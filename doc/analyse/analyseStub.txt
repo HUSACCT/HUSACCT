@@ -1,0 +1,32 @@
+Classes and Packages in stub
+
+domain
+domain.locationbased
+domain.locationbased.foursquare
+domain.locationbased.foursquare.Account
+domain.locationbased.foursquare.Friends
+domain.locationbased.foursquare.Map
+domain.locationbased.foursquare.History
+domain.locationbased.latitude
+domain.locationbased.latitude.Account
+domain.locationbased.latitude.Friends
+domain.locationbased.latitude.Map
+infrastructure
+infrastructure.socialmedia
+infrastructure.socialmedia.locationbased
+infrastructure.socialmedia.locationbased.foursquare
+infrastructure.socialmedia.locationbased.foursquare.AccountDAO
+infrastructure.socialmedia.locationbased.foursquare.FriendsDAO
+infrastructure.socialmedia.locationbased.foursquare.IMap
+infrastructure.socialmedia.locationbased.foursquare.HistoryDAO
+
+
+Dependencies in stub  (from --> to)
+
+domain.locationbased.foursquare.History   	-->    infrastructure.socialmedia.locationbased.foursquare.HistoryDAO
+domain.locationbased.foursquare.Map   		-->    infrastructure.socialmedia.locationbased.foursquare.IMap
+domain.locationbased.foursquare.Account   	-->    infrastructure.socialmedia.locationbased.foursquare.AccountDAO
+domain.locationbased.foursquare.Friends   	-->    infrastructure.socialmedia.locationbased.foursquare.FriendsDAO
+domain.locationbased.latitude.Account   	-->    infrastructure.socialmedia.locationbased.latitude.AccountDAO
+domain.locationbased.latitude.Friends  		-->    infrastructure.socialmedia.locationbased.latitude.FriendsDAO
+domain.locationbased.latitude.Map   		-->    infrastructure.socialmedia.locationbased.latitude.IMap
