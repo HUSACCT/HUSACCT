@@ -3,6 +3,7 @@ package husacct.graphics.task.figures;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D.Double;
 
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 
 @SuppressWarnings("serial")
@@ -12,9 +13,9 @@ public class ViolatedComponentFigure extends ComponentFigure implements
 	private ViolationDTO[] violations;
 	
 
-	public ViolatedComponentFigure(Double rect, String name, ViolationDTO[] violations)
+	public ViolatedComponentFigure(Double rect, ModuleDTO moduleDTO, ViolationDTO[] violations)
 	{
-		super(rect, name);
+		super(rect, moduleDTO);
 		
 		this.violations = violations;
 	}

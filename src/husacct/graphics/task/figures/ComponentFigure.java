@@ -1,5 +1,7 @@
 package husacct.graphics.task.figures;
 
+import husacct.common.dto.ModuleDTO;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -22,9 +24,9 @@ public class ComponentFigure extends ModuleFigure
 	private RectangleFigure box2;
 	private TextFigure textBox;
 	
-	public ComponentFigure(Rectangle2D.Double rect, String name)
+	public ComponentFigure(Rectangle2D.Double rect, ModuleDTO moduleDTO)
 	{		
-		super(rect, name);
+		super(rect, moduleDTO);
 		
 	}
 	
@@ -33,7 +35,7 @@ public class ComponentFigure extends ModuleFigure
 		this.mainBox = new RectangleFigure();
 		this.box1 = new RectangleFigure();
 		this.box2 = new RectangleFigure();
-		this.textBox = new TextFigure(name);
+		this.textBox = new TextFigure(getName());
 		
 		this.children.add(mainBox);
 		this.children.add(box1);

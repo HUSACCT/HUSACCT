@@ -18,9 +18,9 @@ public class ViolatedRelationFigure extends RelationFigure implements
 	}
 
 	@Override
-	public ViolationDTO[] getViolations() {
-		// TODO Auto-generated method stub
-		return null;
+	public ViolationDTO[] getViolations()
+	{
+		return new ViolationDTO[]{};
 	}
 
 }

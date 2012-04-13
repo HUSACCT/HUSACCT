@@ -14,9 +14,9 @@ public final class FigureFactory {
 			ModuleDTO moduleDTO = (ModuleDTO)dto;
 			Rectangle2D.Double rect = new Rectangle2D.Double(10, 10, 100, 75);
 			if (moduleDTO.type == "Layer") 
-				return new LayerFigure(rect, moduleDTO.logicalPath);
+				return new LayerFigure(rect, moduleDTO);
 			else if (moduleDTO.type == "Module") 
-				return new ClassFigure(rect, moduleDTO.logicalPath);
+				return new ClassFigure(rect, moduleDTO);
 		}
 		
 		throw new RuntimeException("Undefined module type passed to FigureFactory");

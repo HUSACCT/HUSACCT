@@ -1,5 +1,7 @@
 package husacct.graphics.task.figures;
 
+import husacct.common.dto.ModuleDTO;
+
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -12,18 +14,18 @@ import org.jhotdraw.draw.handle.TransformHandleKit;
 
 public abstract class ModuleFigure extends AbstractFigure
 {
+	private ModuleDTO moduleDTO;
 	private static final long serialVersionUID = 971276235252293165L;
 	protected Point2D.Double anchor;
 	protected Point2D.Double lead;
-	protected String name;
 	
-	public ModuleFigure(Rectangle2D.Double rect, String name)
+	public ModuleFigure(Rectangle2D.Double rect, ModuleDTO moduleDTO)
 	{
 		super();
 		
 		this.anchor = new Point2D.Double(rect.x, rect.y);
 		this.lead = new Point2D.Double(rect.x + rect.width, rect.y + rect.height);
-		this.name = name;
+		this.moduleDTO = moduleDTO;
 		
 		initializeComponents();
 	}
@@ -92,13 +94,13 @@ public abstract class ModuleFigure extends AbstractFigure
     	return lead.y - anchor.y;
     }
     
-    public String getName() {
-    	return name;
+    public String getName()
+    {
+    	return this.moduleDTO.logicalPath;
     }
     
-    public void setName(String newName) {
-    	name = newName;
-    	
-    	invalidate();
+    public ModuleDTO getModuleDTO()
+    {
+    	return this.moduleDTO;
     }
 }

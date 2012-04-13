@@ -1,5 +1,7 @@
 package husacct.graphics.task.figures;
 
+import husacct.common.dto.ModuleDTO;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -12,8 +14,8 @@ public class PackageFigure extends ModuleFigure {
 	private RectangleFigure top;
 	private RectangleFigure body;
 	
-	public PackageFigure(Rectangle2D.Double rect, String name) {
-		super(rect, name);
+	public PackageFigure(Rectangle2D.Double rect, ModuleDTO moduleDTO) {
+		super(rect, moduleDTO);
 	}
 	
 	@Override
