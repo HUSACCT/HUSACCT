@@ -2,28 +2,20 @@ package husacct.graphics.presentation.jhotdraw;
 
 import java.awt.geom.Point2D;
 
+import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 
-import husacct.graphics.task.figures.ModuleFigure;
-import husacct.graphics.task.figures.RelationFigure;
+import husacct.graphics.presentation.jhotdraw.figures.JHotDrawModuleFigure;
+import husacct.graphics.presentation.jhotdraw.figures.JHotDrawRelationFigure;
 
-public class FigureConnectorStrategy {
-	
-	private RelationFigure prototype;
-	
+public class FigureConnectorStrategy
+{	
 	public FigureConnectorStrategy() {
-		
-		prototype = new RelationFigure();
 	}
 	
-	public RelationFigure connect(ModuleFigure startFigure, ModuleFigure endFigure)
+	public void connect(JHotDrawRelationFigure fig, JHotDrawModuleFigure startFigure, JHotDrawModuleFigure endFigure)
 	{
-		RelationFigure connection = new RelationFigure();
-		
-		return this.connect(connection, startFigure, endFigure);
-	}
-	
-	public RelationFigure connect(RelationFigure fig, ModuleFigure startFigure, ModuleFigure endFigure) {
+		LineConnectionFigure prototype = new LineConnectionFigure();
 		
 		Connector startConnector = startFigure.findConnector(new Point2D.Double(50, 50), prototype);
 		Connector endConnector = endFigure.findConnector(new Point2D.Double(500, 30), prototype);
@@ -35,11 +27,11 @@ public class FigureConnectorStrategy {
 			fig.setEndConnector(endConnector);
 			fig.updateConnection();
 			fig.changed();
-			
-			return fig;
 		}
-		
-		throw new IllegalArgumentException("The figures cannot be connected"); 
+		else
+		{
+			throw new IllegalArgumentException("The figures cannot be connected");
+		}
 	}
 	
 	// This code adds decorations to lines. Not needed at the moment

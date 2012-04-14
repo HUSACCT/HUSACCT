@@ -1,6 +1,6 @@
 package husacct.graphics.presentation.jhotdraw;
 
-import husacct.graphics.task.figures.ModuleFigure;
+import husacct.graphics.presentation.jhotdraw.figures.JHotDrawModuleFigure;
 
 public class Drawing extends org.jhotdraw.draw.DefaultDrawing
 {
@@ -11,8 +11,8 @@ public class Drawing extends org.jhotdraw.draw.DefaultDrawing
 		super();
 	}
 
-	public ModuleFigure[] getShownModules()
+	public JHotDrawModuleFigure[] getShownModules()
 	{
-		return new ModuleFigure[]{};
+		return new JHotDrawModuleFigure[]{};
 	}
 }

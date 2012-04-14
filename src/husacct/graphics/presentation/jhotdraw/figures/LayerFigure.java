@@ -1,20 +1,19 @@
-package husacct.graphics.task.figures;
+package husacct.graphics.presentation.jhotdraw.figures;
 
-import husacct.common.dto.ModuleDTO;
+import husacct.graphics.task.figures.ModuleFigure;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import org.jhotdraw.draw.RectangleFigure;
 
-public class LayerFigure extends ModuleFigure {
+public class LayerFigure extends JHotDrawModuleFigure {
 	
 	private static final long serialVersionUID = 101138923385231941L;
 	private RectangleFigure body;
 	
-	public LayerFigure(Rectangle2D.Double rect, ModuleDTO moduleDTO) {
-		
-		super(rect, moduleDTO);
+	public LayerFigure(ModuleFigure moduleFigure)
+	{		
+		super(moduleFigure);
 	}
 	
 	@Override

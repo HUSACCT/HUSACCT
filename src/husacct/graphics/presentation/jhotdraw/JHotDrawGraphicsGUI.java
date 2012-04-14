@@ -1,22 +1,26 @@
 package husacct.graphics.presentation.jhotdraw;
 
 import husacct.common.dto.ViolationDTO;
+import husacct.graphics.presentation.jhotdraw.figures.AbstractJHotDrawFigure;
+import husacct.graphics.presentation.jhotdraw.figures.JHotDrawModuleFigure;
+import husacct.graphics.presentation.jhotdraw.figures.JHotDrawRelationFigure;
 import husacct.graphics.task.figures.AbstractFigure;
 import husacct.graphics.task.figures.ModuleFigure;
 import husacct.graphics.task.figures.RelationFigure;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 
-public class GraphicsGUI extends husacct.graphics.presentation.GraphicsGUI
+public class JHotDrawGraphicsGUI extends husacct.graphics.presentation.GraphicsGUI
 {
 	private Drawing drawing;
 	private DrawingView view;
 	private GraphicsFrame drawTarget;
 	
-	public GraphicsGUI()
+	public JHotDrawGraphicsGUI()
 	{
 		drawing = new Drawing();
 		view = new DrawingView(drawing, this);
@@ -33,8 +37,13 @@ public class GraphicsGUI extends husacct.graphics.presentation.GraphicsGUI
 
 	@Override
 	public ModuleFigure[] getShownModuleFigures()
-	{
-		return drawing.getShownModules();
+	{		
+		ArrayList<ModuleFigure> result = new ArrayList<ModuleFigure>();
+		for(JHotDrawModuleFigure jhFigure : drawing.getShownModules())
+		{
+			result.add((ModuleFigure)jhFigure.getFigure());
+		}
+		return result.toArray(new ModuleFigure[]{});
 	}
 
 	@Override
@@ -47,15 +56,24 @@ public class GraphicsGUI extends husacct.graphics.presentation.GraphicsGUI
 	@Override
 	public void add(AbstractFigure figure)
 	{
-		drawing.add(figure);
+		AbstractJHotDrawFigure jhFigure = (new JHotDrawFigureFactory()).createFigure(figure);
+		
+		//TODO implement layout strategy here
+		
+		drawing.add(jhFigure);
 	}
 
 	@Override
 	public void addRelation(RelationFigure relation, ModuleFigure from,
 			ModuleFigure to)
 	{
-		(new FigureConnectorStrategy()).connect(relation, from, to);
-		drawing.add(relation);
+		JHotDrawFigureFactory factory = new JHotDrawFigureFactory();
+		JHotDrawRelationFigure jhRelation = factory.createFigure(relation);
+		JHotDrawModuleFigure jhFrom = factory.createFigure(from);
+		JHotDrawModuleFigure jhTo = factory.createFigure(to);
+		
+		(new FigureConnectorStrategy()).connect(jhRelation, jhFrom, jhTo);
+		drawing.add(jhRelation);
 	}
 
 	@Override

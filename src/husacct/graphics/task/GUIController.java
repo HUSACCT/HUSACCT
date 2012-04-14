@@ -16,7 +16,7 @@ public abstract class GUIController implements IGraphicsGUIListener
 	
 	public GUIController()
 	{
-		this.graphicsGUI = new husacct.graphics.presentation.jhotdraw.GraphicsGUI();
+		this.graphicsGUI = new husacct.graphics.presentation.jhotdraw.JHotDrawGraphicsGUI();
 		this.graphicsGUI.addGUIListener(this);
 	}
 	

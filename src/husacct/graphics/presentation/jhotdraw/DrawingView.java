@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.jhotdraw;
 
 import husacct.graphics.presentation.GraphicsGUI;
+import husacct.graphics.presentation.jhotdraw.figures.JHotDrawModuleFigure;
 import husacct.graphics.task.figures.IViolatedFigure;
 import husacct.graphics.task.figures.ModuleFigure;
 
@@ -35,9 +36,10 @@ public class DrawingView extends DefaultDrawingView
 				{
 					Figure selectedFigure = figures.iterator().next();
 					
-					if(selectedFigure instanceof ModuleFigure && arg0.getClickCount() == 2)
+					if(selectedFigure instanceof JHotDrawModuleFigure && arg0.getClickCount() == 2)
 					{
-						guiNotificationsFirer.fireModuleFigureZoom((ModuleFigure)selectedFigure);
+						guiNotificationsFirer.fireModuleFigureZoom(
+								((ModuleFigure)((JHotDrawModuleFigure)selectedFigure).getFigure()));
 					}
 					
 					if(selectedFigure instanceof IViolatedFigure)

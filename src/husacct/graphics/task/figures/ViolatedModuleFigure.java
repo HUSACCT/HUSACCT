@@ -1,23 +1,23 @@
 package husacct.graphics.task.figures;
 
-import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 
-public class ViolatedRelationFigure extends RelationFigure 
+public class ViolatedModuleFigure extends ModuleFigure 
 		implements IViolatedFigure
 {
 	private ViolationDTO[] violationDTOs;
 
-	public ViolatedRelationFigure(DependencyDTO dependencyDTO, 
+	public ViolatedModuleFigure(ModuleDTO moduleDTO,
 			ViolationDTO[] violationDTOs)
 	{
-		super(dependencyDTO);
+		super(moduleDTO);
 		
 		this.violationDTOs = violationDTOs;
 	}
 
 	@Override
-	public ViolationDTO[] getViolations() 
+	public ViolationDTO[] getViolations()
 	{
 		return this.violationDTOs;
 	}
