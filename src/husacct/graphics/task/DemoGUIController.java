@@ -7,7 +7,7 @@ import husacct.graphics.presentation.jhotdraw.FigureConnectorStrategy;
 import husacct.graphics.task.figures.ModuleFigure;
 
 
-public class DemoGUIController extends GUIController {
+public class DemoGUIController extends AbstractGUIController {
 	
 	protected FigureConnectorStrategy connectionStrategy = new FigureConnectorStrategy();
 	
