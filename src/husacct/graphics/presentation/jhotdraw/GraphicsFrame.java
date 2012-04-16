@@ -1,4 +1,4 @@
-package husacct.graphics.presentation;
+package husacct.graphics.presentation.jhotdraw;
 
 
 import javax.swing.JInternalFrame;

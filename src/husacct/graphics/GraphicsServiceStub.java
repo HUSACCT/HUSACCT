@@ -1,48 +1,48 @@
 package husacct.graphics;
 
 import husacct.graphics.task.DemoGUIController;
-import husacct.graphics.task.DrawingDetail;
-import husacct.graphics.task.GUIController;
 
 import javax.swing.JInternalFrame;
 
-public class GraphicsServiceStub implements IGraphicsService {
-
-	private GUIController controller;
-
-	public GraphicsServiceStub() {
-		controller = new DemoGUIController();
-	}	
+public class GraphicsServiceStub implements IGraphicsService
+{
+	private DemoGUIController controller;
 	
-	@Override
-	public JInternalFrame getAnalysedArchitectureGUI() {
-
-		return controller.getGUI();
+	public GraphicsServiceStub()
+	{
+		this.controller = new DemoGUIController();
 	}
 
 	@Override
-	public JInternalFrame getDefinedArchitectureGUI() {
-
-		return controller.getGUI();
+	public JInternalFrame getAnalysedArchitectureGUI()
+	{
+		return this.controller.getGUI();
 	}
 
 	@Override
-	public void drawAnalysedArchitecture() {
-		controller.drawAnalysedArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+	public JInternalFrame getDefinedArchitectureGUI()
+	{
+		return this.controller.getGUI();
 	}
 
 	@Override
-	public void drawAnalysedArchitectureWithViolations() {
-		controller.drawAnalysedArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	public void drawAnalysedArchitecture()
+	{		
 	}
 
 	@Override
-	public void drawDefinedArchitecture() {
-		controller.drawDefinedArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+	public void drawAnalysedArchitectureWithViolations()
+	{
 	}
 
 	@Override
-	public void drawDefinedArchitectureWithViolations() {
-		controller.drawDefinedArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	public void drawDefinedArchitecture()
+	{		
 	}
+
+	@Override
+	public void drawDefinedArchitectureWithViolations()
+	{		
+	}
+	
 }

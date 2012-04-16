@@ -1,22 +1,19 @@
-package husacct.graphics.task.figures;
+package husacct.graphics.presentation.jhotdraw.figures;
 
 import java.awt.Color;
-import java.awt.geom.Rectangle2D.Double;
 
 import husacct.common.dto.ViolationDTO;
+import husacct.graphics.task.figures.IViolatedFigure;
+import husacct.graphics.task.figures.ViolatedModuleFigure;
 
 @SuppressWarnings("serial")
 public class ViolatedComponentFigure extends ComponentFigure implements
 		IViolatedFigure
 {
-	private ViolationDTO[] violations;
-	
 
-	public ViolatedComponentFigure(Double rect, String name, ViolationDTO[] violations)
+	public ViolatedComponentFigure(ViolatedModuleFigure moduleFigure)
 	{
-		super(rect, name);
-		
-		this.violations = violations;
+		super(moduleFigure);
 	}
 	
 	protected void initializeComponents()
@@ -30,7 +27,7 @@ public class ViolatedComponentFigure extends ComponentFigure implements
 	@Override
 	public ViolationDTO[] getViolations()
 	{
-		return this.violations;
+		return ((ViolatedModuleFigure)this.getFigure()).getViolations();
 	}
 
 }

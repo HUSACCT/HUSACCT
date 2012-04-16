@@ -1,19 +1,22 @@
-package husacct.graphics.task.figures;
+package husacct.graphics.presentation.jhotdraw.figures;
+
+import husacct.graphics.task.figures.ModuleFigure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import org.jhotdraw.draw.RectangleFigure;
 
-public class PackageFigure extends ModuleFigure {
-	
+public class PackageFigure extends JHotDrawModuleFigure
+{	
 	private static final long serialVersionUID = 5449552267500654293L;
 	
 	private RectangleFigure top;
 	private RectangleFigure body;
 	
-	public PackageFigure(Rectangle2D.Double rect, String name) {
-		super(rect, name);
+	public PackageFigure(ModuleFigure moduleFigure)
+	{
+		super(moduleFigure);
 	}
 	
 	@Override
