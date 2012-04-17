@@ -1,8 +1,7 @@
 package husacct.graphics.task;
 
-import husacct.common.dto.ModuleDTO;
 
-public class DefinedGUIController extends AbstractGUIController
+public class DefinedGUIController
 {
 	
 	public void drawDefinedArchitecture(DrawingDetail detail)
@@ -14,13 +13,13 @@ public class DefinedGUIController extends AbstractGUIController
 		 * get the moduleDTOs,
 		 * call
 		 */
-		this.drawModules(new ModuleDTO[]{});
-		
-		
-		if(detail==DrawingDetail.WITH_VIOLATIONS)
-		{
-			drawViolationsForShownModules();
-		}
+//		this.drawModules(new ModuleDTO[]{});
+//		
+//		
+//		if(detail==DrawingDetail.WITH_VIOLATIONS)
+//		{
+//			drawViolationsForShownModules();
+//		}
 	}
 
 }
