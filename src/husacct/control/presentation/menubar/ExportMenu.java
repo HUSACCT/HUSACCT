@@ -19,7 +19,14 @@ public class ExportMenu extends JMenu{
 			}
 		});
 
-				
+		JMenuItem exportPhysicalArchitectureItem = new JMenuItem("Physical architecture");
+		this.add(exportPhysicalArchitectureItem);
+		exportPhysicalArchitectureItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				// TODO: logical architecture
+			}
+		});
+		
 		JMenuItem exportViolationReportItem = new JMenuItem("Violation report");
 		this.add(exportViolationReportItem);
 		
