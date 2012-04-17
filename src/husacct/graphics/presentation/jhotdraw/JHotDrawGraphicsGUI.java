@@ -10,15 +10,21 @@ import husacct.graphics.task.figures.RelationFigure;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
+
+import org.jhotdraw.draw.Figure;
 
 public class JHotDrawGraphicsGUI extends husacct.graphics.presentation.GraphicsGUI
 {
 	private Drawing drawing;
 	private DrawingView view;
 	private GraphicsFrame drawTarget;
+	
+	private Double latestX = 20.0;
+	private int figWidth = 100;
 	
 	public JHotDrawGraphicsGUI()
 	{
@@ -58,7 +64,10 @@ public class JHotDrawGraphicsGUI extends husacct.graphics.presentation.GraphicsG
 	{
 		AbstractJHotDrawFigure jhFigure = (new JHotDrawFigureFactory()).createFigure(figure);
 		
-		//TODO implement layout strategy here
+		Point2D.Double lead = new Point2D.Double(latestX+this.figWidth, 80);
+		jhFigure.setBounds(new Point2D.Double(latestX, 20), lead);
+		
+		this.latestX = lead.x+20;
 		
 		drawing.add(jhFigure);
 	}
@@ -69,8 +78,8 @@ public class JHotDrawGraphicsGUI extends husacct.graphics.presentation.GraphicsG
 	{
 		JHotDrawFigureFactory factory = new JHotDrawFigureFactory();
 		JHotDrawRelationFigure jhRelation = factory.createFigure(relation);
-		JHotDrawModuleFigure jhFrom = factory.createFigure(from);
-		JHotDrawModuleFigure jhTo = factory.createFigure(to);
+		JHotDrawModuleFigure jhFrom = this.getJHotDrawFigureFromFigure(from);
+		JHotDrawModuleFigure jhTo = this.getJHotDrawFigureFromFigure(to);
 		
 		(new FigureConnectorStrategy()).connect(jhRelation, jhFrom, jhTo);
 		drawing.add(jhRelation);
@@ -84,6 +93,20 @@ public class JHotDrawGraphicsGUI extends husacct.graphics.presentation.GraphicsG
 		{
 			System.out.println(violation.getErrorMessage());
 		}
+	}
+	
+	//TODO lelijke code
+	public JHotDrawModuleFigure getJHotDrawFigureFromFigure(ModuleFigure fig)
+	{
+		for(Figure f : drawing.getChildren())
+		{
+			if(((AbstractJHotDrawFigure)f).getFigure() == fig)
+			{
+				return (JHotDrawModuleFigure)f;
+			}
+		}
+		
+		return null;
 	}
 
 }
