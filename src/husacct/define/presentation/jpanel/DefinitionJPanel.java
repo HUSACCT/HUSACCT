@@ -142,9 +142,9 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 		bottomPanel.setLayout(bottomPanelLayout);
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
-		JButton nextButton = new JButton();
-		bottomPanel.add(nextButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		nextButton.setText("Next");
+//		JButton nextButton = new JButton();
+//		bottomPanel.add(nextButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+//		nextButton.setText("Next");
 		
 		return bottomPanel;
 	}

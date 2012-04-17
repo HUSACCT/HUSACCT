@@ -11,18 +11,19 @@ import java.io.InputStreamReader;
 
 
 public class ApplicationController implements ActionListener {
-	private DefinitionController definitioncontroller = null;
 	//private AnalyseController analysecontroller = null;
 	//private DependencyController dependencycontroller = null;
 	public ApplicationJFrame jframe;
-
+	private static ApplicationController instance;
+	
+	public static ApplicationController getInstance() {
+		return instance == null ? (instance = new ApplicationController()) : instance;
+	}
 	/**
 	 * MainController constructor. This constructor will initialize a new Definition and Analyse controller.
 	 */
 	public ApplicationController() {
 		Log.i(this, "constructor()");
-
-		definitioncontroller = new DefinitionController(this);
 		//analysecontroller = new AnalyseController();
 		//dependencycontroller = new DependencyController();
 	}
@@ -49,7 +50,9 @@ public class ApplicationController implements ActionListener {
 //		jframe.jMenuItemAbout.addActionListener(this);
 
 		// This method sets the definition jpanel in the jframe.
-		jframe.setContentView(definitioncontroller.initUi());
+		DefinitionController definitionController = DefinitionController.getInstance();
+		definitionController.initSettings();
+		jframe.setContentView(definitionController.initUi());
 
 		// Set the visibility of the jframe to true so the jframe is now visible
 		UiDialogs.showOnScreen(0, jframe);
@@ -91,13 +94,13 @@ public class ApplicationController implements ActionListener {
 	public void actionPerformed(ActionEvent action) {
 //		if (action.getSource() == jframe.jMenuItemNewArchitecture) {
 //			Log.i(this, "actionPerformed() - new architecture");
-//			definitioncontroller.newConfiguration();
+//			DefinitionController.getInstance().newConfiguration();
 //		} else if (action.getSource() == jframe.jMenuItemOpenArchitecture) {
 //			Log.i(this, "actionPerformed() - open architecture");
-//			definitioncontroller.openConfiguration();
+//			DefinitionController.getInstance().openConfiguration();
 //		} else if (action.getSource() == jframe.jMenuItemSaveArchitecture) {
 //			Log.i(this, "actionPerformed() - save architecture");
-//			definitioncontroller.saveConfiguration();
+//			DefinitionController.getInstance().saveConfiguration();
 //		} else if (action.getSource() == jframe.jMenuItemStartAnalyse) {
 //			Log.i(this, "actionPerformed() - start analyse");
 //			//analysecontroller.initUi();
