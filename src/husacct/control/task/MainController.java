@@ -2,12 +2,16 @@ package husacct.control.task;
 
 import husacct.control.presentation.MainGui;
 
+import org.apache.log4j.Logger;
+
 public class MainController {
 	
 	ViewController viewController;
 	WorkspaceController workspaceController;
 	LocaleController localeController;
 	StateController stateController;
+	
+	private Logger logger = Logger.getLogger(MainController.class);
 	
 	public MainController(){
 		setControllers();
@@ -43,7 +47,7 @@ public class MainController {
 	
 	public void exit(){
 		// TODO: check saved 
-		System.out.println("exit");
+		logger.debug("Close HUSACCT");
 		System.exit(0);
 	}
 }
