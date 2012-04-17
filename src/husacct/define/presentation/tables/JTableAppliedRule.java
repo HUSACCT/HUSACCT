@@ -8,12 +8,23 @@ public class JTableAppliedRule extends AbstractJTable {
 
 	public JTableAppliedRule() {
 		super();
-
+	}
+	
+	@Override
+	protected void setDefaultTableSettings() {
+		
+	}
+	
+	@Override
+	protected void setColumnHeaders() {
 		tablemodel.addColumn("Rule name");
 		tablemodel.addColumn("To layer");
 		tablemodel.addColumn("Enabled");
 		tablemodel.addColumn("# Exceptions");
-
+	}
+	
+	@Override
+	protected void setColumnWidths() {
 		TableColumn column = null;
 		for (int i = 0; i < getColumnCount(); i++) {
 			column = getColumnModel().getColumn(i);
@@ -28,5 +39,4 @@ public class JTableAppliedRule extends AbstractJTable {
 			}
 		}
 	}
-
 }
