@@ -9,10 +9,10 @@ import java.util.Locale;
 
 public class LocaleController {
 	
-	private static Locale currentLocale;
+	private static Locale currentLocale = Locale.ENGLISH;
 	
 	public LocaleController(){
-		setLocale(Locale.ENGLISH);
+		setLocale(LocaleController.currentLocale);
 	}
 	
 	public static Locale getLocale(){
