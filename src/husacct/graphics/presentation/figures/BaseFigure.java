@@ -10,14 +10,18 @@ import java.util.LinkedList;
 
 import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
 import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.DecoratedFigure;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.TransformHandleKit;
 
-public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
+public abstract class BaseFigure extends AbstractAttributedCompositeFigure implements DecoratedFigure {
 	private static final long serialVersionUID = 971276235252293165L;
 	protected Point2D.Double anchor;
 	protected Point2D.Double lead;
 	protected String name;
+	
+	private Figure decorator = null;
 
 	public BaseFigure() {
 		this(new Rectangle2D.Double(0, 0, 0, 0), "");
@@ -89,7 +93,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		this.set(AttributeKeys.STROKE_COLOR, newColor);
 	}
 
-
 	public double getWidth() {
 		return lead.x - anchor.x;
 	}
@@ -107,4 +110,12 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 		invalidate();
 	}
+	
+	public void setDecorator(Figure newDecorator) {
+		decorator = newDecorator;
+	}
+  
+	public Figure getDecorator() {
+		return decorator;
+	}	
 }
