@@ -1,54 +1,49 @@
 package husacct.graphics;
 
-import husacct.graphics.task.Controller;
+import husacct.graphics.task.AnalysedController;
+import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.DrawingDetail;
 
 import javax.swing.JInternalFrame;
 
 public class GraphicsServiceImpl implements IGraphicsService {
 
-	private Controller controller;
-//	private AnalysedGUIController analysed;
-//	private DefinedGUIController defined;
+	private AnalysedController analysedController;
+	private DefinedController definedController;
 
-	public GraphicsServiceImpl()
-	{
-		controller = new Controller();
+	public GraphicsServiceImpl() {
+		analysedController = new AnalysedController();
+		definedController = new DefinedController();
 	}
 
 	@Override
-	public JInternalFrame getAnalysedArchitectureGUI()
-	{
-		return controller.getGUI();
+	public JInternalFrame getAnalysedArchitectureGUI() {
+		return analysedController.getGUI();
 	}
 
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
 
-		return controller.getGUI();
+		return analysedController.getGUI();
 	}
 
 	@Override
-	public void drawAnalysedArchitecture()
-	{
-		controller.drawAnalysedArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+	public void drawAnalysedArchitecture() {
+		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
-	public void drawAnalysedArchitectureWithViolations()
-	{
-		controller.drawAnalysedArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	public void drawAnalysedArchitectureWithViolations() {
+		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
-	public void drawDefinedArchitecture()
-	{
-		controller.drawDefinedArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+	public void drawDefinedArchitecture() {
+		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
-	public void drawDefinedArchitectureWithViolations()
-	{
-		controller.drawDefinedArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	public void drawDefinedArchitectureWithViolations() {
+		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 }

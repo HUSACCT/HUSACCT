@@ -1,40 +1,48 @@
 package husacct.graphics;
 
-import husacct.graphics.task.Controller;
+import husacct.graphics.task.AnalysedController;
+import husacct.graphics.task.DefinedController;
+import husacct.graphics.task.DrawingDetail;
 
 import javax.swing.JInternalFrame;
 
 public class GraphicsServiceStub implements IGraphicsService {
-	private Controller controller;
+	private AnalysedController analysedController;
+	private DefinedController definedController;
 
 	public GraphicsServiceStub() {
-		controller = new Controller();
+		analysedController = new AnalysedController();
+		definedController = new DefinedController();
 	}
 
 	@Override
 	public JInternalFrame getAnalysedArchitectureGUI() {
-		return controller.getGUI();
+		return analysedController.getGUI();
 	}
 
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
-		return controller.getGUI();
+		return analysedController.getGUI();
 	}
 
 	@Override
 	public void drawAnalysedArchitecture() {
+		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawAnalysedArchitectureWithViolations() {
+		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitecture() {
+		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitectureWithViolations() {
+		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 }
