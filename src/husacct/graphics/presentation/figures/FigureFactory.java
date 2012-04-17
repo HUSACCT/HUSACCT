@@ -1,24 +1,29 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ModuleDTO;
+
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 
-import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
-
-// TODO: Should this class be final? 
 public final class FigureFactory {
 
 	public BaseFigure createFigure(AbstractDTO dto)
 	{
+		BaseFigure retVal = null;
 		Rectangle2D.Double position = new Rectangle2D.Double(10, 10, 200, 150);
 		
 		if (dto instanceof ModuleDTO)
-			return createFigure(position, (ModuleDTO)dto);
-
+			retVal = createFigure(position, (ModuleDTO)dto);
 		else if (dto instanceof AnalysedModuleDTO)
-			return createFigure(position, (AnalysedModuleDTO) dto);
+			retVal = createFigure(position, (AnalysedModuleDTO) dto);
+
+		// TODO: Use a DTODecorator to store the DTO along side with the newly created Figure. 
+		// TODO: Determine whether it's Figure -> DTODecorator or DTODecorator -> Figure.
+		if (retVal != null) 
+			return retVal;
+		
 		throw new RuntimeException("Undefined module type passed to FigureFactory");
 	}
 	
