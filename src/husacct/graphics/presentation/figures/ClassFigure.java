@@ -6,7 +6,7 @@ import java.awt.geom.Rectangle2D;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ClassFigure extends ModuleFigure {
+public class ClassFigure extends BaseFigure {
 
 	private static final long serialVersionUID = -468596930534802557L;
 	private RectangleFigure top, middle, bottom;

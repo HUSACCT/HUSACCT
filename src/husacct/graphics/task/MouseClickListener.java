@@ -1,10 +1,10 @@
 package husacct.graphics.task;
 
-import husacct.graphics.presentation.figures.ModuleFigure;
+import husacct.graphics.presentation.figures.BaseFigure;
 
 public interface MouseClickListener {
 
-	public void moduleZoom(ModuleFigure selectedFigure);
+	public void moduleZoom(BaseFigure selectedFigure);
 
-	public void moduleSelected(ModuleFigure selectedFigure);
+	public void moduleSelected(BaseFigure selectedFigure);
 }

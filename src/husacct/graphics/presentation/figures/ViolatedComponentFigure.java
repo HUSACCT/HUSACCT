@@ -1,35 +1,32 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.common.dto.ViolationDTO;
+
 import java.awt.Color;
 import java.awt.geom.Rectangle2D.Double;
 
-import husacct.common.dto.ViolationDTO;
+public class ViolatedComponentFigure extends BaseFigure implements
+		IViolatedFigure {
 
-@SuppressWarnings("serial")
-public class ViolatedComponentFigure extends ComponentFigure implements
-		IViolatedFigure
-{
+	private static final long serialVersionUID = 6886808516854527764L;
 	private ViolationDTO[] violations;
-	
 
-	public ViolatedComponentFigure(Double rect, String name, ViolationDTO[] violations)
-	{
+	public ViolatedComponentFigure(Double rect, String name,
+			ViolationDTO[] violations) {
 		super(rect, name);
-		
+
 		this.violations = violations;
 	}
-	
-	protected void initializeComponents()
-	{
+
+	protected void initializeComponents() {
 		super.initializeComponents();
 
-		this.setLineColor(Color.RED);
-		//this.setLineThickness(2.0);
+		this.setStrokeColor(Color.RED);
+		// this.setLineThickness(2.0);
 	}
 
 	@Override
-	public ViolationDTO[] getViolations()
-	{
+	public ViolationDTO[] getViolations() {
 		return this.violations;
 	}
 

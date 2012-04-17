@@ -10,7 +10,7 @@ import husacct.common.dto.ModuleDTO;
 // TODO: Should this class be final? 
 public final class FigureFactory {
 
-	public AbstractFigure createFigure(AbstractDTO dto)
+	public BaseFigure createFigure(AbstractDTO dto)
 	{
 		Rectangle2D.Double position = new Rectangle2D.Double(10, 10, 200, 150);
 		
@@ -22,7 +22,7 @@ public final class FigureFactory {
 		throw new RuntimeException("Undefined module type passed to FigureFactory");
 	}
 	
-	private AbstractFigure createFigure(Double position,
+	private BaseFigure createFigure(Double position,
 			AnalysedModuleDTO dto) {
 
 		if (dto.type == "package")
@@ -33,7 +33,7 @@ public final class FigureFactory {
 		return new LayerFigure(position, "<<invalid module type>>" + dto.uniqueName);
 	}
 
-	private AbstractFigure createFigure(Rectangle2D.Double position,
+	private BaseFigure createFigure(Rectangle2D.Double position,
 			ModuleDTO dto) {
 		
 		if (dto.type == "Layer") 

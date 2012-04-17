@@ -1,6 +1,6 @@
 package husacct.graphics.presentation;
 
-import husacct.graphics.presentation.figures.ModuleFigure;
+import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.task.MouseClickListener;
 
 import java.awt.event.MouseAdapter;
@@ -66,21 +66,21 @@ public class DrawingView extends DefaultDrawingView {
 			
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				if (e.getClickCount() == 1)
-					fireModuleSelectedEvent((ModuleFigure)first);
+					fireModuleSelectedEvent((BaseFigure)first);
 				else if (e.getClickCount() == 2) 
-					fireModuleZoomInEvent((ModuleFigure)first);
+					fireModuleZoomInEvent((BaseFigure)first);
 			}
 				
 		}
 	}
 	
-	private void fireModuleSelectedEvent(ModuleFigure obj) {
+	private void fireModuleSelectedEvent(BaseFigure obj) {
 		for (MouseClickListener l : listeners) {
 			l.moduleSelected(obj);
 		}
 	}
 	
-	private void fireModuleZoomInEvent(ModuleFigure obj) {
+	private void fireModuleZoomInEvent(BaseFigure obj) {
 		for (MouseClickListener l : listeners) {
 			l.moduleZoom(obj);
 		}

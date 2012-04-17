@@ -16,7 +16,7 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends AbstractFigure implements ConnectionFigure
+public class RelationFigure extends BaseFigure implements ConnectionFigure
 {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;

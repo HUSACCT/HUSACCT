@@ -1,6 +1,6 @@
 package husacct.graphics.task;
 
-import husacct.graphics.presentation.figures.AbstractFigure;
+import husacct.graphics.presentation.figures.BaseFigure;
 
 import java.awt.geom.Point2D;
 
@@ -17,7 +17,7 @@ public class FigureConnectorStrategy {
 		prototype = new LineConnectionFigure();
 	}
 	
-	public ConnectionFigure connect(AbstractFigure startFigure, AbstractFigure endFigure) {	
+	public ConnectionFigure connect(BaseFigure startFigure, BaseFigure endFigure) {	
 		Connector startConnector = startFigure.findConnector(new Point2D.Double(50, 50), prototype);
 		Connector endConnector = endFigure.findConnector(new Point2D.Double(500, 30), prototype);
 		

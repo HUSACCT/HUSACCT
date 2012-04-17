@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.jhotdraw.draw.RectangleFigure;
 
-public class LayerFigure extends ModuleFigure {
+public class LayerFigure extends BaseFigure {
 	
 	private static final long serialVersionUID = 101138923385231941L;
 	private RectangleFigure body;

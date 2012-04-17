@@ -8,7 +8,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ComponentFigure extends ModuleFigure {
+public class ComponentFigure extends BaseFigure {
 
 	private static final long serialVersionUID = -344477017055924400L;
 
@@ -89,15 +89,18 @@ public class ComponentFigure extends ModuleFigure {
 	@Override
 	public ComponentFigure clone() {
 		ComponentFigure that = (ComponentFigure) super.clone();
+		
 		that.mainBox = this.mainBox.clone();
 		that.box1 = this.box1.clone();
 		that.box2 = this.box2.clone();
 		that.textBox = this.textBox.clone();
+		
 		that.children = new ArrayList<Figure>();
 		that.children.add(that.mainBox);
 		that.children.add(that.box1);
 		that.children.add(that.box2);
 		that.children.add(that.textBox);
+		
 		return that;
 	}
 }

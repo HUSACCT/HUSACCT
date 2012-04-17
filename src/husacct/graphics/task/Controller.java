@@ -7,9 +7,8 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
-import husacct.graphics.presentation.figures.AbstractFigure;
+import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
-import husacct.graphics.presentation.figures.ModuleFigure;
 
 import java.awt.Dimension;
 
@@ -63,7 +62,7 @@ public class Controller implements MouseClickListener
 		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
 
 		for (AnalysedModuleDTO dto : castedModules) {
-			AbstractFigure packageFigure = figureFactory.createFigure(dto);
+			BaseFigure packageFigure = figureFactory.createFigure(dto);
 			drawing.add(packageFigure);
 
 			AnalysedModuleDTO[] subModules = analyseService
@@ -72,7 +71,7 @@ public class Controller implements MouseClickListener
 
 				for (AnalysedModuleDTO subModule : subModules) {
 
-					AbstractFigure figure = figureFactory.createFigure(subModule);
+					BaseFigure figure = figureFactory.createFigure(subModule);
 					drawing.add(figure);
 
 					drawing.add(connectionStrategy.connect(packageFigure, figure));
@@ -86,12 +85,12 @@ public class Controller implements MouseClickListener
 	}
 
 	@Override
-	public void moduleZoom(ModuleFigure selectedFigure) {
+	public void moduleZoom(BaseFigure selectedFigure) {
 		System.out.println("Zooming in on " + selectedFigure.getName());
 	}
 
 	@Override
-	public void moduleSelected(ModuleFigure selectedFigure) {
+	public void moduleSelected(BaseFigure selectedFigure) {
 		System.out.println("Selected module " + selectedFigure.getName());
 	}
 }
