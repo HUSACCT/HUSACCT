@@ -36,7 +36,7 @@ public class PackageFigure extends ModuleFigure {
 		this.anchor = anchor;
 		this.lead = lead;
 		
-		super.setBounds(anchor, lead);		
+		//super.setBounds(anchor, lead);		
 		top.setBounds(anchor, new Point2D.Double(anchor.x + getWidth() * 0.33f, anchor.y + getHeight() * 0.2f));
 		
 		Rectangle2D.Double topRect = top.getBounds();
@@ -48,4 +48,15 @@ public class PackageFigure extends ModuleFigure {
 		body.setBounds(topLeft, bottomRight);
 		text.setBounds(topLeft, bottomRight);
 	}	
+	
+	@Override
+	public PackageFigure clone() {
+		PackageFigure other = (PackageFigure)super.clone();
+		
+		other.top = top.clone();
+		other.body = body.clone();
+		other.text = text.clone();
+		
+		return other;
+	}
 }

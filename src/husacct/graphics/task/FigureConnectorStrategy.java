@@ -1,12 +1,12 @@
 package husacct.graphics.task;
 
+import husacct.graphics.presentation.figures.AbstractFigure;
+
 import java.awt.geom.Point2D;
 
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
-
-import husacct.graphics.presentation.figures.AbstractFigure;
 
 public class FigureConnectorStrategy {
 	

@@ -32,7 +32,7 @@ public class AbstractFigure extends AbstractAttributedCompositeFigure {
 	
 	public void draw(Graphics2D g)
 	{
-		this.setBackgroundColor(new Color(254, 255, 210));
+		//this.setBackgroundColor(new Color(254, 255, 210));
 	
 		super.draw(g);
 	}

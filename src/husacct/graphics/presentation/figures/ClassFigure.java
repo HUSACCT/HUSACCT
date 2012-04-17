@@ -49,4 +49,16 @@ public class ClassFigure extends ModuleFigure {
 				+ getHeight());
 		bottom.setBounds(topLeft, bottomRight);
 	}
+	
+	@Override
+	public ClassFigure clone() {
+		ClassFigure other = (ClassFigure)super.clone();
+		
+		other.top = top.clone();
+		other.middle = middle.clone();
+		other.text = text.clone();
+		other.bottom = bottom.clone();
+		
+		return other;
+	}
 }

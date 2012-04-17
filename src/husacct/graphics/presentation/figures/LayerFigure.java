@@ -28,5 +28,14 @@ public class LayerFigure extends ModuleFigure {
 		super.setBounds(anchor, lead);
 		
 		body.setBounds(anchor, lead);
-	}		
+	}	
+	
+	@Override
+	public LayerFigure clone() {
+		
+		LayerFigure other = (LayerFigure)super.clone();
+		other.body = body.clone();
+		
+		return other;
+	}
 }
