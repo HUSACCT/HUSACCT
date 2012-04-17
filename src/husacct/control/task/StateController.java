@@ -1,5 +1,8 @@
 package husacct.control.task;
 
+import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
+
 import java.util.ArrayList;
 
 public class StateController {
@@ -12,12 +15,28 @@ public class StateController {
 	
 	private int state = StateController.NONE;
 	
-	private ArrayList<IStateChangeListener> listeners;
+	ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
 	
 	public StateController(){
-		listeners = new ArrayList<IStateChangeListener>();
-		// TODO: set/check state, changelisteners
+		setState(state);
 	}
 	
+	public int getState(){
+		return this.state;
+	}
 	
+	public void setState(int inputState){
+		this.state = inputState;
+		notifyStateListeners(inputState);
+	}
+	
+	public void addStateChangeListener(IStateChangeListener listener) {
+		this.stateListeners.add(listener);
+	}
+	
+	public void notifyStateListeners(int state){
+		for(IStateChangeListener listener : this.stateListeners){
+			listener.changeState(state);
+		}
+	}
 }
