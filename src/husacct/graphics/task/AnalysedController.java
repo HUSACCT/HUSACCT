@@ -22,8 +22,8 @@ public class AnalysedController extends BaseController {
 		drawModules(modules);
 	}
 
-	private void drawModules(AbstractDTO[] modules) {
-
+	private void drawModules(AbstractDTO[] modules)
+	{
 		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
 
 		for (AnalysedModuleDTO dto : castedModules) {
@@ -33,12 +33,22 @@ public class AnalysedController extends BaseController {
 	}
 	
 	@Override
-	public void moduleZoom(BaseFigure selectedFigure) {
-		System.out.println("Zooming in on " + selectedFigure.getName());
+	public void moduleZoom(AbstractDTO zoomedModuleDTO)
+	{
+		if (zoomedModuleDTO instanceof AnalysedModuleDTO)
+		{
+			//TODO clear drawing
+			
+			AnalysedModuleDTO analysedModuleDTO = (AnalysedModuleDTO)zoomedModuleDTO;
+			
+			AnalysedModuleDTO[] childModules = 
+					this.analyseService.getChildModulesInModule(analysedModuleDTO.uniqueName);
+			
+			for(AnalysedModuleDTO childModule : childModules)
+			{
+				//TODO add child figures
+				System.out.println("child "+childModule.name);
+			}
+		}
 	}
-
-	@Override
-	public void moduleSelected(BaseFigure selectedFigure) {
-		System.out.println("Selected module " + selectedFigure.getName());
-	}	
 }

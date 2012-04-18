@@ -1,5 +1,7 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.common.dto.DependencyDTO;
+
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -20,10 +22,13 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure
 {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
+	private DependencyDTO dependencyDTO;
 
-	public RelationFigure()
+	public RelationFigure(DependencyDTO dependencyDTO)
 	{		
 		super();
+		
+		this.dependencyDTO = dependencyDTO;
 		
 		this.line = new LineConnectionFigure();
 		
@@ -37,10 +42,13 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure
 	
 	
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
+	{
 		line.setBounds(anchor, lead);
 		
 		super.setBounds(anchor, lead);
+		
+		this.invalidate();
 	}
 	
 	public void transform(AffineTransform tx) {

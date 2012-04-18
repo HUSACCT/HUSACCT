@@ -1,5 +1,9 @@
 package husacct.graphics.task;
 
+import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
@@ -38,6 +42,16 @@ public abstract class BaseController implements MouseClickListener
 	public JInternalFrame getGUI() {
 		return drawTarget;
 	}
+
+	@Override
+	public void showViolations(ViolationDTO[] violationDTOs)
+	{
+		System.out.println("Show "+violationDTOs.length+" violations");
+	}
 	
 	public abstract void drawArchitecture(DrawingDetail detail);
+	
+	public void drawViolationsForShownModules()
+	{
+	}
 }
