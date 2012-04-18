@@ -1,7 +1,9 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.task.MouseClickListener;
+import husacct.graphics.presentation.figures.IViolatedFigure;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -64,25 +66,34 @@ public class DrawingView extends DefaultDrawingView {
 		if (!selection.isEmpty()) {
 			Figure first = selection.iterator().next();
 			
-			if (e.getButton() == MouseEvent.BUTTON1) {
-				if (e.getClickCount() == 1)
-					fireModuleSelectedEvent((BaseFigure)first);
-				else if (e.getClickCount() == 2) 
-					fireModuleZoomInEvent((BaseFigure)first);
+			if (e.getButton() == MouseEvent.BUTTON1)
+			{
+				if (e.getClickCount() == 1 && first instanceof IViolatedFigure)
+				{
+					fireViolatedFigureSelected((IViolatedFigure)first);
+				}
+				else if (e.getClickCount() == 2 && first instanceof ModuleFigure)
+				{
+					fireModuleZoomInEvent((ModuleFigure)first);					
+				}
 			}
 				
 		}
 	}
 	
-	private void fireModuleSelectedEvent(BaseFigure obj) {
-		for (MouseClickListener l : listeners) {
-			l.moduleSelected(obj);
+	private void fireViolatedFigureSelected(IViolatedFigure fig)
+	{
+		for (MouseClickListener l : listeners)
+		{
+			l.showViolations(fig.getViolations());
 		}
 	}
 	
-	private void fireModuleZoomInEvent(BaseFigure obj) {
-		for (MouseClickListener l : listeners) {
-			l.moduleZoom(obj);
+	private void fireModuleZoomInEvent(ModuleFigure fig)
+	{
+		for (MouseClickListener l : listeners)
+		{
+			l.moduleZoom(fig.getDTO());
 		}
 	}	
 	

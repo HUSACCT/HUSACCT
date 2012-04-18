@@ -1,32 +1,29 @@
 package husacct.graphics.presentation.figures;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import husacct.common.dto.AbstractDTO;
 
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 
-public class LayerFigure extends BaseFigure {
+public class LayerFigure extends ModuleFigure {
 	
 	private static final long serialVersionUID = 101138923385231941L;
 	private RectangleFigure body;
 	
-	public LayerFigure(Rectangle2D.Double rect, String name) {
+	public LayerFigure(AbstractDTO dto)
+	{		
+		super(dto);
 		
-		super(rect, name);
-	}
-	
-	@Override
-	protected void initializeComponents() {
-		body = new RectangleFigure(anchor.x, anchor.y, 0, 0);		
+		body = new RectangleFigure();		
 		children.add(body);
-		
-		super.initializeComponents();
 	}	
 	
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		super.setBounds(anchor, lead);
-		
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
+	{
 		body.setBounds(anchor, lead);
 	}	
 	
@@ -35,6 +32,9 @@ public class LayerFigure extends BaseFigure {
 		
 		LayerFigure other = (LayerFigure)super.clone();
 		other.body = body.clone();
+		
+		other.children = new ArrayList<Figure>();
+		other.children.add(body);
 		
 		return other;
 	}
