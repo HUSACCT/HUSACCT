@@ -30,6 +30,19 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 	private static final long serialVersionUID = 1489931076171389065L;
 	private Figure decorator;
 	
+	public Decorator(Figure decorator) {
+		this.decorator = decorator;
+	}
+	
+	public Figure getDecorator() {
+		return this.decorator;
+	}
+	
+	@Override
+	public void setDecorator(Figure decorator) {
+		this.decorator = decorator;
+	}
+	
 	@Override
 	public void addFigureListener(FigureListener arg0) {
 		decorator.addFigureListener(arg0);
@@ -67,17 +80,17 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 
 	@Override
 	public Connector findCompatibleConnector(Connector arg0, boolean arg1) {
-		return findCompatibleConnector(arg0, arg1);
+		return decorator.findCompatibleConnector(arg0, arg1);
 	}
 
 	@Override
 	public Connector findConnector(Double arg0, ConnectionFigure arg1) {
-		return findConnector(arg0, arg1);
+		return decorator.findConnector(arg0, arg1);
 	}
 
 	@Override
 	public Figure findFigureInside(Double arg0) {
-		return findFigureInside(arg0);
+		return decorator.findFigureInside(arg0);
 	}
 
 	@Override
@@ -264,16 +277,6 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 	@Override
 	public void willChange() {
 		decorator.willChange();
-	}
-
-	@Override
-	public Figure getDecorator() {
-		return decorator;
-	}
-
-	@Override
-	public void setDecorator(Figure newDecorator) {
-		decorator = newDecorator;
 	}
 
 	@Override

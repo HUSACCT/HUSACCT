@@ -9,14 +9,11 @@ import java.util.LinkedList;
 
 import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
 import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.DecoratedFigure;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.TransformHandleKit;
 
-public abstract class BaseFigure extends AbstractAttributedCompositeFigure implements DecoratedFigure {
+public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
-	private Figure decorator = null;
 
 	public BaseFigure()
 	{
@@ -76,12 +73,4 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure imple
 	{
 		return this.getBounds().height;
 	}
-	
-	public void setDecorator(Figure newDecorator) {
-		decorator = newDecorator;
-	}
-  
-	public Figure getDecorator() {
-		return decorator;
-	}	
 }

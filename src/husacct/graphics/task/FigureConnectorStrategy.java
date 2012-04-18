@@ -7,7 +7,6 @@ import java.awt.geom.Point2D;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.Connector;
 
 public class FigureConnectorStrategy {
@@ -18,26 +17,30 @@ public class FigureConnectorStrategy {
 		
 		prototype = new LineConnectionFigure();
 	}
-	
-	public Figure connect(BaseFigure startFigure, BaseFigure endFigure) {	
+
+	public ConnectionFigure connect(ConnectionFigure connection,
+			BaseFigure startFigure,
+			BaseFigure endFigure) {	
 		Connector startConnector = startFigure.findConnector(new Point2D.Double(50, 50), prototype);
 		Connector endConnector = endFigure.findConnector(new Point2D.Double(500, 30), prototype);
 		
 		if ((startConnector != null && endConnector != null) && prototype.canConnect(startConnector, endConnector))
-		{			
-			ConnectionFigure connection = (ConnectionFigure)prototype.clone();
+		{
 			connection.willChange();
 			connection.setStartConnector(startConnector);
 			connection.setEndConnector(endConnector);
 			connection.updateConnection();
 			connection.changed();
 			
-			TextFigure tf = new TextFigure("Hoi!");
-			tf.setDecorator(connection);
-			return tf;
+			return connection;
 		}
 		
-		throw new IllegalArgumentException("The figures cannot be connected"); 
+		throw new IllegalArgumentException("The figures cannot be connected"); 		
+	}
+	
+	public Figure connect(BaseFigure startFigure, BaseFigure endFigure) {
+		ConnectionFigure connection = (ConnectionFigure)prototype.clone();
+		return this.connect(connection, startFigure, endFigure);
 	}
 	
 	public ConnectionFigure getConnectionPrototype() {

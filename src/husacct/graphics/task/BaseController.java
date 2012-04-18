@@ -1,6 +1,5 @@
 package husacct.graphics.task;
 
-import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
