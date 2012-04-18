@@ -1,11 +1,11 @@
-package husacct.graphics.task.figures;
+package husacct.graphics.presentation.figures;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import org.jhotdraw.draw.RectangleFigure;
 
-public class LayerFigure extends ModuleFigure {
+public class LayerFigure extends BaseFigure {
 	
 	private static final long serialVersionUID = 101138923385231941L;
 	private RectangleFigure body;
@@ -28,5 +28,14 @@ public class LayerFigure extends ModuleFigure {
 		super.setBounds(anchor, lead);
 		
 		body.setBounds(anchor, lead);
-	}		
+	}	
+	
+	@Override
+	public LayerFigure clone() {
+		
+		LayerFigure other = (LayerFigure)super.clone();
+		other.body = body.clone();
+		
+		return other;
+	}
 }
