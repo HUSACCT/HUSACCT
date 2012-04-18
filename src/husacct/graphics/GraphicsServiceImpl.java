@@ -24,7 +24,7 @@ public class GraphicsServiceImpl implements IGraphicsService {
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
 
-		return analysedController.getGUI();
+		return definedController.getGUI();
 	}
 
 	@Override

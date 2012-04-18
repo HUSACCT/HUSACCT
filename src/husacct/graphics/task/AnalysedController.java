@@ -4,6 +4,7 @@ import husacct.analyse.AnalyseServiceStub;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 public class AnalysedController extends BaseController {
@@ -17,7 +18,6 @@ public class AnalysedController extends BaseController {
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
-
 		AbstractDTO[] modules = analyseService.getRootModules();
 		drawModules(modules);
 	}
@@ -33,5 +33,12 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
+		AbstractDTO dto = ((DTODecorator) zoomedModuleFigure).getDTO();
+		switch(dto.getClass().getSimpleName()){
+			case "AnalysedModuleDTO":
+				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
+				AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(newdto.uniqueName);
+				drawModules(children);
+		}
 	}
 }
