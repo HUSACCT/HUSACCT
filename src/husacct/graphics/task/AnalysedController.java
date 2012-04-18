@@ -18,7 +18,6 @@ public class AnalysedController extends BaseController {
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
-
 		AbstractDTO[] modules = analyseService.getRootModules();
 		drawModules(modules);
 	}
