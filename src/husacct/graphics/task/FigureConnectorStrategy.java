@@ -1,46 +1,50 @@
 package husacct.graphics.task;
 
+import husacct.graphics.presentation.figures.BaseFigure;
+
 import java.awt.geom.Point2D;
 
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
-
-import husacct.graphics.task.figures.ModuleFigure;
-import husacct.graphics.task.figures.RelationFigure;
 
 public class FigureConnectorStrategy {
 	
-	private RelationFigure prototype;
+	private ConnectionFigure prototype;
 	
 	public FigureConnectorStrategy() {
 		
-		prototype = new RelationFigure();
+		prototype = new LineConnectionFigure();
 	}
 	
-	public RelationFigure connect(ModuleFigure startFigure, ModuleFigure endFigure)
-	{
-		RelationFigure connection = new RelationFigure();
-		
-		return this.connect(connection, startFigure, endFigure);
-	}
-	
-	public RelationFigure connect(RelationFigure fig, ModuleFigure startFigure, ModuleFigure endFigure) {
-		
+	public ConnectionFigure connect(BaseFigure startFigure, BaseFigure endFigure) {	
 		Connector startConnector = startFigure.findConnector(new Point2D.Double(50, 50), prototype);
 		Connector endConnector = endFigure.findConnector(new Point2D.Double(500, 30), prototype);
 		
 		if ((startConnector != null && endConnector != null) && prototype.canConnect(startConnector, endConnector))
 		{			
-			fig.willChange();
-			fig.setStartConnector(startConnector);
-			fig.setEndConnector(endConnector);
-			fig.updateConnection();
-			fig.changed();
+			ConnectionFigure connection = (ConnectionFigure)prototype.clone();
+			connection.willChange();
+			connection.setStartConnector(startConnector);
+			connection.setEndConnector(endConnector);
+			connection.updateConnection();
+			connection.changed();
 			
-			return fig;
+			return connection;
 		}
 		
 		throw new IllegalArgumentException("The figures cannot be connected"); 
 	}
+	
+	public ConnectionFigure getConnectionPrototype() {
+		return prototype;
+	}
+	
+	public void setConnectionPrototype(ConnectionFigure newPrototype) {
+		prototype = newPrototype;
+	}
+	
+	
 	
 	// This code adds decorations to lines. Not needed at the moment
 //	ArrowTip arrowTip = new ArrowTip(1.0, 12, 12, true, true, true);
