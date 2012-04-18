@@ -9,21 +9,20 @@ import husacct.graphics.presentation.figures.BaseFigure;
 public class AnalysedController extends BaseController {
 
 	private IAnalyseService analyseService;
-	
+
 	public AnalysedController() {
 		super();
-	
+
 		analyseService = new AnalyseServiceStub();
 	}
-	
+
 	public void drawArchitecture(DrawingDetail detail) {
-		
+
 		AbstractDTO[] modules = analyseService.getRootModules();
 		drawModules(modules);
 	}
 
-	private void drawModules(AbstractDTO[] modules)
-	{
+	private void drawModules(AbstractDTO[] modules) {
 		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
 
 		for (AnalysedModuleDTO dto : castedModules) {
@@ -31,23 +30,21 @@ public class AnalysedController extends BaseController {
 			drawing.add(packageFigure);
 		}
 	}
-	
+
 	@Override
-	public void moduleZoom(AbstractDTO zoomedModuleDTO)
-	{
-		if (zoomedModuleDTO instanceof AnalysedModuleDTO)
-		{
-			//TODO clear drawing
-			
-			AnalysedModuleDTO analysedModuleDTO = (AnalysedModuleDTO)zoomedModuleDTO;
-			
-			AnalysedModuleDTO[] childModules = 
-					this.analyseService.getChildModulesInModule(analysedModuleDTO.uniqueName);
-			
-			for(AnalysedModuleDTO childModule : childModules)
-			{
-				//TODO add child figures
-				System.out.println("child "+childModule.name);
+	public void moduleZoom(AbstractDTO zoomedModuleDTO) {
+		System.out.println("child " + zoomedModuleDTO.getClass());
+		
+		if (zoomedModuleDTO instanceof AnalysedModuleDTO) {
+			// TODO clear drawing
+
+			AnalysedModuleDTO analysedModuleDTO = (AnalysedModuleDTO) zoomedModuleDTO;
+
+			AnalysedModuleDTO[] childModules = this.analyseService
+					.getChildModulesInModule(analysedModuleDTO.uniqueName);
+
+			for (AnalysedModuleDTO childModule : childModules) {
+				System.out.println("child " + childModule.name);
 			}
 		}
 	}
