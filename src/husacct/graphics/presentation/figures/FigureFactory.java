@@ -29,13 +29,16 @@ public final class FigureFactory {
 				+ dto.getClass().getSimpleName() + "' passed to FigureFactory");
 	}
 
-	private ModuleFigure createModuleFigure(AbstractDTO dto) {
+	private BaseFigure createModuleFigure(AbstractDTO dto) {
 		String type;
+		String name;
 
 		if (dto instanceof ModuleDTO) {
 			type = ((ModuleDTO) dto).type;
+			name = ((ModuleDTO) dto).logicalPath;
 		} else if (dto instanceof AnalysedModuleDTO) {
 			type = ((AnalysedModuleDTO) dto).type;
+			name = ((AnalysedModuleDTO) dto).name;
 		} else {
 			throw new RuntimeException("dto type '"
 					+ dto.getClass().getSimpleName()
@@ -44,20 +47,20 @@ public final class FigureFactory {
 
 		switch (type.toLowerCase()) {
 		case "layer":
-			return new LayerFigure(dto);
+			return new LayerFigure(name);
 
 		case "class":
-			return new ClassFigure(dto);
+			return new ClassFigure(name);
 
 		case "package":
-			return new PackageFigure(dto);
+			return new PackageFigure(name);
 
 		default:
-			return new ModuleFigure(dto);
+			throw new RuntimeException("module dto type '"+type+"' not implemented");
 		}
 	}
 
 	private RelationFigure createFigure(DependencyDTO dependencyDTO) {
-		return new RelationFigure(dependencyDTO);
+		return new RelationFigure("Dependency from "+dependencyDTO.from+" to "+dependencyDTO.to);
 	}
 }

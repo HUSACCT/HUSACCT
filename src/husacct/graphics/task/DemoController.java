@@ -1,6 +1,7 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.*;
+import husacct.graphics.presentation.figures.BaseFigure;
 
 public class DemoController extends BaseController
 {
@@ -8,14 +9,14 @@ public class DemoController extends BaseController
 	public DemoController()
 	{
 		ModuleDTO presentationLayer = new ModuleDTO();
-		presentationLayer.type = "module";
+		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
 		
 		drawing.add(this.figureFactory.createFigure(presentationLayer));
 	}
 
 	@Override
-	public void moduleZoom(AbstractDTO zoomedModuleDTO) {
+	public void moduleZoom(BaseFigure zoomedModuleFigure) {
 		// TODO Auto-generated method stub
 
 	}

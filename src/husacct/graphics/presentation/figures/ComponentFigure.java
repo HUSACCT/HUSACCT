@@ -1,7 +1,5 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.dto.ModuleDTO;
-
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -9,7 +7,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ComponentFigure extends ModuleFigure
+public class ComponentFigure extends NamedFigure
 {
 	private static final long serialVersionUID = -344477017055924400L;
 
@@ -22,9 +20,9 @@ public class ComponentFigure extends ModuleFigure
 	private RectangleFigure box2;
 	private TextFigure textBox;
 
-	public ComponentFigure(ModuleDTO moduleDTO)
+	public ComponentFigure(String name)
 	{
-		super(moduleDTO);
+		super(name);
 		
 		this.mainBox = new RectangleFigure();
 		this.box1 = new RectangleFigure();

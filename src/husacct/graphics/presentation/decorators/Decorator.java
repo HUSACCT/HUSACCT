@@ -25,8 +25,8 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.geom.Dimension2DDouble;
 
-public abstract class Decorator extends BaseFigure implements DecoratedFigure {
-
+public abstract class Decorator extends BaseFigure implements DecoratedFigure
+{
 	private static final long serialVersionUID = 1489931076171389065L;
 	private Figure decorator;
 	

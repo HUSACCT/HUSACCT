@@ -1,7 +1,6 @@
 package husacct.graphics.task;
 
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
+import husacct.graphics.presentation.figures.BaseFigure;
 
 
 public class DefinedController extends BaseController
@@ -14,12 +13,8 @@ public class DefinedController extends BaseController
 	}
 	
 	@Override
-	public void moduleZoom(AbstractDTO zoomedModuleDTO)
+	public void moduleZoom(BaseFigure zoomedModuleFigure)
 	{
-		if(zoomedModuleDTO instanceof ModuleDTO)
-		{
-			System.out.println("Zooming in on "+((ModuleDTO)zoomedModuleDTO).logicalPath);
-		}
 	}
 
 }

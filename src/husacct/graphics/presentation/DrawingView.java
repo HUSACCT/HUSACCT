@@ -2,7 +2,6 @@ package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.IViolatedFigure;
 import husacct.graphics.task.MouseClickListener;
 
 import java.awt.event.MouseAdapter;
@@ -63,31 +62,27 @@ public class DrawingView extends DefaultDrawingView {
 		Set<Figure> selection = getSelectedFigures();
 
 		if (!selection.isEmpty()) {
-			Figure first = selection.iterator().next();
+			BaseFigure first = (BaseFigure)selection.iterator().next();
 
 			if (e.getButton() == MouseEvent.BUTTON1) {
-				if (e.getClickCount() == 1 && first instanceof IViolatedFigure) {
-					fireViolatedFigureSelected((IViolatedFigure) first);
+				if (e.getClickCount() == 1) {
+					fireFigureSelected(first);
 				} else if (e.getClickCount() == 2) {
-					fireModuleZoomInEvent((BaseFigure) first);
+					moduleZoom((BaseFigure) first);
 				}
 			}
 		}
 	}
 
-	private void fireViolatedFigureSelected(IViolatedFigure fig) {
+	private void fireFigureSelected(BaseFigure fig) {
 		for (MouseClickListener l : listeners) {
-			l.showViolations(fig.getViolations());
+			l.figureSelected(fig);
 		}
 	}
 
-	private void fireModuleZoomInEvent(BaseFigure fig) {
+	private void moduleZoom(BaseFigure fig) {
 		for (MouseClickListener l : listeners) {
-			
-			if (fig instanceof DTODecorator) {
-				DTODecorator dec = (DTODecorator)fig;
-				l.moduleZoom(dec.getDTO());			
-			}
+			l.moduleZoom(fig);
 		}
 	}
 

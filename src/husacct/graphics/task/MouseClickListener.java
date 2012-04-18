@@ -1,11 +1,10 @@
 package husacct.graphics.task;
 
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ViolationDTO;
+import husacct.graphics.presentation.figures.BaseFigure;
 
 public interface MouseClickListener {
 
-	public void moduleZoom(AbstractDTO zoomedModuleDTO);
+	public void moduleZoom(BaseFigure zoomedModuleFigure);
 
-	public void showViolations(ViolationDTO[] violationDTOs);
+	public void figureSelected(BaseFigure clickedFigure);
 }

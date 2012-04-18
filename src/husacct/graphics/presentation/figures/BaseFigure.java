@@ -16,7 +16,6 @@ import org.jhotdraw.draw.handle.TransformHandleKit;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure implements DecoratedFigure {
 	private static final long serialVersionUID = 971276235252293165L;
-	
 	private Figure decorator = null;
 
 	public BaseFigure()

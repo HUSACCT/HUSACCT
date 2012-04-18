@@ -1,21 +1,18 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.dto.AbstractDTO;
-
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 
-public class LayerFigure extends ModuleFigure {
-	
+public class LayerFigure extends NamedFigure {	
 	private static final long serialVersionUID = 101138923385231941L;
 	private RectangleFigure body;
 	
-	public LayerFigure(AbstractDTO dto)
+	public LayerFigure(String name)
 	{		
-		super(dto);
+		super(name);
 		
 		body = new RectangleFigure();		
 		children.add(body);

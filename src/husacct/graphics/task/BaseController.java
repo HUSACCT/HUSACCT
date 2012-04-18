@@ -4,6 +4,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
+import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 
 import java.awt.Dimension;
@@ -41,9 +42,9 @@ public abstract class BaseController implements MouseClickListener
 	}
 
 	@Override
-	public void showViolations(ViolationDTO[] violationDTOs)
+	public void figureSelected(BaseFigure clickedFigure)
 	{
-		System.out.println("Show "+violationDTOs.length+" violations");
+		System.out.println("Figure of type '"+clickedFigure.getClass().getSimpleName()+"' selected");
 	}
 	
 	public abstract void drawArchitecture(DrawingDetail detail);

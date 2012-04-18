@@ -32,20 +32,6 @@ public class AnalysedController extends BaseController {
 	}
 
 	@Override
-	public void moduleZoom(AbstractDTO zoomedModuleDTO) {
-		System.out.println("child " + zoomedModuleDTO.getClass());
-		
-		if (zoomedModuleDTO instanceof AnalysedModuleDTO) {
-			// TODO clear drawing
-
-			AnalysedModuleDTO analysedModuleDTO = (AnalysedModuleDTO) zoomedModuleDTO;
-
-			AnalysedModuleDTO[] childModules = this.analyseService
-					.getChildModulesInModule(analysedModuleDTO.uniqueName);
-
-			for (AnalysedModuleDTO childModule : childModules) {
-				System.out.println("child " + childModule.name);
-			}
-		}
+	public void moduleZoom(BaseFigure zoomedModuleFigure) {
 	}
 }

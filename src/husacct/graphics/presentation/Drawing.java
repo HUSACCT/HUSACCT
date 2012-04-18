@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import org.jhotdraw.draw.Figure;
 
-import husacct.graphics.presentation.figures.ModuleFigure;
+import husacct.graphics.presentation.figures.BaseFigure;
 
 
 public class Drawing extends org.jhotdraw.draw.DefaultDrawing
@@ -16,7 +16,7 @@ public class Drawing extends org.jhotdraw.draw.DefaultDrawing
 		super();
 	}
 
-	public ModuleFigure getShownModules()
+	public BaseFigure getShownModules()
 	{
 		return null;
 	}

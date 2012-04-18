@@ -1,7 +1,5 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.dto.DependencyDTO;
-
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -18,17 +16,14 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends BaseFigure implements ConnectionFigure
+public class RelationFigure extends NamedFigure implements ConnectionFigure
 {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
-	private DependencyDTO dependencyDTO;
 
-	public RelationFigure(DependencyDTO dependencyDTO)
+	public RelationFigure(String name)
 	{		
-		super();
-		
-		this.dependencyDTO = dependencyDTO;
+		super(name);
 		
 		this.line = new LineConnectionFigure();
 		
