@@ -2,22 +2,15 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.tables.JTableTableModel;
-import husacct.define.presentation.utils.DefaultMessages;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -148,7 +141,8 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 		
 		return bottomPanel;
 	}
-
+	
+	@Deprecated
 	public long getSelectedLayer() {
 		Object selected = jListLayers.getSelectedValue();
 		if (selected instanceof DataHelper) {

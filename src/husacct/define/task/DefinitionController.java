@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class DefinitionController implements ActionListener, ListSelectionListener, KeyListener, Observer {
+public class DefinitionController implements ActionListener, KeyListener, Observer {
 
 	private DefinitionJPanel definitionJPanel;
 	private static DefinitionController instance;
@@ -490,21 +490,17 @@ public class DefinitionController implements ActionListener, ListSelectionListen
 	/**
 	 * This function will load the layer name, descriptin and interface acces only checkbox. Next it will call two methods which will load the two tables.
 	 */
-	public void loadLayerDetail() {
+	public void loadLayerDetail(long layerId) {
 		Log.i(this, "loadLayerDetail()");
 
-		long layerId = definitionJPanel.getSelectedLayer();
-
 		if (layerId != -1) {
-			// Set the values
 			try {
-				definitionJPanel.jTextFieldLayerName.setText(DefineDomainService.getInstance().getModuleNameById(layerId));
+				String moduleName = DefineDomainService.getInstance().getModuleNameById(layerId);
+				definitionJPanel.jTextFieldLayerName.setText(moduleName);
 			} catch (Exception e) {
 				Log.e(this, "loadLayerDetail() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 			}
-//			definitionJPanel.jTextAreaLayerDescription.setText(definitionService.getLayerDescription(layer_id));
-//			definitionJPanel.jCheckBoxAccess.setSelected(definitionService.getLayerInterfaceOnly(layer_id));
 
 			// Update the tables
 			updateSoftwareUnitTable();
@@ -690,12 +686,6 @@ public class DefinitionController implements ActionListener, ListSelectionListen
 			updateLayer();
 		} else {
 			Log.i(this, "actionPerformed(" + action + ")");
-		}
-	}
-
-	public void valueChanged(ListSelectionEvent event) {
-		if (event.getSource() == definitionJPanel.jListLayers && !event.getValueIsAdjusting()) {
-			loadLayerDetail();
 		}
 	}
 

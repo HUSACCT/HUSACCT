@@ -12,6 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+/**
+ * 
+ * @author Henk ter Harmsel
+ *
+ */
 public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel {
 
 	private static final long serialVersionUID = 8086576683923713276L;
