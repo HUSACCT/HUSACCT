@@ -41,8 +41,6 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure
 	{
 		line.setBounds(anchor, lead);
 		
-		super.setBounds(anchor, lead);
-		
 		this.invalidate();
 	}
 	

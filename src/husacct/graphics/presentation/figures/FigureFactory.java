@@ -2,31 +2,35 @@ package husacct.graphics.presentation.figures;
 
 import husacct.common.dto.*;
 import husacct.graphics.presentation.decorators.DTODecorator;
+import husacct.graphics.presentation.decorators.DependenciesDecorator;
 
 public final class FigureFactory {
+	
+	public BaseFigure createFigure(DependencyDTO[] dtos) {
+		RelationFigure relationFigure = this.createFigure(dtos[0]);
+		DependenciesDecorator dependenciesDecorator = new DependenciesDecorator(relationFigure, dtos);
+		return dependenciesDecorator;
+	}
 
 	public BaseFigure createFigure(AbstractDTO dto) {
 		BaseFigure retVal = null;
 
 		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
 			retVal = createModuleFigure(dto);
-		} else if (dto instanceof DependencyDTO) {
-			retVal = createFigure((DependencyDTO) dto);
+		}
+		
+		if(retVal == null)
+		{
+			throw new RuntimeException("Unimplemented dto type '"
+					+ dto.getClass().getSimpleName() + "' passed to FigureFactory");
 		}
 
 		// TODO: Use a DTODecorator to store the DTO along side with the newly
 		// created Figure.
 		// TODO: Determine whether it's Figure -> DTODecorator or DTODecorator
 		// -> Figure.
-		if (retVal != null) {
-			DTODecorator decorator = new DTODecorator(dto);
-			decorator.setDecorator(retVal);
-			
-			return decorator;
-		}
-
-		throw new RuntimeException("Unimplemented dto type '"
-				+ dto.getClass().getSimpleName() + "' passed to FigureFactory");
+		DTODecorator decorator = new DTODecorator(retVal, dto);
+		return decorator;
 	}
 
 	private BaseFigure createModuleFigure(AbstractDTO dto) {

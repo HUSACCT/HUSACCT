@@ -12,7 +12,8 @@ public class ViolationsDecorator extends Decorator {
 	private static final long serialVersionUID = 4445235736740459408L;
 	private ViolationDTO[] violations;
 	
-	public ViolationsDecorator(ViolationDTO[] violations) {
+	public ViolationsDecorator(Figure decorator,ViolationDTO[] violations) {
+		super(decorator);
 		this.violations = violations;
 	}
 	
@@ -21,10 +22,8 @@ public class ViolationsDecorator extends Decorator {
 	}	
 	
 	@Override 
-	public void setDecorator(Figure newDecorator) {
-		Figure oldDecorator = getDecorator();
-		oldDecorator.set(AttributeKeys.STROKE_COLOR, Color.BLACK);
-		
+	public void setDecorator(Figure newDecorator)
+	{		
 		super.setDecorator(newDecorator);
 		getDecorator().set(AttributeKeys.STROKE_COLOR, Color.RED);
 	}
