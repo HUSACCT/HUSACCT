@@ -1,6 +1,9 @@
 package husacct.control;
 
+<<<<<<< HEAD
+=======
 import husacct.common.savechain.ISaveable;
+>>>>>>> b41072a8bc2d1ef523f3d97d4a6bdb2e4c212598
 import husacct.control.task.LocaleController;
 
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 		}
 	}
 
+<<<<<<< HEAD
+=======
 	public Element getWorkspaceData() {
 		Element data = new Element("MyControlData");
 		data.addContent("testdata");
@@ -39,4 +44,5 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 		logger.debug(workspaceData);		
 	}
 
+>>>>>>> b41072a8bc2d1ef523f3d97d4a6bdb2e4c212598
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Architecture rules" xmlns="http://pmd.sf.net/ruleset/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+	xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+	<description>A set of rules to check the architecture of an application</description>
+
+	<rule name="Back-call rule" message="A lower layer is calling a higher layer"
+		class="hu.project.innovation.configuration.model.rules.BackCallRule">
+		<description>Back call rule</description>
+		<priority>3</priority>
+	</rule>
+
+	<rule name="Skip-layer rule" message="A layer is being skipped"
+		class="hu.project.innovation.configuration.model.rules.SkipLayerRule">
+		<description>Skip layer rule</description>
+		<priority>3</priority>
+	</rule>
+
+	<rule name="Interfaces only rule" message="The called layer is only accesable through interfaces"
+		class="hu.project.innovation.configuration.model.rules.InterfacesOnlyRule">
+		<description>Interfaces only rule</description>
+		<priority>2</priority>
+	</rule>
+
+</ruleset>

@@ -1,4 +1,4 @@
-package husacct.graphics.task.figures;
+package husacct.graphics.presentation.figures;
 
 import java.awt.Color;
 

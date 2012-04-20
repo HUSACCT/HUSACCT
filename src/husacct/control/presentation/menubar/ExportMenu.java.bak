@@ -33,17 +33,27 @@ public class ExportMenu extends JMenu{
 			}
 		});
 
+<<<<<<< HEAD
+				
+		exportViolationReportItem = new JMenuItem("Violation report");
 
 		exportPhysicalArchitectureItem = new JMenuItem("Physical architecture");
+=======
+		JMenuItem exportPhysicalArchitectureItem = new JMenuItem("Physical architecture");
+>>>>>>> b41072a8bc2d1ef523f3d97d4a6bdb2e4c212598
 		this.add(exportPhysicalArchitectureItem);
 		exportPhysicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: physical architecture
+				// TODO: logical architecture
 			}
 		});
 		
+<<<<<<< HEAD
 		exportViolationReportItem = new JMenuItem("Violation report");
 
+=======
+		JMenuItem exportViolationReportItem = new JMenuItem("Violation report");
+>>>>>>> b41072a8bc2d1ef523f3d97d4a6bdb2e4c212598
 		this.add(exportViolationReportItem);
 		
 		exportViolationReportItem.addActionListener(new ActionListener(){
