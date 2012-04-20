@@ -1,46 +1,28 @@
 package husacct.validate.presentation;
 
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.TaskServiceImpl;
+import java.awt.Color;
 import java.util.List;
-import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private static final long serialVersionUID = 3568220674416621458L;
 	TaskServiceImpl ts;
-	DefaultTableModel severityModel;
+	ColorTableModel severityModel;
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		this.ts = ts;
-		String[] severityColumnNames = {"Severity Name", "Color"};
-		severityModel = new DefaultTableModel(severityColumnNames, 0) {
-
-			Class<?>[] types = new Class[]{
-			java.lang.String.class, java.lang.Object.class
-			};
-			boolean[] canEdit = new boolean[]{
-				true, true
-			};
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
+		severityModel = new ColorTableModel();
 		initComponents();
+		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
+
+		TableCellEditor editor = new ColorChooserEditor();
+		column.setCellEditor(editor);
+
 
 		LanguageConfigurationPanel lcp = new LanguageConfigurationPanel();
 		jTabbedPane1.addTab("Java", lcp);
@@ -165,33 +147,35 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downActionPerformed
-//		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() -
-//												 1) {
-//			severityModel.moveRow(severityNameTable.getSelectedRow(),
-//								  severityNameTable.getSelectedRow(),
-//								  severityNameTable.getSelectedRow() + 1);
-//			severityNameTable.changeSelection(severityNameTable.getSelectedRow() +
-//											  1, 0, false, false);
-//		}
+		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() -
+												 1) {
+			severityModel.moveRow(severityNameTable.getSelectedRow(),
+								  severityNameTable.getSelectedRow(),
+								  severityNameTable.getSelectedRow() + 1);
+			severityNameTable.changeSelection(severityNameTable.getSelectedRow() +
+											  1, 0, false, false);
+		}
 	}//GEN-LAST:event_downActionPerformed
 
 	private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
-//		if (severityNameTable.getSelectedRow() > 0) {
-//			severityModel.moveRow(severityNameTable.getSelectedRow(),
-//								  severityNameTable.getSelectedRow(),
-//								  severityNameTable.getSelectedRow() - 1);
-//			severityNameTable.changeSelection(severityNameTable.getSelectedRow() -
-//											  1, 0, false, false);
-//		}
+		if (severityNameTable.getSelectedRow() > 0) {
+			severityModel.moveRow(severityNameTable.getSelectedRow(),
+								  severityNameTable.getSelectedRow(),
+								  severityNameTable.getSelectedRow() - 1);
+			severityNameTable.changeSelection(severityNameTable.getSelectedRow() -
+											  1, 0, false, false);
+		}
 	}//GEN-LAST:event_upActionPerformed
 
 	private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
-//		severityModel.removeRow(severityNameTable.getSelectedRow());
+		if(severityNameTable.getSelectedRow() > -1){
+			severityModel.removeRow(severityNameTable.getSelectedRow());
+		}
 	}//GEN-LAST:event_removeActionPerformed
 
 	private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-//		severityModel.addRow(new Object[]{""});
-		severityNameTable.changeSelection(severityNameTable.getRowCount() - 1, 0,
+		severityModel.insertRow(0, new Object[]{"", ""});
+		severityNameTable.changeSelection(0, 0,
 										  false, false);
 	}//GEN-LAST:event_addActionPerformed
 
@@ -211,17 +195,14 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
 	private void loadSeverity() {
-//
-//		List<Severity> severities = ts.getAllSeverities();
-//
-//		if (severities.isEmpty()) {
-//			severityModel.addRow(new Object[]{"Low"});
-//			severityModel.addRow(new Object[]{"Meduim"});
-//			severityModel.addRow(new Object[]{"High"});
-//		} else {
-//			for (Severity severity : severities) {
-//				severityModel.addRow(new Object[]{severity.getDefaultName()});
-//			}
-//		}
+		List<Severity> severities = ts.getAllSeverities();
+		for(Severity severity : severities){
+			severityModel.addRow(new Object[]{severity.getDefaultName(), severity.getColor()});
+		}
+		if (severities.isEmpty()){
+			severityModel.addRow(new Object[]{"Low", Color.BLUE});
+			severityModel.addRow(new Object[]{"Meduim", Color.BLUE});
+			severityModel.addRow(new Object[]{"High", Color.BLUE});
+		}
 	}
 }
