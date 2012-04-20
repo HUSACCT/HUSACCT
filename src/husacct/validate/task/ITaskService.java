@@ -15,7 +15,7 @@ public interface ITaskService {
 	public ArrayList<String> loadRuletypes();
 	public ArrayList<String> loadViolationtypes();
 
-	public List<RuleType> getRuletypes();
-	public void getViolationtypes(String ruletypeKey);
+	public List<RuleType> getRuletypes(String language);
+//	public void getViolationtypes(String ruletypeKey);
 	public List<Severity> getAllSeverities();
 }
