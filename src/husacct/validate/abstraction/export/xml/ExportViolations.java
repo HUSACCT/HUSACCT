@@ -6,12 +6,12 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ExportViolations {
@@ -32,9 +32,9 @@ public class ExportViolations {
 			addMessage(violationElement, violation.getMessage());
 			createElementWithContent("isIndirect",""+violation.isIndirect(), violationElement);
 			try {
-				createElementWithContent("occured", DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)violation.getOccured()).toString(), violationElement);
+				createElementWithContent("occured", DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)violation.getOccured()).toXMLFormat(), violationElement);
 			} catch (DatatypeConfigurationException e) {
-				Logger.getLogger(ExportViolations.class.getName()).log(Level.SEVERE, "There was a error creating a new date in ExportViolations", e);
+				Logger.getLogger(ExportViolations.class.getName()).log(Level.ERROR, "There was a error creating a new date in ExportViolations", e);
 			}
 			violationsElement.addContent(violationElement);
 		}
