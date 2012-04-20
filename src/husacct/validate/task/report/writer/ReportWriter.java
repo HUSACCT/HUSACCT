@@ -1,0 +1,63 @@
+package husacct.validate.task.report.writer;
+
+import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
+import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.report.UnknownStorageTypeException;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
+
+import com.itextpdf.text.DocumentException;
+
+public abstract class ReportWriter {
+
+	protected Report report;
+	protected String path;
+	protected String fileName;
+	protected ExtensionType extensionType;
+
+	public ReportWriter(Report report, String path, String fileName, ExtensionType extensionType) {
+		this.report = report;
+		this.path = path;
+		this.fileName = fileName;
+		this.extensionType = extensionType;
+	}
+
+	public abstract void createReport() throws IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException, URISyntaxException, DocumentException, TransformerException, DOMException ;
+
+	public String convertIsIndirectBooleanToString(boolean isIndirect) {
+		if(isIndirect) {
+			return "direct";
+		} else {
+			return "indirect";
+		}
+	}
+	public String getCurrentDate(){
+		return new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+	}
+
+	public void checkDirsExist() {
+		File file = new File(path);
+		file.mkdirs();
+	}
+
+	public String getFileName() {
+		String s = "";
+		if(path.endsWith(""+File.separatorChar)) {
+			s = path + fileName;
+		} else {
+			s = path + File.separatorChar + fileName;
+		}
+		s += "." + extensionType.getExtension();
+		return s;
+	}
+}

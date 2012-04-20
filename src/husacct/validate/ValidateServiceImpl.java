@@ -1,88 +1,85 @@
 package husacct.validate;
 
-import com.itextpdf.text.DocumentException;
-import husacct.define.DefineServiceStub;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.abstraction.export.ExportReportFactory;
-import husacct.validate.abstraction.fetch.UnknownStorageTypeException;
-import husacct.validate.domain.assembler.AssemblerController;
-import husacct.validate.domain.check.CheckConformanceController;
-import husacct.validate.domain.factory.RuletypesFactory;
+import husacct.define.DefineServiceImpl;
+import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
+import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.presentation.BrowseViolations;
-import husacct.validate.task.filter.LogicalPathsViolation;
+import husacct.validate.presentation.ConfigurationUI;
+import husacct.validate.task.ReportServiceImpl;
+import husacct.validate.task.TaskServiceImpl;
+import husacct.validate.task.report.UnknownStorageTypeException;
+
 import java.io.IOException;
+import java.net.URISyntaxException;
+
 import javax.swing.JInternalFrame;
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
-public class ValidateServiceImpl implements IValidateService {
-	private ValidateServiceStub stub = new ValidateServiceStub();
-	private CheckConformanceController checkConformance = new CheckConformanceController();
+import com.itextpdf.text.DocumentException;
 
+public class ValidateServiceImpl implements IValidateService {
+	private ConfigurationServiceImpl configuration;
+	private DomainServiceImpl domain;
+	private ReportServiceImpl report;
+	private TaskServiceImpl task;
+
+	public ValidateServiceImpl(){
+		this.configuration = new ConfigurationServiceImpl();
+		this.domain = new DomainServiceImpl(configuration);
+		this.report = new ReportServiceImpl(configuration);
+		this.task = new TaskServiceImpl(configuration, domain);
+	}
+
+
+	@Override
 	public CategoryDTO[] getCategories(){
-		RuletypesFactory ruletypefactory = new RuletypesFactory();
-		return new AssemblerController().createCategoryDTO(ruletypefactory.getRuleTypes());
+		return domain.getCategories();
 	}
 
 	@Override
 	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
-		return new LogicalPathsViolation().getViolations(logicalpathFrom, logicalpathTo, checkConformance);
+		return task.getViolations(logicalpathFrom, logicalpathTo);
 	}
 
 	@Override
 	public String[] getExportExtentions() {
-		return stub.getExportExtentions();
+		return new ExtensionTypes().getExtensionTypes();
 	}
 
 	@Override
 	public void checkConformance() {
-		RuleDTO[] appliedRules = new RuleDTO[]{new DefineServiceStub().getDefinedRules()[0]};
-		System.out.println("check");
-		checkConformance.CheckConformance(appliedRules);
+		RuleDTO[] appliedRules = new DefineServiceImpl().getDefinedRules();
+		domain.checkConformance(appliedRules);
 	}
 
 	@Override
 	//Export report
-	public void exportViolations(String name, String fileType, String path) {
-		System.out.println("export");
-		try {
-			new ExportReportFactory().exportReport(fileType, checkConformance.getViolations(), name+".pdf", path);
-		} catch (DOMException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (UnknownStorageTypeException e) {
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public void exportViolations(String name, String fileType, String path) throws DOMException, UnknownStorageTypeException, ParserConfigurationException, SAXException, IOException, URISyntaxException, DocumentException, TransformerException {
+		report.createReport(fileType, name, path);
 	}
 
 	@Override
 	public JInternalFrame getBrowseViolationsGUI(){
-		return new BrowseViolations(checkConformance.getViolations());
+		return new BrowseViolations(task);
+	}
+
+	@Override
+	public JInternalFrame getConfigurationGUI(){
+		return new ConfigurationUI(task);
 	}
 
 	public static void main(String[] args){
 		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
 		serviceImpl.checkConformance();
-		serviceImpl.exportViolations("elaborationViolations.pdf", "pdf", "C:\\reports");
+
 	}
 
 }

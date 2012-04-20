@@ -1,11 +1,11 @@
 package husacct.validate;
 
-import javax.swing.JInternalFrame;
-
 import husacct.common.dto.CategoryDTO;
+import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
+import javax.swing.JInternalFrame;
 
 public class ValidateServiceStub implements IValidateService{
 
@@ -19,14 +19,10 @@ public class ValidateServiceStub implements IValidateService{
 
 	private CategoryDTO category = new CategoryDTO("Legality of Dependency", new RuleTypeDTO[] { ruleType });
 
-	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 
-			"is not allowed", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType);
-	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO",
-			"is not allowed", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType);
-	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap",
-			"is not allowed", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType);
-	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ",
-			"is not allowed", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType);
+	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
+	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
+	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
+	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, new MessageDTO("Module locationbasedHistory", "Module locationbasedDAO", "IsNotAllowedToUse"));
 
 	public CategoryDTO[] getCategories() {
 		return new CategoryDTO[] { category };
@@ -35,7 +31,7 @@ public class ValidateServiceStub implements IValidateService{
 	public String[] getExportExtentions() {
 		return new String[] { "pdf", "xml", "html" };
 	}
-	
+
 	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo){
 		//If you want to have the rules of one logicalmodule logicalpathFrom and logicalpathTo should be the same
 		if(logicalpathFrom.equals("Domain layer") && logicalpathTo.contains("Infrastructure layer")){
@@ -65,8 +61,13 @@ public class ValidateServiceStub implements IValidateService{
 	public void exportViolations(String name, String fileType, String path) {
 
 	}
-	
+
 	public JInternalFrame getBrowseViolationsGUI(){
 		return new JInternalFrame();
+	}
+
+	@Override
+	public JInternalFrame getConfigurationGUI() {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

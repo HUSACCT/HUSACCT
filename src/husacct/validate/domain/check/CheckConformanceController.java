@@ -1,9 +1,10 @@
 package husacct.validate.domain.check;
 
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.factory.RuletypesFactory;
-import husacct.validate.domain.ruletype.Rule;
-import husacct.validate.domain.violation.Violation;
+import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.rulefactory.RuletypesFactory;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,22 +12,25 @@ import java.util.List;
 import java.util.Map;
 
 public class CheckConformanceController {
+	private final ConfigurationServiceImpl configuration;
 	private List<Violation> violations;
 	private RuletypesFactory ruleFactory;
-	private Map<String, Rule> ruleCache;
+	private Map<String, RuleType> ruleCache;
 
-	public CheckConformanceController(){
+	public CheckConformanceController(ConfigurationServiceImpl configuration){
+		this.configuration = configuration;
+		this.configuration.clearViolations();
 		this.violations = new ArrayList<Violation>();
-		this.ruleCache = new HashMap<String, Rule>();
+		this.ruleCache = new HashMap<String, RuleType>();
 		this.ruleFactory = new RuletypesFactory();
 	}
 
-	public void CheckConformance(RuleDTO[] appliedRules){
+	public void checkConformance(RuleDTO[] appliedRules){
 		for(RuleDTO appliedRule : appliedRules){
-			Rule rule = getRuleType(appliedRule.ruleTypeKey);
+			RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 			if(rule != null){
 				List<Violation> newViolations = rule.check(appliedRule);
-				violations.addAll(newViolations);
+				configuration.addViolations(newViolations);
 			}
 			else{
 				//rule(Key) does not exists, thus ignore appliedRule
@@ -34,8 +38,8 @@ public class CheckConformanceController {
 		}
 	}
 
-	private Rule getRuleType(String ruleKey){
-		Rule rule = ruleCache.get(ruleKey);
+	private RuleType getRuleType(String ruleKey){
+		RuleType rule = ruleCache.get(ruleKey);
 
 		if(rule == null){
 			rule = ruleFactory.generateRuleType(ruleKey);

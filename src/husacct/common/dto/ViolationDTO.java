@@ -3,21 +3,21 @@ package husacct.common.dto;
 public class ViolationDTO extends AbstractDTO {
 	private String fromClasspath;
 	private String toClasspath;
-	private String errorMessage;
 	private String logicalModuleFrom;
 	private String logicalModuleTo;
 	private RuleTypeDTO ruleType;
 	private ViolationTypeDTO violationType;
+	private MessageDTO message;
 
-	public ViolationDTO(String fromClasspath, String toClasspath, String errorMessage,
-			String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType) {
+	public ViolationDTO(String fromClasspath, String toClasspath,
+			String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, MessageDTO message) {
 		this.fromClasspath = fromClasspath;
 		this.toClasspath = toClasspath;
-		this.errorMessage = errorMessage;
 		this.logicalModuleFrom = logicalModuleFrom;
 		this.logicalModuleTo = logicalModuleTo;
 		this.violationType = violationType;
 		this.ruleType = ruleType;
+		this.setMessage(message);
 	}
 
 	public String getFromClasspath() {
@@ -26,10 +26,6 @@ public class ViolationDTO extends AbstractDTO {
 
 	public String getToClasspath() {
 		return toClasspath;
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
 	}
 
 	public String getLogicalModuleFrom() {
@@ -46,5 +42,13 @@ public class ViolationDTO extends AbstractDTO {
 
 	public ViolationTypeDTO getViolationType() {
 		return violationType;
+	}
+
+	public MessageDTO getMessage() {
+		return message;
+	}
+
+	public void setMessage(MessageDTO message) {
+		this.message = message;
 	}
 }
