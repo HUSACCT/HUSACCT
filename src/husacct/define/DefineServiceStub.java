@@ -163,4 +163,14 @@ public class DefineServiceStub implements IDefineService{
 	public void loadWorkspaceData(Element workspaceData) {
 		//TODO: Implement in Construction I
 	}
+
+	@Override
+	public boolean isDefined() {
+		return true;
+	}
+
+	@Override
+	public boolean isMapped() {
+		return true;
+	}
 }

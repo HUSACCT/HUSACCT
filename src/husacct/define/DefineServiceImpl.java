@@ -1,5 +1,7 @@
 package husacct.define;
 
+import java.util.ArrayList;
+
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
@@ -106,5 +108,26 @@ public class DefineServiceImpl implements IDefineService {
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		//TODO: Implement in Construction I
+	}
+
+	@Override
+	public boolean isDefined() {
+		boolean isDefined = false;
+		if (SoftwareArchitecture.getInstance().getModules().size() > 0){
+			isDefined = true;
+		}
+		return isDefined;
+	}
+
+	@Override
+	public boolean isMapped() {
+		boolean isMapped = false;
+		ArrayList<Module> modules = SoftwareArchitecture.getInstance().getModules();
+		for (Module module : modules){	
+			if (module.isMapped()){
+				isMapped = true;
+			}
+		}
+		return isMapped;
 	}
 }
