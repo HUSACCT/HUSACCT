@@ -39,11 +39,11 @@ public class ConfigurationServiceImpl {
 		severityConfig.addSeverities(severities);
 	}
 
-	public HashMap<String, Severity> getAllSeveritiesPerRuleTypes() {
+	public HashMap<String, Severity> getAllSeveritiesPerTypes() {
 		return severitiesPerTypes;
 	}
 	
-	public void setSeveritiesPerRuleTypes(HashMap<String, Severity> severitiesPerRuleTypes){
-		this.severitiesPerTypes = severitiesPerRuleTypes;
+	public void setSeveritiesPerTypes(HashMap<String, Severity> severitiesPerTypes){
+		this.severitiesPerTypes = severitiesPerTypes;
 	}
 }

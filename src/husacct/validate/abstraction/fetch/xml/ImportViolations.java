@@ -6,7 +6,6 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -15,7 +14,7 @@ import javax.xml.datatype.DatatypeFactory;
 import org.jdom2.Element;
 
 
-public class ImportViolationsWithJDOM {
+public class ImportViolations {
 	public List<Violation> importViolations(Element violationsElement) throws DatatypeConfigurationException {
 		List<Violation> violations = new ArrayList<Violation>();
 		for(Element violationElement : violationsElement.getChildren()) {

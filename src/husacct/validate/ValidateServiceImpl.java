@@ -4,7 +4,6 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
-import husacct.define.DefineServiceImpl;
 import husacct.define.DefineServiceStub;
 import husacct.validate.abstraction.AbstractionServiceImpl;
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
@@ -27,7 +26,6 @@ import javax.xml.transform.TransformerException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
@@ -91,18 +89,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		serviceImpl.checkConformance();
 
 	}
-
-
 	@Override
 	public Element getWorkspaceData() {
-		try {
-			return abstraction.exportValidationWorkspace();
-		} catch (ParserConfigurationException e) {
-			Logger.getLogger(ValidateServiceImpl.class).log(Level.ERROR, "Error exporting the workspace", e);
-		} catch (JDOMException e) {
-			Logger.getLogger(ValidateServiceImpl.class).log(Level.ERROR, "Error exporting the workspace", e);
-		}
-		return null;
+		return abstraction.exportValidationWorkspace();
 	}
 
 

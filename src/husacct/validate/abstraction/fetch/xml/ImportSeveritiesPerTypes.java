@@ -16,7 +16,8 @@ public class ImportSeveritiesPerTypes {
 				if(severity.getValue() == Integer.parseInt(severityPerTypesElement.getChildText("value"))) {
 					severitiesPerTypes.put(severityPerTypesElement.getChildText("typeKey"), severity);
 				}
-			}			
+			}	
+			
 		}
 		return severitiesPerTypes;
 	}
