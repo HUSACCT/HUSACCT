@@ -102,7 +102,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("<span>Date generated: " + getCurrentDate() + "</span><br />Project: " + report.getProjectName() + "<br />Version: " + report.getVersion() + "<br />");
 		html.append("<span class=\"stats\">Statistics</span><br/>");
 		html.append("Total violations: " + report.getViolations().size() + "<br />"+ "<br />");
-		for(ViolationsPerSeverity severityPerViolation : report.getSeveritiesPerViolation(report.getViolations())) {
+		for(ViolationsPerSeverity severityPerViolation : report.getViolationsPerSeverity()) {
 			html.append(severityPerViolation.getSeverity().getDefaultName() + ": " + severityPerViolation.getAmount() + "<br />");
 		}
 	}

@@ -88,7 +88,7 @@ public class PDFReportWriter extends ReportWriter {
 
 		document.add(new Paragraph("Total violations: " + report.getViolations().size()));
 		document.add(new Paragraph(" "));
-		List<ViolationsPerSeverity> violationsPerSeverity = report.getSeveritiesPerViolation(report.getViolations());
+		List<ViolationsPerSeverity> violationsPerSeverity = report.getViolationsPerSeverity();
 		if(violationsPerSeverity.isEmpty()) {
 			document.add(Chunk.NEWLINE);
 			document.add(Chunk.NEWLINE);
