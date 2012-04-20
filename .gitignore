@@ -3,3 +3,7 @@ bin
 .project
 .settings
 *.log
+/nbproject/
+/build/
+/dist/
+build.xml
