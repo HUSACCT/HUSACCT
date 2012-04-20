@@ -20,9 +20,11 @@ public class LanguageConfigurationPanel extends javax.swing.JPanel {
 	String[] violationtypeModelHeaders = {"Ruletype", "Severity"};
 	DefaultTableModel violationtypeModel = new DefaultTableModel(violationtypeModelHeaders, 0);
 	private final ComboBoxTableModel ruletypeModel;
+	private final String language;
 
     /** Creates new form LanguageConfigurationPanel */
-    public LanguageConfigurationPanel() {
+    public LanguageConfigurationPanel(String language) {
+		this.language = language;
        String[] ruletypeColumnNames = {"Ruletype", "Severity"};
 	   String[] severities = {"High", "Low"};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities) {

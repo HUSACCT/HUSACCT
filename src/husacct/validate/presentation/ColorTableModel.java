@@ -1,57 +1,62 @@
 package husacct.validate.presentation;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 
+@SuppressWarnings("UseOfObsoleteCollectionType")
 class ColorTableModel extends AbstractTableModel {
 
 	protected Vector dataVector = new Vector();
 	String columnNames[] = {"Severity Name", "Color"};
 
+	Class<?>[] types = new Class[]{String.class, String.class};
+	boolean[] canEdit = new boolean[]{true, true};
+
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return types[columnIndex];
+	}
+
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		return canEdit[columnIndex];
+	}
+
+	@Override
 	public int getColumnCount() {
 		return columnNames.length;
 	}
 
+	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
 
+	@Override
 	public int getRowCount() {
 		return dataVector.size();
 	}
 
+	@Override
 	public Object getValueAt(int row, int column) {
 		Vector rowVector = (Vector) dataVector.elementAt(row);
 		return rowVector.elementAt(column);
 	}
 
-	public Class getColumnClass(int column) {
-		return (getValueAt(0, column).getClass());
-	}
-
+	@Override
 	public void setValueAt(Object value, int row, int column) {
 		Vector rowVector = (Vector) dataVector.elementAt(row);
 		rowVector.setElementAt(value, column);
 		fireTableRowsUpdated(row, row);
-	}
-
-	public boolean isCellEditable(int row, int column) {
-		return (column != 0);
 	}
 
 	protected static Vector convertToVector(Object[] anArray) {
@@ -142,6 +147,7 @@ class ColorChooserEditor extends AbstractCellEditor implements TableCellEditor {
 	public ColorChooserEditor() {
 		ActionListener actionListener = new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				Color color = JColorChooser.showDialog(delegate, "Color Chooser",
 													   savedColor);
@@ -151,6 +157,7 @@ class ColorChooserEditor extends AbstractCellEditor implements TableCellEditor {
 		delegate.addActionListener(actionListener);
 	}
 
+	@Override
 	public Object getCellEditorValue() {
 		return savedColor;
 	}
@@ -162,6 +169,7 @@ class ColorChooserEditor extends AbstractCellEditor implements TableCellEditor {
 		}
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected,
 			int row, int column) {

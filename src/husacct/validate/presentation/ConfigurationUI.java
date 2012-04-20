@@ -4,7 +4,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
@@ -23,9 +22,11 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		TableCellEditor editor = new ColorChooserEditor();
 		column.setCellEditor(editor);
 
-
-		LanguageConfigurationPanel lcp = new LanguageConfigurationPanel();
-		jTabbedPane1.addTab("Java", lcp);
+		System.out.println(ts.getAvailableLanguages().toString());
+		for(String language : ts.getAvailableLanguages()){
+			LanguageConfigurationPanel lcp = new LanguageConfigurationPanel(language);
+			jTabbedPane1.addTab(language, lcp);
+		}
 
 		loadSeverity();
 	}
@@ -174,7 +175,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}//GEN-LAST:event_removeActionPerformed
 
 	private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-		severityModel.insertRow(0, new Object[]{"", ""});
+		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
 		severityNameTable.changeSelection(0, 0,
 										  false, false);
 	}//GEN-LAST:event_addActionPerformed
