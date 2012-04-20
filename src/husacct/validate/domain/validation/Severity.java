@@ -1,11 +1,18 @@
 package husacct.validate.domain.validation;
 
+import java.util.UUID;
+
 public class Severity{
 	
 	private String defaultName;
 	private String userName;
 	private int value;
 	private String color;
+	private UUID id;
+	
+	public Severity() {
+		id = UUID.randomUUID();
+	}
 	
 	public String getDefaultName() {
 		return defaultName;
@@ -30,5 +37,9 @@ public class Severity{
 	}
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public UUID getId() {
+		return id;
 	}
 }
