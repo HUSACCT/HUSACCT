@@ -2,6 +2,7 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.validate.domain.check.CheckConformanceUtil;
 import husacct.validate.domain.validation.ruletype.RuleType;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.validation.Message;
@@ -13,13 +14,16 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import husacct.analyse.AnalyseServiceStub;
 
 public class IsNotAllowedToUseRule extends RuleType {
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+		
 	public IsNotAllowedToUseRule(String key, String category, List<ViolationType> violationtypes) {
-		super(key, category, violationtypes);
+		super(key, category, violationtypes, exceptionrules);
 	}
 
 	@Override
