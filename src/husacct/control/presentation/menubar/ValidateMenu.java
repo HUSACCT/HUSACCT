@@ -51,19 +51,19 @@ public class ValidateMenu extends JMenu{
 			@Override
 			public void changeState(int state) {
 				currentState = controller.getState();
-				if(currentState == 0){
+				if(currentState == controller.NONE){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == 1){
+				}else if(currentState == controller.EMPTY){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == 2){
+				}else if(currentState == controller.DEFINED){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == 3){
+				}else if(currentState == controller.MAPPED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == 4){
+				}else if(currentState == controller.VALIDATED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(true);
 				}

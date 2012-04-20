@@ -63,23 +63,23 @@ public class ExportMenu extends JMenu{
 			public void changeState(int state) {
 				currentState = controller.getState();
 				
-				if(currentState == 0){
+				if(currentState == controller.NONE){
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(false);
 					exportPhysicalArchitectureItem.setEnabled(false);
-				}else if(currentState == 1){
+				}else if(currentState == controller.EMPTY){
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(false);
 					exportPhysicalArchitectureItem.setEnabled(false);
-				}else if(currentState == 2){
+				}else if(currentState == controller.DEFINED){
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(true);
 					exportPhysicalArchitectureItem.setEnabled(false);
-				}else if(currentState == 3){
+				}else if(currentState == controller.MAPPED){
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(true);
 					exportPhysicalArchitectureItem.setEnabled(false);
-				}else if(currentState == 4){
+				}else if(currentState == controller.VALIDATED){
 					exportViolationReportItem.setEnabled(true);
 					exportLogicalArchitectureItem.setEnabled(true);
 					exportPhysicalArchitectureItem.setEnabled(true);

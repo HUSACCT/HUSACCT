@@ -85,28 +85,28 @@ public class FileMenu extends JMenu {
 
 			@Override
 			public void changeState(int state) {
-				currentState = mainController.getStateController().getState();
-				if(currentState == 0){
+				currentState = stateController.getState();
+				if(currentState == stateController.NONE){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(false);
 					closeWorkspaceItem.setEnabled(false);
-				}else if(currentState == 1){
+				}else if(currentState == stateController.EMPTY){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
 					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == 2){
+				}else if(currentState == stateController.DEFINED){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
 					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == 3){
+				}else if(currentState == stateController.MAPPED){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
 					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == 4){
+				}else if(currentState == stateController.VALIDATED){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
