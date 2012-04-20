@@ -36,7 +36,11 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 	}
 
 	public void loadWorkspaceData(Element workspaceData) {
-		logger.debug(workspaceData);		
+		logger.debug(workspaceData);	
+	}
+	
+	public void displayErrorMessage(Exception exception){
+		logger.debug(exception.getMessage());
 	}
 
 }
