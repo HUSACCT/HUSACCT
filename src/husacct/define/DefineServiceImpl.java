@@ -89,9 +89,9 @@ public class DefineServiceImpl implements IDefineService {
 		return applicationController.getApplicationFrame();
 	}
 	
-	//TODO: Implement in Construction phase
 
 	public Document exportLogicalArchitecture() throws ParserConfigurationException{
+		//TODO: Implement in Construction I
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		  //Get the DocumentBuilder
 		  DocumentBuilder parser = factory.newDocumentBuilder();
@@ -101,10 +101,11 @@ public class DefineServiceImpl implements IDefineService {
 	}
 
 	public void importLogicalArchitecture(Document doc){
-		//TODO	
+		//TODO: Implement in Construction I
 	}
 	
 	public Document exportPhysicalArchitecture() throws ParserConfigurationException{
+		//TODO: Implement in Construction I
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		  //Get the DocumentBuilder
 		  DocumentBuilder parser = factory.newDocumentBuilder();
@@ -114,7 +115,7 @@ public class DefineServiceImpl implements IDefineService {
 	}
 	
 	public void importPhysicalArchitecture(Document doc) {
-		//TODO
+		//TODO: Implement in Construction I
 	}
 	
 

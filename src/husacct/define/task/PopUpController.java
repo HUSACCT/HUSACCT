@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 public abstract class PopUpController extends Observable implements ActionListener {
 	public static final String ACTION_NEW = "NEW";
 	public static final String ACTION_EDIT = "EDIT";
-	public ResourceBundle resourceBundle = ResourceBundle.getBundle("husacct/define/presentation/gui", new Locale("en", "GB"));
+	public ResourceBundle resourceBundle = ResourceBundle.getBundle("husacct/common/locale/defineLang", new Locale("en", "GB"));
 
 	protected DefineDomainService defineDomainService = DefineDomainService.getInstance();
 	protected String action = PopUpController.ACTION_NEW;

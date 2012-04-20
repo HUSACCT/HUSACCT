@@ -1,10 +1,8 @@
 package husacct.define.domain;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-
 import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 public class AppliedRule {
 	

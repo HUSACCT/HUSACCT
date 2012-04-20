@@ -6,13 +6,19 @@ public class MainGUI {
 
 	public static void main(String args[])
 	{
-//		ImportController importc = new ImportController();
-//		importc.importXML(new File("./xml/architecture.xml"));
-
+		// Init Main Frame
+//		JFrame mainFrame = new JFrame();
+//		mainFrame.setVisible(true);
+//		mainFrame.pack();
+//		mainFrame.setSize(1100, 800);
+		
 		// Start the Application controller
 		ApplicationController gui = new ApplicationController();
-
-		// Init the Ui
+		
+		// Init the UI internal frame
 		gui.initUi();
+		
+		// Add Internal frame to Main Frame
+//		mainFrame.add(gui.jframe);
 	}
 }

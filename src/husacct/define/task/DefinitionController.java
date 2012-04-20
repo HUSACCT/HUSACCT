@@ -1,7 +1,6 @@
 package husacct.define.task;
 
 import husacct.define.domain.DefineDomainService;
-import husacct.define.task.ApplicationController;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -21,8 +20,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class DefinitionController implements ActionListener, KeyListener, Observer {
 
