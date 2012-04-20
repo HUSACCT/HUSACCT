@@ -1,12 +1,5 @@
 package husacct.define;
 
-import javax.swing.JFrame;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
@@ -16,6 +9,10 @@ import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.task.ApplicationController;
+
+import javax.swing.JFrame;
+
+import org.jdom2.Element;
 
 public class DefineServiceImpl implements IDefineService {
 	private DefineDomainService defineDomainService = new DefineDomainService();
@@ -89,36 +86,25 @@ public class DefineServiceImpl implements IDefineService {
 		return applicationController.getApplicationFrame();
 	}
 	
-
-	public Document exportLogicalArchitecture() throws ParserConfigurationException{
+	public Element getLogicalArchitectureData(){
 		//TODO: Implement in Construction I
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+		Element e = new Element("Root Element");
+		return e;
 	}
 
-	public void importLogicalArchitecture(Document doc){
+	public void loadLogicalArchitectureData(Element e){
 		//TODO: Implement in Construction I
 	}
-	
-	public Document exportPhysicalArchitecture() throws ParserConfigurationException{
+
+	@Override
+	public Element getWorkspaceData() {
 		//TODO: Implement in Construction I
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+		Element e = new Element("Root Element");
+		return e;
 	}
-	
-	public void importPhysicalArchitecture(Document doc) {
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
 		//TODO: Implement in Construction I
 	}
-	
-
-
-
 }
