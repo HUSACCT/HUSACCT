@@ -29,7 +29,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel {
 	public void initGui() {
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 		this.setLayout(softwareUnitsPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Software units which are assigned to this layer"));
+		this.setBorder(BorderFactory.createTitledBorder("Software units which are assigned to this module"));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 	}

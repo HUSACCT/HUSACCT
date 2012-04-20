@@ -4,9 +4,13 @@ import husacct.define.presentation.helper.DataHelper;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -22,7 +26,7 @@ import javax.swing.event.ListSelectionListener;
  * @author Henk ter Harmsel
  *
  */
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, ListSelectionListener {
+public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, ListSelectionListener, Observer {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 	private JList moduleTreeJList;
@@ -131,8 +135,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		if (selectedModule instanceof DataHelper) {
 			moduleId = ((DataHelper) selectedModule).getId();
 		}
-		
-		DefinitionController.getInstance().loadLayerDetail(moduleId);
+		DefinitionController.getInstance().notifyObservers(moduleId);	
 	}
 
 	@Override
@@ -154,7 +157,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 
 	private void removeModuleAction(ActionEvent action) {
-		DefinitionController.getInstance().removeLayer();
+		DefinitionController.getInstance().removeModule();
 		this.updateModulesTreeList();
 	}
 
@@ -164,7 +167,17 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 
 	private void newModuleAction(ActionEvent action) {
-		DefinitionController.getInstance().newLayer();
+		DefinitionController.getInstance().newModule();
 		this.updateModulesTreeList();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+//		Long moduleId = Long.parseLong(arg.toString());
+//		HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
+		
+		
+		
+		
 	}
 }

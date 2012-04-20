@@ -6,6 +6,7 @@ import java.util.Collections;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.*;
 
+
 public class DefineDomainService {
 	private static DefineDomainService instance = null;
 	public static DefineDomainService getInstance() {
@@ -27,6 +28,11 @@ public class DefineDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		String moduleName = module.getName();
 		return moduleName;
+	}
+
+	public Module getModuleById(long moduleId) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		return module;
 	}
 
 	public void removeModuleById(long moduleId) {
@@ -209,5 +215,6 @@ public class DefineDomainService {
 	public Application getApplicationDetails(){
 		return Application.getInstance();
 	}
+
 
 }

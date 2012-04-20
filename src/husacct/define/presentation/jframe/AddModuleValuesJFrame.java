@@ -96,7 +96,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		String moduleName = this.getModuleNameValue();
 		String level = this.getHierarchicalLevelValue();
 		if(!moduleName.isEmpty() && !level.isEmpty()) {
-			// #TODO:: handle the save action!
+			//TODO: handle the save action!
 		}
 	}
 	
@@ -121,6 +121,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	}
 	
 	private void throwError(String errorMessage) {
-		// #TODO:: Throw an error!
+		//TODO: Throw an error!
 	}
 }

@@ -10,8 +10,7 @@ public class AppliedRule {
 	private long id;
 	private String description;
 	private String[] dependencies;
-	private String prefix;
-	private String suffix;
+	private String regex;
 	private Module usedModule;
 	private Module restrictedModule;
 	private String ruleType;
@@ -22,15 +21,14 @@ public class AppliedRule {
 	//CONSTRUCTORS
 	//CONSTRUCTORS
 	public AppliedRule(String ruleType, String description, String[] dependencies,
-			String prefix, String suffix, Module usedModule,
+			String regex, Module usedModule,
 			Module restrictedModule) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.ruleType = ruleType;
 		this.description = description;
 		this.dependencies = dependencies;
-		this.prefix = prefix;
-		this.suffix = suffix;
+		this.regex = regex;
 		this.usedModule = usedModule;
 		this.restrictedModule = restrictedModule;
 		this.exceptions = new ArrayList<AppliedRule>();
@@ -38,11 +36,11 @@ public class AppliedRule {
 	}
 	
 	public AppliedRule(String ruleType, String description, Module usedModule, Module restrictedModule){
-		this(ruleType, description, new String[0], "","",usedModule,restrictedModule);
+		this(ruleType, description, new String[0], "",usedModule,restrictedModule);
 	}
 
 	public AppliedRule() {
-		this("", "",new String[0], "","",null,null);
+		this("", "",new String[0], "",null,null);
 	}
 
 	//LOGIC
@@ -105,9 +103,9 @@ public class AppliedRule {
 		return usesModule;
 	}
 	
-	//GETTER & SETTERS
-	//GETTER & SETTERS
-	//GETTER & SETTERS
+	/*
+	 * 	 GETTER & SETTERS
+	 */
 	public String getRuleType() {
 		return ruleType;
 	}
@@ -181,18 +179,10 @@ public class AppliedRule {
 	}
 
 	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+		this.regex = prefix;
 	}
 
 	public String getPrefix() {
-		return prefix;
-	}
-
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-
-	public String getSuffix() {
-		return suffix;
+		return regex;
 	}
 }

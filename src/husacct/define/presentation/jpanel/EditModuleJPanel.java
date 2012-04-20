@@ -1,10 +1,17 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.utils.DefaultMessages;
+import husacct.define.presentation.utils.Log;
+import husacct.define.task.DefinitionController;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -19,9 +26,14 @@ import javax.swing.JTextField;
  * @author Henk ter Harmsel
  *
  */
-public class EditModuleJPanel extends AbstractDefinitionJPanel {
+public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyListener, Observer{
 
 	private static final long serialVersionUID = -9020336576931490389L;
+	private JLabel moduleNameLabel;
+	private JTextField moduleNameTextfield;
+	private JLabel descriptionLabel;
+	private JScrollPane descriptionScrollPane;
+	private JTextArea descriptionTextArea;
 
 	public EditModuleJPanel() {
 		super();
@@ -29,6 +41,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel {
 
 	@Override
 	public void initGui() {
+		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
 		this.setBorder(BorderFactory.createTitledBorder("Module configuration"));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
@@ -37,8 +50,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel {
 		this.addModuleNameTextField();
 		this.addModuleDescriptionLabel();
 		this.addModuleDescriptionScrollPane();
-		this.addFacadeCheckBox();
-		this.addModuleAccessLabel();
+		
 	}
 	
 	private void setDefaultGridLayout() {
@@ -51,53 +63,72 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel {
 	}
 	
 	private void addModuleNameLabel() {
-		JLabel moduleNameLabel = new JLabel();
+		moduleNameLabel = new JLabel();
 		this.add(moduleNameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		moduleNameLabel.setText("Module name");
 	}
 	
 	private void addModuleNameTextField() {
-		JTextField moduleNameTextfield = new JTextField();
+		moduleNameTextfield = new JTextField();
 		moduleNameTextfield.setToolTipText(DefaultMessages.TIP_LAYER);
 		this.add(moduleNameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 	}
 	
 	private void addModuleDescriptionLabel() {
-		JLabel descriptionLabel = new JLabel();
+		descriptionLabel = new JLabel();
 		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		descriptionLabel.setText("Description");
 	}
 	
 	private void addModuleDescriptionScrollPane() {
-		JScrollPane descriptionScrollPane = new JScrollPane();
+		descriptionScrollPane = new JScrollPane();
 		this.add(descriptionScrollPane, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		descriptionScrollPane.setPreferredSize(new java.awt.Dimension(142, 26));
 		descriptionScrollPane.setViewportView(this.createModuleDescriptionTextArea());
 	}
 
 	private JTextArea createModuleDescriptionTextArea() {
-		JTextArea descriptionTextArea = new JTextArea();
+		descriptionTextArea = new JTextArea();
 		descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
 		descriptionTextArea.setToolTipText(DefaultMessages.TIP_LAYERDESCRIPTION);
 		return descriptionTextArea;
-	}
-	
-	private void addFacadeCheckBox() {
-		JCheckBox facadeCheckBox = new JCheckBox();
-		facadeCheckBox.setText("Only accessible by a facade (interface)");
-		facadeCheckBox.setToolTipText(DefaultMessages.TIP_FACADE);
-		this.add(facadeCheckBox, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-	}
-	
-	private void addModuleAccessLabel() {
-		JLabel moduleAccessLabel = new JLabel();
-		moduleAccessLabel.setText("Access:");
-		this.add(moduleAccessLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 	}
 
 	@Override
 	protected JPanel addButtonPanel() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		Long moduleId = Long.parseLong(arg.toString());
+		HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
+		
+		this.moduleNameTextfield.setText((String) moduleDetails.get("name"));
+		this.descriptionTextArea.setText((String) moduleDetails.get("description"));
+		this.repaint();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		updateModuleDetails();
+	}
+
+	private void updateModuleDetails() {
+		
+		//TODO implement, GO HENK!!!;
+		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
+		DefinitionController.getInstance().updateModuleDetails(moduleDetails);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
 	}
 }

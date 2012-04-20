@@ -25,6 +25,12 @@ import javax.swing.JTextField;
 public class DefinitionJPanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 7442552399461704491L;
+	public ModuleJPanel modulePanel;
+	public EditModuleJPanel moduleEditPanel;
+	public SoftwareUnitsJPanel sofwareUnitsPanel;
+	public AppliedRulesJPanel appliedRulesPanel;
+	
+	
 	public JTable jTableSoftwareUnits;
 	public JButton jButtonNext;
 
@@ -33,7 +39,7 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	public JList jListLayers;
 	
 	public JTextArea jTextAreaLayerDescription;
-	public JTextField jTextFieldLayerName;
+	public JTextField jTextFieldModuleName;
 	//SoftwareUnits
 	public JButton jButtonAddSoftwareUnit;
 	public JButton jButtonRemoveSoftwareUnit;
@@ -46,9 +52,9 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	//DefineModules
 	public JButton jButtonMoveLayerDown;
 	public JButton jButtonMoveLayerUp;
-	public JButton jButtonNewLayer;
-	public JButton jButtonRemoveLayer;
-	
+	public JButton jButtonNewModule;
+	public JButton jButtonRemoveModule;
+
 	private JPanel mappingPanel;
 	
 	public DefinitionJPanel() {
@@ -71,14 +77,14 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 			
 			mainSplitPane.add(this.createModulePanel(), JSplitPane.LEFT);
 			mainSplitPane.add(this.createRightPanel(), JSplitPane.RIGHT);
-			mainSplitPane.add(this.addBottomPanel(), JSplitPane.BOTTOM);
+//			mainSplitPane.add(this.addBottomPanel(), JSplitPane.BOTTOM);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	private JPanel createModulePanel() {
-		ModuleJPanel modulePanel = new ModuleJPanel();
+		modulePanel = new ModuleJPanel();
 		modulePanel.initGui();
 		return modulePanel;
 	}
@@ -94,9 +100,9 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	}
 	
 	private JPanel createEditModulePanel() {
-		EditModuleJPanel modulePanel = new EditModuleJPanel();
-		modulePanel.initGui();
-		return modulePanel;
+		moduleEditPanel = new EditModuleJPanel();
+		moduleEditPanel.initGui();
+		return moduleEditPanel;
 	}
 
 	private JPanel createDefaultMappingPanel() {
@@ -117,13 +123,13 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	}
 	
 	private JPanel createAppliedRulesPanel() {
-		AppliedRulesJPanel appliedRulesPanel = new AppliedRulesJPanel();
+		appliedRulesPanel = new AppliedRulesJPanel();
 		appliedRulesPanel.initGui();
 		return appliedRulesPanel;
 	}
 	
 	private JPanel createSoftwareUnitsPanel() {
-		SoftwareUnitsJPanel sofwareUnitsPanel = new SoftwareUnitsJPanel();
+		sofwareUnitsPanel = new SoftwareUnitsJPanel();
 		sofwareUnitsPanel.initGui();
 		return sofwareUnitsPanel;
 	}
@@ -143,7 +149,7 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	}
 	
 	@Deprecated
-	public long getSelectedLayer() {
+	public long getSelectedModule() {
 		Object selected = jListLayers.getSelectedValue();
 		if (selected instanceof DataHelper) {
 			long id = ((DataHelper) selected).getId();
