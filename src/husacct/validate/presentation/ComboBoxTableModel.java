@@ -18,6 +18,10 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		return editor;
 	}
 
+	public void setComboboxValues(String[] comboboxValues) {
+		this.comboboxValues = comboboxValues;
+	}
+
 	public ComboBoxTableModel(Vector columnNames, int rowCount) {
 		setDataVector(newVector(rowCount), columnNames);
 	}
@@ -134,4 +138,9 @@ public class ComboBoxTableModel extends AbstractTableModel {
     public void insertRow(int row, Object[] rowData) {
         insertRow(row, convertToVector(rowData));
     }
+
+	public void removeRow(int row) {
+		dataVector.removeElementAt(row);
+		fireTableRowsDeleted(row, row);
+	}
 }

@@ -61,17 +61,17 @@ public class TaskServiceImpl implements ITaskService{
 	}
 
 	@Override
-	public List<RuleType> getRuletypes() {
+	public List<RuleType> getRuletypes(String language) {
 		return domain.getAllRuleTypes();
-	}
-
-	@Override
-	public void getViolationtypes(String ruletypeKey) {
 	}
 
 	@Override
 	public List<Severity> getAllSeverities(){
 		return configuration.getAllSeverities();
+	}
+
+	public void addSeverities(List<Severity> severities) {
+		configuration.addSeverities(severities);
 	}
 
 	public String[] getAvailableLanguages(){

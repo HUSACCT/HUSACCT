@@ -18,7 +18,7 @@ class ColorTableModel extends AbstractTableModel {
 	protected Vector dataVector = new Vector();
 	String columnNames[] = {"Severity Name", "Color"};
 
-	Class<?>[] types = new Class[]{String.class, String.class};
+	Class<?>[] types = new Class[]{String.class, Color.class};
 	boolean[] canEdit = new boolean[]{true, true};
 
 	@Override

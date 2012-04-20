@@ -3,6 +3,8 @@ package husacct.validate.presentation;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -22,11 +24,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		TableCellEditor editor = new ColorChooserEditor();
 		column.setCellEditor(editor);
 
-		System.out.println(ts.getAvailableLanguages().toString());
-		for(String language : ts.getAvailableLanguages()){
-			LanguageConfigurationPanel lcp = new LanguageConfigurationPanel(language);
-			jTabbedPane1.addTab(language, lcp);
-		}
+		loadLanguageTabs();
 
 		loadSeverity();
 	}
@@ -126,6 +124,11 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         jTabbedPane1.addTab("Severity configuration", severityNamePanel);
 
         cancel.setText("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,7 +172,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}//GEN-LAST:event_upActionPerformed
 
 	private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
-		if(severityNameTable.getSelectedRow() > -1){
+		if (severityNameTable.getSelectedRow() > -1) {
 			severityModel.removeRow(severityNameTable.getSelectedRow());
 		}
 	}//GEN-LAST:event_removeActionPerformed
@@ -181,7 +184,25 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}//GEN-LAST:event_addActionPerformed
 
 	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applySeverityActionPerformed
+		List<Severity> test = new ArrayList<Severity>();
+		for (int i = 0; i < severityModel.getRowCount(); i++) {
+			Severity s = new Severity();
+			s.setColor(severityModel.getValueAt(i, 1).toString());
+			s.setUserName((String) severityModel.getValueAt(i, 0));
+			s.setValue(i + 1);
+			test.add(s);
+		}
+		System.out.println(test.size());
+		ts.addSeverities(test);
+		loadSeverity();
+		removeLanguageTabs();
+		loadLanguageTabs();
+
 	}//GEN-LAST:event_applySeverityActionPerformed
+
+	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+		dispose();
+	}//GEN-LAST:event_cancelActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JButton applySeverity;
@@ -196,14 +217,52 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
 	private void loadSeverity() {
+		clearModel(severityModel);
 		List<Severity> severities = ts.getAllSeverities();
-		for(Severity severity : severities){
-			severityModel.addRow(new Object[]{severity.getDefaultName(), severity.getColor()});
+		for (Severity severity : severities) {
+			severityModel.addRow(new Object[]{severity.getUserName(),
+											  severity.getColor()});
 		}
-		if (severities.isEmpty()){
-			severityModel.addRow(new Object[]{"Low", Color.BLUE});
-			severityModel.addRow(new Object[]{"Meduim", Color.BLUE});
-			severityModel.addRow(new Object[]{"High", Color.BLUE});
+		if (severities.isEmpty()) {
+			loadDefault();
+		}
+	}
+
+	private String[] severityNames() {
+		List<Severity> severities = ts.getAllSeverities();
+		ArrayList<String> severityNames = new ArrayList<String>();
+		for (Severity severity : severities) {
+			severityNames.add((String) severity.getUserName());
+
+		}
+		String[] arrayNames = {};
+		return (String[]) severityNames.toArray(arrayNames);
+	}
+
+	private void loadDefault() {
+		severityModel.addRow(new Object[]{"Low", Color.GREEN});
+		severityModel.addRow(new Object[]{"Meduim", Color.YELLOW});
+		severityModel.addRow(new Object[]{"High", Color.RED});
+	}
+
+	private void clearModel(ColorTableModel model) {
+		while (0 < model.getRowCount()) {
+			model.removeRow(0);
+		}
+	}
+
+	private void loadLanguageTabs(){
+		for (String language : ts.getAvailableLanguages()) {
+			LanguageConfigurationPanel lcp = new LanguageConfigurationPanel(
+					language, ts.getRuletypes(language), severityNames());
+			jTabbedPane1.addTab(language, lcp);
+		}
+	}
+
+	private void removeLanguageTabs(){
+		while(jTabbedPane1.getTabCount() > 1){
+			System.out.println("Delete " + jTabbedPane1.getTitleAt(1));
+			jTabbedPane1.remove(1);
 		}
 	}
 }
