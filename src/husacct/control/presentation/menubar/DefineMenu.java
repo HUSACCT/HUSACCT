@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import husacct.ServiceProvider;
-import husacct.control.IControlService;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.StateController;
 
@@ -56,6 +54,11 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
+		//disable buttons on start
+		importArchitectureItem.setEnabled(false);
+		defineLogicalArchitectureItem.setEnabled(false);
+		importLogicalArchitectureItem.setEnabled(false);
+		
 		stateController.addStateChangeListener(new IStateChangeListener() {
 
 			public void changeState(int state) {
@@ -75,7 +78,7 @@ public class DefineMenu extends JMenu{
 					importLogicalArchitectureItem.setEnabled(true);
 				}else if(currentState == 3){
 					importArchitectureItem.setEnabled(true);
-					defineLogicalArchitectureItem.setEnabled(false);
+					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
 				}else if(currentState == 4){
 					importArchitectureItem.setEnabled(true);

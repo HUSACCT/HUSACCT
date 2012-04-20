@@ -1,7 +1,5 @@
 package husacct.control.presentation.menubar;
 
-import husacct.ServiceProvider;
-import husacct.control.IControlService;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
@@ -12,12 +10,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
 @SuppressWarnings("serial")
 public class FileMenu extends JMenu {
-	
+
+	private StateController stateController;
 	private WorkspaceController workspaceController;
 	private MainController mainController;
 	private JMenuItem createWorkspaceItem;
@@ -31,13 +29,15 @@ public class FileMenu extends JMenu {
 		this.mainController = controller;
 		this.workspaceController = controller.getWorkspaceController();
 		
-		
+		this.stateController = controller.getStateController();
+		currentState = stateController.getState();
 		
 		createWorkspaceItem = new JMenuItem("Create workspace");
 		this.add(createWorkspaceItem);
 		createWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showCreateWorkspaceGui();
+				stateController.setState(1);
 			}
 		});
 		
@@ -46,6 +46,7 @@ public class FileMenu extends JMenu {
 		openWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showOpenWorkspaceGui();
+				stateController.setState(1);
 			}
 		});
 		
@@ -75,6 +76,10 @@ public class FileMenu extends JMenu {
 				mainController.exit();
 			}
 		});
+		
+		//disable buttons on start
+		saveWorkspaceItem.setEnabled(false);
+		closeWorkspaceItem.setEnabled(false);
 		
 		controller.getStateController().addStateChangeListener(new IStateChangeListener() {
 

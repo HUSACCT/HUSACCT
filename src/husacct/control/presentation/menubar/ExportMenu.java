@@ -1,7 +1,6 @@
 package husacct.control.presentation.menubar;
 
-import husacct.ServiceProvider;
-import husacct.control.IControlService;
+
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.StateController;
 
@@ -16,6 +15,7 @@ public class ExportMenu extends JMenu{
 	private StateController controller;
 	private JMenuItem exportViolationReportItem;
 	private JMenuItem exportLogicalArchitectureItem;
+	private JMenuItem exportPhysicalArchitectureItem;
 	private int currentState;
 	
 	public ExportMenu(StateController stateController){
@@ -35,6 +35,17 @@ public class ExportMenu extends JMenu{
 
 				
 		exportViolationReportItem = new JMenuItem("Violation report");
+
+		exportPhysicalArchitectureItem = new JMenuItem("Physical architecture");
+		this.add(exportPhysicalArchitectureItem);
+		exportPhysicalArchitectureItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				// TODO: logical architecture
+			}
+		});
+		
+		exportViolationReportItem = new JMenuItem("Violation report");
+
 		this.add(exportViolationReportItem);
 		
 		exportViolationReportItem.addActionListener(new ActionListener(){
@@ -43,6 +54,11 @@ public class ExportMenu extends JMenu{
 			}
 		});
 		
+		//disable buttons on start
+		exportViolationReportItem.setEnabled(false);
+		exportLogicalArchitectureItem.setEnabled(false);
+		exportPhysicalArchitectureItem.setEnabled(false);
+		
 		controller.addStateChangeListener(new IStateChangeListener() {
 
 			@Override
@@ -50,21 +66,25 @@ public class ExportMenu extends JMenu{
 				currentState = controller.getState();
 				
 				if(currentState == 0){
-					System.out.println("Hier!");
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(false);
+					exportPhysicalArchitectureItem.setEnabled(false);
 				}else if(currentState == 1){
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(false);
+					exportPhysicalArchitectureItem.setEnabled(false);
 				}else if(currentState == 2){
 					exportViolationReportItem.setEnabled(false);
-					exportLogicalArchitectureItem.setEnabled(false);
+					exportLogicalArchitectureItem.setEnabled(true);
+					exportPhysicalArchitectureItem.setEnabled(false);
 				}else if(currentState == 3){
 					exportViolationReportItem.setEnabled(false);
 					exportLogicalArchitectureItem.setEnabled(true);
+					exportPhysicalArchitectureItem.setEnabled(false);
 				}else if(currentState == 4){
 					exportViolationReportItem.setEnabled(true);
 					exportLogicalArchitectureItem.setEnabled(true);
+					exportPhysicalArchitectureItem.setEnabled(true);
 				}
 			}
 			

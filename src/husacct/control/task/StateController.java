@@ -1,8 +1,5 @@
 package husacct.control.task;
 
-import husacct.ServiceProvider;
-import husacct.control.ControlServiceImpl;
-
 import java.util.ArrayList;
 
 public class StateController {

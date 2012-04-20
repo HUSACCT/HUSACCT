@@ -1,7 +1,5 @@
 package husacct.control.presentation.menubar;
 
-import husacct.ServiceProvider;
-import husacct.control.IControlService;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.StateController;
 
@@ -43,6 +41,10 @@ public class ValidateMenu extends JMenu{
 			}
 		});
 		
+		//disable buttons on start
+		mntmValidateNow.setEnabled(false);
+		mntmConfigure.setEnabled(false);
+		
 		
 		controller.addStateChangeListener(new IStateChangeListener() {
 
@@ -52,8 +54,7 @@ public class ValidateMenu extends JMenu{
 				if(currentState == 0){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}
-				if(currentState == 1){
+				}else if(currentState == 1){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
 				}else if(currentState == 2){
