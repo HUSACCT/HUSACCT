@@ -1,6 +1,5 @@
 package husacct.validate.domain.validation.report;
 
-import husacct.validate.abstraction.fetch.xml.ImportSeverities;
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -8,6 +7,7 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerS
 import husacct.validate.task.report.UnknownStorageTypeException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,16 +21,28 @@ public class Report {
 	private List<Violation> violations;
 	private List<Severity> severities;
 	private String imagePath;
-	private ImportSeverities importConfiguration;
 
 	public Report(String projectName, String version, List<Violation> violations, String path, List<Severity> severities) throws ParserConfigurationException, SAXException, IOException, UnknownStorageTypeException {
 		this.projectName = projectName;
 		this.version = version;
 		this.violations = violations;
-		this.importConfiguration = new ImportSeverities();
 		this.imagePath = path + "/image.png";
 		this.severities = severities;
-		new StatisticsImage().createStatisticsImage(imagePath, importConfiguration.getSeveritiesPerViolation(violations, severities));
+		new StatisticsImage().createStatisticsImage(imagePath, getViolationsPerSeverity());
+	}
+	
+	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
+		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
+		for(Severity severity : severities) {
+			int violationsCount = 0;
+			for(Violation violation : violations) {
+				if(violation.getSeverityValue() == severity.getValue()) {
+					violationsCount++;
+				}
+			}
+			violationsPerSeverity.add(new ViolationsPerSeverity(violationsCount, severity));
+		}
+		return violationsPerSeverity;
 	}
 
 	public String[] getLocaleColumnHeaders() {
@@ -43,13 +55,6 @@ public class Report {
 		headers[5] = ResourceBundles.getValue("DependencyKind");
 		headers[6] = "";
 		return headers;
-	}
-
-	public List<ViolationsPerSeverity> getSeveritiesPerViolation(List<Violation> violations) throws SAXException, IOException, ParserConfigurationException {
-		return importConfiguration.getSeveritiesPerViolation(violations, severities);
-	}
-	public String getSeverityNameFromValue(int value) throws SAXException, IOException, ParserConfigurationException {
-		return importConfiguration.getSeverityNameFromValue(value, severities);
 	}
 
 	public void setProjectName(String projectName) {
@@ -81,5 +86,13 @@ public class Report {
 		this.imagePath = imagePath;
 	}
 
+	public String getSeverityNameFromValue(int severityValue) {
+		for(Severity severity : severities) {
+			if(severity.getValue() == severityValue) {
+				return severity.getDefaultName();
+			}
+		}
+		throw new NullPointerException("Severity value was not found, please check if the configuration is correct");
+	}
 
 }

@@ -1,12 +1,12 @@
 package husacct.validate.abstraction.export;
 
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 
+import java.util.HashMap;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
+import org.jdom2.Element;
 
 public class ExportController {
 	
@@ -16,8 +16,15 @@ public class ExportController {
 		exportFactory = new ExportFactory();
 	}
 	
-	public Document exportViolationsXML(List<Violation> violations) throws ParserConfigurationException {
-		return exportFactory.exportXML("violations", violations);
+	public Element exportViolationsXML(List<Violation> violations) {
+		return exportFactory.exportViolations(violations);
+	}
+	
+	public Element exportSeveritiesXML(List<Severity> severities) {
+		return exportFactory.exportSeverities(severities);
+	}
+	public Element exportSeveritiesPerTypes(HashMap<String, Severity> severitiesPerTypes) {
+		return exportFactory.exportSeveritiesPerTypes(severitiesPerTypes);
 	}
 
 }

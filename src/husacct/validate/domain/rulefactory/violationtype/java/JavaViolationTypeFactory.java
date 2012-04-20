@@ -23,7 +23,7 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 	}
 
 	public List<ViolationType> createViolationTypesByRule(String ruleKey){
-		if(ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString())){
+		if(ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())){
 			return generateViolationTypes(defaultDependencies);
 		}
 		else{
@@ -34,9 +34,9 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 	public ViolationType createViolationType(String violationKey){
 		List<String> violationKeysToLower = new ArrayList<String>();
 		for(String violationtype : violationKeys){
-			violationKeysToLower.add(violationtype);
+			violationKeysToLower.add(violationtype.toLowerCase());
 		}		
-		
+
 		if(violationKeysToLower.contains(violationKey.toLowerCase())){
 			return new ViolationType(violationKey);
 		}

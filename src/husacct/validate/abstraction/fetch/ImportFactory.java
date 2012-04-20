@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import husacct.validate.abstraction.fetch.xml.ImportSeveritiesPerRuleTypesWithJDOM;
-import husacct.validate.abstraction.fetch.xml.ImportSeveritiesWithJDOM;
+import husacct.validate.abstraction.fetch.xml.ImportSeveritiesPerTypes;
+import husacct.validate.abstraction.fetch.xml.ImportSeverities;
 import husacct.validate.abstraction.fetch.xml.ImportViolationsWithJDOM;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -21,14 +21,14 @@ public class ImportFactory {
 			ImportViolationsWithJDOM importViolations = new ImportViolationsWithJDOM();
 			return importViolations.importViolations(element);
 		} else if(element.getName().equals("severities")) {
-			ImportSeveritiesWithJDOM importSeverities = new ImportSeveritiesWithJDOM();
+			ImportSeverities importSeverities = new ImportSeverities();
 			return	importSeverities.importSeverities(element);
 		}
 		return Collections.emptyList();
 	}
 
 	public List<Severity> importSeverities(Element element) {
-		ImportSeveritiesWithJDOM importSeverities = new ImportSeveritiesWithJDOM();
+		ImportSeverities importSeverities = new ImportSeverities();
 		return	importSeverities.importSeverities(element);
 	}
 
@@ -38,8 +38,8 @@ public class ImportFactory {
 	}
 
 	public HashMap<String, Severity> importSeveritiesPerRuleTypes(Element element, List<Severity> severities) {
-		ImportSeveritiesPerRuleTypesWithJDOM importSeveritiesPerRuleTypes = new ImportSeveritiesPerRuleTypesWithJDOM();
-		return importSeveritiesPerRuleTypes.importSeveritiesPerRuleTypes(element, severities);
+		ImportSeveritiesPerTypes importSeveritiesPerRuleTypes = new ImportSeveritiesPerTypes();
+		return importSeveritiesPerRuleTypes.importSeveritiesPerTypes(element, severities);
 	}
 
 }

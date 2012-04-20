@@ -57,7 +57,7 @@ public class XMLReportWriter extends ReportWriter {
 		totalViolations.setTextContent("" + report.getViolations().size());
 		reportElement.appendChild(totalViolations);
 
-		for(ViolationsPerSeverity violationPerSeverity : report.getSeveritiesPerViolation(report.getViolations())) {
+		for(ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
 			Element violationElement = doc.createElement(violationPerSeverity.getSeverity().getDefaultName().replace(" ", ""));
 			violationElement.setTextContent("" + violationPerSeverity.getAmount());
 			reportElement.appendChild(violationElement);
