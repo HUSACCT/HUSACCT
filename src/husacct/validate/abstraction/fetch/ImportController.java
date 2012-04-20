@@ -15,13 +15,14 @@ public class ImportController {
 	
 	private List<Severity> severities;
 	private List<Violation> violations;
-	private HashMap<String, Severity> severitiesPerRuleTypes;
+	private HashMap<String, Severity> severitiesPerTypes;
 	
 	public ImportController(Element element) throws DatatypeConfigurationException {
 		ImportFactory importFactory = new ImportFactory();
 		severities = importFactory.importSeverities(element.getChild("severities"));
 		violations = importFactory.ImportViolations(element.getChild("violations"));
-		severitiesPerRuleTypes = importFactory.importSeveritiesPerRuleTypes(element.getChild("severitiesPerRuleTypes"), severities);
+		//the severities per rule type needs to be obtained after the severities are set.
+		severitiesPerTypes = importFactory.importSeveritiesPerRuleTypes(element.getChild("severitiesPerTypes"), severities);
 	}
 
 	public List<Severity> getSeverities() {
@@ -31,7 +32,7 @@ public class ImportController {
 		return violations;
 	}
 
-	public HashMap<String, Severity> getSeveritiesPerRuleTypes() {
-		return severitiesPerRuleTypes;
+	public HashMap<String, Severity> getSeveritiesPerTypes() {
+		return severitiesPerTypes;
 	}
 }

@@ -5,9 +5,13 @@ import java.util.EnumSet;
 public enum RuleTypes {
 	IS_NOT_ALLOWED("IsNotAllowedToUse", 2),
 	IS_ALLOWED("IsAllowedToUse", 2),
-	IS_ONLY_ALLOWED("IsOnlyAllowedToUse", 2);
+	IS_ONLY_ALLOWED("IsOnlyAllowedToUse", 2),
+	IS_ONLY_MODULE_ALLOWED("IsOnlyModuleAllowedToUse",2),
+	MUST_USE("MustUse",2),
+	BACK_CALL("BackCall",2),
+	SKIP_CALL("SkipCall",2);
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED,IS_ONLY_MODULE_ALLOWED,MUST_USE,BACK_CALL,SKIP_CALL);
 	public static final EnumSet<RuleTypes> allRuleTypes = EnumSet.allOf(RuleTypes.class);
 	private final String key;
 	private final int defaultSeverity;

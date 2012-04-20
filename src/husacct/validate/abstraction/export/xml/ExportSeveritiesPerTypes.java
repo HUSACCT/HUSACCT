@@ -10,9 +10,9 @@ import org.jdom2.Element;
 public class ExportSeveritiesPerTypes {
 	
 	public Element exportSeveritiesPerTypes(HashMap<String, Severity> severitiesPerRuleTypes) {
-		Element severitiesPerRuleTypesElement = new Element("severitiesPerRuleTypes");
+		Element severitiesPerRuleTypesElement = new Element("severitiesPerTypes");
 		for(Entry<String , Severity> severityPerRuleTypeEntry : severitiesPerRuleTypes.entrySet()) {
-			Element severityPerRuleTypeElement = new Element("severityPerRuleType");
+			Element severityPerRuleTypeElement = new Element("severityPerType");
 			Element valueElement = new Element("value");
 			valueElement.setText("" + severityPerRuleTypeEntry.getValue().getValue());
 			Element ruleTypeKeyElement = new Element("typeKey");
