@@ -27,10 +27,12 @@ public class AnalyseServiceStub implements IAnalyseService{
 		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare", "foursquare", "package", foursquareSub));
 		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.latitude", "latitude", "package", latitudeSub));
 
-
 		ArrayList<AnalysedModuleDTO> domainSub = new ArrayList<AnalysedModuleDTO>();
 		domainSub.add(new AnalysedModuleDTO("domain.locationbased", "locationbased", "package", locationbasedSub));
-
+		domainSub.add(new AnalysedModuleDTO("domain.locationbased.Account", "Account", "class"));
+		domainSub.add(new AnalysedModuleDTO("domain.locationbased.Friends", "Friends", "class"));
+		domainSub.add(new AnalysedModuleDTO("domain.locationbased.Map", "Map", "class"));
+		domainSub.add(new AnalysedModuleDTO("domain.locationbased.History", "History", "class"));
 
 		ArrayList<AnalysedModuleDTO> foursquare1Sub = new ArrayList<AnalysedModuleDTO>();
 		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "AccountDAO", "class"));
@@ -177,7 +179,7 @@ public class AnalyseServiceStub implements IAnalyseService{
 		int iterator = 0;
 		for(AnalysedModuleDTO module : rootElement.subModules){
 			returnModules[iterator] = module;
-			module.subModules = null;
+//			module.subModules = new ArrayList<AnalysedModuleDTO>();
 			iterator++;
 		}
 
@@ -228,9 +230,9 @@ public class AnalyseServiceStub implements IAnalyseService{
 			currentDepth++;
 		}
 
-		for(AnalysedModuleDTO m : rightDepthModules){
-			m.subModules = null;
-		}
+//		for(AnalysedModuleDTO m : rightDepthModules){
+//			m.subModules = new ArrayList<AnalysedModuleDTO>();
+//		}
 		return modules;
 	}
 

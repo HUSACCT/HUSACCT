@@ -1,11 +1,7 @@
-package husacct.graphics.task.figures;
-
-import husacct.graphics.presentation.DrawingView;
+package husacct.graphics.presentation.figures;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 
 import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
 import org.jhotdraw.draw.AttributeKeys;
@@ -36,7 +32,7 @@ public class AbstractFigure extends AbstractAttributedCompositeFigure {
 	
 	public void draw(Graphics2D g)
 	{
-		this.setBackgroundColor(new Color(254, 255, 210));
+		//this.setBackgroundColor(new Color(254, 255, 210));
 	
 		super.draw(g);
 	}

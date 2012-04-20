@@ -1,4 +1,4 @@
-package husacct.graphics.task.figures;
+package husacct.graphics.presentation.figures;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
