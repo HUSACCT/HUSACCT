@@ -64,23 +64,23 @@ public class DefineMenu extends JMenu{
 			public void changeState(int state) {
 				currentState = controller.getState();
 				
-				if(currentState == 0){
+				if(currentState == controller.NONE){
 					importArchitectureItem.setEnabled(false);
 					defineLogicalArchitectureItem.setEnabled(false);
 					importLogicalArchitectureItem.setEnabled(false);
-				}else if(currentState == 1){
+				}else if(currentState == controller.EMPTY){
 					importArchitectureItem.setEnabled(false);
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
-				}else if(currentState == 2){
+				}else if(currentState == controller.DEFINED){
 					importArchitectureItem.setEnabled(true);
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
-				}else if(currentState == 3){
+				}else if(currentState == controller.MAPPED){
 					importArchitectureItem.setEnabled(true);
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
-				}else if(currentState == 4){
+				}else if(currentState == controller.VALIDATED){
 					importArchitectureItem.setEnabled(true);
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
