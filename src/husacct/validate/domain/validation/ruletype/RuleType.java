@@ -8,29 +8,26 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public abstract class RuleType {
-	protected String key;
-	protected String descriptionKey;
-	protected String categoryKey;
-	protected String exceptionKeys;
+	protected final String key;
+	protected final String descriptionKey;
+	protected final String categoryKey;
+	protected final EnumSet<RuleTypes> exceptionRuleKeys;
+	protected final List<ViolationType> violationtypes;
+	
 	protected List<RuleType> exceptionrules;
-	protected List<ViolationType> violationtypes;
 
 	protected RuletypesFactory ruletypelanguagefactory;
 
-	public RuleType(String key, String categoryKey){
-		this.key = key;
-		this.descriptionKey = key + "Description";
-		this.categoryKey = categoryKey;
-	}
-
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes){
+	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes){
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
 		this.violationtypes = violationtypes;
+		this.exceptionRuleKeys = exceptionRuletypes;
 	}
 
 	public String getKey(){
