@@ -25,8 +25,8 @@ public class FilterController {
 	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler();
 		ArrayList<Violation> violations = new ArrayList<Violation>();
-
-		for (Violation violation : ts.getAllViolations()) {
+		
+		for (Violation violation : ts.getAllViolations()) {			
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().contains(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().contains(logicalpathFrom)) {
 					violations.add(violation);

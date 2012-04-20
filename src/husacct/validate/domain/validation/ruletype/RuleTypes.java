@@ -4,9 +4,10 @@ import java.util.EnumSet;
 
 public enum RuleTypes {
 	IS_NOT_ALLOWED("IsNotAllowedToUse", 2),
-	IS_ALLOWED("IsAllowedToUse", 2);
+	IS_ALLOWED("IsAllowedToUse", 2),
+	IS_ONLY_ALLOWED("IsOnlyAllowedToUse", 2);
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED);
 	public static final EnumSet<RuleTypes> allRuleTypes = EnumSet.allOf(RuleTypes.class);
 	private final String key;
 	private final int defaultSeverity;

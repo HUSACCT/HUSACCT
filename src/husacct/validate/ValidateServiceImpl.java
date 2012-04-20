@@ -5,6 +5,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.define.DefineServiceImpl;
+import husacct.define.DefineServiceStub;
 import husacct.validate.abstraction.AbstractionServiceImpl;
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
 import husacct.validate.domain.ConfigurationServiceImpl;
@@ -64,7 +65,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public void checkConformance() {
-		RuleDTO[] appliedRules = new DefineServiceImpl().getDefinedRules();
+		RuleDTO[] appliedRules = new DefineServiceStub().getDefinedRules();
 		domain.checkConformance(appliedRules);
 	}
 
