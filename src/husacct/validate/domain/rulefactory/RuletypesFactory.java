@@ -113,6 +113,29 @@ public class RuletypesFactory {
 
 	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes){
 		try {
+			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
+			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
+			for(RuleTypes ruletype : rootRule.getExceptionRuleKeys()){
+				exceptionRuletypes.add(generateRuleTypeWithoutExceptionRules(ruletype.toString()));
+			}
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.toString());
+		} catch (SecurityException e) {
+			System.out.println(e.toString());
+		} catch (InstantiationException e) {
+			System.out.println(e.toString());
+		} catch (IllegalAccessException e) {
+			System.out.println(e.toString());
+		} catch (InvocationTargetException e) {
+			System.out.println(e.toString());
+		} catch (NoSuchMethodException e) {
+			System.out.println(e.toString());
+		}
+		return null;
+	}
+	
+	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes){
+		try {
 			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.toString());
@@ -126,6 +149,29 @@ public class RuletypesFactory {
 			System.out.println(e.toString());
 		} catch (NoSuchMethodException e) {
 			System.out.println(e.toString());
+		}
+		return null;
+	}
+	
+	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey){
+		setViolationTypeFactory("Java");
+		//TODO uncomment when define service is ready
+		//setViolationTypeFactory(language);
+
+		CategorykeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
+		if(categoryKeyClass != null){
+			Class<RuleType> ruletypeClass = categoryKeyClass.getRuleClass();
+			String categoryKey = categoryKeyClass.getCategoryKey();
+			if(ruletypeClass != null){
+				List<ViolationType> violationtypes = Collections.emptyList();
+				if(violationtypefactory != null){
+					violationtypes = violationtypefactory.createViolationTypesByRule(ruleKey);
+				}
+				return generateRuleObjectWithoutExceptionRules(ruletypeClass, ruleKey, categoryKey, violationtypes);
+			}
+		}
+		else{
+			System.out.println("Key " + ruleKey + " does not exists");
 		}
 		return null;
 	}

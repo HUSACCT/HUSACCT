@@ -15,9 +15,8 @@ public abstract class RuleType {
 	protected final String key;
 	protected final String descriptionKey;
 	protected final String categoryKey;
-	protected final EnumSet<RuleTypes> exceptionRuleKeys;
-	protected final List<ViolationType> violationtypes;
-	
+	protected final EnumSet<RuleTypes> exceptionRuleKeys;	
+	protected final List<ViolationType> violationtypes;	
 	protected List<RuleType> exceptionrules;
 
 	protected RuletypesFactory ruletypelanguagefactory;
@@ -41,9 +40,17 @@ public abstract class RuleType {
 	public String getCategoryKey(){
 		return categoryKey;
 	}
+	
+	public EnumSet<RuleTypes> getExceptionRuleKeys(){
+		return exceptionRuleKeys;
+	}
 
 	public List<ViolationType> getViolationTypes(){
 		return violationtypes;
+	}
+	
+	public void setExceptionrules(List<RuleType> ruletypes){
+		this.exceptionrules = ruletypes;
 	}
 
 	public abstract List<Violation> check(RuleDTO appliedRule);
