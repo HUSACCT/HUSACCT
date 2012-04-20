@@ -19,7 +19,7 @@ public class AbstractionServiceImpl {
 		ImportController importController = new ImportController(element);
 		configuration.addSeverities(importController.getSeverities());
 		configuration.addViolations(importController.getViolations());
-		configuration.setSeveritiesPerTypes(importController.getSeveritiesPerRuleTypes());
+		configuration.setSeveritiesPerTypes(importController.getSeveritiesPerTypes());
 	}
 	public Element exportValidationWorkspace() {
 		Element rootValidateElement = new Element("validate");

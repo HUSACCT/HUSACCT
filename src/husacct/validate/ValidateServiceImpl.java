@@ -4,7 +4,6 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
-import husacct.define.DefineServiceImpl;
 import husacct.define.DefineServiceStub;
 import husacct.validate.abstraction.AbstractionServiceImpl;
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
