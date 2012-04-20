@@ -4,6 +4,7 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.define.DefineServiceImpl;
+import husacct.define.DefineServiceStub;
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
@@ -56,7 +57,7 @@ public class ValidateServiceImpl implements IValidateService {
 
 	@Override
 	public void checkConformance() {
-		RuleDTO[] appliedRules = new DefineServiceImpl().getDefinedRules();
+		RuleDTO[] appliedRules = new DefineServiceStub().getDefinedRules();
 		domain.checkConformance(appliedRules);
 	}
 
