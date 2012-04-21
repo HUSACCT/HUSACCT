@@ -11,7 +11,11 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class JavaViolationTypeFactory extends AbstractViolationType {
+	private Logger logger = Logger.getLogger(JavaViolationTypeFactory.class);
+	
 	private EnumSet<JavaDependencyTypes> defaultDependencies = EnumSet.allOf(JavaDependencyTypes.class);
 	//private EnumSet<JavaAccessTypes> defaultAccess = EnumSet.allOf(JavaAccessTypes.class);	
 	private List<String> violationKeys;
@@ -41,7 +45,7 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 			return new ViolationType(violationKey);
 		}
 		else{
-			System.out.println("Warning specified violationKey: " + violationKey + " not found");
+			logger.warn(String.format("Warning specified %s not found", violationKey));
 			return null;
 		}
 	}

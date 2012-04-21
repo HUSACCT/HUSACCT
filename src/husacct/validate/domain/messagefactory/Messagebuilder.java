@@ -2,6 +2,8 @@ package husacct.validate.domain.messagefactory;
 
 import java.util.IllegalFormatException;
 
+import org.apache.log4j.Logger;
+
 import husacct.common.dto.MessageDTO;
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.assembler.MessageAssembler;
@@ -9,13 +11,15 @@ import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 
 public class Messagebuilder {
+	private Logger logger = Logger.getLogger(Messagebuilder.class);
+
 	public String createMessage(MessageDTO message){
 		try{
 			final String ruleTextKey = String.format("%sMessage", message.getRuleKey());
 			final String textFormat = ResourceBundles.getValue(ruleTextKey);		
 			return String.format(textFormat, message.getLeftText(), message.getRightText());
 		}catch(IllegalFormatException e){
-			System.out.println(e);
+			logger.error(e.getMessage(), e);
 		}
 		return "";
 	}

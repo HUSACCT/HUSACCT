@@ -15,16 +15,18 @@ import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class RuleTypesGenerator {
+import org.apache.log4j.Logger;
 
+public class RuleTypesGenerator {
+	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
+	
 	private static final String rootFolderRules = "husacct.validate.domain.validation.ruletype";
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
-
+	
 	public HashMap<String, CategorykeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
 		HashMap<String, CategorykeyClassDTO> keyClasses = new HashMap<String, CategorykeyClassDTO>();
 		HashMap<String, CategorykeyClassDTO> allClasses = generateAllRules();
@@ -33,7 +35,8 @@ public class RuleTypesGenerator {
 			if (ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
 			} else {
-				System.out.println("RuleKey " + ruleKey.toString() + " not found");
+				
+				logger.warn(String.format("Rulekey: %s not found", ruleKey.toString()));
 			}
 		}
 		return keyClasses;

@@ -1,6 +1,7 @@
 package husacct.validate.domain.rulefactory.violationtypeutil;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -14,9 +15,17 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ViolationtypeGenerator {
+import org.apache.log4j.Logger;
+
+public class ViolationtypeGenerator {	
+	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
+
+	public List<String> getAllViolationTypeKeys(String packagename){
+		return new ArrayList<String>(getClasses(packagename));
+	}
+	
 	private Set<String> getClasses(String packageName) {
-		try {
+		try {			
 			Set<String> keyList = new HashSet<String>();
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			assert classLoader != null;
@@ -40,20 +49,22 @@ public class ViolationtypeGenerator {
 							keyList.add(enumValue.toString());
 						}
 						else{
-							System.out.println("WARNING: key already exists");
+							logger.warn(String.format("RuleTypeKey: %s already exists", enumValue.toString()));
 						}
 					}
 				}
 			}
 			return keyList;
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ClassNotFoundException e) {
+			logger.error(e.getMessage(), e);
 		}
 		return Collections.emptySet();
 	}
 
-	private TreeSet<String> findClasses(String directory, String packageName) throws Exception {
+	private TreeSet<String> findClasses(String directory, String packageName) throws IOException{
 		TreeSet<String> classes = new TreeSet<String>();
 		if (directory.startsWith("file:") && directory.contains("!")) {
 			String [] split = directory.split("!");
@@ -81,9 +92,5 @@ public class ViolationtypeGenerator {
 			}
 		}
 		return classes;
-	}
-
-	public List<String> getAllViolationTypeKeys(String packagename){
-		return new ArrayList<String>(getClasses(packagename));
 	}
 }
