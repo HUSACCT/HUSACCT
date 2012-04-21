@@ -14,7 +14,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class JavaViolationTypeFactory extends AbstractViolationType {
-	private Logger logger = Logger.getLogger(JavaViolationTypeFactory.class);
+	//private Logger logger = Logger.getLogger(JavaViolationTypeFactory.class);
 	
 	private EnumSet<JavaDependencyTypes> defaultDependencies = EnumSet.allOf(JavaDependencyTypes.class);
 	//private EnumSet<JavaAccessTypes> defaultAccess = EnumSet.allOf(JavaAccessTypes.class);	
@@ -45,8 +45,9 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 			return new ViolationType(violationKey);
 		}
 		else{
-			logger.warn(String.format("Warning specified %s not found", violationKey));
-			return null;
+			System.out.println(String.format("Warning specified %s not found", violationKey));
+			//logger.warn(String.format("Warning specified %s not found", violationKey));			
 		}
+		return null;
 	}
 }

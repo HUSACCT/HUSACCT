@@ -118,6 +118,7 @@ public class RuletypesFactory {
 			for(RuleTypes ruletype : rootRule.getExceptionRuleKeys()){
 				exceptionRuletypes.add(generateRuleTypeWithoutExceptionRules(ruletype.toString()));
 			}
+			return rootRule;
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.toString());
 		} catch (SecurityException e) {
