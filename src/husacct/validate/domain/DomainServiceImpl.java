@@ -1,9 +1,11 @@
 package husacct.validate.domain;
 
 import husacct.common.dto.CategoryDTO;
+import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.assembler.AssemblerController;
 import husacct.validate.domain.check.CheckConformanceController;
+import husacct.validate.domain.messagefactory.Messagebuilder;
 import husacct.validate.domain.rulefactory.RuletypesFactory;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
@@ -35,5 +37,9 @@ public class DomainServiceImpl {
 		if(ruletypefactory == null){
 			this.ruletypefactory = new RuletypesFactory();
 		}
+	}
+
+	public String buildMessage(MessageDTO message) {	
+		return new Messagebuilder().createMessage(message);
 	}
 }

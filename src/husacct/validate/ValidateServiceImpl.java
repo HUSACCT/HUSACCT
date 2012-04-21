@@ -1,6 +1,7 @@
 package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
+import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
@@ -32,6 +33,8 @@ import org.xml.sax.SAXException;
 import com.itextpdf.text.DocumentException;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {
+	private boolean validationExecuted;
+
 	private ConfigurationServiceImpl configuration;
 	private DomainServiceImpl domain;
 	private ReportServiceImpl report;
@@ -44,6 +47,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
 		this.abstraction = new AbstractionServiceImpl(configuration);
+		this.validationExecuted = false;
 	}
 
 
@@ -99,9 +103,20 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			abstraction.importValidationWorkspace(workspaceData);
+			this.validationExecuted = true;
 		} catch (DatatypeConfigurationException e) {
+			this.validationExecuted = false;
 			Logger.getLogger(ValidateServiceImpl.class).log(Level.ERROR, "Error exporting the workspace", e);
 		}
 	}
 
+	@Override
+	public boolean isValidated() {
+		return validationExecuted;
+	}
+
+	@Override
+	public String buildDefinedRuleMessage(MessageDTO message) {
+		return domain.buildMessage(message);
+	}
 }

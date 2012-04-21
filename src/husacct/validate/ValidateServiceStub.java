@@ -5,9 +5,13 @@ import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
+import husacct.common.savechain.ISaveable;
+
 import javax.swing.JInternalFrame;
 
-public class ValidateServiceStub implements IValidateService{
+import org.jdom2.Element;
+
+public class ValidateServiceStub implements IValidateService, ISaveable{
 
 	private ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor","InvocConstructorDescription", false);
 	private ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
@@ -24,6 +28,12 @@ public class ValidateServiceStub implements IValidateService{
 	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
 	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, new MessageDTO("Module locationbasedHistory", "Module locationbasedDAO", "IsNotAllowedToUse"));
 
+	private boolean validationExecuted;
+	
+	public ValidateServiceStub(){
+		this.validationExecuted = false;
+	}
+	
 	public CategoryDTO[] getCategories() {
 		return new CategoryDTO[] { category };
 	}
@@ -55,7 +65,7 @@ public class ValidateServiceStub implements IValidateService{
 	}
 
 	public void checkConformance() {
-
+		validationExecuted = true;
 	}
 
 	public void exportViolations(String name, String fileType, String path) {
@@ -69,5 +79,25 @@ public class ValidateServiceStub implements IValidateService{
 	@Override
 	public JInternalFrame getConfigurationGUI() {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public boolean isValidated() {
+		return validationExecuted;
+	}
+
+	@Override
+	public Element getWorkspaceData() {
+		return new Element("validateStubElement");
+	}
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		this.validationExecuted = true;
+	}
+
+	@Override
+	public String buildDefinedRuleMessage(MessageDTO message) {
+		return "class A is not allowed to use class B";
 	}
 }
