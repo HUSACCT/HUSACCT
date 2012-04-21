@@ -62,7 +62,7 @@ public class TaskServiceImpl implements ITaskService{
 
 	@Override
 	public List<RuleType> getRuletypes(String language) {
-		return domain.getAllRuleTypes();
+		return domain.getAllRuleTypes(language);
 	}
 
 	@Override

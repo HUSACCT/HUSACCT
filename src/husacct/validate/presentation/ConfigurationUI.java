@@ -184,16 +184,16 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}//GEN-LAST:event_addActionPerformed
 
 	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applySeverityActionPerformed
-		List<Severity> test = new ArrayList<Severity>();
+		List<Severity> severityList = new ArrayList<Severity>();
 		for (int i = 0; i < severityModel.getRowCount(); i++) {
 			Severity s = new Severity();
 			s.setColor(severityModel.getValueAt(i, 1).toString());
 			s.setUserName((String) severityModel.getValueAt(i, 0));
 			s.setValue(i + 1);
-			test.add(s);
+			severityList.add(s);
 		}
-		System.out.println(test.size());
-		ts.addSeverities(test);
+		System.out.println(severityList.size());
+		ts.addSeverities(severityList);
 		loadSeverity();
 		removeLanguageTabs();
 		loadLanguageTabs();
