@@ -52,6 +52,10 @@ public abstract class RuleType {
 	public void setExceptionrules(List<RuleType> ruletypes){
 		this.exceptionrules = ruletypes;
 	}
+	
+	public List<RuleType> getExceptionrules(){
+		return exceptionrules;
+	}
 
 	public abstract List<Violation> check(RuleDTO appliedRule);
 

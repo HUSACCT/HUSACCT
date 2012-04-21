@@ -106,7 +106,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 			abstraction.importValidationWorkspace(workspaceData);
 			this.validationExecuted = true;
 		} catch (DatatypeConfigurationException e) {
-			this.validationExecuted = false;
 			Logger.getLogger(ValidateServiceImpl.class).log(Level.ERROR, "Error exporting the workspace", e);
 		}
 	}
