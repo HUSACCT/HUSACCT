@@ -19,7 +19,7 @@ public class DomainServiceImpl {
 		this.checkConformanceController = new CheckConformanceController(configuration);
 	}
 
-	public List<RuleType> getAllRuleTypes(){
+	public List<RuleType> getAllRuleTypes(String programmingLanguage){
 		initializeRuletypesFactory();
 		return ruletypefactory.getRuleTypes();
 	}
