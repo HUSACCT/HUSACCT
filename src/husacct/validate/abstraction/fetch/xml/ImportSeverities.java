@@ -12,7 +12,7 @@ public class ImportSeverities {
 		List<Severity> severities = new ArrayList<Severity>();
 		for (Element severityElement : element.getChildren()) {
 			Severity severity = new Severity();
-			severity.setDefaultName(severityElement.getChildText("defaultName"));
+			//severity.setDefaultName(severityElement.getChildText("defaultName"));
 			severity.setUserName(severityElement.getChildText("userName"));
 			severity.setValue(Integer.parseInt(severityElement.getChildText("value")));
 			severity.setColor(severityElement.getChildText("color"));
