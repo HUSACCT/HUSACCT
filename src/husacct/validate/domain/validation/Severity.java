@@ -17,9 +17,6 @@ public class Severity{
 	public String getDefaultName() {
 		return defaultName;
 	}
-	public void setDefaultName(String defaultName) {
-		this.defaultName = defaultName;
-	}
 	public String getUserName() {
 		return userName;
 	}

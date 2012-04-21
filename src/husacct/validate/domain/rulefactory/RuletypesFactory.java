@@ -1,7 +1,7 @@
 package husacct.validate.domain.rulefactory;
 
 import husacct.common.dto.ApplicationDTO;
-import husacct.define.DefineServiceImpl;
+import husacct.define.DefineServiceStub;
 import husacct.validate.domain.rulefactory.violationtypeutil.AbstractViolationType;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
@@ -29,7 +29,7 @@ public class RuletypesFactory {
 	}
 
 	public List<RuleType> getRuleTypes(){
-		ApplicationDTO application = new DefineServiceImpl().getApplicationDetails();
+		ApplicationDTO application = new DefineServiceStub().getApplicationDetails();
 		if(application != null){
 			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){
 				return generateDefaultRuleTypes();
