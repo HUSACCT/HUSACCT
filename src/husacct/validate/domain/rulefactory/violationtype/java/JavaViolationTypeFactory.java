@@ -14,8 +14,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class JavaViolationTypeFactory extends AbstractViolationType {
-	//private Logger logger = Logger.getLogger(JavaViolationTypeFactory.class);
-	
+	private Logger logger = Logger.getLogger(JavaViolationTypeFactory.class);
+
 	private EnumSet<JavaDependencyTypes> defaultDependencies = EnumSet.allOf(JavaDependencyTypes.class);
 	//private EnumSet<JavaAccessTypes> defaultAccess = EnumSet.allOf(JavaAccessTypes.class);	
 	private List<String> violationKeys;
@@ -27,12 +27,19 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 	}
 
 	public List<ViolationType> createViolationTypesByRule(String ruleKey){
-		if(ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleKey.equals(RuleTypes.MUST_USE.toString())||ruleKey.equals(RuleTypes.BACK_CALL.toString())||ruleKey.equals(RuleTypes.SKIP_CALL.toString())){
+		if(isCategoryLegalityOfDependency(ruleKey)){
 			return generateViolationTypes(defaultDependencies);
 		}
 		else{
 			return Collections.emptyList();
 		}
+	}
+	
+	private boolean isCategoryLegalityOfDependency(String ruleKey){
+		if(ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleKey.equals(RuleTypes.MUST_USE.toString())||ruleKey.equals(RuleTypes.BACK_CALL.toString())||ruleKey.equals(RuleTypes.SKIP_CALL.toString())){
+			return true;
+		}
+		else return false;
 	}
 
 	public ViolationType createViolationType(String violationKey){
@@ -45,8 +52,7 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 			return new ViolationType(violationKey);
 		}
 		else{
-			System.out.println(String.format("Warning specified %s not found", violationKey));
-			//logger.warn(String.format("Warning specified %s not found", violationKey));			
+			logger.warn(String.format("Warning specified %s not found", violationKey));			
 		}
 		return null;
 	}

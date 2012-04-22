@@ -4,7 +4,7 @@ import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.validate.domain.rulefactory.RuletypesFactory;
+import husacct.validate.domain.rulefactory.RuleTypesFactory;
 import husacct.validate.domain.rulefactory.ViolationTypeFactory;
 import husacct.validate.domain.rulefactory.violationtypeutil.AbstractViolationType;
 import husacct.validate.domain.validation.Violation;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ViolationAssembler {
 	private AbstractViolationType violationtypeFactory;
-	private RuletypesFactory ruleFactory;
+	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
 	private MessageAssembler messageAssembler;
 
@@ -24,7 +24,7 @@ public class ViolationAssembler {
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
 		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory();
 
-		this.ruleFactory = new RuletypesFactory();
+		this.ruleFactory = new RuleTypesFactory();
 		this.ruleAssembler = new RuletypeAssembler();
 		this.messageAssembler = new MessageAssembler();
 	}
@@ -33,8 +33,10 @@ public class ViolationAssembler {
 		List<ViolationDTO> violationDTOList = new ArrayList<ViolationDTO>();
 
 		for (Violation violation : violations) {
-
-			violationDTOList.add(createViolationDTO(violation));
+			ViolationDTO violationDTO = createViolationDTO(violation);
+			if(violationDTO != null){
+				violationDTOList.add(createViolationDTO(violation));
+			}
 		}
 		return violationDTOList;
 	}
@@ -48,7 +50,7 @@ public class ViolationAssembler {
 		final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 		final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 		final MessageDTO message = messageAssembler.createMessageDTO(violation.getMessage());
-		
+
 		return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message);
 	}
 
