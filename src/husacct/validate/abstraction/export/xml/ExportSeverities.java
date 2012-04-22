@@ -15,8 +15,7 @@ public class ExportSeverities {
 			createElementWithContent("defaultName", severity.getDefaultName(), severityElement);
 			createElementWithContent("userName", severity.getUserName(), severityElement);
 			createElementWithContent("value", "" + severity.getValue(), severityElement);
-			createElementWithContent("color", severity.getColor(), severityElement);
-			createElementWithContent("id", severity.getId().toString(), severityElement);
+			createElementWithContent("color", "" + severity.getColor().getRGB(), severityElement);
 			severitiesElement.addContent(severityElement);
 		}
 		return severitiesElement;

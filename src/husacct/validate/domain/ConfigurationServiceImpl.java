@@ -18,7 +18,7 @@ public class ConfigurationServiceImpl {
 		this.violationRepository = new ViolationRepository();
 		this.severitiesPerTypesPerProgrammingLanguages = new HashMap<String, HashMap<String,Severity>>();
 	}
-	
+
 	public void clearViolations(){
 		violationRepository.clear();
 	}
@@ -44,7 +44,7 @@ public class ConfigurationServiceImpl {
 	}
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(
-			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {
-		this.severitiesPerTypesPerProgrammingLanguages = severitiesPerTypesPerProgrammingLanguages;
+			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {		this.severitiesPerTypesPerProgrammingLanguages = severitiesPerTypesPerProgrammingLanguages;
+
 	}
 }

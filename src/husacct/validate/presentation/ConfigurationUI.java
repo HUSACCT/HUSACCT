@@ -187,7 +187,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		List<Severity> severityList = new ArrayList<Severity>();
 		for (int i = 0; i < severityModel.getRowCount(); i++) {
 			Severity s = new Severity();
-			s.setColor(severityModel.getValueAt(i, 1).toString());
+			s.setColor((Color) severityModel.getValueAt(i, 1));
 			s.setUserName((String) severityModel.getValueAt(i, 0));
 			s.setValue(i + 1);
 			severityList.add(s);

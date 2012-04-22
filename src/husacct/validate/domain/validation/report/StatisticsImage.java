@@ -27,7 +27,7 @@ public class StatisticsImage {
 		for(ViolationsPerSeverity violationPerSeverity : list) {
 			dataset.addValue(violationPerSeverity.getAmount(), violationPerSeverity.getSeverity().getDefaultName(), violationPerSeverity.getSeverity().getDefaultName());
 			GradientPaint paint = new GradientPaint(
-					0.0f, 0.0f, Color.decode("#" + violationPerSeverity.getSeverity().getColor()),
+					0.0f, 0.0f, violationPerSeverity.getSeverity().getColor(),
 					0.0f, 0.0f, new Color(0, 0, 20)
 					);
 			renderer.setSeriesPaint(index, paint);
