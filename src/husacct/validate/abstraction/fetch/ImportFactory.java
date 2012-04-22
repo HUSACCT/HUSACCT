@@ -1,7 +1,7 @@
 package husacct.validate.abstraction.fetch;
 
 import husacct.validate.abstraction.fetch.xml.ImportSeverities;
-import husacct.validate.abstraction.fetch.xml.ImportSeveritiesPerTypes;
+import husacct.validate.abstraction.fetch.xml.ImportSeveritiesPerTypesPerProgrammingLanguages;
 import husacct.validate.abstraction.fetch.xml.ImportViolations;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -25,9 +25,9 @@ public class ImportFactory {
 		return importViolations.importViolations(element);
 	}
 
-	public HashMap<String, Severity> importSeveritiesPerRuleTypes(Element element, List<Severity> severities) {
-		ImportSeveritiesPerTypes importSeveritiesPerRuleTypes = new ImportSeveritiesPerTypes();
-		return importSeveritiesPerRuleTypes.importSeveritiesPerTypes(element, severities);
+	public HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {
+		ImportSeveritiesPerTypesPerProgrammingLanguages importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
+		return importSeveritiesPerRuleTypesPerProgrammingLanguages.importSeveritiesPerTypesPerProgrammingLanguages(element, severities);
 	}
 
 }

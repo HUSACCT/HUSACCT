@@ -1,7 +1,7 @@
 package husacct.validate.abstraction.export;
 
 import husacct.validate.abstraction.export.xml.ExportSeverities;
-import husacct.validate.abstraction.export.xml.ExportSeveritiesPerTypes;
+import husacct.validate.abstraction.export.xml.ExportSeveritiesPerTypesPerProgrammingLanguages;
 import husacct.validate.abstraction.export.xml.ExportViolations;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -21,8 +21,10 @@ public class ExportFactory {
 		return new ExportSeverities().exportSeverities(severities);
 	}
 	
-	public Element exportSeveritiesPerTypes(HashMap<String, Severity> severitiesPerTypes) {
-		return new ExportSeveritiesPerTypes().exportSeveritiesPerTypes(severitiesPerTypes);
+
+	public Element exportSeveritiesPerTypesPerProgrammingLanguages(
+			HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
+		return new ExportSeveritiesPerTypesPerProgrammingLanguages().exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
 	}
 
 }

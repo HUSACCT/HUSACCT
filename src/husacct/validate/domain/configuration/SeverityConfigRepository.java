@@ -18,15 +18,18 @@ public class SeverityConfigRepository {
 	}
 
 	public void addSeverities(List<Severity> severities) {
-		for(int i = 0; i < severities.size(); i++){
-			if(this.severities.get(i) != null){
-				this.severities.set(i, severities.get(i));
-			} else{
-				this.severities.add(severities.get(i));
-			}
-
-		}
-		reorderSeverityValues();
+// TODO ask Jorik about old code and how to use it and or fix it
+//		this.severities.removeAll(null);
+//		for(int i = 0; i < severities.size(); i++){
+//			if(this.severities.get(i) != null){
+//				this.severities.set(i, severities.get(i));
+//			} else{
+//				this.severities.add(severities.get(i));
+//			}
+//
+//		}
+//		reorderSeverityValues();
+		this.severities = severities;
 	}
 
 	private void reorderSeverityValues(){

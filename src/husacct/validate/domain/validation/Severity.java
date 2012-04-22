@@ -14,6 +14,10 @@ public class Severity{
 		id = UUID.randomUUID();
 	}
 	
+	public void setDefaultName(String defaultName) {
+		this.defaultName = defaultName;
+	}
+	
 	public String getDefaultName() {
 		return defaultName;
 	}
@@ -38,5 +42,8 @@ public class Severity{
 
 	public UUID getId() {
 		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
 	}
 }
