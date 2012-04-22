@@ -1,7 +1,6 @@
 package husacct.validate.domain.validation;
 
 import java.awt.Color;
-import java.util.UUID;
 
 public class Severity{
 
