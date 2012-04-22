@@ -18,7 +18,7 @@ public class ConfigurationServiceImpl {
 		this.violationRepository = new ViolationRepository();
 		this.severitiesPerTypes = new HashMap<String, Severity>();
 	}
-	
+
 	public void clearViolations(){
 		violationRepository.clear();
 	}
@@ -42,7 +42,7 @@ public class ConfigurationServiceImpl {
 	public HashMap<String, Severity> getAllSeveritiesPerTypes() {
 		return severitiesPerTypes;
 	}
-	
+
 	public void setSeveritiesPerTypes(HashMap<String, Severity> severitiesPerTypes){
 		this.severitiesPerTypes = severitiesPerTypes;
 	}

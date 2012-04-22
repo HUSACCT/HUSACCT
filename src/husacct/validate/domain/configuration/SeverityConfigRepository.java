@@ -17,21 +17,7 @@ public class SeverityConfigRepository {
 		return severities;
 	}
 
-	public void addSeverities(List<Severity> severities) {
-		for(int i = 0; i < severities.size(); i++){
-			if(this.severities.get(i) != null){
-				this.severities.set(i, severities.get(i));
-			} else{
-				this.severities.add(severities.get(i));
-			}
-
-		}
-		reorderSeverityValues();
-	}
-
-	private void reorderSeverityValues(){
-		for(int i = 0; i < severities.size(); i++){
-			severities.get(i).setValue(i+1);
-		}
+	public void addSeverities(List<Severity> severities){
+		this.severities = severities;
 	}
 }
