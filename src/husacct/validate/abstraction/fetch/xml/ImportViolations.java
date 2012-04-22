@@ -21,7 +21,7 @@ public class ImportViolations {
 			Violation violation = new Violation();
 			violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
 			violation.setSeverityValue(Integer.parseInt(violationElement.getChildText("severityValue")));
-			violation.setRuletypeKey(violationElement.getChildText("typetypeKey"));
+			violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));
 			violation.setViolationtypeKey(violationElement.getChildText("violationtypeKey"));
 			violation.setClassPathFrom(violationElement.getChildText("classPathFrom"));
 			violation.setClassPathTo(violationElement.getChildText("classPathTo"));

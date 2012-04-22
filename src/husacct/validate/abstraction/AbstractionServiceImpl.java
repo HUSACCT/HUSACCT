@@ -19,14 +19,14 @@ public class AbstractionServiceImpl {
 		ImportController importController = new ImportController(element);
 		configuration.addSeverities(importController.getSeverities());
 		configuration.addViolations(importController.getViolations());
-		configuration.setSeveritiesPerTypes(importController.getSeveritiesPerTypes());
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(importController.getSeveritiesPerTypesPerProgrammingLanguages());
 	}
 	public Element exportValidationWorkspace() {
 		Element rootValidateElement = new Element("validate");
 		ExportController exportController = new ExportController();
 		rootValidateElement.addContent(exportController.exportViolationsXML(configuration.getAllViolations()));
 		rootValidateElement.addContent(exportController.exportSeveritiesXML(configuration.getAllSeverities()));
-		rootValidateElement.addContent(exportController.exportSeveritiesPerTypes(configuration.getAllSeveritiesPerTypes()));
+		rootValidateElement.addContent(exportController.exportSeveritiesPerTypesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
 		return rootValidateElement;
 	}
 }

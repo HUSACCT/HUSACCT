@@ -23,8 +23,10 @@ public class ExportController {
 	public Element exportSeveritiesXML(List<Severity> severities) {
 		return exportFactory.exportSeverities(severities);
 	}
-	public Element exportSeveritiesPerTypes(HashMap<String, Severity> severitiesPerTypes) {
-		return exportFactory.exportSeveritiesPerTypes(severitiesPerTypes);
+
+	public Element exportSeveritiesPerTypesXML(
+			HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
+		return exportFactory.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
 	}
 
 }

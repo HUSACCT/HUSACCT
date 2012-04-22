@@ -11,12 +11,12 @@ import java.util.List;
 public class ConfigurationServiceImpl {
 	private final SeverityConfigRepository severityConfig;
 	private final ViolationRepository violationRepository;
-	private HashMap<String, Severity> severitiesPerTypes;
+	private HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages;
 
 	public ConfigurationServiceImpl(){
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severitiesPerTypes = new HashMap<String, Severity>();
+		this.severitiesPerTypesPerProgrammingLanguages = new HashMap<String, HashMap<String,Severity>>();
 	}
 
 	public void clearViolations(){
@@ -39,11 +39,12 @@ public class ConfigurationServiceImpl {
 		severityConfig.addSeverities(severities);
 	}
 
-	public HashMap<String, Severity> getAllSeveritiesPerTypes() {
-		return severitiesPerTypes;
+	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
+		return severitiesPerTypesPerProgrammingLanguages;
 	}
 
-	public void setSeveritiesPerTypes(HashMap<String, Severity> severitiesPerTypes){
-		this.severitiesPerTypes = severitiesPerTypes;
+	public void setSeveritiesPerTypesPerProgrammingLanguages(
+			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {		this.severitiesPerTypesPerProgrammingLanguages = severitiesPerTypesPerProgrammingLanguages;
+
 	}
 }

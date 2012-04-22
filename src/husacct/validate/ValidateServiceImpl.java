@@ -119,4 +119,8 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public String buildDefinedRuleMessage(MessageDTO message) {
 		return domain.buildMessage(message);
 	}
+	
+	public ConfigurationServiceImpl getConfiguration() {
+		return configuration;
+	}
 }
