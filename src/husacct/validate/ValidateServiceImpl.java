@@ -7,7 +7,6 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.define.DefineServiceStub;
 import husacct.validate.abstraction.AbstractionServiceImpl;
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.presentation.BrowseViolations;
@@ -63,7 +62,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public String[] getExportExtentions() {
-		return new ExtensionTypes().getExtensionTypes();
+		return abstraction.getExportExtentions();
 	}
 
 	@Override
