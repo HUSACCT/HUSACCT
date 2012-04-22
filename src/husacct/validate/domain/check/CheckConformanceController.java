@@ -2,7 +2,7 @@ package husacct.validate.domain.check;
 
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
-import husacct.validate.domain.rulefactory.RuletypesFactory;
+import husacct.validate.domain.rulefactory.RuleTypesFactory;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 public class CheckConformanceController {
 	private final ConfigurationServiceImpl configuration;
 	private List<Violation> violations;
-	private RuletypesFactory ruleFactory;
+	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
 
 	public CheckConformanceController(ConfigurationServiceImpl configuration){
@@ -22,7 +22,7 @@ public class CheckConformanceController {
 		this.configuration.clearViolations();
 		this.violations = new ArrayList<Violation>();
 		this.ruleCache = new HashMap<String, RuleType>();
-		this.ruleFactory = new RuletypesFactory();
+		this.ruleFactory = new RuleTypesFactory();
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules){

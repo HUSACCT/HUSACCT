@@ -15,19 +15,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 //TODO exception rules;
 //TODO remove duplicated code
-public class RuletypesFactory {
+public class RuleTypesFactory {
+	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
+
 	private AbstractViolationType violationtypefactory;
 	private HashMap<String, CategorykeyClassDTO> allRuletypes;
 	private HashMap<String, CategorykeyClassDTO> mainRuleTypes;
 
-	public RuletypesFactory(){
+	public RuleTypesFactory(){
 		RuleTypesGenerator ruletypegenerator = new RuleTypesGenerator();
 		allRuletypes = ruletypegenerator.generateAllRules();
 		mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
+	public List<RuleType> getRuleTypes(String programmingLanguage){
+		return generateRuleTypes(programmingLanguage);
+	}
+	
 	public List<RuleType> getRuleTypes(){
 		ApplicationDTO application = new DefineServiceStub().getApplicationDetails();
 		if(application != null){
@@ -90,7 +98,7 @@ public class RuletypesFactory {
 			}
 		}
 		else{
-			System.out.println("Key " + ruleKey + " does not exists");
+			logger.warn(String.format("Key: %s does not exists", ruleKey));			
 		}
 		return null;
 	}
@@ -115,46 +123,30 @@ public class RuletypesFactory {
 		try {
 			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
 			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
-			for(RuleTypes ruletype : rootRule.getExceptionRuleKeys()){				
-				exceptionRuletypes.add(generateRuleTypeWithoutExceptionRules(ruletype.toString()));
+			for(RuleTypes ruletype : rootRule.getExceptionRuleKeys()){	
+				final RuleType generatedRuleType = generateRuleTypeWithoutExceptionRules(ruletype.toString());
+				if(generatedRuleType != null){
+					exceptionRuletypes.add(generatedRuleType);
+				}
 			}
 			rootRule.setExceptionrules(exceptionRuletypes);
 			return rootRule;
 		} catch (IllegalArgumentException e) {
-			System.out.println(e.toString());
+			ExceptionOccured(e);
 		} catch (SecurityException e) {
-			System.out.println(e.toString());
+			ExceptionOccured(e);
 		} catch (InstantiationException e) {
-			System.out.println(e.toString());
+			ExceptionOccured(e);
 		} catch (IllegalAccessException e) {
-			System.out.println(e.toString());
+			ExceptionOccured(e);
 		} catch (InvocationTargetException e) {
-			System.out.println(e.toString());
+			ExceptionOccured(e);
 		} catch (NoSuchMethodException e) {
-			System.out.println(e.toString());
+			ExceptionOccured(e);
 		}
 		return null;
 	}
-	
-	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes){
-		try {
-			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
-		} catch (IllegalArgumentException e) {
-			System.out.println(e.toString());
-		} catch (SecurityException e) {
-			System.out.println(e.toString());
-		} catch (InstantiationException e) {
-			System.out.println(e.toString());
-		} catch (IllegalAccessException e) {
-			System.out.println(e.toString());
-		} catch (InvocationTargetException e) {
-			System.out.println(e.toString());
-		} catch (NoSuchMethodException e) {
-			System.out.println(e.toString());
-		}
-		return null;
-	}
-	
+
 	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey){
 		setViolationTypeFactory("Java");
 		//TODO uncomment when define service is ready
@@ -173,8 +165,31 @@ public class RuletypesFactory {
 			}
 		}
 		else{
-			System.out.println("Key " + ruleKey + " does not exists");
+			logger.warn(String.format("Key: %s does not exists", ruleKey));
 		}
 		return null;
+	}
+
+	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes){
+		try {
+			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
+		} catch (IllegalArgumentException e) {
+			ExceptionOccured(e);
+		} catch (SecurityException e) {
+			ExceptionOccured(e);
+		} catch (InstantiationException e) {
+			ExceptionOccured(e);
+		} catch (IllegalAccessException e) {
+			ExceptionOccured(e);
+		} catch (InvocationTargetException e) {
+			ExceptionOccured(e);
+		} catch (NoSuchMethodException e) {
+			ExceptionOccured(e);
+		}
+		return null;
+	}
+
+	private void ExceptionOccured(Exception e){
+		logger.error(e.getMessage(), e);
 	}
 }
