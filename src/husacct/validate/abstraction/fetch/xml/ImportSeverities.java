@@ -17,7 +17,6 @@ public class ImportSeverities {
 			severity.setUserName(severityElement.getChildText("userName"));
 			severity.setValue(Integer.parseInt(severityElement.getChildText("value")));
 			severity.setColor(severityElement.getChildText("color"));
-			severity.setId(UUID.fromString(severityElement.getChildText("id")));
 			severities.add(severity);
 		}
 		return severities;

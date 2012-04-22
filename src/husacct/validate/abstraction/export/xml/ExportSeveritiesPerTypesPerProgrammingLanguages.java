@@ -19,7 +19,7 @@ public class ExportSeveritiesPerTypesPerProgrammingLanguages {
 			for(Entry<String, Severity> severityPerType : programminglanguageEntry.getValue().entrySet()) {
 				Element severityPerTypeElement = createElementWithoutContent("severityPerType", severityPerTypePerProgrammingLanguageElement);
 				createElementWithContent("typeKey", severityPerType.getKey(), severityPerTypeElement);
-				createElementWithContent("severityId", severityPerType.getValue().getId().toString(), severityPerTypeElement);
+				createElementWithContent("value", ""+severityPerType.getValue().getValue(), severityPerTypeElement);
 			}
 		}
 		return severitiesPerTypesPerProgrammingLanguagesElement;

@@ -8,11 +8,7 @@ public class Severity{
 	private String userName;
 	private int value;
 	private String color;
-	private UUID id;
 	
-	public Severity() {
-		id = UUID.randomUUID();
-	}
 	
 	public void setDefaultName(String defaultName) {
 		this.defaultName = defaultName;
@@ -40,10 +36,5 @@ public class Severity{
 		this.color = color;
 	}
 
-	public UUID getId() {
-		return id;
-	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
+	
 }
