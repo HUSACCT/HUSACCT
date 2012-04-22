@@ -1,5 +1,6 @@
 package husacct.validate.domain.rulefactory.violationtype.java;
 
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.rulefactory.violationtypeutil.AbstractViolationType;
 import husacct.validate.domain.rulefactory.violationtypeutil.ViolationtypeGenerator;
 import husacct.validate.domain.validation.ViolationType;
@@ -26,6 +27,7 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 		this.violationKeys = util.getAllViolationTypeKeys(javaViolationTypesLocation);
 	}
 
+	@Override
 	public List<ViolationType> createViolationTypesByRule(String ruleKey){
 		if(isCategoryLegalityOfDependency(ruleKey)){
 			return generateViolationTypes(defaultDependencies);
@@ -42,6 +44,7 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 		else return false;
 	}
 
+	@Override
 	public ViolationType createViolationType(String violationKey){
 		List<String> violationKeysToLower = new ArrayList<String>();
 		for(String violationtype : violationKeys){
@@ -54,6 +57,6 @@ public class JavaViolationTypeFactory extends AbstractViolationType {
 		else{
 			logger.warn(String.format("Warning specified %s not found", violationKey));			
 		}
-		return null;
+		throw new ViolationTypeNotFoundException();
 	}
 }

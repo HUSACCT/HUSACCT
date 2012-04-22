@@ -1,9 +1,12 @@
 package husacct.validate.domain.assembler;
 
+import husacct.Main;
 import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
+import husacct.validate.domain.exception.LanguageNotFoundException;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.rulefactory.RuleTypesFactory;
 import husacct.validate.domain.rulefactory.ViolationTypeFactory;
 import husacct.validate.domain.rulefactory.violationtypeutil.AbstractViolationType;
@@ -14,7 +17,11 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class ViolationAssembler {
+	private Logger logger = Logger.getLogger(Main.class);
+
 	private AbstractViolationType violationtypeFactory;
 	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
@@ -33,32 +40,52 @@ public class ViolationAssembler {
 		List<ViolationDTO> violationDTOList = new ArrayList<ViolationDTO>();
 
 		for (Violation violation : violations) {
-			ViolationDTO violationDTO = createViolationDTO(violation);
-			if(violationDTO != null){
-				violationDTOList.add(createViolationDTO(violation));
+			try{		
+				ViolationDTO violationDTO = createViolationDTO(violation);
+				violationDTOList.add(violationDTO);
+			}catch(ViolationTypeNotFoundException e){
+				logger.warn(String.format("ViolationtypeKey: %s not found in violation", violation.getViolationtypeKey()));
+			}	
+			catch(LanguageNotFoundException e){
+				logger.warn(e.getMessage());
 			}
 		}
 		return violationDTOList;
 	}
 
 	private ViolationDTO createViolationDTO(Violation violation){
-		RuleTypeDTO rule = createRuleTypeDTO(violation);
-		ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
+		try{
+			RuleTypeDTO rule = createRuleTypeDTO(violation);
+			ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
 
-		final String classPathFrom = violation.getClassPathFrom();
-		final String classPathTo = violation.getClassPathTo();
-		final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
-		final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
-		final MessageDTO message = messageAssembler.createMessageDTO(violation.getMessage());
+			final String classPathFrom = violation.getClassPathFrom();
+			final String classPathTo = violation.getClassPathTo();
+			final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+			final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+			final MessageDTO message = messageAssembler.createMessageDTO(violation.getMessage());
 
-		return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message);
+			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message);
+		}catch(ViolationTypeNotFoundException e){
+			throw new ViolationTypeNotFoundException();
+		}
+		catch(LanguageNotFoundException e){
+			throw new LanguageNotFoundException();
+		}
 	}
 
-	private RuleTypeDTO createRuleTypeDTO(Violation violation){
-		ViolationType violationtype = violationtypeFactory.createViolationType(violation.getViolationtypeKey());
-		RuleType rule = ruleFactory.generateRuleType(violation.getRuletypeKey());
 
-		RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);
-		return ruleDTO;
+	private RuleTypeDTO createRuleTypeDTO(Violation violation){
+		try{
+			if(violationtypeFactory == null){
+				throw new LanguageNotFoundException();
+			}			
+			ViolationType violationtype = violationtypeFactory.createViolationType(violation.getViolationtypeKey());
+			RuleType rule = ruleFactory.generateRuleType(violation.getRuletypeKey());
+
+			RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);
+			return ruleDTO;
+		}catch(ViolationTypeNotFoundException e){
+			throw new ViolationTypeNotFoundException();
+		}
 	}
 }
