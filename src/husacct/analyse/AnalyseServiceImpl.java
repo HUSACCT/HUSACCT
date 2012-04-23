@@ -1,7 +1,6 @@
 package husacct.analyse;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.famix.FamixModel;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -11,11 +10,11 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	private AnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
-	private ModelService modelService;
+	private FamixModel famixModel;
 
 	public AnalyseServiceImpl(){
 		stub = new AnalyseServiceStub();
-		modelService = new FamixModelServiceImpl();
+		famixModel = FamixModel.getInstance();
 	}
 
 	@Override
@@ -26,15 +25,6 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	@Override
 	public void analyseApplication() {
 		service.analyseApplication();
-//		List<FamixObject> famixObjects = service.analyseApplication();
-//		try {
-//			for (FamixObject famixObject : famixObjects) {
-//				famixModel.addObject(famixObject);
-//			}
-//		} catch (InvalidAttributesException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(famixModel);
 	}
 
 	@Override
@@ -52,6 +42,21 @@ public class AnalyseServiceImpl implements IAnalyseService{
 		return stub.getDependenciesTo(to);
 	}
 
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
+		return stub.getDependencies(from, to, dependencyFilter);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
+		return stub.getDependenciesFrom(from, dependencyFilter);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
+		return stub.getDependenciesTo(to, dependencyFilter);
+	}
+		
 	@Override
 	public AnalysedModuleDTO[] getRootModules() {
 		return stub.getRootModules();
