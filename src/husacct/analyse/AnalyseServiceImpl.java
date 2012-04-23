@@ -1,6 +1,5 @@
 package husacct.analyse;
 
-import husacct.analyse.domain.famix.FamixModel;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -10,11 +9,9 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	private AnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
-	private FamixModel famixModel;
 
 	public AnalyseServiceImpl(){
 		stub = new AnalyseServiceStub();
-		famixModel = FamixModel.getInstance();
 	}
 
 	@Override
