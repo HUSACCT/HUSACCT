@@ -9,7 +9,7 @@ package husacct.analyse.domain.famix;
  * structural entity is accessed more than once in a method body, then parsers
  * should generate a separate access-association for each occurrence.
  */
-public class FamixAccess extends FamixAssociation
+class FamixAccess extends FamixAssociation
 {
 
 	/**

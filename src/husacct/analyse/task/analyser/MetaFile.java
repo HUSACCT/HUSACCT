@@ -1,8 +1,10 @@
-package husacct.analyse.abstraction.mappers.javamapper;
+package husacct.analyse.task.analyser;
 
-public class MetaFile {
+class MetaFile {
+	
 	private String path;
 	private int lineNumber;
+	
 	public MetaFile(String metaFile, int lineNumber) {
 		this.path = metaFile;
 		this.lineNumber = lineNumber;
