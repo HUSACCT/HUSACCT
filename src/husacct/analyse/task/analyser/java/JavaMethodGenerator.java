@@ -1,4 +1,4 @@
-package husacct.analyse.abstraction.mappers.javamapper.famixObjectGenerators;
+package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.domain.famix.FamixClass;
 import husacct.analyse.domain.famix.FamixMethod;
@@ -7,16 +7,18 @@ import husacct.analyse.domain.famix.FamixObject;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
-public class JavaMethodGenerator extends JavaGenerator {
+class JavaMethodGenerator extends JavaGenerator {
+	
 	private FamixMethod famixMethodObject;
 	private FamixClass famixClassObject;
+	
+	private String classname;
 	
 	public void setFamixClassObject(FamixClass famixClassObject) {
 		this.famixClassObject = famixClassObject;
 	}
 
-	public JavaMethodGenerator()
-	{
+	public JavaMethodGenerator(){
 		this.famixMethodObject = new FamixMethod();
 	}
 	
@@ -24,18 +26,17 @@ public class JavaMethodGenerator extends JavaGenerator {
 		if (methodTree != null) {
 				
 				// If constructor...
-				if(methodTree.getType() == 124)
-				{
+				if(methodTree.getType() == 124){
 					createMethodDetails(methodTree);
-					famixMethodObject.setBelongsToClass(famixClassObject.getName());
-					famixMethodObject.setConstructor(true);
-					famixMethodObject.setDeclaredReturnType("");
-					famixMethodObject.setName("Constructor");
+					famixMethodObject.belongsToClass = classname;
+					famixMethodObject.isConstructor = true;
+					famixMethodObject.declaredReturnType = "";
+					famixMethodObject.name = "Constructor";
 				}else{
 					createMethodDetails(methodTree);
-					famixMethodObject.setBelongsToClass(famixClassObject.getName());
-					famixMethodObject.setConstructor(false);
-					famixMethodObject.setUniqueName(famixClassObject.getUniqueName() + "." + famixMethodObject.getSignature());
+					famixMethodObject.belongsToClass = classname;
+					famixMethodObject.isConstructor = false;
+					famixMethodObject.uniqueName = classname + "." + famixMethodObject.signature;
 				}
 			}
 	}
@@ -47,7 +48,7 @@ public class JavaMethodGenerator extends JavaGenerator {
 				// Dit is vrij logisch, hier wordt gekeken of het een abstracte methode is.
 				if(tree.getChild(i).getChild(1) != null && tree.getChild(i).getChild(1).getType() == 53 )
 				{
-					famixMethodObject.setAbstract(true);
+					famixMethodObject.isAbstract = true;
 				}
 				
 				// Hier wordt de return type geset, maar het object heeft een DeclaredReturnType, maar ook een DeclaredClassReturnType.
@@ -56,16 +57,15 @@ public class JavaMethodGenerator extends JavaGenerator {
 				{
 					if(tree.getChild(i).getChild(0).getType() == 151)
 					{
-						famixMethodObject.setDeclaredReturnType(tree.getChild(i).getChild(0).getChild(0).getText());
+						famixMethodObject.declaredReturnType = tree.getChild(i).getChild(0).getChild(0).getText();
 					} else {
-						famixMethodObject.setDeclaredReturnType(tree.getChild(i).getChild(0).getText());
+						famixMethodObject.declaredReturnType = tree.getChild(i).getChild(0).getText();
 					}
 				}
 				
 				// De methode naam setten!
-				if(tree.getChild(i).getType() == 164)
-				{
-					famixMethodObject.setName(tree.getChild(i).getText());
+				if(tree.getChild(i).getType() == 164){
+					famixMethodObject.name = tree.getChild(i).getText();
 				}
 				
 				fillMethodSignature(tree, i);
@@ -80,10 +80,10 @@ public class JavaMethodGenerator extends JavaGenerator {
 		String methodSignature = "";
 		// Als het een constructor is (124), dan gebruik je de classname voor signature
 		if(tree.getType() == 124)
-			methodSignature =  famixClassObject.getName() + "(";
+			methodSignature =  classname + "(";
 		// Anders de methode naam.
 		else
-			methodSignature = famixMethodObject.getName() + "(";
+			methodSignature = famixMethodObject.name + "(";
 		
 		// Kijken of er een FORMAL_PARAM_LIST element is
 		if(tree.getChild(i).getType() == 133)
@@ -127,7 +127,7 @@ public class JavaMethodGenerator extends JavaGenerator {
 			}
 			// Signature afsluiten en aan het object toevoegen uiteraard!
 			methodSignature += ")";
-			famixMethodObject.setSignature(methodSignature);
+			famixMethodObject.signature = methodSignature;
 		}
 	}
 	public void fillAccessControlQualifier(Tree tree, int i)
@@ -136,27 +136,28 @@ public class JavaMethodGenerator extends JavaGenerator {
 		if(tree.getChild(i).getType() == 145){ //Modifier List, verteld bijv: public/private, maar ook static
 			for (int childOfGivenTree = 0; childOfGivenTree < tree.getChild(i).getChildCount(); childOfGivenTree++){
 				if (tree.getChild(i).getChild(childOfGivenTree).getType() == 90){ //90 = static
-					famixMethodObject.setHasClassScope(true);
+					famixMethodObject.hasClassScope = true;
 				}
 				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == 87){ //87 = public
-					famixMethodObject.setAccessControlQualifier("public");
+					famixMethodObject.accessControlQualifier = "public";
 				}
 				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == 85){ //85 = private
-					famixMethodObject.setAccessControlQualifier("private");
+					famixMethodObject.accessControlQualifier = "private";
 				}
 				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == 86){ //85 = protected
-					famixMethodObject.setAccessControlQualifier("protected");
+					famixMethodObject.accessControlQualifier = "protected";
 				}
 			}
-			if (tree.getChild(i).getChildCount() == 0 || famixMethodObject.isHasClassScope() && famixMethodObject.getAccessControlQualifier() == null){
-				famixMethodObject.setAccessControlQualifier("package-private");
+			if (tree.getChild(i).getChildCount() == 0 || famixMethodObject.hasClassScope && famixMethodObject.accessControlQualifier == null){
+				famixMethodObject.accessControlQualifier = "package-private";
 			}
 		}
 	}
 
-	@Override
-	public FamixMethod generateFamix(CommonTree methodTree) {
+//	@Override
+	public void generateFamix(CommonTree methodTree, String className) {
 		fillMethodObject(methodTree);
-		return famixMethodObject;
+		this.classname = className;
+//		return famixMethodObject;
 	}
 }

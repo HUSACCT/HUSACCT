@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AnalyseControlService {
 		
-	public List<FamixObject> analyseApplication();
+	public void analyseApplication();
 	
 	public DependencyDTO[] getDependency(String from, String to);
 	public DependencyDTO[] getDependency(String from);
