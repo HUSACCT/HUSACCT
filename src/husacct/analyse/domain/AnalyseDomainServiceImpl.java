@@ -1,26 +1,20 @@
-package husacct.analyse.domain.analyseservice;
+package husacct.analyse.domain;
 
-import husacct.analyse.abstraction.mappers.codemapper.CodeMapper;
-import husacct.analyse.abstraction.mappers.codemapper.CodeMapperService;
+import husacct.analyse.domain.famix.FamixModelServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 
-	CodeMapperService mapperService; 
+	private ModelService modelManager;
 
 	public AnalyseDomainServiceImpl(){
-		this.mapperService = new CodeMapper();
-	}
+		this.modelManager = new FamixModelServiceImpl();
+	}	
 	
 	@Override
-	public String[] getAvailableLanguages() {
-		return mapperService.getAvailableLanguages();
-	}
-	
-	@Override
-	public DependencyDTO[] getDependency(String from, String to) {		
-		//TODO 
+	public DependencyDTO[] getDependency(String from, String to) {
+		//TODO 	
 		return null;
 	}
 
@@ -53,5 +47,4 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 		// TODO
 		return null;
 	}
-
 }
