@@ -3,8 +3,10 @@ package husacct.graphics.task;
 import org.jhotdraw.draw.ConnectionFigure;
 
 import husacct.common.dto.*;
+import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.NamedFigure;
 
 public class DemoController extends BaseController
 {
@@ -19,7 +21,9 @@ public class DemoController extends BaseController
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
-		drawing.add(this.figureFactory.createFigure(taskLayer));
+		ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
+		ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
+		drawing.add(this.figureFactory.createFigure(taskLayer, new ViolationDTO[]{ taskLayerErr1, taskLayerErr2 }));
 		
 		DependencyDTO presTaskDep1 = new DependencyDTO("presentation", "task", "call", 239);
 		DependencyDTO presTaskDep2 = new DependencyDTO("presentation", "task", "import", 2);
@@ -35,14 +39,36 @@ public class DemoController extends BaseController
 		
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
-		infrastructureLayer.logicalPath = "infrastructure";
+		infrastructureLayer.logicalPath = "Infrastructure layer";
 		drawing.add(this.figureFactory.createFigure(infrastructureLayer));
+		
+		ModuleDTO domainLayer = new ModuleDTO();
+		domainLayer.type = "layer";
+		domainLayer.logicalPath = "Domain layer";
+		drawing.add(this.figureFactory.createFigure(domainLayer));
+		
+		this.drawViolationsForShownModules();
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure zoomedModuleFigure) {
-		// TODO Auto-generated method stub
-
+	public void moduleZoom(BaseFigure zoomedModuleFigure)
+	{
+		// do recursion, because the dtodecorator might be hidden behind other decorators
+		if(zoomedModuleFigure instanceof Decorator) {
+			this.moduleZoom(((Decorator) zoomedModuleFigure).getDecorator());
+		}
+		
+		if(zoomedModuleFigure instanceof DTODecorator) {
+			AbstractDTO aDto = ((DTODecorator)zoomedModuleFigure).getDTO();
+			if(aDto instanceof ModuleDTO) {
+				ModuleDTO dto = (ModuleDTO)aDto;
+				if(!dto.logicalPath.equals("task")) {
+					throw new RuntimeException("we only support zooming on the task layer in this demo");
+				}
+				
+				this.clearDrawing();
+			}
+		}
 	}
 
 	@Override

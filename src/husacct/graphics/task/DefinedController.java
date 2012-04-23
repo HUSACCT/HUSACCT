@@ -1,9 +1,6 @@
 package husacct.graphics.task;
 
-import husacct.analyse.AnalyseServiceStub;
-import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.DefineServiceStub;
 import husacct.define.IDefineService;

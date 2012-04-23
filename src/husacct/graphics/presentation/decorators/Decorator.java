@@ -28,19 +28,23 @@ import org.jhotdraw.geom.Dimension2DDouble;
 public abstract class Decorator extends BaseFigure implements DecoratedFigure
 {
 	private static final long serialVersionUID = 1489931076171389065L;
-	private Figure decorator;
+	private BaseFigure decorator;
 	
-	public Decorator(Figure decorator) {
+	public Decorator(BaseFigure decorator) {
 		this.decorator = decorator;
 	}
 	
-	public Figure getDecorator() {
+	public BaseFigure getDecorator() {
 		return this.decorator;
 	}
 	
 	@Override
 	public void setDecorator(Figure decorator) {
-		this.decorator = decorator;
+		// not nice, but forces consistency deeper in the hierarchy tree
+		if(!(decorator instanceof BaseFigure)) {
+			throw new RuntimeException("invalid decorator type");
+		}
+		this.decorator = (BaseFigure)decorator;
 	}
 	
 	@Override
