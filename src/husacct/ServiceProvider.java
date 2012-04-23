@@ -14,19 +14,25 @@ import husacct.validate.ValidateServiceImpl;
 public final class ServiceProvider {
 
 	private static ServiceProvider _instance;
-	
+
 	private IControlService controlService;
 	private IAnalyseService analyseService;
 	private IGraphicsService graphicsService;
 	private IDefineService defineService;
 	private IValidateService validateService;
-	
+
 	private ServiceProvider(){
-		this.controlService = new ControlServiceImpl();
-		this.analyseService = new AnalyseServiceImpl();
-		this.graphicsService = new GraphicsServiceImpl();
-		this.defineService = new DefineServiceImpl();
-		this.validateService = new ValidateServiceImpl();
+		try {
+			this.controlService = new ControlServiceImpl();
+			this.analyseService = new AnalyseServiceImpl();
+			this.graphicsService = new GraphicsServiceImpl();
+			this.defineService = new DefineServiceImpl();
+			this.validateService = new ValidateServiceImpl();
+		} catch (StackOverflowError error){
+			System.out.println(error);
+			System.out.println("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
+			System.exit(0);
+		}
 	}
 
 	public static ServiceProvider getInstance(){
@@ -35,11 +41,11 @@ public final class ServiceProvider {
 		}
 		return ServiceProvider._instance;
 	}
-	
+
 	public IControlService getControlService() {
 		return controlService;
 	}
-	
+
 	public IAnalyseService getAnalyseService() {
 		return analyseService;
 	}
@@ -55,5 +61,5 @@ public final class ServiceProvider {
 	public IValidateService getValidateService() {
 		return validateService;
 	}
-	
+
 }
