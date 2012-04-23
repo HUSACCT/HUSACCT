@@ -7,7 +7,7 @@ package husacct.analyse.domain.famix;
  * StructuralEntity . Besides inherited attributes, it has the following
  * attributes:
  */
-public class FamixAttribute extends FamixStructuralEntity
+class FamixAttribute extends FamixStructuralEntity
 {
 
 	/**
