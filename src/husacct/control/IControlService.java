@@ -6,5 +6,5 @@ public interface IControlService {
 	
 	public void addLocaleChangeListener(ILocaleChangeListener listener);
 	public Locale getLocale();
-	
+	public void displayErrorMessage(Exception exception);
 }
