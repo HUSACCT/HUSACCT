@@ -2,8 +2,6 @@ package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.validation.Severity;
 import java.util.ArrayList;
-
-import java.util.Collections;
 import java.util.List;
 
 public class SeverityConfigRepository {

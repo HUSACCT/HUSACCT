@@ -1,9 +1,10 @@
 package husacct.validate.presentation;
 
 import husacct.validate.domain.validation.Severity;
+import husacct.validate.task.TableModels.ColorChooserEditor;
+import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.TableCellEditor;
@@ -23,9 +24,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 		TableCellEditor editor = new ColorChooserEditor();
 		column.setCellEditor(editor);
-
 		loadLanguageTabs();
-
 		loadSeverity();
 	}
 
@@ -172,7 +171,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}//GEN-LAST:event_upActionPerformed
 
 	private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
-		if (severityNameTable.getSelectedRow() > -1) {
+		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
 			severityModel.removeRow(severityNameTable.getSelectedRow());
 		}
 	}//GEN-LAST:event_removeActionPerformed
@@ -184,20 +183,10 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}//GEN-LAST:event_addActionPerformed
 
 	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applySeverityActionPerformed
-		List<Severity> severityList = new ArrayList<Severity>();
-		for (int i = 0; i < severityModel.getRowCount(); i++) {
-			Severity s = new Severity();
-			s.setColor((Color) severityModel.getValueAt(i, 1));
-			s.setUserName((String) severityModel.getValueAt(i, 0));
-			s.setValue(i + 1);
-			severityList.add(s);
-		}
-		System.out.println(severityList.size());
-		ts.addSeverities(severityList);
+		ts.ApplySeverities(severityModel);
 		loadSeverity();
 		removeLanguageTabs();
 		loadLanguageTabs();
-
 	}//GEN-LAST:event_applySeverityActionPerformed
 
 	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
@@ -228,17 +217,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		}
 	}
 
-	private String[] severityNames() {
-		List<Severity> severities = ts.getAllSeverities();
-		ArrayList<String> severityNames = new ArrayList<String>();
-		for (Severity severity : severities) {
-			severityNames.add((String) severity.getUserName());
-
-		}
-		String[] arrayNames = {};
-		return (String[]) severityNames.toArray(arrayNames);
-	}
-
 	private void loadDefault() {
 		severityModel.addRow(new Object[]{"Low", Color.GREEN});
 		severityModel.addRow(new Object[]{"Meduim", Color.YELLOW});
@@ -253,15 +231,14 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void loadLanguageTabs(){
 		for (String language : ts.getAvailableLanguages()) {
-			LanguageConfigurationPanel lcp = new LanguageConfigurationPanel(
-					language, ts.getRuletypes(language), severityNames());
+			LanguageViolationConfigurationPanel lcp = new LanguageViolationConfigurationPanel(
+					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
 			jTabbedPane1.addTab(language, lcp);
 		}
 	}
 
 	private void removeLanguageTabs(){
 		while(jTabbedPane1.getTabCount() > 1){
-			System.out.println("Delete " + jTabbedPane1.getTitleAt(1));
 			jTabbedPane1.remove(1);
 		}
 	}
