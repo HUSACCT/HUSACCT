@@ -2,6 +2,8 @@ package husacct.validate.domain.rulefactory;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.define.DefineServiceStub;
+import husacct.validate.domain.exception.RuleInstantionException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.rulefactory.violationtypeutil.AbstractViolationType;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
@@ -35,7 +37,7 @@ public class RuleTypesFactory {
 	public List<RuleType> getRuleTypes(String programmingLanguage){
 		return generateRuleTypes(programmingLanguage);
 	}
-	
+
 	public List<RuleType> getRuleTypes(){
 		ApplicationDTO application = new DefineServiceStub().getApplicationDetails();
 		if(application != null){
@@ -59,18 +61,21 @@ public class RuleTypesFactory {
 		List<RuleType> rules = new ArrayList<RuleType>();
 
 		for(Entry<String, CategorykeyClassDTO> set : mainRuleTypes.entrySet()){
-			Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
-			String categoryKey = set.getValue().getCategoryKey();
-			if(ruletypeClass != null){
-				List<ViolationType> violationlist = Collections.emptyList();
-				if(violationtypefactory != null){
-					violationlist = violationtypefactory.createViolationTypesByRule(set.getKey());
-				}
+			try{
+				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
+				String categoryKey = set.getValue().getCategoryKey();
+				if(ruletypeClass != null){
+					List<ViolationType> violationlist = Collections.emptyList();
+					if(violationtypefactory != null){
+						violationlist = violationtypefactory.createViolationTypesByRule(set.getKey());
+					}
 
-				RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, violationlist);
-				if(rule != null){
+					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, violationlist);
 					rules.add(rule);
+
 				}
+			}catch(RuleInstantionException e){
+				//TODO
 			}
 		}
 		return rules;
@@ -80,7 +85,7 @@ public class RuleTypesFactory {
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory();
 	}
 
-	public RuleType generateRuleType(String ruleKey){
+	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
 		setViolationTypeFactory("Java");
 		//TODO uncomment when define service is ready
 		//setViolationTypeFactory(language);
@@ -100,26 +105,28 @@ public class RuleTypesFactory {
 		else{
 			logger.warn(String.format("Key: %s does not exists", ruleKey));			
 		}
-		return null;
+		throw new RuleTypeNotFoundException(ruleKey);
 	}
 
 	//Return all the default instances of Rule
 	private List<RuleType> generateDefaultRuleTypes(){
 		List<RuleType> rules = new ArrayList<RuleType>();
 		for(Entry<String, CategorykeyClassDTO> set : mainRuleTypes.entrySet()){
-			Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
-			String categoryKey = set.getValue().getCategoryKey();
-			if(ruletypeClass != null){
-				RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<ViolationType>());
-				if(rule!=null){
-					rules.add(rule);
+			try{
+				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
+				String categoryKey = set.getValue().getCategoryKey();
+				if(ruletypeClass != null){				
+					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<ViolationType>());
+					rules.add(rule);				
 				}
+			}catch(RuleInstantionException e){
+				//TODO
 			}
 		}
 		return rules;
 	}
 
-	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes){
+	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{
 		try {
 			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
 			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
@@ -144,10 +151,10 @@ public class RuleTypesFactory {
 		} catch (NoSuchMethodException e) {
 			ExceptionOccured(e);
 		}
-		return null;
+		throw new RuleInstantionException(key);
 	}
 
-	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey){
+	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey) throws RuleInstantionException{
 		setViolationTypeFactory("Java");
 		//TODO uncomment when define service is ready
 		//setViolationTypeFactory(language);
@@ -167,10 +174,10 @@ public class RuleTypesFactory {
 		else{
 			logger.warn(String.format("Key: %s does not exists", ruleKey));
 		}
-		return null;
+		throw new RuleInstantionException(ruleKey);
 	}
 
-	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes){
+	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{
 		try {
 			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
 		} catch (IllegalArgumentException e) {
@@ -186,7 +193,7 @@ public class RuleTypesFactory {
 		} catch (NoSuchMethodException e) {
 			ExceptionOccured(e);
 		}
-		return null;
+		throw new RuleInstantionException(key);
 	}
 
 	private void ExceptionOccured(Exception e){

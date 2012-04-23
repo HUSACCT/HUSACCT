@@ -6,4 +6,8 @@ public class ViolationTypeNotFoundException extends RuntimeException {
 	public ViolationTypeNotFoundException(){
 		super();
 	}
+	
+	public ViolationTypeNotFoundException(String violationTypeKey){
+		super(String.format("ViolationTypeKey: %s not found in the configuration of the validate component", violationTypeKey));
+	}
 }

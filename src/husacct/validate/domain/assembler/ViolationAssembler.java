@@ -6,6 +6,8 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.validate.domain.exception.LanguageNotFoundException;
+import husacct.validate.domain.exception.RuleInstantionException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.rulefactory.RuleTypesFactory;
 import husacct.validate.domain.rulefactory.ViolationTypeFactory;
@@ -49,11 +51,16 @@ public class ViolationAssembler {
 			catch(LanguageNotFoundException e){
 				logger.warn(e.getMessage());
 			}
+			catch(RuleTypeNotFoundException e){
+				logger.warn(e.getMessage());
+			} catch (RuleInstantionException e) {
+				logger.warn(e.getMessage());
+			}
 		}
 		return violationDTOList;
 	}
 
-	private ViolationDTO createViolationDTO(Violation violation){
+	private ViolationDTO createViolationDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
 		try{
 			RuleTypeDTO rule = createRuleTypeDTO(violation);
 			ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
@@ -68,13 +75,10 @@ public class ViolationAssembler {
 		}catch(ViolationTypeNotFoundException e){
 			throw new ViolationTypeNotFoundException();
 		}
-		catch(LanguageNotFoundException e){
-			throw new LanguageNotFoundException();
-		}
 	}
 
 
-	private RuleTypeDTO createRuleTypeDTO(Violation violation){
+	private RuleTypeDTO createRuleTypeDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
 		try{
 			if(violationtypeFactory == null){
 				throw new LanguageNotFoundException();
@@ -86,6 +90,6 @@ public class ViolationAssembler {
 			return ruleDTO;
 		}catch(ViolationTypeNotFoundException e){
 			throw new ViolationTypeNotFoundException();
-		}
+		}		
 	}
 }
