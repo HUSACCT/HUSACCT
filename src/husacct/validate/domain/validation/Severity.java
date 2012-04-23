@@ -43,7 +43,7 @@ public class Severity {
 
 	@Override
 	public String toString() {
-		if (!userName.isEmpty()) {
+		if (userName != null && !userName.isEmpty()) {
 			return userName;
 		}
 		return defaultName;

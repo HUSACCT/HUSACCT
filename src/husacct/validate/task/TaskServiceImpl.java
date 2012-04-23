@@ -97,29 +97,21 @@ public class TaskServiceImpl implements ITaskService{
 	public void UpdateRuletype(ComboBoxTableModel ruletypeModel, ComboBoxTableModel violationtypeModel, String language){
 		List<RuleType> ruletypes = getRuletypes(language);
 		for (int i = 0; i < ruletypeModel.getRowCount(); i++) {
-			System.out.println(ruletypeModel.getValueAt(i, 1));
+			HashMap<String, Severity> ruletypeKeySeverityMap = new HashMap<String, Severity>();
+			ruletypeKeySeverityMap.put(ruletypes.get(i).getKey(), (Severity)ruletypeModel.getValueAt(i, 1));
+			HashMap<String, HashMap<String, Severity>> languageKeySeverityMap = new HashMap<String, HashMap<String, Severity>>();
+			languageKeySeverityMap.put(language, ruletypeKeySeverityMap);
+			configuration.setSeveritiesPerTypesPerProgrammingLanguages(languageKeySeverityMap);
 
-			HashMap<String, HashMap<String, Severity>> map = new HashMap<String, HashMap<String, Severity>>();
-			HashMap<String, Severity> mapje = new HashMap<String, Severity>();
-			mapje.put(ruletypes.get(i).getKey(), conficurationController.findSeverity((String)ruletypeModel.getValueAt(i, 1), getAllSeverities()));
-			map.put(language, mapje);
-			configuration.setSeveritiesPerTypesPerProgrammingLanguages(map);
-
-
-List<ViolationType> vt = ruletypes.get(i).getViolationTypes();
-
-
-
+			List<ViolationType> vt = ruletypes.get(i).getViolationTypes();
 
 			for (int j = 0; j < violationtypeModel.getRowCount(); j++) {
 				vt.get(j).setActive((Boolean) violationtypeModel.getValueAt(j, 2));
-//				vt.get(j).setSeverity(
-				System.out.println(violationtypeModel.getValueAt(j, 1));
-//				HashMap<String, HashMap<String, Severity>> map = new HashMap<String, HashMap<String, Severity>>();
-//				HashMap<String, Severity> mapje = new HashMap<String, Severity>();
-//				mapje.put(vt.get(j).getViolationtypeKey(), findSeverity());
-//				map.put(language, mapje);
-//				configuration.setSeveritiesPerTypesPerProgrammingLanguages(map);
+				HashMap<String, Severity> violationtypeKeySeverityMap = new HashMap<String, Severity>();
+				violationtypeKeySeverityMap.put(vt.get(i).getViolationtypeKey(), (Severity)violationtypeModel.getValueAt(j, 1));
+				HashMap<String, HashMap<String, Severity>> languageViolationtypeKeySeverityMap = new HashMap<String, HashMap<String, Severity>>();
+				languageViolationtypeKeySeverityMap.put(language, violationtypeKeySeverityMap);
+				configuration.setSeveritiesPerTypesPerProgrammingLanguages(languageViolationtypeKeySeverityMap);
 			}
 		}
 	}

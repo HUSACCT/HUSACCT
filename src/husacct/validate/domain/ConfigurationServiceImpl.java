@@ -4,7 +4,6 @@ import husacct.validate.domain.configuration.SeverityConfigRepository;
 import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

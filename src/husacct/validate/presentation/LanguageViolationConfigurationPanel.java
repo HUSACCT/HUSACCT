@@ -128,7 +128,7 @@ public class LanguageViolationConfigurationPanel extends JPanel {
 
 	private void LoadRuleTypes() {
 		for (RuleType ruletype : ruletypes) {
-			ruletypeModel.addRow(new Object[]{ruletype.getKey(), "Low"});
+			ruletypeModel.addRow(new Object[]{ruletype.getKey(), ts.getAllSeverities().get(0)});
 		}
 	}
 
