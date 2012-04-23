@@ -32,13 +32,13 @@ public class IsNotAllowedToUseRule extends Rule {
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analysestub.getDependency(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){
 					Violation violation = createViolation(dependency, 1, this.key, mainLogicalModuleFrom, mainLogicalModuleTo, mainLogicalModuleFromType, mainLogicalModuleToType, false);
 					violations.add(violation);
 				}
 			}
-		}		
-		return violations;		
+		}
+		return violations;
 	}
 }
