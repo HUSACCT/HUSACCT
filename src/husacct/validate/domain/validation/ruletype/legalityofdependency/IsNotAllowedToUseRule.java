@@ -21,7 +21,7 @@ import husacct.analyse.AnalyseServiceStub;
 
 public class IsNotAllowedToUseRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
-		
+
 	public IsNotAllowedToUseRule(String key, String category, List<ViolationType> violationtypes) {
 		super(key, category, violationtypes, exceptionrules);
 	}
@@ -36,9 +36,9 @@ public class IsNotAllowedToUseRule extends RuleType {
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){			
+		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analysestub.getDependency(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){
 					Message message = new Message(appliedRule);
 
