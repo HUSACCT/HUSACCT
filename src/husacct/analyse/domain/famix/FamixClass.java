@@ -1,6 +1,6 @@
 package husacct.analyse.domain.famix;
 
-public class FamixClass extends FamixEntity{
+class FamixClass extends FamixEntity{
 
 	public boolean isInnerClass = false;
 	public boolean isAbstract;

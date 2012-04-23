@@ -1,6 +1,6 @@
 package husacct.analyse.domain.famix;
 
-public class FamixInvocation extends FamixAssociation{
+class FamixInvocation extends FamixAssociation{
 
 	public String invokedBy;
 	public String invokes;

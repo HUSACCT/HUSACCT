@@ -7,4 +7,6 @@ public interface ModelService {
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
 	public void createImport(String importingClass, String importedModule, String completeImportString, boolean importsCompletePackage);
 	
+	//Debug-functie voor in de main:
+	public void printModel();
 }

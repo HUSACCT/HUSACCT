@@ -18,7 +18,7 @@ class JavaClassGenerator extends JavaGenerator{
 		this.belongsToPackage = uniquePackageName;
 	}
 	
-	public String generateFamix(CommonTree commonTree) {
+	public String generateModel(CommonTree commonTree) {
 		this.name = commonTree.getChild(1).toString();
 		this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
 		this.isInnerClass = isInnerClass(commonTree);

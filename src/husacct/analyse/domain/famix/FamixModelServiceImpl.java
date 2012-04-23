@@ -1,12 +1,8 @@
-package husacct.analyse.domain;
+package husacct.analyse.domain.famix;
 
 import javax.naming.directory.InvalidAttributesException;
 
-import husacct.analyse.domain.famix.FamixClass;
-import husacct.analyse.domain.famix.FamixImport;
-import husacct.analyse.domain.famix.FamixModel;
-import husacct.analyse.domain.famix.FamixObject;
-import husacct.analyse.domain.famix.FamixPackage;
+import husacct.analyse.domain.ModelService;
 
 public class FamixModelServiceImpl implements ModelService{
 	
@@ -68,5 +64,9 @@ public class FamixModelServiceImpl implements ModelService{
 	
 	public FamixModel getModel(){
 		return model;
+	}
+	
+	public void printModel(){
+		System.out.println(model.toString());
 	}
 }

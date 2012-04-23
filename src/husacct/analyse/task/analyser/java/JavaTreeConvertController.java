@@ -1,11 +1,5 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.FamixModelServiceImpl;
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixClass;
-import husacct.analyse.domain.famix.FamixMethod;
-import husacct.analyse.domain.famix.FamixObject;
-import husacct.analyse.domain.famix.FamixPackage;
 import husacct.analyse.infrastructure.antlr.JavaParser;
 import husacct.analyse.infrastructure.antlr.JavaParser.compilationUnit_return;
 import java.util.ArrayList;
@@ -17,21 +11,14 @@ import org.antlr.runtime.tree.Tree;
 
 class JavaTreeConvertController {
 	
-	private ModelService modelService = new FamixModelServiceImpl();
 	private String theClass = null;
 	private String thePackage = null;
-	
-	//TODO Wegwerken FamixObjecten --> Verantwoordelijkheid gaat naar generators. 
-	FamixPackage  famixPackageObject;
-	FamixClass famixClassObject;
-	FamixMethod famixMethodObject;
-	List<FamixObject> famixObjects = new ArrayList<FamixObject>();
-	
 	private Tree packageTree;
 	private Tree classTree;
 	private Tree classTopLevelScopeTree;
 	
-	public void delegateFamixObjectGenerators(JavaParser javaParser) throws RecognitionException {
+	public void delegateModelGenerators(JavaParser javaParser) throws RecognitionException {
+		
 		compilationUnit_return compilationUnit = javaParser.compilationUnit();
 		CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 		
@@ -40,7 +27,6 @@ class JavaTreeConvertController {
 		
 		if(packageTree != null) delegatePackage(packageTree);
 		if(classTree != null) delegateClass(classTree);
-		
 		
 		//TODO : skipping interface and annotations, need to added later
 		if(classTree != null && hasType(compilationUnitTree, JavaParser.IMPORT)){
@@ -51,11 +37,11 @@ class JavaTreeConvertController {
 		}
 		
 		//TODO Werkt nog niet helemaal zoals het hoort: nullPointers? Herschrijven?
-		if (hasMethods(classTree)){
-			Tree methodTree = classTree.getChild(2).getChild(1);
-			if(methodTree != null)delegateMethodTree(methodTree);
-//			delegateMethodTree(classTree.getChild(2).getChild(1));
-		}
+//		if (hasMethods(classTree)){
+//			Tree methodTree = classTree.getChild(2).getChild(1);
+//			if(methodTree != null)delegateMethodTree(methodTree);
+////			delegateMethodTree(classTree.getChild(2).getChild(1));
+//		}
 		
 //		if(classTopLevelScopeTree != null) delegateTopLevelScopeTree(classTopLevelScopeTree);
 //      if (methodTree != null) delegateMethodTree(methodTree);
@@ -79,17 +65,12 @@ class JavaTreeConvertController {
 	
 	public void delegatePackage(Tree packageTree){
 		JavaPackageGenerator javaPackageGenerator = new JavaPackageGenerator();
-		javaPackageGenerator.generateFamix((CommonTree)packageTree);
-		String unique = javaPackageGenerator.getUniqueName();
-		String name = javaPackageGenerator.getName();
-		String belongsToPackage = javaPackageGenerator.belongsToPackage;
-		this.thePackage = unique;
-		modelService.createPackage(unique, belongsToPackage, name);
+		this.thePackage = javaPackageGenerator.generateModel((CommonTree)packageTree);
 	}
 	
 	public void delegateClass(Tree classTree){
 		JavaClassGenerator javaClassGenerator = new JavaClassGenerator(thePackage);
-		String analysedClass = javaClassGenerator.generateFamix((CommonTree)classTree);
+		String analysedClass = javaClassGenerator.generateModel((CommonTree)classTree);
 		if(this.theClass == null) this.theClass = analysedClass;
 		Tree classTopLevelScopeTreeChild = ((BaseTree) classTree).getFirstChildWithType(JavaParser.CLASS_TOP_LEVEL_SCOPE);
 		if(classTopLevelScopeTree != null){
@@ -102,15 +83,14 @@ class JavaTreeConvertController {
 		javaImportGenerator.generateFamixImport(importTree, this.theClass);
 	}
 
-	private void delegateMethodTree(Tree methodTree) {
-		JavaMethodGenerator javaMethodGenerator = new JavaMethodGenerator();
-		javaMethodGenerator.setFamixClassObject(famixClassObject);
-		javaMethodGenerator.generateFamix((CommonTree) methodTree, theClass);
-	}
+//	private void delegateMethodTree(Tree methodTree) {
+//		JavaMethodGenerator javaMethodGenerator = new JavaMethodGenerator();
+//		javaMethodGenerator.generateFamix((CommonTree) methodTree, theClass);
+//	}
 
-	public void delegateAttribute(Tree scopeTree, FamixClass classObject){
-		JavaAttributeGenerator javaAttributeGenerator = new JavaAttributeGenerator();
-	}
+//	public void delegateAttribute(Tree scopeTree, FamixClass classObject){
+//		JavaAttributeGenerator javaAttributeGenerator = new JavaAttributeGenerator();
+//	}
 
 	public void delegateTopLevelScopeTree(Tree scopeTree){
 		System.out.println(scopeTree.getChildCount());

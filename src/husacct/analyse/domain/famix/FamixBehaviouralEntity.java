@@ -1,6 +1,6 @@
 package husacct.analyse.domain.famix;
 
-public class FamixBehaviouralEntity extends FamixEntity{
+class FamixBehaviouralEntity extends FamixEntity{
 
 	public String accessControlQualifier;
 	public String signature;

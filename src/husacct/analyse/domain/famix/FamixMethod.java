@@ -1,6 +1,6 @@
 package husacct.analyse.domain.famix;
 
-public class FamixMethod extends FamixBehaviouralEntity{
+class FamixMethod extends FamixBehaviouralEntity{
 
 	public String belongsToClass;
 	public boolean hasClassScope;

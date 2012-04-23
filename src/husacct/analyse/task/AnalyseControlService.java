@@ -1,6 +1,5 @@
 package husacct.analyse.task;
 
-import husacct.analyse.domain.famix.FamixObject;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 

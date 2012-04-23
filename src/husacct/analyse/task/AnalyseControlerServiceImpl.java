@@ -4,7 +4,6 @@ import java.util.List;
 import husacct.analyse.domain.AnalyseDomainService;
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
-import husacct.analyse.domain.famix.FamixObject;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 

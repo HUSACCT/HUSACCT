@@ -1,17 +1,15 @@
 package husacct.analyse.domain;
 
-import husacct.analyse.domain.famix.FamixModel;
+import husacct.analyse.domain.famix.FamixModelServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 
-	private FamixModelServiceImpl modelManager;
-	private FamixModel model;
+	private ModelService modelManager;
 
 	public AnalyseDomainServiceImpl(){
 		this.modelManager = new FamixModelServiceImpl();
-		this.model = modelManager.getModel();
 	}	
 	
 	@Override

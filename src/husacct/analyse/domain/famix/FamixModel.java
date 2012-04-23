@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import javax.naming.directory.InvalidAttributesException;
 
-public class FamixModel extends FamixObject{
+class FamixModel extends FamixObject{
 
 	private static FamixModel currentInstance;
 

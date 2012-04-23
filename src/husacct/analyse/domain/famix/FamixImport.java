@@ -1,6 +1,6 @@
 package husacct.analyse.domain.famix;
 
-public class FamixImport extends FamixAssociation{
+class FamixImport extends FamixAssociation{
 	
 	public String importingClass;
 	public String importedModule;

@@ -1,57 +1,78 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.FamixModelServiceImpl;
 import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixPackage;
+import husacct.analyse.domain.famix.FamixModelServiceImpl;
 
 import org.antlr.runtime.tree.CommonTree;
+
 class JavaPackageGenerator{
-
-	String name = "";
-	String belongsToPackage = "";
-	String packageName = "";
 	
-	Boolean nameSet = false;
-	FamixPackage famixPackage = new FamixPackage();
-	final int DOT = 15;
-	final int INDENTIFIER = 164;
-
-	public void generateFamix(CommonTree packageNode) {
-			if(packageNode.getChild(0).getType() == DOT && packageNode.getChild(1) == null){
-				generateFamix((CommonTree)packageNode.getChild(0));
-			}else if(packageNode.getChild(0).getType() == INDENTIFIER && packageNode.getChild(1) == null){
-				name = packageNode.getChild(0).toString();
-			}else{
-				if(packageNode.getChild(0) != null && packageNode.getChild(0).getType() == INDENTIFIER && nameSet != true){
-					belongsToPackage = packageNode.getChild(0).toString();
-					name = packageNode.getChild(1).toString();
-					nameSet = true;
-				}else if(packageNode.getChild(0) != null && packageNode.getChild(0).getType() == DOT && nameSet != true){
-					name = packageNode.getChild(1).toString();
-					nameSet = true;
-					generateFamix((CommonTree) packageNode.getChild(0));				
-				}else if (packageNode.getChild(0) != null && (packageNode.getChild(0).getType() == INDENTIFIER || packageNode.getChild(0).getType() == DOT) ){
-					if(packageNode.getChild(0).getType() == DOT){
-						belongsToPackage = packageNode.getChild(1).toString() + "." + belongsToPackage; 
-						generateFamix((CommonTree) packageNode.getChild(0));	
-					}else{
-						belongsToPackage = packageNode.getChild(1).toString() + "." + belongsToPackage; 
-						belongsToPackage = packageNode.getChild(0).toString() + "." + belongsToPackage; 
-					}
-				}
-			}
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getBelongsToPackage() {
-		return belongsToPackage;
+	private ModelService modelService = new FamixModelServiceImpl();
+	
+	public String generateModel(CommonTree treeNode) {
+		String currentPackage = treeNode.toStringTree();
+		String uniqueName = getUniqueNameOfPackage(currentPackage);
+		String belongsToPackage = getParentPackageName(uniqueName);
+		String name = getNameOfPackage(uniqueName);
+		createPackage(name, uniqueName, belongsToPackage);
+		if(hasParentPackages(uniqueName)) {
+			createAllParentPackages(belongsToPackage);
+		}
+		return uniqueName;
 	}
 	
-	public String getUniqueName(){
-		return belongsToPackage + "." + name;
+	private void createAllParentPackages(String uniqueChildPackageName){
+		String belongsToPackage = "";
+		String name = "";
+		if(hasParentPackages(uniqueChildPackageName)){
+			belongsToPackage = getParentPackageName(uniqueChildPackageName);
+			name = getNameOfPackage(uniqueChildPackageName);
+		}
+		else{
+			name = uniqueChildPackageName;
+		}
+		createPackage(name, uniqueChildPackageName, belongsToPackage);
+		if(hasParentPackages(uniqueChildPackageName)){
+			createAllParentPackages(uniqueChildPackageName);
+		}
 	}
 	
+	private String getUniqueNameOfPackage(String antlrTree){
+		String uniqueName = antlrTree;
+		uniqueName = uniqueName.replace("(","");
+		uniqueName = uniqueName.replace(")", "");
+		uniqueName = uniqueName.replace(".","");
+		uniqueName = uniqueName.replace(" ", ".");
+		uniqueName = uniqueName.replace("..", ".");
+		uniqueName = uniqueName.replace("package.", "");
+		return uniqueName;
+	}
+	
+	private String getParentPackageName(String completPackageName){
+		String[] allPackages = splitPackages(completPackageName);
+		String parentPackage = "";
+		for(int i = 0; i<allPackages.length - 1; i++){
+			if(parentPackage == "") parentPackage += allPackages[i];
+			else parentPackage += "." + allPackages[i];
+		}
+		return parentPackage;
+	}	
+	
+	private String getNameOfPackage(String completePackageName){
+		String[] allPackages = splitPackages(completePackageName);
+		return allPackages[allPackages.length - 1];
+	}
+	
+	private String[] splitPackages(String completePackageName){
+		String escapedPoint = "\\.";
+		return completePackageName.split(escapedPoint);
+	}
+	
+	private void createPackage(String name, String uniqueName, String belongsToPackage){
+		modelService.createPackage(uniqueName, belongsToPackage, uniqueName);
+	}
+	
+	private boolean hasParentPackages(String completePackageName){
+		return splitPackages(completePackageName).length - 1 > 0;
+	}
 }
