@@ -118,15 +118,23 @@ public class PDFReportWriter extends ReportWriter {
 		}
 
 		for(Violation violation : report.getViolations()) {
+			if(violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
 			addCellToTable(pdfTable,violation.getClassPathFrom(), BaseColor.WHITE, false);
-			addCellToTable(pdfTable,violation.getClassPathTo(), BaseColor.WHITE, false);
+			} else {
+				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
+			}
+			if(violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
+				addCellToTable(pdfTable,violation.getClassPathTo(), BaseColor.WHITE, false);
+			} else {
+				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
+			}
 			if(!(violation.getLinenumber() == 0)) {
 				addCellToTable(pdfTable,"" + violation.getLinenumber(), BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 			
-			addCellToTable(pdfTable,"" + report.getSeverityNameFromValue(violation.getSeverityValue()), BaseColor.WHITE, false);
+			addCellToTable(pdfTable,"" + violation.getSeverity().toString(), BaseColor.WHITE, false);
 			if(violation.getLogicalModules() != null) {
 				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
 				String message = new Messagebuilder().createMessage(messageObject);

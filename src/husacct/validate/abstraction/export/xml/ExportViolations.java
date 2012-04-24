@@ -22,7 +22,7 @@ public class ExportViolations {
 			Element violationElement = new Element("violation");
 
 			createElementWithContent("lineNumber", "" + violation.getLinenumber(), violationElement);
-			createElementWithContent("severityValue", "" + violation.getSeverityValue(), violationElement);
+			createElementWithContent("severityId", "" + violation.getSeverity().toString(), violationElement);
 			createElementWithContent("ruletypeKey", violation.getRuletypeKey(), violationElement);
 			createElementWithContent("violationtypeKey",violation.getViolationtypeKey(), violationElement);
 			createElementWithContent("classPathFrom",violation.getClassPathFrom(), violationElement);

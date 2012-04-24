@@ -13,17 +13,14 @@ public class SeverityConfigRepository {
 		Severity s1 = new Severity();
 		s1.setColor(Color.GREEN);
 		s1.setDefaultName("Low");
-		s1.setValue(1);
 
 		Severity s2 = new Severity();
 		s2.setColor(Color.YELLOW);
 		s2.setDefaultName("Medium");
-		s2.setValue(2);
 
 		Severity s3 = new Severity();
 		s3.setColor(Color.RED);
 		s3.setDefaultName("High");
-		s3.setValue(3);
 
 		severities.add(s1);
 		severities.add(s2);

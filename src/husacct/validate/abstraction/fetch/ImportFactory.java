@@ -20,9 +20,9 @@ public class ImportFactory {
 		return	importSeverities.importSeverities(element);
 	}
 
-	public List<Violation> ImportViolations(Element element) throws DatatypeConfigurationException {
+	public List<Violation> ImportViolations(Element element, List<Severity> severities) throws DatatypeConfigurationException {
 		ImportViolations importViolations = new ImportViolations();
-		return importViolations.importViolations(element);
+		return importViolations.importViolations(element, severities);
 	}
 
 	public HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {

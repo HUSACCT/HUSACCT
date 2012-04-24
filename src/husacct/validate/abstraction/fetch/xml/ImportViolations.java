@@ -1,6 +1,7 @@
 package husacct.validate.abstraction.fetch.xml;
 
 import husacct.validate.domain.validation.Message;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
@@ -15,12 +16,18 @@ import org.jdom2.Element;
 
 
 public class ImportViolations {
-	public List<Violation> importViolations(Element violationsElement) throws DatatypeConfigurationException {
+	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
 		List<Violation> violations = new ArrayList<Violation>();
 		for(Element violationElement : violationsElement.getChildren()) {
 			Violation violation = new Violation();
 			violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
-			violation.setSeverityValue(Integer.parseInt(violationElement.getChildText("severityValue")));
+			String id = violationElement.getChildText("severityId");
+			for(Severity severity : severities) {
+				if(id.equals(severity.getId().toString())) {
+					violation.setSeverity(severity);
+					break;
+				}
+			}
 			violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));
 			violation.setViolationtypeKey(violationElement.getChildText("violationtypeKey"));
 			violation.setClassPathFrom(violationElement.getChildText("classPathFrom"));

@@ -128,7 +128,7 @@ public class HTMLReportWriter extends ReportWriter {
 			createColumn(violation.getClassPathFrom());
 			createColumn(violation.getClassPathTo());
 			createColumn("" + violation.getLinenumber());
-			createColumn(report.getSeverityNameFromValue(violation.getSeverityValue()));
+			createColumn(violation.getSeverity().toString());
 			if(violation.getLogicalModules() != null) {
 				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
 				String message = new Messagebuilder().createMessage(messageObject);

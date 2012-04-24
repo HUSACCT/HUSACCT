@@ -16,7 +16,7 @@ public class ImportSeveritiesPerTypesPerProgrammingLanguages {
 			HashMap<String, Severity> severitiesPerTypes = new HashMap<String, Severity>();
 			for(Element severityPerTypeElement : severityPerTypePerProgrammingLanguageElement.getChildren("severityPerType")) {
 				for(Severity severity : severities) {
-					if(severity.getValue() == Integer.parseInt(severityPerTypeElement.getChildText("value"))) {
+					if(severity.getId().toString().equals(severityPerTypeElement.getChildText("severityId"))) {
 						severitiesPerTypes.put(severityPerTypeElement.getChildText("typeKey"), severity);
 					}
 				}
