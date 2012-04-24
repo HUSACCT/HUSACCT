@@ -28,7 +28,7 @@ public class AnalysedController extends BaseController {
 
 	private void drawModules(AbstractDTO[] modules) {
 		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
-
+		this.clearDrawing();
 		for (AnalysedModuleDTO dto : castedModules) {
 			BaseFigure packageFigure = figureFactory.createFigure(dto);
 			drawing.add(packageFigure);
@@ -56,7 +56,6 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void zoomOut(AbstractDTO childDTO) {
-		//AbstractDTO dto = ((DTODecorator) zoomedModuleFigure).getDTO();
 		switch(childDTO.getClass().getSimpleName()){
 			case "AnalysedModuleDTO":
 				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)childDTO);
