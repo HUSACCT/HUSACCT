@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.table.TableModel;
 
 /**
  * 
@@ -20,6 +21,8 @@ import javax.swing.JScrollPane;
 public class AppliedRulesJPanel extends AbstractDefinitionJPanel {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
+	private JTableAppliedRule appliedRulesTable;
+	private JScrollPane appliedRulesPane;
 
 	public AppliedRulesJPanel() {
 		super();
@@ -34,10 +37,18 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel {
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 	}
 	
+	public TableModel getModel() {
+		return appliedRulesTable.getModel();
+	}
+	
+	public int getSelectedRow() {
+		return appliedRulesTable.getSelectedRow();
+	}
+	
 	private JScrollPane addAppliedRulesTable() {
-		JScrollPane appliedRulesPane = new JScrollPane();
+		appliedRulesPane = new JScrollPane();
 		appliedRulesPane.setPreferredSize(new java.awt.Dimension(278, 32));
-		JTableAppliedRule appliedRulesTable = new JTableAppliedRule();
+		appliedRulesTable = new JTableAppliedRule();
 		appliedRulesPane.setViewportView(appliedRulesTable);
 		return appliedRulesPane;
 	}

@@ -1,30 +1,44 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.tables.JTableSoftwareUnits;
+import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.table.TableModel;
 
 /**
  * 
  * @author Henk ter Harmsel
  *
  */
-public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel {
+public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements ActionListener,  Observer{
 
 	private static final long serialVersionUID = 8086576683923713276L;
+	private JTableSoftwareUnits softwareUnitsTable;
+	private JScrollPane softwareUnitsPane;
+	
+	private JButton addSoftwareUnitButton;
+	private JButton removeSoftwareUnitButton;
 
 	public SoftwareUnitsJPanel() {
 		super();
 	}
-
+	
+	/**
+	 * Creating Gui
+	 */
 	@Override
 	public void initGui() {
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
@@ -35,9 +49,9 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel {
 	}
 	
 	private JScrollPane addSoftwareUnitsTable() {
-		JScrollPane softwareUnitsPane = new JScrollPane();
+		softwareUnitsPane = new JScrollPane();
 		softwareUnitsPane.setPreferredSize(new java.awt.Dimension(227, 249));
-		JTableSoftwareUnits softwareUnitsTable = new JTableSoftwareUnits();
+		softwareUnitsTable = new JTableSoftwareUnits();
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		return softwareUnitsPane;
 	}
@@ -48,15 +62,11 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel {
 		buttonPanel.setLayout(this.createButtonPanelLayout());
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 		
-		JButton addSoftwareUnitButton = new JButton();
+		addSoftwareUnitButton = new JButton();
 		buttonPanel.add(addSoftwareUnitButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		addSoftwareUnitButton.setText("Add");
-		
-		JButton editSoftwareUnitButton = new JButton();
-		buttonPanel.add(editSoftwareUnitButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		editSoftwareUnitButton.setText("Edit");
 			
-		JButton removeSoftwareUnitButton = new JButton();
+		removeSoftwareUnitButton = new JButton();
 		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeSoftwareUnitButton.setText("Remove");
 		
@@ -70,5 +80,44 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel {
 		buttonPanelLayout.columnWeights = new double[] { 0.1 };
 		buttonPanelLayout.columnWidths = new int[] { 7 };
 		return buttonPanelLayout;
+	}
+
+	/**
+	 * Handling ActionPerformed
+	 */
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		if (action.getSource() == this.addSoftwareUnitButton) {
+			this.addSoftwareUnit();
+		} else if (action.getSource() == this.removeSoftwareUnitButton) {
+			this.removeSoftwareUnit();
+		}
+	}
+	
+	private void addSoftwareUnit(){
+		
+	}
+	private void removeSoftwareUnit(){
+		
+	}
+		
+	/**
+	 * Observer
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		updateSoftwareUnitTable();
+	}
+	
+	public void updateSoftwareUnitTable() {
+		DefinitionController.getInstance().updateSoftwareUnitTable(this.softwareUnitsTable);
+	}
+	
+	public TableModel getModel(){
+		return softwareUnitsTable.getModel();
+	}
+
+	public int getSelectedRow() {
+		return softwareUnitsTable.getSelectedRow();
 	}
 }

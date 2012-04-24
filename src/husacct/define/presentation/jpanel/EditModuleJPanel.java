@@ -1,7 +1,6 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.utils.DefaultMessages;
-import husacct.define.presentation.utils.Log;
 import husacct.define.task.DefinitionController;
 
 import java.awt.GridBagConstraints;
@@ -14,7 +13,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

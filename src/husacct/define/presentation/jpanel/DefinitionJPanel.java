@@ -7,14 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 
 /**
@@ -31,31 +25,29 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	public AppliedRulesJPanel appliedRulesPanel;
 	
 	
-	public JTable jTableSoftwareUnits;
-	public JButton jButtonNext;
-
-	public JCheckBox jCheckBoxAccess;
-	public JTable jTableAppliedRules;
-	public JList jListLayers;
-	
-	public JTextArea jTextAreaLayerDescription;
-	public JTextField jTextFieldModuleName;
-	//SoftwareUnits
-	public JButton jButtonAddSoftwareUnit;
-	public JButton jButtonRemoveSoftwareUnit;
-//	public JButton jButtonEditSoftwareUnit;
-	//AppliedRules
-	public JButton jButtonAddRule;
-	public JButton jButtonRemoveRule;
-	public JButton jButtonEditRule;
-	
-	//DefineModules
-	public JButton jButtonMoveLayerDown;
-	public JButton jButtonMoveLayerUp;
-	public JButton jButtonNewModule;
-	public JButton jButtonRemoveModule;
-
 	private JPanel mappingPanel;
+//	public JTable jTableSoftwareUnits;
+//	public JTable jTableAppliedRules;
+//	public JButton jButtonNext;
+//
+//	public JCheckBox jCheckBoxAccess;
+//	public JList jListLayers;
+	
+//	public JTextArea jTextAreaLayerDescription;
+//	public JTextField jTextFieldModuleName;
+	//SoftwareUnits
+//	public JButton jButtonAddSoftwareUnit;
+//	public JButton jButtonRemoveSoftwareUnit;
+//	//AppliedRules
+//	public JButton jButtonAddRule;
+//	public JButton jButtonRemoveRule;
+//	public JButton jButtonEditRule;
+	//DefineModules
+////	public JButton jButtonMoveLayerDown;
+//	public JButton jButtonMoveLayerUp;
+//	public JButton jButtonNewModule;
+//	public JButton jButtonRemoveModule;
+
 	
 	public DefinitionJPanel() {
 		super();
@@ -76,8 +68,7 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 			mainSplitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			
 			mainSplitPane.add(this.createModulePanel(), JSplitPane.LEFT);
-			mainSplitPane.add(this.createRightPanel(), JSplitPane.RIGHT);
-//			mainSplitPane.add(this.addBottomPanel(), JSplitPane.BOTTOM);
+			mainSplitPane.add(this.createRightPanel(), JSplitPane.RIGHT); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -135,22 +126,8 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	}
 	
 	@Deprecated
-	private JPanel addBottomPanel() {
-		JPanel bottomPanel = new JPanel();
-		BorderLayout bottomPanelLayout = new BorderLayout();
-		bottomPanel.setLayout(bottomPanelLayout);
-		bottomPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		
-//		JButton nextButton = new JButton();
-//		bottomPanel.add(nextButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-//		nextButton.setText("Next");
-		
-		return bottomPanel;
-	}
-	
-	@Deprecated
 	public long getSelectedModule() {
-		Object selected = jListLayers.getSelectedValue();
+		Object selected = modulePanel.getSelectedValue();
 		if (selected instanceof DataHelper) {
 			long id = ((DataHelper) selected).getId();
 			return id;
@@ -158,10 +135,11 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 		return -1;
 	}
 
+	@Deprecated
 	public long getSelectedSoftwareUnit() {
-		int selectedRow = jTableSoftwareUnits.getSelectedRow();
+		int selectedRow = sofwareUnitsPanel.getSelectedRow();
 		if (selectedRow >= 0) {
-			JTableTableModel c = (JTableTableModel) jTableSoftwareUnits.getModel();
+			JTableTableModel c = (JTableTableModel) sofwareUnitsPanel.getModel();
 
 			Object selected = c.getValueAt(selectedRow, 0);
 			if (selected instanceof DataHelper) {
@@ -171,11 +149,12 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 		return -1L;
 	}
 	
+	@Deprecated
 	public String getSelectedSoftwareUnitName() {
 		String selectedValue = "";
-		int selectedRow = jTableSoftwareUnits.getSelectedRow();
+		int selectedRow = sofwareUnitsPanel.getSelectedRow();
 		if (selectedRow >= 0) {
-			JTableTableModel c = (JTableTableModel) jTableSoftwareUnits.getModel();
+			JTableTableModel c = (JTableTableModel) sofwareUnitsPanel.getModel();
 
 			Object selected = c.getValueAt(selectedRow, 0);
 			selectedValue = selected.toString();
@@ -187,10 +166,11 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 		return selectedValue;
 	}
 
+	@Deprecated
 	public long getSelectedAppliedRule() {
-		int selectedRow = jTableAppliedRules.getSelectedRow();
+		int selectedRow = appliedRulesPanel.getSelectedRow();
 		if (selectedRow >= 0) {
-			JTableTableModel c = (JTableTableModel) jTableAppliedRules.getModel();
+			JTableTableModel c = (JTableTableModel) appliedRulesPanel.getModel();
 
 			Object selected = c.getValueAt(selectedRow, 0);
 			if (selected instanceof DataHelper) {

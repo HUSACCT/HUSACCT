@@ -1,14 +1,15 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.domain.DefineDomainService;
 import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
@@ -40,6 +42,10 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		super();
 	}
 
+	
+	/**
+	 * Creating Gui
+	 */
 	@Override
 	public void initGui() {
 		BorderLayout modulePanelLayout = new BorderLayout();
@@ -118,8 +124,67 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		return buttonPanelLayout;
 	}
 	
+	/**
+	 * Observer
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		updateModulesTreeList();
+	}
+	
 	public void updateModulesTreeList() {
 		DefinitionController.getInstance().updateModuleTreeList(this.moduleTreeJList);
+	}
+	/**
+	 * Handling ActionPerformed
+	 */
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		if (action.getSource() == this.newModuleButton) {
+			this.newModule();
+		} else if (action.getSource() == this.moveModuleUpButton) {
+			this.moveLayerUp();
+		} else if (action.getSource() == this.removeModuleButton) {
+			this.removeModule();
+		} else if (action.getSource() == this.moveModuleDownButton) {
+			this.moveLayerDown();
+		}
+	}
+	private void newModule() {
+		//TODO call AddModuleValuesJFrame instead of the following code.
+		
+		// Ask the user for the module name
+		String moduleName = UiDialogs.inputDialog(this, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
+		if (moduleName != null) {
+			//Creating a new module of type Layer
+			//has yet to be implemented to support other module types
+			String layerLevelString = UiDialogs.inputDialog(this, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
+			if (layerLevelString != null) {
+				int layerLevel = Integer.parseInt(layerLevelString);
+				// Call task to create the layer
+				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
+			}
+		}
+		this.updateModulesTreeList();
+	}
+	private void removeModule() {
+		long moduleId = getSelectedModuleId();
+		boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove module: \"" + moduleId + "\"", "Remove?");
+		if (confirm) {
+			JPanelStatus.getInstance("Removing module").start();
+			DefinitionController.getInstance().removeModuleById(moduleId);
+		}
+		this.updateModulesTreeList();
+	}
+	private void moveLayerUp() {
+		long layerId = getSelectedModuleId();
+		DefinitionController.getInstance().moveLayerUp(layerId);
+		this.updateModulesTreeList();
+	}
+	private void moveLayerDown() {
+		long layerId = getSelectedModuleId();
+		DefineDomainService.getInstance().moveLayerDown(layerId);
+		this.updateModulesTreeList();
 	}
 	
 	@Override
@@ -129,6 +194,19 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		}
 	}
 	
+	public Object getSelectedValue(){
+		return moduleTreeJList.getSelectedValue();
+	}
+	
+	public long getSelectedModuleId() {
+		Object selected = getSelectedValue();
+		if (selected instanceof DataHelper) {
+			long id = ((DataHelper) selected).getId();
+			return id;
+		}
+		return -1;
+	}
+	
 	private void moduleTreeJListAction(ListSelectionEvent event) {
 		long moduleId = -1;
 		Object selectedModule = this.moduleTreeJList.getSelectedValue();
@@ -136,48 +214,5 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 			moduleId = ((DataHelper) selectedModule).getId();
 		}
 		DefinitionController.getInstance().notifyObservers(moduleId);	
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.newModuleButton) {
-			this.newModuleAction(action);
-		} else if (action.getSource() == this.moveModuleUpButton) {
-			this.moveModuleUpAction(action);
-		} else if (action.getSource() == this.removeModuleButton) {
-			this.removeModuleAction(action);
-		} else if (action.getSource() == this.moveModuleDownButton) {
-			this.moveModuleDownAction(action);
-		}
-	}
-
-	private void moveModuleDownAction(ActionEvent action) {
-		DefinitionController.getInstance().moveLayerDown();
-		this.updateModulesTreeList();
-	}
-
-	private void removeModuleAction(ActionEvent action) {
-		DefinitionController.getInstance().removeModule();
-		this.updateModulesTreeList();
-	}
-
-	private void moveModuleUpAction(ActionEvent action) {
-		DefinitionController.getInstance().moveLayerUp();
-		this.updateModulesTreeList();
-	}
-
-	private void newModuleAction(ActionEvent action) {
-		DefinitionController.getInstance().newModule();
-		this.updateModulesTreeList();
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-//		Long moduleId = Long.parseLong(arg.toString());
-//		HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
-		
-		
-		
-		
 	}
 }

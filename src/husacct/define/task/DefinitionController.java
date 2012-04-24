@@ -4,6 +4,7 @@ import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Module;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
+import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.Log;
@@ -21,7 +22,6 @@ import java.util.Observer;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class DefinitionController extends Observable implements ActionListener, KeyListener, Observer {
@@ -76,28 +76,16 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	/**
-	 * Create a new module
+	 * Adds a new layer
 	 */
-	public void newModule() {
-		Log.i(this, "newModule()");
+	public void addLayer(String layerName, int hierarchicalLevel){
+		Log.i(this, "DefinitionController - addLayer("+layerName+")");
 		try {
-			// Ask the user for the module name
-			String moduleName = UiDialogs.inputDialog(definitionJPanel, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-			if (moduleName != null) {
-				//Creating a new module of type Layer
-				//has yet to be implemented to support other module types
-				String layerLevelString = UiDialogs.inputDialog(definitionJPanel, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-				if (layerLevelString != null) {
-					JPanelStatus.getInstance("Creating new layer").start();
-					int layerLevel = Integer.parseInt(layerLevelString);
-
-					Log.i(this, "newLayer() - name: " + moduleName);
-					// Create the layer
-					long layerId = DefineDomainService.getInstance().addLayer(moduleName, layerLevel);
-				}
-			}
+			JPanelStatus.getInstance("Adding Layer").start();
+			DefineDomainService.getInstance().addLayer(layerName, hierarchicalLevel);
+			notifyObservers();
 		} catch (Exception e) {
-			Log.e(this, "newLayer() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - addLayer("+layerName+") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -105,23 +93,16 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	/**
-	 * Remove a layer which is selected in the JPanel.
+	 * Remove a module by Id
 	 */
-	public void removeModule() {
-		Log.i(this, "removeModule()");
+	public void removeModuleById(long moduleId) {
+		Log.i(this, "DefinitionController - removeModuleById("+moduleId+")");
 		try {
-			long moduleId = definitionJPanel.getSelectedModule();
-			if (moduleId != -1) {
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, "Are you sure you want to remove module: \"" + moduleId + "\"", "Remove?");
-				if (confirm) {
-					JPanelStatus.getInstance("Removing module").start();
-
-					DefineDomainService.getInstance().removeModuleById(moduleId);
-				}
-
-			}
+			JPanelStatus.getInstance("Removing Module").start();
+			DefineDomainService.getInstance().removeModuleById(moduleId);
+			notifyObservers();
 		} catch (Exception e) {
-			Log.e(this, "removeModule() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - removeModuleById("+moduleId+") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -129,20 +110,18 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	/**
-	 * Move a layer 1 up in hierarchy
+	 * Move a layer one up in hierarchy
 	 */
-	public void moveLayerUp() {
-		Log.i(this, "moveLayerUp()");
+	public void moveLayerUp(long layerId) {
+		Log.i(this, "DefinitionController - moveLayerUp()");
 		try {
-			long layerId = definitionJPanel.getSelectedModule();
-
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Moving layer up").start();
-
 				DefineDomainService.getInstance().moveLayerUp(layerId);
+				notifyObservers();
 			}
 		} catch (Exception e) {
-			Log.e(this, "moveLayerUp() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - moveLayerUp() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -150,20 +129,18 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	/**
-	 * Move a layer 1 down in hierarchy
+	 * Move a layer one down in hierarchy
 	 */
-	public void moveLayerDown() {
-		Log.i(this, "moveLayerDown()");
+	public void moveLayerDown(long layerId) {
+		Log.i(this, "DefinitionController - moveLayerDown()");
 		try {
-			long layerId = definitionJPanel.getSelectedModule();
-
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Moving layer down").start();
-
 				DefineDomainService.getInstance().moveLayerDown(layerId);
+				notifyObservers();
 			}
 		} catch (Exception e) {
-			Log.e(this, "moveLayerDown() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - moveLayerDown() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -173,14 +150,14 @@ public class DefinitionController extends Observable implements ActionListener, 
 	/**
 	 * Add a new software unit to the selected module. This method will make pop-up a new jframe who will handle everything for creating a new sotware unit.
 	 */
-	public void addSoftwareUnit() {
-		Log.i(this, "addSoftwareUnit()");
+	public void createSoftwareUnitGUI() {
+		Log.i(this, "DefinitionController - createSoftwareUnitGUI()");
 		try {
-			long layerId = definitionJPanel.getSelectedModule();
+			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 
-			if (layerId != -1) {
+			if (moduleId != -1) {
 				// Create a new software unit controller
-				SoftwareUnitController c = new SoftwareUnitController(layerId, "");
+				SoftwareUnitController c = new SoftwareUnitController(moduleId, "");
 				// Set the action of the view
 				c.setAction(PopUpController.ACTION_NEW);
 				c.addObserver(this);
@@ -188,19 +165,18 @@ public class DefinitionController extends Observable implements ActionListener, 
 				c.initUi();
 			}
 		} catch (Exception e) {
-			Log.e(this, "addSoftwareUnit() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - createSoftwareUnitGUI() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
 
 	/**
-	 * Remove the selected software unit from the table
+	 * Remove the selected software unit
 	 */
-	private void removeSoftwareUnit() {
-		Log.i(this, "removeSoftwareUnit()");
+	private void removeSoftwareUnit(String softwareUnitName) {
+		Log.i(this, "DefinitionController - removeSoftwareUnit()");
 		try {
-			long moduleId = definitionJPanel.getSelectedModule();
-			String softwareUnitName = definitionJPanel.getSelectedSoftwareUnitName();
+			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 
 			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
 				// Ask the user if he is sure to remove the software unit
@@ -210,19 +186,19 @@ public class DefinitionController extends Observable implements ActionListener, 
 					JPanelStatus.getInstance("Removing software unit").start();
 					DefineDomainService.getInstance().removeSoftwareUnit(moduleId, softwareUnitName);
 					// Update the software unit table
-					updateSoftwareUnitTable();
+					notifyObservers();
 				}
 			}
 		} catch (Exception e) {
-			Log.e(this, "removeSoftwareUnit() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - removeSoftwareUnit() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
 
-	private void addRuleToModule() {
-		Log.i(this, "addRuleToModule()");
+	private void createNewRuleGUI() {
+		Log.i(this, "DefinitionController - createNewRuleGUI()");
 
 		try {
 			long layerId = definitionJPanel.getSelectedModule();
@@ -237,17 +213,16 @@ public class DefinitionController extends Observable implements ActionListener, 
 				a.initUi();
 			}
 		} catch (Exception e) {
-			Log.e(this, "addRuleToModule() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - createNewRuleGUI() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
 
-	private void editRuleToModule() {
-		Log.i(this, "editRuleToModule()");
+	private void editRuleGUI(long appliedRuleId) {
+		Log.i(this, "DefinitionController - EditRuleGUI()");
 
 		try {
-			long moduleId = definitionJPanel.getSelectedModule();
-			long appliedRuleId = definitionJPanel.getSelectedAppliedRule();
+			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 
 			if (moduleId != -1 && appliedRuleId != -1L) {
 				// Create a new software unit controller
@@ -258,20 +233,20 @@ public class DefinitionController extends Observable implements ActionListener, 
 				// Build and show the ui
 				a.initUi();
 			} else {
-				Log.e(this, "editRuleToModule() - no applied rule selected");
+				Log.e(this, "DefinitionController - EditRuleGUI() - no applied rule selected");
 				UiDialogs.errorDialog(definitionJPanel, "Select an applied rule", "Error");
 			}
 		} catch (Exception e) {
-			Log.e(this, "editRuleToModule() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - EditRuleGUI() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
 
-	private void removeRuleToModule() {
-		Log.i(this, "removeRuleToModule()");
+	private void removeRuleToModule(long appliedRuleId) {
+		Log.i(this, "DefinitionController - removeRuleToModule()");
 		try {
-			long layerId = definitionJPanel.getSelectedModule();
-			int appliedRuleId = (int)definitionJPanel.getSelectedAppliedRule();
+			long layerId = definitionJPanel.modulePanel.getSelectedModuleId();
+//			int appliedRuleId = (int)definitionJPanel.getSelectedAppliedRule();
 
 			if (layerId != -1 && appliedRuleId != -1L) {
 				// Ask the user if he is sure to remove the software unit
@@ -282,11 +257,11 @@ public class DefinitionController extends Observable implements ActionListener, 
 					DefineDomainService.getInstance().removeAppliedRule(appliedRuleId);
 
 					// Update the applied rules table
-					updateAppliedRulesTable();
+					notifyObservers();
 				}
 			}
 		} catch (Exception e) {
-			Log.e(this, "removeRuleToLayer() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - removeRuleToLayer() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -294,30 +269,18 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	/**
-	 * Function which will save the name and description changes to the layer
+	 * Function which will save the name and description changes to the module
 	 */
-	private void updateLayer() {
-		Log.i(this, "updateLayer()");
+	private void updateModule(long moduleId, String moduleName, String moduleDescription) {
+		Log.i(this, "DefinitionController - updateLayer()");
 		try {
-			long layerId = definitionJPanel.getSelectedModule();
-
 			JPanelStatus.getInstance("Saving layer").start();
 
-			if (layerId != -1) {
-				DefineDomainService.getInstance().setModuleName(layerId, definitionJPanel.jTextFieldModuleName.getText());
-
-				//To update the layer list: we need to fetch the DataHelper from the list, update it and fire an updateUI to notice that there is an update
-				DefaultListModel dlm = (DefaultListModel) definitionJPanel.jListLayers.getModel();				
-				for (int i = 0; i < dlm.getSize(); i++) {
-					DataHelper datahelper = (DataHelper) dlm.getElementAt(i);
-					if (datahelper.getId() == layerId) {
-						datahelper.setValue(definitionJPanel.jTextFieldModuleName.getText());
-					}
-				}
-				definitionJPanel.jListLayers.updateUI();
+			if (moduleId != -1) {
+				DefineDomainService.getInstance().updateModule(moduleId, moduleName, moduleDescription);
 			}
 		} catch (Exception e) {
-			Log.e(this, "updateLayer() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - updateLayer() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -325,7 +288,7 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	public void updateModuleTreeList(JList moduleTreeList) {
-		Log.i(this, "updateModuleList()");
+		Log.i(this, "DefinitionController - updateModuleList()");
 
 		JPanelStatus.getInstance("Updating modules").start();
 
@@ -340,7 +303,7 @@ public class DefinitionController extends Observable implements ActionListener, 
 				try {
 					datahelper.setValue(DefineDomainService.getInstance().getModuleNameById(moduleId));
 				} catch (Exception e) {
-					Log.e(this, "updateModule() - exception: " + e.getMessage());
+					Log.e(this, "DefinitionController - updateModule() - exception: " + e.getMessage());
 					UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 				}
 				listModule.addElement(datahelper);
@@ -351,73 +314,66 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}	
 
 	/**
-	 * This function will return the layer name, description. Next it will call two methods which will load the two tables.
+	 * This function will return a hashmap with the details of the requested module.
 	 */
 	public HashMap<String, Object> getModuleDetails(long layerId) {
 		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
-		Log.i(this, "loadModuleDetails()");
+		Log.i(this, "DefinitionController - loadModuleDetails()");
 
 		if (layerId != -1) {
 			try {
 				//TODO isolate domain classes
 				Module module = DefineDomainService.getInstance().getModuleById(layerId);
+				moduleDetails.put("id", module.getId());
 				moduleDetails.put("name", module.getName());
 				moduleDetails.put("description", module.getDescription());
 				moduleDetails.put("type", module.getType());
 				
 			} catch (Exception e) {
-				Log.e(this, "loadModuleDetails() - exception: " + e.getMessage());
+				Log.e(this, "DefinitionController - loadModuleDetails() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 			}
-
-			//TODO 
-//			// Update the tables
-//			updateSoftwareUnitTable();
-//			updateAppliedRulesTable();
-
-			// Enable or disable the ui elements
-//			enablePanel();
 		}
 		return moduleDetails;
 	}
 	
 	public void updateModuleDetails(HashMap<String, Object> moduleDetails) {
-		Log.i(this, "updateModuleDetails()");
-		//TODO updateModuleDetails
-		//DefineDomainService.getInstance().updateModule()
+		Log.i(this, "DefinitionController - updateModuleDetails()");
+		Long moduleId = (Long)moduleDetails.get("id");
+		String moduleName = (String) moduleDetails.get("name");
+		String moduleDescription = (String) moduleDetails.get("description");
+		
+		DefineDomainService.getInstance().updateModule(moduleId, moduleName, moduleDescription);
 	}
 
 	/**
 	 * This method will check if the ui elements should be enabled or disabled
 	 */
-	private void enablePanel() {
-		Log.i(this, "enablePanel()");
-
-		long layerId = definitionJPanel.getSelectedModule();
-
+	private void enablePanel(long moduleId) {
+		Log.i(this, "DefinitionController - enablePanel()");
 		boolean enabled;
-		if (layerId == -1) {
-			Log.i(this, "enablePanel() - false");
+		if (moduleId == -1) {
+			Log.i(this, "DefinitionController - enablePanel() - false");
 			enabled = false;
 		} else {
-			Log.i(this, "enablePanel() - true");
+			Log.i(this, "DefinitionController - enablePanel() - true");
 			enabled = true;
 		}
 		// Buttons, textfields, tables etc.
-		definitionJPanel.jTextFieldModuleName.setEnabled(enabled);
-		definitionJPanel.jTextAreaLayerDescription.setEnabled(enabled);
-		definitionJPanel.jCheckBoxAccess.setEnabled(enabled);
-		definitionJPanel.jButtonAddSoftwareUnit.setEnabled(enabled);
-//		definitionJPanel.jButtonEditSoftwareUnit.setEnabled(enabled);
-		definitionJPanel.jButtonRemoveSoftwareUnit.setEnabled(enabled);
-		definitionJPanel.jTableSoftwareUnits.setEnabled(enabled);
-		definitionJPanel.jTableAppliedRules.setEnabled(enabled);
-		definitionJPanel.jButtonAddRule.setEnabled(enabled);
-		definitionJPanel.jButtonEditRule.setEnabled(enabled);
-		definitionJPanel.jButtonRemoveRule.setEnabled(enabled);
-		definitionJPanel.jButtonMoveLayerUp.setEnabled(enabled);
-		definitionJPanel.jButtonMoveLayerDown.setEnabled(enabled);
-		definitionJPanel.jButtonRemoveModule.setEnabled(enabled);
+//		definitionJPanel.jTextFieldModuleName.setEnabled(enabled);
+//		definitionJPanel.jTextAreaLayerDescription.setEnabled(enabled);
+//		definitionJPanel.jCheckBoxAccess.setEnabled(enabled);
+//		definitionJPanel.jButtonAddSoftwareUnit.setEnabled(enabled);
+////		definitionJPanel.jButtonEditSoftwareUnit.setEnabled(enabled);
+//		definitionJPanel.jButtonRemoveSoftwareUnit.setEnabled(enabled);
+//		definitionJPanel.jTableSoftwareUnits.setEnabled(enabled);
+//		definitionJPanel.jTableAppliedRules.setEnabled(enabled);
+//		definitionJPanel.jButtonAddRule.setEnabled(enabled);
+//		definitionJPanel.jButtonEditRule.setEnabled(enabled);
+//		definitionJPanel.jButtonRemoveRule.setEnabled(enabled);
+//		definitionJPanel.jButtonMoveLayerUp.setEnabled(enabled);
+//		definitionJPanel.jButtonMoveLayerDown.setEnabled(enabled);
+//		definitionJPanel.jButtonRemoveModule.setEnabled(enabled);
 
 //		// Enable or disable menu items
 //		if (!definitionService.hasArchitectureDefinition()) {
@@ -435,15 +391,14 @@ public class DefinitionController extends Observable implements ActionListener, 
 
 	/**
 	 * This method updates the component table in the jpanel
+	 * @param softwareUnitsTable 
 	 * 
 	 * @param layer
 	 */
-	private void updateSoftwareUnitTable() {
-		Log.i(this, "updateSoftwareUnitTable()");
-		// half implemented
+	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
+		Log.i(this, "DefinitionController - updateSoftwareUnitTable()");
 		try {
-			long layerId = definitionJPanel.getSelectedModule();
-
+			long layerId = definitionJPanel.modulePanel.getSelectedModuleId();
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Updating software unit table").start();
 
@@ -451,7 +406,7 @@ public class DefinitionController extends Observable implements ActionListener, 
 				ArrayList<String> softwareUnitNames = DefineDomainService.getInstance().getSoftwareUnitNames(layerId);
 
 				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) definitionJPanel.jTableSoftwareUnits.getModel();
+				JTableTableModel atm = (JTableTableModel) definitionJPanel.sofwareUnitsPanel.getModel();//jTableSoftwareUnits.getModel();
 
 				// Remove all items in the table
 				atm.getDataVector().removeAllElements();
@@ -479,13 +434,14 @@ public class DefinitionController extends Observable implements ActionListener, 
 				atm.fireTableDataChanged();
 			}
 		} catch (Exception e) {
-			Log.e(this, "updateSoftwareUnitTable() - exception: " + e.getMessage());
+			Log.e(this, "DefinitionController - updateSoftwareUnitTable() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
 
+	@Deprecated
 	private void updateAppliedRulesTable() {
 		Log.i(this, "updateAppliedRulesTable()");
 		 //Applied rules still have to get implemented
@@ -499,7 +455,7 @@ public class DefinitionController extends Observable implements ActionListener, 
 				ArrayList<Long> appliedRulesIds = DefineDomainService.getInstance().getAppliedRulesIdsByModule(layerId);
 
 				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) definitionJPanel.jTableAppliedRules.getModel();
+				JTableTableModel atm = (JTableTableModel) definitionJPanel.appliedRulesPanel.getModel();//jTableAppliedRules.getModel();
 
 				// Remove all items in the table
 				atm.getDataVector().removeAllElements();
@@ -538,35 +494,34 @@ public class DefinitionController extends Observable implements ActionListener, 
 	}
 
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == definitionJPanel.jButtonNewModule) {
-			newModule();
-		} else if (action.getSource() == definitionJPanel.jButtonRemoveModule) {
-			removeModule();
-		} else if (action.getSource() == definitionJPanel.jButtonMoveLayerUp) {
-			moveLayerUp();
-		} else if (action.getSource() == definitionJPanel.jButtonMoveLayerDown) {
-			moveLayerDown();
-		} else if (action.getSource() == definitionJPanel.jButtonAddSoftwareUnit) {
-			addSoftwareUnit();
-		} else if (action.getSource() == definitionJPanel.jButtonRemoveSoftwareUnit) {
-			removeSoftwareUnit();
-		} else if (action.getSource() == definitionJPanel.jButtonAddRule) {
-			addRuleToModule();
-		} else if (action.getSource() == definitionJPanel.jButtonEditRule) {
-			editRuleToModule();
-		} else if (action.getSource() == definitionJPanel.jButtonRemoveRule) {
-			removeRuleToModule();
-		} else if (action.getSource() == definitionJPanel.jCheckBoxAccess) {
-			updateLayer();
-		} else {
-			Log.i(this, "actionPerformed(" + action + ")");
-		}
+//		if (action.getSource() == definitionJPanel.jButtonNewModule) {
+//			newModule();
+//		} else if (action.getSource() == definitionJPanel.jButtonRemoveModule) {
+//			removeModule();
+//		} else if (action.getSource() == definitionJPanel.jButtonMoveLayerUp) {
+//			moveLayerUp();
+//		} else if (action.getSource() == definitionJPanel.jButtonMoveLayerDown) {
+//			moveLayerDown();
+//		} else if (action.getSource() == definitionJPanel.jButtonAddSoftwareUnit) {
+//			addSoftwareUnit();
+//		} else if (action.getSource() == definitionJPanel.jButtonRemoveSoftwareUnit) {
+//			removeSoftwareUnit();
+//		} else if (action.getSource() == definitionJPanel.jButtonAddRule) {
+//			addRuleToModule();
+//		} else if (action.getSource() == definitionJPanel.jButtonEditRule) {
+//			editRuleToModule();
+//		} else if (action.getSource() == definitionJPanel.jButtonRemoveRule) {
+//			removeRuleToModule();
+//		} else if (action.getSource() == definitionJPanel.jCheckBoxAccess) {
+//			updateModule();
+//		} else {
+			Log.i(this, "actionPerformed(" + action + ") + this should NOT happen!!!!");
+//		}
 	}
 	
 	public void update(Observable o, Object arg) {
 		Log.i(this, "update(" + o + ", " + arg + ")");
-		updateAppliedRulesTable();
-		updateSoftwareUnitTable();
+		notifyObservers();
 	}
 	
 	/**
@@ -586,11 +541,11 @@ public class DefinitionController extends Observable implements ActionListener, 
 	public void keyReleased(KeyEvent arg0) {
 		Log.i(this, "keyReleased(" + arg0 + ")");
 
-		if (arg0.getSource() == definitionJPanel.jTextFieldModuleName || arg0.getSource() == definitionJPanel.jTextAreaLayerDescription) {
-			updateLayer();
-		} else {
-			Log.i(this, "keyReleased(" + arg0 + ")");
-		}
+//		if (arg0.getSource() == definitionJPanel.jTextFieldModuleName || arg0.getSource() == definitionJPanel.jTextAreaLayerDescription) {
+//			updateModule();
+//		} else {
+//			Log.i(this, "keyReleased(" + arg0 + ")");
+//		}
 	}
 
 	public void keyTyped(KeyEvent arg0) {

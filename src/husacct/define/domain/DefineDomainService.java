@@ -24,6 +24,12 @@ public class DefineDomainService {
 	
 	//MODULES
 	//MODULES
+	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		module.setName(moduleName);
+		module.setDescription(moduleDescription);
+	}
+	
 	public String getModuleNameById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		String moduleName = module.getName();
@@ -108,7 +114,7 @@ public class DefineDomainService {
 		return rule.getId();
 	}
 	
-	public void removeAppliedRule(int appliedrule_id) {
+	public void removeAppliedRule(long appliedrule_id) {
 		SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
 	}
 
@@ -215,6 +221,5 @@ public class DefineDomainService {
 	public Application getApplicationDetails(){
 		return Application.getInstance();
 	}
-
 
 }
