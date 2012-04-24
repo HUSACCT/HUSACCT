@@ -24,45 +24,46 @@ public class ModuleTreeModel implements TreeModel {
 	 * children. We also define containers with no children as leaves.
 	 */
 	public boolean isLeaf(Object node) {
-		if (!(node instanceof Container)) {
+		if (node instanceof Container) {
+			Container nodeContainer = (Container) node;
+			return nodeContainer.getComponentCount() == 0;
+		} else {
 			return true;
 		}
-		Container c = (Container) node;
-		return c.getComponentCount() == 0;
 	}
 	
 	public int getChildCount(Object node) {
 		if (node instanceof Container) {
-			Container c = (Container) node;
-			return c.getComponentCount();
+			Container nodeContainer = (Container) node;
+			return nodeContainer.getComponentCount();
 		}
 		return 0;
 	}
 	
-	public Object getChild(Object parent, int index) {
-		if (parent instanceof Container) {
-			Container c = (Container) parent;
-			return c.getComponent(index);
+	public Object getChild(Object parentNode, int index) {
+		if (parentNode instanceof Container) {
+			Container nodeContainer = (Container) parentNode;
+			return nodeContainer.getComponent(index);
 		}
 		return null;
 	}
 	
-	public int getIndexOfChild(Object parent, Object child) {
-		if (!(parent instanceof Container)) {
-			return -1;
+	public int getIndexOfChild(Object parentNode, Object child) {
+		if(parentNode instanceof Container) {
+			Container nodeContainer = (Container) parentNode;
+			Component[] children = nodeContainer.getComponents();
+			return this.checkChildrenForIndex(children, child);
 		}
-		
-		Container c = (Container) parent;
-		Component[] children = c.getComponents();
-		  
-		if (children == null) {
-		    return -1;
-		}
-		
-		for (int i = 0; i < children.length; i++) {
-		    if (children[i] == child) {
-		    	return i;
-		    }
+		return -1;
+	}
+	
+	private int checkChildrenForIndex(Component[] children, Object child) {
+		if(children != null) {
+			for (int i = 0; i < children.length; i++) {
+			    if (children[i] == child) {
+			    	return i;
+			    }
+			}
 		}
 		return -1;
 	}

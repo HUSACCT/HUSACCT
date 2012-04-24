@@ -3,6 +3,8 @@ package husacct.define.presentation.moduletree;
 import java.awt.Component;
 
 import javax.swing.JTree;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeSelectionModel;
 
 public class ModuleTree extends JTree {
 
@@ -10,6 +12,13 @@ public class ModuleTree extends JTree {
 	
 	public ModuleTree(Component c) {
 		super(new ModuleTreeModel(c));
-	    setCellRenderer(new ModuleCellRenderer(getCellRenderer()));
+		TreeCellRenderer currentCellRenderer = this.getCellRenderer();
+		ModuleCellRenderer newCellRenderer = new ModuleCellRenderer(currentCellRenderer);
+	    this.setCellRenderer(newCellRenderer);
+	    this.setDefaultSettings();
+	}
+	
+	public void setDefaultSettings() {
+		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 }

@@ -1,10 +1,12 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,13 +22,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 /**
  * 
  * @author Henk ter Harmsel
  *
  */
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, ListSelectionListener, Observer {
+public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 	private JList moduleTreeJList;
@@ -46,7 +51,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		this.add(createInnerModulePanel(), BorderLayout.CENTER);
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
 	
 	public JPanel createInnerModulePanel() {
@@ -72,10 +77,14 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		JScrollPane moduleTreeScrollPane = new JScrollPane();
 		moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
 		
-		this.moduleTreeJList = new JList();
-		this.moduleTreeJList.setModel(new DefaultListModel());
-		moduleTreeScrollPane.setViewportView(this.moduleTreeJList);
-		this.moduleTreeJList.addListSelectionListener(this);
+		ModuleTree tree = new ModuleTree(moduleTreeScrollPane);
+		moduleTreeScrollPane.setViewportView(tree);
+		tree.addTreeSelectionListener(this);
+		
+//		this.moduleTreeJList = new JList();
+//		this.moduleTreeJList.setModel(new DefaultListModel());
+//		moduleTreeScrollPane.setViewportView(this.moduleTreeJList);
+//		this.moduleTreeJList.addListSelectionListener(this);
 		
 		return moduleTreeScrollPane;
 	}
@@ -118,17 +127,23 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		return buttonPanelLayout;
 	}
 	
+	public void updateModuleTree() {
+		
+	}
+	
+	@Deprecated
 	public void updateModulesTreeList() {
 		DefinitionController.getInstance().updateModuleTreeList(this.moduleTreeJList);
 	}
 	
-	@Override
+	@Deprecated
 	public void valueChanged(ListSelectionEvent event) {
 		if (event.getSource() == this.moduleTreeJList && !event.getValueIsAdjusting()) {
 			this.moduleTreeJListAction(event);
 		}
 	}
 	
+	@Deprecated
 	private void moduleTreeJListAction(ListSelectionEvent event) {
 		long moduleId = -1;
 		Object selectedModule = this.moduleTreeJList.getSelectedValue();
@@ -136,6 +151,17 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 			moduleId = ((DataHelper) selectedModule).getId();
 		}
 		DefinitionController.getInstance().notifyObservers(moduleId);	
+	}
+	
+	@Override
+	public void valueChanged(TreeSelectionEvent event) {
+        TreePath path = event.getPath();
+        Component selectedComponent = (Component) path.getLastPathComponent();
+        if (selectedComponent.isShowing()) {
+        	// #TODO:: do something with selectedComponent
+        } else {
+        	// #TODO:: show error?
+        }
 	}
 
 	@Override
