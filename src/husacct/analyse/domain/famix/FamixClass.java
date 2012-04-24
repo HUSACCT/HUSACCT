@@ -22,6 +22,7 @@ class FamixClass extends FamixEntity{
 		classRepresentation += "\nIs Inner Class: ";
 		if(isInnerClass) classRepresentation += "true";
 		else classRepresentation += "false";
+		if(isInnerClass) classRepresentation += "\nBelongs to class: " + belongsToClass;
 		classRepresentation += "\n\n";
 		return classRepresentation;
 	}

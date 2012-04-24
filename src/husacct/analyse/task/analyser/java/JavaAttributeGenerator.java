@@ -12,14 +12,12 @@ public class JavaAttributeGenerator {
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
 	private String belongsToClass; 
-	
-	private String declareClass; //voorbeeld: package.package.class
-	private String declareType;     //int, string, objectnaam etc
-	
-
-	private String name;
+	private String declareClass; //example: package.package.class
+	private String declareType;  //int, string, CustomClass etc
 	
 	private ModelService modelService = new FamixModelServiceImpl();
+
+	private String name;
 
 	private final static int STATIC = 90;
 	private final static int MODIFIER_LIST = 145;
