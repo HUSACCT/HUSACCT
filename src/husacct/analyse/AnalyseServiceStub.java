@@ -149,9 +149,8 @@ public class AnalyseServiceStub implements IAnalyseService{
 		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
 		
 		for(DependencyDTO dependency : dependencies){			
-			AnalysedModuleDTO moduleTo = (AnalysedModuleDTO) analysed.get(dependency.to).get(0);
 			for(String s : dependencyFilter){
-				if(moduleTo.type.equals(s)){
+				if(dependency.type.equals(s)){
 					filtered.add(dependency);
 				}
 			}
@@ -177,9 +176,8 @@ public class AnalyseServiceStub implements IAnalyseService{
 		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
 		
 		for(DependencyDTO dependency : dependencies){			
-			AnalysedModuleDTO moduleTo = (AnalysedModuleDTO) analysed.get(dependency.to).get(0);
 			for(String s : dependencyFilter){
-				if(moduleTo.type.equals(s)){
+				if(dependency.type.equals(s)){
 					filtered.add(dependency);
 				}
 			}
@@ -205,9 +203,8 @@ public class AnalyseServiceStub implements IAnalyseService{
 		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
 		
 		for(DependencyDTO dependency : dependencies){			
-			AnalysedModuleDTO moduleTo = (AnalysedModuleDTO) analysed.get(dependency.to).get(0);
 			for(String s : dependencyFilter){
-				if(moduleTo.type.equals(s)){
+				if(dependency.type.equals(s)){
 					filtered.add(dependency);
 				}
 			}
