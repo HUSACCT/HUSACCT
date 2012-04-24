@@ -1,5 +1,7 @@
 package husacct.analyse;
 
+import javax.swing.JInternalFrame;
+
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -9,7 +11,8 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	private AnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
-
+	private boolean isAnalysed = false;
+	
 	public AnalyseServiceImpl(){
 		stub = new AnalyseServiceStub();
 	}
@@ -22,7 +25,20 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	@Override
 	public void analyseApplication() {
 		service.analyseApplication();
+		this.isAnalysed = true;
 	}
+	
+	@Override
+	public boolean isAnalysed() {
+		return this.isAnalysed;
+	}
+	
+	@Override
+	public JInternalFrame getJInternalFrame() {
+		return null;
+	}
+	
+	
 
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
