@@ -53,6 +53,21 @@ public class FamixModelServiceImpl implements ModelService{
 		addToModel(fImport);
 	}
 	
+	@Override
+	public void createAttribute(Boolean classScope,
+			String accesControlQualifier, String belongsToClass,
+			String declareType, String name, String uniqueName) {
+
+		FamixAttribute famixAttribute = new FamixAttribute();
+		famixAttribute.hasClassScope = classScope;
+		famixAttribute.accessControlQualifier = accesControlQualifier;
+		famixAttribute.belongsToClass = belongsToClass;
+		famixAttribute.declareType = declareType;
+		famixAttribute.name = name;
+		famixAttribute.uniqueName = uniqueName;
+		addToModel(famixAttribute);
+	}
+	
 	private boolean addToModel(FamixObject newObject){
 		try {
 			model.addObject(newObject);
@@ -68,5 +83,9 @@ public class FamixModelServiceImpl implements ModelService{
 	
 	public void printModel(){
 		System.out.println(model.toString());
+	}
+	
+	public String represent(){
+		return model.toString();
 	}
 }
