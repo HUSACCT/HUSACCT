@@ -1,6 +1,6 @@
 package husacct.define.presentation.moduletree;
 
-import java.awt.Component;
+import husacct.define.task.components.AbstractDefineComponent;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreeCellRenderer;
@@ -10,8 +10,8 @@ public class ModuleTree extends JTree {
 
 	private static final long serialVersionUID = 3282591641481691737L;
 	
-	public ModuleTree(Component c) {
-		super(new ModuleTreeModel(c));
+	public ModuleTree(AbstractDefineComponent rootComponent) {
+		super(new ModuleTreeModel(rootComponent));
 		TreeCellRenderer currentCellRenderer = this.getCellRenderer();
 		ModuleCellRenderer newCellRenderer = new ModuleCellRenderer(currentCellRenderer);
 	    this.setCellRenderer(newCellRenderer);

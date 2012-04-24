@@ -8,7 +8,12 @@ import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.Log;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.LayerComponent;
+import husacct.define.task.components.SoftwareArchitectureComponent;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -348,7 +353,35 @@ public class DefinitionController extends Observable implements ActionListener, 
 		}
 		//enablePanel();
 		JPanelStatus.getInstance().stop();
-	}	
+	}
+	
+	public AbstractDefineComponent getRootComponent() {
+		Log.i(this, "update Module Tree");
+		JPanelStatus.getInstance("Updating modules").start();
+		
+		
+		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
+		
+		ArrayList<Long> moduleIds = DefineDomainService.getInstance().getLayerIdsSorted();
+		if(moduleIds != null) {
+			for (Long moduleId : moduleIds) {
+				LayerComponent layerComponent = new LayerComponent();
+				layerComponent.setHierarchicalLevel(moduleId);
+				try {
+					layerComponent.setName(DefineDomainService.getInstance().getModuleNameById(moduleId));
+				} catch (Exception e) {
+					Log.e(this, "updateModule() - exception: " + e.getMessage());
+					UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+				}
+				rootComponent.addChild(layerComponent);
+			}
+		}
+		
+		
+		
+		JPanelStatus.getInstance().stop();
+		return rootComponent;
+	}
 
 	/**
 	 * This function will return the layer name, description. Next it will call two methods which will load the two tables.

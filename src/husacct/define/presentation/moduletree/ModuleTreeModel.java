@@ -1,16 +1,17 @@
 package husacct.define.presentation.moduletree;
 
-import java.awt.Component;
-import java.awt.Container;
+import husacct.define.task.components.AbstractDefineComponent;
+
+import java.util.ArrayList;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 public class ModuleTreeModel implements TreeModel {
-	Component root;
+	AbstractDefineComponent root;
 	
-	public ModuleTreeModel(Component root) {
+	public ModuleTreeModel(AbstractDefineComponent root) {
 		this.root = root;
 	}
 	
@@ -23,44 +24,47 @@ public class ModuleTreeModel implements TreeModel {
 	 * Any node that isn't a container is a leaf, since they cannot have
 	 * children. We also define containers with no children as leaves.
 	 */
-	public boolean isLeaf(Object node) {
-		if (node instanceof Container) {
-			Container nodeContainer = (Container) node;
-			return nodeContainer.getComponentCount() == 0;
+	public boolean isLeaf(Object nodeObject) {
+		if (nodeObject instanceof AbstractDefineComponent) {
+			AbstractDefineComponent node = (AbstractDefineComponent) nodeObject;
+			ArrayList<AbstractDefineComponent> children = node.getChildren();
+			return (children.size() == 0);
 		} else {
 			return true;
 		}
 	}
 	
-	public int getChildCount(Object node) {
-		if (node instanceof Container) {
-			Container nodeContainer = (Container) node;
-			return nodeContainer.getComponentCount();
+	public int getChildCount(Object nodeObject) {
+		if (nodeObject instanceof AbstractDefineComponent) {
+			AbstractDefineComponent node = (AbstractDefineComponent) nodeObject;
+			ArrayList<AbstractDefineComponent> children = node.getChildren();
+			return children.size();
 		}
 		return 0;
 	}
 	
-	public Object getChild(Object parentNode, int index) {
-		if (parentNode instanceof Container) {
-			Container nodeContainer = (Container) parentNode;
-			return nodeContainer.getComponent(index);
+	public Object getChild(Object nodeObject, int index) {
+		if (nodeObject instanceof AbstractDefineComponent) {
+			AbstractDefineComponent node = (AbstractDefineComponent) nodeObject;
+			ArrayList<AbstractDefineComponent> children = node.getChildren();
+			return children.get(index);
 		}
 		return null;
 	}
 	
-	public int getIndexOfChild(Object parentNode, Object child) {
-		if(parentNode instanceof Container) {
-			Container nodeContainer = (Container) parentNode;
-			Component[] children = nodeContainer.getComponents();
+	public int getIndexOfChild(Object nodeObject, Object child) {
+		if(nodeObject instanceof AbstractDefineComponent) {
+			AbstractDefineComponent node = (AbstractDefineComponent) nodeObject;
+			ArrayList<AbstractDefineComponent> children = node.getChildren();
 			return this.checkChildrenForIndex(children, child);
 		}
 		return -1;
 	}
 	
-	private int checkChildrenForIndex(Component[] children, Object child) {
+	private int checkChildrenForIndex(ArrayList<AbstractDefineComponent> children, Object child) {
 		if(children != null) {
-			for (int i = 0; i < children.length; i++) {
-			    if (children[i] == child) {
+			for (int i = 0; i < children.size(); i++) {
+			    if (children.get(i) == child) {
 			    	return i;
 			    }
 			}

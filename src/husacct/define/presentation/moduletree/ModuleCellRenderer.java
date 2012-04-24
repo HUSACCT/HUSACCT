@@ -1,5 +1,7 @@
 package husacct.define.presentation.moduletree;
 
+import husacct.define.task.components.AbstractDefineComponent;
+
 import java.awt.Component;
 
 import javax.swing.JTree;
@@ -17,13 +19,11 @@ public class ModuleCellRenderer implements TreeCellRenderer {
 	 * Compute the String to display, and pass it to the wrapped renderer
 	 */
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		String newvalue = value.getClass().getName(); // Component type
-		String name = ((Component) value).getName(); // Component name
-		if (name != null) {
-		    newvalue += " (" + name + ")"; // unless null
+		if(value instanceof AbstractDefineComponent) {
+			AbstractDefineComponent component = (AbstractDefineComponent) value;
+			return renderer.getTreeCellRendererComponent(tree,  component.getName(), selected, expanded, leaf, row, hasFocus);
+		} else {
+			return renderer.getTreeCellRendererComponent(tree,  value.getClass().getName(), selected, expanded, leaf, row, hasFocus);
 		}
-		 
-		// Use the wrapped renderer object to do the real work
-		return renderer.getTreeCellRendererComponent(tree, newvalue, selected, expanded, leaf, row, hasFocus);
 	}
 }

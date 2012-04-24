@@ -2,7 +2,10 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.moduletree.ModuleTree;
+import husacct.define.presentation.utils.Log;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.LayerComponent;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,7 +37,11 @@ import javax.swing.tree.TreePath;
 public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer {
 
 	private static final long serialVersionUID = 6141711414139061921L;
+	
+	@Deprecated
 	private JList moduleTreeJList;
+	
+	private JScrollPane moduleTreeScrollPane;
 	
 	private JButton newModuleButton;
 	private JButton moveModuleUpButton;
@@ -68,25 +75,20 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		JPanel moduleTreePanel = new JPanel();
 		BorderLayout moduleTreePanelLayout = new BorderLayout();
 		moduleTreePanel.setLayout(moduleTreePanelLayout);
-		moduleTreePanel.add(this.createModuleTreeScrollPane(), BorderLayout.CENTER);
-		
+		this.createModuleTreeScrollPane();
+		moduleTreePanel.add(this.moduleTreeScrollPane, BorderLayout.CENTER);
 		return moduleTreePanel;
 	}
 	
-	private JScrollPane createModuleTreeScrollPane() {
-		JScrollPane moduleTreeScrollPane = new JScrollPane();
-		moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
-		
-		ModuleTree tree = new ModuleTree(moduleTreeScrollPane);
-		moduleTreeScrollPane.setViewportView(tree);
-		tree.addTreeSelectionListener(this);
+	private void createModuleTreeScrollPane() {
+		this.moduleTreeScrollPane = new JScrollPane();
+		this.moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
+		this.updateModuleTree();
 		
 //		this.moduleTreeJList = new JList();
 //		this.moduleTreeJList.setModel(new DefaultListModel());
 //		moduleTreeScrollPane.setViewportView(this.moduleTreeJList);
 //		this.moduleTreeJList.addListSelectionListener(this);
-		
-		return moduleTreeScrollPane;
 	}
 
 	@Override
@@ -128,7 +130,10 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	public void updateModuleTree() {
-		
+		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getRootComponent();
+		ModuleTree moduleTree = new ModuleTree(rootComponent);
+		this.moduleTreeScrollPane.setViewportView(moduleTree);
+		moduleTree.addTreeSelectionListener(this);
 	}
 	
 	@Deprecated
@@ -156,12 +161,21 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
-        Component selectedComponent = (Component) path.getLastPathComponent();
-        if (selectedComponent.isShowing()) {
-        	// #TODO:: do something with selectedComponent
-        } else {
-        	// #TODO:: show error?
-        }
+        AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
+        Log.e(this, "valueChanged() - " + selectedComponent.getName());
+        this.checkComponent(selectedComponent);
+	}
+	
+	private void checkComponent(AbstractDefineComponent selectedComponent) {
+		if(selectedComponent instanceof LayerComponent) {
+			this.handleLayerComponent(selectedComponent);
+		}
+	}
+	
+	private void handleLayerComponent(AbstractDefineComponent selectedComponent) {
+		LayerComponent layerComponent = (LayerComponent) selectedComponent;
+		long moduleId = layerComponent.getHierarchicalLevel();
+		DefinitionController.getInstance().notifyObservers(moduleId);
 	}
 
 	@Override
@@ -179,22 +193,22 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 
 	private void moveModuleDownAction(ActionEvent action) {
 		DefinitionController.getInstance().moveLayerDown();
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
 
 	private void removeModuleAction(ActionEvent action) {
 		DefinitionController.getInstance().removeModule();
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
 
 	private void moveModuleUpAction(ActionEvent action) {
 		DefinitionController.getInstance().moveLayerUp();
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
 
 	private void newModuleAction(ActionEvent action) {
 		DefinitionController.getInstance().newModule();
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
 
 	@Override
