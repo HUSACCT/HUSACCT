@@ -42,28 +42,6 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		return new String[] { "pdf", "xml", "html" };
 	}
 
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo){
-		//If you want to have the rules of one logicalmodule logicalpathFrom and logicalpathTo should be the same
-		if(logicalpathFrom.equals("Domain layer") && logicalpathTo.contains("Infrastructure layer")){
-			return new ViolationDTO[] { violation1,violation2,violation3,violation4 };
-		}
-		else if(logicalpathFrom.equals("Domain layer.locationbasedConnections") && logicalpathTo.contains("Infrastructure layer")){
-			return new ViolationDTO[] { violation1,violation2,violation3};
-		}
-		else if(logicalpathFrom.equals("Domain layer.locationbasedConnections.foursquareConnection") && logicalpathTo.contains("Infrastructure layer")){
-			return new ViolationDTO[] { violation1,violation2,violation3};
-		}
-		else if(logicalpathFrom.equals("Domain layer.locationbasedConnections.latitudeConnection") && logicalpathTo.contains("Infrastructure layer")){
-			return new ViolationDTO[] { };
-		}
-		else if(logicalpathFrom.equals("Domain layer.locationbasedHistory") && logicalpathTo.contains("Infrastructure layer")){
-			return new ViolationDTO[] { violation4};
-		}
-		else{
-			return new ViolationDTO[] { };
-		}
-	}
-
 	public void checkConformance() {
 		validationExecuted = true;
 	}
@@ -99,5 +77,51 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	@Override
 	public String buildDefinedRuleMessage(MessageDTO message) {
 		return "class A is not allowed to use class B";
+	}
+
+	@Override
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+		//If you want to have the rules of one logicalmodule logicalpathFrom and logicalpathTo should be the same
+		if(logicalpathFrom.equals("Domain layer") && logicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation1,violation2,violation3,violation4 };
+		}
+		else if(logicalpathFrom.equals("Domain layer.locationbasedConnections") && logicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation1,violation2,violation3};
+		}
+		else if(logicalpathFrom.equals("Domain layer.locationbasedConnections.foursquareConnection") && logicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation1,violation2,violation3};
+		}
+		else if(logicalpathFrom.equals("Domain layer.locationbasedConnections.latitudeConnection") && logicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { };
+		}
+		else if(logicalpathFrom.equals("Domain layer.locationbasedHistory") && logicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation4};
+		}
+		else{
+			return new ViolationDTO[] { };
+		}
+	}
+
+	@Override
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		//If you want to have the rules of one logicalmodule logicalpathFrom and logicalpathTo should be the same
+		if(physicalpathFrom.equals("Domain layer") && physicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation1,violation2,violation3,violation4 };
+		}
+		else if(physicalpathFrom.equals("Domain layer.locationbasedConnections") && physicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation1,violation2,violation3};
+		}
+		else if(physicalpathFrom.equals("Domain layer.locationbasedConnections.foursquareConnection") && physicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation1,violation2,violation3};
+		}
+		else if(physicalpathFrom.equals("Domain layer.locationbasedConnections.latitudeConnection") && physicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { };
+		}
+		else if(physicalpathFrom.equals("Domain layer.locationbasedHistory") && physicalpathTo.contains("Infrastructure layer")){
+			return new ViolationDTO[] { violation4};
+		}
+		else{
+			return new ViolationDTO[] { };
+		}
 	}
 }

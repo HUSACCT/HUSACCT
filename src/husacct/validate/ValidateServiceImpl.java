@@ -56,8 +56,13 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	}
 
 	@Override
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
-		return task.getViolations(logicalpathFrom, logicalpathTo);
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
+	}
+	
+	@Override
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
 	@Override
@@ -88,11 +93,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		return new ConfigurationUI(task);
 	}
 
-	public static void main(String[] args){
-		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
-		serviceImpl.checkConformance();
-
-	}
 	@Override
 	public Element getWorkspaceData() {
 		return abstraction.exportValidationWorkspace();
@@ -121,5 +121,11 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	
 	public ConfigurationServiceImpl getConfiguration() {
 		return configuration;
+	}
+	
+	public static void main(String[] args){
+		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
+		serviceImpl.checkConformance();
+
 	}
 }

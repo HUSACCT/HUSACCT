@@ -22,7 +22,7 @@ public class FilterController {
 		this.ts = ts;
 	}
 
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler();
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		
@@ -37,6 +37,12 @@ public class FilterController {
 		}
 		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+	}
+	
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		// TODO Auto-generated method stub
+		//FIXME: implement
+		return new ViolationDTO[]{};
 	}
 
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {
