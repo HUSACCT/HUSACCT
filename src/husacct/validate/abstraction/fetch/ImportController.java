@@ -20,7 +20,7 @@ public class ImportController {
 	public ImportController(Element element) throws DatatypeConfigurationException {
 		ImportFactory importFactory = new ImportFactory();
 		severities = importFactory.importSeverities(element.getChild("severities"));
-		violations = importFactory.ImportViolations(element.getChild("violations"));
+		violations = importFactory.ImportViolations(element.getChild("violations"), severities);
 		severitiesPerTypesPerProgrammingLanguages = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"), severities);
 	}
 

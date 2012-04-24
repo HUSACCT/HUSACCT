@@ -36,7 +36,7 @@ public class Report {
 		for(Severity severity : severities) {
 			int violationsCount = 0;
 			for(Violation violation : violations) {
-				if(violation.getSeverityValue() == severity.getValue()) {
+				if(violation.getSeverity().equals(severity)) {
 					violationsCount++;
 				}
 			}
@@ -84,15 +84,6 @@ public class Report {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
-	}
-
-	public String getSeverityNameFromValue(int severityValue) {
-		for(Severity severity : severities) {
-			if(severity.getValue() == severityValue) {
-				return severity.getDefaultName();
-			}
-		}
-		throw new NullPointerException("Severity value was not found, please check if the configuration is correct");
 	}
 
 }
