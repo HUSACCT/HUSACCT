@@ -1,6 +1,7 @@
 package husacct.validate.abstraction;
 
 import husacct.validate.abstraction.export.ExportController;
+import husacct.validate.abstraction.extensiontypes.ExtensionTypes;
 import husacct.validate.abstraction.fetch.ImportController;
 import husacct.validate.domain.ConfigurationServiceImpl;
 
@@ -13,6 +14,10 @@ public class AbstractionServiceImpl {
 	
 	public AbstractionServiceImpl(ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
+	}
+	
+	public String[] getExportExtentions() {
+		return new ExtensionTypes().getExtensionTypes();
 	}
 
 	public void importValidationWorkspace(Element element) throws DatatypeConfigurationException   {

@@ -6,13 +6,13 @@ import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.assembler.AssemblerController;
 import husacct.validate.domain.check.CheckConformanceController;
 import husacct.validate.domain.messagefactory.Messagebuilder;
-import husacct.validate.domain.rulefactory.RuletypesFactory;
+import husacct.validate.domain.rulefactory.RuleTypesFactory;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.List;
 
 public class DomainServiceImpl {
-	private RuletypesFactory ruletypefactory;
+	private RuleTypesFactory ruletypefactory;
 	private final CheckConformanceController checkConformanceController;
 
 	public DomainServiceImpl(ConfigurationServiceImpl configuration){
@@ -20,6 +20,11 @@ public class DomainServiceImpl {
 	}
 
 	public List<RuleType> getAllRuleTypes(String programmingLanguage){
+		initializeRuletypesFactory();
+		return ruletypefactory.getRuleTypes(programmingLanguage);
+	}
+	
+	public List<RuleType> getAllRuleTypes(){
 		initializeRuletypesFactory();
 		return ruletypefactory.getRuleTypes();
 	}
@@ -35,7 +40,7 @@ public class DomainServiceImpl {
 	
 	private void initializeRuletypesFactory(){
 		if(ruletypefactory == null){
-			this.ruletypefactory = new RuletypesFactory();
+			this.ruletypefactory = new RuleTypesFactory();
 		}
 	}
 

@@ -4,34 +4,35 @@ import husacct.validate.domain.configuration.SeverityConfigRepository;
 import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-
 import java.util.HashMap;
 import java.util.List;
 
 public class ConfigurationServiceImpl {
+
 	private final SeverityConfigRepository severityConfig;
 	private final ViolationRepository violationRepository;
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages;
 
-	public ConfigurationServiceImpl(){
+	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severitiesPerTypesPerProgrammingLanguages = new HashMap<String, HashMap<String,Severity>>();
+		this.severitiesPerTypesPerProgrammingLanguages =
+				new HashMap<String, HashMap<String, Severity>>();
 	}
 
-	public void clearViolations(){
+	public void clearViolations() {
 		violationRepository.clear();
 	}
 
-	public List<Violation> getAllViolations(){
+	public List<Violation> getAllViolations() {
 		return violationRepository.getAllViolations();
 	}
 
-	public void addViolations(List<Violation> violations){
+	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
 	}
 
-	public List<Severity> getAllSeverities(){
+	public List<Severity> getAllSeverities() {
 		return severityConfig.getAllSeverities();
 	}
 
@@ -44,7 +45,8 @@ public class ConfigurationServiceImpl {
 	}
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(
-			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {		this.severitiesPerTypesPerProgrammingLanguages = severitiesPerTypesPerProgrammingLanguages;
-
+			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {
+		this.severitiesPerTypesPerProgrammingLanguages =
+				severitiesPerTypesPerProgrammingLanguages;
 	}
 }

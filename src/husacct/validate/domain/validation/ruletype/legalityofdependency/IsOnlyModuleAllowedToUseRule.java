@@ -20,7 +20,7 @@ import java.util.List;
 
 public class IsOnlyModuleAllowedToUseRule extends RuleType{
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
-	
+
 	public IsOnlyModuleAllowedToUseRule(String key, String category, List<ViolationType> violationtypes) {
 		super(key, category, violationtypes, exceptionrules);
 	}
@@ -34,12 +34,12 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
-		
-		for(Mapping classPathFrom : physicalClasspathsFrom){			
+
+		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo ){
 				//TODO: getDependencyTo(TO) not implemented yet
-				DependencyDTO[] dependencies = analysestub.getDependency(classPathTo.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analysestub.getDependency(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analysestub.getDependenciesTo(classPathTo.getPhysicalPath());
+				DependencyDTO[] allowedDependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){
 					for(DependencyDTO allowedDependency: allowedDependencies){
 						if(dependency != allowedDependency){
@@ -54,7 +54,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 							violations.add(violation);
 						}
 					}
-					
+
 				}
 			}
 		}

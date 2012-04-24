@@ -2,7 +2,7 @@ package husacct.validate.domain.validation.ruletype;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.rulefactory.RuletypesFactory;
+import husacct.validate.domain.rulefactory.RuleTypesFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -19,7 +19,7 @@ public abstract class RuleType {
 	protected final List<ViolationType> violationtypes;	
 	protected List<RuleType> exceptionrules;
 
-	protected RuletypesFactory ruletypelanguagefactory;
+	protected RuleTypesFactory ruletypelanguagefactory;
 
 	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes){
 		this.key = key;
