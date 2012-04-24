@@ -6,6 +6,7 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface ITaskService {
@@ -15,7 +16,7 @@ public interface ITaskService {
 	public ArrayList<String> loadRuletypes();
 	public ArrayList<String> loadViolationtypes();
 
-	public List<RuleType> getRuletypes(String language);
+	public HashMap<String, List<RuleType>> getRuletypes(String language);
 //	public void getViolationtypes(String ruletypeKey);
 	public List<Severity> getAllSeverities();
 }

@@ -213,8 +213,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			severityModel.addRow(new Object[]{severity.toString(),
 											  severity.getColor()});
 		}
-		
-		severityModel.
+
 	}
 
 	private void clearModel(ColorTableModel model) {
@@ -225,9 +224,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void loadLanguageTabs(){
 		for (String language : ts.getAvailableLanguages()) {
-			LanguageViolationConfigurationPanel lcp = new LanguageViolationConfigurationPanel(
-					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
-			jTabbedPane1.addTab(language, lcp);
+//			LanguageViolationConfigurationPanel lcp = new LanguageViolationConfigurationPanel(
+//					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
+			//jTabbedPane1.addTab(language, lcp);
 		}
 	}
 

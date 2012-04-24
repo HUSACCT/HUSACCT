@@ -25,20 +25,20 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabbedPane = new javax.swing.JTabbedPane();
+        ruletypeSeverity = new javax.swing.JPanel();
+        rtsCategoryScrollpane = new javax.swing.JScrollPane();
+        rtsCategory = new javax.swing.JList();
+        rtsRuletypeScrollpane = new javax.swing.JScrollPane();
+        rtsRuletypeTable = new javax.swing.JTable();
+        rtsApply = new javax.swing.JButton();
+        rtsRestore = new javax.swing.JButton();
+        rtsRestoreAll = new javax.swing.JButton();
+        violationtypeSeverity = new javax.swing.JPanel();
+        vtsCategoryScrollpane = new javax.swing.JScrollPane();
+        vtsCategory = new javax.swing.JList();
+        vtsViolationtypeScrollpane = new javax.swing.JScrollPane();
+        vtsViolationtypeTable = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -53,71 +53,70 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
 
-        jList1.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        rtsCategory.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
+        rtsCategory.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        rtsCategoryScrollpane.setViewportView(rtsCategory);
 
-        jTable1.setModel(ruletypeModel);
-        jTable1.setFillsViewportHeight(true);
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(jTable1);
+        rtsRuletypeTable.setModel(ruletypeModel);
+        rtsRuletypeTable.setFillsViewportHeight(true);
+        rtsRuletypeTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        rtsRuletypeScrollpane.setViewportView(rtsRuletypeTable);
 
-        jButton1.setText("Apply");
+        rtsApply.setText("Apply");
 
-        jButton2.setText("<html>Restore<br> to default");
-        jButton2.setActionCommand("Restore to default");
-        jButton2.setEnabled(false);
+        rtsRestore.setText("<html>Restore<br> to default");
+        rtsRestore.setActionCommand("Restore to default");
+        rtsRestore.setEnabled(false);
 
-        jButton3.setText("<html>Restore all<br> to default");
+        rtsRestoreAll.setText("<html>Restore all<br> to default");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+        javax.swing.GroupLayout ruletypeSeverityLayout = new javax.swing.GroupLayout(ruletypeSeverity);
+        ruletypeSeverity.setLayout(ruletypeSeverityLayout);
+        ruletypeSeverityLayout.setHorizontalGroup(
+            ruletypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ruletypeSeverityLayout.createSequentialGroup()
+                .addComponent(rtsCategoryScrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rtsRuletypeScrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(ruletypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(ruletypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(rtsRestore, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(rtsRestoreAll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rtsApply, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        ruletypeSeverityLayout.setVerticalGroup(
+            ruletypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(rtsCategoryScrollpane)
+            .addComponent(rtsRuletypeScrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ruletypeSeverityLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rtsRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rtsRestoreAll, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(rtsApply)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Set ruletype severity", jPanel1);
+        tabbedPane.addTab("Set ruletype severity", ruletypeSeverity);
 
-        jList2.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
-        jList2.setModel(new javax.swing.AbstractListModel() {
+        vtsCategory.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
+        vtsCategory.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList2);
+        vtsCategoryScrollpane.setViewportView(vtsCategory);
 
-        jTable2.setModel(ruletypeModel);
-        jTable2.setFillsViewportHeight(true);
-        jTable2.setSelectionMode();
-        jScrollPane4.setViewportView(jTable2);
+        vtsViolationtypeTable.setModel(ruletypeModel);
+        vtsViolationtypeTable.setFillsViewportHeight(true);
+        vtsViolationtypeScrollpane.setViewportView(vtsViolationtypeTable);
 
         jButton4.setText("<html>Restore<br> to default");
         jButton4.setActionCommand("Restore to default");
@@ -127,27 +126,27 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
 
         jButton6.setText("Apply");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+        javax.swing.GroupLayout violationtypeSeverityLayout = new javax.swing.GroupLayout(violationtypeSeverity);
+        violationtypeSeverity.setLayout(violationtypeSeverityLayout);
+        violationtypeSeverityLayout.setHorizontalGroup(
+            violationtypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(violationtypeSeverityLayout.createSequentialGroup()
+                .addComponent(vtsCategoryScrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(vtsViolationtypeScrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(violationtypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(violationtypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        violationtypeSeverityLayout.setVerticalGroup(
+            violationtypeSeverityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(vtsCategoryScrollpane)
+            .addComponent(vtsViolationtypeScrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, violationtypeSeverityLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -157,7 +156,7 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Set violation severity", jPanel2);
+        tabbedPane.addTab("Set violation severity", violationtypeSeverity);
 
         jList3.setBorder(javax.swing.BorderFactory.createTitledBorder("Category"));
         jList3.setModel(new javax.swing.AbstractListModel() {
@@ -169,7 +168,6 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
 
         jTable3.setModel(ruletypeModel);
         jTable3.setFillsViewportHeight(true);
-        jTable3.setSelectionMode();
         jScrollPane6.setViewportView(jTable3);
 
         jList4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ruletypes"));
@@ -225,22 +223,22 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Set violationtype active per ruletype severit", jPanel3);
+        tabbedPane.addTab("Set violationtype active per ruletype severit", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(tabbedPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1))
+                .addComponent(tabbedPane))
         );
 
-        jTabbedPane1.getAccessibleContext().setAccessibleName("Set ruletype severity");
+        tabbedPane.getAccessibleContext().setAccessibleName("Set ruletype severity");
     }// </editor-fold>//GEN-END:initComponents
 
 	private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -248,32 +246,32 @@ public class LanguageSeverityConfiguration extends javax.swing.JPanel {
 	}//GEN-LAST:event_jButton7ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
     private javax.swing.JList jList3;
     private javax.swing.JList jList4;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+    private javax.swing.JButton rtsApply;
+    private javax.swing.JList rtsCategory;
+    private javax.swing.JScrollPane rtsCategoryScrollpane;
+    private javax.swing.JButton rtsRestore;
+    private javax.swing.JButton rtsRestoreAll;
+    private javax.swing.JScrollPane rtsRuletypeScrollpane;
+    private javax.swing.JTable rtsRuletypeTable;
+    private javax.swing.JPanel ruletypeSeverity;
+    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JPanel violationtypeSeverity;
+    private javax.swing.JList vtsCategory;
+    private javax.swing.JScrollPane vtsCategoryScrollpane;
+    private javax.swing.JScrollPane vtsViolationtypeScrollpane;
+    private javax.swing.JTable vtsViolationtypeTable;
     // End of variables declaration//GEN-END:variables
 }
