@@ -33,6 +33,7 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
+		
 		AbstractDTO dto = ((DTODecorator) zoomedModuleFigure).getDTO();
 		switch(dto.getClass().getSimpleName()){
 			case "AnalysedModuleDTO":

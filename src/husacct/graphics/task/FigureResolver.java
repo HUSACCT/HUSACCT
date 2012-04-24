@@ -9,10 +9,10 @@ import husacct.graphics.presentation.figures.BaseFigure;
 
 public final class FigureResolver {
 
-	public FigureResolver() {	
+	private FigureResolver() {	
 	}
 	
-	public BaseFigure resolveFigure(Figure figure) {
+	public static BaseFigure resolveFigure(Figure figure) {
 		
 		while (figure instanceof Decorator) {
 			
@@ -23,14 +23,14 @@ public final class FigureResolver {
 		return (BaseFigure)figure;
 	}
 	
-	public AbstractDTO resolveDTO(Figure figure) {
+	public static AbstractDTO resolveDTO(Figure figure) {
 		
 		while (figure != null) {
 			
 			if (figure instanceof DTODecorator) {
 				
 				DTODecorator decorator = (DTODecorator)figure;
-				return decorator.getDTO();
+				return (AbstractDTO)decorator.getDTO();
 				
 			} else {
 				
