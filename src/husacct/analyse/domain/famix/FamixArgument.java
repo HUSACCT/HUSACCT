@@ -14,7 +14,7 @@ package husacct.analyse.domain.famix;
  * inheriting from Object. Besides inherited attributes, Argument has the
  * following attributes:
  */
-public class FamixArgument extends FamixObject
+class FamixArgument extends FamixObject
 {
 
 	/**

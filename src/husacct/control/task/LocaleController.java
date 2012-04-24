@@ -9,19 +9,19 @@ import java.util.Locale;
 
 public class LocaleController {
 	
-	private Locale currentLocale;
+	private static Locale currentLocale = Locale.ENGLISH;
 	
 	public LocaleController(){
-		setLocale(Locale.ENGLISH);
+		setLocale(LocaleController.currentLocale);
 	}
 	
-	public Locale getLocale(){
-		return this.currentLocale;
+	public static Locale getLocale(){
+		return LocaleController.currentLocale;
 	}
 	
 	public void setLocale(Locale locale){
 		ControlServiceImpl service = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-		this.currentLocale = locale;
+		LocaleController.currentLocale = locale;
 		service.notifyLocaleListeners(locale);
 	}
 	

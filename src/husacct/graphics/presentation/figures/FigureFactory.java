@@ -3,6 +3,7 @@ package husacct.graphics.presentation.figures;
 import husacct.common.dto.*;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.DependenciesDecorator;
+import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
 public final class FigureFactory {
 	
@@ -12,6 +13,21 @@ public final class FigureFactory {
 		return dependenciesDecorator;
 	}
 
+	private RelationFigure createFigure(DependencyDTO dependencyDTO) {
+		return new RelationFigure("Dependency from "+dependencyDTO.from+" to "+dependencyDTO.to);
+	}
+	
+	public BaseFigure createFigure(ViolationDTO[] violationDTOs) {
+		RelationFigure relationFigure = this.createFigure(violationDTOs[0]);
+		ViolationsDecorator violationsDecorator = new ViolationsDecorator(relationFigure, violationDTOs);
+		return violationsDecorator;
+	}
+	
+	private RelationFigure createFigure(ViolationDTO violationDTO) {
+		return new RelationFigure("Violated dependency from "+violationDTO.getFromClasspath()
+				+" to "+violationDTO.getToClasspath());
+	}
+
 	public BaseFigure createFigure(AbstractDTO dto) {
 		BaseFigure retVal = null;
 
@@ -19,18 +35,24 @@ public final class FigureFactory {
 			retVal = createModuleFigure(dto);
 		}
 		
-		if(retVal == null)
-		{
+		if(retVal == null) {
 			throw new RuntimeException("Unimplemented dto type '"
 					+ dto.getClass().getSimpleName() + "' passed to FigureFactory");
 		}
-
-		// TODO: Use a DTODecorator to store the DTO along side with the newly
-		// created Figure.
-		// TODO: Determine whether it's Figure -> DTODecorator or DTODecorator
-		// -> Figure.
+		
 		DTODecorator decorator = new DTODecorator(retVal, dto);
 		return decorator;
+	}
+	
+	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
+		BaseFigure figure = this.createFigure(dto);
+		
+		if(violationDTOs.length > 0)
+		{
+			figure = new ViolationsDecorator(figure, violationDTOs);
+		}
+		
+		return figure;
 	}
 
 	private BaseFigure createModuleFigure(AbstractDTO dto) {
@@ -62,9 +84,5 @@ public final class FigureFactory {
 		default:
 			throw new RuntimeException("module dto type '"+type+"' not implemented");
 		}
-	}
-
-	private RelationFigure createFigure(DependencyDTO dependencyDTO) {
-		return new RelationFigure("Dependency from "+dependencyDTO.from+" to "+dependencyDTO.to);
 	}
 }

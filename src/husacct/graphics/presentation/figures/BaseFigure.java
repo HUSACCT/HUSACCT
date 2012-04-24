@@ -9,8 +9,8 @@ import java.util.LinkedList;
 
 import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
 import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.TransformHandleKit;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
@@ -52,12 +52,12 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	@Override
 	public Collection<Handle> createHandles(int detailLevel) {
-		LinkedList<Handle> handles = new LinkedList<Handle>();
-		if (detailLevel == 0) {
-			TransformHandleKit.addScaleMoveTransformHandles(this, handles);
-		}
-
-		return handles;
+        LinkedList<Handle> handles = new LinkedList<Handle>();
+        if (detailLevel == 0) {
+        	Handle handle = new BoundsOutlineHandle(this, false, false);
+            handles.add(handle);
+        }
+        return handles;
 	}
 	
 	public void setStrokeColor(Color newColor) {

@@ -1,10 +1,13 @@
 package husacct.graphics;
 
+import husacct.common.savechain.ISaveable;
 import husacct.graphics.task.DemoController;
 
 import javax.swing.JInternalFrame;
 
-public class GraphicsServiceDemo implements IGraphicsService
+import org.jdom2.Element;
+
+public class GraphicsServiceDemo implements IGraphicsService, ISaveable
 {
 	private DemoController controller;
 	
@@ -48,5 +51,16 @@ public class GraphicsServiceDemo implements IGraphicsService
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	public Element getWorkspaceData() {
+		Element data = new Element("ArchitecureGraphicsService");
+		data.addContent("testdata");
+		return data;
+	}
 
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		//TODO: Set workspace data.
+	}
 }

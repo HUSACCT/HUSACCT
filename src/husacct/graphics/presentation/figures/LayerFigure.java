@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.figures;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import org.jhotdraw.draw.Figure;
@@ -13,7 +14,7 @@ public class LayerFigure extends NamedFigure {
 	private TextFigure text;
 	
 	private final int MIN_WIDTH = 300;
-	private final int MIN_HEIGHT = 20;
+	private final int MIN_HEIGHT = 50;
 	
 	public LayerFigure(String name)
 	{		
@@ -38,7 +39,15 @@ public class LayerFigure extends NamedFigure {
 		}
 		
 		body.setBounds(anchor, lead);
-		text.setBounds(anchor, lead);
+		
+		// textbox centralising
+		double plusX = (((lead.x-anchor.x)-this.text.getBounds().width)/2);
+		double plusY = (((lead.y-anchor.y)-this.text.getBounds().height)/2);
+		
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
 		
 		this.invalidate();
 	}	
