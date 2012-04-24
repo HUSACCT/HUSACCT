@@ -2,19 +2,11 @@ package husacct.analyse.presentation;
  
 import java.awt.Dimension; 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 public class AnalyzeGUI extends JFrame {
 	
-	public static void main(String[] args) {
-		   try {  
-	        	javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");      
-	        } catch (Exception ex) {
-	        	System.out.println(ex.getStackTrace());
-	        }
-		AnalyzeGUI testGUI = new AnalyzeGUI();
-		
-	}
-	
+	private static final long serialVersionUID = 1L;
 	private AnalyzeTabPanel tabPanel;
 	
 	public AnalyzeGUI(){
@@ -26,16 +18,23 @@ public class AnalyzeGUI extends JFrame {
 	private void addMainPanel() { 
 		
 		AnalyzeTabPanel tabPanel = new AnalyzeTabPanel(); 
-		this.add(tabPanel);
+		JInternalFrame container = new JInternalFrame();
+		
+		container.setVisible(true);
+		container.add(tabPanel);
+		container.setTitle("Software Analysis Tool");
+		container.setPreferredSize(new Dimension(300,300));
+		this.add(container);
  
 	}
 
 	private void setFrameSettings(){ 
-		Dimension frameSize = new Dimension(1024,800);
+		Dimension frameSize = new Dimension(1124,800);
 		this.setPreferredSize(frameSize);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-	    this.setTitle("Software analysis tool");
+	    //this.setTitle("Software analysis tool");
+		this.setTitle("JFRAME !");
 	}
 	
 
