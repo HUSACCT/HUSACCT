@@ -22,12 +22,11 @@ public class ExportViolations {
 			Element violationElement = new Element("violation");
 
 			createElementWithContent("lineNumber", "" + violation.getLinenumber(), violationElement);
-			createElementWithContent("severityId", "" + violation.getSeverity().toString(), violationElement);
+			createElementWithContent("severityId", "" + violation.getSeverity().getId().toString(), violationElement);
 			createElementWithContent("ruletypeKey", violation.getRuletypeKey(), violationElement);
 			createElementWithContent("violationtypeKey",violation.getViolationtypeKey(), violationElement);
 			createElementWithContent("classPathFrom",violation.getClassPathFrom(), violationElement);
 			createElementWithContent("classPathTo",violation.getClassPathTo(), violationElement);
-
 			createLogicalModulesElement(violation.getLogicalModules(), violationElement);
 			addMessage(violationElement, violation.getMessage());
 			createElementWithContent("isIndirect",""+violation.isIndirect(), violationElement);

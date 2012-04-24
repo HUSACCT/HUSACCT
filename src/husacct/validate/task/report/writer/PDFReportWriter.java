@@ -6,17 +6,12 @@ import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
-import husacct.validate.task.report.UnknownStorageTypeException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -43,7 +38,7 @@ public class PDFReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws DocumentException, MalformedURLException, IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException  {
+	public void createReport() throws DocumentException, MalformedURLException, IOException  {
 		document = new Document();
 		checkDirsExist();
 		
@@ -79,7 +74,7 @@ public class PDFReportWriter extends ReportWriter {
 
 		document.add(new Paragraph(" "));
 	}
-	private void createStatistics() throws DocumentException, MalformedURLException, IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException {
+	private void createStatistics() throws DocumentException {
 		Phrase title = new Phrase();
 		title.setFont(new Font(FontFamily.HELVETICA,13F,Font.BOLD,BaseColor.BLUE));
 		title.add("Statistics");
@@ -103,7 +98,7 @@ public class PDFReportWriter extends ReportWriter {
 			}
 		}
 	}
-	private void createTable() throws DocumentException, SAXException, IOException, ParserConfigurationException {
+	private void createTable() throws DocumentException  {
 		Phrase title = new Phrase();
 		title.setFont(new Font(FontFamily.HELVETICA,13F,Font.BOLD,BaseColor.BLUE));
 		title.add("Violations");
