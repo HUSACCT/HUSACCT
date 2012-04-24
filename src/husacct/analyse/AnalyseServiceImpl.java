@@ -2,6 +2,7 @@ package husacct.analyse;
 
 import javax.swing.JInternalFrame;
 
+import husacct.analyse.presentation.AnalyzePanelGetRootModules;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -35,7 +36,7 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		return null;
+		return new AnalyzePanelGetRootModules();
 	}
 	
 	
