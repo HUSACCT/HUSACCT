@@ -27,10 +27,10 @@ public class FilterController {
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		
 		for (Violation violation : ts.getAllViolations()) {			
-			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().contains(logicalpathFrom)) {
-				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().contains(logicalpathFrom)) {
+			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
+				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
 					violations.add(violation);
-				} else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().contains(logicalpathTo)) {
+				} else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
 					violations.add(violation);
 				}
 			}
