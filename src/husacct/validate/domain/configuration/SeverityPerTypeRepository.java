@@ -23,6 +23,10 @@ public class SeverityPerTypeRepository {
 	public void restoreAllToDefault(String language){
 		
 	}
+	
+	public void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){
+		this.severitiesPerTypePerProgrammingLanguage = severitiesPerTypePerProgrammingLanguage;
+	}
 
 	public void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
 		HashMap<String, Severity> local = this.severitiesPerTypePerProgrammingLanguage.get(language);

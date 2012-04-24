@@ -1,6 +1,7 @@
 package husacct.validate.domain;
 
 import husacct.validate.domain.configuration.SeverityConfigRepository;
+import husacct.validate.domain.configuration.SeverityPerTypeRepository;
 import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -10,14 +11,13 @@ import java.util.List;
 public class ConfigurationServiceImpl {
 
 	private final SeverityConfigRepository severityConfig;
+	private final SeverityPerTypeRepository severityRepository;
 	private final ViolationRepository violationRepository;
-	private HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages;
-
+	
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severitiesPerTypesPerProgrammingLanguages =
-				new HashMap<String, HashMap<String, Severity>>();
+		this.severityRepository = new SeverityPerTypeRepository();
 	}
 
 	public void clearViolations() {
@@ -41,12 +41,14 @@ public class ConfigurationServiceImpl {
 	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
-		return severitiesPerTypesPerProgrammingLanguages;
+		return severityRepository.getSeveritiesPerTypePerProgrammingLanguage();
+	}
+	
+	public void setSeveritiesPerTypesPerProgrammingLanguages(HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {
+		severityRepository.setSeverityMap(severitiesPerTypesPerProgrammingLanguages);
 	}
 
-	public void setSeveritiesPerTypesPerProgrammingLanguages(
-			HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {
-		this.severitiesPerTypesPerProgrammingLanguages =
-				severitiesPerTypesPerProgrammingLanguages;
+	public void setSeveritiesPerTypesPerProgrammingLanguages(String language, HashMap<String, Severity> severitiesPerTypesPerProgrammingLanguages) {
+		severityRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
 	}
 }
