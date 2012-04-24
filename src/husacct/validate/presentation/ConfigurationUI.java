@@ -6,6 +6,8 @@ import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
@@ -21,7 +23,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		initComponents();
 		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
 
-		TableCellEditor editor = new ColorChooserEditor();
+		TableCellEditor editor = new ColorChooserEditor(new JButton());
 		column.setCellEditor(editor);
 		loadLanguageTabs();
 		loadSeverity();
@@ -211,6 +213,8 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			severityModel.addRow(new Object[]{severity.toString(),
 											  severity.getColor()});
 		}
+		
+		severityModel.
 	}
 
 	private void clearModel(ColorTableModel model) {
