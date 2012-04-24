@@ -28,6 +28,9 @@ public class AnalysedController extends BaseController {
 		for (AnalysedModuleDTO dto : castedModules) {
 			BaseFigure packageFigure = figureFactory.createFigure(dto);
 			drawing.add(packageFigure);
+			
+			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
+			bls.doLayout();
 		}
 	}
 
