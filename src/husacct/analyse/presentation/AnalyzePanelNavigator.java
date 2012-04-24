@@ -1,10 +1,10 @@
 package husacct.analyse.presentation;
 import java.awt.Dimension;  
-import javax.swing.JPanel; 
+import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTree; 
 
-public class AnalyzePanelNavigator extends JPanel  { 
+public class AnalyzePanelNavigator extends JInternalFrame  { 
   	private static final long serialVersionUID = 1L;
 	public JTree analyzedCodeTree;
 	public JScrollPane jScrollPaneTree;
@@ -26,7 +26,7 @@ public class AnalyzePanelNavigator extends JPanel  {
 		
 		jScrollPaneTree = new JScrollPane(analyzedCodeTree);
 		jScrollPaneTree.setPreferredSize(new Dimension(850, 700));
-		jScrollPaneTree.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);		  
-		this.add(jScrollPaneTree); 
+		jScrollPaneTree.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+		//this.add(jScrollPaneTree); 
 	} 
 }
