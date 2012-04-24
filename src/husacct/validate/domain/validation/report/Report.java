@@ -36,7 +36,7 @@ public class Report {
 		for(Severity severity : severities) {
 			int violationsCount = 0;
 			for(Violation violation : violations) {
-				if(violation.getSeverityValue() == severity.getValue()) {
+				if(violation.getSeverity().equals(severity)) {
 					violationsCount++;
 				}
 			}
@@ -46,14 +46,14 @@ public class Report {
 	}
 
 	public String[] getLocaleColumnHeaders() {
-		String[] headers = new String[7];
-		headers[0] = ResourceBundles.getValue("Source");
-		headers[1] = ResourceBundles.getValue("Target");
-		headers[2] = ResourceBundles.getValue("LineNr");
-		headers[3] = ResourceBundles.getValue("Severity");
-		headers[4] = ResourceBundles.getValue("Rule");
-		headers[5] = ResourceBundles.getValue("DependencyKind");
-		headers[6] = "";
+		String[] headers = new String[] {
+		ResourceBundles.getValue("Source"),
+		ResourceBundles.getValue("Target"),
+		ResourceBundles.getValue("LineNumber"),
+		ResourceBundles.getValue("Severity"),
+		ResourceBundles.getValue("Rule"),
+		ResourceBundles.getValue("DependencyKind"),
+		""};
 		return headers;
 	}
 
@@ -84,15 +84,6 @@ public class Report {
 
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
-	}
-
-	public String getSeverityNameFromValue(int severityValue) {
-		for(Severity severity : severities) {
-			if(severity.getValue() == severityValue) {
-				return severity.getDefaultName();
-			}
-		}
-		throw new NullPointerException("Severity value was not found, please check if the configuration is correct");
 	}
 
 }

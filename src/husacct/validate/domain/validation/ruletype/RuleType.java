@@ -60,6 +60,9 @@ public abstract class RuleType {
 	public abstract List<Violation> check(RuleDTO appliedRule);
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message){
-		return new Violation(dependency.lineNumber, severityValue, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+		//return new Violation(dependency.lineNumber, severityValue, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+	//TODO: 
+		//FIXME:
+		return null;
 	}
 }

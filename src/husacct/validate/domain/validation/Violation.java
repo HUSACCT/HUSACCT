@@ -4,9 +4,9 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.Calendar;
 
-public class Violation implements Comparable<Violation> {
+public class Violation {
 	private int linenumber;
-	private int severityValue;
+	private Severity severity;
 	private String ruletypeKey;
 	private String violationtypeKey;
 	private String classPathFrom;
@@ -20,9 +20,9 @@ public class Violation implements Comparable<Violation> {
 		
 	}
 	
-	public Violation(int linenumber, int severityValue, String ruletypeKey, String violationtypeKey, String classPathFrom, String classPathTo, boolean inDirect, Message message, LogicalModules logicalModules){
+	public Violation(int linenumber, Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, String classPathTo, boolean inDirect, Message message, LogicalModules logicalModules){
 		this.linenumber = linenumber;
-		this.severityValue = severityValue;
+		this.setSeverity(severity);
 		this.ruletypeKey = ruletypeKey;
 		this.violationtypeKey = violationtypeKey;
 		this.classPathFrom = classPathFrom;
@@ -41,13 +41,6 @@ public class Violation implements Comparable<Violation> {
 		return linenumber;
 	}
 
-	public void setSeverityValue(int severityValue) {
-		this.severityValue = severityValue;
-	}
-
-	public int getSeverityValue() {
-		return severityValue;
-	}
 
 	public void setViolationtypeKey(String violationtypeKey) {
 		this.violationtypeKey = violationtypeKey;
@@ -97,15 +90,6 @@ public class Violation implements Comparable<Violation> {
 		return ruletypeKey;
 	}
 
-	@Override
-	public int compareTo(Violation o) {
-		if(o.getSeverityValue() > severityValue) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
-	}
 
 	public LogicalModules getLogicalModules() {
 		return logicalModules;
@@ -121,5 +105,13 @@ public class Violation implements Comparable<Violation> {
 
 	public Message getMessage() {
 		return message;
+	}
+
+	public Severity getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(Severity severity) {
+		this.severity = severity;
 	}
 }

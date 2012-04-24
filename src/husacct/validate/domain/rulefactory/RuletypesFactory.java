@@ -34,8 +34,25 @@ public class RuleTypesFactory {
 		mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
-	public List<RuleType> getRuleTypes(String programmingLanguage){
-		return generateRuleTypes(programmingLanguage);
+	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){
+		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
+		return extractCategoriesFromRuleType(ruleTypes);
+	}
+
+	private HashMap<String, List<RuleType>> extractCategoriesFromRuleType(List<RuleType> ruletypes){
+		HashMap<String, List<RuleType>> returnMap = new HashMap<String, List<RuleType>>();
+
+		for(RuleType ruletype : ruletypes){
+			final String categoryKey = ruletype.getCategoryKey();
+			List<RuleType> categoryRules = returnMap.get(categoryKey);
+			if(categoryRules != null){
+				categoryRules.add(ruletype);
+			}
+			else{
+				returnMap.put(categoryKey, new ArrayList<RuleType>());
+			}
+		}		
+		return returnMap;
 	}
 
 	public List<RuleType> getRuleTypes(){
@@ -54,7 +71,7 @@ public class RuleTypesFactory {
 
 	//Depending on the language give instance of Rule + violationtypes
 	private List<RuleType> generateRuleTypes(String language){
-		setViolationTypeFactory("Java");
+		setViolationTypeFactory(language);
 		//TODO uncomment when define service is ready
 		//setViolationTypeFactory(language);
 

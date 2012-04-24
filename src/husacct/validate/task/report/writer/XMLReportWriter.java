@@ -80,7 +80,7 @@ public class XMLReportWriter extends ReportWriter {
 			target.setTextContent(violation.getClassPathTo());
 			source.setTextContent(violation.getClassPathFrom());
 			lineNr.setTextContent("" + violation.getLinenumber());
-			severity.setTextContent(report.getSeverityNameFromValue(violation.getSeverityValue()));
+			severity.setTextContent(violation.getSeverity().toString());
 			if(violation.getLogicalModules() != null) {
 				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
 				String message = new Messagebuilder().createMessage(messageObject);
