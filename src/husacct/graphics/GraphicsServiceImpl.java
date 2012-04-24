@@ -17,7 +17,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	public GraphicsServiceImpl() {
 	}
 	
-	private void _createControllers(){
+	private void createControllers(){
 		if(analysedController==null){
 			analysedController = new AnalysedController();
 		}
@@ -28,43 +28,43 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 
 	@Override
 	public JInternalFrame getAnalysedArchitectureGUI() {
-		_createControllers();
+		createControllers();
 		return analysedController.getGUI();
 	}
 
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
-		_createControllers();
+		createControllers();
 		return definedController.getGUI();
 	}
 
 	@Override
 	public void drawAnalysedArchitecture() {
-		_createControllers();
+		createControllers();
 		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawAnalysedArchitectureWithViolations() {
-		_createControllers();
+		createControllers();
 		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitecture() {
-		_createControllers();
+		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitectureWithViolations() {
-		_createControllers();
+		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		_createControllers();
+		createControllers();
 		Element data = new Element("ArchitecureGraphicsService");
 		data.addContent("testdata");
 		return data;
@@ -72,7 +72,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		_createControllers();
+		createControllers();
 		//TODO: Set workspace data.
 	}
 }

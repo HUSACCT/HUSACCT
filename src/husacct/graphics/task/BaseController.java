@@ -20,8 +20,7 @@ import javax.swing.JInternalFrame;
 
 import org.jhotdraw.draw.ConnectionFigure;
 
-public abstract class BaseController implements MouseClickListener
-{
+public abstract class BaseController implements MouseClickListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
@@ -36,7 +35,7 @@ public abstract class BaseController implements MouseClickListener
 
 		initializeComponents();
 	}
-	
+
 	private void initializeComponents() {
 		drawing = new Drawing();
 		view = new DrawingView(drawing);
@@ -49,58 +48,62 @@ public abstract class BaseController implements MouseClickListener
 	public JInternalFrame getGUI() {
 		return drawTarget;
 	}
-	
-	public void clearDrawing()
-	{
+
+	public void clearDrawing() {
 		this.drawing.clear();
-		this.view.clearSelection();		
+		this.view.clearSelection();
 	}
 
+	public abstract void zoomOut(AbstractDTO childDTO);
+
 	@Override
-	public void figureSelected(BaseFigure clickedFigure)
-	{
-		System.out.println("Figure of type '"+clickedFigure.getClass().getSimpleName()+"' selected");
+	public void figureSelected(BaseFigure clickedFigure) {
+		System.out.println("Figure of type '"
+				+ clickedFigure.getClass().getSimpleName() + "' selected");
 	}
-	
+
 	public abstract void drawArchitecture(DrawingDetail detail);
-	
-	public void drawViolationsForShownModules()	{
-		//TODO retrieve the real service from the ServiceProvider instead of using the stub
+
+	public void drawViolationsForShownModules() {
+		// TODO retrieve the real service from the ServiceProvider instead of
+		// using the stub
 		IValidateService validateService = new ValidateServiceStub();
-		
+
 		ArrayList<DTODecorator> moduleFigures = new ArrayList<DTODecorator>();
-		for(BaseFigure f : this.drawing.getShownModules()) {
-			if(f instanceof DTODecorator) {
-				moduleFigures.add((DTODecorator)f);
+		for (BaseFigure f : this.drawing.getShownModules()) {
+			if (f instanceof DTODecorator) {
+				moduleFigures.add((DTODecorator) f);
 			}
 		}
-		
-		for(DTODecorator moduleFigureFrom : moduleFigures) {
-			for(DTODecorator moduleFigureTo : moduleFigures) {
+
+		for (DTODecorator moduleFigureFrom : moduleFigures) {
+			for (DTODecorator moduleFigureTo : moduleFigures) {
 				AbstractDTO dtoFrom = moduleFigureFrom.getDTO();
 				AbstractDTO dtoTo = moduleFigureTo.getDTO();
-				
-				if((dtoFrom instanceof ModuleDTO) && (dtoTo instanceof ModuleDTO)) {
-					ViolationDTO[] violationDTOs = validateService.getViolations(
-							((ModuleDTO)dtoFrom).logicalPath, 
-							((ModuleDTO)dtoTo).logicalPath);
-					if(violationDTOs.length > 0) {
-						this.drawViolations(violationDTOs, moduleFigureFrom, moduleFigureTo);
+
+				if ((dtoFrom instanceof ModuleDTO)
+						&& (dtoTo instanceof ModuleDTO)) {
+					ViolationDTO[] violationDTOs = validateService
+							.getViolations(((ModuleDTO) dtoFrom).logicalPath,
+									((ModuleDTO) dtoTo).logicalPath);
+					if (violationDTOs.length > 0) {
+						this.drawViolations(violationDTOs, moduleFigureFrom,
+								moduleFigureTo);
 					}
 				}
 				// TODO AnalysedModuleDTO
 			}
 		}
 	}
-	
-	private void drawViolations(ViolationDTO[] violationDTOs, BaseFigure fromFigure, BaseFigure toFigure)
-	{
-		BaseFigure violatedRelationFigure = this.figureFactory.createFigure(violationDTOs);
+
+	private void drawViolations(ViolationDTO[] violationDTOs,
+			BaseFigure fromFigure, BaseFigure toFigure) {
+		BaseFigure violatedRelationFigure = this.figureFactory
+				.createFigure(violationDTOs);
 		this.connectionStrategy.connect(
-				//TODO a very ugly cast here
-				(ConnectionFigure)((Decorator)violatedRelationFigure).getDecorator(),
-				fromFigure, 
-				toFigure);
+		// TODO a very ugly cast here
+				(ConnectionFigure) ((Decorator) violatedRelationFigure)
+						.getDecorator(), fromFigure, toFigure);
 		this.drawing.add(violatedRelationFigure);
 	}
 }
