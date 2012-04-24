@@ -2,6 +2,7 @@ package husacct.validate.task.TableModels;
 
 import java.awt.Color;
 import java.util.Vector;
+import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("UseOfObsoleteCollectionType")
@@ -10,7 +11,7 @@ public class ColorTableModel extends AbstractTableModel {
 	protected Vector dataVector = new Vector();
 	String columnNames[] = {"Severity Name", "Color"};
 
-	Class<?>[] types = new Class[]{String.class, Color.class};
+	Class<?>[] types = new Class[]{String.class, JButton.class};
 	boolean[] canEdit = new boolean[]{true, true};
 
 	@Override

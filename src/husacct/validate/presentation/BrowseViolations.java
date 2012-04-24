@@ -16,7 +16,7 @@ import javax.swing.table.TableColumn;
 public final class BrowseViolations extends JInternalFrame {
 
 	private static final long serialVersionUID = -7189769674996804424L;
-	
+
 	private TaskServiceImpl ts;
 	private FilterViolations fv;
 
@@ -309,14 +309,14 @@ public final class BrowseViolations extends JInternalFrame {
 
 		ArrayList<Violation> violationRows = ts.filterViolations(applyFilter.isSelected());
 		for (Violation violation : violationRows) {
-			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), violation.getClassPathTo(), violation.getLinenumber(), violation.getSeverityValue(), ResourceBundles.getValue(violation.getRuletypeKey()), ResourceBundles.getValue(violation.getViolationtypeKey())});
-			if (violation.getSeverityValue() == 3) {
-				lowSeverityCount++;
-			} else if (violation.getSeverityValue() == 2) {
-				mediumSeverityCount++;
-			} else {
-				lowSeverityCount++;
-			}
+//			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), violation.getClassPathTo(), violation.getLinenumber(), violation.getSeverityValue(), ResourceBundles.getValue(violation.getRuletypeKey()), ResourceBundles.getValue(violation.getViolationtypeKey())});
+//			if (violation.getSeverityValue() == 3) {
+//				lowSeverityCount++;
+//			} else if (violation.getSeverityValue() == 2) {
+//				mediumSeverityCount++;
+//			} else {
+//				lowSeverityCount++;
+//			}
 		}
 
 		shownViolationsNumber.setText(violationRows.size() + "");

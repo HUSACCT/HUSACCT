@@ -13,10 +13,10 @@ import javax.swing.table.TableCellEditor;
 public class ColorChooserEditor extends AbstractCellEditor implements
 		TableCellEditor {
 
-	private JButton delegate = new JButton();
-	Color savedColor;
+	private JButton delegate;// = new JButton();
+	private Color savedColor;
 
-	public ColorChooserEditor() {
+	public ColorChooserEditor(JButton button) {
 		ActionListener actionListener = new ActionListener() {
 
 			@Override
@@ -26,7 +26,9 @@ public class ColorChooserEditor extends AbstractCellEditor implements
 				ColorChooserEditor.this.changeColor(color);
 			}
 		};
+		delegate = button;
 		delegate.addActionListener(actionListener);
+
 	}
 
 	@Override
@@ -39,6 +41,10 @@ public class ColorChooserEditor extends AbstractCellEditor implements
 			savedColor = color;
 			delegate.setBackground(color);
 		}
+	}
+
+	public Color setBackgroundColor(){
+		return savedColor;
 	}
 
 	@Override

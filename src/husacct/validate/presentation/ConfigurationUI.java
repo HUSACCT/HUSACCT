@@ -5,8 +5,9 @@ import husacct.validate.task.TableModels.ColorChooserEditor;
 import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
@@ -22,7 +23,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		initComponents();
 		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
 
-		TableCellEditor editor = new ColorChooserEditor();
+		TableCellEditor editor = new ColorChooserEditor(new JButton());
 		column.setCellEditor(editor);
 		loadLanguageTabs();
 		loadSeverity();
@@ -209,18 +210,10 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		clearModel(severityModel);
 		List<Severity> severities = ts.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.getUserName(),
+			severityModel.addRow(new Object[]{severity.toString(),
 											  severity.getColor()});
 		}
-		if (severities.isEmpty()) {
-			loadDefault();
-		}
-	}
 
-	private void loadDefault() {
-		severityModel.addRow(new Object[]{"Low", Color.GREEN});
-		severityModel.addRow(new Object[]{"Meduim", Color.YELLOW});
-		severityModel.addRow(new Object[]{"High", Color.RED});
 	}
 
 	private void clearModel(ColorTableModel model) {
@@ -231,9 +224,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void loadLanguageTabs(){
 		for (String language : ts.getAvailableLanguages()) {
-			LanguageViolationConfigurationPanel lcp = new LanguageViolationConfigurationPanel(
-					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
-			jTabbedPane1.addTab(language, lcp);
+//			LanguageViolationConfigurationPanel lcp = new LanguageViolationConfigurationPanel(
+//					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
+			//jTabbedPane1.addTab(language, lcp);
 		}
 	}
 

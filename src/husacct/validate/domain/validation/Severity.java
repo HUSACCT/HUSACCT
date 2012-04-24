@@ -42,8 +42,9 @@ public class Severity {
 	public String toString() {
 		if (userName != null && !userName.isEmpty()) {
 			return userName;
+		} else{
+			return defaultName;
 		}
-		return defaultName;
 	}
 
 	public UUID getId() {
