@@ -120,7 +120,12 @@ public class PDFReportWriter extends ReportWriter {
 		for(Violation violation : report.getViolations()) {
 			addCellToTable(pdfTable,violation.getClassPathFrom(), BaseColor.WHITE, false);
 			addCellToTable(pdfTable,violation.getClassPathTo(), BaseColor.WHITE, false);
-			addCellToTable(pdfTable,"" + violation.getLinenumber(), BaseColor.WHITE, false);
+			if(!(violation.getLinenumber() == 0)) {
+				addCellToTable(pdfTable,"" + violation.getLinenumber(), BaseColor.WHITE, false);
+			} else {
+				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
+			}
+			
 			addCellToTable(pdfTable,"" + report.getSeverityNameFromValue(violation.getSeverityValue()), BaseColor.WHITE, false);
 			if(violation.getLogicalModules() != null) {
 				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
