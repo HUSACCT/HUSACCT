@@ -1,5 +1,6 @@
 package husacct.graphics.task;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.define.DefineServiceStub;
@@ -13,7 +14,8 @@ public class DefinedController extends BaseController
 	
 	public DefinedController() {
 		super();
-		defineService = new DefineServiceStub();
+		
+		defineService = ServiceProvider.getInstance().getDefineService();
 	}
 	
 	public void drawArchitecture(DrawingDetail detail) {

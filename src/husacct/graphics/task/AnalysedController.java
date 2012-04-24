@@ -1,5 +1,6 @@
 package husacct.graphics.task;
 
+import husacct.ServiceProvider;
 import husacct.analyse.AnalyseServiceStub;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
@@ -14,7 +15,7 @@ public class AnalysedController extends BaseController {
 	public AnalysedController() {
 		super();
 
-		analyseService = new AnalyseServiceStub();
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
