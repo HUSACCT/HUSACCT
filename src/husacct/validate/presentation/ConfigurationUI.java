@@ -5,7 +5,6 @@ import husacct.validate.task.TableModels.ColorChooserEditor;
 import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -209,18 +208,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		clearModel(severityModel);
 		List<Severity> severities = ts.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.getUserName(),
+			severityModel.addRow(new Object[]{severity.toString(),
 											  severity.getColor()});
 		}
-		if (severities.isEmpty()) {
-			loadDefault();
-		}
-	}
-
-	private void loadDefault() {
-		severityModel.addRow(new Object[]{"Low", Color.GREEN});
-		severityModel.addRow(new Object[]{"Meduim", Color.YELLOW});
-		severityModel.addRow(new Object[]{"High", Color.RED});
 	}
 
 	private void clearModel(ColorTableModel model) {

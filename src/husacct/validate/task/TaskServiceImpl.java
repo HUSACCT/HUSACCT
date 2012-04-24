@@ -85,11 +85,19 @@ public class TaskServiceImpl implements ITaskService{
 	public void ApplySeverities(ColorTableModel ctm){
 		List<Severity> severityList = new ArrayList<Severity>();
 		for (int i = 0; i < ctm.getRowCount(); i++) {
-			Severity s = new Severity();
-			s.setColor((Color) ctm.getValueAt(i, 1));
-			s.setUserName((String) ctm.getValueAt(i, 0));
-			s.setValue(i + 1);
-			severityList.add(s);
+			try{
+				Severity s = getAllSeverities().get(i);
+				s.setColor((Color) ctm.getValueAt(i, 1));
+				s.setUserName((String) ctm.getValueAt(i, 0));
+				s.setValue(i + 1);
+				severityList.add(s);
+			} catch(Exception e){
+				Severity s = new Severity();
+				s.setColor((Color) ctm.getValueAt(i, 1));
+				s.setUserName((String) ctm.getValueAt(i, 0));
+				s.setValue(i + 1);
+				severityList.add(s);
+			}
 		}
 		addSeverities(severityList);
 	}
