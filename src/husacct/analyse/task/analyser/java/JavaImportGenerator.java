@@ -1,42 +1,37 @@
-package husacct.analyse.abstraction.mappers.javamapper.famixObjectGenerators;
+package husacct.analyse.task.analyser.java;
 
 import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
-import husacct.analyse.domain.famix.FamixImport;
 import husacct.analyse.infrastructure.antlr.JavaParser;
 
-public class JavaImportGenerator{
-	
-	private FamixImport famixImportObject;
-	private String belongsToClass;
+class JavaImportGenerator extends JavaGenerator{
+
 	public static int nodeType = JavaParser.IMPORT;
-		
-	public JavaImportGenerator(){
-		this.famixImportObject = new FamixImport();
-	}
 	
-	public FamixImport generateFamixImport(CommonTree importTree, String className){
-		this.belongsToClass = className;
+	private String importingClass;
+	private String importedModule;
+	private String completeImportDeclaration;
+	private boolean isCompletePackageImport;
+		
+	public void generateFamixImport(CommonTree importTree, String className){
+		this.importingClass = className;
 		fillImportObject(importTree);
-		return famixImportObject;
+		modelService.createImport(importingClass, importedModule, completeImportDeclaration, isCompletePackageImport);
 	}
 	
 	private void fillImportObject(CommonTree importTree){
 		String importDetails = createImportDetails(importTree, "--");
 		String declaration = convertToImportDeclaration(importDetails, "--");
 		
-		famixImportObject.setImportingClass(this.belongsToClass);
-		famixImportObject.setCompleteImportString(declaration);
-		boolean importsCompletePackage = isPackageImport(declaration);
-		famixImportObject.setIsCompletePackage(isPackageImport(declaration));
-		if(importsCompletePackage){
-			declaration = removeStar(declaration);
-		}
-		famixImportObject.setImportDeclaration(declaration);
+		this.completeImportDeclaration = declaration;
+		this.isCompletePackageImport = isPackageImport(declaration);
+		if(isCompletePackageImport) importedModule = removeStar(declaration);
+		else importedModule = declaration;
 	}
 	
 	private String createImportDetails(CommonTree importTree, String detailSeperator){
 		String details = "";
+			@SuppressWarnings("unchecked")
 			List<CommonTree> importDetail = (List<CommonTree>)importTree.getChildren();
 			if(importDetail != null){
 				if(importDetail.size() < 2){
