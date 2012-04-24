@@ -6,7 +6,6 @@ import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
-import husacct.validate.task.report.UnknownStorageTypeException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,10 +16,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
 public class HTMLReportWriter extends ReportWriter {
 
 	private FileWriter html;
@@ -30,7 +25,7 @@ public class HTMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException, URISyntaxException {
+	public void createReport() throws IOException, URISyntaxException  {
 		checkDirsExist();
 		createResources();
 		html = new FileWriter(getFileName());
@@ -42,7 +37,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.close();
 	}
 
-	private void createResources() throws URISyntaxException, IOException {
+	private void createResources() throws IOException, URISyntaxException {
 		File resourcesDir = new File(path + "/HUSACCT Report Resources");
 		resourcesDir.mkdir();
 
@@ -77,7 +72,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</head>");
 
 	}
-	private void createBody() throws IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException {
+	private void createBody() throws IOException {
 		html.append("<body>");
 		html.append("<table width=\"100%\">");
 		html.append("<tr>");
@@ -94,7 +89,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</body>");
 	}
 
-	private void createStatistics() throws IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException {
+	private void createStatistics() throws IOException {
 		html.append("<div class=\"image\">");
 		html.append("<img src=\"./HUSACCT Report Resources/image.png\"/>");
 		html.append("</div>");
@@ -106,7 +101,7 @@ public class HTMLReportWriter extends ReportWriter {
 			html.append(severityPerViolation.getSeverity().getDefaultName() + ": " + severityPerViolation.getAmount() + "<br />");
 		}
 	}
-	private void createTable() throws IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException {
+	private void createTable() throws IOException  {
 		html.append("<span class=\"stats\">Violations</span>");
 		html.append("<table id=\"example\" border=\"1\" width=\"100%\">");
 		html.append("<thead>");

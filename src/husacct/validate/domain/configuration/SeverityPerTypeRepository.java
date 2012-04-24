@@ -15,15 +15,15 @@ public class SeverityPerTypeRepository {
 	public HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypePerProgrammingLanguage() {
 		return severitiesPerTypePerProgrammingLanguage;
 	}
-	
+
 	public void restoreDefaultSeverity(String language, String key){
-		
+		//TODO
 	}
-	
+
 	public void restoreAllToDefault(String language){
-		
+		//TODO
 	}
-	
+
 	public void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){
 		this.severitiesPerTypePerProgrammingLanguage = severitiesPerTypePerProgrammingLanguage;
 	}
@@ -31,9 +31,7 @@ public class SeverityPerTypeRepository {
 	public void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
 		HashMap<String, Severity> local = this.severitiesPerTypePerProgrammingLanguage.get(language);
 		if(local != null){
-			for(Entry<String, Severity> key : severityMap.entrySet()){
-				
-			}
+			local = severityMap;
 		}
 		else{
 			throw new ProgrammingLanguageNotFound();

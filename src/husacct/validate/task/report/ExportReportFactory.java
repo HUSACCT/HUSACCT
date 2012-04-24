@@ -14,18 +14,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
-
 import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
 	private ReportWriter writer;
 
-	public void exportReport(String fileType, List<Violation> violations, String name, String path, List<Severity> severities) throws UnknownStorageTypeException, ParserConfigurationException, SAXException, IOException, DOMException, URISyntaxException, DocumentException, TransformerException {
+	public void exportReport(String fileType, List<Violation> violations, String name, String path, List<Severity> severities) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException  {
 		DefineServiceStub stub = new DefineServiceStub();
 		
 		Report report = new Report(stub.getApplicationDetails().name, "TODO Version", violations, path, severities);

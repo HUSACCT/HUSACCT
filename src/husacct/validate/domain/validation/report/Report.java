@@ -4,15 +4,9 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
-import husacct.validate.task.report.UnknownStorageTypeException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 public class Report {
 
@@ -22,7 +16,7 @@ public class Report {
 	private List<Severity> severities;
 	private String imagePath;
 
-	public Report(String projectName, String version, List<Violation> violations, String path, List<Severity> severities) throws ParserConfigurationException, SAXException, IOException, UnknownStorageTypeException {
+	public Report(String projectName, String version, List<Violation> violations, String path, List<Severity> severities) {
 		this.projectName = projectName;
 		this.version = version;
 		this.violations = violations;

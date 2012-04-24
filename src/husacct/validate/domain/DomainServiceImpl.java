@@ -31,6 +31,7 @@ public class DomainServiceImpl {
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage){
 		initializeViolationtypeFactory();
 		//TODO;
+		//FIXME;
 		return null;
 	}
 

@@ -2,19 +2,12 @@ package husacct.validate.task.report.writer;
 
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.domain.validation.report.Report;
-import husacct.validate.task.report.UnknownStorageTypeException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
 
 import com.itextpdf.text.DocumentException;
 
@@ -32,7 +25,7 @@ public abstract class ReportWriter {
 		this.extensionType = extensionType;
 	}
 
-	public abstract void createReport() throws IOException, ParserConfigurationException, SAXException, UnknownStorageTypeException, URISyntaxException, DocumentException, TransformerException, DOMException ;
+	public abstract void createReport() throws IOException, URISyntaxException, DocumentException ;
 
 	public String convertIsIndirectBooleanToString(boolean isIndirect) {
 		if(isIndirect) {
