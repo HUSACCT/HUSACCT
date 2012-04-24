@@ -16,12 +16,12 @@ public class StateController {
 	public static final int ANALYSED = 4;
 	public static final int VALIDATED = 5;
 	
-	private int state = StateController.NONE;
+	private int state;
 	
 	ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
 	
 	public StateController(){
-		setState(state);
+		checkState();
 	}
 	
 	public void checkState(){
