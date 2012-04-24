@@ -17,9 +17,12 @@ class FamixClass extends FamixEntity{
 		classRepresentation += "\nUnique Name: " + super.uniqueName;
 		classRepresentation += "\nBelongs to Package: " + belongsToPackage;
 		classRepresentation += "\nName: " + super.name;
+		if(isAbstract) classRepresentation += "\nisAbstract: true";
+		else classRepresentation += "\nisAbstract: false";
 		classRepresentation += "\nIs Inner Class: ";
 		if(isInnerClass) classRepresentation += "true";
 		else classRepresentation += "false";
+		if(isInnerClass) classRepresentation += "\nBelongs to class: " + belongsToClass;
 		classRepresentation += "\n\n";
 		return classRepresentation;
 	}
