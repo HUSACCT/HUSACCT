@@ -23,6 +23,7 @@ public class AnalysedController extends BaseController {
 
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
+		this.resetCurrentPath();
 		drawModules(modules);
 	}
 
@@ -50,21 +51,21 @@ public class AnalysedController extends BaseController {
 		switch(dto.getClass().getSimpleName()){
 			case "AnalysedModuleDTO":
 				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
+				this.setCurrentPath(newdto.uniqueName);
+				System.out.println("In -> "+this.getCurrentPath());
 				getAndDrawModulesIn(newdto.uniqueName);
 		}
 	}
 
 	@Override
-	public void zoomOut(AbstractDTO childDTO) {
-		switch(childDTO.getClass().getSimpleName()){
-			case "AnalysedModuleDTO":
-				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)childDTO);
-				AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(newdto.uniqueName);
-				if(parentDTO!=null){
-					getAndDrawModulesIn(parentDTO.uniqueName);
-				}else{
-					logger.debug("Tried to zoom out from "+newdto.name+", but it has no parent.");
-				}
+	public void moduleZoomOut() {
+		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(this.getCurrentPath());
+		if(parentDTO!=null){
+			this.setCurrentPath(parentDTO.uniqueName);
+			System.out.println("Out -> "+this.getCurrentPath());
+			getAndDrawModulesIn(parentDTO.uniqueName);
+		}else{
+			logger.debug("Tried to zoom out from "+this.getCurrentPath()+", but it has no parent.");
 		}
 	}
 }

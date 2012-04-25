@@ -78,7 +78,7 @@ public class DemoController extends BaseController
 	}
 
 	@Override
-	public void zoomOut(AbstractDTO childDTO) {
+	public void moduleZoomOut() {
 		// TODO Auto-generated method stub
 		
 	}
