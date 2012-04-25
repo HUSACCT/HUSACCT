@@ -2,11 +2,14 @@ package husacct.graphics.presentation;
 
 import husacct.graphics.task.MouseClickListener;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -50,23 +53,12 @@ public class GraphicsFrame extends JInternalFrame {
 	
 	private void createMenuBar(){
 		this.menuBar = new JMenuBar();
-		
-		this.menuBar = new javax.swing.JMenuBar();
-		JMenu goToParentMenu = new javax.swing.JMenu("Go level up");
-		goToParentMenu.setPopupMenuVisible(false);
-		goToParentMenu.addMenuListener(new MenuListener(){
-			public void menuSelected(MenuEvent e){
-				JMenu selectedItem = ((JMenu)e.getSource());
-				selectedItem.setSelected(false);
-				selectedItem.updateUI();
-				((JMenuBar)selectedItem.getParent()).updateUI();
+		JMenuItem goToParentMenu = new JMenuItem("Go level up");
+		goToParentMenu.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				moduleZoomOut();
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent arg0) {}
-			@Override
-			public void menuDeselected(MenuEvent arg0) {}			
+			}			
 		});
 		menuBar.add(goToParentMenu);
 		this.add(menuBar, java.awt.BorderLayout.NORTH);
