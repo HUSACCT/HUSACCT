@@ -1,32 +1,42 @@
-package husacct.validate.domain.rulefactory.violationtypeutil;
+package husacct.validate.domain.factory.violationtype.java;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
 
-public class ViolationtypeGenerator {	
+class ViolationtypeGenerator {	
 	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
 
-	public List<String> getAllViolationTypeKeys(String packagename){
-		return new ArrayList<String>(getClasses(packagename));
+	List<String> getAllViolationTypeKeys(String packagename){
+		Map<String, String> classes = getClasses(packagename);
+		ArrayList<String> violationKeys = new ArrayList<String>();
+		for(String violationkey : classes.keySet()){
+			violationKeys.add(violationkey);
+		}
+		return violationKeys;
 	}
-	
-	private Set<String> getClasses(String packageName) {
+
+	Map<String, String> getAllViolationTypesWithCategory(String packageName){
+		return getClasses(packageName);
+	}
+
+	private Map<String, String> getClasses(String packageName) {
 		try {			
-			Set<String> keyList = new HashSet<String>();
+			Map<String, String> keyList = new HashMap<String, String>();
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			assert classLoader != null;
 			String path = packageName.replace('.', '/');
@@ -43,13 +53,37 @@ public class ViolationtypeGenerator {
 
 			for (String clazz : classes) {
 				Class<?> scannedClass = Class.forName(clazz);
-				if(scannedClass.isEnum()){					
-					for(Object enumValue : Arrays.asList(scannedClass.getEnumConstants())){
-						if(!keyList.contains(enumValue.toString())){
-							keyList.add(enumValue.toString());
-						}
-						else{
-							logger.warn(String.format("RuleTypeKey: %s already exists", enumValue.toString()));
+				if(scannedClass.isEnum()){	
+					Class<?>[] interfaces = scannedClass.getInterfaces();
+
+					for(Class<?> violationInterface : interfaces){
+						if(violationInterface.getSimpleName().equals("IViolationType")){						
+
+							for(Object enumValue : scannedClass.getEnumConstants()){
+
+								Class<?> enumClass = enumValue.getClass();
+								try {
+									Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
+									String category = (String) getCategoryMethod.invoke(enumValue);
+									if(!keyList.containsKey(enumValue.toString())){									
+										keyList.put(enumValue.toString(), category);									
+
+									}								
+									else{
+										logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
+									}									
+								} catch (SecurityException e) {
+									e.printStackTrace();
+								} catch (NoSuchMethodException e) {
+									e.printStackTrace();
+								} catch (IllegalArgumentException e) {
+									e.printStackTrace();
+								} catch (IllegalAccessException e) {
+									e.printStackTrace();
+								} catch (InvocationTargetException e) {
+									e.printStackTrace();
+								}								
+							}
 						}
 					}
 				}
@@ -61,7 +95,7 @@ public class ViolationtypeGenerator {
 		} catch (ClassNotFoundException e) {
 			logger.error(e.getMessage(), e);
 		}
-		return Collections.emptySet();
+		return Collections.emptyMap();
 	}
 
 	private TreeSet<String> findClasses(String directory, String packageName) throws IOException{

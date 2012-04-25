@@ -132,6 +132,7 @@ public class TestFrame extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(rootPane, "Created at C:\\reports");
 		} catch (DOMException ex) {
 			Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null,
+<<<<<<< HEAD
 					ex);
 		} catch (UnknownStorageTypeException ex) {
 			Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null,
@@ -145,6 +146,9 @@ public class TestFrame extends javax.swing.JFrame {
 		} catch (DocumentException ex) {
 			Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null,
 					ex);
+=======
+															ex);		
+>>>>>>> 93be94728f800ccaf7972e05e10db14036d599c6
 		}
 
 	}//GEN-LAST:event_jButton3ActionPerformed

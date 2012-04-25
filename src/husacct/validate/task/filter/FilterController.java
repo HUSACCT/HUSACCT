@@ -22,21 +22,34 @@ public class FilterController {
 		this.taskServiceImpl = ts;
 	}
 
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler();
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		
+<<<<<<< HEAD
 		for (Violation violation : taskServiceImpl.getAllViolations()) {			
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().contains(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().contains(logicalpathFrom)) {
+=======
+		
+		for (Violation violation : ts.getAllViolations()) {	
+			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
+				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
+>>>>>>> 93be94728f800ccaf7972e05e10db14036d599c6
 					violations.add(violation);
-				} else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().contains(logicalpathTo)) {
+				} else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
 					violations.add(violation);
 				}
 			}
 		}
 		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+	}
+	
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		// TODO Auto-generated method stub
+		//FIXME: implement
+		return new ViolationDTO[]{};
 	}
 
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {

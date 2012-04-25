@@ -4,7 +4,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
-import husacct.validate.domain.rulefactory.RuleTypesFactory;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 

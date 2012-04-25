@@ -6,6 +6,7 @@ import java.util.UUID;
 public class Severity {
 
 	private String defaultName;
+	private String categoryKey;
 	private String userName;
 	private Color color;
 	private UUID id;
@@ -53,5 +54,13 @@ public class Severity {
 
 	public void setId(UUID id) {
 		this.id = id;
+	}
+
+	public String getCategoryKey() {
+		return categoryKey;
+	}
+
+	public void setCategoryKey(String categoryKey) {
+		this.categoryKey = categoryKey;
 	}
 }

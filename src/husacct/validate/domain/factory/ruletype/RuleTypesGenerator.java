@@ -1,4 +1,4 @@
-package husacct.validate.domain.rulefactory;
+package husacct.validate.domain.factory.ruletype;
 
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -21,13 +21,13 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
 
-public class RuleTypesGenerator {
+class RuleTypesGenerator {
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
 	
 	private static final String rootFolderRules = "husacct.validate.domain.validation.ruletype";
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
 	
-	public HashMap<String, CategorykeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
+	HashMap<String, CategorykeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
 		HashMap<String, CategorykeyClassDTO> keyClasses = new HashMap<String, CategorykeyClassDTO>();
 		HashMap<String, CategorykeyClassDTO> allClasses = generateAllRules();
 		for (Enum<RuleTypes> ruleKey : rules) {
@@ -42,7 +42,7 @@ public class RuleTypesGenerator {
 		return keyClasses;
 	}
 
-	public HashMap<String, CategorykeyClassDTO> generateAllRules() {
+	HashMap<String, CategorykeyClassDTO> generateAllRules() {
 		HashMap<String, CategorykeyClassDTO> keyClasses = new HashMap<String, CategorykeyClassDTO>();
 		List<Class<?>> ruleClasses = getRuleClasses();
 		for (Class<?> ruleClass : ruleClasses) {

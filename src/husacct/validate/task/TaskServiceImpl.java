@@ -6,11 +6,11 @@ import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TableModels.ComboBoxTableModel;
 import husacct.validate.task.filter.FilterController;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,8 +38,12 @@ public class TaskServiceImpl implements ITaskService{
 	}
 
 	@Override
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
-		return fc.getViolations(logicalpathFrom, logicalpathTo);
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+		return fc.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
+	}
+	
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		return fc.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
 	@Override

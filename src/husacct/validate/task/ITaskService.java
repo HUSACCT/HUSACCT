@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ITaskService {
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo);
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, boolean hideFilter);
 	public ArrayList<Violation> filterViolations(Boolean applyfilter);
 	public ArrayList<String> loadRuletypes();

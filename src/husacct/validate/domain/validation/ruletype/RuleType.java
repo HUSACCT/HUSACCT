@@ -2,7 +2,7 @@ package husacct.validate.domain.validation.ruletype;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.rulefactory.RuleTypesFactory;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -60,9 +60,6 @@ public abstract class RuleType {
 	public abstract List<Violation> check(RuleDTO appliedRule);
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message){
-		//return new Violation(dependency.lineNumber, severityValue, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
-	//TODO: 
-		//FIXME:
-		return null;
+		return new Violation(dependency.lineNumber, null, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
 	}
 }
