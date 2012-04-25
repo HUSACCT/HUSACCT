@@ -53,7 +53,7 @@ public class GraphicsFrame extends JInternalFrame {
 		javax.swing.JMenu nmenu = new javax.swing.JMenu("North menu");
 		nmenu.addMenuListener(new MenuListener(){
 			public void menuSelected(MenuEvent e){
-				controller.
+				//controller.
 			}
 
 			@Override
