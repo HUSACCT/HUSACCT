@@ -1,9 +1,13 @@
 package husacct.graphics.task;
 
+import javax.swing.JTable;
+
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.ViolationTypeDTO;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;

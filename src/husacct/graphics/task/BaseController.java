@@ -8,6 +8,7 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
+import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.validate.IValidateService;
@@ -39,7 +40,6 @@ public abstract class BaseController implements MouseClickListener {
 	private void initializeComponents() {
 		drawing = new Drawing();
 		view = new DrawingView(drawing);
-		view.setPreferredSize(new Dimension(500, 500));
 		view.addListener(this);
 
 		drawTarget = new GraphicsFrame(view);
@@ -58,11 +58,27 @@ public abstract class BaseController implements MouseClickListener {
 	public abstract void zoomOut(AbstractDTO childDTO);
 
 	@Override
-	public void figureSelected(BaseFigure clickedFigure) {
-		System.out.println("Figure of type '"
-				+ clickedFigure.getClass().getSimpleName() + "' selected");
-		//TODO: call properties gui
-		
+	public void figureSelected(BaseFigure clickedFigure)
+	{
+		if(clickedFigure instanceof ViolationsDecorator) {
+			this.drawTarget.showViolations(((ViolationsDecorator)clickedFigure).getViolations());
+		}
+		// do recursion here, because the the decorators
+		// we are checking for above may be hidden behind
+		// other decorators
+		else if (clickedFigure instanceof Decorator) {
+			this.figureSelected(((Decorator)clickedFigure).getDecorator());
+		}
+		else
+		{
+			this.drawTarget.hidePropertiesPane();
+		}
+	}
+	
+	@Override
+	public void figureDeselected()
+	{
+		this.drawTarget.hidePropertiesPane();
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);
