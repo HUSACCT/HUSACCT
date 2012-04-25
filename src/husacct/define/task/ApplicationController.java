@@ -2,7 +2,6 @@ package husacct.define.task;
 
 import husacct.define.presentation.ApplicationJFrame;
 import husacct.define.presentation.utils.Log;
-import husacct.define.presentation.utils.UiDialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,20 +10,17 @@ import java.io.InputStreamReader;
 
 
 public class ApplicationController implements ActionListener {
-	private DefinitionController definitioncontroller = null;
-	//private AnalyseController analysecontroller = null;
-	//private DependencyController dependencycontroller = null;
 	public ApplicationJFrame jframe;
-
+	private static ApplicationController instance;
+	
+	public static ApplicationController getInstance() {
+		return instance == null ? (instance = new ApplicationController()) : instance;
+	}
 	/**
 	 * MainController constructor. This constructor will initialize a new Definition and Analyse controller.
 	 */
 	public ApplicationController() {
 		Log.i(this, "constructor()");
-
-		definitioncontroller = new DefinitionController(this);
-		//analysecontroller = new AnalyseController();
-		//dependencycontroller = new DependencyController();
 	}
 
 	public ApplicationJFrame getApplicationFrame(){
@@ -39,20 +35,13 @@ public class ApplicationController implements ActionListener {
 		// Create a new instance of the jframe
 		jframe = new ApplicationJFrame();
 
-		// Set actionlisteners for the menu
-//		jframe.jMenuItemExit.addActionListener(this);
-//		jframe.jMenuItemNewArchitecture.addActionListener(this);
-//		jframe.jMenuItemOpenArchitecture.addActionListener(this);
-//		jframe.jMenuItemSaveArchitecture.addActionListener(this);
-//		jframe.jMenuItemStartAnalyse.addActionListener(this);
-//		jframe.jMenuItemCheckDependencies.addActionListener(this);
-//		jframe.jMenuItemAbout.addActionListener(this);
-
 		// This method sets the definition jpanel in the jframe.
-		jframe.setContentView(definitioncontroller.initUi());
+		DefinitionController definitionController = DefinitionController.getInstance();
+		definitionController.initSettings();
+		jframe.setContentView(definitionController.initUi());
 
 		// Set the visibility of the jframe to true so the jframe is now visible
-		UiDialogs.showOnScreen(0, jframe);
+//		UiDialogs.showOnScreen(0, jframe);
 		jframe.setVisible(true);
 	}
 
@@ -89,30 +78,7 @@ public class ApplicationController implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent action) {
-//		if (action.getSource() == jframe.jMenuItemNewArchitecture) {
-//			Log.i(this, "actionPerformed() - new architecture");
-//			definitioncontroller.newConfiguration();
-//		} else if (action.getSource() == jframe.jMenuItemOpenArchitecture) {
-//			Log.i(this, "actionPerformed() - open architecture");
-//			definitioncontroller.openConfiguration();
-//		} else if (action.getSource() == jframe.jMenuItemSaveArchitecture) {
-//			Log.i(this, "actionPerformed() - save architecture");
-//			definitioncontroller.saveConfiguration();
-//		} else if (action.getSource() == jframe.jMenuItemStartAnalyse) {
-//			Log.i(this, "actionPerformed() - start analyse");
-//			//analysecontroller.initUi();
-//		} else if (action.getSource() == jframe.jMenuItemCheckDependencies) {
-//			Log.i(this, "actionPerformed() - check dependensies");
-//			//dependencycontroller.initUI();
-//		} else if (action.getSource() == jframe.jMenuItemAbout) {
-//			Log.i(this, "actionPerformed() - about");
-//			UiDialogs.messageDialog(jframe, "© 2012 - This application is made by a project team at Hogeschool Utrecht.", "About");
-//		} else if (action.getSource() == jframe.jMenuItemExit) {
-//			System.exit(0);
-//		} else {
-//			
-//			Log.i(this, "actionPerformed(" + action + ") - unknown button event");
-//		}
+
 	}
 
 }

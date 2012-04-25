@@ -1,11 +1,6 @@
 package husacct.define;
 
-import javax.swing.JFrame;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
+import java.util.ArrayList;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
@@ -16,6 +11,11 @@ import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.task.ApplicationController;
+
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+
+import org.jdom2.Element;
 
 public class DefineServiceImpl implements IDefineService {
 	private DefineDomainService defineDomainService = new DefineDomainService();
@@ -83,41 +83,54 @@ public class DefineServiceImpl implements IDefineService {
 	}
 	
 	
-	public JFrame getDefinedGUI(){
+	public JInternalFrame getDefinedGUI(){
 		ApplicationController applicationController = new ApplicationController();
 		applicationController.initUi();
-		return applicationController.getApplicationFrame();
+		JInternalFrame jinternalFrame = applicationController.getApplicationFrame();
+		jinternalFrame.setVisible(false);
+		return jinternalFrame;
 	}
 	
-	//TODO: Implement in Construction phase
-
-	public Document exportLogicalArchitecture() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+	public Element getLogicalArchitectureData(){
+		//TODO: Implement in Construction I
+		Element e = new Element("Root Element");
+		return e;
 	}
 
-	public void importLogicalArchitecture(Document doc){
-		//TODO	
+	public void loadLogicalArchitectureData(Element e){
+		//TODO: Implement in Construction I
 	}
-	
-	public Document exportPhysicalArchitecture() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+
+	@Override
+	public Element getWorkspaceData() {
+		//TODO: Implement in Construction I
+		Element e = new Element("Root Element");
+		return e;
 	}
-	
-	public void importPhysicalArchitecture(Document doc) {
-		//TODO
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		//TODO: Implement in Construction I
 	}
-	
 
+	@Override
+	public boolean isDefined() {
+		boolean isDefined = false;
+		if (SoftwareArchitecture.getInstance().getModules().size() > 0){
+			isDefined = true;
+		}
+		return isDefined;
+	}
 
-
+	@Override
+	public boolean isMapped() {
+		boolean isMapped = false;
+		ArrayList<Module> modules = SoftwareArchitecture.getInstance().getModules();
+		for (Module module : modules){	
+			if (module.isMapped()){
+				isMapped = true;
+			}
+		}
+		return isMapped;
+	}
 }
