@@ -9,7 +9,16 @@ import husacct.common.dto.ViolationTypeDTO;
 
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import husacct.graphics.task.MouseClickListener;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -20,10 +29,11 @@ public class GraphicsFrame extends JInternalFrame {
 	private static final long serialVersionUID = -4683140198375851034L;
 
 	private DrawingView drawingView;
-	
 	private JMenuBar menuBar;
 	private JScrollPane drawingScollPane,propertiesScrollPane;
 	private JComponent centerPane;
+	
+	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
 
 	public GraphicsFrame(DrawingView drawingView) {
 		this.drawingView = drawingView;
@@ -77,27 +87,29 @@ public class GraphicsFrame extends JInternalFrame {
 	
 	private void createMenuBar(){
 		this.menuBar = new JMenuBar();
-		
-		this.menuBar = new javax.swing.JMenuBar();
-		javax.swing.JMenu nmenu = new javax.swing.JMenu("North menu");
-		nmenu.addMenuListener(new MenuListener(){
-			public void menuSelected(MenuEvent e){
-				//controller.
-			}
-
+		JMenuItem goToParentMenu = new JMenuItem("Go level up");
+		goToParentMenu.addActionListener(new ActionListener(){
 			@Override
-			public void menuCanceled(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void actionPerformed(ActionEvent e) {
+				moduleZoomOut();
 			}			
 		});
-		menuBar.add(nmenu);
+		menuBar.add(goToParentMenu);
+		this.add(menuBar, java.awt.BorderLayout.NORTH);
+	}
+
+	private void moduleZoomOut() {
+		for (MouseClickListener l : listeners) {
+			l.moduleZoomOut();
+		}
+	}
+
+	public void addListener(MouseClickListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(MouseClickListener listener) {
+		listeners.remove(listener);
 	}
 	
 	public void showViolations(ViolationDTO[] violationDTOs)

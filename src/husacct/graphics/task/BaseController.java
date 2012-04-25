@@ -25,6 +25,7 @@ public abstract class BaseController implements MouseClickListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
+	protected String currentPath;
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
@@ -43,7 +44,7 @@ public abstract class BaseController implements MouseClickListener {
 		view.addListener(this);
 
 		drawTarget = new GraphicsFrame(view);
-		//drawTarget.addGoToParentListerner(this);
+		drawTarget.addListener(this);
 	}
 
 	public JInternalFrame getGUI() {
@@ -54,8 +55,16 @@ public abstract class BaseController implements MouseClickListener {
 		this.drawing.clear();
 		this.view.clearSelection();
 	}
-
-	public abstract void zoomOut(AbstractDTO childDTO);
+	
+	public String getCurrentPath(){
+		return this.currentPath;
+	}
+	public void resetCurrentPath(){
+		this.currentPath = "";
+	}
+	public void setCurrentPath(String path){
+		this.currentPath = path;
+	}
 
 	@Override
 	public void figureSelected(BaseFigure clickedFigure)

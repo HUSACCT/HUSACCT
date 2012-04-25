@@ -1,14 +1,13 @@
 package husacct.graphics.task;
 
-import org.apache.log4j.Logger;
-
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
-import husacct.control.ControlServiceImpl;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
+
+import org.apache.log4j.Logger;
 
 public class AnalysedController extends BaseController {
 
@@ -22,6 +21,7 @@ public class AnalysedController extends BaseController {
 
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
+		this.resetCurrentPath();
 		drawModules(modules);
 		
 		if(detail == DrawingDetail.WITH_VIOLATIONS)
@@ -55,26 +55,24 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
-
 		AbstractDTO dto = ((DTODecorator) zoomedModuleFigure).getDTO();
-		switch (dto.getClass().getSimpleName()) {
-		case "AnalysedModuleDTO":
-			AnalysedModuleDTO newdto = ((AnalysedModuleDTO) dto);
-			getAndDrawModulesIn(newdto.uniqueName);
+		switch(dto.getClass().getSimpleName()){
+			case "AnalysedModuleDTO":
+				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
+				this.setCurrentPath(newdto.uniqueName);
+				getAndDrawModulesIn(newdto.uniqueName);
 		}
 	}
 
-	// Override
-	public void zoomOut(AbstractDTO childDTO) {
-		switch (childDTO.getClass().getSimpleName()) {
-		case "AnalysedModuleDTO":
-			AnalysedModuleDTO newdto = ((AnalysedModuleDTO) childDTO);
-			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(newdto.uniqueName);
-			if (parentDTO != null) {
-				getAndDrawModulesIn(parentDTO.uniqueName);
-			} else {
-				logger.debug("Tried to zoom out from " + newdto.name + ", but it has no parent.");
-			}
+	@Override
+	public void moduleZoomOut() {
+		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(this.getCurrentPath());
+		if(parentDTO!=null){
+			this.setCurrentPath(parentDTO.uniqueName);
+			getAndDrawModulesIn(parentDTO.uniqueName);
+		}else{
+			logger.debug("Tried to zoom out from "+this.getCurrentPath()+", but it has no parent.");
+
 		}
 	}
 }
