@@ -27,6 +27,6 @@ public enum JavaAccessModifiers implements IViolationType{
 
 	@Override
 	public String getCategory() {
-		return "test";
+		return "AccessModifier";
 	}
 }

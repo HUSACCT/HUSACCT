@@ -26,7 +26,8 @@ public class FilterController {
 		ViolationAssembler assembler = new ViolationAssembler();
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		
-		for (Violation violation : ts.getAllViolations()) {			
+		
+		for (Violation violation : ts.getAllViolations()) {	
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
 					violations.add(violation);

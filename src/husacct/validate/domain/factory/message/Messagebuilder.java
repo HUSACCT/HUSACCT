@@ -1,4 +1,4 @@
-package husacct.validate.domain.messagefactory;
+package husacct.validate.domain.factory.message;
 
 import java.util.IllegalFormatException;
 
@@ -14,15 +14,8 @@ public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
 
 	public String createMessage(MessageDTO message){
-		try{
-			final String ruleTextKey = String.format("%sMessage", message.getRuleKey());
-			final String textFormat = ResourceBundles.getValue(ruleTextKey);		
-			return String.format(textFormat, message.getLeftText(), message.getRightText());
-		}catch(IllegalFormatException e){
-			logger.error(e.getMessage(), e);
-		}
-		return "";
-	}
+		return generateMessage(message);
+	}	
 
 	public String createMessage(Violation violation){
 		MessageAssembler assembler = new MessageAssembler();
@@ -35,4 +28,25 @@ public class Messagebuilder {
 		MessageDTO messageDTO = assembler.createMessageDTO(message);
 		return createMessage(messageDTO);
 	}
+
+	private String generateMessage(MessageDTO message){
+		try{
+			final String ruleTextKey = String.format("%sMessage", message.getRuleKey());
+			final String textFormat = ResourceBundles.getValue(ruleTextKey);		
+			return String.format(textFormat, message.getLeftText(), message.getRightText());
+		}catch(IllegalFormatException e){
+			logger.error(e.getMessage(), e);
+		}
+		return "";
+	}
+	
+//	private String exceptionMessage(String mainMessage){
+//		try{
+//			final String exceptionKey = ResourceBundles.getValue("ExceptionMessage");
+//			return mainMessage += exceptionKey;
+//		}catch(IllegalFormatException e){
+//			logger.error(e.getMessage(), e);
+//		}
+//		return mainMessage;
+//	}
 }

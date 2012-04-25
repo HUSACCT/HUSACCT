@@ -35,8 +35,4 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 		Map<String, String> violationTypeKeysAndCategories = generator.getAllViolationTypesWithCategory(javaViolationTypesLocation);
 		return getAllViolationTypes(violationTypeKeysAndCategories);
 	}
-
-	public static void main(String[] args){
-		new JavaViolationTypeFactory();
-	}
 }

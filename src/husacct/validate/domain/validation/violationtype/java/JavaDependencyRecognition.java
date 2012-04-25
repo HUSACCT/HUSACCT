@@ -33,6 +33,6 @@ public enum JavaDependencyRecognition implements IViolationType{
 
 	@Override
 	public String getCategory() {
-		return "test";
+		return "DependencyRecognition";
 	}
 }
