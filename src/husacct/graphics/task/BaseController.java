@@ -43,6 +43,7 @@ public abstract class BaseController implements MouseClickListener {
 		view.addListener(this);
 
 		drawTarget = new GraphicsFrame(view);
+		drawTarget.addGoToParentListerner(this);
 	}
 
 	public JInternalFrame getGUI() {
@@ -60,6 +61,8 @@ public abstract class BaseController implements MouseClickListener {
 	public void figureSelected(BaseFigure clickedFigure) {
 		System.out.println("Figure of type '"
 				+ clickedFigure.getClass().getSimpleName() + "' selected");
+		//TODO: call properties gui
+		
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);
