@@ -75,6 +75,12 @@ public final class FigureFactory {
 	
 			case "class":
 				return new ClassFigure(name);
+				
+			case "abstract": //TODO Abstract class
+				return new ClassFigure(name);
+				
+			case "interface": //TODO Interface obj
+				return new ClassFigure(name);
 	
 			case "package":
 				return new PackageFigure(name);
