@@ -3,21 +3,15 @@ package husacct.validate.domain.validation.violationtype.java;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 
 public enum JavaAccessModifiers implements IViolationType{
-	PUBLIC("public", 1),
-	PROTECTED("protected", 1),
-	DEFAULT("default", 1),
-	PRIVATE("private", 1);
+	PUBLIC("public"),
+	PROTECTED("protected"),
+	DEFAULT("default"),
+	PRIVATE("private");
 
 	private final String key;
-	private final int defaultSeverity;
 
-	JavaAccessModifiers(String key, int defaultSeverity){
+	JavaAccessModifiers(String key){
 		this.key = key;
-		this.defaultSeverity = defaultSeverity;
-	}
-	
-	public int getDefaultSeverity(){
-		return defaultSeverity;
 	}
 
 	@Override

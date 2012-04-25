@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.RuleDTO;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;

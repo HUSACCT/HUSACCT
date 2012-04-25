@@ -20,8 +20,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-//TODO exception rules;
-//TODO remove duplicated code
 public class RuleTypesFactory {
 	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
 
@@ -93,7 +91,7 @@ public class RuleTypesFactory {
 
 				}
 			}catch(RuleInstantionException e){
-				//TODO
+				logger.error(e.getMessage(), e);	
 			}
 		}
 		return rules;
@@ -138,7 +136,7 @@ public class RuleTypesFactory {
 					rules.add(rule);				
 				}
 			}catch(RuleInstantionException e){
-				//TODO
+				logger.error(e.getMessage(), e);
 			}
 		}
 		return rules;

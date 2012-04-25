@@ -1,5 +1,7 @@
 package husacct.common.dto;
 
+import java.awt.Color;
+
 public class ViolationDTO extends AbstractDTO {
 	private String fromClasspath;
 	private String toClasspath;
@@ -8,16 +10,26 @@ public class ViolationDTO extends AbstractDTO {
 	private RuleTypeDTO ruleType;
 	private ViolationTypeDTO violationType;
 	private MessageDTO message;
+	
+	private Color severityColor;
+	private String userDefinedName;
+	private String systemDefinedName;
+	private int value;
 
-	public ViolationDTO(String fromClasspath, String toClasspath,
-			String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, MessageDTO message) {
+	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, MessageDTO message) {
 		this.fromClasspath = fromClasspath;
 		this.toClasspath = toClasspath;
 		this.logicalModuleFrom = logicalModuleFrom;
 		this.logicalModuleTo = logicalModuleTo;
 		this.violationType = violationType;
 		this.ruleType = ruleType;
-		this.setMessage(message);
+		this.message = message;
+		
+		//Set temporarily with static values
+		this.severityColor = Color.red;
+		this.userDefinedName = "Medium";
+		this.systemDefinedName = "";
+		this.value = 3;
 	}
 
 	public String getFromClasspath() {
@@ -48,7 +60,18 @@ public class ViolationDTO extends AbstractDTO {
 		return message;
 	}
 
-	public void setMessage(MessageDTO message) {
-		this.message = message;
+	public Color getSeverityColor() {
+		return severityColor;
+	}
+	public String getUserDefinedName() {
+		return userDefinedName;
+	}
+
+	public String getSystemDefinedName() {
+		return systemDefinedName;
+	}
+
+	public int getValue() {
+		return value;
 	}
 }

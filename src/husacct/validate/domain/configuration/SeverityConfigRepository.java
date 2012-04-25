@@ -1,37 +1,60 @@
 package husacct.validate.domain.configuration;
 
+import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.Severity;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeverityConfigRepository {
-	private List<Severity> severities;
+	private List<Severity> currentSeverities;
+	private final List<Severity> defaultSeverities;
 
 	public SeverityConfigRepository(){
-		this.severities = new ArrayList<Severity>();
-		Severity s1 = new Severity();
-		s1.setColor(Color.GREEN);
-		s1.setDefaultName("Low");
+		this.currentSeverities = new ArrayList<Severity>();
+		this.defaultSeverities = new ArrayList<Severity>();
+		generateDefaultSeverities();
 
-		Severity s2 = new Severity();
-		s2.setColor(Color.YELLOW);
-		s2.setDefaultName("Medium");
-
-		Severity s3 = new Severity();
-		s3.setColor(Color.RED);
-		s3.setDefaultName("High");
-
-		severities.add(s1);
-		severities.add(s2);
-		severities.add(s3);
+		initializeCurrentSeverities();
 	}
 
 	public List<Severity> getAllSeverities(){
-		return severities;
+		return currentSeverities;
 	}
 
 	public void addSeverities(List<Severity> severities){
-		this.severities = severities;
+		this.currentSeverities = severities;
+	}
+	
+	public Severity getSeverity(String key){
+		for(Severity defaultSeverity : defaultSeverities){
+			if(key.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
+				return defaultSeverity;
+			}
+		}
+		
+		for(Severity customSeverity : currentSeverities){
+			if(key.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+				return customSeverity;
+			}		
+		}
+		throw new SeverityNotFoundException();
+	}
+
+	private void generateDefaultSeverities(){
+		Severity defaultLowSeverity = new Severity("Low", "", Color.GREEN);
+		Severity defaultMediumSeverity = new Severity("Medium", "", Color.ORANGE);
+		Severity defaultHighSeverity = new Severity("High", "", Color.RED);
+
+		this.defaultSeverities.add(defaultLowSeverity);
+		this.defaultSeverities.add(defaultMediumSeverity);
+		this.defaultSeverities.add(defaultHighSeverity);
+	}
+
+	private void initializeCurrentSeverities(){	
+		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
+		for(Severity severity : defaultSeverities){
+			currentSeverities.add(severity);
+		}
 	}
 }
