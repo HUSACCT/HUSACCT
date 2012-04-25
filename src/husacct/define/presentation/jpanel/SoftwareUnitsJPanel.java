@@ -41,6 +41,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	 */
 	@Override
 	public void initGui() {
+		DefinitionController.getInstance().addObserver(this);
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 		this.setLayout(softwareUnitsPanelLayout);
 		this.setBorder(BorderFactory.createTitledBorder("Software units which are assigned to this module"));
@@ -65,10 +66,12 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		addSoftwareUnitButton = new JButton();
 		buttonPanel.add(addSoftwareUnitButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		addSoftwareUnitButton.setText("Add");
+		addSoftwareUnitButton.addActionListener(this);
 			
 		removeSoftwareUnitButton = new JButton();
-		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeSoftwareUnitButton.setText("Remove");
+		removeSoftwareUnitButton.addActionListener(this);
 		
 		return buttonPanel;
 	}
@@ -95,10 +98,11 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	}
 	
 	private void addSoftwareUnit(){
-		
+		DefinitionController.getInstance().createSoftwareUnitGUI();
 	}
 	private void removeSoftwareUnit(){
-		
+		String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
+		DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
 	}
 		
 	/**

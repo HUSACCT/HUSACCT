@@ -10,12 +10,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-
-/**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI Builder, which is free for non-commercial use. If Jigloo is being used commercially (ie, by a corporation, company or
- * business for any purpose whatever) then you should purchase a license for each developer using Jigloo. Please visit www.cloudgarden.com for details. Use of Jigloo implies acceptance of these
- * licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
- */
 public class DefinitionJPanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 7442552399461704491L;
@@ -26,27 +20,6 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	
 	
 	private JPanel mappingPanel;
-//	public JTable jTableSoftwareUnits;
-//	public JTable jTableAppliedRules;
-//	public JButton jButtonNext;
-//
-//	public JCheckBox jCheckBoxAccess;
-//	public JList jListLayers;
-	
-//	public JTextArea jTextAreaLayerDescription;
-//	public JTextField jTextFieldModuleName;
-	//SoftwareUnits
-//	public JButton jButtonAddSoftwareUnit;
-//	public JButton jButtonRemoveSoftwareUnit;
-//	//AppliedRules
-//	public JButton jButtonAddRule;
-//	public JButton jButtonRemoveRule;
-//	public JButton jButtonEditRule;
-	//DefineModules
-////	public JButton jButtonMoveLayerDown;
-//	public JButton jButtonMoveLayerUp;
-//	public JButton jButtonNewModule;
-//	public JButton jButtonRemoveModule;
 
 	
 	public DefinitionJPanel() {
@@ -56,7 +29,6 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 
 	public final void initUI() {
 		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 			
 			BorderLayout thisLayout = new BorderLayout();
 			this.setLayout(thisLayout);

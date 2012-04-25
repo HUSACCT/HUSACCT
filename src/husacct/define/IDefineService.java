@@ -5,7 +5,7 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.savechain.ISaveable;
 
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
@@ -20,7 +20,7 @@ public interface IDefineService extends ISaveable{
 	public boolean isDefined();
 	public boolean isMapped();
 	
-	public JFrame getDefinedGUI();
+	public JInternalFrame getDefinedGUI();
 	
 	public Element getLogicalArchitectureData();
 	public void loadLogicalArchitectureData(Element e);

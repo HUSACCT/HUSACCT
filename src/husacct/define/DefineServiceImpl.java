@@ -13,6 +13,7 @@ import husacct.define.domain.module.Module;
 import husacct.define.task.ApplicationController;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
@@ -82,10 +83,12 @@ public class DefineServiceImpl implements IDefineService {
 	}
 	
 	
-	public JFrame getDefinedGUI(){
+	public JInternalFrame getDefinedGUI(){
 		ApplicationController applicationController = new ApplicationController();
 		applicationController.initUi();
-		return applicationController.getApplicationFrame();
+		JInternalFrame jinternalFrame = applicationController.getApplicationFrame();
+		jinternalFrame.setVisible(false);
+		return jinternalFrame;
 	}
 	
 	public Element getLogicalArchitectureData(){

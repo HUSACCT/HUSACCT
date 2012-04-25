@@ -105,14 +105,30 @@ public class DefineDomainService {
 		return rules;
 	}
 	
-	public long addAppliedRule(String ruleType, String description, long moduleFromId, long moduleToId) {
+	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
+			String regex, long moduleFromId, long moduleToId, boolean enabled) {
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
 		Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
 
-		AppliedRule rule = new AppliedRule(ruleType,description, moduleFrom, moduleTo);
+		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex, moduleFrom, moduleTo, enabled);
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		return rule.getId();
 	}
+	
+	public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,String description, String[] dependencies, 
+			String regex,long moduleFromId, long moduleToId, boolean enabled) {
+		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
+		rule.setRuleType(ruleTypeKey);
+		rule.setDescription(description);
+		rule.setDependencies(dependencies);
+		rule.setRegex(regex);
+		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
+		Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
+		rule.setRestrictedModule(moduleFrom);
+		rule.setUsedModule(moduleTo);
+		rule.setEnabled(enabled);
+	}
+	
 	
 	public void removeAppliedRule(long appliedrule_id) {
 		SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
@@ -189,6 +205,12 @@ public class DefineDomainService {
 			softwareUnitNames.add(unit.getName());
 		}
 		return softwareUnitNames;
+	}
+	
+	public ArrayList<SoftwareUnitDefinition> getSoftwareUnit(long moduleId) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
+		return softwareUnits;
 	}
 	
 	public String getSoftwareUnitType(String softwareUnitName) {

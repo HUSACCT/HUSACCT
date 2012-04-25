@@ -2,7 +2,6 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.domain.DefineDomainService;
 import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
@@ -149,6 +148,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		} else if (action.getSource() == this.moveModuleDownButton) {
 			this.moveLayerDown();
 		}
+		this.updateModulesTreeList();
 	}
 	private void newModule() {
 		//TODO call AddModuleValuesJFrame instead of the following code.
@@ -169,22 +169,21 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	private void removeModule() {
 		long moduleId = getSelectedModuleId();
-		boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove module: \"" + moduleId + "\"", "Remove?");
-		if (confirm) {
-			JPanelStatus.getInstance("Removing module").start();
-			DefinitionController.getInstance().removeModuleById(moduleId);
+		if (moduleId != -1){
+			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove module: \"" + getSelectedValue() + "\"", "Remove?");
+			if (confirm) {
+				moduleTreeJList.clearSelection();
+				DefinitionController.getInstance().removeModuleById(moduleId);
+			}
 		}
-		this.updateModulesTreeList();
 	}
 	private void moveLayerUp() {
 		long layerId = getSelectedModuleId();
 		DefinitionController.getInstance().moveLayerUp(layerId);
-		this.updateModulesTreeList();
 	}
 	private void moveLayerDown() {
 		long layerId = getSelectedModuleId();
 		DefineDomainService.getInstance().moveLayerDown(layerId);
-		this.updateModulesTreeList();
 	}
 	
 	@Override
