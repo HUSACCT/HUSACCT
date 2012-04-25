@@ -42,7 +42,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		return new String[] { "pdf", "xml", "html" };
 	}
 
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo){
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo){
 		//If you want to have the rules of one logicalmodule logicalpathFrom and logicalpathTo should be the same
 		if(logicalpathFrom.equals("Domain layer") && logicalpathTo.contains("Infrastructure layer")){
 			return new ViolationDTO[] { violation1,violation2,violation3,violation4 };

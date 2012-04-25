@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterController {
-	private TaskServiceImpl ts;
+	private TaskServiceImpl taskServiceImpl;
 
 	private ArrayList<String> ruletypes = new ArrayList<String>();
 	private ArrayList<String> violationtypes = new ArrayList<String>();
@@ -19,14 +19,14 @@ public class FilterController {
 
 
 	public FilterController(TaskServiceImpl ts){
-		this.ts = ts;
+		this.taskServiceImpl = ts;
 	}
 
 	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler();
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		
-		for (Violation violation : ts.getAllViolations()) {			
+		for (Violation violation : taskServiceImpl.getAllViolations()) {			
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().contains(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().contains(logicalpathFrom)) {
 					violations.add(violation);
@@ -42,7 +42,7 @@ public class FilterController {
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {
 		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
-		for(Violation violation : ts.getAllViolations()){
+		for(Violation violation : taskServiceImpl.getAllViolations()){
 			for(String path : paths){
 				if(!modulesFilter.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) && regex.matchRegex(regex.makeRegexString(path), violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath())){
 					modulesFilter.add(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
@@ -58,7 +58,7 @@ public class FilterController {
 	public ArrayList<Violation> filterViolations(Boolean applyfilter) {
 		ArrayList<Violation> tempViolations = new ArrayList<Violation>();
 
-		for (Violation violation : ts.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if(applyfilter){
 				if (hidefilter && ( !ruletypes.contains(ResourceBundles.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) ) ) {
 						tempViolations.add(violation);
@@ -76,7 +76,7 @@ public class FilterController {
 	public ArrayList<String> loadRuletypes(){
 		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
 
-		for (Violation violation : ts.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if(!AppliedRuletypes.contains(ResourceBundles.getValue(violation.getRuletypeKey()))){
 				AppliedRuletypes.add(ResourceBundles.getValue(violation.getRuletypeKey()));
 			}
@@ -88,12 +88,25 @@ public class FilterController {
 	public ArrayList<String> loadViolationtypes(){
 		ArrayList<String> AppliedViolationtypes = new ArrayList<String>();
 
-		for (Violation violation : ts.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if(!AppliedViolationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey()))){
 				AppliedViolationtypes.add(ResourceBundles.getValue(violation.getViolationtypeKey()));
 			}
 		}
 
 		return AppliedViolationtypes;
+	}
+
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
+			String physicalPathTo) {
+		List<Violation> violations = new ArrayList<Violation>();
+		for (Violation violation : taskServiceImpl.getAllViolations()) {
+			if(violation.getClassPathFrom().contains(physicalPathFrom) || violation.getClassPathTo().contains(physicalPathTo)) {
+				violations.add(violation);
+			}
+		}
+		ViolationAssembler assembler = new ViolationAssembler();
+		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
+		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 }

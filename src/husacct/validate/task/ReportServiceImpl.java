@@ -16,18 +16,8 @@ public class ReportServiceImpl{
 		this.configuration = configuration;
 	}
 
-	public void createReport(String fileType, String name, String path) {
+	public void createReport(String fileType, String name, String path) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException {
 		ExportReportFactory reportFactory = new ExportReportFactory();
-		try {
-			reportFactory.exportReport(fileType, configuration.getAllViolations(), name, path, configuration.getAllSeverities());
-		} catch (UnknownStorageTypeException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
+		reportFactory.exportReport(fileType, configuration.getAllViolations(), name, path, configuration.getAllSeverities());
 	}
 }

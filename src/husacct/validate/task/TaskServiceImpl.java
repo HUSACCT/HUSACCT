@@ -116,4 +116,9 @@ public class TaskServiceImpl implements ITaskService{
 //		}
 //		configuration.setSeveritiesPerTypesPerProgrammingLanguages(SeverityMap);
 	}
+
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
+			String physicalPathTo) {
+		return fc.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
+	}
 }

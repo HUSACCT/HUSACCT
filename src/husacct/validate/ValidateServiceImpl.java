@@ -1,5 +1,8 @@
 package husacct.validate;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
@@ -13,6 +16,7 @@ import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.presentation.ConfigurationUI;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
+import husacct.validate.task.report.UnknownStorageTypeException;
 
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -20,6 +24,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
+
+import com.itextpdf.text.DocumentException;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private boolean validationExecuted;
@@ -44,10 +50,14 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public CategoryDTO[] getCategories(){
 		return domain.getCategories();
 	}
-
+	
 	@Override
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		return task.getViolations(logicalpathFrom, logicalpathTo);
+	}
+	
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
+		return task.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 
 	@Override
@@ -64,7 +74,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	//Export report
-	public void exportViolations(String name, String fileType, String path)  {
+	public void exportViolations(String name, String fileType, String path) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException  {
 		report.createReport(fileType, name, path);
 	}
 
