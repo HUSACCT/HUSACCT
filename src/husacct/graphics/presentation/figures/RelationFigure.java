@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jhotdraw.draw.AttributeKeys;
@@ -12,18 +13,20 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.handle.BezierNodeHandle;
+import org.jhotdraw.draw.handle.BezierOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends BaseFigure implements ConnectionFigure
+public class RelationFigure extends NamedFigure implements ConnectionFigure
 {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
 
-	public RelationFigure()
+	public RelationFigure(String name)
 	{		
-		super();
+		super(name);
 		
 		this.line = new LineConnectionFigure();
 		
@@ -37,10 +40,11 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure
 	
 	
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
+	{
 		line.setBounds(anchor, lead);
 		
-		super.setBounds(anchor, lead);
+		this.invalidate();
 	}
 	
 	public void transform(AffineTransform tx) {
@@ -63,11 +67,24 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure
 		set(AttributeKeys.STROKE_DASHES, stroke);
 	}
 	
-	@Override
-	public Collection<Handle> createHandles(int detailLevel)
-	{
-		return this.line.createHandles(detailLevel);
-	}
+    @Override
+    public Collection<Handle> createHandles(int detailLevel) {
+        ArrayList<Handle> handles = new ArrayList<Handle>(getNodeCount());
+        switch (detailLevel) {
+            case -1: // Mouse hover handles
+                handles.add(new BezierOutlineHandle(this.line, true));
+                break;
+            case 0:
+                handles.add(new BezierOutlineHandle(this.line));
+                if (getLiner() == null) {
+                    for (int i = 1, n = getNodeCount() - 1; i < n; i++) {
+                        handles.add(new BezierNodeHandle(this.line, i));
+                    }
+                }
+                break;
+        }
+        return handles;
+    }
 	
 	@Override
 	public RelationFigure clone() {
