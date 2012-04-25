@@ -54,6 +54,8 @@ public abstract class BaseController implements MouseClickListener {
 		this.view.clearSelection();
 	}
 
+	public abstract void zoomOut(AbstractDTO childDTO);
+
 	@Override
 	public void figureSelected(BaseFigure clickedFigure) {
 		System.out.println("Figure of type '"

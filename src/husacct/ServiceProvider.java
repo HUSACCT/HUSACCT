@@ -23,6 +23,8 @@ public final class ServiceProvider {
 
 	private ServiceProvider() {
 		try {
+			_instance = this;
+			
 			this.controlService = new ControlServiceImpl();
 			this.analyseService = new AnalyseServiceImpl();
 			this.graphicsService = new GraphicsServiceImpl();
@@ -38,7 +40,7 @@ public final class ServiceProvider {
 
 	public static ServiceProvider getInstance() {
 		if (ServiceProvider._instance == null) {
-			ServiceProvider._instance = new ServiceProvider();
+			new ServiceProvider();
 		}
 		return ServiceProvider._instance;
 	}
