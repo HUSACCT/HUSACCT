@@ -9,4 +9,8 @@ public interface MouseClickListener {
 	public void moduleZoomOut();
 
 	public void figureSelected(BaseFigure clickedFigure);
+	
+	public void exportToImage();
+	
+	public void toggleViolations();
 }

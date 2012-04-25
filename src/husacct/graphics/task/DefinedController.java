@@ -40,4 +40,16 @@ public class DefinedController extends BaseController {
 		
 	}
 
+	@Override
+	public void exportToImage() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toggleViolations() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -72,7 +72,20 @@ public class AnalysedController extends BaseController {
 			getAndDrawModulesIn(parentDTO.uniqueName);
 		}else{
 			logger.debug("Tried to zoom out from "+this.getCurrentPath()+", but it has no parent.");
-
+			logger.debug("Reverting to the root of the application.");
+			drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 		}
+	}
+
+	@Override
+	public void exportToImage() {
+		// TODO Auto-generated method stub
+		System.out.println("Option triggered: Export to image");
+	}
+
+	@Override
+	public void toggleViolations() {
+		// TODO Auto-generated method stub
+		System.out.println("Option triggered: Toggle violations visiblity");
 	}
 }
