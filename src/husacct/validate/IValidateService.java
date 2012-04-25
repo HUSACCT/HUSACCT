@@ -22,10 +22,7 @@ public interface IValidateService
 	public String buildDefinedRuleMessage(MessageDTO message);
 	public CategoryDTO[] getCategories();
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);
-<<<<<<< HEAD
-=======
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo);
->>>>>>> 93be94728f800ccaf7972e05e10db14036d599c6
 	public String[] getExportExtentions();
 	public void checkConformance();
 	public void exportViolations(String name, String fileType, String path) throws DOMException, UnknownStorageTypeException, ParserConfigurationException, SAXException, IOException, URISyntaxException, DocumentException, TransformerException;

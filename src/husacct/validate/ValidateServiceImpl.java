@@ -53,21 +53,14 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	
 	@Override
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
-<<<<<<< HEAD
-		return task.getViolations(logicalpathFrom, logicalpathTo);
-=======
 		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 	
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
->>>>>>> 93be94728f800ccaf7972e05e10db14036d599c6
 	}
-	
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
-		return task.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
-	}
+
 
 	@Override
 	public String[] getExportExtentions() {

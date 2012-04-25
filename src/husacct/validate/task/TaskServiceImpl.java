@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class TaskServiceImpl implements ITaskService{
-	private final FilterController fc;
+	private final FilterController filterController;
 	private final ConfigurationController conficurationController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
@@ -28,7 +28,7 @@ public class TaskServiceImpl implements ITaskService{
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
 		this.domain = domain;
-		fc = new FilterController(this);
+		filterController = new FilterController(this);
 		acs = new AnalyseServiceStub();
 		conficurationController = new ConfigurationController();
 	}
@@ -39,33 +39,29 @@ public class TaskServiceImpl implements ITaskService{
 
 	@Override
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
-		return fc.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
-	}
-	
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
-		return fc.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
+		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
 	@Override
 	public void setFilterValues(ArrayList<String> ruletypes,
 			ArrayList<String> violationtypes,
 			ArrayList<String> paths, boolean hideFilter) {
-		fc.setFilterValues(ruletypes, violationtypes, paths, hideFilter);
+		filterController.setFilterValues(ruletypes, violationtypes, paths, hideFilter);
 	}
 
 	@Override
 	public ArrayList<Violation> filterViolations(Boolean applyfilter) {
-		return fc.filterViolations(applyfilter);
+		return filterController.filterViolations(applyfilter);
 	}
 
 	@Override
 	public ArrayList<String> loadRuletypes() {
-		return fc.loadRuletypes();
+		return filterController.loadRuletypes();
 	}
 
 	@Override
 	public ArrayList<String> loadViolationtypes() {
-		return fc.loadViolationtypes();
+		return filterController.loadViolationtypes();
 	}
 
 	@Override
@@ -123,6 +119,6 @@ public class TaskServiceImpl implements ITaskService{
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
 			String physicalPathTo) {
-		return fc.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
+		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 }
