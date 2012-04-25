@@ -23,6 +23,11 @@ public class AnalysedController extends BaseController {
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		drawModules(modules);
+		
+		if(detail == DrawingDetail.WITH_VIOLATIONS)
+		{
+			this.drawViolationsForShownModules();
+		}
 	}
 
 	private void drawModules(AbstractDTO[] modules) {
