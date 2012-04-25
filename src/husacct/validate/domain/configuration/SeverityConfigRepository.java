@@ -26,15 +26,15 @@ public class SeverityConfigRepository {
 		this.currentSeverities = severities;
 	}
 	
-	public Severity getSeverity(String key){
+	public Severity getSeverityByName(String severityName){
 		for(Severity defaultSeverity : defaultSeverities){
-			if(key.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
+			if(severityName.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
 				return defaultSeverity;
 			}
 		}
 		
 		for(Severity customSeverity : currentSeverities){
-			if(key.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
 				return customSeverity;
 			}		
 		}

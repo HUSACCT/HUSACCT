@@ -14,8 +14,8 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 public class SkipCallRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 	
-	public SkipCallRule(String key, String category, List<ViolationType> violationtypes) {
-		super(key, category, violationtypes, exceptionrules);
+	public SkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override

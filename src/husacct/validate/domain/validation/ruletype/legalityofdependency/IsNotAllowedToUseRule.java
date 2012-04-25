@@ -23,8 +23,8 @@ import husacct.analyse.AnalyseServiceStub;
 public class IsNotAllowedToUseRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	public IsNotAllowedToUseRule(String key, String category, List<ViolationType> violationtypes) {
-		super(key, category, violationtypes, exceptionrules);
+	public IsNotAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override
