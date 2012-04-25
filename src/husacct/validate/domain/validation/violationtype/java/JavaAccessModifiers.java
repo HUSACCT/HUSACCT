@@ -1,8 +1,8 @@
 package husacct.validate.domain.validation.violationtype.java;
 
-import husacct.validate.domain.rulefactory.violationtypeutil.IViolationType;
+import husacct.validate.domain.validation.violationtype.IViolationType;
 
-public enum JavaAccessTypes implements IViolationType{
+public enum JavaAccessModifiers implements IViolationType{
 	PUBLIC("public", 1),
 	PROTECTED("protected", 1),
 	DEFAULT("default", 1),
@@ -11,7 +11,7 @@ public enum JavaAccessTypes implements IViolationType{
 	private final String key;
 	private final int defaultSeverity;
 
-	JavaAccessTypes(String key, int defaultSeverity){
+	JavaAccessModifiers(String key, int defaultSeverity){
 		this.key = key;
 		this.defaultSeverity = defaultSeverity;
 	}
@@ -23,5 +23,10 @@ public enum JavaAccessTypes implements IViolationType{
 	@Override
 	public String toString(){
 		return key;
+	}
+
+	@Override
+	public String getCategory() {
+		return "test";
 	}
 }

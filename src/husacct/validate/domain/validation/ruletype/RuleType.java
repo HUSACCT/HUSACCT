@@ -2,7 +2,7 @@ package husacct.validate.domain.validation.ruletype;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.rulefactory.RuleTypesFactory;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;

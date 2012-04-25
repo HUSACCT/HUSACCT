@@ -1,8 +1,8 @@
 package husacct.validate.domain.validation.violationtype.java;
 
-import husacct.validate.domain.rulefactory.violationtypeutil.IViolationType;
+import husacct.validate.domain.validation.violationtype.IViolationType;
 
-public enum JavaDependencyTypes implements IViolationType{
+public enum JavaDependencyRecognition implements IViolationType{
 	INVOC_METHOD("InvocMethod", 2),
 	INVOC_CONSTRUCTOR("InvocConstructor", 2),
 	ACCESS_PROPERTY_OR_FIELD("AccessPropertyOrField" , 2),
@@ -17,7 +17,7 @@ public enum JavaDependencyTypes implements IViolationType{
 	private final String key;
 	private final int defaultSeverity;
 
-	JavaDependencyTypes(String value, int defaultSeverity){
+	JavaDependencyRecognition(String value, int defaultSeverity){
 		this.key = value;
 		this.defaultSeverity = defaultSeverity;
 	}
@@ -29,5 +29,10 @@ public enum JavaDependencyTypes implements IViolationType{
 	@Override
 	public String toString(){
 		return key;
+	}
+
+	@Override
+	public String getCategory() {
+		return "test";
 	}
 }
