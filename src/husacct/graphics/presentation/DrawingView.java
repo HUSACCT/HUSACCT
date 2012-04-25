@@ -24,6 +24,11 @@ public class DrawingView extends DefaultDrawingView {
 	private SelectionTool selectionTool;
 
 	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
+	
+	/**
+	 * holds true if a figure is selected
+	 */
+	private boolean selectionActive = false;
 
 	public DrawingView(Drawing drawing) {
 		this.drawing = drawing;
@@ -60,7 +65,9 @@ public class DrawingView extends DefaultDrawingView {
 
 		Set<Figure> selection = getSelectedFigures();
 
-		if (!selection.isEmpty()) {
+		if (!selection.isEmpty()){
+			this.selectionActive = true;
+			
 			BaseFigure first = (BaseFigure)selection.iterator().next();
 
 			if (e.getButton() == MouseEvent.BUTTON1) {
@@ -70,6 +77,20 @@ public class DrawingView extends DefaultDrawingView {
 					moduleZoom((BaseFigure) first);
 				}
 			}
+		}
+		else
+		{
+			if(this.selectionActive)
+			{
+				this.fireFigureDeselected();
+				this.selectionActive = false;
+			}
+		}
+	}
+
+	private void fireFigureDeselected() {
+		for (MouseClickListener l : listeners) {
+			l.figureDeselected();
 		}
 	}
 

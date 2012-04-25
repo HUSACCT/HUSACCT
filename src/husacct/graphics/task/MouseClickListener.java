@@ -10,6 +10,8 @@ public interface MouseClickListener {
 
 	public void figureSelected(BaseFigure clickedFigure);
 	
+	public void figureDeselected();
+	
 	public void exportToImage();
 	
 	public void toggleViolations();
