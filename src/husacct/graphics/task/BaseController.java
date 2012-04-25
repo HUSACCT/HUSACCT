@@ -112,7 +112,7 @@ public abstract class BaseController implements MouseClickListener {
 				if ((dtoFrom instanceof ModuleDTO)
 						&& (dtoTo instanceof ModuleDTO)) {
 					ViolationDTO[] violationDTOs = validateService
-							.getViolations(((ModuleDTO) dtoFrom).logicalPath,
+							.getViolationsByLogicalPath(((ModuleDTO) dtoFrom).logicalPath,
 									((ModuleDTO) dtoTo).logicalPath);
 					if (violationDTOs.length > 0) {
 						this.drawViolations(violationDTOs, moduleFigureFrom,
