@@ -34,5 +34,22 @@ public class SoftwareUnitDefinition {
 	{
 		this.type = type;
 	}
+	
+	public String toString(){
+		String s = "";
+		s+= name + " - " + type.toString();
+		return s;
+	}
+	
+	public boolean equals(Object o){
+		boolean isEqual = false;
+		if (o instanceof SoftwareUnitDefinition){
+			SoftwareUnitDefinition unit = (SoftwareUnitDefinition) o;
+			if (unit.getName().equals(this.name) && unit.getType() == this.type){
+				isEqual = true;
+			}
+		}
+		return isEqual;
+	}
 
 }
