@@ -1,6 +1,8 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.domain.DefineDomainService;
 import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.Log;
 import husacct.define.task.DefinitionController;
@@ -8,12 +10,10 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
@@ -42,6 +43,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	private JList moduleTreeJList;
 	
 	private JScrollPane moduleTreeScrollPane;
+	private ModuleTree moduleTree;
 	
 	private JButton newModuleButton;
 	private JButton moveModuleUpButton;
@@ -52,6 +54,10 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		super();
 	}
 
+	
+	/**
+	 * Creating Gui
+	 */
 	@Override
 	public void initGui() {
 		BorderLayout modulePanelLayout = new BorderLayout();
@@ -84,11 +90,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.moduleTreeScrollPane = new JScrollPane();
 		this.moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
 		this.updateModuleTree();
-		
-//		this.moduleTreeJList = new JList();
-//		this.moduleTreeJList.setModel(new DefaultListModel());
-//		moduleTreeScrollPane.setViewportView(this.moduleTreeJList);
-//		this.moduleTreeJList.addListSelectionListener(this);
 	}
 
 	@Override
@@ -129,16 +130,92 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		return buttonPanelLayout;
 	}
 	
+	/**
+	 * Observer
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		updateModuleTree();
+	}
+	
 	public void updateModuleTree() {
 		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getRootComponent();
-		ModuleTree moduleTree = new ModuleTree(rootComponent);
-		this.moduleTreeScrollPane.setViewportView(moduleTree);
-		moduleTree.addTreeSelectionListener(this);
+		this.moduleTree = new ModuleTree(rootComponent);
+		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
+		this.moduleTree.addTreeSelectionListener(this);
 	}
 	
 	@Deprecated
 	public void updateModulesTreeList() {
 		DefinitionController.getInstance().updateModuleTreeList(this.moduleTreeJList);
+	}
+	
+	/**
+	 * Handling ActionPerformed
+	 */
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		if (action.getSource() == this.newModuleButton) {
+			this.newModule();
+		} else if (action.getSource() == this.moveModuleUpButton) {
+			this.moveLayerUp();
+		} else if (action.getSource() == this.removeModuleButton) {
+			this.removeModule();
+		} else if (action.getSource() == this.moveModuleDownButton) {
+			this.moveLayerDown();
+		}
+		this.updateModuleTree();
+	}
+	
+	private void newModule() {
+		//TODO call AddModuleValuesJFrame instead of the following code.
+		
+		// Ask the user for the module name
+		String moduleName = UiDialogs.inputDialog(this, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
+		if (moduleName != null) {
+			//Creating a new module of type Layer
+			//has yet to be implemented to support other module types
+			String layerLevelString = UiDialogs.inputDialog(this, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
+			if (layerLevelString != null) {
+				int layerLevel = Integer.parseInt(layerLevelString);
+				// Call task to create the layer
+				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
+			}
+		}
+		this.updateModuleTree();
+	}
+	
+	private void removeModule() {
+		long moduleId = getSelectedModuleId();
+		if (moduleId != -1){
+			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove the selected module?", "Remove?");
+			if (confirm) {
+				DefinitionController.getInstance().removeModuleById(moduleId);
+			}
+		}
+		this.updateModuleTree();
+	}
+	
+	private void moveLayerUp() {
+		long layerId = getSelectedModuleId();
+		DefinitionController.getInstance().moveLayerUp(layerId);
+		this.updateModuleTree();
+	}
+	
+	private void moveLayerDown() {
+		long layerId = getSelectedModuleId();
+		DefineDomainService.getInstance().moveLayerDown(layerId);
+		this.updateModuleTree();
+	}
+	
+	public long getSelectedModuleId() {
+		TreePath path = this.moduleTree.getSelectionPath();
+		AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
+		if(selectedComponent instanceof LayerComponent) {
+			LayerComponent layerComponent = (LayerComponent) selectedComponent;
+			return layerComponent.getHierarchicalLevel();
+		}
+		return -1;
 	}
 	
 	@Deprecated
@@ -162,7 +239,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-        Log.e(this, "valueChanged() - " + selectedComponent.getName());
         this.checkComponent(selectedComponent);
 	}
 	
@@ -176,48 +252,5 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		LayerComponent layerComponent = (LayerComponent) selectedComponent;
 		long moduleId = layerComponent.getHierarchicalLevel();
 		DefinitionController.getInstance().notifyObservers(moduleId);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.newModuleButton) {
-			this.newModuleAction(action);
-		} else if (action.getSource() == this.moveModuleUpButton) {
-			this.moveModuleUpAction(action);
-		} else if (action.getSource() == this.removeModuleButton) {
-			this.removeModuleAction(action);
-		} else if (action.getSource() == this.moveModuleDownButton) {
-			this.moveModuleDownAction(action);
-		}
-	}
-
-	private void moveModuleDownAction(ActionEvent action) {
-		DefinitionController.getInstance().moveLayerDown();
-		this.updateModuleTree();
-	}
-
-	private void removeModuleAction(ActionEvent action) {
-		DefinitionController.getInstance().removeModule();
-		this.updateModuleTree();
-	}
-
-	private void moveModuleUpAction(ActionEvent action) {
-		DefinitionController.getInstance().moveLayerUp();
-		this.updateModuleTree();
-	}
-
-	private void newModuleAction(ActionEvent action) {
-		DefinitionController.getInstance().newModule();
-		this.updateModuleTree();
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-//		Long moduleId = Long.parseLong(arg.toString());
-//		HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
-		
-		
-		
-		
 	}
 }

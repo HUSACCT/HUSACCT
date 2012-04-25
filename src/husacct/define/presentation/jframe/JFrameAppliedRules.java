@@ -1,12 +1,20 @@
 package husacct.define.presentation.jframe;
 
+import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.utils.KeyValueComboBox;
+import husacct.define.presentation.utils.Log;
+import husacct.define.task.AppliedRulesController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -15,21 +23,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 
+public class JFrameAppliedRules extends JFrame implements KeyListener, ActionListener{
 
-/**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI Builder, which is free for non-commercial use. If Jigloo is being used commercially (ie, by a corporation, company or
- * business for any purpose whatever) then you should purchase a license for each developer using Jigloo. Please visit www.cloudgarden.com for details. Use of Jigloo implies acceptance of these
- * licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
- */
-public class JFrameAppliedRules extends javax.swing.JFrame {
-
-	private JPanel jPanel1;
+	private static final long serialVersionUID = -3491664038962722000L;
+	private JPanel jPanelMain;
 	private JLabel jLabelModuleTo;
 	private JLabel jLabelModuleFrom;
 	private JLabel jLabel2;
@@ -42,13 +46,15 @@ public class JFrameAppliedRules extends javax.swing.JFrame {
 	public JComboBox jComboBoxModuleTo;
 	public KeyValueComboBox keyValueComboBoxAppliedRule;
 	public JTableException jTableException;
-	private JPanel jPanel4;
+	private JPanel jPanelExceptionButtons;
 	public JButton jButtonAddExceptionRow;
 	public JButton jButtonRemoveExceptionRow;
-	private JPanel jPanel2;
+	private JPanel jPanelUpdateCancel;
 	public JButton jButtonCancel;
 	public JButton jButtonSave;
 
+	private AppliedRulesController appliedRulesController;
+	
 	{
 		// Set Look & Feel
 		try {
@@ -61,32 +67,38 @@ public class JFrameAppliedRules extends javax.swing.JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3491664038962722000L;
 
 	/**
 	 * Auto-generated main method to display this JFrame
 	 */
 
-	public JFrameAppliedRules() {
+	public JFrameAppliedRules(AppliedRulesController appliedRulesController) {
 		super();
+		this.appliedRulesController = appliedRulesController;
 		initGUI();
+		loadSelectBoxes();
+		fillRuleTypeCombobox();
 	}
 
+
+	/**
+	 * Creating Gui
+	 */
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle("New Applied Rule");
 			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
 			{
-				jPanel1 = new JPanel();
+				jPanelMain = new JPanel();
 				GridBagLayout jPanel1Layout = new GridBagLayout();
 				jPanel1Layout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
 				jPanel1Layout.rowHeights = new int[] { 23, 23, 29, 7 };
 				jPanel1Layout.columnWeights = new double[] { 0.0, 0.1 };
 				jPanel1Layout.columnWidths = new int[] { 132, 7 };
-				getContentPane().add(jPanel1, BorderLayout.CENTER);
-				jPanel1.setLayout(jPanel1Layout);
-				jPanel1.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+				getContentPane().add(jPanelMain, BorderLayout.CENTER);
+				jPanelMain.setLayout(jPanel1Layout);
+				jPanelMain.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 //				{
 //					jLabelModuleFrom = new JLabel();
 //					jPanel1.add(jLabelModuleFrom, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
@@ -94,24 +106,24 @@ public class JFrameAppliedRules extends javax.swing.JFrame {
 //				}
 				{
 					jLabelModuleTo = new JLabel();
-					jPanel1.add(jLabelModuleTo, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jLabelModuleTo, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					jLabelModuleTo.setText("To Module");
 				}
 				{
 					jLabel2 = new JLabel();
-					jPanel1.add(jLabel2, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jLabel2, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					jLabel2.setText("Enabled");
 				}
 				{
 					jLabelExceptions = new JLabel();
-					jPanel1.add(jLabelExceptions, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jLabelExceptions, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					jLabelExceptions.setText("Exceptions");
 				}
 				{
 					jPanel3 = new JPanel();
 					BorderLayout jPanel3Layout = new BorderLayout();
 					jPanel3.setLayout(jPanel3Layout);
-					jPanel1.add(jPanel3, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jPanel3, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 					{
 						jScrollPane1 = new JScrollPane();
 						jPanel3.add(jScrollPane1, BorderLayout.CENTER);
@@ -122,73 +134,133 @@ public class JFrameAppliedRules extends javax.swing.JFrame {
 						}
 					}
 					{
-						jPanel4 = new JPanel();
+						jPanelExceptionButtons = new JPanel();
 						GridBagLayout jPanel4Layout = new GridBagLayout();
-						jPanel3.add(jPanel4, BorderLayout.EAST);
+						jPanel3.add(jPanelExceptionButtons, BorderLayout.EAST);
 						jPanel4Layout.rowWeights = new double[] { 0.0, 0.1 };
 						jPanel4Layout.rowHeights = new int[] { 15, 7 };
 						jPanel4Layout.columnWeights = new double[] { 0.1 };
 						jPanel4Layout.columnWidths = new int[] { 7 };
-						jPanel4.setLayout(jPanel4Layout);
-						jPanel4.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+						jPanelExceptionButtons.setLayout(jPanel4Layout);
+						jPanelExceptionButtons.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 						{
 							jButtonAddExceptionRow = new JButton();
 							jButtonAddExceptionRow.setEnabled(false);
-							jPanel4.add(jButtonAddExceptionRow, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+							jPanelExceptionButtons.add(jButtonAddExceptionRow, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 							jButtonAddExceptionRow.setText("Add row");
 						}
 						{
 							jButtonRemoveExceptionRow = new JButton();
 							jButtonRemoveExceptionRow.setEnabled(false);
-							jPanel4.add(jButtonRemoveExceptionRow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+							jPanelExceptionButtons.add(jButtonRemoveExceptionRow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 							jButtonRemoveExceptionRow.setText("Remove row");
 						}
 					}
 				}
 				{
 					jLabelRuleType = new JLabel();
-					jPanel1.add(jLabelRuleType, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jLabelRuleType, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 					jLabelRuleType.setText("RuleType");
 				}
 				{
 					ComboBoxModel jComboBox1Model = new DefaultComboBoxModel(new Object[] {});
 					keyValueComboBoxAppliedRule = new KeyValueComboBox();
-					jPanel1.add(keyValueComboBoxAppliedRule, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(keyValueComboBoxAppliedRule, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 					keyValueComboBoxAppliedRule.setModel(jComboBox1Model);
 				}
 				{
 					ComboBoxModel jComboBox2Model = new DefaultComboBoxModel(new String[] { });
 					jComboBoxModuleTo = new JComboBox();
-					jPanel1.add(jComboBoxModuleTo, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jComboBoxModuleTo, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 					jComboBoxModuleTo.setModel(jComboBox2Model);
 				}
 				{
 					jCheckBoxEnabled = new JCheckBox();
 					jCheckBoxEnabled.setSelected(true);
-					jPanel1.add(jCheckBoxEnabled, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jPanelMain.add(jCheckBoxEnabled, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 				}
 			}
 			{
-				jPanel2 = new JPanel();
-				getContentPane().add(jPanel2, BorderLayout.SOUTH);
+				jPanelUpdateCancel = new JPanel();
+				getContentPane().add(jPanelUpdateCancel, BorderLayout.SOUTH);
 				{
 					jButtonCancel = new JButton();
-					jPanel2.add(jButtonCancel);
+					jPanelUpdateCancel.add(jButtonCancel);
 					jButtonCancel.setText("Cancel");
+					jButtonCancel.addActionListener(this);
 				}
 				{
 					jButtonSave = new JButton();
-					jPanel2.add(jButtonSave);
+					jPanelUpdateCancel.add(jButtonSave);
 					jButtonSave.setText("Add");
+					jButtonSave.addActionListener(this);
 				}
 
 			}
+//			jPanelMain.setBackground(Color.blue);
+//			jPanelUpdateCancel.setBackground(Color.cyan);
+//			jPanel3.setBackground(Color.green);
+//			jPanelExceptionButtons.setBackground(Color.red);
 			pack();
 			this.setSize(677, 300);
 		} catch (Exception e) {
 			// add your error handling code here
 			e.printStackTrace();
 		}
+	}
+	
+	private void loadSelectBoxes() {
+		jComboBoxModuleTo.setModel(this.appliedRulesController.loadModuleToCombobox());
+	}
+	
+	private void fillRuleTypeCombobox() {
+		this.appliedRulesController.fillRuleTypeComboBox(keyValueComboBoxAppliedRule);
+	}
+	
+	/**
+	 * Handling ActionPerformed
+	 */
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		if (action.getSource() == this.jButtonSave) {
+			this.save();
+		} else if (action.getSource() == this.jButtonCancel) {
+			this.cancel();
+		}
+	}
+
+	private void cancel() {
+		this.dispose();
+	}
+
+	private void save() {	
+		String ruleTypeKey = keyValueComboBoxAppliedRule.getSelectedItemKey();
+		String description = "";
+		String[] dependencies = {};
+		String regex = "";
+		long moduleToId = ((DataHelper) jComboBoxModuleTo.getSelectedItem()).getId();
+		boolean isEnabled = jCheckBoxEnabled.isSelected();
+		
+		this.appliedRulesController.save(ruleTypeKey, description,dependencies, regex, moduleToId, isEnabled);
+		this.dispose();
+	}
+	
+	/**
+	 * Handling KeyPresses
+	 */
+	public void keyPressed(KeyEvent arg0) {
+		// Ignore
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+		Log.i(this, "keyreleased");
+		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			this.dispose();
+		}
+	}
+
+	public void keyTyped(KeyEvent arg0) {
+		// Ignore
 	}
 
 }

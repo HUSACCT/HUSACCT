@@ -5,7 +5,7 @@ import husacct.define.presentation.utils.JPanelStatus;
 
 import java.awt.BorderLayout;
 
-import javax.swing.ImageIcon;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
@@ -16,7 +16,7 @@ import javax.swing.WindowConstants;
  * Define Architecture main frame
  * 
  */
-public class ApplicationJFrame extends javax.swing.JFrame {
+public class ApplicationJFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 6858870868564931134L;
 	private String defaultTitle = "HUSACCT";
@@ -29,7 +29,6 @@ public class ApplicationJFrame extends javax.swing.JFrame {
 
 	private void initUi() {
 		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			
 			this.setLayoutSettings();
@@ -46,7 +45,7 @@ public class ApplicationJFrame extends javax.swing.JFrame {
 	
 	private void setLayoutSettings() {
 		this.setTitle(" - Define Architecture");
-		setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
+//		setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
 	}
 	
 	private void addDefinitionPanel() {

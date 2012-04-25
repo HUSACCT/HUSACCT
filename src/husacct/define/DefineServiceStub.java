@@ -5,6 +5,7 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
@@ -138,8 +139,8 @@ public class DefineServiceStub implements IDefineService{
 		//return "DomainLayer";
 	}
 
-	public JFrame getDefinedGUI(){
-		return new JFrame();
+	public JInternalFrame getDefinedGUI(){
+		return new JInternalFrame();
 	}
 	
 	public Element getLogicalArchitectureData(){

@@ -1,20 +1,18 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.utils.DefaultMessages;
-import husacct.define.presentation.utils.Log;
 import husacct.define.task.DefinitionController;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,11 +24,11 @@ import javax.swing.JTextField;
  * @author Henk ter Harmsel
  *
  */
-public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyListener, Observer{
+public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusListener, Observer{
 
 	private static final long serialVersionUID = -9020336576931490389L;
-	private JLabel moduleNameLabel;
-	private JTextField moduleNameTextfield;
+	private JLabel nameLabel;
+	private JTextField nameTextfield;
 	private JLabel descriptionLabel;
 	private JScrollPane descriptionScrollPane;
 	private JTextArea descriptionTextArea;
@@ -63,15 +61,16 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 	}
 	
 	private void addModuleNameLabel() {
-		moduleNameLabel = new JLabel();
-		this.add(moduleNameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		moduleNameLabel.setText("Module name");
+		nameLabel = new JLabel();
+		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		nameLabel.setText("Module name");
 	}
 	
 	private void addModuleNameTextField() {
-		moduleNameTextfield = new JTextField();
-		moduleNameTextfield.setToolTipText(DefaultMessages.TIP_LAYER);
-		this.add(moduleNameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		nameTextfield = new JTextField();
+		nameTextfield.setToolTipText(DefaultMessages.TIP_LAYER);
+		this.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		nameTextfield.addFocusListener(this);
 	}
 	
 	private void addModuleDescriptionLabel() {
@@ -91,44 +90,43 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 		descriptionTextArea = new JTextArea();
 		descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
 		descriptionTextArea.setToolTipText(DefaultMessages.TIP_LAYERDESCRIPTION);
+		descriptionTextArea.addFocusListener(this);
 		return descriptionTextArea;
 	}
 
-	@Override
-	protected JPanel addButtonPanel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		Long moduleId = Long.parseLong(arg.toString());
-		HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
-		
-		this.moduleNameTextfield.setText((String) moduleDetails.get("name"));
-		this.descriptionTextArea.setText((String) moduleDetails.get("description"));
+		if (moduleId != -1){
+			HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
+			this.nameTextfield.setText((String) moduleDetails.get("name"));
+			this.descriptionTextArea.setText((String) moduleDetails.get("description"));
+		}
 		this.repaint();
 	}
+	
+	private void updateModule() {
+		String moduleName = nameTextfield.getText();
+		String moduleDescription = descriptionTextArea.getText();
+		DefinitionController.getInstance().updateModule(moduleName, moduleDescription);
+	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {
+	public void focusGained(FocusEvent arg0) {
 		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		updateModuleDetails();
-	}
-
-	private void updateModuleDetails() {
 		
-		//TODO implement, GO HENK!!!;
-		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
-		DefinitionController.getInstance().updateModuleDetails(moduleDetails);
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void focusLost(FocusEvent arg0) {
+		updateModule();
+	}
+
+	//TODO Lookinto this
+	//I have no idea what this method does, but somehow its required for the focusListener
+	@Override
+	protected JPanel addButtonPanel() {
+		return null;
 	}
 }

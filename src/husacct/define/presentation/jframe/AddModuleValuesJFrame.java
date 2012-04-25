@@ -33,7 +33,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.add(this.innerPanel);
 		this.innerPanel.setLayout(this.createInnerPanelLayout());
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		
 		this.addModuleValues();
 		this.addHierarchicalLevelValues();
 		this.addButtons();

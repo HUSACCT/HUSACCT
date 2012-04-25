@@ -18,11 +18,12 @@ public class AppliedRule {
 	private ArrayList<AppliedRule> exceptions;
 
 	
-	//CONSTRUCTORS
-	//CONSTRUCTORS
+	/**
+	 * Contructors
+	 */
 	public AppliedRule(String ruleType, String description, String[] dependencies,
 			String regex, Module usedModule,
-			Module restrictedModule) {
+			Module restrictedModule, boolean enabled) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.ruleType = ruleType;
@@ -32,19 +33,20 @@ public class AppliedRule {
 		this.usedModule = usedModule;
 		this.restrictedModule = restrictedModule;
 		this.exceptions = new ArrayList<AppliedRule>();
-		this.enabled = true;
+		this.enabled = enabled;
 	}
 	
 	public AppliedRule(String ruleType, String description, Module usedModule, Module restrictedModule){
-		this(ruleType, description, new String[0], "",usedModule,restrictedModule);
+		this(ruleType, description, new String[0], "",usedModule,restrictedModule, true);
 	}
 
 	public AppliedRule() {
-		this("", "",new String[0], "",null,null);
+		this("", "",new String[0], "",null,null, true);
 	}
 
-	//LOGIC
-	//LOGIC
+	/**
+	 * Logic
+	 */
 	public void addException(AppliedRule exception)
 	{
 		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
@@ -103,8 +105,8 @@ public class AppliedRule {
 		return usesModule;
 	}
 	
-	/*
-	 * 	 GETTER & SETTERS
+	/**
+	 * Getters & Setters
 	 */
 	public String getRuleType() {
 		return ruleType;
@@ -178,11 +180,12 @@ public class AppliedRule {
 		return dependencies;
 	}
 
-	public void setPrefix(String prefix) {
-		this.regex = prefix;
+	public void setRegex(String regex) {
+		this.regex = regex;
 	}
 
-	public String getPrefix() {
+	public String getRegex() {
 		return regex;
 	}
+
 }

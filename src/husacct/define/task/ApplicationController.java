@@ -2,7 +2,6 @@ package husacct.define.task;
 
 import husacct.define.presentation.ApplicationJFrame;
 import husacct.define.presentation.utils.Log;
-import husacct.define.presentation.utils.UiDialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,7 +41,7 @@ public class ApplicationController implements ActionListener {
 		jframe.setContentView(definitionController.initUi());
 
 		// Set the visibility of the jframe to true so the jframe is now visible
-		UiDialogs.showOnScreen(0, jframe);
+//		UiDialogs.showOnScreen(0, jframe);
 		jframe.setVisible(true);
 	}
 

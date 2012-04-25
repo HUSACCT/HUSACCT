@@ -17,7 +17,8 @@ public class JTableAppliedRule extends AbstractJTable {
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn("Rule name");
+		tablemodel.addColumn("Id");
+		tablemodel.addColumn("Rule Type");
 		tablemodel.addColumn("To layer");
 		tablemodel.addColumn("Enabled");
 		tablemodel.addColumn("# Exceptions");
@@ -29,12 +30,14 @@ public class JTableAppliedRule extends AbstractJTable {
 		for (int i = 0; i < getColumnCount(); i++) {
 			column = getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(75); // Component name
+				column.setPreferredWidth(10); // Id
 			} else if (i == 1) {
-				column.setPreferredWidth(75); // To layer
+				column.setPreferredWidth(75); // Rule Type
 			} else if (i == 2) {
-				column.setPreferredWidth(25); // Enabled
+				column.setPreferredWidth(75); // To layer
 			} else if (i == 3) {
+				column.setPreferredWidth(25); // Enabled
+			} else if (i == 4) {
 				column.setPreferredWidth(50); // Exceptions
 			}
 		}
