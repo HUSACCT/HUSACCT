@@ -69,24 +69,20 @@ public final class FigureFactory {
 					+ "' is not recognized as a module dto");
 		}
 
-		switch (type.toLowerCase()) {
-			case "layer":
-				return new LayerFigure(name);
-	
-			case "class":
-				return new ClassFigure(name);
-				
-			case "abstract": //TODO Abstract class
-				return new ClassFigure(name);
-				
-			case "interface": //TODO Interface obj
-				return new ClassFigure(name);
-	
-			case "package":
-				return new PackageFigure(name);
-	
-			default:
-				throw new RuntimeException("module dto type '" + type + "' not implemented");
+		if(type.toLowerCase().equals("layer")) {
+			return new LayerFigure(name);
+		}else if(type.toLowerCase().equals("class")) {
+			return new ClassFigure(name);
+		}else if(type.toLowerCase().equals("abstract")) {				
+			//TODO Abstract class
+			return new ClassFigure(name);
+		}else if(type.toLowerCase().equals("interface")) {	
+			//TODO Interface obj
+			return new ClassFigure(name);
+		}else if(type.toLowerCase().equals("package")) {
+			return new PackageFigure(name);
+		}else{
+			throw new RuntimeException("module dto type '" + type + "' not implemented");
 		}
 	}
 }

@@ -56,11 +56,10 @@ public class AnalysedController extends BaseController {
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
 		AbstractDTO dto = FigureResolver.resolveDTO(zoomedModuleFigure);
-		switch(dto.getClass().getSimpleName()){
-			case "AnalysedModuleDTO":
-				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
-				this.setCurrentPath(newdto.uniqueName);
-				getAndDrawModulesIn(newdto.uniqueName);
+		if(dto.getClass().getSimpleName().equals("AnalysedModuleDTO")){
+			AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
+			this.setCurrentPath(newdto.uniqueName);
+			getAndDrawModulesIn(newdto.uniqueName);
 		}
 	}
 
