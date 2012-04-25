@@ -43,7 +43,7 @@ public abstract class BaseController implements MouseClickListener {
 		view.addListener(this);
 
 		drawTarget = new GraphicsFrame(view);
-		drawTarget.addGoToParentListerner(this);
+		//drawTarget.addGoToParentListerner(this);
 	}
 
 	public JInternalFrame getGUI() {
