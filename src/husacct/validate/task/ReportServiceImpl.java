@@ -7,12 +7,6 @@ import husacct.validate.task.report.UnknownStorageTypeException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
-
 import com.itextpdf.text.DocumentException;
 
 public class ReportServiceImpl{
@@ -22,7 +16,7 @@ public class ReportServiceImpl{
 		this.configuration = configuration;
 	}
 
-	public void createReport(String fileType, String name, String path) throws DOMException, UnknownStorageTypeException, ParserConfigurationException, SAXException, IOException, URISyntaxException, DocumentException, TransformerException{
+	public void createReport(String fileType, String name, String path) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException {
 		ExportReportFactory reportFactory = new ExportReportFactory();
 		reportFactory.exportReport(fileType, configuration.getAllViolations(), name, path, configuration.getAllSeverities());
 	}

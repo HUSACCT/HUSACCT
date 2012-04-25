@@ -1,7 +1,11 @@
 package husacct.analyse.task.analyser;
 
+import husacct.ServiceProvider;
 import husacct.analyse.task.analyser.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyser.java.JavaAnalyser;
+import husacct.common.dto.ApplicationDTO;
+import husacct.define.IDefineService;
+
 import java.util.List;
 
 public class ApplicationAnalyser {
@@ -12,22 +16,25 @@ public class ApplicationAnalyser {
 		this.builder = new AnalyserBuilder();
 	}
 	
-	public void analyseApplication(String workspacePath) {
-		
-		//TODO Implement getApplicationDetails from defineService. 
-		String language = "Java";
-		
-		AbstractAnalyser analyser = builder.getAnalyser(language);
-		SourceFileFinder sourceFileFinder = new SourceFileFinder();
-		try{
-			String sourceFileExtension = getExtensionForLanguage(language);
-			List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);
-			for(MetaFile fileInfo: fileData){
-				analyser.generateModelFromSource(fileInfo.getPath());
+	public void analyseApplication() {
+				
+		ServiceProvider provider = ServiceProvider.getInstance();
+		IDefineService definitionService = provider.getDefineService();
+		ApplicationDTO appDto = definitionService.getApplicationDetails();
+		String language = appDto.programmingLanguage;
+		for(String workspacePath: appDto.paths){
+			AbstractAnalyser analyser = builder.getAnalyser(language);
+			SourceFileFinder sourceFileFinder = new SourceFileFinder();
+			try{
+				String sourceFileExtension = getExtensionForLanguage(language);
+				List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);
+				for(MetaFile fileInfo: fileData){
+					analyser.generateModelFromSource(fileInfo.getPath());
+				}
 			}
-		}
-		catch(Exception e){
-			//TODO Generate Custom Exception
+			catch(Exception e){
+				//TODO Generate Custom Exception
+			}
 		}
 	}
 

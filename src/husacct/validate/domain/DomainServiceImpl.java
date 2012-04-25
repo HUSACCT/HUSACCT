@@ -5,14 +5,17 @@ import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.assembler.AssemblerController;
 import husacct.validate.domain.check.CheckConformanceController;
-import husacct.validate.domain.messagefactory.Messagebuilder;
-import husacct.validate.domain.rulefactory.RuleTypesFactory;
-import husacct.validate.domain.rulefactory.ViolationTypeFactory;
+import husacct.validate.domain.factory.message.Messagebuilder;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DomainServiceImpl {
 	private RuleTypesFactory ruletypefactory;
@@ -28,10 +31,16 @@ public class DomainServiceImpl {
 		return ruletypefactory.getRuleTypes(programmingLanguage);
 	}
 	
-	public HashMap<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage){
+	public Map<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage){
 		initializeViolationtypeFactory();
-		//TODO;
-		return null;
+		
+		AbstractViolationType violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage);
+		if(violationtypefactory != null){
+			return violationtypefactory.getAllViolationTypes();
+		}
+		else{
+			return Collections.emptyMap();
+		}
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules){

@@ -1,33 +1,19 @@
 package husacct.validate.task.report.writer;
 
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
-import husacct.validate.domain.messagefactory.Messagebuilder;
+import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
-import husacct.validate.task.report.UnknownStorageTypeException;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
-import com.itextpdf.text.DocumentException;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.XMLOutputter;
 
 public class XMLReportWriter extends ReportWriter {
 
@@ -36,87 +22,73 @@ public class XMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws IOException, DocumentException, ParserConfigurationException, TransformerException, DOMException, SAXException, UnknownStorageTypeException {
+	public void createReport() throws IOException {
 
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder parser = factory.newDocumentBuilder();
-		Document doc = parser.newDocument();
+		
+		Document document = new Document();
 
-		Element reportElement = doc.createElement("report");
-		doc.appendChild(reportElement);
+		Element reportElement = new Element("report");
+		document.setRootElement(reportElement);
 
-		Element projectName = doc.createElement("projectName");
-		projectName.setTextContent(report.getProjectName());
-		reportElement.appendChild(projectName);
+		Element projectName = new Element("projectName");
+		projectName.setText(report.getProjectName());
+		reportElement.addContent(projectName);
 
-		Element projectVersion = doc.createElement("version");
-		projectVersion.setTextContent(report.getVersion());
-		reportElement.appendChild(projectVersion);
+		Element projectVersion = new Element("version");
+		projectVersion.setText(report.getVersion());
+		reportElement.addContent(projectVersion);
 
-		Element totalViolations = doc.createElement("totalViolations");
-		totalViolations.setTextContent("" + report.getViolations().size());
-		reportElement.appendChild(totalViolations);
-
+		Element totalViolations = new Element("totalViolations");
+		totalViolations.setText("" + report.getViolations().size());
+		reportElement.addContent(totalViolations);
+		
+		Element violationsSeverities = new Element("violations");
+		violationsSeverities.setAttribute(new Attribute("totalViolations" , "" +  report.getViolations().size()));
 		for(ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
-			Element violationElement = doc.createElement(violationPerSeverity.getSeverity().getDefaultName().replace(" ", ""));
-			violationElement.setTextContent("" + violationPerSeverity.getAmount());
-			reportElement.appendChild(violationElement);
+			Element violationElement = new Element(violationPerSeverity.getSeverity().getDefaultName().replace(" ", ""));
+			violationElement.setText("" + violationPerSeverity.getAmount());
+			violationsSeverities.addContent(violationElement);
 		}
+		reportElement.addContent(violationsSeverities);
 
-		Element violations = doc.createElement("violations");
-		reportElement.appendChild(violations);
+		Element violations = new Element("violations");
+		reportElement.addContent(violations);
 
 		for(Violation violation : report.getViolations()) {
-			Element xmlViolation = doc.createElement("violation");
+			Element xmlViolation = new Element("violation");
 
-			Element source = doc.createElement("source");
-			Element target = doc.createElement("target");
-			Element lineNr = doc.createElement("lineNr.");
-			Element severity = doc.createElement("severity");
-			Element ruleType = doc.createElement("ruleType");
-			Element dependencyKind = doc.createElement("dependencyKind");
-			Element isDirect = doc.createElement("isDirect");
+			Element source = new Element("source");
+			Element target = new Element("target");
+			Element lineNr = new Element("lineNr.");
+			Element severity = new Element("severity");
+			Element ruleType = new Element("ruleType");
+			Element dependencyKind = new Element("dependencyKind");
+			Element isDirect = new Element("isDirect");
 
-			target.setTextContent(violation.getClassPathTo());
-			source.setTextContent(violation.getClassPathFrom());
-			lineNr.setTextContent("" + violation.getLinenumber());
-			severity.setTextContent(violation.getSeverity().toString());
+			target.setText(violation.getClassPathTo());
+			source.setText(violation.getClassPathFrom());
+			lineNr.setText("" + violation.getLinenumber());
+			severity.setText(violation.getSeverity().toString());
 			if(violation.getLogicalModules() != null) {
 				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
 				String message = new Messagebuilder().createMessage(messageObject);
-				ruleType.setTextContent(message);
+				ruleType.setText(message);
 			}
-			dependencyKind.setTextContent(violation.getViolationtypeKey());
-			isDirect.setTextContent("" + violation.isIndirect());
+			dependencyKind.setText(violation.getViolationtypeKey());
+			isDirect.setText("" + violation.isIndirect());
 
-			xmlViolation.appendChild(source);
-			xmlViolation.appendChild(target);
-			xmlViolation.appendChild(lineNr);
-			xmlViolation.appendChild(severity);
-			xmlViolation.appendChild(ruleType);
-			xmlViolation.appendChild(dependencyKind);
-			xmlViolation.appendChild(isDirect);
+			xmlViolation.addContent(source);
+			xmlViolation.addContent(target);
+			xmlViolation.addContent(lineNr);
+			xmlViolation.addContent(severity);
+			xmlViolation.addContent(ruleType);
+			xmlViolation.addContent(dependencyKind);
+			xmlViolation.addContent(isDirect);
 
-			violations.appendChild(xmlViolation);
+			violations.addContent(xmlViolation);
 		}
-
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-		StringWriter sw = new StringWriter();
-		StreamResult result = new StreamResult(sw);
-		DOMSource source = new DOMSource(doc);
-		transformer.transform(source, result);
-		String xmlString = sw.toString();
-
-		checkDirsExist();
-
-		FileWriter fw = new FileWriter(getFileName());
-		fw.append(xmlString);
-		fw.flush();
-		fw.close();
+		XMLOutputter outputter = new XMLOutputter();
+		outputter.output(document, new FileWriter(getFileName()));
 	}
 
 }

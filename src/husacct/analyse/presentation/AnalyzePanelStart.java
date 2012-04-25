@@ -8,17 +8,20 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-public class AnalyzePanelStart extends JPanel {  
+public class AnalyzePanelStart extends JInternalFrame {  
 	private static final long serialVersionUID = 1L;
 	public JTextField urlInputField;
 	private JComboBox languageCombo;
 	private JButton urlBrowseButton;
 	public  JButton analyseButton;
+	public JButton getRootDependButton = new JButton("getRootModules");
+	public JButton getDependencyPackage = new JButton("getDependency's");
 	
 	private JScrollPane jScrollPaneStart = new JScrollPane();
 	private JLabel filterHead = new JLabel("Set up the filters");
@@ -44,6 +47,7 @@ public class AnalyzePanelStart extends JPanel {
 	public void setContainerPanelSettings(){
 		Dimension containerPanelSize = new Dimension(900,700); 
 		this.setPreferredSize(containerPanelSize);
+		this.setTitle("Analyse Application");
 		this.setVisible(true); 
 	}
 	
@@ -97,6 +101,7 @@ public class AnalyzePanelStart extends JPanel {
 	                                .addComponent(urlBrowseButton)
 	                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 	                                .addComponent(languageCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+	                                
 	                            .addComponent(jScrollPaneStart, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)))
 	                    .addGroup(jPanel4Layout.createSequentialGroup()
 	                        .addGap(20, 20, 20)
@@ -190,7 +195,11 @@ public class AnalyzePanelStart extends JPanel {
 			    .addContainerGap(123, Short.MAX_VALUE))
 			); 
 
+			
 			analyseContainer= new JPanel(); 
+			
+	 
+			
 			javax.swing.GroupLayout analyseContainerLaout = new javax.swing.GroupLayout(analyseContainer);
 			analyseContainer.setLayout(analyseContainerLaout);
 			analyseContainerLaout.setHorizontalGroup(
@@ -215,6 +224,7 @@ public class AnalyzePanelStart extends JPanel {
 			parentContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 			 .addComponent(urlLanguagContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 			  .addComponent(analyseContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+			  
 			);
 			parentContainerLayout.setVerticalGroup(
 			parentContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

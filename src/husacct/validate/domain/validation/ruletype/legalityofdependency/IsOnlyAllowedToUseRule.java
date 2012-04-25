@@ -5,6 +5,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtil;
 import husacct.validate.domain.validation.Message;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
@@ -37,7 +38,6 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo ){
-				//TODO: getDependencyFrom(From) not implemented yet
 				DependencyDTO[] dependencies = analysestub.getDependenciesFrom(classPathFrom.getPhysicalPath());
 				DependencyDTO[] allowedDependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){

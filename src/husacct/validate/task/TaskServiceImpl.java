@@ -6,11 +6,11 @@ import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TableModels.ComboBoxTableModel;
 import husacct.validate.task.filter.FilterController;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class TaskServiceImpl implements ITaskService{
-	private final FilterController fc;
+	private final FilterController filterController;
 	private final ConfigurationController conficurationController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
@@ -28,7 +28,7 @@ public class TaskServiceImpl implements ITaskService{
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
 		this.domain = domain;
-		fc = new FilterController(this);
+		filterController = new FilterController(this);
 		acs = new AnalyseServiceStub();
 		conficurationController = new ConfigurationController();
 	}
@@ -38,30 +38,30 @@ public class TaskServiceImpl implements ITaskService{
 	}
 
 	@Override
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
-		return fc.getViolations(logicalpathFrom, logicalpathTo);
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
 	@Override
 	public void setFilterValues(ArrayList<String> ruletypes,
 			ArrayList<String> violationtypes,
 			ArrayList<String> paths, boolean hideFilter) {
-		fc.setFilterValues(ruletypes, violationtypes, paths, hideFilter);
+		filterController.setFilterValues(ruletypes, violationtypes, paths, hideFilter);
 	}
 
 	@Override
 	public ArrayList<Violation> filterViolations(Boolean applyfilter) {
-		return fc.filterViolations(applyfilter);
+		return filterController.filterViolations(applyfilter);
 	}
 
 	@Override
 	public ArrayList<String> loadRuletypes() {
-		return fc.loadRuletypes();
+		return filterController.loadRuletypes();
 	}
 
 	@Override
 	public ArrayList<String> loadViolationtypes() {
-		return fc.loadViolationtypes();
+		return filterController.loadViolationtypes();
 	}
 
 	@Override
@@ -115,5 +115,10 @@ public class TaskServiceImpl implements ITaskService{
 //			}
 //		}
 //		configuration.setSeveritiesPerTypesPerProgrammingLanguages(SeverityMap);
+	}
+
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
+			String physicalPathTo) {
+		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 }

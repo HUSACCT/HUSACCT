@@ -1,5 +1,8 @@
 package husacct.validate;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
@@ -15,19 +18,12 @@ import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
 import husacct.validate.task.report.UnknownStorageTypeException;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
 
 import com.itextpdf.text.DocumentException;
 
@@ -54,11 +50,17 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public CategoryDTO[] getCategories(){
 		return domain.getCategories();
 	}
-
+	
 	@Override
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
-		return task.getViolations(logicalpathFrom, logicalpathTo);
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
+	
+	@Override
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
+	}
+
 
 	@Override
 	public String[] getExportExtentions() {
@@ -74,7 +76,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	//Export report
-	public void exportViolations(String name, String fileType, String path) throws DOMException, UnknownStorageTypeException, ParserConfigurationException, SAXException, IOException, URISyntaxException, DocumentException, TransformerException {
+	public void exportViolations(String name, String fileType, String path) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException  {
 		report.createReport(fileType, name, path);
 	}
 
@@ -88,11 +90,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		return new ConfigurationUI(task);
 	}
 
-	public static void main(String[] args){
-		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
-		serviceImpl.checkConformance();
-
-	}
 	@Override
 	public Element getWorkspaceData() {
 		return abstraction.exportValidationWorkspace();
@@ -121,5 +118,11 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	
 	public ConfigurationServiceImpl getConfiguration() {
 		return configuration;
+	}
+	
+	public static void main(String[] args){
+		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
+		serviceImpl.checkConformance();
+
 	}
 }
