@@ -107,6 +107,7 @@ public abstract class BaseController implements MouseClickListener {
 		// TODO a very ugly cast here
 				(ConnectionFigure) ((Decorator) violatedRelationFigure)
 						.getDecorator(), fromFigure, toFigure);
+		
 		this.drawing.add(violatedRelationFigure);
 	}
 }

@@ -28,46 +28,48 @@ public class AnalysedController extends BaseController {
 	private void drawModules(AbstractDTO[] modules) {
 		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
 		this.clearDrawing();
+		
 		for (AnalysedModuleDTO dto : castedModules) {
+			
 			BaseFigure packageFigure = figureFactory.createFigure(dto);
 			drawing.add(packageFigure);
-			
+
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout();
 		}
 	}
-	
-	private void getAndDrawModulesIn(String parentName){
+
+	private void getAndDrawModulesIn(String parentName) {
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
-		if(children.length>0){
+		if (children.length > 0) {
 			drawModules(children);
-		}else{
-			logger.debug("Tried to draw modules for "+parentName+", but it has no children.");
+		} else {
+			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
 	}
 
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
-		
+
 		AbstractDTO dto = ((DTODecorator) zoomedModuleFigure).getDTO();
-		switch(dto.getClass().getSimpleName()){
-			case "AnalysedModuleDTO":
-				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
-				getAndDrawModulesIn(newdto.uniqueName);
+		switch (dto.getClass().getSimpleName()) {
+		case "AnalysedModuleDTO":
+			AnalysedModuleDTO newdto = ((AnalysedModuleDTO) dto);
+			getAndDrawModulesIn(newdto.uniqueName);
 		}
 	}
 
-	//Override
+	// Override
 	public void zoomOut(AbstractDTO childDTO) {
-		switch(childDTO.getClass().getSimpleName()){
-			case "AnalysedModuleDTO":
-				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)childDTO);
-				AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(newdto.uniqueName);
-				if(parentDTO!=null){
-					getAndDrawModulesIn(parentDTO.uniqueName);
-				}else{
-					logger.debug("Tried to zoom out from "+newdto.name+", but it has no parent.");
-				}
+		switch (childDTO.getClass().getSimpleName()) {
+		case "AnalysedModuleDTO":
+			AnalysedModuleDTO newdto = ((AnalysedModuleDTO) childDTO);
+			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(newdto.uniqueName);
+			if (parentDTO != null) {
+				getAndDrawModulesIn(parentDTO.uniqueName);
+			} else {
+				logger.debug("Tried to zoom out from " + newdto.name + ", but it has no parent.");
+			}
 		}
 	}
 }

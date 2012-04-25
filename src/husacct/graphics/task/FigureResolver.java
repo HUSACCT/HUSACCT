@@ -9,35 +9,35 @@ import husacct.graphics.presentation.figures.BaseFigure;
 
 public final class FigureResolver {
 
-	private FigureResolver() {	
+	private FigureResolver() {
 	}
-	
+
 	public static BaseFigure resolveFigure(Figure figure) {
-		
+
 		while (figure instanceof Decorator) {
-			
-			Decorator decorator = (Decorator)figure;
+
+			Decorator decorator = (Decorator) figure;
 			figure = decorator.getDecorator();
 		}
-		
-		return (BaseFigure)figure;
+
+		return (BaseFigure) figure;
 	}
-	
+
 	public static AbstractDTO resolveDTO(Figure figure) {
-		
+
 		while (figure != null) {
-			
+
 			if (figure instanceof DTODecorator) {
-				
-				DTODecorator decorator = (DTODecorator)figure;
-				return (AbstractDTO)decorator.getDTO();
-				
+
+				DTODecorator decorator = (DTODecorator) figure;
+				return (AbstractDTO) decorator.getDTO();
+
 			} else {
-				
-				figure = ((Decorator)figure).getDecorator();
+
+				figure = ((Decorator) figure).getDecorator();
 			}
 		}
-		
+
 		throw new RuntimeException("Figure doesn't contain a DTO");
 	}
 }
