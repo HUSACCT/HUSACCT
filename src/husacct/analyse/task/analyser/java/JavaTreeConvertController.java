@@ -1,9 +1,10 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.JavaParser; 
-import husacct.analyse.infrastructure.antlr.JavaParser.compilationUnit_return;
-import org.antlr.runtime.RecognitionException; 
-import org.antlr.runtime.tree.CommonTree; 
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.JavaParser.compilationUnit_return;
+
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class JavaTreeConvertController { 
