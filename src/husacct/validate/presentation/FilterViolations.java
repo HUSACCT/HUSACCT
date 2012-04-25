@@ -1,7 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ResourceBundles;
-import husacct.validate.task.BrowseViolationController;
+import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -10,7 +10,9 @@ import javax.swing.table.DefaultTableModel;
 
 public class FilterViolations extends JFrame {
 
-	private BrowseViolationController bvc;
+	private static final long serialVersionUID = -6295611607558238501L;
+	
+	private TaskServiceImpl ts;
 	private BrowseViolations bv;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane TabbedPane;
@@ -25,17 +27,19 @@ public class FilterViolations extends JFrame {
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
 
-	public FilterViolations(BrowseViolationController bvc, BrowseViolations bv) {
-		this.bvc = bvc;
+	public FilterViolations(TaskServiceImpl ts, BrowseViolations bv) {
+		this.ts = ts;
 		this.bv = bv;
 		String[] columnNamesRuletype = {"", ResourceBundles.getValue("Ruletypes")};
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 
-			Class[] types = new Class[]{Boolean.class, String.class};
+			private static final long serialVersionUID = -2752815747553087143L;
+			
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
 			@Override
-			public Class getColumnClass(int columnIndex) {
+			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
 			}
 
@@ -48,11 +52,13 @@ public class FilterViolations extends JFrame {
 		String[] columnNamesViolationtype = {"", ResourceBundles.getValue("Violationtypes")};
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
 
-			Class[] types = new Class[]{Boolean.class, String.class};
+			private static final long serialVersionUID = -2076057432618819613L;
+			
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
 			@Override
-			public Class getColumnClass(int columnIndex) {
+			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
 			}
 
@@ -65,11 +71,13 @@ public class FilterViolations extends JFrame {
 		String[] columnNamesPath = {" ", ResourceBundles.getValue("Path")};
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
 
-			Class[] types = new Class[]{Boolean.class, String.class};
+			private static final long serialVersionUID = 8399838627659517010L;
+			
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, true};
 
 			@Override
-			public Class getColumnClass(int columnIndex) {
+			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
 			}
 
@@ -79,7 +87,8 @@ public class FilterViolations extends JFrame {
 			}
 		};
 		initComponents();
-		testData();
+		loadRuletypes();
+		loadViolationtypes();
 	}
 
 	private void initComponents() {
@@ -144,7 +153,7 @@ public class FilterViolations extends JFrame {
 		addPath.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				addPathActionPerformed(evt);
+				addPathActionPerformed();
 			}
 		});
 
@@ -152,7 +161,7 @@ public class FilterViolations extends JFrame {
 		removePath.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				removePathActionPerformed(evt);
+				removePathActionPerformed();
 			}
 		});
 
@@ -183,15 +192,17 @@ public class FilterViolations extends JFrame {
 
 		save.setText(ResourceBundles.getValue("Save"));
 		save.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				saveActionPerformed(evt);
+				saveActionPerformed();
 			}
 		});
 
 		cancel.setText(ResourceBundles.getValue("Cancel"));
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				cancelActionPerformed(evt);
+				cancelActionPerformed();
 			}
 		});
 
@@ -234,25 +245,25 @@ public class FilterViolations extends JFrame {
 		pack();
 	}// </editor-fold>
 
-	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {
+	private void cancelActionPerformed() {
 		dispose();
 	}
 
-	private void saveActionPerformed(java.awt.event.ActionEvent evt) {
+	private void saveActionPerformed() {
 		ruletypesfilter = getRuletypesFilter();
 		violationtypesfilter = getViolationtypesFilter();
 		pathsfilter = getPathFilter();
-		bvc.lpv.setFilterValues(ruletypesfilter, violationtypesfilter,
+		ts.setFilterValues(ruletypesfilter, violationtypesfilter,
 				pathsfilter, hideFilteredValues.isSelected());
 		bv.setViolations();
 		dispose();
 	}
 
-	private void addPathActionPerformed(java.awt.event.ActionEvent evt) {
+	private void addPathActionPerformed() {
 		pathFilterModel.addRow(new Object[]{true, ""});
 	}
 
-	private void removePathActionPerformed(java.awt.event.ActionEvent evt) {
+	private void removePathActionPerformed() {
 		if (pathFilterTable.getSelectedRow() > -1) {
 			pathFilterModel.removeRow(pathFilterTable.getSelectedRow());
 		}
@@ -294,12 +305,17 @@ public class FilterViolations extends JFrame {
 		return paths;
 	}
 
-	private void testData() {
-		ruletypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("IsAllowedToUse")});
-		ruletypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("IsNotAllowedToUse")});
+	private void loadRuletypes(){
+		ArrayList<String> ruletypes = ts.loadRuletypes();
+		for(String ruletype : ruletypes){
+			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
+		}
+	}
 
-		violationtypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("Implements")});
-		violationtypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("Extends")});
-		violationtypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("InvocConstructor")});
+	private void loadViolationtypes(){
+		ArrayList<String> violationtypes = ts.loadViolationtypes();
+		for(String violationtype : violationtypes){
+			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
+		}
 	}
 }

@@ -106,7 +106,7 @@ public class ApplicationController implements ActionListener {
 //			//dependencycontroller.initUI();
 //		} else if (action.getSource() == jframe.jMenuItemAbout) {
 //			Log.i(this, "actionPerformed() - about");
-//			UiDialogs.messageDialog(jframe, "© 2012 - This application is made by a project team at Hogeschool Utrecht.", "About");
+//			UiDialogs.messageDialog(jframe, " 2012 - This application is made by a project team at Hogeschool Utrecht.", "About");
 //		} else if (action.getSource() == jframe.jMenuItemExit) {
 //			System.exit(0);
 //		} else {

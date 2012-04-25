@@ -1,6 +1,5 @@
 package husacct.analyse.task;
 
-import java.util.List;
 import husacct.analyse.domain.AnalyseDomainService;
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
@@ -19,8 +18,7 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 	
 	@Override
 	public void analyseApplication() {
-//		return analyserService.analyseApplication("benchmark_application");
-		analyserService.analyseApplication("benchmark_application");
+		analyserService.analyseApplication();
 	}
 	
 	@Override

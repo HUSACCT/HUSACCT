@@ -7,13 +7,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class AnalyzeFramePackages extends JFrame{ 
-	public AnalyzeFramePackages(){
+	
+	public AnalyzeFramePackages(String modelRepresentation){
 		setFrameSettings();
-		addTextArea();
+		addTextArea(modelRepresentation);
 		this.pack();
 	} 
-	private void addTextArea() {
+	private void addTextArea(String modelRepresentationalText) {
 		JTextArea jtaFrame = new JTextArea(100,100);
+		jtaFrame.setText(modelRepresentationalText);
 		JScrollPane jScrollPaneTextArea = new JScrollPane(jtaFrame);
 		jScrollPaneTextArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		this.add(jScrollPaneTextArea);
