@@ -183,11 +183,15 @@ public class SoftwareArchitecture {
 	public long addModule(Module module)
 	{
 		long moduleId;
-		if(!modules.contains(module) && !this.hasModule(module.getName())) {
-			modules.add(module);
-			moduleId = module.getId();
+		if(!this.hasModule(module.getName())) {
+			if (!modules.contains(module)){
+				modules.add(module);
+				moduleId = module.getId();
+			}else {
+				throw new RuntimeException("Cannot add module, since there already is a module with the same unique data!");
+			}
 		}else{
-			throw new RuntimeException("This module has already been addded!");
+			throw new RuntimeException("There is already a module with this name!");
 		}
 		return moduleId;
 	}
@@ -197,6 +201,7 @@ public class SoftwareArchitecture {
 		Module currentModule = null;
 		boolean moduleFound = false;
 		if(modules.contains(moduleToRemove)) {
+			moduleFound = true;
 			modules.remove(moduleToRemove);
 		}else{
 			for (Module mod : modules){

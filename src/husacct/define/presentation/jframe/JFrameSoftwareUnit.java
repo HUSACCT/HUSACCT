@@ -1,11 +1,18 @@
 package husacct.define.presentation.jframe;
 
-import husacct.define.presentation.tables.JTableException;
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.presentation.utils.Log;
+import husacct.define.task.SoftwareUnitController;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -16,17 +23,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
-
-
-/**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI Builder, which is free for non-commercial use. If Jigloo is being used commercially (ie, by a corporation, company or
- * business for any purpose whatever) then you should purchase a license for each developer using Jigloo. Please visit www.cloudgarden.com for details. Use of Jigloo implies acceptance of these
- * licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
- */
-public class JFrameSoftwareUnit extends JFrame {
+public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyListener{
 
 	{
 		// Set Look & Feel
@@ -40,29 +39,25 @@ public class JFrameSoftwareUnit extends JFrame {
 	private static final long serialVersionUID = 3093579720278942807L;
 	private JPanel jPanel1;
 	private JPanel jPanel2;
-	private JPanel jPanel3;
-	private JPanel jPanel4;
-	private JLabel jLabel1;
-	private JLabel jLabel2;
-	private JLabel jLabel3;
-	private JScrollPane jScrollPane1;
-//	public JButton jButtonAddExceptionRow;
-//	public JButton jButtonRemoveExceptionRow;
+	private JLabel jLabelSelectSu;
 	public JButton jButtonSave;
 	public JButton jButtonCancel;
 	public JComboBox jComboBoxSoftwareUnit;
-//	public JTableException jTableException;
+	
+	private SoftwareUnitController softwareUnitController;
 
-	/**
-	 * Auto-generated main method to display this JFrame
-	 */
 
-	public JFrameSoftwareUnit(String[] comboBoxValues) {
+	public JFrameSoftwareUnit(SoftwareUnitController softwareUnitController) {
 		super();
-		initUI(comboBoxValues);
+		this.softwareUnitController = softwareUnitController;
+		initUI();
+		fillSoftwareUnitCombobox();
 	}
 
-	private void initUI(String[] comboBoxValues) {
+	/**
+	 * Creating Gui
+	 */
+	private void initUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle("New Software Unit");
@@ -78,68 +73,14 @@ public class JFrameSoftwareUnit extends JFrame {
 				jPanel1.setLayout(jPanel1Layout);
 				jPanel1.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 				{
-					jLabel2 = new JLabel();
-					jPanel1.add(jLabel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-					jLabel2.setText("Selecteer software definitie");
+					jLabelSelectSu = new JLabel();
+					jPanel1.add(jLabelSelectSu, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					jLabelSelectSu.setText("Selecteer software definitie");
 				}
 				{
-//					old =
-//					ComboBoxModel jComboBox1Model = new DefaultComboBoxModel(new String[] { 
-//							SoftwareUnitDefinition.PACKAGE, 
-//							SoftwareUnitDefinition.CLASS, 
-//							SoftwareUnitDefinition.METHOD });
-					ComboBoxModel jComboBox1Model = new DefaultComboBoxModel(comboBoxValues);
 					jComboBoxSoftwareUnit = new JComboBox();
 					jPanel1.add(jComboBoxSoftwareUnit, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-					jComboBoxSoftwareUnit.setModel(jComboBox1Model);
 				}
-				
-				
-				
-				
-				
-				// IS DIT GEDEELTE NODIG? DENK HET NIET?
-//				{
-//					jLabel3 = new JLabel();
-//					jPanel1.add(jLabel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-//					jLabel3.setText("Exceptions");
-//				}
-//				{
-//					jPanel3 = new JPanel();
-//					BorderLayout jPanel3Layout = new BorderLayout();
-//					jPanel3.setLayout(jPanel3Layout);
-//					jPanel1.add(jPanel3, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//					{
-//						jScrollPane1 = new JScrollPane();
-//						jPanel3.add(jScrollPane1, BorderLayout.CENTER);
-//						jScrollPane1.setPreferredSize(new java.awt.Dimension(516, 55));
-//						{
-//							jTableException = new JTableException();
-//							jScrollPane1.setViewportView(jTableException);
-//						}
-//					}
-//					{
-//						jPanel4 = new JPanel();
-//						GridBagLayout jPanel4Layout = new GridBagLayout();
-//						jPanel3.add(jPanel4, BorderLayout.EAST);
-//						jPanel4Layout.rowWeights = new double[] { 0.0, 0.1 };
-//						jPanel4Layout.rowHeights = new int[] { 15, 7 };
-//						jPanel4Layout.columnWeights = new double[] { 0.1 };
-//						jPanel4Layout.columnWidths = new int[] { 7 };
-//						jPanel4.setLayout(jPanel4Layout);
-//						jPanel4.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-//						{
-//							jButtonAddExceptionRow = new JButton();
-//							jPanel4.add(jButtonAddExceptionRow, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-//							jButtonAddExceptionRow.setText("Add row");
-//						}
-//						{
-//							jButtonRemoveExceptionRow = new JButton();
-//							jPanel4.add(jButtonRemoveExceptionRow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-//							jButtonRemoveExceptionRow.setText("Remove row");
-//						}
-//					}
-//				}
 			}
 			{
 				jPanel2 = new JPanel();
@@ -148,20 +89,71 @@ public class JFrameSoftwareUnit extends JFrame {
 					jButtonCancel = new JButton();
 					jPanel2.add(jButtonCancel);
 					jButtonCancel.setText("Cancel");
+					jButtonCancel.addActionListener(this);
 				}
 				{
 					jButtonSave = new JButton();
 					jPanel2.add(jButtonSave);
 					jButtonSave.setText("Add");
+					jButtonSave.addActionListener(this);
 				}
 
 			}
 			pack();
 			this.setSize(677, 300);
 		} catch (Exception e) {
-			// add your error handling code here
 			e.printStackTrace();
 		}
 	}
+	
+	public void fillSoftwareUnitCombobox() {
+		ArrayList<SoftwareUnitDefinition> softwareUnitList = new ArrayList<SoftwareUnitDefinition>();
+		softwareUnitController.fillSoftwareUnitsList(softwareUnitList);	
+		ComboBoxModel jComboBox1Model = new DefaultComboBoxModel(softwareUnitList.toArray());
+		jComboBoxSoftwareUnit.setModel(jComboBox1Model);
+	}
+
+	/**
+	 * Handling ActionPerformed
+	 */
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		if (action.getSource() == this.jButtonSave) {
+			this.save();
+		} else if (action.getSource() == this.jButtonCancel) {
+			this.cancel();
+		}
+	}
+
+	private void cancel() {
+		this.dispose();
+	}
+
+	private void save() {
+		String displayedRow = jComboBoxSoftwareUnit.getSelectedItem().toString();
+		String[] softwareUnitDetails = displayedRow.split("-");
+		String softwareUnitName = softwareUnitDetails[0].trim();
+		softwareUnitController.save(softwareUnitName);
+		this.dispose();
+	}
+	
+	/**
+	 * Handling KeyPresses
+	 */
+	public void keyPressed(KeyEvent arg0) {
+		// Ignore
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+		Log.i(this, "keyreleased");
+		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			this.dispose();
+		}
+	}
+
+	public void keyTyped(KeyEvent arg0) {
+		// Ignore
+	}
+	
 
 }

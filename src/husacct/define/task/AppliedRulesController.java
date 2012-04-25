@@ -4,22 +4,19 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.JFrameAppliedRules;
-import husacct.validate.ValidateServiceStub;
 import husacct.define.presentation.tables.JTableException;
-import husacct.define.presentation.tables.JTableTableModel;
+import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.presentation.utils.Log;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.validate.ValidateServiceStub;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
 
-public class AppliedRulesController extends PopUpController implements KeyListener {
+public class AppliedRulesController extends PopUpController {
 
 	private JFrameAppliedRules jframe;
 	private long appliedRuleId;
@@ -27,7 +24,7 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 
 	public AppliedRulesController(long layerId, long appliedRuleId) {
 		Log.i(this, "constructor(" + layerId + ", " + appliedRuleId + ")");
-		setLayerID(layerId);
+		setModuleId(layerId);
 		this.appliedRuleId = appliedRuleId;
 		validateService = new ValidateServiceStub();
 	}
@@ -35,11 +32,9 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 	@Override
 	public void initUi() throws Exception {
 		Log.i(this, "initUi()");
-		jframe = new JFrameAppliedRules();
+		jframe = new JFrameAppliedRules(this);
 
 		// Change view of jframe conforms the action
-		loadSelectBoxes();
-		fillRuleTypeComboBox();
 		if (getAction().equals(SoftwareUnitController.ACTION_NEW)) {
 			jframe.jButtonSave.setText("Create");
 			jframe.setTitle("New applied rule");
@@ -53,7 +48,7 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 
 				// Load table with exceptions
 				JTableException table = jframe.jTableException;
-				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
+//				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
 
 				ArrayList<Long> exceptionIds = defineDomainService.getExceptionIdsByAppliedRule(appliedRuleId);
 				for (long exception_id : exceptionIds) {
@@ -67,19 +62,13 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 			}
 		}
 
-		jframe.jButtonAddExceptionRow.addActionListener(this);
-		jframe.jButtonRemoveExceptionRow.addActionListener(this);
-		jframe.jButtonSave.addActionListener(this);
-		jframe.jButtonCancel.addActionListener(this);
-		jframe.addKeyListener(this);
-
 		// Set the visibility of the jframe to true so the jframe is now visible
 		UiDialogs.showOnScreen(0, jframe);
 
 		jframe.setVisible(true);
 	}
 
-	private void fillRuleTypeComboBox() {
+	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = validateService.getCategories();
 		RuleTypeDTO[] ruleTypes = categories[0].getRuleTypes();
 		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
@@ -95,17 +84,16 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 			String value = resourceBundle.getString(ruleTypeDTO.getKey());
 			ruleTypeValues.add(value);
 		}
-		
-		jframe.keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
+		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 	}
-
-	public void loadSelectBoxes() {
+	public ComboBoxModel loadModuleToCombobox() {
+		ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 		// loading of all layers
 		ArrayList<Long> layerIds = defineDomainService.getLayerIdsSorted();
 
 		if (layerIds != null) {
 			// Remove the current layer from the list
-			layerIds.remove(getLayerID()-1);
+			layerIds.remove(getModuleId());
 
 			ArrayList<DataHelper> layernames = new ArrayList<DataHelper>();
 			for (long layer_id : layerIds) {
@@ -115,43 +103,38 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 				layernames.add(datahelper);
 			}
 
-			DefaultComboBoxModel jComboBoxModel = new DefaultComboBoxModel(layernames.toArray());
-			jframe.jComboBoxModuleTo.setModel(jComboBoxModel);
+			comboBoxModel = new DefaultComboBoxModel(layernames.toArray());
 		}
+		return comboBoxModel;
 	}
 
-	@Override
-	public void save() {
+	public void save(String ruleTypeKey, String description, String[] dependencies, String regex, long moduleToId, boolean isEnabled) {
 		try {
+			long moduleFromId = getModuleId();
 			if (getAction().equals(PopUpController.ACTION_NEW)) {
-				String ruleTypeKey = jframe.keyValueComboBoxAppliedRule.getSelectedItemKey();
-				String description = "";
-				long moduleFromId = getLayerID();
-				long moduleToId = ((DataHelper) jframe.jComboBoxModuleTo.getSelectedItem()).getId();
-				appliedRuleId = defineDomainService.addAppliedRule(ruleTypeKey, description, moduleFromId, moduleToId);
-				defineDomainService.setAppliedRuleIsEnabled(appliedRuleId, jframe.jCheckBoxEnabled.isSelected());
-				JTableException table = jframe.jTableException;
-				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
 
-				int tablerows = tablemodel.getRowCount();
-				for (int i = 0; i < tablerows; i++) {
-					defineDomainService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFromId, moduleToId);
-//					defineDomainService.addExceptionToAppliedRule(appliedRuleId, tablemodel.getValueAt(i, 0).toString(), tablemodel.getValueAt(i, 1).toString(), moduleToId, moduleToId);
-				}
+				appliedRuleId = defineDomainService.addAppliedRule(ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
+				
+//				JTableException table = jframe.jTableException;
+//				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
+
+//				int tablerows = tablemodel.getRowCount();
+//				for (int i = 0; i < tablerows; i++) {
+//					defineDomainService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFromId, moduleToId);
+//				}
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-//				defineDomainService.setAppliedRuleToLayer(getLayerID(), appliedrule_id, ((DataHelper) jframe.jComboBoxToLayer.getSelectedItem()).getIntId());
-//				defineDomainService.setAppliedRuleRuleType(getLayerID(), appliedrule_id, jframe.jComboBoxAppliedRule.getSelectedItem().toString());
-				defineDomainService.setAppliedRuleIsEnabled(appliedRuleId, jframe.jCheckBoxEnabled.isSelected());
+				defineDomainService.updateAppliedRule(appliedRuleId, ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
 
-				defineDomainService.removeAppliedRuleExceptions(appliedRuleId);
-
-				JTableException table = jframe.jTableException;
-				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
-
-				int tablerows = tablemodel.getRowCount();
-				for (int i = 0; i < tablerows; i++) {
-//					defineDomainService.addExceptionToAppliedRule(appliedrule_id,jframe.jComboBoxAppliedRule.getSelectedItemKey(),"", tablemodel.getValueAt(i, 0).toString(), tablemodel.getValueAt(i, 1).toString());
-				}
+//				defineDomainService.removeAppliedRuleExceptions(appliedRuleId);
+//
+//				JTableException table = jframe.jTableException;
+//				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
+//
+//				int tablerows = tablemodel.getRowCount();
+//				for (int i = 0; i < tablerows; i++) {
+//					defineDomainService.addExceptionToAppliedRule(appliedRuleId,ruleTypeKey,description, moduleFromId, moduleToId);
+////							, tablemodel.getValueAt(i, 0).toString(), tablemodel.getValueAt(i, 1).toString());
+//				}
 			}
 			jframe.dispose();
 			pokeObservers();
@@ -187,34 +170,5 @@ public class AppliedRulesController extends PopUpController implements KeyListen
 //			tablemodel.removeRow(selectedrow);
 //		}
 //	}
-
-	public void actionPerformed(ActionEvent action) {
-		Log.i(this, "actionPerformed()");
-		if (action.getSource() == jframe.jButtonSave) {
-			save();
-		} else if (action.getSource() == jframe.jButtonCancel) {
-			jframe.dispose();
-//		else if (action.getSource() == jframe.jButtonAddExceptionRow) {
-//			addExceptionRow();
-//		} else if (action.getSource() == jframe.jButtonRemoveExceptionRow) {
-//			removeExceptionRow();
-		} else {
-			Log.i(this, "actionPerformed(" + action + ") - unknown button event");
-		}
-	}
-
-	public void keyPressed(KeyEvent e) {
-		// Ignore
-	}
-
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			jframe.dispose();
-		}
-	}
-
-	public void keyTyped(KeyEvent e) {
-		// Ignore
-	}
 
 }

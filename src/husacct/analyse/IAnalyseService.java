@@ -1,11 +1,16 @@
 package husacct.analyse;
 
+import javax.swing.JInternalFrame;
+
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public interface IAnalyseService {
 	
 	public void analyseApplication();
+	public boolean isAnalysed();
+	
+	public JInternalFrame getJInternalFrame();
 	
 	public DependencyDTO[] getDependencies(String from, String to);
 	public DependencyDTO[] getDependenciesFrom(String from);
