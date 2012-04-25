@@ -3,6 +3,8 @@ package husacct.graphics.presentation;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
+import husacct.ServiceProvider;
+import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -178,8 +180,10 @@ public class GraphicsFrame extends JInternalFrame {
 				violationTypeDescription = violation.getViolationType().getDescriptionKey();
 			}
 			
+			String message = ServiceProvider.getInstance().getValidateService().buildDefinedRuleMessage(violation.getMessage());
+			
 			rows.add(new String[]{
-				violation.getErrorMessage(), 
+				message, 
 				ruleTypeDescription,
 				violationTypeDescription
 			});
