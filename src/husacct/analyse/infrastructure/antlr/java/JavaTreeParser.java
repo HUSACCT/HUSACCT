@@ -1,4 +1,4 @@
-package husacct.analyse.infrastructure.antlr;
+package husacct.analyse.infrastructure.antlr.java;
 
 
 import java.util.ArrayList;

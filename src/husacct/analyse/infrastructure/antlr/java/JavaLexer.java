@@ -1,6 +1,6 @@
 // $ANTLR 3.2 Sep 23, 2009 12:02:23 /Users/Thijmen/Documents/project/husacct_final/src/husacct/analyse/infrastructure/grammars/java/Java.g 2012-04-06 14:26:00
 
-package husacct.analyse.infrastructure.antlr;
+package husacct.analyse.infrastructure.antlr.java;
 
 
 import org.antlr.runtime.*;
