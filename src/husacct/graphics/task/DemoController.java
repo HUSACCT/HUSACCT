@@ -1,12 +1,14 @@
 package husacct.graphics.task;
 
-import org.jhotdraw.draw.ConnectionFigure;
-
-import husacct.common.dto.*;
+import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.NamedFigure;
+
+import org.jhotdraw.draw.ConnectionFigure;
 
 public class DemoController extends BaseController
 {

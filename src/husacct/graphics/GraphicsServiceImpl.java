@@ -1,5 +1,6 @@
 package husacct.graphics;
 
+import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
@@ -15,13 +16,14 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	private DefinedController definedController;
 
 	public GraphicsServiceImpl() {
+		ServiceProvider.getInstance().getAnalyseService();
 	}
-	
-	private void createControllers(){
-		if(analysedController==null){
+
+	private void createControllers() {
+		if (analysedController == null) {
 			analysedController = new AnalysedController();
 		}
-		if(definedController==null){
+		if (definedController == null) {
 			definedController = new DefinedController();
 		}
 	}

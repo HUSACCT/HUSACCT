@@ -1,6 +1,5 @@
 package husacct.graphics.presentation;
 
-import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.task.MouseClickListener;
 
 import java.util.ArrayList;

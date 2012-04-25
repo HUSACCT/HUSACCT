@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.figures;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import org.jhotdraw.draw.Figure;
@@ -12,6 +13,9 @@ public class ClassFigure extends NamedFigure {
 	private static final long serialVersionUID = -468596930534802557L;
 	private RectangleFigure top, middle, bottom;
 	private TextFigure text;
+	
+	public static final int MIN_WIDTH = 100;
+	public static final int MIN_HEIGHT = 80;
 
 	public ClassFigure(String name)
 	{
@@ -31,21 +35,38 @@ public class ClassFigure extends NamedFigure {
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
 	{
-		Point2D.Double topLeft = anchor;
-		Point2D.Double bottomRight = new Point2D.Double(anchor.x + getWidth(),
-				anchor.y + getHeight() * 0.2);
-		top.setBounds(topLeft, bottomRight);
-
-		Point2D.Double topLeft1 = new Point2D.Double(anchor.x, anchor.y + getHeight() * 0.2);
-		Point2D.Double bottomRight1 = new Point2D.Double(anchor.x + getWidth(), anchor.y
-				+ getHeight() * 0.6);
-		middle.setBounds(topLeft1, bottomRight1);
-		text.setBounds(topLeft1, bottomRight1);
-
-		Point2D.Double topLeft2 = new Point2D.Double(anchor.x, anchor.y + getHeight() * 0.6);
-		Point2D.Double bottomRight2 = new Point2D.Double(anchor.x + getWidth(), anchor.y
-				+ getHeight());
-		bottom.setBounds(topLeft2, bottomRight2);
+		if((lead.x-anchor.x) < this.MIN_WIDTH)
+		{
+			lead.x = anchor.x + this.MIN_WIDTH;
+		}
+		if((lead.y-anchor.y) < this.MIN_HEIGHT)
+		{
+			lead.y = anchor.y + this.MIN_HEIGHT;
+		}
+		
+		double width = lead.x-anchor.x;
+		double totalHeight = lead.y-anchor.y;
+		double middleHeight = Math.floor(totalHeight/3);
+		double bottomHeight = Math.floor(totalHeight/3);
+		double topHeight = totalHeight-middleHeight-bottomHeight;
+		
+		top.setBounds(anchor, new Point2D.Double(anchor.x+width, anchor.y+topHeight));
+		middle.setBounds(
+				new Point2D.Double(anchor.x, anchor.y+topHeight), 
+				new Point2D.Double(anchor.x+width, anchor.y+topHeight+middleHeight));
+		bottom.setBounds(
+				new Point2D.Double(anchor.x, anchor.y+topHeight+middleHeight),
+				new Point2D.Double(anchor.x+width, anchor.y+topHeight+middleHeight+bottomHeight));
+		
+		// textbox centralising
+		double plusX = ((top.getBounds().width-this.text.getBounds().width)/2);
+		double plusY = ((top.getBounds().height-this.text.getBounds().height)/2);
+		
+		Point2D.Double textAnchor = (Double)anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
+		
 		
 		this.invalidate();
 	}

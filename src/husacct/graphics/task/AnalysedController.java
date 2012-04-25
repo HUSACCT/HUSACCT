@@ -1,15 +1,13 @@
 package husacct.graphics.task;
 
-import org.apache.log4j.Logger;
-
 import husacct.ServiceProvider;
-import husacct.analyse.AnalyseServiceStub;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
-import husacct.control.ControlServiceImpl;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
+
+import org.apache.log4j.Logger;
 
 public class AnalysedController extends BaseController {
 
@@ -25,23 +23,33 @@ public class AnalysedController extends BaseController {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		this.resetCurrentPath();
 		drawModules(modules);
+		
+		if(detail == DrawingDetail.WITH_VIOLATIONS)
+		{
+			this.drawViolationsForShownModules();
+		}
 	}
 
 	private void drawModules(AbstractDTO[] modules) {
 		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
 		this.clearDrawing();
+		
 		for (AnalysedModuleDTO dto : castedModules) {
+			
 			BaseFigure packageFigure = figureFactory.createFigure(dto);
 			drawing.add(packageFigure);
+
+			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
+			bls.doLayout();
 		}
 	}
-	
-	private void getAndDrawModulesIn(String parentName){
+
+	private void getAndDrawModulesIn(String parentName) {
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
-		if(children.length>0){
+		if (children.length > 0) {
 			drawModules(children);
-		}else{
-			logger.debug("Tried to draw modules for "+parentName+", but it has no children.");
+		} else {
+			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
 	}
 
@@ -52,7 +60,6 @@ public class AnalysedController extends BaseController {
 			case "AnalysedModuleDTO":
 				AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
 				this.setCurrentPath(newdto.uniqueName);
-				System.out.println("In -> "+this.getCurrentPath());
 				getAndDrawModulesIn(newdto.uniqueName);
 		}
 	}
@@ -62,10 +69,10 @@ public class AnalysedController extends BaseController {
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(this.getCurrentPath());
 		if(parentDTO!=null){
 			this.setCurrentPath(parentDTO.uniqueName);
-			System.out.println("Out -> "+this.getCurrentPath());
 			getAndDrawModulesIn(parentDTO.uniqueName);
 		}else{
 			logger.debug("Tried to zoom out from "+this.getCurrentPath()+", but it has no parent.");
+
 		}
 	}
 }

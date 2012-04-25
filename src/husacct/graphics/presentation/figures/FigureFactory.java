@@ -6,7 +6,7 @@ import husacct.graphics.presentation.decorators.DependenciesDecorator;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
 public final class FigureFactory {
-	
+
 	public BaseFigure createFigure(DependencyDTO[] dtos) {
 		RelationFigure relationFigure = this.createFigure(dtos[0]);
 		DependenciesDecorator dependenciesDecorator = new DependenciesDecorator(relationFigure, dtos);
@@ -14,18 +14,18 @@ public final class FigureFactory {
 	}
 
 	private RelationFigure createFigure(DependencyDTO dependencyDTO) {
-		return new RelationFigure("Dependency from "+dependencyDTO.from+" to "+dependencyDTO.to);
+		return new RelationFigure("Dependency from " + dependencyDTO.from + " to " + dependencyDTO.to);
 	}
-	
+
 	public BaseFigure createFigure(ViolationDTO[] violationDTOs) {
 		RelationFigure relationFigure = this.createFigure(violationDTOs[0]);
 		ViolationsDecorator violationsDecorator = new ViolationsDecorator(relationFigure, violationDTOs);
 		return violationsDecorator;
 	}
-	
+
 	private RelationFigure createFigure(ViolationDTO violationDTO) {
-		return new RelationFigure("Violated dependency from "+violationDTO.getFromClasspath()
-				+" to "+violationDTO.getToClasspath());
+		return new RelationFigure("Violated dependency from " + violationDTO.getFromClasspath() + " to "
+				+ violationDTO.getToClasspath());
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto) {
@@ -34,24 +34,23 @@ public final class FigureFactory {
 		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
 			retVal = createModuleFigure(dto);
 		}
-		
-		if(retVal == null) {
-			throw new RuntimeException("Unimplemented dto type '"
-					+ dto.getClass().getSimpleName() + "' passed to FigureFactory");
+
+		if (retVal == null) {
+			throw new RuntimeException("Unimplemented dto type '" + dto.getClass().getSimpleName()
+					+ "' passed to FigureFactory");
 		}
-		
+
 		DTODecorator decorator = new DTODecorator(retVal, dto);
 		return decorator;
 	}
-	
+
 	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
 		BaseFigure figure = this.createFigure(dto);
-		
-		if(violationDTOs.length > 0)
-		{
+
+		if (violationDTOs.length > 0) {
 			figure = new ViolationsDecorator(figure, violationDTOs);
 		}
-		
+
 		return figure;
 	}
 
@@ -66,23 +65,22 @@ public final class FigureFactory {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
 		} else {
-			throw new RuntimeException("dto type '"
-					+ dto.getClass().getSimpleName()
+			throw new RuntimeException("dto type '" + dto.getClass().getSimpleName()
 					+ "' is not recognized as a module dto");
 		}
 
 		switch (type.toLowerCase()) {
-		case "layer":
-			return new LayerFigure(name);
-
-		case "class":
-			return new ClassFigure(name);
-
-		case "package":
-			return new PackageFigure(name);
-
-		default:
-			throw new RuntimeException("module dto type '"+type+"' not implemented");
+			case "layer":
+				return new LayerFigure(name);
+	
+			case "class":
+				return new ClassFigure(name);
+	
+			case "package":
+				return new PackageFigure(name);
+	
+			default:
+				throw new RuntimeException("module dto type '" + type + "' not implemented");
 		}
 	}
 }

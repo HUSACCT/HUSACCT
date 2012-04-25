@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.figures;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import org.jhotdraw.draw.Figure;
@@ -15,8 +16,8 @@ public class PackageFigure extends NamedFigure
 	private RectangleFigure body;
 	private TextFigure text;
 	
-	private static final int MIN_WIDTH = 100;
-	private static final int MIN_HEIGHT = 70;
+	private static final int MIN_WIDTH = 150;
+	private static final int MIN_HEIGHT = 120;
 	
 	public PackageFigure(String name)
 	{
@@ -47,10 +48,18 @@ public class PackageFigure extends NamedFigure
 		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x) * 0.33f, 
 				anchor.y + (lead.y - anchor.y) * 0.2f));
 	
-		Point2D.Double topLeft = new Point2D.Double(anchor.x, (anchor.y + top.getBounds().height));
+		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x, (anchor.y + top.getBounds().height));
 		
-		body.setBounds(topLeft, lead);
-		text.setBounds(topLeft, lead);
+		body.setBounds(bodyTopLeft, lead);
+		
+		// textbox centralising
+		double plusX = (((lead.x-bodyTopLeft.x)-this.text.getBounds().width)/2);
+		double plusY = (((lead.y-bodyTopLeft.y)-this.text.getBounds().height)/2);
+		
+		Point2D.Double textAnchor = (Double) bodyTopLeft.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
 		
 		this.invalidate();
 	}	
