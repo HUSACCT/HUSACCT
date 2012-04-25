@@ -6,7 +6,6 @@ import husacct.validate.task.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
 import java.util.List;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -159,7 +158,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
                 .addComponent(cancel)
                 .addGap(16, 16, 16))
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
 	private void downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downActionPerformed
 		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() -
@@ -241,9 +240,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void loadLanguageTabs(){
 		for (String language : ts.getAvailableLanguages()) {
-//			LanguageViolationConfigurationPanel lcp = new LanguageViolationConfigurationPanel(
-//					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
-			//jTabbedPane1.addTab(language, lcp);
+			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
+					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
+			jTabbedPane1.addTab(language, lcp);
 		}
 	}
 
