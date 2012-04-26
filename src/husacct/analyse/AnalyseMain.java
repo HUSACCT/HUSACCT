@@ -12,6 +12,8 @@ import husacct.define.IDefineService;
 public class AnalyseMain {
 	public static void main(String[] args){
 		
+		//Test Comment overname git
+		
 		//Test Analyse-service
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
@@ -23,15 +25,15 @@ public class AnalyseMain {
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		ModelService service = new FamixModelServiceImpl();
-		service.printModel();
+//		service.printModel();
 		
 		//Test All Query-services via output in frame!
-//		try {  
-//	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
-//	     } catch (Exception ex) {
-//	     }
+		try {  
+	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
+	     } catch (Exception ex) {
+	     }
 		
 //		new AnalyzeGUI(); 
-//		new AnalyzeFramePackages(service.represent());
+		new AnalyzeFramePackages(service.represent());
 	}
 }

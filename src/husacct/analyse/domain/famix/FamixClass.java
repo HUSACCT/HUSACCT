@@ -4,6 +4,7 @@ class FamixClass extends FamixEntity{
 
 	public boolean isInnerClass = false;
 	public boolean isAbstract;
+	public boolean hasInnerClasses;
 	public String belongsToPackage;
 	public String belongsToClass = null;
 	
