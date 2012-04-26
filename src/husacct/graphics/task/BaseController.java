@@ -14,7 +14,6 @@ import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.validate.IValidateService;
 import husacct.validate.ValidateServiceStub;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
 

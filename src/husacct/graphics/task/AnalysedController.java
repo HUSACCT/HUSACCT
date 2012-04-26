@@ -5,16 +5,20 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.graphics.presentation.decorators.DTODecorator;
+import husacct.control.IControlService;
+import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
+
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.jhotdraw.draw.ConnectionFigure;
 
 public class AnalysedController extends BaseController {
 
+	private IControlService controlService;
 	private IAnalyseService analyseService;
 	private IValidateService validateService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
@@ -23,6 +27,14 @@ public class AnalysedController extends BaseController {
 		super();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+		controlService = ServiceProvider.getInstance().getControlService();
+		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			@Override
+			public void update(Locale newLocale) {
+				//TODO: Redraw entire drawing for locale change
+				System.out.println("Graphics: Language change.");
+			}
+		});
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
