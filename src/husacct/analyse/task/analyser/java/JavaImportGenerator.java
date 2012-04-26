@@ -1,8 +1,10 @@
 package husacct.analyse.task.analyser.java;
 
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import java.util.List;
+
 import org.antlr.runtime.tree.CommonTree;
-import husacct.analyse.infrastructure.antlr.JavaParser;
 
 class JavaImportGenerator extends JavaGenerator{
 

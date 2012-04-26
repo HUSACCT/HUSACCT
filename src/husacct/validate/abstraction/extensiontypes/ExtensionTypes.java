@@ -1,23 +1,28 @@
 package husacct.validate.abstraction.extensiontypes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ExtensionTypes {
 	public enum ExtensionType {
-		PDF("pdf"), HTML("html"), XML("xml");
+		PDF("pdf"), 
+		HTML("html"), 
+		XML("xml");
+
 		private String extension;
+
 		ExtensionType(String extension) {
 			this.extension = extension;
 		}
+
 		public String getExtension() {
 			return extension;
 		}
 	}
-	public List<String> getExtensionTypes() {
-		List<String> extensionTypes = new ArrayList<String>();
+
+	public String[] getExtensionTypes() {
+		String[] extensionTypes = new String[ExtensionType.values().length];
+		int extensionTypesIndex = 0;
 		for(ExtensionType extensionType : ExtensionType.values()) {
-			extensionTypes.add(extensionType.getExtension());
+			extensionTypes[extensionTypesIndex] = extensionType.getExtension();
+			extensionTypesIndex++;
 		}
 		return extensionTypes;
 	}

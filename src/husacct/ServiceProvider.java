@@ -21,23 +21,26 @@ public final class ServiceProvider {
 	private IDefineService defineService;
 	private IValidateService validateService;
 
-	private ServiceProvider(){
+	private ServiceProvider() {
 		try {
+			_instance = this;
+			
 			this.controlService = new ControlServiceImpl();
 			this.analyseService = new AnalyseServiceImpl();
 			this.graphicsService = new GraphicsServiceImpl();
 			this.defineService = new DefineServiceImpl();
 			this.validateService = new ValidateServiceImpl();
-		} catch (StackOverflowError error){
+		} catch (StackOverflowError error) {
 			System.out.println(error);
-			System.out.println("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
+			System.out
+					.println("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
 			System.exit(0);
 		}
 	}
 
-	public static ServiceProvider getInstance(){
-		if(ServiceProvider._instance == null){
-			ServiceProvider._instance = new ServiceProvider();
+	public static ServiceProvider getInstance() {
+		if (ServiceProvider._instance == null) {
+			new ServiceProvider();
 		}
 		return ServiceProvider._instance;
 	}
