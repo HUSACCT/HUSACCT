@@ -8,6 +8,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.validate.IValidateService;
 
 import org.apache.log4j.Logger;
 import org.jhotdraw.draw.ConnectionFigure;
@@ -15,11 +16,13 @@ import org.jhotdraw.draw.ConnectionFigure;
 public class AnalysedController extends BaseController {
 
 	private IAnalyseService analyseService;
+	private IValidateService validateService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
 		super();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		validateService = ServiceProvider.getInstance().getValidateService();
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
@@ -39,7 +42,10 @@ public class AnalysedController extends BaseController {
 
 	protected void drawModules(AbstractDTO[] modules) {
 		super.drawModules(modules);
-		
+		this.drawDependencies(modules);
+	}
+	
+	private void drawDependencies(AbstractDTO[] modules){
 		AnalysedModuleDTO[] analysedModules = (AnalysedModuleDTO[]) modules; 
 		for(AnalysedModuleDTO analysedModuleDTO : analysedModules){
 			for(AnalysedModuleDTO innerAnalysedModuleDTO : analysedModules){
@@ -99,8 +105,25 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void toggleViolations() {
-		// TODO Auto-generated method stub
+		super.toggleViolations();
 		System.out.println("Option triggered: Toggle violations visiblity");
 		//drawArchitecture(DrawingDetail detail) <- use
+		if(showViolations()){
+			//TODO
+			// Loop through all the figures/dtos
+			// Request found violations between all combinations
+			// Create a relationFigure for the violations
+			// Clear dependency lines
+			// Add the violation lines to the drawing
+			//validateService.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
+		}else{
+			// TODO
+			// Loop through all the figures/dtos
+			// Request found dependencies between all combinations
+			// Create a relationFigure for the dependencies
+			// Clear violation lines
+			// Add the dependency lines to the drawing
+			//this.drawDependencies(modules); //Where to get the modules? We do not save them!
+		}
 	}
 }

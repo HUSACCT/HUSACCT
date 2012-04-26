@@ -27,6 +27,7 @@ public abstract class BaseController implements MouseClickListener {
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
 	protected String currentPath;
+	protected boolean showViolations = false;
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
@@ -150,5 +151,13 @@ public abstract class BaseController implements MouseClickListener {
 						.getDecorator(), fromFigure, toFigure);
 		
 		this.drawing.add(violatedRelationFigure);
+	}
+	
+	public void toggleViolations() {
+		showViolations = (showViolations ? false : true);
+	}
+	
+	protected boolean showViolations(){
+		return showViolations;
 	}
 }
