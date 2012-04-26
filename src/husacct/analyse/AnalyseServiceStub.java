@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JInternalFrame;
 
 public class AnalyseServiceStub implements IAnalyseService{
 
@@ -13,6 +14,18 @@ public class AnalyseServiceStub implements IAnalyseService{
 	public AnalyseServiceStub(){
 		generateModule();
 		//printHashmap(analysed.get("").get(0));
+	}
+	
+	@Override
+	public boolean isAnalysed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public JInternalFrame getJInternalFrame() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private void GenerateHashmap(List<AnalysedModuleDTO> subModules) {
@@ -472,5 +485,4 @@ public class AnalyseServiceStub implements IAnalyseService{
 		
 		
 	}
-	
 }
