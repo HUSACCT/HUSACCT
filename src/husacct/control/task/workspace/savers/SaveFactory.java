@@ -38,7 +38,6 @@ public class SaveFactory {
 	public static List<String> getAvailableSavers(){
 		List<String> list = new ArrayList<String>();
 		list.add("Xml");
-		list.add("OracleDB");
 		return list;
 	}
 	
