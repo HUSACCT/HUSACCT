@@ -14,12 +14,6 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +63,7 @@ public class DefinitionController extends Observable implements Observer {
 		try {
 			JPanelStatus.getInstance("Adding Layer").start();
 			DefineDomainService.getInstance().addLayer(layerName, hierarchicalLevel);
-			notifyObservers();
+			this.notifyObservers();
 		} catch (Exception e) {
 			Log.e(this, "DefinitionController - addLayer("+layerName+") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
@@ -86,7 +80,7 @@ public class DefinitionController extends Observable implements Observer {
 		try {
 			JPanelStatus.getInstance("Removing Module").start();
 			DefineDomainService.getInstance().removeModuleById(moduleId);
-			notifyObservers();
+			this.notifyObservers();
 		} catch (Exception e) {
 			Log.e(this, "DefinitionController - removeModuleById("+moduleId+") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
@@ -104,7 +98,7 @@ public class DefinitionController extends Observable implements Observer {
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Moving layer up").start();
 				DefineDomainService.getInstance().moveLayerUp(layerId);
-				notifyObservers();
+				this.notifyObservers();
 			}
 		} catch (Exception e) {
 			Log.e(this, "DefinitionController - moveLayerUp() - exception: " + e.getMessage());
@@ -123,7 +117,7 @@ public class DefinitionController extends Observable implements Observer {
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Moving layer down").start();
 				DefineDomainService.getInstance().moveLayerDown(layerId);
-				notifyObservers();
+				this.notifyObservers();
 			}
 		} catch (Exception e) {
 			Log.e(this, "DefinitionController - moveLayerDown() - exception: " + e.getMessage());
@@ -172,7 +166,7 @@ public class DefinitionController extends Observable implements Observer {
 					JPanelStatus.getInstance("Removing software unit").start();
 					DefineDomainService.getInstance().removeSoftwareUnit(moduleId, softwareUnitName);
 					// Update the software unit table
-					notifyObservers();
+					this.notifyObservers();
 				}
 			}
 		} catch (Exception e) {
@@ -243,7 +237,7 @@ public class DefinitionController extends Observable implements Observer {
 					DefineDomainService.getInstance().removeAppliedRule(appliedRuleId);
 
 					// Update the applied rules table
-					notifyObservers();
+					this.notifyObservers();
 				}
 			}
 		} catch (Exception e) {
@@ -265,7 +259,7 @@ public class DefinitionController extends Observable implements Observer {
 			if (moduleId != -1) {
 				DefineDomainService.getInstance().updateModule(moduleId, moduleName, moduleDescription);
 			}
-			notifyObservers();
+			this.notifyObservers();
 		} catch (Exception e) {
 			Log.e(this, "DefinitionController - updateModule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
@@ -451,7 +445,7 @@ public class DefinitionController extends Observable implements Observer {
 	@Override
 	public void notifyObservers(){
 		long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
-		for (Observer o : observers){
+		for (Observer o : this.observers){
 			o.update(this, moduleId);
 		}
 	}
@@ -460,20 +454,20 @@ public class DefinitionController extends Observable implements Observer {
 	 * This function will load notify all to update their data
 	 */
 	public void notifyObservers(long moduleId){
-		for (Observer o : observers){
+		for (Observer o : this.observers){
 			o.update(this, moduleId);
 		}
 	}
 	
 	public void addObserver(Observer o){
-		if (!observers.contains(o)){
-			observers.add(o);
+		if (!this.observers.contains(o)){
+			this.observers.add(o);
 		}
 	}
 	
 	public void removeObserver(Observer o){
-		if (observers.contains(o)){
-			observers.remove(o);
+		if (this.observers.contains(o)){
+			this.observers.remove(o);
 		}
 	}
 }

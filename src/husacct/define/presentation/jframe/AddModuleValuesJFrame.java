@@ -1,5 +1,7 @@
 package husacct.define.presentation.jframe;
 
+import husacct.define.task.DefinitionController;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
@@ -32,10 +34,14 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel = new JPanel();
 		this.add(this.innerPanel);
 		this.innerPanel.setLayout(this.createInnerPanelLayout());
-		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		this.addModuleValues();
 		this.addHierarchicalLevelValues();
 		this.addButtons();
+		
+		this.setVisible(true);
+		this.pack();
+		this.setSize(500, 150);
 	}
 	
 	private GridLayout createInnerPanelLayout() {
@@ -56,7 +62,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	}
 	
 	private void addHierarchicalLevelValues() {
-		JLabel hierarchicalLevelLabel = new JLabel("Module name");
+		JLabel hierarchicalLevelLabel = new JLabel("Hierarchical Level");
 		this.innerPanel.add(hierarchicalLevelLabel);
 		
 		this.hierarchicalLevelField = new JTextField();
@@ -95,7 +101,9 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		String moduleName = this.getModuleNameValue();
 		String level = this.getHierarchicalLevelValue();
 		if(!moduleName.isEmpty() && !level.isEmpty()) {
-			//TODO: handle the save action!
+			DefinitionController definitionController = DefinitionController.getInstance();
+			definitionController.addLayer(moduleName, Integer.parseInt(level));
+			this.dispose();
 		}
 	}
 	

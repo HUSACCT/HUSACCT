@@ -2,15 +2,14 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.domain.DefineDomainService;
 import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.jframe.AddModuleValuesJFrame;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.presentation.moduletree.ModuleTree;
-import husacct.define.presentation.utils.Log;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,14 +17,12 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -54,12 +51,9 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		super();
 	}
 
-	
-	/**
-	 * Creating Gui
-	 */
 	@Override
 	public void initGui() {
+		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -135,7 +129,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		updateModuleTree();
+		this.updateModuleTree();
 	}
 	
 	public void updateModuleTree() {
@@ -170,19 +164,20 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	private void newModule() {
 		//TODO call AddModuleValuesJFrame instead of the following code.
 		
-		// Ask the user for the module name
-		String moduleName = UiDialogs.inputDialog(this, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-		if (moduleName != null) {
-			//Creating a new module of type Layer
-			//has yet to be implemented to support other module types
-			String layerLevelString = UiDialogs.inputDialog(this, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-			if (layerLevelString != null) {
-				int layerLevel = Integer.parseInt(layerLevelString);
-				// Call task to create the layer
-				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
-			}
-		}
-		this.updateModuleTree();
+//		// Ask the user for the module name
+//		String moduleName = UiDialogs.inputDialog(this, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
+//		if (moduleName != null) {
+//			//Creating a new module of type Layer
+//			//has yet to be implemented to support other module types
+//			String layerLevelString = UiDialogs.inputDialog(this, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
+//			if (layerLevelString != null) {
+//				int layerLevel = Integer.parseInt(layerLevelString);
+//				// Call task to create the layer
+//				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
+//			}
+//		}
+		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame();
+		addModuleFrame.initUI();
 	}
 	
 	private void removeModule() {
