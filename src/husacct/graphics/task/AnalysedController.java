@@ -4,10 +4,13 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.graphics.presentation.decorators.DTODecorator;
+import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.ConnectionFigure;
 
 public class AnalysedController extends BaseController {
 
@@ -29,9 +32,31 @@ public class AnalysedController extends BaseController {
 			this.drawViolationsForShownModules();
 		}
 	}
+	
+	private DependencyDTO[] getDependenciesBetween(String from, String to){
+		return analyseService.getDependencies(from, to);
+	}
 
 	protected void drawModules(AbstractDTO[] modules) {
 		super.drawModules(modules);
+		
+		AnalysedModuleDTO[] analysedModules = (AnalysedModuleDTO[]) modules; 
+		for(AnalysedModuleDTO analysedModuleDTO : analysedModules){
+			for(AnalysedModuleDTO innerAnalysedModuleDTO : analysedModules){
+				DependencyDTO[] dependencies = getDependenciesBetween(analysedModuleDTO.uniqueName, innerAnalysedModuleDTO.uniqueName);
+				
+				try{
+					BaseFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
+					this.connectionStrategy.connect(
+							(ConnectionFigure)((Decorator)dependencyFigure).getDecorator(), 
+							this.dtoFigureMap.get(analysedModuleDTO), 
+							this.dtoFigureMap.get(innerAnalysedModuleDTO));
+					drawing.add(dependencyFigure);
+				}catch(RuntimeException e){
+					logger.debug(e.getMessage()+" "+analysedModuleDTO.uniqueName+" -> "+innerAnalysedModuleDTO.uniqueName);
+				}
+			}
+		}
 	}
 
 	@Override

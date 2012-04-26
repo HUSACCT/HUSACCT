@@ -8,9 +8,14 @@ import husacct.graphics.presentation.decorators.ViolationsDecorator;
 public final class FigureFactory {
 
 	public BaseFigure createFigure(DependencyDTO[] dtos) {
-		RelationFigure relationFigure = this.createFigure(dtos[0]);
-		DependenciesDecorator dependenciesDecorator = new DependenciesDecorator(relationFigure, dtos);
-		return dependenciesDecorator;
+		if(dtos.length>0){
+			RelationFigure relationFigure = this.createFigure(dtos[0]);
+			DependenciesDecorator dependenciesDecorator = new DependenciesDecorator(relationFigure, dtos);
+			return dependenciesDecorator;
+		}
+		else{
+			throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
+		}
 	}
 
 	private RelationFigure createFigure(DependencyDTO dependencyDTO) {

@@ -16,6 +16,7 @@ import husacct.validate.ValidateServiceStub;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
 
@@ -29,6 +30,7 @@ public abstract class BaseController implements MouseClickListener {
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
+	protected HashMap<AbstractDTO,BaseFigure> dtoFigureMap = new HashMap<AbstractDTO,BaseFigure>();
 
 	public BaseController() {
 
@@ -90,14 +92,15 @@ public abstract class BaseController implements MouseClickListener {
 		this.drawTarget.hidePropertiesPane();
 	}
 
-	public abstract void drawArchitecture(DrawingDetail detail);
+	public abstract void drawArchitecture(DrawingDetail detail); 
 	
 	protected void drawModules(AbstractDTO[] modules){
 		this.clearDrawing();
-		
+		this.dtoFigureMap.clear();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
+			this.dtoFigureMap.put(dto, generatedFigure); //TODO: Check with team if their findbyname in drawingview is stable or not.
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout();
