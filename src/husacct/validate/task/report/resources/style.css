@@ -1,0 +1,33 @@
+#example {
+	border-collapse: collapse;
+	border: 1px solid #4BACC6;
+}
+
+#example td {
+	border: 1px solid #4BACC6;
+}
+
+#example th {
+	border: solid #4BACC6;
+	background-color: #4BACC6;
+	cursor: pointer;
+	color: white;
+	font-weight: bold;
+	padding: 3px 10px;
+}
+
+.image {
+	float: right;
+}
+
+.stats {
+	font-size: 14px;
+	color: blue;
+	font-weight: bold;
+}
+
+.title {
+	font-size: 16px;
+	color: blue;
+	font-weight: bold;
+}
