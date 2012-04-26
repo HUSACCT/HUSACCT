@@ -36,6 +36,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private JMenuBar menuBar;
 	private JScrollPane drawingScollPane,propertiesScrollPane;
 	private JComponent centerPane;
+	private JMenuItem pathInfoMenu;
 	
 	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
 
@@ -127,7 +128,16 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(showViolationsOptionMenu);
 		
+		pathInfoMenu = new JMenuItem("");
+		pathInfoMenu.setSize(50,20);
+		pathInfoMenu.setMaximumSize(new Dimension(1000,menuItemMaxHeight));
+		menuBar.add(pathInfoMenu);
+		
 		this.add(menuBar, java.awt.BorderLayout.NORTH);
+	}
+	
+	public void setCurrentPathInfo(String path){
+		pathInfoMenu.setText(path);
 	}
 
 	private void moduleZoomOut() {

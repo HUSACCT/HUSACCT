@@ -102,6 +102,7 @@ public abstract class BaseController implements MouseClickListener {
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout();
 		}
+		this.drawTarget.setCurrentPathInfo(this.currentPath);
 	}
 
 	public void drawViolationsForShownModules() {
