@@ -5,13 +5,21 @@ import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.workspace.CreateWorkspaceFrame;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
+import husacct.control.presentation.workspace.SaveWorkspaceFrame;
+import husacct.control.task.workspace.loaders.ILoadWorkspace;
+import husacct.control.task.workspace.loaders.LoadFactory;
+import husacct.control.task.workspace.savers.ISaveWorkspace;
+import husacct.control.task.workspace.savers.SaveFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.XMLOutputter;
 
 public class WorkspaceController {
 
@@ -26,78 +34,84 @@ public class WorkspaceController {
 		new OpenWorkspaceFrame(this);
 
 	}
-
-	public void saveWorkspace() {
-
-		try {
-			
-			Element controlData = null;
-			Element defineData = null;
-			Element analyseData = null;
-			Element graphicsData = null;
-			Element validateData = null;
-			
-			if(ServiceProvider.getInstance().getControlService() instanceof ISaveable){
-				ISaveable service = (ISaveable) ServiceProvider.getInstance().getControlService();
-				controlData = service.getWorkspaceData();
-			}
-			
-			if(ServiceProvider.getInstance().getDefineService() instanceof ISaveable){
-				ISaveable service = (ISaveable) ServiceProvider.getInstance().getDefineService();
-				defineData = service.getWorkspaceData();
-			}
-			
-			if(ServiceProvider.getInstance().getAnalyseService() instanceof ISaveable){
-				ISaveable service = (ISaveable) ServiceProvider.getInstance().getAnalyseService();
-				analyseData = service.getWorkspaceData();
-			}
-			
-			if(ServiceProvider.getInstance().getGraphicsService() instanceof ISaveable){
-				ISaveable service = (ISaveable) ServiceProvider.getInstance().getGraphicsService();
-				graphicsData = service.getWorkspaceData();
-			}
-			
-			if(ServiceProvider.getInstance().getValidateService() instanceof ISaveable){
-				ISaveable service = (ISaveable) ServiceProvider.getInstance().getValidateService();
-				validateData = service.getWorkspaceData();
-			}
-			
-			Element controlDataContainer = new Element("control");
-			Element defineDataContainer = new Element("define");
-			Element analyseDataContainer = new Element("analyse");
-			Element graphicsDataContainer = new Element("graphics");
-			Element validateDataContainer = new Element("validate");
-			
-			if(controlData != null) controlDataContainer.addContent(controlData);
-			if(defineData != null) defineDataContainer.addContent(defineData);
-			if(analyseData != null) analyseDataContainer.addContent(analyseData);
-			if(graphicsData != null) graphicsDataContainer.addContent(graphicsData);
-			if(validateData != null) validateDataContainer.addContent(validateData);
-			
-			Element rootElement = new Element("husacct");
-			rootElement.setAttribute("version", "1");
-			
-			rootElement.addContent(controlDataContainer);
-			rootElement.addContent(defineDataContainer);
-			rootElement.addContent(analyseDataContainer);
-			rootElement.addContent(graphicsDataContainer);
-			rootElement.addContent(validateDataContainer);
-			
-			Document doc = new Document(rootElement);
-			XMLOutputter xmlOutputter = new XMLOutputter();
-			
-			logger.debug(xmlOutputter.outputString(doc));
-
-		} catch (Exception e){
-			logger.error(String.format("Unable to save workspace: %s", e));
-		}
 	
+	public void showSaveWorkspaceGui() {
+		new SaveWorkspaceFrame(this);
+
+	}
+	
+	public void saveWorkspace(String saverIdentifier, HashMap<String, Object> dataValues) {
+		ISaveWorkspace saver = SaveFactory.get(saverIdentifier);
+		Document document = getWorkspaceData();
+		saver.save(document, dataValues);
+	}
+	
+	public void loadWorkspace(String loaderIdentifier, HashMap<String, Object> dataValues){
+		ILoadWorkspace loader = LoadFactory.get(loaderIdentifier);
+		Document doc = loader.load(dataValues);
+		loadWorkspace(doc);
+	}
+	
+	public Document getWorkspaceData(){
+		Element rootElement = new Element("husacct");
+		rootElement.setAttribute("version", "1");		
+		
+		for(ISaveable service : getSaveableServices()){
+			String serviceName = service.getClass().getName();
+			try {
+				Element container = new Element(serviceName);
+				Element serviceData = service.getWorkspaceData();
+				container.addContent(serviceData);
+				rootElement.addContent(container);
+			} catch (Exception e) {
+				logger.debug("Unable to save workspacedata for " + serviceName + ": " + e.getMessage());
+			}
+		}
+
+		Document doc = new Document(rootElement);
+		return doc;
 	}
 
 	public void loadWorkspace(Document document){
-		
+		List<ISaveable> savableServices = getSaveableServices();
+		if(document.hasRootElement()){
+			Element rootElement = document.getRootElement();
+			for(ISaveable service : savableServices){
+				String serviceName = service.getClass().getName();
+				List<Element> elementQuery = rootElement.getChildren(serviceName);
+				for(Element serviceDataContainer : elementQuery){
+					Element serviceData = serviceDataContainer.getChildren().get(0); 
+					service.loadWorkspaceData(serviceData);
+				}
+			}
+		}
 	}
 	
+	private List<ISaveable> getSaveableServices() {
+		List<ISaveable> saveableServices = new ArrayList<ISaveable>();
+		
+		if(ServiceProvider.getInstance().getControlService() instanceof ISaveable){
+			saveableServices.add((ISaveable) ServiceProvider.getInstance().getControlService());
+		}
+		
+		if(ServiceProvider.getInstance().getDefineService() instanceof ISaveable){
+			saveableServices.add((ISaveable) ServiceProvider.getInstance().getDefineService());
+		}
+		
+		if(ServiceProvider.getInstance().getAnalyseService() instanceof ISaveable){
+			saveableServices.add((ISaveable) ServiceProvider.getInstance().getAnalyseService());
+		}
+
+		if(ServiceProvider.getInstance().getGraphicsService() instanceof ISaveable){
+			saveableServices.add((ISaveable) ServiceProvider.getInstance().getGraphicsService());
+		}
+		
+		if(ServiceProvider.getInstance().getValidateService() instanceof ISaveable){
+			saveableServices.add((ISaveable) ServiceProvider.getInstance().getValidateService());
+		}
+		return saveableServices;
+	}
+
 	public void closeWorkspace() {	
 		Object[] options = { "Yes", "No", "Cancel" };
 		int n = JOptionPane.showOptionDialog(null,
@@ -105,7 +119,7 @@ public class WorkspaceController {
 				"Close workspace", JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 		if (n == JOptionPane.YES_OPTION) {
-			saveWorkspace();
+			//saveWorkspace();
 		} else if (n == JOptionPane.NO_OPTION) {
 			System.out.println("no");
 		} else if (n == JOptionPane.CANCEL_OPTION) {
