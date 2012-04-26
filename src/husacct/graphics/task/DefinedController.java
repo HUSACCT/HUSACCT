@@ -20,13 +20,8 @@ public class DefinedController extends BaseController {
 		drawModules(modules);
 	}
 
-	private void drawModules(AbstractDTO[] modules) {
-		ModuleDTO[] castedModules = (ModuleDTO[]) modules;
-
-		for (ModuleDTO dto : castedModules) {
-			BaseFigure logicalFigure = figureFactory.createFigure(dto);
-			drawing.add(logicalFigure);
-		}
+	protected void drawModules(AbstractDTO[] modules) {
+		super.drawModules(modules);
 	}
 
 	@Override

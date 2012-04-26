@@ -91,6 +91,18 @@ public abstract class BaseController implements MouseClickListener {
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);
+	
+	protected void drawModules(AbstractDTO[] modules){
+		this.clearDrawing();
+		
+		for (AbstractDTO dto : modules) {
+			BaseFigure generatedFigure = figureFactory.createFigure(dto);
+			drawing.add(generatedFigure);
+
+			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
+			bls.doLayout();
+		}
+	}
 
 	public void drawViolationsForShownModules() {
 		// TODO retrieve the real service from the ServiceProvider instead of

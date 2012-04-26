@@ -30,36 +30,17 @@ public class AnalysedController extends BaseController {
 		}
 	}
 
-	private void drawModules(AbstractDTO[] modules) {
-		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
-		this.clearDrawing();
-		
-		for (AnalysedModuleDTO dto : castedModules) {
-			
-			BaseFigure packageFigure = figureFactory.createFigure(dto);
-			drawing.add(packageFigure);
-
-			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
-			bls.doLayout();
-		}
-	}
-
-	private void getAndDrawModulesIn(String parentName) {
-		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
-		if (children.length > 0) {
-			drawModules(children);
-		} else {
-			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
-		}
+	protected void drawModules(AbstractDTO[] modules) {
+		super.drawModules(modules);
 	}
 
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
 		AbstractDTO dto = FigureResolver.resolveDTO(zoomedModuleFigure);
 		if(dto.getClass().getSimpleName().equals("AnalysedModuleDTO")){
-			AnalysedModuleDTO newdto = ((AnalysedModuleDTO)dto);
-			this.setCurrentPath(newdto.uniqueName);
-			getAndDrawModulesIn(newdto.uniqueName);
+			AnalysedModuleDTO analysedDTO = ((AnalysedModuleDTO)dto);
+			this.setCurrentPath(analysedDTO.uniqueName);
+			getAndDrawModulesIn(analysedDTO.uniqueName);
 		}
 	}
 
@@ -75,6 +56,15 @@ public class AnalysedController extends BaseController {
 			drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 		}
 	}
+	
+	private void getAndDrawModulesIn(String parentName) {
+		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
+		if (children.length > 0) {
+			drawModules(children);
+		} else {
+			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
+		}
+	}
 
 	@Override
 	public void exportToImage() {
@@ -86,5 +76,6 @@ public class AnalysedController extends BaseController {
 	public void toggleViolations() {
 		// TODO Auto-generated method stub
 		System.out.println("Option triggered: Toggle violations visiblity");
+		//drawArchitecture(DrawingDetail detail) <- use
 	}
 }
