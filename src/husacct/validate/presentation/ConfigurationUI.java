@@ -1,10 +1,11 @@
 package husacct.validate.presentation;
 
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.task.TableModels.ColorChooserEditor;
-import husacct.validate.task.TableModels.ColorTableModel;
+import husacct.validate.presentation.TableModels.ColorChooserEditor;
+import husacct.validate.presentation.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
+import java.util.LinkedHashMap;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.table.TableCellEditor;
@@ -28,7 +29,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		loadSeverity();
 	}
 
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -193,22 +193,29 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 										  false, false);
 	}//GEN-LAST:event_addActionPerformed
 
-	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applySeverityActionPerformed
-		ts.ApplySeverities(severityModel);
+	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {
+		LinkedHashMap<Integer, String> linkedmap = new LinkedHashMap<Integer, String>();
+
+		for(int i = 0; i < severityModel.getRowCount(); i++){
+			linkedmap.put(i, (String) severityModel.getValueAt(i, 0));
+			linkedmap.put(i, (String) severityModel.getValueAt(i, 1));
+			linkedmap.put(i, (String) severityModel.getValueAt(i, 2));
+		}
+
+		ts.applySeverities(linkedmap);
 		loadSeverity();
 		removeLanguageTabs();
 		loadLanguageTabs();
-	}//GEN-LAST:event_applySeverityActionPerformed
+	}
 
-	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {
 		dispose();
-	}//GEN-LAST:event_cancelActionPerformed
+	}
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-		// TODO add your handling code here:
-	}//GEN-LAST:event_jButton1ActionPerformed
+	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+	}
+
     private javax.swing.JButton add;
     private javax.swing.JButton applySeverity;
     private javax.swing.JButton cancel;
@@ -220,7 +227,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane severityNameScrollPane;
     private javax.swing.JTable severityNameTable;
     private javax.swing.JButton up;
-    // End of variables declaration//GEN-END:variables
 
 	private void loadSeverity() {
 		clearModel(severityModel);
