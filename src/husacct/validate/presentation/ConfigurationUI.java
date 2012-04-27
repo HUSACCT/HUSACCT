@@ -25,8 +25,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		severityModel = new ColorTableModel();
 		initComponents();
 		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
-		TableCellEditor editor = new ColorChooserEditor(new JButton());
+		TableCellEditor editor = new ColorChooserEditor();
 		column.setCellEditor(editor);
+		column.setCellRenderer(new ColorRenderer(true));
 		loadLanguageTabs();
 		loadSeverity();
 	}
@@ -249,7 +250,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	private void loadLanguageTabs(){
 		for (String language : ts.getAvailableLanguages()) {
 			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
-					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
+					language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
 			jTabbedPane1.addTab(language, lcp);
 		}
 		if (ts.getAvailableLanguages().length == 0){

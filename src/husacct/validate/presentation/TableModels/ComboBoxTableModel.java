@@ -164,4 +164,12 @@ public class ComboBoxTableModel extends AbstractTableModel {
 	public void setCanEdit(Boolean[] canEdit) {
 		this.canEdit = canEdit;
 	}
+	
+	public void clear() {
+		int rows = getRowCount();
+		while (0 < rows) {
+			removeRow(0);
+			rows--;
+		}
+	}
 }
