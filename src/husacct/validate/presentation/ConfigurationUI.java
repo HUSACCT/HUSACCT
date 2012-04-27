@@ -235,6 +235,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		for (Severity severity : severities) {
 			severityModel.addRow(new Object[]{severity.toString(),
 											  severity.getColor()});
+			severityModel.setRowColour(severityModel.getRowCount()-1, severity.getColor());
 		}
 
 	}
@@ -250,6 +251,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
 					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
 			jTabbedPane1.addTab(language, lcp);
+		}
+		if (ts.getAvailableLanguages().length == 0){
+			jTabbedPane1.addTab("No programming language availible", new JPanel());
 		}
 	}
 

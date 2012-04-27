@@ -1,5 +1,8 @@
 package husacct.validate.presentation.TableModels;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
@@ -12,6 +15,8 @@ public class ColorTableModel extends AbstractTableModel {
 
 	Class<?>[] types = new Class[]{String.class, JButton.class};
 	boolean[] canEdit = new boolean[]{true, true};
+
+	List<Color> rowColours = new ArrayList<Color>();
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
@@ -129,4 +134,13 @@ public class ColorTableModel extends AbstractTableModel {
 		dataVector.removeElementAt(row);
 		fireTableRowsDeleted(row, row);
 	}
+
+	public void setRowColour(int row, Color c) {
+        rowColours.add(c);
+        fireTableRowsUpdated(row, row);
+    }
+
+    public Color getRowColour(int row) {
+        return rowColours.get(row);
+    }
 }
