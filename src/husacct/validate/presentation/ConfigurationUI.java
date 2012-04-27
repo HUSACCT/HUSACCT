@@ -25,8 +25,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		severityModel = new ColorTableModel();
 		initComponents();
 		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
-		TableCellEditor editor = new ColorChooserEditor(new JButton());
+		TableCellEditor editor = new ColorChooserEditor();
 		column.setCellEditor(editor);
+		column.setCellRenderer(new ColorRenderer(true));
 		loadLanguageTabs();
 		loadSeverity();
 	}
