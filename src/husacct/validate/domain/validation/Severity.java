@@ -9,19 +9,29 @@ public class Severity {
 	private Color color;
 	private UUID id;
 
-	public Severity() {
-		this.id = UUID.randomUUID();
-	}
-
 	public Severity(String defaultName, String userName, Color color){
 		this.id = UUID.randomUUID();
 		this.defaultName = defaultName;
 		this.userName = userName;
 		this.color = color;
 	}
-
+	
+	public Severity(UUID id, String defaultName, String userName, Color color){
+		this.id = id;
+		this.defaultName = defaultName;
+		this.userName = userName;
+		this.color = color;
+	}
+	
 	public Severity(String userName, Color color){
 		this.id = UUID.randomUUID();
+		this.defaultName = "";
+		this.userName = userName;
+		this.color = color;
+	}
+
+	public Severity(UUID id, String userName, Color color){
+		this.id = id;
 		this.defaultName = "";
 		this.userName = userName;
 		this.color = color;
@@ -64,7 +74,4 @@ public class Severity {
 		return id;
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
 }
