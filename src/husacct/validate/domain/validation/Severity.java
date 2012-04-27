@@ -4,15 +4,27 @@ import java.awt.Color;
 import java.util.UUID;
 
 public class Severity {
-
 	private String defaultName;
-	private String categoryKey;
 	private String userName;
 	private Color color;
 	private UUID id;
-	
+
 	public Severity() {
 		this.id = UUID.randomUUID();
+	}
+
+	public Severity(String defaultName, String userName, Color color){
+		this.id = UUID.randomUUID();
+		this.defaultName = defaultName;
+		this.userName = userName;
+		this.color = color;
+	}
+
+	public Severity(String userName, Color color){
+		this.id = UUID.randomUUID();
+		this.defaultName = "";
+		this.userName = userName;
+		this.color = color;
 	}
 
 	public void setDefaultName(String defaultName) {
@@ -54,13 +66,5 @@ public class Severity {
 
 	public void setId(UUID id) {
 		this.id = id;
-	}
-
-	public String getCategoryKey() {
-		return categoryKey;
-	}
-
-	public void setCategoryKey(String categoryKey) {
-		this.categoryKey = categoryKey;
 	}
 }

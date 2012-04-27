@@ -1,18 +1,21 @@
 package husacct.define;
 
-import javax.swing.JFrame;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+
+import org.jdom2.Element;
+
 public class DefineServiceStub implements IDefineService{
 
+	@Override
+	public void createApplication(String name, String[] paths, String language, String version) {
+		
+	}
+	
 	@Override
 	public RuleDTO[] getDefinedRules() {
 		//Temporary architecture
@@ -66,7 +69,7 @@ public class DefineServiceStub implements IDefineService{
 		RuleDTO ruleOne = new RuleDTO();
 		ruleOne.ruleTypeKey = "IsNotAllowedToUse";
 			//IGNORE FOR ELABORATION VERSION
-			ruleOne.violationTypeKeys = new String[]{"Invocation of a method/contructor","Extending an abstract class", "Implementing an interface"};
+			ruleOne.violationTypeKeys = new String[]{"InvocMethod", "InvocConstructor","ExtendsAbstract", "Implements"};
 		ruleOne.moduleFrom = lbConnectionsModule;			
 		ruleOne.moduleTo = lbDAOModule;
 		ruleOne.exceptionRules = new RuleDTO[]{};
@@ -74,7 +77,7 @@ public class DefineServiceStub implements IDefineService{
 		RuleDTO ruleTwo = new RuleDTO();
 		ruleTwo.ruleTypeKey = "IsNotAllowedToUse";		
 			//IGNORE FOR ELABORATION VERSION
-			ruleTwo.violationTypeKeys = new String[] {"Extending a class/struct"};
+			ruleTwo.violationTypeKeys = new String[] {"ExtendsConcrete"};
 		ruleTwo.moduleFrom = lbHistoryModule;
 		ruleTwo.moduleTo = lbDAOModule;
 		ruleOne.exceptionRules = new RuleDTO[]{};
@@ -136,39 +139,39 @@ public class DefineServiceStub implements IDefineService{
 		//return "DomainLayer";
 	}
 
-	public Document exportLogicalArchitecture() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+	public JInternalFrame getDefinedGUI(){
+		return new JInternalFrame();
+	}
+	
+	public Element getLogicalArchitectureData(){
+		//TODO: Implement in Construction I
+		Element e = new Element("Root Element");
+		return e;
 	}
 
-	public void importLogicalArchitecture(Document doc){
-		//TODO
-	}
-	
-	public Document exportPhysicalArchitecture() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
-	}
-	
-	public void importPhysicalArchitecture(Document doc) {
-		//TODO
-	}
-	
-	public JFrame getDefinedGUI(){
-		return new JFrame();
+	public void loadLogicalArchitectureData(Element e){
+		//TODO: Implement in Construction I
 	}
 
 	@Override
-	public void createApplication(String name, String[] paths, String language, String version) {
-		//TODO
+	public Element getWorkspaceData() {
+		//TODO: Implement in Construction I
+		Element e = new Element("Root Element");
+		return e;
 	}
 
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		//TODO: Implement in Construction I
+	}
+
+	@Override
+	public boolean isDefined() {
+		return true;
+	}
+
+	@Override
+	public boolean isMapped() {
+		return true;
+	}
 }

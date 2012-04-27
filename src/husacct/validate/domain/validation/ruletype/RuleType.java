@@ -4,6 +4,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Message;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
@@ -18,15 +19,17 @@ public abstract class RuleType {
 	protected final EnumSet<RuleTypes> exceptionRuleKeys;	
 	protected final List<ViolationType> violationtypes;	
 	protected List<RuleType> exceptionrules;
+	protected final Severity severity;
 
 	protected RuleTypesFactory ruletypelanguagefactory;
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes){
+	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
 		this.violationtypes = violationtypes;
 		this.exceptionRuleKeys = exceptionRuletypes;
+		this.severity = severity;
 	}
 
 	public String getKey(){

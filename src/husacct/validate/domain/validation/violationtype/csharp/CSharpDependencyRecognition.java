@@ -6,11 +6,6 @@ public enum CSharpDependencyRecognition implements IViolationType {
 	;
 
 	@Override
-	public int getDefaultSeverity() {
-		return 0;
-	}
-
-	@Override
 	public String getCategory() {
 		return "";
 	}

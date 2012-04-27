@@ -16,7 +16,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
-	
+
 	private static final long serialVersionUID = 7276696509798039409L;
 
 	private Drawing drawing;
@@ -25,75 +25,95 @@ public class DrawingView extends DefaultDrawingView {
 
 	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
 	
-	public DrawingView(Drawing drawing)
-	{
+	/**
+	 * holds true if a figure is selected
+	 */
+	private boolean selectionActive = false;
+
+	public DrawingView(Drawing drawing) {
 		this.drawing = drawing;
 		setDrawing(this.drawing);
-			
+
 		editor = new DefaultDrawingEditor();
 		editor.add(this);
-		
+
 		initializeSelectionTool();
 		initializeMouseListener();
 	}
-	
+
 	private void initializeSelectionTool() {
 		selectionTool = new SelectionTool();
 		editor.setTool(selectionTool);
 	}
-	
+
 	private void initializeMouseListener() {
-		
+
 		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) { 
-				onMouseClicked(e); 
-				}
-		} );
-		
-		addMouseWheelListener(new MouseWheelListener() { 
-			 public void mouseWheelMoved(MouseWheelEvent e) {
-				 onMouseWheel(e);
-			 }
-		} );
-	}
-	
-	private void onMouseClicked(MouseEvent e) {
-		
-		Set<Figure> selection = getSelectedFigures();
-		
-		if (!selection.isEmpty()) {
-			Figure first = selection.iterator().next();
-			
-			if (e.getButton() == MouseEvent.BUTTON1) {
-				if (e.getClickCount() == 1)
-					fireModuleSelectedEvent((BaseFigure)first);
-				else if (e.getClickCount() == 2) 
-					fireModuleZoomInEvent((BaseFigure)first);
+			public void mouseClicked(MouseEvent e) {
+				onMouseClicked(e);
 			}
-				
+		});
+
+		addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				onMouseWheel(e);
+			}
+		});
+	}
+
+	private void onMouseClicked(MouseEvent e) {
+
+		Set<Figure> selection = getSelectedFigures();
+
+		if (!selection.isEmpty()){
+			this.selectionActive = true;
+			
+			BaseFigure first = (BaseFigure)selection.iterator().next();
+
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				if (e.getClickCount() == 1) {
+					fireFigureSelected(first);
+				} else if (e.getClickCount() == 2) {
+					moduleZoom((BaseFigure) first);
+				}
+			}
+		}
+		else
+		{
+			if(this.selectionActive)
+			{
+				this.fireFigureDeselected();
+				this.selectionActive = false;
+			}
 		}
 	}
-	
-	private void fireModuleSelectedEvent(BaseFigure obj) {
+
+	private void fireFigureDeselected() {
 		for (MouseClickListener l : listeners) {
-			l.moduleSelected(obj);
+			l.figureDeselected();
 		}
 	}
-	
-	private void fireModuleZoomInEvent(BaseFigure obj) {
+
+	private void fireFigureSelected(BaseFigure fig) {
 		for (MouseClickListener l : listeners) {
-			l.moduleZoom(obj);
+			l.figureSelected(fig);
 		}
-	}	
-	
+	}
+
+	private void moduleZoom(BaseFigure fig) {
+		for (MouseClickListener l : listeners) {
+			l.moduleZoom(fig);
+		}
+	}
+
 	private void onMouseWheel(MouseWheelEvent e) {
-	
+
 	}
-	
+
 	public void addListener(MouseClickListener listener) {
 		listeners.add(listener);
 	}
-	
+
 	public void removeListener(MouseClickListener listener) {
 		listeners.remove(listener);
 	}
