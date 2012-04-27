@@ -41,14 +41,16 @@ public class MustUseRule extends RuleType{
 				totalCounter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
-		}
-		if(noDependencyCounter == totalCounter){
-			Message message = new Message(appliedRule);
+			if(noDependencyCounter == totalCounter){
+				Message message = new Message(appliedRule);
 
 
-			//Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
-			//violations.add(violation);
-		}
+				//Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
+				//violations.add(violation);
+			}
+		}	
+		if(noDependencyCounter != totalCounter)
+			violations.clear();
 		return violations;
 	}
 }
