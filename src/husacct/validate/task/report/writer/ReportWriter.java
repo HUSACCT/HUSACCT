@@ -66,6 +66,8 @@ public abstract class ReportWriter {
 		} else {
 			s = path + File.separatorChar + fileName;
 		}
+		s = s.replaceAll("." + extensionType.getExtension(), "");
+		
 		s += "." + extensionType.getExtension();
 		return s;
 	}
