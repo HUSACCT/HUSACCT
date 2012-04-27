@@ -104,7 +104,7 @@ public class TaskServiceImpl implements ITaskService{
 
 	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
 
-		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language.toLowerCase(), map);
 	}
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
@@ -116,5 +116,9 @@ public class TaskServiceImpl implements ITaskService{
 	public Map<String, List<ViolationType>> getViolationTypes(
 			String language) {
 		return domain.getAllViolationTypes(language);
+	}
+	
+	public Severity getSeverityFromKey(String language, String key){
+		return configuration.getSeverityFromKey(language, key);
 	}
 }

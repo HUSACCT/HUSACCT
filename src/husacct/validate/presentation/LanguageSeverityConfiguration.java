@@ -122,6 +122,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
+				 if (evt.getValueIsAdjusting()) {
+					 return;
+				 } 
 				rtsCategoryValueChanged();
 			}
 		});
@@ -401,7 +404,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void rtsApplyActionPerformed() {
-		
+		updateRuletypeSeverities();
 	}
 
 	private void vtsRestoreActionPerformed() {
@@ -413,7 +416,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void vtsApplyActionPerformed() {
-		
+		updateViolationtypeSeverities();
 	}
 
 	private void avtDeselectAllActionPerformed() {
@@ -441,7 +444,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void updateRuletypeSeverities() {
-		//TODO: Fix the fetching of the ruletypes en put them in a list to return to the reposetory
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < ruletypeModel.getRowCount(); i++){
@@ -450,18 +452,37 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		ts.updateSeverityPerType(map, language);
 	}
+	
+	private void updateViolationtypeSeverities() {
+		HashMap<String, Severity> map = new HashMap<String, Severity>();
+
+		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
+			map.put((String) violationtypeModel.getValueAt(i, 0), (Severity) violationtypeModel.getValueAt(i, 1));
+		}
+
+		ts.updateSeverityPerType(map, language);
+	}
 
 	private void loadRuleTypes(String category) {
-		System.out.println(category);
+		ruletypeModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
 			if (categoryString.equals(category)){
 				List<RuleType> rules = ruletypes.get(category);
 				for(RuleType ruletype: rules){
-					ruletypeModel.addRow(new Object[]{ruletype.getKey(), ts.getAllSeverities().get(0)});
+					Severity severity;
+					try{
+						severity = ts.getSeverityFromKey(language.toLowerCase(), ruletype.getKey());
+					} catch (Exception e){
+						severity = ts.getAllSeverities().get(0);
+					}
+					
+					
+					ruletypeModel.addRow(new Object[]{ruletype.getKey(), severity});
 				}
 			}
 
 		}
+		ruletypeModel.checkValuesAreValid();	
 	}
 
 	private void loadRuleTypeCategories() {
@@ -485,10 +506,17 @@ public class LanguageSeverityConfiguration extends JPanel {
 			if (categoryString.equals(violationTypeKey)){
 				List<ViolationType> violationtypes = violationTypes.get(violationTypeKey);
 				for(ViolationType violationtype: violationtypes){
-					violationtypeModel.addRow(new Object[]{violationtype.getViolationtypeKey(), ts.getAllSeverities().get(0)});
+					Severity severity;
+					try{
+						severity = ts.getSeverityFromKey(language.toLowerCase(), violationtype.getViolationtypeKey());
+					} catch (Exception e){
+						severity = ts.getAllSeverities().get(0);
+					}
+					violationtypeModel.addRow(new Object[]{violationtype.getViolationtypeKey(), severity});
 				}
 			}
 
 		}
+		violationtypeModel.checkValuesAreValid();
 	}
 }

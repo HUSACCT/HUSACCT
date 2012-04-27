@@ -51,4 +51,8 @@ public class ConfigurationServiceImpl {
 	public void setSeveritiesPerTypesPerProgrammingLanguages(String language, HashMap<String, Severity> severitiesPerTypesPerProgrammingLanguages) {
 		severityRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
 	}
+	
+	public Severity getSeverityFromKey(String language, String key){
+		return severityRepository.getSeverity(language, key);
+	}
 }

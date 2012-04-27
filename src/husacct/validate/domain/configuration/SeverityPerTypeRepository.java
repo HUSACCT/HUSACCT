@@ -5,12 +5,15 @@ import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.Severity;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 
 	public SeverityPerTypeRepository(){
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+		//TODO delete test data
+		severitiesPerTypePerProgrammingLanguage.put("java", new HashMap<String, Severity>());
 	}
 
 	public HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypePerProgrammingLanguage() {
@@ -46,12 +49,14 @@ public class SeverityPerTypeRepository {
 	}
 
 	public void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
-		HashMap<String, Severity> local = this.severitiesPerTypePerProgrammingLanguage.get(language);
-		if(local != null){
-			local = severityMap;
+		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(language);
+		for(Entry<String, Severity> entry : severityMap.entrySet()){
+			if(local.containsKey(entry.getKey())){
+				local.remove(entry.getKey());
+			}
+			local.put(entry.getKey(), entry.getValue());
 		}
-		else{
-			throw new ProgrammingLanguageNotFound();
-		}
+		severitiesPerTypePerProgrammingLanguage.remove(language);
+		severitiesPerTypePerProgrammingLanguage.put(language, local);
 	}
 }
