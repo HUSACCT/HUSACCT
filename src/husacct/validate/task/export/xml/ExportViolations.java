@@ -1,4 +1,4 @@
-package husacct.validate.abstraction.export.xml;
+package husacct.validate.task.export.xml;
 
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
