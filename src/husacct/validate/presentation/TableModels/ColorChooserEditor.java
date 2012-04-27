@@ -1,4 +1,4 @@
-package husacct.validate.task.TableModels;
+package husacct.validate.presentation.TableModels;
 
 import java.awt.Color;
 import java.awt.Component;

@@ -2,19 +2,19 @@ package husacct.validate.task;
 
 import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.TestData;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.task.TableModels.ColorTableModel;
-import husacct.validate.task.TableModels.ComboBoxTableModel;
+import husacct.validate.presentation.TableModels.ColorTableModel;
+import husacct.validate.presentation.TableModels.ComboBoxTableModel;
 import husacct.validate.task.filter.FilterController;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -24,7 +24,6 @@ public class TaskServiceImpl implements ITaskService{
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final AnalyseServiceStub acs;
-	private TestData data = new TestData();
 
 
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
@@ -32,9 +31,7 @@ public class TaskServiceImpl implements ITaskService{
 		this.domain = domain;
 		filterController = new FilterController(this);
 		acs = new AnalyseServiceStub();
-		conficurationController = new ConfigurationController();
-		configuration.addSeverities(data.getSeverities());
-		configuration.addViolations(data.getViolations());
+		conficurationController = new ConfigurationController(this);
 	}
 
 	public List<Violation> getAllViolations(){
@@ -47,24 +44,24 @@ public class TaskServiceImpl implements ITaskService{
 	}
 
 	@Override
-	public void setFilterValues(ArrayList<String> ruletypes,
-			ArrayList<String> violationtypes,
+	public void setFilterValues(ArrayList<String> ruletypesKeys,
+			ArrayList<String> violationtypesKeys,
 			ArrayList<String> paths, boolean hideFilter) {
-		filterController.setFilterValues(ruletypes, violationtypes, paths, hideFilter);
+		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter);
 	}
 
 	@Override
-	public ArrayList<Violation> filterViolations(Boolean applyfilter) {
+	public ArrayList<Violation> applyFilterViolations(Boolean applyfilter) {
 		return filterController.filterViolations(applyfilter);
 	}
 
 	@Override
-	public ArrayList<String> loadRuletypes() {
+	public ArrayList<String> loadRuletypesForFilter() {
 		return filterController.loadRuletypes();
 	}
 
 	@Override
-	public ArrayList<String> loadViolationtypes() {
+	public ArrayList<String> loadViolationtypesForFilter() {
 		return filterController.loadViolationtypes();
 	}
 
@@ -78,47 +75,27 @@ public class TaskServiceImpl implements ITaskService{
 		return configuration.getAllSeverities();
 	}
 
-	public void addSeverities(List<Severity> severities) {
-		configuration.addSeverities(severities);
-	}
-
 	public String[] getAvailableLanguages(){
 		return acs.getAvailableLanguages();
 	}
 
-	public void ApplySeverities(ColorTableModel ctm){
+	public void applySeverities(LinkedHashMap<Integer, String> linkedmap){
 		List<Severity> severityList = new ArrayList<Severity>();
-		for (int i = 0; i < ctm.getRowCount(); i++) {
-			try{
-				Severity s = getAllSeverities().get(i);
-				s.setColor((Color) ctm.getValueAt(i, 1));
-				s.setUserName((String) ctm.getValueAt(i, 0));
-				severityList.add(s);
-			} catch(IndexOutOfBoundsException exception){
-				Severity s = new Severity();
-				s.setColor((Color) ctm.getValueAt(i, 1));
-				s.setUserName((String) ctm.getValueAt(i, 0));
-				severityList.add(s);
-			}
+
+		for (int i = 0; i < linkedmap.size(); i++) {
+			Severity severity = conficurationController.SererityChecker(linkedmap.get(i));
+			severity.setUserName("TODO");
+			severity.setColor(Color.RED);
 		}
 		addSeverities(severityList);
 	}
+	private void addSeverities(List<Severity> severities) {
+		configuration.addSeverities(severities);
+	}
 
-	public void UpdateRuletype(ComboBoxTableModel ruletypeModel, ComboBoxTableModel violationtypeModel, String language){
-//		HashMap<String, List<RuleType>> ruletypes = getRuletypes(language);
-//		HashMap<String, Severity> SeverityMap = new HashMap<String, Severity>();
-//		for (int i = 0; i < ruletypeModel.getRowCount(); i++) {
-//			SeverityMap.put(ruletypes.get(i).getKey(), (Severity)ruletypeModel.getValueAt(i, 1));
-//
-//			List<ViolationType> vt = ruletypes.get(i).getViolationTypes();
-//
-//			for (int j = 0; j < violationtypeModel.getRowCount(); j++) {
-//				vt.get(j).setActive((Boolean) violationtypeModel.getValueAt(j, 2));
-//
-//				SeverityMap.put(vt.get(i).getViolationtypeKey(), (Severity)violationtypeModel.getValueAt(j, 1));
-//			}
-//		}
-//		configuration.setSeveritiesPerTypesPerProgrammingLanguages(SeverityMap);
+	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
+
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,

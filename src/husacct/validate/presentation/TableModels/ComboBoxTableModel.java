@@ -1,4 +1,4 @@
-package husacct.validate.task.TableModels;
+package husacct.validate.presentation.TableModels;
 
 import husacct.validate.domain.validation.Severity;
 import java.util.List;

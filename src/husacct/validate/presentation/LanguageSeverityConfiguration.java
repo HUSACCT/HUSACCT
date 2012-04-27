@@ -1,11 +1,13 @@
 package husacct.validate.presentation;
 
 import husacct.validate.domain.validation.Severity;
+import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.task.TableModels.ComboBoxTableModel;
+import husacct.validate.presentation.TableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
@@ -456,16 +458,22 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}//GEN-LAST:event_avtViolationtypeTableValueChanged
 
 	private void rtsCategoryValueChanged() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_rtsCategoryValueChanged
+		LoadRuleTypes((String) rtsCategory.getSelectedValue());
+	}
 
 	private void vtsCategoryValueChanged() {
 		// TODO add your handling code here:
 	}
 
-	private void applyViolationTypesActionPerformed() {
+	private void updateRuletypeSeverities() {
 		//TODO: Fix the fetching of the ruletypes en put them in a list to return to the reposetory
-		ts.UpdateRuletype(ruletypeModel, violationtypeModel, language);
+		HashMap<String, Severity> map = new HashMap<String, Severity>();
+
+		for(int i = 0; i < ruletypeModel.getRowCount(); i++){
+			map.put((String) ruletypeModel.getValueAt(i, 0), (Severity) ruletypeModel.getValueAt(i, 1));
+		}
+
+		ts.updateSeverityPerType(map, language);
 	}
 
 	private void LoadRuleTypes(String category) {
@@ -479,19 +487,19 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		}
 	}
+	
+	private void LoadRuleTypeCategories() {
+		DefaultListModel model = new DefaultListModel();
+		for (String categoryString : ruletypes.keySet()) {
+			model.addElement(categoryString);
+		}
+		rtsCategory.setModel(model);
+	}
+	
+	//private void LoadViolationTypes
 
 	private void loadViolationType(String ruletypeKey) {
-//		for (RuleType ruletype : ruletypes) {
-//			if (ruletype.getKey().equals(ruletypeKey)) {
-//				clearModel(violationtypeModel);
-//				for (ViolationType violationtype : ruletype.getViolationTypes()) {
-//					violationtypeModel.addRow(new Object[]{violationtype.
-//								getViolationtypeKey(), 1,
-//														   violationtype.
-//								isActive()});
-//				}
-//			}
-//		}
+
 	}
 
 	private void clearModel(ComboBoxTableModel model) {
@@ -501,4 +509,5 @@ public class LanguageSeverityConfiguration extends JPanel {
 			rows--;
 		}
 	}
+	
 }
