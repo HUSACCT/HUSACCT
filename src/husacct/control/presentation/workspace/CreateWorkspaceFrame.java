@@ -27,5 +27,4 @@ public class CreateWorkspaceFrame extends JFrame{
 		this.getContentPane().add(createButton);
 		this.setVisible(true);
 	}
-
 }

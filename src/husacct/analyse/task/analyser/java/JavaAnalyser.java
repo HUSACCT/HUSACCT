@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.infrastructure.antlr.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import husacct.analyse.task.analyser.AbstractAnalyser;
 
 public class JavaAnalyser extends AbstractAnalyser{

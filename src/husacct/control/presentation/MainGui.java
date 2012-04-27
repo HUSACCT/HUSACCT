@@ -10,6 +10,7 @@ import husacct.control.presentation.menubar.ViewMenu;
 import husacct.control.task.MainController;
 
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -39,7 +40,7 @@ public class MainGui extends JFrame {
 		contentPane.setBorder(new EmptyBorder(50, 50, 50, 50));
 		setContentPane(contentPane);
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
-		
+		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);	
 		
 	}
@@ -50,8 +51,8 @@ public class MainGui extends JFrame {
 		
 		FileMenu fileMenu = new FileMenu(controller);
 		ViewMenu viewMenu = new ViewMenu(controller.getViewController());
-		DefineMenu defineMenu = new DefineMenu(controller.getStateController());
-		ValidateMenu validateMenu = new ValidateMenu(controller.getStateController());
+		DefineMenu defineMenu = new DefineMenu(controller);
+		ValidateMenu validateMenu = new ValidateMenu(controller);
 		ExportMenu exportMenu = new ExportMenu(controller.getStateController());
 		LanguageMenu languageMenu = new LanguageMenu(controller.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();

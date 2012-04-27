@@ -1,52 +1,95 @@
 package husacct.validate.domain.assembler;
 
+import husacct.Main;
+import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.validate.domain.factory.AbstractViolationType;
-import husacct.validate.domain.factory.RuletypesFactory;
-import husacct.validate.domain.factory.ViolationTypeFactory;
-import husacct.validate.domain.ruletype.Rule;
-import husacct.validate.domain.violation.Violation;
-import husacct.validate.domain.violationtype.ViolationType;
+import husacct.validate.domain.exception.LanguageNotFoundException;
+import husacct.validate.domain.exception.RuleInstantionException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class ViolationAssembler {
+	private Logger logger = Logger.getLogger(Main.class);
+
 	private AbstractViolationType violationtypeFactory;
-	private RuletypesFactory ruleFactory;
+	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
+	private MessageAssembler messageAssembler;
 
 	public ViolationAssembler(){
-		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();		
+		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
 		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory();
 
-		this.ruleFactory = new RuletypesFactory();
+		this.ruleFactory = new RuleTypesFactory();
 		this.ruleAssembler = new RuletypeAssembler();
+		this.messageAssembler = new MessageAssembler();
 	}
 
 	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
 		List<ViolationDTO> violationDTOList = new ArrayList<ViolationDTO>();
 
 		for (Violation violation : violations) {
-
-			violationDTOList.add(createViolationDTO(violation));
+			try{		
+				ViolationDTO violationDTO = createViolationDTO(violation);
+				violationDTOList.add(violationDTO);
+			}catch(ViolationTypeNotFoundException e){
+				logger.warn(String.format("ViolationtypeKey: %s not found in violation", violation.getViolationtypeKey()));
+			}	
+			catch(LanguageNotFoundException e){
+				logger.warn(e.getMessage());
+			}
+			catch(RuleTypeNotFoundException e){
+				logger.warn(e.getMessage());
+			} catch (RuleInstantionException e) {
+				logger.warn(e.getMessage());
+			}
 		}
 		return violationDTOList;
 	}
 
-	private ViolationDTO createViolationDTO(Violation violation){
-		RuleTypeDTO rule = createRuleTypeDTO(violation);	
-		ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
-		return new ViolationDTO(violation.getClassPathFrom(),violation.getClassPathTo(), violation.getMessage(), violation.getLogicalModuleFrom(), violation.getLogicalModuleTo(), violationtype, rule);
+	private ViolationDTO createViolationDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
+		try{
+			RuleTypeDTO rule = createRuleTypeDTO(violation);
+			ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
+
+			final String classPathFrom = violation.getClassPathFrom();
+			final String classPathTo = violation.getClassPathTo();
+			final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+			final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+			final MessageDTO message = messageAssembler.createMessageDTO(violation.getMessage());
+
+			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message);
+		}catch(ViolationTypeNotFoundException e){
+			throw new ViolationTypeNotFoundException();
+		}
 	}
 
-	private RuleTypeDTO createRuleTypeDTO(Violation violation){
-		ViolationType violationtype = violationtypeFactory.createViolationType(violation.getViolationtypeKey());
-		Rule rule = ruleFactory.generateRuleType(violation.getRuletypeKey());
 
-		RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);
-		return ruleDTO;
+	private RuleTypeDTO createRuleTypeDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
+		try{
+			if(violationtypeFactory == null){
+				throw new LanguageNotFoundException();
+			}			
+			ViolationType violationtype = violationtypeFactory.createViolationType(violation.getViolationtypeKey());
+			RuleType rule = ruleFactory.generateRuleType(violation.getRuletypeKey());
+
+			RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);
+			return ruleDTO;
+		}catch(ViolationTypeNotFoundException e){
+			throw new ViolationTypeNotFoundException();
+		}		
 	}
 }

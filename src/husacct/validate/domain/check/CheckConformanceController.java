@@ -1,48 +1,59 @@
 package husacct.validate.domain.check;
 
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.factory.RuletypesFactory;
-import husacct.validate.domain.ruletype.Rule;
-import husacct.validate.domain.violation.Violation;
+import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.RuleInstantionException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckConformanceController {
-	private List<Violation> violations;
-	private RuletypesFactory ruleFactory;
-	private Map<String, Rule> ruleCache;
+import org.apache.log4j.Logger;
 
-	public CheckConformanceController(){
+public class CheckConformanceController {
+	private final ConfigurationServiceImpl configuration;
+
+	private Logger logger = Logger.getLogger(CheckConformanceController.class);
+	private List<Violation> violations;
+	private RuleTypesFactory ruleFactory;
+	private Map<String, RuleType> ruleCache;
+
+	public CheckConformanceController(ConfigurationServiceImpl configuration){
+		this.configuration = configuration;
+		this.configuration.clearViolations();
 		this.violations = new ArrayList<Violation>();
-		this.ruleCache = new HashMap<String, Rule>();
-		this.ruleFactory = new RuletypesFactory();
+		this.ruleCache = new HashMap<String, RuleType>();
+		this.ruleFactory = new RuleTypesFactory();
 	}
 
-	public void CheckConformance(RuleDTO[] appliedRules){
+	public void checkConformance(RuleDTO[] appliedRules){
 		for(RuleDTO appliedRule : appliedRules){
-			Rule rule = getRuleType(appliedRule.ruleTypeKey);
-			if(rule != null){
+			try{
+				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 				List<Violation> newViolations = rule.check(appliedRule);
-				violations.addAll(newViolations);
-			}
-			else{
-				//rule(Key) does not exists, thus ignore appliedRule
+				configuration.addViolations(newViolations);
+			}catch(RuleTypeNotFoundException e){
+				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+			} catch (RuleInstantionException e) {
+				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 			}
 		}
 	}
 
-	private Rule getRuleType(String ruleKey){
-		Rule rule = ruleCache.get(ruleKey);
-
+	private RuleType getRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
+		RuleType rule = ruleCache.get(ruleKey);
 		if(rule == null){
 			rule = ruleFactory.generateRuleType(ruleKey);
 		}
 		if(rule != null){
 			ruleCache.put(ruleKey, rule);
 		}
+
 		return rule;
 	}
 

@@ -1,7 +1,7 @@
 package husacct.validate.domain.assembler;
 
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.validate.domain.violationtype.ViolationType;
+import husacct.validate.domain.validation.ViolationType;
 
 import java.util.ArrayList;
 import java.util.List;

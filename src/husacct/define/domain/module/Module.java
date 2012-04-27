@@ -1,8 +1,8 @@
 package husacct.define.domain.module;
 
-import java.util.ArrayList;
-
 import husacct.define.domain.SoftwareUnitDefinition;
+
+import java.util.ArrayList;
 
 public class Module {
 	
@@ -83,12 +83,20 @@ public class Module {
 	//SoftwareUnitDefinition
 	public void addSUDefinition(SoftwareUnitDefinition unit)
 	{
-		mappedSUunits.add(unit);
+		if(!mappedSUunits.contains(unit) && !this.hasSUDefinition(unit.getName())) {
+			mappedSUunits.add(unit);
+		}else{
+			System.out.println("This software unit has already been added!");
+		}
 	}
 	
 	public void removeSUDefintion(SoftwareUnitDefinition unit)
 	{
-		mappedSUunits.remove(unit);
+		if(mappedSUunits.contains(unit) && this.hasSUDefinition(unit.getName())) {
+			mappedSUunits.remove(unit);
+		}else{
+			System.out.println("This software unit does not exist!");
+		}
 	}
 	
 	private boolean hasSUDefinition(String name) 
@@ -199,6 +207,19 @@ public class Module {
 
 	public long getId() {
 		return id;
+	}
+
+	public boolean isMapped() {
+		boolean isMapped = false;
+		if (mappedSUunits.size() > 0){
+			isMapped = true;
+		}
+		for (Module mod : subModules){
+			if (mod.isMapped()){
+				isMapped = true;
+			}
+		}
+		return isMapped;
 	}
 
 }

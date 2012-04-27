@@ -4,16 +4,16 @@ import java.util.List;
 
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
-import husacct.validate.domain.ruletype.Rule;
-import husacct.validate.domain.violationtype.ViolationType;
+import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.ruletype.RuleType;
 
-public class AssemblerController {	
-	public CategoryDTO[] createCategoryDTO(List<Rule> rules){
+public class AssemblerController {
+	public CategoryDTO[] createCategoryDTO(List<RuleType> rules){
 		CategoryAssembler assembler = new CategoryAssembler();
 		return assembler.createCategoryDTO(rules);
 	}
-	
-	public RuleTypeDTO createRuleTypeDTO(Rule rule, ViolationType violationtype){
+
+	public RuleTypeDTO createRuleTypeDTO(RuleType rule, ViolationType violationtype){
 		RuletypeAssembler assembler = new RuletypeAssembler();
 		return assembler.createRuleTypeDTO(rule, violationtype);
 	}

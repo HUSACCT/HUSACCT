@@ -1,5 +1,6 @@
 package husacct.control.presentation.menubar;
 
+import husacct.control.task.MainController;
 import husacct.control.task.ViewController;
 
 import java.awt.event.ActionEvent;
@@ -11,17 +12,18 @@ import javax.swing.JMenuItem;
 @SuppressWarnings("serial")
 public class ViewMenu extends JMenu{
 	
-	private ViewController controller;
+	private ViewController viewcontroller;
+	private MainController maincontroller;
 	
 	public ViewMenu(ViewController viewController){
 		super("View");
-		this.controller = viewController;
+		this.viewcontroller = viewController;
 		
 		JMenuItem logicalArchitectureItem = new JMenuItem("Logical architecture");
 		this.add(logicalArchitectureItem);
 		logicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Logical architecture
+				maincontroller.getViewController().toggleDefineGui();
 			}
 		});
 		

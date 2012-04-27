@@ -1,54 +1,80 @@
 package husacct.graphics;
 
-import husacct.graphics.task.Controller;
+import husacct.ServiceProvider;
+import husacct.common.savechain.ISaveable;
+import husacct.graphics.task.AnalysedController;
+import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.DrawingDetail;
 
 import javax.swing.JInternalFrame;
 
-public class GraphicsServiceImpl implements IGraphicsService {
+import org.jdom2.Element;
 
-	private Controller controller;
-//	private AnalysedGUIController analysed;
-//	private DefinedGUIController defined;
+public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 
-	public GraphicsServiceImpl()
-	{
-		controller = new Controller();
+	private AnalysedController analysedController;
+	private DefinedController definedController;
+
+	public GraphicsServiceImpl() {
+		ServiceProvider.getInstance().getAnalyseService();
+	}
+
+	private void createControllers() {
+		if (analysedController == null) {
+			analysedController = new AnalysedController();
+		}
+		if (definedController == null) {
+			definedController = new DefinedController();
+		}
 	}
 
 	@Override
-	public JInternalFrame getAnalysedArchitectureGUI()
-	{
-		return controller.getGUI();
+	public JInternalFrame getAnalysedArchitectureGUI() {
+		createControllers();
+		return analysedController.getGUI();
 	}
 
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
-
-		return controller.getGUI();
+		createControllers();
+		return definedController.getGUI();
 	}
 
 	@Override
-	public void drawAnalysedArchitecture()
-	{
-		controller.drawAnalysedArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+	public void drawAnalysedArchitecture() {
+		createControllers();
+		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
-	public void drawAnalysedArchitectureWithViolations()
-	{
-		controller.drawAnalysedArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	public void drawAnalysedArchitectureWithViolations() {
+		createControllers();
+		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
-	public void drawDefinedArchitecture()
-	{
-		controller.drawDefinedArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+	public void drawDefinedArchitecture() {
+		createControllers();
+		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
-	public void drawDefinedArchitectureWithViolations()
-	{
-		controller.drawDefinedArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	public void drawDefinedArchitectureWithViolations() {
+		createControllers();
+		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
+	}
+
+	@Override
+	public Element getWorkspaceData() {
+		createControllers();
+		Element data = new Element("ArchitecureGraphicsService");
+		data.addContent("testdata");
+		return data;
+	}
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		createControllers();
+		//TODO: Set workspace data.
 	}
 }
