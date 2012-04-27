@@ -53,7 +53,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 
 	@Override
 	public void initGui() {
-		DefinitionController.getInstance().addObserver(this);
+//		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -133,10 +133,18 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	public void updateModuleTree() {
+//		//Save the treepath to remember the tree selection after the updated
+//		TreePath path = null;
+//		if (this.moduleTree != null){
+//			path = this.moduleTree.getSelectionPath();
+//		}
+		
 		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getRootComponent();
 		this.moduleTree = new ModuleTree(rootComponent);
 		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
 		this.moduleTree.addTreeSelectionListener(this);
+		
+//		this.moduleTree.setSelectionPath(path);
 	}
 	
 	@Deprecated
@@ -176,7 +184,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 //				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
 //			}
 //		}
-		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame();
+		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
 		addModuleFrame.initUI();
 	}
 	
@@ -204,13 +212,16 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	public long getSelectedModuleId() {
+		long moduleId = -1;
 		TreePath path = this.moduleTree.getSelectionPath();
-		AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-		if(selectedComponent instanceof LayerComponent) {
-			LayerComponent layerComponent = (LayerComponent) selectedComponent;
-			return layerComponent.getHierarchicalLevel();
+		if (path != null){//returns null if nothing is selected
+			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
+			if(selectedComponent instanceof LayerComponent) {
+				LayerComponent layerComponent = (LayerComponent) selectedComponent;
+				moduleId = layerComponent.getHierarchicalLevel();
+			}
 		}
-		return -1;
+		return moduleId;
 	}
 	
 	@Deprecated

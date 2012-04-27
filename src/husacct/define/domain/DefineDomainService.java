@@ -60,7 +60,7 @@ public class DefineDomainService {
 	//LAYERS
 	//LAYERS
 	//LAYERS
-	public long addLayer(String name, int level) {
+	public long addLayer(long parentModuleId, String name, int level) {
 		Module layer = new Layer(name, level);
 		((Layer) layer).setHierarchicalLevel(level);
 		long moduleId = SoftwareArchitecture.getInstance().addModule(layer);

@@ -1,5 +1,6 @@
 package husacct.define.presentation.jframe;
 
+import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
 
 import java.awt.GridLayout;
@@ -20,13 +21,15 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	
+	private ModuleJPanel modulePanel;
 	private JPanel innerPanel;
 	
 	private JTextField moduleNameField;
 	private JTextField hierarchicalLevelField;
 	
-	public AddModuleValuesJFrame() {
+	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
 		super();
+		this.modulePanel = modulePanel;
 	}
 	
 	@Override
@@ -103,6 +106,9 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		if(!moduleName.isEmpty() && !level.isEmpty()) {
 			DefinitionController definitionController = DefinitionController.getInstance();
 			definitionController.addLayer(moduleName, Integer.parseInt(level));
+			//update tree view
+			this.modulePanel.updateModuleTree();
+			
 			this.dispose();
 		}
 	}

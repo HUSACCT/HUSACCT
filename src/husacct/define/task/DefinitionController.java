@@ -62,7 +62,9 @@ public class DefinitionController extends Observable implements Observer {
 		Log.i(this, "DefinitionController - addLayer("+layerName+")");
 		try {
 			JPanelStatus.getInstance("Adding Layer").start();
-			DefineDomainService.getInstance().addLayer(layerName, hierarchicalLevel);
+			long selectedModuleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			
+			DefineDomainService.getInstance().addLayer(selectedModuleId, layerName, hierarchicalLevel);
 			this.notifyObservers();
 		} catch (Exception e) {
 			Log.e(this, "DefinitionController - addLayer("+layerName+") - exception: " + e.getMessage());
@@ -295,6 +297,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	public AbstractDefineComponent getRootComponent() {
+		//TODO complement with normal modules/external libraries instead of layers
 		Log.i(this, "update Module Tree");
 		JPanelStatus.getInstance("Updating modules").start();
 		
