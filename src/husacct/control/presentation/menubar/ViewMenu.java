@@ -23,7 +23,7 @@ public class ViewMenu extends JMenu{
 		this.add(logicalArchitectureItem);
 		logicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				maincontroller.getViewController().toggleDefineGui();
+				//maincontroller.getViewController().toggleDefineGui();
 			}
 		});
 		

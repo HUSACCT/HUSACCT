@@ -9,11 +9,13 @@ import husacct.control.presentation.menubar.ValidateMenu;
 import husacct.control.presentation.menubar.ViewMenu;
 import husacct.control.task.MainController;
 
-import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -36,10 +38,13 @@ public class MainGui extends JFrame {
 		
 
 		// TODO: cleanup
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(50, 50, 50, 50));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		
+		contentPane = new JPanel(gridBagLayout);
+		
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);	
 		

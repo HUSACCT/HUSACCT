@@ -2,6 +2,7 @@ package husacct.control.presentation.menubar;
 
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
+import husacct.control.task.StateController;
 import husacct.control.task.ViewController;
 
 import java.awt.event.ActionEvent;
@@ -30,7 +31,9 @@ public class DefineMenu extends JMenu{
 			public void actionPerformed(ActionEvent e){
 				maincontroller.getViewController().setDefineGui();
 				maincontroller.getViewController().showDefineGui();
-				maincontroller.getStateController().setState(2);
+				maincontroller.getViewController().setDefinedArchitectureGui();
+				maincontroller.getViewController().showDefinedArchitectureGui();
+				maincontroller.getStateController().setState(StateController.VALIDATED);
 			}
 		});
 		
