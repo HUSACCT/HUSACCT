@@ -19,7 +19,7 @@ import java.util.List;
 
 public class MustUseRule extends RuleType{
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED, RuleTypes.IS_NOT_ALLOWED);
-		
+
 	public MustUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules,severity);
 	}
@@ -33,7 +33,7 @@ public class MustUseRule extends RuleType{
 		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
-		
+
 		int totalCounter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
@@ -41,14 +41,16 @@ public class MustUseRule extends RuleType{
 				totalCounter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
-		}
-		if(noDependencyCounter == totalCounter){
-			Message message = new Message(appliedRule);
-			
-			//FIXME: create a violation
-			//Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
-			//violations.add(violation);
-		}
+			if(noDependencyCounter == totalCounter){
+				Message message = new Message(appliedRule);
+
+
+				//Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
+				//violations.add(violation);
+			}
+		}	
+		if(noDependencyCounter != totalCounter)
+			violations.clear();
 		return violations;
 	}
 }

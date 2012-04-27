@@ -45,7 +45,7 @@ public class SkipCallRule extends RuleType {
 		
 		for (ModuleDTO module :allModules){
 			if(module.logicalPath == appliedRule.moduleFrom.logicalPath){
-				toModules = toModules(allModules,allModules.indexOf(module));
+				toModules = getModulesTo(allModules,allModules.indexOf(module));
 			}
 		}		
 		
@@ -71,10 +71,10 @@ public class SkipCallRule extends RuleType {
 		return violations;
 	}
 	
-	private List<List<Mapping>> toModules(List<ModuleDTO> allModules, int fromModuleNumber){
+	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(ModuleDTO module : allModules){
-			if(allModules.indexOf(module) > fromModuleNumber+1)
+			if(allModules.indexOf(module) > moduleFromNumber+1)
 			returnList.add(CheckConformanceUtil.getAllModulesFromLayer(allModules.get(allModules.indexOf(module))));
 		}		
 		return returnList;

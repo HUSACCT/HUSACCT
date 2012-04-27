@@ -46,7 +46,7 @@ public class BackCallRule extends RuleType {
 		for (ModuleDTO module :allModules){
 			counter++;
 			if(module.logicalPath == appliedRule.moduleFrom.logicalPath){
-				toModules = toModules(allModules, counter);
+				toModules = getModulesTo(allModules, counter);
 			}
 		}		
 		
@@ -72,7 +72,7 @@ public class BackCallRule extends RuleType {
 		return violations;
 	}
 	
-	private List<List<Mapping>> toModules(List<ModuleDTO> allModules, int counter){
+	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(int i=0 ; i<counter ; i++){
 			returnList.add(CheckConformanceUtil.getAllModulesFromLayer(allModules.get(i)));
