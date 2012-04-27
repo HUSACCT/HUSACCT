@@ -2,6 +2,7 @@ package husacct.define.task;
 
 import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.Layer;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -300,26 +301,39 @@ public class DefinitionController extends Observable implements Observer {
 		JPanelStatus.getInstance("Updating Modules").start();
 		
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
-		
-		ArrayList<Long> moduleIds = DefineDomainService.getInstance().getLayerIdsSorted();
-		if(moduleIds != null) {
-			for (Long moduleId : moduleIds) {
-				LayerComponent layerComponent = new LayerComponent();
-				layerComponent.setHierarchicalLevel(moduleId);
-				try {
-					layerComponent.setName(DefineDomainService.getInstance().getModuleNameById(moduleId));
-				} catch (Exception e) {
-					Log.e(this, "updateModule() - exception: " + e.getMessage());
-					UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-				}
-				rootComponent.addChild(layerComponent);
-			}
+		Module[] modules = DefineDomainService.getInstance().getModules();
+		for (Module module : modules) {
+			this.addChildComponents(rootComponent, module);
 		}
-		
-		
-		
+
 		JPanelStatus.getInstance().stop();
 		return rootComponent;
+	}
+	
+	private void addChildComponents(AbstractDefineComponent parentComponent, Module module) {
+		AbstractDefineComponent childComponent = this.checkModuleType(module);
+		for(Module subModule : module.getSubModules()) {
+			this.addChildComponents(childComponent, subModule);
+		}
+		parentComponent.addChild(childComponent);
+	}
+	
+	private AbstractDefineComponent checkModuleType(Module module) {
+		AbstractDefineComponent returnComponent = null;
+		if(module instanceof Layer) {
+			returnComponent = this.createLayerComponent(module);
+		} else {
+			Log.e(this, "checkModuleType() - ModuleType not implemented");
+			UiDialogs.errorDialog(definitionJPanel, "ModuleType is not implemented yet", "Error");
+		}
+		return returnComponent;
+	}
+	
+	private AbstractDefineComponent createLayerComponent(Module module) {
+		LayerComponent layerComponent = new LayerComponent();
+		layerComponent.setHierarchicalLevel(module.getId());
+		layerComponent.setName(DefineDomainService.getInstance().getModuleNameById(module.getId()));
+		return layerComponent;
 	}
 
 	/**
