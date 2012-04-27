@@ -2,6 +2,7 @@ package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.Severity;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +27,15 @@ public class SeverityConfigRepository {
 		this.currentSeverities = severities;
 	}
 	
-	public Severity getSeverity(String key){
+	public Severity getSeverityByName(String severityName){
 		for(Severity defaultSeverity : defaultSeverities){
-			if(key.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
+			if(severityName.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
 				return defaultSeverity;
 			}
 		}
 		
 		for(Severity customSeverity : currentSeverities){
-			if(key.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
 				return customSeverity;
 			}		
 		}

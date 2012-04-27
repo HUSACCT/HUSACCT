@@ -1,6 +1,7 @@
 package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.exception.ProgrammingLanguageNotFound;
+import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.Severity;
 
 import java.util.HashMap;
@@ -14,6 +15,22 @@ public class SeverityPerTypeRepository {
 
 	public HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypePerProgrammingLanguage() {
 		return severitiesPerTypePerProgrammingLanguage;
+	}
+
+	public Severity getSeverity(String language, String key){
+		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(language);
+		if(severityPerType == null){
+			throw new SeverityNotFoundException();
+		}
+		else{
+			Severity severity = severityPerType.get(key);
+			if(severity == null){
+				throw new SeverityNotFoundException();
+			}
+			else{
+				return severity;
+			}
+		}
 	}
 
 	public void restoreDefaultSeverity(String language, String key){

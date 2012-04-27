@@ -23,13 +23,13 @@ public abstract class RuleType {
 
 	protected RuleTypesFactory ruletypelanguagefactory;
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes){
+	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
 		this.violationtypes = violationtypes;
 		this.exceptionRuleKeys = exceptionRuletypes;
-		this.severity = null;
+		this.severity = severity;
 	}
 
 	public String getKey(){

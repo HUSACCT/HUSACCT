@@ -1,15 +1,14 @@
 package husacct.graphics.presentation.figures;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ComponentFigure extends BaseFigure {
-
+public class ComponentFigure extends NamedFigure
+{
 	private static final long serialVersionUID = -344477017055924400L;
 
 	public static final int SPACE_LEFT = 34;
@@ -21,26 +20,23 @@ public class ComponentFigure extends BaseFigure {
 	private RectangleFigure box2;
 	private TextFigure textBox;
 
-	public ComponentFigure(Rectangle2D.Double rect, String name) {
-		super(rect, name);
-	}
-
-	@Override
-	protected void initializeComponents() {
+	public ComponentFigure(String name)
+	{
+		super(name);
+		
 		this.mainBox = new RectangleFigure();
 		this.box1 = new RectangleFigure();
 		this.box2 = new RectangleFigure();
-		this.textBox = new TextFigure(name);
+		this.textBox = new TextFigure(this.getName());
 
 		this.children.add(mainBox);
 		this.children.add(box1);
 		this.children.add(box2);
 		this.children.add(textBox);
-
-		this.sizeChildBoxes(anchor, lead);
 	}
 
-	private void sizeChildBoxes(Point2D.Double anchor, Point2D.Double lead) {
+	private void sizeChildBoxes(Point2D.Double anchor, Point2D.Double lead)
+	{
 		if ((lead.x - anchor.x) < getMinimumWidth()) {
 			lead.x = anchor.x + getMinimumWidth();
 		}
@@ -70,24 +66,28 @@ public class ComponentFigure extends BaseFigure {
 		this.textBox.setBounds(textBoxOrigin, null);
 	}
 
-	public static int getMinimumHeight() {
+	public static int getMinimumHeight()
+	{
 		return COMP_DISTANCE + COMP_HEIGHT + COMP_DISTANCE + COMP_HEIGHT
 				+ COMP_DISTANCE;
 	}
 
-	public static int getMinimumWidth() {
+	public static int getMinimumWidth()
+	{
 		return SPACE_LEFT * 4;
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
+	{
 		this.sizeChildBoxes(anchor, lead);
 
 		invalidate();
 	}
 
 	@Override
-	public ComponentFigure clone() {
+	public ComponentFigure clone()
+	{
 		ComponentFigure that = (ComponentFigure) super.clone();
 		
 		that.mainBox = this.mainBox.clone();

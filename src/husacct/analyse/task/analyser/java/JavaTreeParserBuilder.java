@@ -1,7 +1,10 @@
 package husacct.analyse.task.analyser.java;
 
+import husacct.analyse.infrastructure.antlr.java.JavaLexer;
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import java.io.IOException;
-import husacct.analyse.infrastructure.antlr.*;
+
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
