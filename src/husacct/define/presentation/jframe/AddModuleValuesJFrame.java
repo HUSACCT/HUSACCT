@@ -105,7 +105,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		String level = this.getHierarchicalLevelValue();
 		if(!moduleName.isEmpty() && !level.isEmpty()) {
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addLayer(moduleName, Integer.parseInt(level));
+			definitionController.addLayer(this.modulePanel.getSelectedModuleId(), moduleName, Integer.parseInt(level));
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			

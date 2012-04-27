@@ -3,7 +3,6 @@ package husacct.define.presentation.moduletree;
 import husacct.define.task.components.AbstractDefineComponent;
 
 import javax.swing.JTree;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
 public class ModuleTree extends JTree {

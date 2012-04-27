@@ -19,7 +19,6 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
@@ -42,10 +41,10 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	private JScrollPane moduleTreeScrollPane;
 	private ModuleTree moduleTree;
 	
-	private JButton newModuleButton;
-	private JButton moveModuleUpButton;
-	private JButton removeModuleButton;
-	private JButton moveModuleDownButton;
+	private JButton newModuleButton = new JButton();
+	private JButton moveModuleUpButton = new JButton();
+	private JButton removeModuleButton = new JButton();
+	private JButton moveModuleDownButton = new JButton();
 	
 	public ModuleJPanel() {
 		super();
@@ -133,18 +132,11 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	public void updateModuleTree() {
-//		//Save the treepath to remember the tree selection after the updated
-//		TreePath path = null;
-//		if (this.moduleTree != null){
-//			path = this.moduleTree.getSelectionPath();
-//		}
-		
-		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getRootComponent();
+		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
 		this.moduleTree = new ModuleTree(rootComponent);
 		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
 		this.moduleTree.addTreeSelectionListener(this);
-		
-//		this.moduleTree.setSelectionPath(path);
+		this.checkLayerComponentIsSelected();
 	}
 	
 	@Deprecated
@@ -232,6 +224,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
         this.checkComponent(selectedComponent);
+        this.checkLayerComponentIsSelected();
 	}
 	
 	private void checkComponent(AbstractDefineComponent selectedComponent) {
@@ -244,5 +237,24 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		LayerComponent layerComponent = (LayerComponent) selectedComponent;
 		long moduleId = layerComponent.getHierarchicalLevel();
 		DefinitionController.getInstance().notifyObservers(moduleId);
+	}
+	
+	public void checkLayerComponentIsSelected() {
+		TreePath path = this.moduleTree.getSelectionPath();
+		if(path != null && path.getLastPathComponent() instanceof LayerComponent) {
+			this.enableMoveLayerButtons();
+		} else {
+			this.disableMoveLayerButtons();
+		}
+	}
+	
+	public void disableMoveLayerButtons() {
+		this.moveModuleDownButton.setEnabled(false);
+		this.moveModuleUpButton.setEnabled(false);
+	}
+	
+	public void enableMoveLayerButtons() {
+		this.moveModuleDownButton.setEnabled(true);
+		this.moveModuleUpButton.setEnabled(true);
 	}
 }
