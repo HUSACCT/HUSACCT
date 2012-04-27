@@ -6,6 +6,7 @@ import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -144,7 +145,7 @@ public class RuleTypesFactory {
 
 	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{
 		try {
-			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
+			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, null);
 			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
 			for(RuleTypes ruletype : rootRule.getExceptionRuleKeys()){	
 				final RuleType generatedRuleType = generateRuleTypeWithoutExceptionRules(ruletype.toString());
@@ -195,7 +196,7 @@ public class RuleTypesFactory {
 
 	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{
 		try {
-			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class).newInstance(key, categoryKey, violationtypes);
+			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, null);
 		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);
 		} catch (SecurityException e) {
