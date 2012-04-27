@@ -1,7 +1,5 @@
 package husacct.validate.presentation.TableModels;
 
-import java.awt.Color;
-import java.util.UUID;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
@@ -10,10 +8,10 @@ import javax.swing.table.AbstractTableModel;
 public class ColorTableModel extends AbstractTableModel {
 
 	protected Vector dataVector = new Vector();
-	String columnNames[] = {"UUID", "Severity Name", "Color"};
+	String columnNames[] = {"Severity Name", "Color"};
 
-	Class<?>[] types = new Class[]{String.class, String.class, JButton.class};
-	boolean[] canEdit = new boolean[]{false, true, true};
+	Class<?>[] types = new Class[]{String.class, JButton.class};
+	boolean[] canEdit = new boolean[]{true, true};
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {

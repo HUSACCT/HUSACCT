@@ -476,19 +476,19 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		}
 	}
-	
+
 	private void loadRuleTypeCategories() {
 		for (String categoryString : ruletypes.keySet()) {
 			rtsCategoryModel.addElement(categoryString);
 		}
 		rtsCategory.setModel(rtsCategoryModel);
 	}
-	
+
 	private void loadViolationTypeCategories() {
-		for (String categoryString : v.keySet()) {
-			rtsCategoryModel.addElement(categoryString);
-		}
-		rtsCategory.setModel(rtsCategoryModel);
+//		for (String categoryString : v.keySet()) {
+//			rtsCategoryModel.addElement(categoryString);
+//		}
+//		rtsCategory.setModel(rtsCategoryModel);
 	}
 
 	private void loadViolationType(String ruletypeKey) {

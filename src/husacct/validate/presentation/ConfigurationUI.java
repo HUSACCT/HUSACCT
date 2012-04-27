@@ -6,6 +6,8 @@ import husacct.validate.presentation.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javax.swing.*;
@@ -22,7 +24,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		this.ts = ts;
 		severityModel = new ColorTableModel();
 		initComponents();
-		TableColumn column = severityNameTable.getColumnModel().getColumn(2);
+		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
 		TableCellEditor editor = new ColorChooserEditor(new JButton());
 		column.setCellEditor(editor);
 		loadLanguageTabs();
@@ -54,7 +56,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         severityNameScrollPane.setViewportView(severityNameTable);
 
         add.setText("Add");
-        add.addActionListener(new java.awt.event.ActionListener() {
+        add.addActionListener(new ActionListener() {
 			@Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
@@ -189,21 +191,19 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 
 	private void addActionPerformed(java.awt.event.ActionEvent evt) {
-		severityModel.insertRow(0, new Object[]{"", "", Color.BLACK});
+		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
 		severityNameTable.changeSelection(0, 0,
 										  false, false);
 	}
 
 	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {
-		LinkedHashMap<Integer, String> linkedmap = new LinkedHashMap<Integer, String>();
+		List<Object[]> list = new ArrayList<Object[]>();
 
 		for(int i = 0; i < severityModel.getRowCount(); i++){
-			linkedmap.put(i, (String) severityModel.getValueAt(i, 0));
-			linkedmap.put(i, (String) severityModel.getValueAt(i, 1));
-			linkedmap.put(i, (String) severityModel.getValueAt(i, 2));
+			list.add(new Object[]{(String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)});
 		}
 
-		ts.applySeverities(linkedmap);
+		ts.applySeverities(list);
 		loadSeverity();
 		removeLanguageTabs();
 		loadLanguageTabs();
@@ -233,8 +233,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		clearModel(severityModel);
 		List<Severity> severities = ts.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.getId().toString(),
-											  severity.toString(),
+			severityModel.addRow(new Object[]{severity.toString(),
 											  severity.getColor()});
 		}
 
