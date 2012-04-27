@@ -24,6 +24,18 @@ public class DefineDomainService {
 	
 	//MODULES
 	//MODULES
+	private long addModuleToRoot(Module module){
+		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+		return moduleId;
+	}
+	
+	private long addModuleToParent(long parentModuleId, Module module){
+		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+		parentModule.addSubModule(module);
+		long moduleId = module.getId();
+		return moduleId;
+	}
+	
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		module.setName(moduleName);
@@ -61,9 +73,16 @@ public class DefineDomainService {
 	//LAYERS
 	//LAYERS
 	public long addLayer(long parentModuleId, String name, int level) {
+		long moduleId = -1;
+
 		Module layer = new Layer(name, level);
 		((Layer) layer).setHierarchicalLevel(level);
-		long moduleId = SoftwareArchitecture.getInstance().addModule(layer);
+		
+		if (parentModuleId == -1){
+			moduleId = addModuleToRoot(layer);
+		}else {
+			moduleId = addModuleToParent(parentModuleId, layer);
+		}
 		return moduleId;
 	}
 	
