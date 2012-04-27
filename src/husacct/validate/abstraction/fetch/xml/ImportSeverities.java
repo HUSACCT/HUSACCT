@@ -13,11 +13,11 @@ public class ImportSeverities {
 	public List<Severity> importSeverities(Element element) {
 		List<Severity> severities = new ArrayList<Severity>();
 		for (Element severityElement : element.getChildren()) {
-			Severity severity = new Severity();
-			severity.setId(UUID.fromString(severityElement.getChildText("id")));
-			severity.setDefaultName(severityElement.getChildText("defaultName"));
-			severity.setUserName(severityElement.getChildText("userName"));
-			severity.setColor(new Color(Integer.parseInt(severityElement.getChildText("color"))));
+			UUID id = UUID.fromString(severityElement.getChildText("id"));
+			String defaultname = severityElement.getChildText("defaultName");
+			String username = severityElement.getChildText("userName");
+			Color color = new Color(Integer.parseInt(severityElement.getChildText("color")));
+			Severity severity = new Severity(id, defaultname, username, color);
 			severities.add(severity);
 		}
 		return severities;

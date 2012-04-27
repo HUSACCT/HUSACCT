@@ -2,7 +2,6 @@ package husacct.validate.task.report.writer;
 
 import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.domain.factory.message.Messagebuilder;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
@@ -43,8 +42,8 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File javascriptDir = new File(resourcesDir + "/js");
 		javascriptDir.mkdir();
-		File jqueryJSResource = new File(ClassLoader.getSystemResource("husacct/validate/abstraction/report/resources/jquery-1.7.2.min.js").toURI());
-		File dataTableJSResource = new File(ClassLoader.getSystemResource("husacct/validate/abstraction/report/resources/jquery.dataTables.js").toURI());
+		File jqueryJSResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/jquery-1.7.2.min.js").toURI());
+		File dataTableJSResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/jquery.dataTables.js").toURI());
 		File jqueryJSOutput = new File(javascriptDir + "/jquery-1.7.2.min.js");
 		File dataTableJSOutput = new File(javascriptDir + "/jquery.dataTables.js");
 		copyfile(jqueryJSResource, jqueryJSOutput);
@@ -57,7 +56,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File cssDir = new File(resourcesDir + "/css");
 		cssDir.mkdir();
-		File cssResource = new File(ClassLoader.getSystemResource("husacct/validate/abstraction/report/resources/style.css").toURI());
+		File cssResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/style.css").toURI());
 		File cssDestination = new File(cssDir + "/style.css");
 		copyfile(cssResource, cssDestination);
 	}
@@ -120,19 +119,48 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("<tbody>");
 		for(Violation violation : report.getViolations()) {
 			html.append("<tr>");
-			createColumn(violation.getClassPathFrom());
-			createColumn(violation.getClassPathTo());
-			createColumn("" + violation.getLinenumber());
-			createColumn(violation.getSeverity().toString());
-			if(violation.getLogicalModules() != null) {
-				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
-				String message = new Messagebuilder().createMessage(messageObject);
+			//Source
+			if(violation.getClassPathFrom() != null) {
+				createColumn(violation.getClassPathFrom());
+			} else {
+				createColumn("");
+			}
+			
+			//Rule
+			if(violation.getMessage() != null) {
+				String message = new Messagebuilder().createMessage(violation.getMessage());
 				createColumn(message);
 			} else {
 				createColumn("");
 			}
-			createColumn(violation.getViolationtypeKey());
-			createColumn(convertIsIndirectBooleanToString(violation.isIndirect()));
+			
+			//LineNumber
+			if(violation.getLinenumber() > 0) {
+				createColumn("" + violation.getLinenumber());
+			} else {
+				createColumn("");
+			}
+			
+			//Dependency Kind
+			if(violation.getViolationtypeKey() != null) {
+				createColumn(getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()));
+			} else {
+				createColumn("");
+			}
+			
+			//Target
+			if(violation.getClassPathTo() != null) {
+				createColumn(violation.getClassPathTo());	
+			} else {
+				createColumn("");
+			}
+			
+			//Severity
+			if(violation.getSeverity() != null) {
+				createColumn(violation.getSeverity().toString());
+			} else {
+				createColumn("");
+			}
 			html.append("</tr>");
 		}
 		html.append("</tbody>");
