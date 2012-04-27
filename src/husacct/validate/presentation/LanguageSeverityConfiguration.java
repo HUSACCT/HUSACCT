@@ -6,22 +6,25 @@ import husacct.validate.task.TableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class LanguageSeverityConfiguration extends JPanel {
 
 	private final ComboBoxTableModel ruletypeModel;
 	private final ComboBoxTableModel violationtypeModel;
+	private final DefaultTableModel avtViolationtypeModel;
 	private final DefaultListModel rtsCategoryModel;
 	private final DefaultListModel vtsCategoryModel;
 	private final DefaultListModel avtCategoryModel;
 	private final DefaultListModel avtRuletypeModel;
 	private final String language;
-	private final List<RuleType> ruletypes;
+	private final HashMap<String, List<RuleType>> ruletypes;
 	private final TaskServiceImpl ts;
 
 	private JPanel activeViolationtype, ruletypeSeverity, violationtypeSeverity;
@@ -35,7 +38,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private JTabbedPane tabbedPane;
 
 	public LanguageSeverityConfiguration(String language,
-			List<RuleType> ruletypes, List<Severity> severityNames,
+			HashMap<String, List<RuleType>> ruletypes, List<Severity> severityNames,
 			TaskServiceImpl ts) {
 		this.language = language;
 		this.ruletypes = ruletypes;
@@ -43,13 +46,17 @@ public class LanguageSeverityConfiguration extends JPanel {
 		String[] ruletypeColumnNames = {"Ruletype", "Severity"};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0,
 											   severityNames);
-		ruletypeModel.setTypes(new Class[]{java.lang.String.class,
-										   java.lang.String.class});
+		ruletypeModel.setTypes(new Class[]{String.class, Severity.class});
 		ruletypeModel.setCanEdit(new Boolean[]{false, true});
 
-		String[] violationtypeModelHeaders = {"Violationtype", "Severity", "Active"};
+		String[] violationtypeModelHeaders = {"Violationtype", "Severity"};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severityNames);
-		violationtypeModel.setTypes(new Class[]{String.class, String.class, Boolean.class});
+		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
+		violationtypeModel.setCanEdit(new Boolean[]{false, true, true});
+
+		String[] avtViolationtypeModelHeaders = {"Violationtype", "Active"};
+		avtViolationtypeModel = new DefaultTableModel(avtViolationtypeModelHeaders, 0);
+		violationtypeModel.setTypes(new Class[]{String.class, Boolean.class});
 		violationtypeModel.setCanEdit(new Boolean[]{false, true, true});
 
 		rtsCategoryModel = new DefaultListModel();
@@ -197,7 +204,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		});
 		vtsCategoryScrollpane.setViewportView(vtsCategory);
 
-		vtsViolationtypeTable.setModel(ruletypeModel);
+		vtsViolationtypeTable.setModel(violationtypeModel);
 		vtsViolationtypeTable.setFillsViewportHeight(true);
 		vtsViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
@@ -291,7 +298,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		});
 		avtCategoryScrollpane.setViewportView(avtCategory);
 
-		avtRuletype.setModel(ruletypeModel);
+		avtRuletype.setModel(avtViolationtypeModel);
 		avtRuletype.setFillsViewportHeight(true);
 		avtRuletype.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		avtRuletypeScrollpane.setViewportView(avtRuletype);
@@ -454,5 +461,44 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 	private void vtsCategoryValueChanged() {
 		// TODO add your handling code here:
+	}
+
+	private void applyViolationTypesActionPerformed() {
+		//TODO: Fix the fetching of the ruletypes en put them in a list to return to the reposetory
+		ts.UpdateRuletype(ruletypeModel, violationtypeModel, language);
+	}
+
+	private void LoadRuleTypes(String category) {
+		for (String categoryString : ruletypes.keySet()) {
+			if (categoryString.equals(category)){
+				List<RuleType> rules = ruletypes.get(category);
+				for(RuleType ruletype: rules){
+					ruletypeModel.addRow(new Object[]{ruletype.getKey(), ts.getAllSeverities().get(0)});
+				}
+			}
+
+		}
+	}
+
+	private void loadViolationType(String ruletypeKey) {
+//		for (RuleType ruletype : ruletypes) {
+//			if (ruletype.getKey().equals(ruletypeKey)) {
+//				clearModel(violationtypeModel);
+//				for (ViolationType violationtype : ruletype.getViolationTypes()) {
+//					violationtypeModel.addRow(new Object[]{violationtype.
+//								getViolationtypeKey(), 1,
+//														   violationtype.
+//								isActive()});
+//				}
+//			}
+//		}
+	}
+
+	private void clearModel(ComboBoxTableModel model) {
+		int rows = model.getRowCount();
+		while (0 < rows) {
+			model.removeRow(0);
+			rows--;
+		}
 	}
 }
