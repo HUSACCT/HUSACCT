@@ -1,6 +1,7 @@
 package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.validation.Severity;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;

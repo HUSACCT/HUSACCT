@@ -2,6 +2,7 @@ package husacct.validate.task;
 
 import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.ViolationDTO;
+import husacct.validate.TestData;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.validation.Severity;
@@ -23,6 +24,7 @@ public class TaskServiceImpl implements ITaskService{
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final AnalyseServiceStub acs;
+	private TestData data = new TestData();
 
 
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
@@ -31,6 +33,8 @@ public class TaskServiceImpl implements ITaskService{
 		filterController = new FilterController(this);
 		acs = new AnalyseServiceStub();
 		conficurationController = new ConfigurationController();
+		configuration.addSeverities(data.getSeverities());
+		configuration.addViolations(data.getViolations());
 	}
 
 	public List<Violation> getAllViolations(){
