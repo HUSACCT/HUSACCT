@@ -1,10 +1,8 @@
 package husacct.define.domain;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-
 import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 public class AppliedRule {
 	
@@ -12,8 +10,7 @@ public class AppliedRule {
 	private long id;
 	private String description;
 	private String[] dependencies;
-	private String prefix;
-	private String suffix;
+	private String regex;
 	private Module usedModule;
 	private Module restrictedModule;
 	private String ruleType;
@@ -21,34 +18,35 @@ public class AppliedRule {
 	private ArrayList<AppliedRule> exceptions;
 
 	
-	//CONSTRUCTORS
-	//CONSTRUCTORS
+	/**
+	 * Contructors
+	 */
 	public AppliedRule(String ruleType, String description, String[] dependencies,
-			String prefix, String suffix, Module usedModule,
-			Module restrictedModule) {
+			String regex, Module usedModule,
+			Module restrictedModule, boolean enabled) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.ruleType = ruleType;
 		this.description = description;
 		this.dependencies = dependencies;
-		this.prefix = prefix;
-		this.suffix = suffix;
+		this.regex = regex;
 		this.usedModule = usedModule;
 		this.restrictedModule = restrictedModule;
 		this.exceptions = new ArrayList<AppliedRule>();
-		this.enabled = true;
+		this.enabled = enabled;
 	}
 	
 	public AppliedRule(String ruleType, String description, Module usedModule, Module restrictedModule){
-		this(ruleType, description, new String[0], "","",usedModule,restrictedModule);
+		this(ruleType, description, new String[0], "",usedModule,restrictedModule, true);
 	}
 
 	public AppliedRule() {
-		this("", "",new String[0], "","",null,null);
+		this("", "",new String[0], "",null,null, true);
 	}
 
-	//LOGIC
-	//LOGIC
+	/**
+	 * Logic
+	 */
 	public void addException(AppliedRule exception)
 	{
 		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
@@ -107,9 +105,9 @@ public class AppliedRule {
 		return usesModule;
 	}
 	
-	//GETTER & SETTERS
-	//GETTER & SETTERS
-	//GETTER & SETTERS
+	/**
+	 * Getters & Setters
+	 */
 	public String getRuleType() {
 		return ruleType;
 	}
@@ -182,19 +180,12 @@ public class AppliedRule {
 		return dependencies;
 	}
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+	public void setRegex(String regex) {
+		this.regex = regex;
 	}
 
-	public String getPrefix() {
-		return prefix;
+	public String getRegex() {
+		return regex;
 	}
 
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-
-	public String getSuffix() {
-		return suffix;
-	}
 }

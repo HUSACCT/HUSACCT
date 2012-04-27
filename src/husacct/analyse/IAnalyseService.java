@@ -1,6 +1,6 @@
 package husacct.analyse;
 
-import java.io.FileNotFoundException;
+import javax.swing.JInternalFrame;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -8,9 +8,18 @@ import husacct.common.dto.DependencyDTO;
 public interface IAnalyseService {
 	
 	public void analyseApplication();
+	public boolean isAnalysed();
 	
-	public DependencyDTO[] getDependency(String from, String to);
-	public DependencyDTO[] getDependency(String from);
+	public JInternalFrame getJInternalFrame();
+	
+	public DependencyDTO[] getDependencies(String from, String to);
+	public DependencyDTO[] getDependenciesFrom(String from);
+	public DependencyDTO[] getDependenciesTo(String to);
+	
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
+	
 	public String[] getAvailableLanguages();
 	
 	public AnalysedModuleDTO[] getRootModules();

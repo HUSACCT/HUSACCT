@@ -4,7 +4,15 @@ import husacct.graphics.presentation.figures.BaseFigure;
 
 public interface MouseClickListener {
 
-	public void moduleZoom(BaseFigure selectedFigure);
+	public void moduleZoom(BaseFigure zoomedModuleFigure);
+	
+	public void moduleZoomOut();
 
-	public void moduleSelected(BaseFigure selectedFigure);
+	public void figureSelected(BaseFigure clickedFigure);
+	
+	public void figureDeselected();
+	
+	public void exportToImage();
+	
+	public void toggleViolations();
 }

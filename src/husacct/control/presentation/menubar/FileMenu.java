@@ -54,7 +54,7 @@ public class FileMenu extends JMenu {
 		this.add(saveWorkspaceItem);
 		saveWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				workspaceController.saveWorkspace();
+				workspaceController.showSaveWorkspaceGui();
 			}
 		});
 		

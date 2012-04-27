@@ -1,5 +1,10 @@
 package husacct.control.task;
 
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
+import husacct.define.IDefineService;
+import husacct.validate.IValidateService;
+
 import java.util.ArrayList;
 
 public class StateController {
@@ -8,14 +13,47 @@ public class StateController {
 	public static final int EMPTY = 1;
 	public static final int DEFINED = 2;
 	public static final int MAPPED = 3;
-	public static final int VALIDATED = 4;
+	public static final int ANALYSED = 4;
+	public static final int VALIDATED = 5;
 	
-	private int state = StateController.NONE;
+	private int state;
 	
 	ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
 	
 	public StateController(){
-		setState(state);
+		checkState();
+	}
+	
+	public void checkState(){
+		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		
+		int newState = StateController.NONE;
+		
+		if(WorkspaceController.isOpenWorkspace()){
+			newState = StateController.EMPTY;
+		}
+		
+		if(defineService.isDefined()){
+			newState = StateController.DEFINED;
+		}
+		
+		if(defineService.isMapped()){
+			newState = StateController.MAPPED;
+		}
+		
+		if(analyseService.isAnalysed()){
+			newState = StateController.ANALYSED;
+		}
+		
+		if(validateService.isValidated()){
+			newState = StateController.VALIDATED;
+		}
+		
+		if(newState != this.getState()){
+			this.setState(newState);
+		}
 	}
 	
 	public int getState(){

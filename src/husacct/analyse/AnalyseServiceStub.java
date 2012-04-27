@@ -6,69 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JInternalFrame;
+
 
 public class AnalyseServiceStub implements IAnalyseService{
 
 	private HashMap<String, ArrayList<Object>> analysed;
 	public AnalyseServiceStub(){
-
-		ArrayList<AnalysedModuleDTO> foursquareSub = new ArrayList<AnalysedModuleDTO>();
-		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.Account", "Account", "class"));
-		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.Friends", "Friends", "class"));
-		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.Map", "Map", "class"));
-		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.History", "History", "class"));
-
-		ArrayList<AnalysedModuleDTO> latitudeSub = new ArrayList<AnalysedModuleDTO>();
-		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Account", "Account", "class"));
-		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Friends", "Friends", "class"));
-		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Map", "Map", "class"));		
-
-		ArrayList<AnalysedModuleDTO> locationbasedSub = new ArrayList<AnalysedModuleDTO>();
-		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare", "foursquare", "package", foursquareSub));
-		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.latitude", "latitude", "package", latitudeSub));
-
-		ArrayList<AnalysedModuleDTO> domainSub = new ArrayList<AnalysedModuleDTO>();
-		domainSub.add(new AnalysedModuleDTO("domain.locationbased", "locationbased", "package", locationbasedSub));
-		domainSub.add(new AnalysedModuleDTO("domain.locationbased.Account", "Account", "class"));
-		domainSub.add(new AnalysedModuleDTO("domain.locationbased.Friends", "Friends", "class"));
-		domainSub.add(new AnalysedModuleDTO("domain.locationbased.Map", "Map", "class"));
-		domainSub.add(new AnalysedModuleDTO("domain.locationbased.History", "History", "class"));
-
-		ArrayList<AnalysedModuleDTO> foursquare1Sub = new ArrayList<AnalysedModuleDTO>();
-		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "AccountDAO", "class"));
-		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "FriendsDAO", "class"));
-		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.IMap", "IMap", "class"));
-		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "HistoryDAO", "class"));
-
-		ArrayList<AnalysedModuleDTO> locationbased1Sub = new ArrayList<AnalysedModuleDTO>();
-		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare", "foursquare", "package", foursquare1Sub));
-
-		ArrayList<AnalysedModuleDTO> socialmediaSub = new ArrayList<AnalysedModuleDTO>();
-		socialmediaSub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased", "locationbased", "package", locationbased1Sub));
-
-		ArrayList<AnalysedModuleDTO> infrastructureSub = new ArrayList<AnalysedModuleDTO>();
-		infrastructureSub.add(new AnalysedModuleDTO("infrastructure.socialmedia", "socialmedia", "package", socialmediaSub));
-
-		ArrayList<AnalysedModuleDTO> analysedSub = new ArrayList<AnalysedModuleDTO>();
-		analysedSub.add(new AnalysedModuleDTO("domain", "domain", "package", domainSub));
-		analysedSub.add(new AnalysedModuleDTO("infrastructure", "infrastructure", "package", infrastructureSub));
-
-		AnalysedModuleDTO analysedModules = new AnalysedModuleDTO("", "root", "package", analysedSub);
-		analysed = new HashMap<String, ArrayList<Object>>();
-
-		List<AnalysedModuleDTO> rootElement = new ArrayList<AnalysedModuleDTO>();
-		rootElement.add(analysedModules);
-		GenerateHashmap(rootElement);
-
-
-		addDependency(new DependencyDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "Extends", 10));
-		addDependency(new DependencyDTO("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", "InvocConstructor", 11));
-		addDependency(new DependencyDTO("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "Extends", 10));
-		addDependency(new DependencyDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Extends", 10));
-		addDependency(new DependencyDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "InvocConstructor", 10));
-		addDependency(new DependencyDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Extends", 10));
-		addDependency(new DependencyDTO("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", "Implements", 10));
-
+		generateModule();
+		//printHashmap(analysed.get("").get(0));
 	}
 
 	private void GenerateHashmap(List<AnalysedModuleDTO> subModules) {
@@ -88,6 +34,7 @@ public class AnalyseServiceStub implements IAnalyseService{
 	private void addDependency(DependencyDTO dependency){
 		ArrayList<Object> getElement = analysed.get(dependency.from);
 
+		@SuppressWarnings("unchecked")
 		ArrayList<DependencyDTO> dependencies = (ArrayList<DependencyDTO>) getElement.get(1);
 		dependencies.add(dependency);
 
@@ -102,8 +49,9 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
+	public DependencyDTO[] getDependencies(String from, String to) {
 
 		ArrayList<DependencyDTO> allDependencies = new ArrayList<DependencyDTO>();
 
@@ -138,8 +86,9 @@ public class AnalyseServiceStub implements IAnalyseService{
 		return new DependencyDTO[0];
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DependencyDTO[] getDependency(String from) {
+	public DependencyDTO[] getDependenciesFrom(String from) {
 	
 		ArrayList<DependencyDTO> allDependencies = new ArrayList<DependencyDTO>();
 
@@ -163,7 +112,122 @@ public class AnalyseServiceStub implements IAnalyseService{
 		
 		return matchDependency;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to){
+		ArrayList<DependencyDTO> allDependencies = new ArrayList<DependencyDTO>();
+		
+		for(String key : analysed.keySet()){
+			ArrayList<Object> teest = analysed.get(key);
+			
+			for(DependencyDTO o : (ArrayList<DependencyDTO>) teest.get(1)){
+								
+				if(o.to.indexOf(to) != -1){
+					allDependencies.add(o);
+				}
+			}
+		}
 
+		if(allDependencies.size() <= 0){
+			return new DependencyDTO[0];
+		}
+		
+		DependencyDTO[] dependencies = new DependencyDTO[allDependencies.size()];
+	
+		int iterator = 0;
+		for(DependencyDTO d : allDependencies){
+			dependencies[iterator] = d;
+			iterator++;
+		}
+		
+		
+		return dependencies;
+	}
+
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
+		DependencyDTO[] dependencies = getDependencies(from, to);
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		
+		for(DependencyDTO dependency : dependencies){			
+			for(String s : dependencyFilter){
+				if(dependency.type.equals(s)){
+					filtered.add(dependency);
+				}
+			}
+		}
+		
+		if(filtered.size() == 0){
+			return new DependencyDTO[0];
+		}
+		
+		DependencyDTO[] filter = new DependencyDTO[filtered.size()];
+		int iterator = 0;
+		for(DependencyDTO d : filtered){
+			filter[iterator] = d;
+			iterator++;
+		}
+		
+		
+		return filter;
+	}
+	
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
+		DependencyDTO[] dependencies = getDependenciesFrom(from);
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		
+		for(DependencyDTO dependency : dependencies){			
+			for(String s : dependencyFilter){
+				if(dependency.type.equals(s)){
+					filtered.add(dependency);
+				}
+			}
+		}
+		
+		if(filtered.size() == 0){
+			return new DependencyDTO[0];
+		}
+		
+		DependencyDTO[] filter = new DependencyDTO[filtered.size()];
+		int iterator = 0;
+		for(DependencyDTO d : filtered){
+			filter[iterator] = d;
+			iterator++;
+		}
+		
+		
+		return filter;
+	}
+	
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
+		DependencyDTO[] dependencies = getDependenciesTo(to);
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		
+		for(DependencyDTO dependency : dependencies){			
+			for(String s : dependencyFilter){
+				if(dependency.type.equals(s)){
+					filtered.add(dependency);
+				}
+			}
+		}
+		
+		if(filtered.size() == 0){
+			return new DependencyDTO[0];
+		}
+		
+		DependencyDTO[] filter = new DependencyDTO[filtered.size()];
+		int iterator = 0;
+		for(DependencyDTO d : filtered){
+			filter[iterator] = d;
+			iterator++;
+		}
+		
+		
+		return filter;
+	}
+	
+	
 	@Override
 	public String[] getAvailableLanguages() {
 		String[] languages = {"Java", "C#"};
@@ -178,8 +242,11 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 		int iterator = 0;
 		for(AnalysedModuleDTO module : rootElement.subModules){
+			
+			
+			
 			returnModules[iterator] = module;
-//			module.subModules = new ArrayList<AnalysedModuleDTO>();
+			module.subModules = new ArrayList<AnalysedModuleDTO>();
 			iterator++;
 		}
 
@@ -188,7 +255,17 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
+		generateModule();
+		
+		if(analysed.get(from) == null){
+			return new AnalysedModuleDTO[0];
+		}
+		
 		AnalysedModuleDTO getElement = (AnalysedModuleDTO) analysed.get(from).get(0);
+
+		if(getElement.subModules == null){
+			return new AnalysedModuleDTO[0];
+		}
 
 		AnalysedModuleDTO[] modules = new AnalysedModuleDTO[getElement.subModules.size()];
 
@@ -203,15 +280,32 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
+		generateModule();
 		int currentDepth = 0;
 
-
+		if(depth == 0){
+			AnalysedModuleDTO[] modules = this.getChildModulesInModule(from);
+			return modules;
+		}
+		
 		if(depth == 1){
-			return this.getChildModulesInModule(from);
+			AnalysedModuleDTO[] modules = this.getChildModulesInModule(from);
+			for(AnalysedModuleDTO module : modules){
+				module.subModules = new ArrayList<AnalysedModuleDTO>();
+			}
+			return modules;
 		}
 
+		if(analysed.get(from) == null){
+			return new AnalysedModuleDTO[0];
+		}
+		
 		AnalysedModuleDTO getElement = (AnalysedModuleDTO) analysed.get(from).get(0);
 
+		if(getElement.subModules == null){
+			return new AnalysedModuleDTO[0];
+		}
+		
 		AnalysedModuleDTO[] modules = new AnalysedModuleDTO[getElement.subModules.size()];
 
 		int iterator = 0;
@@ -223,23 +317,29 @@ public class AnalyseServiceStub implements IAnalyseService{
 		currentDepth = 1;
 		AnalysedModuleDTO[] rightDepthModules = modules;
 
-		while(currentDepth != depth){
+		while(currentDepth <= depth){
 
 
 			rightDepthModules = NextDepth(rightDepthModules);
 			currentDepth++;
 		}
 
-//		for(AnalysedModuleDTO m : rightDepthModules){
-//			m.subModules = new ArrayList<AnalysedModuleDTO>();
-//		}
+		for(AnalysedModuleDTO m : rightDepthModules){
+			m.subModules = new ArrayList<AnalysedModuleDTO>();
+		}
 		return modules;
 	}
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
+		generateModule();
+		if(analysed.get(child) == null){
+			return new AnalysedModuleDTO("", "", "", "");
+		}
+		
+		
 		if(child.indexOf(".") == -1){
-			return new AnalysedModuleDTO("", "", "");
+			return new AnalysedModuleDTO("", "", "", "");
 		}
 
 		String[] pathSplitted = child.split("\\.");
@@ -250,7 +350,12 @@ public class AnalyseServiceStub implements IAnalyseService{
 			}
 		}
 
-		return (AnalysedModuleDTO) analysed.get(parentPath).get(0);
+		AnalysedModuleDTO parentModule = (AnalysedModuleDTO) analysed.get(parentPath).get(0);
+		for(AnalysedModuleDTO m : parentModule.subModules){
+			m.subModules = new ArrayList<AnalysedModuleDTO>();
+		}
+		
+		return parentModule;
 	}
 
 
@@ -273,4 +378,106 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 		return depthModules;
 	}
+	
+	public void generateModule(){
+		ArrayList<AnalysedModuleDTO> foursquareSub = new ArrayList<AnalysedModuleDTO>();
+		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.Account", "Account", "class", "public"));
+		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.Friends", "Friends", "class", "public"));
+		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.Map", "Map", "class", "public"));
+		foursquareSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare.History", "History", "class", "public"));
+
+		ArrayList<AnalysedModuleDTO> latitudeSub = new ArrayList<AnalysedModuleDTO>();
+		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Account", "Account", "class", "public"));
+		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Friends", "Friends", "class", "public"));
+		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Map", "Map", "class", "public"));		
+
+		ArrayList<AnalysedModuleDTO> locationbasedSub = new ArrayList<AnalysedModuleDTO>();
+		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare", "foursquare", "package", foursquareSub));
+		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.latitude", "latitude", "package", latitudeSub));
+
+
+		ArrayList<AnalysedModuleDTO> domainSub = new ArrayList<AnalysedModuleDTO>();
+		domainSub.add(new AnalysedModuleDTO("domain.locationbased", "locationbased", "package", locationbasedSub));
+
+
+		ArrayList<AnalysedModuleDTO> foursquare1Sub = new ArrayList<AnalysedModuleDTO>();
+		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "AccountDAO", "class", "public"));
+		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "FriendsDAO", "abstract", "public"));
+		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.IMap", "IMap", "interface", "public"));
+		foursquare1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "HistoryDAO", "class", "public"));
+		
+		ArrayList<AnalysedModuleDTO> latitude1Sub = new ArrayList<AnalysedModuleDTO>();
+		latitude1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude.AccountDAO", "AccountDAO", "class", "public"));
+		latitude1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "FriendsDAO", "abstract", "public"));
+		latitude1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "interface", "public"));
+
+		ArrayList<AnalysedModuleDTO> locationbased1Sub = new ArrayList<AnalysedModuleDTO>();
+		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare", "foursquare", "package", foursquare1Sub));
+		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude", "latitude", "package", latitude1Sub));
+
+		ArrayList<AnalysedModuleDTO> socialmediaSub = new ArrayList<AnalysedModuleDTO>();
+		socialmediaSub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased", "locationbased", "package", locationbased1Sub));
+
+		ArrayList<AnalysedModuleDTO> infrastructureSub = new ArrayList<AnalysedModuleDTO>();
+		infrastructureSub.add(new AnalysedModuleDTO("infrastructure.socialmedia", "socialmedia", "package", socialmediaSub));
+
+		ArrayList<AnalysedModuleDTO> analysedSub = new ArrayList<AnalysedModuleDTO>();
+		analysedSub.add(new AnalysedModuleDTO("domain", "domain", "package", domainSub));
+		analysedSub.add(new AnalysedModuleDTO("infrastructure", "infrastructure", "package", infrastructureSub));
+
+		AnalysedModuleDTO analysedModules = new AnalysedModuleDTO("", "root", "package", analysedSub);
+		analysed = new HashMap<String, ArrayList<Object>>();
+
+		ArrayList<AnalysedModuleDTO> rootElement = new ArrayList<AnalysedModuleDTO>();
+		rootElement.add(analysedModules);
+		GenerateHashmap(rootElement);
+
+
+		addDependency(new DependencyDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "Extends", 10));
+		addDependency(new DependencyDTO("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", "InvocConstructor", 11));
+		addDependency(new DependencyDTO("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "Extends", 10));
+		addDependency(new DependencyDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Extends", 10));
+		addDependency(new DependencyDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "InvocConstructor", 10));
+		addDependency(new DependencyDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Extends", 10));
+		addDependency(new DependencyDTO("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", "Implements", 10));
+
+	}
+	
+	
+	@SuppressWarnings("unused")
+	private void printHashmap(Object rootElement){
+		AnalysedModuleDTO element = (AnalysedModuleDTO) rootElement;
+		
+		int space = 100;
+		int uniquelength = space - element.uniqueName.length();
+		int total = (int) Math.ceil(uniquelength / 8);
+		
+		String tab = "";
+		for(int i = 0; i < total; i++){
+			tab += "\t";
+		}
+		
+		String info = element.uniqueName + tab + element.type + "\t" + element.visibility;
+		
+		System.out.println(info);
+		
+		ArrayList<AnalysedModuleDTO> subElementen = (ArrayList<AnalysedModuleDTO>) element.subModules;
+		
+		for(AnalysedModuleDTO d : subElementen){
+			printHashmap(d);
+		}
+	}
+
+	@Override
+	public boolean isAnalysed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public JInternalFrame getJInternalFrame() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

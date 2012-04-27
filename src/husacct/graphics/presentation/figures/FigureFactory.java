@@ -1,46 +1,88 @@
 package husacct.graphics.presentation.figures;
 
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
+import husacct.common.dto.*;
+import husacct.graphics.presentation.decorators.DTODecorator;
+import husacct.graphics.presentation.decorators.DependenciesDecorator;
+import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
-import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
-
-// TODO: Should this class be final? 
 public final class FigureFactory {
 
-	public BaseFigure createFigure(AbstractDTO dto)
-	{
-		Rectangle2D.Double position = new Rectangle2D.Double(10, 10, 200, 150);
-		
-		if (dto instanceof ModuleDTO)
-			return createFigure(position, (ModuleDTO)dto);
-
-		else if (dto instanceof AnalysedModuleDTO)
-			return createFigure(position, (AnalysedModuleDTO) dto);
-		throw new RuntimeException("Undefined module type passed to FigureFactory");
-	}
-	
-	private BaseFigure createFigure(Double position,
-			AnalysedModuleDTO dto) {
-
-		if (dto.type == "package")
-			return new PackageFigure(position, dto.uniqueName);
-		else if (dto.type == "class")
-			return new ClassFigure(position, dto.uniqueName);
-
-		return new LayerFigure(position, "<<invalid module type>>" + dto.uniqueName);
+	public BaseFigure createFigure(DependencyDTO[] dtos) {
+		RelationFigure relationFigure = this.createFigure(dtos[0]);
+		DependenciesDecorator dependenciesDecorator = new DependenciesDecorator(relationFigure, dtos);
+		return dependenciesDecorator;
 	}
 
-	private BaseFigure createFigure(Rectangle2D.Double position,
-			ModuleDTO dto) {
-		
-		if (dto.type == "Layer") 
-			return new LayerFigure(position, dto.logicalPath);
-		else if (dto.type == "Module") 
-			return new ClassFigure(position, dto.logicalPath);
-		
-		return new ClassFigure(position, "<<invalid module type>>" + dto.logicalPath);
+	private RelationFigure createFigure(DependencyDTO dependencyDTO) {
+		return new RelationFigure("Dependency from " + dependencyDTO.from + " to " + dependencyDTO.to);
+	}
+
+	public BaseFigure createFigure(ViolationDTO[] violationDTOs) {
+		RelationFigure relationFigure = this.createFigure(violationDTOs[0]);
+		ViolationsDecorator violationsDecorator = new ViolationsDecorator(relationFigure, violationDTOs);
+		return violationsDecorator;
+	}
+
+	private RelationFigure createFigure(ViolationDTO violationDTO) {
+		return new RelationFigure("Violated dependency from " + violationDTO.getFromClasspath() + " to "
+				+ violationDTO.getToClasspath());
+	}
+
+	public BaseFigure createFigure(AbstractDTO dto) {
+		BaseFigure retVal = null;
+
+		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
+			retVal = createModuleFigure(dto);
+		}
+
+		if (retVal == null) {
+			throw new RuntimeException("Unimplemented dto type '" + dto.getClass().getSimpleName()
+					+ "' passed to FigureFactory");
+		}
+
+		DTODecorator decorator = new DTODecorator(retVal, dto);
+		return decorator;
+	}
+
+	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
+		BaseFigure figure = this.createFigure(dto);
+
+		if (violationDTOs.length > 0) {
+			figure = new ViolationsDecorator(figure, violationDTOs);
+		}
+
+		return figure;
+	}
+
+	private BaseFigure createModuleFigure(AbstractDTO dto) {
+		String type;
+		String name;
+
+		if (dto instanceof ModuleDTO) {
+			type = ((ModuleDTO) dto).type;
+			name = ((ModuleDTO) dto).logicalPath;
+		} else if (dto instanceof AnalysedModuleDTO) {
+			type = ((AnalysedModuleDTO) dto).type;
+			name = ((AnalysedModuleDTO) dto).name;
+		} else {
+			throw new RuntimeException("dto type '" + dto.getClass().getSimpleName()
+					+ "' is not recognized as a module dto");
+		}
+
+		if(type.toLowerCase().equals("layer")) {
+			return new LayerFigure(name);
+		}else if(type.toLowerCase().equals("class")) {
+			return new ClassFigure(name);
+		}else if(type.toLowerCase().equals("abstract")) {				
+			//TODO Abstract class
+			return new ClassFigure(name);
+		}else if(type.toLowerCase().equals("interface")) {	
+			//TODO Interface obj
+			return new ClassFigure(name);
+		}else if(type.toLowerCase().equals("package")) {
+			return new PackageFigure(name);
+		}else{
+			throw new RuntimeException("module dto type '" + type + "' not implemented");
+		}
 	}
 }
