@@ -31,8 +31,10 @@ public class AnalysedController extends BaseController {
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
 			public void update(Locale newLocale) {
-				//TODO: Redraw entire drawing for locale change
-				System.out.println("Graphics: Language change.");
+				getAndDrawModulesIn(currentPath);
+				if(showViolations()){
+					drawViolationsForShownModules();
+				}
 			}
 		});
 	}

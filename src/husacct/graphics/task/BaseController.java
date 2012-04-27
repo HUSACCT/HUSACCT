@@ -30,7 +30,7 @@ public abstract class BaseController implements MouseClickListener {
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
-	protected HashMap<AbstractDTO,BaseFigure> dtoFigureMap = new HashMap<AbstractDTO,BaseFigure>();
+	protected HashMap<AbstractDTO, BaseFigure> dtoFigureMap = new HashMap<AbstractDTO, BaseFigure>();
 
 	public BaseController() {
 
@@ -57,50 +57,48 @@ public abstract class BaseController implements MouseClickListener {
 		this.drawing.clear();
 		this.view.clearSelection();
 	}
-	
-	public String getCurrentPath(){
+
+	public String getCurrentPath() {
 		return this.currentPath;
 	}
-	public void resetCurrentPath(){
+
+	public void resetCurrentPath() {
 		this.currentPath = "";
 	}
-	public void setCurrentPath(String path){
+
+	public void setCurrentPath(String path) {
 		this.currentPath = path;
 	}
 
 	@Override
-	public void figureSelected(BaseFigure clickedFigure)
-	{
-		if(clickedFigure instanceof ViolationsDecorator) {
-			this.drawTarget.showViolations(((ViolationsDecorator)clickedFigure).getViolations());
+	public void figureSelected(BaseFigure clickedFigure) {
+		if (clickedFigure instanceof ViolationsDecorator) {
+			this.drawTarget.showViolations(((ViolationsDecorator) clickedFigure).getViolations());
 		}
 		// do recursion here, because the the decorators
 		// we are checking for above may be hidden behind
 		// other decorators
 		else if (clickedFigure instanceof Decorator) {
-			this.figureSelected(((Decorator)clickedFigure).getDecorator());
-		}
-		else
-		{
+			this.figureSelected(((Decorator) clickedFigure).getDecorator());
+		} else {
 			this.drawTarget.hidePropertiesPane();
 		}
 	}
-	
+
 	@Override
-	public void figureDeselected()
-	{
+	public void figureDeselected() {
 		this.drawTarget.hidePropertiesPane();
 	}
 
-	public abstract void drawArchitecture(DrawingDetail detail); 
-	
-	protected void drawModules(AbstractDTO[] modules){
+	public abstract void drawArchitecture(DrawingDetail detail);
+
+	protected void drawModules(AbstractDTO[] modules) {
 		this.clearDrawing();
 		this.dtoFigureMap.clear();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
-			this.dtoFigureMap.put(dto, generatedFigure); //TODO: Check with team if their findbyname in drawingview is stable or not.
+			this.dtoFigureMap.put(dto, generatedFigure); // TODO: Check with team if their findbyname in drawingview is stable or not.
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout();
@@ -109,8 +107,7 @@ public abstract class BaseController implements MouseClickListener {
 	}
 
 	public void drawViolationsForShownModules() {
-		// TODO retrieve the real service from the ServiceProvider instead of
-		// using the stub
+		// TODO retrieve the real service from the ServiceProvider instead of using the stub
 		IValidateService validateService = new ValidateServiceStub();
 
 		ArrayList<DTODecorator> moduleFigures = new ArrayList<DTODecorator>();
@@ -125,14 +122,9 @@ public abstract class BaseController implements MouseClickListener {
 				AbstractDTO dtoFrom = moduleFigureFrom.getDTO();
 				AbstractDTO dtoTo = moduleFigureTo.getDTO();
 
-				if ((dtoFrom instanceof ModuleDTO)
-						&& (dtoTo instanceof ModuleDTO)) {
-					ViolationDTO[] violationDTOs = validateService
-							.getViolationsByLogicalPath(((ModuleDTO) dtoFrom).logicalPath,
-									((ModuleDTO) dtoTo).logicalPath);
-					if (violationDTOs.length > 0) {
-						this.drawViolations(violationDTOs, moduleFigureFrom,
-								moduleFigureTo);
+				if ((dtoFrom instanceof ModuleDTO) && (dtoTo instanceof ModuleDTO)) {
+					ViolationDTO[] violationDTOs = validateService.getViolationsByLogicalPath(((ModuleDTO) dtoFrom).logicalPath,((ModuleDTO) dtoTo).logicalPath);					if (violationDTOs.length > 0) {
+					this.drawViolations(violationDTOs, moduleFigureFrom,moduleFigureTo);
 					}
 				}
 				// TODO AnalysedModuleDTO
@@ -148,15 +140,23 @@ public abstract class BaseController implements MouseClickListener {
 		// TODO a very ugly cast here
 				(ConnectionFigure) ((Decorator) violatedRelationFigure)
 						.getDecorator(), fromFigure, toFigure);
-		
+
 		this.drawing.add(violatedRelationFigure);
 	}
-	
+
 	public void toggleViolations() {
 		showViolations = (showViolations ? false : true);
 	}
-	
-	protected boolean showViolations(){
+
+	protected boolean showViolations() {
 		return showViolations;
+	}
+
+	protected DrawingDetail getCurrentDrawingDetail(){
+		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
+		if(showViolations()){
+			detail = DrawingDetail.WITH_VIOLATIONS;
+		}
+		return detail;
 	}
 }
