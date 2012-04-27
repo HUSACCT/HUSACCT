@@ -1,6 +1,6 @@
-package husacct.control.presentation.workspace;
+package husacct.control.presentation.menubar.popup;
 
-import husacct.control.task.WorkspaceController;
+import husacct.control.task.MainController;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,15 +9,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-@SuppressWarnings("serial")
-public class CreateWorkspaceFrame extends JFrame{
-	
-	private WorkspaceController controller;
-	
-	public CreateWorkspaceFrame(WorkspaceController controller){
-		// TODO: create workspace gui + controller.createWorkspace
-		super("Create workspace");
-		this.controller = controller;
+
+public class ExportLogicalArchitectureFrame extends JFrame {
+
+	private MainController maincontroller;
+	public ExportLogicalArchitectureFrame(MainController maincontroller){
+		super("Export logical architecture");
+		this.maincontroller = maincontroller;
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		JButton createButton = new JButton("Create workspace");

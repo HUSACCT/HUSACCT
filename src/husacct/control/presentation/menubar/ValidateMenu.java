@@ -1,6 +1,7 @@
 package husacct.control.presentation.menubar;
 
 import husacct.control.task.IStateChangeListener;
+import husacct.control.task.MainController;
 import husacct.control.task.StateController;
 
 import java.awt.event.ActionEvent;
@@ -11,24 +12,25 @@ import javax.swing.JMenuItem;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
-	private StateController controller;
+	private MainController maincontroller;
 	private int currentState;
 	private JMenuItem mntmConfigure;
 	private JMenuItem mntmValidateNow;
 	
-	public ValidateMenu(StateController stateController){
+	public ValidateMenu(MainController mainController){
 		super("Validate");
 		
-		this.controller = stateController;
-		currentState = controller.getState();
+		this.maincontroller = mainController;
+		currentState = maincontroller.getStateController().getState();
 		
 		mntmValidateNow = new JMenuItem("Validate now");
 		this.add(mntmValidateNow);
 		mntmValidateNow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO: Validate now
-				
-				controller.setState(4);
+				maincontroller.getViewController().setViolationsGui();
+				maincontroller.getViewController().showViolationsGui();
+				maincontroller.getStateController().setState(4);
 			}
 		});
 		
@@ -46,24 +48,24 @@ public class ValidateMenu extends JMenu{
 		mntmConfigure.setEnabled(false);
 		
 		
-		controller.addStateChangeListener(new IStateChangeListener() {
+		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
 
 			@Override
 			public void changeState(int state) {
-				currentState = controller.getState();
-				if(currentState == controller.NONE){
+				currentState = maincontroller.getStateController().getState();
+				if(currentState == maincontroller.getStateController().NONE){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == controller.EMPTY){
+				}else if(currentState == maincontroller.getStateController().EMPTY){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == controller.DEFINED){
-					mntmValidateNow.setEnabled(false);
-					mntmConfigure.setEnabled(false);
-				}else if(currentState == controller.MAPPED){
+				}else if(currentState == maincontroller.getStateController().DEFINED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == controller.VALIDATED){
+				}else if(currentState == maincontroller.getStateController().MAPPED){
+					mntmValidateNow.setEnabled(true);
+					mntmConfigure.setEnabled(false);
+				}else if(currentState == maincontroller.getStateController().VALIDATED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(true);
 				}

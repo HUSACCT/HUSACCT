@@ -11,6 +11,8 @@ public class MainController {
 	LocaleController localeController;
 	StateController stateController;
 	
+	public MainGui mainGUI;
+	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
 	public MainController(){
@@ -20,13 +22,13 @@ public class MainController {
 
 	private void setControllers() {
 		this.workspaceController = new WorkspaceController();
-		this.viewController = new ViewController();
+		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();
 	}
 
 	private void openMainGui() {
-		new MainGui(this);
+		this.mainGUI = new MainGui(this);
 	}
 	
 	public ViewController getViewController(){
@@ -49,5 +51,9 @@ public class MainController {
 		// TODO: check saved 
 		logger.debug("Close HUSACCT");
 		System.exit(0);
+	}
+	
+	public MainGui getMainGui(){
+		return mainGUI;
 	}
 }

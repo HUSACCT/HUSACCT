@@ -50,8 +50,8 @@ public class MainGui extends JFrame {
 		
 		FileMenu fileMenu = new FileMenu(controller);
 		ViewMenu viewMenu = new ViewMenu(controller.getViewController());
-		DefineMenu defineMenu = new DefineMenu(controller.getStateController());
-		ValidateMenu validateMenu = new ValidateMenu(controller.getStateController());
+		DefineMenu defineMenu = new DefineMenu(controller);
+		ValidateMenu validateMenu = new ValidateMenu(controller);
 		ExportMenu exportMenu = new ExportMenu(controller.getStateController());
 		LanguageMenu languageMenu = new LanguageMenu(controller.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
