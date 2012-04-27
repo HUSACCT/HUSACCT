@@ -31,6 +31,6 @@ public class ConfigurationController {
 			}
 		}
 
-		return new Severity();
+		return new Severity("", "", Color.RED);
 	}
 }
