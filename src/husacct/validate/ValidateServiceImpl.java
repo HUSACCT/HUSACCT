@@ -120,6 +120,10 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		return configuration;
 	}
 	
+	public void Validate(RuleDTO[] appliedRules){
+		domain.checkConformance(appliedRules);
+	}
+	
 	public static void main(String[] args){
 		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
 		serviceImpl.checkConformance();
