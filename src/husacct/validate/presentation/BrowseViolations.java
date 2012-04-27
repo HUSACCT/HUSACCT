@@ -55,6 +55,7 @@ public final class BrowseViolations extends JInternalFrame {
 	private DefaultTableModel violationModel;
 
 	public BrowseViolations(TaskServiceImpl ts) {
+		setSize(new Dimension(800, 600));
 		this.ts = ts;
 		this.fv = new FilterViolations(ts, this);
 		initComponents();

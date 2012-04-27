@@ -458,8 +458,8 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}//GEN-LAST:event_avtViolationtypeTableValueChanged
 
 	private void rtsCategoryValueChanged() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_rtsCategoryValueChanged
+		LoadRuleTypes((String) rtsCategory.getSelectedValue());
+	}
 
 	private void vtsCategoryValueChanged() {
 		// TODO add your handling code here:
@@ -487,6 +487,16 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		}
 	}
+	
+	private void LoadRuleTypeCategories() {
+		DefaultListModel model = new DefaultListModel();
+		for (String categoryString : ruletypes.keySet()) {
+			model.addElement(categoryString);
+		}
+		rtsCategory.setModel(model);
+	}
+	
+	//private void LoadViolationTypes
 
 	private void loadViolationType(String ruletypeKey) {
 
@@ -499,4 +509,5 @@ public class LanguageSeverityConfiguration extends JPanel {
 			rows--;
 		}
 	}
+	
 }
