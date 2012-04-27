@@ -9,6 +9,7 @@ public abstract class AbstractDefineComponent extends Component {
 	protected ArrayList<AbstractDefineComponent> children;
 	
 	public AbstractDefineComponent() {
+		super();
 		this.children = new ArrayList<AbstractDefineComponent>();
 	}
 	

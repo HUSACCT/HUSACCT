@@ -170,20 +170,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
-		//TODO call AddModuleValuesJFrame instead of the following code.
-		
-//		// Ask the user for the module name
-//		String moduleName = UiDialogs.inputDialog(this, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-//		if (moduleName != null) {
-//			//Creating a new module of type Layer
-//			//has yet to be implemented to support other module types
-//			String layerLevelString = UiDialogs.inputDialog(this, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-//			if (layerLevelString != null) {
-//				int layerLevel = Integer.parseInt(layerLevelString);
-//				// Call task to create the layer
-//				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
-//			}
-//		}
 		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
 		addModuleFrame.initUI();
 	}

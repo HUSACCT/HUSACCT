@@ -1,17 +1,21 @@
 package husacct.define.presentation.moduletree;
 
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.LayerComponent;
+import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.awt.Component;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
-import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
-public class ModuleCellRenderer implements TreeCellRenderer {
-	TreeCellRenderer renderer;
+public class ModuleCellRenderer extends DefaultTreeCellRenderer {
 	
-	public ModuleCellRenderer(TreeCellRenderer renderer) {
-	  this.renderer = renderer;
+	private static final long serialVersionUID = 7222224490353685412L;
+	
+	public ModuleCellRenderer() {
+		
 	}
 	
 	/**
@@ -21,9 +25,20 @@ public class ModuleCellRenderer implements TreeCellRenderer {
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 		if(value instanceof AbstractDefineComponent) {
 			AbstractDefineComponent component = (AbstractDefineComponent) value;
-			return renderer.getTreeCellRendererComponent(tree,  component.getName(), selected, expanded, leaf, row, hasFocus);
-		} else {
-			return renderer.getTreeCellRendererComponent(tree,  value.getClass().getName(), selected, expanded, leaf, row, hasFocus);
+			super.getTreeCellRendererComponent(tree,  component.getName(), selected, expanded, leaf, row, hasFocus);
+			
+			this.determineIcon(value);
 		}
+		return this;
+	}
+	
+	private void determineIcon(Object value) {
+		ImageIcon icon = new ImageIcon();
+		if(value instanceof SoftwareArchitectureComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-software_architecture.png"));
+		} else if(value instanceof LayerComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-layer.png"));
+		}
+		this.setIcon(icon);
 	}
 }

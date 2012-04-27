@@ -1,7 +1,10 @@
 package husacct.define.task.components;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 public class LayerComponent extends AbstractDefineComponent {
 
@@ -10,6 +13,9 @@ public class LayerComponent extends AbstractDefineComponent {
 	
 	public LayerComponent() {
 		super();
+//		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg"));
+//		this.prepareImage(icon.getImage(), icon.getImageObserver());
+//		//this.imageUpdate(, 1, 0, 0, 20, 20);
 	}
 
 	public long getHierarchicalLevel() {

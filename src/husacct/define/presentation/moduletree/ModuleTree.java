@@ -12,9 +12,8 @@ public class ModuleTree extends JTree {
 	
 	public ModuleTree(AbstractDefineComponent rootComponent) {
 		super(new ModuleTreeModel(rootComponent));
-		TreeCellRenderer currentCellRenderer = this.getCellRenderer();
-		ModuleCellRenderer newCellRenderer = new ModuleCellRenderer(currentCellRenderer);
-	    this.setCellRenderer(newCellRenderer);
+		ModuleCellRenderer moduleCellRenderer = new ModuleCellRenderer();
+	    this.setCellRenderer(moduleCellRenderer);
 	    this.setDefaultSettings();
 	}
 	
