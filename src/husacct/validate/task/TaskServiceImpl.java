@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class TaskServiceImpl implements ITaskService{
@@ -69,6 +70,8 @@ public class TaskServiceImpl implements ITaskService{
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {
 		return domain.getAllRuleTypes(language);
 	}
+	
+	
 
 	@Override
 	public List<Severity> getAllSeverities(){
@@ -101,5 +104,11 @@ public class TaskServiceImpl implements ITaskService{
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
 			String physicalPathTo) {
 		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
+	}
+
+	@Override
+	public Map<String, List<ViolationType>> getViolationTypes(
+			String language) {
+		return domain.getAllViolationTypes(language);
 	}
 }

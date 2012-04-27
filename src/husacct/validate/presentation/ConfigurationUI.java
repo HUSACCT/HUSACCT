@@ -247,7 +247,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	private void loadLanguageTabs(){
 		for (String language : ts.getAvailableLanguages()) {
 			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
-					language, ts.getRuletypes(language), ts.getAllSeverities(), ts);
+					language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
 			jTabbedPane1.addTab(language, lcp);
 		}
 	}

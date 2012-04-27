@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -29,7 +31,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private final DefaultListModel avtRuletypeModel;
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;
-	//private final HashMap<String, ?> violationTypes;
+	private final Map<String, List<ViolationType>> violationTypes;
 	private final TaskServiceImpl ts;
 
 	private JPanel activeViolationtype, ruletypeSeverity, violationtypeSeverity;
@@ -42,27 +44,30 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private JTable avtRuletype, rtsRuletypeTable, vtsViolationtypeTable;
 	private JTabbedPane tabbedPane;
 
-	public LanguageSeverityConfiguration(String language,
+	public LanguageSeverityConfiguration(String language, Map<String, List<ViolationType>> violationTypes,
 			HashMap<String, List<RuleType>> ruletypes, List<Severity> severityNames,
 			TaskServiceImpl ts) {
 		this.language = language;
 		this.ruletypes = ruletypes;
 		this.ts = ts;
+		this.violationTypes = violationTypes;
 		String[] ruletypeColumnNames = {"Ruletype", "Severity"};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0,
 											   severityNames);
 		ruletypeModel.setTypes(new Class[]{String.class, Severity.class});
 		ruletypeModel.setCanEdit(new Boolean[]{false, true});
-
+		
+		
+		
 		String[] violationtypeModelHeaders = {"Violationtype", "Severity"};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severityNames);
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
-		violationtypeModel.setCanEdit(new Boolean[]{false, true, true});
+		violationtypeModel.setCanEdit(new Boolean[]{false, true});
 
 		String[] avtViolationtypeModelHeaders = {"Violationtype", "Active"};
 		avtViolationtypeModel = new DefaultTableModel(avtViolationtypeModelHeaders, 0);
-		violationtypeModel.setTypes(new Class[]{String.class, Boolean.class});
-		violationtypeModel.setCanEdit(new Boolean[]{false, true, true});
+//		avtViolationtypeModel.setTypes(new Class[]{String.class, Boolean.class});
+//		avtViolationtypeModel.setCanEdit(new Boolean[]{false, true, true});
 
 		rtsCategoryModel = new DefaultListModel();
 		vtsCategoryModel = new DefaultListModel();
@@ -70,9 +75,13 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtRuletypeModel = new DefaultListModel();
 
 		initComponents();
-
+		
 		TableColumnModel tcm = rtsRuletypeTable.getColumnModel();
 		tcm.getColumn(1).setCellEditor(ruletypeModel.getEditor());
+
+		TableColumnModel tcm2 = vtsViolationtypeTable.getColumnModel();
+		tcm2.getColumn(1).setCellEditor(violationtypeModel.getEditor());
+		initializeEverything();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -153,47 +162,34 @@ public class LanguageSeverityConfiguration extends JPanel {
 		});
 
 		GroupLayout ruletypeSeverityLayout = new GroupLayout(ruletypeSeverity);
-		ruletypeSeverity.setLayout(ruletypeSeverityLayout);
 		ruletypeSeverityLayout.setHorizontalGroup(
-				ruletypeSeverityLayout.createParallelGroup(
-				GroupLayout.Alignment.LEADING).addGroup(ruletypeSeverityLayout.
-				createSequentialGroup().addComponent(rtsCategoryScrollpane,
-													 GroupLayout.DEFAULT_SIZE,
-													 200, Short.MAX_VALUE).
-				addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).
-				addComponent(rtsRuletypeScrollpane, GroupLayout.PREFERRED_SIZE,
-							 406, GroupLayout.PREFERRED_SIZE).addPreferredGap(
-				LayoutStyle.ComponentPlacement.RELATED).addGroup(
-				ruletypeSeverityLayout.createParallelGroup(
-				GroupLayout.Alignment.LEADING, false).addGroup(ruletypeSeverityLayout.
-				createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-				rtsRestore, GroupLayout.Alignment.TRAILING,
-																				GroupLayout.PREFERRED_SIZE,
-																				88,
-																				GroupLayout.PREFERRED_SIZE).
-				addComponent(rtsRestoreAll, GroupLayout.Alignment.TRAILING,
-							 GroupLayout.PREFERRED_SIZE, 88,
-							 GroupLayout.PREFERRED_SIZE)).addComponent(rtsApply,
-																	   GroupLayout.DEFAULT_SIZE,
-																	   GroupLayout.DEFAULT_SIZE,
-																	   Short.MAX_VALUE)).
-				addContainerGap()));
+			ruletypeSeverityLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
+					.addComponent(rtsCategoryScrollpane, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(rtsRuletypeScrollpane, GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(ruletypeSeverityLayout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(ruletypeSeverityLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(rtsRestore, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+							.addComponent(rtsRestoreAll, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
+						.addComponent(rtsApply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap())
+		);
 		ruletypeSeverityLayout.setVerticalGroup(
-				ruletypeSeverityLayout.createParallelGroup(
-				GroupLayout.Alignment.LEADING).addComponent(
-				rtsCategoryScrollpane).addComponent(rtsRuletypeScrollpane,
-													GroupLayout.DEFAULT_SIZE,
-													461, Short.MAX_VALUE).
-				addGroup(GroupLayout.Alignment.TRAILING, ruletypeSeverityLayout.
-				createSequentialGroup().addContainerGap().addComponent(
-				rtsRestore, GroupLayout.PREFERRED_SIZE, 44,
-																	   GroupLayout.PREFERRED_SIZE).
-				addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).
-				addComponent(rtsRestoreAll, GroupLayout.PREFERRED_SIZE, 42,
-							 GroupLayout.PREFERRED_SIZE).addPreferredGap(
-				LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-																		 Short.MAX_VALUE).
-				addComponent(rtsApply).addContainerGap()));
+			ruletypeSeverityLayout.createParallelGroup(Alignment.TRAILING)
+				.addComponent(rtsCategoryScrollpane)
+				.addComponent(rtsRuletypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(rtsRestore, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(rtsRestoreAll, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+					.addComponent(rtsApply)
+					.addContainerGap())
+		);
+		ruletypeSeverity.setLayout(ruletypeSeverityLayout);
 
 		tabbedPane.addTab("Set ruletype severity", ruletypeSeverity);
 
@@ -245,49 +241,34 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		GroupLayout violationtypeSeverityLayout = new GroupLayout(
 				violationtypeSeverity);
-		violationtypeSeverity.setLayout(violationtypeSeverityLayout);
 		violationtypeSeverityLayout.setHorizontalGroup(
-				violationtypeSeverityLayout.createParallelGroup(
-				GroupLayout.Alignment.LEADING).addGroup(violationtypeSeverityLayout.
-				createSequentialGroup().addComponent(vtsCategoryScrollpane,
-													 GroupLayout.DEFAULT_SIZE,
-													 201, Short.MAX_VALUE).
-				addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).
-				addComponent(vtsViolationtypeScrollpane,
-							 GroupLayout.PREFERRED_SIZE, 405,
-							 GroupLayout.PREFERRED_SIZE).addPreferredGap(
-				LayoutStyle.ComponentPlacement.RELATED).addGroup(
-				violationtypeSeverityLayout.createParallelGroup(
-				GroupLayout.Alignment.LEADING, false).addGroup(violationtypeSeverityLayout.
-				createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-				vtsRestore, GroupLayout.Alignment.TRAILING,
-																				GroupLayout.PREFERRED_SIZE,
-																				88,
-																				GroupLayout.PREFERRED_SIZE).
-				addComponent(vtsRestoreAll, GroupLayout.Alignment.TRAILING,
-							 GroupLayout.PREFERRED_SIZE, 88,
-							 GroupLayout.PREFERRED_SIZE)).addComponent(vtsApply,
-																	   GroupLayout.PREFERRED_SIZE,
-																	   88,
-																	   GroupLayout.PREFERRED_SIZE)).
-				addContainerGap()));
+			violationtypeSeverityLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(violationtypeSeverityLayout.createSequentialGroup()
+					.addComponent(vtsCategoryScrollpane, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(vtsViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(violationtypeSeverityLayout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(violationtypeSeverityLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(vtsRestore, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+							.addComponent(vtsRestoreAll, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
+						.addComponent(vtsApply, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 		violationtypeSeverityLayout.setVerticalGroup(
-				violationtypeSeverityLayout.createParallelGroup(
-				GroupLayout.Alignment.LEADING).addComponent(
-				vtsCategoryScrollpane).addComponent(vtsViolationtypeScrollpane,
-													GroupLayout.DEFAULT_SIZE,
-													461, Short.MAX_VALUE).
-				addGroup(GroupLayout.Alignment.TRAILING,
-						 violationtypeSeverityLayout.createSequentialGroup().
-				addContainerGap().addComponent(vtsRestore,
-											   GroupLayout.PREFERRED_SIZE, 44,
-											   GroupLayout.PREFERRED_SIZE).
-				addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).
-				addComponent(vtsRestoreAll, GroupLayout.PREFERRED_SIZE, 42,
-							 GroupLayout.PREFERRED_SIZE).addPreferredGap(
-				LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-																		 Short.MAX_VALUE).
-				addComponent(vtsApply).addContainerGap()));
+			violationtypeSeverityLayout.createParallelGroup(Alignment.TRAILING)
+				.addComponent(vtsCategoryScrollpane)
+				.addComponent(vtsViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+				.addGroup(violationtypeSeverityLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(vtsRestore, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(vtsRestoreAll, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+					.addComponent(vtsApply)
+					.addContainerGap())
+		);
+		violationtypeSeverity.setLayout(violationtypeSeverityLayout);
 
 		tabbedPane.addTab("Set violation severity", violationtypeSeverity);
 
@@ -401,57 +382,62 @@ public class LanguageSeverityConfiguration extends JPanel {
 		tabbedPane.getAccessibleContext().setAccessibleName(
 				"Set ruletype severity");
 	}
+	
+	public void initializeEverything() {
+		loadRuleTypeCategories();
+		loadViolationTypeCategories();
+	}
 
 	private void avtSelectAllActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_avtSelectAllActionPerformed
+		
+	}
 
 	private void rtsRestoreActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_rtsRestoreActionPerformed
+		
+	}
 
 	private void rtsRestoreAllActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_rtsRestoreAllActionPerformed
+		
+	}
 
 	private void rtsApplyActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_rtsApplyActionPerformed
+		
+	}
 
 	private void vtsRestoreActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_vtsRestoreActionPerformed
+		
+	}
 
 	private void vtsRestoreAllActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_vtsRestoreAllActionPerformed
+		
+	}
 
 	private void vtsApplyActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_vtsApplyActionPerformed
+		
+	}
 
 	private void avtDeselectAllActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_avtDeselectAllActionPerformed
+		
+	}
 
 	private void avtApplyActionPerformed() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_avtApplyActionPerformed
+		
+	}
 
 	private void avtCategoryValueChanged() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_avtCategoryValueChanged
+		
+	}
 
 	private void avtViolationtypeTableValueChanged() {
-		// TODO add your handling code here:
-	}//GEN-LAST:event_avtViolationtypeTableValueChanged
+		
+	}
 
 	private void rtsCategoryValueChanged() {
 		loadRuleTypes((String) rtsCategory.getSelectedValue());
 	}
 
 	private void vtsCategoryValueChanged() {
-		// TODO add your handling code here:
+		loadViolationType((String) vtsCategory.getSelectedValue());
 	}
 
 	private void updateRuletypeSeverities() {
@@ -466,6 +452,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void loadRuleTypes(String category) {
+		System.out.println(category);
 		for (String categoryString : ruletypes.keySet()) {
 			if (categoryString.equals(category)){
 				List<RuleType> rules = ruletypes.get(category);
@@ -478,31 +465,29 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 	
 	private void loadRuleTypeCategories() {
+		rtsCategoryModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
 			rtsCategoryModel.addElement(categoryString);
 		}
-		rtsCategory.setModel(rtsCategoryModel);
 	}
 	
 	private void loadViolationTypeCategories() {
-		for (String categoryString : v.keySet()) {
-			rtsCategoryModel.addElement(categoryString);
-		}
-		rtsCategory.setModel(rtsCategoryModel);
-	}
-
-	private void loadViolationType(String ruletypeKey) {
-
-	}
-
-	private void clearComboBoxModel(ComboBoxTableModel model) {
-		int rows = model.getRowCount();
-		while (0 < rows) {
-			model.removeRow(0);
-			rows--;
+		vtsCategoryModel.clear();
+		for (String categoryString : violationTypes.keySet()) {
+			vtsCategoryModel.addElement(categoryString);
 		}
 	}
-	private void clearRtsCategoryModel() {
-		rtsCategoryModel.clear();
+
+	private void loadViolationType(String violationTypeKey) {
+		violationtypeModel.clear();
+		for (String categoryString : violationTypes.keySet()) {
+			if (categoryString.equals(violationTypeKey)){
+				List<ViolationType> violationtypes = violationTypes.get(violationTypeKey);
+				for(ViolationType violationtype: violationtypes){
+					violationtypeModel.addRow(new Object[]{violationtype.getViolationtypeKey(), ts.getAllSeverities().get(0)});
+				}
+			}
+
+		}
 	}
 }
