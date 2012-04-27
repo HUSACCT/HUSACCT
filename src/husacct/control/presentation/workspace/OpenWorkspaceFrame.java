@@ -3,7 +3,7 @@ package husacct.control.presentation.workspace;
 import husacct.control.presentation.workspace.loaders.ILoaderFrame;
 import husacct.control.presentation.workspace.loaders.LoaderFrameFactory;
 import husacct.control.task.WorkspaceController;
-import husacct.control.task.workspace.loaders.LoadFactory;
+import husacct.control.task.workspace.ResourceFactory;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -49,7 +49,7 @@ public class OpenWorkspaceFrame extends JFrame{
 	}
 	
 	private void setLoaders(){
-		List<String> loaders = LoadFactory.getAvailableLoaders();
+		List<String> loaders = ResourceFactory.getAvailableResources();
 		loaderListData = loaders;
 	}
 	

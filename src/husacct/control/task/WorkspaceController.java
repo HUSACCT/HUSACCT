@@ -6,10 +6,8 @@ import husacct.control.domain.Workspace;
 import husacct.control.presentation.workspace.CreateWorkspaceFrame;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
 import husacct.control.presentation.workspace.SaveWorkspaceFrame;
-import husacct.control.task.workspace.loaders.ILoadWorkspace;
-import husacct.control.task.workspace.loaders.LoadFactory;
-import husacct.control.task.workspace.savers.ISaveWorkspace;
-import husacct.control.task.workspace.savers.SaveFactory;
+import husacct.control.task.workspace.IWorkspaceResource;
+import husacct.control.task.workspace.ResourceFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,15 +38,15 @@ public class WorkspaceController {
 
 	}
 	
-	public void saveWorkspace(String saverIdentifier, HashMap<String, Object> dataValues) {
-		ISaveWorkspace saver = SaveFactory.get(saverIdentifier);
+	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
+		IWorkspaceResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
-		saver.save(document, dataValues);
+		workspaceResource.save(document, dataValues);
 	}
 	
-	public void loadWorkspace(String loaderIdentifier, HashMap<String, Object> dataValues){
-		ILoadWorkspace loader = LoadFactory.get(loaderIdentifier);
-		Document doc = loader.load(dataValues);
+	public void loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
+		IWorkspaceResource workspaceResource = ResourceFactory.get(resourceIdentifier);
+		Document doc = workspaceResource.load(dataValues);
 		loadWorkspace(doc);
 	}
 	

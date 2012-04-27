@@ -3,7 +3,7 @@ package husacct.control.presentation.workspace;
 import husacct.control.presentation.workspace.savers.ISaverFrame;
 import husacct.control.presentation.workspace.savers.SaverFrameFactory;
 import husacct.control.task.WorkspaceController;
-import husacct.control.task.workspace.savers.SaveFactory;
+import husacct.control.task.workspace.ResourceFactory;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -46,8 +46,8 @@ public class SaveWorkspaceFrame extends JFrame{
 	}
 	
 	private void setSavers(){
-		List<String> savers = SaveFactory.getAvailableSavers();
-		saverListData = savers;
+		List<String> workspaceResources = ResourceFactory.getAvailableResources();
+		saverListData = workspaceResources;
 	}
 	
 	private void addComponents(){

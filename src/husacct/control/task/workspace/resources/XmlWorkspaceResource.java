@@ -1,21 +1,34 @@
-package husacct.control.task.workspace.savers;
+package husacct.control.task.workspace.resources;
+
+
+import husacct.control.task.workspace.IWorkspaceResource;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+public class XmlWorkspaceResource implements IWorkspaceResource{
 
-public class XmlSaver implements ISaveWorkspace{
+	private Logger logger = Logger.getLogger(XmlWorkspaceResource.class);
 
-	private Logger logger = Logger.getLogger(XmlSaver.class);
+	public Document load(HashMap<String, Object> dataValues) {
+		File file = (File) dataValues.get("file");
+		SAXBuilder sax = new SAXBuilder();
+		Document doc = new Document();
+		try {
+			doc = sax.build(file);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return doc;
+	}
 	
-	@Override
 	public void save(Document doc, HashMap<String, Object> dataValues) {
 		
 		File file = (File) dataValues.get("file");
@@ -28,5 +41,5 @@ public class XmlSaver implements ISaveWorkspace{
 			new RuntimeException(e);
 		}
 	}
-
+	
 }
