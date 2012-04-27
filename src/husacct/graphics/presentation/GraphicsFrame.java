@@ -1,33 +1,24 @@
 package husacct.graphics.presentation;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-
 import husacct.ServiceProvider;
-import husacct.common.dto.MessageDTO;
-import husacct.common.dto.RuleTypeDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.dto.ViolationTypeDTO;
-
-import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
 import husacct.graphics.task.MouseClickListener;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 public class GraphicsFrame extends JInternalFrame {
 	private static final long serialVersionUID = -4683140198375851034L;
@@ -166,7 +157,7 @@ public class GraphicsFrame extends JInternalFrame {
 		listeners.remove(listener);
 	}
 	
-	public void showViolations(ViolationDTO[] violationDTOs)
+	public void showViolationsProperties(ViolationDTO[] violationDTOs)
 	{
 		this.propertiesScrollPane.setViewportView(this.createViolationsTable(violationDTOs));
 		this.layoutComponents(true);
@@ -203,6 +194,28 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void hidePropertiesPane() {
-		this.layoutComponents(false);		
+		this.layoutComponents(false);
+	}
+
+	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
+		this.propertiesScrollPane.setViewportView(this.createDependencyTable(dependencyDTOs));
+		this.layoutComponents(true);
+	}
+
+	private Component createDependencyTable(DependencyDTO[] dependencyDTOs) {
+		String[] columnNames = { "From", "To", "Line number", "Dependency Type" };
+		
+		ArrayList<String[]> rows = new ArrayList<String[]>();
+		for(DependencyDTO dependency: dependencyDTOs)
+		{
+			rows.add(new String[]{
+				dependency.from, 
+				dependency.to,
+				""+dependency.lineNumber,
+				dependency.type
+			});
+		}
+		
+		return new JTable(rows.toArray(new String[][]{}), columnNames);
 	}
 }
