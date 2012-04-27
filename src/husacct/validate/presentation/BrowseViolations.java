@@ -1,6 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
@@ -69,19 +70,20 @@ public final class BrowseViolations extends JInternalFrame {
 		dependencyLevel = new ButtonGroup();
 		violationPanel = new JScrollPane();
 		violationTable = new JTable();
-		String[] columnNames = {ResourceBundles.getValue("LogicalModule"),
-				ResourceBundles.getValue("Source"),
-				ResourceBundles.getValue("Target"),
-				ResourceBundles.getValue("LineNumber"),
-				ResourceBundles.getValue("Severity"),
-				ResourceBundles.getValue("Rule"),
-				ResourceBundles.getValue("DependencyKind")};
+		String[] columnNames = {
+			ResourceBundles.getValue("LogicalModule"),
+			ResourceBundles.getValue("Source"),
+			ResourceBundles.getValue("Rule"),
+			ResourceBundles.getValue("LineNumber"),
+			ResourceBundles.getValue("DependencyKind"),
+			ResourceBundles.getValue("Target"),
+			ResourceBundles.getValue("Severity")};
 		violationModel = new DefaultTableModel(columnNames, 0) {
 
 			private static final long serialVersionUID = -6892927200143239311L;
 			Class<?>[] types = new Class[]{
 					String.class, String.class, String.class, Integer.class,
-					Integer.class, String.class, String.class
+					String.class, String.class, String.class
 			};
 			boolean[] canEdit = new boolean[]{
 					false, false, false, false, false, false, false
@@ -241,7 +243,6 @@ public final class BrowseViolations extends JInternalFrame {
 		setClosable(true);
 		setIconifiable(true);
 		setMaximizable(true);
-		setVisible(true);
 	}
 
 	public void createInformationPanel() {
@@ -257,10 +258,10 @@ public final class BrowseViolations extends JInternalFrame {
 		//
 		shownViolations = new JLabel(ResourceBundles.getValue("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
-		
+
 		shownViolationsNumber = new JLabel("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
-		
+
 		for(ViolationsPerSeverity violationPerSeverity: getViolationsPerSeverity()) {
 			informationPanel.add(new JLabel(violationPerSeverity.getSeverity().toString()));
 			informationPanel.add(new JLabel("" + violationPerSeverity.getAmount()));
@@ -272,11 +273,11 @@ public final class BrowseViolations extends JInternalFrame {
 		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
 		for(Severity severity : ts.getAllSeverities()) {
 			int violationsCount = 0;
-			List<Violation> violations = Collections.emptyList();
+			List<Violation> violations;
 			if(!applyFilter.isSelected()) {
 				violations = ts.getAllViolations();
 			} else {
-				violations = ts.filterViolations(true);
+				violations = ts.applyFilterViolations(true);
 			}
 			for(Violation violation : violations) {
 				if(violation.getSeverity() != null) {
@@ -296,12 +297,14 @@ public final class BrowseViolations extends JInternalFrame {
 			violationModel.removeRow(0);
 		}
 
-		ArrayList<Violation> violationRows = ts.filterViolations(applyFilter.isSelected());
+		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
 		for (Violation violation : violationRows) {
-			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), violation.getClassPathTo(), violation.getLinenumber(), /*violation.getSeverity().toString()*/ "TODO severity", ResourceBundles.getValue(violation.getRuletypeKey()), ResourceBundles.getValue(violation.getViolationtypeKey())});
+			String message = new Messagebuilder().createMessage(violation.getMessage());
+			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), message, violation.getLinenumber(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), /*violation.getSeverity().toString()*/ "TODO severity"});
 		}
 
-		shownViolationsNumber.setText("" + violationModel.getRowCount());
+		setColumnWidth(3, 50);
+
 		createInformationPanel();
 	}
 
