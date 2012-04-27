@@ -463,19 +463,20 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		}
 	}
-	
+
 	private void loadRuleTypeCategories() {
 		rtsCategoryModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
 			rtsCategoryModel.addElement(categoryString);
 		}
 	}
-	
+
 	private void loadViolationTypeCategories() {
 		vtsCategoryModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
 			vtsCategoryModel.addElement(categoryString);
 		}
+
 	}
 
 	private void loadViolationType(String violationTypeKey) {

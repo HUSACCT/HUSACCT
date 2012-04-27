@@ -32,5 +32,6 @@ public class ConfigurationController {
 		}
 
 		return new Severity("","",Color.red);
+
 	}
 }

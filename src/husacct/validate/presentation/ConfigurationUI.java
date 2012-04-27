@@ -5,9 +5,12 @@ import husacct.validate.presentation.TableModels.ColorChooserEditor;
 import husacct.validate.presentation.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import javax.swing.JButton;
+import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
@@ -22,7 +25,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		severityModel = new ColorTableModel();
 		initComponents();
 		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
-
 		TableCellEditor editor = new ColorChooserEditor(new JButton());
 		column.setCellEditor(editor);
 		loadLanguageTabs();
@@ -31,31 +33,31 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        severityNamePanel = new javax.swing.JPanel();
-        severityNameScrollPane = new javax.swing.JScrollPane();
-        severityNameTable = new javax.swing.JTable();
-        add = new javax.swing.JButton();
-        remove = new javax.swing.JButton();
-        up = new javax.swing.JButton();
-        down = new javax.swing.JButton();
-        applySeverity = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        cancel = new javax.swing.JButton();
+        jTabbedPane1 = new JTabbedPane();
+        severityNamePanel = new JPanel();
+        severityNameScrollPane = new JScrollPane();
+        severityNameTable = new JTable();
+        add = new JButton();
+        remove = new JButton();
+        up = new JButton();
+        down = new JButton();
+        applySeverity = new JButton();
+        jButton1 = new JButton();
+        cancel = new JButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Configuration");
-        setVisible(true);
 
         severityNameTable.setModel(severityModel);
         severityNameTable.setFillsViewportHeight(true);
         severityNameScrollPane.setViewportView(severityNameTable);
 
         add.setText("Add");
-        add.addActionListener(new java.awt.event.ActionListener() {
+        add.addActionListener(new ActionListener() {
+			@Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addActionPerformed(evt);
             }
@@ -63,6 +65,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
         remove.setText("Remove");
         remove.addActionListener(new java.awt.event.ActionListener() {
+			@Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeActionPerformed(evt);
             }
@@ -160,7 +163,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         );
     }
 
-	private void downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downActionPerformed
+	private void downActionPerformed(ActionEvent evt) {
 		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() -
 												 1) {
 			severityModel.moveRow(severityNameTable.getSelectedRow(),
@@ -169,9 +172,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			severityNameTable.changeSelection(severityNameTable.getSelectedRow() +
 											  1, 0, false, false);
 		}
-	}//GEN-LAST:event_downActionPerformed
+	}
 
-	private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
+	private void upActionPerformed(ActionEvent evt) {
 		if (severityNameTable.getSelectedRow() > 0) {
 			severityModel.moveRow(severityNameTable.getSelectedRow(),
 								  severityNameTable.getSelectedRow(),
@@ -179,30 +182,28 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			severityNameTable.changeSelection(severityNameTable.getSelectedRow() -
 											  1, 0, false, false);
 		}
-	}//GEN-LAST:event_upActionPerformed
+	}
 
-	private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
+	private void removeActionPerformed(java.awt.event.ActionEvent evt) {
 		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
 			severityModel.removeRow(severityNameTable.getSelectedRow());
 		}
-	}//GEN-LAST:event_removeActionPerformed
+	}
 
-	private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+	private void addActionPerformed(java.awt.event.ActionEvent evt) {
 		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
 		severityNameTable.changeSelection(0, 0,
 										  false, false);
-	}//GEN-LAST:event_addActionPerformed
+	}
 
 	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {
-		LinkedHashMap<Integer, String> linkedmap = new LinkedHashMap<Integer, String>();
+		List<Object[]> list = new ArrayList<Object[]>();
 
 		for(int i = 0; i < severityModel.getRowCount(); i++){
-			linkedmap.put(i, (String) severityModel.getValueAt(i, 0));
-			linkedmap.put(i, (String) severityModel.getValueAt(i, 1));
-			linkedmap.put(i, (String) severityModel.getValueAt(i, 2));
+			list.add(new Object[]{(String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)});
 		}
 
-		ts.applySeverities(linkedmap);
+		ts.applySeverities(list);
 		loadSeverity();
 		removeLanguageTabs();
 		loadLanguageTabs();

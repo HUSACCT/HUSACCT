@@ -82,13 +82,19 @@ public class TaskServiceImpl implements ITaskService{
 		return acs.getAvailableLanguages();
 	}
 
-	public void applySeverities(LinkedHashMap<Integer, String> linkedmap){
+	public void applySeverities(List<Object[]> list){
 		List<Severity> severityList = new ArrayList<Severity>();
 
-		for (int i = 0; i < linkedmap.size(); i++) {
-			Severity severity = conficurationController.SererityChecker(linkedmap.get(i));
-			severity.setUserName("TODO");
-			severity.setColor(Color.RED);
+		for (int i = 0; i < list.size(); i++) {
+			try{
+				Severity severity = getAllSeverities().get(i);
+				severity.setUserName((String) list.get(i)[0]);
+				severity.setColor((Color) list.get(i)[1]);
+				severityList.add(severity);
+			} catch (IndexOutOfBoundsException e){
+				severityList.add(new Severity((String) list.get(i)[0], (Color) list.get(i)[1]));
+			}
+
 		}
 		addSeverities(severityList);
 	}
