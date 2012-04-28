@@ -37,6 +37,7 @@ public abstract class BaseController implements MouseClickListener {
 	protected HashMap<AbstractDTO, BaseFigure> dtoFigureMap = new HashMap<AbstractDTO, BaseFigure>();
 	
 	protected BasicLayoutStrategy layoutStrategy;
+	protected AbstractDTO[] receivedDTOs;
 
 	public BaseController() {
 
@@ -174,14 +175,16 @@ public abstract class BaseController implements MouseClickListener {
 	public void toggleViolations() {
 		showViolations = (showViolations ? false : true);
 	}
-
-	protected boolean showViolations() {
+	public boolean violationsAreShown(){
 		return showViolations;
+	}
+	public boolean dependenciesAreShown(){
+		return !violationsAreShown();
 	}
 
 	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (showViolations()) {
+		if(violationsAreShown()){
 			detail = DrawingDetail.WITH_VIOLATIONS;
 		}
 		return detail;
