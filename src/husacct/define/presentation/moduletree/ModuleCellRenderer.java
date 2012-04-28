@@ -1,7 +1,10 @@
 package husacct.define.presentation.moduletree;
 
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.ComponentComponent;
+import husacct.define.task.components.ExternalLibraryComponent;
 import husacct.define.task.components.LayerComponent;
+import husacct.define.task.components.ModuleComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.awt.Component;
@@ -34,10 +37,16 @@ public class ModuleCellRenderer extends DefaultTreeCellRenderer {
 	
 	private void determineIcon(Object value) {
 		ImageIcon icon = new ImageIcon();
-		if(value instanceof SoftwareArchitectureComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-software_architecture.png"));
+		if(value instanceof ComponentComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-component.png"));
+		} else if(value instanceof ExternalLibraryComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-library.png"));
 		} else if(value instanceof LayerComponent) {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-layer.png"));
+		} else if(value instanceof ModuleComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-module.png"));
+		} else if(value instanceof SoftwareArchitectureComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-software_architecture.png"));
 		}
 		this.setIcon(icon);
 	}

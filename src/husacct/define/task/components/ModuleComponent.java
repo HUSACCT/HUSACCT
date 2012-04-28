@@ -3,21 +3,12 @@ package husacct.define.task.components;
 import java.awt.Component;
 import java.util.ArrayList;
 
-public class LayerComponent extends AbstractDefineComponent {
-
-	private static final long serialVersionUID = 47794294423459128L;
-	private int hierarchicalLevel;
+public class ModuleComponent extends AbstractDefineComponent {
 	
-	public LayerComponent() {
+	private static final long serialVersionUID = 6711345066811693165L;
+
+	public ModuleComponent() {
 		super();
-	}
-
-	public int getHierarchicalLevel() {
-		return hierarchicalLevel;
-	}
-
-	public void setHierarchicalLevel(int hierarchicalLevel) {
-		this.hierarchicalLevel = hierarchicalLevel;
 	}
 
 	@Override

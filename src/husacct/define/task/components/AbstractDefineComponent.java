@@ -7,6 +7,7 @@ public abstract class AbstractDefineComponent extends Component {
 
 	private static final long serialVersionUID = -8598001531867139865L;
 	protected ArrayList<AbstractDefineComponent> children;
+	protected long moduleId;
 	
 	public AbstractDefineComponent() {
 		super();
@@ -18,4 +19,6 @@ public abstract class AbstractDefineComponent extends Component {
 	public abstract void setChildren(ArrayList<AbstractDefineComponent> children);
 	public abstract ArrayList<AbstractDefineComponent> getChildren();
 	public abstract void removeChild(AbstractDefineComponent child);
+	public abstract void setModuleId(long moduleId);
+	public abstract long getModuleId();
 }

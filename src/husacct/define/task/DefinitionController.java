@@ -3,6 +3,8 @@ package husacct.define.task;
 import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.Component;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -11,6 +13,7 @@ import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.Log;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
@@ -26,7 +29,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 public class DefinitionController extends Observable implements Observer {
-
+	
 	private DefinitionJPanel definitionJPanel;
 	private static DefinitionController instance;
 	private List<Observer> observers;
@@ -296,7 +299,6 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	public AbstractDefineComponent getModuleTreeComponents() {
-		//TODO complement with normal modules/external libraries instead of layers
 		Log.i(this, "getting Module Tree Components");
 		JPanelStatus.getInstance("Updating Modules").start();
 		
@@ -311,29 +313,11 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	private void addChildComponents(AbstractDefineComponent parentComponent, Module module) {
-		AbstractDefineComponent childComponent = this.checkModuleType(module);
+		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
 		for(Module subModule : module.getSubModules()) {
 			this.addChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);
-	}
-	
-	private AbstractDefineComponent checkModuleType(Module module) {
-		AbstractDefineComponent returnComponent = null;
-		if(module instanceof Layer) {
-			returnComponent = this.createLayerComponent(module);
-		} else {
-			Log.e(this, "checkModuleType() - ModuleType not implemented");
-			UiDialogs.errorDialog(definitionJPanel, "ModuleType is not implemented yet", "Error");
-		}
-		return returnComponent;
-	}
-	
-	private AbstractDefineComponent createLayerComponent(Module module) {
-		LayerComponent layerComponent = new LayerComponent();
-		layerComponent.setHierarchicalLevel(module.getId());
-		layerComponent.setName(DefineDomainService.getInstance().getModuleNameById(module.getId()));
-		return layerComponent;
 	}
 
 	/**

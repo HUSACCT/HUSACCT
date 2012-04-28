@@ -40,4 +40,14 @@ public class SoftwareArchitectureComponent extends AbstractDefineComponent {
 			}
 		}
 	}
+	
+	@Override
+	public void setModuleId(long moduleId) {
+		this.moduleId = moduleId;
+	}
+
+	@Override
+	public long getModuleId() {
+		return this.moduleId;
+	}
 }
