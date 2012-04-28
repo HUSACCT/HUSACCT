@@ -1,7 +1,6 @@
 package husacct.validate.domain.assembler;
 
 import husacct.Main;
-import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -9,6 +8,7 @@ import husacct.validate.domain.exception.LanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
+import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
@@ -27,7 +27,7 @@ public class ViolationAssembler {
 	private AbstractViolationType violationtypeFactory;
 	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
-	private MessageAssembler messageAssembler;
+	private Messagebuilder messagebuilder;
 
 	public ViolationAssembler(){
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
@@ -35,7 +35,7 @@ public class ViolationAssembler {
 
 		this.ruleFactory = new RuleTypesFactory();
 		this.ruleAssembler = new RuletypeAssembler();
-		this.messageAssembler = new MessageAssembler();
+		this.messagebuilder = new Messagebuilder();
 	}
 
 	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
@@ -63,15 +63,15 @@ public class ViolationAssembler {
 	private ViolationDTO createViolationDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
 		try{
 			RuleTypeDTO rule = createRuleTypeDTO(violation);
-			ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
+			ViolationTypeDTO violationtype = rule.violationTypes[0];
 
 			final String classPathFrom = violation.getClassPathFrom();
 			final String classPathTo = violation.getClassPathTo();
 			final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 			final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
-			final MessageDTO message = messageAssembler.createMessageDTO(violation.getMessage());
-
-			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message);
+			final String message = messagebuilder.createMessage(violation.getMessage());
+		
+			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, violation.getLinenumber());
 		}catch(ViolationTypeNotFoundException e){
 			throw new ViolationTypeNotFoundException();
 		}

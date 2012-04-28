@@ -1,7 +1,6 @@
 package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
-import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
@@ -108,11 +107,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	@Override
 	public boolean isValidated() {
 		return validationExecuted;
-	}
-
-	@Override
-	public String buildDefinedRuleMessage(MessageDTO message) {
-		return domain.buildMessage(message);
 	}
 	
 	public ConfigurationServiceImpl getConfiguration() {

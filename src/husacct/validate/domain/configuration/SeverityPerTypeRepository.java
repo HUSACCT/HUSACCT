@@ -1,6 +1,5 @@
 package husacct.validate.domain.configuration;
 
-import husacct.validate.domain.exception.ProgrammingLanguageNotFound;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.Severity;
 
@@ -9,9 +8,14 @@ import java.util.Map.Entry;
 
 public class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
+	private SeverityConfigRepository severityConfig;
 
-	public SeverityPerTypeRepository(){
+	public SeverityPerTypeRepository(SeverityConfigRepository severityConfig){
+		this.severityConfig = severityConfig;
+
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+
+
 		//TODO delete test data
 		severitiesPerTypePerProgrammingLanguage.put("java", new HashMap<String, Severity>());
 	}
@@ -37,11 +41,20 @@ public class SeverityPerTypeRepository {
 	}
 
 	public void restoreDefaultSeverity(String language, String key){
-		//TODO
+		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language);
+		
+		//if there is no value, autmatically the default severities will be applied
+		Severity severity = severitiesPerType.get(key);
+		if(severity != null){
+			severitiesPerType.remove(key);
+		}
 	}
 
 	public void restoreAllToDefault(String language){
-		//TODO
+		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language);
+		
+		//if there is no value, autmatically the default severities will be applied
+		severitiesPerType.clear();
 	}
 
 	public void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){

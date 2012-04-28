@@ -41,6 +41,26 @@ public class SeverityConfigRepository {
 		}
 		throw new SeverityNotFoundException();
 	}
+	
+	
+//	private boolean equalsMemoryLocation(Severity severity){
+//		for(Severity defaultSeverity : defaultSeverities){
+//			if(defaultSeverity == severity){
+//				return true;
+//			}
+//		}
+//		
+//		for(Severity currentSeverity : currentSeverities){
+//			if(currentSeverity == severity){
+//				return true;
+//			}
+//		}		
+//		return false;
+//	}
+//	
+//	private boolean equalsContent(Severity severity){
+//		
+//	}
 
 	private void generateDefaultSeverities(){
 		Severity defaultLowSeverity = new Severity("Low", "", Color.GREEN);
