@@ -25,28 +25,27 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.geom.Dimension2DDouble;
 
-public abstract class Decorator extends BaseFigure implements DecoratedFigure
-{
+public abstract class Decorator extends BaseFigure implements DecoratedFigure {
 	private static final long serialVersionUID = 1489931076171389065L;
 	private BaseFigure decorator;
-	
+
 	public Decorator(BaseFigure decorator) {
 		this.decorator = decorator;
 	}
-	
+
 	public BaseFigure getDecorator() {
 		return this.decorator;
 	}
-	
+
 	@Override
 	public void setDecorator(Figure decorator) {
-		// not nice, but forces consistency deeper in the hierarchy tree
-		if(!(decorator instanceof BaseFigure)) {
+		
+		if (!(decorator instanceof BaseFigure)) 
 			throw new RuntimeException("invalid decorator type");
-		}
-		this.decorator = (BaseFigure)decorator;
+		
+		this.decorator = (BaseFigure) decorator;
 	}
-	
+
 	@Override
 	public void addFigureListener(FigureListener arg0) {
 		decorator.addFigureListener(arg0);
@@ -179,16 +178,14 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 	}
 
 	@Override
-	public boolean handleDrop(Double arg0, Collection<Figure> arg1,
-			DrawingView arg2) {
-		
+	public boolean handleDrop(Double arg0, Collection<Figure> arg1, DrawingView arg2) {
+
 		return decorator.handleDrop(arg0, arg1, arg2);
 	}
 
 	@Override
-	public boolean handleMouseClick(Double arg0, MouseEvent arg1,
-			DrawingView arg2) {
-		
+	public boolean handleMouseClick(Double arg0, MouseEvent arg1, DrawingView arg2) {
+
 		return decorator.handleMouseClick(arg0, arg1, arg2);
 	}
 
@@ -236,7 +233,7 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 
 	@Override
 	public void removeNotify(Drawing arg0) {
-		
+
 		decorator.removeNotify(arg0);
 	}
 
@@ -260,7 +257,7 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 	@Override
 	public void restoreTransformTo(Object arg0) {
 		decorator.restoreTransformTo(arg0);
-		
+
 	}
 
 	@Override
@@ -285,8 +282,8 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure
 
 	@Override
 	public Decorator clone() {
-		
-		Decorator other = (Decorator)super.clone();
+
+		Decorator other = (Decorator) super.clone();
 		other.decorator = decorator.clone();
 		return other;
 	}

@@ -1,7 +1,6 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
@@ -74,26 +73,39 @@ public abstract class BaseController implements MouseClickListener {
 	}
 
 	@Override
-	public void figureSelected(BaseFigure clickedFigure) {
-		clickedFigure = (Decorator)clickedFigure;
-		if (clickedFigure instanceof ViolationsDecorator) {
-			this.drawTarget.showViolationsProperties(((ViolationsDecorator) clickedFigure).getViolations());
-		}else if (clickedFigure instanceof DependenciesDecorator) {
-			this.drawTarget.showDependenciesProperties(((DependenciesDecorator) clickedFigure).getDependencies());
+	public void figureSelected(BaseFigure[] figures) {
+		// FIXME: Wrap these instanceof calls into a (series of abstract)
+		// clas(ses) and remove the
+		// recursion that is happening. Discuss solution with team before
+		// implementing
+		BaseFigure selectedFigure = figures[0];
+
+		if (selectedFigure instanceof ViolationsDecorator) {
+			this.drawTarget.showViolationsProperties(((ViolationsDecorator) selectedFigure).getViolations());
+		} else if (selectedFigure instanceof DependenciesDecorator) {
+			this.drawTarget.showDependenciesProperties(((DependenciesDecorator) selectedFigure).getDependencies());
 		}
-		// do recursion here, because the the decorators
-		// we are checking for above may be hidden behind
-		// other decorators
-		else if (clickedFigure instanceof Decorator) {
-			this.figureSelected(((Decorator) clickedFigure).getDecorator());
+
+		else if (selectedFigure instanceof Decorator) {
+			Decorator decorator = (Decorator) selectedFigure;
+
+			ArrayList<BaseFigure> list = new ArrayList<BaseFigure>();
+			list.add(decorator.getDecorator());
+
+			figureSelected((BaseFigure[]) list.toArray(new BaseFigure[list.size()]));
+
 		} else {
-			this.drawTarget.hidePropertiesPane();
+
+			drawTarget.hidePropertiesPane();
 		}
 	}
 
 	@Override
-	public void figureDeselected() {
-		this.drawTarget.hidePropertiesPane();
+	public void figureDeselected(BaseFigure[] figures) {
+		
+		if (view.getSelectionCount() == 0) {
+			drawTarget.hidePropertiesPane();
+		}		
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);
@@ -104,7 +116,11 @@ public abstract class BaseController implements MouseClickListener {
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
-			this.dtoFigureMap.put(dto, generatedFigure); // TODO: Check with team if their findbyname in drawingview is stable or not.
+			this.dtoFigureMap.put(dto, generatedFigure); // TODO: Check with
+															// team if their
+															// findbyname in
+															// drawingview is
+															// stable or not.
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout();
@@ -113,7 +129,8 @@ public abstract class BaseController implements MouseClickListener {
 	}
 
 	public void drawViolationsForShownModules() {
-		// TODO retrieve the real service from the ServiceProvider instead of using the stub
+		// TODO retrieve the real service from the ServiceProvider instead of
+		// using the stub
 		IValidateService validateService = new ValidateServiceStub();
 
 		ArrayList<DTODecorator> moduleFigures = new ArrayList<DTODecorator>();
@@ -130,32 +147,20 @@ public abstract class BaseController implements MouseClickListener {
 
 				if ((dtoFrom instanceof ModuleDTO) && (dtoTo instanceof ModuleDTO)) {
 					ViolationDTO[] violationDTOs = validateService.getViolationsByLogicalPath(
-							((ModuleDTO) dtoFrom).logicalPath,
-							((ModuleDTO) dtoTo).logicalPath);					
+							((ModuleDTO) dtoFrom).logicalPath, ((ModuleDTO) dtoTo).logicalPath);
 					if (violationDTOs.length > 0) {
-						this.drawViolations(violationDTOs, moduleFigureFrom,moduleFigureTo);
-					}
-				}
-				if ((dtoFrom instanceof AnalysedModuleDTO) && (dtoTo instanceof AnalysedModuleDTO)) {
-					ViolationDTO[] violationDTOs = validateService.getViolationsByPhysicalPath(
-							((AnalysedModuleDTO) dtoFrom).uniqueName,
-							((AnalysedModuleDTO) dtoTo).uniqueName);
-					if (violationDTOs.length > 0) {
-						this.drawViolations(violationDTOs, moduleFigureFrom,moduleFigureTo);
+						this.drawViolations(violationDTOs, moduleFigureFrom, moduleFigureTo);
 					}
 				}
 			}
 		}
 	}
 
-	private void drawViolations(ViolationDTO[] violationDTOs,
-			BaseFigure fromFigure, BaseFigure toFigure) {
-		BaseFigure violatedRelationFigure = this.figureFactory
-				.createFigure(violationDTOs);
+	private void drawViolations(ViolationDTO[] violationDTOs, BaseFigure fromFigure, BaseFigure toFigure) {
+		BaseFigure violatedRelationFigure = this.figureFactory.createFigure(violationDTOs);
 		this.connectionStrategy.connect(
 		// TODO a very ugly cast here
-				(ConnectionFigure) ((Decorator) violatedRelationFigure)
-						.getDecorator(), fromFigure, toFigure);
+				(ConnectionFigure) ((Decorator) violatedRelationFigure).getDecorator(), fromFigure, toFigure);
 
 		this.drawing.add(violatedRelationFigure);
 	}
@@ -170,7 +175,7 @@ public abstract class BaseController implements MouseClickListener {
 		return !violationsAreShown();
 	}
 
-	protected DrawingDetail getCurrentDrawingDetail(){
+	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
 		if(violationsAreShown()){
 			detail = DrawingDetail.WITH_VIOLATIONS;

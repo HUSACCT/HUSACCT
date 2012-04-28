@@ -2,7 +2,6 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 
@@ -11,7 +10,7 @@ public class DefinedController extends BaseController {
 
 	public DefinedController() {
 		super();
-		
+
 		defineService = ServiceProvider.getInstance().getDefineService();
 	}
 
@@ -32,19 +31,19 @@ public class DefinedController extends BaseController {
 	@Override
 	public void moduleZoomOut() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void exportToImage() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void toggleViolations() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

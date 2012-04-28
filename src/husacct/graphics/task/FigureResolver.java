@@ -31,7 +31,7 @@ public final class FigureResolver {
 
 				DTODecorator decorator = (DTODecorator) figure;
 				return (AbstractDTO) decorator.getDTO();
-
+						
 			} else {
 
 				figure = ((Decorator) figure).getDecorator();
