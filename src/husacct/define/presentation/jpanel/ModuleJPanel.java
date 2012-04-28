@@ -139,11 +139,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.checkLayerComponentIsSelected();
 	}
 	
-	@Deprecated
-	public void updateModulesTreeList() {
-		DefinitionController.getInstance().updateModuleTreeList(this.moduleTreeJList);
-	}
-	
 	/**
 	 * Handling ActionPerformed
 	 */

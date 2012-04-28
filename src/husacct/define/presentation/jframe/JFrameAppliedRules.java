@@ -3,7 +3,6 @@ package husacct.define.presentation.jframe;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.utils.KeyValueComboBox;
-import husacct.define.presentation.utils.Log;
 import husacct.define.task.AppliedRulesController;
 
 import java.awt.BorderLayout;
@@ -253,7 +252,6 @@ public class JFrameAppliedRules extends JFrame implements KeyListener, ActionLis
 	}
 
 	public void keyReleased(KeyEvent arg0) {
-		Log.i(this, "keyreleased");
 		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			this.dispose();
 		}

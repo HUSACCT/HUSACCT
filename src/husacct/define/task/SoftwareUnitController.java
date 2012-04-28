@@ -6,7 +6,6 @@ import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
-import husacct.define.presentation.utils.Log;
 import husacct.define.presentation.utils.UiDialogs;
 
 
@@ -15,7 +14,6 @@ public class SoftwareUnitController extends PopUpController {
 	private JFrameSoftwareUnit softwareUnitFrame;
 	
 	public SoftwareUnitController(long moduleId, String softwareUnitName) {
-		Log.i(this, "constructor(" + moduleId + ", " + softwareUnitName + ")");
 		setModuleId(moduleId);
 //		softwareUnitFrame.setTitle("Map " + softwareUnitName);
 	}
@@ -28,8 +26,6 @@ public class SoftwareUnitController extends PopUpController {
 
 	@Override
 	public void initUi() throws Exception {
-		Log.i(this, "initUi()");
-
 		softwareUnitFrame = new JFrameSoftwareUnit(this);
 		// Set the visibility of the jframe to true so the jframe is now visible
 		UiDialogs.showOnScreen(0, softwareUnitFrame);

@@ -15,7 +15,7 @@ public class MainGUI {
 	{
 		PropertyConfigurator.configure("husacct.properties");
 		Logger logger = Logger.getLogger(Main.class);
-		logger.debug("Starting Define");
+		logger.info("Starting Define");
 		
 		// Init Main Frame
 		JFrame mainFrame = new JFrame();

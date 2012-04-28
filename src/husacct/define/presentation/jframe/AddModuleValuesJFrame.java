@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -134,6 +135,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	}
 	
 	private void throwError(String errorMessage) {
-		//TODO: Throw an error!
+		JOptionPane.showMessageDialog(this, errorMessage, "Wrong input!", JOptionPane.ERROR_MESSAGE);
 	}
 }

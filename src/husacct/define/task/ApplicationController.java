@@ -1,17 +1,20 @@
 package husacct.define.task;
 
 import husacct.define.presentation.ApplicationJFrame;
-import husacct.define.presentation.utils.Log;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.Logger;
+
 
 public class ApplicationController implements ActionListener {
 	public ApplicationJFrame jframe;
 	private static ApplicationController instance;
+	
+	private Logger logger;
 	
 	public static ApplicationController getInstance() {
 		return instance == null ? (instance = new ApplicationController()) : instance;
@@ -20,7 +23,7 @@ public class ApplicationController implements ActionListener {
 	 * MainController constructor. This constructor will initialize a new Definition and Analyse controller.
 	 */
 	public ApplicationController() {
-		Log.i(this, "constructor()");
+		logger = Logger.getLogger(ApplicationController.class);
 	}
 
 	public ApplicationJFrame getApplicationFrame(){
@@ -30,8 +33,6 @@ public class ApplicationController implements ActionListener {
 	 * Start the application with GUI by calling this method.
 	 */
 	public void initUi() {
-		Log.i(this, "initUi()");
-
 		// Create a new instance of the jframe
 		jframe = new ApplicationJFrame();
 
@@ -49,31 +50,31 @@ public class ApplicationController implements ActionListener {
 	 * Start the application without GUI by calling this method.
 	 */
 	public void initCommand() {
-		Log.i(this, "initCommand()");
+		logger.info("initCommand()");
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String helpCommando = "Available commands are:\n" + "Help\tRequest help\n" + "Exit\tExit the application";
 		String lineseperator = "----------------------------------------------------------------------------------------";
 		String cmdLine = "Enter command: ";
 		try {
-			Log.i(this, helpCommando);
-			Log.i(this, lineseperator);
-			Log.i(this, cmdLine);
+			logger.info(helpCommando);
+			logger.info(lineseperator);
+			logger.info(cmdLine);
 
 			String line = "";
 			while ((line = in.readLine()) != null) {
 				if (line.startsWith("help")) {
-					Log.i(this, helpCommando);
+					logger.info(helpCommando);
 				} else if (line.startsWith("exit")) {
 					System.exit(0);
 				} else {
-					Log.i(this, "Sorry, unknown commando");
+					logger.info("Sorry, unknown commando");
 				}
-				Log.i(this, lineseperator);
-				Log.i(this, cmdLine);
+				logger.info(lineseperator);
+				logger.info(cmdLine);
 			}
 		} catch (Exception e) {
-			Log.e(getClass().getSimpleName(), "initCommand() - Exception: " + e);
+			logger.info("initCommand() - Exception: " + e);
 		}
 	}
 

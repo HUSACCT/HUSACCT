@@ -6,7 +6,6 @@ import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.JFrameAppliedRules;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.utils.KeyValueComboBox;
-import husacct.define.presentation.utils.Log;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.validate.ValidateServiceStub;
 
@@ -23,7 +22,6 @@ public class AppliedRulesController extends PopUpController {
 	private ValidateServiceStub validateService;
 
 	public AppliedRulesController(long layerId, long appliedRuleId) {
-		Log.i(this, "constructor(" + layerId + ", " + appliedRuleId + ")");
 		setModuleId(layerId);
 		this.appliedRuleId = appliedRuleId;
 		validateService = new ValidateServiceStub();
@@ -31,7 +29,6 @@ public class AppliedRulesController extends PopUpController {
 
 	@Override
 	public void initUi() throws Exception {
-		Log.i(this, "initUi()");
 		jframe = new JFrameAppliedRules(this);
 
 		// Change view of jframe conforms the action

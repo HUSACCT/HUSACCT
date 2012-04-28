@@ -2,20 +2,15 @@ package husacct.define.task;
 
 import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Module;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.ExternalLibrary;
-import husacct.define.domain.module.Component;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
-import husacct.define.presentation.utils.Log;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.AbstractDefineComponent;
-import husacct.define.task.components.LayerComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
@@ -28,19 +23,22 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 public class DefinitionController extends Observable implements Observer {
 	
 	private DefinitionJPanel definitionJPanel;
 	private static DefinitionController instance;
 	private List<Observer> observers;
+	private Logger logger;
 	
 	public static DefinitionController getInstance() {
 		return instance == null ? (instance = new DefinitionController()) : instance;
 	}
 
 	public DefinitionController() {
-		Log.i(this, "constructor()");
 		observers = new ArrayList<Observer>();
+		logger = Logger.getLogger(DefinitionController.class);
 	}
 	
 	public void initSettings() {
@@ -54,8 +52,6 @@ public class DefinitionController extends Observable implements Observer {
 	 * @return JPanel The jpanel
 	 */
 	public JPanel initUi() {
-		Log.i(this, "initUi()");
-		// Return the definition jpanel
 		return definitionJPanel;
 	}
 
@@ -63,13 +59,13 @@ public class DefinitionController extends Observable implements Observer {
 	 * Adds a new layer
 	 */
 	public void addLayer(long selectedModuleId, String layerName, int hierarchicalLevel){
-		Log.i(this, "DefinitionController - addLayer("+layerName+")");
+		logger.info("Adding layer " + layerName);
 		try {
 			JPanelStatus.getInstance("Adding Layer").start();			
 			DefineDomainService.getInstance().addLayer(selectedModuleId, layerName, hierarchicalLevel);
 			this.notifyObservers();
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - addLayer("+layerName+") - exception: " + e.getMessage());
+			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -80,13 +76,13 @@ public class DefinitionController extends Observable implements Observer {
 	 * Remove a module by Id
 	 */
 	public void removeModuleById(long moduleId) {
-		Log.i(this, "DefinitionController - removeModuleById("+moduleId+")");
+		logger.info("Removing module by ID " + moduleId);
 		try {
 			JPanelStatus.getInstance("Removing Module").start();
 			DefineDomainService.getInstance().removeModuleById(moduleId);
 			this.notifyObservers();
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - removeModuleById("+moduleId+") - exception: " + e.getMessage());
+			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -97,7 +93,7 @@ public class DefinitionController extends Observable implements Observer {
 	 * Move a layer one up in hierarchy
 	 */
 	public void moveLayerUp(long layerId) {
-		Log.i(this, "DefinitionController - moveLayerUp()");
+		logger.info("Moving layer up");
 		try {
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Moving layer up").start();
@@ -105,7 +101,7 @@ public class DefinitionController extends Observable implements Observer {
 				this.notifyObservers();
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - moveLayerUp() - exception: " + e.getMessage());
+			logger.error("moveLayerUp() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -116,7 +112,7 @@ public class DefinitionController extends Observable implements Observer {
 	 * Move a layer one down in hierarchy
 	 */
 	public void moveLayerDown(long layerId) {
-		Log.i(this, "DefinitionController - moveLayerDown()");
+		logger.info("Moving layer down");
 		try {
 			if (layerId != -1) {
 				JPanelStatus.getInstance("Moving layer down").start();
@@ -124,7 +120,7 @@ public class DefinitionController extends Observable implements Observer {
 				this.notifyObservers();
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - moveLayerDown() - exception: " + e.getMessage());
+			logger.error("moveLayerDown() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -134,11 +130,10 @@ public class DefinitionController extends Observable implements Observer {
 	/**
 	 * Add a new software unit to the selected module. This method will make pop-up a new jframe who will handle everything for creating a new sotware unit.
 	 */
+	@Deprecated
 	public void createSoftwareUnitGUI() {
-		Log.i(this, "DefinitionController - createSoftwareUnitGUI()");
 		try {
 			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
-			Log.i(this, "DefinitionController - createSoftwareUnitGUI() - ModuleId: " + moduleId);
 			if (moduleId != -1) {
 				// Create a new software unit controller
 				SoftwareUnitController c = new SoftwareUnitController(moduleId, "");
@@ -149,7 +144,6 @@ public class DefinitionController extends Observable implements Observer {
 				c.initUi();
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - createSoftwareUnitGUI() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
@@ -158,7 +152,7 @@ public class DefinitionController extends Observable implements Observer {
 	 * Remove the selected software unit
 	 */
 	public void removeSoftwareUnit(String softwareUnitName) {
-		Log.i(this, "DefinitionController - removeSoftwareUnit()");
+		logger.info("Removing software unit " + softwareUnitName);
 		try {
 			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 
@@ -174,16 +168,15 @@ public class DefinitionController extends Observable implements Observer {
 				}
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - removeSoftwareUnit() - exception: " + e.getMessage());
+			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-
+	
+	@Deprecated
 	public void createRuleGUI() {
-		Log.i(this, "DefinitionController - createRuleGUI()");
-
 		try {
 			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 
@@ -197,14 +190,12 @@ public class DefinitionController extends Observable implements Observer {
 				a.initUi();
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - createRuleGUI() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
-
+	
+	@Deprecated
 	public void createRuleGUI(long appliedRuleId) {
-		Log.i(this, "DefinitionController - EditRuleGUI()");
-
 		try {
 			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 
@@ -217,17 +208,15 @@ public class DefinitionController extends Observable implements Observer {
 				// Build and show the ui
 				a.initUi();
 			} else {
-				Log.e(this, "DefinitionController - EditRuleGUI() - no applied rule selected");
 				UiDialogs.errorDialog(definitionJPanel, "Select an applied rule", "Error");
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - EditRuleGUI() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
-
+	
 	public void removeRule(long appliedRuleId) {
-		Log.i(this, "DefinitionController - removeRuleToModule()");
+		logger.info("Removing rule " + appliedRuleId);
 		try {
 			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 //			int appliedRuleId = (int)definitionJPanel.getSelectedAppliedRule();
@@ -245,7 +234,7 @@ public class DefinitionController extends Observable implements Observer {
 				}
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - removeRuleToLayer() - exception: " + e.getMessage());
+			logger.error("removeRule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -256,7 +245,7 @@ public class DefinitionController extends Observable implements Observer {
 	 * Function which will save the name and description changes to the module
 	 */
 	public void updateModule(String moduleName, String moduleDescription) {
-		Log.i(this, "DefinitionController - updateModule()");
+		logger.info("Updating module " + moduleName);
 		try {
 			JPanelStatus.getInstance("Saving layer").start();
 			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
@@ -265,41 +254,15 @@ public class DefinitionController extends Observable implements Observer {
 			}
 			this.notifyObservers();
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - updateModule() - exception: " + e.getMessage());
+			logger.error("updateModule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-
-	public void updateModuleTreeList(JList moduleTreeList) {
-		Log.i(this, "DefinitionController - updateModuleList()");
-
-		JPanelStatus.getInstance("Updating modules").start();
-
-		ArrayList<Long> moduleIds = DefineDomainService.getInstance().getLayerIdsSorted();
-		DefaultListModel listModule = (DefaultListModel) moduleTreeList.getModel();
-
-		listModule.removeAllElements();
-		if (moduleIds != null) {
-			for (Long moduleId : moduleIds) {
-				DataHelper datahelper = new DataHelper();
-				datahelper.setId(moduleId);
-				try {
-					datahelper.setValue(DefineDomainService.getInstance().getModuleNameById(moduleId));
-				} catch (Exception e) {
-					Log.e(this, "DefinitionController - updateModule() - exception: " + e.getMessage());
-					UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-				}
-				listModule.addElement(datahelper);
-			}
-		}
-		//enablePanel();
-		JPanelStatus.getInstance().stop();
-	}
 	
 	public AbstractDefineComponent getModuleTreeComponents() {
-		Log.i(this, "getting Module Tree Components");
+		logger.info("getting Module Tree Components");
 		JPanelStatus.getInstance("Updating Modules").start();
 		
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
@@ -325,7 +288,7 @@ public class DefinitionController extends Observable implements Observer {
 	 */
 	public HashMap<String, Object> getModuleDetails(long layerId) {
 		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
-		Log.i(this, "DefinitionController - loadModuleDetails()");
+		logger.info("loading Module Detail " + layerId);
 
 		if (layerId != -1) {
 			try {
@@ -337,7 +300,7 @@ public class DefinitionController extends Observable implements Observer {
 				moduleDetails.put("type", module.getType());
 				
 			} catch (Exception e) {
-				Log.e(this, "DefinitionController - loadModuleDetails() - exception: " + e.getMessage());
+				logger.error("getModuleDetails() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 			}
 		}
@@ -345,13 +308,14 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	/**
+	 * TODO:: TASK SHOULD NOT CALL VIEW
 	 * This method updates the component table in the jpanel
 	 * @param softwareUnitsTable 
 	 * 
 	 * @param layer
 	 */
+	@Deprecated
 	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
-		Log.i(this, "DefinitionController - updateSoftwareUnitTable()");
 		try {
 			long layerId = definitionJPanel.modulePanel.getSelectedModuleId();
 			JPanelStatus.getInstance("Updating software unit table").start();
@@ -377,15 +341,15 @@ public class DefinitionController extends Observable implements Observer {
 				atm.fireTableDataChanged();
 			}
 		} catch (Exception e) {
-			Log.e(this, "DefinitionController - updateSoftwareUnitTable() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-
+	
+	@Deprecated
+	// #TODO:: CONTROLLER SHOULD NOT CALL VIEW
 	public void updateAppliedRulesTable(JTableAppliedRule appliedRuleTable) {
-		Log.i(this, "updateAppliedRulesTable()");
 		try {
 			long layerId = definitionJPanel.modulePanel.getSelectedModuleId();
 			JPanelStatus.getInstance("Updating rules applied table").start();
@@ -427,7 +391,6 @@ public class DefinitionController extends Observable implements Observer {
 				atm.fireTableDataChanged();
 			}
 		} catch (Exception e) {
-			Log.e(this, "updateAppliedRulesTable() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -435,7 +398,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	public void update(Observable o, Object arg) {
-		Log.i(this, "update(" + o + ", " + arg + ")");
+		logger.info("update(" + o + ", " + arg + ")");
 		long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
 		notifyObservers(moduleId);
 	}

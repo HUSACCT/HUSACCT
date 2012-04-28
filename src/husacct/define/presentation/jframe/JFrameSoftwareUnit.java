@@ -1,7 +1,6 @@
 package husacct.define.presentation.jframe;
 
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.presentation.utils.Log;
 import husacct.define.task.SoftwareUnitController;
 
 import java.awt.BorderLayout;
@@ -145,7 +144,6 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 	}
 
 	public void keyReleased(KeyEvent arg0) {
-		Log.i(this, "keyreleased");
 		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			this.dispose();
 		}
