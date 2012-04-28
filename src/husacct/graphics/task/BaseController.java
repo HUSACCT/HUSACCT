@@ -1,6 +1,7 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
@@ -127,11 +128,21 @@ public abstract class BaseController implements MouseClickListener {
 				AbstractDTO dtoTo = moduleFigureTo.getDTO();
 
 				if ((dtoFrom instanceof ModuleDTO) && (dtoTo instanceof ModuleDTO)) {
-					ViolationDTO[] violationDTOs = validateService.getViolationsByLogicalPath(((ModuleDTO) dtoFrom).logicalPath,((ModuleDTO) dtoTo).logicalPath);					if (violationDTOs.length > 0) {
-					this.drawViolations(violationDTOs, moduleFigureFrom,moduleFigureTo);
+					ViolationDTO[] violationDTOs = validateService.getViolationsByLogicalPath(
+							((ModuleDTO) dtoFrom).logicalPath,
+							((ModuleDTO) dtoTo).logicalPath);					
+					if (violationDTOs.length > 0) {
+						this.drawViolations(violationDTOs, moduleFigureFrom,moduleFigureTo);
 					}
 				}
-				// TODO AnalysedModuleDTO
+				if ((dtoFrom instanceof AnalysedModuleDTO) && (dtoTo instanceof AnalysedModuleDTO)) {
+					ViolationDTO[] violationDTOs = validateService.getViolationsByPhysicalPath(
+							((AnalysedModuleDTO) dtoFrom).uniqueName,
+							((AnalysedModuleDTO) dtoTo).uniqueName);
+					if (violationDTOs.length > 0) {
+						this.drawViolations(violationDTOs, moduleFigureFrom,moduleFigureTo);
+					}
+				}
 			}
 		}
 	}
