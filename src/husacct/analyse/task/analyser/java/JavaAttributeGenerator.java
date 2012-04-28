@@ -7,7 +7,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 
-public class JavaAttributeGenerator {
+class JavaAttributeGenerator {
 	
 	private Boolean classScope = false;
 	private String AccesControlQualifier;

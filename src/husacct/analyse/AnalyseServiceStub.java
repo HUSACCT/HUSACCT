@@ -45,7 +45,7 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public void analyseApplication() {
-		// TODO Auto-generated method stub
+		// TODO Tim Implement stub if nessecary
 
 	}
 
