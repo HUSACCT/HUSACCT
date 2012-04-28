@@ -12,8 +12,8 @@ import husacct.define.IDefineService;
 public class AnalyseMain {
 	public static void main(String[] args){
 		
-		//Test Comment overname git
-		String testString = "Mama";
+		//Test COmment Voor Rensie Lange Jan
+		
 		//Test Analyse-service
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
