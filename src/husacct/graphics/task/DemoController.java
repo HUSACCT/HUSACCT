@@ -23,6 +23,7 @@ public class DemoController extends BaseController {
 		taskLayer.logicalPath = "task";
 		ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
 		ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
+
 		drawing.add(this.figureFactory.createFigure(taskLayer, new ViolationDTO[] { taskLayerErr1, taskLayerErr2 }));
 
 		DependencyDTO presTaskDep1 = new DependencyDTO("presentation", "task", "call", 239);

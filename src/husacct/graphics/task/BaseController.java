@@ -73,8 +73,10 @@ public abstract class BaseController implements MouseClickListener {
 
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
-		// FIXME: Wrap these instanceof calls into a (series of abstract) clas(ses) and remove the
-		//			recursion that is happening. Discuss solution with team before implementing
+		// FIXME: Wrap these instanceof calls into a (series of abstract)
+		// clas(ses) and remove the
+		// recursion that is happening. Discuss solution with team before
+		// implementing
 		BaseFigure selectedFigure = figures[0];
 
 		if (selectedFigure instanceof ViolationsDecorator) {
@@ -84,8 +86,8 @@ public abstract class BaseController implements MouseClickListener {
 		}
 
 		else if (selectedFigure instanceof Decorator) {
-			Decorator decorator = (Decorator)selectedFigure;
-			
+			Decorator decorator = (Decorator) selectedFigure;
+
 			ArrayList<BaseFigure> list = new ArrayList<BaseFigure>();
 			list.add(decorator.getDecorator());
 
@@ -145,7 +147,6 @@ public abstract class BaseController implements MouseClickListener {
 						this.drawViolations(violationDTOs, moduleFigureFrom, moduleFigureTo);
 					}
 				}
-				// TODO AnalysedModuleDTO
 			}
 		}
 	}
