@@ -32,7 +32,7 @@ public class AnalysedController extends BaseController {
 			@Override
 			public void update(Locale newLocale) {
 				getAndDrawModulesIn(currentPath);
-				if(showViolations()){
+				if(violationsAreShown()){
 					drawViolationsForShownModules();
 				}
 			}
@@ -44,9 +44,10 @@ public class AnalysedController extends BaseController {
 		this.resetCurrentPath();
 		drawModules(modules);
 		
-		if(detail == DrawingDetail.WITH_VIOLATIONS)
-		{
-			this.drawViolationsForShownModules();
+		if(detail == DrawingDetail.WITH_VIOLATIONS){
+			this.toggleViolations();
+		}else{
+			this.drawDependenciesForShownModules(modules);
 		}
 	}
 	
@@ -56,10 +57,9 @@ public class AnalysedController extends BaseController {
 
 	protected void drawModules(AbstractDTO[] modules) {
 		super.drawModules(modules);
-		this.drawDependencies(modules);
 	}
 	
-	private void drawDependencies(AbstractDTO[] modules){
+	private void drawDependenciesForShownModules(AbstractDTO[] modules){
 		AnalysedModuleDTO[] analysedModules = (AnalysedModuleDTO[]) modules; 
 		for(AnalysedModuleDTO analysedModuleDTO : analysedModules){
 			for(AnalysedModuleDTO innerAnalysedModuleDTO : analysedModules){
@@ -121,8 +121,8 @@ public class AnalysedController extends BaseController {
 	public void toggleViolations() {
 		super.toggleViolations();
 		System.out.println("Option triggered: Toggle violations visiblity");
-		//drawArchitecture(DrawingDetail detail) <- use
-		if(showViolations()){
+		if(violationsAreShown()){
+			this.drawViolationsForShownModules();
 			//TODO
 			// Loop through all the figures/dtos
 			// Request found violations between all combinations
@@ -131,6 +131,7 @@ public class AnalysedController extends BaseController {
 			// Add the violation lines to the drawing
 			//validateService.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 		}else{
+			//this.drawDependenciesForShownModules();
 			// TODO
 			// Loop through all the figures/dtos
 			// Request found dependencies between all combinations
