@@ -24,12 +24,12 @@ public class DefineDomainService {
 	
 	//MODULES
 	//MODULES
-	private long addModuleToRoot(Module module){
+	public long addModuleToRoot(Module module){
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
 		return moduleId;
 	}
 	
-	private long addModuleToParent(long parentModuleId, Module module){
+	public long addModuleToParent(long parentModuleId, Module module){
 		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();

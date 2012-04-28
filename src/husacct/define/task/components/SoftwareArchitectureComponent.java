@@ -10,6 +10,7 @@ public class SoftwareArchitectureComponent extends AbstractDefineComponent {
 	public SoftwareArchitectureComponent() {
 		super();
 		this.setName("SofwareArchitecture");
+		this.setModuleId(-1);
 	}
 
 	@Override

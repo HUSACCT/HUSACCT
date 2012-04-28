@@ -2,6 +2,9 @@ package husacct.define.task;
 
 import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Component;
+import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -55,21 +58,70 @@ public class DefinitionController extends Observable implements Observer {
 		return definitionJPanel;
 	}
 
-	/**
-	 * Adds a new layer
-	 */
-	public void addLayer(long selectedModuleId, String layerName, int hierarchicalLevel){
+	public void addLayer(long selectedModuleId, String layerName, String layerDescription, int hierarchicalLevel){
 		logger.info("Adding layer " + layerName);
 		try {
-			JPanelStatus.getInstance("Adding Layer").start();			
-			DefineDomainService.getInstance().addLayer(selectedModuleId, layerName, hierarchicalLevel);
-			this.notifyObservers();
+			JPanelStatus.getInstance("Adding Layer").start();
+			Layer newLayer = new Layer(layerName, layerDescription, hierarchicalLevel);
+			this.passModuleToService(selectedModuleId, newLayer);
 		} catch (Exception e) {
 			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
+	}
+	
+	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
+		logger.info("Adding module " + moduleName);
+		try {
+			JPanelStatus.getInstance("Adding module").start();
+			Module newModule = new Module(moduleName, moduleDescription);
+			this.passModuleToService(selectedModuleId, newModule);
+		} catch (Exception e) {
+			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void addComponent(long selectedModuleId, String componentName, String componentDescription){
+		logger.info("Adding component " + componentName);
+		try {
+			JPanelStatus.getInstance("Adding component").start();
+			Component newComponent = new Component(componentName, componentDescription);
+			this.passModuleToService(selectedModuleId, newComponent);
+		} catch (Exception e) {
+			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void addExternalLibrary(long selectedModuleId, String libraryName, String libraryDescription){
+		logger.info("Adding external library " + libraryName);
+		try {
+			JPanelStatus.getInstance("Adding external library").start();
+			ExternalLibrary newComponent = new ExternalLibrary(libraryName, libraryDescription);
+			this.passModuleToService(selectedModuleId, newComponent);
+		} catch (Exception e) {
+			logger.error("addExternalLibrary(" + libraryName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	private void passModuleToService(long selectedModuleId, Module module) {
+		if(selectedModuleId == -1) {
+			DefineDomainService.getInstance().addModuleToRoot(module);
+		} else {
+			logger.debug("Adding child");
+			DefineDomainService.getInstance().addModuleToParent(selectedModuleId, module);
+		}
+		this.notifyObservers();
 	}
 
 	/**

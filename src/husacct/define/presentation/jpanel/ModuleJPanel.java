@@ -26,6 +26,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import org.apache.log4j.Logger;
+
 /**
  * 
  * @author Henk ter Harmsel
@@ -167,9 +169,9 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove the selected module?", "Remove?");
 			if (confirm) {
 				DefinitionController.getInstance().removeModuleById(moduleId);
+				this.updateModuleTree();
 			}
 		}
-		this.updateModuleTree();
 	}
 	
 	private void moveLayerUp() {
@@ -189,11 +191,9 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		TreePath path = this.moduleTree.getSelectionPath();
 		if (path != null){//returns null if nothing is selected
 			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-			if(selectedComponent instanceof LayerComponent) {
-				LayerComponent layerComponent = (LayerComponent) selectedComponent;
-				moduleId = layerComponent.getHierarchicalLevel();
-			}
+			moduleId = selectedComponent.getModuleId();
 		}
+		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
 		return moduleId;
 	}
 	
@@ -218,20 +218,17 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-        this.checkComponent(selectedComponent);
+        this.loadComponentDetails(selectedComponent);
         this.checkLayerComponentIsSelected();
 	}
 	
-	private void checkComponent(AbstractDefineComponent selectedComponent) {
-		if(selectedComponent instanceof LayerComponent) {
-			this.handleLayerComponent(selectedComponent);
+	private void loadComponentDetails(AbstractDefineComponent selectedComponent) {
+		long moduleId = selectedComponent.getModuleId();
+		if(moduleId != -1) {
+			DefinitionController.getInstance().notifyObservers(moduleId);
+		} else {
+			//TODO:: load SofwareArchitecturData
 		}
-	}
-	
-	private void handleLayerComponent(AbstractDefineComponent selectedComponent) {
-		LayerComponent layerComponent = (LayerComponent) selectedComponent;
-		long moduleId = layerComponent.getHierarchicalLevel();
-		DefinitionController.getInstance().notifyObservers(moduleId);
 	}
 	
 	public void checkLayerComponentIsSelected() {
