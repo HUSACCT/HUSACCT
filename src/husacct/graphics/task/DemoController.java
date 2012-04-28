@@ -12,6 +12,8 @@ import org.jhotdraw.draw.ConnectionFigure;
 
 public class DemoController extends BaseController {
 
+	private final int ITEMS_PER_ROW = 2;
+	
 	public DemoController() {
 		ModuleDTO presentationLayer = new ModuleDTO();
 		presentationLayer.type = "layer";
@@ -46,6 +48,9 @@ public class DemoController extends BaseController {
 		domainLayer.logicalPath = "Domain layer";
 		drawing.add(this.figureFactory.createFigure(domainLayer));
 
+		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
+		bls.doLayout(ITEMS_PER_ROW);
+		
 		this.drawViolationsForShownModules();
 	}
 

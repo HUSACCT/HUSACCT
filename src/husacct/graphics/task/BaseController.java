@@ -23,6 +23,9 @@ import javax.swing.JInternalFrame;
 import org.jhotdraw.draw.ConnectionFigure;
 
 public abstract class BaseController implements MouseClickListener {
+	
+	private final int ITEMS_PER_ROW = 4;
+	
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
@@ -32,6 +35,8 @@ public abstract class BaseController implements MouseClickListener {
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
 	protected HashMap<AbstractDTO, BaseFigure> dtoFigureMap = new HashMap<AbstractDTO, BaseFigure>();
+	
+	protected BasicLayoutStrategy layoutStrategy;
 
 	public BaseController() {
 
@@ -48,6 +53,8 @@ public abstract class BaseController implements MouseClickListener {
 
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
+		
+		layoutStrategy = new BasicLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
@@ -122,7 +129,7 @@ public abstract class BaseController implements MouseClickListener {
 															// stable or not.
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
-			bls.doLayout();
+			bls.doLayout(ITEMS_PER_ROW);
 		}
 		this.drawTarget.setCurrentPathInfo(this.currentPath);
 	}

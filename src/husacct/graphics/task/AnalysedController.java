@@ -21,6 +21,8 @@ import org.jhotdraw.draw.ConnectionFigure;
 
 public class AnalysedController extends BaseController {
 
+	private final int ITEMS_PER_ROW = 4;
+	
 	private IControlService controlService;
 	private IAnalyseService analyseService;
 	private IValidateService validateService;
@@ -60,6 +62,8 @@ public class AnalysedController extends BaseController {
 	protected void drawModules(AbstractDTO[] modules) {
 		super.drawModules(modules);
 		this.drawDependencies(modules);
+		
+		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 
 	private void drawDependencies(AbstractDTO[] modules) {
