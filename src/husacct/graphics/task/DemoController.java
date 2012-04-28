@@ -31,18 +31,6 @@ public class DemoController extends BaseController
 		ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
 		drawing.add(this.figureFactory.createFigure(taskLayer, new ViolationDTO[]{ taskLayerErr1, taskLayerErr2 }));
 		
-		DependencyDTO presTaskDep1 = new DependencyDTO("presentation", "task", "call", 239);
-		DependencyDTO presTaskDep2 = new DependencyDTO("presentation", "task", "import", 2);
-		BaseFigure presTaskDepFigure = this.figureFactory.createFigure(
-				new DependencyDTO[]{ presTaskDep1, presTaskDep2 });
-		BaseFigure foundPresentationLayerFigure = drawing.findFigureByName("presentation");
-		BaseFigure foundTaskLayerFigure = drawing.findFigureByName("task");
-		this.connectionStrategy.connect(
-				(ConnectionFigure)((Decorator)presTaskDepFigure).getDecorator(), 
-				foundPresentationLayerFigure, 
-				foundTaskLayerFigure);
-		drawing.add(presTaskDepFigure);
-		
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
 		infrastructureLayer.logicalPath = "Infrastructure layer";

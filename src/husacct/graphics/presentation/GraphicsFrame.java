@@ -186,7 +186,7 @@ public class GraphicsFrame extends JInternalFrame {
 			rows.add(new String[]{
 				message, 
 				ruleTypeDescription,
-				violationTypeDescription
+				violationTypeDescription,
 			});
 		}
 		

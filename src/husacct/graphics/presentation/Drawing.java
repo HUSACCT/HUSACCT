@@ -57,58 +57,5 @@ public class Drawing extends org.jhotdraw.draw.DefaultDrawing
 		this.invalidate();
 		this.changed();
 	}
-	
-	/**
-	 * @deprecated usage of this function can cause problems, because the name of the figure
-	 * may be different from e.g. logicalPaths in the dtos 
-	 */
-	public BaseFigure findFigureByName(String name)
-	{
-		return this.findFigureByName(name, this.getChildren());
-	}
-	
-	private BaseFigure findFigureByName(String name, List<Figure> figures)
-	{
-		for(Figure figure : figures)
-		{
-			BaseFigure foundChildFig = this.findFigureByName(name, figure);
-			if(foundChildFig != null)
-			{
-				return foundChildFig;
-			}
-		}
-		
-		return null;
-	}
-	
-	private BaseFigure findFigureByName(String name, Figure figure)
-	{		
-		if(figure instanceof NamedFigure)
-		{
-			if(((NamedFigure) figure).getName().equals(name))
-			{
-				return (BaseFigure)figure;
-			}
-		}
-		
-		if(figure instanceof DecoratedFigure)
-		{
-			BaseFigure foundChildFig = findFigureByName(name, ((DecoratedFigure) figure).getDecorator());
-			if(foundChildFig != null)
-			{
-				return foundChildFig;
-			}
-		}
-		
-		if(figure instanceof CompositeFigure)
-		{
-			BaseFigure foundChildFig = findFigureByName(name, ((CompositeFigure) figure).getChildren());
-			if(foundChildFig != null)
-			{
-				return foundChildFig;
-			}
-		}
-		
-		return null;
-	}
+
 }
