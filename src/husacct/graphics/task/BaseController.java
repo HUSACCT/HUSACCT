@@ -1,6 +1,7 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
@@ -31,8 +32,8 @@ public abstract class BaseController implements MouseClickListener {
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
-	protected HashMap<AbstractDTO, BaseFigure> dtoFigureMap = new HashMap<AbstractDTO, BaseFigure>();
-	protected AbstractDTO[] receivedDTOs;
+	
+	protected HashMap<BaseFigure, AbstractDTO> figureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
 
 	public BaseController() {
 
@@ -112,57 +113,16 @@ public abstract class BaseController implements MouseClickListener {
 
 	protected void drawModules(AbstractDTO[] modules) {
 		this.clearDrawing();
-		this.dtoFigureMap.clear();
+		this.figureDTOMap.clear();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
-			this.dtoFigureMap.put(dto, generatedFigure); // TODO: Check with
-															// team if their
-															// findbyname in
-															// drawingview is
-															// stable or not.
+			this.figureDTOMap.put(generatedFigure, dto);
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout();
 		}
 		this.drawTarget.setCurrentPathInfo(this.currentPath);
-	}
-
-	public void drawViolationsForShownModules() {
-		// TODO retrieve the real service from the ServiceProvider instead of
-		// using the stub
-		IValidateService validateService = new ValidateServiceStub();
-
-		ArrayList<DTODecorator> moduleFigures = new ArrayList<DTODecorator>();
-		for (BaseFigure f : this.drawing.getShownModules()) {
-			if (f instanceof DTODecorator) {
-				moduleFigures.add((DTODecorator) f);
-			}
-		}
-
-		for (DTODecorator moduleFigureFrom : moduleFigures) {
-			for (DTODecorator moduleFigureTo : moduleFigures) {
-				AbstractDTO dtoFrom = moduleFigureFrom.getDTO();
-				AbstractDTO dtoTo = moduleFigureTo.getDTO();
-
-				if ((dtoFrom instanceof ModuleDTO) && (dtoTo instanceof ModuleDTO)) {
-					ViolationDTO[] violationDTOs = validateService.getViolationsByLogicalPath(
-							((ModuleDTO) dtoFrom).logicalPath, ((ModuleDTO) dtoTo).logicalPath);
-					if (violationDTOs.length > 0) {
-						this.drawViolations(violationDTOs, moduleFigureFrom, moduleFigureTo);
-					}
-				}
-			}
-		}
-	}
-
-	private void drawViolations(ViolationDTO[] violationDTOs, BaseFigure fromFigure, BaseFigure toFigure) {
-		BaseFigure violatedRelationFigure = this.figureFactory.createFigure(violationDTOs);
-		this.connectionStrategy.connect(
-		// TODO a very ugly cast here
-				(ConnectionFigure) ((Decorator) violatedRelationFigure).getDecorator(), fromFigure, toFigure);
-
-		this.drawing.add(violatedRelationFigure);
 	}
 
 	public void toggleViolations() {
@@ -173,6 +133,9 @@ public abstract class BaseController implements MouseClickListener {
 	}
 	public boolean dependenciesAreShown(){
 		return !violationsAreShown();
+	}
+	public void showViolations(){
+		showViolations = true;
 	}
 
 	protected DrawingDetail getCurrentDrawingDetail() {

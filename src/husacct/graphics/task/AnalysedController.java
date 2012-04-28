@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.decorators.DTODecorator;
@@ -46,40 +47,77 @@ public class AnalysedController extends BaseController {
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		this.resetCurrentPath();
-		drawModules(modules);
+		this.drawModules(modules);
+		
 		if(detail == DrawingDetail.WITH_VIOLATIONS){
-			this.toggleViolations();
-		}else{
-			this.drawDependenciesForShownModules(modules);
+			this.showViolations();
 		}
-	}
-
-	private DependencyDTO[] getDependenciesBetween(String from, String to) {
-		return analyseService.getDependencies(from, to);
+		this.drawLinesBasedOnSetting();
 	}
 
 	protected void drawModules(AbstractDTO[] modules) {
 		super.drawModules(modules);
 	}
-
-	private void drawDependenciesForShownModules(AbstractDTO[] modules){
-		AnalysedModuleDTO[] analysedModules = (AnalysedModuleDTO[]) modules; 
-		for(AnalysedModuleDTO analysedModuleDTO : analysedModules){
-			for(AnalysedModuleDTO innerAnalysedModuleDTO : analysedModules){
-				DependencyDTO[] dependencies = getDependenciesBetween(analysedModuleDTO.uniqueName, innerAnalysedModuleDTO.uniqueName);
-				
-				try{
-					BaseFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
-					this.connectionStrategy.connect((ConnectionFigure) ((Decorator) dependencyFigure).getDecorator(),
-							this.dtoFigureMap.get(analysedModuleDTO), this.dtoFigureMap.get(innerAnalysedModuleDTO));
-					drawing.add(dependencyFigure);
-				} catch (RuntimeException e) {
-					logger.debug(e.getMessage() + " " + analysedModuleDTO.uniqueName + " -> "
-							+ innerAnalysedModuleDTO.uniqueName);
-				}
+	
+	// Dependencies
+	
+	private void drawDependenciesForShownModules(){
+		for (BaseFigure figureFrom : this.drawing.getShownModules()) {
+			for (BaseFigure figureTo : this.drawing.getShownModules()) {
+				getAndDrawDependencyBetween(figureFrom, figureTo);
 			}
 		}
 	}
+	
+	private void getAndDrawDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureDTOMap.get(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureDTOMap.get(figureTo);
+		
+		DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
+		
+		try{
+			BaseFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
+			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) dependencyFigure).getDecorator(), figureFrom, figureTo);
+			drawing.add(dependencyFigure);
+		} catch (RuntimeException e) {
+			logger.debug(e.getMessage() + " " + dtoFrom.uniqueName + " -> " + dtoTo.uniqueName);
+		}
+	}
+	
+	private DependencyDTO[] getDependenciesBetween(String from, String to) {
+		return analyseService.getDependencies(from, to);
+	}
+	
+	// Violations
+	
+	public void drawViolationsForShownModules() {
+		for (BaseFigure figureFrom : this.drawing.getShownModules()) {
+			for (BaseFigure figureTo : this.drawing.getShownModules()) {
+				getAndDrawViolationBetween(figureFrom, figureTo);
+			}
+		}
+	}
+	
+	private void getAndDrawViolationBetween(BaseFigure figureFrom, BaseFigure figureTo){
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureDTOMap.get(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureDTOMap.get(figureTo);
+		
+		ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
+		
+		try{
+			BaseFigure violationFigure = this.figureFactory.createFigure(dependencies);
+			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) violationFigure).getDecorator(), figureFrom, figureTo);
+			drawing.add(violationFigure);
+		} catch (RuntimeException e) {
+			logger.debug(e.getMessage() + " " + dtoFrom.uniqueName + " -> " + dtoTo.uniqueName);
+		}
+	}
+	
+	private ViolationDTO[] getViolationsBetween(String from, String to) {
+		return validateService.getViolationsByPhysicalPath(from, to);
+	}
+	
+	// Listener methods
 
 	@Override
 	public void moduleZoom(BaseFigure figure) {
@@ -97,7 +135,6 @@ public class AnalysedController extends BaseController {
 	
 	private boolean isZoomable(BaseFigure figure) {
 		// FIXME: This code probably doesn't belong in the Controller. This should be made a discussion.
-		
 		if (figure instanceof DependenciesDecorator)
 			return false;
 		else if (figure instanceof DTODecorator)
@@ -110,11 +147,10 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoomOut() {
-		
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(this.getCurrentPath());
 		if (parentDTO != null) {
 			this.setCurrentPath(parentDTO.uniqueName);
-			getAndDrawModulesIn(parentDTO.uniqueName);
+			this.getAndDrawModulesIn(parentDTO.uniqueName);
 		} else {
 			logger.debug("Tried to zoom out from " + this.getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
@@ -125,7 +161,8 @@ public class AnalysedController extends BaseController {
 	private void getAndDrawModulesIn(String parentName) {
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 		if (children.length > 0) {
-			drawModules(children);
+			this.drawModules(children);
+			this.drawLinesBasedOnSetting();
 		} else {
 			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
@@ -141,17 +178,23 @@ public class AnalysedController extends BaseController {
 	public void toggleViolations() {
 		super.toggleViolations();
 		System.out.println("Option triggered: Toggle violations visiblity");
+		this.drawLinesBasedOnSetting();
+	}
+	
+	private void drawLinesBasedOnSetting(){
 		if(violationsAreShown()){
+			System.out.println("violations");
 			this.drawViolationsForShownModules();
-			//TODO
+			// TODO
 			// Loop through all the figures/dtos
 			// Request found violations between all combinations
 			// Create a relationFigure for the violations
 			// Clear dependency lines
 			// Add the violation lines to the drawing
-			//validateService.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
+			// validateService.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 		}else{
-			//this.drawDependenciesForShownModules();
+			System.out.println("dep");
+			this.drawDependenciesForShownModules();
 			// TODO
 			// Loop through all the figures/dtos
 			// Request found dependencies between all combinations
