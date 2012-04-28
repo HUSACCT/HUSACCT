@@ -17,28 +17,5 @@ class FamixImport extends FamixAssociation{
 		importRepresentation += "\ncompleteImportString: " + completeImportString + "\n";
 		return importRepresentation;
 	}
-	
-	public String getTestDetails(boolean showAvailableVariables){
-		String details = "";
-		details += "Complete Declaration of import: " + completeImportString;
-		if(this.importsCompletePackage){
-			details += "\n The complete package "  + this.importedModule + " was imported";
-		}
-		else{
-			details += "\n Only Class "  + this.importedModule + " was imported";
-		}
-		
-		if(showAvailableVariables){
-			details += "\n\nImported by class: " + this.importingClass + "\n";
-			details += "Variables available in FamixImport-class:\n";
-			details += "Complete Import String: " + completeImportString + "\n"; 
-			details += "Import Declaration: " + importedModule + "\n";
-			details += "Boolean isCompletePackage: ";
-			if(importsCompletePackage) details += "true\n";
-			else details += "false\n";
-		}
-		
-		return details;
-	}
 }
 

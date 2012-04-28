@@ -114,7 +114,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		// TODO UI 
 		
 	}
 
@@ -123,7 +123,6 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 		updateModule();
 	}
 
-	//TODO Lookinto this
 	//I have no idea what this method does, but somehow its required for the focusListener
 	@Override
 	protected JPanel addButtonPanel() {

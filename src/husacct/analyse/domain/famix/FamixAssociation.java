@@ -1,6 +1,8 @@
 package husacct.analyse.domain.famix;
 
-class FamixAssociation extends FamixObject
-{
+class FamixAssociation extends FamixObject{
 
+	public String from;
+	public String to;
+	
 }

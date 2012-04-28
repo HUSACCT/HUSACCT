@@ -46,6 +46,8 @@ public class FamixModelServiceImpl implements ModelService{
 	@Override
 	public void createImport(String importingClass, String importedModule, String completeImportString, boolean importsCompletePackage) {
 		FamixImport fImport = new FamixImport();
+		fImport.from = importingClass;
+		fImport.to = importedModule;
 		fImport.importingClass = importingClass;
 		fImport.completeImportString = completeImportString;
 		fImport.importedModule = completeImportString;
