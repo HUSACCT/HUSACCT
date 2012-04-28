@@ -159,6 +159,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
+		this.getSelectedModuleId();
 		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
 		addModuleFrame.initUI();
 	}
