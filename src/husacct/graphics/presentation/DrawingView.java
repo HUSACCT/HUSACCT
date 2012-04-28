@@ -182,6 +182,8 @@ public class DrawingView extends DefaultDrawingView {
 				moduleZoom(selection);
 			}
 		}
+		
+		e.consume();
 	}
 
 	private void moduleZoomOut() {

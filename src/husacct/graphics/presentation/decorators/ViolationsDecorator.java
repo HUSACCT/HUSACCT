@@ -13,29 +13,20 @@ public class ViolationsDecorator extends Decorator {
 
 	private static final long serialVersionUID = 4445235736740459408L;
 	private ViolationDTO[] violations;
-	private Color severityColor = Color.BLACK;
+	private Color severityColor = Color.RED;
 
 	public ViolationsDecorator(BaseFigure decorator, ViolationDTO[] violations) {
 		super(decorator);
 		this.violations = violations;
-	}
-
-	public ViolationDTO[] getViolations() {
-		return this.violations;
-	}
-
-	@Override
-	public void draw(Graphics2D arg0) {
-		this.getDecorator().set(AttributeKeys.STROKE_COLOR, Color.RED);
-		super.draw(arg0);
+		
+		updateAppearance();
 	}
 	
-	@Override
-	public void setDecorator(Figure decorator) {
-		super.setDecorator(decorator);
+	private void updateAppearance() {
 		
 		findHighestSeverityColor();
-		decorator.set(AttributeKeys.STROKE_COLOR, severityColor);
+		
+		getDecorator().set(AttributeKeys.STROKE_COLOR, severityColor);		
 	}
 	
 	private void findHighestSeverityColor() {
@@ -50,5 +41,21 @@ public class ViolationsDecorator extends Decorator {
 				severityColor = dto.getSeverityColor();
 			}
 		}
+	}	
+
+	public ViolationDTO[] getViolations() {
+		return this.violations;
+	}
+
+	@Override
+	public void draw(Graphics2D arg0) {
+		super.draw(arg0);
+	}
+	
+	@Override
+	public void setDecorator(Figure decorator) {
+		super.setDecorator(decorator);
+		
+		updateAppearance();
 	}
 }

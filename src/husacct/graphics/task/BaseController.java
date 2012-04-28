@@ -101,6 +101,10 @@ public abstract class BaseController implements MouseClickListener {
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
+		
+		if (view.getSelectionCount() == 0) {
+			drawTarget.hidePropertiesPane();
+		}		
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);

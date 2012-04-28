@@ -113,6 +113,7 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoomOut() {
+		
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(this.getCurrentPath());
 		if (parentDTO != null) {
 			this.setCurrentPath(parentDTO.uniqueName);
