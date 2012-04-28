@@ -7,7 +7,7 @@ public interface ModelService {
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
 	public void createImport(String importingClass, String importedModule, String completeImportString, boolean importsCompletePackage);
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName);
-	
+	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 	//Debug-functies voor in de main:
 	public void printModel();
 	public String represent();

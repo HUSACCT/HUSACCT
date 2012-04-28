@@ -14,7 +14,7 @@ class FamixImport extends FamixAssociation{
 		importRepresentation += "\nisCompletePackage: ";
 		if(importsCompletePackage) importRepresentation += "true";
 		else importRepresentation += "false";
-		importRepresentation += "\ncompleteImportString: " + completeImportString + "\n";
+		importRepresentation += "\ncompleteImportString: " + completeImportString + "\n\n";
 		return importRepresentation;
 	}
 }

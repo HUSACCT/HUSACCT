@@ -24,7 +24,9 @@ class JavaTreeConvertController {
     
     private void createClassInformation(CommonTree completeTree){
     	Tree packageTree = completeTree.getFirstChildWithType(JavaParser.PACKAGE);
-    	delegatePackage(packageTree);
+    	if(hasPackageElement(completeTree)){
+    		delegatePackage(packageTree);
+    	}else this.thePackage = "";
     	Tree classTree = completeTree.getFirstChildWithType(JavaParser.CLASS);
     	this.theClass = this.currentClass = delegateClass(classTree, false);
     	this.parentClass = theClass;
@@ -45,13 +47,15 @@ class JavaTreeConvertController {
     			}else{
     				if(nodeType == JavaParser.IMPORT){
         				delegateImport((CommonTree)treeNode);
+        				tree.deleteChild(treeNode.getChildIndex());
         			}
         			if(nodeType == JavaParser.VAR_DECLARATION ){
         				delegateAttribute(treeNode);
         				tree.deleteChild(treeNode.getChildIndex());
         			}
         			if(nodeType == JavaParser.THROW || nodeType == JavaParser.CATCH || nodeType == JavaParser.THROWS){
-        				
+        				delegateException(treeNode);
+        				tree.deleteChild(treeNode.getChildIndex());
         			}
     			}
     			walkAST((CommonTree) tree.getChild(i));
@@ -84,6 +88,10 @@ class JavaTreeConvertController {
     
     public void delegateException(Tree exceptionTree){
     	JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator();
-    	exceptionGenerator.generateModel((CommonTree)exceptionTree);
+    	exceptionGenerator.generateModel((CommonTree)exceptionTree, this.currentClass);
+    }
+    
+    private boolean hasPackageElement(CommonTree tree){
+    	return tree.getFirstChildWithType(JavaParser.PACKAGE) != null;
     }
 }

@@ -4,5 +4,6 @@ class FamixAssociation extends FamixObject{
 
 	public String from;
 	public String to;
+	public int lineNumber;
 	
 }

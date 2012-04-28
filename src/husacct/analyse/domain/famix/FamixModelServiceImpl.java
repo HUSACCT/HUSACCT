@@ -70,6 +70,16 @@ public class FamixModelServiceImpl implements ModelService{
 		addToModel(famixAttribute);
 	}
 	
+	@Override
+	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType) {
+		FamixException exception = new FamixException();
+		exception.from = fromClass;
+		exception.to = ExceptionClass;
+		exception.lineNumber = lineNumber;
+		exception.exceptionType = declarationType;
+		addToModel(exception);
+	}
+	
 	private boolean addToModel(FamixObject newObject){
 		try {
 			model.addObject(newObject);
