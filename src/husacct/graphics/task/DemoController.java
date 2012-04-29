@@ -4,7 +4,6 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 
@@ -123,8 +122,8 @@ public class DemoController extends BaseController {
 			this.moduleZoom(((Decorator) zoomedModuleFigure).getDecorator());
 		}
 
-		if (zoomedModuleFigure instanceof DTODecorator) {
-			AbstractDTO aDto = ((DTODecorator) zoomedModuleFigure).getDTO();
+		if (zoomedModuleFigure.isModule()) {
+			AbstractDTO aDto = this.getDTOFromFigure(zoomedModuleFigure);
 			if (aDto instanceof ModuleDTO) {
 				ModuleDTO dto = (ModuleDTO) aDto;
 				if (!dto.logicalPath.equals("task")) {

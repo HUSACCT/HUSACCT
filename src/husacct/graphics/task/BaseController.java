@@ -1,27 +1,19 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.ModuleDTO;
-import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
-import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.decorators.DependenciesDecorator;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
-import husacct.validate.IValidateService;
-import husacct.validate.ValidateServiceStub;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
-
-import org.jhotdraw.draw.ConnectionFigure;
 
 public abstract class BaseController implements MouseClickListener {
 	protected Drawing drawing;
@@ -108,6 +100,10 @@ public abstract class BaseController implements MouseClickListener {
 		if (view.getSelectionCount() == 0) {
 			drawTarget.hidePropertiesPane();
 		}
+	}
+	
+	public AbstractDTO getDTOFromFigure(BaseFigure figure){
+		return this.figureDTOMap.get(figure);
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);

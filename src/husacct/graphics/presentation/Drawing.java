@@ -1,5 +1,8 @@
 package husacct.graphics.presentation;
 
+import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.NamedFigure;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +10,6 @@ import java.util.List;
 import org.jhotdraw.draw.CompositeFigure;
 import org.jhotdraw.draw.DecoratedFigure;
 import org.jhotdraw.draw.Figure;
-
-import husacct.common.dto.*;
-import husacct.graphics.presentation.decorators.DTODecorator;
-import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.NamedFigure;
 
 public class Drawing extends org.jhotdraw.draw.DefaultDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;

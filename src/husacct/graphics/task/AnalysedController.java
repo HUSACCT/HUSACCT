@@ -8,10 +8,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
-import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
-import husacct.graphics.presentation.decorators.DependenciesDecorator;
-import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
@@ -120,7 +117,7 @@ public class AnalysedController extends BaseController {
 	@Override
 	public void moduleZoom(BaseFigure figure) {
 		if (figure.isModule()) { //FIXME? : Can zoom only on modules
-			AbstractDTO dto = FigureResolver.resolveDTO(figure);
+			AbstractDTO dto = this.getDTOFromFigure(figure);
 	
 			if (dto.getClass().getSimpleName().equals("AnalysedModuleDTO")) {
 				AnalysedModuleDTO analysedDTO = ((AnalysedModuleDTO) dto);

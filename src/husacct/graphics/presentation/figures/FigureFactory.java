@@ -1,7 +1,10 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.dto.*;
-import husacct.graphics.presentation.decorators.DTODecorator;
+import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.decorators.DependenciesDecorator;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
@@ -45,8 +48,7 @@ public final class FigureFactory {
 					+ "' passed to FigureFactory");
 		}
 
-		DTODecorator decorator = new DTODecorator(retVal, dto);
-		return decorator;
+		return retVal;
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
