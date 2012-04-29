@@ -1,11 +1,9 @@
 package husacct.validate.domain;
 
 import husacct.common.dto.CategoryDTO;
-import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.assembler.AssemblerController;
 import husacct.validate.domain.check.CheckConformanceController;
-import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
@@ -62,9 +60,5 @@ public class DomainServiceImpl {
 		if(violationtypefactory == null){
 			this.violationtypefactory = new ViolationTypeFactory();
 		}
-	}
-
-	public String buildMessage(MessageDTO message) {	
-		return new Messagebuilder().createMessage(message);
 	}
 }

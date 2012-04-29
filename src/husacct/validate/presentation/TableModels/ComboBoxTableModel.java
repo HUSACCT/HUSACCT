@@ -1,4 +1,4 @@
-package husacct.validate.task.TableModels;
+package husacct.validate.presentation.TableModels;
 
 import husacct.validate.domain.validation.Severity;
 import java.util.List;
@@ -65,6 +65,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int column) {
+//		checkValuesAreValid();
 		Vector rowVector = (Vector) dataVector.elementAt(row);
 		return rowVector.elementAt(column);
 	}
@@ -122,12 +123,27 @@ public class ComboBoxTableModel extends AbstractTableModel {
 	private static Vector nonNullVector(Vector v) {
 		return (v != null) ? v : new Vector();
 	}
+	
+	public void checkValuesAreValid(){
+		for (int i = 0; i < getRowCount(); i++) {
+			boolean b = false;
+			for(Severity value : comboboxValues){
+				if(value.equals((Severity)getValueAt(i, 1))){
+					b = true;
+					
+				}
+			}
+			if(!b) {
+				setValueAt(comboboxValues.get(0), i, 1);
+			}
+		}
+	}
 
 	private void justifyRows(int from, int to) {
 		dataVector.setSize(getRowCount());
 
 		for (int i = from; i < to; i++) {
-			if (dataVector.elementAt(i) == null) {
+			if (comboboxValues.contains(dataVector.elementAt(i))) {
 				dataVector.setElementAt(new Vector(), i);
 			}
 			((Vector) dataVector.elementAt(i)).setSize(getColumnCount());
@@ -163,5 +179,13 @@ public class ComboBoxTableModel extends AbstractTableModel {
 
 	public void setCanEdit(Boolean[] canEdit) {
 		this.canEdit = canEdit;
+	}
+	
+	public void clear() {
+		int rows = getRowCount();
+		while (0 < rows) {
+			removeRow(0);
+			rows--;
+		}
 	}
 }

@@ -23,13 +23,13 @@ public abstract class RuleType {
 
 	protected RuleTypesFactory ruletypelanguagefactory;
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes){
+	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
 		this.violationtypes = violationtypes;
 		this.exceptionRuleKeys = exceptionRuletypes;
-		this.severity = null;
+		this.severity = severity;
 	}
 
 	public String getKey(){
@@ -64,5 +64,9 @@ public abstract class RuleType {
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message){
 		return new Violation(dependency.lineNumber, null, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+	}
+	
+	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules){
+		return new Violation(0, null, ruleKey, "", from, "", inDirect, message, logicalModules);		
 	}
 }

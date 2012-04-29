@@ -1,4 +1,4 @@
-package husacct.validate.abstraction.export;
+package husacct.validate.task.export;
 
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;

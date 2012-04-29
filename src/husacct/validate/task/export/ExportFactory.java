@@ -1,10 +1,10 @@
-package husacct.validate.abstraction.export;
+package husacct.validate.task.export;
 
-import husacct.validate.abstraction.export.xml.ExportSeverities;
-import husacct.validate.abstraction.export.xml.ExportSeveritiesPerTypesPerProgrammingLanguages;
-import husacct.validate.abstraction.export.xml.ExportViolations;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.task.export.xml.ExportSeverities;
+import husacct.validate.task.export.xml.ExportSeveritiesPerTypesPerProgrammingLanguages;
+import husacct.validate.task.export.xml.ExportViolations;
 
 import java.util.HashMap;
 import java.util.List;
