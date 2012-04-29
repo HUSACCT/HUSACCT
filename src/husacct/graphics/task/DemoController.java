@@ -46,7 +46,7 @@ public class DemoController extends BaseController {
 		domainLayer.logicalPath = "Domain layer";
 		drawing.add(this.figureFactory.createFigure(domainLayer));
 
-		this.drawViolationsForShownModules();
+//		this.drawViolationsForShownModules();
 	}
 
 	@Override

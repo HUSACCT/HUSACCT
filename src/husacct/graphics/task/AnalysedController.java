@@ -182,27 +182,13 @@ public class AnalysedController extends BaseController {
 	}
 	
 	private void drawLinesBasedOnSetting(){
+		this.drawing.clearLines();
 		if(violationsAreShown()){
-			System.out.println("violations");
+			System.out.println("Visiblity mode: Violations");
 			this.drawViolationsForShownModules();
-			// TODO
-			// Loop through all the figures/dtos
-			// Request found violations between all combinations
-			// Create a relationFigure for the violations
-			// Clear dependency lines
-			// Add the violation lines to the drawing
-			// validateService.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 		}else{
-			System.out.println("dep");
+			System.out.println("Visiblity mode: Dependencies");
 			this.drawDependenciesForShownModules();
-			// TODO
-			// Loop through all the figures/dtos
-			// Request found dependencies between all combinations
-			// Create a relationFigure for the dependencies
-			// Clear violation lines
-			// Add the dependency lines to the drawing
-			// this.drawDependencies(modules); //Where to get the modules? We do
-			// not save them!
 		}
 	}
 }

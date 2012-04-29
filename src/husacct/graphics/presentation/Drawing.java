@@ -23,16 +23,24 @@ public class Drawing extends org.jhotdraw.draw.DefaultDrawing {
 	public BaseFigure[] getShownModules() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 
-		for (Figure f : this.getChildren()) {
-			// TODO instanceof checking is a code smell
-			if ((f instanceof BaseFigure) && (f instanceof DTODecorator)) {
-				AbstractDTO dto = ((DTODecorator) f).getDTO();
-				if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
-					moduleFigures.add((BaseFigure) f);
-				}
+		for (Figure jhotdrawfigure : this.getChildren()) {
+			BaseFigure figure = (BaseFigure) jhotdrawfigure;
+			if(figure.isModule()){
+				moduleFigures.add(figure);
 			}
 		}
+		return moduleFigures.toArray(new BaseFigure[] {});
+	}
+	
+	public BaseFigure[] getShownLines() {
+		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 
+		for (Figure jhotdrawfigure : this.getChildren()) {
+			BaseFigure figure = (BaseFigure) jhotdrawfigure;
+			if(figure.isLine()){
+				moduleFigures.add(figure);
+			}
+		}
 		return moduleFigures.toArray(new BaseFigure[] {});
 	}
 
@@ -46,13 +54,23 @@ public class Drawing extends org.jhotdraw.draw.DefaultDrawing {
 		return super.add(f);
 	}
 
-	public void clear() {
+	public void clear() { //TODO: clearAll? and clearModules?
 		this.willChange();
 		this.basicRemoveAllChildren();
 		this.invalidate();
 		this.changed();
 	}
-
+	
+	public void clearLines(){
+		this.willChange();
+		BaseFigure[] lines = getShownLines();
+		for(BaseFigure line : lines){
+			this.remove(line);
+		}
+		this.invalidate();
+		this.changed();
+	}
+	
 	/**
 	 * @deprecated usage of this function can cause problems, because the name
 	 *             of the figure may be different from e.g. logicalPaths in the

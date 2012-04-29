@@ -58,4 +58,14 @@ public class ViolationsDecorator extends Decorator {
 		
 		updateAppearance();
 	}
+
+	@Override
+	public boolean isModule() {
+		return false;
+	}
+
+	@Override
+	public boolean isLine() {
+		return true;
+	}
 }

@@ -103,4 +103,14 @@ public class ComponentFigure extends NamedFigure
 		
 		return that;
 	}
+	
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
+	}
 }

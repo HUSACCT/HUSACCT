@@ -96,4 +96,8 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		
 		this.isSizeable = newValue;
 	}
+
+	public abstract boolean isModule();
+	
+	public abstract boolean isLine();
 }

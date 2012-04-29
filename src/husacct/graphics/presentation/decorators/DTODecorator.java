@@ -16,4 +16,14 @@ public class DTODecorator extends Decorator {
 	public AbstractDTO getDTO() {
 		return containedDTO;
 	}
+
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
+	}
 }

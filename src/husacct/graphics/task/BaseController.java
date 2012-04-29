@@ -57,6 +57,7 @@ public abstract class BaseController implements MouseClickListener {
 	}
 
 	public void clearDrawing() {
+		this.figureDTOMap.clear();
 		this.drawing.clear();
 		this.view.clearSelection();
 	}
@@ -106,14 +107,13 @@ public abstract class BaseController implements MouseClickListener {
 		
 		if (view.getSelectionCount() == 0) {
 			drawTarget.hidePropertiesPane();
-		}		
+		}
 	}
 
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModules(AbstractDTO[] modules) {
 		this.clearDrawing();
-		this.figureDTOMap.clear();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
@@ -128,12 +128,15 @@ public abstract class BaseController implements MouseClickListener {
 	public void toggleViolations() {
 		showViolations = (showViolations ? false : true);
 	}
+	
 	public boolean violationsAreShown(){
 		return showViolations;
 	}
+	
 	public boolean dependenciesAreShown(){
 		return !violationsAreShown();
 	}
+	
 	public void showViolations(){
 		showViolations = true;
 	}

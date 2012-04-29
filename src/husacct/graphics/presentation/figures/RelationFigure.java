@@ -207,4 +207,14 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure
 	{
 		this.line.lineout();
 	}
+	
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
+	}
 }
