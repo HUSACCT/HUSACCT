@@ -1,7 +1,6 @@
 package husacct.graphics.task;
 
 import husacct.ServiceProvider;
-import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -10,7 +9,6 @@ import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.validate.IValidateService;
 
 import java.util.Locale;
 
@@ -22,8 +20,6 @@ public class AnalysedController extends BaseController {
 	private final int ITEMS_PER_ROW = 4;
 	
 	private IControlService controlService;
-	private IAnalyseService analyseService;
-	private IValidateService validateService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
@@ -35,7 +31,7 @@ public class AnalysedController extends BaseController {
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
 			public void update(Locale newLocale) {
-				getAndDrawModulesIn(currentPath);
+				getAndDrawModulesIn(getCurrentPath());
 				if(violationsAreShown()){
 					drawViolationsForShownModules();
 				}
@@ -62,16 +58,17 @@ public class AnalysedController extends BaseController {
 	// Dependencies
 	
 	private void drawDependenciesForShownModules(){
-		for (BaseFigure figureFrom : this.drawing.getShownModules()) {
-			for (BaseFigure figureTo : this.drawing.getShownModules()) {
+		BaseFigure[] shownModules = this.drawing.getShownModules();
+		for (BaseFigure figureFrom : shownModules) {
+			for (BaseFigure figureTo : shownModules) {
 				getAndDrawDependencyBetween(figureFrom, figureTo);
 			}
 		}
 	}
 	
 	private void getAndDrawDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureDTOMap.get(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureDTOMap.get(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getDTOFromFigure(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getDTOFromFigure(figureTo);
 		
 		try{
 			DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
@@ -83,23 +80,20 @@ public class AnalysedController extends BaseController {
 		}
 	}
 	
-	private DependencyDTO[] getDependenciesBetween(String from, String to) {
-		return analyseService.getDependencies(from, to);
-	}
-	
 	// Violations
 	
 	public void drawViolationsForShownModules() {
-		for (BaseFigure figureFrom : this.drawing.getShownModules()) {
-			for (BaseFigure figureTo : this.drawing.getShownModules()) {
+		BaseFigure[] shownModules = this.drawing.getShownModules();
+		for (BaseFigure figureFrom : shownModules) {
+			for (BaseFigure figureTo : shownModules) {
 				getAndDrawViolationBetween(figureFrom, figureTo);
 			}
 		}
 	}
 	
 	private void getAndDrawViolationBetween(BaseFigure figureFrom, BaseFigure figureTo){
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureDTOMap.get(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureDTOMap.get(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getDTOFromFigure(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getDTOFromFigure(figureTo);
 		
 		try{
 			ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
@@ -111,10 +105,6 @@ public class AnalysedController extends BaseController {
 		}
 	}
 	
-	private ViolationDTO[] getViolationsBetween(String from, String to) {
-		return validateService.getViolationsByPhysicalPath(from, to);
-	}
-	
 	// Listener methods
 
 	@Override
@@ -123,9 +113,8 @@ public class AnalysedController extends BaseController {
 			AbstractDTO dto = this.getDTOFromFigure(figure);
 	
 			if (dto.getClass().getSimpleName().equals("AnalysedModuleDTO")) {
-				AnalysedModuleDTO analysedDTO = ((AnalysedModuleDTO) dto);
-				this.setCurrentPath(analysedDTO.uniqueName);
-				getAndDrawModulesIn(analysedDTO.uniqueName);
+				AnalysedModuleDTO parentDTO = ((AnalysedModuleDTO) dto);
+				getAndDrawModulesIn(parentDTO.uniqueName);
 			}
 		}
 	}
@@ -133,8 +122,7 @@ public class AnalysedController extends BaseController {
 	@Override
 	public void moduleZoomOut() {
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(this.getCurrentPath());
-		if (parentDTO != null) {
-			this.setCurrentPath(parentDTO.uniqueName);
+		if (null != parentDTO) {
 			this.getAndDrawModulesIn(parentDTO.uniqueName);
 		} else {
 			logger.debug("Tried to zoom out from " + this.getCurrentPath() + ", but it has no parent.");
@@ -144,6 +132,7 @@ public class AnalysedController extends BaseController {
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
+		this.setCurrentPath(parentName);
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 		if (children.length > 0) {
 			this.drawModules(children);
@@ -162,17 +151,14 @@ public class AnalysedController extends BaseController {
 	@Override
 	public void toggleViolations() {
 		super.toggleViolations();
-		System.out.println("Option triggered: Toggle violations visiblity");
 		this.drawLinesBasedOnSetting();
 	}
 	
 	private void drawLinesBasedOnSetting(){
 		this.drawing.clearLines();
 		if(violationsAreShown()){
-			System.out.println("Visiblity mode: Violations");
 			this.drawViolationsForShownModules();
 		}else{
-			System.out.println("Visiblity mode: Dependencies");
 			this.drawDependenciesForShownModules();
 		}
 	}

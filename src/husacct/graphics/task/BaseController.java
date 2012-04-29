@@ -1,6 +1,9 @@
 package husacct.graphics.task;
 
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
@@ -9,6 +12,7 @@ import husacct.graphics.presentation.decorators.DependenciesDecorator;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
+import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,9 +33,11 @@ public abstract class BaseController implements MouseClickListener {
 	protected FigureConnectorStrategy connectionStrategy;
 	protected HashMap<BaseFigure, AbstractDTO> figureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
 	protected BasicLayoutStrategy layoutStrategy;
+	
+	protected IAnalyseService analyseService;
+	protected IValidateService validateService;
 
 	public BaseController() {
-
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
@@ -83,28 +89,27 @@ public abstract class BaseController implements MouseClickListener {
 			this.drawTarget.showViolationsProperties(((ViolationsDecorator) selectedFigure).getViolations());
 		} else if (selectedFigure instanceof DependenciesDecorator) {
 			this.drawTarget.showDependenciesProperties(((DependenciesDecorator) selectedFigure).getDependencies());
-		}
-
-		else if (selectedFigure instanceof Decorator) {
+		}else if (selectedFigure instanceof Decorator) {
 			Decorator decorator = (Decorator) selectedFigure;
 
 			ArrayList<BaseFigure> list = new ArrayList<BaseFigure>();
 			list.add(decorator.getDecorator());
 
 			figureSelected((BaseFigure[]) list.toArray(new BaseFigure[list.size()]));
-
 		} else {
-
 			drawTarget.hidePropertiesPane();
 		}
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
-		
 		if (view.getSelectionCount() == 0) {
 			drawTarget.hidePropertiesPane();
 		}
+	}
+	
+	public void linkDTOtoFigure(AbstractDTO dto, BaseFigure figure){
+		this.figureDTOMap.put(figure, dto);
 	}
 	
 	public AbstractDTO getDTOFromFigure(BaseFigure figure){
@@ -118,7 +123,7 @@ public abstract class BaseController implements MouseClickListener {
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
-			this.figureDTOMap.put(generatedFigure, dto);
+			this.linkDTOtoFigure(dto, generatedFigure);
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 			bls.doLayout(ITEMS_PER_ROW);
@@ -148,5 +153,14 @@ public abstract class BaseController implements MouseClickListener {
 			detail = DrawingDetail.WITH_VIOLATIONS;
 		}
 		return detail;
+	}
+	
+	
+	protected DependencyDTO[] getDependenciesBetween(String from, String to) {
+		return analyseService.getDependencies(from, to);
+	}
+	
+	protected ViolationDTO[] getViolationsBetween(String from, String to) {
+		return validateService.getViolationsByPhysicalPath(from, to);
 	}
 }

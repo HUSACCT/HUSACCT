@@ -9,9 +9,10 @@ import java.util.List;
 
 import org.jhotdraw.draw.CompositeFigure;
 import org.jhotdraw.draw.DecoratedFigure;
+import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.Figure;
 
-public class Drawing extends org.jhotdraw.draw.DefaultDrawing {
+public class Drawing extends DefaultDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 
 	public Drawing() {

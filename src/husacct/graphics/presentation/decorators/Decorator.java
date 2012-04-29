@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.swing.Action;
 
 import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DecoratedFigure;
 import org.jhotdraw.draw.Drawing;

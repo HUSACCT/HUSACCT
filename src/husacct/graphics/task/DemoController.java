@@ -59,8 +59,8 @@ public class DemoController extends BaseController {
 	}
 	
 	private void getAndDrawDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
-		ModuleDTO dtoFrom = (ModuleDTO) this.figureDTOMap.get(figureFrom);
-		ModuleDTO dtoTo = (ModuleDTO) this.figureDTOMap.get(figureTo);
+		ModuleDTO dtoFrom = (ModuleDTO) this.getDTOFromFigure(figureFrom);
+		ModuleDTO dtoTo = (ModuleDTO) this.getDTOFromFigure(figureTo);
 		
 		DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.logicalPath, dtoTo.logicalPath);
 		
@@ -73,7 +73,7 @@ public class DemoController extends BaseController {
 		}
 	}
 	
-	private DependencyDTO[] getDependenciesBetween(String from, String to) {
+	protected DependencyDTO[] getDependenciesBetween(String from, String to) {
 		DependencyDTO[] dependencies = new DependencyDTO[0];
 		if(from=="task"  && to=="presentation"){
 			dependencies = new DependencyDTO[1];
@@ -94,8 +94,8 @@ public class DemoController extends BaseController {
 	}
 	
 	private void getAndDrawViolationBetween(BaseFigure figureFrom, BaseFigure figureTo){
-		ModuleDTO dtoFrom = (ModuleDTO) this.figureDTOMap.get(figureFrom);
-		ModuleDTO dtoTo = (ModuleDTO) this.figureDTOMap.get(figureTo);
+		ModuleDTO dtoFrom = (ModuleDTO) this.getDTOFromFigure(figureFrom);
+		ModuleDTO dtoTo = (ModuleDTO) this.getDTOFromFigure(figureTo);
 		
 		try{
 			ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.logicalPath, dtoTo.logicalPath);
@@ -107,7 +107,7 @@ public class DemoController extends BaseController {
 		}
 	}
 	
-	private ViolationDTO[] getViolationsBetween(String from, String to) {
+	protected ViolationDTO[] getViolationsBetween(String from, String to) {
 		ViolationDTO[] violations = new ViolationDTO[0];
 		if(from=="Domain layer"  && to=="Infrastructure layer"){
 			violations = new ViolationDTO[2];

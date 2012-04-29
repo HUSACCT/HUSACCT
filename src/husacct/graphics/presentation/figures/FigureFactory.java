@@ -37,28 +37,28 @@ public final class FigureFactory {
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto) {
-		BaseFigure retVal = null;
+		BaseFigure createdFigure = null;
 
 		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
-			retVal = createModuleFigure(dto);
+			createdFigure = createModuleFigure(dto);
 		}
 
-		if (retVal == null) {
+		if (null==createdFigure) {
 			throw new RuntimeException("Unimplemented dto type '" + dto.getClass().getSimpleName()
 					+ "' passed to FigureFactory");
 		}
 
-		return retVal;
+		return createdFigure;
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
-		BaseFigure figure = this.createFigure(dto);
+		BaseFigure createdFigure = this.createFigure(dto);
 
 		if (violationDTOs.length > 0) {
-			figure = new ViolationsDecorator(figure, violationDTOs);
+			createdFigure = new ViolationsDecorator(createdFigure, violationDTOs);
 		}
 
-		return figure;
+		return createdFigure;
 	}
 
 	private BaseFigure createModuleFigure(AbstractDTO dto) {
