@@ -63,7 +63,7 @@ public class ViolationAssembler {
 	private ViolationDTO createViolationDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
 		try{
 			RuleTypeDTO rule = createRuleTypeDTO(violation);
-			ViolationTypeDTO violationtype = rule.violationTypes[0];
+			ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
 
 			final String classPathFrom = violation.getClassPathFrom();
 			final String classPathTo = violation.getClassPathTo();

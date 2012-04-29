@@ -8,4 +8,12 @@ public class CategoryDTO extends AbstractDTO {
 		this.key = key;
 		this.ruleTypes = ruleTypes;
 	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public RuleTypeDTO[] getRuleTypes() {
+		return ruleTypes;
+	}
 }

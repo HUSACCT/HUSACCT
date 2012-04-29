@@ -33,4 +33,52 @@ public class ViolationDTO extends AbstractDTO {
 		this.systemDefinedName = "";
 		this.severityValue = 3;
 	}
+
+	public String getFromClasspath() {
+		return fromClasspath;
+	}
+
+	public String getToClasspath() {
+		return toClasspath;
+	}
+
+	public String getLogicalModuleFrom() {
+		return logicalModuleFrom;
+	}
+
+	public String getLogicalModuleTo() {
+		return logicalModuleTo;
+	}
+
+	public RuleTypeDTO getRuleType() {
+		return ruleType;
+	}
+
+	public ViolationTypeDTO getViolationType() {
+		return violationType;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public int getLinenumber() {
+		return linenumber;
+	}
+
+	public Color getSeverityColor() {
+		return severityColor;
+	}
+
+	public String getUserDefinedName() {
+		return userDefinedName;
+	}
+
+	public String getSystemDefinedName() {
+		return systemDefinedName;
+	}
+
+	public int getSeverityValue() {
+		return severityValue;
+	}
 }

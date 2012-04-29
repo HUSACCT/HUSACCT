@@ -12,4 +12,20 @@ public class RuleTypeDTO extends AbstractDTO {
 		this.violationTypes = violationTypes;
 		this.exceptionRuleTypes = exceptionRuleTypes;
 	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public String getDescriptionKey() {
+		return descriptionKey;
+	}
+
+	public ViolationTypeDTO[] getViolationTypes() {
+		return violationTypes;
+	}
+
+	public RuleTypeDTO[] getExceptionRuleTypes() {
+		return exceptionRuleTypes;
+	}
 }
