@@ -8,47 +8,113 @@ import husacct.graphics.presentation.decorators.DTODecorator;
 import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 
+import org.apache.log4j.Logger;
 import org.jhotdraw.draw.ConnectionFigure;
 
 public class DemoController extends BaseController {
+	
+	private Logger logger = Logger.getLogger(DemoController.class);
 
 	public DemoController() {
+		AbstractDTO[] modules = new AbstractDTO[4];
+		
 		ModuleDTO presentationLayer = new ModuleDTO();
 		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
-		drawing.add(this.figureFactory.createFigure(presentationLayer));
+		modules[0] = presentationLayer;
 
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
-		ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
-		ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
-
-		drawing.add(this.figureFactory.createFigure(taskLayer, new ViolationDTO[] { taskLayerErr1, taskLayerErr2 }));
-
-		DependencyDTO presTaskDep1 = new DependencyDTO("presentation", "task", "call", 239);
-		DependencyDTO presTaskDep2 = new DependencyDTO("presentation", "task", "import", 2);
-		BaseFigure presTaskDepFigure = this.figureFactory
-				.createFigure(new DependencyDTO[] { presTaskDep1, presTaskDep2 });
-		BaseFigure foundPresentationLayerFigure = drawing.findFigureByName("presentation");
-		BaseFigure foundTaskLayerFigure = drawing.findFigureByName("task");
-		this.connectionStrategy.connect((ConnectionFigure) ((Decorator) presTaskDepFigure).getDecorator(),
-				foundPresentationLayerFigure, foundTaskLayerFigure);
-		drawing.add(presTaskDepFigure);
-
+		modules[1] = taskLayer;
+		
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
 		infrastructureLayer.logicalPath = "Infrastructure layer";
-		drawing.add(this.figureFactory.createFigure(infrastructureLayer));
+		modules[2] = infrastructureLayer;
 
 		ModuleDTO domainLayer = new ModuleDTO();
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "Domain layer";
-		drawing.add(this.figureFactory.createFigure(domainLayer));
+		modules[3] = domainLayer;
+		
+		this.drawModules(modules);
 
-//		this.drawViolationsForShownModules();
+		this.drawDependenciesForShownModules();
+		this.drawViolationsForShownModules();
+	}
+	
+	// Dependencies
+	
+	private void drawDependenciesForShownModules(){
+		for (BaseFigure figureFrom : this.drawing.getShownModules()) {
+			for (BaseFigure figureTo : this.drawing.getShownModules()) {
+				getAndDrawDependencyBetween(figureFrom, figureTo);
+			}
+		}
+	}
+	
+	private void getAndDrawDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
+		ModuleDTO dtoFrom = (ModuleDTO) this.figureDTOMap.get(figureFrom);
+		ModuleDTO dtoTo = (ModuleDTO) this.figureDTOMap.get(figureTo);
+		
+		DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.logicalPath, dtoTo.logicalPath);
+		
+		try{
+			BaseFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
+			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) dependencyFigure).getDecorator(), figureFrom, figureTo);
+			drawing.add(dependencyFigure);
+		} catch (RuntimeException e) {
+			logger.debug(e.getMessage() + " " + dtoFrom.logicalPath + " -> " + dtoTo.logicalPath);
+		}
+	}
+	
+	private DependencyDTO[] getDependenciesBetween(String from, String to) {
+		DependencyDTO[] dependencies = new DependencyDTO[0];
+		if(from=="task"  && to=="presentation"){
+			dependencies = new DependencyDTO[1];
+			DependencyDTO taskLayerDep1 = new DependencyDTO("task","presentation","wa",1);
+			dependencies[0] = taskLayerDep1;
+		}
+		return dependencies;
 	}
 
+	// Violations
+	
+	public void drawViolationsForShownModules() {
+		for (BaseFigure figureFrom : this.drawing.getShownModules()) {
+			for (BaseFigure figureTo : this.drawing.getShownModules()) {
+				getAndDrawViolationBetween(figureFrom, figureTo);
+			}
+		}
+	}
+	
+	private void getAndDrawViolationBetween(BaseFigure figureFrom, BaseFigure figureTo){
+		ModuleDTO dtoFrom = (ModuleDTO) this.figureDTOMap.get(figureFrom);
+		ModuleDTO dtoTo = (ModuleDTO) this.figureDTOMap.get(figureTo);
+		
+		try{
+			ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.logicalPath, dtoTo.logicalPath);
+			BaseFigure violationFigure = this.figureFactory.createFigure(dependencies);
+			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) violationFigure).getDecorator(), figureFrom, figureTo);
+			drawing.add(violationFigure);
+		} catch (RuntimeException e) {
+			logger.debug(e.getMessage() + " " + dtoFrom.logicalPath + " -> " + dtoTo.logicalPath);
+		}
+	}
+	
+	private ViolationDTO[] getViolationsBetween(String from, String to) {
+		ViolationDTO[] violations = new ViolationDTO[0];
+		if(from=="Domain layer"  && to=="Infrastructure layer"){
+			violations = new ViolationDTO[2];
+			ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
+			violations[0] = taskLayerErr1;
+			ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
+			violations[1] = taskLayerErr2;
+		}
+		return violations;
+	}
+	
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
 		// do recursion, because the dtodecorator might be hidden behind other

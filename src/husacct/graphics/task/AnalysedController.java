@@ -73,9 +73,8 @@ public class AnalysedController extends BaseController {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureDTOMap.get(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureDTOMap.get(figureTo);
 		
-		DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
-		
 		try{
+			DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
 			BaseFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
 			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) dependencyFigure).getDecorator(), figureFrom, figureTo);
 			drawing.add(dependencyFigure);
@@ -102,9 +101,8 @@ public class AnalysedController extends BaseController {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureDTOMap.get(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureDTOMap.get(figureTo);
 		
-		ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
-		
 		try{
+			ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
 			BaseFigure violationFigure = this.figureFactory.createFigure(dependencies);
 			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) violationFigure).getDecorator(), figureFrom, figureTo);
 			drawing.add(violationFigure);
@@ -121,28 +119,15 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure figure) {
-		if (isZoomable(figure)) {
+		if (figure.isModule()) { //FIXME? : Can zoom only on modules
 			AbstractDTO dto = FigureResolver.resolveDTO(figure);
 	
 			if (dto.getClass().getSimpleName().equals("AnalysedModuleDTO")) {
-	
 				AnalysedModuleDTO analysedDTO = ((AnalysedModuleDTO) dto);
 				this.setCurrentPath(analysedDTO.uniqueName);
 				getAndDrawModulesIn(analysedDTO.uniqueName);
 			}
 		}
-	}
-	
-	private boolean isZoomable(BaseFigure figure) {
-		// FIXME: This code probably doesn't belong in the Controller. This should be made a discussion.
-		if (figure instanceof DependenciesDecorator)
-			return false;
-		else if (figure instanceof DTODecorator)
-			return true;
-		else if (figure instanceof ViolationsDecorator)
-			return true;
-			
-		return false;
 	}
 
 	@Override
