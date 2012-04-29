@@ -32,14 +32,12 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private DomainServiceImpl domain;
 	private ReportServiceImpl report;
 	private TaskServiceImpl task;
-	//private AbstractionServiceImpl abstraction;
 
 	public ValidateServiceImpl(){
 		this.configuration = new ConfigurationServiceImpl();
 		this.domain = new DomainServiceImpl(configuration);
 		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
-		//this.abstraction = new AbstractionServiceImpl();
 		this.validationExecuted = false;
 	}
 
