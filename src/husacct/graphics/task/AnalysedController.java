@@ -144,8 +144,8 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void exportToImage() {
-		// TODO Auto-generated method stub
-		System.out.println("Option triggered: Export to image");
+		// TODO Make better
+		this.drawing.showExportToImagePanel();
 	}
 
 	@Override

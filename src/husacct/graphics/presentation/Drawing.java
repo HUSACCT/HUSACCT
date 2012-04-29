@@ -4,19 +4,45 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.NamedFigure;
 
 import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+
+import org.apache.log4j.Logger;
 import org.jhotdraw.draw.CompositeFigure;
 import org.jhotdraw.draw.DecoratedFigure;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.io.ImageOutputFormat;
 
 public class Drawing extends DefaultDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
+	private Logger logger = Logger.getLogger(Drawing.class);
 
 	public Drawing() {
 		super();
+	}
+	
+	public void showExportToImagePanel(){
+		File selectedFile = new File(".");
+		try {
+			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
+			JFileChooser fileChooser =  new JFileChooser();
+			fileChooser.setVisible(true);
+			int returnValue = fileChooser.showSaveDialog(fileChooser);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				selectedFile = fileChooser.getSelectedFile();
+				FileOutputStream fileoutputstream = new FileOutputStream(selectedFile);
+				imageoutputformat.write(fileoutputstream,this);
+				fileoutputstream.close();
+	        }
+		} catch (IOException e) {
+			logger.debug("Cannot save file to "+selectedFile.getAbsolutePath());
+		}
 	}
 
 	public BaseFigure[] getShownModules() {
