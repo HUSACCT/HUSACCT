@@ -1,7 +1,9 @@
 package husacct.validate.domain.factory.ruletype;
 
+import husacct.validate.domain.exception.DefaultSeverityNotFoundException;
+import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
+import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -16,6 +18,7 @@ import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -24,43 +27,65 @@ import org.apache.log4j.Logger;
 
 class RuleTypesGenerator {
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
-	
+
+	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
 	private static final String rootFolderRules = "husacct.validate.domain.validation.ruletype";
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
-	
-	HashMap<String, CategorykeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
-		HashMap<String, CategorykeyClassDTO> keyClasses = new HashMap<String, CategorykeyClassDTO>();
-		HashMap<String, CategorykeyClassDTO> allClasses = generateAllRules();
+
+	RuleTypesGenerator(){
+		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverityCombination();
+	}
+
+	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
+		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
+		HashMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
 		for (Enum<RuleTypes> ruleKey : rules) {
-			CategorykeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
+			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
 			if (ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
-			} else {
-				
+			} else {				
 				logger.warn(String.format("Rulekey: %s not found", ruleKey.toString()));
 			}
 		}
 		return keyClasses;
 	}
 
-	HashMap<String, CategorykeyClassDTO> generateAllRules() {
-		HashMap<String, CategorykeyClassDTO> keyClasses = new HashMap<String, CategorykeyClassDTO>();
+	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
+		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		List<Class<?>> ruleClasses = getRuleClasses();
 		for (Class<?> ruleClass : ruleClasses) {
-			if (isInstanceOfRule(ruleClass)) {
-				final String categoryKey = getCategoryKey(ruleClass);
-				final String ruleKey = getRuleKey(ruleClass);
-				keyClasses.put(ruleKey, new CategorykeyClassDTO(categoryKey, (Class<RuleType>) ruleClass));
+			String ruleKey = "";
+			try{
+				if (isInstanceOfRule(ruleClass)) {
+					ruleKey = getRuleKey(ruleClass);
+					final String categoryKey = getCategoryKey(ruleClass);					
+					final DefaultSeverities defaultSeverity = getDefaultSeverity(ruleKey);
+					keyClasses.put(ruleKey, new CategoryKeyClassDTO(categoryKey, (Class<RuleType>) ruleClass, defaultSeverity));
+				}
+			}catch(DefaultSeverityNotFoundException e){
+				logger.warn(String.format("No default severity found for: %s, thus this ruleType will be ignored", ruleKey), e);
 			}
 		}
+
 		return keyClasses;
 	}
 
-	private List<Class<?>> getRuleClasses() {
-		return getClasses(rootFolderRules);
+	private DefaultSeverities getDefaultSeverity(String ruleKey){
+		DefaultSeverities defaultSeverity = defaultRulesPerRuleType.get(ruleKey);
+		if(defaultSeverity != null){
+			return defaultSeverity;
+		}
+		else{
+			throw new DefaultSeverityNotFoundException();
+		}
+
 	}
 
-	private List<Class<?>> getClasses(String packageName) {
+	private List<Class<?>> getRuleClasses() {
+		return getRuleClasses(rootFolderRules);
+	}
+
+	private List<Class<?>> getRuleClasses(String packageName) {
 		try {
 			List<String> directories = getDirectories(packageName);
 			TreeSet<String> classes = new TreeSet<String>();
@@ -166,5 +191,14 @@ class RuleTypesGenerator {
 
 	private String getRuleKey(Class<?> ruleClass) {
 		return ruleClass.getSimpleName().replace("Rule", "");
-	}
+	}	
+
+	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverityCombination(){
+		HashMap<String, DefaultSeverities> defaultRulesPerRuleType = new HashMap<String, DefaultSeverities>();
+		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)){
+			defaultRulesPerRuleType.put(ruletype.toString(), ruletype.getDefaultSeverity());
+		}
+
+		return defaultRulesPerRuleType;
+	}	
 }

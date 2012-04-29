@@ -1,28 +1,30 @@
 package husacct.validate.domain.validation.ruletype;
 
+import husacct.validate.domain.validation.DefaultSeverities;
+
 import java.util.EnumSet;
 
 public enum RuleTypes {
-	IS_NOT_ALLOWED("IsNotAllowedToUse", "Low"),
-	IS_ALLOWED("IsAllowedToUse", "Low"),
-	IS_ONLY_ALLOWED("IsOnlyAllowedToUse", "Low"),
-	IS_ONLY_MODULE_ALLOWED("IsOnlyModuleAllowedToUse", "Low"),
-	MUST_USE("MustUse", "Low"),
-	BACK_CALL("BackCall", "Low"),
-	SKIP_CALL("SkipCall", "Low");
+	IS_NOT_ALLOWED("IsNotAllowedToUse", DefaultSeverities.MEDIUM),
+	IS_ALLOWED("IsAllowedToUse", DefaultSeverities.LOW),
+	IS_ONLY_ALLOWED("IsOnlyAllowedToUse", DefaultSeverities.LOW),
+	IS_ONLY_MODULE_ALLOWED("IsOnlyModuleAllowedToUse", DefaultSeverities.MEDIUM),
+	MUST_USE("MustUse", DefaultSeverities.MEDIUM),
+	BACK_CALL("BackCall", DefaultSeverities.HIGH),
+	SKIP_CALL("SkipCall", DefaultSeverities.LOW);
 
 	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED,IS_ONLY_MODULE_ALLOWED,MUST_USE,BACK_CALL,SKIP_CALL);
-	public static final EnumSet<RuleTypes> allRuleTypes = EnumSet.allOf(RuleTypes.class);
+	//public static final EnumSet<RuleTypes> allRuleTypes = EnumSet.allOf(RuleTypes.class);
 	private final String key;
-	private final String defaultSeverityKey;
+	private final DefaultSeverities defaultSeverity;
 
-	RuleTypes(String key, String defaultSeverityKey){
+	RuleTypes(String key, DefaultSeverities defaultSeverity){
 		this.key = key;
-		this.defaultSeverityKey = defaultSeverityKey;
+		this.defaultSeverity = defaultSeverity;
 	}
 
-	public String getDefaultSeverityKey(){
-		return defaultSeverityKey;
+	public DefaultSeverities getDefaultSeverity() {
+		return defaultSeverity;
 	}
 
 	@Override

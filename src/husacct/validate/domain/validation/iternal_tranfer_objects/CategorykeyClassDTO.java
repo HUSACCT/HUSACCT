@@ -1,14 +1,17 @@
 package husacct.validate.domain.validation.iternal_tranfer_objects;
 
+import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
-public class CategorykeyClassDTO {
+public class CategoryKeyClassDTO {
 	private final String categoryKey;
 	private final Class<RuleType> ruleClass;
+	private final DefaultSeverities defaultSeverity;
 
-	public CategorykeyClassDTO(String categoryKey, Class<RuleType> ruleClass){
+	public CategoryKeyClassDTO(String categoryKey, Class<RuleType> ruleClass, DefaultSeverities defaultSeverity){
 		this.categoryKey = categoryKey;
 		this.ruleClass = ruleClass;
+		this.defaultSeverity = defaultSeverity;
 	}
 
 	public String getCategoryKey() {
@@ -17,5 +20,9 @@ public class CategorykeyClassDTO {
 
 	public Class<RuleType> getRuleClass() {
 		return ruleClass;
+	}
+
+	public DefaultSeverities getDefaultSeverity() {
+		return defaultSeverity;
 	}
 }

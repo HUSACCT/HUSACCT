@@ -39,6 +39,10 @@ public class ConfigurationServiceImpl {
 	public void addSeverities(List<Severity> severities) {
 		severityConfig.addSeverities(severities);
 	}
+	
+	public Severity getSeverityByName(String severityName){
+		return severityConfig.getSeverityByName(severityName);
+	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
 		return severityRepository.getSeveritiesPerTypePerProgrammingLanguage();
