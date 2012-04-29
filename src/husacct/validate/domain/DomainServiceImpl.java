@@ -21,7 +21,7 @@ public class DomainServiceImpl {
 	private final CheckConformanceController checkConformanceController;
 
 	public DomainServiceImpl(ConfigurationServiceImpl configuration){
-		this.checkConformanceController = new CheckConformanceController(configuration);
+		this.checkConformanceController = new CheckConformanceController(configuration, ruletypefactory);
 	}
 
 	public HashMap<String, List<RuleType>> getAllRuleTypes(String programmingLanguage){
@@ -40,6 +40,12 @@ public class DomainServiceImpl {
 			return Collections.emptyMap();
 		}
 	}
+	
+	private void initializeViolationtypeFactory(){
+		if(violationtypefactory == null){
+			this.violationtypefactory = new ViolationTypeFactory();
+		}
+	}
 
 	public void checkConformance(RuleDTO[] appliedRules){
 		checkConformanceController.checkConformance(appliedRules);
@@ -50,15 +56,13 @@ public class DomainServiceImpl {
 		return new AssemblerController().createCategoryDTO(ruletypefactory.getRuleTypes());
 	}
 	
+	public RuleTypesFactory getRuleTypesFactory(){
+		return ruletypefactory;
+	}
+	
 	private void initializeRuletypesFactory(){
 		if(ruletypefactory == null){
 			this.ruletypefactory = new RuleTypesFactory();
-		}
-	}
-	
-	private void initializeViolationtypeFactory(){
-		if(violationtypefactory == null){
-			this.violationtypefactory = new ViolationTypeFactory();
 		}
 	}
 }

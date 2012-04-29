@@ -29,11 +29,11 @@ public class ViolationAssembler {
 	private RuletypeAssembler ruleAssembler;
 	private Messagebuilder messagebuilder;
 
-	public ViolationAssembler(){
+	public ViolationAssembler(RuleTypesFactory ruleFactory){
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
 		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory();
 
-		this.ruleFactory = new RuleTypesFactory();
+		this.ruleFactory = ruleFactory;
 		this.ruleAssembler = new RuletypeAssembler();
 		this.messagebuilder = new Messagebuilder();
 	}

@@ -28,10 +28,10 @@ import com.itextpdf.text.DocumentException;
 public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private boolean validationExecuted;
 
-	private ConfigurationServiceImpl configuration;
-	private DomainServiceImpl domain;
-	private ReportServiceImpl report;
-	private TaskServiceImpl task;
+	private final ConfigurationServiceImpl configuration;
+	private final DomainServiceImpl domain;
+	private final ReportServiceImpl report;
+	private final TaskServiceImpl task;
 
 	public ValidateServiceImpl(){
 		this.configuration = new ConfigurationServiceImpl();
@@ -40,7 +40,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		this.task = new TaskServiceImpl(configuration, domain);
 		this.validationExecuted = false;
 	}
-
 
 	@Override
 	public CategoryDTO[] getCategories(){
@@ -56,7 +55,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
-
 
 	@Override
 	public String[] getExportExtentions() {
@@ -91,7 +89,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		return task.exportValidationWorkspace();
 	}
 
-
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
@@ -118,6 +115,5 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public static void main(String[] args){
 		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
 		serviceImpl.checkConformance();
-
 	}
 }
