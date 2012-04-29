@@ -1,17 +1,23 @@
 package husacct.validate.domain.validation.violationtype.java;
 
+import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.violationtype.IViolationType;
+import husacct.validate.domain.validation.violationtype.ViolationCategories;
 
 public enum JavaAccessModifiers implements IViolationType{
-	PUBLIC("public"),
-	PROTECTED("protected"),
-	DEFAULT("default"),
-	PRIVATE("private");
+	PUBLIC("public", DefaultSeverities.MEDIUM),
+	PROTECTED("protected", DefaultSeverities.MEDIUM),
+	DEFAULT("default", DefaultSeverities.LOW),
+	PRIVATE("private", DefaultSeverities.LOW);
 
 	private final String key;
+	private final DefaultSeverities defaultSeverity;
+	private final ViolationCategories violationCategory;
 
-	JavaAccessModifiers(String key){
+	JavaAccessModifiers(String key, DefaultSeverities defaultSeverity){
 		this.key = key;
+		this.defaultSeverity = defaultSeverity;
+		this.violationCategory = ViolationCategories.ACCESS_MODIFIERS;
 	}
 
 	@Override
@@ -21,6 +27,11 @@ public enum JavaAccessModifiers implements IViolationType{
 
 	@Override
 	public String getCategory() {
-		return "AccessModifier";
+		return violationCategory.toString();
+	}
+
+	@Override
+	public DefaultSeverities getDefaultSeverity() {
+		return defaultSeverity;
 	}
 }
