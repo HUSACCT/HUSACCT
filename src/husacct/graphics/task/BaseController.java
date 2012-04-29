@@ -16,6 +16,9 @@ import java.util.HashMap;
 import javax.swing.JInternalFrame;
 
 public abstract class BaseController implements MouseClickListener {
+	
+	private final int ITEMS_PER_ROW = 4;
+	
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
@@ -24,8 +27,8 @@ public abstract class BaseController implements MouseClickListener {
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
-	
 	protected HashMap<BaseFigure, AbstractDTO> figureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
+	protected BasicLayoutStrategy layoutStrategy;
 
 	public BaseController() {
 
@@ -42,6 +45,8 @@ public abstract class BaseController implements MouseClickListener {
 
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
+		
+		layoutStrategy = new BasicLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
@@ -116,7 +121,7 @@ public abstract class BaseController implements MouseClickListener {
 			this.figureDTOMap.put(generatedFigure, dto);
 
 			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
-			bls.doLayout();
+			bls.doLayout(ITEMS_PER_ROW);
 		}
 		this.drawTarget.setCurrentPathInfo(this.currentPath);
 	}

@@ -14,6 +14,8 @@ public class DemoController extends BaseController {
 	
 	private Logger logger = Logger.getLogger(DemoController.class);
 
+	private final int ITEMS_PER_ROW = 2;
+	
 	public DemoController() {
 		AbstractDTO[] modules = new AbstractDTO[4];
 		
@@ -41,6 +43,9 @@ public class DemoController extends BaseController {
 
 		this.drawDependenciesForShownModules();
 		this.drawViolationsForShownModules();
+
+		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
+		bls.doLayout(ITEMS_PER_ROW);
 	}
 	
 	// Dependencies
