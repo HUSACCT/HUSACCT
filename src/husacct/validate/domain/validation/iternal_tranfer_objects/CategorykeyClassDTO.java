@@ -3,8 +3,8 @@ package husacct.validate.domain.validation.iternal_tranfer_objects;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 public class CategorykeyClassDTO {
-	private String categoryKey;
-	private Class<RuleType> ruleClass;
+	private final String categoryKey;
+	private final Class<RuleType> ruleClass;
 
 	public CategorykeyClassDTO(String categoryKey, Class<RuleType> ruleClass){
 		this.categoryKey = categoryKey;
