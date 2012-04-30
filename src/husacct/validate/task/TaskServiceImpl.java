@@ -101,7 +101,7 @@ public class TaskServiceImpl implements ITaskService{
 		}
 		addSeverities(severityList);
 	}
-	private void addSeverities(List<Severity> severities) {
+	public void addSeverities(List<Severity> severities) {
 		configuration.addSeverities(severities);
 	}
 
