@@ -11,9 +11,12 @@ public enum RuleTypes {
 	IS_ONLY_MODULE_ALLOWED("IsOnlyModuleAllowedToUse", DefaultSeverities.MEDIUM),
 	MUST_USE("MustUse", DefaultSeverities.MEDIUM),
 	BACK_CALL("BackCall", DefaultSeverities.HIGH),
-	SKIP_CALL("SkipCall", DefaultSeverities.LOW);
+	SKIP_CALL("SkipCall", DefaultSeverities.LOW),
+	
+	INTERFACE_CONVENTION("InterfaceConvention", DefaultSeverities.MEDIUM),
+	SUBCLASS_CONVENTION("SubClassConvention", DefaultSeverities.MEDIUM);
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED,IS_ONLY_MODULE_ALLOWED,MUST_USE,BACK_CALL,SKIP_CALL);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED,IS_ONLY_MODULE_ALLOWED,MUST_USE,BACK_CALL,SKIP_CALL,INTERFACE_CONVENTION, SUBCLASS_CONVENTION);
 	//public static final EnumSet<RuleTypes> allRuleTypes = EnumSet.allOf(RuleTypes.class);
 	private final String key;
 	private final DefaultSeverities defaultSeverity;
