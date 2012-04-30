@@ -1,36 +1,36 @@
 package husacct.validate.presentation;
 
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.presentation.TableModels.ColorChooserEditor;
 import husacct.validate.presentation.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
 
 public class ConfigurationUI extends javax.swing.JInternalFrame {
 
-	private static final long serialVersionUID = 3568220674416621458L;
-	TaskServiceImpl ts;
-	ColorTableModel severityModel;
+    private static final long serialVersionUID = 3568220674416621458L;
+    private TaskServiceImpl ts;
+    private ColorTableModel severityModel;
+    
+    private JButton add, remove, down, up, cancel, applySeverity, restore;
+    private JTabbedPane jTabbedPane1;
+    private JPanel severityNamePanel;
+    private JScrollPane severityNameScrollPane;
+    private JTable severityNameTable;
 
-	public ConfigurationUI(TaskServiceImpl ts) {
-		this.ts = ts;
-		severityModel = new ColorTableModel();
-		initComponents();
-		TableColumn column = severityNameTable.getColumnModel().getColumn(1);
-		TableCellEditor editor = new ColorChooserEditor();
-		column.setCellEditor(editor);
-		column.setCellRenderer(new ColorRenderer(true));
-		loadLanguageTabs();
-		loadSeverity();
-	}
+    public ConfigurationUI(TaskServiceImpl ts) {
+        this.ts = ts;
+        severityModel = new ColorTableModel();
+        initComponents();
+        
+        severityModel.setColorEditor(severityNameTable, 1);
+        loadLanguageTabs();
+        loadSeverity();
+    }
 
     private void initComponents() {
 
@@ -43,7 +43,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         up = new JButton();
         down = new JButton();
         applySeverity = new JButton();
-        jButton1 = new JButton();
+        restore = new JButton();
         cancel = new JButton();
 
         setClosable(true);
@@ -58,205 +58,182 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
         add.setText("Add");
         add.addActionListener(new ActionListener() {
-			@Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addActionPerformed(evt);
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                addActionPerformed();
             }
         });
 
         remove.setText("Remove");
-        remove.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeActionPerformed(evt);
+        remove.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                removeActionPerformed();
             }
         });
 
         up.setText("Up");
-        up.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                upActionPerformed(evt);
+        up.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                upActionPerformed();
             }
         });
 
         down.setText("Down");
-        down.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downActionPerformed(evt);
+        down.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                downActionPerformed();
             }
         });
 
         applySeverity.setText("Apply");
-        applySeverity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                applySeverityActionPerformed(evt);
+        applySeverity.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                applySeverityActionPerformed();
             }
         });
 
-        jButton1.setText("<html>Resore to<br> default");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        restore.setText("<html>Resore to<br> default");
+        restore.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                jButton1ActionPerformed();
             }
         });
 
         javax.swing.GroupLayout severityNamePanelLayout = new javax.swing.GroupLayout(severityNamePanel);
         severityNamePanel.setLayout(severityNamePanelLayout);
         severityNamePanelLayout.setHorizontalGroup(
-            severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(severityNamePanelLayout.createSequentialGroup()
-                .addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(remove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1)
-                    .addComponent(applySeverity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+                severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(severityNamePanelLayout.createSequentialGroup().addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(remove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore).addComponent(applySeverity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
         severityNamePanelLayout.setVerticalGroup(
-            severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-            .addGroup(severityNamePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(add)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(remove)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(up)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(down)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(applySeverity)
-                .addContainerGap())
-        );
+                severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE).addGroup(severityNamePanelLayout.createSequentialGroup().addContainerGap().addComponent(add).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(remove).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(up).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(down).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(applySeverity).addContainerGap()));
 
         jTabbedPane1.addTab("Severity configuration", severityNamePanel);
 
         cancel.setText("Cancel");
-        cancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelActionPerformed(evt);
+        cancel.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                cancelActionPerformed();
             }
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cancel)
-                .addContainerGap())
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(cancel).addContainerGap()));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cancel)
-                .addGap(16, 16, 16))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(jTabbedPane1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(cancel).addGap(16, 16, 16)));
     }
 
-	private void downActionPerformed(ActionEvent evt) {
-		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() -
-												 1) {
-			severityModel.moveRow(severityNameTable.getSelectedRow(),
-								  severityNameTable.getSelectedRow(),
-								  severityNameTable.getSelectedRow() + 1);
-			severityNameTable.changeSelection(severityNameTable.getSelectedRow() +
-											  1, 0, false, false);
-		}
-	}
+    private void downActionPerformed() {
+        if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount()
+                - 1) {
+            List<Severity> serverities = ts.getAllSeverities();
+            Severity severity = serverities.get(severityNameTable.getSelectedRow());
+            serverities.remove(severityNameTable.getSelectedRow());
+            severityModel.moveRow(severityNameTable.getSelectedRow(),
+                    severityNameTable.getSelectedRow(),
+                    severityNameTable.getSelectedRow() + 1);
+            severityNameTable.changeSelection(severityNameTable.getSelectedRow()
+                    + 1, 0, false, false);
+            serverities.add(severityNameTable.getSelectedRow(), severity);
+            ts.addSeverities(serverities);
+        }
+    }
 
-	private void upActionPerformed(ActionEvent evt) {
-		if (severityNameTable.getSelectedRow() > 0) {
-			severityModel.moveRow(severityNameTable.getSelectedRow(),
-								  severityNameTable.getSelectedRow(),
-								  severityNameTable.getSelectedRow() - 1);
-			severityNameTable.changeSelection(severityNameTable.getSelectedRow() -
-											  1, 0, false, false);
-		}
-	}
+    private void upActionPerformed() {
+        if (severityNameTable.getSelectedRow() > 0) {
+            List<Severity> serverities = ts.getAllSeverities();
+            Severity severity = serverities.get(severityNameTable.getSelectedRow());
+            serverities.remove(severityNameTable.getSelectedRow());
+            severityModel.moveRow(severityNameTable.getSelectedRow(),
+                    severityNameTable.getSelectedRow(),
+                    severityNameTable.getSelectedRow() - 1);
+            severityNameTable.changeSelection(severityNameTable.getSelectedRow()
+                    - 1, 0, false, false);
+            serverities.add(severityNameTable.getSelectedRow(), severity);
+            ts.addSeverities(serverities);
+        }
+    }
 
-	private void removeActionPerformed(java.awt.event.ActionEvent evt) {
-		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
-			severityModel.removeRow(severityNameTable.getSelectedRow());
-		}
-	}
+    private void removeActionPerformed() {
+        if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
+            severityModel.removeRow(severityNameTable.getSelectedRow());
+        }
+    }
 
-	private void addActionPerformed(java.awt.event.ActionEvent evt) {
-		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
-		severityNameTable.changeSelection(0, 0,
-										  false, false);
-	}
+    private void addActionPerformed() {
+        severityModel.insertRow(0, new Object[]{"", Color.BLACK});
+        severityNameTable.changeSelection(0, 0,
+                false, false);
+        List<Severity> serverities = ts.getAllSeverities();
+        Severity severity = new Severity("", Color.BLACK);
+        serverities.add(severity);
+        ts.addSeverities(serverities);
+    }
 
-	private void applySeverityActionPerformed(java.awt.event.ActionEvent evt) {
-		List<Object[]> list = new ArrayList<Object[]>();
+    private void applySeverityActionPerformed() {
+        List<Object[]> list = new ArrayList<Object[]>();
 
-		for(int i = 0; i < severityModel.getRowCount(); i++){
-			list.add(new Object[]{(String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)});
-		}
+        for (int i = 0; i < severityModel.getRowCount(); i++) {
+            list.add(new Object[]{(String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)});
+        }
 
-		ts.applySeverities(list);
-		loadSeverity();
-		removeLanguageTabs();
-		loadLanguageTabs();
-	}
+        ts.applySeverities(list);
+        loadSeverity();
+        removeLanguageTabs();
+        loadLanguageTabs();
+    }
 
-	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {
-		dispose();
-	}
+    private void cancelActionPerformed() {
+        dispose();
+    }
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButton1ActionPerformed() {
+    }
 
-	}
+    private void loadSeverity() {
+        clearModel(severityModel);
+        List<Severity> severities = ts.getAllSeverities();
+        for (Severity severity : severities) {
+            severityModel.addRow(new Object[]{severity.toString(),
+                        severity.getColor()});
+            severityModel.setRowColour(severityModel.getRowCount() - 1, severity.getColor());
+        }
 
-    private javax.swing.JButton add;
-    private javax.swing.JButton applySeverity;
-    private javax.swing.JButton cancel;
-    private javax.swing.JButton down;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JButton remove;
-    private javax.swing.JPanel severityNamePanel;
-    private javax.swing.JScrollPane severityNameScrollPane;
-    private javax.swing.JTable severityNameTable;
-    private javax.swing.JButton up;
+    }
 
-	private void loadSeverity() {
-		clearModel(severityModel);
-		List<Severity> severities = ts.getAllSeverities();
-		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.toString(),
-											  severity.getColor()});
-		}
+    private void clearModel(ColorTableModel model) {
+        while (0 < model.getRowCount()) {
+            model.removeRow(0);
+        }
+    }
 
-	}
+    private void loadLanguageTabs() {
+        for (String language : ts.getAvailableLanguages()) {
+            LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
+                    language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
+            jTabbedPane1.addTab(language, lcp);
+        }
+        if (ts.getAvailableLanguages().length == 0) {
+            jTabbedPane1.addTab("No programming language availible", new JPanel());
+        }
+    }
 
-	private void clearModel(ColorTableModel model) {
-		while (0 < model.getRowCount()) {
-			model.removeRow(0);
-		}
-	}
-
-	private void loadLanguageTabs(){
-		for (String language : ts.getAvailableLanguages()) {
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
-					language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
-			jTabbedPane1.addTab(language, lcp);
-		}
-	}
-
-	private void removeLanguageTabs(){
-		while(jTabbedPane1.getTabCount() > 1){
-			jTabbedPane1.remove(1);
-		}
-	}
+    private void removeLanguageTabs() {
+        while (jTabbedPane1.getTabCount() > 1) {
+            jTabbedPane1.remove(1);
+        }
+    }
 }
