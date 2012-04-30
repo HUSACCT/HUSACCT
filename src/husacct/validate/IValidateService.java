@@ -29,4 +29,5 @@ public interface IValidateService
 	public boolean isValidated();
 	public JInternalFrame getBrowseViolationsGUI();
 	public JInternalFrame getConfigurationGUI();
+	public void reloadGUI();
 }

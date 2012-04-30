@@ -125,4 +125,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		serviceImpl.checkConformance();
 
 	}
+
+	@Override
+	public void reloadGUI() {
+		//TODO write code to generate GUI
+	}
 }
