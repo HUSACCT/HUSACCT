@@ -39,7 +39,27 @@ public class AnalyseServiceImpl implements IAnalyseService{
 		return new AnalyzePanelGetRootModules();
 	}
 	
+	@Override
+	public AnalysedModuleDTO[] getRootModules() {
+		return service.getRootModules();
+	}
 	
+
+	@Override
+	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
+		return service.getChildModulesInModule(from);
+//		return stub.getChildModulesInModule(from);
+	}
+
+	@Override
+	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
+		return stub.getChildModulesInModule(from, depth);
+	}
+
+	@Override
+	public AnalysedModuleDTO getParentModuleForModule(String child) {
+		return stub.getParentModuleForModule(child);
+	}
 
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
@@ -69,25 +89,5 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	@Override
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
 		return stub.getDependenciesTo(to, dependencyFilter);
-	}
-		
-	@Override
-	public AnalysedModuleDTO[] getRootModules() {
-		return stub.getRootModules();
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		return stub.getChildModulesInModule(from);
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		return stub.getChildModulesInModule(from, depth);
-	}
-
-	@Override
-	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		return stub.getParentModuleForModule(child);
 	}
 }

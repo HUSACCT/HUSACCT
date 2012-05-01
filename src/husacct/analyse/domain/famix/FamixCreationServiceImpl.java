@@ -2,13 +2,13 @@ package husacct.analyse.domain.famix;
 
 import javax.naming.directory.InvalidAttributesException;
 
-import husacct.analyse.domain.ModelService;
+import husacct.analyse.domain.ModelCreationService;
 
-public class FamixModelServiceImpl implements ModelService{
+public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	private FamixModel model;
 	
-	public FamixModelServiceImpl(){
+	public FamixCreationServiceImpl(){
 		model = FamixModel.getInstance();
 	}
 	
@@ -80,6 +80,18 @@ public class FamixModelServiceImpl implements ModelService{
 		addToModel(exception);
 	}
 	
+	@Override
+	public void createInheritanceDefinition(String from, String to,
+			int lineNumber, String type) {
+		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition();
+		famixInheritanceDefinition.from = from;
+		famixInheritanceDefinition.to = to;
+		famixInheritanceDefinition.lineNumber = lineNumber;
+		famixInheritanceDefinition.type = type;
+		addToModel(famixInheritanceDefinition);
+
+	}
+	
 	private boolean addToModel(FamixObject newObject){
 		try {
 			model.addObject(newObject);
@@ -99,5 +111,25 @@ public class FamixModelServiceImpl implements ModelService{
 	
 	public String represent(){
 		return model.toString();
+	}
+
+	@Override
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature, boolean isPureAccessor, String declaredReturnType,
+			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
+		
+		FamixMethod famixMethod = new FamixMethod();
+		famixMethod.name = name;
+		famixMethod.uniqueName = uniqueName;
+
+		famixMethod.accessControlQualifier = accessControlQualifier;
+		famixMethod.signature = signature;
+		famixMethod.isPureAccessor = isPureAccessor;
+		famixMethod.declaredReturnType = declaredReturnType;
+
+		famixMethod.belongsToClass = belongsToClass;
+		famixMethod.isConstructor = isConstructor;
+		famixMethod.isAbstract = isAbstract;
+		famixMethod.hasClassScope = hasClassScope;
+		addToModel(famixMethod);
 	}
 }

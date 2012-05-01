@@ -16,16 +16,13 @@ public class AnalyzeGUI extends JFrame {
 	} 
 	
 	private void addMainPanel() { 
-		
 		AnalyzeTabPanel tabPanel = new AnalyzeTabPanel(); 
 		JInternalFrame container = new JInternalFrame();
-		
 		container.setVisible(true);
 		container.add(tabPanel);
 		container.setTitle("Software Analysis Tool");
 		container.setPreferredSize(new Dimension(300,300));
 		this.add(container);
- 
 	}
 
 	private void setFrameSettings(){ 
@@ -33,8 +30,7 @@ public class AnalyzeGUI extends JFrame {
 		this.setPreferredSize(frameSize);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-	    //this.setTitle("Software analysis tool");
-		this.setTitle("JFRAME !");
+		this.setTitle("HUSACCT Debugging Front End: Analyse Application");
 	}
 	
 

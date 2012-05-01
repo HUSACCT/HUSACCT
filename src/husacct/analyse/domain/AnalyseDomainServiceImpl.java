@@ -1,16 +1,49 @@
 package husacct.analyse.domain;
 
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import java.util.List;
+import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 
-	private ModelService modelManager;
+	private ModelQueryService queryService;
 
 	public AnalyseDomainServiceImpl(){
-		this.modelManager = new FamixModelServiceImpl();
+		this.queryService = new FamixQueryServiceImpl();
 	}	
+	
+	@Override
+	public AnalysedModuleDTO[] getRootModules() {
+		List<AnalysedModuleDTO> rootModuleList = queryService.getRootModules();
+		AnalysedModuleDTO[] rootModules = new AnalysedModuleDTO[rootModuleList.size()];
+		for(int i=0; i<rootModuleList.size(); i++){
+			rootModules[i] = rootModuleList.get(i);
+		}
+		return rootModules;
+	}
+	
+	@Override
+	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
+		List<AnalysedModuleDTO> childModules = queryService.getChildModulesInModule(from);
+		AnalysedModuleDTO[] childs = new AnalysedModuleDTO[childModules.size()];
+		for(int i=0; i<childModules.size(); i++){
+			childs[i] = childModules.get(i);
+		}
+		return childs;
+	}
+
+	@Override
+	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
+		//TODO Implement Service
+		return null;
+	}
+
+	@Override
+	public AnalysedModuleDTO getParentModuleForModule(String child) {
+		// TODO Implement Service
+		return null;
+	}
 	
 	@Override
 	public DependencyDTO[] getDependency(String from, String to) {
@@ -22,29 +55,5 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 	public DependencyDTO[] getDependency(String from) {
 		//TODO Implement Service
 		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		//TODO Implement Service
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		//TODO Implement Service
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getRootModules() {
-		// TODO Implement Service
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO Implement Service
-		return null;
-	}
+	}	
 }

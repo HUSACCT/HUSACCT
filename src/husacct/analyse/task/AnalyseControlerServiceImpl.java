@@ -26,31 +26,15 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 		return analyserService.getAvailableLanguages();
 	}
 	
-	
-	
-
-	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
-		// TODO Implement Service
-		return null;
-	}
-
-	@Override
-	public DependencyDTO[] getDependency(String from) {
-		// TODO Implement Service
-		return null;
-	}
-
 	@Override
 	public AnalysedModuleDTO[] getRootModules() {
-		// TODO Implement Service
-		return null;
+		return domainService.getRootModules();
 	}
+	
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		// TODO Implement Service
-		return null;
+		return domainService.getChildModulesInModule(from);
 	}
 
 	@Override
@@ -61,6 +45,18 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
+		// TODO Implement Service
+		return null;
+	}
+
+	@Override
+	public DependencyDTO[] getDependency(String from, String to) {
+		// TODO Implement Service
+		return null;
+	}
+
+	@Override
+	public DependencyDTO[] getDependency(String from) {
 		// TODO Implement Service
 		return null;
 	}

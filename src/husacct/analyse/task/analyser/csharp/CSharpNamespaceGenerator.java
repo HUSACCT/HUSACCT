@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.csharp;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class CSharpNamespaceGenerator {
 			namespaceString += commonTree.getText();
 		}
 		namespaceString = namespaceString.split("namespace")[1];
-		ModelService ms = new FamixModelServiceImpl();
+		ModelCreationService ms = new FamixCreationServiceImpl();
 		String belongsToPackage = namespaceString.substring(0, namespaceString.lastIndexOf("."));
 		String name = namespaceString.substring(namespaceString.lastIndexOf(".")+1,namespaceString.length());
 		ms.createPackage(namespaceString, belongsToPackage, name);

@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.csharp;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class CSharpClassGenerator {
 
 
 	public CSharpClassGenerator(List<CommonTree> classTrees, String string) {
-		ModelService ms = new FamixModelServiceImpl();
+		ModelCreationService ms = new FamixCreationServiceImpl();
 		String uniqueName = null;
 		String name = string;
 		boolean isAbstract = false;

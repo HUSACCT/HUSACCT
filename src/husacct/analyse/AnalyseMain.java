@@ -1,20 +1,19 @@
 package husacct.analyse;
 
 import javax.swing.UIManager;
-
 import husacct.ServiceProvider;
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
-import husacct.analyse.presentation.AnalyzeFramePackages;
-import husacct.analyse.presentation.AnalyzeGUI;
+import husacct.analyse.domain.AnalyseDomainService;
+import husacct.analyse.domain.AnalyseDomainServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.presentation.AnalyseDebuggingFrame;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
 import husacct.define.IDefineService;
 
 public class AnalyseMain {
 	public static void main(String[] args){
 		
-		//Test COmment Voor Rensie Lange Jan
-		
-		//Test Analyse-service
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
@@ -24,16 +23,14 @@ public class AnalyseMain {
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
-		ModelService service = new FamixModelServiceImpl();
-//		service.printModel();
 		
-		//Test All Query-services via output in frame!
+		ModelCreationService model = new FamixCreationServiceImpl();
+		System.out.println(model.represent());
+		
 		try {  
 	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
-	     } catch (Exception ex) {
-	     }
+	     } catch (Exception ex) { }
 		
-//		new AnalyzeGUI(); 
-		new AnalyzeFramePackages(service.represent());
+		new AnalyseDebuggingFrame();
 	}
 }

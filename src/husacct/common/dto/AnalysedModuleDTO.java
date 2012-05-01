@@ -26,4 +26,13 @@ public class AnalysedModuleDTO extends AbstractDTO{
 		this.visibility = "";
 		this.subModules = subModules;
 	}
+	
+	public String toString(){
+		String result = "";
+		result += "Type: " + type + "\n";
+		result += "Uniqename: " + uniqueName + "\n";
+		result += "name: " + name + "\n";
+		result += "Visibility: " + visibility + "\n";
+		return result;
+	}
 }

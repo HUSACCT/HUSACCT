@@ -1,17 +1,11 @@
 package husacct.analyse.presentation;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
 
 public class AnalyzeTabPanel extends JTabbedPane{
+	
 	private static final long serialVersionUID = 1L;
 
 	public AnalyzeTabPanel() {
@@ -27,6 +21,7 @@ public class AnalyzeTabPanel extends JTabbedPane{
 		tabStart.analyseButton.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent arg0) { setSelectedIndex(1);}
 		});
+		
 		// getRootDependButton Button Panel-DepOver - show packages in a new JFrame! 
 		tabDependencyOverview.getRootDependButton.addActionListener(new ActionListener() {
 			@Override

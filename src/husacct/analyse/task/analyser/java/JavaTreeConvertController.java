@@ -26,7 +26,7 @@ class JavaTreeConvertController {
     	Tree packageTree = completeTree.getFirstChildWithType(JavaParser.PACKAGE);
     	if(hasPackageElement(completeTree)){
     		delegatePackage(packageTree);
-    	}else this.thePackage = "";
+    	} else this.thePackage = "";
     	Tree classTree = completeTree.getFirstChildWithType(JavaParser.CLASS);
     	this.theClass = this.currentClass = delegateClass(classTree, false);
     	this.parentClass = theClass;
@@ -49,8 +49,16 @@ class JavaTreeConvertController {
         				delegateImport((CommonTree)treeNode);
         				tree.deleteChild(treeNode.getChildIndex());
         			}
+    				if(nodeType == JavaParser.IMPLEMENTS_CLAUSE || nodeType == JavaParser.EXTENDS_CLAUSE ){
+        				delegateInheritanceDefinition((CommonTree)treeNode);
+        				tree.deleteChild(treeNode.getChildIndex());
+        			}
         			if(nodeType == JavaParser.VAR_DECLARATION ){
         				delegateAttribute(treeNode);
+        				tree.deleteChild(treeNode.getChildIndex());
+        			}
+        			if(nodeType == JavaParser.FUNCTION_METHOD_DECL || nodeType == JavaParser.CONSTRUCTOR_DECL || nodeType == JavaParser.VOID_METHOD_DECL){
+        				delegateMethod(treeNode);
         				tree.deleteChild(treeNode.getChildIndex());
         			}
         			if(nodeType == JavaParser.THROW || nodeType == JavaParser.CATCH || nodeType == JavaParser.THROWS){
@@ -63,30 +71,40 @@ class JavaTreeConvertController {
     	}
 	}
         
-	public void delegatePackage(Tree packageTree){ 
+    private void delegatePackage(Tree packageTree){ 
        	JavaPackageGenerator javaPackageGenerator = new JavaPackageGenerator(); 
         this.thePackage = javaPackageGenerator.generateModel((CommonTree)packageTree); 
 	} 
         
-    public String delegateClass(Tree classTree, boolean isInnerClass){ 
+    private String delegateClass(Tree classTree, boolean isInnerClass){ 
       	JavaClassGenerator javaClassGenerator = new JavaClassGenerator(thePackage); 
       	String analysedClass;
       	if(isInnerClass) analysedClass = javaClassGenerator.generateModel((CommonTree)classTree, parentClass);
       	else analysedClass = javaClassGenerator.generateModel((CommonTree)classTree);
         return analysedClass;
     } 
+    
+    private void delegateInheritanceDefinition(CommonTree treeNode) {
+		JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
+		javaInheritanceDefinitionGenerator.generateModelObject(treeNode, this.theClass);
+	}
         
-    public void delegateImport(CommonTree importTree){ 
+    private void delegateImport(CommonTree importTree){ 
        	JavaImportGenerator javaImportGenerator = new JavaImportGenerator(); 
        	javaImportGenerator.generateFamixImport(importTree, this.currentClass); 
     }
     
-    public void delegateAttribute(Tree attributeTree){
+    private void delegateAttribute(Tree attributeTree){
     	JavaAttributeGenerator javaAttributeGenerator = new JavaAttributeGenerator();
     	javaAttributeGenerator.generateModel(attributeTree, this.currentClass);
     }
     
-    public void delegateException(Tree exceptionTree){
+    private void delegateMethod(Tree methodTree){
+    	JavaMethodGenerator methodGenerator = new JavaMethodGenerator();
+    	methodGenerator.generateModelObject((CommonTree)methodTree, this.currentClass);
+    }
+    
+    private void delegateException(Tree exceptionTree){
     	JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator();
     	exceptionGenerator.generateModel((CommonTree)exceptionTree, this.currentClass);
     }

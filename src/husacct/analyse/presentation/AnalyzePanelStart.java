@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class AnalyzePanelStart extends JInternalFrame {  
+	
 	private static final long serialVersionUID = 1L;
 	public JTextField urlInputField;
 	private JComboBox languageCombo;
