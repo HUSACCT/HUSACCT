@@ -22,8 +22,8 @@ import java.util.List;
 public class IsOnlyModuleAllowedToUseRule extends RuleType{
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	public IsOnlyModuleAllowedToUseRule(String key, String category, List<ViolationType> violationtypes) {
-		super(key, category, violationtypes, exceptionrules);
+	public IsOnlyModuleAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override

@@ -113,6 +113,7 @@ public class TestFrame extends javax.swing.JFrame {
 		JInternalFrame bv = impl.getBrowseViolationsGUI();
 
 		bv.setBounds(0, 0, 800, 600);
+		bv.setVisible(true);
 		this.ggt.add(bv);
 		bv.moveToFront();
 	}//GEN-LAST:event_jButton1ActionPerformed
@@ -122,6 +123,7 @@ public class TestFrame extends javax.swing.JFrame {
 		JInternalFrame cgui = impl.getConfigurationGUI();
 
 		cgui.setBounds(10, 10, 800, 600);
+		cgui.setVisible(true);
 		this.ggt.add(cgui);
 		cgui.moveToFront();
 	}//GEN-LAST:event_jButton2ActionPerformed
