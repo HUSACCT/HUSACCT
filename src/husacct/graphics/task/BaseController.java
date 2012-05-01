@@ -12,8 +12,8 @@ import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
-import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.JInternalFrame;
 
@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public abstract class BaseController implements MouseClickListener {
 	
 	private final int ITEMS_PER_ROW = 4;
-	
+		
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
@@ -70,6 +70,9 @@ public abstract class BaseController implements MouseClickListener {
 	public void clearDrawing() {
 		this.figureDTOMap.clear();
 		this.dependencyFigureMap.clear();
+		this.violatedModuleDTOMap.clear();
+		this.violationFigureMap.clear();
+		
 		this.drawing.clear();
 		this.view.clearSelection();
 	}
@@ -216,7 +219,7 @@ public abstract class BaseController implements MouseClickListener {
 				getAndDrawDependenciesBetween(figureFrom, figureTo);
 			}
 		}
-		sizeDependencyFigures();
+		sizeRelationFigures(this.dependencyFigureMap);
 	}
 
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
@@ -230,30 +233,6 @@ public abstract class BaseController implements MouseClickListener {
 	}
 	
 	protected abstract DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo);
-	
-	private void sizeDependencyFigures() {
-		// max amounts of dependencies
-		int maxAmount = -1;
-		for(RelationFigure fig : this.dependencyFigureMap.keySet()) {
-			int length = this.dependencyFigureMap.get(fig).length;
-			
-			if(maxAmount == -1 || maxAmount < length) {
-				maxAmount = length;
-			}
-		}
-		
-		// set line thickness according to scale
-		for(RelationFigure fig : this.dependencyFigureMap.keySet()) {
-			double weight = (double)this.dependencyFigureMap.get(fig).length/maxAmount;
-			if(weight < 0.33) {
-				fig.setLineThickness(1);
-			} else if (weight < 0.66) {
-				fig.setLineThickness(2);
-			} else {
-				fig.setLineThickness(4);
-			}			
-		}
-	}
 	
 	// violations
 	
@@ -270,6 +249,7 @@ public abstract class BaseController implements MouseClickListener {
 				}
 			}
 		}
+		this.sizeRelationFigures(violationFigureMap);
 	}
 	
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
@@ -291,4 +271,56 @@ public abstract class BaseController implements MouseClickListener {
 	}
 	
 	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
+	
+	private void sizeRelationFigures(HashMap<RelationFigure, ? extends AbstractDTO[]> figures) {
+		// 1 relation, small
+		if(figures.size() == 1) {
+			figures.keySet().iterator().next().setLineThickness(1);
+		}
+		// 2 relations; both small, or one slightly bigger 
+		else if (figures.size() == 2) {
+			Iterator<RelationFigure> iterator = figures.keySet().iterator();
+			RelationFigure figure1 = iterator.next();
+			RelationFigure figure2 = iterator.next();
+			int length1 = figures.get(figure1).length;
+			int length2 = figures.get(figure2).length;
+			
+			if(length1 == length2) {
+				figure1.setLineThickness(1);
+				figure2.setLineThickness(1);
+			}
+			else if (length1 < length2) {
+				figure1.setLineThickness(1);
+				figure2.setLineThickness(2);
+			}
+			else { // length1 > length2
+				figure1.setLineThickness(2);
+				figure2.setLineThickness(1);
+			}
+		}
+		// 3 ore more relations; small, big or fat, according to scale
+		else if (figures.size() >= 3) {
+			// max amounts of dependencies
+			int maxAmount = -1;
+			for(RelationFigure fig : figures.keySet()) {
+				int length = figures.get(fig).length;
+				
+				if(maxAmount == -1 || maxAmount < length) {
+					maxAmount = length;
+				}
+			}
+			
+			// set line thickness according to scale
+			for(RelationFigure fig : figures.keySet()) {
+				double weight = (double)figures.get(fig).length/maxAmount;
+				if(weight < 0.33) {
+					fig.setLineThickness(1);
+				} else if (weight < 0.66) {
+					fig.setLineThickness(3);
+				} else {
+					fig.setLineThickness(4);
+				}			
+			}
+		}
+	}
 }

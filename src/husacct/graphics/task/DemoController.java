@@ -1,7 +1,5 @@
 package husacct.graphics.task;
 
-import java.util.ArrayList;
-
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
@@ -9,7 +7,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.NamedFigure;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
 
 public class DemoController extends BaseController {
 
