@@ -1,6 +1,5 @@
 package husacct.graphics;
 
-import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
@@ -16,7 +15,6 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	private DefinedController definedController;
 
 	public GraphicsServiceImpl() {
-		ServiceProvider.getInstance().getAnalyseService();
 	}
 
 	private void createControllers() {
@@ -76,5 +74,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	public void loadWorkspaceData(Element workspaceData) {
 		createControllers();
 		//TODO: Set workspace data.
+		// - Last known location of export to Image?
+		// - show violations = on/off?
 	}
 }
