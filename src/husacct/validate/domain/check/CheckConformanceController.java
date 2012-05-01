@@ -23,12 +23,12 @@ public class CheckConformanceController {
 	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
 
-	public CheckConformanceController(ConfigurationServiceImpl configuration){
+	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory){
 		this.configuration = configuration;
 		this.configuration.clearViolations();
 		this.violations = new ArrayList<Violation>();
 		this.ruleCache = new HashMap<String, RuleType>();
-		this.ruleFactory = new RuleTypesFactory();
+		this.ruleFactory = ruleFactory;
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules){

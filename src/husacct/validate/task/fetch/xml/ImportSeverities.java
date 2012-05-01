@@ -1,4 +1,4 @@
-package husacct.validate.abstraction.fetch.xml;
+package husacct.validate.task.fetch.xml;
 
 import husacct.validate.domain.validation.Severity;
 

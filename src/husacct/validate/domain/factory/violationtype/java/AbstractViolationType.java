@@ -57,7 +57,7 @@ public abstract class AbstractViolationType {
 			return new ViolationType(violationKey);
 		}
 		else{
-			logger.warn(String.format("Warning specified %s not found", violationKey));			
+			logger.warn(String.format("Warning specified %s not found in the system", violationKey));			
 		}
 		throw new ViolationTypeNotFoundException();
 	}

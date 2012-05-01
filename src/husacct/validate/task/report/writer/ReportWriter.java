@@ -1,8 +1,8 @@
 package husacct.validate.task.report.writer;
 
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
 import java.io.IOException;

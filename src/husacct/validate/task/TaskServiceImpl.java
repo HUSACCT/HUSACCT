@@ -8,20 +8,25 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.presentation.TableModels.ColorTableModel;
-import husacct.validate.presentation.TableModels.ComboBoxTableModel;
+import husacct.validate.task.export.ExportController;
+import husacct.validate.task.extensiontypes.ExtensionTypes;
+import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+
+import org.jdom2.Element;
 
 
 public class TaskServiceImpl implements ITaskService{
 	private final FilterController filterController;
-	private final ConfigurationController conficurationController;
+	private final ConfigurationController configurationController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final AnalyseServiceStub acs;
@@ -29,10 +34,10 @@ public class TaskServiceImpl implements ITaskService{
 
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
-		this.domain = domain;
-		filterController = new FilterController(this);
+		this.domain = domain;				
+		filterController = new FilterController(this, domain.getRuleTypesFactory());
 		acs = new AnalyseServiceStub();
-		conficurationController = new ConfigurationController(this);
+		configurationController = new ConfigurationController(this);
 	}
 
 	public List<Violation> getAllViolations(){
@@ -69,9 +74,7 @@ public class TaskServiceImpl implements ITaskService{
 	@Override
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {
 		return domain.getAllRuleTypes(language);
-	}
-	
-	
+	}	
 
 	@Override
 	public List<Severity> getAllSeverities(){
@@ -104,7 +107,7 @@ public class TaskServiceImpl implements ITaskService{
 
 	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
 
-		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language.toLowerCase(), map);
 	}
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
@@ -116,5 +119,28 @@ public class TaskServiceImpl implements ITaskService{
 	public Map<String, List<ViolationType>> getViolationTypes(
 			String language) {
 		return domain.getAllViolationTypes(language);
+	}
+	
+	public Severity getSeverityFromKey(String language, String key){
+		return configuration.getSeverityFromKey(language, key);
+	}
+	
+	public void importValidationWorkspace(Element element) throws DatatypeConfigurationException   {
+		ImportController importController = new ImportController(element);
+		configuration.addSeverities(importController.getSeverities());
+		configuration.addViolations(importController.getViolations());
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(importController.getSeveritiesPerTypesPerProgrammingLanguages());
+	}
+	public Element exportValidationWorkspace() {
+		Element rootValidateElement = new Element("validate");
+		ExportController exportController = new ExportController();
+		rootValidateElement.addContent(exportController.exportViolationsXML(configuration.getAllViolations()));
+		rootValidateElement.addContent(exportController.exportSeveritiesXML(configuration.getAllSeverities()));
+		rootValidateElement.addContent(exportController.exportSeveritiesPerTypesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
+		return rootValidateElement;
+	}
+	
+	public String[] getExportExtentions() {
+		return new ExtensionTypes().getExtensionTypes();
 	}
 }
