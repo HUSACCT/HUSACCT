@@ -21,7 +21,7 @@ public class PackageFigure extends NamedFigure
 	
 	public PackageFigure(String name)
 	{
-		super(name);
+		super(name, false);
 		
 		top = new RectangleFigure();
 		body = new RectangleFigure();
@@ -79,5 +79,15 @@ public class PackageFigure extends NamedFigure
 		other.children.add(other.text);
 		
 		return other;
+	}
+	
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
 	}
 }
