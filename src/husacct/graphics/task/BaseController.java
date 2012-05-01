@@ -9,10 +9,10 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
-import husacct.graphics.presentation.figures.NamedFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
@@ -216,8 +216,9 @@ public abstract class BaseController implements MouseClickListener {
 				getAndDrawDependenciesBetween(figureFrom, figureTo);
 			}
 		}
+		sizeDependencyFigures();
 	}
-	
+
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		DependencyDTO[] dependencies = (DependencyDTO[])getDependenciesBetween(figureFrom, figureTo);
 		if(dependencies.length > 0) {
@@ -229,6 +230,30 @@ public abstract class BaseController implements MouseClickListener {
 	}
 	
 	protected abstract DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo);
+	
+	private void sizeDependencyFigures() {
+		// max amounts of dependencies
+		int maxAmount = -1;
+		for(RelationFigure fig : this.dependencyFigureMap.keySet()) {
+			int length = this.dependencyFigureMap.get(fig).length;
+			
+			if(maxAmount == -1 || maxAmount < length) {
+				maxAmount = length;
+			}
+		}
+		
+		// set line thickness according to scale
+		for(RelationFigure fig : this.dependencyFigureMap.keySet()) {
+			double weight = (double)this.dependencyFigureMap.get(fig).length/maxAmount;
+			if(weight < 0.33) {
+				fig.setLineThickness(1);
+			} else if (weight < 0.66) {
+				fig.setLineThickness(2);
+			} else {
+				fig.setLineThickness(4);
+			}			
+		}
+	}
 	
 	// violations
 	

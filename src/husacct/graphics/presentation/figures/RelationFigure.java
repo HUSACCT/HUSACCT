@@ -36,11 +36,6 @@ public class RelationFigure extends NamedFigure
 		
 		this.line = new LineConnectionFigure();
 		this.add(this.line);
-		
-		this.setLineStroke(new double[]{ 6.0 });
-
-		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
-		this.set(AttributeKeys.END_DECORATION, arrowTip);
 
 		this.amountFigure = new TextFigure(Integer.toString(amount));
 		this.add(this.amountFigure);
@@ -77,12 +72,14 @@ public class RelationFigure extends NamedFigure
 		set(AttributeKeys.STROKE_WIDTH, thickness);
 	}
 	
-	public void setLineStroke(double[] stroke) {
-		set(AttributeKeys.STROKE_DASHES, stroke);
-	}
-	
 	@Override
 	public void draw(Graphics2D graphics) {
+		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
+		this.set(AttributeKeys.END_DECORATION, arrowTip);
+		
+		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH); 
+		set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });		
+		
 		if(this.isViolated()) {
 			this.amountFigure.set(AttributeKeys.TEXT_COLOR, Color.RED);
 		}

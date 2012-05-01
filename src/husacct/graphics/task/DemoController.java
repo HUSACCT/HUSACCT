@@ -1,5 +1,7 @@
 package husacct.graphics.task;
 
+import java.util.ArrayList;
+
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
@@ -15,7 +17,7 @@ public class DemoController extends BaseController {
 	
 	public DemoController() {
 		
-		AbstractDTO[] modules = new AbstractDTO[4];
+		AbstractDTO[] modules = new AbstractDTO[5];
 		
 		ModuleDTO presentationLayer = new ModuleDTO();
 		presentationLayer.type = "layer";
@@ -29,13 +31,18 @@ public class DemoController extends BaseController {
 		
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
-		infrastructureLayer.logicalPath = "Infrastructure layer";
+		infrastructureLayer.logicalPath = "infrastructure";
 		modules[2] = infrastructureLayer;
-
+		
 		ModuleDTO domainLayer = new ModuleDTO();
 		domainLayer.type = "layer";
-		domainLayer.logicalPath = "Domain layer";
+		domainLayer.logicalPath = "domain";
 		modules[3] = domainLayer;
+
+		ModuleDTO testLayer = new ModuleDTO();
+		testLayer.type = "layer";
+		testLayer.logicalPath = "test";
+		modules[4] = testLayer;
 		
 		this.drawModules(modules);
 
@@ -66,15 +73,55 @@ public class DemoController extends BaseController {
 		NamedFigure figFrom = (NamedFigure)figureFrom;
 		NamedFigure figTo = (NamedFigure)figureTo;
 		
-		DependencyDTO[] dependencies = new DependencyDTO[0];
+		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 		
 		if(figFrom.getName().equals("presentation") && figTo.getName().equals("task")){
-			dependencies = new DependencyDTO[1];
-			DependencyDTO taskLayerDep1 = new DependencyDTO("task","presentation","wa",1);
-			dependencies[0] = taskLayerDep1;
+			dependencies.add(new DependencyDTO("task","presentation","wa",1));
 		}
 		
-		return dependencies;
+		if(figFrom.getName().equals("task") && figTo.getName().equals("domain")) {
+			dependencies.add(new DependencyDTO("task","domain","wa",1));
+			dependencies.add(new DependencyDTO("task","domain","wa",2));
+			dependencies.add(new DependencyDTO("task","domain","wa",3));
+		}
+
+		if(figFrom.getName().equals("domain") && figTo.getName().equals("infrastructure")) {
+			dependencies.add(new DependencyDTO("task","domain","wa",1));
+			dependencies.add(new DependencyDTO("task","domain","wa",2));
+			dependencies.add(new DependencyDTO("task","domain","wa",3));
+			dependencies.add(new DependencyDTO("task","domain","wa",4));
+			dependencies.add(new DependencyDTO("task","domain","wa",5));
+			dependencies.add(new DependencyDTO("task","domain","wa",6));
+		}
+		
+		if(figFrom.getName().equals("infrastructure") && figTo.getName().equals("test")) {
+			dependencies.add(new DependencyDTO("task","domain","wa",1));
+			dependencies.add(new DependencyDTO("task","domain","wa",2));
+			dependencies.add(new DependencyDTO("task","domain","wa",3));
+			dependencies.add(new DependencyDTO("task","domain","wa",4));
+			dependencies.add(new DependencyDTO("task","domain","wa",5));
+			dependencies.add(new DependencyDTO("task","domain","wa",6));
+			dependencies.add(new DependencyDTO("task","domain","wa",7));
+			dependencies.add(new DependencyDTO("task","domain","wa",8));
+			dependencies.add(new DependencyDTO("task","domain","wa",9));
+			dependencies.add(new DependencyDTO("task","domain","wa",10));
+			dependencies.add(new DependencyDTO("task","domain","wa",11));
+			dependencies.add(new DependencyDTO("task","domain","wa",12));
+			dependencies.add(new DependencyDTO("task","domain","wa",1));
+			dependencies.add(new DependencyDTO("task","domain","wa",2));
+			dependencies.add(new DependencyDTO("task","domain","wa",3));
+			dependencies.add(new DependencyDTO("task","domain","wa",4));
+			dependencies.add(new DependencyDTO("task","domain","wa",5));
+			dependencies.add(new DependencyDTO("task","domain","wa",6));
+			dependencies.add(new DependencyDTO("task","domain","wa",7));
+			dependencies.add(new DependencyDTO("task","domain","wa",8));
+			dependencies.add(new DependencyDTO("task","domain","wa",9));
+			dependencies.add(new DependencyDTO("task","domain","wa",10));
+			dependencies.add(new DependencyDTO("task","domain","wa",11));
+			dependencies.add(new DependencyDTO("task","domain","wa",12));
+		}
+		
+		return dependencies.toArray(new DependencyDTO[]{});
 	}
 
 	@Override
@@ -84,7 +131,7 @@ public class DemoController extends BaseController {
 		
 		ViolationDTO[] violations = new ViolationDTO[0];
 		
-		if(figFrom.getName().equals("Domain layer") && figTo.getName().equals("Infrastructure layer")) {
+		if(figFrom.getName().equals("domain") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
 			ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
 			violations[0] = taskLayerErr1;
