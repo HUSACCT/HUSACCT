@@ -3,7 +3,9 @@ package husacct.graphics.task;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.ViolationTypeDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.NamedFigure;
 
@@ -129,20 +131,28 @@ public class DemoController extends BaseController {
 		
 		ViolationDTO[] violations = new ViolationDTO[0];
 		
+		//From ValidateServiceStub.java
+		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor","InvocConstructorDescription", false);
+		ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
+		ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements","ImplementsDescription", false);
+		ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
+		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse","IsNotAllowedToUseDescription",
+				new ViolationTypeDTO[] { constructorCall,extendingAbstractClass,implementationOfInterface,extendClass }, new RuleTypeDTO[] {});
+		
 		if(figFrom.getName().equals("domain") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 1", 1);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 2", 1);
 			violations[1] = taskLayerErr2;
 		}
 		
 		
 		if(figFrom.getName().equals("task") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO(null, null, "error1", null, null, null, null);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 2", 1);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO(null, null, "error2", null, null, null, null);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 2", 1);
 			violations[1] = taskLayerErr2;			
 		}
 		

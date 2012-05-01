@@ -26,16 +26,16 @@ public final class FigureFactory {
 		}
 		
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " 
-				+ violationDTOs[0].getFromClasspath() + " to " + violationDTOs[0].getToClasspath(), 
+				+ violationDTOs[0].fromClasspath + " to " + violationDTOs[0].toClasspath, 
 				true, violationDTOs.length);
 		
 		// get the highest severity color
 		int highestSeverity = -1;
 		Color highestColor = null;
 		for(ViolationDTO dto : violationDTOs) {
-			if(dto.getValue() > highestSeverity) {
-				highestSeverity = dto.getValue();
-				highestColor = dto.getSeverityColor();
+			if(dto.severityValue > highestSeverity) {
+				highestSeverity = dto.severityValue;
+				highestColor = dto.severityColor;
 			}
 		}
 		if(highestColor != null) {

@@ -34,11 +34,11 @@ public class ViolationsDecorator extends Decorator {
 		int value;
 		
 		for (ViolationDTO dto : violations) {
-			value = dto.getValue();
+			value = dto.severityValue;
 			
 			if (value > highestValue) {
 				highestValue = value;
-				severityColor = dto.getSeverityColor();
+				severityColor = dto.severityColor;
 			}
 		}
 	}	

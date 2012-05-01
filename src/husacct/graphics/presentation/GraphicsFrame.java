@@ -167,12 +167,12 @@ public class GraphicsFrame extends JInternalFrame {
 			String ruleTypeDescription = "none";
 			String violationTypeDescription = "none";
 
-			if (violation.getRuleType() != null) {
-				ruleTypeDescription = violation.getRuleType().getDescriptionKey();
+			if (null != violation.ruleType) {
+				ruleTypeDescription = violation.ruleType.getDescriptionKey();
 			}
 
-			if (violation.getViolationType() != null) {
-				violationTypeDescription = violation.getViolationType().getDescriptionKey();
+			if (null != violation.violationType) {
+				violationTypeDescription = violation.violationType.getDescriptionKey();
 			}
 
 			String message = "this was implement with a MessageDTO, "
