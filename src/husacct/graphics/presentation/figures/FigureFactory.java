@@ -1,5 +1,7 @@
 package husacct.graphics.presentation.figures;
 
+import java.awt.Color;
+
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -26,6 +28,19 @@ public final class FigureFactory {
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " 
 				+ violationDTOs[0].getFromClasspath() + " to " + violationDTOs[0].getToClasspath(), 
 				true, violationDTOs.length);
+		
+		// get the highest severity color
+		int highestSeverity = -1;
+		Color highestColor = null;
+		for(ViolationDTO dto : violationDTOs) {
+			if(dto.getValue() > highestSeverity) {
+				highestSeverity = dto.getValue();
+				highestColor = dto.getSeverityColor();
+			}
+		}
+		if(highestColor != null) {
+			violatedRelationFigure.setLineColor(highestColor);
+		}
 		
 		return violatedRelationFigure;
 	}

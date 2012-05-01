@@ -54,18 +54,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	protected void drawStroke(Graphics2D g) {
 		// Empty
 	}
-	
-	@Override
-	public void draw(Graphics2D graphics) {
-		if(this.isViolated()) {
-			this.setStrokeColor(Color.RED);
-		}
-		else {
-			this.setStrokeColor(Color.BLACK);
-		}
-		
-		super.draw(graphics);
-	}
 
 	@Override
 	public BaseFigure clone() {

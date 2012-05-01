@@ -78,11 +78,7 @@ public class RelationFigure extends NamedFigure
 		this.set(AttributeKeys.END_DECORATION, arrowTip);
 		
 		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH); 
-		set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });		
-		
-		if(this.isViolated()) {
-			this.amountFigure.set(AttributeKeys.TEXT_COLOR, Color.RED);
-		}
+		set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });
 		
 		super.draw(graphics);
 	}
