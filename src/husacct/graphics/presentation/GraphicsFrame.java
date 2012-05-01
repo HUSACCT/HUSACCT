@@ -1,6 +1,5 @@
 package husacct.graphics.presentation;
 
-import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.task.MouseClickListener;
@@ -176,8 +175,8 @@ public class GraphicsFrame extends JInternalFrame {
 				violationTypeDescription = violation.getViolationType().getDescriptionKey();
 			}
 
-			String message = ServiceProvider.getInstance().getValidateService()
-					.buildDefinedRuleMessage(violation.getMessage());
+			String message = "this was implement with a MessageDTO, "
+					+ "but will be implemented using errorMessage property"; //TODO
 
 			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription });
 		}

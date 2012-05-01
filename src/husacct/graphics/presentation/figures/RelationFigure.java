@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.figures;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -11,48 +12,61 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.handle.BezierNodeHandle;
 import org.jhotdraw.draw.handle.BezierOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends NamedFigure implements ConnectionFigure
+public class RelationFigure extends NamedFigure 
+		implements ConnectionFigure, FigureListener
 {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
+	private TextFigure amountFigure;
 
-	public RelationFigure(String name)
+	public RelationFigure(String name, boolean violated, int amount)
 	{		
-		super(name);
+		super(name, violated);
 		
 		this.line = new LineConnectionFigure();
-		
 		this.add(this.line);
-
+		
 		this.setLineStroke(new double[]{ 6.0 });
 
 		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
 		this.set(AttributeKeys.END_DECORATION, arrowTip);
+
+		this.amountFigure = new TextFigure(Integer.toString(amount));
+		this.add(this.amountFigure);
+		
+		line.addFigureListener(this);
 	}
 	
 	
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
-	{
-		line.setBounds(anchor, lead);
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		line.updateConnection();
+		this.relayout();
+	}
+
+	private void relayout() {		
+		double midX = line.getBounds().x + line.getBounds().width/2;
+		double midY = line.getBounds().y + line.getBounds().height/2;
 		
-		this.invalidate();
+		this.amountFigure.willChange();
+		this.amountFigure.setBounds(new Point2D.Double(midX, midY), null);
+		this.amountFigure.changed();
 	}
 	
-	public void transform(AffineTransform tx) {
-		
-		line.transform(tx);
+	public void transform(AffineTransform tx) {		
 		line.updateConnection();
-		
-		super.transform(tx);
+		this.relayout();
 	}
 	
 	public void setLineColor(Color newColor) {
@@ -65,6 +79,15 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure
 	
 	public void setLineStroke(double[] stroke) {
 		set(AttributeKeys.STROKE_DASHES, stroke);
+	}
+	
+	@Override
+	public void draw(Graphics2D graphics) {
+		if(this.isViolated()) {
+			this.amountFigure.set(AttributeKeys.TEXT_COLOR, Color.RED);
+		}
+		
+		super.draw(graphics);
 	}
 	
     @Override
@@ -89,7 +112,11 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure
 	@Override
 	public RelationFigure clone() {
 		RelationFigure other = (RelationFigure) super.clone();
-		other.line = line.clone();
+		other.children = new ArrayList<Figure>();
+		other.line = this.line.clone();
+		other.children.add(other.line);
+		other.amountFigure = this.amountFigure.clone();
+		other.children.add(other.amountFigure);
 		
 		return other; 
 	}
@@ -216,5 +243,36 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure
 	@Override
 	public boolean isLine() {
 		return false;
+	}
+
+	// these methods listen to line events
+
+	@Override
+	public void areaInvalidated(FigureEvent e) {
+		this.relayout();
+	}
+
+	@Override
+	public void attributeChanged(FigureEvent e) {
+	}
+
+	@Override
+	public void figureHandlesChanged(FigureEvent e) {
+	}
+
+	@Override
+	public void figureChanged(FigureEvent e) {
+	}
+	
+	@Override
+	public void figureAdded(FigureEvent e) {
+	}
+
+	@Override
+	public void figureRemoved(FigureEvent e) {		
+	}
+
+	@Override
+	public void figureRequestRemove(FigureEvent e) {
 	}
 }

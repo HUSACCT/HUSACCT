@@ -15,9 +15,12 @@ import org.jhotdraw.draw.handle.Handle;
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
 	private boolean isSizeable = false;
+	private boolean violated = false;
 
-	public BaseFigure() {
+	public BaseFigure(boolean violated) {
 		super();
+		
+		this.violated = violated;
 	}
 
 	@Override
@@ -31,6 +34,17 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 		setBounds(newAnchor, newLead);
 	}
+	
+	public void setViolated(boolean violated) {
+		this.violated = violated;
+		//TODO test if this is enough to trigger redrawing of the figure
+		// or if we need to call willChange() and changed() as well.
+		this.invalidate();
+	}
+	
+	public boolean isViolated() {
+		return this.violated;
+	}
 
 	@Override
 	protected void drawFill(Graphics2D g) {
@@ -40,6 +54,15 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	@Override
 	protected void drawStroke(Graphics2D g) {
 		// Empty
+	}
+	
+	@Override
+	public void draw(Graphics2D graphics) {
+		if(this.isViolated()) {
+			this.setStrokeColor(Color.RED);
+		}
+		
+		super.draw(graphics);
 	}
 
 	@Override

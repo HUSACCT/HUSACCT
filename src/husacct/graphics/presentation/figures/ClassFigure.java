@@ -18,7 +18,7 @@ public class ClassFigure extends NamedFigure {
 	public static final int MIN_HEIGHT = 80;
 
 	public ClassFigure(String name) {
-		super(name);
+		super(name, false);
 
 		top = new RectangleFigure();
 		middle = new RectangleFigure();

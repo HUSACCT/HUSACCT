@@ -22,7 +22,7 @@ public class ComponentFigure extends NamedFigure
 
 	public ComponentFigure(String name)
 	{
-		super(name);
+		super(name, false);
 		
 		this.mainBox = new RectangleFigure();
 		this.box1 = new RectangleFigure();

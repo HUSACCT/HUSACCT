@@ -18,7 +18,7 @@ public class LayerFigure extends NamedFigure {
 	
 	public LayerFigure(String name)
 	{		
-		super(name);
+		super(name, false);
 		
 		body = new RectangleFigure();
 		text = new TextFigure(name);

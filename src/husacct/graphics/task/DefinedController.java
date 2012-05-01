@@ -2,6 +2,8 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 
@@ -25,7 +27,7 @@ public class DefinedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure zoomedModuleFigure) {
-		// TODO
+		// TODO implement zooming here by retrieving the parent from defined service
 	}
 
 	@Override
@@ -41,9 +43,15 @@ public class DefinedController extends BaseController {
 	}
 
 	@Override
-	public void toggleViolations() {
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

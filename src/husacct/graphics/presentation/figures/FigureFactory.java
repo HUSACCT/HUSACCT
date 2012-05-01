@@ -5,35 +5,29 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.presentation.decorators.DependenciesDecorator;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
 public final class FigureFactory {
 
-	public BaseFigure createFigure(DependencyDTO[] dtos) {
-		if(dtos.length>0){
-			RelationFigure relationFigure = this.createFigure(dtos[0]);
-			DependenciesDecorator dependenciesDecorator = new DependenciesDecorator(relationFigure, dtos);
-			return dependenciesDecorator;
-		}
-		else{
+	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
+		if(dependencyDTOs.length <= 0){
 			throw new RuntimeException("No dependencies received. Cannot create a dependency figure.");
 		}
+		
+		return new RelationFigure("Dependency from " + dependencyDTOs[0].from 
+				+ " to " + dependencyDTOs[0].to, false, dependencyDTOs.length);
 	}
 
-	private RelationFigure createFigure(DependencyDTO dependencyDTO) {
-		return new RelationFigure("Dependency from " + dependencyDTO.from + " to " + dependencyDTO.to);
-	}
-
-	public BaseFigure createFigure(ViolationDTO[] violationDTOs) {
-		RelationFigure relationFigure = this.createFigure(violationDTOs[0]);
-		ViolationsDecorator violationsDecorator = new ViolationsDecorator(relationFigure, violationDTOs);
-		return violationsDecorator;
-	}
-
-	private RelationFigure createFigure(ViolationDTO violationDTO) {
-		return new RelationFigure("Violated dependency from " + violationDTO.getFromClasspath() + " to "
-				+ violationDTO.getToClasspath());
+	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {
+		if(violationDTOs.length <= 0) {
+			throw new RuntimeException("No violations received. Cannot create a violation figure.");
+		}
+		
+		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " 
+				+ violationDTOs[0].getFromClasspath() + " to " + violationDTOs[0].getToClasspath(), 
+				true, violationDTOs.length);
+		
+		return violatedRelationFigure;
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto) {

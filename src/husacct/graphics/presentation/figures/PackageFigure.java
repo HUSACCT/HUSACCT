@@ -21,7 +21,7 @@ public class PackageFigure extends NamedFigure
 	
 	public PackageFigure(String name)
 	{
-		super(name);
+		super(name, false);
 		
 		top = new RectangleFigure();
 		body = new RectangleFigure();

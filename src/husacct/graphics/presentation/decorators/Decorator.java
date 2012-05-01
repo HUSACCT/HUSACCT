@@ -30,6 +30,8 @@ public abstract class Decorator extends BaseFigure implements DecoratedFigure {
 	private BaseFigure decorator;
 
 	public Decorator(BaseFigure decorator) {
+		super(false);
+		
 		this.decorator = decorator;
 	}
 

@@ -7,13 +7,11 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
-import husacct.graphics.presentation.decorators.Decorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.ConnectionFigure;
 
 public class AnalysedController extends BaseController {
 
@@ -57,52 +55,22 @@ public class AnalysedController extends BaseController {
 	
 	// Dependencies
 	
-	private void drawDependenciesForShownModules(){
-		BaseFigure[] shownModules = this.drawing.getShownModules();
-		for (BaseFigure figureFrom : shownModules) {
-			for (BaseFigure figureTo : shownModules) {
-				getAndDrawDependencyBetween(figureFrom, figureTo);
-			}
-		}
-	}
-	
-	private void getAndDrawDependencyBetween(BaseFigure figureFrom, BaseFigure figureTo){
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getDTOFromFigure(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getDTOFromFigure(figureTo);
 		
-		try{
-			DependencyDTO[] dependencies = getDependenciesBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
-			BaseFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
-			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) dependencyFigure).getDecorator(), figureFrom, figureTo);
-			drawing.add(dependencyFigure);
-		} catch (RuntimeException e) {
-			logger.debug(e.getMessage() + " " + dtoFrom.uniqueName + " -> " + dtoTo.uniqueName);
-		}
+		return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 	
-	// Violations
+	// violations
 	
-	public void drawViolationsForShownModules() {
-		BaseFigure[] shownModules = this.drawing.getShownModules();
-		for (BaseFigure figureFrom : shownModules) {
-			for (BaseFigure figureTo : shownModules) {
-				getAndDrawViolationBetween(figureFrom, figureTo);
-			}
-		}
-	}
-	
-	private void getAndDrawViolationBetween(BaseFigure figureFrom, BaseFigure figureTo){
+	@Override
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getDTOFromFigure(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getDTOFromFigure(figureTo);
 		
-		try{
-			ViolationDTO[] dependencies = getViolationsBetween(dtoFrom.uniqueName, dtoTo.uniqueName);
-			BaseFigure violationFigure = this.figureFactory.createFigure(dependencies);
-			this.connectionStrategy.connect((ConnectionFigure) ((Decorator) violationFigure).getDecorator(), figureFrom, figureTo);
-			drawing.add(violationFigure);
-		} catch (RuntimeException e) {
-			logger.debug(e.getMessage() + " " + dtoFrom.uniqueName + " -> " + dtoTo.uniqueName);
-		}
+		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 	
 	// Listener methods
@@ -140,12 +108,6 @@ public class AnalysedController extends BaseController {
 		} else {
 			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
-	}
-
-	@Override
-	public void exportToImage() {
-		// TODO Make better
-		this.drawing.showExportToImagePanel();
 	}
 
 	@Override
