@@ -66,6 +66,7 @@ public class RelationFigure extends NamedFigure
 	
 	public void setLineColor(Color newColor) {
 		set(AttributeKeys.STROKE_COLOR, newColor);
+		this.amountFigure.set(AttributeKeys.TEXT_COLOR, newColor);
 	}
 	
 	public void setLineThickness(double thickness) {
