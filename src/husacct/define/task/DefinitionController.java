@@ -5,6 +5,7 @@ import husacct.define.domain.module.Module;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.ModuleComparator;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -17,6 +18,9 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
@@ -318,7 +322,7 @@ public class DefinitionController extends Observable implements Observer {
 		JPanelStatus.getInstance("Updating Modules").start();
 		
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
-		Module[] modules = DefineDomainService.getInstance().getModules();
+		ArrayList<Module> modules = DefineDomainService.getInstance().getSortedModules();
 		for (Module module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}

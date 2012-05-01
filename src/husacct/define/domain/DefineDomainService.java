@@ -64,6 +64,23 @@ public class DefineDomainService {
 		return modules;
 	}
 	
+	public ArrayList<Module> getSortedModules() {
+		ArrayList<Module> modules = SoftwareArchitecture.getInstance().getModules();
+		Collections.sort(modules, new ModuleComparator());
+		for(Module module : modules) {
+			this.sortModuleChildren(module);
+		}
+		return modules;
+	}
+	
+	public void sortModuleChildren(Module module) {
+		ArrayList<Module> children = module.getSubModules();
+		Collections.sort(children, new ModuleComparator());
+		for(Module child : children) {
+			this.sortModuleChildren(child);
+		}
+	}
+	
 	public Module getModuleByLogicalPath(String logicalPath){
 		Module module = SoftwareArchitecture.getInstance().getModuleByLogicalPath(logicalPath);
 		return module;
