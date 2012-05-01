@@ -36,10 +36,9 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	}
 	
 	public void setViolated(boolean violated) {
+		this.willChange();
 		this.violated = violated;
-		//TODO test if this is enough to trigger redrawing of the figure
-		// or if we need to call willChange() and changed() as well.
-		this.invalidate();
+		this.changed();
 	}
 	
 	public boolean isViolated() {
@@ -60,6 +59,9 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	public void draw(Graphics2D graphics) {
 		if(this.isViolated()) {
 			this.setStrokeColor(Color.RED);
+		}
+		else {
+			this.setStrokeColor(Color.BLACK);
 		}
 		
 		super.draw(graphics);

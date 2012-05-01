@@ -68,7 +68,7 @@ public class DemoController extends BaseController {
 		
 		DependencyDTO[] dependencies = new DependencyDTO[0];
 		
-		if(figFrom.getName().equals("task") && figTo.getName().equals("presentation")){
+		if(figFrom.getName().equals("presentation") && figTo.getName().equals("task")){
 			dependencies = new DependencyDTO[1];
 			DependencyDTO taskLayerDep1 = new DependencyDTO("task","presentation","wa",1);
 			dependencies[0] = taskLayerDep1;

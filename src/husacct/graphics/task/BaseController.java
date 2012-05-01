@@ -9,6 +9,7 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
+import husacct.graphics.presentation.figures.NamedFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
@@ -33,8 +34,10 @@ public abstract class BaseController implements MouseClickListener {
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
 	private HashMap<BaseFigure, AbstractDTO> figureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
-	private HashMap<RelationFigure, AbstractDTO[]> relationFigureDTOMap = 
-			new HashMap<RelationFigure, AbstractDTO[]>();
+	private HashMap<RelationFigure, DependencyDTO[]> dependencyFigureMap = 
+			new HashMap<RelationFigure, DependencyDTO[]>();
+	private HashMap<RelationFigure, ViolationDTO[]> violationFigureMap = 
+			new HashMap<RelationFigure, ViolationDTO[]>();
 	private HashMap<BaseFigure, ViolationDTO[]> violatedModuleDTOMap = 
 			new HashMap<BaseFigure, ViolationDTO[]>(); 
 	protected BasicLayoutStrategy layoutStrategy;
@@ -66,7 +69,7 @@ public abstract class BaseController implements MouseClickListener {
 
 	public void clearDrawing() {
 		this.figureDTOMap.clear();
-		this.relationFigureDTOMap.clear();
+		this.dependencyFigureMap.clear();
 		this.drawing.clear();
 		this.view.clearSelection();
 	}
@@ -87,24 +90,17 @@ public abstract class BaseController implements MouseClickListener {
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
 		
-		//FIXME still there is some instance of checking here
-		
-		if(selectedFigure instanceof RelationFigure) {
-			// get the dependencies belonging to this figure
-			AbstractDTO[] dtos = this.getDTOsFromRelationFigure((RelationFigure)selectedFigure);
-			if(dtos instanceof DependencyDTO[]) {
-				this.drawTarget.showDependenciesProperties((DependencyDTO[])dtos);
-			}
-			else if(dtos instanceof ViolationDTO[]) {
-				this.drawTarget.showViolationsProperties((ViolationDTO[])dtos);
-			}
+		if(this.violatedModuleDTOMap.containsKey(selectedFigure)) {
+			this.drawTarget.showViolationsProperties(this.violatedModuleDTOMap.get(selectedFigure));
 		}
-		else if (selectedFigure instanceof BaseFigure
-				&& this.violatedModuleDTOMap.containsKey(selectedFigure)) {
-			this.drawTarget.showViolationsProperties(this.violatedModuleDTOMap.get(selectedFigure));			
+		else if (this.violationFigureMap.containsKey(selectedFigure)) {
+			this.drawTarget.showViolationsProperties(this.violationFigureMap.get(selectedFigure));
+		}
+		else if (this.dependencyFigureMap.containsKey(selectedFigure)) {
+			this.drawTarget.showDependenciesProperties(this.dependencyFigureMap.get(selectedFigure));
 		}
 		else {
-			drawTarget.hidePropertiesPane();
+			this.drawTarget.hidePropertiesPane();
 		}
 	}
 
@@ -123,12 +119,20 @@ public abstract class BaseController implements MouseClickListener {
 		return this.figureDTOMap.get(figure);
 	}
 	
-	public void linkDTOsToRelationFigure(AbstractDTO[] dtos, RelationFigure figure){
-		this.relationFigureDTOMap.put(figure, dtos);
+	public void linkDependencyDTOsToFigure(DependencyDTO[] dtos, RelationFigure figure){
+		this.dependencyFigureMap.put(figure, dtos);
 	}
 	
-	public AbstractDTO[] getDTOsFromRelationFigure(RelationFigure fig) {
-		return this.relationFigureDTOMap.get(fig);
+	public DependencyDTO[] getDependencyDTOsFromRelationFigure(RelationFigure fig) {
+		return this.dependencyFigureMap.get(fig);
+	}
+	
+	public void linkViolationDTOsToFigure(ViolationDTO[] dtos, RelationFigure figure) {
+		this.violationFigureMap.put(figure, dtos);
+	}
+	
+	public ViolationDTO[] getViolationDTOsFromRelationFigure(RelationFigure fig) {
+		return this.violationFigureMap.get(fig);
 	}
 	
 	public void linkViolationDTOsToModuleFigure(ViolationDTO[] dtos, BaseFigure fig) {
@@ -159,7 +163,15 @@ public abstract class BaseController implements MouseClickListener {
 			Logger.getLogger(this.getClass()).debug("hiding violations");
 			showViolations = false;
 			
-			//TODO hide violations
+			// clear violations
+			for(BaseFigure fig : this.violatedModuleDTOMap.keySet()) {
+				fig.setViolated(false);
+			}
+			this.violatedModuleDTOMap.clear();
+			for(BaseFigure fig : this.violationFigureMap.keySet()) {
+				this.drawing.remove(fig);
+			}
+			this.violationFigureMap.clear();
 		}
 		else {
 			Logger.getLogger(this.getClass()).debug("showing violations");
@@ -210,7 +222,7 @@ public abstract class BaseController implements MouseClickListener {
 		DependencyDTO[] dependencies = (DependencyDTO[])getDependenciesBetween(figureFrom, figureTo);
 		if(dependencies.length > 0) {
 			RelationFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
-			this.linkDTOsToRelationFigure(dependencies, dependencyFigure);
+			this.linkDependencyDTOsToFigure(dependencies, dependencyFigure);
 			this.connectionStrategy.connect(dependencyFigure, figureFrom, figureTo);
 			drawing.add(dependencyFigure);
 		}
@@ -247,7 +259,7 @@ public abstract class BaseController implements MouseClickListener {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
 		if(violations.length > 0) {
 			RelationFigure violationFigure = this.figureFactory.createFigure(violations);
-			this.linkDTOsToRelationFigure(violations, violationFigure);
+			this.linkViolationDTOsToFigure(violations, violationFigure);
 			this.connectionStrategy.connect(violationFigure, figureFrom, figureTo);
 			drawing.add(violationFigure);
 		}
