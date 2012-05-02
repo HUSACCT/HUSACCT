@@ -57,8 +57,8 @@ public class AnalysedController extends BaseController {
 	
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getDTOFromFigure(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getDTOFromFigure(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureTo);
 		
 		return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
@@ -67,8 +67,8 @@ public class AnalysedController extends BaseController {
 	
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getDTOFromFigure(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getDTOFromFigure(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureTo);
 		
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
@@ -78,7 +78,7 @@ public class AnalysedController extends BaseController {
 	@Override
 	public void moduleZoom(BaseFigure figure) {
 		if (figure.isModule()) { //FIXME? : Can zoom only on modules
-			AbstractDTO dto = this.getDTOFromFigure(figure);
+			AbstractDTO dto = this.figureMap.getModuleDTO(figure);
 	
 			if (dto.getClass().getSimpleName().equals("AnalysedModuleDTO")) {
 				AnalysedModuleDTO parentDTO = ((AnalysedModuleDTO) dto);
