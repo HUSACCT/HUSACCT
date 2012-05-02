@@ -129,11 +129,12 @@ public class WorkspaceController {
 	}
 	
 	public static boolean isOpenWorkspace(){
-		if(WorkspaceController.currentWorkspace != null){
-			return true;
-		} else {
-			return false;
-		}
+		return true;
+//		if(WorkspaceController.currentWorkspace != null){
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
 }

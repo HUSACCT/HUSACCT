@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
@@ -17,7 +19,7 @@ public class ValidateMenu extends JMenu{
 	private JMenuItem mntmConfigure;
 	private JMenuItem mntmValidateNow;
 	
-	public ValidateMenu(MainController mainController){
+	public ValidateMenu(final MainController mainController){
 		super("Validate");
 		
 		this.maincontroller = mainController;
@@ -45,7 +47,7 @@ public class ValidateMenu extends JMenu{
 		
 		//disable buttons on start
 		mntmValidateNow.setEnabled(false);
-		mntmConfigure.setEnabled(false);
+		mntmConfigure.setEnabled(true);
 		
 		
 		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
@@ -55,22 +57,40 @@ public class ValidateMenu extends JMenu{
 				currentState = maincontroller.getStateController().getState();
 				if(currentState == StateController.NONE){
 					mntmValidateNow.setEnabled(false);
-					mntmConfigure.setEnabled(false);
 				}else if(currentState == StateController.EMPTY){
 					mntmValidateNow.setEnabled(false);
-					mntmConfigure.setEnabled(false);
 				}else if(currentState == StateController.DEFINED){
 					mntmValidateNow.setEnabled(true);
-					mntmConfigure.setEnabled(false);
 				}else if(currentState == StateController.MAPPED){
 					mntmValidateNow.setEnabled(true);
-					mntmConfigure.setEnabled(false);
 				}else if(currentState == StateController.VALIDATED){
 					mntmValidateNow.setEnabled(true);
-					mntmConfigure.setEnabled(true);
 				}
 			}
 			
+		});
+		
+		// TODO: refactor including adapter
+		this.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				mainController.getStateController().checkState();
+				
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
 		});
 	}
 	

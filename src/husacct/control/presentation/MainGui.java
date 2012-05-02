@@ -21,11 +21,11 @@ public class MainGui extends JFrame {
 
 	private static final long serialVersionUID = 140205650372010347L;
 
-	private MainController controller;
+	private MainController mainController;
 	private JMenuBar menuBar;
 
 	public MainGui(MainController controller) {
-		this.controller = controller;
+		this.mainController = controller;
 		setupFrame();
 		createMenuBar();
 		this.setContentPane(new JDesktopPane());
@@ -36,12 +36,12 @@ public class MainGui extends JFrame {
 	private void createMenuBar() {
 		this.menuBar = new MenuBar();
 		
-		FileMenu fileMenu = new FileMenu(controller);
-		ViewMenu viewMenu = new ViewMenu(controller.getViewController());
-		DefineMenu defineMenu = new DefineMenu(controller);
-		ValidateMenu validateMenu = new ValidateMenu(controller);
-		ExportMenu exportMenu = new ExportMenu(controller.getStateController());
-		LanguageMenu languageMenu = new LanguageMenu(controller.getLocaleController());
+		FileMenu fileMenu = new FileMenu(mainController);
+		ViewMenu viewMenu = new ViewMenu(mainController.getViewController());
+		DefineMenu defineMenu = new DefineMenu(mainController);
+		ValidateMenu validateMenu = new ValidateMenu(mainController);
+		ExportMenu exportMenu = new ExportMenu(mainController);
+		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
 
 		menuBar.add(fileMenu);
@@ -63,7 +63,7 @@ public class MainGui extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				controller.exit();		
+				mainController.exit();		
 			}
 		});
 	}

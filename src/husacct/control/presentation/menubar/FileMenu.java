@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 @SuppressWarnings("serial")
 public class FileMenu extends JMenu {
@@ -37,7 +39,6 @@ public class FileMenu extends JMenu {
 		createWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showCreateWorkspaceGui();
-				stateController.setState(1);
 			}
 		});
 		
@@ -46,7 +47,6 @@ public class FileMenu extends JMenu {
 		openWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showOpenWorkspaceGui();
-				stateController.setState(1);
 			}
 		});
 		
@@ -86,27 +86,27 @@ public class FileMenu extends JMenu {
 			@Override
 			public void changeState(int state) {
 				currentState = stateController.getState();
-				if(currentState == stateController.NONE){
+				if(currentState == StateController.NONE){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(false);
 					closeWorkspaceItem.setEnabled(false);
-				}else if(currentState == stateController.EMPTY){
+				}else if(currentState == StateController.EMPTY){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
 					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == stateController.DEFINED){
+				}else if(currentState == StateController.DEFINED){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
 					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == stateController.MAPPED){
+				}else if(currentState == StateController.MAPPED){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
 					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == stateController.VALIDATED){
+				}else if(currentState == StateController.VALIDATED){
 					createWorkspaceItem.setEnabled(true);
 					openWorkspaceItem.setEnabled(true);
 					saveWorkspaceItem.setEnabled(true);
@@ -114,6 +114,29 @@ public class FileMenu extends JMenu {
 				}
 			}
 			
+		});
+		
+		// TODO: refactor including adapter
+		this.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				stateController.checkState();
+				
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
 		});
 	}
 }
