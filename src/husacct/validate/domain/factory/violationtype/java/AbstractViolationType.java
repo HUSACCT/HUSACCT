@@ -1,27 +1,27 @@
 package husacct.validate.domain.factory.violationtype.java;
 
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
 public abstract class AbstractViolationType {
 	private Logger logger = Logger.getLogger(AbstractViolationType.class);
-	protected List<String> allViolationKeys;
+	protected List<CategoryKeySeverityDTO> allViolationKeys;
 	protected ViolationtypeGenerator generator;
 	
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
 	public abstract HashMap<String, List<ViolationType>> getAllViolationTypes();
 	
-	AbstractViolationType(){
+	AbstractViolationType(ConfigurationServiceImpl configuration){
 		generator = new ViolationtypeGenerator();
 	}
 
@@ -34,19 +34,19 @@ public abstract class AbstractViolationType {
 		return violationtypes;
 	}
 	
-	protected HashMap<String, List<ViolationType>> getAllViolationTypes(Map<String, String> violationTypeKeysAndCategories){
+	protected HashMap<String, List<ViolationType>> getAllViolationTypes(List<CategoryKeySeverityDTO> keyList){
 		HashMap<String, List<ViolationType>> categoryViolations = new HashMap<String, List<ViolationType>>();
-		for(Entry<String, String> value : violationTypeKeysAndCategories.entrySet()){
-			if(categoryViolations.containsKey(value.getValue())){
-				List<ViolationType> violationtypes = categoryViolations.get(value.getValue());
-				ViolationType violationtype = createViolationType(value.getKey());
+		for(CategoryKeySeverityDTO dto : keyList){
+			if(categoryViolations.containsKey(dto.getCategory())){
+				List<ViolationType> violationtypes = categoryViolations.get(dto.getCategory());
+				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);
 			}
 			else{
 				List<ViolationType> violationtypes = new ArrayList<ViolationType>();
-				ViolationType violationtype = createViolationType(value.getKey());
+				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);	
-				categoryViolations.put(value.getValue(), violationtypes);
+				categoryViolations.put(dto.getCategory(), violationtypes);
 			}
 		}
 		return categoryViolations;
@@ -54,8 +54,8 @@ public abstract class AbstractViolationType {
 	
 	public ViolationType createViolationType(String violationKey){
 		List<String> violationKeysToLower = new ArrayList<String>();
-		for(String violationtype : allViolationKeys){
-			violationKeysToLower.add(violationtype.toLowerCase());
+		for(CategoryKeySeverityDTO violationtype : allViolationKeys){
+			violationKeysToLower.add(violationtype.getKey().toLowerCase());
 		}		
 
 		if(violationKeysToLower.contains(violationKey.toLowerCase())){

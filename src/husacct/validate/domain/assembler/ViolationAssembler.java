@@ -4,6 +4,7 @@ import husacct.Main;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.LanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
@@ -29,9 +30,9 @@ public class ViolationAssembler {
 	private RuletypeAssembler ruleAssembler;
 	private Messagebuilder messagebuilder;
 
-	public ViolationAssembler(RuleTypesFactory ruleFactory){
+	public ViolationAssembler(RuleTypesFactory ruleFactory, ConfigurationServiceImpl configuration){
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
-		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory();
+		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
 
 		this.ruleFactory = ruleFactory;
 		this.ruleAssembler = new RuletypeAssembler();

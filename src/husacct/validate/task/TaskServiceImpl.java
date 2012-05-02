@@ -35,7 +35,7 @@ public class TaskServiceImpl implements ITaskService{
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
 		this.domain = domain;				
-		filterController = new FilterController(this, domain.getRuleTypesFactory());
+		filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
 		acs = new AnalyseServiceStub();
 		configurationController = new ConfigurationController(this);
 	}

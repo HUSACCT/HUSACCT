@@ -5,6 +5,7 @@ import husacct.define.DefineServiceStub;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
+import husacct.validate.domain.factory.severity.SeverityFactory;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
@@ -24,9 +25,8 @@ import org.apache.log4j.Logger;
 
 public class RuleTypesFactory {
 	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
+	private final SeverityFactory severityFactory;
 	private final ConfigurationServiceImpl configuration;
-	//private final SeverityFactory severityFactory;
-	//private final ViolationTypeFactory violationTypeFactory;
 	
 	private AbstractViolationType violationtypefactory;
 	private HashMap<String, CategoryKeyClassDTO> allRuletypes;
@@ -39,7 +39,7 @@ public class RuleTypesFactory {
 		this.allRuletypes = ruletypegenerator.generateAllRules();
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 		
-		//this.severityFactory = new SeverityFactory();
+		this.severityFactory = new SeverityFactory(configuration);
 	}
 
 	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){
@@ -107,11 +107,11 @@ public class RuleTypesFactory {
 	}
 
 	private void setViolationTypeFactory(String language){
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language);
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language, configuration);
 	}
 	
 	private void setViolationTypeFactory(){
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 	}
 
 	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{

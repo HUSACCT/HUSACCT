@@ -1,5 +1,8 @@
 package husacct.validate.domain.factory.violationtype.java;
 
+import husacct.validate.domain.validation.DefaultSeverities;
+import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeySeverityDTO;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -7,11 +10,10 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -22,33 +24,22 @@ class ViolationtypeGenerator {
 	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
 	private static final String violationTypeInterfaceLocation = "husacct.validate.domain.validation.violationtype.IViolationType"; 
 
-	List<String> getAllViolationTypeKeys(String parentPackage){
-		Map<String, String> classes = getClasses(parentPackage);
-		ArrayList<String> violationKeys = new ArrayList<String>();
-		for(String violationkey : classes.keySet()){
-			violationKeys.add(violationkey);
-		}
-		return violationKeys;
+	List<CategoryKeySeverityDTO> getAllViolationTypes(String parentPackage){
+		return new ArrayList<CategoryKeySeverityDTO>(getClasses(parentPackage));		
 	}
 
-	Map<String, String> getAllViolationTypesWithCategory(String packageName){
-		return getClasses(packageName);
-	}
-
-	private Map<String, String> getClasses(String parentPackage) {
-		try {			
-			Map<String, String> keyList = new HashMap<String, String>();
-
+	private Set<CategoryKeySeverityDTO> getClasses(String parentPackage) {
+		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
+		try {
 			TreeSet<String> classes = new TreeSet<String>();
 			List<String> directories = getDirectories(parentPackage);
 			for (String directory : directories) {
 				classes.addAll(findClasses(directory, violationTypeInterfaceLocation.replace("IViolationType", "")+ parentPackage, parentPackage));
 			}
-
 			for (String clazz : classes) {
 				Class<?> scannedClass = Class.forName(clazz);
 				if(scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)){
-					keyList.putAll(generateViolationTypes(scannedClass));
+					keyList.addAll(generateViolationTypes(scannedClass));
 				}
 			}
 			return keyList;
@@ -58,7 +49,7 @@ class ViolationtypeGenerator {
 		} catch (ClassNotFoundException e) {
 			logger.error(e.getMessage(), e);
 		}
-		return Collections.emptyMap();
+		return keyList;
 	}
 	
 	private List<String> getDirectories(String parentPackage){
@@ -119,16 +110,20 @@ class ViolationtypeGenerator {
 		return false;		
 	}
 
-	private Map<String, String> generateViolationTypes(Class<?> scannedClass){
-		Map<String, String> keyList = new HashMap<String, String>();
+	private Set<CategoryKeySeverityDTO> generateViolationTypes(Class<?> scannedClass){
+		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
 
 		for(Object enumValue : scannedClass.getEnumConstants()){
 			Class<?> enumClass = enumValue.getClass();
 			try {
 				Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
 				String category = (String) getCategoryMethod.invoke(enumValue);
-				if(!keyList.containsKey(enumValue.toString())){									
-					keyList.put(enumValue.toString(), category);
+				
+				Method getDefaultSeverityMethod = enumClass.getDeclaredMethod("getDefaultSeverity");
+				DefaultSeverities defaultSeverity = (DefaultSeverities) getDefaultSeverityMethod.invoke(enumValue);
+				
+				if(!containsViolationTypeInSet(keyList, enumValue.toString())){									
+					keyList.add(new CategoryKeySeverityDTO(enumValue.toString(), category, defaultSeverity));
 				}								
 				else{
 					logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
@@ -146,5 +141,14 @@ class ViolationtypeGenerator {
 			}								
 		}
 		return keyList;
+	}
+	
+	private boolean containsViolationTypeInSet(Set<CategoryKeySeverityDTO> keyList, String key){
+		for(CategoryKeySeverityDTO dto : keyList){
+			if(dto.getKey().toLowerCase().equals(key.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
 	}
 }
