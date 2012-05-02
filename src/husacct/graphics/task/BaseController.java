@@ -26,7 +26,7 @@ public abstract class BaseController implements MouseClickListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
-	protected String currentPath;
+	protected String currentPath = "";
 	private boolean showViolations = false;
 	
 	protected Logger logger = Logger.getLogger("Graphics Controller");
