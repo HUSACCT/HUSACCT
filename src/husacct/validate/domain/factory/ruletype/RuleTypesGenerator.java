@@ -29,7 +29,6 @@ class RuleTypesGenerator {
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
 
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
-	private static final String rootFolderRules = "husacct.validate.domain.validation.ruletype";
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
 
 	RuleTypesGenerator(){
@@ -39,7 +38,7 @@ class RuleTypesGenerator {
 	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		HashMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
-		for (Enum<RuleTypes> ruleKey : rules) {
+		for (Enum<RuleTypes> ruleKey : rules) {			
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
 			if (ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
@@ -82,7 +81,7 @@ class RuleTypesGenerator {
 	}
 
 	private List<Class<?>> getRuleClasses() {
-		return getRuleClasses(rootFolderRules);
+		return getRuleClasses(ruleTypeAbstractClass);
 	}
 
 	private List<Class<?>> getRuleClasses(String packageName) {
@@ -90,7 +89,7 @@ class RuleTypesGenerator {
 			List<String> directories = getDirectories(packageName);
 			TreeSet<String> classes = new TreeSet<String>();
 			for (String directory : directories) {
-				classes.addAll(findClasses(directory, packageName));
+				classes.addAll(findClasses(directory, packageName.replace(".RuleType", "")));
 			}
 			List<Class<?>> classList = loadRuleClasses(classes);
 			return classList;
@@ -110,11 +109,12 @@ class RuleTypesGenerator {
 
 		final String path = packageName.replace('.', '/');
 		Enumeration<URL> resources;
-		resources = classLoader.getResources(path);
+		resources = classLoader.getResources(path + ".class");
 		if (resources != null) {
 			while (resources.hasMoreElements()) {
 				URL resource = resources.nextElement();
-				directories.add(resource.getFile());
+				directories.add(resource.getFile().replace("/RuleType.class", ""));
+				System.out.println(resource.getFile().replace("/RuleType.class", ""));
 			}
 		}
 		return directories;
@@ -128,8 +128,9 @@ class RuleTypesGenerator {
 			ZipInputStream zip = new ZipInputStream(jar.openStream());
 			ZipEntry entry = null;
 			while ((entry = zip.getNextEntry()) != null) {
-				if (entry.getName().endsWith(".class")) {
+				if (entry.getName().startsWith("husacct/validate/domain/validation/ruletype") && entry.getName().endsWith(".class")) {
 					final String className = entry.getName().replaceAll("[$].*", "").replaceAll("[.]class", "").replace('/', '.');
+					System.out.println(className);
 					classes.add(className);
 				}
 			}

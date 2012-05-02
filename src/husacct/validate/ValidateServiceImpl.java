@@ -114,6 +114,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	
 	public static void main(String[] args){
 		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
-		serviceImpl.checkConformance();
+		System.out.println(serviceImpl.getCategories().length);
 	}
 }
