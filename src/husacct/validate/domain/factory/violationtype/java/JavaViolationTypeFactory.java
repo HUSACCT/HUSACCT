@@ -15,7 +15,7 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 	private static final String javaViolationTypesRootPackagename = "java";
 
 	public JavaViolationTypeFactory(ConfigurationServiceImpl configuration){
-		super(configuration);
+		super(configuration, "Java");
 		this.allViolationKeys = generator.getAllViolationTypes(javaViolationTypesRootPackagename);
 	}
 

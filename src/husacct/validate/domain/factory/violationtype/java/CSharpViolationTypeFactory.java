@@ -14,7 +14,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	private static final String csharpViolationTypesRootPackagename = "csharp";	
 
 	public CSharpViolationTypeFactory(ConfigurationServiceImpl configuration){
-		super(configuration);
+		super(configuration, "C#");
 		this.allViolationKeys = generator.getAllViolationTypes(csharpViolationTypesRootPackagename);
 	}
 

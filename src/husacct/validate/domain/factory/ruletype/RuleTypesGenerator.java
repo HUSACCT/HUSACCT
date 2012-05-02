@@ -32,7 +32,7 @@ class RuleTypesGenerator {
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
 
 	RuleTypesGenerator(){
-		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverityCombination();
+		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
 
 	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
@@ -192,7 +192,7 @@ class RuleTypesGenerator {
 		return ruleClass.getSimpleName().replace("Rule", "");
 	}	
 
-	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverityCombination(){
+	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity(){
 		HashMap<String, DefaultSeverities> defaultRulesPerRuleType = new HashMap<String, DefaultSeverities>();
 		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)){
 			defaultRulesPerRuleType.put(ruletype.toString(), ruletype.getDefaultSeverity());
