@@ -15,7 +15,7 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 	private static final String javaViolationTypesRootPackagename = "java";
 
 	public JavaViolationTypeFactory(){
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();
+		super();
 		this.allViolationKeys = generator.getAllViolationTypeKeys(javaViolationTypesRootPackagename);
 	}
 
@@ -31,7 +31,6 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 
 	@Override
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();
 		Map<String, String> violationTypeKeysAndCategories = generator.getAllViolationTypesWithCategory(javaViolationTypesRootPackagename);
 		return getAllViolationTypes(violationTypeKeysAndCategories);
 	}

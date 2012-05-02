@@ -14,7 +14,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	private static final String csharpViolationTypesRootPackagename = "csharp";	
 
 	public CSharpViolationTypeFactory(){
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();
+		super();
 		this.allViolationKeys = generator.getAllViolationTypeKeys(csharpViolationTypesRootPackagename);
 	}
 
@@ -30,7 +30,6 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	
 	@Override
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();
 		Map<String, String> violationTypeKeysAndCategories = generator.getAllViolationTypesWithCategory(csharpViolationTypesRootPackagename);
 		return getAllViolationTypes(violationTypeKeysAndCategories);
 	}

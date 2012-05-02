@@ -16,9 +16,14 @@ import org.apache.log4j.Logger;
 public abstract class AbstractViolationType {
 	private Logger logger = Logger.getLogger(AbstractViolationType.class);
 	protected List<String> allViolationKeys;
+	protected ViolationtypeGenerator generator;
 	
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
 	public abstract HashMap<String, List<ViolationType>> getAllViolationTypes();
+	
+	AbstractViolationType(){
+		generator = new ViolationtypeGenerator();
+	}
 
 	protected List<ViolationType> generateViolationTypes(EnumSet<?> enums){
 		List<ViolationType> violationtypes = new ArrayList<ViolationType>();

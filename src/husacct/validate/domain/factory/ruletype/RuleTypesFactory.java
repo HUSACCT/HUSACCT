@@ -5,7 +5,6 @@ import husacct.define.DefineServiceStub;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
-import husacct.validate.domain.factory.severity.SeverityFactory;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;

@@ -47,36 +47,8 @@ class ViolationtypeGenerator {
 
 			for (String clazz : classes) {
 				Class<?> scannedClass = Class.forName(clazz);
-				if(scannedClass.isEnum()){	
-					Class<?>[] interfaces = scannedClass.getInterfaces();
-
-					for(Class<?> violationInterface : interfaces){
-						if(violationInterface.getSimpleName().equals("IViolationType")){
-							for(Object enumValue : scannedClass.getEnumConstants()){
-								Class<?> enumClass = enumValue.getClass();
-								try {
-									Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
-									String category = (String) getCategoryMethod.invoke(enumValue);
-									if(!keyList.containsKey(enumValue.toString())){									
-										keyList.put(enumValue.toString(), category);
-									}								
-									else{
-										logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
-									}									
-								} catch (SecurityException e) {
-									e.printStackTrace();
-								} catch (NoSuchMethodException e) {
-									e.printStackTrace();
-								} catch (IllegalArgumentException e) {
-									e.printStackTrace();
-								} catch (IllegalAccessException e) {
-									e.printStackTrace();
-								} catch (InvocationTargetException e) {
-									e.printStackTrace();
-								}								
-							}
-						}
-					}
+				if(scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)){
+					keyList.putAll(generateViolationTypes(scannedClass));
 				}
 			}
 			return keyList;
@@ -106,7 +78,7 @@ class ViolationtypeGenerator {
 		}
 		return directories;	
 	}
-
+	
 	private TreeSet<String> findClasses(String directory, String packageName, String parentPackage) throws IOException{
 		TreeSet<String> classes = new TreeSet<String>();
 		if (directory.startsWith("file:") && directory.contains("!")) {
@@ -135,5 +107,44 @@ class ViolationtypeGenerator {
 			}
 		}
 		return classes;
+	}
+
+	private boolean hasIViolationTypeInterface(Class<?> scannedClass){
+		Class<?>[] interfaces = scannedClass.getInterfaces();
+		for(Class<?> violationInterface : interfaces){
+			if(violationInterface.getSimpleName().equals("IViolationType")){
+				return true;
+			}
+		}		
+		return false;		
+	}
+
+	private Map<String, String> generateViolationTypes(Class<?> scannedClass){
+		Map<String, String> keyList = new HashMap<String, String>();
+
+		for(Object enumValue : scannedClass.getEnumConstants()){
+			Class<?> enumClass = enumValue.getClass();
+			try {
+				Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
+				String category = (String) getCategoryMethod.invoke(enumValue);
+				if(!keyList.containsKey(enumValue.toString())){									
+					keyList.put(enumValue.toString(), category);
+				}								
+				else{
+					logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
+				}									
+			} catch (SecurityException e) {
+				logger.error(e.getMessage(), e);
+			} catch (NoSuchMethodException e) {
+				logger.error(e.getMessage(), e);
+			} catch (IllegalArgumentException e) {
+				logger.error(e.getMessage(), e);
+			} catch (IllegalAccessException e) {
+				logger.error(e.getMessage(), e);
+			} catch (InvocationTargetException e) {
+				logger.error(e.getMessage(), e);
+			}								
+		}
+		return keyList;
 	}
 }
