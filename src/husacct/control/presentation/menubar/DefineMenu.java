@@ -3,7 +3,6 @@ package husacct.control.presentation.menubar;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
-import husacct.control.task.ViewController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,12 +28,7 @@ public class DefineMenu extends JMenu{
 
 		defineLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				maincontroller.getViewController().setDefineGui();
 				maincontroller.getViewController().showDefineGui();
-				//maincontroller.getStateController().checkState();
-
-				maincontroller.getViewController().setDefinedArchitectureGui();
-				maincontroller.getViewController().showDefinedArchitectureGui();
 			}
 		});
 
@@ -42,10 +36,7 @@ public class DefineMenu extends JMenu{
 		this.add(importLogicalArchitectureItem);
 		importLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				maincontroller.getViewController().setViolationsGui();
-				maincontroller.getViewController().showViolationsGui();
-
-				//maincontroller.getStateController().setState(2);
+				// TODO: import
 			}
 		});
 
@@ -58,24 +49,14 @@ public class DefineMenu extends JMenu{
 			public void changeState(int state) {
 				currentState = maincontroller.getStateController().getState();
 
-				if(currentState == maincontroller.getStateController().NONE){
+				if(currentState == StateController.NONE){
 					defineLogicalArchitectureItem.setEnabled(false);
 					importLogicalArchitectureItem.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().EMPTY){
-					defineLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-				}else if(currentState == maincontroller.getStateController().DEFINED){
-					defineLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-				}else if(currentState == maincontroller.getStateController().MAPPED){
-					defineLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-				}else if(currentState == maincontroller.getStateController().VALIDATED){
+				}else if(currentState >= StateController.EMPTY){
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
 				}
 			}
-
 		});
 	}
 }

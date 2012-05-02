@@ -10,38 +10,31 @@ import husacct.control.presentation.menubar.ViewMenu;
 import husacct.control.task.MainController;
 
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.BoxLayout;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 public class MainGui extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPanel;
-	private MainController controller;
+	private static final long serialVersionUID = 140205650372010347L;
 
+	private MainController controller;
 	private JMenuBar menuBar;
-	
+
 	public MainGui(MainController controller) {
 		this.controller = controller;
 		setupFrame();
 		createMenuBar();
-		contentPanel = new JPanel(new GridBagLayout());
-		this.setContentPane(contentPanel);
+		this.setContentPane(new JDesktopPane());
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);	
 	}
 
 	private void createMenuBar() {
 		this.menuBar = new MenuBar();
-	
 		
 		FileMenu fileMenu = new FileMenu(controller);
 		ViewMenu viewMenu = new ViewMenu(controller.getViewController());
@@ -50,8 +43,7 @@ public class MainGui extends JFrame {
 		ExportMenu exportMenu = new ExportMenu(controller.getStateController());
 		LanguageMenu languageMenu = new LanguageMenu(controller.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
-	
-		
+
 		menuBar.add(fileMenu);
 		menuBar.add(viewMenu);
 		menuBar.add(defineMenu);
