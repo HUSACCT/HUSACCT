@@ -18,6 +18,8 @@ import java.util.Set;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.event.FigureSelectionEvent;
+import org.jhotdraw.draw.event.FigureSelectionListener;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
@@ -43,6 +45,7 @@ public class DrawingView extends DefaultDrawingView {
 		initializeSelectionTool();
 		initializeMouseListener();
 		initializeKeyboardListener();
+		initializeSelectionListener();
 	}
 
 	private void initializeSelectionTool() {
@@ -68,63 +71,67 @@ public class DrawingView extends DefaultDrawingView {
 	private void onMouseClicked(MouseEvent e) {
 
 		handleDeselect();
-		
+
 		if (hasSelection()) {
-			
+
 			int mouseButton = e.getButton();
 			int mouseClicks = e.getClickCount();
-			
+
 			if (mouseButton == MouseEvent.BUTTON1) {
 				if (mouseClicks == SingleClick) {
-					
+
 					BaseFigure[] selection = toFigureArray(getSelectedFigures());
 					figureSelected(selection);
 				} else if (mouseClicks == DoubleClick) {
-					
+
 					BaseFigure[] selection = toFigureArray(getSelectedFigures());
-					moduleZoom(selection);					
+					moduleZoom(selection);
 				}
 			}
 		}
-		
+
 		previousSelection.clear();
 		previousSelection.addAll(getSelectedFigures());
 	}
-	
+
+	private void onMouseWheel(MouseWheelEvent e) {
+
+	}
+
 	private void handleDeselect() {
-		
+
 		Set<Figure> deselectedFigures = getDeltaSelection();
-		
+
 		if (deselectedFigures.size() > 0) {
-			BaseFigure[] deselection = new BaseFigure[deselectedFigures.size()]; 
+			BaseFigure[] deselection = new BaseFigure[deselectedFigures.size()];
 			deselection = deselectedFigures.toArray(deselection);
-			
+
 			figureDeselected(deselection);
 		}
 	}
-	
+
 	private boolean hasSelection() {
 		return getSelectedFigures().size() > 0;
 	}
-	
+
 	private BaseFigure[] toFigureArray(Collection<Figure> collection) {
 		BaseFigure[] retVal = new BaseFigure[collection.size()];
 		retVal = (BaseFigure[]) collection.toArray(retVal);
-		
+
 		return retVal;
 	}
 
 	private Set<Figure> getDeltaSelection() {
 		HashSet<Figure> deltaSelection = new HashSet<Figure>();
 		Set<Figure> selection = getSelectedFigures();
-		
+
 		for (Figure f : previousSelection) {
-			
+
 			if (!selection.contains(f)) {
 				deltaSelection.add(f);
 			}
 		}
-		
+
 		return Collections.unmodifiableSet(deltaSelection);
 	}
 
@@ -133,7 +140,7 @@ public class DrawingView extends DefaultDrawingView {
 			l.figureSelected(figures);
 		}
 	}
-	
+
 	private void figureDeselected(BaseFigure[] figures) {
 		for (MouseClickListener l : listeners) {
 			l.figureDeselected(figures);
@@ -146,8 +153,24 @@ public class DrawingView extends DefaultDrawingView {
 		}
 	}
 
-	private void onMouseWheel(MouseWheelEvent e) {
+	private void initializeSelectionListener() {
 
+		addFigureSelectionListener(new FigureSelectionListener() {
+
+			@Override
+			public void selectionChanged(FigureSelectionEvent evt) {
+				onSelectionChanged(evt);
+			}
+		});
+	}
+
+	protected void onSelectionChanged(FigureSelectionEvent evt) {
+		handleDeselect();
+
+		if (hasSelection()) {
+			BaseFigure[] selection = toFigureArray(getSelectedFigures());
+			figureSelected(selection);
+		}
 	}
 
 	private void initializeKeyboardListener() {
@@ -170,28 +193,27 @@ public class DrawingView extends DefaultDrawingView {
 	protected void onKeyPressed(KeyEvent e) {
 
 		int key = e.getKeyCode();
-		
+
 		if (key == KeyEvent.VK_BACK_SPACE) {
-			
+
 			moduleZoomOut();
 		} else if (key == KeyEvent.VK_ENTER) {
-			
+
 			if (hasSelection()) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
 				moduleZoom(selection);
 			}
 		}
-		
+
 		e.consume();
 	}
 
 	private void moduleZoomOut() {
-	
+
 		for (MouseClickListener l : listeners) {
 			l.moduleZoomOut();
 		}
-	}		
-	
+	}
 
 	public void addListener(MouseClickListener listener) {
 		listeners.add(listener);
