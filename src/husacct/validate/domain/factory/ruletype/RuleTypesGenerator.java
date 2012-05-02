@@ -1,5 +1,6 @@
 package husacct.validate.domain.factory.ruletype;
 
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
@@ -135,9 +136,9 @@ class RuleTypesGenerator {
 		return classList;
 	}
 
-	private boolean classHasRuleConstructor(Class<?> ruleClass) {
+	private boolean classHasRuleConstructor(Class<?> ruleClass) {		
 		try {
-			ruleClass.getConstructor(String.class, String.class, List.class);
+			ruleClass.getConstructor(String.class, String.class, List.class, Severity.class);
 		} catch (SecurityException e) {
 			return exceptionOccured(e);
 		} catch (NoSuchMethodException e) {

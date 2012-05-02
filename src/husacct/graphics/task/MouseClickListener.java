@@ -8,9 +8,9 @@ public interface MouseClickListener {
 	
 	public void moduleZoomOut();
 
-	public void figureSelected(BaseFigure clickedFigure);
+	public void figureSelected(BaseFigure[] figures);
 	
-	public void figureDeselected();
+	public void figureDeselected(BaseFigure[] figures);
 	
 	public void exportToImage();
 	

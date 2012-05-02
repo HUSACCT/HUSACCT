@@ -5,7 +5,6 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,8 +80,8 @@ public class FilterController {
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler();
 		ArrayList<Violation> violations = new ArrayList<Violation>();
-		
-		for (Violation violation : taskServiceImpl.getAllViolations()) {	
+
+		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
 					violations.add(violation);

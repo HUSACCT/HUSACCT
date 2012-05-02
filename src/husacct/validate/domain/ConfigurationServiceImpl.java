@@ -17,7 +17,7 @@ public class ConfigurationServiceImpl {
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severityRepository = new SeverityPerTypeRepository();
+		this.severityRepository = new SeverityPerTypeRepository(severityConfig);
 	}
 
 	public void clearViolations() {
@@ -50,5 +50,9 @@ public class ConfigurationServiceImpl {
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(String language, HashMap<String, Severity> severitiesPerTypesPerProgrammingLanguages) {
 		severityRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
+	}
+	
+	public Severity getSeverityFromKey(String language, String key){
+		return severityRepository.getSeverity(language, key);
 	}
 }

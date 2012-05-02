@@ -4,49 +4,102 @@ import java.util.IllegalFormatException;
 
 import org.apache.log4j.Logger;
 
-import husacct.common.dto.MessageDTO;
 import husacct.validate.abstraction.language.ResourceBundles;
-import husacct.validate.domain.assembler.MessageAssembler;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 
 public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
 
-	public String createMessage(MessageDTO message){
-		return generateMessage(message);
-	}	
-
 	public String createMessage(Violation violation){
-		MessageAssembler assembler = new MessageAssembler();
-		MessageDTO messageDTO = assembler.createMessageDTO(violation.getMessage());
-		return createMessage(messageDTO);
+		return generateMessage(violation.getMessage());
 	}
 
 	public String createMessage(Message message){
-		MessageAssembler assembler = new MessageAssembler();
-		MessageDTO messageDTO = assembler.createMessageDTO(message);
-		return createMessage(messageDTO);
+		return generateMessage(message);
 	}
 
-	private String generateMessage(MessageDTO message){
+	private String generateMessage(Message message){
+		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
+
+		final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+		final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
+
+		final String left = appendStrings(logicalModuleFromPath, logicalModuleFromType);
+		final String right = appendStrings(logicalModuleToPath, logicalModuleToType);
+
+		final String textFormat = getTextFormat(message.getRuleKey());
+
+		String messageText = generateMessage(textFormat, left, right);
+
+		for(int i = 0; i < message.getExceptionMessage().size(); i ++ ){
+			if(i == 0){
+				messageText += generateFirstExceptionMessage(message.getExceptionMessage().get(i));
+			}
+			else{
+				messageText += generateRestExceptionMessage(message.getExceptionMessage().get(i));
+			}
+		}
+		return messageText;
+	}
+
+	private String generateSingleMessage(Message message){
+		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
+
+		final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+		final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
+
+		final String left = appendStrings(logicalModuleFromPath, logicalModuleFromType);
+		final String right = appendStrings(logicalModuleToPath, logicalModuleToType);
+
+		final String textFormat = getTextFormat(message.getRuleKey());
+
+		return generateMessage(textFormat, left, right);
+	}
+
+	private String appendStrings(String left, String right){
+		return String.format("%s %s", left, right);
+	}
+
+	private String getTextFormat(String ruleTypeKey){
 		try{
-			final String ruleTextKey = String.format("%sMessage", message.getRuleKey());
-			final String textFormat = ResourceBundles.getValue(ruleTextKey);		
-			return String.format(textFormat, message.getLeftText(), message.getRightText());
+			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
+			return ResourceBundles.getValue(ruleTextKey);		
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
 		}
 		return "";
 	}
-	
-//	private String exceptionMessage(String mainMessage){
-//		try{
-//			final String exceptionKey = ResourceBundles.getValue("ExceptionMessage");
-//			return mainMessage += exceptionKey;
-//		}catch(IllegalFormatException e){
-//			logger.error(e.getMessage(), e);
-//		}
-//		return mainMessage;
-//	}
+
+	private String generateMessage(String textFormat, String left, String right){
+		try{
+			return String.format(textFormat, left, right);
+		}
+		catch(IllegalFormatException e){
+			logger.error(e.getMessage(), e);
+		}
+		return "";
+	}
+
+	private String generateFirstExceptionMessage(Message message){
+		try{
+			final String exceptionKey = ResourceBundles.getValue("ExceptionMessage");
+			return exceptionKey + generateSingleMessage(message);
+		}catch(IllegalFormatException e){
+			logger.error(e.getMessage(), e);
+		}
+		return "";
+	}
+
+	private String generateRestExceptionMessage(Message message){
+		try{
+			final String exceptionKey = ResourceBundles.getValue("EnumerationMessage");
+			return exceptionKey + generateSingleMessage(message);
+		}catch(IllegalFormatException e){
+			logger.error(e.getMessage(), e);
+		}
+		return "";
+	}
 }

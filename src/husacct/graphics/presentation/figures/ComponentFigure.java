@@ -22,7 +22,7 @@ public class ComponentFigure extends NamedFigure
 
 	public ComponentFigure(String name)
 	{
-		super(name);
+		super(name, false);
 		
 		this.mainBox = new RectangleFigure();
 		this.box1 = new RectangleFigure();
@@ -102,5 +102,15 @@ public class ComponentFigure extends NamedFigure
 		that.children.add(that.textBox);
 		
 		return that;
+	}
+	
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
 	}
 }

@@ -15,9 +15,12 @@ import org.jhotdraw.draw.handle.Handle;
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
 	private boolean isSizeable = false;
+	private boolean violated = false;
 
-	public BaseFigure() {
+	public BaseFigure(boolean violated) {
 		super();
+		
+		this.violated = violated;
 	}
 
 	@Override
@@ -30,6 +33,16 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		newLead = (Point2D.Double) at.transform(lead, newLead);
 
 		setBounds(newAnchor, newLead);
+	}
+	
+	public void setViolated(boolean violated) {
+		this.willChange();
+		this.violated = violated;
+		this.changed();
+	}
+	
+	public boolean isViolated() {
+		return this.violated;
 	}
 
 	@Override
@@ -96,4 +109,8 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		
 		this.isSizeable = newValue;
 	}
+
+	public abstract boolean isModule();
+	
+	public abstract boolean isLine();
 }

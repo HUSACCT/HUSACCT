@@ -18,7 +18,7 @@ public class LayerFigure extends NamedFigure {
 	
 	public LayerFigure(String name)
 	{		
-		super(name);
+		super(name, false);
 		
 		body = new RectangleFigure();
 		text = new TextFigure(name);
@@ -64,5 +64,15 @@ public class LayerFigure extends NamedFigure {
 		other.children.add(other.text);
 		
 		return other;
+	}
+
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
 	}
 }

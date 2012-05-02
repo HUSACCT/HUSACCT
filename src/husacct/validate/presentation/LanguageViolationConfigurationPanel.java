@@ -3,7 +3,7 @@ package husacct.validate.presentation;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.task.TableModels.ComboBoxTableModel;
+import husacct.validate.presentation.TableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -123,7 +123,7 @@ public class LanguageViolationConfigurationPanel extends JPanel {
 
 	private void applyViolationTypesActionPerformed() {
 		//TODO: Fix the fetching of the ruletypes en put them in a list to return to the reposetory
-		ts.UpdateRuletype(ruletypeModel, violationtypeModel, language);
+		//ts.UpdateRuletype(ruletypeModel, violationtypeModel, language);
 	}
 
 	private void LoadRuleTypes() {
