@@ -109,19 +109,4 @@ public class AnalysedController extends BaseController {
 			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
 	}
-
-	@Override
-	public void toggleViolations() {
-		super.toggleViolations();
-		this.drawLinesBasedOnSetting();
-	}
-	
-	private void drawLinesBasedOnSetting(){
-		this.drawing.clearLines();
-		if(violationsAreShown()){
-			this.drawViolationsForShownModules();
-		}else{
-			this.drawDependenciesForShownModules();
-		}
-	}
 }

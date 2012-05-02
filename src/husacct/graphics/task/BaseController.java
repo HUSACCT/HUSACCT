@@ -67,6 +67,10 @@ public abstract class BaseController implements MouseClickListener {
 		this.drawing.clear();
 		this.view.clearSelection();
 	}
+	
+	public void clearLines(){
+		this.drawing.clearLines();
+	}
 
 	public String getCurrentPath() {
 		return this.currentPath;
@@ -118,9 +122,9 @@ public abstract class BaseController implements MouseClickListener {
 	}
 
 	public void toggleViolations() {
-		if (showViolations) {
-			Logger.getLogger(this.getClass()).debug("hiding violations");
-			showViolations = false;
+		if (violationsAreShown()) {
+			logger.debug("Hiding violations");
+			hideViolations();
 
 			// TODO: Just use (implement) the logic from the Drawing.java to clear all violations?
 			// clear violations
@@ -133,11 +137,12 @@ public abstract class BaseController implements MouseClickListener {
 			}
 			this.figureMap.clearAllViolations();
 		} else {
-			Logger.getLogger(this.getClass()).debug("showing violations");
-			showViolations = true;
+			logger.debug("Showing violations");
+			showViolations();
 
 			this.drawViolationsForShownModules();
 		}
+		this.drawLinesBasedOnSetting();
 	}
 
 	@Override
@@ -149,9 +154,9 @@ public abstract class BaseController implements MouseClickListener {
 	public boolean violationsAreShown() {
 		return showViolations;
 	}
-
-	public boolean dependenciesAreShown() {
-		return !violationsAreShown();
+	
+	public void hideViolations() {
+		showViolations = false;
 	}
 
 	public void showViolations() {
@@ -164,6 +169,14 @@ public abstract class BaseController implements MouseClickListener {
 			detail = DrawingDetail.WITH_VIOLATIONS;
 		}
 		return detail;
+	}
+	
+	protected void drawLinesBasedOnSetting(){
+		this.clearLines();
+		this.drawDependenciesForShownModules();
+		if(violationsAreShown()){
+			this.drawViolationsForShownModules();
+		}
 	}
 
 	// dependencies
