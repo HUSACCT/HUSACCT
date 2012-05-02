@@ -1,6 +1,9 @@
 package husacct.validate.domain.factory.ruletype;
 
+import husacct.define.DefineServiceStub;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.DefaultSeverityNotFoundException;
+import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeyClassDTO;
@@ -25,14 +28,17 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
 
-class RuleTypesGenerator {
+class RuleTypesGenerator {		
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
 
+	private final ConfigurationServiceImpl configuration;
+	
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
 
-	RuleTypesGenerator(){
-		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverityCombination();
+	RuleTypesGenerator(ConfigurationServiceImpl configuration){
+		this.configuration = configuration;
+		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
 
 	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
@@ -192,7 +198,7 @@ class RuleTypesGenerator {
 		return ruleClass.getSimpleName().replace("Rule", "");
 	}	
 
-	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverityCombination(){
+	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity(){
 		HashMap<String, DefaultSeverities> defaultRulesPerRuleType = new HashMap<String, DefaultSeverities>();
 		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)){
 			defaultRulesPerRuleType.put(ruletype.toString(), ruletype.getDefaultSeverity());
