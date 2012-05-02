@@ -11,169 +11,85 @@ import javax.swing.JLabel;
 public class ViewController {
 
 	private ServiceProvider serviceProvider;
-	private MainController mainController; 
-	private JInternalFrame defineFrame;
-	private JInternalFrame violationsFrame;
-	private JInternalFrame analysedArchitectureFrame;
-	private JInternalFrame definedArchitectureFrame;
-	private boolean hidden = true;
-
-	private JInternalFrame testinternalframe;
+	private MainController mainController;
+	
+	private JInternalFrame defineInternalFrame;
+	private JInternalFrame violationsInternalFrame;
+	private JInternalFrame analysedArchitectureInternalFrame;
+	private JInternalFrame definedArchitectureInternalFrame;
+		
+	private GridBagConstraints constraint = new GridBagConstraints();
 	
 	public ViewController(MainController maincontroller){
 		this.mainController = maincontroller;
 	}
 	
-	private void createTestFrame() {
-		this.testinternalframe = new JInternalFrame("TestFrame");
-		JLabel testlabel = new JLabel("Testing 1,2,3...");
-		testinternalframe.setPreferredSize(new Dimension(700, 500));
-		testinternalframe.setLocation(0, 0);
-		testinternalframe.add(testlabel);
-		testinternalframe.setVisible(true);
-	}
-	
-//	private GridBagConstraints setFrameInMainGUI(int gridx, int gridy) {
-//		GridBagConstraints constraint = new GridBagConstraints();
-//		
-//		constraint.fill = GridBagConstraints.BOTH;
-//		constraint.gridx = gridx;
-//		constraint.gridy = gridy;
-//		return constraint;
-//	}
-	
 	public void setDefineGui(){
 		serviceProvider = ServiceProvider.getInstance();
-		this.defineFrame = serviceProvider.getDefineService().getDefinedGUI();
-		
+		this.defineInternalFrame = serviceProvider.getDefineService().getDefinedGUI();
+		constraint.gridx = 0;
+		constraint.gridy = 0;
+		constraint.weightx = 0.5;
+		constraint.weighty = 0.75;
+		constraint.gridwidth = 1;
+		constraint.fill = GridBagConstraints.BOTH;
+		mainController.getMainGui().getContentPane().add(defineInternalFrame, constraint);
 	}
 	
 	public void showDefineGui() {
-		if (defineFrame != null){
-			GridBagConstraints constraint = new GridBagConstraints();
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.gridx = 0;
-			constraint.gridy = 0;
-			constraint.weightx = 0.5;
-			constraint.anchor = GridBagConstraints.NORTHWEST;
-			mainController.getMainGui().getContentPane().add(defineFrame, constraint);
-			defineFrame.setVisible(true);
-			this.hidden = false;
+		if (defineInternalFrame != null){
+			defineInternalFrame.setMaximizable(true);
+			defineInternalFrame.setVisible(true);
 		}		
 	}
 
-	public void hideDefineGui(){
-		this.defineFrame.setVisible(false);
-		this.hidden = true;
-	}
-
-	public void toggleDefineGui() {
-		if(hidden) {
-			this.defineFrame.setVisible(true);
-			this.hidden = false;
-		}
-		else {
-			hideDefineGui();
-		}
-	}
-	
 	public void setViolationsGui(){
 		this.serviceProvider = ServiceProvider.getInstance();
-		this.violationsFrame = serviceProvider.getValidateService().getBrowseViolationsGUI();
+		this.violationsInternalFrame = serviceProvider.getValidateService().getBrowseViolationsGUI();
+		constraint.fill = GridBagConstraints.BOTH;
+		constraint.gridx = 0;
+		constraint.gridy = 1;
+		constraint.gridwidth = 2;
+		constraint.weightx = 0.0;
+		constraint.weighty = 0.25;
+		mainController.getMainGui().getContentPane().add(violationsInternalFrame, constraint);
 	}
 	
 	public void showViolationsGui() {
-		if (violationsFrame != null){
-			GridBagConstraints constraint = new GridBagConstraints();
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.gridx = 0;
-			constraint.gridy = 1;
-			constraint.weightx = 0.0;
-			constraint.gridwidth = 2;
-			mainController.getMainGui().getContentPane().add(violationsFrame, constraint);
-			violationsFrame.setVisible(true);
-			violationsFrame.setLocation(0, 0);
-			//this.hidden = false;
-		}		
-	}
-
-	public void hideViolationsGui(){
-		this.defineFrame.setVisible(false);
-		this.hidden = true;
-	}
-
-	public void toggleViolationsGui() {
-		if(hidden) {
-			this.defineFrame.setVisible(true);
-			this.hidden = false;
-		}
-		else {
-			hideDefineGui();
+		if (violationsInternalFrame != null){
+			violationsInternalFrame.setClosable(false);
+			violationsInternalFrame.setVisible(true);
 		}
 	}
 	
 	public void setDefinedArchitectureGui(){
 		this.serviceProvider = ServiceProvider.getInstance();
-		this.definedArchitectureFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
+		this.definedArchitectureInternalFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
+		constraint.gridx = 1;
+		constraint.gridy = 0;
+		constraint.weightx = 0.5;
+		constraint.weighty = 0.75;
+		constraint.gridwidth = 1;
+		constraint.fill = GridBagConstraints.BOTH;
+		mainController.getMainGui().getContentPane().add(definedArchitectureInternalFrame, constraint);
 	}
 	
 	public void showDefinedArchitectureGui() {
-		if (definedArchitectureFrame != null){
-			GridBagConstraints constraint = new GridBagConstraints();
-			constraint.fill = GridBagConstraints.BOTH;
-			constraint.gridx = 1;
-			constraint.gridy = 0;
-			constraint.weightx = 0.5;
-			constraint.anchor = GridBagConstraints.NORTHEAST;
-			mainController.getMainGui().getContentPane().add(definedArchitectureFrame, constraint);
-			definedArchitectureFrame.setVisible(true);
-			definedArchitectureFrame.setLocation(0, 0);
-			//this.hidden = false;
+		if (definedArchitectureInternalFrame != null){
+			definedArchitectureInternalFrame.setMaximizable(true);
+			definedArchitectureInternalFrame.setVisible(true);
 		}		
-	}
-
-	public void hideDefinedArchitectureGui(){
-		this.defineFrame.setVisible(false);
-		this.hidden = true;
-	}
-
-	public void toggleDefinedArchitectureGui() {
-		if(hidden) {
-			this.defineFrame.setVisible(true);
-			this.hidden = false;
-		}
-		else {
-			hideDefineGui();
-		}
 	}	
 	
 	public void setAnalysedArchitectureGui(){
 		this.serviceProvider = ServiceProvider.getInstance();
-		this.analysedArchitectureFrame = serviceProvider.getGraphicsService().getAnalysedArchitectureGUI();
+		this.analysedArchitectureInternalFrame = serviceProvider.getGraphicsService().getAnalysedArchitectureGUI();
 	}
 	
 	public void showAnalysedArchitectureGui() {
-		if (analysedArchitectureFrame != null){
-			mainController.getMainGui().getContentPane().add(analysedArchitectureFrame);
-			analysedArchitectureFrame.setVisible(true);
-			//this.hidden = false;
+		if (analysedArchitectureInternalFrame != null){
+			mainController.getMainGui().getContentPane().add(analysedArchitectureInternalFrame);
+			analysedArchitectureInternalFrame.setVisible(true);
 		}		
-	}
-
-	public void hideAnalysedArchitectureGui(){
-		this.defineFrame.setVisible(false);
-		this.hidden = true;
-	}
-
-	public void toggleAnalysedArchitectureGui() {
-		if(hidden) {
-			this.defineFrame.setVisible(true);
-			this.hidden = false;
-		}
-		else {
-			hideDefineGui();
-		}
 	}	
-	
-	
 }

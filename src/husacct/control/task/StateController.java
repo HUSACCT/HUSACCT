@@ -25,35 +25,38 @@ public class StateController {
 	}
 	
 	public void checkState(){
-		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
-		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		
-		int newState = StateController.NONE;
+		this.setState(VALIDATED);
 		
-		if(WorkspaceController.isOpenWorkspace()){
-			newState = StateController.EMPTY;
-		}
-		
-		if(defineService.isDefined()){
-			newState = StateController.DEFINED;
-		}
-		
-		if(defineService.isMapped()){
-			newState = StateController.MAPPED;
-		}
-		
-		if(analyseService.isAnalysed()){
-			newState = StateController.ANALYSED;
-		}
-		
-		if(validateService.isValidated()){
-			newState = StateController.VALIDATED;
-		}
-		
-		if(newState != this.getState()){
-			this.setState(newState);
-		}
+//		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+//		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+//		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+//		
+//		int newState = StateController.NONE;
+//		
+//		if(WorkspaceController.isOpenWorkspace()){
+//			newState = StateController.EMPTY;
+//		}
+//		
+//		if(defineService.isDefined()){
+//			newState = StateController.DEFINED;
+//		}
+//		
+//		if(defineService.isMapped()){
+//			newState = StateController.MAPPED;
+//		}
+//		
+//		if(analyseService.isAnalysed()){
+//			newState = StateController.ANALYSED;
+//		}
+//		
+//		if(validateService.isValidated()){
+//			newState = StateController.VALIDATED;
+//		}
+//		
+//		if(newState != this.getState()){
+//			this.setState(newState);
+//		}
 	}
 	
 	public int getState(){

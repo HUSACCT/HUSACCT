@@ -19,11 +19,11 @@ public class ViewMenu extends JMenu{
 		super("View");
 		this.viewcontroller = viewController;
 		
-		JMenuItem logicalArchitectureItem = new JMenuItem("Logical architecture");
+		JMenuItem logicalArchitectureItem = new JMenuItem("Define architecture");
 		this.add(logicalArchitectureItem);
 		logicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				//maincontroller.getViewController().toggleDefineGui();
+				//maincontroller.getViewController().toggleView();
 			}
 		});
 		

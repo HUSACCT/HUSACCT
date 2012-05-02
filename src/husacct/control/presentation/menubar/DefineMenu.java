@@ -17,13 +17,13 @@ public class DefineMenu extends JMenu{
 	private JMenuItem importLogicalArchitectureItem;
 	private JMenuItem defineLogicalArchitectureItem;
 	private int currentState;
-	
+
 	public DefineMenu(MainController mainController){
 		super("Define");
-		
+
 		this.maincontroller = mainController;
 		currentState = maincontroller.getStateController().getState();
-		
+
 		defineLogicalArchitectureItem = new JMenuItem("Define logical architecture");
 		this.add(defineLogicalArchitectureItem);
 
@@ -31,31 +31,33 @@ public class DefineMenu extends JMenu{
 			public void actionPerformed(ActionEvent e){
 				maincontroller.getViewController().setDefineGui();
 				maincontroller.getViewController().showDefineGui();
+				//maincontroller.getStateController().checkState();
+
 				maincontroller.getViewController().setDefinedArchitectureGui();
 				maincontroller.getViewController().showDefinedArchitectureGui();
-				maincontroller.getStateController().setState(StateController.VALIDATED);
 			}
 		});
-		
+
 		importLogicalArchitectureItem = new JMenuItem("Import logical architecture");
 		this.add(importLogicalArchitectureItem);
 		importLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: import
-				
-				maincontroller.getStateController().setState(2);
+				maincontroller.getViewController().setViolationsGui();
+				maincontroller.getViewController().showViolationsGui();
+
+				//maincontroller.getStateController().setState(2);
 			}
 		});
-		
+
 		//disable buttons on start
 		defineLogicalArchitectureItem.setEnabled(false);
 		importLogicalArchitectureItem.setEnabled(false);
-		
+
 		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
 
 			public void changeState(int state) {
 				currentState = maincontroller.getStateController().getState();
-				
+
 				if(currentState == maincontroller.getStateController().NONE){
 					defineLogicalArchitectureItem.setEnabled(false);
 					importLogicalArchitectureItem.setEnabled(false);
@@ -73,7 +75,7 @@ public class DefineMenu extends JMenu{
 					importLogicalArchitectureItem.setEnabled(true);
 				}
 			}
-			
+
 		});
 	}
 }
