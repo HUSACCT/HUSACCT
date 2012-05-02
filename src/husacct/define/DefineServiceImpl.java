@@ -1,7 +1,5 @@
 package husacct.define;
 
-import java.util.ArrayList;
-
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
@@ -12,7 +10,8 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.task.ApplicationController;
 
-import javax.swing.JFrame;
+import java.util.ArrayList;
+
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
@@ -35,16 +34,8 @@ public class DefineServiceImpl implements IDefineService {
 	
 	@Override
 	public ModuleDTO[] getRootModules() {	
-		ModuleDTO[] moduleDTOs = getModules();
-		for (ModuleDTO moduleDTO : moduleDTOs){
-			moduleDTO.subModules = new ModuleDTO[]{};
-		}
-		return moduleDTOs;
-	}
-	
-	private ModuleDTO[] getModules() {
-		Module[] modules = defineDomainService.getModules();
-		ModuleDTO[] moduleDTOs = domainParser.parseModules(modules);
+		Module[] modules = defineDomainService.getRootModules();
+		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
 		return moduleDTOs;
 	}
 	

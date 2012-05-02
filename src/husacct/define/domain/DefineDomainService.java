@@ -1,10 +1,10 @@
 package husacct.define.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import husacct.define.domain.SoftwareUnitDefinition.Type;
-import husacct.define.domain.module.*;
+import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 
 public class DefineDomainService {
@@ -22,8 +22,9 @@ public class DefineDomainService {
 		SoftwareArchitecture.getInstance().setName(name);
 	}
 	
-	//MODULES
-	//MODULES
+	/**
+	 * Modules
+	 */
 	public long addModuleToRoot(Module module){
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
 		return moduleId;
@@ -34,7 +35,7 @@ public class DefineDomainService {
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
 		return moduleId;
-	}
+	}	
 	
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
@@ -58,10 +59,19 @@ public class DefineDomainService {
 		SoftwareArchitecture.getInstance().removeModule(module);
 	}
 	
-	public Module[] getModules(){
+	public Module[] getRootModules(){
 		ArrayList<Module> moduleList = SoftwareArchitecture.getInstance().getModules();
 		Module[] modules = new Module[moduleList.size()]; moduleList.toArray(modules);
 		return modules;
+	}
+	
+	public ArrayList<Long> getRootModulesIds(){
+		ArrayList<Module> moduleList = SoftwareArchitecture.getInstance().getModules();
+		ArrayList<Long> moduleIdList = new ArrayList<Long>();
+		for (Module module : moduleList) {
+			moduleIdList.add(module.getId());
+		}
+		return moduleIdList;
 	}
 	
 	public Module getModuleByLogicalPath(String logicalPath){
@@ -69,9 +79,9 @@ public class DefineDomainService {
 		return module;
 	}
 	
-	//LAYERS
-	//LAYERS
-	//LAYERS
+	/**
+	 * Layers
+	 */
 	public long addLayer(long parentModuleId, String name, int level) {
 		long moduleId = -1;
 
@@ -99,25 +109,9 @@ public class DefineDomainService {
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
 	}
 	
-	public ArrayList<Long> getLayerIdsSorted() {
-		ArrayList<Module> rootModules = SoftwareArchitecture.getInstance().getModules();
-		ArrayList<Layer> layers = new ArrayList<Layer>();
-		for (Module m : rootModules){
-			if (m instanceof Layer){
-				layers.add((Layer)m);
-			}
-		}
-		Collections.sort(layers);
-		ArrayList<Long> sortedLayerIds = new ArrayList<Long>();
-		for (Layer l : layers){
-			sortedLayerIds.add(l.getId());
-		}
-		return sortedLayerIds;
-	}
-	
-	//APPLIED RULES	
-	//APPLIED RULES
-	//APPLIED RULES
+	/**
+	 * Applied Rule
+	 */
 	public AppliedRule[] getAppliedRules() {
 		ArrayList<AppliedRule> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
 		AppliedRule[] rules = new AppliedRule[ruleList.size()]; ruleList.toArray(rules);
@@ -180,9 +174,9 @@ public class DefineDomainService {
 		return isEnabled;
 	}
 
-	//APPLIED RULE EXCEPTIONS
-	//APPLIED RULE EXCEPTIONS
-	//APPLIED RULE EXCEPTIONS
+	/**
+	 * Applied Rule Exception
+	 */
 	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, long moduleFromId, long moduleToId) {
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
 		Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
@@ -198,7 +192,7 @@ public class DefineDomainService {
 		parentRule.removeExceptionById(exceptionRuleId);
 	}
 
-	public void removeAppliedRuleExceptions(long appliedRuleId) {
+	public void removeAllAppliedRuleExceptions(long appliedRuleId) {
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
 		parentRule.removeAllExceptions();
 	}
@@ -213,9 +207,9 @@ public class DefineDomainService {
 		return exceptionIds;
 	}
 	
-	//SOFTWARE UNIT DEFINITION
-	//SOFTWARE UNIT DEFINITION
-	//SOFTWARE UNIT DEFINITION	
+	/**
+	 * Software Unit Definitions
+	 */
 	public ArrayList<String> getSoftwareUnitNames(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
@@ -238,9 +232,11 @@ public class DefineDomainService {
 		return softwareUnitType;
 	}
 
-	public void addSoftwareUnit(long moduleId, String softwareUnit) {
+	public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, Type.PACKAGE);
+		//TODO add try catch fopr type
+		Type type = Type.valueOf(t);
+		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
 		module.addSUDefinition(unit);
 	}
 	
@@ -251,9 +247,9 @@ public class DefineDomainService {
 	}
 
 	
-	//APPLICATION
-	//APPLICATION
-	//APPLICATION
+	/**
+	 * Application
+	 */
 	public void createApplication(String name, String[] paths, String language, String version) {
 			Application app = new Application(name, paths, language, version);
 			Application.setInstance(app);	
