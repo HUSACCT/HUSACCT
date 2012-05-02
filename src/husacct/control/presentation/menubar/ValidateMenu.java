@@ -30,7 +30,7 @@ public class ValidateMenu extends JMenu{
 				// TODO: Validate now
 				maincontroller.getViewController().setViolationsGui();
 				maincontroller.getViewController().showViolationsGui();
-				maincontroller.getStateController().setState(4);
+				maincontroller.getStateController().checkState();
 			}
 		});
 		
@@ -53,19 +53,19 @@ public class ValidateMenu extends JMenu{
 			@Override
 			public void changeState(int state) {
 				currentState = maincontroller.getStateController().getState();
-				if(currentState == maincontroller.getStateController().NONE){
+				if(currentState == StateController.NONE){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().EMPTY){
+				}else if(currentState == StateController.EMPTY){
 					mntmValidateNow.setEnabled(false);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().DEFINED){
+				}else if(currentState == StateController.DEFINED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().MAPPED){
+				}else if(currentState == StateController.MAPPED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().VALIDATED){
+				}else if(currentState == StateController.VALIDATED){
 					mntmValidateNow.setEnabled(true);
 					mntmConfigure.setEnabled(true);
 				}

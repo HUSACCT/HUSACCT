@@ -24,30 +24,19 @@ import javax.swing.border.EmptyBorder;
 public class MainGui extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private JPanel contentPanel;
 	private MainController controller;
 
 	private JMenuBar menuBar;
 	
 	public MainGui(MainController controller) {
 		this.controller = controller;
-		
 		setupFrame();
-
 		createMenuBar();
-		
-
-		// TODO: cleanup
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		
-		contentPane = new JPanel(gridBagLayout);
-		
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
+		contentPanel = new JPanel(new GridBagLayout());
+		this.setContentPane(contentPanel);
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);	
-		
 	}
 
 	private void createMenuBar() {

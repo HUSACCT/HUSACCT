@@ -1,12 +1,14 @@
 package husacct.control.presentation.menubar;
 
 
+import husacct.control.presentation.menubar.popup.ExportLogicalArchitectureFrame;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.StateController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -17,6 +19,7 @@ public class ExportMenu extends JMenu{
 	private JMenuItem exportLogicalArchitectureItem;
 	private JMenuItem exportPhysicalArchitectureItem;
 	private int currentState;
+	private JFrame exportLogicalArchitectureFrame = new ExportLogicalArchitectureFrame();
 	
 	public ExportMenu(StateController stateController){
 		super("Export");
@@ -29,7 +32,7 @@ public class ExportMenu extends JMenu{
 		this.add(exportLogicalArchitectureItem);
 		exportLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: logical architecture
+				exportLogicalArchitectureFrame.setVisible(true);
 			}
 		});
 
