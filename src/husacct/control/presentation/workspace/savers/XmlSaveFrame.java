@@ -36,13 +36,14 @@ public class XmlSaveFrame extends JFrame implements ISaverFrame{
 		this.workspaceController = workspaceController;
 		setup();
 		addComponents();
-		setListeners();		
+		setListeners();
+		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
-		this.setSize(new Dimension(350, 100));
+		this.setSize(new Dimension(350, 120));
 	}
 	
 	private void addComponents(){
@@ -67,7 +68,7 @@ public class XmlSaveFrame extends JFrame implements ISaverFrame{
 		});
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				load();
+				save();
 			}
 		});
 	}
@@ -86,10 +87,11 @@ public class XmlSaveFrame extends JFrame implements ISaverFrame{
 		saveButton.setEnabled(true);
 	}
 	
-	protected void load() {
+	protected void save() {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("file", selectedFile);
 		workspaceController.saveWorkspace("xml", data);
+		dispose();
 	}	
 
 }

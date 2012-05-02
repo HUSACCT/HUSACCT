@@ -18,6 +18,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class XmlLoadFrame extends JFrame implements ILoaderFrame{
 
+	private static final long serialVersionUID = 1L;
+
 	private WorkspaceController workspaceController;
 	
 	private JLabel pathLabel;
@@ -41,7 +43,8 @@ public class XmlLoadFrame extends JFrame implements ILoaderFrame{
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
-		this.setSize(new Dimension(350, 100));
+		this.setSize(new Dimension(350, 120));
+		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void addComponents(){
@@ -91,6 +94,7 @@ public class XmlLoadFrame extends JFrame implements ILoaderFrame{
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("file", selectedFile);
 		workspaceController.loadWorkspace("xml", data);
+		dispose();
 	}	
 
 }

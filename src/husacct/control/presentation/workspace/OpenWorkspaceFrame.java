@@ -21,12 +21,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.log4j.Logger;
-
 @SuppressWarnings("serial")
 public class OpenWorkspaceFrame extends JFrame{
-	
-	private Logger logger = Logger.getLogger(OpenWorkspaceFrame.class);
+
 	private WorkspaceController workspaceController;
 	private JList loaderList;
 	private List<String> loaderListData;
@@ -46,6 +43,7 @@ public class OpenWorkspaceFrame extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(300, 400));
+		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void setLoaders(){

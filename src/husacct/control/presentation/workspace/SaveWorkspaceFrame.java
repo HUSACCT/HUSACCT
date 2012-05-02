@@ -43,6 +43,7 @@ public class SaveWorkspaceFrame extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(300, 400));
+		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void setSavers(){
