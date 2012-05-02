@@ -209,6 +209,8 @@ public class DefinitionController extends Observable implements Observer {
 				c.initUi();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			this.logger.error(e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}

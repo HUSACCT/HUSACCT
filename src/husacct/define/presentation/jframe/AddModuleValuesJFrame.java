@@ -5,6 +5,7 @@ import husacct.define.task.DefinitionController;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -122,21 +123,46 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == this.cancelButton) {
-			this.cancelButtonAction(event);
+			this.cancelButtonAction();
 		} else if (event.getSource() == this.saveButton) {
-			this.saveButtonAction(event);
+			this.saveButtonAction();
 		} else if (event.getSource() == this.moduleTypeComboBox) {
 			this.moduleTypeComboBoxAction();
 		}
 	}
+	
+	/**
+	 * Do nothing
+	 */
+	@Override
+	public void keyPressed(KeyEvent event) {
+		
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			this.cancelButtonAction();
+		} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+			this.saveButtonAction();
+		}
+	}
+	
+	/**
+	 * Do nothing
+	 */
+	@Override
+	public void keyTyped(KeyEvent event) {
+		
+	}
 
 	@Override
-	protected void cancelButtonAction(ActionEvent event) {
+	protected void cancelButtonAction() {
 		this.dispose();
 	}
 
 	@Override
-	protected void saveButtonAction(ActionEvent event) {
+	protected void saveButtonAction() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
 		this.submitForModuleType(moduleType);
 	}

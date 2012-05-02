@@ -49,7 +49,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 
 	public void initGui() {
-//		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
