@@ -20,9 +20,10 @@ import org.apache.log4j.Logger;
 
 class ViolationtypeGenerator {	
 	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
+	private static final String violationTypeInterfaceLocation = "husacct.validate.domain.validation.violationtype.IViolationType"; 
 
-	List<String> getAllViolationTypeKeys(String packagename){
-		Map<String, String> classes = getClasses(packagename);
+	List<String> getAllViolationTypeKeys(String parentPackage){
+		Map<String, String> classes = getClasses(parentPackage);
 		ArrayList<String> violationKeys = new ArrayList<String>();
 		for(String violationkey : classes.keySet()){
 			violationKeys.add(violationkey);
@@ -34,21 +35,14 @@ class ViolationtypeGenerator {
 		return getClasses(packageName);
 	}
 
-	private Map<String, String> getClasses(String packageName) {
+	private Map<String, String> getClasses(String parentPackage) {
 		try {			
 			Map<String, String> keyList = new HashMap<String, String>();
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			assert classLoader != null;
-			String path = packageName.replace('.', '/');
-			Enumeration<URL> resources = classLoader.getResources(path);
-			List<String> dirs = new ArrayList<String>();
-			while (resources.hasMoreElements()) {
-				URL resource = resources.nextElement();
-				dirs.add(resource.getFile());
-			}
+
 			TreeSet<String> classes = new TreeSet<String>();
-			for (String directory : dirs) {
-				classes.addAll(findClasses(directory, packageName));
+			List<String> directories = getDirectories(parentPackage);
+			for (String directory : directories) {
+				classes.addAll(findClasses(directory, violationTypeInterfaceLocation.replace("IViolationType", "")+ parentPackage, parentPackage));
 			}
 
 			for (String clazz : classes) {
@@ -57,17 +51,14 @@ class ViolationtypeGenerator {
 					Class<?>[] interfaces = scannedClass.getInterfaces();
 
 					for(Class<?> violationInterface : interfaces){
-						if(violationInterface.getSimpleName().equals("IViolationType")){						
-
+						if(violationInterface.getSimpleName().equals("IViolationType")){
 							for(Object enumValue : scannedClass.getEnumConstants()){
-
 								Class<?> enumClass = enumValue.getClass();
 								try {
 									Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
 									String category = (String) getCategoryMethod.invoke(enumValue);
 									if(!keyList.containsKey(enumValue.toString())){									
-										keyList.put(enumValue.toString(), category);									
-
+										keyList.put(enumValue.toString(), category);
 									}								
 									else{
 										logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
@@ -97,8 +88,26 @@ class ViolationtypeGenerator {
 		}
 		return Collections.emptyMap();
 	}
+	
+	private List<String> getDirectories(String parentPackage){
+		List<String> directories = new ArrayList<String>();
+		try{			
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			assert classLoader != null;
+			String path = violationTypeInterfaceLocation.replace('.', '/') + ".class";
+			Enumeration<URL> resources = classLoader.getResources(path);			
+			while (resources.hasMoreElements()) {
+				URL resource = resources.nextElement();
+				directories.add(resource.getFile().replace("/IViolationType.class", "") + "/" + parentPackage);				
+			}
+			return  directories;
+		}catch(IOException e){
 
-	private TreeSet<String> findClasses(String directory, String packageName) throws IOException{
+		}
+		return directories;	
+	}
+
+	private TreeSet<String> findClasses(String directory, String packageName, String parentPackage) throws IOException{
 		TreeSet<String> classes = new TreeSet<String>();
 		if (directory.startsWith("file:") && directory.contains("!")) {
 			String [] split = directory.split("!");
@@ -106,7 +115,7 @@ class ViolationtypeGenerator {
 			ZipInputStream zip = new ZipInputStream(jar.openStream());
 			ZipEntry entry = null;
 			while ((entry = zip.getNextEntry()) != null) {
-				if (entry.getName().endsWith(".class")) {
+				if (entry.getName().startsWith("husacct/validate/domain/validation/violationtype/" + parentPackage) && entry.getName().endsWith(".class")) {
 					String className = entry.getName().replaceAll("[$].*", "").replaceAll("[.]class", "").replace('/', '.');
 					classes.add(className);
 				}
@@ -120,7 +129,7 @@ class ViolationtypeGenerator {
 		for (File file : files) {
 			if (file.isDirectory()) {
 				assert !file.getName().contains(".");
-				classes.addAll(findClasses(file.getAbsolutePath(), packageName + "." + file.getName()));
+				classes.addAll(findClasses(file.getAbsolutePath(), packageName + "." + file.getName(), parentPackage));
 			} else if (file.getName().endsWith(".class")) {
 				classes.add(packageName + '.' + file.getName().substring(0, file.getName().length() - 6));
 			}

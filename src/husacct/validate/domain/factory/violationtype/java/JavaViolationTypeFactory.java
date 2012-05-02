@@ -12,11 +12,11 @@ import java.util.Map;
 class JavaViolationTypeFactory extends AbstractViolationType {
 	private EnumSet<JavaDependencyRecognition> defaultDependencies = EnumSet.allOf(JavaDependencyRecognition.class);
 	//private EnumSet<JavaAccessTypes> defaultAccess = EnumSet.allOf(JavaAccessTypes.class);	
-	private static final String javaViolationTypesLocation = "husacct.validate.domain.validation.violationtype.java";
+	private static final String javaViolationTypesRootPackagename = "java";
 
 	public JavaViolationTypeFactory(){
 		ViolationtypeGenerator generator = new ViolationtypeGenerator();
-		this.allViolationKeys = generator.getAllViolationTypeKeys(javaViolationTypesLocation);
+		this.allViolationKeys = generator.getAllViolationTypeKeys(javaViolationTypesRootPackagename);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 	@Override
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
 		ViolationtypeGenerator generator = new ViolationtypeGenerator();
-		Map<String, String> violationTypeKeysAndCategories = generator.getAllViolationTypesWithCategory(javaViolationTypesLocation);
+		Map<String, String> violationTypeKeysAndCategories = generator.getAllViolationTypesWithCategory(javaViolationTypesRootPackagename);
 		return getAllViolationTypes(violationTypeKeysAndCategories);
 	}
 }

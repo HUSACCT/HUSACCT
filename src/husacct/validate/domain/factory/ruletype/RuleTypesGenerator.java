@@ -114,7 +114,6 @@ class RuleTypesGenerator {
 			while (resources.hasMoreElements()) {
 				URL resource = resources.nextElement();
 				directories.add(resource.getFile().replace("/RuleType.class", ""));
-				System.out.println(resource.getFile().replace("/RuleType.class", ""));
 			}
 		}
 		return directories;
@@ -130,7 +129,6 @@ class RuleTypesGenerator {
 			while ((entry = zip.getNextEntry()) != null) {
 				if (entry.getName().startsWith("husacct/validate/domain/validation/ruletype") && entry.getName().endsWith(".class")) {
 					final String className = entry.getName().replaceAll("[$].*", "").replaceAll("[.]class", "").replace('/', '.');
-					System.out.println(className);
 					classes.add(className);
 				}
 			}
