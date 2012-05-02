@@ -24,7 +24,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	private static final long serialVersionUID = -1729066215610611394L;
 	
 	private ModuleJPanel modulePanel;
-	private long selectedModuleId;
 	
 	private JPanel innerPanel;
 	
@@ -37,7 +36,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
-		this.selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 	}
 	
 	@Override
@@ -161,7 +159,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addModule(this.selectedModuleId, moduleName, moduleDescription);
+			definitionController.addModule(this.modulePanel.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -175,7 +173,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			int level = Integer.parseInt(this.hierarchicalLevelField.getText());
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addLayer(this.selectedModuleId, moduleName, moduleDescription, level);
+			definitionController.addLayer(this.modulePanel.getSelectedModuleId(), moduleName, moduleDescription, level);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -188,7 +186,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addComponent(this.selectedModuleId, moduleName, moduleDescription);
+			definitionController.addComponent(this.modulePanel.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -201,7 +199,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addExternalLibrary(this.selectedModuleId, moduleName, moduleDescription);
+			definitionController.addExternalLibrary(this.modulePanel.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();

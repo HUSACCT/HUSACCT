@@ -1,7 +1,6 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.domain.DefineDomainService;
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.AddModuleValuesJFrame;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.presentation.moduletree.ModuleTree;
@@ -18,10 +17,8 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -37,8 +34,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 
 	private static final long serialVersionUID = 6141711414139061921L;
 	
-	@Deprecated
-	private JList moduleTreeJList;
+	private long selectedModuleId = -1;
 	
 	private JScrollPane moduleTreeScrollPane;
 	private ModuleTree moduleTree;
@@ -157,7 +153,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
-		this.getSelectedModuleId();
 		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
 		addModuleFrame.initUI();
 	}
@@ -186,32 +181,8 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.updateModuleTree();
 	}
 	
-	private long getSelectedModuleId() {
-		long moduleId = -1;
-		TreePath path = this.moduleTree.getSelectionPath();
-		if (path != null){//returns null if nothing is selected
-			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-			moduleId = selectedComponent.getModuleId();
-		}
-		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
-		return moduleId;
-	}
-	
-	@Deprecated
-	public void valueChanged(ListSelectionEvent event) {
-		if (event.getSource() == this.moduleTreeJList && !event.getValueIsAdjusting()) {
-			this.moduleTreeJListAction(event);
-		}
-	}
-	
-	@Deprecated
-	private void moduleTreeJListAction(ListSelectionEvent event) {
-		long moduleId = -1;
-		Object selectedModule = this.moduleTreeJList.getSelectedValue();
-		if (selectedModule instanceof DataHelper) {
-			moduleId = ((DataHelper) selectedModule).getId();
-		}
-		DefinitionController.getInstance().notifyObservers(moduleId);	
+	public long getSelectedModuleId() {
+		return this.selectedModuleId;
 	}
 	
 	@Override
@@ -223,6 +194,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void updateSelectedModule(long moduleId) {
+		this.selectedModuleId = moduleId;
 		if(moduleId != -1) {
 			DefinitionController.getInstance().setSelectedModuleId(moduleId);
 		} else {
