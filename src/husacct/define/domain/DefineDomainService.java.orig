@@ -22,7 +22,7 @@ public class DefineDomainService {
 		SoftwareArchitecture.getInstance().setName(name);
 	}
 	
-	/**
+	/*
 	 * Modules
 	 */
 	public long addModuleToRoot(Module module){
@@ -96,7 +96,7 @@ public class DefineDomainService {
 		return module;
 	}
 	
-	/**
+	/*
 	 * Layers
 	 */
 	public long addLayer(long parentModuleId, String name, int level) {
@@ -126,7 +126,7 @@ public class DefineDomainService {
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
 	}
 	
-	/**
+	/*
 	 * Applied Rule
 	 */
 	public AppliedRule[] getAppliedRules() {
@@ -191,7 +191,7 @@ public class DefineDomainService {
 		return isEnabled;
 	}
 
-	/**
+	/*
 	 * Applied Rule Exception
 	 */
 	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, long moduleFromId, long moduleToId) {
@@ -224,7 +224,7 @@ public class DefineDomainService {
 		return exceptionIds;
 	}
 	
-	/**
+	/*
 	 * Software Unit Definitions
 	 */
 	public ArrayList<String> getSoftwareUnitNames(long moduleId) {
@@ -264,7 +264,7 @@ public class DefineDomainService {
 	}
 
 	
-	/**
+	/*
 	 * Application
 	 */
 	public void createApplication(String name, String[] paths, String language, String version) {

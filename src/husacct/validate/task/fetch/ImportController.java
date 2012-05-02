@@ -1,4 +1,4 @@
-package husacct.validate.abstraction.fetch;
+package husacct.validate.task.fetch;
 
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;

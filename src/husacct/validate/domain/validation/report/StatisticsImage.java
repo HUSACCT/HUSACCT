@@ -11,6 +11,7 @@ import java.util.List;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -23,6 +24,8 @@ public class StatisticsImage {
 		JFreeChart chart = ChartFactory.createBarChart("Violations Chart", "severity", "violations", dataset, PlotOrientation.VERTICAL, true, true, false);
 		CategoryPlot plot = chart.getCategoryPlot();
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
+		NumberAxis numberAxis = (NumberAxis)plot.getRangeAxis();
+		numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		int index = 0;
 		for(ViolationsPerSeverity violationPerSeverity : list) {
 			dataset.addValue(violationPerSeverity.getAmount(), violationPerSeverity.getSeverity().getDefaultName(), violationPerSeverity.getSeverity().getDefaultName());

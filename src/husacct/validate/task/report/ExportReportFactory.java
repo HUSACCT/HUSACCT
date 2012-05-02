@@ -1,10 +1,10 @@
 package husacct.validate.task.report;
 
 import husacct.define.DefineServiceStub;
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.task.report.writer.HTMLReportWriter;
 import husacct.validate.task.report.writer.PDFReportWriter;
 import husacct.validate.task.report.writer.ReportWriter;

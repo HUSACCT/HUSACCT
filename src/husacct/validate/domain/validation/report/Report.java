@@ -24,7 +24,7 @@ public class Report {
 		this.severities = severities;
 		new StatisticsImage().createStatisticsImage(imagePath, getViolationsPerSeverity());
 	}
-	
+
 	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
 		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
 		for(Severity severity : severities) {
@@ -41,13 +41,13 @@ public class Report {
 
 	public String[] getLocaleColumnHeaders() {
 		String[] headers = new String[] {
-		ResourceBundles.getValue("Source"),
-		ResourceBundles.getValue("Target"),
-		ResourceBundles.getValue("LineNumber"),
-		ResourceBundles.getValue("Severity"),
-		ResourceBundles.getValue("Rule"),
-		ResourceBundles.getValue("DependencyKind"),
-		""};
+				ResourceBundles.getValue("Source"),
+				ResourceBundles.getValue("Rule"),
+				ResourceBundles.getValue("LineNumber"),
+				ResourceBundles.getValue("DependencyKind"),
+				ResourceBundles.getValue("Target"),
+				ResourceBundles.getValue("Severity")
+		};
 		return headers;
 	}
 

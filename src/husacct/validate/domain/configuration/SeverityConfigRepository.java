@@ -2,6 +2,7 @@ package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.Severity;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +27,40 @@ public class SeverityConfigRepository {
 		this.currentSeverities = severities;
 	}
 	
-	public Severity getSeverity(String key){
+	public Severity getSeverityByName(String severityName){
 		for(Severity defaultSeverity : defaultSeverities){
-			if(key.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
+			if(severityName.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
 				return defaultSeverity;
 			}
 		}
 		
 		for(Severity customSeverity : currentSeverities){
-			if(key.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
 				return customSeverity;
 			}		
 		}
 		throw new SeverityNotFoundException();
 	}
+	
+	
+//	private boolean equalsMemoryLocation(Severity severity){
+//		for(Severity defaultSeverity : defaultSeverities){
+//			if(defaultSeverity == severity){
+//				return true;
+//			}
+//		}
+//		
+//		for(Severity currentSeverity : currentSeverities){
+//			if(currentSeverity == severity){
+//				return true;
+//			}
+//		}		
+//		return false;
+//	}
+//	
+//	private boolean equalsContent(Severity severity){
+//		
+//	}
 
 	private void generateDefaultSeverities(){
 		Severity defaultLowSeverity = new Severity("Low", "", Color.GREEN);

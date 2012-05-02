@@ -1,7 +1,6 @@
 package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
-import husacct.common.dto.MessageDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -23,10 +22,10 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 
 	private CategoryDTO category = new CategoryDTO("Legality of Dependency", new RuleTypeDTO[] { ruleType });
 
-	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
-	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
-	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, new MessageDTO("Module locationbasedConnections", "Module locationbasedDAO", "IsNotAllowedToUse"));
-	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, new MessageDTO("Module locationbasedHistory", "Module locationbasedDAO", "IsNotAllowedToUse"));
+	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, "Module locationbasedConnections  is not allowed to use Module locationbasedDAO", 12);
+	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 18);
+	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 19);
+	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56);
 
 	private boolean validationExecuted;
 	
@@ -72,11 +71,6 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		this.validationExecuted = true;
-	}
-
-	@Override
-	public String buildDefinedRuleMessage(MessageDTO message) {
-		return "class A is not allowed to use class B";
 	}
 
 	@Override

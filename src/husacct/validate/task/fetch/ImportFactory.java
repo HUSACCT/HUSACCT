@@ -1,10 +1,10 @@
-package husacct.validate.abstraction.fetch;
+package husacct.validate.task.fetch;
 
-import husacct.validate.abstraction.fetch.xml.ImportSeverities;
-import husacct.validate.abstraction.fetch.xml.ImportSeveritiesPerTypesPerProgrammingLanguages;
-import husacct.validate.abstraction.fetch.xml.ImportViolations;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.task.fetch.xml.ImportSeverities;
+import husacct.validate.task.fetch.xml.ImportSeveritiesPerTypesPerProgrammingLanguages;
+import husacct.validate.task.fetch.xml.ImportViolations;
 
 import java.util.HashMap;
 import java.util.List;

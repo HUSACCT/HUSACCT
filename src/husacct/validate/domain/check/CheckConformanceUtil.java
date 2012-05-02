@@ -2,6 +2,7 @@ package husacct.validate.domain.check;
 
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.define.DefineServiceStub;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
@@ -32,6 +33,28 @@ public class CheckConformanceUtil {
 		}
 		return classpaths;
 	}
+
+	//TODO: Define Service
+	static DefineServiceStub definestub = new DefineServiceStub();
+	
+	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
+		ArrayList<Mapping> classpathsFrom = new ArrayList<Mapping>();
+		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
+		for(ModuleDTO module : childModules){
+			classpathsFrom.addAll(getAllClasspathsFromModule(module));
+			classpathsFrom.addAll(getAllModulesFromLayer(module,classpathsFrom));
+		}
+		return classpathsFrom;
+	}
+	private static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, ArrayList<Mapping> classpaths){
+		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
+		for(ModuleDTO module : childModules){
+			classpaths.addAll(getAllClasspathsFromModule(module));
+			return getAllModulesFromLayer(module,classpaths);
+		}
+		return classpaths;
+	}
+
 
 	public static Mappings filter(RuleDTO rule){
 		Mappings mainClasspaths = getAllClasspathsFromModule(rule);

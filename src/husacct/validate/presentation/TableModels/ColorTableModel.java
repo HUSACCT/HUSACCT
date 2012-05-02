@@ -1,6 +1,5 @@
-package husacct.validate.task.TableModels;
+package husacct.validate.presentation.TableModels;
 
-import java.awt.Color;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;

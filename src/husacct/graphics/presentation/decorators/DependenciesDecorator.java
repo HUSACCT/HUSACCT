@@ -15,4 +15,14 @@ public class DependenciesDecorator extends Decorator {
 	public DependencyDTO[] getDependencies() {
 		return this.dependencyDTOs;
 	}
+
+	@Override
+	public boolean isModule() {
+		return false;
+	}
+
+	@Override
+	public boolean isLine() {
+		return true;
+	}
 }
