@@ -16,7 +16,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.UIManager;
 
-public class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{  
+class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{  
 	
 	private static final long serialVersionUID = 1L;
 	private JTree analyzedCodeTree;

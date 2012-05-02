@@ -5,6 +5,7 @@ import java.util.List;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
 
 public class AnalyseUIController {
 
@@ -50,5 +51,13 @@ public class AnalyseUIController {
 			}
 		}
 		return allModulesInModule;
+	}
+	
+	public List<DependencyDTO> listDependencies(String from, String to){
+		List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
+		for(DependencyDTO dependency: analyseTaskService.getDependency(from, to)){
+			if(!dependencies.contains(dependencies)) dependencies.add(dependency);
+		}
+		return dependencies;
 	}
 }

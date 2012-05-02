@@ -1,5 +1,6 @@
 package husacct.analyse.presentation;
 
+import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -14,6 +15,8 @@ public class AnalyseInternalFrame extends JInternalFrame {
 	public AnalyseInternalFrame() {
 		super("Analysed Application", true, true, false, true);
 		setBounds(200, 200, 550, 400);
+
+		setFrameIcon(new ImageIcon("img/husacct.png"));
 		
 		JTabbedPane tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel.setBackground(UIManager.getColor("Panel.background"));

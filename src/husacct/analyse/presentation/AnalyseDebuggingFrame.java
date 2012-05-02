@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
-
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -33,7 +31,7 @@ public class AnalyseDebuggingFrame extends JFrame {
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout(0, 0));
-		setTitle("HUSACCT Debug Analyse Component");
+		setTitle("Husacct - Analyse Application");
 		setVisible(true);
 	}
 

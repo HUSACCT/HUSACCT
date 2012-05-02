@@ -44,15 +44,36 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 
 	@Override
-	public void createImport(String importingClass, String importedModule, String completeImportString, boolean importsCompletePackage) {
+	public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage) {
 		FamixImport fImport = new FamixImport();
 		fImport.from = importingClass;
 		fImport.to = importedModule;
+		fImport.lineNumber = lineNumber;
 		fImport.importingClass = importingClass;
 		fImport.completeImportString = completeImportString;
 		fImport.importedModule = completeImportString;
 		fImport.importsCompletePackage = importsCompletePackage;
 		addToModel(fImport);
+	}
+	
+	@Override
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature, boolean isPureAccessor, String declaredReturnType,
+			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
+		
+		FamixMethod famixMethod = new FamixMethod();
+		famixMethod.name = name;
+		famixMethod.uniqueName = uniqueName;
+
+		famixMethod.accessControlQualifier = accessControlQualifier;
+		famixMethod.signature = signature;
+		famixMethod.isPureAccessor = isPureAccessor;
+		famixMethod.declaredReturnType = declaredReturnType;
+
+		famixMethod.belongsToClass = belongsToClass;
+		famixMethod.isConstructor = isConstructor;
+		famixMethod.isAbstract = isAbstract;
+		famixMethod.hasClassScope = hasClassScope;
+		addToModel(famixMethod);
 	}
 	
 	@Override
@@ -83,13 +104,11 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	@Override
 	public void createInheritanceDefinition(String from, String to,
 			int lineNumber, String type) {
-		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition();
+		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition(type);
 		famixInheritanceDefinition.from = from;
 		famixInheritanceDefinition.to = to;
 		famixInheritanceDefinition.lineNumber = lineNumber;
-		famixInheritanceDefinition.type = type;
 		addToModel(famixInheritanceDefinition);
-
 	}
 	
 	private boolean addToModel(FamixObject newObject){
@@ -111,25 +130,5 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	public String represent(){
 		return model.toString();
-	}
-
-	@Override
-	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature, boolean isPureAccessor, String declaredReturnType,
-			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
-		
-		FamixMethod famixMethod = new FamixMethod();
-		famixMethod.name = name;
-		famixMethod.uniqueName = uniqueName;
-
-		famixMethod.accessControlQualifier = accessControlQualifier;
-		famixMethod.signature = signature;
-		famixMethod.isPureAccessor = isPureAccessor;
-		famixMethod.declaredReturnType = declaredReturnType;
-
-		famixMethod.belongsToClass = belongsToClass;
-		famixMethod.isConstructor = isConstructor;
-		famixMethod.isAbstract = isAbstract;
-		famixMethod.hasClassScope = hasClassScope;
-		addToModel(famixMethod);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import husacct.analyse.domain.ModelQueryService;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
 
 public class FamixQueryServiceImpl implements ModelQueryService{
 
@@ -66,7 +67,7 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 				String name = fPackage.name;
 				String type = "package";
 				module = new AnalysedModuleDTO(uniqueName,name,type, "");
-				foundModules.add(module);
+				if(!analysedModuleAlreadyListed(foundModules, module)) foundModules.add(module);
 			}
 		}
 		while(classIterator.hasNext()){
@@ -77,10 +78,40 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 				String name = fClass.name;
 				String type = "class";
 				module = new AnalysedModuleDTO(uniqueName, name, type, "");
-				foundModules.add(module);
+				if(!analysedModuleAlreadyListed(foundModules, module)) foundModules.add(module);
 			}
 		}
 		return foundModules;
 	}
+
+	@Override
+	public List<DependencyDTO> getDependencies(String from, String to) {
+		ArrayList<DependencyDTO> allDependencies = new ArrayList<DependencyDTO>(); 
+		ArrayList<FamixAssociation> AssociationIterator = theModel.associations ; 
+		for(FamixAssociation currentAssociation: AssociationIterator){ 
+			if(currentAssociation.from.startsWith(from)){ 
+				if(currentAssociation.to.startsWith(to)){
+					DependencyDTO found = new DependencyDTO(currentAssociation.from,currentAssociation.to, currentAssociation.type,currentAssociation.lineNumber);
+					if(!dependencyAlreadyListed(allDependencies, found)) allDependencies.add(found);
+				}
+ 			} 
+		} 
+		return allDependencies;
+	}
 	
+	private boolean dependencyAlreadyListed(List<DependencyDTO> dependencies, DependencyDTO dependency){
+		boolean result = false;
+		for(DependencyDTO item: dependencies){
+			if(item.equals(dependency)) result = true;
+		}
+		return result;
+	}
+	
+	private boolean analysedModuleAlreadyListed(List<AnalysedModuleDTO> modules, AnalysedModuleDTO module){
+		boolean result = false;
+		for(AnalysedModuleDTO item: modules){
+			if(item.equals(module)) result = true;
+		}
+		return result;
+	}
 }

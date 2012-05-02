@@ -1,8 +1,7 @@
 package husacct.analyse;
 
 import javax.swing.JInternalFrame;
-
-import husacct.analyse.presentation.AnalyzePanelGetRootModules;
+import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -36,7 +35,7 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		return new AnalyzePanelGetRootModules();
+		return new AnalyseInternalFrame();
 	}
 	
 	@Override
@@ -48,7 +47,6 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
 		return service.getChildModulesInModule(from);
-//		return stub.getChildModulesInModule(from);
 	}
 
 	@Override
@@ -63,7 +61,7 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
-		return stub.getDependencies(from, to);
+		return service.getDependency(from, to);
 	}
 
 	@Override

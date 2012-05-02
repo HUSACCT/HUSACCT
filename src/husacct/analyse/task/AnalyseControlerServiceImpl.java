@@ -42,15 +42,14 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 		// TODO Implement Service
 		return null;
 	}
-
+	
 	@Override
-	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO Implement Service
-		return null;
+	public DependencyDTO[] getDependency(String from, String to) {
+		return domainService.getDependency(from, to);
 	}
 
 	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
+	public AnalysedModuleDTO getParentModuleForModule(String child) {
 		// TODO Implement Service
 		return null;
 	}

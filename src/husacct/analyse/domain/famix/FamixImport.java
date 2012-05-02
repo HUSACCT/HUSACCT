@@ -7,6 +7,10 @@ class FamixImport extends FamixAssociation{
 	public String completeImportString;
 	public boolean importsCompletePackage;
 	
+	public FamixImport(){
+		super.type = "import";
+	}
+	
 	public String toString(){
 		String importRepresentation = "";
 		importRepresentation += "\nimportingClass: " + this.importingClass;

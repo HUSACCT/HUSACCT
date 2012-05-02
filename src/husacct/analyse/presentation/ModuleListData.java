@@ -4,7 +4,7 @@ import java.util.List;
 import husacct.common.dto.AnalysedModuleDTO;
 import javax.swing.AbstractListModel;
 
-public class ModuleListData extends AbstractListModel{
+class ModuleListData extends AbstractListModel{
 
 	private static final long serialVersionUID = 1L;
 	private List<AnalysedModuleDTO> modules;
