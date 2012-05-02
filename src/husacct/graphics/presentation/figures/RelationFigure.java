@@ -231,12 +231,12 @@ public class RelationFigure extends NamedFigure
 	
 	@Override
 	public boolean isModule() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isLine() {
-		return false;
+		return true;
 	}
 
 	// these methods listen to line events

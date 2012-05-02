@@ -84,18 +84,6 @@ public class FigureMap {
 		return violatedFigureDTOMap.get(figure);
 	}
 	
-	public boolean isDependencyLine(BaseFigure figure){
-		return dependencyLineDTOMap.containsKey(figure);
-	}
-	
-	public boolean isViolationLine(BaseFigure figure){
-		return violationLineDTOMap.containsKey(figure);
-	}
-	
-	public boolean isViolatedFigure(BaseFigure figure){
-		return violatedFigureDTOMap.containsKey(figure);
-	}
-	
 	// Linking
 
 	public void linkModule(BaseFigure figure, AbstractDTO dto) {
@@ -112,6 +100,20 @@ public class FigureMap {
 	
 	public void linkViolations(RelationFigure figure, ViolationDTO[] dtos) {
 		violationLineDTOMap.put(figure, dtos);
+	}
+	
+	// Inquiries about figures
+	
+	public boolean isDependencyLine(BaseFigure figure){
+		return dependencyLineDTOMap.containsKey(figure);
+	}
+	
+	public boolean isViolationLine(BaseFigure figure){
+		return violationLineDTOMap.containsKey(figure);
+	}
+	
+	public boolean isViolatedFigure(BaseFigure figure){
+		return violatedFigureDTOMap.containsKey(figure);
 	}
 
 }

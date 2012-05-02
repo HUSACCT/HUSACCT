@@ -1,20 +1,17 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.NamedFigure;
+import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.CompositeFigure;
-import org.jhotdraw.draw.DecoratedFigure;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.io.ImageOutputFormat;
@@ -35,6 +32,7 @@ public class Drawing extends DefaultDrawing {
 			fileChooser.setVisible(true);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				//TODO: Move to appropriate FileManager, possible?
 				selectedFile = fileChooser.getSelectedFile();
 				FileOutputStream fileoutputstream = new FileOutputStream(selectedFile);
 				imageoutputformat.write(fileoutputstream,this);
@@ -57,7 +55,7 @@ public class Drawing extends DefaultDrawing {
 		return moduleFigures.toArray(new BaseFigure[] {});
 	}
 	
-	public BaseFigure[] getShownLines() {
+	public RelationFigure[] getShownLines() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 
 		for (Figure jhotdrawfigure : this.getChildren()) {
@@ -66,7 +64,7 @@ public class Drawing extends DefaultDrawing {
 				moduleFigures.add(figure);
 			}
 		}
-		return moduleFigures.toArray(new BaseFigure[] {});
+		return moduleFigures.toArray(new RelationFigure[] {});
 	}
 
 	@Override
@@ -78,65 +76,40 @@ public class Drawing extends DefaultDrawing {
 
 		return super.add(f);
 	}
+	
+	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList){
+		for(BaseFigure figure : arrayList){
+			figure.setViolated(false);
+		}
+	}
 
-	public void clear() { //TODO: clearAll? and clearModules?
+	public void clearAll() {
 		this.willChange();
 		this.basicRemoveAllChildren();
 		this.invalidate();
 		this.changed();
 	}
 	
-	public void clearLines(){
+	public void clearAllLines(){
 		this.willChange();
 		BaseFigure[] lines = getShownLines();
 		for(BaseFigure line : lines){
+			// TODO FIXME BUG: Does not clear all lines when used in the demo controller!
 			this.remove(line);
 		}
 		this.invalidate();
 		this.changed();
 	}
 	
-	/**
-	 * @deprecated usage of this function can cause problems, because the name
-	 *             of the figure may be different from e.g. logicalPaths in the
-	 *             dtos
-	 */
-	public BaseFigure findFigureByName(String name) {
-		return this.findFigureByName(name, this.getChildren());
-	}
-
-	private BaseFigure findFigureByName(String name, List<Figure> figures) {
-		for (Figure figure : figures) {
-			BaseFigure foundChildFig = this.findFigureByName(name, figure);
-			if (foundChildFig != null) {
-				return foundChildFig;
+	public void clearViolationLines(){
+		this.willChange();
+		BaseFigure[] lines = getShownLines();
+		for(BaseFigure line : lines){
+			if(line.isViolated()){
+				this.remove(line);
 			}
 		}
-
-		return null;
-	}
-
-	private BaseFigure findFigureByName(String name, Figure figure) {
-		if (figure instanceof NamedFigure) {
-			if (((NamedFigure) figure).getName().equals(name)) {
-				return (BaseFigure) figure;
-			}
-		}
-
-		if (figure instanceof DecoratedFigure) {
-			BaseFigure foundChildFig = findFigureByName(name, ((DecoratedFigure) figure).getDecorator());
-			if (foundChildFig != null) {
-				return foundChildFig;
-			}
-		}
-
-		if (figure instanceof CompositeFigure) {
-			BaseFigure foundChildFig = findFigureByName(name, ((CompositeFigure) figure).getChildren());
-			if (foundChildFig != null) {
-				return foundChildFig;
-			}
-		}
-
-		return null;
+		this.invalidate();
+		this.changed();
 	}
 }

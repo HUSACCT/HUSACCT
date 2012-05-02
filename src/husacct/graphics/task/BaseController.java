@@ -64,12 +64,12 @@ public abstract class BaseController implements MouseClickListener {
 
 	public void clearDrawing() {
 		this.figureMap.clearAll();
-		this.drawing.clear();
+		this.drawing.clearAll();
 		this.view.clearSelection();
 	}
 	
 	public void clearLines(){
-		this.drawing.clearLines();
+		this.drawing.clearAllLines();
 	}
 
 	public String getCurrentPath() {
@@ -126,15 +126,8 @@ public abstract class BaseController implements MouseClickListener {
 			logger.debug("Hiding violations");
 			hideViolations();
 
-			// TODO: Just use (implement) the logic from the Drawing.java to clear all violations?
-			// clear violations
-			for (BaseFigure figure : this.figureMap.getViolatedFigures()) {
-				figure.setViolated(false);
-			}
-			// TODO: Just use (implement) the logic from the Drawing.java to clear all violation lines?
-			for (BaseFigure figure : this.figureMap.getViolationLines()) {
-				this.drawing.remove(figure);
-			}
+			this.drawing.setFiguresNotViolated(this.figureMap.getViolatedFigures());
+			this.drawing.clearViolationLines();
 			this.figureMap.clearAllViolations();
 		} else {
 			logger.debug("Showing violations");

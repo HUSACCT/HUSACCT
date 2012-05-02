@@ -48,11 +48,13 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	@Override
 	protected void drawFill(Graphics2D g) {
 		// Empty
+		// TODO: Sorry? What do you do?
 	}
 
 	@Override
 	protected void drawStroke(Graphics2D g) {
 		// Empty
+		// TODO: Sorry? What do you do?
 	}
 
 	@Override

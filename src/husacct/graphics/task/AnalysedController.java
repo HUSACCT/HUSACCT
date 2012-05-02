@@ -53,8 +53,6 @@ public class AnalysedController extends BaseController {
 		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 	
-	// Dependencies
-	
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureFrom);
@@ -62,8 +60,6 @@ public class AnalysedController extends BaseController {
 		
 		return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
-	
-	// violations
 	
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
@@ -77,9 +73,9 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure figure) {
-		if (figure.isModule()) { //FIXME? : Can zoom only on modules
+		if (figure.isModule()) {
 			AbstractDTO dto = this.figureMap.getModuleDTO(figure);
-	
+			// TODO: Can't check on DTO class name
 			if (dto.getClass().getSimpleName().equals("AnalysedModuleDTO")) {
 				AnalysedModuleDTO parentDTO = ((AnalysedModuleDTO) dto);
 				getAndDrawModulesIn(parentDTO.uniqueName);
