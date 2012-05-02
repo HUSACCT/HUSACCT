@@ -35,7 +35,7 @@ public class RuleTypesFactory {
 	public RuleTypesFactory(ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
 		
-		RuleTypesGenerator ruletypegenerator = new RuleTypesGenerator(configuration);
+		RuleTypesGenerator ruletypegenerator = new RuleTypesGenerator();
 		this.allRuletypes = ruletypegenerator.generateAllRules();
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
