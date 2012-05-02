@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -76,17 +77,15 @@ public class DrawingView extends DefaultDrawingView {
 			if (mouseButton == MouseEvent.BUTTON1) {
 				if (mouseClicks == SingleClick) {
 					
-					Set<Figure> selectedFigures = getSelectedFigures();
-					BaseFigure[] selection = new BaseFigure[selectedFigures.size()];
-					selection = selectedFigures.toArray(selection);
-					
+					BaseFigure[] selection = toFigureArray(getSelectedFigures());
 					figureSelected(selection);
 				} else if (mouseClicks == DoubleClick) {
-					BaseFigure figure = getFirstSelectedFigure();
-					moduleZoom(figure);
+					
+					BaseFigure[] selection = toFigureArray(getSelectedFigures());
+					moduleZoom(selection);					
 				}
 			}
-		} 
+		}
 		
 		previousSelection.clear();
 		previousSelection.addAll(getSelectedFigures());
@@ -103,6 +102,17 @@ public class DrawingView extends DefaultDrawingView {
 			figureDeselected(deselection);
 		}
 	}
+	
+	private boolean hasSelection() {
+		return getSelectedFigures().size() > 0;
+	}
+	
+	private BaseFigure[] toFigureArray(Collection<Figure> collection) {
+		BaseFigure[] retVal = new BaseFigure[collection.size()];
+		retVal = (BaseFigure[]) collection.toArray(retVal);
+		
+		return retVal;
+	}
 
 	private Set<Figure> getDeltaSelection() {
 		HashSet<Figure> deltaSelection = new HashSet<Figure>();
@@ -118,17 +128,6 @@ public class DrawingView extends DefaultDrawingView {
 		return Collections.unmodifiableSet(deltaSelection);
 	}
 
-	private boolean hasSelection() {
-		return getSelectedFigures().size() > 0;
-	}
-	
-	private BaseFigure getFirstSelectedFigure() {
-		
-		Set<Figure> selection = getSelectedFigures();
-		
-		return (BaseFigure) selection.iterator().next();
-	}
-
 	private void figureSelected(BaseFigure[] figures) {
 		for (MouseClickListener l : listeners) {
 			l.figureSelected(figures);
@@ -141,7 +140,7 @@ public class DrawingView extends DefaultDrawingView {
 		}
 	}
 
-	private void moduleZoom(BaseFigure fig) {
+	private void moduleZoom(BaseFigure[] fig) {
 		for (MouseClickListener l : listeners) {
 			l.moduleZoom(fig);
 		}
@@ -178,7 +177,7 @@ public class DrawingView extends DefaultDrawingView {
 		} else if (key == KeyEvent.VK_ENTER) {
 			
 			if (hasSelection()) {
-				BaseFigure selection = getFirstSelectedFigure();
+				BaseFigure[] selection = toFigureArray(getSelectedFigures());
 				moduleZoom(selection);
 			}
 		}

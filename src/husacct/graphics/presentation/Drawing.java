@@ -26,22 +26,26 @@ public class Drawing extends DefaultDrawing {
 	public Drawing() {
 		super();
 	}
-	
-	public void showExportToImagePanel(){
+
+	public void showExportToImagePanel() {
+
 		File selectedFile = new File(".");
 		try {
+
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
-			JFileChooser fileChooser =  new JFileChooser();
+			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setVisible(true);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
+
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
+
 				selectedFile = fileChooser.getSelectedFile();
 				FileOutputStream fileoutputstream = new FileOutputStream(selectedFile);
-				imageoutputformat.write(fileoutputstream,this);
+				imageoutputformat.write(fileoutputstream, this);
 				fileoutputstream.close();
-	        }
+			}
 		} catch (IOException e) {
-			logger.debug("Cannot save file to "+selectedFile.getAbsolutePath());
+			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
 		}
 	}
 
@@ -50,19 +54,19 @@ public class Drawing extends DefaultDrawing {
 
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if(figure.isModule()){
+			if (figure.isModule()) {
 				moduleFigures.add(figure);
 			}
 		}
 		return moduleFigures.toArray(new BaseFigure[] {});
 	}
-	
+
 	public BaseFigure[] getShownLines() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if(figure.isLine()){
+			if (figure.isLine()) {
 				moduleFigures.add(figure);
 			}
 		}
@@ -79,23 +83,23 @@ public class Drawing extends DefaultDrawing {
 		return super.add(f);
 	}
 
-	public void clear() { //TODO: clearAll? and clearModules?
+	public void clear() { // TODO: clearAll? and clearModules?
 		this.willChange();
 		this.basicRemoveAllChildren();
 		this.invalidate();
 		this.changed();
 	}
-	
-	public void clearLines(){
+
+	public void clearLines() {
 		this.willChange();
 		BaseFigure[] lines = getShownLines();
-		for(BaseFigure line : lines){
+		for (BaseFigure line : lines) {
 			this.remove(line);
 		}
 		this.invalidate();
 		this.changed();
 	}
-	
+
 	/**
 	 * @deprecated usage of this function can cause problems, because the name
 	 *             of the figure may be different from e.g. logicalPaths in the

@@ -35,6 +35,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		setBounds(newAnchor, newLead);
 	}
 	
+	// TODO: This should be a decorator!
 	public void setViolated(boolean violated) {
 		this.willChange();
 		this.violated = violated;

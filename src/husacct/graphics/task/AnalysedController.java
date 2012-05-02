@@ -76,7 +76,11 @@ public class AnalysedController extends BaseController {
 	// Listener methods
 
 	@Override
-	public void moduleZoom(BaseFigure figure) {
+	public void moduleZoom(BaseFigure[] figures) {
+		
+		// TODO: Making zooming on multiple selected figures possible. 
+		BaseFigure figure = figures[0];
+		
 		if (figure.isModule()) { //FIXME? : Can zoom only on modules
 			AbstractDTO dto = this.getDTOFromFigure(figure);
 	

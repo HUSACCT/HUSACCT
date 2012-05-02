@@ -26,7 +26,7 @@ public class DefinedController extends BaseController {
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure zoomedModuleFigure) {
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
 		// TODO implement zooming here by retrieving the parent from defined service
 	}
 

@@ -53,7 +53,7 @@ public class DemoController extends BaseController {
 	}
 	
 	@Override
-	public void moduleZoom(BaseFigure zoomedModuleFigure) {
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
 	}
 
 	@Override

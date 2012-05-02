@@ -74,7 +74,6 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	public void loadWorkspaceData(Element workspaceData) {
 		createControllers();
 		//TODO: Set workspace data.
-		// - Last known location of export to Image?
 		// - show violations = on/off?
 	}
 }
