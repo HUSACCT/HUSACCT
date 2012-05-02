@@ -3,8 +3,10 @@ package husacct.define.domain;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ModuleComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class DefineDomainService {
