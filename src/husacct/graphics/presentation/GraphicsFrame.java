@@ -26,6 +26,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private JMenuBar menuBar;
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
+	private String ROOT_LEVEL = "Root";
 
 	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
 
@@ -33,7 +34,7 @@ public class GraphicsFrame extends JInternalFrame {
 		this.drawingView = drawingView;
 
 		this.initializeComponents();
-		this.setTitle("Root");
+		this.setCurrentPathInfo("");
 	}
 
 	private void initializeComponents() {
@@ -120,6 +121,9 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void setCurrentPathInfo(String path) {
+		if(path.equals("")){
+			path = ROOT_LEVEL;
+		}
 		this.setTitle(path);
 	}
 
