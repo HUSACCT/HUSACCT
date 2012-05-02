@@ -1,10 +1,10 @@
 package husacct.define.task;
 
 import husacct.define.domain.DefineDomainService;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -12,8 +12,8 @@ import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
-import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -34,6 +32,7 @@ public class DefinitionController extends Observable implements Observer {
 	private static DefinitionController instance;
 	private List<Observer> observers;
 	private Logger logger;
+	private long selectedModuleId = -1;
 	
 	public static DefinitionController getInstance() {
 		return instance == null ? (instance = new DefinitionController()) : instance;
@@ -58,6 +57,15 @@ public class DefinitionController extends Observable implements Observer {
 		return definitionJPanel;
 	}
 
+	public void setSelectedModuleId(long moduleId) {
+		this.selectedModuleId = moduleId;
+		notifyObservers(moduleId);
+	}
+
+	public long getSelectedModuleId() {
+		return selectedModuleId;
+	}
+	
 	public void addLayer(long selectedModuleId, String layerName, String layerDescription, int hierarchicalLevel){
 		logger.info("Adding layer " + layerName);
 		try {
@@ -128,10 +136,11 @@ public class DefinitionController extends Observable implements Observer {
 	 * Remove a module by Id
 	 */
 	public void removeModuleById(long moduleId) {
-		logger.info("Removing module by ID " + moduleId);
+		logger.info("Removing module by Id " + moduleId);
 		try {
 			JPanelStatus.getInstance("Removing Module").start();
 			DefineDomainService.getInstance().removeModuleById(moduleId);
+			this.setSelectedModuleId(-1);
 			this.notifyObservers();
 		} catch (Exception e) {
 			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
@@ -182,10 +191,10 @@ public class DefinitionController extends Observable implements Observer {
 	/**
 	 * Add a new software unit to the selected module. This method will make pop-up a new jframe who will handle everything for creating a new sotware unit.
 	 */
-	@Deprecated
 	public void createSoftwareUnitGUI() {
 		try {
-			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long moduleId = getSelectedModuleId();
+			
 			if (moduleId != -1) {
 				// Create a new software unit controller
 				SoftwareUnitController c = new SoftwareUnitController(moduleId, "");
@@ -206,7 +215,7 @@ public class DefinitionController extends Observable implements Observer {
 	public void removeSoftwareUnit(String softwareUnitName) {
 		logger.info("Removing software unit " + softwareUnitName);
 		try {
-			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long moduleId = getSelectedModuleId();
 
 			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
 				// Ask the user if he is sure to remove the software unit
@@ -227,14 +236,14 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	@Deprecated
 	public void createRuleGUI() {
+		
 		try {
-			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long moduleId = getSelectedModuleId();
 
 			if (moduleId != -1) {
 				// Create a new software unit controller
-				AppliedRulesController a = new AppliedRulesController(moduleId, -1L);
+				AppliedRuleController a = new AppliedRuleController(moduleId, -1L);
 				// Set the action of the view
 				a.setAction(PopUpController.ACTION_NEW);
 				a.addObserver(this);
@@ -246,14 +255,13 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	@Deprecated
 	public void createRuleGUI(long appliedRuleId) {
 		try {
-			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long moduleId = getSelectedModuleId();
 
 			if (moduleId != -1 && appliedRuleId != -1L) {
 				// Create a new software unit controller
-				AppliedRulesController a = new AppliedRulesController(moduleId, appliedRuleId);
+				AppliedRuleController a = new AppliedRuleController(moduleId, appliedRuleId);
 				// Set the action of the view
 				a.setAction(PopUpController.ACTION_EDIT);
 				a.addObserver(this);
@@ -270,7 +278,7 @@ public class DefinitionController extends Observable implements Observer {
 	public void removeRule(long appliedRuleId) {
 		logger.info("Removing rule " + appliedRuleId);
 		try {
-			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long moduleId = getSelectedModuleId();
 //			int appliedRuleId = (int)definitionJPanel.getSelectedAppliedRule();
 
 			if (moduleId != -1 && appliedRuleId != -1L) {
@@ -300,7 +308,7 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Updating module " + moduleName);
 		try {
 			JPanelStatus.getInstance("Saving layer").start();
-			long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long moduleId = getSelectedModuleId();
 			if (moduleId != -1) {
 				DefineDomainService.getInstance().updateModule(moduleId, moduleName, moduleDescription);
 			}
@@ -318,7 +326,7 @@ public class DefinitionController extends Observable implements Observer {
 		JPanelStatus.getInstance("Updating Modules").start();
 		
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
-		Module[] modules = DefineDomainService.getInstance().getModules();
+		Module[] modules = DefineDomainService.getInstance().getRootModules();
 		for (Module module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}
@@ -338,14 +346,14 @@ public class DefinitionController extends Observable implements Observer {
 	/**
 	 * This function will return a hashmap with the details of the requested module.
 	 */
-	public HashMap<String, Object> getModuleDetails(long layerId) {
+	public HashMap<String, Object> getModuleDetails(long moduleId) {
 		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
-		logger.info("loading Module Detail " + layerId);
+		logger.info("loading Module Detail " + moduleId);
 
-		if (layerId != -1) {
+		if (moduleId != -1) {
 			try {
-				//TODO isolate domain classes
-				Module module = DefineDomainService.getInstance().getModuleById(layerId);
+				//TODO maybe isolate domain classes
+				Module module = DefineDomainService.getInstance().getModuleById(moduleId);
 				moduleDetails.put("id", module.getId());
 				moduleDetails.put("name", module.getName());
 				moduleDetails.put("description", module.getDescription());
@@ -369,7 +377,7 @@ public class DefinitionController extends Observable implements Observer {
 	@Deprecated
 	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
 		try {
-			long layerId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long layerId = getSelectedModuleId();
 			JPanelStatus.getInstance("Updating software unit table").start();
 			if (layerId != -1) {
 
@@ -403,7 +411,7 @@ public class DefinitionController extends Observable implements Observer {
 	// #TODO:: CONTROLLER SHOULD NOT CALL VIEW
 	public void updateAppliedRulesTable(JTableAppliedRule appliedRuleTable) {
 		try {
-			long layerId = definitionJPanel.modulePanel.getSelectedModuleId();
+			long layerId = getSelectedModuleId();
 			JPanelStatus.getInstance("Updating rules applied table").start();
 			if (layerId != -1) {
 
@@ -451,13 +459,13 @@ public class DefinitionController extends Observable implements Observer {
 	
 	public void update(Observable o, Object arg) {
 		logger.info("update(" + o + ", " + arg + ")");
-		long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+		long moduleId = getSelectedModuleId();
 		notifyObservers(moduleId);
 	}
 	
 	@Override
 	public void notifyObservers(){
-		long moduleId = definitionJPanel.modulePanel.getSelectedModuleId();
+		long moduleId = getSelectedModuleId();
 		for (Observer o : this.observers){
 			o.update(this, moduleId);
 		}

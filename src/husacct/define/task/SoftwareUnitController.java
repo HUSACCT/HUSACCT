@@ -1,12 +1,12 @@
 package husacct.define.task;
 
-import java.util.ArrayList;
-
-import husacct.analyse.AnalyseServiceStub;
+import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.utils.UiDialogs;
+
+import java.util.ArrayList;
 
 
 public class SoftwareUnitController extends PopUpController {
@@ -15,12 +15,10 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public SoftwareUnitController(long moduleId, String softwareUnitName) {
 		setModuleId(moduleId);
-//		softwareUnitFrame.setTitle("Map " + softwareUnitName);
 	}
 	
 	public AnalysedModuleDTO[] getAnalyzedModules() {
-		AnalyseServiceStub analyzeService = new AnalyseServiceStub();
-		AnalysedModuleDTO[] modules = analyzeService.getRootModules();
+		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
 		return modules;
 	}
 
@@ -30,13 +28,14 @@ public class SoftwareUnitController extends PopUpController {
 		// Set the visibility of the jframe to true so the jframe is now visible
 		UiDialogs.showOnScreen(0, softwareUnitFrame);
 		softwareUnitFrame.setVisible(true);
+		System.out.println("ASDASASDAD");
 
 	}
 
-	public void save(String softwareUnit) {
+	public void save(String softwareUnit, String type) {
 		try {
 			long moduleId = getModuleId();
-			defineDomainService.addSoftwareUnit(moduleId, softwareUnit);
+			defineDomainService.addSoftwareUnit(moduleId, softwareUnit, type);
 			
 			pokeObservers();
 		} catch (Exception e) {

@@ -26,15 +26,6 @@ import javax.swing.WindowConstants;
 
 public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyListener{
 
-	{
-		// Set Look & Feel
-		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private static final long serialVersionUID = 3093579720278942807L;
 	private JPanel jPanel1;
 	private JPanel jPanel2;
@@ -132,7 +123,8 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 		String displayedRow = jComboBoxSoftwareUnit.getSelectedItem().toString();
 		String[] softwareUnitDetails = displayedRow.split("-");
 		String softwareUnitName = softwareUnitDetails[0].trim();
-		softwareUnitController.save(softwareUnitName);
+		String softwareUnitType = softwareUnitDetails[1].trim();
+		softwareUnitController.save(softwareUnitName, softwareUnitType);
 		this.dispose();
 	}
 	

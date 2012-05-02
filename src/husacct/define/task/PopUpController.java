@@ -16,13 +16,7 @@ public abstract class PopUpController extends Observable {
 	protected long moduleId;
 
 	public abstract void initUi() throws Exception;
-
-//	public abstract void save();
-
-//	public abstract void addExceptionRow();
-
-//	public abstract void removeExceptionRow();
-
+	
 	/**
 	 * Use this function to notify the definitioncontroller that there is a change
 	 */

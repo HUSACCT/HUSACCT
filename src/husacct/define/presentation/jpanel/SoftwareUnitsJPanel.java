@@ -39,7 +39,6 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	/**
 	 * Creating Gui
 	 */
-	@Override
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
@@ -57,7 +56,6 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		return softwareUnitsPane;
 	}
 	
-	@Override
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
@@ -101,8 +99,10 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		DefinitionController.getInstance().createSoftwareUnitGUI();
 	}
 	private void removeSoftwareUnit(){
-		String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
-		DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
+		if (getSelectedRow() != -1){
+			String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
+			DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
+		}
 	}
 		
 	/**

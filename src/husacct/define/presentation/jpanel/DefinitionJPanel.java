@@ -1,8 +1,5 @@
 package husacct.define.presentation.jpanel;
 
-import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.tables.JTableTableModel;
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
@@ -95,55 +92,5 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 		sofwareUnitsPanel = new SoftwareUnitsJPanel();
 		sofwareUnitsPanel.initGui();
 		return sofwareUnitsPanel;
-	}
-	
-	@Deprecated
-	public long getSelectedModule() {
-		return modulePanel.getSelectedModuleId();
-	}
-
-	@Deprecated
-	public long getSelectedSoftwareUnit() {
-		int selectedRow = sofwareUnitsPanel.getSelectedRow();
-		if (selectedRow >= 0) {
-			JTableTableModel c = (JTableTableModel) sofwareUnitsPanel.getModel();
-
-			Object selected = c.getValueAt(selectedRow, 0);
-			if (selected instanceof DataHelper) {
-				return ((DataHelper) selected).getId();
-			}
-		}
-		return -1L;
-	}
-	
-	@Deprecated
-	public String getSelectedSoftwareUnitName() {
-		String selectedValue = "";
-		int selectedRow = sofwareUnitsPanel.getSelectedRow();
-		if (selectedRow >= 0) {
-			JTableTableModel c = (JTableTableModel) sofwareUnitsPanel.getModel();
-
-			Object selected = c.getValueAt(selectedRow, 0);
-			selectedValue = selected.toString();
-			
-//			if (selected instanceof DataHelper) {
-//				selectedValue = ((DataHelper) selected).getValue();
-//			}
-		}
-		return selectedValue;
-	}
-
-	@Deprecated
-	public long getSelectedAppliedRule() {
-		int selectedRow = appliedRulesPanel.getSelectedRow();
-		if (selectedRow >= 0) {
-			JTableTableModel c = (JTableTableModel) appliedRulesPanel.getModel();
-
-			Object selected = c.getValueAt(selectedRow, 0);
-			if (selected instanceof DataHelper) {
-				return ((DataHelper) selected).getId();
-			}
-		}
-		return -1L;
 	}
 }

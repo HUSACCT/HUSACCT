@@ -39,7 +39,10 @@ public class KeyValueComboBox extends JComboBox{
 	}
 	
 	public String getSelectedItemKey(){
-		String selectedItemValue = super.getSelectedItem().toString();
+		String selectedItemValue = "";
+		if (super.getSelectedItem() != null) {
+			selectedItemValue = super.getSelectedItem().toString();
+		}
 		return getHaskMapKeyFromValue(selectedItemValue);
 	}
 	

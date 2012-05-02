@@ -12,7 +12,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -38,7 +37,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
-		this.selectedModuleId = modulePanel.getSelectedModuleId();
+		this.selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 	}
 	
 	@Override

@@ -93,19 +93,21 @@ public class UiDialogs {
 	 * @param frame
 	 */
 	public static void showOnScreen(int screen, JFrame frame) {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-		if (screen > -1 && screen < gs.length) {
-			Rectangle r = gs[screen].getDefaultConfiguration().getBounds();
-			int windowWidth = (int) r.getWidth();
-			int windowHeigh = (int) r.getHeight();
-
-			int frameWidth = (int) frame.getWidth();
-			int frameHeigh = (int) frame.getHeight();
-
-			frame.setLocation((windowWidth - frameWidth) / 2, (windowHeigh - frameHeigh) / 2);
-		} else if (gs.length <= 0) {
-			throw new RuntimeException("No Screens Found");
-		}
+		frame.setLocationRelativeTo(frame.getRootPane());
+		
+//		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//		GraphicsDevice[] gs = ge.getScreenDevices();
+//		if (screen > -1 && screen < gs.length) {
+//			Rectangle r = gs[screen].getDefaultConfiguration().getBounds();
+//			int windowWidth = (int) r.getWidth();
+//			int windowHeigh = (int) r.getHeight();
+//
+//			int frameWidth = (int) frame.getWidth();
+//			int frameHeigh = (int) frame.getHeight();
+//
+//			frame.setLocation((windowWidth - frameWidth) / 2, (windowHeigh - frameHeigh) / 2);
+//		} else if (gs.length <= 0) {
+//			throw new RuntimeException("No Screens Found");
+//		}
 	}
 }

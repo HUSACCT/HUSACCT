@@ -52,7 +52,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		super();
 	}
 
-	@Override
 	public void initGui() {
 //		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
@@ -87,7 +86,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.updateModuleTree();
 	}
 
-	@Override
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
@@ -169,6 +167,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		if (moduleId != -1){
 			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove the selected module?", "Remove?");
 			if (confirm) {
+				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);
 				this.updateModuleTree();
 			}
@@ -187,7 +186,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.updateModuleTree();
 	}
 	
-	public long getSelectedModuleId() {
+	private long getSelectedModuleId() {
 		long moduleId = -1;
 		TreePath path = this.moduleTree.getSelectionPath();
 		if (path != null){//returns null if nothing is selected
@@ -219,14 +218,13 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-        this.loadComponentDetails(selectedComponent);
+        this.updateSelectedModule(selectedComponent.getModuleId());
         this.checkLayerComponentIsSelected();
 	}
 	
-	private void loadComponentDetails(AbstractDefineComponent selectedComponent) {
-		long moduleId = selectedComponent.getModuleId();
+	private void updateSelectedModule(long moduleId) {
 		if(moduleId != -1) {
-			DefinitionController.getInstance().notifyObservers(moduleId);
+			DefinitionController.getInstance().setSelectedModuleId(moduleId);
 		} else {
 			//TODO:: load SofwareArchitecturData
 		}
