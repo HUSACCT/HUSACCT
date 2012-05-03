@@ -6,6 +6,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import java.awt.Rectangle;
+
 public class ViewController {
 
 	private ServiceProvider serviceProvider;
@@ -80,9 +82,15 @@ public class ViewController {
 	}
 	
 	public void showViolationsGui() {
-		if (violationsInternalFrame == null){
-			setViolationsGui();
+		Rectangle rect = null;
+		if (violationsInternalFrame != null){
+			rect = violationsInternalFrame.getBounds();
+			mainController.getMainGui().getContentPane().remove(violationsInternalFrame);
+			mainController.getMainGui().getContentPane().repaint();
+			violationsInternalFrame = null;
 		}
+		setViolationsGui();
+		if(rect != null) violationsInternalFrame.setBounds(rect);
 		violationsInternalFrame.setVisible(true);
 		violationsInternalFrame.toFront();
 	}	
