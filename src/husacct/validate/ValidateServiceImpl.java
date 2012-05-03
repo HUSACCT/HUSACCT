@@ -116,4 +116,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
 		System.out.println(serviceImpl.getCategories().length);
 	}
+
+	@Override
+	public void reloadGUI() {
+		//TODO write code to generate GUI
+	}
 }

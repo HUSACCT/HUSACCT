@@ -1,19 +1,12 @@
 package husacct.validate.presentation.TableModels;
 
+import husacct.validate.abstraction.language.ResourceBundles;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractCellEditor;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.border.Border;
+import javax.swing.*;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 public class ColorChooserEditor extends AbstractCellEditor implements
 TableCellEditor, ActionListener {
@@ -23,7 +16,7 @@ TableCellEditor, ActionListener {
 	JButton button;
 	JColorChooser colorChooser;
 	JDialog dialog;
-	protected static final String EDIT = "edit";
+	protected static final String EDIT = ResourceBundles.getValue("edit");
 
 	public ColorChooserEditor() {
 		//Set up the editor (from the table's point of view),
@@ -38,7 +31,7 @@ TableCellEditor, ActionListener {
 		//Set up the dialog that the button brings up.
 		colorChooser = new JColorChooser();
 		dialog = JColorChooser.createDialog(button,
-				"Pick a Color",
+				ResourceBundles.getValue("Pick a Color"),
 				true,  //modal
 				colorChooser,
 				this,  //OK button handler
@@ -49,6 +42,7 @@ TableCellEditor, ActionListener {
 	 * Handles events from the editor button and from
 	 * the dialog's OK button.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (EDIT.equals(e.getActionCommand())) {
 			//The user has clicked the cell, so
@@ -66,11 +60,13 @@ TableCellEditor, ActionListener {
 	}
 
 	//Implement the one CellEditor method that AbstractCellEditor doesn't.
+	@Override
 	public Object getCellEditorValue() {
 		return currentColor;
 	}
 
 	//Implement the one method defined by TableCellEditor.
+	@Override
 	public Component getTableCellEditorComponent(JTable table,
 			Object value,
 			boolean isSelected,
