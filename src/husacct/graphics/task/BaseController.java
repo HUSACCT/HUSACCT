@@ -80,6 +80,26 @@ public abstract class BaseController implements UserInputListener {
 	public void setCurrentPath(String path) {
 		this.currentPath = path;
 	}
+	
+	public boolean violationsAreShown() {
+		return showViolations;
+	}
+	
+	public void hideViolations() {
+		showViolations = false;
+	}
+
+	public void showViolations() {
+		showViolations = true;
+	}
+
+	protected DrawingDetail getCurrentDrawingDetail() {
+		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
+		if (violationsAreShown()) {
+			detail = DrawingDetail.WITH_VIOLATIONS;
+		}
+		return detail;
+	}
 
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
@@ -133,28 +153,7 @@ public abstract class BaseController implements UserInputListener {
 
 	@Override
 	public void exportToImage() {
-		// TODO Make better
 		this.drawing.showExportToImagePanel();
-	}
-
-	public boolean violationsAreShown() {
-		return showViolations;
-	}
-	
-	public void hideViolations() {
-		showViolations = false;
-	}
-
-	public void showViolations() {
-		showViolations = true;
-	}
-
-	protected DrawingDetail getCurrentDrawingDetail() {
-		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (violationsAreShown()) {
-			detail = DrawingDetail.WITH_VIOLATIONS;
-		}
-		return detail;
 	}
 	
 	protected void drawLinesBasedOnSetting(){

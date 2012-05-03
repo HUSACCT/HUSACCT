@@ -123,7 +123,7 @@ public class AnalysedController extends BaseController {
 		} else {
 			logger.debug("Tried to zoom out from " + this.getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
-			drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
+			drawArchitecture(getCurrentDrawingDetail());
 		}
 	}
 
