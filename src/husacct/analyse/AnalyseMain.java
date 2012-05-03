@@ -13,9 +13,9 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-		String path = "/Users/Erik/Documents/Hogeschool Utrecht/Jaar 3/Specialisatie/ThemaOpdracht/HUSACCT Develop/AnalysedProject";
+		String path = "C:\\Users\\Thomas\\Documents\\My Dropbox\\School\\Themaopdracht 9\\Code\\C#";
 		String[] paths = new String[]{path};
-		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
+		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();

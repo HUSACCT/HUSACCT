@@ -16,13 +16,12 @@ public class ApplicationAnalyser {
 		this.builder = new AnalyserBuilder();
 	}
 	
-	public void analyseApplication() {
-				
+	public void analyseApplication() {				
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService definitionService = provider.getDefineService();
-		ApplicationDTO appDto = definitionService.getApplicationDetails();
-		String language = appDto.programmingLanguage;
-		for(String workspacePath: appDto.paths){
+		ApplicationDTO applicationDTO = definitionService.getApplicationDetails();
+		String language = applicationDTO.programmingLanguage;
+		for(String workspacePath: applicationDTO.paths){
 			AbstractAnalyser analyser = builder.getAnalyser(language);
 			SourceFileFinder sourceFileFinder = new SourceFileFinder();
 			try{
