@@ -129,6 +129,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		rtsRuletypeTable.setModel(ruletypeModel);
 		rtsRuletypeTable.setFillsViewportHeight(true);
+		rtsRuletypeTable.getTableHeader().setReorderingAllowed(false);
 		rtsRuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		rtsRuletypeScrollpane.setViewportView(rtsRuletypeTable);
 
@@ -207,6 +208,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		vtsViolationtypeTable.setModel(violationtypeModel);
 		vtsViolationtypeTable.setFillsViewportHeight(true);
+		vtsViolationtypeTable.getTableHeader().setReorderingAllowed(false);
 		vtsViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 		vtsViolationtypeScrollpane.setViewportView(vtsViolationtypeTable);
@@ -292,6 +294,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtViolationtypeTable.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Ruletypes")));
 		avtViolationtypeTable.setModel(avtRuletypeModel);
+		vtsViolationtypeTable.getTableHeader().setReorderingAllowed(false);
 		avtViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 		avtViolationtypeTable.addListSelectionListener(new ListSelectionListener() {
