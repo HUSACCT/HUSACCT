@@ -1,7 +1,7 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.task.MouseClickListener;
+import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,7 +29,7 @@ public class DrawingView extends DefaultDrawingView {
 	private DefaultDrawingEditor editor;
 	private SelectionTool selectionTool;
 
-	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
+	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	private HashSet<Figure> previousSelection = new HashSet<Figure>();
 
 	public DrawingView(Drawing drawing) {
@@ -130,19 +130,19 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void figureSelected(BaseFigure[] figures) {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.figureSelected(figures);
 		}
 	}
 	
 	private void figureDeselected(BaseFigure[] figures) {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.figureDeselected(figures);
 		}
 	}
 
 	private void moduleZoom(BaseFigure fig) {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.moduleZoom(fig);
 		}
 	}
@@ -188,17 +188,17 @@ public class DrawingView extends DefaultDrawingView {
 
 	private void moduleZoomOut() {
 	
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.moduleZoomOut();
 		}
 	}		
 	
 
-	public void addListener(MouseClickListener listener) {
+	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeListener(MouseClickListener listener) {
+	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
 	}
 }

@@ -2,7 +2,7 @@ package husacct.graphics.task;
 
 import husacct.graphics.presentation.figures.BaseFigure;
 
-public interface MouseClickListener {
+public interface UserInputListener {
 
 	public void moduleZoom(BaseFigure zoomedModuleFigure);
 	

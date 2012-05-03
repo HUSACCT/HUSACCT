@@ -19,7 +19,7 @@ import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
 
-public abstract class BaseController implements MouseClickListener {
+public abstract class BaseController implements UserInputListener {
 
 	private final int ITEMS_PER_ROW = 4;
 

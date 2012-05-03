@@ -2,7 +2,7 @@ package husacct.graphics.presentation;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.task.MouseClickListener;
+import husacct.graphics.task.UserInputListener;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,7 +28,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private JComponent centerPane;
 	private String ROOT_LEVEL = "Root";
 
-	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
+	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
 	public GraphicsFrame(DrawingView drawingView) {
 		this.drawingView = drawingView;
@@ -128,28 +128,28 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void moduleZoomOut() {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.moduleZoomOut();
 		}
 	}
 
 	private void exportToImage() {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.exportToImage();
 		}
 	}
 
 	private void toggleViolations() {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.toggleViolations();
 		}
 	}
 
-	public void addListener(MouseClickListener listener) {
+	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeListener(MouseClickListener listener) {
+	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
 	}
 
