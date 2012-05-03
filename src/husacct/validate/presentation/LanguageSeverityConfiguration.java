@@ -57,7 +57,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 		ruletypeModel.setCanEdit(new Boolean[]{false, true});
 		
 		
-		
 		String[] violationtypeModelHeaders = {ResourceBundles.getValue("Violationtype"), ResourceBundles.getValue("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severityNames);
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
