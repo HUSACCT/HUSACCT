@@ -17,12 +17,13 @@ public class SoftwareUnitController extends PopUpController {
 	private JFrameSoftwareUnit softwareUnitFrame;
 	private Logger logger;
 	
-	public SoftwareUnitController(long moduleId, String softwareUnitName) {
+	public SoftwareUnitController(long moduleId) {
 		logger = Logger.getLogger(SoftwareUnitController.class);
 		this.setModuleId(moduleId);
 	}
 
 	@Override
+	@Deprecated
 	public void initUi() throws Exception {
 		softwareUnitFrame = new JFrameSoftwareUnit(this);
 		// Set the visibility of the jframe to true so the jframe is now visible
@@ -34,7 +35,8 @@ public class SoftwareUnitController extends PopUpController {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
 			defineDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
-			pokeObservers();
+			//pokeObservers();
+			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
 			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage(), "Error");

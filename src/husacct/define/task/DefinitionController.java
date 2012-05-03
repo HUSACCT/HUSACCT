@@ -4,7 +4,6 @@ import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.Module;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
@@ -18,9 +17,6 @@ import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
@@ -189,29 +185,6 @@ public class DefinitionController extends Observable implements Observer {
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
-		}
-	}
-
-	/**
-	 * Add a new software unit to the selected module. This method will make pop-up a new jframe who will handle everything for creating a new sotware unit.
-	 */
-	public void createSoftwareUnitGUI() {
-		try {
-			long moduleId = getSelectedModuleId();
-			
-			if (moduleId != -1) {
-				// Create a new software unit controller
-				SoftwareUnitController c = new SoftwareUnitController(moduleId, "");
-				// Set the action of the view
-				c.setAction(PopUpController.ACTION_NEW);
-				c.addObserver(this);
-				// Build and show the ui
-				c.initUi();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.logger.error(e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package husacct.define.presentation.jframe;
 
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -37,8 +38,15 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 	public AnalyzedModuleTree softwareDefinitionTree;
 	
 	private SoftwareUnitController softwareUnitController;
-
-
+	
+	public JFrameSoftwareUnit(long moduleId) {
+		super();
+		this.softwareUnitController = new SoftwareUnitController(moduleId);
+		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
+		initUI();
+	}
+	
+	@Deprecated
 	public JFrameSoftwareUnit(SoftwareUnitController softwareUnitController) {
 		super();
 		this.softwareUnitController = softwareUnitController;

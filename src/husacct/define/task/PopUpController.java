@@ -15,6 +15,7 @@ public abstract class PopUpController extends Observable {
 	protected String action = PopUpController.ACTION_NEW;
 	protected long moduleId;
 
+	@Deprecated
 	public abstract void initUi() throws Exception;
 	
 	/**
