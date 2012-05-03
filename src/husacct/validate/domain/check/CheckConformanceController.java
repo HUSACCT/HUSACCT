@@ -39,7 +39,6 @@ public class CheckConformanceController {
 			} catch (RuleInstantionException e) {
 				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 			}
-			System.out.println(configuration.getAllViolations().size());
 		}
 	}
 
