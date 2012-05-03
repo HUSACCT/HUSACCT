@@ -52,7 +52,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 							LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 							LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
-							final Severity violationTypeSeverity = violationtypefactory.createViolationType(dependency.type).getSeverity();
+							final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
 							Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);						
 							Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 							violations.add(violation);
