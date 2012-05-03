@@ -10,10 +10,10 @@ public class CreateWorkspaceDialog{
 		String helpText = "Workspace Name";
 		String defaultText = "myHusacctWorkspace";
 		String dialogTitle = "Create workspace";
-		String s = (String) JOptionPane.showInputDialog(mainController.getMainGui(), helpText, dialogTitle, JOptionPane.PLAIN_MESSAGE, null , null, defaultText);
+		String workspaceName = (String) JOptionPane.showInputDialog(mainController.getMainGui(), helpText, dialogTitle, JOptionPane.PLAIN_MESSAGE, null , null, defaultText);
 
-		if ((s != null) && (s.length() > 0)) {
-			mainController.getWorkspaceController().createWorkspace(s);
+		if ((workspaceName != null) && (workspaceName.length() > 0)) {
+			mainController.getWorkspaceController().createWorkspace(workspaceName);
 		}
 	}
 
