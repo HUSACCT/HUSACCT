@@ -1,5 +1,6 @@
 package husacct.validate.presentation;
 
+import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -51,7 +52,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		this.ruletypes = ruletypes;
 		this.ts = ts;
 		this.violationTypes = violationTypes;
-		String[] ruletypeColumnNames = {"Ruletype", "Severity"};
+		String[] ruletypeColumnNames = {ResourceBundles.getValue("Ruletype"), ResourceBundles.getValue("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0,
 											   severityNames);
 		ruletypeModel.setTypes(new Class[]{String.class, Severity.class});
@@ -59,15 +60,13 @@ public class LanguageSeverityConfiguration extends JPanel {
 		
 		
 		
-		String[] violationtypeModelHeaders = {"Violationtype", "Severity"};
+		String[] violationtypeModelHeaders = {ResourceBundles.getValue("Violationtype"), ResourceBundles.getValue("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severityNames);
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
 		violationtypeModel.setCanEdit(new Boolean[]{false, true});
 
-		String[] avtViolationtypeModelHeaders = {"Violationtype", "Active"};
+		String[] avtViolationtypeModelHeaders = {ResourceBundles.getValue("Violationtype"), ResourceBundles.getValue("Active")};
 		avtViolationtypeModel = new DefaultTableModel(avtViolationtypeModelHeaders, 0);
-//		avtViolationtypeModel.setTypes(new Class[]{String.class, Boolean.class});
-//		avtViolationtypeModel.setCanEdit(new Boolean[]{false, true, true});
 
 		rtsCategoryModel = new DefaultListModel();
 		vtsCategoryModel = new DefaultListModel();
@@ -115,7 +114,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtDeselectAll = new JButton();
 		avtApply = new JButton();
 
-		rtsCategory.setBorder(BorderFactory.createTitledBorder("Category"));
+		rtsCategory.setBorder(BorderFactory.createTitledBorder(ResourceBundles.getValue("Category")));
 		rtsCategory.setModel(rtsCategoryModel);
 		rtsCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		rtsCategory.addListSelectionListener(new ListSelectionListener() {
@@ -135,7 +134,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		rtsRuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		rtsRuletypeScrollpane.setViewportView(rtsRuletypeTable);
 
-		rtsApply.setText("Apply");
+		rtsApply.setText(ResourceBundles.getValue("Apply"));
 		rtsApply.addActionListener(new ActionListener() {
 
 			@Override
@@ -144,7 +143,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			}
 		});
 
-		rtsRestore.setText("<html>Restore<br> to default");
+		rtsRestore.setText(ResourceBundles.getValue("<html>Restore<br> to default"));
 		rtsRestore.setActionCommand("Restore to default");
 		rtsRestore.setEnabled(false);
 		rtsRestore.addActionListener(new ActionListener() {
@@ -155,7 +154,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			}
 		});
 
-		rtsRestoreAll.setText("<html>Restore all<br> to default");
+		rtsRestoreAll.setText(ResourceBundles.getValue("<html>Restore all<br> to default"));
 		rtsRestoreAll.addActionListener(new ActionListener() {
 
 			@Override
@@ -194,9 +193,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 		);
 		ruletypeSeverity.setLayout(ruletypeSeverityLayout);
 
-		tabbedPane.addTab("Set ruletype severity", ruletypeSeverity);
+		tabbedPane.addTab(ResourceBundles.getValue("Set ruletype severity"), ruletypeSeverity);
 
-		vtsCategory.setBorder(BorderFactory.createTitledBorder("Category"));
+		vtsCategory.setBorder(BorderFactory.createTitledBorder(ResourceBundles.getValue("Category")));
 		vtsCategory.setModel(vtsCategoryModel);
 		vtsCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		vtsCategory.addListSelectionListener(new ListSelectionListener() {
@@ -214,7 +213,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 				ListSelectionModel.SINGLE_SELECTION);
 		vtsViolationtypeScrollpane.setViewportView(vtsViolationtypeTable);
 
-		vtsRestore.setText("<html>Restore<br> to default");
+		vtsRestore.setText(ResourceBundles.getValue("<html>Restore<br> to default"));
 		vtsRestore.setEnabled(false);
 		vtsRestore.addActionListener(new ActionListener() {
 
@@ -224,7 +223,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			}
 		});
 
-		vtsRestoreAll.setText("<html>Restore all<br> to default");
+		vtsRestoreAll.setText(ResourceBundles.getValue("<html>Restore all<br> to default"));
 		vtsRestoreAll.addActionListener(new ActionListener() {
 
 			@Override
@@ -233,7 +232,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			}
 		});
 
-		vtsApply.setText("Apply");
+		vtsApply.setText(ResourceBundles.getValue("Apply"));
 		vtsApply.addActionListener(new ActionListener() {
 
 			@Override
@@ -273,9 +272,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 		);
 		violationtypeSeverity.setLayout(violationtypeSeverityLayout);
 
-		tabbedPane.addTab("Set violation severity", violationtypeSeverity);
+		tabbedPane.addTab(ResourceBundles.getValue("Set violation severity"), violationtypeSeverity);
 
-		avtCategory.setBorder(BorderFactory.createTitledBorder("Category"));
+		avtCategory.setBorder(BorderFactory.createTitledBorder(ResourceBundles.getValue("Category")));
 		avtCategory.setModel(avtCategoryModel);
 		avtCategory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		avtCategory.addListSelectionListener(new ListSelectionListener() {
@@ -293,7 +292,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtRuletypeScrollpane.setViewportView(avtRuletype);
 
 		avtViolationtypeTable.setBorder(BorderFactory.createTitledBorder(
-				"Ruletypes"));
+				ResourceBundles.getValue("Ruletypes")));
 		avtViolationtypeTable.setModel(avtRuletypeModel);
 		avtViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
@@ -306,8 +305,8 @@ public class LanguageSeverityConfiguration extends JPanel {
 		});
 		avtViolationtypeScrollpane.setViewportView(avtViolationtypeTable);
 
-		avtSelectAll.setText("Select all");
-		avtSelectAll.setActionCommand("Restore to default");
+		avtSelectAll.setText(ResourceBundles.getValue("Select all"));
+		avtSelectAll.setActionCommand(ResourceBundles.getValue("Restore to default"));
 		avtSelectAll.addActionListener(new ActionListener() {
 
 			@Override
@@ -316,7 +315,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			}
 		});
 
-		avtDeselectAll.setText("Deselect all");
+		avtDeselectAll.setText(ResourceBundles.getValue("Deselect all"));
 		avtDeselectAll.addActionListener(new ActionListener() {
 
 			@Override
@@ -325,7 +324,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			}
 		});
 
-		avtApply.setText("Apply");
+		avtApply.setText(ResourceBundles.getValue("Apply"));
 		avtApply.addActionListener(new ActionListener() {
 
 			@Override
@@ -368,7 +367,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		);
 		activeViolationtype.setLayout(activeViolationtypeLayout);
 
-		tabbedPane.addTab("Set violationtype active per ruletype severit",
+		tabbedPane.addTab(ResourceBundles.getValue("Set violationtype active per ruletype severity"),
 						  activeViolationtype);
 
 		GroupLayout layout = new GroupLayout(this);
@@ -383,7 +382,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 				tabbedPane)));
 
 		tabbedPane.getAccessibleContext().setAccessibleName(
-				"Set ruletype severity");
+				ResourceBundles.getValue("Set ruletype severity"));
 	}
 	
 	public void initializeEverything() {

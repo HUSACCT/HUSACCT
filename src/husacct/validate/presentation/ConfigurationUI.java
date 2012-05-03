@@ -1,5 +1,6 @@
 package husacct.validate.presentation;
 
+import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.TableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
@@ -50,13 +51,13 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Configuration");
+        setTitle(ResourceBundles.getValue("Configuration"));
 
         severityNameTable.setModel(severityModel);
         severityNameTable.setFillsViewportHeight(true);
         severityNameScrollPane.setViewportView(severityNameTable);
 
-        add.setText("Add");
+        add.setText(ResourceBundles.getValue("Add"));
         add.addActionListener(new ActionListener() {
 
             @Override
@@ -65,7 +66,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             }
         });
 
-        remove.setText("Remove");
+        remove.setText(ResourceBundles.getValue("Remove"));
         remove.addActionListener(new ActionListener() {
 
             @Override
@@ -74,7 +75,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             }
         });
 
-        up.setText("Up");
+        up.setText(ResourceBundles.getValue("Up"));
         up.addActionListener(new ActionListener() {
 
             @Override
@@ -83,7 +84,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             }
         });
 
-        down.setText("Down");
+        down.setText(ResourceBundles.getValue("Down"));
         down.addActionListener(new ActionListener() {
 
             @Override
@@ -92,7 +93,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             }
         });
 
-        applySeverity.setText("Apply");
+        applySeverity.setText(ResourceBundles.getValue("Apply"));
         applySeverity.addActionListener(new ActionListener() {
 
             @Override
@@ -101,7 +102,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             }
         });
 
-        restore.setText("<html>Resore to<br> default");
+        restore.setText(ResourceBundles.getValue("<html>Resore to<br> default"));
         restore.addActionListener(new ActionListener() {
 
             @Override
@@ -117,9 +118,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         severityNamePanelLayout.setVerticalGroup(
                 severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE).addGroup(severityNamePanelLayout.createSequentialGroup().addContainerGap().addComponent(add).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(remove).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(up).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(down).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(applySeverity).addContainerGap()));
 
-        jTabbedPane1.addTab("Severity configuration", severityNamePanel);
+        jTabbedPane1.addTab(ResourceBundles.getValue("Severity configuration"), severityNamePanel);
 
-        cancel.setText("Cancel");
+        cancel.setText(ResourceBundles.getValue("Cancel"));
         cancel.addActionListener(new ActionListener() {
 
             @Override
@@ -227,7 +228,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             jTabbedPane1.addTab(language, lcp);
         }
         if (ts.getAvailableLanguages().length == 0) {
-            jTabbedPane1.addTab("No programming language availible", new JPanel());
+            jTabbedPane1.addTab(ResourceBundles.getValue("No programming language availible"), new JPanel());
         }
     }
 
