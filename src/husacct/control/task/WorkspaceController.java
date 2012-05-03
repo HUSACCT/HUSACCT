@@ -38,6 +38,10 @@ public class WorkspaceController {
 
 	}
 	
+	public void setWorkspace(Workspace workspace){
+		currentWorkspace = workspace;
+	}
+	
 	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
 		IWorkspaceResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
