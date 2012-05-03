@@ -9,13 +9,36 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CheckConformanceUtil {
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		
-		ArrayList<Mapping> mappingFrom = getAllClasspathsFromModule(rule.moduleFrom);
-		ArrayList<Mapping> mappingTo = getAllClasspathsFromModule(rule.moduleTo);
+		ArrayList<Mapping> mappingFrom;
+		ArrayList<Mapping> mappingTo;
+		if(emptyModule(rule.moduleFrom)== false){
+			mappingFrom = getAllClasspathsFromModule(rule.moduleFrom);
+		}
+		else{
+			mappingFrom = new ArrayList<Mapping>();
+		}
+		if(emptyModule(rule.moduleTo)== false){
+			mappingTo = getAllClasspathsFromModule(rule.moduleTo);
+		}
+		else{
+			mappingTo = new ArrayList<Mapping>();
+		}
 		return new Mappings(mappingFrom, mappingTo);
+	}
+	
+	private static boolean emptyModule(ModuleDTO module){
+		if(module.type == null){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	private static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO rootModule){
@@ -40,19 +63,23 @@ public class CheckConformanceUtil {
 	static DefineServiceStub definestub = new DefineServiceStub();
 
 	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
-		ArrayList<Mapping> classpathsFrom = new ArrayList<Mapping>();
-		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
-		for(ModuleDTO module : childModules){
-			classpathsFrom.addAll(getAllClasspathsFromModule(module));
-			classpathsFrom.addAll(getAllModulesFromLayer(module,classpathsFrom));
+		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
+		ModuleDTO[] childModules = definestub.getSkipCallChildsFromModule(layerModule.logicalPath);
+		if(childModules.length != 0){
+			for(ModuleDTO module : childModules){
+				classpathsFrom.addAll(getAllClasspathsFromModule(module));
+				classpathsFrom.addAll(getAllModulesFromLayer(module,classpathsFrom));
+			}			
 		}
-		return classpathsFrom;
+		return new ArrayList<Mapping>(classpathsFrom);
 	}
-	private static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, ArrayList<Mapping> classpaths){
-		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
-		for(ModuleDTO module : childModules){
-			classpaths.addAll(getAllClasspathsFromModule(module));
-			return getAllModulesFromLayer(module,classpaths);
+	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths){
+		ModuleDTO[] childModules = definestub.getSkipCallChildsFromModule(layerModule.logicalPath);
+		if(childModules.length != 0){
+			for(ModuleDTO module : childModules){
+				classpaths.addAll(getAllClasspathsFromModule(module));
+				return getAllModulesFromLayer(module,classpaths);
+			}
 		}
 		return classpaths;
 	}
@@ -106,8 +133,8 @@ public class CheckConformanceUtil {
 		if(violationTypeSeverity != null){
 			violationTypeValue = configuration.getSeverityValue(violationTypeSeverity);
 		}
-		
-	
+
+
 		if(ruleTypeValue == -1 && violationTypeValue != -1){
 			return violationTypeSeverity;
 		}

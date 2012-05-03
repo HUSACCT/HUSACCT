@@ -48,14 +48,16 @@ public class BackCallRule extends RuleType {
 		
 		for (ModuleDTO module :allModules){
 			counter++;
-			if(module.logicalPath == appliedRule.moduleFrom.logicalPath){
+			if(module.type.toLowerCase().equals("layer")){
+				if(module.logicalPath.toLowerCase().equals(appliedRule.moduleFrom.logicalPath.toLowerCase()))
 				toModules = getModulesTo(allModules, counter);
+				
 			}
-		}		
+		}			
 		
 		for(List<Mapping> moduleTo : toModules){
-			for(Mapping classPathFrom : moduleTo){
-				for(Mapping classPathTo : moduleFrom ){
+			for(Mapping classPathFrom : moduleFrom){
+				for(Mapping classPathTo : moduleTo ){
 					DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(appliedRule);

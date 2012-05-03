@@ -44,16 +44,18 @@ public class SkipCallRule extends RuleType {
 		List<Mapping> moduleFrom = mappings.getMappingFrom();
 		
 		List<ModuleDTO> allModules = Arrays.asList(definestub.getRootModules());
-		
 		for (ModuleDTO module :allModules){
-			if(module.logicalPath == appliedRule.moduleFrom.logicalPath){
-				toModules = getModulesTo(allModules,allModules.indexOf(module));
+			if(module.type.toLowerCase().contains("layer"))
+			{
+				if(module.logicalPath.toLowerCase().equals(appliedRule.moduleFrom.logicalPath.toLowerCase()))
+					toModules = getModulesTo(allModules,allModules.indexOf(module));
+				
 			}
 		}		
 		
 		for(List<Mapping> moduleTo : toModules){
-			for(Mapping classPathFrom : moduleTo){
-				for(Mapping classPathTo : moduleFrom ){
+			for(Mapping classPathFrom : moduleFrom){
+				for(Mapping classPathTo : moduleTo ){
 					DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(appliedRule);
