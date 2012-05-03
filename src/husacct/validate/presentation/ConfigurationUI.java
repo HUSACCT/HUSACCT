@@ -102,7 +102,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
             }
         });
 
-        restore.setText(ResourceBundles.getValue("<html>Resore to<br> default"));
+        restore.setText(ResourceBundles.getValue("RestoreToDefault"));
         restore.addActionListener(new ActionListener() {
 
             @Override
@@ -118,7 +118,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         severityNamePanelLayout.setVerticalGroup(
                 severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE).addGroup(severityNamePanelLayout.createSequentialGroup().addContainerGap().addComponent(add).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(remove).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(up).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(down).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(applySeverity).addContainerGap()));
 
-        jTabbedPane1.addTab(ResourceBundles.getValue("Severity configuration"), severityNamePanel);
+        jTabbedPane1.addTab(ResourceBundles.getValue("SeverityConfiguration"), severityNamePanel);
 
         cancel.setText(ResourceBundles.getValue("Cancel"));
         cancel.addActionListener(new ActionListener() {
