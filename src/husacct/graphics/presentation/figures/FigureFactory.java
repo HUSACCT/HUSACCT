@@ -1,13 +1,12 @@
 package husacct.graphics.presentation.figures;
 
-import java.awt.Color;
-
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.presentation.decorators.ViolationsDecorator;
+
+import java.awt.Color;
 
 public final class FigureFactory {
 
@@ -62,11 +61,6 @@ public final class FigureFactory {
 
 	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
 		BaseFigure createdFigure = this.createFigure(dto);
-
-		if (violationDTOs.length > 0) {
-			createdFigure = new ViolationsDecorator(createdFigure, violationDTOs);
-		}
-
 		return createdFigure;
 	}
 

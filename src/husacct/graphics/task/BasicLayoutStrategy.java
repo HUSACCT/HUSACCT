@@ -1,7 +1,6 @@
 package husacct.graphics.task;
 
 import husacct.graphics.presentation.Drawing;
-import husacct.graphics.presentation.decorators.DependenciesDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
@@ -72,7 +71,7 @@ public class BasicLayoutStrategy {
 	private boolean isConnector(Figure figure) {
 		if (figure instanceof BaseFigure) {
 			
-			if (figure instanceof RelationFigure || figure instanceof DependenciesDecorator)
+			if (figure instanceof RelationFigure)
 				return true;
 			
 		} else if (figure instanceof ConnectionFigure) {
