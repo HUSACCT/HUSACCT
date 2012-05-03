@@ -238,6 +238,10 @@ public class RelationFigure extends NamedFigure
 	public boolean isLine() {
 		return true;
 	}
+	
+	public int getAmount(){
+		return Integer.parseInt(this.amountFigure.getText());
+	}
 
 	// these methods listen to line events
 

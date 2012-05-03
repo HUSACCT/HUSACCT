@@ -46,7 +46,7 @@ public class DemoController extends BaseController {
 		
 		this.drawModules(modules);
 
-		this.drawDependenciesForShownModules();
+		this.drawLinesBasedOnSetting();
 
 		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 		bls.doLayout(ITEMS_PER_ROW);

@@ -163,6 +163,7 @@ public abstract class BaseController implements UserInputListener {
 		if(violationsAreShown()){
 			this.drawViolationsForShownModules();
 		}
+		this.drawing.resizeRelationFigures();
 	}
 
 	// dependencies
@@ -174,7 +175,6 @@ public abstract class BaseController implements UserInputListener {
 				getAndDrawDependenciesBetween(figureFrom, figureTo);
 			}
 		}
-		this.drawing.sizeRelationFigures(this.figureMap.getDependencyHashMap()); // TODO see TODO below
 	}
 
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
@@ -203,7 +203,6 @@ public abstract class BaseController implements UserInputListener {
 				}
 			}
 		}
-		this.drawing.sizeRelationFigures(this.figureMap.getViolationHashMap()); // TODO see TODO below
 	}
 
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
