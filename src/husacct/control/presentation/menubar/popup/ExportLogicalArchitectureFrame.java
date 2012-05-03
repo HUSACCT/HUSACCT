@@ -66,6 +66,7 @@ public class ExportLogicalArchitectureFrame extends JFrame {
 
 	protected void showFileDialog() {
 		JFileChooser chooser = new JFileChooser();
+		chooser.setApproveButtonText("Export");
 		int returnVal = chooser.showOpenDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			setFile(chooser.getSelectedFile());	            

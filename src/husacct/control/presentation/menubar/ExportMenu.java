@@ -28,7 +28,6 @@ public class ExportMenu extends JMenu{
 		
 		currentState = mainController.getStateController().getState();
 		
-		
 		exportLogicalArchitectureItem = new JMenuItem("Logical architecture");
 		this.add(exportLogicalArchitectureItem);
 		exportLogicalArchitectureItem.addActionListener(new ActionListener(){

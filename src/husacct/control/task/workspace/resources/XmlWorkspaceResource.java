@@ -1,17 +1,12 @@
 package husacct.control.task.workspace.resources;
 
 
-import husacct.Main;
-import husacct.control.task.MainController;
 import husacct.control.task.workspace.IWorkspaceResource;
-import husacct.control.task.workspace.ResourceFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
-
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
