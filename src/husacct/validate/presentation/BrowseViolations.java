@@ -257,10 +257,7 @@ public final class BrowseViolations extends JInternalFrame {
 	}
 
 	public void createInformationPanel() {
-		for(Component component : informationPanel.getComponents()){
-			System.out.println(component.getName() + " " + component.getClass());
-			informationPanel.remove(component);
-		}
+		informationPanel.removeAll();
 		
 		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
@@ -276,11 +273,7 @@ public final class BrowseViolations extends JInternalFrame {
 		informationPanel.add(shownViolationsNumber);
 
 		for(Entry<Severity, Integer> violationPerSeverity: ts.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
-			System.out.println(violationPerSeverity.getKey().toString());
-			System.out.println(violationPerSeverity.getValue());
-			JLabel tempValue = new JLabel(violationPerSeverity.getKey().toString());
-			tempValue.setVisible(true);
-			informationPanel.add(tempValue);
+			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
 			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
 		}
 		
@@ -296,7 +289,7 @@ public final class BrowseViolations extends JInternalFrame {
 		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
 		for (Violation violation : violationRows) {
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), message, violation.getLinenumber(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), /*violation.getSeverity().toString()*/ "TODO severity"});
+			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), message, violation.getLinenumber(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		}
 
 		setColumnWidth(3, 50);

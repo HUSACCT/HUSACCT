@@ -39,6 +39,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         severityNamePanel = new JPanel();
         severityNameScrollPane = new JScrollPane();
         severityNameTable = new JTable();
+        severityNameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add = new JButton();
         remove = new JButton();
         up = new JButton();
