@@ -20,13 +20,12 @@ public class AnalyseMain {
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		
-		ModelCreationService creation = new FamixCreationServiceImpl();
-		System.out.println(creation.represent());
-		
 		try {  
 	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
 	     } catch (Exception ex) { }
 		
+		ModelCreationService modelService = new FamixCreationServiceImpl();
+		System.out.println(modelService.represent());
 		new AnalyseDebuggingFrame();
 	}
 }	

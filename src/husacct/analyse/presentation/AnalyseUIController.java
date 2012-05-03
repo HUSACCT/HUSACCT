@@ -7,14 +7,14 @@ import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-public class AnalyseUIController {
+class AnalyseUIController {
 
 	private AnalyseControlService analyseTaskService = new AnalyseControlerServiceImpl();
 	
 	public AnalyseUIController(){
 		this.analyseTaskService = new AnalyseControlerServiceImpl();
 	}
-	
+		
 	public List<AnalysedModuleDTO> getRootModules(){
 		List<AnalysedModuleDTO> rootModules = new ArrayList<AnalysedModuleDTO>();
 		for(AnalysedModuleDTO analysedModule: analyseTaskService.getRootModules()){
@@ -53,10 +53,14 @@ public class AnalyseUIController {
 		return allModulesInModule;
 	}
 	
-	public List<DependencyDTO> listDependencies(String from, String to){
+	public List<DependencyDTO> listDependencies(List<AnalysedModuleDTO> from, List<AnalysedModuleDTO> to){
 		List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
-		for(DependencyDTO dependency: analyseTaskService.getDependency(from, to)){
-			if(!dependencies.contains(dependencies)) dependencies.add(dependency);
+		for(AnalysedModuleDTO fromModule: from){
+			for(AnalysedModuleDTO toModule: to){
+				for(DependencyDTO dependency: analyseTaskService.getDependency(fromModule.uniqueName, toModule.uniqueName)){
+					if(!dependencies.contains(dependency)) dependencies.add(dependency);
+				}
+			}
 		}
 		return dependencies;
 	}

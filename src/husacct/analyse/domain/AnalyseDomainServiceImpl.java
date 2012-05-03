@@ -8,10 +8,15 @@ import husacct.common.dto.DependencyDTO;
 public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 
 	private ModelQueryService queryService;
-
+	private ModelCreationService creationService;
+	
 	public AnalyseDomainServiceImpl(){
 		this.queryService = new FamixQueryServiceImpl();
 	}	
+	
+	public void clearModel(){
+		
+	}
 	
 	@Override
 	public AnalysedModuleDTO[] getRootModules() {

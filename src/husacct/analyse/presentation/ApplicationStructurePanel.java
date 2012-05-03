@@ -3,7 +3,6 @@ package husacct.analyse.presentation;
 import husacct.common.dto.AnalysedModuleDTO;
 import java.awt.Color;
 import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane; 
 import javax.swing.JTree;
@@ -31,7 +30,7 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 	
 	private void createPanel() {
 		
-		AnalysedModuleDTO rootModule = new AnalysedModuleDTO("Application", "Application", "root", "public");
+		AnalysedModuleDTO rootModule = new AnalysedModuleDTO("", "", "", "");
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootModule);
 		
 		List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();
@@ -45,10 +44,10 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 		analyzedCodeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		analyzedCodeTree.addTreeSelectionListener(this);
 		jScrollPaneTree = new JScrollPane(analyzedCodeTree);
+		jScrollPaneTree.setBackground(UIManager.getColor("Panel.background"));
 		jScrollPaneTree.setBorder(null);
 		jScrollPaneTree.setBackground(getBackground());
 		
-		jScrollPaneTree.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
