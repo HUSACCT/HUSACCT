@@ -35,7 +35,7 @@ public class CheckConformanceController {
 		for(RuleDTO appliedRule : appliedRules){
 			try{
 				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-				List<Violation> newViolations = rule.check(appliedRule);
+				List<Violation> newViolations = rule.check(configuration, appliedRule);
 				configuration.addViolations(newViolations);
 			}catch(RuleTypeNotFoundException e){
 				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));

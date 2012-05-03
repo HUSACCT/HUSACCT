@@ -3,13 +3,17 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
+import husacct.validate.domain.validation.logicalmodule.LogicalModule;
+import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -25,8 +29,9 @@ public class MustUseRule extends RuleType{
 	}
 
 	@Override
-	public List<Violation> check(RuleDTO appliedRule) {	
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {	
 		List<Violation> violations = new ArrayList<Violation>();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		//TODO replace with real implementation
 		AnalyseServiceStub analysestub = new AnalyseServiceStub();
 
@@ -44,9 +49,11 @@ public class MustUseRule extends RuleType{
 			if(noDependencyCounter == totalCounter){
 				Message message = new Message(appliedRule);
 
-
-				//Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
-				//violations.add(violation);
+				LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
+				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
+				Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, null);
+				Violation violation = createViolation(super.key, classPathFrom.getPhysicalPath(), false, message, logicalModules, severity);
+				violations.add(violation);
 			}
 		}	
 		if(noDependencyCounter != totalCounter)

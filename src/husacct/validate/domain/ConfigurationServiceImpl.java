@@ -23,6 +23,10 @@ public class ConfigurationServiceImpl {
 	public void clearViolations() {
 		violationRepository.clear();
 	}
+	
+	public int getSeverityValue(Severity severity){
+		return severityConfig.getSeverityValue(severity);
+	}
 
 	public List<Violation> getAllViolations() {
 		return violationRepository.getAllViolations();
