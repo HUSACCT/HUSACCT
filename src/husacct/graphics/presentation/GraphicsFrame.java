@@ -158,26 +158,29 @@ public class GraphicsFrame extends JInternalFrame {
 		this.layoutComponents(true);
 	}
 
+	// TODO: Sort violations based on severity value
+	// TODO: Make small columns smaller in the GUI 
 	private JTable createViolationsTable(ViolationDTO[] violationDTOs) {
-		String[] columnNames = { "Error Message", "Rule Type", "Violation Type" };
+		String[] columnNames = { "Error Message", "Rule Type", "Violation Type", "Severity", "Line" };
 
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 		for (ViolationDTO violation : violationDTOs) {
+			String message = violation.message;
+		
 			String ruleTypeDescription = "none";
-			String violationTypeDescription = "none";
-
 			if (null != violation.ruleType) {
 				ruleTypeDescription = violation.ruleType.getDescriptionKey();
 			}
 
+			String violationTypeDescription = "none";
 			if (null != violation.violationType) {
 				violationTypeDescription = violation.violationType.getDescriptionKey();
 			}
-
-			String message = "this was implement with a MessageDTO, "
-					+ "but will be implemented using errorMessage property"; //TODO
-
-			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription });
+			
+			String severity = ""+violation.severityValue;
+			String line = ""+violation.linenumber;
+			
+			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
 		}
 
 		return new JTable(rows.toArray(new String[][] {}), columnNames);

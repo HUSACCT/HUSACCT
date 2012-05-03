@@ -104,7 +104,6 @@ public class Drawing extends DefaultDrawing {
 	}
 	
 	public void resizeRelationFigures() {
-		System.out.println(true);
 		RelationFigure[] figures = getShownLines();
 		// 1 relation, small
 		if (1 == figures.length) {
