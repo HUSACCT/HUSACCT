@@ -127,13 +127,9 @@ public abstract class BaseController implements UserInputListener {
 			hideViolations();
 
 			this.drawing.setFiguresNotViolated(this.figureMap.getViolatedFigures());
-			this.drawing.clearViolationLines();
-			this.figureMap.clearAllViolations();
 		} else {
 			logger.debug("Showing violations");
 			showViolations();
-
-			this.drawViolationsForShownModules();
 		}
 		this.drawLinesBasedOnSetting();
 	}

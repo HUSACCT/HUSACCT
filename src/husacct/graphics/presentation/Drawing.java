@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 
@@ -78,9 +79,12 @@ public class Drawing extends DefaultDrawing {
 	}
 	
 	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList){
+		this.willChange();
 		for(BaseFigure figure : arrayList){
 			figure.setViolated(false);
 		}
+		this.invalidate();
+		this.changed();
 	}
 
 	public void clearAll() {
@@ -94,7 +98,6 @@ public class Drawing extends DefaultDrawing {
 		this.willChange();
 		BaseFigure[] lines = getShownLines();
 		for(BaseFigure line : lines){
-			// TODO FIXME BUG: Does not clear all lines when used in the demo controller!
 			this.remove(line);
 		}
 		this.invalidate();

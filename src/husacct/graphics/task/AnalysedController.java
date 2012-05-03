@@ -4,7 +4,9 @@ import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.ViolationTypeDTO;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -66,7 +68,36 @@ public class AnalysedController extends BaseController {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureTo);
 		
-		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
+//		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
+		
+		// TODO validation service probably has to actually run through the main GUI to have this to work.
+		// REMOVE ME WHEN STUFF WORKS!
+		// From ValidateServiceStub.java
+		ViolationDTO[] violations = new ViolationDTO[0];
+		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor","InvocConstructorDescription", false);
+		ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
+		ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements","ImplementsDescription", false);
+		ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
+		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse","IsNotAllowedToUseDescription",
+				new ViolationTypeDTO[] { constructorCall,extendingAbstractClass,implementationOfInterface,extendClass }, new RuleTypeDTO[] {});
+		
+		if(dtoFrom.uniqueName.equals("domain") && dtoTo.uniqueName.equals("infrastructure")) {
+			violations = new ViolationDTO[2];
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "infrastructure", "domain", "infrastructure", extendClass, ruleType, "error 1", 1);
+			violations[0] = taskLayerErr1;
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "infrastructure", "domain", "infrastructure", extendClass, ruleType, "error 2", 1);
+			violations[1] = taskLayerErr2;
+		}
+		
+		if(dtoFrom.uniqueName.equals("infrastructure") && dtoTo.uniqueName.equals("infrastructure")) {
+			violations = new ViolationDTO[2];
+			ViolationDTO taskLayerErr1 = new ViolationDTO("infrastructure", "infrastructure", "infrastructure", "infrastructure", extendClass, ruleType, "error 3", 1);
+			violations[0] = taskLayerErr1;
+			ViolationDTO taskLayerErr2 = new ViolationDTO("infrastructure", "infrastructure", "infrastructure", "infrastructure", extendClass, ruleType, "error 4", 1);
+			violations[1] = taskLayerErr2;
+		}
+		
+		return violations;
 	}
 	
 	// Listener methods
