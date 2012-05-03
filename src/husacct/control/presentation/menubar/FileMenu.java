@@ -19,19 +19,17 @@ public class FileMenu extends JMenu {
 
 	private StateController stateController;
 	private WorkspaceController workspaceController;
-	private MainController mainController;
 	private JMenuItem createWorkspaceItem;
 	private JMenuItem openWorkspaceItem;
 	private JMenuItem saveWorkspaceItem;
 	private JMenuItem closeWorkspaceItem;
 	private int currentState;
 	
-	public FileMenu(MainController controller){
+	public FileMenu(final MainController mainController){
 		super("File");
-		this.mainController = controller;
-		this.workspaceController = controller.getWorkspaceController();
+		this.workspaceController = mainController.getWorkspaceController();
 		
-		this.stateController = controller.getStateController();
+		this.stateController = mainController.getStateController();
 		currentState = stateController.getState();
 		
 		createWorkspaceItem = new JMenuItem("Create workspace");
@@ -62,7 +60,7 @@ public class FileMenu extends JMenu {
 		this.add(closeWorkspaceItem);
 		closeWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				workspaceController.closeWorkspace();
+				workspaceController.showCloseWorkspaceGui();
 			}
 		});		
 
@@ -81,7 +79,7 @@ public class FileMenu extends JMenu {
 		saveWorkspaceItem.setEnabled(false);
 		closeWorkspaceItem.setEnabled(false);
 		
-		controller.getStateController().addStateChangeListener(new IStateChangeListener() {
+		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 
 			@Override
 			public void changeState(int state) {

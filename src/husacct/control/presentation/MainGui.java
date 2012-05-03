@@ -23,7 +23,8 @@ public class MainGui extends JFrame {
 
 	private MainController mainController;
 	private JMenuBar menuBar;
-
+	private String titlePrefix = "HUSACCT";
+	
 	public MainGui(MainController controller) {
 		this.mainController = controller;
 		setupFrame();
@@ -31,6 +32,7 @@ public class MainGui extends JFrame {
 		this.setContentPane(new JDesktopPane());
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);	
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
 	}
 
 	private void createMenuBar() {
@@ -57,7 +59,6 @@ public class MainGui extends JFrame {
 	}
 
 	private void setupFrame(){
-		this.setTitle("HUSACCT");
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setBounds(100, 100, 783, 535);
 		this.addWindowListener(new WindowAdapter() {
@@ -66,6 +67,14 @@ public class MainGui extends JFrame {
 				mainController.exit();		
 			}
 		});
+	}
+	
+	public void setTitle(String title){
+		if(title.length() > 0){
+			super.setTitle(titlePrefix + " - " + title);
+		} else {
+			super.setTitle(titlePrefix);
+		}
 	}
 
 }

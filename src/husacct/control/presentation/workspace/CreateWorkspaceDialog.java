@@ -14,7 +14,7 @@ public class CreateWorkspaceDialog{
 
 		if ((workspaceName != null) && (workspaceName.length() > 0)) {
 			mainController.getWorkspaceController().createWorkspace(workspaceName);
-		}
+		}		
 	}
 
 }

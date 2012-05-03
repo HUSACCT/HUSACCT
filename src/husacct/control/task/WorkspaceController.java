@@ -3,6 +3,7 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
+import husacct.control.presentation.workspace.CloseWorkspaceDialog;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
 import husacct.control.presentation.workspace.SaveWorkspaceFrame;
@@ -24,7 +25,7 @@ public class WorkspaceController {
 	private Logger logger = Logger.getLogger(WorkspaceController.class);
 	private static Workspace currentWorkspace;
 
-	private MainController mainController;
+	private static MainController mainController;
 	
 	public WorkspaceController(MainController mainController){
 		this.mainController = mainController;
@@ -34,13 +35,16 @@ public class WorkspaceController {
 		new CreateWorkspaceDialog(mainController);
 	}
 
-	public void showOpenWorkspaceGui() {
-		new OpenWorkspaceFrame(mainController);
-
+	public void showCloseWorkspaceGui(){
+		new CloseWorkspaceDialog(mainController);
 	}
 	
-	public void showSaveWorkspaceGui() {
-		new SaveWorkspaceFrame(mainController);
+	public void showOpenWorkspaceGui() {
+		new OpenWorkspaceFrame(mainController);
+	}
+	
+	public SaveWorkspaceFrame showSaveWorkspaceGui() {
+		return new SaveWorkspaceFrame(mainController);
 
 	}
 	
@@ -48,6 +52,12 @@ public class WorkspaceController {
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		WorkspaceController.currentWorkspace = workspace;
+		mainController.getMainGui().setTitle(name);
+	}
+	
+	public void closeWorkspace() {
+		WorkspaceController.currentWorkspace = null;
+		mainController.getMainGui().setTitle("");
 	}
 	
 	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
@@ -121,30 +131,23 @@ public class WorkspaceController {
 		}
 		return saveableServices;
 	}
-
-	public void closeWorkspace() {	
-		Object[] options = { "Yes", "No", "Cancel" };
-		int n = JOptionPane.showOptionDialog(null,
-				"Save changes?",
-				"Close workspace", JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
-		if (n == JOptionPane.YES_OPTION) {
-			//saveWorkspace();
-		} else if (n == JOptionPane.NO_OPTION) {
-			System.out.println("no");
-		} else if (n == JOptionPane.CANCEL_OPTION) {
-			System.out.println("cancel");
-		} else {
-			System.out.println("none");
-		}
-		
-	}
 	
 	public static boolean isOpenWorkspace(){
 		if(WorkspaceController.currentWorkspace != null){
 			return true;
 		}
 		return false;
+	}
+	
+	public static Workspace getCurrentWorkspace(){
+		return WorkspaceController.currentWorkspace;
+	}
+
+	public static void setWorkspace(Workspace workspace) {
+		WorkspaceController.currentWorkspace = workspace;
+		if(mainController != null) {
+			mainController.getMainGui().setTitle(workspace.getName());
+		}
 	}
 
 }
