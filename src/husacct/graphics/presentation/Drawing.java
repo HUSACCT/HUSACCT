@@ -1,11 +1,11 @@
 package husacct.graphics.presentation;
 
+import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,18 +25,18 @@ public class Drawing extends DefaultDrawing {
 	}
 	
 	public void showExportToImagePanel(){
-		File selectedFile = new File(".");
+		FileManager filemanager = new FileManager();
+		File selectedFile = filemanager.getFile();
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
 			JFileChooser fileChooser =  new JFileChooser();
 			fileChooser.setVisible(true);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				//TODO: Move to appropriate FileManager, possible?
-				selectedFile = fileChooser.getSelectedFile();
-				FileOutputStream fileoutputstream = new FileOutputStream(selectedFile);
-				imageoutputformat.write(fileoutputstream,this);
-				fileoutputstream.close();
+				filemanager.setFile(fileChooser.getSelectedFile());
+				filemanager.createOutputStream();
+				imageoutputformat.write(filemanager.getOutputStream(),this);
+				filemanager.closeOutputStream();
 	        }
 		} catch (IOException e) {
 			logger.debug("Cannot save file to "+selectedFile.getAbsolutePath());
