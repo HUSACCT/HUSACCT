@@ -106,9 +106,16 @@ public class CheckConformanceUtil {
 		if(violationTypeSeverity != null){
 			violationTypeValue = configuration.getSeverityValue(violationTypeSeverity);
 		}
-
-		if(ruleTypeValue <= violationTypeValue){
-			if(ruleTypeSeverity != null){
+		
+	
+		if(ruleTypeValue == -1 && violationTypeValue != -1){
+			return violationTypeSeverity;
+		}
+		else if(ruleTypeValue != -1 && violationTypeValue == -1){
+			return ruleTypeSeverity;
+		}
+		else if(ruleTypeValue != -1 && violationTypeValue != -1){
+			if(ruleTypeValue <= violationTypeValue){
 				return ruleTypeSeverity;
 			}
 			else{
@@ -116,7 +123,7 @@ public class CheckConformanceUtil {
 			}
 		}
 		else{
-			return violationTypeSeverity;
-		}
+			return null;
+		}		
 	}
 }
