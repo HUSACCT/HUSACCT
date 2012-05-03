@@ -35,20 +35,6 @@ public class Message {
 		this.violationTypeKeys = violationTypeKeys;
 		this.exceptionMessage = exceptionMessage;
 	}
-	
-	public Message(LogicalModules logicalModules, String ruleKey, List<String> violationTypeKeys){
-		this.logicalModules = logicalModules;
-		this.ruleKey = ruleKey;
-		this.violationTypeKeys = violationTypeKeys;
-		this.exceptionMessage = Collections.emptyList();
-	}
-	
-	public Message(LogicalModules logicalModules, String ruleKey){
-		this.logicalModules = logicalModules;
-		this.ruleKey = ruleKey;
-		this.violationTypeKeys = Collections.emptyList();
-		this.exceptionMessage = Collections.emptyList();
-	}
 
 	public String getRuleKey() {
 		return ruleKey;

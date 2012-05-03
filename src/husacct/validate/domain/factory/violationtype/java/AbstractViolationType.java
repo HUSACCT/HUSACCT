@@ -34,8 +34,8 @@ public abstract class AbstractViolationType {
 
 	protected List<ViolationType> generateViolationTypes(EnumSet<?> enums){
 		List<ViolationType> violationtypes = new ArrayList<ViolationType>();
-		for(Enum<?> enumValue : enums){
-			ViolationType violationtype = generateViolationType(enumValue);
+		for(Enum<?> enumValue : enums){			
+			ViolationType violationtype = generateViolationType(enumValue);	
 			violationtypes.add(violationtype);
 		}
 		return violationtypes;
@@ -84,12 +84,14 @@ public abstract class AbstractViolationType {
 		if(ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleKey.equals(RuleTypes.MUST_USE.toString())||ruleKey.equals(RuleTypes.BACK_CALL.toString())||ruleKey.equals(RuleTypes.SKIP_CALL.toString())){
 			return true;
 		}
-		else return false;
+		else {
+			return false;
+		}
 	}
 
 	protected Severity createSeverity(String language, String violationKey){
 		try{
-			return configuration.getSeverityFromKey(language, violationKey);
+			configuration.getSeverityFromKey(language, violationKey);			
 		}catch(SeverityNotFoundException e){
 			CategoryKeySeverityDTO violation = getCategoryKeySeverityDTO(violationKey);
 			if(violation != null){

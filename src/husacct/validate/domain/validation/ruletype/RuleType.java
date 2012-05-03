@@ -61,6 +61,10 @@ public abstract class RuleType {
 	public List<RuleType> getExceptionrules(){
 		return exceptionrules;
 	}
+	
+	public Severity getSeverity(){
+		return severity;
+	}
 
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule);
 

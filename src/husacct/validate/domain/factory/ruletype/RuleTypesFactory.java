@@ -40,7 +40,7 @@ public class RuleTypesFactory {
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
-	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){
+	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){		
 		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
 		return extractCategoriesFromRuleType(ruleTypes);
 	}
@@ -81,8 +81,8 @@ public class RuleTypesFactory {
 		//TODO uncomment when define service is ready
 		//setViolationTypeFactory(language);
 
-		List<RuleType> rules = new ArrayList<RuleType>();
-
+		List<RuleType> rules = new ArrayList<RuleType>();		
+		
 		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
 			try{
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
@@ -100,7 +100,7 @@ public class RuleTypesFactory {
 			}catch(RuleInstantionException e){
 				logger.error(e.getMessage(), e);	
 			}
-		}
+		}		
 		return rules;
 	}
 
