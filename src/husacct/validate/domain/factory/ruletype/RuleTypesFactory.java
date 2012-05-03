@@ -64,7 +64,7 @@ public class RuleTypesFactory {
 	public List<RuleType> getRuleTypes(){
 		ApplicationDTO application = new DefineServiceStub().getApplicationDetails();
 		if(application != null){
-			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){
+			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){				
 				return generateDefaultRuleTypes();
 			}
 			else{

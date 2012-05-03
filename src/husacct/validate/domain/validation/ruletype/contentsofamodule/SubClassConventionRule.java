@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import husacct.common.dto.RuleDTO;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -18,7 +19,7 @@ public class SubClassConventionRule extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(RuleDTO appliedRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
 		// TODO Auto-generated method stub
 		return null;
 	}
