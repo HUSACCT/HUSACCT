@@ -27,7 +27,7 @@ public class MainController {
 		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();
-		this.applicationController = new ApplicationController();
+		this.applicationController = new ApplicationController(this);
 		this.importExportController = new ImportExportController(this);
 	}
 

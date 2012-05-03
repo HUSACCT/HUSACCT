@@ -1,6 +1,5 @@
 package husacct.control.presentation.menubar;
 
-import husacct.control.presentation.util.AnalyseApplicationFrame;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
@@ -8,7 +7,6 @@ import husacct.control.task.StateController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
@@ -18,11 +16,9 @@ import javax.swing.event.MenuListener;
 public class DefineMenu extends JMenu{
 	private JMenuItem importLogicalArchitectureItem;
 	private JMenuItem defineLogicalArchitectureItem;
-	private JMenuItem setApplicationItem;
+	private JMenuItem setApplicationDetailsItem;
 	private JMenuItem showLogicalGraphicsItem;
 	private JMenuItem exportLogicalArchitectureItem;
-	private JFrame analyseApplicationFrame = new AnalyseApplicationFrame();
-
 
 	public DefineMenu(final MainController mainController){
 		super("Define");
@@ -36,11 +32,11 @@ public class DefineMenu extends JMenu{
 			}
 		});
 
-		setApplicationItem = new JMenuItem("Analyse application");
-		this.add(setApplicationItem);
-		setApplicationItem.addActionListener(new ActionListener(){
+		setApplicationDetailsItem = new JMenuItem("Application details");
+		this.add(setApplicationDetailsItem);
+		setApplicationDetailsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				analyseApplicationFrame.setVisible(true);
+				mainController.getApplicationController().showApplicationDetailsGui();
 			}
 		});
 		
@@ -71,7 +67,7 @@ public class DefineMenu extends JMenu{
 		//disable buttons on start
 		defineLogicalArchitectureItem.setEnabled(false);
 		importLogicalArchitectureItem.setEnabled(false);
-		setApplicationItem.setEnabled(false);
+		setApplicationDetailsItem.setEnabled(false);
 		showLogicalGraphicsItem.setEnabled(false);
 		importLogicalArchitectureItem.setEnabled(false);
 		exportLogicalArchitectureItem.setEnabled(false);
@@ -86,11 +82,11 @@ public class DefineMenu extends JMenu{
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
-					setApplicationItem.setEnabled(true);
+					setApplicationDetailsItem.setEnabled(true);
 				} else if(state >= StateController.DEFINED){
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
-					setApplicationItem.setEnabled(true);
+					setApplicationDetailsItem.setEnabled(true);
 					showLogicalGraphicsItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
 					exportLogicalArchitectureItem.setEnabled(true);

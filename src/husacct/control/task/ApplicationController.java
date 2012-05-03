@@ -1,16 +1,21 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ApplicationDTO;
+import husacct.control.presentation.util.SetApplicationFrame;
 
 public class ApplicationController {
 
-	private ServiceProvider serviceProvider;
-
-	public ApplicationController() {
-		serviceProvider = ServiceProvider.getInstance();
+	private MainController mainController;
+	public ApplicationController(MainController mainController) {
+		this.mainController = mainController;
 	}
 
-	public void analyseApplication(String applicationName, String[] paths, String language, String version) {
-		serviceProvider.getDefineService().createApplication(applicationName, paths, language, version);
+	public void showApplicationDetailsGui(){
+		new SetApplicationFrame(mainController);
+	}
+	
+	public void setApplicationData(ApplicationDTO applicationDTO) {
+		ServiceProvider.getInstance().getDefineService().createApplication(applicationDTO.name, applicationDTO.paths, applicationDTO.programmingLanguage, applicationDTO.version);
 	}
 }

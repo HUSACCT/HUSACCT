@@ -33,7 +33,6 @@ public class ImportExportController {
 
 	public void showExportViolationsReportGui() {
 		System.out.println("showExportViolationsReportGui");
-		
 	}
 	
 	public void exportLogicalArchitecture(File file){
