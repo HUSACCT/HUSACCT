@@ -136,7 +136,7 @@ public class TaskServiceImpl implements ITaskService{
 		ExportController exportController = new ExportController();
 		rootValidateElement.addContent(exportController.exportViolationsXML(configuration.getAllViolations()));
 		rootValidateElement.addContent(exportController.exportSeveritiesXML(configuration.getAllSeverities()));
-		rootValidateElement.addContent(exportController.exportSeveritiesPerTypesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
+		rootValidateElement.addContent(exportController.exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
 		return rootValidateElement;
 	}
 	
