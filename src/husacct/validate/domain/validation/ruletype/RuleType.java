@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.ruletype;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
@@ -44,7 +45,7 @@ public abstract class RuleType {
 	public String getCategoryKey(){
 		return categoryKey;
 	}
-	
+
 	public EnumSet<RuleTypes> getExceptionRuleKeys(){
 		return exceptionRuleKeys;
 	}
@@ -52,11 +53,11 @@ public abstract class RuleType {
 	public List<ViolationType> getViolationTypes(){
 		return violationtypes;
 	}
-	
+
 	public void setExceptionrules(List<RuleType> ruletypes){
 		this.exceptionrules = ruletypes;
 	}
-	
+
 	public List<RuleType> getExceptionrules(){
 		return exceptionrules;
 	}
@@ -66,8 +67,17 @@ public abstract class RuleType {
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
 		return new Violation(dependency.lineNumber, severity, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
 	}
-	
+
 	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity){
 		return new Violation(0, severity, ruleKey, "", from, "", inDirect, message, logicalModules);		
+	}
+
+	protected Severity getViolationTypeSeverity(String violationTypeKey){
+		try{
+			return violationtypefactory.createViolationType(violationTypeKey).getSeverity();
+		}catch(ViolationTypeNotFoundException e){
+
+		}
+		return null;
 	}
 }
