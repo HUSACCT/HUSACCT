@@ -16,8 +16,9 @@ import javax.swing.event.MenuListener;
 public class ValidateMenu extends JMenu{
 	private MainController maincontroller;
 	private int currentState;
-	private JMenuItem mntmConfigure;
-	private JMenuItem mntmValidateNow;
+	private JMenuItem configureItem;
+	private JMenuItem validateNowItem;
+	private JMenuItem exportViolationReportItem;
 	
 	public ValidateMenu(final MainController mainController){
 		super("Validate");
@@ -25,26 +26,36 @@ public class ValidateMenu extends JMenu{
 		this.maincontroller = mainController;
 		currentState = maincontroller.getStateController().getState();
 		
-		mntmValidateNow = new JMenuItem("Validate now");
-		this.add(mntmValidateNow);
-		mntmValidateNow.addActionListener(new ActionListener(){
+		validateNowItem = new JMenuItem("Validate now");
+		this.add(validateNowItem);
+		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO: Validate now
 				maincontroller.getViewController().showViolationsGui();
 			}
 		});
 		
-		mntmConfigure = new JMenuItem("Configuration");
-		this.add(mntmConfigure);
-		mntmConfigure.addActionListener(new ActionListener(){
+		configureItem = new JMenuItem("Configuration");
+		this.add(configureItem);
+		configureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				maincontroller.getViewController().showConfigurationGui();
 			}
 		});
+
+		exportViolationReportItem = new JMenuItem("Violation report");
+
+		this.add(exportViolationReportItem);
+		
+		exportViolationReportItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				// TODO: Violation report
+			}
+		});
 		
 		//disable buttons on start
-		mntmValidateNow.setEnabled(false);
-		mntmConfigure.setEnabled(true);
+		validateNowItem.setEnabled(false);
+		configureItem.setEnabled(true);
 		
 		
 		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
@@ -53,15 +64,15 @@ public class ValidateMenu extends JMenu{
 			public void changeState(int state) {
 				currentState = maincontroller.getStateController().getState();
 				if(currentState == StateController.NONE){
-					mntmValidateNow.setEnabled(false);
+					validateNowItem.setEnabled(false);
 				}else if(currentState == StateController.EMPTY){
-					mntmValidateNow.setEnabled(false);
+					validateNowItem.setEnabled(false);
 				}else if(currentState == StateController.DEFINED){
-					mntmValidateNow.setEnabled(true);
+					validateNowItem.setEnabled(true);
 				}else if(currentState == StateController.MAPPED){
-					mntmValidateNow.setEnabled(true);
+					validateNowItem.setEnabled(true);
 				}else if(currentState == StateController.VALIDATED){
-					mntmValidateNow.setEnabled(true);
+					validateNowItem.setEnabled(true);
 				}
 			}
 			

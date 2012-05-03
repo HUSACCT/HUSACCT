@@ -20,6 +20,7 @@ public class DefineMenu extends JMenu{
 	private JMenuItem defineLogicalArchitectureItem;
 	private JMenuItem setApplicationItem;
 	private JMenuItem showLogicalGraphicsItem;
+	private JMenuItem exportLogicalArchitectureItem;
 	private JFrame analyseApplicationFrame = new AnalyseApplicationFrame();
 
 
@@ -58,7 +59,15 @@ public class DefineMenu extends JMenu{
 				// TODO: import gui
 			}
 		});
-
+		
+		exportLogicalArchitectureItem = new JMenuItem("Export logical architecture");
+		this.add(exportLogicalArchitectureItem);
+		exportLogicalArchitectureItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//exportLogicalArchitectureFrame.setVisible(true);
+			}
+		});
+		
 		//disable buttons on start
 		defineLogicalArchitectureItem.setEnabled(false);
 		importLogicalArchitectureItem.setEnabled(false);
