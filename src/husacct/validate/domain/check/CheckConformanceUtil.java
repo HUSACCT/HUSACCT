@@ -42,19 +42,20 @@ public class CheckConformanceUtil {
 	}
 
 	private static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO rootModule){
-		ArrayList<Mapping> classpathsFrom = new ArrayList<Mapping>();
+		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
 		for(String classpath : rootModule.physicalPaths){
 			classpathsFrom.add(new Mapping(rootModule.logicalPath, rootModule.type, classpath));
 		}
-		return getAllClasspathsFromModule(rootModule, classpathsFrom);		
+		getAllClasspathsFromModule(rootModule, classpathsFrom);	
+		return new ArrayList<Mapping>(classpathsFrom);
 	}
 
-	private static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO module, ArrayList<Mapping> classpaths){
+	private static HashSet<Mapping> getAllClasspathsFromModule(ModuleDTO module, HashSet<Mapping> classpaths){
 		for(ModuleDTO submodule : module.subModules){
 			for(String classpath : submodule.physicalPaths){
 				classpaths.add(new Mapping(submodule.logicalPath, submodule.type, classpath));
 			}
-			return getAllClasspathsFromModule(submodule, classpaths);
+			classpaths.addAll(getAllClasspathsFromModule(submodule, classpaths));
 		}
 		return classpaths;
 	}
@@ -64,7 +65,7 @@ public class CheckConformanceUtil {
 
 	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		ModuleDTO[] childModules = definestub.getSkipCallChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpathsFrom.addAll(getAllClasspathsFromModule(module));
@@ -74,7 +75,7 @@ public class CheckConformanceUtil {
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths){
-		ModuleDTO[] childModules = definestub.getSkipCallChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpaths.addAll(getAllClasspathsFromModule(module));

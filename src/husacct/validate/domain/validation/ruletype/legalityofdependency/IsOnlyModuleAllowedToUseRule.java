@@ -44,19 +44,34 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 				DependencyDTO[] dependencies = analysestub.getDependenciesTo(classPathTo.getPhysicalPath());
 				DependencyDTO[] allowedDependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){
-					for(DependencyDTO allowedDependency: allowedDependencies){
-						if(dependency != allowedDependency){
-							Message message = new Message(appliedRule);
-
-							LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-							LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
-							LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-
-							final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-							Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);						
-							Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
-							violations.add(violation);
+					if(allowedDependencies.length != 0){
+						for(DependencyDTO allowedDependency: allowedDependencies){
+							if(dependency != allowedDependency){
+								Message message = new Message(appliedRule);
+	
+								LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
+								LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
+								LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+	
+								final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
+								Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);						
+								Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
+								violations.add(violation);
+							}
 						}
+					}
+					else{
+						Message message = new Message(appliedRule);
+						
+						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
+						LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
+						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+
+						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
+						Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);						
+						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
+						violations.add(violation);
+						
 					}
 
 				}

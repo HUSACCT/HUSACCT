@@ -44,7 +44,7 @@ public class BackCallRule extends RuleType {
 		List<Mapping> moduleFrom = mappings.getMappingFrom();
 		
 		List<ModuleDTO> allModules = Arrays.asList(definestub.getRootModules());
-		int counter = 0;
+		int counter = -1;
 		
 		for (ModuleDTO module :allModules){
 			counter++;
@@ -54,9 +54,9 @@ public class BackCallRule extends RuleType {
 				
 			}
 		}			
-		
-		for(List<Mapping> moduleTo : toModules){
-			for(Mapping classPathFrom : moduleFrom){
+
+		for(Mapping classPathFrom : moduleFrom){
+			for(List<Mapping> moduleTo : toModules){
 				for(Mapping classPathTo : moduleTo ){
 					DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
 					for(DependencyDTO dependency: dependencies){
