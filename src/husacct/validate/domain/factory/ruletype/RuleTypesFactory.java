@@ -241,7 +241,7 @@ public class RuleTypesFactory {
 	
 	private DefaultSeverities getCategoryKeyClassDTO(String ruleTypeKey){
 		for(CategoryKeyClassDTO ruleType : allRuletypes.values()){
-			if(ruleType.getRuleClass().getSimpleName().toLowerCase().equals(ruleTypeKey.toLowerCase())){
+			if(ruleType.getRuleClass().getSimpleName().toLowerCase().replace("rule", "").equals(ruleTypeKey.toLowerCase())){
 				return ruleType.getDefaultSeverity();
 			}
 		}
