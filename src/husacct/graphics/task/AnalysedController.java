@@ -105,11 +105,12 @@ public class AnalysedController extends BaseController {
 	@Override
 	public void moduleZoom(BaseFigure figure) {
 		if (figure.isModule()) {
-			AbstractDTO dto = this.figureMap.getModuleDTO(figure);
-			// TODO: Can't check on DTO class name
-			if (dto.getClass().getSimpleName().equals("AnalysedModuleDTO")) {
-				AnalysedModuleDTO parentDTO = ((AnalysedModuleDTO) dto);
+			try{
+				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.uniqueName);
+			}catch(Exception e){
+				logger.debug("Could not zoom on this object: "+figure);
+				logger.debug("Possible type cast failure.");
 			}
 		}
 	}
