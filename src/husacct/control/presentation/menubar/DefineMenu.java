@@ -73,6 +73,8 @@ public class DefineMenu extends JMenu{
 		importLogicalArchitectureItem.setEnabled(false);
 		setApplicationItem.setEnabled(false);
 		showLogicalGraphicsItem.setEnabled(false);
+		importLogicalArchitectureItem.setEnabled(false);
+		exportLogicalArchitectureItem.setEnabled(false);
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 
@@ -83,12 +85,15 @@ public class DefineMenu extends JMenu{
 				}else if(state == StateController.EMPTY){
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
+					importLogicalArchitectureItem.setEnabled(true);
 					setApplicationItem.setEnabled(true);
 				} else if(state >= StateController.DEFINED){
 					defineLogicalArchitectureItem.setEnabled(true);
 					importLogicalArchitectureItem.setEnabled(true);
 					setApplicationItem.setEnabled(true);
 					showLogicalGraphicsItem.setEnabled(true);
+					importLogicalArchitectureItem.setEnabled(true);
+					exportLogicalArchitectureItem.setEnabled(true);
 				}
 			}
 		});

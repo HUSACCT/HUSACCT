@@ -56,7 +56,7 @@ public class ValidateMenu extends JMenu{
 		//disable buttons on start
 		validateNowItem.setEnabled(false);
 		configureItem.setEnabled(true);
-		
+		exportViolationReportItem.setEnabled(false);
 		
 		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
 
@@ -65,14 +65,19 @@ public class ValidateMenu extends JMenu{
 				currentState = maincontroller.getStateController().getState();
 				if(currentState == StateController.NONE){
 					validateNowItem.setEnabled(false);
+					exportViolationReportItem.setEnabled(false);
 				}else if(currentState == StateController.EMPTY){
 					validateNowItem.setEnabled(false);
+					exportViolationReportItem.setEnabled(false);
 				}else if(currentState == StateController.DEFINED){
 					validateNowItem.setEnabled(true);
+					exportViolationReportItem.setEnabled(false);
 				}else if(currentState == StateController.MAPPED){
 					validateNowItem.setEnabled(true);
+					exportViolationReportItem.setEnabled(false);
 				}else if(currentState == StateController.VALIDATED){
 					validateNowItem.setEnabled(true);
+					exportViolationReportItem.setEnabled(true);
 				}
 			}
 			
