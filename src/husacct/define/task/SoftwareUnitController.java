@@ -30,18 +30,6 @@ public class SoftwareUnitController extends PopUpController {
 		UiDialogs.showOnScreen(0, softwareUnitFrame);
 		softwareUnitFrame.setVisible(true);
 	}
-
-	public void save(String softwareUnit, String type) {
-		logger.info("Adding software unit to module with id " + this.getModuleId());
-		try {
-			defineDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
-			//pokeObservers();
-			DefinitionController.getInstance().notifyObservers();
-		} catch (Exception e) {
-			this.logger.error(e.getMessage());
-			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage(), "Error");
-		}
-	}
 	
 	@Deprecated
 	public void fillSoftwareUnitsList(ArrayList<SoftwareUnitDefinition> softwareUnitList){
@@ -63,6 +51,18 @@ public class SoftwareUnitController extends PopUpController {
 			}
 			
 		}
+	}
+	
+	@Deprecated
+	private ArrayList<SoftwareUnitDefinition> getAnalayzedSoftwareUnits(){
+		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
+		AnalysedModuleDTO[] modules = getAnalyzedModules();
+		for(AnalysedModuleDTO module : modules) {
+			SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(module.name, SoftwareUnitDefinition.Type.valueOf(module.type.toUpperCase()));
+			softwareUnits.add(softwareUnit);
+		}
+		filterAddedSoftwareUnits(softwareUnits);
+		return softwareUnits;
 	}
 	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
@@ -90,14 +90,15 @@ public class SoftwareUnitController extends PopUpController {
 		parentComponent.addChild(childComponent);
 	}
 	
-	private ArrayList<SoftwareUnitDefinition> getAnalayzedSoftwareUnits(){
-		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
-		AnalysedModuleDTO[] modules = getAnalyzedModules();
-		for(AnalysedModuleDTO module : modules) {
-			SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(module.name, SoftwareUnitDefinition.Type.valueOf(module.type.toUpperCase()));
-			softwareUnits.add(softwareUnit);
+	public void save(String softwareUnit, String type) {
+		logger.info("Adding software unit to module with id " + this.getModuleId());
+		try {
+			defineDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
+			//pokeObservers();
+			DefinitionController.getInstance().notifyObservers();
+		} catch (Exception e) {
+			this.logger.error(e.getMessage());
+			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage(), "Error");
 		}
-		filterAddedSoftwareUnits(softwareUnits);
-		return softwareUnits;
 	}
 }
