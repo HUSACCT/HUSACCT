@@ -16,6 +16,7 @@ import husacct.validate.task.filter.FilterController;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -142,5 +143,9 @@ public class TaskServiceImpl implements ITaskService{
 	
 	public String[] getExportExtentions() {
 		return new ExtensionTypes().getExtensionTypes();
+	}
+	
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter){
+		return filterController.getViolationsPerSeverity(applyFilter);
 	}
 }

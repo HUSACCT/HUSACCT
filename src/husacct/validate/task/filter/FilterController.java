@@ -5,9 +5,12 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FilterController {
@@ -110,5 +113,27 @@ public class FilterController {
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+	}
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter) {
+		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
+		for(Severity severity : taskServiceImpl.getAllSeverities()) {
+			int violationsCount = 0;
+			List<Violation> violations;
+			if(!applyFilter) {
+				violations = taskServiceImpl.getAllViolations();
+			} else {
+				violations = taskServiceImpl.applyFilterViolations(true);
+			}
+			for(Violation violation : violations) {
+				if(violation.getSeverity() != null) {
+					if(violation.getSeverity().equals(severity)) {
+						violationsCount++;
+					}
+				}
+			}
+			
+			violationsPerSeverity.put(severity, violationsCount);
+		}
+		return violationsPerSeverity;
 	}
 }

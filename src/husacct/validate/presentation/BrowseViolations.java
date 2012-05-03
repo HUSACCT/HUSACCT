@@ -6,7 +6,9 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.task.TaskServiceImpl;
+import husacct.validate.task.filter.FilterController;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -15,7 +17,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -253,9 +257,10 @@ public final class BrowseViolations extends JInternalFrame {
 	}
 
 	public void createInformationPanel() {
-		informationPanel.removeAll();
-		System.out.println("kom ik hier?");
-
+		for(Component component : informationPanel.getComponents()){
+			System.out.println(component.getName() + " " + component.getClass());
+			informationPanel.remove(component);
+		}
 		
 		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
@@ -264,39 +269,22 @@ public final class BrowseViolations extends JInternalFrame {
 		totalViolationNumber.setText("" + ts.getAllViolations().size());
 		informationPanel.add(totalViolationNumber);
 		
-		shownViolations.setText(ResourceBundles.getValue("shownViolations") + ":");
+		shownViolations.setText(ResourceBundles.getValue("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
 		
 		shownViolationsNumber.setText("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
 
-		for(ViolationsPerSeverity violationPerSeverity: getViolationsPerSeverity()) {
-			informationPanel.add(new JLabel(violationPerSeverity.getSeverity().toString()));
-			informationPanel.add(new JLabel("" + violationPerSeverity.getAmount()));
+		for(Entry<Severity, Integer> violationPerSeverity: ts.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
+			System.out.println(violationPerSeverity.getKey().toString());
+			System.out.println(violationPerSeverity.getValue());
+			JLabel tempValue = new JLabel(violationPerSeverity.getKey().toString());
+			tempValue.setVisible(true);
+			informationPanel.add(tempValue);
+			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
 		}
-
-	}
-
-	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
-		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
-		for(Severity severity : ts.getAllSeverities()) {
-			int violationsCount = 0;
-			List<Violation> violations;
-			if(!applyFilter.isSelected()) {
-				violations = ts.getAllViolations();
-			} else {
-				violations = ts.applyFilterViolations(true);
-			}
-			for(Violation violation : violations) {
-				if(violation.getSeverity() != null) {
-					if(violation.getSeverity().equals(severity)) {
-						violationsCount++;
-					}
-				}
-			}
-			violationsPerSeverity.add(new ViolationsPerSeverity(violationsCount, severity));
-		}
-		return violationsPerSeverity;
+		
+		informationPanel.updateUI();
 	}
 
 	protected void setViolations() {
