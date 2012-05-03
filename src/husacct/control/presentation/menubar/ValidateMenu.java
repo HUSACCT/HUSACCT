@@ -14,7 +14,6 @@ import javax.swing.event.MenuListener;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
-	private MainController maincontroller;
 	private int currentState;
 	private JMenuItem configureItem;
 	private JMenuItem validateNowItem;
@@ -22,16 +21,14 @@ public class ValidateMenu extends JMenu{
 	
 	public ValidateMenu(final MainController mainController){
 		super("Validate");
-		
-		this.maincontroller = mainController;
-		currentState = maincontroller.getStateController().getState();
+		currentState = mainController.getStateController().getState();
 		
 		validateNowItem = new JMenuItem("Validate now");
 		this.add(validateNowItem);
 		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO: Validate now
-				maincontroller.getViewController().showViolationsGui();
+				mainController.getViewController().showViolationsGui();
 			}
 		});
 		
@@ -39,7 +36,7 @@ public class ValidateMenu extends JMenu{
 		this.add(configureItem);
 		configureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				maincontroller.getViewController().showConfigurationGui();
+				mainController.getViewController().showConfigurationGui();
 			}
 		});
 
@@ -49,20 +46,19 @@ public class ValidateMenu extends JMenu{
 		
 		exportViolationReportItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Violation report
+				mainController.getImportExportController().showExportViolationsReportGui();
 			}
 		});
 		
-		//disable buttons on start
 		validateNowItem.setEnabled(false);
 		configureItem.setEnabled(true);
 		exportViolationReportItem.setEnabled(false);
 		
-		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
+		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 
 			@Override
 			public void changeState(int state) {
-				currentState = maincontroller.getStateController().getState();
+				currentState = mainController.getStateController().getState();
 				if(currentState == StateController.NONE){
 					validateNowItem.setEnabled(false);
 					exportViolationReportItem.setEnabled(false);

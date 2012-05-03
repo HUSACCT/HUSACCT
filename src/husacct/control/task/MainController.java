@@ -11,6 +11,7 @@ public class MainController {
 	LocaleController localeController;
 	StateController stateController;
 	ApplicationController applicationController;
+	ImportExportController importExportController;
 	
 	public MainGui mainGUI;
 	
@@ -27,6 +28,7 @@ public class MainController {
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();
 		this.applicationController = new ApplicationController();
+		this.importExportController = new ImportExportController(this);
 	}
 
 	private void openMainGui() {
@@ -51,6 +53,10 @@ public class MainController {
 	
 	public ApplicationController getApplicationController(){
 		return this.applicationController;
+	}
+	
+	public ImportExportController getImportExportController(){
+		return this.importExportController;
 	}
 	
 	public void exit(){

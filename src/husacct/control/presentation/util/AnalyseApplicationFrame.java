@@ -1,4 +1,4 @@
-package husacct.control.presentation.menubar.popup;
+package husacct.control.presentation.util;
 
 import husacct.control.task.MainController;
 

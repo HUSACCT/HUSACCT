@@ -7,8 +7,8 @@ import husacct.control.presentation.workspace.CloseWorkspaceDialog;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
 import husacct.control.presentation.workspace.SaveWorkspaceFrame;
-import husacct.control.task.workspace.IWorkspaceResource;
-import husacct.control.task.workspace.ResourceFactory;
+import husacct.control.task.resources.IResource;
+import husacct.control.task.resources.ResourceFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,13 +59,13 @@ public class WorkspaceController {
 	}
 	
 	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
-		IWorkspaceResource workspaceResource = ResourceFactory.get(resourceIdentifier);
+		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
 		workspaceResource.save(document, dataValues);
 	}
 	
 	public void loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
-		IWorkspaceResource workspaceResource = ResourceFactory.get(resourceIdentifier);
+		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document doc = workspaceResource.load(dataValues);
 		loadWorkspace(doc);
 	}

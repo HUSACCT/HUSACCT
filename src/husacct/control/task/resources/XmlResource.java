@@ -1,7 +1,6 @@
-package husacct.control.task.workspace.resources;
+package husacct.control.task.resources;
 
 
-import husacct.control.task.workspace.IWorkspaceResource;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,9 +11,9 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-public class XmlWorkspaceResource implements IWorkspaceResource{
+public class XmlResource implements IResource{
 
-	private Logger logger = Logger.getLogger(XmlWorkspaceResource.class);
+	private Logger logger = Logger.getLogger(XmlResource.class);
 
 	public Document load(HashMap<String, Object> dataValues) {
 		File file = (File) dataValues.get("file");

@@ -1,4 +1,4 @@
-package husacct.control.task.workspace;
+package husacct.control.task.resources;
 
 
 
@@ -8,19 +8,19 @@ import java.util.List;
 
 public class ResourceFactory {
 
-	public static IWorkspaceResource getDefault(){
+	public static IResource getDefault(){
 		List<String> list = getAvailableResources();
 		return get(list.get(0));
 	}
 	
-	public static IWorkspaceResource get(String identifier){
+	public static IResource get(String identifier){
 		if(isAvailable(identifier)){
 	        try {
 	            ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
-	            String classNameToBeLoaded = "husacct.control.task.workspace.resources." + identifier + "WorkspaceResource";
+	            String classNameToBeLoaded = "husacct.control.task.resources." + identifier + "Resource";
 	            Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
 	            Object instance = myClass.newInstance();
-	            return (IWorkspaceResource) instance;
+	            return (IResource) instance;
 	        } catch (SecurityException e) {
 	            e.printStackTrace();
 	        } catch (IllegalArgumentException e) {

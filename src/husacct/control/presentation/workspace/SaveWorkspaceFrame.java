@@ -3,7 +3,7 @@ package husacct.control.presentation.workspace;
 import husacct.control.presentation.workspace.savers.ISaverFrame;
 import husacct.control.presentation.workspace.savers.SaverFrameFactory;
 import husacct.control.task.MainController;
-import husacct.control.task.workspace.ResourceFactory;
+import husacct.control.task.resources.ResourceFactory;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;

@@ -1,6 +1,6 @@
 package husacct.control.presentation.menubar;
 
-import husacct.control.presentation.menubar.popup.AnalyseApplicationFrame;
+import husacct.control.presentation.util.AnalyseApplicationFrame;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
@@ -56,7 +56,7 @@ public class DefineMenu extends JMenu{
 		this.add(importLogicalArchitectureItem);
 		importLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: import gui
+				mainController.getImportExportController().showImportLogicalArchitectureGui();
 			}
 		});
 		
@@ -64,7 +64,7 @@ public class DefineMenu extends JMenu{
 		this.add(exportLogicalArchitectureItem);
 		exportLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				//exportLogicalArchitectureFrame.setVisible(true);
+				mainController.getImportExportController().showExportLogicalArchitectureGui();
 			}
 		});
 		

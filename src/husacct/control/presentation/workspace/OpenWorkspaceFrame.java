@@ -4,7 +4,7 @@ import husacct.control.presentation.workspace.loaders.ILoaderFrame;
 import husacct.control.presentation.workspace.loaders.LoaderFrameFactory;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
-import husacct.control.task.workspace.ResourceFactory;
+import husacct.control.task.resources.ResourceFactory;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
