@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import husacct.common.dto.RuleDTO;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -19,7 +20,7 @@ public class IsAllowedToUseRule extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(RuleDTO appliedRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
 		//Return no violations because is allowed to use is always true
 		return Collections.emptyList();
 	}

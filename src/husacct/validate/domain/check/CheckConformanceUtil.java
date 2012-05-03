@@ -3,6 +3,8 @@ package husacct.validate.domain.check;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.DefineServiceStub;
+import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
@@ -36,7 +38,7 @@ public class CheckConformanceUtil {
 
 	//TODO: Define Service
 	static DefineServiceStub definestub = new DefineServiceStub();
-	
+
 	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
 		ArrayList<Mapping> classpathsFrom = new ArrayList<Mapping>();
 		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
@@ -60,7 +62,7 @@ public class CheckConformanceUtil {
 		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
 		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
 		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
-		
+
 		if(rule.exceptionRules!= null){
 			for(RuleDTO exceptionRule : rule.exceptionRules){
 				Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
@@ -88,5 +90,33 @@ public class CheckConformanceUtil {
 			}
 		}
 		return mainClasspaths;
+	}
+
+	public static Severity getSeverity(ConfigurationServiceImpl configuration, Severity ruleTypeSeverity, Severity violationTypeSeverity){
+		if(violationTypeSeverity == null && ruleTypeSeverity == null){
+			return null;
+		}
+
+		int ruleTypeValue = -1;
+		int violationTypeValue = -1;
+
+		if(ruleTypeSeverity != null){
+			ruleTypeValue = configuration.getSeverityValue(ruleTypeSeverity);
+		}
+		if(violationTypeSeverity != null){
+			violationTypeValue = configuration.getSeverityValue(violationTypeSeverity);
+		}
+
+		if(ruleTypeValue <= violationTypeValue){
+			if(ruleTypeSeverity != null){
+				return ruleTypeSeverity;
+			}
+			else{
+				return violationTypeSeverity;
+			}
+		}
+		else{
+			return violationTypeSeverity;
+		}
 	}
 }

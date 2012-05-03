@@ -1,6 +1,5 @@
 package husacct.validate.domain.factory.ruletype;
 
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.DefaultSeverityNotFoundException;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
@@ -31,16 +30,15 @@ class RuleTypesGenerator {
 	
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
 	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
-
-
+	
 	RuleTypesGenerator(){
-		
+		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
 
 	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		HashMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
-		for (Enum<RuleTypes> ruleKey : rules) {			
+		for (Enum<RuleTypes> ruleKey : rules) {		
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
 			if (ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
@@ -53,13 +51,13 @@ class RuleTypesGenerator {
 
 	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
-		List<Class<?>> ruleClasses = getRuleClasses();
+		List<Class<?>> ruleClasses = getRuleClasses();		
 		for (Class<?> ruleClass : ruleClasses) {
 			String ruleKey = "";
 			try{
 				if (isInstanceOfRule(ruleClass)) {
 					ruleKey = getRuleKey(ruleClass);
-					final String categoryKey = getCategoryKey(ruleClass);					
+					final String categoryKey = getCategoryKey(ruleClass);	
 					final DefaultSeverities defaultSeverity = getDefaultSeverity(ruleKey);
 					keyClasses.put(ruleKey, new CategoryKeyClassDTO(categoryKey, (Class<RuleType>) ruleClass, defaultSeverity));
 				}

@@ -1,6 +1,9 @@
 package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.common.dto.DependencyDTO;
@@ -28,8 +31,9 @@ public class IsNotAllowedToUseRule extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(RuleDTO appliedRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
 		List<Violation> violations = new ArrayList<Violation>();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		//TODO replace with real implementation
 		AnalyseServiceStub analysestub = new AnalyseServiceStub();
 
@@ -47,8 +51,12 @@ public class IsNotAllowedToUseRule extends RuleType {
 					LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 					LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
-					//TODO: retrieve severity for this ruletype
-					Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
+					Severity violationTypeSeverity = null;
+					try{
+						violationTypeSeverity = violationtypefactory.createViolationType(dependency.type).getSeverity();
+					}catch(ViolationTypeNotFoundException e){}
+					Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);
+					Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 					violations.add(violation);
 				}
 			}

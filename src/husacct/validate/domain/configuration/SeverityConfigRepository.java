@@ -43,26 +43,10 @@ public class SeverityConfigRepository {
 		throw new SeverityNotFoundException();
 	}
 
-
-	//	private boolean equalsMemoryLocation(Severity severity){
-	//		for(Severity defaultSeverity : defaultSeverities){
-	//			if(defaultSeverity == severity){
-	//				return true;
-	//			}
-	//		}
-	//		
-	//		for(Severity currentSeverity : currentSeverities){
-	//			if(currentSeverity == severity){
-	//				return true;
-	//			}
-	//		}		
-	//		return false;
-	//	}
-	//	
-	//	private boolean equalsContent(Severity severity){
-	//		
-	//	}
-
+	public int getSeverityValue(Severity severity){
+		return currentSeverities.indexOf(severity);
+	}
+	
 	private void generateDefaultSeverities(){
 		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
 			Severity severity = new Severity(defaultSeverity.toString(), "", defaultSeverity.getColor());

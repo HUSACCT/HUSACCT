@@ -15,9 +15,9 @@ import org.jdom2.Element;
 public class ValidateServiceStub implements IValidateService, ISaveable{
 
 	private ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor","InvocConstructorDescription", false);
-	private ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
+	private ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("ExtendsAbstract","ExtendsDescription", false);
 	private ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements","ImplementsDescription", false);
-	private ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
+	private ViolationTypeDTO extendClass = new ViolationTypeDTO("ExtendsConcrete","ExtendsDescription", false);
 
 	private RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse","IsNotAllowedToUseDescription",
 			new ViolationTypeDTO[] { constructorCall,extendingAbstractClass,implementationOfInterface,extendClass }, new RuleTypeDTO[] {});
@@ -119,5 +119,10 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		else{
 			return new ViolationDTO[] { };
 		}
+	}
+
+	@Override
+	public void reloadGUI() {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
