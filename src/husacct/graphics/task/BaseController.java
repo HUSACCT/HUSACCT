@@ -12,9 +12,6 @@ import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.validate.IValidateService;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
@@ -177,7 +174,7 @@ public abstract class BaseController implements UserInputListener {
 				getAndDrawDependenciesBetween(figureFrom, figureTo);
 			}
 		}
-		sizeRelationFigures(this.figureMap.getDependencyHashMap()); // TODO see TODO below
+		this.drawing.sizeRelationFigures(this.figureMap.getDependencyHashMap()); // TODO see TODO below
 	}
 
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
@@ -206,7 +203,7 @@ public abstract class BaseController implements UserInputListener {
 				}
 			}
 		}
-		this.sizeRelationFigures(this.figureMap.getViolationHashMap()); // TODO see TODO below
+		this.drawing.sizeRelationFigures(this.figureMap.getViolationHashMap()); // TODO see TODO below
 	}
 
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
@@ -228,56 +225,4 @@ public abstract class BaseController implements UserInputListener {
 	}
 
 	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
-
-	// TODO: This doesn't belong here
-	// Presentation logic
-	private void sizeRelationFigures(HashMap<RelationFigure, ? extends AbstractDTO[]> figures) {
-		// 1 relation, small
-		if (figures.size() == 1) {
-			figures.keySet().iterator().next().setLineThickness(1);
-		}
-		// 2 relations; both small, or one slightly bigger
-		else if (figures.size() == 2) {
-			Iterator<RelationFigure> iterator = figures.keySet().iterator();
-			RelationFigure figure1 = iterator.next();
-			RelationFigure figure2 = iterator.next();
-			int length1 = figures.get(figure1).length;
-			int length2 = figures.get(figure2).length;
-
-			if (length1 == length2) {
-				figure1.setLineThickness(1);
-				figure2.setLineThickness(1);
-			} else if (length1 < length2) {
-				figure1.setLineThickness(1);
-				figure2.setLineThickness(2);
-			} else { // length1 > length2
-				figure1.setLineThickness(2);
-				figure2.setLineThickness(1);
-			}
-		}
-		// 3 ore more relations; small, big or fat, according to scale
-		else if (figures.size() >= 3) {
-			// max amounts of dependencies
-			int maxAmount = -1;
-			for (RelationFigure fig : figures.keySet()) {
-				int length = figures.get(fig).length;
-
-				if (maxAmount == -1 || maxAmount < length) {
-					maxAmount = length;
-				}
-			}
-
-			// set line thickness according to scale
-			for (RelationFigure fig : figures.keySet()) {
-				double weight = (double) figures.get(fig).length / maxAmount;
-				if (weight < 0.33) {
-					fig.setLineThickness(1);
-				} else if (weight < 0.66) {
-					fig.setLineThickness(3);
-				} else {
-					fig.setLineThickness(4);
-				}
-			}
-		}
-	}
 }

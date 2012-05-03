@@ -1,5 +1,6 @@
 package husacct.graphics.presentation;
 
+import husacct.common.dto.AbstractDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
@@ -8,6 +9,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 
@@ -101,5 +104,57 @@ public class Drawing extends DefaultDrawing {
 		}
 		this.invalidate();
 		this.changed();
+	}
+	
+	// TODO: This doesn't belong here
+	// Presentation logic
+	public void sizeRelationFigures(HashMap<RelationFigure, ? extends AbstractDTO[]> figures) {
+		// 1 relation, small
+		if (figures.size() == 1) {
+			figures.keySet().iterator().next().setLineThickness(1);
+		}
+		// 2 relations; both small, or one slightly bigger
+		else if (figures.size() == 2) {
+			Iterator<RelationFigure> iterator = figures.keySet().iterator();
+			RelationFigure figure1 = iterator.next();
+			RelationFigure figure2 = iterator.next();
+			int length1 = figures.get(figure1).length;
+			int length2 = figures.get(figure2).length;
+
+			if (length1 == length2) {
+				figure1.setLineThickness(1);
+				figure2.setLineThickness(1);
+			} else if (length1 < length2) {
+				figure1.setLineThickness(1);
+				figure2.setLineThickness(2);
+			} else { // length1 > length2
+				figure1.setLineThickness(2);
+				figure2.setLineThickness(1);
+			}
+		}
+		// 3 ore more relations; small, big or fat, according to scale
+		else if (figures.size() >= 3) {
+			// max amounts of dependencies
+			int maxAmount = -1;
+			for (RelationFigure fig : figures.keySet()) {
+				int length = figures.get(fig).length;
+
+				if (maxAmount == -1 || maxAmount < length) {
+					maxAmount = length;
+				}
+			}
+
+			// set line thickness according to scale
+			for (RelationFigure fig : figures.keySet()) {
+				double weight = (double) figures.get(fig).length / maxAmount;
+				if (weight < 0.33) {
+					fig.setLineThickness(1);
+				} else if (weight < 0.66) {
+					fig.setLineThickness(3);
+				} else {
+					fig.setLineThickness(4);
+				}
+			}
+		}
 	}
 }
