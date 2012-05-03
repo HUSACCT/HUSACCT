@@ -1,6 +1,6 @@
 package husacct.control.presentation.workspace;
 
-import husacct.control.task.WorkspaceController;
+import husacct.control.task.MainController;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,12 +12,12 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class CreateWorkspaceFrame extends JFrame{
 	
-	private WorkspaceController controller;
+	private MainController mainController;
 	
-	public CreateWorkspaceFrame(WorkspaceController controller){
+	public CreateWorkspaceFrame(MainController mainController){
 		// TODO: create workspace gui + controller.createWorkspace
 		super("Create workspace");
-		this.controller = controller;
+		this.mainController = mainController;
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		JButton createButton = new JButton("Create workspace");

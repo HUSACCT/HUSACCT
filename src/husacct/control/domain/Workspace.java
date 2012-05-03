@@ -1,29 +1,24 @@
 package husacct.control.domain;
 
-import java.util.Date;
+import husacct.common.dto.ApplicationDTO;
 
 public class Workspace {
-	private boolean saved;
-	private Date lastSave;
-	private String path;
-	private boolean ForkPulltest = true;
 	
-	public String getPath() {
-		return path;
+	private String name;
+	private ApplicationDTO appData;
+
+	public String getName() {
+		return name;
 	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public Date getLastSave() {
-		return lastSave;
+	public ApplicationDTO getApplicationData() {
+		return appData;
 	}
-	public void setLastSave(Date lastSave) {
-		this.lastSave = lastSave;
+	public void setApplicationData(ApplicationDTO appData) {
+		this.appData = appData;
 	}
-	public boolean isSaved() {
-		return saved;
-	}
-	public void setSaved(boolean saved) {
-		this.saved = saved;
-	}
+	
+	
 }

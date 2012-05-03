@@ -21,7 +21,7 @@ public class MainController {
 	}
 
 	private void setControllers() {
-		this.workspaceController = new WorkspaceController();
+		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();

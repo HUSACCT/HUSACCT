@@ -24,17 +24,23 @@ public class WorkspaceController {
 	private Logger logger = Logger.getLogger(WorkspaceController.class);
 	private static Workspace currentWorkspace;
 
+	private MainController mainController;
+	
+	public WorkspaceController(MainController mainController){
+		this.mainController = mainController;
+	}
+
 	public void showCreateWorkspaceGui() {
-		new CreateWorkspaceFrame(this);
+		new CreateWorkspaceFrame(mainController);
 	}
 
 	public void showOpenWorkspaceGui() {
-		new OpenWorkspaceFrame(this);
+		new OpenWorkspaceFrame(mainController);
 
 	}
 	
 	public void showSaveWorkspaceGui() {
-		new SaveWorkspaceFrame(this);
+		new SaveWorkspaceFrame(mainController);
 
 	}
 	
@@ -129,12 +135,10 @@ public class WorkspaceController {
 	}
 	
 	public static boolean isOpenWorkspace(){
-		return true;
-//		if(WorkspaceController.currentWorkspace != null){
-//			return true;
-//		} else {
-//			return false;
-//		}
+		if(WorkspaceController.currentWorkspace != null){
+			return true;
+		}
+		return false;
 	}
 
 }

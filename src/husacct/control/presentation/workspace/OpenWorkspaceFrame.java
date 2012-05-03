@@ -2,6 +2,7 @@ package husacct.control.presentation.workspace;
 
 import husacct.control.presentation.workspace.loaders.ILoaderFrame;
 import husacct.control.presentation.workspace.loaders.LoaderFrameFactory;
+import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.workspace.ResourceFactory;
 
@@ -24,14 +25,14 @@ import javax.swing.event.ListSelectionListener;
 @SuppressWarnings("serial")
 public class OpenWorkspaceFrame extends JFrame{
 
-	private WorkspaceController workspaceController;
+	private MainController mainController;
 	private JList loaderList;
 	private List<String> loaderListData;
 	private JButton next, cancel;
 	
-	public OpenWorkspaceFrame(WorkspaceController workspaceController){
+	public OpenWorkspaceFrame(MainController mainController){
 		super("Open workspace");
-		this.workspaceController = workspaceController;
+		this.mainController = mainController;
 		this.setup();
 		this.setLoaders();
 		this.addComponents();
@@ -101,7 +102,7 @@ public class OpenWorkspaceFrame extends JFrame{
 	private void openLoaderFrame(){
 		String selectedLoader = (String) loaderList.getSelectedValue();
 		ILoaderFrame loaderFrame = LoaderFrameFactory.get(selectedLoader);
-		loaderFrame.setWorkspaceController(workspaceController);
+		loaderFrame.setWorkspaceController(mainController.getWorkspaceController());
 		loaderFrame.setVisible(true);
 	}
 }
