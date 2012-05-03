@@ -10,6 +10,7 @@ public class MainController {
 	WorkspaceController workspaceController;
 	LocaleController localeController;
 	StateController stateController;
+	ApplicationController applicationController;
 	
 	public MainGui mainGUI;
 	
@@ -25,6 +26,7 @@ public class MainController {
 		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();
+		this.applicationController = new ApplicationController();
 	}
 
 	private void openMainGui() {
@@ -45,6 +47,10 @@ public class MainController {
 	
 	public StateController getStateController(){
 		return this.stateController;
+	}
+	
+	public ApplicationController getApplicationController(){
+		return this.applicationController;
 	}
 	
 	public void exit(){

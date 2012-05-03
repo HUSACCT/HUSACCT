@@ -13,6 +13,7 @@ public class ViewController {
 	
 	private JInternalFrame defineInternalFrame;
 	private JInternalFrame violationsInternalFrame;
+	private JInternalFrame configurationInternalFrame;
 	private JInternalFrame analysedArchitectureInternalFrame;
 	private JInternalFrame definedArchitectureInternalFrame;	
 
@@ -52,6 +53,12 @@ public class ViewController {
 		mainController.getMainGui().getContentPane().add(violationsInternalFrame);
 	}
 	
+	public void setConfigurationGui() {
+		configurationInternalFrame = serviceProvider.getValidateService().getConfigurationGUI();
+		setupFrame(configurationInternalFrame, "Configuration");
+		mainController.getMainGui().getContentPane().add(configurationInternalFrame);
+	}
+	
 	public void setDefinedArchitectureGui(){
 		definedArchitectureInternalFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
 		setupFrame(definedArchitectureInternalFrame, "Defined architecture");
@@ -69,6 +76,7 @@ public class ViewController {
 			setDefineGui();
 		}	
 		defineInternalFrame.setVisible(true);
+		defineInternalFrame.toFront();
 	}
 	
 	public void showViolationsGui() {
@@ -76,6 +84,15 @@ public class ViewController {
 			setViolationsGui();
 		}
 		violationsInternalFrame.setVisible(true);
+		violationsInternalFrame.toFront();
+	}	
+	
+	public void showConfigurationGui() {
+		if (configurationInternalFrame == null){
+			setConfigurationGui();
+		}
+		configurationInternalFrame.setVisible(true);
+		configurationInternalFrame.toFront();
 	}	
 	
 	public void showDefinedArchitectureGui() {
@@ -83,6 +100,8 @@ public class ViewController {
 			setDefinedArchitectureGui();
 		}		
 		definedArchitectureInternalFrame.setVisible(true);
+		definedArchitectureInternalFrame.toFront();
+
 	}	
 		
 	public void showAnalysedArchitectureGui() {
@@ -90,5 +109,6 @@ public class ViewController {
 			setAnalysedArchitectureGui();
 		}		
 		analysedArchitectureInternalFrame.setVisible(true);
+		analysedArchitectureInternalFrame.toFront();
 	}	
 }

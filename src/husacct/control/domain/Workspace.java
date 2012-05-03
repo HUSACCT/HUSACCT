@@ -6,7 +6,6 @@ public class Workspace {
 	private boolean saved;
 	private Date lastSave;
 	private String path;
-	private boolean ForkPulltest = true;
 	
 	public String getPath() {
 		return path;

@@ -30,9 +30,7 @@ public class ValidateMenu extends JMenu{
 		mntmValidateNow.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO: Validate now
-				maincontroller.getViewController().setViolationsGui();
 				maincontroller.getViewController().showViolationsGui();
-				maincontroller.getStateController().checkState();
 			}
 		});
 		
@@ -40,8 +38,7 @@ public class ValidateMenu extends JMenu{
 		this.add(mntmConfigure);
 		mntmConfigure.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Configuration
-				
+				maincontroller.getViewController().showConfigurationGui();
 			}
 		});
 		
