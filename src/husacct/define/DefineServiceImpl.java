@@ -93,7 +93,7 @@ public class DefineServiceImpl implements IDefineService {
 	
 	public Element getLogicalArchitectureData(){
 		//TODO: Implement in Construction I
-		Element e = new Element("RootElement");
+		Element e = new Element("Root Element");
 		return e;
 	}
 
@@ -104,7 +104,7 @@ public class DefineServiceImpl implements IDefineService {
 	@Override
 	public Element getWorkspaceData() {
 		//TODO: Implement in Construction I
-		Element e = new Element("RootElement");
+		Element e = new Element("Root Element");
 		return e;
 	}
 
