@@ -2,6 +2,7 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
@@ -50,7 +51,10 @@ public class IsNotAllowedToUseRule extends RuleType {
 					LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 					LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
-					final Severity violationTypeSeverity = violationtypefactory.createViolationType(dependency.type).getSeverity();
+					Severity violationTypeSeverity = null;
+					try{
+						violationTypeSeverity = violationtypefactory.createViolationType(dependency.type).getSeverity();
+					}catch(ViolationTypeNotFoundException e){}
 					Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);
 					Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 					violations.add(violation);

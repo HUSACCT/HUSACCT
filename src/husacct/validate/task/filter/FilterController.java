@@ -86,7 +86,6 @@ public class FilterController {
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		ArrayList<Violation> violations = new ArrayList<Violation>();
-
 		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
