@@ -4,6 +4,7 @@ import husacct.Main;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.LanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
@@ -12,10 +13,12 @@ import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +32,9 @@ public class ViolationAssembler {
 	private RuletypeAssembler ruleAssembler;
 	private Messagebuilder messagebuilder;
 
-	public ViolationAssembler(RuleTypesFactory ruleFactory){
+	public ViolationAssembler(RuleTypesFactory ruleFactory, ConfigurationServiceImpl configuration){
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
-		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory();
+		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
 
 		this.ruleFactory = ruleFactory;
 		this.ruleAssembler = new RuletypeAssembler();
@@ -70,8 +73,19 @@ public class ViolationAssembler {
 			final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 			final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 			final String message = messagebuilder.createMessage(violation.getMessage());
-		
-			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, violation.getLinenumber());
+			final int linenumber = violation.getLinenumber();
+
+			if(violation.getSeverity() != null){
+				final Severity severity = violation.getSeverity();
+				final Color color = severity.getColor();
+				final  String userDefinedName = severity.getUserName();
+				final String systemDefinedName = severity.getDefaultName();
+				//FIXME: get severityValue from config attributte in this class
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, 0);
+			}
+			else{				
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", "", 0);
+			}
 		}catch(ViolationTypeNotFoundException e){
 			throw new ViolationTypeNotFoundException();
 		}

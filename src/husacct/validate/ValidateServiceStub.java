@@ -1,5 +1,7 @@
 package husacct.validate;
 
+import java.awt.Color;
+
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
@@ -22,10 +24,10 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 
 	private CategoryDTO category = new CategoryDTO("Legality of Dependency", new RuleTypeDTO[] { ruleType });
 
-	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, "Module locationbasedConnections  is not allowed to use Module locationbasedDAO", 12);
-	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 18);
-	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 19);
-	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56);
+	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, "Module locationbasedConnections  is not allowed to use Module locationbasedDAO", 12, Color.GREEN, "", "Low", 1);
+	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 18, Color.ORANGE, "Custom", "", 2);
+	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 19, Color.RED, "", "High", 3);
+	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56, Color.RED, "Catastrophic", "", 4);
 
 	private boolean validationExecuted;
 	

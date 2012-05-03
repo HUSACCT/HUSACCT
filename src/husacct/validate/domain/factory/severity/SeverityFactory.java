@@ -37,11 +37,15 @@ public class SeverityFactory {
 		}catch(SeverityNotFoundException e){
 			logger.debug(String.format("No custom severity defined by user with key: %s", severityName), e);
 		}
-		
+
 		return null;
 	}
-	
-//	private Severity getDefaultSeverity(String key){
-//		
-//	}
+
+	private Severity getDefaultSeverity(String key){
+		Severity severity = configuration.getSeverityFromKey(new DefineServiceStub().getApplicationDetails().programmingLanguage, key);
+		if(severity == null){
+return null;
+		}
+		else return severity;
+	}
 }
