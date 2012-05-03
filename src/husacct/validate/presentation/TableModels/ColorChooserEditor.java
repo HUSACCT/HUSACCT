@@ -31,7 +31,7 @@ TableCellEditor, ActionListener {
 		//Set up the dialog that the button brings up.
 		colorChooser = new JColorChooser();
 		dialog = JColorChooser.createDialog(button,
-				ResourceBundles.getValue("Pick a Color"),
+				ResourceBundles.getValue("PickAColor"),
 				true,  //modal
 				colorChooser,
 				this,  //OK button handler

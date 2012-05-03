@@ -83,7 +83,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 	@SuppressWarnings("unchecked")
 	private void initComponents() {
 		
-		// <editor-fold defaultstate="collapsed" desc="setting fields to their value">
 		tabbedPane = new JTabbedPane();
 		ruletypeSeverity = new JPanel();
 		rtsCategoryScrollpane = new JScrollPane();
@@ -111,7 +110,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtSelectAll = new JButton();
 		avtDeselectAll = new JButton();
 		avtApply = new JButton();
-		// </editor-fold>
 		
 		rtsCategory.setBorder(BorderFactory.createTitledBorder(ResourceBundles.getValue("Category")));
 		rtsCategory.setModel(rtsCategoryModel);
@@ -130,6 +128,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		rtsRuletypeTable.setModel(ruletypeModel);
 		rtsRuletypeTable.setFillsViewportHeight(true);
+		rtsRuletypeTable.getTableHeader().setReorderingAllowed(false);
 		rtsRuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		rtsRuletypeScrollpane.setViewportView(rtsRuletypeTable);
 
@@ -208,6 +207,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		vtsViolationtypeTable.setModel(violationtypeModel);
 		vtsViolationtypeTable.setFillsViewportHeight(true);
+		vtsViolationtypeTable.getTableHeader().setReorderingAllowed(false);
 		vtsViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 		vtsViolationtypeScrollpane.setViewportView(vtsViolationtypeTable);
@@ -293,6 +293,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtViolationtypeTable.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Ruletypes")));
 		avtViolationtypeTable.setModel(avtRuletypeModel);
+		vtsViolationtypeTable.getTableHeader().setReorderingAllowed(false);
 		avtViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 		avtViolationtypeTable.addListSelectionListener(new ListSelectionListener() {
