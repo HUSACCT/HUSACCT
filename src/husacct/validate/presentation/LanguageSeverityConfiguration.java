@@ -84,7 +84,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 	@SuppressWarnings("unchecked")
 	private void initComponents() {
 		
-		// <editor-fold defaultstate="collapsed" desc="setting fields to their value">
 		tabbedPane = new JTabbedPane();
 		ruletypeSeverity = new JPanel();
 		rtsCategoryScrollpane = new JScrollPane();
@@ -112,7 +111,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtSelectAll = new JButton();
 		avtDeselectAll = new JButton();
 		avtApply = new JButton();
-		// </editor-fold>
 		
 		rtsCategory.setBorder(BorderFactory.createTitledBorder(ResourceBundles.getValue("Category")));
 		rtsCategory.setModel(rtsCategoryModel);
