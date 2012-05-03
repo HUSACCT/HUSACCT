@@ -24,7 +24,7 @@ public class ExportController {
 		return exportFactory.exportSeverities(severities);
 	}
 
-	public Element exportSeveritiesPerTypesXML(
+	public Element exportSeveritiesPerTypesPerProgrammingLanguagesXML(
 			HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
 		return exportFactory.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
 	}

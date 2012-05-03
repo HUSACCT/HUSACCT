@@ -16,7 +16,7 @@ import javax.swing.table.TableColumn;
 public class ColorTableModel extends AbstractTableModel {
 
     protected Vector dataVector = new Vector();
-    String columnNames[] = {ResourceBundles.getValue("Severity Name"), ResourceBundles.getValue("Color")};
+    String columnNames[] = {ResourceBundles.getValue("SeverityName"), ResourceBundles.getValue("Color")};
     Class<?>[] types = new Class[]{String.class, JButton.class};
     boolean[] canEdit = new boolean[]{true, true};
     List<Color> rowColours = new ArrayList<Color>();

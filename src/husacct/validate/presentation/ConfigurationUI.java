@@ -55,6 +55,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
         severityNameTable.setModel(severityModel);
         severityNameTable.setFillsViewportHeight(true);
+		severityNameTable.getTableHeader().setReorderingAllowed(false);
         severityNameScrollPane.setViewportView(severityNameTable);
 
         add.setText(ResourceBundles.getValue("Add"));

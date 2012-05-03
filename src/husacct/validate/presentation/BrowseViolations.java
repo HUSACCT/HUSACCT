@@ -119,7 +119,14 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.getRowSorter().toggleSortOrder(4);
 		violationTable.getTableHeader().setReorderingAllowed(false);
 		violationPanel.setViewportView(violationTable);
-
+		
+		shownViolationsNumber = new JLabel();
+		shownViolations = new JLabel();
+		totalViolationNumber = new JLabel();
+		totalViolation = new JLabel();
+		informationPanel = new JPanel();
+		informationPanel.setLayout(new GridLayout(0, 2,0,1));
+		
 		shownViolationsNumber.setText("0");
 
 		displayPanel.setBorder(BorderFactory.createTitledBorder(
@@ -232,7 +239,7 @@ public final class BrowseViolations extends JInternalFrame {
 								.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
 				);
 
-		informationPanel = new JPanel();
+		
 		scrollPane.setViewportView(informationPanel);
 
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
@@ -247,19 +254,20 @@ public final class BrowseViolations extends JInternalFrame {
 
 	public void createInformationPanel() {
 		informationPanel.removeAll();
-		informationPanel.setLayout(new GridLayout(0, 2,0,1));
+		System.out.println("kom ik hier?");
 
-		totalViolation = new JLabel();
+		
 		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
 
-		totalViolationNumber = new JLabel("" + ts.getAllViolations().size());
+		
+		totalViolationNumber.setText("" + ts.getAllViolations().size());
 		informationPanel.add(totalViolationNumber);
-		//
-		shownViolations = new JLabel(ResourceBundles.getValue("ShownViolations") + ":");
+		
+		shownViolations.setText(ResourceBundles.getValue("shownViolations") + ":");
 		informationPanel.add(shownViolations);
-
-		shownViolationsNumber = new JLabel("" + violationModel.getRowCount());
+		
+		shownViolationsNumber.setText("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
 
 		for(ViolationsPerSeverity violationPerSeverity: getViolationsPerSeverity()) {
