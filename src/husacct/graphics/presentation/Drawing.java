@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 
@@ -99,18 +98,6 @@ public class Drawing extends DefaultDrawing {
 		BaseFigure[] lines = getShownLines();
 		for(BaseFigure line : lines){
 			this.remove(line);
-		}
-		this.invalidate();
-		this.changed();
-	}
-	
-	public void clearViolationLines(){
-		this.willChange();
-		BaseFigure[] lines = getShownLines();
-		for(BaseFigure line : lines){
-			if(line.isViolated()){
-				this.remove(line);
-			}
 		}
 		this.invalidate();
 		this.changed();
