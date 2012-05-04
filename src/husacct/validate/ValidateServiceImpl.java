@@ -1,5 +1,6 @@
 package husacct.validate;
 
+import com.itextpdf.text.DocumentException;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
@@ -9,21 +10,17 @@ import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.presentation.ConfigurationUI;
+import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
 import husacct.validate.task.report.UnknownStorageTypeException;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
-
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
-
-import com.itextpdf.text.DocumentException;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private boolean validationExecuted;

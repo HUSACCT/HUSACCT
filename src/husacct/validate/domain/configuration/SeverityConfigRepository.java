@@ -47,6 +47,10 @@ public class SeverityConfigRepository {
 		return currentSeverities.indexOf(severity);
 	}
 	
+	public void restoreToDefault(){
+		currentSeverities = defaultSeverities;
+	}
+	
 	private void generateDefaultSeverities(){
 		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
 			Severity severity = new Severity(defaultSeverity.toString(), "", defaultSeverity.getColor());

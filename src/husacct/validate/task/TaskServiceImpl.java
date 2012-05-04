@@ -25,7 +25,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.jdom2.Element;
 
 
-public class TaskServiceImpl implements ITaskService{
+public class TaskServiceImpl{
 	private final FilterController filterController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
@@ -43,39 +43,32 @@ public class TaskServiceImpl implements ITaskService{
 		return configuration.getAllViolations();
 	}
 
-	@Override
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
-	@Override
 	public void setFilterValues(ArrayList<String> ruletypesKeys,
 			ArrayList<String> violationtypesKeys,
 			ArrayList<String> paths, boolean hideFilter) {
 		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter);
 	}
 
-	@Override
 	public ArrayList<Violation> applyFilterViolations(Boolean applyfilter) {
 		return filterController.filterViolations(applyfilter);
 	}
 
-	@Override
 	public ArrayList<String> loadRuletypesForFilter() {
 		return filterController.loadRuletypes();
 	}
 
-	@Override
 	public ArrayList<String> loadViolationtypesForFilter() {
 		return filterController.loadViolationtypes();
 	}
 
-	@Override
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {
 		return domain.getAllRuleTypes(language);
 	}	
 
-	@Override
 	public List<Severity> getAllSeverities(){
 		return configuration.getAllSeverities();
 	}
@@ -100,13 +93,12 @@ public class TaskServiceImpl implements ITaskService{
 		}
 		addSeverities(severityList);
 	}
-	public void addSeverities(List<Severity> severities) {
+	private void addSeverities(List<Severity> severities) {
 		configuration.addSeverities(severities);
 	}
 
 	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
-
-		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language.toLowerCase(), map);
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
@@ -114,7 +106,6 @@ public class TaskServiceImpl implements ITaskService{
 		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 
-	@Override
 	public Map<String, List<ViolationType>> getViolationTypes(
 			String language) {
 		return domain.getAllViolationTypes(language);
@@ -146,5 +137,17 @@ public class TaskServiceImpl implements ITaskService{
 	
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter){
 		return filterController.getViolationsPerSeverity(applyFilter);
+	}
+	
+	public void restoreAllToDefault(String language){
+		configuration.restoreAllToDefault(language);
+	}
+	
+	public void restoreToDefault(String language, String key){
+		configuration.restoreToDefault(language, key);
+	}
+	
+	public void restoreSeveritiesToDefault(){
+		configuration.restoreSeveritiesToDefault();
 	}
 }

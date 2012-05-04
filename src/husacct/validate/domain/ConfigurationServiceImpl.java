@@ -64,4 +64,16 @@ public class ConfigurationServiceImpl {
 	public Severity getSeverityFromKey(String language, String key){
 		return severityRepository.getSeverity(language, key);
 	}
+	
+	public void restoreAllToDefault(String language){
+		severityRepository.restoreAllToDefault(language);
+	}
+	
+	public void restoreToDefault(String language, String key){
+		severityRepository.restoreDefaultSeverity(language, key);
+	}
+	
+	public void restoreSeveritiesToDefault(){
+		severityConfig.restoreToDefault();
+	}
 }
