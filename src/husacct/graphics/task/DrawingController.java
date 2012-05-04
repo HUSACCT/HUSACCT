@@ -159,8 +159,6 @@ public abstract class DrawingController implements UserInputListener {
 		drawing.resizeRelationFigures();
 	}
 
-	// dependencies
-
 	public void drawDependenciesForShownModules() {
 		BaseFigure[] shownModules = drawing.getShownModules();
 		for (BaseFigure figureFrom : shownModules) {
@@ -182,15 +180,12 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected abstract DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo);
 
-	// violations
-
 	public void drawViolationsForShownModules() {
 		BaseFigure[] shownModules = drawing.getShownModules();
 		validateService.checkConformance();
 		for (BaseFigure figureFrom : shownModules) {
 			for (BaseFigure figureTo : shownModules) {
-				// are the violations in the same module?
-				if (figureFrom == figureTo) { // TODO, use equals?
+				if (figureFrom == figureTo) {
 					getAndDrawViolationsIn(figureFrom);
 				} else {
 					getAndDrawViolationsBetween(figureFrom, figureTo);
