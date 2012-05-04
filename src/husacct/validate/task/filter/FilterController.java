@@ -102,8 +102,7 @@ public class FilterController {
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
-			String physicalPathTo) {
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		List<Violation> violations = new ArrayList<Violation>();
 		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if(violation.getClassPathFrom().startsWith(physicalPathFrom) || violation.getClassPathTo().startsWith(physicalPathTo)) {
