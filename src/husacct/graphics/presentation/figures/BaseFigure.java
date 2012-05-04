@@ -13,14 +13,16 @@ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
+
 	private static final long serialVersionUID = 971276235252293165L;
 	private boolean isSizeable = false;
 	private boolean violated = false;
 
-	public BaseFigure(boolean violated) {
+	// private LinkedList<Connector> connectors = new LinkedList();
+
+	public BaseFigure(boolean violationBoolean) {
 		super();
-		
-		this.violated = violated;
+		violated = violationBoolean;
 	}
 
 	@Override
@@ -34,83 +36,81 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 		setBounds(newAnchor, newLead);
 	}
-	
-	public void setViolated(boolean violated) {
-		this.willChange();
-		this.violated = violated;
-		this.changed();
+
+	// TODO: This should be a decorator!
+	public void setViolated(boolean violationBoolean) {
+		willChange();
+		violated = violationBoolean;
+		changed();
 	}
-	
+
 	public boolean isViolated() {
-		return this.violated;
+		return violated;
 	}
 
 	@Override
 	protected void drawFill(Graphics2D g) {
 		// Empty
+		// TODO: Sorry? What do you do?
 	}
 
 	@Override
 	protected void drawStroke(Graphics2D g) {
 		// Empty
+		// TODO: Sorry? What do you do?
 	}
 
 	@Override
 	public BaseFigure clone() {
 		BaseFigure other = (BaseFigure) super.clone();
-
 		return other;
 	}
 
 	@Override
 	public Collection<Handle> createHandles(int detailLevel) {
 		LinkedList<Handle> handles = new LinkedList<Handle>();
-		if (isSizeable)
+		if (isSizeable) {
 			handles.addAll(createSizeableHandles(detailLevel));
-		else
+		} else {
 			handles.addAll(createSelectionHandles(detailLevel));
-
+		}
 		return handles;
 	}
-	
+
 	private Collection<Handle> createSizeableHandles(int detailLevel) {
 		return super.createHandles(detailLevel);
 	}
-	
+
 	private Collection<Handle> createSelectionHandles(int detailLevel) {
 		LinkedList<Handle> handles = new LinkedList<Handle>();
-		
 		if (detailLevel == 0) {
 			Handle handle = new BoundsOutlineHandle(this, false, false);
 			handles.add(handle);
 		}
-		
 		return handles;
 	}
 
 	public void setStrokeColor(Color newColor) {
-		this.set(AttributeKeys.STROKE_COLOR, newColor);
+		set(AttributeKeys.STROKE_COLOR, newColor);
 	}
 
 	public double getWidth() {
-		return this.getBounds().width;
+		return getBounds().width;
 	}
 
 	public double getHeight() {
-		return this.getBounds().height;
+		return getBounds().height;
 	}
-	
+
 	public boolean isSizeable() {
-		
-		return this.isSizeable;
+		return isSizeable;
 	}
-	
+
 	public void setSizeable(boolean newValue) {
-		
-		this.isSizeable = newValue;
+		isSizeable = newValue;
 	}
 
 	public abstract boolean isModule();
-	
+
 	public abstract boolean isLine();
 }

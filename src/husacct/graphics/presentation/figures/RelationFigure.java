@@ -231,12 +231,16 @@ public class RelationFigure extends NamedFigure
 	
 	@Override
 	public boolean isModule() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isLine() {
-		return false;
+		return true;
+	}
+	
+	public int getAmount(){
+		return Integer.parseInt(this.amountFigure.getText());
 	}
 
 	// these methods listen to line events

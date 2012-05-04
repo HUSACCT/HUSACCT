@@ -81,7 +81,7 @@ public class ClassFigure extends NamedFigure {
 
 		return other;
 	}
-	
+
 	@Override
 	public boolean isModule() {
 		return true;
