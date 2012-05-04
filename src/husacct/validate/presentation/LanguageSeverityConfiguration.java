@@ -222,6 +222,18 @@ public class LanguageSeverityConfiguration extends JPanel {
 		vtsViolationtypeTable.getTableHeader().setReorderingAllowed(false);
 		vtsViolationtypeTable.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
+		
+		vtsViolationtypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
+				checkRestoreButtonEnabled();
+			}
+		});
+		
 		vtsViolationtypeScrollpane.setViewportView(vtsViolationtypeTable);
 
 		vtsRestore.setText(ResourceBundles.getValue("RestoreToDefault"));
@@ -400,18 +412,17 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void avtSelectAllActionPerformed() {
-		System.out.println(1);
+//		System.out.println(1);
 	}
 
 	private void rtsRestoreActionPerformed() {
-		ts.restoreToDefault(language, getKeyFromString((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
+		ts.restoreToDefault(language, ResourceBundles.getKey((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
+		rtsCategoryValueChanged();
 	}
 
 	private void rtsRestoreAllActionPerformed() {
 		ts.restoreAllToDefault(language);
-		//TODO check if it works
 		rtsCategoryValueChanged();
-//		this.updateUI();
 	}
 
 	private void rtsApplyActionPerformed() {
@@ -420,11 +431,13 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void vtsRestoreActionPerformed() {
-		System.out.println(4);
+		ts.restoreToDefault(language, ResourceBundles.getKey((String) violationtypeModel.getValueAt(vtsViolationtypeTable.getSelectedRow(), 0)));
+		vtsCategoryValueChanged();
 	}
 
 	private void vtsRestoreAllActionPerformed() {
-		System.out.println(5);
+		ts.restoreAllToDefault(language);
+		vtsCategoryValueChanged();
 	}
 
 	private void vtsApplyActionPerformed() {
@@ -433,19 +446,19 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void avtDeselectAllActionPerformed() {
-		System.out.println(6);
+//		System.out.println(6);
 	}
 
 	private void avtApplyActionPerformed() {
-		System.out.println(7);
+//		System.out.println(7);
 	}
 
 	private void avtCategoryValueChanged() {
-		System.out.println(8);
+//		System.out.println(8);
 	}
 
 	private void avtViolationtypeTableValueChanged() {
-		System.out.println(9);
+//		System.out.println(9);
 	}
 
 	private void rtsCategoryValueChanged() {
@@ -453,6 +466,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void vtsCategoryValueChanged() {
+		checkRestoreButtonEnabled();
 		loadViolationType((String) vtsCategory.getSelectedValue());
 	}
 
@@ -460,9 +474,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < ruletypeModel.getRowCount(); i++){
-			map.put((String) ruletypeModel.getValueAt(i, 0), (Severity) ruletypeModel.getValueAt(i, 1));
+			map.put(ResourceBundles.getKey((String) ruletypeModel.getValueAt(i, 0)), (Severity) ruletypeModel.getValueAt(i, 1));
 		}
-
+		
 		ts.updateSeverityPerType(map, language);
 	}
 	
@@ -470,7 +484,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
-			map.put((String) violationtypeModel.getValueAt(i, 0), (Severity) violationtypeModel.getValueAt(i, 1));
+			map.put(ResourceBundles.getKey((String) violationtypeModel.getValueAt(i, 0)), (Severity) violationtypeModel.getValueAt(i, 1));
 		}
 
 		ts.updateSeverityPerType(map, language);
@@ -519,7 +533,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 				for(ViolationType violationtype: violationtypes){
 					Severity severity;
 					try{
-						severity = ts.getSeverityFromKey(language.toLowerCase(), violationtype.getViolationtypeKey());
+						severity = ts.getSeverityFromKey(language, violationtype.getViolationtypeKey());
 					} catch (Exception e){
 						severity = ts.getAllSeverities().get(0);
 					}
@@ -543,28 +557,5 @@ public class LanguageSeverityConfiguration extends JPanel {
 		} else{
 			vtsRestore.setEnabled(false);
 		}
-	}
-	
-	private String getKeyFromString(String string){
-		HashMap<String, List<RuleType>> ruletypeMap = ts.getRuletypes(language);
-		Map<String, List<ViolationType>> violationtypeMap = ts.getViolationTypes(language);
-		
-		for(List<RuleType> ruletypes : ruletypeMap.values()){
-			for(RuleType ruletype : ruletypes){
-				if(ResourceBundles.getValue(ruletype.getKey()) == string){
-					return ruletype.getKey();
-				}
-			}
-		}
-		
-		for(List<ViolationType> violationtypes : violationtypeMap.values()){
-			for(ViolationType violationtype : violationtypes){
-				if(ResourceBundles.getValue(violationtype.getViolationtypeKey()) == string){
-					return violationtype.getViolationtypeKey();
-				}
-			}
-		}
-		
-		return "";
 	}
 }

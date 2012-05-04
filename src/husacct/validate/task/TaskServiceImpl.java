@@ -95,13 +95,12 @@ public class TaskServiceImpl{
 		}
 		addSeverities(severityList);
 	}
-	public void addSeverities(List<Severity> severities) {
+	private void addSeverities(List<Severity> severities) {
 		configuration.addSeverities(severities);
 	}
 
 	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
-
-		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language.toLowerCase(), map);
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
@@ -147,5 +146,9 @@ public class TaskServiceImpl{
 	
 	public void restoreToDefault(String language, String key){
 		configuration.restoreToDefault(language, key);
+	}
+	
+	public void restoreSeveritiesToDefault(){
+		configuration.restoreSeveritiesToDefault();
 	}
 }

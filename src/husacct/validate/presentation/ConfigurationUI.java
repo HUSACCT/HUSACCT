@@ -109,7 +109,7 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                jButton1ActionPerformed();
+                restore();
             }
         });
 
@@ -142,31 +142,21 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
     private void downActionPerformed() {
         if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount()
                 - 1) {
-            List<Severity> serverities = ts.getAllSeverities();
-            Severity severity = serverities.get(severityNameTable.getSelectedRow());
-            serverities.remove(severityNameTable.getSelectedRow());
             severityModel.moveRow(severityNameTable.getSelectedRow(),
                     severityNameTable.getSelectedRow(),
                     severityNameTable.getSelectedRow() + 1);
             severityNameTable.changeSelection(severityNameTable.getSelectedRow()
                     + 1, 0, false, false);
-            serverities.add(severityNameTable.getSelectedRow(), severity);
-            ts.addSeverities(serverities);
         }
     }
 
     private void upActionPerformed() {
         if (severityNameTable.getSelectedRow() > 0) {
-            List<Severity> serverities = ts.getAllSeverities();
-            Severity severity = serverities.get(severityNameTable.getSelectedRow());
-            serverities.remove(severityNameTable.getSelectedRow());
             severityModel.moveRow(severityNameTable.getSelectedRow(),
                     severityNameTable.getSelectedRow(),
                     severityNameTable.getSelectedRow() - 1);
             severityNameTable.changeSelection(severityNameTable.getSelectedRow()
                     - 1, 0, false, false);
-            serverities.add(severityNameTable.getSelectedRow(), severity);
-            ts.addSeverities(serverities);
         }
     }
 
@@ -180,10 +170,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         severityModel.insertRow(0, new Object[]{"", Color.BLACK});
         severityNameTable.changeSelection(0, 0,
                 false, false);
-        List<Severity> serverities = ts.getAllSeverities();
-        Severity severity = new Severity("", Color.BLACK);
-        serverities.add(severity);
-        ts.addSeverities(serverities);
     }
 
     private void applySeverityActionPerformed() {
@@ -203,7 +189,9 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
         dispose();
     }
 
-    private void jButton1ActionPerformed() {
+    private void restore() {
+		ts.restoreSeveritiesToDefault();
+		loadSeverity();
     }
 
     private void loadSeverity() {

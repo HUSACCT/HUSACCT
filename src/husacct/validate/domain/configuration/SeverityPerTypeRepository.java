@@ -41,9 +41,9 @@ public class SeverityPerTypeRepository {
 	}
 
 	private void initializeDefaultSeverityForLanguage(String programmingLanguage){
-		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage.toLowerCase(), new HashMap<String, Severity>());
+		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
 		for(Entry<String, List<RuleType>> entry : ruletypefactory.getRuleTypes(programmingLanguage).entrySet()){			
-			HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage.toLowerCase());
+			HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 
 			for(RuleType ruleType : entry.getValue()){					
 				severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
@@ -61,7 +61,7 @@ public class SeverityPerTypeRepository {
 	}
 
 	public Severity getSeverity(String language, String key){
-		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(language.toLowerCase());
+		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(language);
 		if(severityPerType == null){
 			throw new SeverityNotFoundException();
 		}
@@ -77,16 +77,21 @@ public class SeverityPerTypeRepository {
 	}
 
 	public void restoreDefaultSeverity(String language, String key){
-		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language.toLowerCase());
+		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language);
 
 		//if there is no value, autmatically the default severities will be applied
 		if(severitiesPerType!= null){
+			System.out.println("here");
 			Severity oldSeverity = severitiesPerType.get(key);
-			if(oldSeverity != null){				
+			System.out.println(oldSeverity);
+			if(oldSeverity != null){
 				Severity defaultSeverity = getDefaultRuleKey(language, key);
+				System.out.println(defaultSeverity);
 				if(defaultSeverity != null){
 					severitiesPerType.remove(key);
+					System.out.println("removed");
 					severitiesPerType.put(key, defaultSeverity);
+					System.out.println("added");
 				}
 			}
 		}
@@ -94,7 +99,10 @@ public class SeverityPerTypeRepository {
 
 	private Severity getDefaultRuleKey(String language, String key){
 		try{
+			System.out.println(key);
 			Severity severity = ruletypefactory.generateRuleType(key).getSeverity();
+			System.out.println("yay");
+			System.out.println(severity);
 			return severity;
 		}catch(RuleTypeNotFoundException e){
 			AbstractViolationType violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language, configuration);
@@ -115,14 +123,15 @@ public class SeverityPerTypeRepository {
 	}
 
 	public void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
-		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(language.toLowerCase());
+		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(language);
+
 		for(Entry<String, Severity> entry : severityMap.entrySet()){
 			if(local.containsKey(entry.getKey())){
 				local.remove(entry.getKey());
 			}
 			local.put(entry.getKey(), entry.getValue());
 		}
-		severitiesPerTypePerProgrammingLanguage.remove(language.toLowerCase());
-		severitiesPerTypePerProgrammingLanguage.put(language.toLowerCase(), local);
+		severitiesPerTypePerProgrammingLanguage.remove(language);
+		severitiesPerTypePerProgrammingLanguage.put(language, local);
 	}
 }
