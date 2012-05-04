@@ -4,7 +4,6 @@ import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.Module;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
@@ -18,9 +17,6 @@ import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
@@ -63,6 +59,7 @@ public class DefinitionController extends Observable implements Observer {
 
 	public void setSelectedModuleId(long moduleId) {
 		this.selectedModuleId = moduleId;
+		logger.info("New Selected Module: " + moduleId);
 		notifyObservers(moduleId);
 	}
 
@@ -348,7 +345,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
 
 	/**
-	 * This function will return a hashmap with the details of the requested module.
+	 * This function will return a hash map with the details of the requested module.
 	 */
 	public HashMap<String, Object> getModuleDetails(long moduleId) {
 		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
@@ -356,7 +353,6 @@ public class DefinitionController extends Observable implements Observer {
 
 		if (moduleId != -1) {
 			try {
-				//TODO maybe isolate domain classes
 				Module module = DefineDomainService.getInstance().getModuleById(moduleId);
 				moduleDetails.put("id", module.getId());
 				moduleDetails.put("name", module.getName());
@@ -373,12 +369,7 @@ public class DefinitionController extends Observable implements Observer {
 	
 	/**
 	 * TODO:: TASK SHOULD NOT CALL VIEW
-	 * This method updates the component table in the jpanel
-	 * @param softwareUnitsTable 
-	 * 
-	 * @param layer
 	 */
-	@Deprecated
 	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
 		try {
 			long layerId = getSelectedModuleId();
@@ -411,7 +402,7 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	@Deprecated
+
 	// #TODO:: CONTROLLER SHOULD NOT CALL VIEW
 	public void updateAppliedRulesTable(JTableAppliedRule appliedRuleTable) {
 		try {

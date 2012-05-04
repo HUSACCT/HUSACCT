@@ -44,6 +44,11 @@ public class DefineDomainService {
 		module.setName(moduleName);
 		module.setDescription(moduleDescription);
 	}
+
+	public void removeModuleById(long moduleId) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		SoftwareArchitecture.getInstance().removeModule(module);
+	}
 	
 	public String getModuleNameById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
@@ -54,11 +59,6 @@ public class DefineDomainService {
 	public Module getModuleById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		return module;
-	}
-
-	public void removeModuleById(long moduleId) {
-		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		SoftwareArchitecture.getInstance().removeModule(module);
 	}
 	
 	public Module[] getRootModules(){
@@ -75,6 +75,23 @@ public class DefineDomainService {
 		}
 		return moduleIdList;
 	}
+	
+	public ArrayList<Long> getSubModuleIds(Long parentModuleId) {
+		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+		
+		ArrayList<Long> moduleIdList = new ArrayList<Long>();
+		for (Module module : parentModule.getSubModules()) {
+			moduleIdList.add(module.getId());
+			//get the submoduleIds of this submodule
+			//recursive
+			ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
+			for (Long l : subModuleIdList){
+				moduleIdList.add(l);
+			}
+		}
+		return moduleIdList;
+	}
+	
 	
 	public ArrayList<Module> getSortedModules() {
 		ArrayList<Module> modules = SoftwareArchitecture.getInstance().getModules();
@@ -114,11 +131,6 @@ public class DefineDomainService {
 		}
 		return moduleId;
 	}
-	
-	public void setModuleName(long moduleId, String newName) {
-		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		module.setName(newName);
-	}
 
 	public void moveLayerUp(long layerId){
 		SoftwareArchitecture.getInstance().moveUpDown(layerId);
@@ -126,6 +138,11 @@ public class DefineDomainService {
 	
 	public void moveLayerDown(long layerId){
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
+	}
+	
+	public void setModuleName(long moduleId, String newName) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		module.setName(newName);
 	}
 	
 	/**

@@ -1,11 +1,10 @@
 package husacct.define.presentation.jframe;
 
-import husacct.define.domain.DefineDomainService;
+import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.RuleDetailsJPanel;
 import husacct.define.presentation.tables.JTableException;
-import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.KeyValueComboBox;
-import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.BorderLayout;
@@ -18,7 +17,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -30,7 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 
-public class JFrameAppliedRule extends JFrame implements KeyListener, ActionListener, ItemListener{
+public class JFrameAppliedRule extends JFrame implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
 	
@@ -61,6 +63,7 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	public JFrameAppliedRule(AppliedRuleController appliedRuleController) {
 		super();
 		this.appliedRuleController = appliedRuleController;
+		this.appliedRuleController.addObserver(this);
 		initGUI();
 	}
 
@@ -173,6 +176,44 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	}
 	
 	/**
+	 * Handling Updating Observerable
+	 */
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		updateExceptionTable();
+	}
+	
+	private void updateExceptionTable() {
+
+		// Get all applied rules from the service
+		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
+
+		// Get the tablemodel from the table
+		JTableTableModel atm = (JTableTableModel) jTableException.getModel();
+
+		// Remove all items in the table
+		atm.getDataVector().removeAllElements();
+		for (HashMap<String, Object> exceptionRule : exceptionRules) {	
+			String description = (String) exceptionRule.get("description");
+			Long moduleIdFrom = (Long) exceptionRule.get("moduleFromId");
+			String moduleFrom = appliedRuleController.getModuleName(moduleIdFrom);
+			Long moduleIdTo = (Long) exceptionRule.get("moduleToId");
+			String moduleTo = appliedRuleController.getModuleName(moduleIdTo);
+			
+			boolean appliedRuleIsEnabled = (Boolean) exceptionRule.get("enabled");
+			String enabled = "Off";
+			if (appliedRuleIsEnabled) {
+				enabled = "On";
+			}
+
+			Object rowdata[] = {moduleFrom, moduleTo, description, enabled};
+			atm.addRow(rowdata);
+		}
+		atm.fireTableDataChanged();
+		this.repaint();
+	}
+
+	/**
 	 * Handling ActionPerformed
 	 */
 	@Override
@@ -190,7 +231,11 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	}
 
 	private void addException() {
-		appliedRuleController.createExceptionGUI();
+		//TODO ugly code
+		Long selectedModuleFromId = appliedRuleController.getCurrentModuleId();
+		DataHelper datahelper = (DataHelper) jPanelRuleDetails.jComboBoxModuleTo.getSelectedItem();
+		Long selectedModuleToId = datahelper.getId();
+		appliedRuleController.createExceptionGUI(selectedModuleFromId, selectedModuleToId);
 	}
 	
 	private void removeException() {
@@ -244,5 +289,6 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	public void keyTyped(KeyEvent arg0) {
 		// Ignore
 	}
+
 
 }

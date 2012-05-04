@@ -1,10 +1,9 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.domain.DefineDomainService;
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.AddModuleValuesJFrame;
-import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.presentation.moduletree.ModuleTree;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
@@ -18,10 +17,8 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -36,9 +33,6 @@ import org.apache.log4j.Logger;
 public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer {
 
 	private static final long serialVersionUID = 6141711414139061921L;
-	
-	@Deprecated
-	private JList moduleTreeJList;
 	
 	private JScrollPane moduleTreeScrollPane;
 	private ModuleTree moduleTree;
@@ -137,6 +131,17 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
+		
+		//TODO temporary fix
+		//actually need to select the node with the currently selectedModuleId
+		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
+		if (selectedModuleId != -1){
+			this.updateSelectedModule(-1);			
+		}		
+		
+		for (int i = 0; i < moduleTree.getRowCount(); i++) {
+			moduleTree.expandRow(i);
+		}
 	}
 	
 	/**
@@ -157,7 +162,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
-		this.getSelectedModuleId();
 		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
 		addModuleFrame.initUI();
 	}
@@ -196,24 +200,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
 		return moduleId;
 	}
-	
-	@Deprecated
-	public void valueChanged(ListSelectionEvent event) {
-		if (event.getSource() == this.moduleTreeJList && !event.getValueIsAdjusting()) {
-			this.moduleTreeJListAction(event);
-		}
-	}
-	
-	@Deprecated
-	private void moduleTreeJListAction(ListSelectionEvent event) {
-		long moduleId = -1;
-		Object selectedModule = this.moduleTreeJList.getSelectedValue();
-		if (selectedModule instanceof DataHelper) {
-			moduleId = ((DataHelper) selectedModule).getId();
-		}
-		DefinitionController.getInstance().notifyObservers(moduleId);	
-	}
-	
+
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
@@ -222,12 +209,9 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
         this.checkLayerComponentIsSelected();
 	}
 	
+	
 	private void updateSelectedModule(long moduleId) {
-		if(moduleId != -1) {
-			DefinitionController.getInstance().setSelectedModuleId(moduleId);
-		} else {
-			//TODO:: load SofwareArchitecturData
-		}
+		DefinitionController.getInstance().setSelectedModuleId(moduleId);
 	}
 	
 	public void checkLayerComponentIsSelected() {

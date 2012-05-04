@@ -2,8 +2,11 @@ package husacct.define.task;
 
 import husacct.define.domain.DefineDomainService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 public abstract class PopUpController extends Observable {
@@ -14,6 +17,12 @@ public abstract class PopUpController extends Observable {
 	protected DefineDomainService defineDomainService = DefineDomainService.getInstance();
 	protected String action = PopUpController.ACTION_NEW;
 	protected long moduleId;
+	
+	protected List<Observer> observers;
+	
+	public PopUpController(){
+		observers = new ArrayList<Observer>();
+	}
 
 	public abstract void initUi() throws Exception;
 	
@@ -43,4 +52,22 @@ public abstract class PopUpController extends Observable {
 		return action;
 	}
 
+	public void addObserver(Observer o){
+		if (!this.observers.contains(o)){
+			this.observers.add(o);
+		}
+	}
+	
+	public void removeObserver(Observer o){
+		if (this.observers.contains(o)){
+			this.observers.remove(o);
+		}
+	}
+	
+	@Override
+	public void notifyObservers(){
+		for (Observer o : this.observers){
+			o.update(this, moduleId);
+		}
+	}
 }

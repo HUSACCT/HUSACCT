@@ -31,7 +31,7 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	private AppliedRuleController appliedRuleController;
 	
 	private JPanel jPanelMain;
-	private RuleDetailsJPanel jPanelRuleDetails;
+	public RuleDetailsJPanel jPanelRuleDetails;
 	private JLabel jLabelRuleType;
 	private JPanel jPanelUpdateCancel;
 		
@@ -76,9 +76,8 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 				{
 					keyValueComboBoxAppliedRule = new KeyValueComboBox();
 					jPanelMain.add(keyValueComboBoxAppliedRule, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-					//TODO fill with exception
 					this.appliedRuleController.fillRuleTypeComboBoxWithExceptions(keyValueComboBoxAppliedRule);
-					keyValueComboBoxAppliedRule.addItemListener(this);
+					keyValueComboBoxAppliedRule.addItemListener(this);	
 				}
 				{
 					jPanelRuleDetails = new RuleDetailsJPanel(appliedRuleController);

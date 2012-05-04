@@ -4,7 +4,6 @@ import husacct.define.domain.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("rawtypes")
 public class Module implements Comparable<Module> {
 	
 	protected static long STATIC_ID;

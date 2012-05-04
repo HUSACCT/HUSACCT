@@ -9,6 +9,8 @@ import java.awt.Insets;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -23,12 +25,11 @@ public class RuleDetailsJPanel extends JPanel{
 	private AppliedRuleController appliedRulesController;
 	
 	private JLabel jLabelModuleFrom;
-	private JLabel jLabelModuleFromConcrete;
 	private JLabel jLabelModuleTo;
 	private JLabel jLabelEnabled;
 	private JLabel jLabelDescription;
 	private JScrollPane jScrollPaneDescription;
-	private JLabel jLabelRegex;
+//	private JLabel jLabelRegex;
 	
 	public JCheckBox jCheckBoxEnabled;
 	public JComboBox jComboBoxModuleFrom;
@@ -86,7 +87,7 @@ public class RuleDetailsJPanel extends JPanel{
 
 	private HashMap<String, Object> saveDefaultDataToHashMap() {
 		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
-		long moduleFromId = appliedRulesController.getCurrentModuleId();
+		long moduleFromId = -1;
 		long moduleToId = -1;
 		boolean enabled = true;
 		String description = "";
@@ -105,7 +106,8 @@ public class RuleDetailsJPanel extends JPanel{
 
 
 	private void saveIsNotAllowedToUse(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		DataHelper datahelper = (DataHelper) jComboBoxModuleTo.getSelectedItem();
 		ruleDetails.put("moduleToId", datahelper.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
@@ -113,7 +115,8 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 
 	private void saveIsAllowedToUse(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		DataHelper datahelper = (DataHelper) jComboBoxModuleTo.getSelectedItem();
 		ruleDetails.put("moduleToId", datahelper.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
@@ -121,7 +124,8 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 	
 	private void saveIsOnlyAllowedToUse(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		DataHelper datahelper = (DataHelper) jComboBoxModuleTo.getSelectedItem();
 		ruleDetails.put("moduleToId", datahelper.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
@@ -129,14 +133,16 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 
 	private void saveIsOnlyModuleAllowedToUse(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		DataHelper datahelper = (DataHelper) jComboBoxModuleTo.getSelectedItem();
 		ruleDetails.put("moduleToId", datahelper.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
 		ruleDetails.put("description", jTextAreaDescription.getText());
 	}
 	private void saveMustUse(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		DataHelper datahelper = (DataHelper) jComboBoxModuleTo.getSelectedItem();
 		ruleDetails.put("moduleToId", datahelper.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
@@ -144,12 +150,14 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 
 	private void saveBackCall(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
 		ruleDetails.put("description", jTextAreaDescription.getText());
 	}
 	private void saveSkipCall(HashMap<String, Object> ruleDetails) {
-		ruleDetails.put("moduleFromId", appliedRulesController.getCurrentModuleId());
+		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
+		ruleDetails.put("moduleFromId", datahelper1.getId());
 		ruleDetails.put("enabled", jCheckBoxEnabled.isSelected());
 		ruleDetails.put("description", jTextAreaDescription.getText());
 	}
@@ -178,64 +186,75 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 	
 	private void initIsNotAllowedToUse(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addModuleTo(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	private void initIsAllowedToUse(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addModuleTo(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	private void initIsOnlyAllowedToUse(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addModuleTo(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	private void initIsOnlyModuleAllowedToUse(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addModuleTo(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	private void initMustUse(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addModuleTo(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	private void initBackCall(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	private void initSkipCall(){
-		addModuleFrom(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		addModuleFromLabel(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addEnabled(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		addDescription(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 	
-	private void addModuleFrom(GridBagConstraints gbc){
+	private void addModuleFromLabel(GridBagConstraints gbc){
 		{
 			jLabelModuleFrom = new JLabel();
 			this.add(jLabelModuleFrom, gbc);
 			jLabelModuleFrom.setText("From Module");
 		}
 		gbc.gridx++;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		{
-			jLabelModuleFromConcrete = new JLabel();
-			this.add(jLabelModuleFromConcrete, gbc);
-			jLabelModuleFromConcrete.setText(appliedRulesController.getCurrentModuleName());
+			jComboBoxModuleFrom = new JComboBox();
+			this.add(jComboBoxModuleFrom, gbc);
+			String currentModuleName = appliedRulesController.getCurrentModuleName();
+			Long currentModuleID = appliedRulesController.getCurrentModuleId();
+			
+			ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
+			DataHelper datahelper = new DataHelper();
+			datahelper.setId(currentModuleID);
+			datahelper.setValue(currentModuleName);
+			comboBoxModel = new DefaultComboBoxModel(new DataHelper[]{datahelper});
+			
+			jComboBoxModuleFrom.setModel(comboBoxModel);	
+			
 		}
 	}
 	

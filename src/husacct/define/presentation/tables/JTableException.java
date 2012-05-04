@@ -20,9 +20,9 @@ public class JTableException extends AbstractJTable {
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn("Id");
 		tablemodel.addColumn("From module");
 		tablemodel.addColumn("To module");
+		tablemodel.addColumn("Description");
 		tablemodel.addColumn("Enabled");
 	}
 	
@@ -32,11 +32,11 @@ public class JTableException extends AbstractJTable {
 		for (int i = 0; i < getColumnCount(); i++) {
 			column = getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(10); // Id
-			} else if (i == 1) {
 				column.setPreferredWidth(75); // From module
-			} else if (i == 2) {
+			} else if (i == 1) {
 				column.setPreferredWidth(75); // To module
+			} else if (i == 2) {
+				column.setPreferredWidth(75); // Description
 			} else if (i == 3) {
 				column.setPreferredWidth(25); // Enabled
 			}
