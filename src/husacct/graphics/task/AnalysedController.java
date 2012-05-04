@@ -13,7 +13,7 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
-public class AnalysedController extends BaseController {
+public class AnalysedController extends DrawingController {
 
 	private IControlService controlService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
@@ -70,6 +70,8 @@ public class AnalysedController extends BaseController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
+
+		// FIXME: Make this code function with the multiple selected figures
 		BaseFigure figure = figures[0];
 
 		if (figure.isModule()) {

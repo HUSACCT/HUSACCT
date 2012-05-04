@@ -4,7 +4,6 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -25,7 +24,7 @@ import org.jhotdraw.draw.tool.SelectionTool;
 public class DrawingView extends DefaultDrawingView {
 
 	private static final long serialVersionUID = 7276696509798039409L;
-	private static final int SingleClick = 1;
+	// private static final int SingleClick = 1;
 	private static final int DoubleClick = 2;
 
 	private Drawing drawing;
@@ -44,8 +43,10 @@ public class DrawingView extends DefaultDrawingView {
 
 		initializeSelectionTool();
 		initializeMouseListener();
-		initializeKeyboardListener();
 		initializeSelectionListener();
+
+		// FIXME: Keyboard listeners contain bugs. Fix before re-enabling
+		// initializeKeyboardListener();
 	}
 
 	private void initializeSelectionTool() {
@@ -78,11 +79,12 @@ public class DrawingView extends DefaultDrawingView {
 			int mouseClicks = e.getClickCount();
 
 			if (mouseButton == MouseEvent.BUTTON1) {
-				if (mouseClicks == SingleClick) {
-
-					BaseFigure[] selection = toFigureArray(getSelectedFigures());
-					figureSelected(selection);
-				} else if (mouseClicks == DoubleClick) {
+				// if (mouseClicks == SingleClick) {
+				//
+				// BaseFigure[] selection = toFigureArray(getSelectedFigures());
+				// figureSelected(selection);
+				// } else
+				if (mouseClicks == DoubleClick) {
 
 					BaseFigure[] selection = toFigureArray(getSelectedFigures());
 					moduleZoom(selection);
@@ -173,22 +175,25 @@ public class DrawingView extends DefaultDrawingView {
 		}
 	}
 
-	private void initializeKeyboardListener() {
-		addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				onKeyPressed(e);
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-		});
-	}
+	// TODO: DO NOT REMOVE THIS FUNCTION. IT IS DISABLED BECAUSE IT CONTAINS
+	// BUGS
+	// NOT BECAUSE IT IS UNWANTED CODE
+	// private void initializeKeyboardListener() {
+	// addKeyListener(new KeyListener() {
+	// @Override
+	// public void keyPressed(KeyEvent e) {
+	// onKeyPressed(e);
+	// }
+	//
+	// @Override
+	// public void keyReleased(KeyEvent e) {
+	// }
+	//
+	// @Override
+	// public void keyTyped(KeyEvent e) {
+	// }
+	// });
+	// }
 
 	protected void onKeyPressed(KeyEvent e) {
 

@@ -16,7 +16,7 @@ import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
 
-public abstract class BaseController implements UserInputListener {
+public abstract class DrawingController implements UserInputListener {
 
 	public final int ITEMS_PER_ROW = 4;
 
@@ -26,7 +26,7 @@ public abstract class BaseController implements UserInputListener {
 	protected String currentPath = "";
 	private boolean showViolations = false;
 
-	protected Logger logger = Logger.getLogger(BaseController.class);
+	protected Logger logger = Logger.getLogger(DrawingController.class);
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
@@ -37,7 +37,7 @@ public abstract class BaseController implements UserInputListener {
 
 	protected FigureMap figureMap = new FigureMap();
 
-	public BaseController() {
+	public DrawingController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 		
@@ -139,12 +139,10 @@ public abstract class BaseController implements UserInputListener {
 
 	public void toggleViolations() {
 		if (violationsAreShown()) {
-			logger.debug("Hiding violations");
 			hideViolations();
 
 			this.drawing.setFiguresNotViolated(this.figureMap.getViolatedFigures());
 		} else {
-			logger.debug("Showing violations");
 			showViolations();
 		}
 		this.drawLinesBasedOnSetting();

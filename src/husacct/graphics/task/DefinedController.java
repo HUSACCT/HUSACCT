@@ -7,7 +7,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 
-public class DefinedController extends BaseController {
+public class DefinedController extends DrawingController {
 	private IDefineService defineService;
 
 	public DefinedController() {

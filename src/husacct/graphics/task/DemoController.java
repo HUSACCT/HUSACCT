@@ -11,7 +11,7 @@ import husacct.graphics.presentation.figures.NamedFigure;
 
 import java.util.ArrayList;
 
-public class DemoController extends BaseController {
+public class DemoController extends DrawingController {
 
 	private final int ITEMS_PER_ROW = 2;
 

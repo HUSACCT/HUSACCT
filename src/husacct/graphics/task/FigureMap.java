@@ -63,6 +63,7 @@ public class FigureMap {
 		for (BaseFigure figure : violatedFigureDTOMap.keySet()) {
 			figures.add(figure);
 		}
+
 		return figures;
 	}
 
