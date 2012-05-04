@@ -11,20 +11,17 @@ import org.antlr.runtime.tree.CommonTree;
 
 class CSharpTreeConvertController {
 
-	boolean innerClass = false;
 	private List<CommonTree> namespaceTrees;
 	private List<CommonTree> classTrees;
-	private int amoutofAccolades;
-	private boolean isAbstractClass;
 	private CommonTree abstractTree;
-
-	public int getAmoutofAccolades() {
-		return amoutofAccolades;
-	}
-
-	public void setAmoutofAccolades(int amoutofAccolades) {
-		this.amoutofAccolades = amoutofAccolades;
-	}
+	private final int ABSTRACT = 74;
+	private final int CLASS = 155;
+	private final int FORWARDCURLYBRACKET = 62;
+	private List<String> classNames = new ArrayList<String>();
+	private List<Integer> innerClassDepth = new ArrayList<Integer>();
+	private String currentClassName;
+	private boolean isName = false;
+	private int depth = 0;
 
 	public void delegateDomainObjectGenerators(CSharpParser cSharpParser) throws RecognitionException {
 		compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
@@ -32,47 +29,45 @@ class CSharpTreeConvertController {
 		namespaceTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
 		boolean namespace = false;
-		boolean isClass = false;
+		boolean isClassPart = false;
+		depth = 0;
+		innerClassDepth = new ArrayList<Integer>();
 		for (Object trees : compilationUnitTree.getChildren()) {
 			CommonTree tree = (CommonTree) trees;
 			namespace = namespaceChecking(tree, namespace);
-			isClass = classChecking(tree, isClass);
+			isClassPart = setClassTree(tree, isClassPart);
 		}
 		CSharpNamespaceGenerator namespaceGenerator = new CSharpNamespaceGenerator(namespaceTrees);
-		
 		new CSharpClassGenerator(classTrees, namespaceGenerator.getName());
 	}
 
-	private boolean classChecking(CommonTree tree, boolean isClass) {
-		if (tree.getType() == 74) {
+	private boolean setClassTree(CommonTree tree, boolean isClassPart) {
+		if (tree.getType() == ABSTRACT) {
 			abstractTree = tree;
 		}
+		if (isName ) {
+			currentClassName = tree.getText();
+			isName = false;
+		}
+		if (tree.getType() == CLASS) {
+			isClassPart = true;
+			isName = true;
+		}
 		
-		if (tree.getType() == 155) {
-			isClass = true;
+		if (isClassPart && tree.getType() == FORWARDCURLYBRACKET ) {
+			isClassPart = false;
+			classNames.add(currentClassName);
+			innerClassDepth.add(depth++);
 		}
-
-		if (isClass && tree.getType() == 62 ) {
-			isClass = false;
-			innerClass = true;
-		}
-
-		if (tree.getType() == 62) {
-			amoutofAccolades++;
-		}
-
-		if (tree.getType() == 63) {
-			amoutofAccolades--;
-		}
-
-		if (isClass) {
+		
+		if (isClassPart) {
 			if (abstractTree != null) {
 				classTrees.add(abstractTree);
 				abstractTree = null;
 			}
 			classTrees.add(tree);
 		}
-		return isClass;
+		return isClassPart;
 	}
 
 

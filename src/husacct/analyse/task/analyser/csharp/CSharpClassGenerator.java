@@ -9,25 +9,30 @@ import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpClassGenerator {
 
-
 	public CSharpClassGenerator(List<CommonTree> classTrees, String string) {
 		ModelCreationService ms = new FamixCreationServiceImpl();
 		String uniqueName = null;
 		String name = string;
+		boolean isClass = false;
 		boolean isAbstract = false;
 		for (CommonTree tree : classTrees) {
 			if (tree.getType() == 155) {
-				uniqueName = tree.getText();
+				isClass = true;
 				name += "." + tree.getText();
-			}
-			if (tree.getType() == 74) {
+			} else if (tree.getType() == 74) {
 				isAbstract = true;
+			} else if (tree.getType() == 40) {
+				
+			} else if (isClass) {
+				uniqueName = string + "." + tree.getText();
+				name = tree.getText();
+				isClass = false;
+				String belongsToPackage = string;
+				boolean innerClass = false;
+				ms.createClass(uniqueName,name,belongsToPackage,isAbstract,innerClass);
 			}
+			
 		}
-		System.out.println(isAbstract);
-		boolean isInnerClass = false;
-		String belongsToPackage = null;
-		ms.createClass(uniqueName,name,belongsToPackage,isAbstract,isInnerClass);
 		
 	}
 
