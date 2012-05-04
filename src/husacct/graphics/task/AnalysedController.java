@@ -32,9 +32,6 @@ public class AnalysedController extends BaseController {
 			@Override
 			public void update(Locale newLocale) {
 				getAndDrawModulesIn(getCurrentPath());
-				if (violationsAreShown()) {
-					drawViolationsForShownModules();
-				}
 			}
 		});
 	}
