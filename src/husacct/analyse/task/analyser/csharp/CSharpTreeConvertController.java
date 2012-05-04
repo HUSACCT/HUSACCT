@@ -14,6 +14,7 @@ class CSharpTreeConvertController {
 	boolean innerClass = false;
 	private List<CommonTree> namespaceTrees;
 	private List<CommonTree> classTrees;
+	private List<CommonTree> usageTrees;
 	private int amoutofAccolades;
 	private boolean isAbstractClass;
 	private CommonTree abstractTree;
@@ -30,17 +31,21 @@ class CSharpTreeConvertController {
 		compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
 		CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 		namespaceTrees = new ArrayList<CommonTree>();
+		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
 		boolean namespace = false;
+		boolean usage = false;
 		boolean isClass = false;
 		for (Object trees : compilationUnitTree.getChildren()) {
 			CommonTree tree = (CommonTree) trees;
 			namespace = namespaceChecking(tree, namespace);
 			isClass = classChecking(tree, isClass);
+			usage = usageCheck(tree, usage);
 		}
 		CSharpNamespaceGenerator namespaceGenerator = new CSharpNamespaceGenerator(namespaceTrees);
 		
 		new CSharpClassGenerator(classTrees, namespaceGenerator.getName());
+		CSharpImportGenerator importGenerator = new CSharpImportGenerator(usageTrees, "classname");
 	}
 
 	private boolean classChecking(CommonTree tree, boolean isClass) {
@@ -89,5 +94,24 @@ class CSharpTreeConvertController {
 			namespaceTrees.add(tree);
 		}
 		return namespace;
+	}
+	
+	private boolean usageCheck(CommonTree tree, boolean usage){
+		
+		if(tree.getType() == 18){
+			usage = true;
+		}
+		
+		if(usage){
+			if(tree.getType() != 18){
+				usageTrees.add(tree);
+			}
+		}
+		
+		if(usage && tree.getType() == 25){
+			usage = false;
+		}
+		
+		return usage;
 	}
 }
