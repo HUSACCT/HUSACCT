@@ -1,9 +1,12 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.domain.DefineDomainService;
-import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.jframe.AddModuleValuesJFrame;
+import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.LayerComponent;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -13,45 +16,40 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 /**
  * 
  * @author Henk ter Harmsel
  *
  */
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, ListSelectionListener, Observer {
+public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer {
 
 	private static final long serialVersionUID = 6141711414139061921L;
-	private JList moduleTreeJList;
+
+	private JScrollPane moduleTreeScrollPane;
+	private ModuleTree moduleTree;
 	
-	private JButton newModuleButton;
-	private JButton moveModuleUpButton;
-	private JButton removeModuleButton;
-	private JButton moveModuleDownButton;
+	private JButton newModuleButton = new JButton();
+	private JButton moveModuleUpButton = new JButton();
+	private JButton removeModuleButton = new JButton();
+	private JButton moveModuleDownButton = new JButton();
 	
 	public ModuleJPanel() {
 		super();
 	}
 
-	
-	/**
-	 * Creating Gui
-	 */
-	@Override
 	public void initGui() {
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		this.add(createInnerModulePanel(), BorderLayout.CENTER);
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
 	
 	public JPanel createInnerModulePanel() {
@@ -68,24 +66,17 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		JPanel moduleTreePanel = new JPanel();
 		BorderLayout moduleTreePanelLayout = new BorderLayout();
 		moduleTreePanel.setLayout(moduleTreePanelLayout);
-		moduleTreePanel.add(this.createModuleTreeScrollPane(), BorderLayout.CENTER);
-		
+		this.createModuleTreeScrollPane();
+		moduleTreePanel.add(this.moduleTreeScrollPane, BorderLayout.CENTER);
 		return moduleTreePanel;
 	}
 	
-	private JScrollPane createModuleTreeScrollPane() {
-		JScrollPane moduleTreeScrollPane = new JScrollPane();
-		moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
-		
-		this.moduleTreeJList = new JList();
-		this.moduleTreeJList.setModel(new DefaultListModel());
-		moduleTreeScrollPane.setViewportView(this.moduleTreeJList);
-		this.moduleTreeJList.addListSelectionListener(this);
-		
-		return moduleTreeScrollPane;
+	private void createModuleTreeScrollPane() {
+		this.moduleTreeScrollPane = new JScrollPane();
+		this.moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
+		this.updateModuleTree();
 	}
 
-	@Override
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
@@ -128,12 +119,24 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		updateModulesTreeList();
+		this.updateModuleTree();
 	}
 	
-	public void updateModulesTreeList() {
-		DefinitionController.getInstance().updateModuleTreeList(this.moduleTreeJList);
+	public void updateModuleTree() {
+		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
+		this.moduleTree = new ModuleTree(rootComponent);
+		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
+		this.moduleTree.addTreeSelectionListener(this);
+		this.checkLayerComponentIsSelected();
+		
+		//FIXME need to get the reselect the node with the currently selectedmoduleid
+///////////////////////////////////////
+		
+		for (int i = 0; i < moduleTree.getRowCount(); i++) {
+			moduleTree.expandRow(i);
+		}
 	}
+	
 	/**
 	 * Handling ActionPerformed
 	 */
@@ -148,70 +151,78 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		} else if (action.getSource() == this.moveModuleDownButton) {
 			this.moveLayerDown();
 		}
-		this.updateModulesTreeList();
+		this.updateModuleTree();
 	}
+	
 	private void newModule() {
-		//TODO call AddModuleValuesJFrame instead of the following code.
-		
-		// Ask the user for the module name
-		String moduleName = UiDialogs.inputDialog(this, "Please enter module name", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-		if (moduleName != null) {
-			//Creating a new module of type Layer
-			//has yet to be implemented to support other module types
-			String layerLevelString = UiDialogs.inputDialog(this, "Please enter layer level", "Please input a value", JOptionPane.QUESTION_MESSAGE);
-			if (layerLevelString != null) {
-				int layerLevel = Integer.parseInt(layerLevelString);
-				// Call task to create the layer
-				DefinitionController.getInstance().addLayer(moduleName, layerLevel);
-			}
-		}
-		this.updateModulesTreeList();
+		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
+		addModuleFrame.initUI();
 	}
+	
 	private void removeModule() {
 		long moduleId = getSelectedModuleId();
 		if (moduleId != -1){
-			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove module: \"" + getSelectedValue() + "\"", "Remove?");
+			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove the selected module?", "Remove?");
 			if (confirm) {
-				moduleTreeJList.clearSelection();
+				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);
+				this.updateModuleTree();
 			}
 		}
 	}
+	
 	private void moveLayerUp() {
 		long layerId = getSelectedModuleId();
 		DefinitionController.getInstance().moveLayerUp(layerId);
+		this.updateModuleTree();
 	}
+	
 	private void moveLayerDown() {
 		long layerId = getSelectedModuleId();
 		DefineDomainService.getInstance().moveLayerDown(layerId);
+		this.updateModuleTree();
 	}
 	
-	@Override
-	public void valueChanged(ListSelectionEvent event) {
-		if (event.getSource() == this.moduleTreeJList && !event.getValueIsAdjusting()) {
-			this.moduleTreeJListAction(event);
-		}
-	}
-	
-	public Object getSelectedValue(){
-		return moduleTreeJList.getSelectedValue();
-	}
-	
-	public long getSelectedModuleId() {
-		Object selected = getSelectedValue();
-		if (selected instanceof DataHelper) {
-			long id = ((DataHelper) selected).getId();
-			return id;
-		}
-		return -1;
-	}
-	
-	private void moduleTreeJListAction(ListSelectionEvent event) {
+	private long getSelectedModuleId() {
 		long moduleId = -1;
-		Object selectedModule = this.moduleTreeJList.getSelectedValue();
-		if (selectedModule instanceof DataHelper) {
-			moduleId = ((DataHelper) selectedModule).getId();
+		TreePath path = this.moduleTree.getSelectionPath();
+		if (path != null){//returns null if nothing is selected
+			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
+			moduleId = selectedComponent.getModuleId();
 		}
-		DefinitionController.getInstance().notifyObservers(moduleId);	
+//		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
+		return moduleId;
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent event) {
+        TreePath path = event.getPath();
+        AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
+        this.updateSelectedModule(selectedComponent.getModuleId());
+        this.checkLayerComponentIsSelected();
+	}
+	
+	
+	private void updateSelectedModule(long moduleId) {
+		DefinitionController.getInstance().setSelectedModuleId(moduleId);
+	}
+	
+	public void checkLayerComponentIsSelected() {
+		TreePath path = this.moduleTree.getSelectionPath();
+		if(path != null && path.getLastPathComponent() instanceof LayerComponent) {
+			this.enableMoveLayerButtons();
+		} else {
+			this.disableMoveLayerButtons();
+		}
+	}
+	
+	public void disableMoveLayerButtons() {
+		this.moveModuleDownButton.setEnabled(false);
+		this.moveModuleUpButton.setEnabled(false);
+	}
+	
+	public void enableMoveLayerButtons() {
+		this.moveModuleDownButton.setEnabled(true);
+		this.moveModuleUpButton.setEnabled(true);
 	}
 }
