@@ -1,10 +1,11 @@
 package husacct.validate;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
-import husacct.define.DefineServiceStub;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.presentation.BrowseViolations;
@@ -27,22 +28,22 @@ import com.itextpdf.text.DocumentException;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private boolean validationExecuted;
+	
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-	private ConfigurationServiceImpl configuration;
-	private DomainServiceImpl domain;
-	private ReportServiceImpl report;
-	private TaskServiceImpl task;
-	//private AbstractionServiceImpl abstraction;
+	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
+	private final ConfigurationServiceImpl configuration;
+	private final DomainServiceImpl domain;
+	private final ReportServiceImpl report;
+	private final TaskServiceImpl task;
 
 	public ValidateServiceImpl(){
 		this.configuration = new ConfigurationServiceImpl();
 		this.domain = new DomainServiceImpl(configuration);
 		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
-		//this.abstraction = new AbstractionServiceImpl();
 		this.validationExecuted = false;
 	}
-
 
 	@Override
 	public CategoryDTO[] getCategories(){
@@ -50,15 +51,20 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	}
 	
 	@Override
-	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {		
+		if(!validationExecuted){
+			logger.debug("warning, method: getViolationsByLogicalPath executed but no validation is executed");
+		}		
 		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 	
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		if(!validationExecuted){
+			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
+		}	
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
-
 
 	@Override
 	public String[] getExportExtentions() {
@@ -67,7 +73,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public void checkConformance() {		
-		RuleDTO[] appliedRules = new DefineServiceStub().getDefinedRules();
+		RuleDTO[] appliedRules = defineService.getDefinedRules();
 		domain.checkConformance(appliedRules);
 		this.validationExecuted = true;
 	}
@@ -93,7 +99,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		return task.exportValidationWorkspace();
 	}
 
-
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
@@ -116,10 +121,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
 	}
-	
-	public static void main(String[] args){
-		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
-		serviceImpl.checkConformance();
 
-	}
+	@Override
+	public void reloadGUI() {
+		//TODO write code to generate GUI
+	}	
 }

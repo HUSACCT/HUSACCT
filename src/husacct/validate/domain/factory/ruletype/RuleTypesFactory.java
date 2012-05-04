@@ -1,14 +1,18 @@
 package husacct.validate.domain.factory.ruletype;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
-import husacct.define.DefineServiceStub;
+import husacct.define.IDefineService;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
+import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
+import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_tranfer_objects.CategorykeyClassDTO;
+import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -23,18 +27,24 @@ import org.apache.log4j.Logger;
 
 public class RuleTypesFactory {
 	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
-
+	
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+	
+	private final ConfigurationServiceImpl configuration;
+	
 	private AbstractViolationType violationtypefactory;
-	private HashMap<String, CategorykeyClassDTO> allRuletypes;
-	private HashMap<String, CategorykeyClassDTO> mainRuleTypes;
+	private HashMap<String, CategoryKeyClassDTO> allRuletypes;
+	private HashMap<String, CategoryKeyClassDTO> mainRuleTypes;
 
-	public RuleTypesFactory(){
+	public RuleTypesFactory(ConfigurationServiceImpl configuration){
+		this.configuration = configuration;
+
 		RuleTypesGenerator ruletypegenerator = new RuleTypesGenerator();
-		allRuletypes = ruletypegenerator.generateAllRules();
-		mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
+		this.allRuletypes = ruletypegenerator.generateAllRules();
+		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
-	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){
+	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){	
 		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
 		return extractCategoriesFromRuleType(ruleTypes);
 	}
@@ -47,18 +57,20 @@ public class RuleTypesFactory {
 			List<RuleType> categoryRules = returnMap.get(categoryKey);
 			if(categoryRules != null){
 				categoryRules.add(ruletype);
-			}
+			}	
 			else{
-				returnMap.put(categoryKey, new ArrayList<RuleType>());
+				List<RuleType> ruleList = new ArrayList<RuleType>();
+				ruleList.add(ruletype);
+				returnMap.put(categoryKey, ruleList);					
 			}
-		}		
+		}	
 		return returnMap;
 	}
 
 	public List<RuleType> getRuleTypes(){
-		ApplicationDTO application = new DefineServiceStub().getApplicationDetails();
+		ApplicationDTO application = defineService.getApplicationDetails();
 		if(application != null){
-			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){
+			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){				
 				return generateDefaultRuleTypes();
 			}
 			else{
@@ -72,12 +84,10 @@ public class RuleTypesFactory {
 	//Depending on the language give instance of Rule + violationtypes
 	private List<RuleType> generateRuleTypes(String language){
 		setViolationTypeFactory(language);
-		//TODO uncomment when define service is ready
-		//setViolationTypeFactory(language);
 
-		List<RuleType> rules = new ArrayList<RuleType>();
+		List<RuleType> rules = new ArrayList<RuleType>();		
 
-		for(Entry<String, CategorykeyClassDTO> set : mainRuleTypes.entrySet()){
+		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
 			try{
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();
@@ -94,20 +104,22 @@ public class RuleTypesFactory {
 			}catch(RuleInstantionException e){
 				logger.error(e.getMessage(), e);	
 			}
-		}
+		}		
 		return rules;
 	}
 
 	private void setViolationTypeFactory(String language){
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language, configuration);
+	}
+
+	private void setViolationTypeFactory(){
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 	}
 
 	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
-		setViolationTypeFactory("Java");
-		//TODO uncomment when define service is ready
-		//setViolationTypeFactory(language);
+		setViolationTypeFactory();
 
-		CategorykeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
+		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
 		if(categoryKeyClass != null){
 			Class<RuleType> ruletypeClass = categoryKeyClass.getRuleClass();
 			String categoryKey = categoryKeyClass.getCategoryKey();
@@ -128,7 +140,7 @@ public class RuleTypesFactory {
 	//Return all the default instances of Rule
 	private List<RuleType> generateDefaultRuleTypes(){
 		List<RuleType> rules = new ArrayList<RuleType>();
-		for(Entry<String, CategorykeyClassDTO> set : mainRuleTypes.entrySet()){
+		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
 			try{
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();
@@ -145,7 +157,7 @@ public class RuleTypesFactory {
 
 	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{
 		try {
-			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, null);
+			RuleType rootRule = (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
 			List<RuleType> exceptionRuletypes = new ArrayList<RuleType>();
 			for(RuleTypes ruletype : rootRule.getExceptionRuleKeys()){	
 				final RuleType generatedRuleType = generateRuleTypeWithoutExceptionRules(ruletype.toString());
@@ -172,11 +184,9 @@ public class RuleTypesFactory {
 	}
 
 	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey) throws RuleInstantionException{
-		setViolationTypeFactory("Java");
-		//TODO uncomment when define service is ready
-		//setViolationTypeFactory(language);
+		setViolationTypeFactory();
 
-		CategorykeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
+		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
 		if(categoryKeyClass != null){
 			Class<RuleType> ruletypeClass = categoryKeyClass.getRuleClass();
 			String categoryKey = categoryKeyClass.getCategoryKey();
@@ -196,7 +206,7 @@ public class RuleTypesFactory {
 
 	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{
 		try {
-			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, null);
+			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
 		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);
 		} catch (SecurityException e) {
@@ -215,5 +225,26 @@ public class RuleTypesFactory {
 
 	private void ExceptionOccured(Exception e){
 		logger.error(e.getMessage(), e);
+	}
+
+	private Severity createSeverity(String ruleTypeKey){
+		try{
+			return configuration.getSeverityFromKey(defineService.getApplicationDetails().programmingLanguage, ruleTypeKey);
+		}catch(SeverityNotFoundException e){
+			DefaultSeverities defaultSeverity = getCategoryKeyClassDTO(ruleTypeKey);
+			if(defaultSeverity != null){
+				return configuration.getSeverityByName(defaultSeverity.toString());
+			}
+		}
+		return null;
+	}	
+
+	private DefaultSeverities getCategoryKeyClassDTO(String ruleTypeKey){
+		for(CategoryKeyClassDTO ruleType : allRuletypes.values()){
+			if(ruleType.getRuleClass().getSimpleName().toLowerCase().replace("rule", "").equals(ruleTypeKey.toLowerCase())){
+				return ruleType.getDefaultSeverity();
+			}
+		}
+		return null;
 	}
 }

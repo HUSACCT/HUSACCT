@@ -2,14 +2,23 @@ package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class FilterViolations extends JFrame {
-
 	private static final long serialVersionUID = -6295611607558238501L;
 
 	private TaskServiceImpl ts;
@@ -243,7 +252,7 @@ public class FilterViolations extends JFrame {
 				);
 
 		pack();
-	}// </editor-fold>
+	}
 
 	private void cancelActionPerformed() {
 		dispose();
