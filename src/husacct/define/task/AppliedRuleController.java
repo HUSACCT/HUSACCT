@@ -74,18 +74,18 @@ public class AppliedRuleController extends PopUpController {
 	 */
 	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
-		RuleTypeDTO[] ruleTypes = categories[0].getRuleTypes();
+		RuleTypeDTO[] ruleTypes = categories[0].ruleTypes;
 		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 		ArrayList<String> ruleTypeValues = new ArrayList<String>();
 		
 		//foreach ruletype set ruletypekeys array
 		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			ruleTypeKeys.add(ruleTypeDTO.getKey());
+			ruleTypeKeys.add(ruleTypeDTO.key);
 		}
 				
 		//Get the correct display value for each ruletypekey from the resourcebundle
 		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			String value = resourceBundle.getString(ruleTypeDTO.getKey());
+			String value = resourceBundle.getString(ruleTypeDTO.key);
 			ruleTypeValues.add(value);
 		}
 		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
@@ -93,21 +93,21 @@ public class AppliedRuleController extends PopUpController {
 	
 	public void fillRuleTypeComboBoxWithExceptions(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
-		RuleTypeDTO[] ruleTypes = categories[0].getRuleTypes();
+		RuleTypeDTO[] ruleTypes = categories[0].ruleTypes;
 		//Get currently selected RuleType
 		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			if (ruleTypeDTO.getKey().equals(selectedRuleTypeKey)){
+			if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
 				//Fill combobox with exceptionruletypes of that rule
 				ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 				ArrayList<String> ruleTypeValues = new ArrayList<String>();
 				
-				for (RuleTypeDTO ruleDTO : ruleTypeDTO.getExceptionRuleTypes()){
-					ruleTypeKeys.add(ruleDTO.getKey());
+				for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
+					ruleTypeKeys.add(ruleDTO.key);
 				}
 						
 				//Get the correct display value for each ruletypekey from the resourcebundle
-				for (RuleTypeDTO ruleDTO : ruleTypeDTO.getExceptionRuleTypes()){
-					String value = resourceBundle.getString(ruleDTO.getKey());
+				for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
+					String value = resourceBundle.getString(ruleDTO.key);
 					ruleTypeValues.add(value);
 				}
 				keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
