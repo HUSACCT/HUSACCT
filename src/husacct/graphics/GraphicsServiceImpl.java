@@ -66,6 +66,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	public Element getWorkspaceData() {
 		createControllers();
 		Element data = new Element("ArchitecureGraphicsService");
+		// TODO: Save violations on or off
 		data.addContent("testdata");
 		return data;
 	}

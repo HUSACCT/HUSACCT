@@ -1,20 +1,17 @@
 package husacct.graphics.presentation;
 
+import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.NamedFigure;
+import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.CompositeFigure;
-import org.jhotdraw.draw.DecoratedFigure;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.io.ImageOutputFormat;
@@ -26,10 +23,11 @@ public class Drawing extends DefaultDrawing {
 	public Drawing() {
 		super();
 	}
+	
+	public void showExportToImagePanel(){
+		FileManager filemanager = new FileManager();
+		File selectedFile = filemanager.getFile();
 
-	public void showExportToImagePanel() {
-
-		File selectedFile = new File(".");
 		try {
 
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
@@ -39,11 +37,11 @@ public class Drawing extends DefaultDrawing {
 
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 
-				selectedFile = fileChooser.getSelectedFile();
-				FileOutputStream fileoutputstream = new FileOutputStream(selectedFile);
-				imageoutputformat.write(fileoutputstream, this);
-				fileoutputstream.close();
-			}
+				filemanager.setFile(fileChooser.getSelectedFile());
+				filemanager.createOutputStream();
+				imageoutputformat.write(filemanager.getOutputStream(),this);
+				filemanager.closeOutputStream();
+	        }
 		} catch (IOException e) {
 			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
 		}
@@ -60,8 +58,9 @@ public class Drawing extends DefaultDrawing {
 		}
 		return moduleFigures.toArray(new BaseFigure[] {});
 	}
+	
+	public RelationFigure[] getShownLines() {
 
-	public BaseFigure[] getShownLines() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 
 		for (Figure jhotdrawfigure : this.getChildren()) {
@@ -70,7 +69,7 @@ public class Drawing extends DefaultDrawing {
 				moduleFigures.add(figure);
 			}
 		}
-		return moduleFigures.toArray(new BaseFigure[] {});
+		return moduleFigures.toArray(new RelationFigure[] {});
 	}
 
 	@Override
@@ -80,15 +79,25 @@ public class Drawing extends DefaultDrawing {
 
 		return super.add(f);
 	}
+	
+	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList){
+		this.willChange();
+		for(BaseFigure figure : arrayList){
+			figure.setViolated(false);
+		}
+		this.invalidate();
+		this.changed();
+	}
 
-	public void clear() { 
+	public void clearAll() {
 		this.willChange();
 		this.basicRemoveAllChildren();
 		this.invalidate();
 		this.changed();
 	}
 
-	public void clearLines() {
+	
+	public void clearAllLines(){
 		this.willChange();
 		BaseFigure[] lines = getShownLines();
 		for (BaseFigure line : lines) {
@@ -97,48 +106,53 @@ public class Drawing extends DefaultDrawing {
 		this.invalidate();
 		this.changed();
 	}
+	
+	public void resizeRelationFigures() {
+		RelationFigure[] figures = getShownLines();
+		// 1 relation, small
+		if (1 == figures.length) {
+			figures[0].setLineThickness(1);
 
-	/**
-	 * @deprecated usage of this function can cause problems, because the name
-	 *             of the figure may be different from e.g. logicalPaths in the
-	 *             dtos
-	 */
-	public BaseFigure findFigureByName(String name) {
-		return this.findFigureByName(name, this.getChildren());
-	}
+		}
+		// 2 relations; both small, or one slightly bigger
+		else if (figures.length == 2) {
+			int length1 = figures[0].getAmount();
+			int length2 = figures[1].getAmount();
 
-	private BaseFigure findFigureByName(String name, List<Figure> figures) {
-		for (Figure figure : figures) {
-			BaseFigure foundChildFig = this.findFigureByName(name, figure);
-			if (foundChildFig != null) {
-				return foundChildFig;
+			if (length1 == length2) {
+				figures[0].setLineThickness(1);
+				figures[1].setLineThickness(1);
+			} else if (length1 < length2) {
+				figures[0].setLineThickness(1);
+				figures[1].setLineThickness(2);
+			} else { // length1 > length2
+				figures[0].setLineThickness(2);
+				figures[1].setLineThickness(1);
 			}
 		}
+		// 3 or more relations; small, big or fat, according to scale
+		else if (figures.length >= 3) {
+			// max amounts of dependencies
+			int maxAmount = -1;
+			for (RelationFigure figure : figures) {
+				int length = figure.getAmount();
 
-		return null;
-	}
+				if (maxAmount == -1 || maxAmount < length) {
+					maxAmount = length;
+				}
+			}
 
-	private BaseFigure findFigureByName(String name, Figure figure) {
-		if (figure instanceof NamedFigure) {
-			if (((NamedFigure) figure).getName().equals(name)) {
-				return (BaseFigure) figure;
+			// set line thickness according to scale
+			for (RelationFigure figure : figures) {
+				double weight = (double) figure.getAmount() / maxAmount;
+				if (weight < 0.33) {
+					figure.setLineThickness(1);
+				} else if (weight < 0.66) {
+					figure.setLineThickness(3);
+				} else {
+					figure.setLineThickness(4);
+				}
 			}
 		}
-
-		if (figure instanceof DecoratedFigure) {
-			BaseFigure foundChildFig = findFigureByName(name, ((DecoratedFigure) figure).getDecorator());
-			if (foundChildFig != null) {
-				return foundChildFig;
-			}
-		}
-
-		if (figure instanceof CompositeFigure) {
-			BaseFigure foundChildFig = findFigureByName(name, ((CompositeFigure) figure).getChildren());
-			if (foundChildFig != null) {
-				return foundChildFig;
-			}
-		}
-
-		return null;
 	}
 }

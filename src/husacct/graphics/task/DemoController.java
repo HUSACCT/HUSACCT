@@ -46,7 +46,7 @@ public class DemoController extends BaseController {
 		
 		this.drawModules(modules);
 
-		this.drawDependenciesForShownModules();
+		this.drawLinesBasedOnSetting();
 
 		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 		bls.doLayout(ITEMS_PER_ROW);
@@ -150,10 +150,10 @@ public class DemoController extends BaseController {
 		
 		if(figFrom.getName().equals("task") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 2", 1);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 3", 1);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 2", 1);
-			violations[1] = taskLayerErr2;			
+			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 4", 1);
+			violations[1] = taskLayerErr2;
 		}
 		
 		return violations;
