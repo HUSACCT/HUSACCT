@@ -2,8 +2,4 @@ bin
 .classpath
 .project
 .settings
-*.log
-/build/
-/dist/
-/nbproject/
-/build.xml
+*.log*
