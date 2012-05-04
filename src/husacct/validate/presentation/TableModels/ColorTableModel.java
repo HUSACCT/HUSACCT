@@ -1,25 +1,27 @@
-package husacct.validate.presentation.TableModels;
+package husacct.validate.presentation.tableModels;
 
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.presentation.ColorRenderer;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-@SuppressWarnings("UseOfObsoleteCollectionType")
 public class ColorTableModel extends AbstractTableModel {
 
-    protected Vector dataVector = new Vector();
-    String columnNames[] = {ResourceBundles.getValue("SeverityName"), ResourceBundles.getValue("Color")};
-    Class<?>[] types = new Class[]{String.class, JButton.class};
-    boolean[] canEdit = new boolean[]{true, true};
-    List<Color> rowColours = new ArrayList<Color>();
+	private static final long serialVersionUID = 2492345975488386436L;
+	protected Vector dataVector = new Vector();
+    private String columnNames[] = {ResourceBundles.getValue("SeverityName"), ResourceBundles.getValue("Color")};
+    private Class<?>[] types = new Class[]{String.class, JButton.class};
+    private boolean[] canEdit = new boolean[]{true, true};
+    private List<Color> rowColours = new ArrayList<Color>();
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {

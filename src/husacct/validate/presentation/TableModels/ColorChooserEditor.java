@@ -1,21 +1,28 @@
-package husacct.validate.presentation.TableModels;
+package husacct.validate.presentation.tableModels;
 
 import husacct.validate.abstraction.language.ResourceBundles;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
+import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
-public class ColorChooserEditor extends AbstractCellEditor implements
-TableCellEditor, ActionListener {
+public class ColorChooserEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
 
-
-	Color currentColor;
-	JButton button;
-	JColorChooser colorChooser;
-	JDialog dialog;
+	private static final long serialVersionUID = 2378648633168150198L;
+	
+	private Color currentColor;
+	private JButton button;
+	private JColorChooser colorChooser;
+	private JDialog dialog;
+	
 	protected static final String EDIT = ResourceBundles.getValue("edit");
 
 	public ColorChooserEditor() {
@@ -67,11 +74,7 @@ TableCellEditor, ActionListener {
 
 	//Implement the one method defined by TableCellEditor.
 	@Override
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		currentColor = (Color)value;
 		return button;
 	}

@@ -4,23 +4,35 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.presentation.TableModels.ComboBoxTableModel;
+import husacct.validate.presentation.tableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.*;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class LanguageSeverityConfiguration extends JPanel {
-
+	private static final long serialVersionUID = 4125846168658642242L;
+	
 	private final ComboBoxTableModel ruletypeModel;
 	private final ComboBoxTableModel violationtypeModel;
 	private final DefaultTableModel avtViolationtypeModel;
@@ -80,9 +92,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		initializeEverything();
 	}
 
-	@SuppressWarnings("unchecked")
-	private void initComponents() {
-		
+	private void initComponents() {		
 		tabbedPane = new JTabbedPane();
 		ruletypeSeverity = new JPanel();
 		rtsCategoryScrollpane = new JScrollPane();
