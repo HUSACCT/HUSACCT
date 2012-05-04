@@ -40,7 +40,7 @@ public class RuleTypesFactory {
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
-	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){		
+	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){	
 		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
 		return extractCategoriesFromRuleType(ruleTypes);
 	}
@@ -57,7 +57,7 @@ public class RuleTypesFactory {
 			else{
 				returnMap.put(categoryKey, new ArrayList<RuleType>());
 			}
-		}		
+		}	
 		return returnMap;
 	}
 
@@ -78,8 +78,6 @@ public class RuleTypesFactory {
 	//Depending on the language give instance of Rule + violationtypes
 	private List<RuleType> generateRuleTypes(String language){
 		setViolationTypeFactory(language);
-		//TODO uncomment when define service is ready
-		//setViolationTypeFactory(language);
 
 		List<RuleType> rules = new ArrayList<RuleType>();		
 		
@@ -114,8 +112,6 @@ public class RuleTypesFactory {
 
 	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
 		setViolationTypeFactory();
-		//TODO uncomment when define service is ready
-		//setViolationTypeFactory(language);
 
 		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
 		if(categoryKeyClass != null){
@@ -182,9 +178,7 @@ public class RuleTypesFactory {
 	}
 
 	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey) throws RuleInstantionException{
-		setViolationTypeFactory("Java");
-		//TODO uncomment when define service is ready
-		//setViolationTypeFactory(language);
+		setViolationTypeFactory();
 
 		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
 		if(categoryKeyClass != null){

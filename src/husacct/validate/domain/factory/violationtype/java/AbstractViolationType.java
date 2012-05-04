@@ -81,7 +81,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleKey){
-		if(ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleKey.equals(RuleTypes.MUST_USE.toString())||ruleKey.equals(RuleTypes.BACK_CALL.toString())||ruleKey.equals(RuleTypes.SKIP_CALL.toString())){
+		if(ruleKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleKey.equals(RuleTypes.MUST_USE.toString())||ruleKey.equals(RuleTypes.BACK_CALL.toString())||ruleKey.equals(RuleTypes.SKIP_CALL.toString())){
 			return true;
 		}
 		else {
@@ -89,22 +89,22 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected Severity createSeverity(String language, String violationKey){
+	private Severity createSeverity(String language, String violationKey){
 		try{
-			configuration.getSeverityFromKey(language, violationKey);			
+			return configuration.getSeverityFromKey(language, violationKey);			
 		}catch(SeverityNotFoundException e){
 			CategoryKeySeverityDTO violation = getCategoryKeySeverityDTO(violationKey);
 			if(violation != null){
 				return configuration.getSeverityByName(violation.getDefaultSeverity().toString());
-			}						
-		}
-		return null;
 
+			}
+		}	
+		return null;
 	}
 
-	private CategoryKeySeverityDTO getCategoryKeySeverityDTO(String violationKey){
+	private CategoryKeySeverityDTO getCategoryKeySeverityDTO(String violationKey){		
 		for(CategoryKeySeverityDTO violation : allViolationKeys){
-			if(violation.getKey().toLowerCase().equals(violationKey.toLowerCase())){
+			if(violation.getKey().toLowerCase().equals(violationKey.toLowerCase())){				
 				return violation;
 			}
 		}

@@ -425,7 +425,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 //		System.out.println(1);
 	}
 
-	private void rtsRestoreActionPerformed() {
+	private void rtsRestoreActionPerformed() {		
 		ts.restoreToDefault(language, ResourceBundles.getKey((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
 		rtsCategoryValueChanged();
 	}
@@ -440,7 +440,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		updateRuletypeSeverities();
 	}
 
-	private void vtsRestoreActionPerformed() {
+	private void vtsRestoreActionPerformed() {		
 		ts.restoreToDefault(language, ResourceBundles.getKey((String) violationtypeModel.getValueAt(vtsViolationtypeTable.getSelectedRow(), 0)));
 		vtsCategoryValueChanged();
 	}
