@@ -17,7 +17,7 @@ public class ViolationDTO extends AbstractDTO {
 	public final String systemDefinedName;
 	public final int severityValue;
 
-	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message , int linenumber) {
+	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message , int linenumber, Color severityColor, String userDefinedName, String systemDefinedName, int severityValue) {
 		this.fromClasspath = fromClasspath;
 		this.toClasspath = toClasspath;
 		this.logicalModuleFrom = logicalModuleFrom;
@@ -28,7 +28,7 @@ public class ViolationDTO extends AbstractDTO {
 		this.linenumber = linenumber;
 		
 		//Set temporarily with static values
-		this.severityColor = Color.red;
+		this.severityColor = severityColor;
 		this.userDefinedName = "Medium";
 		this.systemDefinedName = "";
 		this.severityValue = 3;

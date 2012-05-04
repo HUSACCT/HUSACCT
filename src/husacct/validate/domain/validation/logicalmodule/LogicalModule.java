@@ -3,32 +3,30 @@ package husacct.validate.domain.validation.logicalmodule;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 
 public class LogicalModule {
-	private String logicalModulePath;
-	private String logicalModuleType;
-	
+	private final String logicalModulePath;
+	private final String logicalModuleType;
+
 	public LogicalModule(String logicalModulePath, String logicalModuleType){
 		this.logicalModulePath = logicalModulePath;
 		this.logicalModuleType = logicalModuleType;
 	}
-	
+
 	public LogicalModule(Mapping mapping){
-		this.logicalModulePath = mapping.getLogicalPath();
-		this.logicalModuleType = mapping.getLogicalPathType();
+		if(mapping != null){
+			this.logicalModulePath = mapping.getLogicalPath();
+			this.logicalModuleType = mapping.getLogicalPathType();
+		}
+		else{
+			this.logicalModulePath = "";
+			this.logicalModuleType = "";
+		}
 	}
 
 	public String getLogicalModulePath() {
 		return logicalModulePath;
 	}
 
-	public void setLogicalModulePath(String logicalModulePath) {
-		this.logicalModulePath = logicalModulePath;
-	}
-
 	public String getLogicalModuleType() {
 		return logicalModuleType;
-	}
-
-	public void setLogicalModuleType(String logicalModuleType) {
-		this.logicalModuleType = logicalModuleType;
 	}
 }

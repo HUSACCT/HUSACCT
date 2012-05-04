@@ -55,11 +55,7 @@ public class LanguageMenu extends JMenu{
 					
 				}
 			});
-			
 			this.add(item);
-
 		}		
-		
 	}
-
 }

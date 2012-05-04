@@ -10,6 +10,10 @@ public class MainController {
 	WorkspaceController workspaceController;
 	LocaleController localeController;
 	StateController stateController;
+	ApplicationController applicationController;
+	ImportExportController importExportController;
+	
+	public MainGui mainGUI;
 	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
@@ -19,14 +23,16 @@ public class MainController {
 	}
 
 	private void setControllers() {
-		this.workspaceController = new WorkspaceController();
-		this.viewController = new ViewController();
+		this.workspaceController = new WorkspaceController(this);
+		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();
+		this.applicationController = new ApplicationController(this);
+		this.importExportController = new ImportExportController(this);
 	}
 
 	private void openMainGui() {
-		new MainGui(this);
+		this.mainGUI = new MainGui(this);
 	}
 	
 	public ViewController getViewController(){
@@ -45,9 +51,21 @@ public class MainController {
 		return this.stateController;
 	}
 	
+	public ApplicationController getApplicationController(){
+		return this.applicationController;
+	}
+	
+	public ImportExportController getImportExportController(){
+		return this.importExportController;
+	}
+	
 	public void exit(){
 		// TODO: check saved 
 		logger.debug("Close HUSACCT");
 		System.exit(0);
+	}
+	
+	public MainGui getMainGui(){
+		return mainGUI;
 	}
 }
