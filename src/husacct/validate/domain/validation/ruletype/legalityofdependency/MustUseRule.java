@@ -1,6 +1,5 @@
 package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
-import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
@@ -32,8 +31,6 @@ public class MustUseRule extends RuleType{
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {	
 		List<Violation> violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		//TODO replace with real implementation
-		AnalyseServiceStub analysestub = new AnalyseServiceStub();
 
 		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
@@ -42,7 +39,7 @@ public class MustUseRule extends RuleType{
 		int totalCounter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
 				totalCounter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}

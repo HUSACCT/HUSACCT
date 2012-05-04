@@ -1,10 +1,11 @@
 package husacct.validate;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
-import husacct.define.DefineServiceStub;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.presentation.BrowseViolations;
@@ -27,6 +28,8 @@ import com.itextpdf.text.DocumentException;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private boolean validationExecuted;
+	
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
 	private final ConfigurationServiceImpl configuration;
@@ -70,7 +73,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public void checkConformance() {		
-		RuleDTO[] appliedRules = new DefineServiceStub().getDefinedRules();
+		RuleDTO[] appliedRules = defineService.getDefinedRules();
 		domain.checkConformance(appliedRules);
 		this.validationExecuted = true;
 	}
@@ -117,10 +120,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
-	}
-	
-	public static void main(String[] args){
-		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
 	}
 
 	@Override

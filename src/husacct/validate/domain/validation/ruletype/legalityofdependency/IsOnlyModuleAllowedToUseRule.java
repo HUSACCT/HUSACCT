@@ -1,6 +1,5 @@
 package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
-import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
@@ -32,8 +31,6 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
 		List<Violation> violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		//TODO replace with real implementation
-		AnalyseServiceStub analysestub = new AnalyseServiceStub();
 
 		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
@@ -41,8 +38,8 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo ){
-				DependencyDTO[] dependencies = analysestub.getDependenciesTo(classPathTo.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependenciesTo(classPathTo.getPhysicalPath());
+				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){
 					if(allowedDependencies.length != 0){
 						for(DependencyDTO allowedDependency: allowedDependencies){

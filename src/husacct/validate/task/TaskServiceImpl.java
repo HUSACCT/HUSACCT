@@ -1,6 +1,7 @@
 package husacct.validate.task;
 
-import husacct.analyse.AnalyseServiceStub;
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
@@ -29,14 +30,13 @@ public class TaskServiceImpl{
 	private final FilterController filterController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
-	private final AnalyseServiceStub acs;
+	private final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 
 
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
 		this.domain = domain;				
 		filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
-		acs = new AnalyseServiceStub();
 	}
 
 	public List<Violation> getAllViolations(){
@@ -74,7 +74,7 @@ public class TaskServiceImpl{
 	}
 
 	public String[] getAvailableLanguages(){
-		return acs.getAvailableLanguages();
+		return analyseService.getAvailableLanguages();
 	}
 
 	public void applySeverities(List<Object[]> list){
