@@ -252,7 +252,7 @@ public class FilterViolations extends JFrame {
 				);
 
 		pack();
-	}// </editor-fold>
+	}
 
 	private void cancelActionPerformed() {
 		dispose();
