@@ -27,7 +27,6 @@ import org.jdom2.Element;
 
 public class TaskServiceImpl implements ITaskService{
 	private final FilterController filterController;
-	private final ConfigurationController configurationController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final AnalyseServiceStub acs;
@@ -38,7 +37,6 @@ public class TaskServiceImpl implements ITaskService{
 		this.domain = domain;				
 		filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
 		acs = new AnalyseServiceStub();
-		configurationController = new ConfigurationController(this);
 	}
 
 	public List<Violation> getAllViolations(){
@@ -132,6 +130,7 @@ public class TaskServiceImpl implements ITaskService{
 		configuration.addViolations(importController.getViolations());
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(importController.getSeveritiesPerTypesPerProgrammingLanguages());
 	}
+	
 	public Element exportValidationWorkspace() {
 		Element rootValidateElement = new Element("validate");
 		ExportController exportController = new ExportController();
