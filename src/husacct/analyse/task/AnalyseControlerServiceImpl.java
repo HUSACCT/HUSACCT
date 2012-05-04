@@ -10,6 +10,7 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 
 	private ApplicationAnalyser analyserService; 
 	private AnalyseDomainService domainService;
+	private boolean isAnalysed = false;
 	
 	public AnalyseControlerServiceImpl(){
 		this.domainService = new AnalyseDomainServiceImpl();
@@ -18,7 +19,9 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 	
 	@Override
 	public void analyseApplication() {
+		if(isAnalysed) domainService.clearModel();
 		analyserService.analyseApplication();
+		isAnalysed = true;
 	}
 	
 	@Override

@@ -22,4 +22,13 @@ public class DependencyDTO extends AbstractDTO{
 		result = result && (this.lineNumber == other.lineNumber);
 		return result;
 	}
+	
+	public String toString(){
+		String result = "";
+		result += "From: " + from + ", ";
+		result += "To: " + to + ", ";
+		result += "Type: " + type + " ,";
+		result += "Line: " + lineNumber + ".";
+		return result;
+	}
 }

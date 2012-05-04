@@ -1,15 +1,21 @@
 package husacct.analyse.domain.famix;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.naming.directory.InvalidAttributesException;
-
 import husacct.analyse.domain.ModelCreationService;
+import husacct.common.dto.AnalysedModuleDTO;
 
 public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	private FamixModel model;
+	private FamixQueryServiceImpl queryService;
+	private List<FamixAssociation> dependencyHolder;
 	
 	public FamixCreationServiceImpl(){
 		model = FamixModel.getInstance();
+		queryService = new FamixQueryServiceImpl();
+		dependencyHolder = new ArrayList<FamixAssociation>();;
 	}
 	
 	public void createPackage(String uniqueName, String belongsToPackage, String name){
@@ -41,6 +47,16 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fClass.name = name;
 		fClass.belongsToClass = belongsToClass;
 		addToModel(fClass);
+		walkDependencies();
+	}
+	
+	@Override
+	public void createInterface(String uniqueName, String name, String belongsToPackage) {
+		FamixInterface fInterface = new FamixInterface();
+		fInterface.uniqueName = uniqueName;
+		fInterface.name = name;
+		fInterface.belongsToPackage = belongsToPackage;
+		addToModel(fInterface);
 	}
 
 	@Override
@@ -77,10 +93,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
-	public void createAttribute(Boolean classScope,
-			String accesControlQualifier, String belongsToClass,
-			String declareType, String name, String uniqueName) {
-
+	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {
 		FamixAttribute famixAttribute = new FamixAttribute();
 		famixAttribute.hasClassScope = classScope;
 		famixAttribute.accessControlQualifier = accesControlQualifier;
@@ -102,13 +115,25 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
-	public void createInheritanceDefinition(String from, String to,
-			int lineNumber, String type) {
+	public void createInheritanceDefinition(String from, String to, int lineNumber, String type) {
 		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition(type);
 		famixInheritanceDefinition.from = from;
 		famixInheritanceDefinition.to = to;
 		famixInheritanceDefinition.lineNumber = lineNumber;
-		addToModel(famixInheritanceDefinition);
+		
+		String fromPackage = "";
+		String[] fromParts = from.split("\\.");
+		for(int i=0; i<fromParts.length -1; i++){
+			fromPackage += fromParts[i] + ".";
+		}
+		fromPackage = fromPackage.substring(0, fromPackage.length() -1); //delete the last point.
+		List<AnalysedModuleDTO> classes = queryService.searchClassesInPackage(fromPackage, to);
+		if(!classes.isEmpty()){
+			famixInheritanceDefinition.to = classes.get(0).uniqueName;
+			addToModel(famixInheritanceDefinition);
+		}else{
+			dependencyHolder.add(famixInheritanceDefinition);
+		}
 	}
 	
 	private boolean addToModel(FamixObject newObject){
@@ -120,12 +145,9 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		}
 	}
 	
-	public FamixModel getModel(){
-		return model;
-	}
-	
-	public void printModel(){
-		System.out.println(model.toString());
+	//This function can be called to retry creation of dependencies after a new classe was analysed
+	private void walkDependencies(){
+		//TODO Retry setting the to-parameter of depdencies in the holder. 
 	}
 	
 	public String represent(){

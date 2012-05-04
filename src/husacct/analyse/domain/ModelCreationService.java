@@ -7,6 +7,8 @@ public interface ModelCreationService {
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
 	
+	public void createInterface(String uniqueName, String name, String belongsToPackage);
+	
 	public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 	
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName);
@@ -25,6 +27,5 @@ public interface ModelCreationService {
 	
 	
 	//Debug-functies voor in de main:
-	public void printModel();
 	public String represent();
 }

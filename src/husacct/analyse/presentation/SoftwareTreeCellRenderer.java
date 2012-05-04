@@ -26,16 +26,20 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
     		DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
         	AnalysedModuleDTO moduleSelected = (AnalysedModuleDTO)node.getUserObject();
         	
-        	if(moduleSelected.type.equals("root")){
-        		label.setIcon(new ImageIcon("img/folder.png"));
-        	}
-        	else if(moduleSelected.type.equals("package")){
+        	if(moduleSelected.uniqueName.equals("")){
+        		label.setIcon(new ImageIcon("img/application.png"));
+        	}else if(moduleSelected.type.equals("package")){
         		label.setIcon(new ImageIcon("img/package.png"));
-        	}else{
+        	}else if(moduleSelected.type.equals("class")){
         		label.setIcon(new ImageIcon("img/class.gif"));
+        	}else if(moduleSelected.type.equals("interface")){
+        		label.setIcon(new ImageIcon("img/interface.png"));
+        	}else{
+        		label.setIcon(new ImageIcon("img/module.png"));
         	}
             
-            label.setText(moduleSelected.name);
+        	if(moduleSelected.name.equals("")) label.setText("Application");
+        	else label.setText(moduleSelected.name);
             if (selected)label.setBackground(backgroundSelectionColor);
             else label.setBackground(backgroundNonSelectionColor);
     	}catch(ClassCastException e){

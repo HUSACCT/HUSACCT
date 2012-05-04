@@ -45,6 +45,18 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 				rootModules.add(rootModuleDTO);
 			}
 		}
+		Iterator<Entry<String, FamixInterface>> interfaceIterator = theModel.interfaces.entrySet().iterator();
+		while(interfaceIterator.hasNext()){
+			Entry<String, FamixInterface> currentEntry = (Entry<String, FamixInterface>) interfaceIterator.next();
+			FamixInterface fInterface = currentEntry.getValue();
+			if(isRootModule(fInterface.uniqueName)){
+				String uniqueName = fInterface.uniqueName;
+				String name = fInterface.name;
+				String type = "interface";
+				rootModuleDTO = new AnalysedModuleDTO(uniqueName, name, type, "");
+				rootModules.add(rootModuleDTO);
+			}
+		}
 		return rootModules;
 	}
 	
@@ -81,22 +93,37 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 				if(!analysedModuleAlreadyListed(foundModules, module)) foundModules.add(module);
 			}
 		}
+		Iterator<Entry<String, FamixInterface>> interfaceIterator = theModel.interfaces.entrySet().iterator();
+		while(interfaceIterator.hasNext()){
+			Entry<String, FamixInterface> currentEntry = (Entry<String, FamixInterface>) interfaceIterator.next();
+			FamixInterface fInterface = currentEntry.getValue();
+			if(fInterface.belongsToPackage.equals(from)){
+				String uniqueName = fInterface.uniqueName;
+				String name = fInterface.name;
+				String type = "interface";
+				module = new AnalysedModuleDTO(uniqueName, name, type, "");
+				if(!analysedModuleAlreadyListed(foundModules, module)) foundModules.add(module);
+			}
+		}
 		return foundModules;
 	}
 
 	@Override
 	public List<DependencyDTO> getDependencies(String from, String to) {
-		ArrayList<DependencyDTO> allDependencies = new ArrayList<DependencyDTO>(); 
-		ArrayList<FamixAssociation> AssociationIterator = theModel.associations ; 
-		for(FamixAssociation currentAssociation: AssociationIterator){ 
-			if(currentAssociation.from.startsWith(from)){ 
-				if(currentAssociation.to.startsWith(to)){
-					DependencyDTO found = new DependencyDTO(currentAssociation.from,currentAssociation.to, currentAssociation.type,currentAssociation.lineNumber);
-					if(!dependencyAlreadyListed(allDependencies, found)) allDependencies.add(found);
+		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
+		List<FamixAssociation> allAssocations = theModel.associations;
+		DependencyDTO foundDepency;
+		for(FamixAssociation assocation: allAssocations){
+			if(assocation.from.startsWith(from)){
+				if(assocation.to.startsWith(to)){
+					foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+					if(!dependencyAlreadyListed(result, foundDepency)){
+						result.add(foundDepency);
+					}
 				}
- 			} 
-		} 
-		return allDependencies;
+			}
+		}
+		return result;
 	}
 	
 	private boolean dependencyAlreadyListed(List<DependencyDTO> dependencies, DependencyDTO dependency){
@@ -113,5 +140,33 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 			if(item.equals(module)) result = true;
 		}
 		return result;
+	}
+	
+	public List<AnalysedModuleDTO> searchClassesInPackage(String thePackage, String name){
+		List<AnalysedModuleDTO> foundClasses = new ArrayList<AnalysedModuleDTO>();
+		AnalysedModuleDTO module;
+		Iterator<Entry<String, FamixClass>> classIterator = theModel.classes.entrySet().iterator();
+		while(classIterator.hasNext()){
+			Entry<String, FamixClass> currentEntry = (Entry<String, FamixClass>) classIterator.next();
+			FamixClass fClass = currentEntry.getValue();
+			if(fClass.uniqueName.contains(thePackage) && fClass.uniqueName.contains(name)){
+				String uniqueName = fClass.uniqueName;
+				String nm = fClass.name;
+				String type = "class";
+				module = new AnalysedModuleDTO(uniqueName, nm, type, "");
+				foundClasses.add(module);
+			}
+		}
+		return foundClasses;
+	}
+	
+	public List<FamixImport> searchImportsForClass(String uniqueClassName){
+		List<FamixImport> imports = theModel.getImports();
+		for(FamixImport anImport: imports){
+			if(anImport.from.equals(uniqueClassName)){
+				imports.add(anImport);
+			}
+		}
+		return imports;
 	}
 }

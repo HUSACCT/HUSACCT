@@ -25,7 +25,7 @@ public class AnalyseInternalFrame extends JInternalFrame {
 		treePanel = new ApplicationStructurePanel();
 		tabPanel.addTab("Source Overview", null, treePanel, null);
 		
-		JPanel dependencyPanel = new DependencyPanel();
+		dependencyPanel = new DependencyPanel();
 		tabPanel.addTab("Dependency Overview", null, dependencyPanel, null);
 		
 		setIconifiable(true);

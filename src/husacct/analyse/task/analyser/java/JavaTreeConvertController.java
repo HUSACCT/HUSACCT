@@ -18,17 +18,22 @@ class JavaTreeConvertController {
     public void delegateModelGenerators(JavaParser javaParser) throws RecognitionException { 
     	compilationUnit_return compilationUnit = javaParser.compilationUnit(); 
         CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree(); 
-        createClassInformation(compilationUnitTree);
+        createClassOrInterfaceInformation(compilationUnitTree);
         walkAST(compilationUnitTree);
     }
     
-    private void createClassInformation(CommonTree completeTree){
+    private void createClassOrInterfaceInformation(CommonTree completeTree){
     	Tree packageTree = completeTree.getFirstChildWithType(JavaParser.PACKAGE);
     	if(hasPackageElement(completeTree)){
     		delegatePackage(packageTree);
     	} else this.thePackage = "";
     	Tree classTree = completeTree.getFirstChildWithType(JavaParser.CLASS);
-    	this.theClass = this.currentClass = delegateClass(classTree, false);
+    	if(classTree == null){
+    		classTree = completeTree.getFirstChildWithType(JavaParser.INTERFACE);
+    		this.theClass = this.currentClass = delegateInterface(classTree);
+    	}else{
+    		this.theClass = this.currentClass = delegateClass(classTree, false);
+    	}
     	this.parentClass = theClass;
     }
         
@@ -83,6 +88,11 @@ class JavaTreeConvertController {
       	else analysedClass = javaClassGenerator.generateModel((CommonTree)classTree);
         return analysedClass;
     } 
+    
+    private String delegateInterface(Tree interfaceTree){
+    	JavaInterfaceGenerator javaInterfaceGenerator = new JavaInterfaceGenerator(thePackage);
+    	return javaInterfaceGenerator.generateModel((CommonTree)interfaceTree);
+    }
     
     private void delegateInheritanceDefinition(CommonTree treeNode) {
 		JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
