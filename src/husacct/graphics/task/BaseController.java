@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 public abstract class BaseController implements UserInputListener {
 
-	private final int ITEMS_PER_ROW = 4;
+	public final int ITEMS_PER_ROW = 4;
 
 	protected Drawing drawing;
 	protected DrawingView view;
@@ -40,7 +40,7 @@ public abstract class BaseController implements UserInputListener {
 	public BaseController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
-
+		
 		initializeComponents();
 	}
 
@@ -64,8 +64,8 @@ public abstract class BaseController implements UserInputListener {
 		this.drawing.clearAll();
 		this.view.clearSelection();
 	}
-	
-	public void clearLines(){
+
+	public void clearLines() {
 		this.drawing.clearAllLines();
 	}
 
@@ -80,11 +80,11 @@ public abstract class BaseController implements UserInputListener {
 	public void setCurrentPath(String path) {
 		this.currentPath = path;
 	}
-	
+
 	public boolean violationsAreShown() {
 		return showViolations;
 	}
-	
+
 	public void hideViolations() {
 		showViolations = false;
 	}
@@ -131,11 +131,10 @@ public abstract class BaseController implements UserInputListener {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			this.figureMap.linkModule(generatedFigure, dto);
-
-			BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
-			bls.doLayout(ITEMS_PER_ROW);
 		}
-		this.drawTarget.setCurrentPathInfo(this.currentPath);
+		
+		drawTarget.setCurrentPathInfo(this.currentPath);
+		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 
 	public void toggleViolations() {
@@ -155,11 +154,11 @@ public abstract class BaseController implements UserInputListener {
 	public void exportToImage() {
 		this.drawing.showExportToImagePanel();
 	}
-	
-	protected void drawLinesBasedOnSetting(){
+
+	protected void drawLinesBasedOnSetting() {
 		this.clearLines();
 		this.drawDependenciesForShownModules();
-		if(violationsAreShown()){
+		if (violationsAreShown()) {
 			this.drawViolationsForShownModules();
 		}
 		this.drawing.resizeRelationFigures();
@@ -214,10 +213,11 @@ public abstract class BaseController implements UserInputListener {
 
 	private void getAndDrawViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
+		
 		if (violations.length > 0) {
 			RelationFigure violationFigure = this.figureFactory.createFigure(violations);
-			this.figureMap.linkViolations(violationFigure, violations);
-			this.connectionStrategy.connect(violationFigure, figureFrom, figureTo);
+			figureMap.linkViolations(violationFigure, violations);
+			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
 			drawing.add(violationFigure);
 		}
 	}
