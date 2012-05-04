@@ -2,12 +2,15 @@ package husacct.graphics.presentation;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.graphics.task.MouseClickListener;
+import husacct.graphics.task.UserInputListener;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -23,17 +26,30 @@ public class GraphicsFrame extends JInternalFrame {
 	private static final long serialVersionUID = -4683140198375851034L;
 
 	private DrawingView drawingView;
-	private JMenuBar menuBar;
+	private JMenuBar menuBar, locationBar;
+	private JMenuItem locationString;
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
-	private JMenuItem pathInfoMenu;
+	private String ROOT_LEVEL = "Root";
+	private boolean showingProperties = false;
 
-	private ArrayList<MouseClickListener> listeners = new ArrayList<MouseClickListener>();
+	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
 	public GraphicsFrame(DrawingView drawingView) {
 		this.drawingView = drawingView;
-
 		this.initializeComponents();
+		this.setCurrentPathInfo("");
+		this.setSize(500, 500);
+		this.addHierarchyBoundsListener(new HierarchyBoundsListener() {
+			@Override
+			public void ancestorMoved(HierarchyEvent arg0) {
+			}
+
+			@Override
+			public void ancestorResized(HierarchyEvent arg0) {
+				positionLayoutComponents();
+			}
+		});
 	}
 
 	private void initializeComponents() {
@@ -41,24 +57,24 @@ public class GraphicsFrame extends JInternalFrame {
 		this.drawingScollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.drawingScollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		this.drawingScollPane.setViewportView(drawingView);
-		this.drawingScollPane.setMinimumSize(new Dimension(500, 300));
 
 		this.propertiesScrollPane = new JScrollPane();
 		this.propertiesScrollPane
 				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		this.propertiesScrollPane
 				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		this.propertiesScrollPane.setMinimumSize(new Dimension(500, 50));
 
-		createMenuBar();
+		createMenuBars();
 
 		this.setLayout(new java.awt.BorderLayout());
-		this.add(this.menuBar, java.awt.BorderLayout.NORTH);
+		this.add(this.menuBar, BorderLayout.NORTH);
+		this.add(this.locationBar, BorderLayout.SOUTH);
 
 		this.layoutComponents(false);
 	}
 
 	private void layoutComponents(boolean showProperties) {
+		showingProperties = showProperties;
 		if (this.centerPane != null) {
 			this.remove(this.centerPane);
 		}
@@ -68,6 +84,7 @@ public class GraphicsFrame extends JInternalFrame {
 		} else {
 			this.centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, this.drawingScollPane,
 					this.propertiesScrollPane);
+			positionLayoutComponents();
 			((JSplitPane) centerPane).setOneTouchExpandable(true);
 			((JSplitPane) centerPane).setContinuousLayout(true);
 		}
@@ -78,11 +95,21 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 
-	private void createMenuBar() {
-		this.menuBar = new JMenuBar();
-		this.menuBar.setSize(200, 20);
+	private void positionLayoutComponents() {
+		if (showingProperties) {
+			((JSplitPane) centerPane).setSize(this.getWidth(), this.getHeight());
+			int smallerSize = ((JSplitPane) centerPane).getSize().height / 5 * 3;
+			((JSplitPane) centerPane).setDividerLocation(smallerSize);
+		}
+	}
+
+	private void createMenuBars() {
+		int totalWidth = this.getWidth();
 		int menuItemMaxWidth = 120;
 		int menuItemMaxHeight = 45;
+
+		this.menuBar = new JMenuBar();
+		this.menuBar.setSize(totalWidth, 20);
 		JMenuItem goToParentMenu = new JMenuItem("Level up");
 		goToParentMenu.setSize(50, 20);
 		goToParentMenu.setMaximumSize(new Dimension(70, menuItemMaxHeight));
@@ -116,41 +143,49 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(showViolationsOptionMenu);
 
-		pathInfoMenu = new JMenuItem("");
-		pathInfoMenu.setSize(50, 20);
-		pathInfoMenu.setMaximumSize(new Dimension(1000, menuItemMaxHeight));
-		menuBar.add(pathInfoMenu);
+		this.add(menuBar, java.awt.BorderLayout.AFTER_LINE_ENDS);
 
-		this.add(menuBar, java.awt.BorderLayout.NORTH);
+		locationBar = new JMenuBar();
+		locationBar.setSize(totalWidth, 20);
+
+		locationString = new JMenuItem(ROOT_LEVEL);
+		locationString.setSize(menuItemMaxWidth, menuItemMaxHeight);
+		locationString.setMinimumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
+		locationBar.add(locationString);
+
+		this.add(locationBar, java.awt.BorderLayout.WEST);
 	}
 
 	public void setCurrentPathInfo(String path) {
-		pathInfoMenu.setText(path);
+		if (path.equals("")) {
+			path = ROOT_LEVEL;
+		}
+		locationString.setText(path);
 	}
 
 	private void moduleZoomOut() {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.moduleZoomOut();
 		}
 	}
 
 	private void exportToImage() {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.exportToImage();
 		}
 	}
 
 	private void toggleViolations() {
-		for (MouseClickListener l : listeners) {
+		for (UserInputListener l : listeners) {
 			l.toggleViolations();
 		}
 	}
 
-	public void addListener(MouseClickListener listener) {
+	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeListener(MouseClickListener listener) {
+	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
 	}
 
@@ -159,26 +194,29 @@ public class GraphicsFrame extends JInternalFrame {
 		this.layoutComponents(true);
 	}
 
+	// TODO: Sort violations based on severity value
+	// TODO: Make small columns smaller in the GUI
 	private JTable createViolationsTable(ViolationDTO[] violationDTOs) {
-		String[] columnNames = { "Error Message", "Rule Type", "Violation Type" };
+		String[] columnNames = { "Error Message", "Rule Type", "Violation Type", "Severity", "Line" };
 
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 		for (ViolationDTO violation : violationDTOs) {
-			String ruleTypeDescription = "none";
-			String violationTypeDescription = "none";
+			String message = violation.message;
 
+			String ruleTypeDescription = "none";
 			if (null != violation.ruleType) {
 				ruleTypeDescription = violation.ruleType.getDescriptionKey();
 			}
 
+			String violationTypeDescription = "none";
 			if (null != violation.violationType) {
 				violationTypeDescription = violation.violationType.getDescriptionKey();
 			}
 
-			String message = "this was implement with a MessageDTO, "
-					+ "but will be implemented using errorMessage property"; //TODO
+			String severity = "" + violation.severityValue;
+			String line = "" + violation.linenumber;
 
-			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription });
+			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
 		}
 
 		return new JTable(rows.toArray(new String[][] {}), columnNames);
