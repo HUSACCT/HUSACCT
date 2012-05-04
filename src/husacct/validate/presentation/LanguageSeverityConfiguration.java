@@ -130,6 +130,18 @@ public class LanguageSeverityConfiguration extends JPanel {
 		rtsRuletypeTable.setFillsViewportHeight(true);
 		rtsRuletypeTable.getTableHeader().setReorderingAllowed(false);
 		rtsRuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		rtsRuletypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
+				checkRestoreButtonEnabled();
+			}
+		});
+		
 		rtsRuletypeScrollpane.setViewportView(rtsRuletypeTable);
 
 		rtsApply.setText(ResourceBundles.getValue("Apply"));
@@ -380,9 +392,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 				addGroup(GroupLayout.Alignment.TRAILING, layout.
 				createSequentialGroup().addContainerGap().addComponent(
 				tabbedPane)));
-
-//		tabbedPane.getAccessibleContext().setAccessibleName(
-//				ResourceBundles.getValue("Set ruletype severity"));
 	}
 	
 	public void initializeEverything() {
@@ -391,47 +400,52 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void avtSelectAllActionPerformed() {
-		
+		System.out.println(1);
 	}
 
 	private void rtsRestoreActionPerformed() {
-		
+		ts.restoreToDefault(language, getKeyFromString((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
 	}
 
 	private void rtsRestoreAllActionPerformed() {
-		
+		ts.restoreAllToDefault(language);
+		//TODO check if it works
+		rtsCategoryValueChanged();
+//		this.updateUI();
 	}
 
 	private void rtsApplyActionPerformed() {
+		checkRestoreButtonEnabled();
 		updateRuletypeSeverities();
 	}
 
 	private void vtsRestoreActionPerformed() {
-		
+		System.out.println(4);
 	}
 
 	private void vtsRestoreAllActionPerformed() {
-		
+		System.out.println(5);
 	}
 
 	private void vtsApplyActionPerformed() {
+		checkRestoreButtonEnabled();
 		updateViolationtypeSeverities();
 	}
 
 	private void avtDeselectAllActionPerformed() {
-		
+		System.out.println(6);
 	}
 
 	private void avtApplyActionPerformed() {
-		
+		System.out.println(7);
 	}
 
 	private void avtCategoryValueChanged() {
-		
+		System.out.println(8);
 	}
 
 	private void avtViolationtypeTableValueChanged() {
-		
+		System.out.println(9);
 	}
 
 	private void rtsCategoryValueChanged() {
@@ -461,22 +475,27 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 		ts.updateSeverityPerType(map, language);
 	}
+	
+	private void loadRuleTypeCategories() {
+		rtsCategoryModel.clear();
+		for (String categoryString : ruletypes.keySet()) {
+			rtsCategoryModel.addElement(ResourceBundles.getValue(categoryString));
+		}
+	}
 
 	private void loadRuleTypes(String category) {
 		ruletypeModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
-			if (categoryString.equals(category)){
-				List<RuleType> rules = ruletypes.get(category);
+			if (ResourceBundles.getValue(categoryString).equals(category)){
+				List<RuleType> rules = ruletypes.get(categoryString);
 				for(RuleType ruletype: rules){
 					Severity severity;
 					try{
-						severity = ts.getSeverityFromKey(language.toLowerCase(), ruletype.getKey());
+						severity = ts.getSeverityFromKey(language, ruletype.getKey());
 					} catch (Exception e){
 						severity = ts.getAllSeverities().get(0);
 					}
-					
-					
-					ruletypeModel.addRow(new Object[]{ruletype.getKey(), severity});
+					ruletypeModel.addRow(new Object[]{ResourceBundles.getValue(ruletype.getKey()), severity});
 				}
 			}
 
@@ -484,26 +503,19 @@ public class LanguageSeverityConfiguration extends JPanel {
 		ruletypeModel.checkValuesAreValid();	
 	}
 
-	private void loadRuleTypeCategories() {
-		rtsCategoryModel.clear();
-		for (String categoryString : ruletypes.keySet()) {
-			rtsCategoryModel.addElement(categoryString);
-		}
-	}
-
 	private void loadViolationTypeCategories() {
 		vtsCategoryModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			vtsCategoryModel.addElement(categoryString);
+			vtsCategoryModel.addElement(ResourceBundles.getValue(categoryString));
 		}
 
 	}
 
-	private void loadViolationType(String violationTypeKey) {
+	private void loadViolationType(String category) {
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			if (categoryString.equals(violationTypeKey)){
-				List<ViolationType> violationtypes = violationTypes.get(violationTypeKey);
+			if (ResourceBundles.getValue(categoryString).equals(category)){
+				List<ViolationType> violationtypes = violationTypes.get(categoryString);
 				for(ViolationType violationtype: violationtypes){
 					Severity severity;
 					try{
@@ -511,11 +523,48 @@ public class LanguageSeverityConfiguration extends JPanel {
 					} catch (Exception e){
 						severity = ts.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[]{violationtype.getViolationtypeKey(), severity});
+					violationtypeModel.addRow(new Object[]{ResourceBundles.getValue(violationtype.getViolationtypeKey()), severity});
 				}
 			}
 
 		}
 		violationtypeModel.checkValuesAreValid();
+	}
+	
+	private void checkRestoreButtonEnabled(){
+		if(rtsRuletypeTable.getSelectedRow() > -1){
+			rtsRestore.setEnabled(true);
+		} else{
+			rtsRestore.setEnabled(false);
+		}
+		
+		if(vtsViolationtypeTable.getSelectedRow() > -1){
+			vtsRestore.setEnabled(true);
+		} else{
+			vtsRestore.setEnabled(false);
+		}
+	}
+	
+	private String getKeyFromString(String string){
+		HashMap<String, List<RuleType>> ruletypeMap = ts.getRuletypes(language);
+		Map<String, List<ViolationType>> violationtypeMap = ts.getViolationTypes(language);
+		
+		for(List<RuleType> ruletypes : ruletypeMap.values()){
+			for(RuleType ruletype : ruletypes){
+				if(ResourceBundles.getValue(ruletype.getKey()) == string){
+					return ruletype.getKey();
+				}
+			}
+		}
+		
+		for(List<ViolationType> violationtypes : violationtypeMap.values()){
+			for(ViolationType violationtype : violationtypes){
+				if(ResourceBundles.getValue(violationtype.getViolationtypeKey()) == string){
+					return violationtype.getViolationtypeKey();
+				}
+			}
+		}
+		
+		return "";
 	}
 }

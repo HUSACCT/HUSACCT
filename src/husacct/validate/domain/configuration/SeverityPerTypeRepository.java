@@ -54,7 +54,9 @@ public class SeverityPerTypeRepository {
 		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language);
 		
 		//if there is no value, autmatically the default severities will be applied
-		severitiesPerType.clear();
+		if(severitiesPerType != null){
+			severitiesPerType.clear();
+		}
 	}
 
 	public void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){

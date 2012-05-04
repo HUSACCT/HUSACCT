@@ -258,7 +258,6 @@ public final class BrowseViolations extends JInternalFrame {
 
 	public void createInformationPanel() {
 		for(Component component : informationPanel.getComponents()){
-			System.out.println(component.getName() + " " + component.getClass());
 			informationPanel.remove(component);
 		}
 		
@@ -276,8 +275,6 @@ public final class BrowseViolations extends JInternalFrame {
 		informationPanel.add(shownViolationsNumber);
 
 		for(Entry<Severity, Integer> violationPerSeverity: ts.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
-			System.out.println(violationPerSeverity.getKey().toString());
-			System.out.println(violationPerSeverity.getValue());
 			JLabel tempValue = new JLabel(violationPerSeverity.getKey().toString());
 			tempValue.setVisible(true);
 			informationPanel.add(tempValue);
