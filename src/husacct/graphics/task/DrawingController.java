@@ -24,7 +24,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
 	protected String currentPath = "";
-	private boolean showViolations = false;
+	private boolean isViolationsShown = false;
 
 	protected Logger logger = Logger.getLogger(DrawingController.class);
 
@@ -81,21 +81,21 @@ public abstract class DrawingController implements UserInputListener {
 		this.currentPath = path;
 	}
 
-	public boolean violationsAreShown() {
-		return showViolations;
+	public boolean areViolationsShown() {
+		return isViolationsShown;
 	}
 
 	public void hideViolations() {
-		showViolations = false;
+		isViolationsShown = false;
 	}
 
 	public void showViolations() {
-		showViolations = true;
+		isViolationsShown = true;
 	}
 
 	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (violationsAreShown()) {
+		if (areViolationsShown()) {
 			detail = DrawingDetail.WITH_VIOLATIONS;
 		}
 		return detail;
@@ -138,7 +138,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void toggleViolations() {
-		if (violationsAreShown()) {
+		if (areViolationsShown()) {
 			hideViolations();
 
 			this.drawing.setFiguresNotViolated(this.figureMap.getViolatedFigures());
@@ -156,7 +156,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected void drawLinesBasedOnSetting() {
 		this.clearLines();
 		this.drawDependenciesForShownModules();
-		if (violationsAreShown()) {
+		if (areViolationsShown()) {
 			this.drawViolationsForShownModules();
 		}
 		this.drawing.resizeRelationFigures();
