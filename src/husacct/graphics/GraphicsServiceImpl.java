@@ -15,6 +15,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	private DefinedController definedController;
 
 	public GraphicsServiceImpl() {
+		createControllers();
 	}
 
 	private void createControllers() {
@@ -28,43 +29,36 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 
 	@Override
 	public JInternalFrame getAnalysedArchitectureGUI() {
-		createControllers();
 		return analysedController.getGUI();
 	}
 
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
-		createControllers();
 		return definedController.getGUI();
 	}
 
 	@Override
 	public void drawAnalysedArchitecture() {
-		createControllers();
 		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawAnalysedArchitectureWithViolations() {
-		createControllers();
 		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitecture() {
-		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitectureWithViolations() {
-		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		createControllers();
 		Element data = new Element("ArchitecureGraphicsService");
 		// TODO: Save violations on or off
 		data.addContent("testdata");
@@ -73,7 +67,6 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		createControllers();
 		// TODO: Set workspace data.
 		// - show violations = on/off?
 	}
