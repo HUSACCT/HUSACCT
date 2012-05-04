@@ -4,6 +4,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.task.UserInputListener;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -23,16 +24,17 @@ public class GraphicsFrame extends JInternalFrame {
 	private static final long serialVersionUID = -4683140198375851034L;
 
 	private DrawingView drawingView;
-	private JMenuBar menuBar;
+	private JMenuBar menuBar, locationBar;
+	private JMenuItem locationString;
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
 	private String ROOT_LEVEL = "Root";
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
+
 	public GraphicsFrame(DrawingView drawingView) {
 		this.drawingView = drawingView;
-
 		this.initializeComponents();
 		this.setCurrentPathInfo("");
 	}
@@ -49,12 +51,15 @@ public class GraphicsFrame extends JInternalFrame {
 				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		this.propertiesScrollPane
 				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		this.propertiesScrollPane.setMinimumSize(new Dimension(500, 50));
+		int width = this.getWidth();
+		int height = this.getHeight() / 25;
+		this.propertiesScrollPane.setMaximumSize(new Dimension(width, height));
 
-		createMenuBar();
+		createMenuBars();
 
 		this.setLayout(new java.awt.BorderLayout());
-		this.add(this.menuBar, java.awt.BorderLayout.NORTH);
+		this.add(this.menuBar, BorderLayout.NORTH);
+		this.add(this.locationBar, BorderLayout.SOUTH);
 
 		this.layoutComponents(false);
 	}
@@ -79,11 +84,13 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 
-	private void createMenuBar() {
-		this.menuBar = new JMenuBar();
-		this.menuBar.setSize(200, 20);
+	private void createMenuBars() {
+		int totalWidth = this.getWidth();
 		int menuItemMaxWidth = 120;
 		int menuItemMaxHeight = 45;
+		
+		this.menuBar = new JMenuBar();
+		this.menuBar.setSize(totalWidth, 20);
 		JMenuItem goToParentMenu = new JMenuItem("Level up");
 		goToParentMenu.setSize(50, 20);
 		goToParentMenu.setMaximumSize(new Dimension(70, menuItemMaxHeight));
@@ -117,14 +124,24 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(showViolationsOptionMenu);
 
-		this.add(menuBar, java.awt.BorderLayout.NORTH);
+		this.add(menuBar, java.awt.BorderLayout.AFTER_LINE_ENDS);
+		
+		locationBar = new JMenuBar();
+		locationBar.setSize(totalWidth, 20);
+		
+		locationString = new JMenuItem(ROOT_LEVEL);
+		locationString.setSize(menuItemMaxWidth, menuItemMaxHeight);
+		locationString.setMinimumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
+		locationBar.add(locationString);
+		
+		this.add(locationBar, java.awt.BorderLayout.WEST);
 	}
-
+	
 	public void setCurrentPathInfo(String path) {
 		if (path.equals("")) {
 			path = ROOT_LEVEL;
 		}
-		this.setTitle(path);
+		locationString.setText(path);
 	}
 
 	private void moduleZoomOut() {
