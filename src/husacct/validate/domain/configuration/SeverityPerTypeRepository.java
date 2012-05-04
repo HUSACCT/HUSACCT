@@ -43,6 +43,7 @@ public class SeverityPerTypeRepository {
 				severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
 
 				for(ViolationType violationType : ruleType.getViolationTypes()){	
+					System.out.println(violationType.getViolationtypeKey());
 					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
 				}
 			}

@@ -27,14 +27,14 @@ import org.apache.log4j.Logger;
 public class RuleTypesFactory {
 	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
 	private final ConfigurationServiceImpl configuration;
-	
+
 	private AbstractViolationType violationtypefactory;
 	private HashMap<String, CategoryKeyClassDTO> allRuletypes;
 	private HashMap<String, CategoryKeyClassDTO> mainRuleTypes;
 
 	public RuleTypesFactory(ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
-		
+
 		RuleTypesGenerator ruletypegenerator = new RuleTypesGenerator();
 		this.allRuletypes = ruletypegenerator.generateAllRules();
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
@@ -53,9 +53,11 @@ public class RuleTypesFactory {
 			List<RuleType> categoryRules = returnMap.get(categoryKey);
 			if(categoryRules != null){
 				categoryRules.add(ruletype);
-			}
+			}	
 			else{
-				returnMap.put(categoryKey, new ArrayList<RuleType>());
+				List<RuleType> ruleList = new ArrayList<RuleType>();
+				ruleList.add(ruletype);
+				returnMap.put(categoryKey, ruleList);					
 			}
 		}	
 		return returnMap;
@@ -80,7 +82,7 @@ public class RuleTypesFactory {
 		setViolationTypeFactory(language);
 
 		List<RuleType> rules = new ArrayList<RuleType>();		
-		
+
 		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
 			try{
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
@@ -105,7 +107,7 @@ public class RuleTypesFactory {
 	private void setViolationTypeFactory(String language){
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language, configuration);
 	}
-	
+
 	private void setViolationTypeFactory(){
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 	}
@@ -220,7 +222,7 @@ public class RuleTypesFactory {
 	private void ExceptionOccured(Exception e){
 		logger.error(e.getMessage(), e);
 	}
-	
+
 	private Severity createSeverity(String ruleTypeKey){
 		try{
 			return configuration.getSeverityFromKey(new DefineServiceStub().getApplicationDetails().programmingLanguage, ruleTypeKey);
@@ -232,7 +234,7 @@ public class RuleTypesFactory {
 		}
 		return null;
 	}	
-	
+
 	private DefaultSeverities getCategoryKeyClassDTO(String ruleTypeKey){
 		for(CategoryKeyClassDTO ruleType : allRuletypes.values()){
 			if(ruleType.getRuleClass().getSimpleName().toLowerCase().replace("rule", "").equals(ruleTypeKey.toLowerCase())){
