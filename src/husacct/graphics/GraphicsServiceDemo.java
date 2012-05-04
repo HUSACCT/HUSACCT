@@ -30,25 +30,21 @@ public class GraphicsServiceDemo implements IGraphicsService, ISaveable
 
 	@Override
 	public void drawAnalysedArchitecture() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void drawAnalysedArchitectureWithViolations() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void drawDefinedArchitecture() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void drawDefinedArchitectureWithViolations() {
-		// TODO Auto-generated method stub
 
 	}
 	

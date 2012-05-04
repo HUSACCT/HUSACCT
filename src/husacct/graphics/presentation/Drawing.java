@@ -78,12 +78,10 @@ public class Drawing extends DefaultDrawing {
 		// this triggers at least the minimum sizes
 		f.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
 
-		// TODO implement layout mechanism here
-
 		return super.add(f);
 	}
 
-	public void clear() { // TODO: clearAll? and clearModules?
+	public void clear() { 
 		this.willChange();
 		this.basicRemoveAllChildren();
 		this.invalidate();
