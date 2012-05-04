@@ -1,8 +1,9 @@
 package husacct.validate.domain.check;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.define.DefineServiceStub;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 public class CheckConformanceUtil {
+	private static IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+	
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		
 		ArrayList<Mapping> mappingFrom;
 		ArrayList<Mapping> mappingTo;
@@ -58,14 +61,11 @@ public class CheckConformanceUtil {
 			classpaths.addAll(getAllClasspathsFromModule(submodule, classpaths));
 		}
 		return classpaths;
-	}
-
-	//TODO: Define Service
-	static DefineServiceStub definestub = new DefineServiceStub();
+	}	
 
 	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = defineService.getChildsFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpathsFrom.addAll(getAllClasspathsFromModule(module));
@@ -75,7 +75,7 @@ public class CheckConformanceUtil {
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths){
-		ModuleDTO[] childModules = definestub.getChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = defineService.getChildsFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpaths.addAll(getAllClasspathsFromModule(module));

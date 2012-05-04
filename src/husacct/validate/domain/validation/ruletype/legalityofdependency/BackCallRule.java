@@ -1,10 +1,8 @@
 package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
-import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.define.DefineServiceStub;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
 import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
@@ -36,14 +34,11 @@ public class BackCallRule extends RuleType {
 		List<Violation> violations = new ArrayList<Violation>();
 		List<List<Mapping>> toModules = new ArrayList<List<Mapping>>();
 		violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		//TODO replace with real implementation
-		AnalyseServiceStub analysestub = new AnalyseServiceStub();
-		DefineServiceStub definestub = new DefineServiceStub();
 		
 		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
 		List<Mapping> moduleFrom = mappings.getMappingFrom();
 		
-		List<ModuleDTO> allModules = Arrays.asList(definestub.getRootModules());
+		List<ModuleDTO> allModules = Arrays.asList(defineService.getRootModules());
 		int counter = -1;
 		
 		for (ModuleDTO module :allModules){
@@ -58,7 +53,7 @@ public class BackCallRule extends RuleType {
 		for(Mapping classPathFrom : moduleFrom){
 			for(List<Mapping> moduleTo : toModules){
 				for(Mapping classPathTo : moduleTo ){
-					DependencyDTO[] dependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
+					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(appliedRule);
 	

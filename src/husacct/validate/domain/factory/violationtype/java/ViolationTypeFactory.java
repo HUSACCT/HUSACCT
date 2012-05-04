@@ -1,15 +1,17 @@
 package husacct.validate.domain.factory.violationtype.java;
 
-import husacct.define.DefineServiceStub;
+import husacct.ServiceProvider;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 
 import org.apache.log4j.Logger;
 
 public class ViolationTypeFactory {
 	private Logger logger = Logger.getLogger(ViolationTypeFactory.class);
-
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+	
 	public AbstractViolationType getViolationTypeFactory(ConfigurationServiceImpl configuration){
-		String language = new DefineServiceStub().getApplicationDetails().programmingLanguage;	
+		String language = defineService.getApplicationDetails().programmingLanguage;	
 		return getViolationTypeFactory(language, configuration);
 	}
 

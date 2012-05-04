@@ -1,7 +1,10 @@
 package husacct.validate.domain.validation.ruletype;
 
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
@@ -24,6 +27,9 @@ public abstract class RuleType {
 	protected final Severity severity;
 
 	protected AbstractViolationType violationtypefactory;
+	
+	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
 		this.key = key;

@@ -1,7 +1,8 @@
 package husacct.validate.domain.factory.ruletype;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
-import husacct.define.DefineServiceStub;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
@@ -26,8 +27,11 @@ import org.apache.log4j.Logger;
 
 public class RuleTypesFactory {
 	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
+	
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+	
 	private final ConfigurationServiceImpl configuration;
-
+	
 	private AbstractViolationType violationtypefactory;
 	private HashMap<String, CategoryKeyClassDTO> allRuletypes;
 	private HashMap<String, CategoryKeyClassDTO> mainRuleTypes;
@@ -64,7 +68,7 @@ public class RuleTypesFactory {
 	}
 
 	public List<RuleType> getRuleTypes(){
-		ApplicationDTO application = new DefineServiceStub().getApplicationDetails();
+		ApplicationDTO application = defineService.getApplicationDetails();
 		if(application != null){
 			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){				
 				return generateDefaultRuleTypes();
@@ -225,7 +229,7 @@ public class RuleTypesFactory {
 
 	private Severity createSeverity(String ruleTypeKey){
 		try{
-			return configuration.getSeverityFromKey(new DefineServiceStub().getApplicationDetails().programmingLanguage, ruleTypeKey);
+			return configuration.getSeverityFromKey(defineService.getApplicationDetails().programmingLanguage, ruleTypeKey);
 		}catch(SeverityNotFoundException e){
 			DefaultSeverities defaultSeverity = getCategoryKeyClassDTO(ruleTypeKey);
 			if(defaultSeverity != null){

@@ -1,6 +1,7 @@
 package husacct.validate.domain.configuration;
 
-import husacct.analyse.AnalyseServiceStub;
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -16,6 +17,7 @@ public class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
 	private final RuleTypesFactory ruletypefactory;
+	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
 
 	public SeverityPerTypeRepository(ConfigurationServiceImpl configuration){
 		this.ruletypefactory = new RuleTypesFactory(configuration);
@@ -25,9 +27,8 @@ public class SeverityPerTypeRepository {
 	}
 
 
-	public void initializeDefaultSeverities() {
-		AnalyseServiceStub analyse = new AnalyseServiceStub();
-		for(String programmingLanguage : analyse.getAvailableLanguages()){
+	public void initializeDefaultSeverities() {		
+		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
 			severitiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));
 			defaultSeveritiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));
 		}		
@@ -43,7 +44,6 @@ public class SeverityPerTypeRepository {
 				severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
 
 				for(ViolationType violationType : ruleType.getViolationTypes()){	
-					System.out.println(violationType.getViolationtypeKey());
 					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
 				}
 			}
