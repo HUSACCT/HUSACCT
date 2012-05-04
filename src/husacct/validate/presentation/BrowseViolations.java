@@ -4,7 +4,6 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.Cursor;
@@ -14,8 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -119,7 +117,14 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.getRowSorter().toggleSortOrder(4);
 		violationTable.getTableHeader().setReorderingAllowed(false);
 		violationPanel.setViewportView(violationTable);
-
+		
+		shownViolationsNumber = new JLabel();
+		shownViolations = new JLabel();
+		totalViolationNumber = new JLabel();
+		totalViolation = new JLabel();
+		informationPanel = new JPanel();
+		informationPanel.setLayout(new GridLayout(0, 2,0,1));
+		
 		shownViolationsNumber.setText("0");
 
 		displayPanel.setBorder(BorderFactory.createTitledBorder(
@@ -232,7 +237,7 @@ public final class BrowseViolations extends JInternalFrame {
 								.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
 				);
 
-		informationPanel = new JPanel();
+		
 		scrollPane.setViewportView(informationPanel);
 
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
@@ -247,48 +252,26 @@ public final class BrowseViolations extends JInternalFrame {
 
 	public void createInformationPanel() {
 		informationPanel.removeAll();
-		informationPanel.setLayout(new GridLayout(0, 2,0,1));
-
-		totalViolation = new JLabel();
+		
 		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
 
-		totalViolationNumber = new JLabel("" + ts.getAllViolations().size());
+		
+		totalViolationNumber.setText("" + ts.getAllViolations().size());
 		informationPanel.add(totalViolationNumber);
-		//
-		shownViolations = new JLabel(ResourceBundles.getValue("ShownViolations") + ":");
+		
+		shownViolations.setText(ResourceBundles.getValue("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
-
-		shownViolationsNumber = new JLabel("" + violationModel.getRowCount());
+		
+		shownViolationsNumber.setText("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
 
-		for(ViolationsPerSeverity violationPerSeverity: getViolationsPerSeverity()) {
-			informationPanel.add(new JLabel(violationPerSeverity.getSeverity().toString()));
-			informationPanel.add(new JLabel("" + violationPerSeverity.getAmount()));
+		for(Entry<Severity, Integer> violationPerSeverity: ts.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
+			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
+			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
 		}
-
-	}
-
-	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
-		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
-		for(Severity severity : ts.getAllSeverities()) {
-			int violationsCount = 0;
-			List<Violation> violations;
-			if(!applyFilter.isSelected()) {
-				violations = ts.getAllViolations();
-			} else {
-				violations = ts.applyFilterViolations(true);
-			}
-			for(Violation violation : violations) {
-				if(violation.getSeverity() != null) {
-					if(violation.getSeverity().equals(severity)) {
-						violationsCount++;
-					}
-				}
-			}
-			violationsPerSeverity.add(new ViolationsPerSeverity(violationsCount, severity));
-		}
-		return violationsPerSeverity;
+		
+		informationPanel.updateUI();
 	}
 
 	protected void setViolations() {
@@ -300,7 +283,7 @@ public final class BrowseViolations extends JInternalFrame {
 		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
 		for (Violation violation : violationRows) {
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), message, violation.getLinenumber(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), /*violation.getSeverity().toString()*/ "TODO severity"});
+			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), message, violation.getLinenumber(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		}
 
 		setColumnWidth(3, 50);

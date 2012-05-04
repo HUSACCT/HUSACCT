@@ -4,7 +4,7 @@ public class LanguageNotFoundException extends Exception {
 	private static final long serialVersionUID = 780096305107666489L;
 
 	public LanguageNotFoundException(){
-		
+		super();
 	}
 	
 	public LanguageNotFoundException(String language){

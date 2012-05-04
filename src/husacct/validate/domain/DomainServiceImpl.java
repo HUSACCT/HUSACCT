@@ -19,25 +19,33 @@ public class DomainServiceImpl {
 	private RuleTypesFactory ruletypefactory;
 	private ViolationTypeFactory violationtypefactory;
 	private final CheckConformanceController checkConformanceController;
+	private final ConfigurationServiceImpl configuration;
 
-	public DomainServiceImpl(ConfigurationServiceImpl configuration){
-		this.checkConformanceController = new CheckConformanceController(configuration);
+	public DomainServiceImpl(ConfigurationServiceImpl configuration){	
+		this.configuration = configuration;
+		this.ruletypefactory = new RuleTypesFactory(configuration);
+		this.checkConformanceController = new CheckConformanceController(configuration, ruletypefactory);
 	}
 
 	public HashMap<String, List<RuleType>> getAllRuleTypes(String programmingLanguage){
-		initializeRuletypesFactory();
 		return ruletypefactory.getRuleTypes(programmingLanguage);
 	}
 	
 	public Map<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage){
 		initializeViolationtypeFactory();
 		
-		AbstractViolationType violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage);
+		AbstractViolationType violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage, configuration);
 		if(violationtypefactory != null){
 			return violationtypefactory.getAllViolationTypes();
 		}
 		else{
 			return Collections.emptyMap();
+		}
+	}
+	
+	private void initializeViolationtypeFactory(){
+		if(violationtypefactory == null){
+			this.violationtypefactory = new ViolationTypeFactory();
 		}
 	}
 
@@ -46,19 +54,10 @@ public class DomainServiceImpl {
 	}
 	
 	public CategoryDTO[] getCategories(){
-		initializeRuletypesFactory();
 		return new AssemblerController().createCategoryDTO(ruletypefactory.getRuleTypes());
 	}
 	
-	private void initializeRuletypesFactory(){
-		if(ruletypefactory == null){
-			this.ruletypefactory = new RuleTypesFactory();
-		}
-	}
-	
-	private void initializeViolationtypeFactory(){
-		if(violationtypefactory == null){
-			this.violationtypefactory = new ViolationTypeFactory();
-		}
+	public RuleTypesFactory getRuleTypesFactory(){
+		return ruletypefactory;
 	}
 }

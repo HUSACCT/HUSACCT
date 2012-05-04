@@ -22,9 +22,7 @@ public class XMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws IOException {
-
-		
+	public void createReport() throws IOException {		
 		Document document = new Document();
 
 		Element reportElement = new Element("report");
@@ -70,7 +68,7 @@ public class XMLReportWriter extends ReportWriter {
 			lineNr.setText("" + violation.getLinenumber());
 			severity.setText(violation.getSeverity().toString());
 			if(violation.getLogicalModules() != null) {
-				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
+				Message messageObject = violation.getMessage();
 				String message = new Messagebuilder().createMessage(messageObject);
 				ruleType.setText(message);
 			}
@@ -90,5 +88,4 @@ public class XMLReportWriter extends ReportWriter {
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(document, new FileWriter(getFileName()));
 	}
-
 }
