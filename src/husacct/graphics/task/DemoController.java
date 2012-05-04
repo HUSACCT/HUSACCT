@@ -9,6 +9,7 @@ import husacct.common.dto.ViolationTypeDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.NamedFigure;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class DemoController extends DrawingController {
@@ -144,20 +145,20 @@ public class DemoController extends DrawingController {
 		if (figFrom.getName().equals("domain") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
 			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
-					"error 1", 1);
+					"error 1", 1, Color.red, "", "", 3);
 			violations[0] = taskLayerErr1;
 			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
-					"error 2", 1);
+					"error 2", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
 			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 3", 1);
+					"error 3", 1, Color.red, "", "", 3);
 			violations[0] = taskLayerErr1;
 			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 4", 1);
+					"error 4", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
 
