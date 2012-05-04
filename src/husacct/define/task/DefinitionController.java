@@ -190,27 +190,6 @@ public class DefinitionController extends Observable implements Observer {
 	}
 
 	/**
-	 * Add a new software unit to the selected module. This method will make pop-up a new jframe who will handle everything for creating a new sotware unit.
-	 */
-	public void createSoftwareUnitGUI() {
-		try {
-			long moduleId = getSelectedModuleId();
-			
-			if (moduleId != -1) {
-				// Create a new software unit controller
-				SoftwareUnitController c = new SoftwareUnitController(moduleId, "");
-				// Set the action of the view
-				c.setAction(PopUpController.ACTION_NEW);
-				c.addObserver(this);
-				// Build and show the ui
-				c.initUi();
-			}
-		} catch (Exception e) {
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-		}
-	}
-
-	/**
 	 * Remove the selected software unit
 	 */
 	public void removeSoftwareUnit(String softwareUnitName) {

@@ -24,6 +24,7 @@ public abstract class PopUpController extends Observable {
 		observers = new ArrayList<Observer>();
 	}
 
+	@Deprecated
 	public abstract void initUi() throws Exception;
 	
 	/**

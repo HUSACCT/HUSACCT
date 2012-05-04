@@ -5,6 +5,7 @@ import husacct.define.task.DefinitionController;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,7 +25,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	private static final long serialVersionUID = -1729066215610611394L;
 	
 	private ModuleJPanel modulePanel;
-	private long selectedModuleId;
 	
 	private JPanel innerPanel;
 	
@@ -37,7 +37,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
-		this.selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
 	}
 	
 	@Override
@@ -124,21 +123,46 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == this.cancelButton) {
-			this.cancelButtonAction(event);
+			this.cancelButtonAction();
 		} else if (event.getSource() == this.saveButton) {
-			this.saveButtonAction(event);
+			this.saveButtonAction();
 		} else if (event.getSource() == this.moduleTypeComboBox) {
 			this.moduleTypeComboBoxAction();
 		}
 	}
+	
+	/**
+	 * Do nothing
+	 */
+	@Override
+	public void keyPressed(KeyEvent event) {
+		
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			this.cancelButtonAction();
+		} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+			this.saveButtonAction();
+		}
+	}
+	
+	/**
+	 * Do nothing
+	 */
+	@Override
+	public void keyTyped(KeyEvent event) {
+		
+	}
 
 	@Override
-	protected void cancelButtonAction(ActionEvent event) {
+	protected void cancelButtonAction() {
 		this.dispose();
 	}
 
 	@Override
-	protected void saveButtonAction(ActionEvent event) {
+	protected void saveButtonAction() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
 		this.submitForModuleType(moduleType);
 	}
@@ -161,7 +185,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addModule(this.selectedModuleId, moduleName, moduleDescription);
+			definitionController.addModule(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -175,7 +199,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			int level = Integer.parseInt(this.hierarchicalLevelField.getText());
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addLayer(this.selectedModuleId, moduleName, moduleDescription, level);
+			definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription, level);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -188,7 +212,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addComponent(this.selectedModuleId, moduleName, moduleDescription);
+			definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -201,7 +225,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addExternalLibrary(this.selectedModuleId, moduleName, moduleDescription);
+			definitionController.addExternalLibrary(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();

@@ -23,8 +23,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import org.apache.log4j.Logger;
-
 /**
  * 
  * @author Henk ter Harmsel
@@ -33,7 +31,7 @@ import org.apache.log4j.Logger;
 public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer {
 
 	private static final long serialVersionUID = 6141711414139061921L;
-	
+
 	private JScrollPane moduleTreeScrollPane;
 	private ModuleTree moduleTree;
 	
@@ -47,7 +45,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 
 	public void initGui() {
-//		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -132,12 +129,8 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
 		
-		//TODO temporary fix
-		//actually need to select the node with the currently selectedModuleId
-		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
-		if (selectedModuleId != -1){
-			this.updateSelectedModule(-1);			
-		}		
+		//FIXME need to get the reselect the node with the currently selectedmoduleid
+///////////////////////////////////////
 		
 		for (int i = 0; i < moduleTree.getRowCount(); i++) {
 			moduleTree.expandRow(i);
@@ -197,7 +190,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
 			moduleId = selectedComponent.getModuleId();
 		}
-		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
+//		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
 		return moduleId;
 	}
 

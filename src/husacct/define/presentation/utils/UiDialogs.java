@@ -1,9 +1,6 @@
 package husacct.define.presentation.utils;
 
 import java.awt.Component;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
