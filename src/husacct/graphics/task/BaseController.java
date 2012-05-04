@@ -192,6 +192,7 @@ public abstract class BaseController implements UserInputListener {
 
 	public void drawViolationsForShownModules() {
 		BaseFigure[] shownModules = this.drawing.getShownModules();
+		validateService.checkConformance();
 		for (BaseFigure figureFrom : shownModules) {
 			for (BaseFigure figureTo : shownModules) {
 				// are the violations in the same module?
