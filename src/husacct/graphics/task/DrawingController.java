@@ -60,25 +60,25 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void clearDrawing() {
-		this.figureMap.clearAll();
-		this.drawing.clearAll();
-		this.view.clearSelection();
+		figureMap.clearAll();
+		drawing.clearAll();
+		view.clearSelection();
 	}
 
 	public void clearLines() {
-		this.drawing.clearAllLines();
+		drawing.clearAllLines();
 	}
 
 	public String getCurrentPath() {
-		return this.currentPath;
+		return currentPath;
 	}
 
 	public void resetCurrentPath() {
-		this.currentPath = "";
+		currentPath = "";
 	}
 
 	public void setCurrentPath(String path) {
-		this.currentPath = path;
+		currentPath = path;
 	}
 
 	public boolean areViolationsShown() {
@@ -87,6 +87,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void hideViolations() {
 		isViolationsShown = false;
+		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	public void showViolations() {
@@ -104,15 +105,14 @@ public abstract class DrawingController implements UserInputListener {
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
-
-		if (this.figureMap.isViolatedFigure(selectedFigure)) {
-			this.drawTarget.showViolationsProperties(this.figureMap.getViolatedDTOs(selectedFigure));
-		} else if (this.figureMap.isViolationLine(selectedFigure)) {
-			this.drawTarget.showViolationsProperties(this.figureMap.getViolationDTOs(selectedFigure));
-		} else if (this.figureMap.isDependencyLine(selectedFigure)) {
-			this.drawTarget.showDependenciesProperties(this.figureMap.getDependencyDTOs(selectedFigure));
+		if (figureMap.isViolatedFigure(selectedFigure)) {
+			drawTarget.showViolationsProperties(figureMap.getViolatedDTOs(selectedFigure));
+		} else if (figureMap.isViolationLine(selectedFigure)) {
+			drawTarget.showViolationsProperties(figureMap.getViolationDTOs(selectedFigure));
+		} else if (figureMap.isDependencyLine(selectedFigure)) {
+			drawTarget.showDependenciesProperties(figureMap.getDependencyDTOs(selectedFigure));
 		} else {
-			this.drawTarget.hidePropertiesPane();
+			drawTarget.hidePropertiesPane();
 		}
 	}
 
@@ -126,46 +126,43 @@ public abstract class DrawingController implements UserInputListener {
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModules(AbstractDTO[] modules) {
-		this.clearDrawing();
+		clearDrawing();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
-			this.figureMap.linkModule(generatedFigure, dto);
+			figureMap.linkModule(generatedFigure, dto);
 		}
-		
-		drawTarget.setCurrentPathInfo(this.currentPath);
+		drawTarget.setCurrentPathInfo(getCurrentPath());
 		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 
 	public void toggleViolations() {
 		if (areViolationsShown()) {
 			hideViolations();
-
-			this.drawing.setFiguresNotViolated(this.figureMap.getViolatedFigures());
 		} else {
 			showViolations();
 		}
-		this.drawLinesBasedOnSetting();
+		drawLinesBasedOnSetting();
 	}
 
 	@Override
 	public void exportToImage() {
-		this.drawing.showExportToImagePanel();
+		drawing.showExportToImagePanel();
 	}
 
 	protected void drawLinesBasedOnSetting() {
-		this.clearLines();
-		this.drawDependenciesForShownModules();
+		clearLines();
+		drawDependenciesForShownModules();
 		if (areViolationsShown()) {
-			this.drawViolationsForShownModules();
+			drawViolationsForShownModules();
 		}
-		this.drawing.resizeRelationFigures();
+		drawing.resizeRelationFigures();
 	}
 
 	// dependencies
 
 	public void drawDependenciesForShownModules() {
-		BaseFigure[] shownModules = this.drawing.getShownModules();
+		BaseFigure[] shownModules = drawing.getShownModules();
 		for (BaseFigure figureFrom : shownModules) {
 			for (BaseFigure figureTo : shownModules) {
 				getAndDrawDependenciesBetween(figureFrom, figureTo);
@@ -176,9 +173,9 @@ public abstract class DrawingController implements UserInputListener {
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		DependencyDTO[] dependencies = (DependencyDTO[]) getDependenciesBetween(figureFrom, figureTo);
 		if (dependencies.length > 0) {
-			RelationFigure dependencyFigure = this.figureFactory.createFigure(dependencies);
-			this.figureMap.linkDependencies(dependencyFigure, dependencies);
-			this.connectionStrategy.connect(dependencyFigure, figureFrom, figureTo);
+			RelationFigure dependencyFigure = figureFactory.createFigure(dependencies);
+			figureMap.linkDependencies(dependencyFigure, dependencies);
+			connectionStrategy.connect(dependencyFigure, figureFrom, figureTo);
 			drawing.add(dependencyFigure);
 		}
 	}
@@ -188,7 +185,7 @@ public abstract class DrawingController implements UserInputListener {
 	// violations
 
 	public void drawViolationsForShownModules() {
-		BaseFigure[] shownModules = this.drawing.getShownModules();
+		BaseFigure[] shownModules = drawing.getShownModules();
 		validateService.checkConformance();
 		for (BaseFigure figureFrom : shownModules) {
 			for (BaseFigure figureTo : shownModules) {
@@ -206,15 +203,14 @@ public abstract class DrawingController implements UserInputListener {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureFrom);
 		if (violations.length > 0) {
 			figureFrom.setViolated(true);
-			this.figureMap.linkViolatedModule(figureFrom, violations);
+			figureMap.linkViolatedModule(figureFrom, violations);
 		}
 	}
 
 	private void getAndDrawViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
-		
 		if (violations.length > 0) {
-			RelationFigure violationFigure = this.figureFactory.createFigure(violations);
+			RelationFigure violationFigure = figureFactory.createFigure(violations);
 			figureMap.linkViolations(violationFigure, violations);
 			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
 			drawing.add(violationFigure);

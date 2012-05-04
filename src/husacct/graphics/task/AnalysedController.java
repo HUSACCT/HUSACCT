@@ -19,14 +19,11 @@ public class AnalysedController extends DrawingController {
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
-		
 		super();
-		
 		initializeServices();
 	}
 	
 	private void initializeServices() {
-		
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		controlService = ServiceProvider.getInstance().getControlService();
@@ -70,7 +67,6 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
-
 		// FIXME: Make this code function with the multiple selected figures
 		BaseFigure figure = figures[0];
 
