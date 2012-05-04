@@ -17,7 +17,8 @@ public class ConfigurationServiceImpl {
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severityRepository = new SeverityPerTypeRepository(severityConfig);
+		this.severityRepository = new SeverityPerTypeRepository(this);
+		this.severityRepository.initializeDefaultSeverities();
 	}
 
 	public void clearViolations() {

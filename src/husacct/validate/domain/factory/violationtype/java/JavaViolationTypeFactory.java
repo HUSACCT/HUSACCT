@@ -22,7 +22,7 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 
 	@Override
 	public List<ViolationType> createViolationTypesByRule(String ruleTypeKey){
-		if(isCategoryLegalityOfDependency(ruleTypeKey)){
+		if(isCategoryLegalityOfDependency(ruleTypeKey)){	
 			return generateViolationTypes(defaultDependencies);
 		}
 		else if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION.toString())){			
