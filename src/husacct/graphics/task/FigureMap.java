@@ -38,16 +38,6 @@ public class FigureMap {
 		this.violatedFigureDTOMap.clear();
 	}
 
-	// Get All
-
-	public HashMap<RelationFigure, DependencyDTO[]> getDependencyHashMap() {
-		return dependencyLineDTOMap;
-	}
-
-	public HashMap<RelationFigure, ViolationDTO[]> getViolationHashMap() {
-		return violationLineDTOMap;
-	}
-
 	// Get figures
 
 	public ArrayList<BaseFigure> getViolationLines() {
