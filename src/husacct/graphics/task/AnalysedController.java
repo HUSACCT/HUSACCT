@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public class AnalysedController extends BaseController {
 
 	private final int ITEMS_PER_ROW = 4;
-	
+
 	private IControlService controlService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
@@ -32,7 +32,7 @@ public class AnalysedController extends BaseController {
 			@Override
 			public void update(Locale newLocale) {
 				getAndDrawModulesIn(getCurrentPath());
-				if(violationsAreShown()){
+				if (violationsAreShown()) {
 					drawViolationsForShownModules();
 				}
 			}
@@ -43,8 +43,8 @@ public class AnalysedController extends BaseController {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		this.resetCurrentPath();
 		this.drawModules(modules);
-		
-		if(detail == DrawingDetail.WITH_VIOLATIONS){
+
+		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			this.showViolations();
 		}
 		this.drawLinesBasedOnSetting();
@@ -54,65 +54,74 @@ public class AnalysedController extends BaseController {
 		super.drawModules(modules);
 		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
-	
+
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureTo);
-		
+
 		return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
-	
+
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figureTo);
-		
-//		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
-		
-		// TODO validation service probably has to actually run through the main GUI to have this to work.
+
+		// return
+		// validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName,
+		// dtoTo.uniqueName);
+
+		// TODO validation service probably has to actually run through the main
+		// GUI to have this to work.
 		// REMOVE ME WHEN STUFF WORKS!
 		// From ValidateServiceStub.java
 		ViolationDTO[] violations = new ViolationDTO[0];
-		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor","InvocConstructorDescription", false);
-		ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
-		ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements","ImplementsDescription", false);
-		ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends","ExtendsDescription", false);
-		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse","IsNotAllowedToUseDescription",
-				new ViolationTypeDTO[] { constructorCall,extendingAbstractClass,implementationOfInterface,extendClass }, new RuleTypeDTO[] {});
-		
-		if(dtoFrom.uniqueName.equals("domain") && dtoTo.uniqueName.equals("infrastructure")) {
+		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor", "InvocConstructorDescription",
+				false);
+		ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends", "ExtendsDescription", false);
+		ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements", "ImplementsDescription", false);
+		ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends", "ExtendsDescription", false);
+		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse", "IsNotAllowedToUseDescription",
+				new ViolationTypeDTO[] { constructorCall, extendingAbstractClass, implementationOfInterface,
+						extendClass }, new RuleTypeDTO[] {});
+
+		if (dtoFrom.uniqueName.equals("domain") && dtoTo.uniqueName.equals("infrastructure")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "infrastructure", "domain", "infrastructure", extendClass, ruleType, "error 1", 1);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "infrastructure", "domain", "infrastructure",
+					extendClass, ruleType, "error 1", 1);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "infrastructure", "domain", "infrastructure", extendClass, ruleType, "error 2", 1);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "infrastructure", "domain", "infrastructure",
+					extendClass, ruleType, "error 2", 1);
 			violations[1] = taskLayerErr2;
 		}
-		
-		if(dtoFrom.uniqueName.equals("infrastructure") && dtoTo.uniqueName.equals("infrastructure")) {
+
+		if (dtoFrom.uniqueName.equals("infrastructure") && dtoTo.uniqueName.equals("infrastructure")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("infrastructure", "infrastructure", "infrastructure", "infrastructure", extendClass, ruleType, "error 3", 1);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("infrastructure", "infrastructure", "infrastructure",
+					"infrastructure", extendClass, ruleType, "error 3", 1);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("infrastructure", "infrastructure", "infrastructure", "infrastructure", extendClass, ruleType, "error 4", 1);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("infrastructure", "infrastructure", "infrastructure",
+					"infrastructure", extendClass, ruleType, "error 4", 1);
 			violations[1] = taskLayerErr2;
 		}
-		
+
 		return violations;
 	}
-	
+
 	// Listener methods
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		BaseFigure figure = figures[0];
-		
+
 		if (figure.isModule()) {
-			try{
+			try {
 				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
 
 				getAndDrawModulesIn(parentDTO.uniqueName);
-			}catch(Exception e){
-				logger.debug("Could not zoom on this object: "+figure);
+			} catch (Exception e) {
+				logger.debug("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
 			}
 		}

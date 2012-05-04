@@ -8,24 +8,24 @@ import java.io.IOException;
 public class FileManager {
 	private File file;
 	private FileOutputStream outputstream;
-	
-	public FileManager(){
+
+	public FileManager() {
 		createTemporaryFile();
 	}
-	
-	public void createTemporaryFile(){
+
+	public void createTemporaryFile() {
 		new File(".");
 	}
-	
-	public File getFile(){
+
+	public File getFile() {
 		return this.file;
 	}
-	
-	public void setFile(File file){
+
+	public void setFile(File file) {
 		this.file = file;
 	}
-	
-	public FileOutputStream createOutputStream() throws FileNotFoundException{
+
+	public FileOutputStream createOutputStream() throws FileNotFoundException {
 		this.outputstream = new FileOutputStream(file);
 		return this.outputstream;
 	}

@@ -19,7 +19,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public BaseFigure(boolean violated) {
 		super();
-		
+
 		this.violated = violated;
 	}
 
@@ -34,14 +34,14 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 		setBounds(newAnchor, newLead);
 	}
-	
+
 	// TODO: This should be a decorator!
 	public void setViolated(boolean violated) {
 		this.willChange();
 		this.violated = violated;
 		this.changed();
 	}
-	
+
 	public boolean isViolated() {
 		return this.violated;
 	}
@@ -75,19 +75,19 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 		return handles;
 	}
-	
+
 	private Collection<Handle> createSizeableHandles(int detailLevel) {
 		return super.createHandles(detailLevel);
 	}
-	
+
 	private Collection<Handle> createSelectionHandles(int detailLevel) {
 		LinkedList<Handle> handles = new LinkedList<Handle>();
-		
+
 		if (detailLevel == 0) {
 			Handle handle = new BoundsOutlineHandle(this, false, false);
 			handles.add(handle);
 		}
-		
+
 		return handles;
 	}
 
@@ -102,18 +102,18 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	public double getHeight() {
 		return this.getBounds().height;
 	}
-	
+
 	public boolean isSizeable() {
-		
+
 		return this.isSizeable;
 	}
-	
+
 	public void setSizeable(boolean newValue) {
-		
+
 		this.isSizeable = newValue;
 	}
 
 	public abstract boolean isModule();
-	
+
 	public abstract boolean isLine();
 }

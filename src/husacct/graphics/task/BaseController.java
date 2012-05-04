@@ -64,8 +64,8 @@ public abstract class BaseController implements UserInputListener {
 		this.drawing.clearAll();
 		this.view.clearSelection();
 	}
-	
-	public void clearLines(){
+
+	public void clearLines() {
 		this.drawing.clearAllLines();
 	}
 
@@ -80,11 +80,11 @@ public abstract class BaseController implements UserInputListener {
 	public void setCurrentPath(String path) {
 		this.currentPath = path;
 	}
-	
+
 	public boolean violationsAreShown() {
 		return showViolations;
 	}
-	
+
 	public void hideViolations() {
 		showViolations = false;
 	}
@@ -155,11 +155,11 @@ public abstract class BaseController implements UserInputListener {
 	public void exportToImage() {
 		this.drawing.showExportToImagePanel();
 	}
-	
-	protected void drawLinesBasedOnSetting(){
+
+	protected void drawLinesBasedOnSetting() {
 		this.clearLines();
 		this.drawDependenciesForShownModules();
-		if(violationsAreShown()){
+		if (violationsAreShown()) {
 			this.drawViolationsForShownModules();
 		}
 		this.drawing.resizeRelationFigures();
