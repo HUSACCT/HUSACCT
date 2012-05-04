@@ -19,15 +19,15 @@ public class FigureMap {
 	}
 
 	public void clearAll() {
-		this.moduleFigureDTOMap.clear();
-		this.dependencyLineDTOMap.clear();
-		this.violationLineDTOMap.clear();
-		this.violatedFigureDTOMap.clear();
+		moduleFigureDTOMap.clear();
+		dependencyLineDTOMap.clear();
+		violationLineDTOMap.clear();
+		violatedFigureDTOMap.clear();
 	}
 
 	public void clearAllViolations() {
-		this.violationLineDTOMap.clear();
-		this.violatedFigureDTOMap.clear();
+		violationLineDTOMap.clear();
+		violatedFigureDTOMap.clear();
 	}
 
 	public ArrayList<BaseFigure> getViolationLines() {
