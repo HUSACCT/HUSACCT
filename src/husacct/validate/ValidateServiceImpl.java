@@ -28,6 +28,7 @@ import com.itextpdf.text.DocumentException;
 public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private boolean validationExecuted;
 
+	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final ReportServiceImpl report;
@@ -47,12 +48,18 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	}
 	
 	@Override
-	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {		
+		if(!validationExecuted){
+			logger.debug("warning, method: getViolationsByLogicalPath executed but no validation is executed");
+		}		
 		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 	
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		if(!validationExecuted){
+			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
+		}	
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
@@ -120,5 +127,5 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	@Override
 	public void reloadGUI() {
 		//TODO write code to generate GUI
-	}
+	}	
 }
