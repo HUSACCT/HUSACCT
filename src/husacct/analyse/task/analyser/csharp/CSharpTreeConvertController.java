@@ -13,6 +13,12 @@ class CSharpTreeConvertController {
 
 	private List<CommonTree> namespaceTrees;
 	private List<CommonTree> classTrees;
+<<<<<<< HEAD
+=======
+	private List<CommonTree> usageTrees;
+	private int amoutofAccolades;
+	private boolean isAbstractClass;
+>>>>>>> d6033310b3ddafe280d5fe00efde535e54683265
 	private CommonTree abstractTree;
 	private final int ABSTRACT = 74;
 	private final int CLASS = 155;
@@ -27,8 +33,10 @@ class CSharpTreeConvertController {
 		compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
 		CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 		namespaceTrees = new ArrayList<CommonTree>();
+		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
 		boolean namespace = false;
+<<<<<<< HEAD
 		boolean isClassPart = false;
 		depth = 0;
 		innerClassDepth = new ArrayList<Integer>();
@@ -36,9 +44,19 @@ class CSharpTreeConvertController {
 			CommonTree tree = (CommonTree) trees;
 			namespace = namespaceChecking(tree, namespace);
 			isClassPart = setClassTree(tree, isClassPart);
+=======
+		boolean usage = false;
+		boolean isClass = false;
+		for (Object trees : compilationUnitTree.getChildren()) {
+			CommonTree tree = (CommonTree) trees;
+			namespace = namespaceChecking(tree, namespace);
+			isClass = classChecking(tree, isClass);
+			usage = usageCheck(tree, usage);
+>>>>>>> d6033310b3ddafe280d5fe00efde535e54683265
 		}
 		CSharpNamespaceGenerator namespaceGenerator = new CSharpNamespaceGenerator(namespaceTrees);
 		new CSharpClassGenerator(classTrees, namespaceGenerator.getName());
+		CSharpImportGenerator importGenerator = new CSharpImportGenerator(usageTrees, "classname");
 	}
 
 	private boolean setClassTree(CommonTree tree, boolean isClassPart) {
@@ -84,5 +102,24 @@ class CSharpTreeConvertController {
 			namespaceTrees.add(tree);
 		}
 		return namespace;
+	}
+	
+	private boolean usageCheck(CommonTree tree, boolean usage){
+		
+		if(tree.getType() == 18){
+			usage = true;
+		}
+		
+		if(usage){
+			if(tree.getType() != 18){
+				usageTrees.add(tree);
+			}
+		}
+		
+		if(usage && tree.getType() == 25){
+			usage = false;
+		}
+		
+		return usage;
 	}
 }
