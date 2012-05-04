@@ -9,6 +9,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -29,14 +31,25 @@ public class GraphicsFrame extends JInternalFrame {
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
 	private String ROOT_LEVEL = "Root";
+	private boolean showingProperties = false;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
-
 
 	public GraphicsFrame(DrawingView drawingView) {
 		this.drawingView = drawingView;
 		this.initializeComponents();
 		this.setCurrentPathInfo("");
+		this.setSize(500, 500);
+		this.addHierarchyBoundsListener(new HierarchyBoundsListener() {
+			@Override
+			public void ancestorMoved(HierarchyEvent arg0) {
+			}
+
+			@Override
+			public void ancestorResized(HierarchyEvent arg0) {
+				positionLayoutComponents();
+			}
+		});
 	}
 
 	private void initializeComponents() {
@@ -44,16 +57,12 @@ public class GraphicsFrame extends JInternalFrame {
 		this.drawingScollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.drawingScollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		this.drawingScollPane.setViewportView(drawingView);
-		this.drawingScollPane.setMinimumSize(new Dimension(500, 300));
 
 		this.propertiesScrollPane = new JScrollPane();
 		this.propertiesScrollPane
 				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		this.propertiesScrollPane
 				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		int width = this.getWidth();
-		int height = this.getHeight() / 25;
-		this.propertiesScrollPane.setMaximumSize(new Dimension(width, height));
 
 		createMenuBars();
 
@@ -65,6 +74,7 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void layoutComponents(boolean showProperties) {
+		showingProperties = showProperties;
 		if (this.centerPane != null) {
 			this.remove(this.centerPane);
 		}
@@ -74,6 +84,7 @@ public class GraphicsFrame extends JInternalFrame {
 		} else {
 			this.centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, this.drawingScollPane,
 					this.propertiesScrollPane);
+			positionLayoutComponents();
 			((JSplitPane) centerPane).setOneTouchExpandable(true);
 			((JSplitPane) centerPane).setContinuousLayout(true);
 		}
@@ -84,11 +95,19 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 
+	private void positionLayoutComponents() {
+		if (showingProperties) {
+			((JSplitPane) centerPane).setSize(this.getWidth(), this.getHeight());
+			int smallerSize = ((JSplitPane) centerPane).getSize().height / 5 * 3;
+			((JSplitPane) centerPane).setDividerLocation(smallerSize);
+		}
+	}
+
 	private void createMenuBars() {
 		int totalWidth = this.getWidth();
 		int menuItemMaxWidth = 120;
 		int menuItemMaxHeight = 45;
-		
+
 		this.menuBar = new JMenuBar();
 		this.menuBar.setSize(totalWidth, 20);
 		JMenuItem goToParentMenu = new JMenuItem("Level up");
@@ -125,18 +144,18 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.add(showViolationsOptionMenu);
 
 		this.add(menuBar, java.awt.BorderLayout.AFTER_LINE_ENDS);
-		
+
 		locationBar = new JMenuBar();
 		locationBar.setSize(totalWidth, 20);
-		
+
 		locationString = new JMenuItem(ROOT_LEVEL);
 		locationString.setSize(menuItemMaxWidth, menuItemMaxHeight);
 		locationString.setMinimumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		locationBar.add(locationString);
-		
+
 		this.add(locationBar, java.awt.BorderLayout.WEST);
 	}
-	
+
 	public void setCurrentPathInfo(String path) {
 		if (path.equals("")) {
 			path = ROOT_LEVEL;
