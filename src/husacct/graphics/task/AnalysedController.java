@@ -15,13 +15,18 @@ import org.apache.log4j.Logger;
 
 public class AnalysedController extends BaseController {
 
-	private final int ITEMS_PER_ROW = 4;
-
 	private IControlService controlService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
+		
 		super();
+		
+		initializeServices();
+	}
+	
+	private void initializeServices() {
+		
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		controlService = ServiceProvider.getInstance().getControlService();
@@ -31,7 +36,7 @@ public class AnalysedController extends BaseController {
 			public void update(Locale newLocale) {
 				getAndDrawModulesIn(getCurrentPath());
 			}
-		});
+		});		
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
@@ -45,10 +50,6 @@ public class AnalysedController extends BaseController {
 		this.drawLinesBasedOnSetting();
 	}
 
-	protected void drawModules(AbstractDTO[] modules) {
-		super.drawModules(modules);
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
-	}
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
