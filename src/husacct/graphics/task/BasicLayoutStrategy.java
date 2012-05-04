@@ -22,9 +22,10 @@ public class BasicLayoutStrategy {
 
 		this.drawing = drawing;
 	}
-	
-	// TODO: Update doLayout() to take screen resolution into account and attempt to make it all fit
-	//			on the screen without the use of scrollbars. 
+
+	// TODO: Update doLayout() to take screen resolution into account and
+	// attempt to make it all fit
+	// on the screen without the use of scrollbars.
 	public void doLayout(int maxHorizontalItems) {
 		// Rectangle2D.Double drawingBounds = drawing.getBounds();
 
@@ -42,17 +43,17 @@ public class BasicLayoutStrategy {
 			bounds.x = x;
 			bounds.y = y;
 			Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-			Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);			
-			
+			Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);
+
 			if (!isConnector(f)) {
 				f.willChange();
 				f.setBounds(anchor, lead);
 				f.changed();
-			
+
 				itemsOnCurrentLine++;
-				
+
 				x += bounds.width + HORZ_ITEM_SPACING;
-				maxHeightOnLine = Math.max(maxHeightOnLine, bounds.height);				
+				maxHeightOnLine = Math.max(maxHeightOnLine, bounds.height);
 			} else {
 				connectors.add(f);
 			}
@@ -65,19 +66,20 @@ public class BasicLayoutStrategy {
 			}
 		}
 	}
-	
-	// TODO: Patrick: I'm not quite sure if this code should be here. We really need to discuss this kind of
-	// code. It's ugly and unneccessary I think. 
+
+	// TODO: Patrick: I'm not quite sure if this code should be here. We really
+	// need to discuss this kind of
+	// code. It's ugly and unneccessary I think.
 	private boolean isConnector(Figure figure) {
 		if (figure instanceof BaseFigure) {
-			
+
 			if (figure instanceof RelationFigure)
 				return true;
-			
+
 		} else if (figure instanceof ConnectionFigure) {
 			return true;
 		}
-		
+
 		return false;
 	}
 }

@@ -37,6 +37,7 @@ public class FigureConnectorStrategy {
 
 	public Figure connect(BaseFigure startFigure, BaseFigure endFigure) {
 		ConnectionFigure connection = (ConnectionFigure) prototype.clone();
+
 		return connect(connection, startFigure, endFigure);
 	}
 

@@ -21,7 +21,14 @@ public class AnalysedController extends BaseController {
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
+		
 		super();
+		
+		initializeServices();
+	}
+	
+	private void initializeServices() {
+		
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		controlService = ServiceProvider.getInstance().getControlService();
@@ -30,11 +37,8 @@ public class AnalysedController extends BaseController {
 			@Override
 			public void update(Locale newLocale) {
 				getAndDrawModulesIn(getCurrentPath());
-				if (violationsAreShown()) {
-					drawViolationsForShownModules();
-				}
 			}
-		});
+		});		
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
@@ -42,11 +46,12 @@ public class AnalysedController extends BaseController {
 		this.resetCurrentPath();
 		this.drawModules(modules);
 
-		if (detail == DrawingDetail.WITH_VIOLATIONS) {
+		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			this.showViolations();
 		}
 		this.drawLinesBasedOnSetting();
 	}
+
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {

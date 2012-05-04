@@ -74,7 +74,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		createControllers();
-		//TODO: Set workspace data.
+		// TODO: Set workspace data.
 		// - show violations = on/off?
 	}
 }

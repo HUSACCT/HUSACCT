@@ -121,7 +121,7 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void setCurrentPathInfo(String path) {
-		if(path.equals("")){
+		if (path.equals("")) {
 			path = ROOT_LEVEL;
 		}
 		this.setTitle(path);
@@ -159,14 +159,14 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	// TODO: Sort violations based on severity value
-	// TODO: Make small columns smaller in the GUI 
+	// TODO: Make small columns smaller in the GUI
 	private JTable createViolationsTable(ViolationDTO[] violationDTOs) {
 		String[] columnNames = { "Error Message", "Rule Type", "Violation Type", "Severity", "Line" };
 
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 		for (ViolationDTO violation : violationDTOs) {
 			String message = violation.message;
-		
+
 			String ruleTypeDescription = "none";
 			if (null != violation.ruleType) {
 				ruleTypeDescription = violation.ruleType.getDescriptionKey();
@@ -176,10 +176,10 @@ public class GraphicsFrame extends JInternalFrame {
 			if (null != violation.violationType) {
 				violationTypeDescription = violation.violationType.getDescriptionKey();
 			}
-			
-			String severity = ""+violation.severityValue;
-			String line = ""+violation.linenumber;
-			
+
+			String severity = "" + violation.severityValue;
+			String line = "" + violation.linenumber;
+
 			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
 		}
 
