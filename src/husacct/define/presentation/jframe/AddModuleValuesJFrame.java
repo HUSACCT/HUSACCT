@@ -1,11 +1,17 @@
 package husacct.define.presentation.jframe;
 
+import husacct.define.presentation.jpanel.ModuleJPanel;
+import husacct.define.task.DefinitionController;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,33 +24,48 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	
+	private ModuleJPanel modulePanel;
+	
 	private JPanel innerPanel;
 	
 	private JTextField moduleNameField;
+	private JTextField moduleDescriptionField;
 	private JTextField hierarchicalLevelField;
 	
-	public AddModuleValuesJFrame() {
+	private JComboBox moduleTypeComboBox;
+	
+	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
 		super();
+		this.modulePanel = modulePanel;
 	}
 	
 	@Override
 	public void initUI() {
 		this.innerPanel = new JPanel();
+		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		this.innerPanel.setLayout(this.getGridLayout(5, 2));
+		this.createInnerPanel();
 		this.add(this.innerPanel);
-		this.innerPanel.setLayout(this.createInnerPanelLayout());
-		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		this.addModuleValues();
-		this.addHierarchicalLevelValues();
-		this.addButtons();
+		
+		this.setVisible(true);
+		this.pack();
+		this.setSize(700, 190);
 	}
 	
-	private GridLayout createInnerPanelLayout() {
-		GridLayout innerPanelLayout = new GridLayout(2, 2);
-		innerPanelLayout.setColumns(2);
-		innerPanelLayout.setHgap(5);
-		innerPanelLayout.setVgap(5);
-		innerPanelLayout.setRows(3);
-		return innerPanelLayout;
+	private GridLayout getGridLayout(int rows, int columns) {
+		GridLayout gridLayout = new GridLayout(rows, columns);
+		gridLayout.setHgap(5);
+		gridLayout.setVgap(5);
+		return gridLayout;
+	}
+	
+	private void createInnerPanel() {
+		this.addModuleValues();
+		this.addModuleDescriptionTextArea();
+		this.addModuleTypeComboBox();
+		this.addHierarchicalLevelValues();
+		this.addButtons();
+		this.setVisibles();
 	}
 	
 	private void addModuleValues() {
@@ -55,8 +76,27 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel.add(this.moduleNameField);
 	}
 	
+	private void addModuleDescriptionTextArea() {
+		JLabel moduleLabel = new JLabel("Module Description");
+		this.innerPanel.add(moduleLabel);
+		
+		this.moduleDescriptionField = new JTextField();
+		this.innerPanel.add(this.moduleDescriptionField);
+	}
+	
+	private void addModuleTypeComboBox() {
+		JLabel moduleTypeLabel = new JLabel("Module type");
+		this.innerPanel.add(moduleTypeLabel);
+		
+		String[] moduleTypes = {"Module", "Layer", "Component", "External Library"};
+		this.moduleTypeComboBox = new JComboBox(moduleTypes);
+		this.moduleTypeComboBox.setSelectedIndex(0);
+		this.moduleTypeComboBox.addActionListener(this);
+		this.innerPanel.add(this.moduleTypeComboBox);
+	}
+	
 	private void addHierarchicalLevelValues() {
-		JLabel hierarchicalLevelLabel = new JLabel("Module name");
+		JLabel hierarchicalLevelLabel = new JLabel("Hierarchical Level");
 		this.innerPanel.add(hierarchicalLevelLabel);
 		
 		this.hierarchicalLevelField = new JTextField();
@@ -75,51 +115,162 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.saveButton.setText("Save");
 		this.saveButton.addActionListener(this);
 	}
+	
+	private void setVisibles() {
+		this.hierarchicalLevelField.setVisible(false);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == this.cancelButton) {
-			this.cancelButtonAction(event);
+			this.cancelButtonAction();
 		} else if (event.getSource() == this.saveButton) {
-			this.saveButtonAction(event);
+			this.saveButtonAction();
+		} else if (event.getSource() == this.moduleTypeComboBox) {
+			this.moduleTypeComboBoxAction();
 		}
+	}
+	
+	/**
+	 * Do nothing
+	 */
+	@Override
+	public void keyPressed(KeyEvent event) {
+		
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			this.cancelButtonAction();
+		} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+			this.saveButtonAction();
+		}
+	}
+	
+	/**
+	 * Do nothing
+	 */
+	@Override
+	public void keyTyped(KeyEvent event) {
+		
 	}
 
 	@Override
-	protected void cancelButtonAction(ActionEvent event) {
+	protected void cancelButtonAction() {
 		this.dispose();
 	}
 
 	@Override
-	protected void saveButtonAction(ActionEvent event) {
-		String moduleName = this.getModuleNameValue();
-		String level = this.getHierarchicalLevelValue();
-		if(!moduleName.isEmpty() && !level.isEmpty()) {
-			//TODO: handle the save action!
+	protected void saveButtonAction() {
+		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
+		this.submitForModuleType(moduleType);
+	}
+	
+	private void submitForModuleType(String moduleType) {
+		if(moduleType == "Module") {
+			this.submitModule();
+		} else if(moduleType == "Layer") {
+			this.submitLayer();
+		} else if(moduleType == "Component") {
+			this.submitComponent();
+		} else if(moduleType == "External Library") {
+			this.submitExternalLibrary();
 		}
 	}
 	
-	private String getModuleNameValue() {
+	private void submitModule() {
+		if(this.checkModuleName()) {
+			String moduleName = this.moduleNameField.getText();
+			String moduleDescription = this.moduleDescriptionField.getText();
+			
+			DefinitionController definitionController = DefinitionController.getInstance();
+			definitionController.addModule(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			//update tree view
+			this.modulePanel.updateModuleTree();
+			this.dispose();
+		}
+	}
+	
+	private void submitLayer() {
+		if(this.checkModuleName() && this.checkModuleHierarchicalLevel()) {
+			String moduleName = this.moduleNameField.getText();
+			String moduleDescription = this.moduleDescriptionField.getText();
+			int level = Integer.parseInt(this.hierarchicalLevelField.getText());
+			
+			DefinitionController definitionController = DefinitionController.getInstance();
+			definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription, level);
+			//update tree view
+			this.modulePanel.updateModuleTree();
+			this.dispose();
+		}
+	}
+	
+	private void submitComponent() {
+		if(this.checkModuleName()) {
+			String moduleName = this.moduleNameField.getText();
+			String moduleDescription = this.moduleDescriptionField.getText();
+			
+			DefinitionController definitionController = DefinitionController.getInstance();
+			definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			//update tree view
+			this.modulePanel.updateModuleTree();
+			this.dispose();
+		}
+	}
+	
+	private void submitExternalLibrary() {
+		if(this.checkModuleName()) {
+			String moduleName = this.moduleNameField.getText();
+			String moduleDescription = this.moduleDescriptionField.getText();
+			
+			DefinitionController definitionController = DefinitionController.getInstance();
+			definitionController.addExternalLibrary(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			//update tree view
+			this.modulePanel.updateModuleTree();
+			this.dispose();
+		}
+	}
+	
+	private boolean checkModuleName() {
 		String moduleNameValue = this.moduleNameField.getText();
 		if(this.inputController.checkModuleNameInput(moduleNameValue)) {
-			return moduleNameValue;
+			return true;
 		} else {
 			this.throwError(this.inputController.getErrorMessage());
 		}
-		return "";
+		return false;
 	}
 	
-	private String getHierarchicalLevelValue() {
+	private boolean checkModuleHierarchicalLevel() {
 		String levelValue = this.hierarchicalLevelField.getText();
 		if(this.inputController.checkHierarchicalLevelInput(levelValue)) {
-			return levelValue;
+			return true;
 		} else {
 			this.throwError(this.inputController.getErrorMessage());
 		}
-		return "";
+		return false;
 	}
 	
 	private void throwError(String errorMessage) {
-		//TODO: Throw an error!
+		JOptionPane.showMessageDialog(this, errorMessage, "Wrong input!", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	private void moduleTypeComboBoxAction() {
+		this.setVisibles();
+		this.checkSelectedModuleType();
+	}
+	
+	private void checkSelectedModuleType() {
+		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
+		if(moduleType == "Module") {
+			
+		} else if(moduleType =="Layer") {
+			this.hierarchicalLevelField.setVisible(true);
+		} else if(moduleType =="Component") {
+			
+		} else if(moduleType =="External Library") {
+			
+		}
 	}
 }

@@ -40,7 +40,6 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	/**
 	 * Creating Gui
 	 */
-	@Override
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
@@ -58,7 +57,6 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		return appliedRulesPane;
 	}
 	
-	@Override
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());

@@ -1,14 +1,22 @@
 package husacct.define.presentation;
 
+import husacct.Main;
 import husacct.define.DefineServiceImpl;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 public class MainGUI {
 
 	public static void main(String args[])
 	{
+		PropertyConfigurator.configure("husacct.properties");
+		Logger logger = Logger.getLogger(Main.class);
+		logger.info("Starting Define");
+		
 		// Init Main Frame
 		JFrame mainFrame = new JFrame();
 		mainFrame.setVisible(true);

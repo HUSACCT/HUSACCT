@@ -6,5 +6,10 @@ public class Component extends Module {
 	{
 		super();
 	}
+	
+	public Component(String name, String description)
+	{
+		super(name, description);
+	}
 
 }

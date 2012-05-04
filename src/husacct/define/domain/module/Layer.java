@@ -1,6 +1,6 @@
 package husacct.define.domain.module;
 
-public class Layer extends Module implements Comparable<Layer>{
+public class Layer extends Module {
 	
 	private int hierarchicalLevel;
 	
@@ -45,16 +45,19 @@ public class Layer extends Module implements Comparable<Layer>{
 	    }
 	    return false;
 	}
-
+	
 	@Override
-	public int compareTo(Layer o) {
+	public int compareTo(Module compareModule) {
 		int compareResult = 0;
-		if (this.hierarchicalLevel > o.hierarchicalLevel){
-			compareResult = 1;
-		}else if (this.hierarchicalLevel < o.hierarchicalLevel){
+		if(compareModule instanceof Layer || this.getId() < compareModule.getId()) {
+			Layer compareLayer = (Layer) compareModule;
+			if(this.getHierarchicalLevel() > compareLayer.getHierarchicalLevel()) {
+				compareResult = 1;
+			} else if(this.getHierarchicalLevel() < compareLayer.getHierarchicalLevel()) {
+				compareResult = -1;
+			}
+		} else {
 			compareResult = -1;
-		}else {
-			compareResult = 0;
 		}
 		return compareResult;
 	}
