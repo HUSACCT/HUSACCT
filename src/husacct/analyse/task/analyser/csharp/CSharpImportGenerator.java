@@ -37,7 +37,6 @@ public class CSharpImportGenerator {
 		FamixCreationServiceImpl model = new FamixCreationServiceImpl();
 		
 		for(String usage : seperatedAndMergedUsages){
-			System.out.print("bla");
 			model.createImport(classname, usage, 0, usage, true);
 		}
 	}
