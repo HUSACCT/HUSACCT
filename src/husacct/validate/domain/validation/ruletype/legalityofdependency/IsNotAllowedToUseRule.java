@@ -10,7 +10,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -29,10 +28,10 @@ public class IsNotAllowedToUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		List<Violation> violations = new ArrayList<Violation>();
+		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		Mappings mappings = CheckConformanceUtil.filter(currentRule);
+		this.mappings = CheckConformanceUtil.filter(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 

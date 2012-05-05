@@ -11,7 +11,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -31,34 +30,22 @@ public class BackCallRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		List<Violation> violations = new ArrayList<Violation>();
-		List<List<Mapping>> toModules = new ArrayList<List<Mapping>>();
-		violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
+		this.violations = new ArrayList<Violation>();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		
-		Mappings mappings = CheckConformanceUtil.filter(currentRule);
-		List<Mapping> moduleFrom = mappings.getMappingFrom();
-		
-		List<ModuleDTO> allModules = Arrays.asList(defineService.getRootModules());
-		int counter = -1;
-		
-		for (ModuleDTO module :allModules){
-			counter++;
-			if(module.type.toLowerCase().equals("layer")){
-				if(module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
-				toModules = getModulesTo(allModules, counter);
-				
-			}
-		}			
+		this.mappings = CheckConformanceUtil.filter(currentRule);
+		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();			
+		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getRootModules()),currentRule);
 
-		for(Mapping classPathFrom : moduleFrom){
-			for(List<Mapping> moduleTo : toModules){
-				for(Mapping classPathTo : moduleTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
+		for(Mapping classPathFrom : physicalClasspathsFrom){
+			for(List<Mapping> moduleTo : modulesTo){
+				for(Mapping physicalClasspathsTo : moduleTo ){
+					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),physicalClasspathsTo.getPhysicalPath());	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(rootRule);
 	
 						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-						LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
+						LogicalModule logicalModuleTo = new LogicalModule(physicalClasspathsTo);
 						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 	
 						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
@@ -68,17 +55,28 @@ public class BackCallRule extends RuleType {
 					}
 				}					
 			}				
-		}
-		
+		}		
 		return violations;
 	}
+	
+	private List<List<Mapping>> filerLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
+		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
+		int counter = -1;		
+		for (ModuleDTO module :allModules){
+			counter++;
+			if(module.type.toLowerCase().equals("layer")){
+				if(module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
+					returnModules = getModulesTo(allModules, counter);				
+			}
+		}
+		return returnModules;	
+	}	
 	
 	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(int i=0 ; i<counter ; i++){
 			returnList.add(CheckConformanceUtil.getAllModulesFromLayer(allModules.get(i)));
 		}		
-		return returnList;
-		
+		return returnList;		
 	}
 }
