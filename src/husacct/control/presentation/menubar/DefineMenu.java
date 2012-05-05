@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
@@ -94,27 +93,10 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
-		// TODO: refactor including adapter
-		this.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent arg0) {
+		this.addMenuListener(new MenuListenerAdapter() {
+			public void menuSelected(MenuEvent e) {
 				mainController.getStateController().checkState();
-				
 			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
 		});
 	}
 }
