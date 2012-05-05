@@ -41,7 +41,11 @@ public class AnalysedController extends DrawingController {
 	
 	public void showViolations(){
 		super.showViolations();
-		validateService.checkConformance();
+		try{
+			validateService.checkConformance();
+		}catch(NullPointerException e){
+			logger.warn("NullPointerException, I think the validate service isn't started.");
+		}
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {

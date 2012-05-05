@@ -8,7 +8,6 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.DefineServiceStub;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
@@ -44,7 +43,11 @@ public class DefinedController extends DrawingController {
 	
 	public void showViolations(){
 		super.showViolations();
-		validateService.checkConformance();
+		try{
+			validateService.checkConformance();
+		}catch(NullPointerException e){
+			logger.warn("NullPointerException, I think the validate service isn't started.");
+		}
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
@@ -111,13 +114,17 @@ public class DefinedController extends DrawingController {
 	}
 	
 	private void getAndDrawModulesIn(String parentName) {
-		setCurrentPath(parentName);
-		ModuleDTO[] children = defineService.getChildsFromModule(parentName);
-		if (children.length > 0) {
-			drawModules(children);
-			drawLinesBasedOnSetting();
-		} else {
-			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
+		try{
+			setCurrentPath(parentName);
+			ModuleDTO[] children = defineService.getChildsFromModule(parentName);
+			if (children.length > 0) {
+				drawModules(children);
+				drawLinesBasedOnSetting();
+			} else {
+				logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
+			}
+		}catch(NullPointerException e){
+			logger.warn("NullPointerException, I think the define service isn't started.");
 		}
 	}
 
