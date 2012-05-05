@@ -1,16 +1,23 @@
 package husacct.validate.domain.validation.ruletype.contentsofamodule;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-
+import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
+import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
+import husacct.validate.domain.validation.logicalmodule.LogicalModule;
+import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
 
@@ -22,7 +29,32 @@ public class InterfaceConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		// TODO Auto-generated method stub
-		return Collections.emptyList();
+		this.violations = new ArrayList<Violation>();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
+
+		this.mappings = CheckConformanceUtil.filter(currentRule);
+		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+		
+		String[] dependencyFilter = {"InterfaceConvention"};
+
+		int counter = 0, noDependencyCounter = 0;
+		for(Mapping classPathFrom : physicalClasspathsFrom){			
+			for(Mapping classPathTo : physicalClasspathsTo){
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath(),dependencyFilter);
+				counter++;
+				if(dependencies.length == 0) noDependencyCounter++;			
+			}
+			if(noDependencyCounter == counter){
+				Message message = new Message(rootRule);
+
+				LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
+				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
+				Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, null);
+				Violation violation = createViolation(super.key, classPathFrom.getPhysicalPath(), false, message, logicalModules, severity);
+				violations.add(violation);
+			}
+		}	
+		return violations;
 	}
 }
