@@ -28,11 +28,11 @@ public class MustUseRule extends RuleType{
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {	
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {	
 		List<Violation> violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
+		Mappings mappings = CheckConformanceUtil.filter(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -44,7 +44,7 @@ public class MustUseRule extends RuleType{
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
 			if(noDependencyCounter == totalCounter){
-				Message message = new Message(appliedRule);
+				Message message = new Message(rootRule);
 
 				LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
@@ -53,8 +53,9 @@ public class MustUseRule extends RuleType{
 				violations.add(violation);
 			}
 		}	
-		if(noDependencyCounter != totalCounter)
+		if(noDependencyCounter != totalCounter){
 			violations.clear();
+		}
 		return violations;
 	}
 }

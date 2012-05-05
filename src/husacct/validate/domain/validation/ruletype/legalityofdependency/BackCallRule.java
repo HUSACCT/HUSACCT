@@ -30,12 +30,12 @@ public class BackCallRule extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		List<Violation> violations = new ArrayList<Violation>();
 		List<List<Mapping>> toModules = new ArrayList<List<Mapping>>();
 		violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		
-		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
+		Mappings mappings = CheckConformanceUtil.filter(currentRule);
 		List<Mapping> moduleFrom = mappings.getMappingFrom();
 		
 		List<ModuleDTO> allModules = Arrays.asList(defineService.getRootModules());
@@ -44,7 +44,7 @@ public class BackCallRule extends RuleType {
 		for (ModuleDTO module :allModules){
 			counter++;
 			if(module.type.toLowerCase().equals("layer")){
-				if(module.logicalPath.toLowerCase().equals(appliedRule.moduleFrom.logicalPath.toLowerCase()))
+				if(module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
 				toModules = getModulesTo(allModules, counter);
 				
 			}
@@ -55,7 +55,7 @@ public class BackCallRule extends RuleType {
 				for(Mapping classPathTo : moduleTo ){
 					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());	
 					for(DependencyDTO dependency: dependencies){
-						Message message = new Message(appliedRule);
+						Message message = new Message(rootRule);
 	
 						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 						LogicalModule logicalModuleTo = new LogicalModule(classPathTo);

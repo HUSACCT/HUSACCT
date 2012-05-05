@@ -1,5 +1,6 @@
 package husacct.validate.domain.validation.ruletype.contentsofamodule;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class InterfaceConventionRule extends RuleType {
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 }

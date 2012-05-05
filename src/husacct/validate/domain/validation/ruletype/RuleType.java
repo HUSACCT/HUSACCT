@@ -72,7 +72,7 @@ public abstract class RuleType {
 		return severity;
 	}
 
-	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule);
+	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
 		return new Violation(dependency.lineNumber, severity, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);

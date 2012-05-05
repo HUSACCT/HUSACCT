@@ -32,7 +32,24 @@ public class CheckConformanceController {
 		for(RuleDTO appliedRule : appliedRules){
 			try{
 				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-				List<Violation> newViolations = rule.check(configuration, appliedRule);
+				List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
+				configuration.addViolations(newViolations);
+				if(appliedRule.exceptionRules != null){
+					checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
+				}
+			}catch(RuleTypeNotFoundException e){
+				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+			} catch (RuleInstantionException e) {
+				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
+			}
+		}
+	}
+
+	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
+		for(RuleDTO appliedRule : exceptionRules){
+			try{
+				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+				List<Violation> newViolations = rule.check(configuration, parent, appliedRule);
 				configuration.addViolations(newViolations);
 			}catch(RuleTypeNotFoundException e){
 				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
@@ -50,7 +67,6 @@ public class CheckConformanceController {
 		if(rule != null){
 			ruleCache.put(ruleKey, rule);
 		}
-
 		return rule;
 	}
 }
