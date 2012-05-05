@@ -11,11 +11,21 @@ class FamixInvocation extends FamixAssociation{
 	
 	public String toString(){
 		String string = "";
-		string += "Invoked By: " + invokedBy;
-		string += "\nInvokes: " + invokes;
+		string += "Invoked By: " + super.to;
+		string += "\nInvokes: " + super.from;
 		string += "\nBase: " + base;
-		string += "\n lineNumber: " + lineNumber;
+		string += "\n lineNumber: " + super.lineNumber;
 		string += "\nSourcefilePath: " + sourceFilePath;
 		return string;
 	}
+	
+//	public String toString(){
+//		String string = "";
+//		string += "Invoked By: " + invokedBy;
+//		string += "\nInvokes: " + invokes;
+//		string += "\nBase: " + base;
+//		string += "\n lineNumber: " + lineNumber;
+//		string += "\nSourcefilePath: " + sourceFilePath;
+//		return string;
+//	}
 }

@@ -21,10 +21,11 @@ public interface ModelCreationService {
 			String belongsToClass, boolean isConstructor, boolean isAbstract,
 			boolean hasClassScope);
 	
-	public void createInheritanceDefinition(String from, String to,
-			int lineNumber, String type);
+	public void createInheritanceDefinition(String from, String to, int lineNumber);
+	public void createImplementsDefinition(String from, String to, int lineNumber);
 	
-	
+	//Function to connect dependencies, after all modules are known in the model
+	public void connectDependencies();
 	
 	//Debug-functies voor in de main:
 	public String represent();

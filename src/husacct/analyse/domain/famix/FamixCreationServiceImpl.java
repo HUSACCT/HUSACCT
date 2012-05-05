@@ -1,21 +1,19 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import javax.naming.directory.InvalidAttributesException;
 import husacct.analyse.domain.ModelCreationService;
-import husacct.common.dto.AnalysedModuleDTO;
 
 public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	private FamixModel model;
-	private FamixQueryServiceImpl queryService;
-	private List<FamixAssociation> dependencyHolder;
 	
 	public FamixCreationServiceImpl(){
 		model = FamixModel.getInstance();
-		queryService = new FamixQueryServiceImpl();
-		dependencyHolder = new ArrayList<FamixAssociation>();;
 	}
 	
 	public void createPackage(String uniqueName, String belongsToPackage, String name){
@@ -47,7 +45,6 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fClass.name = name;
 		fClass.belongsToClass = belongsToClass;
 		addToModel(fClass);
-		walkDependencies();
 	}
 	
 	@Override
@@ -115,25 +112,103 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
-	public void createInheritanceDefinition(String from, String to, int lineNumber, String type) {
-		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition(type);
+	public void createInheritanceDefinition(String from, String to, int lineNumber) {
+		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition();
 		famixInheritanceDefinition.from = from;
 		famixInheritanceDefinition.to = to;
 		famixInheritanceDefinition.lineNumber = lineNumber;
-		
-		String fromPackage = "";
-		String[] fromParts = from.split("\\.");
-		for(int i=0; i<fromParts.length -1; i++){
-			fromPackage += fromParts[i] + ".";
+		model.waitingAssociations.add(famixInheritanceDefinition);
+	}
+	
+	@Override
+	public void createImplementsDefinition(String from, String to, int lineNumber) {
+		FamixImplementationDefinition fImplements = new FamixImplementationDefinition();
+		fImplements.from = from;
+		fImplements.to = to;
+		fImplements.lineNumber = lineNumber;
+		model.waitingAssociations.add(fImplements);
+	}
+	
+	@Override
+	public void connectDependencies(){
+		for(FamixAssociation assocation: model.waitingAssociations){
+			boolean found = false;
+			if(!assocation.to.contains("\\.")){
+				FamixClass theClass = getClassForUniqueName(assocation.from);
+				String thePackage = theClass.belongsToPackage;
+				List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
+				for(FamixImport fImport: importsInClass){
+					String importString = fImport.completeImportString;
+					if(fImport.importsCompletePackage){
+						for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
+							if(getClassOfUniqueName(uniqueClassName).equals(assocation.to)){
+								assocation.to = uniqueClassName;
+								found = true;
+							}
+						}
+						for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
+							if(getClassOfUniqueName(uniqueClassName).equals(assocation.to)){
+								assocation.to = uniqueClassName;
+								found = true;
+							}
+						}
+					}else{
+						if(importString.endsWith(assocation.to)){
+							assocation.to = importString;
+							found = true;
+						}
+					}
+				}
+				if(!found){
+					List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
+					for(String uniqueClassName: classesInPackage){
+						if(getClassOfUniqueName(uniqueClassName).equals(assocation.to)){
+							assocation.to = uniqueClassName;
+						}
+					}
+				}
+			}
+			addToModel(assocation);
 		}
-		fromPackage = fromPackage.substring(0, fromPackage.length() -1); //delete the last point.
-		List<AnalysedModuleDTO> classes = queryService.searchClassesInPackage(fromPackage, to);
-		if(!classes.isEmpty()){
-			famixInheritanceDefinition.to = classes.get(0).uniqueName;
-			addToModel(famixInheritanceDefinition);
-		}else{
-			dependencyHolder.add(famixInheritanceDefinition);
+	}
+	
+	private String getClassOfUniqueName(String uniqueName){
+		String[] parts = uniqueName.split("\\.");
+		return parts[parts.length -1];
+	}
+	
+	private List<String> getClassesOrInterfacesInPackage(String packageUniqueName){
+		List<String> result = new ArrayList<String>();
+		Iterator<Entry<String, FamixClass>> classIterator = model.classes.entrySet().iterator();
+		while(classIterator.hasNext()){
+			Entry<String, FamixClass> entry = (Entry<String, FamixClass>)classIterator.next();
+			FamixClass currentClass = entry.getValue();
+			if(currentClass.belongsToPackage.equals(packageUniqueName)){
+				result.add(currentClass.uniqueName);
+			}
 		}
+		Iterator<Entry<String, FamixInterface>> interfaceIterator = model.interfaces.entrySet().iterator();
+		while(interfaceIterator.hasNext()){
+			Entry<String, FamixInterface> entry = (Entry<String, FamixInterface>)interfaceIterator.next();
+			FamixInterface currentInterface = entry.getValue();
+			if(currentInterface.belongsToPackage.equals(packageUniqueName)){
+				result.add(currentInterface.uniqueName);
+			}
+		}
+		return result;
+	}
+	
+	
+	private FamixClass getClassForUniqueName(String uniqueName){
+		Iterator<Entry<String, FamixClass>> classIterator = model.classes.entrySet().iterator();
+		while(classIterator.hasNext()){
+			Entry<String, FamixClass> entry = (Entry<String, FamixClass>)classIterator.next();
+			FamixClass currentClass = entry.getValue();
+			if(currentClass.uniqueName.equals(uniqueName)){
+				return currentClass;
+			}
+		}
+		return null;
 	}
 	
 	private boolean addToModel(FamixObject newObject){
@@ -143,11 +218,6 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		} catch (InvalidAttributesException e) {
 			return false;
 		}
-	}
-	
-	//This function can be called to retry creation of dependencies after a new classe was analysed
-	private void walkDependencies(){
-		//TODO Retry setting the to-parameter of depdencies in the holder. 
 	}
 	
 	public String represent(){

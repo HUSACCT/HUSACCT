@@ -10,6 +10,8 @@ class FamixModel extends FamixObject{
 
 	private static FamixModel currentInstance;
 
+	public List<FamixAssociation> waitingAssociations;
+	
 	public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
 	public HashMap<String, FamixStructuralEntity> structuralEntities;
 	public HashMap<String, FamixPackage> packages;
@@ -29,6 +31,8 @@ class FamixModel extends FamixObject{
 	
 	private FamixModel(){
 		this.exporterDate = new Date().toString();
+		waitingAssociations = new ArrayList<FamixAssociation>();
+		
 		associations = new ArrayList<FamixAssociation>();
 		classes = new HashMap<String, FamixClass>();
 		packages = new HashMap<String, FamixPackage>();
@@ -85,11 +89,14 @@ class FamixModel extends FamixObject{
 		return result;
 	}
 	
-	public List<FamixImport> getImports(){
+	public List<FamixImport> getImportsInClass(String uniqueClassName){
 		List<FamixImport> imports = new ArrayList<FamixImport>();
 		for(FamixAssociation association: associations){
 			if(association instanceof FamixImport){
-				imports.add((FamixImport)association);
+				FamixImport theImport = (FamixImport)association;
+				if(theImport.from.equals(uniqueClassName)){
+					imports.add((FamixImport)association);
+				}
 			}
 		}
 		return imports;
@@ -112,10 +119,10 @@ class FamixModel extends FamixObject{
 				"\n ------------Packages------------- \n" + packages
 				+ "\n ------------Classes------------- \n" + classes
 				+ "\n ------------Interfaces------------\n" + interfaces
-				+ "\n -----------Imports:-------------- \n" + associations
+				+ "\n -----------Assocations:-------------- \n" + associations
 				+ "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
-				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities
-				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
+				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities;
+//				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
 
 	}
 }

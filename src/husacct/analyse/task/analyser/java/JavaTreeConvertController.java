@@ -54,10 +54,13 @@ class JavaTreeConvertController {
         				delegateImport((CommonTree)treeNode);
         				tree.deleteChild(treeNode.getChildIndex());
         			}
-    				if(nodeType == JavaParser.IMPLEMENTS_CLAUSE || nodeType == JavaParser.EXTENDS_CLAUSE ){
+    				if(nodeType == JavaParser.EXTENDS_CLAUSE ){
         				delegateInheritanceDefinition((CommonTree)treeNode);
         				tree.deleteChild(treeNode.getChildIndex());
         			}
+    				if(nodeType == JavaParser.IMPLEMENTS_CLAUSE){
+    					delegateImplementsDefinition((CommonTree)treeNode);
+    				}
         			if(nodeType == JavaParser.VAR_DECLARATION ){
         				delegateAttribute(treeNode);
         				tree.deleteChild(treeNode.getChildIndex());
@@ -97,6 +100,11 @@ class JavaTreeConvertController {
     private void delegateInheritanceDefinition(CommonTree treeNode) {
 		JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
 		javaInheritanceDefinitionGenerator.generateModelObject(treeNode, this.theClass);
+	}
+    
+    private void delegateImplementsDefinition(CommonTree treeNode) {
+		JavaImplementsDefinitionGenerator javaImplementsDefinitionGenerator = new JavaImplementsDefinitionGenerator();
+		javaImplementsDefinitionGenerator.generateModelObject(treeNode, this.theClass);
 	}
         
     private void delegateImport(CommonTree importTree){ 

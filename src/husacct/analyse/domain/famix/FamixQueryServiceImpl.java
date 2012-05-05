@@ -116,7 +116,8 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		for(FamixAssociation assocation: allAssocations){
 			if(assocation.from.startsWith(from)){
 				if(assocation.to.startsWith(to)){
-					foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+					String theType = determineType(assocation);
+					foundDepency = new DependencyDTO(assocation.from, assocation.to, theType, assocation.lineNumber);
 					if(!dependencyAlreadyListed(result, foundDepency)){
 						result.add(foundDepency);
 					}
@@ -124,6 +125,21 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 			}
 		}
 		return result;
+	}
+	
+	private String determineType(FamixAssociation assocation){
+		String type = assocation.type;
+		if(type.equals("extends")){
+			FamixClass theClass = getClassForUniqueName(assocation.to);
+			if(theClass == null) type = "extendsLibrary";
+			else if(theClass.isAbstract) type = "extendsAbstract";
+			else type = "extendsConcrete";
+		}
+		return type;
+	}
+	
+	private FamixClass getClassForUniqueName(String uniqueName){
+		return theModel.classes.get(uniqueName);
 	}
 	
 	private boolean dependencyAlreadyListed(List<DependencyDTO> dependencies, DependencyDTO dependency){
@@ -158,15 +174,5 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 			}
 		}
 		return foundClasses;
-	}
-	
-	public List<FamixImport> searchImportsForClass(String uniqueClassName){
-		List<FamixImport> imports = theModel.getImports();
-		for(FamixImport anImport: imports){
-			if(anImport.from.equals(uniqueClassName)){
-				imports.add(anImport);
-			}
-		}
-		return imports;
 	}
 }
