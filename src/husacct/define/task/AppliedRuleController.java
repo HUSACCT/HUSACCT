@@ -3,6 +3,9 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.AppliedRuleExceptionDomainService;
+import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.JFrameAppliedRule;
 import husacct.define.presentation.jframe.JFrameExceptionRule;
@@ -22,11 +25,18 @@ public class AppliedRuleController extends PopUpController {
 	private long currentAppliedRuleId;
 	private String selectedRuleTypeKey;
 	private ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();
+	
+	private ModuleDomainService moduleService;
+	private AppliedRuleDomainService appliedRuleService;
+	private AppliedRuleExceptionDomainService appliedRuleExceptionService;
 
 	public AppliedRuleController(long moduleId, long appliedRuleId) {
 		super();
-		setModuleId(moduleId);
+		this.setModuleId(moduleId);
 		this.currentAppliedRuleId = appliedRuleId;
+		this.moduleService = new ModuleDomainService();
+		this.appliedRuleService = new AppliedRuleDomainService();
+		this.appliedRuleExceptionService = new AppliedRuleExceptionDomainService();
 	}
 
 	/*
@@ -118,7 +128,7 @@ public class AppliedRuleController extends PopUpController {
 	public ComboBoxModel loadModulesToCombobox() {
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 		// loading of all layers
-		ArrayList<Long> moduleIds = defineDomainService.getRootModulesIds();
+		ArrayList<Long> moduleIds = this.moduleService.getRootModulesIds();
 
 		if (moduleIds != null) {
 			// Remove the current layer from the list
@@ -128,7 +138,7 @@ public class AppliedRuleController extends PopUpController {
 			for (long moduleId : moduleIds) {
 				DataHelper datahelper = new DataHelper();
 				datahelper.setId(moduleId);
-				datahelper.setValue("" + defineDomainService.getModuleNameById(moduleId));
+				datahelper.setValue("" + this.moduleService.getModuleNameById(moduleId));
 				layernames.add(datahelper);
 			}
 
@@ -140,13 +150,13 @@ public class AppliedRuleController extends PopUpController {
 	public ComboBoxModel loadsubModulesToCombobox(Long parentModuleId) {
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 		// loading of all layers
-		ArrayList<Long> moduleIds = defineDomainService.getSubModuleIds(parentModuleId);
+		ArrayList<Long> moduleIds = this.moduleService.getSubModuleIds(parentModuleId);
 
 		ArrayList<DataHelper> layernames = new ArrayList<DataHelper>();
 		for (long moduleId : moduleIds) {
 			DataHelper datahelper = new DataHelper();
 			datahelper.setId(moduleId);
-			datahelper.setValue("" + defineDomainService.getModuleNameById(moduleId));
+			datahelper.setValue("" + this.moduleService.getModuleNameById(moduleId));
 			layernames.add(datahelper);
 		}
 
@@ -166,7 +176,7 @@ public class AppliedRuleController extends PopUpController {
 	
 	public String getCurrentModuleName(){
 		long currentModuleId = getModuleId();
-		return defineDomainService.getModuleNameById(currentModuleId);
+		return this.moduleService.getModuleNameById(currentModuleId);
 	}
 	
 	public Long getCurrentModuleId(){
@@ -180,9 +190,9 @@ public class AppliedRuleController extends PopUpController {
 	public void save(String ruleTypeKey, String description, String[] dependencies, String regex,long moduleFromId, long moduleToId, boolean isEnabled) {
 		try {
 			if (getAction().equals(PopUpController.ACTION_NEW)) {
-				currentAppliedRuleId = defineDomainService.addAppliedRule(ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
+				currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-				defineDomainService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
+				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
 			}
 			saveAllExceptionRules();
 			
@@ -194,7 +204,7 @@ public class AppliedRuleController extends PopUpController {
 	}
 	
 	public void saveAllExceptionRules(){
-		defineDomainService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
+		this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 		
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {
 			long appliedRuleId = currentAppliedRuleId;
@@ -203,7 +213,7 @@ public class AppliedRuleController extends PopUpController {
 			long moduleFromId = (Long) exceptionRule.get("moduleFromId");
 			long moduleToId = (Long) exceptionRule.get("moduleToId");
 			
-			defineDomainService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFromId, moduleToId);
+			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFromId, moduleToId);
 		}
 	}
 
@@ -277,6 +287,6 @@ public class AppliedRuleController extends PopUpController {
 	}
 
 	public String getModuleName(Long moduleIdFrom) {
-		return defineDomainService.getModuleNameById(moduleIdFrom);
+		return this.moduleService.getModuleNameById(moduleIdFrom);
 	}
 }

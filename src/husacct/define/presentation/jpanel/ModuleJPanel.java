@@ -1,6 +1,6 @@
 package husacct.define.presentation.jpanel;
 
-import husacct.define.domain.DefineDomainService;
+import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.presentation.jframe.AddModuleValuesJFrame;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
@@ -179,7 +179,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	
 	private void moveLayerDown() {
 		long layerId = getSelectedModuleId();
-		DefineDomainService.getInstance().moveLayerDown(layerId);
+		DefinitionController.getInstance().moveLayerDown(layerId);
 		this.updateModuleTree();
 	}
 	

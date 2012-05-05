@@ -3,6 +3,7 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -17,9 +18,12 @@ public class SoftwareUnitController extends PopUpController {
 	private JFrameSoftwareUnit softwareUnitFrame;
 	private Logger logger;
 	
+	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
+	
 	public SoftwareUnitController(long moduleId) {
 		logger = Logger.getLogger(SoftwareUnitController.class);
 		this.setModuleId(moduleId);
+		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
 
 	@Override
@@ -44,7 +48,7 @@ public class SoftwareUnitController extends PopUpController {
 	
 	@Deprecated
 	private void filterAddedSoftwareUnits(ArrayList<SoftwareUnitDefinition> softwareUnitList) {
-		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.defineDomainService.getSoftwareUnit(moduleId);
+		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.softwareUnitDefinitionDomainService.getSoftwareUnit(moduleId);
 		for (SoftwareUnitDefinition addedUnit : addedsoftwareUnitList){
 			if (softwareUnitList.contains(addedUnit)) {
 				softwareUnitList.remove(addedUnit);
@@ -93,7 +97,7 @@ public class SoftwareUnitController extends PopUpController {
 	public void save(String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
-			defineDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
+			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
 			//pokeObservers();
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {

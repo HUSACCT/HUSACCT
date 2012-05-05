@@ -1,7 +1,5 @@
 package husacct.define.task;
 
-import husacct.define.domain.DefineDomainService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -14,7 +12,6 @@ public abstract class PopUpController extends Observable {
 	public static final String ACTION_EDIT = "EDIT";
 	public ResourceBundle resourceBundle = ResourceBundle.getBundle("husacct/common/locale/defineLang", new Locale("en", "GB"));
 
-	protected DefineDomainService defineDomainService = DefineDomainService.getInstance();
 	protected String action = PopUpController.ACTION_NEW;
 	protected long moduleId;
 	
