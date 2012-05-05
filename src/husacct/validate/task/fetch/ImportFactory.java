@@ -14,20 +14,25 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.jdom2.Element;
 
 public class ImportFactory {
+	private final ImportSeverities importSeverities;
+	private final ImportViolations importViolations;
+	private final ImportSeveritiesPerTypesPerProgrammingLanguages importSeveritiesPerRuleTypesPerProgrammingLanguages;
+	
+	public ImportFactory(){
+		this.importSeverities = new ImportSeverities();
+		this.importViolations = new ImportViolations();
+		this.importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
+	}
 
 	public List<Severity> importSeverities(Element element) {
-		ImportSeverities importSeverities = new ImportSeverities();
 		return	importSeverities.importSeverities(element);
 	}
 
-	public List<Violation> ImportViolations(Element element, List<Severity> severities) throws DatatypeConfigurationException {
-		ImportViolations importViolations = new ImportViolations();
+	public List<Violation> importViolations(Element element, List<Severity> severities) throws DatatypeConfigurationException {
 		return importViolations.importViolations(element, severities);
 	}
 
 	public HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {
-		ImportSeveritiesPerTypesPerProgrammingLanguages importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
 		return importSeveritiesPerRuleTypesPerProgrammingLanguages.importSeveritiesPerTypesPerProgrammingLanguages(element, severities);
 	}
-
 }
