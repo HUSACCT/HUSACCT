@@ -26,16 +26,17 @@ import org.jdom2.Element;
 
 import com.itextpdf.text.DocumentException;
 
-public class ValidateServiceImpl implements IValidateService, ISaveable {
-	private boolean validationExecuted;
-	
+public class ValidateServiceImpl implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
+	
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final ReportServiceImpl report;
 	private final TaskServiceImpl task;
+	
+	private boolean validationExecuted;
 
 	public ValidateServiceImpl(){
 		this.configuration = new ConfigurationServiceImpl();
@@ -112,18 +113,21 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	@Override
 	public boolean isValidated() {
 		return validationExecuted;
-	}
-	
-	public ConfigurationServiceImpl getConfiguration() {
-		return configuration;
-	}
-	
-	public void Validate(RuleDTO[] appliedRules){
-		domain.checkConformance(appliedRules);
-	}
+	}	
+
 
 	@Override
 	public void reloadGUI() {
 		//TODO write code to generate GUI
-	}	
+	}
+	
+	//This method is only used for testing with the Testsuite
+	public ConfigurationServiceImpl getConfiguration() {
+		return configuration;
+	}
+	
+	//This method is only used for testing with the Testsuite
+	public void Validate(RuleDTO[] appliedRules){
+		domain.checkConformance(appliedRules);
+	}
 }

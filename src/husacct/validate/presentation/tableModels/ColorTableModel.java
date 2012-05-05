@@ -15,9 +15,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 public class ColorTableModel extends AbstractTableModel {
-
 	private static final long serialVersionUID = 2492345975488386436L;
-	protected Vector dataVector = new Vector();
+	
+	private Vector dataVector = new Vector();
     private String columnNames[] = {ResourceBundles.getValue("SeverityName"), ResourceBundles.getValue("Color")};
     private Class<?>[] types = new Class[]{String.class, JButton.class};
     private boolean[] canEdit = new boolean[]{true, true};

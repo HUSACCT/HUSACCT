@@ -10,7 +10,6 @@ import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 
 public class ComboBoxTableModel extends AbstractTableModel {
-
 	private static final long serialVersionUID = -7158951096196307267L;
 	
 	private Vector dataVector;
@@ -31,8 +30,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		setDataVector(newVector(rowCount), columnNames);
 	}
 
-	public ComboBoxTableModel(Object[] columnNames, int rowCount,
-			List<Severity> comboboxValues) {
+	public ComboBoxTableModel(Object[] columnNames, int rowCount, List<Severity> comboboxValues) {
 		this(convertToVector(columnNames), rowCount);
 		this.columnNames = columnNames;
 		this.comboboxValues = comboboxValues;

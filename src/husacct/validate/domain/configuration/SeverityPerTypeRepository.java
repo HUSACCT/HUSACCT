@@ -5,6 +5,8 @@ import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -16,12 +18,14 @@ import java.util.Map.Entry;
 public class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
+	private final ConfigurationServiceImpl configuration;
 	private final RuleTypesFactory ruletypefactory;
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
+	private AbstractViolationType violationtypefactory;
 
 	public SeverityPerTypeRepository(ConfigurationServiceImpl configuration){
-		this.ruletypefactory = new RuleTypesFactory(configuration);
-
+		this.configuration = configuration;
+		this.ruletypefactory = new RuleTypesFactory(configuration);		
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
@@ -37,18 +41,19 @@ public class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> initializeDefaultSeverityForLanguage(String programmingLanguage){
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
-		for(Entry<String, List<RuleType>> entry : ruletypefactory.getRuleTypes(programmingLanguage).entrySet()){			
-			HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
-
-			for(RuleType ruleType : entry.getValue()){					
-				severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
-
-				for(ViolationType violationType : ruleType.getViolationTypes()){	
-					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
-				}
-			}
+		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
+		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
+			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
 		}
 
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage ,configuration);
+		if(violationtypefactory != null){				
+			for(Entry<String, List<ViolationType>> violationTypeCategory : violationtypefactory.getAllViolationTypes().entrySet()){	
+				for(ViolationType violationType : violationTypeCategory.getValue()){
+					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
+				}				
+			}
+		}
 		return severitiesPerTypePerProgrammingLanguage;
 	}
 
