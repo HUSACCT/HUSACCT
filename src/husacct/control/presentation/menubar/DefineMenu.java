@@ -13,11 +13,12 @@ import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
-	private JMenuItem importLogicalArchitectureItem;
 	private JMenuItem defineLogicalArchitectureItem;
 	private JMenuItem setApplicationDetailsItem;
 	private JMenuItem showLogicalGraphicsItem;
+	private JMenuItem showAnalysedGraphicsItem;
 	private JMenuItem exportLogicalArchitectureItem;
+	private JMenuItem importLogicalArchitectureItem;
 
 	public DefineMenu(final MainController mainController){
 		super("Define");
@@ -47,6 +48,14 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
+		showAnalysedGraphicsItem = new JMenuItem("Show analysed architecture graphics");
+		this.add(showAnalysedGraphicsItem);
+		showAnalysedGraphicsItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getViewController().showAnalysedArchitectureGui();
+			}
+		});
+		
 		importLogicalArchitectureItem = new JMenuItem("Import logical architecture");
 		this.add(importLogicalArchitectureItem);
 		importLogicalArchitectureItem.addActionListener(new ActionListener(){
@@ -63,32 +72,31 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
-		//disable buttons on start
-		defineLogicalArchitectureItem.setEnabled(false);
-		importLogicalArchitectureItem.setEnabled(false);
-		setApplicationDetailsItem.setEnabled(false);
-		showLogicalGraphicsItem.setEnabled(false);
-		importLogicalArchitectureItem.setEnabled(false);
-		exportLogicalArchitectureItem.setEnabled(false);
-		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-
 			public void changeState(int state) {
-				if(state == StateController.NONE){
-					defineLogicalArchitectureItem.setEnabled(false);
-					importLogicalArchitectureItem.setEnabled(false);
-				}else if(state == StateController.EMPTY){
-					defineLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-					setApplicationDetailsItem.setEnabled(true);
-				} else if(state >= StateController.DEFINED){
-					defineLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-					setApplicationDetailsItem.setEnabled(true);
-					showLogicalGraphicsItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
-					exportLogicalArchitectureItem.setEnabled(true);
+				defineLogicalArchitectureItem.setEnabled(false);
+				setApplicationDetailsItem.setEnabled(false);
+				showLogicalGraphicsItem.setEnabled(false);
+				showAnalysedGraphicsItem.setEnabled(false);
+				importLogicalArchitectureItem.setEnabled(false);
+				exportLogicalArchitectureItem.setEnabled(false);
+				switch(state){
+					case StateController.VALIDATED:
+					case StateController.MAPPED: {
+						importLogicalArchitectureItem.setEnabled(true);
+					}
+					case StateController.ANALYSED: {
+						showAnalysedGraphicsItem.setEnabled(true);
+					}
+					case StateController.DEFINED: {
+						exportLogicalArchitectureItem.setEnabled(true);
+						showLogicalGraphicsItem.setEnabled(true);	
+					}
+					case StateController.EMPTY: {
+						defineLogicalArchitectureItem.setEnabled(true);
+						importLogicalArchitectureItem.setEnabled(true);
+						setApplicationDetailsItem.setEnabled(true);	
+					}
 				}
 			}
 		});
