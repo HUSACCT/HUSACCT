@@ -99,6 +99,13 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixAttribute.name = name;
 		famixAttribute.uniqueName = uniqueName;
 		addToModel(famixAttribute);
+		FamixAssociation fAssocation = new FamixAssociation();
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "declaration";
+		//TODO Set linenumbers of structural entities..
+		fAssocation.lineNumber = 0;
+		model.waitingAssociations.add(fAssocation);
 	}
 	
 	@Override
@@ -108,7 +115,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		exception.to = ExceptionClass;
 		exception.lineNumber = lineNumber;
 		exception.exceptionType = declarationType;
-		addToModel(exception);
+		model.waitingAssociations.add(exception);
 	}
 	
 	@Override

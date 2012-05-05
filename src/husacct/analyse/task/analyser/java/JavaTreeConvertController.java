@@ -52,32 +52,43 @@ class JavaTreeConvertController {
     			}else{
     				if(nodeType == JavaParser.IMPORT){
         				delegateImport((CommonTree)treeNode);
-        				tree.deleteChild(treeNode.getChildIndex());
-        			}
-    				if(nodeType == JavaParser.EXTENDS_CLAUSE ){
-        				delegateInheritanceDefinition((CommonTree)treeNode);
-        				tree.deleteChild(treeNode.getChildIndex());
+        				deleteTreeChild(treeNode);
+  
         			}
     				if(nodeType == JavaParser.IMPLEMENTS_CLAUSE){
     					delegateImplementsDefinition((CommonTree)treeNode);
+    					deleteTreeChild(treeNode);
     				}
+    				if(nodeType == JavaParser.EXTENDS_CLAUSE ){
+        				delegateInheritanceDefinition((CommonTree)treeNode);
+        				deleteTreeChild(treeNode);
+
+        			}
         			if(nodeType == JavaParser.VAR_DECLARATION ){
         				delegateAttribute(treeNode);
-        				tree.deleteChild(treeNode.getChildIndex());
+        				deleteTreeChild(treeNode);
         			}
         			if(nodeType == JavaParser.FUNCTION_METHOD_DECL || nodeType == JavaParser.CONSTRUCTOR_DECL || nodeType == JavaParser.VOID_METHOD_DECL){
         				delegateMethod(treeNode);
-        				tree.deleteChild(treeNode.getChildIndex());
+        				deleteTreeChild(treeNode);
         			}
         			if(nodeType == JavaParser.THROW || nodeType == JavaParser.CATCH || nodeType == JavaParser.THROWS){
         				delegateException(treeNode);
-        				tree.deleteChild(treeNode.getChildIndex());
+        				deleteTreeChild(treeNode);
         			}
     			}
+
     			walkAST((CommonTree) tree.getChild(i));
+
     		}
     	}
 	}
+    
+    private void deleteTreeChild(Tree treeNode){
+    	for (int child = 0 ; child < treeNode.getChildCount(); child++){
+			treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
+		}
+    }
         
     private void delegatePackage(Tree packageTree){ 
        	JavaPackageGenerator javaPackageGenerator = new JavaPackageGenerator(); 
@@ -97,14 +108,14 @@ class JavaTreeConvertController {
     	return javaInterfaceGenerator.generateModel((CommonTree)interfaceTree);
     }
     
+    private void delegateImplementsDefinition(CommonTree treeNode) {
+		JavaImplementsDefinitionGenerator implementsGenerator = new JavaImplementsDefinitionGenerator();
+		implementsGenerator.generateModelObject(treeNode, this.theClass);
+	}
+    
     private void delegateInheritanceDefinition(CommonTree treeNode) {
 		JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
 		javaInheritanceDefinitionGenerator.generateModelObject(treeNode, this.theClass);
-	}
-    
-    private void delegateImplementsDefinition(CommonTree treeNode) {
-		JavaImplementsDefinitionGenerator javaImplementsDefinitionGenerator = new JavaImplementsDefinitionGenerator();
-		javaImplementsDefinitionGenerator.generateModelObject(treeNode, this.theClass);
 	}
         
     private void delegateImport(CommonTree importTree){ 

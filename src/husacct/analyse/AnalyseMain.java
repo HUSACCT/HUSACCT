@@ -2,6 +2,8 @@ package husacct.analyse;
 
 import javax.swing.UIManager;
 import husacct.ServiceProvider;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;
 
@@ -17,6 +19,9 @@ public class AnalyseMain {
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
+		
+		ModelCreationService creation = new FamixCreationServiceImpl();
+		System.out.println(creation.represent());
 		
 		try {  
 	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
