@@ -1,11 +1,6 @@
 package husacct.common.dto;
 
 public class ApplicationDTO extends AbstractDTO{
-//	public final String name;
-//	public final String[] paths;
-//	public final String programmingLanguage;
-//	public final String version;
-	
 	public String name;
 	public String[] paths;
 	public String programmingLanguage;

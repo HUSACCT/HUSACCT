@@ -7,6 +7,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 public abstract class PopUpController extends Observable {
 	public static final String ACTION_NEW = "NEW";
 	public static final String ACTION_EDIT = "EDIT";
@@ -14,11 +16,13 @@ public abstract class PopUpController extends Observable {
 
 	protected String action = PopUpController.ACTION_NEW;
 	protected long moduleId;
+	protected Logger logger;
 	
 	protected List<Observer> observers;
 	
 	public PopUpController(){
 		observers = new ArrayList<Observer>();
+		logger = Logger.getLogger(DefinitionController.class);
 	}
 
 	@Deprecated

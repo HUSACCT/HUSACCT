@@ -71,16 +71,21 @@ public class DefineServiceStub implements IDefineService{
 			String[] violationTypeKeys = new String[]{"InvocMethod", "InvocConstructor","ExtendsAbstract", "Implements"};
 		ModuleDTO moduleFrom = lbConnectionsModule;			
 		ModuleDTO moduleTo = lbDAOModule;
+		String regex = "";
 		RuleDTO[] exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleOne = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
-
+		RuleDTO ruleOne = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 		ruleTypeKey = "IsNotAllowedToUse";		
 			//IGNORE FOR ELABORATION VERSION
 			violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleTwo = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleTwo = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
 //		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo};
 		
@@ -89,48 +94,54 @@ public class DefineServiceStub implements IDefineService{
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleThree = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleThree = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 	
 		ruleTypeKey = "IsOnlyAllowedToUse";		
 		//IGNORE FOR ELABORATION VERSION
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleFour = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleFour = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 	
 		ruleTypeKey = "IsOnlyModuleAllowedToUse";		
 		//IGNORE FOR ELABORATION VERSION
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleFive = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleFive = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
 		ruleTypeKey = "MustUse";		
 		//IGNORE FOR ELABORATION VERSION
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleSix = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleSix = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
 		ruleTypeKey = "BackCall";		
 		//IGNORE FOR ELABORATION VERSION
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
-		moduleFrom = lbHistoryModule;
+		moduleFrom = domainLayer;
 		moduleTo = new ModuleDTO();
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleSeven = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleSeven = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
 		ruleTypeKey = "SkipCall";		
 		//IGNORE FOR ELABORATION VERSION
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
-		moduleFrom = lbHistoryModule;
+		moduleFrom = domainLayer;
 		moduleTo = new ModuleDTO();
+		regex = "";
 		exceptionRules = new RuleDTO[]{};
-		RuleDTO ruleEight = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleEight = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
 	
 		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo, ruleThree, ruleFour, ruleFive, ruleSix, ruleSeven, ruleEight};
 

@@ -43,10 +43,16 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	/**
 	 * Constructor
 	 */
-	public JFrameExceptionRule(AppliedRuleController appliedRulesController) {
+	public JFrameExceptionRule(AppliedRuleController appliedRulesController, Long selectedModuleFromId, Long selectedModuleToId) {
 		super();
 		this.appliedRuleController = appliedRulesController;
 		initGUI();
+		loadComboboxes(selectedModuleFromId, selectedModuleToId);
+	}
+
+	private void loadComboboxes(Long selectedModuleFromId, Long selectedModuleToId) {
+		jPanelRuleDetails.jComboBoxModuleFrom.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
+		jPanelRuleDetails.jComboBoxModuleTo.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
 	}
 
 	/**

@@ -14,6 +14,7 @@ import husacct.define.presentation.utils.UiDialogs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.MissingResourceException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -84,43 +85,54 @@ public class AppliedRuleController extends PopUpController {
 	 */
 	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
-		RuleTypeDTO[] ruleTypes = categories[0].ruleTypes;
 		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 		ArrayList<String> ruleTypeValues = new ArrayList<String>();
 		
-		//foreach ruletype set ruletypekeys array
-		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			ruleTypeKeys.add(ruleTypeDTO.key);
-		}
-				
-		//Get the correct display value for each ruletypekey from the resourcebundle
-		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			String value = resourceBundle.getString(ruleTypeDTO.key);
-			ruleTypeValues.add(value);
+		for (CategoryDTO categorie : categories) {
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			
+			//foreach ruletype set ruletypekeys array
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				ruleTypeKeys.add(ruleTypeDTO.key);
+			}
+					
+			//Get the correct display value for each ruletypekey from the resourcebundle
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				try{
+					String value = resourceBundle.getString(ruleTypeDTO.key);
+					ruleTypeValues.add(value);
+				}catch(MissingResourceException e){
+					ruleTypeValues.add(ruleTypeDTO.key);
+					logger.info("Key not found in resourcebundle: " + ruleTypeDTO.key);
+				}
+			}
 		}
 		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 	}
 	
 	public void fillRuleTypeComboBoxWithExceptions(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
-		RuleTypeDTO[] ruleTypes = categories[0].ruleTypes;
-		//Get currently selected RuleType
-		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
-				//Fill combobox with exceptionruletypes of that rule
-				ArrayList<String> ruleTypeKeys = new ArrayList<String>();
-				ArrayList<String> ruleTypeValues = new ArrayList<String>();
-				
-				for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
-					ruleTypeKeys.add(ruleDTO.key);
+		
+		for (CategoryDTO categorie : categories){
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			//Get currently selected RuleType
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
+					//Fill combobox with exceptionruletypes of that rule
+					ArrayList<String> ruleTypeKeys = new ArrayList<String>();
+					ArrayList<String> ruleTypeValues = new ArrayList<String>();
+					
+					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
+						ruleTypeKeys.add(ruleDTO.key);
+					}
+							
+					//Get the correct display value for each ruletypekey from the resourcebundle
+					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
+						String value = resourceBundle.getString(ruleDTO.key);
+						ruleTypeValues.add(value);
+					}
+					keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 				}
-						
-				//Get the correct display value for each ruletypekey from the resourcebundle
-				for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
-					String value = resourceBundle.getString(ruleDTO.key);
-					ruleTypeValues.add(value);
-				}
-				keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 			}
 		}
 	}
@@ -221,7 +233,8 @@ public class AppliedRuleController extends PopUpController {
 	 * Exceptions
 	 */
 	public void createExceptionGUI(Long selectedModuleFromId, Long selectedModuleToId) {
-		jframeExceptionRule = new JFrameExceptionRule(this);
+		//TODO improve this is very ugly code
+		jframeExceptionRule = new JFrameExceptionRule(this, selectedModuleFromId, selectedModuleToId);
 
 		// Change view of jframe conforms the action
 		if (getAction().equals(SoftwareUnitController.ACTION_NEW)) {
@@ -233,13 +246,6 @@ public class AppliedRuleController extends PopUpController {
 		}
 		// Set the visibility of the jframe to true so the jframe is now visible
 		UiDialogs.showOnScreen(0, jframeExceptionRule);
-		
-		
-		//load the correct submodules in the comboboxes 
-		jframeExceptionRule.jPanelRuleDetails.jComboBoxModuleFrom.setModel(loadsubModulesToCombobox(selectedModuleFromId));
-		jframeExceptionRule.jPanelRuleDetails.jComboBoxModuleTo.setModel(loadsubModulesToCombobox(selectedModuleToId));
-		
-		
 		
 		jframeExceptionRule.setVisible(true);
 	}
