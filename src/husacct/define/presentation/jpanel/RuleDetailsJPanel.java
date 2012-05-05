@@ -101,10 +101,6 @@ public class RuleDetailsJPanel extends JPanel{
 		return ruleDetails;
 	}
 
-
-
-
-
 	private void saveIsNotAllowedToUse(HashMap<String, Object> ruleDetails) {
 		DataHelper datahelper1 = (DataHelper) jComboBoxModuleFrom.getSelectedItem();
 		ruleDetails.put("moduleFromId", datahelper1.getId());

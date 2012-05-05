@@ -103,6 +103,7 @@ public class DomainParser {
 		ModuleDTO moduleFrom = parseModule(rule.getUsedModule());
 		ModuleDTO moduleTo = parseModule(rule.getRestrictedModule());
 		String[] violationTypeKeys = rule.getDependencies();
+		String regex = rule.getRegex();
 		
 		ArrayList<RuleDTO> exceptionRuleList = new ArrayList<RuleDTO>();
 		for (AppliedRule exceptionRule : rule.getExceptions()){
@@ -114,7 +115,7 @@ public class DomainParser {
 		exceptionRuleList.toArray(exceptionRuleDTOs);
 		RuleDTO[] exceptionRules = exceptionRuleDTOs; 
 		
-		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
 		return ruleDTO;
 	}
 }

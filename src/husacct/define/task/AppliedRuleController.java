@@ -11,6 +11,7 @@ import husacct.define.presentation.utils.UiDialogs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.MissingResourceException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -74,19 +75,27 @@ public class AppliedRuleController extends PopUpController {
 	 */
 	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
-		RuleTypeDTO[] ruleTypes = categories[0].ruleTypes;
 		ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 		ArrayList<String> ruleTypeValues = new ArrayList<String>();
 		
-		//foreach ruletype set ruletypekeys array
-		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			ruleTypeKeys.add(ruleTypeDTO.key);
-		}
-				
-		//Get the correct display value for each ruletypekey from the resourcebundle
-		for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-			String value = resourceBundle.getString(ruleTypeDTO.key);
-			ruleTypeValues.add(value);
+		for (CategoryDTO categorie : categories) {
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			
+			//foreach ruletype set ruletypekeys array
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				ruleTypeKeys.add(ruleTypeDTO.key);
+			}
+					
+			//Get the correct display value for each ruletypekey from the resourcebundle
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				try{
+					String value = resourceBundle.getString(ruleTypeDTO.key);
+					ruleTypeValues.add(value);
+				}catch(MissingResourceException e){
+					ruleTypeValues.add(ruleTypeDTO.key);
+					logger.info("Key not found in resourcebundle: " + ruleTypeDTO.key);
+				}
+			}
 		}
 		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 	}
@@ -224,11 +233,9 @@ public class AppliedRuleController extends PopUpController {
 		// Set the visibility of the jframe to true so the jframe is now visible
 		UiDialogs.showOnScreen(0, jframeExceptionRule);
 		
-		
-		//load the correct submodules in the comboboxes 
+		//FIXME jComboboxes are null, coz not initGui yet
 		jframeExceptionRule.jPanelRuleDetails.jComboBoxModuleFrom.setModel(loadsubModulesToCombobox(selectedModuleFromId));
 		jframeExceptionRule.jPanelRuleDetails.jComboBoxModuleTo.setModel(loadsubModulesToCombobox(selectedModuleToId));
-		
 		
 		
 		jframeExceptionRule.setVisible(true);
