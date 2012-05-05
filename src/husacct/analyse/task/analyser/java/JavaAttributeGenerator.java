@@ -6,14 +6,13 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
-
 class JavaAttributeGenerator {
 	
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
 	private String belongsToClass; 
 	private String declareClass; //example: package.package.class
-	private String declareType;  //int, string, CustomClass etc
+	private String declareType = "";  //int, string, CustomClass etc
 	
 	private ModelCreationService modelService = new FamixCreationServiceImpl();
 
@@ -50,6 +49,7 @@ class JavaAttributeGenerator {
 	}
 
 	private void createAttributeObject(){
+		if(declareType.contains("\\.")) declareType = declareType.substring(0, declareType.length() -2);
 		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name);
 	}
 
@@ -73,7 +73,12 @@ class JavaAttributeGenerator {
 		if(child.getType() != QUALIFIED_TYPE_IDENT){
 			declareType = child.getText();
 		}else{
-			declareType = declaretype.getText();
+			if(child.getChildCount() > 1){
+				for(int i=0; i<child.getChildCount(); i++){
+					this.declareType += child.getChild(i).toString() + ".";
+				}
+			}
+			else declareType = declaretype.getText();
 		}
 	}
 
