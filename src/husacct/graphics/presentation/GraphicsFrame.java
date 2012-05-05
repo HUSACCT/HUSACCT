@@ -121,17 +121,17 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 		menuBar.add(goToParentMenu);
-
-		JMenuItem exportToImageMenu = new JMenuItem("Export to image");
-		exportToImageMenu.setSize(50, 20);
-		exportToImageMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
-		exportToImageMenu.addActionListener(new ActionListener() {
+		
+		JMenuItem refreshMenu = new JMenuItem("Refresh");
+		refreshMenu.setSize(50, 20);
+		refreshMenu.setMaximumSize(new Dimension(90, menuItemMaxHeight));
+		refreshMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				exportToImage();
+				refreshDrawing();
 			}
 		});
-		menuBar.add(exportToImageMenu);
+		menuBar.add(refreshMenu);
 
 		JCheckBoxMenuItem showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
 		showViolationsOptionMenu.setSize(50, 20);
@@ -143,8 +143,19 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 		menuBar.add(showViolationsOptionMenu);
+		
+		JMenuItem exportToImageMenu = new JMenuItem("Export to image");
+		exportToImageMenu.setSize(50, 20);
+		exportToImageMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
+		exportToImageMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportToImage();
+			}
+		});
+		menuBar.add(exportToImageMenu);
 
-		add(menuBar, java.awt.BorderLayout.AFTER_LINE_ENDS);
+		add(menuBar, java.awt.BorderLayout.NORTH);
 
 		locationBar = new JMenuBar();
 		locationBar.setSize(totalWidth, 20);
@@ -179,6 +190,12 @@ public class GraphicsFrame extends JInternalFrame {
 	private void toggleViolations() {
 		for (UserInputListener l : listeners) {
 			l.toggleViolations();
+		}
+	}
+	
+	private void refreshDrawing() {
+		for (UserInputListener l : listeners) {
+			l.refreshDrawing();
 		}
 	}
 

@@ -28,7 +28,7 @@ public class AnalysedController extends DrawingController {
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
 			public void update(Locale newLocale) {
-				getAndDrawModulesIn(getCurrentPath());
+				refreshDrawing();
 			}
 		});		
 	}
@@ -37,6 +37,11 @@ public class AnalysedController extends DrawingController {
 		controlService = ServiceProvider.getInstance().getControlService();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+	}
+	
+	@Override
+	public void refreshDrawing() {
+		getAndDrawModulesIn(getCurrentPath());
 	}
 	
 	public void showViolations(){

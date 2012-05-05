@@ -117,7 +117,7 @@ public abstract class DrawingController implements UserInputListener {
 			drawTarget.hidePropertiesPane();
 		}
 	}
-
+	
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModules(AbstractDTO[] modules) {

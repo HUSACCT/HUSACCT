@@ -29,7 +29,7 @@ public class DefinedController extends DrawingController {
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
 			public void update(Locale newLocale) {
-				getAndDrawModulesIn(getCurrentPath());
+				refreshDrawing();
 			}
 		});
 	}
@@ -39,6 +39,11 @@ public class DefinedController extends DrawingController {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
+	}
+	
+	@Override
+	public void refreshDrawing() {
+		getAndDrawModulesIn(getCurrentPath());
 	}
 	
 	public void showViolations(){
@@ -51,7 +56,6 @@ public class DefinedController extends DrawingController {
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
-		//defineService = new DefineServiceStub(); //TODO: Remove when stuff works
 		AbstractDTO[] modules = defineService.getRootModules();
 		resetCurrentPath();
 		drawModules(modules);
