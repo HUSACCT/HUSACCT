@@ -31,14 +31,16 @@ public class ViolationAssembler {
 	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
 	private Messagebuilder messagebuilder;
+	private final ConfigurationServiceImpl configuration;
 
 	public ViolationAssembler(RuleTypesFactory ruleFactory, ConfigurationServiceImpl configuration){
-		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
-		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
-
+		this.configuration = configuration;
 		this.ruleFactory = ruleFactory;
 		this.ruleAssembler = new RuletypeAssembler();
 		this.messagebuilder = new Messagebuilder();
+		
+		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
+		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
 	}
 
 	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
@@ -80,8 +82,9 @@ public class ViolationAssembler {
 				final Color color = severity.getColor();
 				final  String userDefinedName = severity.getUserName();
 				final String systemDefinedName = severity.getDefaultName();
-				//FIXME: get severityValue from config attributte in this class
-				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, 0);
+				final int severityValue = configuration.getSeverityValue(violation.getSeverity());
+				
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, severityValue);
 			}
 			else{				
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", "", 0);

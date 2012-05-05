@@ -10,22 +10,13 @@ import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.presentation.ConfigurationUI;
+import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
-import husacct.validate.task.report.UnknownStorageTypeException;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
-
-import com.itextpdf.text.DocumentException;
-import husacct.validate.presentation.FilterViolations;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
@@ -88,7 +79,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	//Export report
-	public void exportViolations(String name, String fileType, String path) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException  {
+	public void exportViolations(String name, String fileType, String path) {
 		report.createReport(fileType, name, path);
 	}
 
@@ -113,7 +104,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 			task.importValidationWorkspace(workspaceData);
 			this.validationExecuted = true;
 		} catch (DatatypeConfigurationException e) {
-			Logger.getLogger(ValidateServiceImpl.class).log(Level.ERROR, "Error exporting the workspace", e);
+			logger.error("Error exporting the workspace: " + e.getMessage(), e);
 		}
 	}
 
