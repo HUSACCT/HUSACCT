@@ -26,7 +26,7 @@ public class WorkspaceController {
 	private static MainController mainController;
 	
 	public WorkspaceController(MainController mainController){
-		this.mainController = mainController;
+		WorkspaceController.mainController = mainController;
 	}
 
 	public void showCreateWorkspaceGui() {
