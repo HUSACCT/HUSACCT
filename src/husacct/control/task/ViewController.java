@@ -86,6 +86,7 @@ public class ViewController {
 	}
 	
 	public void setDefinedArchitectureGui(){
+		serviceProvider.getGraphicsService().drawDefinedArchitecture();
 		definedArchitectureInternalFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
 		setupFrame(definedArchitectureInternalFrame, "Defined architecture");
 		definedArchitectureInternalFrame.setSize(defaultDimension);
@@ -93,6 +94,7 @@ public class ViewController {
 	}
 	
 	public void setAnalysedArchitectureGui(){
+		serviceProvider.getGraphicsService().drawAnalysedArchitecture();
 		analysedArchitectureInternalFrame = serviceProvider.getGraphicsService().getAnalysedArchitectureGUI();
 		setupFrame(analysedArchitectureInternalFrame, "Analysed architecture");
 		analysedArchitectureInternalFrame.setSize(defaultDimension);
