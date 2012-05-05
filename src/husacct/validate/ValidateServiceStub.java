@@ -122,7 +122,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public void reloadGUI() {
+	public void reloadGUIText() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

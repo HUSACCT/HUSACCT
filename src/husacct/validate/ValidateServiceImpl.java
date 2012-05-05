@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 import com.itextpdf.text.DocumentException;
+import husacct.validate.presentation.FilterViolations;
 
 public class ValidateServiceImpl implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
@@ -35,6 +36,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	private final DomainServiceImpl domain;
 	private final ReportServiceImpl report;
 	private final TaskServiceImpl task;
+	private final BrowseViolations browseViolations;
+	private final FilterViolations filterViolations;
+	private final ConfigurationUI configurationUI;
 	
 	private boolean validationExecuted;
 
@@ -44,6 +48,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
 		this.validationExecuted = false;
+		this.browseViolations = new BrowseViolations(task);
+		this.filterViolations = new FilterViolations(task, browseViolations);
+		this.configurationUI = new ConfigurationUI(task);
 	}
 
 	@Override
@@ -87,12 +94,12 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public JInternalFrame getBrowseViolationsGUI(){
-		return new BrowseViolations(task);
+		return browseViolations;
 	}
 
 	@Override
 	public JInternalFrame getConfigurationGUI(){
-		return new ConfigurationUI(task);
+		return configurationUI;
 	}
 
 	@Override
@@ -113,12 +120,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	@Override
 	public boolean isValidated() {
 		return validationExecuted;
-	}	
-
-
-	@Override
-	public void reloadGUI() {
-		//TODO write code to generate GUI
 	}
 	
 	//This method is only used for testing with the Testsuite
@@ -129,5 +130,12 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	//This method is only used for testing with the Testsuite
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
+	}
+	
+	@Override
+	public void reloadGUIText(){
+		browseViolations.loadGUIText();
+		filterViolations.loadGUIText();
+		configurationUI.loadGUIText();
 	}
 }

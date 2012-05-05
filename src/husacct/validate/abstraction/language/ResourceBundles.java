@@ -40,4 +40,8 @@ public class ResourceBundles {
 		}
 		return remoteValue;
 	}
+
+	public static void setLocale(Locale locale) {
+		ResourceBundles.locale = locale;
+	}
 }

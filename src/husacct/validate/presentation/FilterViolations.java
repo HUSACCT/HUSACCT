@@ -39,65 +39,8 @@ public class FilterViolations extends JFrame {
 	public FilterViolations(TaskServiceImpl ts, BrowseViolations bv) {
 		this.ts = ts;
 		this.bv = bv;
-		String[] columnNamesRuletype = {"", ResourceBundles.getValue("Ruletypes")};
-		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
-
-			private static final long serialVersionUID = -2752815747553087143L;
-
-			Class<?>[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, false};
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
-
-		String[] columnNamesViolationtype = {"", ResourceBundles.getValue("Violationtypes")};
-		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
-
-			private static final long serialVersionUID = -2076057432618819613L;
-
-			Class<?>[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, false};
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
-
-		String[] columnNamesPath = {" ", ResourceBundles.getValue("Path")};
-		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
-
-			private static final long serialVersionUID = 8399838627659517010L;
-
-			Class<?>[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, true};
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
 		initComponents();
-		loadRuletypes();
-		loadViolationtypes();
+		loadGUIText();
 	}
 
 	private void initComponents() {
@@ -120,19 +63,16 @@ public class FilterViolations extends JFrame {
 		hideFilteredValues = new JRadioButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(ResourceBundles.getValue("TotalViolations"));
 		setAlwaysOnTop(true);
 		setResizable(false);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
-		ruletypeTable.setModel(ruletypeModelFilter);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
 		ruletypeTable.setFillsViewportHeight(true);
 		ruletypeTable.getTableHeader().setResizingAllowed(false);
 		ruletypeTable.getTableHeader().setReorderingAllowed(false);
 		ruletypepanel.setViewportView(ruletypeTable);
-
-		violationtypeTable.setModel(violationtypeModelFilter);
+		
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
 		violationtypePanel.setViewportView(violationtypeTable);
@@ -151,14 +91,10 @@ public class FilterViolations extends JFrame {
 				.addComponent(violationtypePanel)
 				);
 
-		TabbedPane.addTab(ResourceBundles.getValue("FilterViolations"), filterViolationPanel);
-
-		pathFilterTable.setModel(pathFilterModel);
 		pathFilterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
 		pathFilterTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 		pathFilterScrollPane.setViewportView(pathFilterTable);
 
-		addPath.setText(ResourceBundles.getValue("Add"));
 		addPath.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -166,7 +102,6 @@ public class FilterViolations extends JFrame {
 			}
 		});
 
-		removePath.setText(ResourceBundles.getValue("Remove"));
 		removePath.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -197,9 +132,6 @@ public class FilterViolations extends JFrame {
 						.addContainerGap())
 				);
 
-		TabbedPane.addTab(ResourceBundles.getValue("FilterPaths"), pathFilterPanel);
-
-		save.setText(ResourceBundles.getValue("Save"));
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -207,7 +139,6 @@ public class FilterViolations extends JFrame {
 			}
 		});
 
-		cancel.setText(ResourceBundles.getValue("Cancel"));
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -216,11 +147,9 @@ public class FilterViolations extends JFrame {
 		});
 
 		filtergroup.add(showFilteredValues);
-		showFilteredValues.setText(ResourceBundles.getValue("ShowSelectedValues"));
 
 		filtergroup.add(hideFilteredValues);
 		hideFilteredValues.setSelected(true);
-		hideFilteredValues.setText(ResourceBundles.getValue("HideSelectedValues"));
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -252,6 +181,87 @@ public class FilterViolations extends JFrame {
 				);
 
 		pack();
+	}
+	
+	public void loadGUIText(){
+		setTitle(ResourceBundles.getValue("TotalViolations"));
+		TabbedPane.addTab(ResourceBundles.getValue("FilterViolations"), filterViolationPanel);
+		addPath.setText(ResourceBundles.getValue("Add"));
+		removePath.setText(ResourceBundles.getValue("Remove"));
+		TabbedPane.addTab(ResourceBundles.getValue("FilterPaths"), pathFilterPanel);
+		save.setText(ResourceBundles.getValue("Save"));
+		cancel.setText(ResourceBundles.getValue("Cancel"));
+		showFilteredValues.setText(ResourceBundles.getValue("ShowSelectedValues"));
+		hideFilteredValues.setText(ResourceBundles.getValue("HideSelectedValues"));
+		
+		loadModels();
+	}
+	
+	public void loadModels(){
+		String[] columnNamesRuletype = {"", ResourceBundles.getValue("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ResourceBundles.getValue("Violationtypes")};
+		String[] columnNamesPath = {" ", ResourceBundles.getValue("Path")};
+		
+		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
+
+			private static final long serialVersionUID = -2752815747553087143L;
+
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
+			boolean[] canEdit = new boolean[]{true, false};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+
+		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
+
+			private static final long serialVersionUID = -2076057432618819613L;
+
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
+			boolean[] canEdit = new boolean[]{true, false};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+
+		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
+
+			private static final long serialVersionUID = 8399838627659517010L;
+
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
+			boolean[] canEdit = new boolean[]{true, true};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+		
+		ruletypeTable.setModel(ruletypeModelFilter);
+		violationtypeTable.setModel(violationtypeModelFilter);
+		pathFilterTable.setModel(pathFilterModel);
+		
+		loadRuletypes();
+		loadViolationtypes();
 	}
 
 	private void cancelActionPerformed() {
