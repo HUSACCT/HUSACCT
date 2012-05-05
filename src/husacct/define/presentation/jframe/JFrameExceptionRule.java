@@ -3,6 +3,7 @@ package husacct.define.presentation.jframe;
 import husacct.define.presentation.jpanel.RuleDetailsJPanel;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.task.AppliedRuleController;
+import husacct.define.task.PopUpController;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -29,6 +30,7 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	private static final long serialVersionUID = -3491664038962722000L;
 	
 	private AppliedRuleController appliedRuleController;
+	private JFrameAppliedRule appliedRuleFrame;
 	
 	private JPanel jPanelMain;
 	public RuleDetailsJPanel jPanelRuleDetails;
@@ -43,16 +45,29 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	/**
 	 * Constructor
 	 */
-	public JFrameExceptionRule(AppliedRuleController appliedRulesController, Long selectedModuleFromId, Long selectedModuleToId) {
+	public JFrameExceptionRule(AppliedRuleController appliedRulesController, JFrameAppliedRule appliedRuleFrame, Long selectedModuleFromId, Long selectedModuleToId) {
 		super();
 		this.appliedRuleController = appliedRulesController;
+		this.appliedRuleFrame = appliedRuleFrame;
+		
 		initGUI();
 		loadComboboxes(selectedModuleFromId, selectedModuleToId);
+		this.setTextures();
 	}
 
 	private void loadComboboxes(Long selectedModuleFromId, Long selectedModuleToId) {
 		jPanelRuleDetails.fromModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
 		jPanelRuleDetails.toModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
+	}
+	
+	private void setTextures() {
+		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
+			this.jButtonSave.setText("Create");
+			this.setTitle("New exception rule");
+		} else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
+			this.jButtonSave.setText("Save");
+			this.setTitle("Edit exception rule");
+		}
 	}
 
 	/**
@@ -148,6 +163,7 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	private void save() {	
 		HashMap<String, Object> ruleDetails = jPanelRuleDetails.saveToHashMap();	
 		this.appliedRuleController.addException(ruleDetails);
+		this.appliedRuleFrame.updateExceptionTable();
 		this.dispose();
 	}
 	

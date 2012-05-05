@@ -156,6 +156,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	
 	private void newModule() {
 		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
+		addModuleFrame.setLocationRelativeTo(addModuleFrame.getRootPane());
 		addModuleFrame.initUI();
 	}
 	

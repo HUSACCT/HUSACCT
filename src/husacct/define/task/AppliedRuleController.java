@@ -21,8 +21,6 @@ import java.util.MissingResourceException;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
-import org.apache.log4j.Logger;
-
 public class AppliedRuleController extends PopUpController {
 
 	private JFrameAppliedRule jframeAppliedRule;
@@ -39,52 +37,22 @@ public class AppliedRuleController extends PopUpController {
 		super();
 		this.setModuleId(moduleId);
 		this.currentAppliedRuleId = appliedRuleId;
+		this.determineAction();
+		
 		this.moduleService = new ModuleDomainService();
 		this.appliedRuleService = new AppliedRuleDomainService();
 		this.appliedRuleExceptionService = new AppliedRuleExceptionDomainService();
 	}
-
-	/*
-	 * Init GUI
-	 */
-	@Override
-	public void initUi() throws Exception {
-		jframeAppliedRule = new JFrameAppliedRule(this);
-
-		// Change view of jframe conforms the action
-		if (getAction().equals(SoftwareUnitController.ACTION_NEW)) {
-			jframeAppliedRule.setSaveButtonText("Create");
-			jframeAppliedRule.setTitle("New applied rule");
-		} else if (getAction().equals(SoftwareUnitController.ACTION_EDIT)) {
-			jframeAppliedRule.setSaveButtonText("Save");
-			jframeAppliedRule.setTitle("Edit applied rule");
-//			if (currentAppliedRuleId != -1L) {
-//				// Load name & type
-//				
-//				//jframe.jComboBoxToLayer.setSelectedItem(defineDomainService.getLayerName(defineDomainService.getAppliedRuleToLayer(getLayerID(), appliedrule_id)));
-//				//jframe.jCheckBoxEnabled.setSelected(defineDomainService.getAppliedRuleIsEnabled(getLayerID(), appliedrule_id));
-//
-//				// Load table with exceptions
-//				JTableException table = jframe.jTableException;
-////				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
-//
-//				ArrayList<Long> exceptionIds = defineDomainService.getExceptionIdsByAppliedRule(currentAppliedRuleId);
-//				for (long exception_id : exceptionIds) {
-//					DataHelper datahelper = new DataHelper();
-//					datahelper.setId(exception_id);
-////					datahelper.setValue(defineDomainService.getAppliedruleExceptionName(getLayerID(), appliedRuleId, exception_id));
-//
-////					Object[] row = { datahelper, defineDomainService.getAppliedRuleExceptionType(getLayerID(), appliedRuleId, exception_id) };
-////					tablemodel.addRow(row);
-//				}
-//			}
+	
+	private void determineAction() {
+		if(this.currentAppliedRuleId == -1L) {
+			this.setAction(PopUpController.ACTION_NEW);
+		} else {
+			this.setAction(PopUpController.ACTION_EDIT);
 		}
-
-		// Set the visibility of the jframe to true so the jframe is now visible
-		UiDialogs.showOnScreen(0, jframeAppliedRule);
-		jframeAppliedRule.setVisible(true);
 	}
-	/*
+
+	/**
 	 * Load Data
 	 */
 	public void fillRuleTypeComboBox(KeyValueComboBox keyValueComboBoxAppliedRule) {
@@ -100,7 +68,6 @@ public class AppliedRuleController extends PopUpController {
 			//Get the correct display value for each ruletypekey from the resourcebundle
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
 				try {
-					Logger.getLogger(this.getClass()).debug(ruleTypeDTO.key);
 					if(!(selectedModule instanceof Layer) && (ruleTypeDTO.key.equals("SkipCall") || ruleTypeDTO.key.equals("BackCall"))) {
 						continue;
 					} else {
@@ -208,15 +175,13 @@ public class AppliedRuleController extends PopUpController {
 	 */
 	public void save(String ruleTypeKey, String description, String[] dependencies, String regex,long moduleFromId, long moduleToId, boolean isEnabled) {
 		try {
-			if (getAction().equals(PopUpController.ACTION_NEW)) {
-				currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
+			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
+				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFromId, moduleToId, isEnabled);
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description,dependencies,regex, moduleFromId, moduleToId, isEnabled);
+				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFromId, moduleToId, isEnabled);
 			}
-			saveAllExceptionRules();
-			
-			jframeAppliedRule.dispose();
-			pokeObservers();
+			this.saveAllExceptionRules();
+			DefinitionController.getInstance().notifyObservers(this.moduleId);
 		} catch (Exception e) {
 			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage(), "Error");
 		}
@@ -236,30 +201,8 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 
-	/*
-	 * Exceptions
-	 */
-	public void createExceptionGUI(Long selectedModuleFromId, Long selectedModuleToId) {
-		//TODO improve this is very ugly code
-		jframeExceptionRule = new JFrameExceptionRule(this, selectedModuleFromId, selectedModuleToId);
-
-		// Change view of jframe conforms the action
-		if (getAction().equals(SoftwareUnitController.ACTION_NEW)) {
-			jframeExceptionRule.jButtonSave.setText("Create");
-			jframeExceptionRule.setTitle("New exception rule");
-		} else if (getAction().equals(SoftwareUnitController.ACTION_EDIT)) {
-			jframeExceptionRule.jButtonSave.setText("Save");
-			jframeExceptionRule.setTitle("Edit exception rule");
-		}
-		// Set the visibility of the jframe to true so the jframe is now visible
-		UiDialogs.showOnScreen(0, jframeExceptionRule);
-		
-		jframeExceptionRule.setVisible(true);
-	}
-
 	public void addException(HashMap<String, Object> exceptionRule){
 		exceptionRules.add(exceptionRule);
-		notifyObservers();
 	}
 	
 	public void removeException(Long exceptionRuleId){

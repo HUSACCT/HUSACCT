@@ -25,15 +25,6 @@ public class SoftwareUnitController extends PopUpController {
 		this.setModuleId(moduleId);
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
-
-	@Override
-	@Deprecated
-	public void initUi() throws Exception {
-		softwareUnitFrame = new JFrameSoftwareUnit(this);
-		// Set the visibility of the jframe to true so the jframe is now visible
-		UiDialogs.showOnScreen(0, softwareUnitFrame);
-		softwareUnitFrame.setVisible(true);
-	}
 	
 	@Deprecated
 	public void fillSoftwareUnitsList(ArrayList<SoftwareUnitDefinition> softwareUnitList){

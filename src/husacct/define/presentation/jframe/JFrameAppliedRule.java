@@ -5,6 +5,7 @@ import husacct.define.presentation.jpanel.RuleDetailsJPanel;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.KeyValueComboBox;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.BorderLayout;
@@ -49,20 +50,13 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	private JButton jButtonRemoveExceptionRow;	
 	private JButton jButtonCancel;
 	private JButton jButtonSave;
-
-	/**
-	 * Constructor
-	 */
-	public JFrameAppliedRule(AppliedRuleController appliedRuleController) {
+	
+	public JFrameAppliedRule(long moduleId, long appliedRuleId) {
 		super();
-		this.appliedRuleController = appliedRuleController;
-		this.appliedRuleController.addObserver(this);
+		this.appliedRuleController = new AppliedRuleController(moduleId, appliedRuleId);
 		initGUI();
 	}
 
-	/**
-	 * Creating Gui
-	 */
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -184,7 +178,7 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		updateExceptionTable();
 	}
 	
-	private void updateExceptionTable() {
+	public void updateExceptionTable() {
 		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
 		JTableTableModel tableModel = (JTableTableModel) jTableException.getModel();
 		tableModel.getDataVector().removeAllElements();
@@ -225,10 +219,13 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 
 	private void addException() {
 		//TODO ugly code
-		Long selectedModuleFromId = appliedRuleController.getCurrentModuleId();
+		Long selectedModuleFromId = this.appliedRuleController.getCurrentModuleId();
 		DataHelper datahelper = (DataHelper) this.ruleDetailsJPanel.toModuleJComboBox.getSelectedItem();
 		Long selectedModuleToId = datahelper.getId();
-		appliedRuleController.createExceptionGUI(selectedModuleFromId, selectedModuleToId);
+		
+		JFrameExceptionRule exceptionFrame = new JFrameExceptionRule(this.appliedRuleController, this, selectedModuleFromId, selectedModuleToId);
+		exceptionFrame.setLocationRelativeTo(exceptionFrame.getRootPane());
+		exceptionFrame.setVisible(true);
 	}
 	
 	private void removeException() {

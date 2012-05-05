@@ -1,5 +1,6 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.presentation.jframe.JFrameAppliedRule;
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.utils.UiDialogs;
@@ -110,7 +111,10 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	private void addRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
-			DefinitionController.getInstance().createRuleGUI();
+			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, -1L);
+			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			appliedRuleFrame.setVisible(true);
+			//DefinitionController.getInstance().createRuleGUI();
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
 		}

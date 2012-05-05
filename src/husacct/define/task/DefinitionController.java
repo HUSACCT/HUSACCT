@@ -222,45 +222,6 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	public void createRuleGUI() {
-		
-		try {
-			long moduleId = getSelectedModuleId();
-
-			if (moduleId != -1) {
-				// Create a new software unit controller
-				AppliedRuleController a = new AppliedRuleController(moduleId, -1L);
-				// Set the action of the view
-				a.setAction(PopUpController.ACTION_NEW);
-				a.addObserver(this);
-				// Build and show the ui
-				a.initUi();
-			}
-		} catch (Exception e) {
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-		}
-	}
-	
-	public void createRuleGUI(long appliedRuleId) {
-		try {
-			long moduleId = getSelectedModuleId();
-
-			if (moduleId != -1 && appliedRuleId != -1L) {
-				// Create a new software unit controller
-				AppliedRuleController a = new AppliedRuleController(moduleId, appliedRuleId);
-				// Set the action of the view
-				a.setAction(PopUpController.ACTION_EDIT);
-				a.addObserver(this);
-				// Build and show the ui
-				a.initUi();
-			} else {
-				UiDialogs.errorDialog(definitionJPanel, "Select an applied rule", "Error");
-			}
-		} catch (Exception e) {
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-		}
-	}
-	
 	public void removeRule(long appliedRuleId) {
 		logger.info("Removing rule " + appliedRuleId);
 		try {
@@ -353,8 +314,9 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	/**
-	 * TODO:: TASK SHOULD NOT CALL VIEW
+	 * #FIXME:: TASK SHOULD NOT CALL VIEW
 	 */
+	@Deprecated
 	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
 		try {
 			long layerId = getSelectedModuleId();
@@ -388,7 +350,10 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 
-	// #TODO:: CONTROLLER SHOULD NOT CALL VIEW
+	/**
+	 * #FIXME:: TASK SHOULD NOT CALL VIEW
+	 */
+	@Deprecated
 	public void updateAppliedRulesTable(JTableAppliedRule appliedRuleTable) {
 		try {
 			long layerId = getSelectedModuleId();
