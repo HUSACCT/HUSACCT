@@ -5,7 +5,6 @@ import husacct.control.presentation.menubar.HelpMenu;
 import husacct.control.presentation.menubar.LanguageMenu;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.menubar.ValidateMenu;
-import husacct.control.presentation.menubar.ViewMenu;
 import husacct.control.task.MainController;
 
 import java.awt.Frame;
@@ -16,7 +15,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
-public class MainGui extends JFrame {
+public class MainGui extends JFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
 
@@ -38,21 +37,19 @@ public class MainGui extends JFrame {
 		this.menuBar = new MenuBar();
 		
 		FileMenu fileMenu = new FileMenu(mainController);
-		ViewMenu viewMenu = new ViewMenu(mainController.getViewController());
 		DefineMenu defineMenu = new DefineMenu(mainController);
 		ValidateMenu validateMenu = new ValidateMenu(mainController);
 		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
 
 		menuBar.add(fileMenu);
-		menuBar.add(viewMenu);
 		menuBar.add(defineMenu);
 		menuBar.add(validateMenu);
 		menuBar.add(languageMenu);
 		menuBar.add(helpMenu);
 		
 		setJMenuBar(menuBar);
-		
+
 	}
 
 	private void setupFrame(){
