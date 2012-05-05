@@ -221,7 +221,7 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	private void addException() {
 		//TODO ugly code
 		Long selectedModuleFromId = appliedRuleController.getCurrentModuleId();
-		DataHelper datahelper = (DataHelper) this.ruleDetailsJPanel.jComboBoxModuleTo.getSelectedItem();
+		DataHelper datahelper = (DataHelper) this.ruleDetailsJPanel.toModuleJComboBox.getSelectedItem();
 		Long selectedModuleToId = datahelper.getId();
 		appliedRuleController.createExceptionGUI(selectedModuleFromId, selectedModuleToId);
 	}
@@ -272,5 +272,8 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		// Ignore
 	}
 
-
+	@Deprecated
+	public void setSaveButtonText(String text) {
+		this.jButtonSave.setText(text);
+	}
 }

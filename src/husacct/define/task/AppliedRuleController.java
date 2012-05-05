@@ -49,10 +49,10 @@ public class AppliedRuleController extends PopUpController {
 
 		// Change view of jframe conforms the action
 		if (getAction().equals(SoftwareUnitController.ACTION_NEW)) {
-			jframeAppliedRule.jButtonSave.setText("Create");
+			jframeAppliedRule.setSaveButtonText("Create");
 			jframeAppliedRule.setTitle("New applied rule");
 		} else if (getAction().equals(SoftwareUnitController.ACTION_EDIT)) {
-			jframeAppliedRule.jButtonSave.setText("Save");
+			jframeAppliedRule.setSaveButtonText("Save");
 			jframeAppliedRule.setTitle("Edit applied rule");
 //			if (currentAppliedRuleId != -1L) {
 //				// Load name & type

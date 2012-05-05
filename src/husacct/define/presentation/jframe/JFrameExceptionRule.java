@@ -51,8 +51,8 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	}
 
 	private void loadComboboxes(Long selectedModuleFromId, Long selectedModuleToId) {
-		jPanelRuleDetails.jComboBoxModuleFrom.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
-		jPanelRuleDetails.jComboBoxModuleTo.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
+		jPanelRuleDetails.fromModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
+		jPanelRuleDetails.toModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
 	}
 
 	/**
