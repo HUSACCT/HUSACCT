@@ -3,7 +3,6 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
-import husacct.control.presentation.workspace.CloseWorkspaceDialog;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
 import husacct.control.presentation.workspace.SaveWorkspaceFrame;
@@ -32,10 +31,6 @@ public class WorkspaceController {
 	public void showCreateWorkspaceGui() {
 		new CreateWorkspaceDialog(mainController);
 	}
-
-	public void showCloseWorkspaceGui(){
-		new CloseWorkspaceDialog(mainController);
-	}
 	
 	public void showOpenWorkspaceGui() {
 		new OpenWorkspaceFrame(mainController);
@@ -43,7 +38,6 @@ public class WorkspaceController {
 	
 	public SaveWorkspaceFrame showSaveWorkspaceGui() {
 		return new SaveWorkspaceFrame(mainController);
-
 	}
 	
 	public void createWorkspace(String name){

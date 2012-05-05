@@ -54,7 +54,7 @@ public class FileMenu extends JMenu {
 		this.add(closeWorkspaceItem);
 		closeWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				workspaceController.showCloseWorkspaceGui();
+				workspaceController.closeWorkspace();
 			}
 		});		
 
