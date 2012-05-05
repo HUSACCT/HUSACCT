@@ -3,6 +3,8 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.define.domain.module.Module;
+import husacct.define.domain.module.Layer;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -18,6 +20,8 @@ import java.util.MissingResourceException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+
+import org.apache.log4j.Logger;
 
 public class AppliedRuleController extends PopUpController {
 
@@ -91,18 +95,20 @@ public class AppliedRuleController extends PopUpController {
 		for (CategoryDTO categorie : categories) {
 			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
 			
-			//foreach ruletype set ruletypekeys array
-			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-				ruleTypeKeys.add(ruleTypeDTO.key);
-				//#TODO:: Check if ruletype is skip/back call -> only layers in combobox -> popUpcontroller->getModuleID();
-			}
+			Module selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
 					
 			//Get the correct display value for each ruletypekey from the resourcebundle
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
-				try{
-					String value = resourceBundle.getString(ruleTypeDTO.key);
-					ruleTypeValues.add(value);
-				}catch(MissingResourceException e){
+				try {
+					Logger.getLogger(this.getClass()).debug(ruleTypeDTO.key);
+					if(!(selectedModule instanceof Layer) && (ruleTypeDTO.key.equals("SkipCall") || ruleTypeDTO.key.equals("BackCall"))) {
+						continue;
+					} else {
+						String value = resourceBundle.getString(ruleTypeDTO.key);
+						ruleTypeKeys.add(ruleTypeDTO.key);
+						ruleTypeValues.add(value);
+					}
+				} catch(MissingResourceException e){
 					ruleTypeValues.add(ruleTypeDTO.key);
 					logger.info("Key not found in resourcebundle: " + ruleTypeDTO.key);
 				}

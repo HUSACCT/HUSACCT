@@ -3,6 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.task.AppliedRuleController;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -28,6 +29,11 @@ public class RuleDetailsJPanel extends JPanel{
 	private AppliedRuleController appliedRulesController;
 	private Logger logger;
 	
+	private JLabel fromModuleLabel;
+	private JLabel toModuleLabel;
+	private JLabel ruleEnabledLabel;
+	private JLabel descriptionLabel;
+	
 	public JComboBox fromModuleJComboBox;
 	public JComboBox toModuleJComboBox;
 	public JCheckBox ruleEnabledCheckBox;
@@ -44,7 +50,7 @@ public class RuleDetailsJPanel extends JPanel{
 		try {
 			this.setLayout(this.createRuleDetailsLayout());
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			initDetails(ruleTypeKey);
+			this.initDetails(ruleTypeKey);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -80,6 +86,11 @@ public class RuleDetailsJPanel extends JPanel{
 		} else if (ruleTypeKey.equals("SkipCall")){
 			initSkipCall();
 		}//TODO complement with remaining ruletypes
+		
+		// updating panel!
+		if(this.getComponentCount() > 0) {
+			this.getRootPane().revalidate();
+		}
 	}
 	
 	private void initIsNotAllowedToUse(){
@@ -131,13 +142,15 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 	
 	private void addFromModuleComponents(GridBagConstraints gridBagConstraints) {
-		this.add(new JLabel("From Module"));
+		this.fromModuleLabel = new JLabel("From Module");
+		this.add(this.fromModuleLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		this.add(createFromModuleJComboBox(), gridBagConstraints);
+		this.createFromModuleJComboBox();
+		this.add(this.fromModuleJComboBox, gridBagConstraints);
 	}
 	
-	private JComboBox createFromModuleJComboBox() {
+	private void createFromModuleJComboBox() {
 		this.fromModuleJComboBox = new JComboBox();
 		String currentModuleName = appliedRulesController.getCurrentModuleName();
 		Long currentModuleID = appliedRulesController.getCurrentModuleId();
@@ -149,24 +162,25 @@ public class RuleDetailsJPanel extends JPanel{
 		comboBoxModel = new DefaultComboBoxModel(new DataHelper[]{datahelper});
 		
 		this.fromModuleJComboBox.setModel(comboBoxModel);
-		return this.fromModuleJComboBox;
 	}
 	
 	private void addToModuleComponents(GridBagConstraints gridBagConstraints) {
-		this.add(new JLabel("To Module"), gridBagConstraints);
+		this.toModuleLabel = new JLabel("To Module");
+		this.add(this.toModuleLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		this.add(createToModuleJComboBox(), gridBagConstraints);
+		this.createToModuleJComboBox();
+		this.add(this.toModuleJComboBox, gridBagConstraints);
 	}
 	
-	private JComboBox createToModuleJComboBox() {
+	private void createToModuleJComboBox() {
 		this.toModuleJComboBox = new JComboBox();
 		this.toModuleJComboBox.setModel(this.appliedRulesController.loadModulesToCombobox());
-		return this.toModuleJComboBox;
 	}
 	
 	private void addEnabledComponents(GridBagConstraints gridBagConstraints){
-		this.add(new JLabel("Enabled"), gridBagConstraints);
+		this.ruleEnabledLabel = new JLabel("Enabled");
+		this.add(this.ruleEnabledLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		this.ruleEnabledCheckBox = new JCheckBox();
 		this.ruleEnabledCheckBox.setSelected(true);
@@ -174,7 +188,8 @@ public class RuleDetailsJPanel extends JPanel{
 	}
 	
 	private void addDescriptionComponents(GridBagConstraints gridBagConstraints){
-		this.add(new JLabel("Description"), gridBagConstraints);
+		this.descriptionLabel = new JLabel("Description");
+		this.add(this.descriptionLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		this.add(this.createDescriptionScrollPane(), gridBagConstraints);

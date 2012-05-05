@@ -31,6 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
+import org.apache.log4j.Logger;
+
 
 public class JFrameAppliedRule extends JFrame implements KeyListener, ActionListener, ItemListener, Observer{
 
@@ -85,8 +87,13 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
 		mainPanel.add(new JLabel("RuleType"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		mainPanel.add(this.createAppliedRuleKeyValueComboBox(), new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		mainPanel.add(this.createRuleDetailsJPanel(), new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		
+		this.createAppliedRuleKeyValueComboBox();
+		mainPanel.add(this.appliedRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		
+		this.ruleDetailsJPanel = new RuleDetailsJPanel(this.appliedRuleController);
+		this.refreshRuleDetailsJPanel();
+		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		
 		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
@@ -103,19 +110,17 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		return mainPanelLayout;
 	}
 	
-	private KeyValueComboBox createAppliedRuleKeyValueComboBox() {
+	private void createAppliedRuleKeyValueComboBox() {
 		this.appliedRuleKeyValueComboBox = new KeyValueComboBox();
 		this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
 		this.appliedRuleKeyValueComboBox.addItemListener(this);
-		return this.appliedRuleKeyValueComboBox;
 	}
 	
-	private RuleDetailsJPanel createRuleDetailsJPanel() {
-		this.ruleDetailsJPanel = new RuleDetailsJPanel(appliedRuleController);
+	private void refreshRuleDetailsJPanel() {
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		this.ruleDetailsJPanel.initGui(ruleTypeKey);
-		return ruleDetailsJPanel;
+		this.repaint();
 	}
 	
 	private JPanel createExceptionsPanel() {
@@ -232,10 +237,8 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		if (e.getSource() == this.appliedRuleKeyValueComboBox){
-			String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
-			appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-			this.ruleDetailsJPanel.initGui(ruleTypeKey);
+		if (e.getSource() == this.appliedRuleKeyValueComboBox && e.getStateChange() == 1) {
+			this.refreshRuleDetailsJPanel();
 		}
 	}
 

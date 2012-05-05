@@ -2,6 +2,7 @@ package husacct.define.presentation;
 
 import husacct.Main;
 import husacct.define.DefineServiceImpl;
+import husacct.define.domain.services.SoftwareArchitectureDomainService;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -16,6 +17,9 @@ public class MainGUI {
 		PropertyConfigurator.configure("husacct.properties");
 		Logger logger = Logger.getLogger(Main.class);
 		logger.info("Starting Define");
+		
+		SoftwareArchitectureDomainService softwareDomainService = new SoftwareArchitectureDomainService();
+		softwareDomainService.createApplication("application 1", new String[] {}, "Java", "1.0");
 		
 		// Init Main Frame
 		JFrame mainFrame = new JFrame();
