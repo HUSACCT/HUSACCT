@@ -24,7 +24,6 @@ public class ValidateMenu extends JMenu{
 		this.add(validateNowItem);
 		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Validate now
 				mainController.getViewController().showViolationsGui();
 			}
 		});
