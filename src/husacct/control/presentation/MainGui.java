@@ -52,6 +52,7 @@ public class MainGui extends JFrame{
 	}
 
 	private void setupFrame(){
+		setTitle();
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setBounds(100, 100, 783, 535);
 		this.addWindowListener(new WindowAdapter() {
@@ -68,6 +69,10 @@ public class MainGui extends JFrame{
 		} else {
 			super.setTitle(titlePrefix);
 		}
+	}
+	
+	public void setTitle(){
+		setTitle("");
 	}
 
 }
