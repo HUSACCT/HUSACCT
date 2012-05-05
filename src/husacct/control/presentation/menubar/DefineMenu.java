@@ -91,11 +91,11 @@ public class DefineMenu extends JMenu{
 					case StateController.DEFINED: {
 						exportLogicalArchitectureItem.setEnabled(true);
 						showLogicalGraphicsItem.setEnabled(true);	
+						setApplicationDetailsItem.setEnabled(true);
 					}
 					case StateController.EMPTY: {
 						defineLogicalArchitectureItem.setEnabled(true);
 						importLogicalArchitectureItem.setEnabled(true);
-						setApplicationDetailsItem.setEnabled(true);	
 					}
 				}
 			}
