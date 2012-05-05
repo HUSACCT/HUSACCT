@@ -39,27 +39,44 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
 		return domainService.getChildModulesInModule(from);
 	}
-
+	
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		// TODO Implement Service
-		return null;
+		return domainService.getChildModulesInModule(from, depth);
 	}
 	
 	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
-		return domainService.getDependency(from, to);
-	}
-
-	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO Implement Service
-		return null;
+		return domainService.getParentModuleForModule(child);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to) {
+		return domainService.getDependencies(from, to);
 	}
 
 	@Override
-	public DependencyDTO[] getDependency(String from) {
-		// TODO Implement Service
-		return null;
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
+		return domainService.getDependencies(from, to, dependencyFilter);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from) {
+		return domainService.getDependenciesFrom(from);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
+		return domainService.getDependenciesFrom(from, dependencyFilter);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to) {
+		return domainService.getDependenciesTo(to);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
+		return domainService.getDependenciesTo(to, dependencyFilter);
 	}
 }

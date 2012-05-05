@@ -1,7 +1,6 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -14,6 +13,11 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	public FamixCreationServiceImpl(){
 		model = FamixModel.getInstance();
+	}
+	
+	@Override
+	public void clearModel() {
+		model.clear();
 	}
 	
 	public void createPackage(String uniqueName, String belongsToPackage, String name){
@@ -103,8 +107,25 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
 		fAssocation.type = "declaration";
-		//TODO Set linenumbers of structural entities..
-		fAssocation.lineNumber = 0;
+		fAssocation.lineNumber = 0; //in this case, the linenumber is not given
+		model.waitingAssociations.add(fAssocation);
+	}
+	
+	@Override
+	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int line) {
+		FamixAttribute famixAttribute = new FamixAttribute();
+		famixAttribute.hasClassScope = classScope;
+		famixAttribute.accessControlQualifier = accesControlQualifier;
+		famixAttribute.belongsToClass = belongsToClass;
+		famixAttribute.declareType = declareType;
+		famixAttribute.name = name;
+		famixAttribute.uniqueName = uniqueName;
+		addToModel(famixAttribute);
+		FamixAssociation fAssocation = new FamixAssociation();
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "declaration";
+		fAssocation.lineNumber = line;
 		model.waitingAssociations.add(fAssocation);
 	}
 	
@@ -230,4 +251,5 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	public String represent(){
 		return model.toString();
 	}
+
 }

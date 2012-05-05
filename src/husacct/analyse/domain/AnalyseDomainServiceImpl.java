@@ -15,7 +15,7 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 	}	
 	
 	public void clearModel(){
-		
+		creationService.clearModel();
 	}
 	
 	@Override
@@ -40,18 +40,16 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		//TODO Implement Service
-		return null;
+		return queryService.getChildModulesInModule(from, depth);
 	}
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO Implement Service
-		return null;
+		return queryService.getParentModuleForModule(child);
 	}
 	
 	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
+	public DependencyDTO[] getDependencies(String from, String to) {
 		List<DependencyDTO> depdencyList = queryService.getDependencies(from, to);
 		DependencyDTO[] dependencies = new DependencyDTO[depdencyList.size()];
 		int count = 0;
@@ -61,10 +59,31 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 		}
 		return dependencies;
 	}
+	
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
+		return queryService.getDependencies(from, to, dependencyFilter);
+	}
 
 	@Override
-	public DependencyDTO[] getDependency(String from) {
-		//TODO Implement Service
-		return null;
+	public DependencyDTO[] getDependenciesFrom(String from) {
+		List<DependencyDTO> dependencies = queryService.getDependenciesFrom(from);
+		return dependencies.toArray(new DependencyDTO[dependencies.size()]);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
+		return queryService.getDependenciesFrom(from, dependencyFilter);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to) {
+		List<DependencyDTO> dependencies = queryService.getDependenciesTo(to);
+ 		return dependencies.toArray(new DependencyDTO[dependencies.size()]);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
+		return queryService.getDependenciesTo(to, dependencyFilter);
 	}	
 }

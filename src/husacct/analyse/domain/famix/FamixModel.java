@@ -125,4 +125,8 @@ class FamixModel extends FamixObject{
 //				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
 
 	}
+
+	public void clear() {
+		FamixModel.currentInstance = new FamixModel();
+	}
 }
