@@ -9,43 +9,36 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 
-class CSharpTreeConvertController {
+class CSharpTreeConvertController extends CSharpGenerator{
 
 	private List<CommonTree> namespaceTrees;
 	private List<CommonTree> classTrees;
 	private List<CommonTree> usageTrees;
-	private int amoutofAccolades;
-	private boolean isAbstractClass;
 	private CommonTree abstractTree;
-	private final int ABSTRACT = 74;
-	private final int CLASS = 155;
-	private final int FORWARDCURLYBRACKET = 62;
-	private List<String> classNames = new ArrayList<String>();
-	private List<Integer> innerClassDepth = new ArrayList<Integer>();
-	private String currentClassName;
 	private boolean isName = false;
-	private int depth = 0;
 
+	@SuppressWarnings("unchecked")
 	public void delegateDomainObjectGenerators(CSharpParser cSharpParser) throws RecognitionException {
 		compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
 		CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 		namespaceTrees = new ArrayList<CommonTree>();
 		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
+		walkAST(compilationUnitTree.getChildren());
+		CSharpNamespaceGenerator namespaceGenerator = new CSharpNamespaceGenerator(namespaceTrees);
+		new CSharpClassGenerator(classTrees, namespaceGenerator.getName());
+		new CSharpImportGenerator(usageTrees, "classname");
+	}
+
+	private void walkAST(List<CommonTree> children) {
 		boolean namespace = false;
 		boolean isClassPart = false;
-		depth = 0;
-		innerClassDepth = new ArrayList<Integer>();
 		boolean usage = false;
-		for (Object trees : compilationUnitTree.getChildren()) {
-			CommonTree tree = (CommonTree) trees;
+		for (CommonTree tree : children) {
 			namespace = namespaceChecking(tree, namespace);
 			isClassPart = setClassTree(tree, isClassPart);
 			usage = usageCheck(tree, usage);
 		}
-		CSharpNamespaceGenerator namespaceGenerator = new CSharpNamespaceGenerator(namespaceTrees);
-		new CSharpClassGenerator(classTrees, namespaceGenerator.getName());
-		new CSharpImportGenerator(usageTrees, "classname");
 	}
 
 	private boolean setClassTree(CommonTree tree, boolean isClassPart) {
@@ -53,7 +46,6 @@ class CSharpTreeConvertController {
 			abstractTree = tree;
 		}
 		if (isName ) {
-			currentClassName = tree.getText();
 			isName = false;
 		}
 		if (tree.getType() == CLASS) {
@@ -63,8 +55,6 @@ class CSharpTreeConvertController {
 		
 		if (isClassPart && tree.getType() == FORWARDCURLYBRACKET ) {
 			isClassPart = false;
-			classNames.add(currentClassName);
-			innerClassDepth.add(depth++);
 		}
 		
 		if (isClassPart) {
@@ -79,11 +69,11 @@ class CSharpTreeConvertController {
 
 
 	private boolean namespaceChecking(CommonTree tree, boolean namespace) {
-		if (tree.getType() == 61) {
+		if (tree.getType() == NAMESPACE) {
 			namespace = true;
 		}
 
-		if (namespace && tree.getType() == 62 ) {
+		if (namespace && tree.getType() == FORWARDCURLYBRACKET ) {
 			namespace = false;
 		}
 
@@ -95,12 +85,12 @@ class CSharpTreeConvertController {
 	
 	private boolean usageCheck(CommonTree tree, boolean usage){
 		
-		if(tree.getType() == 18){
+		if(tree.getType() == USING){
 			usage = true;
 		}
 		
 		if(usage){
-			if(tree.getType() != 18){
+			if(tree.getType() != USING){
 				usageTrees.add(tree);
 			}
 		}

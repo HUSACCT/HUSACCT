@@ -1,16 +1,11 @@
 package husacct.analyse.task.analyser.csharp;
 
-import husacct.analyse.domain.ModelCreationService;
-import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 
-public class CSharpClassGenerator {
-
+public class CSharpClassGenerator extends CSharpGenerator{
 	public CSharpClassGenerator(List<CommonTree> classTrees, String string) {
-		ModelCreationService ms = new FamixCreationServiceImpl();
 		String uniqueName = null;
 		String name = string;
 		boolean isClass = false;
@@ -29,7 +24,7 @@ public class CSharpClassGenerator {
 				isClass = false;
 				String belongsToPackage = string;
 				boolean innerClass = false;
-				ms.createClass(uniqueName,name,belongsToPackage,isAbstract,innerClass);
+				modelService.createClass(uniqueName,name,belongsToPackage,isAbstract,innerClass);
 			}
 			
 		}
