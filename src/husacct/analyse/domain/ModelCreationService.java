@@ -2,6 +2,8 @@ package husacct.analyse.domain;
 
 public interface ModelCreationService {
 	
+	public void clearModel( );
+	
 	public void createPackage(String uniqieName, String belongsToPackage, String name);
 	
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
@@ -12,6 +14,7 @@ public interface ModelCreationService {
 	public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 	
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName);
+	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 	
 	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 	
@@ -29,4 +32,6 @@ public interface ModelCreationService {
 	
 	//Debug-functies voor in de main:
 	public String represent();
+
+	
 }

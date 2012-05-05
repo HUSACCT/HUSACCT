@@ -2,12 +2,12 @@ package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class JavaAttributeGenerator {
 	
+	private int line;
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
 	private String belongsToClass; 
@@ -27,6 +27,7 @@ class JavaAttributeGenerator {
 	
 	
 	public void generateModel(Tree attributeTree, String belongsToClass) {
+		this.line = attributeTree.getLine();
 		this.belongsToClass = belongsToClass;
 		walkThroughAST(attributeTree);
 		createAttributeObject();
@@ -49,8 +50,8 @@ class JavaAttributeGenerator {
 	}
 
 	private void createAttributeObject(){
-		if(declareType.contains("\\.")) declareType = declareType.substring(0, declareType.length() -2);
-		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name);
+		if(declareType.contains(".")) declareType = declareType.substring(0, declareType.length() -1);
+		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, line);
 	}
 
 	private void setAttributeName(Tree tree) {

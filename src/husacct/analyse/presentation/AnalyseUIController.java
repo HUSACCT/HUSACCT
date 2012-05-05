@@ -57,7 +57,7 @@ class AnalyseUIController {
 		List<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 		for(AnalysedModuleDTO fromModule: from){
 			for(AnalysedModuleDTO toModule: to){
-				for(DependencyDTO dependency: analyseTaskService.getDependency(fromModule.uniqueName, toModule.uniqueName)){
+				for(DependencyDTO dependency: analyseTaskService.getDependencies(fromModule.uniqueName, toModule.uniqueName)){
 					if(!dependencies.contains(dependency)) dependencies.add(dependency);
 				}
 			}
