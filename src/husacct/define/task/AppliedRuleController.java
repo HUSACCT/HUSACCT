@@ -94,6 +94,7 @@ public class AppliedRuleController extends PopUpController {
 			//foreach ruletype set ruletypekeys array
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
 				ruleTypeKeys.add(ruleTypeDTO.key);
+				//#TODO:: Check if ruletype is skip/back call -> only layers in combobox -> popUpcontroller->getModuleID();
 			}
 					
 			//Get the correct display value for each ruletypekey from the resourcebundle
