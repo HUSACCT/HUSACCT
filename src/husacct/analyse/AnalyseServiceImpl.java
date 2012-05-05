@@ -86,7 +86,7 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	@Override
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
-		return stub.getDependenciesTo(to, dependencyFilter);
+		return service.getDependenciesTo(to, dependencyFilter);
 	}
 	
 	
