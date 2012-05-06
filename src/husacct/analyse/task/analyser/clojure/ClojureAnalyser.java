@@ -1,12 +1,12 @@
 package husacct.analyse.task.analyser.clojure;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.task.analyser.AbstractAnalyser;
 
 public class ClojureAnalyser extends AbstractAnalyser{
 
-	ModelService modelCreatorService = new FamixModelServiceImpl();
+	ModelCreationService modelCreatorService = new FamixCreationServiceImpl();
 	
 	@Override
 	public void generateModelFromSource(String sourceFilePath) {

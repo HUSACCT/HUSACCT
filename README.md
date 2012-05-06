@@ -59,8 +59,8 @@ The application we were instructed to build is meant to be a contribution to the
 The tool itself is written in Java.  
 Currently there is (only) support for the following **languages**:
 
-- Java _(Using Antler)_
-- .NET C# _(Using Antler)_
+- Java _(Using Antlr)_
+- .NET C# _(Using Antlr)_
 
 We are trying to build support for the following **rule types**:
 

@@ -14,17 +14,19 @@ class JavaImportGenerator extends JavaGenerator{
 	private String importedModule;
 	private String completeImportDeclaration;
 	private boolean isCompletePackageImport;
-		
+	private int lineNumber;
+	
 	public void generateFamixImport(CommonTree importTree, String className){
 		this.importingClass = className;
 		fillImportObject(importTree);
-		modelService.createImport(importingClass, importedModule, completeImportDeclaration, isCompletePackageImport);
+		modelService.createImport(importingClass, importedModule, lineNumber, completeImportDeclaration, isCompletePackageImport);
 	}
 	
 	private void fillImportObject(CommonTree importTree){
 		String importDetails = createImportDetails(importTree, "--");
 		String declaration = convertToImportDeclaration(importDetails, "--");
 		
+		this.lineNumber = importTree.getLine();
 		this.completeImportDeclaration = declaration;
 		this.isCompletePackageImport = isPackageImport(declaration);
 		if(isCompletePackageImport) importedModule = removeStar(declaration);
