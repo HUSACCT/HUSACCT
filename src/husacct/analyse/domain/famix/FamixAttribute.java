@@ -18,5 +18,4 @@ class FamixAttribute extends FamixStructuralEntity{
 		importRepresentation += "\n";
 		return importRepresentation;
 	}
-	
 }

@@ -1,23 +1,38 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
-
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 
-class JavaPackageGenerator{
-	
-	private ModelService modelService = new FamixModelServiceImpl();
+class JavaPackageGenerator extends JavaGenerator{
 	
 	public String generateModel(CommonTree treeNode) {
-		String currentPackage = treeNode.toStringTree();
-		String uniqueName = getUniqueNameOfPackage(currentPackage);
+		String uniqueName = getUniqueNameOfPackage(treeNode);
 		String belongsToPackage = getParentPackageName(uniqueName);
 		String name = getNameOfPackage(uniqueName);
 		createPackage(name, uniqueName, belongsToPackage);
 		if(hasParentPackages(uniqueName)) {
 			createAllParentPackages(belongsToPackage);
 		}
+		return uniqueName;
+	}
+	
+	private String getParentPackageName(String completPackageName){
+		String[] allPackages = splitPackages(completPackageName);
+		String parentPackage = "";
+		for(int i = 0; i<allPackages.length - 1; i++){
+			if(parentPackage == "") parentPackage += allPackages[i];
+			else parentPackage += "." + allPackages[i];
+		}
+		return parentPackage;
+	}	
+	
+	private String getUniqueNameOfPackage(Tree antlrTree){
+		String uniqueName = antlrTree.toStringTree();
+		uniqueName = uniqueName.replace("(package", "");
+		uniqueName = uniqueName.replace("(","");
+		uniqueName = uniqueName.replace(")", "");
+		uniqueName = uniqueName.replace(". ","").substring(1); //trim first space character
+		uniqueName = uniqueName.replace(" ", ".");
 		return uniqueName;
 	}
 	
@@ -33,34 +48,13 @@ class JavaPackageGenerator{
 		}
 		createPackage(name, uniqueChildPackageName, belongsToPackage);
 		if(hasParentPackages(uniqueChildPackageName)){
-			createAllParentPackages(uniqueChildPackageName);
+			createAllParentPackages(belongsToPackage);
 		}
 	}
-	
-	private String getUniqueNameOfPackage(String antlrTree){
-		String uniqueName = antlrTree;
-		uniqueName = uniqueName.replace("(","");
-		uniqueName = uniqueName.replace(")", "");
-		uniqueName = uniqueName.replace(".","");
-		uniqueName = uniqueName.replace(" ", ".");
-		uniqueName = uniqueName.replace("..", ".");
-		uniqueName = uniqueName.replace("package.", "");
-		return uniqueName;
-	}
-	
-	private String getParentPackageName(String completPackageName){
-		String[] allPackages = splitPackages(completPackageName);
-		String parentPackage = "";
-		for(int i = 0; i<allPackages.length - 1; i++){
-			if(parentPackage == "") parentPackage += allPackages[i];
-			else parentPackage += "." + allPackages[i];
-		}
-		return parentPackage;
-	}	
 	
 	private String getNameOfPackage(String completePackageName){
 		String[] allPackages = splitPackages(completePackageName);
-		return allPackages[allPackages.length - 1];
+		return allPackages[allPackages.length -1];
 	}
 	
 	private String[] splitPackages(String completePackageName){
@@ -69,10 +63,10 @@ class JavaPackageGenerator{
 	}
 	
 	private void createPackage(String name, String uniqueName, String belongsToPackage){
-		modelService.createPackage(uniqueName, belongsToPackage, uniqueName);
+		modelService.createPackage(uniqueName, belongsToPackage, name);
 	}
 	
 	private boolean hasParentPackages(String completePackageName){
-		return splitPackages(completePackageName).length - 1 > 0;
+		return completePackageName.contains(".");
 	}
 }

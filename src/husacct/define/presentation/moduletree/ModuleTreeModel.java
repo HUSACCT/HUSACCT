@@ -73,7 +73,7 @@ public class ModuleTreeModel implements TreeModel {
 	}
 	
 	/**
-	 * #TODO:: TreeModel never fires any events (since it is not editable)
+	 * #TODO ANTLR:: TreeModel never fires any events (since it is not editable)
 	 */
 	@Override
 	public void valueForPathChanged(TreePath path, Object newvalue) {
@@ -82,7 +82,7 @@ public class ModuleTreeModel implements TreeModel {
 	
 	
 	/**
-	 * #TODO:: TreeModel never fires any events (since it is not editable)
+	 * #TODO ANTLR:: TreeModel never fires any events (since it is not editable)
 	 */
 	@Override
 	public void addTreeModelListener(TreeModelListener l) {
@@ -90,7 +90,7 @@ public class ModuleTreeModel implements TreeModel {
 	}
 	
 	/**
-	 * #TODO:: TreeModel never fires any events (since it is not editable)
+	 * #TODO ANTLR:: TreeModel never fires any events (since it is not editable)
 	 */
 	@Override
 	public void removeTreeModelListener(TreeModelListener l) {

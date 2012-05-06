@@ -1,10 +1,10 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 abstract class JavaGenerator {
 	
-	protected ModelService modelService = new FamixModelServiceImpl();
+	protected ModelCreationService modelService = new FamixCreationServiceImpl();
 
 }

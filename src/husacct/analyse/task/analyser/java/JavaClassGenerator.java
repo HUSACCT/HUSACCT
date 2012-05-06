@@ -26,7 +26,11 @@ class JavaClassGenerator extends JavaGenerator{
 	
 	public String generateModel(CommonTree commonTree) {
 		this.name = commonTree.getChild(1).toString();
-		this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
+		if(belongsToPackage.equals("")) {
+			this.uniqueName = commonTree.getChild(1).toString();
+		}else{
+			this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
+		}
 		this.isAbstract = isAbstract(commonTree);
 		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass);
 		return uniqueName;

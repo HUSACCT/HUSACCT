@@ -1,13 +1,13 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 
-public class JavaAttributeGenerator {
+class JavaAttributeGenerator {
 	
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
@@ -15,7 +15,7 @@ public class JavaAttributeGenerator {
 	private String declareClass; //example: package.package.class
 	private String declareType;  //int, string, CustomClass etc
 	
-	private ModelService modelService = new FamixModelServiceImpl();
+	private ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	private String name;
 

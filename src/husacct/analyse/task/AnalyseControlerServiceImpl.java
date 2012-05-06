@@ -10,6 +10,7 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 
 	private ApplicationAnalyser analyserService; 
 	private AnalyseDomainService domainService;
+	private boolean isAnalysed = false;
 	
 	public AnalyseControlerServiceImpl(){
 		this.domainService = new AnalyseDomainServiceImpl();
@@ -18,7 +19,9 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 	
 	@Override
 	public void analyseApplication() {
+		if(isAnalysed) domainService.clearModel();
 		analyserService.analyseApplication();
+		isAnalysed = true;
 	}
 	
 	@Override
@@ -26,43 +29,37 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 		return analyserService.getAvailableLanguages();
 	}
 	
-	
-	
+	@Override
+	public AnalysedModuleDTO[] getRootModules() {
+		return domainService.getRootModules();
+	}
 	
 
 	@Override
+	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
+		return domainService.getChildModulesInModule(from);
+	}
+
+	@Override
+	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
+		// TODO Implement Service
+		return null;
+	}
+	
+	@Override
 	public DependencyDTO[] getDependency(String from, String to) {
-		// TODO 
+		return domainService.getDependency(from, to);
+	}
+
+	@Override
+	public AnalysedModuleDTO getParentModuleForModule(String child) {
+		// TODO Implement Service
 		return null;
 	}
 
 	@Override
 	public DependencyDTO[] getDependency(String from) {
-		// TODO 
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getRootModules() {
-		// TODO 
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		// TODO 
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		// TODO 
-		return null;
-	}
-
-	@Override
-	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO 
+		// TODO Implement Service
 		return null;
 	}
 }
