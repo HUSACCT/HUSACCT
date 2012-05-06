@@ -12,7 +12,10 @@ import javax.swing.table.AbstractTableModel;
 public class ComboBoxTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = -7158951096196307267L;
 	
+	@SuppressWarnings("rawtypes")
 	private Vector dataVector;
+	
+	@SuppressWarnings({ "rawtypes", "unused" })
 	private Vector columnIdentifiers;
 	private DefaultCellEditor editor;
 	private List<Severity> comboboxValues;
@@ -26,6 +29,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		this.comboboxValues = comboboxValues;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ComboBoxTableModel(Vector columnNames, int rowCount) {
 		setDataVector(newVector(rowCount), columnNames);
 	}
@@ -64,9 +68,9 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		return columnNames.length;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getValueAt(int row, int column) {
-//		checkValuesAreValid();
 		Vector rowVector = (Vector) dataVector.elementAt(row);
 		return rowVector.elementAt(column);
 	}
@@ -76,6 +80,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		return (String) columnNames[column];
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setValueAt(Object value, int row, int column) {
 		if (isValidValue(value)) {
@@ -97,6 +102,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		return false;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected static Vector convertToVector(Object[] anArray) {
 		if (anArray == null) {
 			return null;
@@ -108,12 +114,14 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		return v;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static Vector newVector(int size) {
 		Vector v = new Vector(size);
 		v.setSize(size);
 		return v;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public final void setDataVector(Vector dataVector, Vector columnIdentifiers) {
 		this.dataVector = nonNullVector(dataVector);
 		this.columnIdentifiers = nonNullVector(columnIdentifiers);
@@ -121,6 +129,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		fireTableStructureChanged();
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static Vector nonNullVector(Vector v) {
 		return (v != null) ? v : new Vector();
 	}
@@ -140,6 +149,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void justifyRows(int from, int to) {
 		dataVector.setSize(getRowCount());
 
@@ -151,6 +161,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void addRow(Vector rowData) {
 		insertRow(getRowCount(), rowData);
 	}
@@ -159,6 +170,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		addRow(convertToVector(rowData));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void insertRow(int row, Vector rowData) {
 		dataVector.insertElementAt(rowData, row);
 		justifyRows(row, row + 1);
@@ -174,7 +186,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		fireTableRowsDeleted(row, row);
 	}
 
-	public void setTypes(Class[] types) {
+	public void setTypes(Class<?>[] types) {
 		this.types = types;
 	}
 
