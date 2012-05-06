@@ -13,12 +13,6 @@ class JavaInterfaceGenerator extends JavaGenerator{
 	}
 	
 	public String generateModel(CommonTree commonTree) {
-		
-		if(commonTree == null){
-			System.out.println("NULL");
-		}
-		
-		
 		this.name = commonTree.getChild(1).toString();
 		if(belongsToPackage.equals("")) {
 			this.uniqueName = commonTree.getChild(1).toString();
