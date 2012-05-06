@@ -25,18 +25,21 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jdom2.Element;
 
-
 public class TaskServiceImpl{
 	private final FilterController filterController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 
+	private final ExportController exportController;
+	private final ImportController importController;
 
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
-		this.domain = domain;				
-		filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
+		this.domain = domain;	
+		this.exportController = new ExportController();
+		this.importController = new ImportController(configuration);
+		this.filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
 	}
 
 	public List<Violation> getAllViolations(){
@@ -110,43 +113,35 @@ public class TaskServiceImpl{
 			String language) {
 		return domain.getAllViolationTypes(language);
 	}
-	
+
 	public Severity getSeverityFromKey(String language, String key){
 		return configuration.getSeverityFromKey(language, key);
 	}
-	
-	public void importValidationWorkspace(Element element) throws DatatypeConfigurationException   {
-		ImportController importController = new ImportController(element);
-		configuration.addSeverities(importController.getSeverities());
-		configuration.addViolations(importController.getViolations());
-		configuration.setSeveritiesPerTypesPerProgrammingLanguages(importController.getSeveritiesPerTypesPerProgrammingLanguages());
+
+	public void importValidationWorkspace(Element element) throws DatatypeConfigurationException {
+		importController.importWorkspace(element);
 	}
-	
+
 	public Element exportValidationWorkspace() {
-		Element rootValidateElement = new Element("validate");
-		ExportController exportController = new ExportController();
-		rootValidateElement.addContent(exportController.exportViolationsXML(configuration.getAllViolations()));
-		rootValidateElement.addContent(exportController.exportSeveritiesXML(configuration.getAllSeverities()));
-		rootValidateElement.addContent(exportController.exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
-		return rootValidateElement;
+		return exportController.exportAllData(configuration);
 	}
-	
+
 	public String[] getExportExtentions() {
 		return new ExtensionTypes().getExtensionTypes();
 	}
-	
+
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter){
 		return filterController.getViolationsPerSeverity(applyFilter);
 	}
-	
+
 	public void restoreAllToDefault(String language){
 		configuration.restoreAllToDefault(language);
 	}
-	
+
 	public void restoreToDefault(String language, String key){
 		configuration.restoreToDefault(language, key);
 	}
-	
+
 	public void restoreSeveritiesToDefault(){
 		configuration.restoreSeveritiesToDefault();
 	}

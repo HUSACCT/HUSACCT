@@ -340,7 +340,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtViolationtypeScrollpane.setViewportView(avtViolationtypeTable);
 
 		avtSelectAll.setText(ResourceBundles.getValue("SelectAll"));
-		avtSelectAll.setActionCommand(ResourceBundles.getValue("Restore to default"));
+		avtSelectAll.setActionCommand(ResourceBundles.getValue("RestoreToDefault"));
 		avtSelectAll.addActionListener(new ActionListener() {
 
 			@Override

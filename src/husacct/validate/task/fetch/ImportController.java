@@ -1,8 +1,10 @@
 package husacct.validate.task.fetch;
 
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,29 +12,39 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jdom2.Element;
 
-
 public class ImportController {
-	
+
 	private List<Severity> severities;
-	private List<Violation> violations;
-	private HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages;
-	
-	public ImportController(Element element) throws DatatypeConfigurationException {
-		ImportFactory importFactory = new ImportFactory();
-		severities = importFactory.importSeverities(element.getChild("severities"));
-		violations = importFactory.ImportViolations(element.getChild("violations"), severities);
-		severitiesPerTypesPerProgrammingLanguages = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"), severities);
+	private final ImportFactory importFactory;
+	private final ConfigurationServiceImpl configuration;
+
+	public ImportController(ConfigurationServiceImpl configuration) {
+		this.configuration = configuration;
+		this.importFactory = new ImportFactory();
+		this.severities = new ArrayList<Severity>();
 	}
 
-	public List<Severity> getSeverities() {
-		return severities;
-	}
-	public List<Violation> getViolations() {
-		return violations;
+	public void importWorkspace(Element element) throws DatatypeConfigurationException{
+		importSeverties(element);
+		importViolations(element);
+		importSeveritiesPerTypesPerProgrammingLanguages(element);
 	}
 
-	public HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypesPerProgrammingLanguages() {
-		return severitiesPerTypesPerProgrammingLanguages;
+	private void importSeverties(Element element) {
+		Element severityElement = element.getChild("severities");
+		this.severities = importFactory.importSeverities(severityElement);
+		configuration.addSeverities(severities);
 	}
-	
+
+	private void importViolations(Element element) throws DatatypeConfigurationException{
+			Element violationElement = element.getChild("violations");
+			List<Violation> violations = importFactory.importViolations(violationElement, severities);
+			configuration.addViolations(violations);
+	}
+
+	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element){
+		Element severitiesPerTypesPerProgrammingLanguagesElement = element.getChild("severitiesPerTypesPerProgrammingLanguages");
+		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguagesElement, severities);
+		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
+	}	
 }

@@ -4,21 +4,14 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-
-public class ConfigurationUI extends javax.swing.JInternalFrame {
+public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private static final long serialVersionUID = 3568220674416621458L;
 	private TaskServiceImpl ts;
@@ -32,12 +25,8 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		this.ts = ts;
-		severityModel = new ColorTableModel();
 		initComponents();
-
-		severityModel.setColorEditor(severityNameTable, 1);
-		loadLanguageTabs();
-		loadSeverity();
+		loadGUIText();
 	}
 
 	private void initComponents() {
@@ -59,14 +48,11 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		setIconifiable(true);
 		setMaximizable(true);
 		setResizable(true);
-		setTitle(ResourceBundles.getValue("Configuration"));
 
-		severityNameTable.setModel(severityModel);
 		severityNameTable.setFillsViewportHeight(true);
 		severityNameTable.getTableHeader().setReorderingAllowed(false);
 		severityNameScrollPane.setViewportView(severityNameTable);
 
-		add.setText(ResourceBundles.getValue("Add"));
 		add.addActionListener(new ActionListener() {
 
 			@Override
@@ -75,7 +61,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		remove.setText(ResourceBundles.getValue("Remove"));
 		remove.addActionListener(new ActionListener() {
 
 			@Override
@@ -84,7 +69,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		up.setText(ResourceBundles.getValue("Up"));
 		up.addActionListener(new ActionListener() {
 
 			@Override
@@ -93,7 +77,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		down.setText(ResourceBundles.getValue("Down"));
 		down.addActionListener(new ActionListener() {
 
 			@Override
@@ -102,7 +85,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		applySeverity.setText(ResourceBundles.getValue("Apply"));
 		applySeverity.addActionListener(new ActionListener() {
 
 			@Override
@@ -111,7 +93,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		restore.setText(ResourceBundles.getValue("RestoreToDefault"));
 		restore.addActionListener(new ActionListener() {
 
 			@Override
@@ -127,9 +108,6 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 		severityNamePanelLayout.setVerticalGroup(
 				severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE).addGroup(severityNamePanelLayout.createSequentialGroup().addContainerGap().addComponent(add).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(remove).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(up).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(down).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(applySeverity).addContainerGap()));
 
-		jTabbedPane1.addTab(ResourceBundles.getValue("SeverityConfiguration"), severityNamePanel);
-
-		cancel.setText(ResourceBundles.getValue("Cancel"));
 		cancel.addActionListener(new ActionListener() {
 
 			@Override
@@ -144,6 +122,28 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(cancel).addContainerGap()));
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(jTabbedPane1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(cancel).addGap(16, 16, 16)));
+	}
+	
+	public void loadGUIText(){
+		setTitle(ResourceBundles.getValue("Configuration"));
+		add.setText(ResourceBundles.getValue("Add"));
+		remove.setText(ResourceBundles.getValue("Remove"));
+		up.setText(ResourceBundles.getValue("Up"));
+		down.setText(ResourceBundles.getValue("Down"));
+		applySeverity.setText(ResourceBundles.getValue("Apply"));
+		restore.setText(ResourceBundles.getValue("RestoreToDefault"));
+		jTabbedPane1.addTab(ResourceBundles.getValue("SeverityConfiguration"), severityNamePanel);
+		cancel.setText(ResourceBundles.getValue("Cancel"));
+
+		loadModels();
+		loadLanguageTabs();
+	}
+	
+	private void loadModels(){
+		severityModel = new ColorTableModel();
+		severityNameTable.setModel(severityModel);
+		severityModel.setColorEditor(severityNameTable, 1);
+		loadSeverity();
 	}
 
 	private void downActionPerformed() {

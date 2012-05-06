@@ -5,7 +5,6 @@ import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,20 +13,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle;
+import javax.swing.*;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -57,46 +44,15 @@ public final class BrowseViolations extends JInternalFrame {
 		this.ts = ts;
 		this.fv = new FilterViolations(ts, this);
 		initComponents();
+		loadGUIText();
 		violationTable.doLayout();
-		setViolations();
-
 	}
 
 	private void initComponents() {
 
-		setTitle(ResourceBundles.getValue("BrowseViolations"));
 		dependencyLevel = new ButtonGroup();
 		violationPanel = new JScrollPane();
 		violationTable = new JTable();
-		String[] columnNames = {
-			ResourceBundles.getValue("LogicalModule"),
-			ResourceBundles.getValue("Source"),
-			ResourceBundles.getValue("Rule"),
-			ResourceBundles.getValue("LineNumber"),
-			ResourceBundles.getValue("DependencyKind"),
-			ResourceBundles.getValue("Target"),
-			ResourceBundles.getValue("Severity")};
-		violationModel = new DefaultTableModel(columnNames, 0) {
-
-			private static final long serialVersionUID = -6892927200143239311L;
-			Class<?>[] types = new Class[]{
-					String.class, String.class, String.class, Integer.class,
-					String.class, String.class, String.class
-			};
-			boolean[] canEdit = new boolean[]{
-					false, false, false, false, false, false, false
-			};
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
 		shownViolationsNumber = new JLabel();
 		displayPanel = new JPanel();
 		dependencies = new JLabel();
@@ -109,12 +65,9 @@ public final class BrowseViolations extends JInternalFrame {
 		violationPanel.setAutoscrolls(true);
 
 		violationTable.setAutoCreateRowSorter(true);
-		violationTable.setModel(violationModel);
 		violationTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		violationTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		violationTable.setFillsViewportHeight(true);
-		violationTable.getRowSorter().toggleSortOrder(4);
-		violationTable.getRowSorter().toggleSortOrder(4);
 		violationTable.getTableHeader().setReorderingAllowed(false);
 		violationPanel.setViewportView(violationTable);
 		
@@ -127,20 +80,12 @@ public final class BrowseViolations extends JInternalFrame {
 		
 		shownViolationsNumber.setText("0");
 
-		displayPanel.setBorder(BorderFactory.createTitledBorder(
-				ResourceBundles.getValue("Display")));
-
-		dependencies.setText(ResourceBundles.getValue("Dependencies") + ":");
-
 		dependencyLevel.add(allDependencies);
 		allDependencies.setSelected(true);
-		allDependencies.setText(ResourceBundles.getValue("All"));
 
 		dependencyLevel.add(directDependencies);
-		directDependencies.setText(ResourceBundles.getValue("Direct"));
 
 		dependencyLevel.add(indirectDependencies);
-		indirectDependencies.setText(ResourceBundles.getValue("Indirect"));
 
 		GroupLayout displayPanelLayout = new GroupLayout(displayPanel);
 		displayPanel.setLayout(displayPanelLayout);
@@ -165,10 +110,6 @@ public final class BrowseViolations extends JInternalFrame {
 		editFilter = new JButton();
 		applyFilter = new JCheckBox();
 
-		filterPanel.setBorder(BorderFactory.createTitledBorder(
-				ResourceBundles.getValue("Filter")));
-
-		editFilter.setText(ResourceBundles.getValue("EditFilter"));
 		editFilter.setAutoscrolls(true);
 		editFilter.setMaximumSize(new Dimension(75, 15));
 		editFilter.setMinimumSize(new Dimension(75, 15));
@@ -181,7 +122,6 @@ public final class BrowseViolations extends JInternalFrame {
 			}
 		});
 
-		applyFilter.setText(ResourceBundles.getValue("ApplyFilter"));
 		applyFilter.addItemListener(new ItemListener() {
 
 			@Override
@@ -240,14 +180,66 @@ public final class BrowseViolations extends JInternalFrame {
 		
 		scrollPane.setViewportView(informationPanel);
 
-		informationPanel.setBorder(BorderFactory.createTitledBorder(
-				ResourceBundles.getValue("Information")));
-
 		getContentPane().setLayout(layout);
 		setResizable(true);
 		setClosable(true);
 		setIconifiable(true);
 		setMaximizable(true);
+	}
+	
+	public void loadGUIText(){
+		setTitle(ResourceBundles.getValue("BrowseViolations"));
+		displayPanel.setBorder(BorderFactory.createTitledBorder(
+				ResourceBundles.getValue("Display")));
+		dependencies.setText(ResourceBundles.getValue("Dependencies") + ":");
+		allDependencies.setText(ResourceBundles.getValue("All"));
+		directDependencies.setText(ResourceBundles.getValue("Direct"));
+		indirectDependencies.setText(ResourceBundles.getValue("Indirect"));
+		filterPanel.setBorder(BorderFactory.createTitledBorder(
+				ResourceBundles.getValue("Filter")));
+		editFilter.setText(ResourceBundles.getValue("EditFilter"));
+		applyFilter.setText(ResourceBundles.getValue("ApplyFilter"));
+		informationPanel.setBorder(BorderFactory.createTitledBorder(
+				ResourceBundles.getValue("Information")));
+		loadModels();
+		createInformationPanel();
+	}
+	
+	private void loadModels(){
+		String[] columnNames = {
+			ResourceBundles.getValue("LogicalModule"),
+			ResourceBundles.getValue("Source"),
+			ResourceBundles.getValue("Rule"),
+			ResourceBundles.getValue("LineNumber"),
+			ResourceBundles.getValue("DependencyKind"),
+			ResourceBundles.getValue("Target"),
+			ResourceBundles.getValue("Severity")};
+		
+		violationModel = new DefaultTableModel(columnNames, 0) {
+
+			private static final long serialVersionUID = -6892927200143239311L;
+			Class<?>[] types = new Class[]{
+					String.class, String.class, String.class, Integer.class,
+					String.class, String.class, String.class
+			};
+			boolean[] canEdit = new boolean[]{
+					false, false, false, false, false, false, false
+			};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+		violationTable.setModel(violationModel);
+		violationTable.getRowSorter().toggleSortOrder(4);
+		violationTable.getRowSorter().toggleSortOrder(4);
+		setViolations();
 	}
 
 	public void createInformationPanel() {
