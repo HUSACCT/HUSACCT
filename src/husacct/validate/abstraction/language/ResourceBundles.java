@@ -12,20 +12,21 @@ import org.apache.log4j.Logger;
 public class ResourceBundles {
 	private static final String bundleLocation = "husacct.common.locale.validateLang";
 	private static Logger logger = Logger.getLogger(ResourceBundles.class);
-	private static Locale locale = ServiceProvider.getInstance().getControlService().getLocale();
-	
+
 	public static String getValue(String key){			
-		try{			
+		try{
+			Locale locale = getLocale();
 			ResourceBundle languageValues = ResourceBundle.getBundle(bundleLocation, locale);
 			return languageValues.getString(key);
 		}catch(MissingResourceException m){
-			logger.error(m.getMessage(), m);
+			logger.warn(m.getMessage(), m);
 		}
 		return key;
 	}
-	
+
 	public static String getKey(String remoteValue){
-		try{			
+		try{	
+			Locale locale = getLocale();
 			ResourceBundle languageValues = ResourceBundle.getBundle(bundleLocation, locale);
 			Enumeration<String> keys = languageValues.getKeys();
 			while (keys.hasMoreElements()) {
@@ -41,7 +42,7 @@ public class ResourceBundles {
 		return remoteValue;
 	}
 
-	public static void setLocale(Locale locale) {
-		ResourceBundles.locale = locale;
+	private static Locale getLocale() {
+		return ServiceProvider.getInstance().getControlService().getLocale();
 	}
 }

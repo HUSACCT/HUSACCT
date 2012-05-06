@@ -34,7 +34,7 @@ public class DomainServiceImpl {
 	public Map<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage){
 		initializeViolationtypeFactory();
 		
-		AbstractViolationType violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage, configuration);
+		AbstractViolationType violationtypefactory = this.violationtypefactory.getViolationTypeFactory(programmingLanguage, configuration);
 		if(violationtypefactory != null){
 			return violationtypefactory.getAllViolationTypes();
 		}

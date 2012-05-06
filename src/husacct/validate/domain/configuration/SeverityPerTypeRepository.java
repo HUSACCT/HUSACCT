@@ -25,7 +25,7 @@ public class SeverityPerTypeRepository {
 
 	public SeverityPerTypeRepository(ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
-		this.ruletypefactory = new RuleTypesFactory(configuration);		
+		this.ruletypefactory = new RuleTypesFactory(configuration);
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}

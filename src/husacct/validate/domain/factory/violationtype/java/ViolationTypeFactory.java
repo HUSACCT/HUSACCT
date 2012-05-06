@@ -23,7 +23,7 @@ public class ViolationTypeFactory {
 			return new CSharpViolationTypeFactory(configuration);
 		}
 		else{
-			logger.warn("No programminglanguage defined in the define component");
+			logger.debug("No programminglanguage defined in the define component");
 			return null;
 		}
 	}
