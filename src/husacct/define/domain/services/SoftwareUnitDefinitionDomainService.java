@@ -1,0 +1,47 @@
+package husacct.define.domain.services;
+
+import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.SoftwareUnitDefinition.Type;
+import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
+
+public class SoftwareUnitDefinitionDomainService {
+	
+	public ArrayList<String> getSoftwareUnitNames(long moduleId) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
+		ArrayList<String> softwareUnitNames = new ArrayList<String>();
+		for (SoftwareUnitDefinition unit : softwareUnits){
+			softwareUnitNames.add(unit.getName());
+		}
+		return softwareUnitNames;
+	}
+	
+	public ArrayList<SoftwareUnitDefinition> getSoftwareUnit(long moduleId) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
+		return softwareUnits;
+	}
+	
+	public String getSoftwareUnitType(String softwareUnitName) {
+		SoftwareUnitDefinition unit = SoftwareArchitecture.getInstance().getSoftwareUnitByName(softwareUnitName);
+		String softwareUnitType = unit.getType().toString();
+		return softwareUnitType;
+	}
+
+	public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		//TODO add try catch fopr type
+		Type type = Type.valueOf(t);
+		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+		module.addSUDefinition(unit);
+	}
+	
+	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		SoftwareUnitDefinition unit = SoftwareArchitecture.getInstance().getSoftwareUnitByName(softwareUnit);
+		module.removeSUDefintion(unit);
+	}
+}
