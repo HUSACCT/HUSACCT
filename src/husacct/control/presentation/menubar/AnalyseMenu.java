@@ -15,7 +15,8 @@ import javax.swing.event.MenuEvent;
 public class AnalyseMenu extends JMenu{
 	private JMenuItem setApplicationDetailsItem;
 	private JMenuItem showAnalysedGraphicsItem;
-
+	private JMenuItem setApplicationTreeItem;
+	
 	public AnalyseMenu(final MainController mainController){
 		super("Analyse");
 
@@ -24,6 +25,14 @@ public class AnalyseMenu extends JMenu{
 		setApplicationDetailsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().showApplicationDetailsGui();
+			}
+		});
+		
+		setApplicationTreeItem = new JMenuItem("Show application tree");
+		this.add(setApplicationTreeItem);
+		setApplicationTreeItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getViewController().showApplicationTreeGui();
 			}
 		});
 		
@@ -39,11 +48,13 @@ public class AnalyseMenu extends JMenu{
 			public void changeState(int state) {
 				setApplicationDetailsItem.setEnabled(false);
 				showAnalysedGraphicsItem.setEnabled(false);
+				setApplicationTreeItem.setEnabled(false);
 				switch(state){
 					case StateController.VALIDATED:
 					case StateController.MAPPED:
 					case StateController.ANALYSED: {
 						showAnalysedGraphicsItem.setEnabled(true);
+						setApplicationTreeItem.setEnabled(true);
 					}
 					case StateController.DEFINED: {
 						setApplicationDetailsItem.setEnabled(true);

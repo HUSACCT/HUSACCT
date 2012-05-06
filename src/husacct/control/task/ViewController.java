@@ -19,6 +19,7 @@ public class ViewController {
 	private JInternalFrame configurationInternalFrame;
 	private JInternalFrame definedArchitectureInternalFrame;
 	private JInternalFrame analysedArchitectureInternalFrame;
+	private JInternalFrame applicationTreeInternalFrame;
 	
 	private Dimension defaultDimension = new Dimension(800, 600);
 	
@@ -101,6 +102,13 @@ public class ViewController {
 		mainController.getMainGui().getContentPane().add(analysedArchitectureInternalFrame);
 	}
 	
+	public void setApplicationTreeGui(){
+		applicationTreeInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
+		setupFrame(applicationTreeInternalFrame, "Violations");
+		applicationTreeInternalFrame.setSize(defaultDimension);
+		mainController.getMainGui().getContentPane().add(applicationTreeInternalFrame);
+	}
+	
 	public void showDefineGui() {		
 		Rectangle rect = getBounds(defineInternalFrame);
 		resetFrame(defineInternalFrame);
@@ -144,5 +152,14 @@ public class ViewController {
 		setBounds(analysedArchitectureInternalFrame, rect);
 		analysedArchitectureInternalFrame.setVisible(true);
 		analysedArchitectureInternalFrame.toFront();
-	}	
+	}
+	
+	public void showApplicationTreeGui() {		
+		Rectangle rect = getBounds(applicationTreeInternalFrame);
+		resetFrame(applicationTreeInternalFrame);
+		setApplicationTreeGui();
+		setBounds(applicationTreeInternalFrame, rect);
+		applicationTreeInternalFrame.setVisible(true);
+		applicationTreeInternalFrame.toFront();
+	}
 }
