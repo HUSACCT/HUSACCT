@@ -1,11 +1,10 @@
 package husacct.control.presentation;
+import husacct.control.presentation.menubar.AnalyseMenu;
 import husacct.control.presentation.menubar.DefineMenu;
 import husacct.control.presentation.menubar.FileMenu;
 import husacct.control.presentation.menubar.HelpMenu;
 import husacct.control.presentation.menubar.LanguageMenu;
-import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.menubar.ValidateMenu;
-import husacct.control.presentation.menubar.ViewMenu;
 import husacct.control.task.MainController;
 
 import java.awt.Frame;
@@ -16,7 +15,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
-public class MainGui extends JFrame {
+public class MainGui extends JFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
 
@@ -35,27 +34,28 @@ public class MainGui extends JFrame {
 	}
 
 	private void createMenuBar() {
-		this.menuBar = new MenuBar();
+		this.menuBar = new JMenuBar();
 		
 		FileMenu fileMenu = new FileMenu(mainController);
-		ViewMenu viewMenu = new ViewMenu(mainController.getViewController());
 		DefineMenu defineMenu = new DefineMenu(mainController);
+		AnalyseMenu analyseMenu = new AnalyseMenu(mainController);
 		ValidateMenu validateMenu = new ValidateMenu(mainController);
 		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
 
 		menuBar.add(fileMenu);
-		menuBar.add(viewMenu);
 		menuBar.add(defineMenu);
+		menuBar.add(analyseMenu);
 		menuBar.add(validateMenu);
 		menuBar.add(languageMenu);
 		menuBar.add(helpMenu);
 		
 		setJMenuBar(menuBar);
-		
+
 	}
 
 	private void setupFrame(){
+		setTitle();
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setBounds(100, 100, 783, 535);
 		this.addWindowListener(new WindowAdapter() {
@@ -72,6 +72,10 @@ public class MainGui extends JFrame {
 		} else {
 			super.setTitle(titlePrefix);
 		}
+	}
+	
+	public void setTitle(){
+		setTitle("");
 	}
 
 }

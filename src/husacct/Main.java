@@ -13,7 +13,7 @@ public class Main {
 		Logger logger = Logger.getLogger(Main.class);
 		logger.debug("Starting HUSACCT");
 		
-		new MainController();
+		new MainController(args);
 	}
 
 }

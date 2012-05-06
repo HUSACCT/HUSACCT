@@ -3,7 +3,6 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
-import husacct.control.presentation.workspace.CloseWorkspaceDialog;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
 import husacct.control.presentation.workspace.SaveWorkspaceFrame;
@@ -26,15 +25,11 @@ public class WorkspaceController {
 	private static MainController mainController;
 	
 	public WorkspaceController(MainController mainController){
-		this.mainController = mainController;
+		WorkspaceController.mainController = mainController;
 	}
 
 	public void showCreateWorkspaceGui() {
 		new CreateWorkspaceDialog(mainController);
-	}
-
-	public void showCloseWorkspaceGui(){
-		new CloseWorkspaceDialog(mainController);
 	}
 	
 	public void showOpenWorkspaceGui() {
@@ -43,19 +38,18 @@ public class WorkspaceController {
 	
 	public SaveWorkspaceFrame showSaveWorkspaceGui() {
 		return new SaveWorkspaceFrame(mainController);
-
 	}
 	
 	public void createWorkspace(String name){
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		WorkspaceController.currentWorkspace = workspace;
-		mainController.getMainGui().setTitle(name);
+		if(mainController.guiEnabled) mainController.getMainGui().setTitle(name);
 	}
 	
 	public void closeWorkspace() {
 		WorkspaceController.currentWorkspace = null;
-		mainController.getMainGui().setTitle("");
+		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
 	}
 	
 	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
@@ -143,7 +137,7 @@ public class WorkspaceController {
 
 	public static void setWorkspace(Workspace workspace) {
 		WorkspaceController.currentWorkspace = workspace;
-		if(mainController != null) {
+		if(mainController != null && mainController.guiEnabled) {
 			mainController.getMainGui().setTitle(workspace.getName());
 		}
 	}

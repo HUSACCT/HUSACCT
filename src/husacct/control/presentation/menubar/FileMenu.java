@@ -12,25 +12,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 @SuppressWarnings("serial")
 public class FileMenu extends JMenu {
 
-	private StateController stateController;
 	private WorkspaceController workspaceController;
 	private JMenuItem createWorkspaceItem;
 	private JMenuItem openWorkspaceItem;
 	private JMenuItem saveWorkspaceItem;
 	private JMenuItem closeWorkspaceItem;
-	private int currentState;
 	
 	public FileMenu(final MainController mainController){
 		super("File");
 		this.workspaceController = mainController.getWorkspaceController();
-		
-		this.stateController = mainController.getStateController();
-		currentState = stateController.getState();
 		
 		createWorkspaceItem = new JMenuItem("Create workspace");
 		this.add(createWorkspaceItem);
@@ -60,7 +54,7 @@ public class FileMenu extends JMenu {
 		this.add(closeWorkspaceItem);
 		closeWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				workspaceController.showCloseWorkspaceGui();
+				workspaceController.closeWorkspace();
 			}
 		});		
 
@@ -75,66 +69,33 @@ public class FileMenu extends JMenu {
 			}
 		});
 		
-		//disable buttons on start
-		saveWorkspaceItem.setEnabled(false);
-		closeWorkspaceItem.setEnabled(false);
-		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-
-			@Override
 			public void changeState(int state) {
-				currentState = stateController.getState();
-				if(currentState == StateController.NONE){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(false);
-					closeWorkspaceItem.setEnabled(false);
-				}else if(currentState == StateController.EMPTY){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == StateController.DEFINED){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == StateController.MAPPED){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == StateController.VALIDATED){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
+				createWorkspaceItem.setEnabled(false);
+				openWorkspaceItem.setEnabled(false);
+				saveWorkspaceItem.setEnabled(false);
+				closeWorkspaceItem.setEnabled(false);
+				switch(state){
+					case StateController.VALIDATED:
+					case StateController.MAPPED:
+					case StateController.ANALYSED:
+					case StateController.DEFINED:
+					case StateController.EMPTY: {
+						closeWorkspaceItem.setEnabled(true);
+						saveWorkspaceItem.setEnabled(true);
+					}
+					case StateController.NONE: {
+						createWorkspaceItem.setEnabled(true);
+						openWorkspaceItem.setEnabled(true);
+					}
 				}
 			}
-			
 		});
 		
-		// TODO: refactor including adapter
-		this.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent arg0) {
-				stateController.checkState();
-				
+		this.addMenuListener(new MenuListenerAdapter() {
+			public void menuSelected(MenuEvent e) {
+				mainController.getStateController().checkState();
 			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
 		});
 	}
 }
