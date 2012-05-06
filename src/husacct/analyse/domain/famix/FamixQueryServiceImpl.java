@@ -128,11 +128,24 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
 		AnalysedModuleDTO parent;
 		
+		FamixEntity foundChildModule = theModel.classes.get(child);
+					foundChildModule = foundChildModule == null ? theModel.packages.get(child) : foundChildModule;
+					foundChildModule = foundChildModule == null ? theModel.interfaces.get(child) : foundChildModule;
+		
+		if(foundChildModule == null){
+			return new AnalysedModuleDTO("", "", "", "");
+		}
+		
 		String parentUniqueName = "";
 		String[] nameParts = child.split("\\.");
 		for(int i=0; i<nameParts.length -1; i++) {
 			parentUniqueName += nameParts[i] + ".";
 		}
+		
+		if(parentUniqueName.equals("")){
+			return new AnalysedModuleDTO("", "", "", "");
+		}
+		
 		parentUniqueName = parentUniqueName.substring(0, parentUniqueName.length() -1);
 		
 		FamixClass foundClass = theModel.classes.get(parentUniqueName);
@@ -233,14 +246,14 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 	public List<DependencyDTO> getDependenciesTo(String to) {
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssocations = theModel.associations;
-		DependencyDTO foundDepency;
+		DependencyDTO foundDepency;		
 		for(FamixAssociation assocation: allAssocations){
-	  	if(assocation.to.startsWith(to)){
-					foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
-					if(!dependencyAlreadyListed(result, foundDepency)){
-						result.add(foundDepency);
-					}
+			if(assocation.to.startsWith(to)){
+				foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+				if(!dependencyAlreadyListed(result, foundDepency)){
+					result.add(foundDepency);
 				}
+			}
 		}
 		return result; 
 	}
@@ -252,7 +265,7 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		DependencyDTO foundDepency;
 		for(FamixAssociation assocation: allAssocations){
 					for(String tempDependencyFilter: dependencyFilter){
-						if(assocation.type.equalsIgnoreCase(tempDependencyFilter)){
+						if(assocation.to.startsWith(to) && assocation.type.equalsIgnoreCase(tempDependencyFilter)){
 					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
 							if(!dependencyAlreadyListed(result, foundDepency)){
 								result.add(foundDepency);
