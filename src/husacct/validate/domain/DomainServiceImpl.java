@@ -23,7 +23,7 @@ public class DomainServiceImpl {
 
 	public DomainServiceImpl(ConfigurationServiceImpl configuration){	
 		this.configuration = configuration;
-		this.ruletypefactory = new RuleTypesFactory(configuration);
+		this.ruletypefactory = configuration.getRuleTypesFactory();
 		this.checkConformanceController = new CheckConformanceController(configuration, ruletypefactory);
 	}
 

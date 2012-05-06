@@ -18,14 +18,14 @@ import java.util.Map.Entry;
 public class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
-	private final ConfigurationServiceImpl configuration;
 	private final RuleTypesFactory ruletypefactory;
+	private final ConfigurationServiceImpl configuration;
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
 	private AbstractViolationType violationtypefactory;
 
-	public SeverityPerTypeRepository(ConfigurationServiceImpl configuration){
+	public SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
-		this.ruletypefactory = new RuleTypesFactory(configuration);
+		this.ruletypefactory = ruletypefactory;
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
