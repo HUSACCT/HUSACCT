@@ -4,21 +4,14 @@ import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-
-public class ConfigurationUI extends javax.swing.JInternalFrame {
+public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private static final long serialVersionUID = 3568220674416621458L;
 	private TaskServiceImpl ts;
@@ -148,8 +141,8 @@ public class ConfigurationUI extends javax.swing.JInternalFrame {
 	
 	private void loadModels(){
 		severityModel = new ColorTableModel();
-		severityModel.setColorEditor(severityNameTable, 1);
 		severityNameTable.setModel(severityModel);
+		severityModel.setColorEditor(severityNameTable, 1);
 		loadSeverity();
 	}
 

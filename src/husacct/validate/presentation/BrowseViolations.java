@@ -5,7 +5,6 @@ import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,20 +13,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle;
+import javax.swing.*;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -57,9 +44,8 @@ public final class BrowseViolations extends JInternalFrame {
 		this.ts = ts;
 		this.fv = new FilterViolations(ts, this);
 		initComponents();
+		loadGUIText();
 		violationTable.doLayout();
-		setViolations();
-
 	}
 
 	private void initComponents() {
@@ -82,8 +68,6 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		violationTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		violationTable.setFillsViewportHeight(true);
-		violationTable.getRowSorter().toggleSortOrder(4);
-		violationTable.getRowSorter().toggleSortOrder(4);
 		violationTable.getTableHeader().setReorderingAllowed(false);
 		violationPanel.setViewportView(violationTable);
 		
@@ -217,12 +201,11 @@ public final class BrowseViolations extends JInternalFrame {
 		applyFilter.setText(ResourceBundles.getValue("ApplyFilter"));
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Information")));
-		violationModel.fireTableStructureChanged();
-		reloadModel();
+		loadModels();
 		createInformationPanel();
 	}
 	
-	public void reloadModel(){
+	private void loadModels(){
 		String[] columnNames = {
 			ResourceBundles.getValue("LogicalModule"),
 			ResourceBundles.getValue("Source"),
@@ -254,6 +237,8 @@ public final class BrowseViolations extends JInternalFrame {
 			}
 		};
 		violationTable.setModel(violationModel);
+		violationTable.getRowSorter().toggleSortOrder(4);
+		violationTable.getRowSorter().toggleSortOrder(4);
 		setViolations();
 	}
 
