@@ -15,4 +15,6 @@ public interface UserInputListener {
 	public void exportToImage();
 
 	public void toggleViolations();
+	
+	public void refreshDrawing();
 }

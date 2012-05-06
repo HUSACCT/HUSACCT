@@ -17,7 +17,10 @@ public class DemoController extends DrawingController {
 	private final int ITEMS_PER_ROW = 2;
 
 	public DemoController() {
-
+		initializeDrawing();
+	}
+	
+	private void initializeDrawing(){
 		AbstractDTO[] modules = new AbstractDTO[5];
 
 		ModuleDTO presentationLayer = new ModuleDTO();
@@ -51,6 +54,11 @@ public class DemoController extends DrawingController {
 
 		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 		bls.doLayout(ITEMS_PER_ROW);
+	}
+	
+	@Override
+	public void refreshDrawing() {
+		initializeDrawing();
 	}
 
 	@Override
