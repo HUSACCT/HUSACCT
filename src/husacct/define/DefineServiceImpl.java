@@ -5,9 +5,11 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
-import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.SoftwareArchitectureDomainService;
+import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.task.ApplicationController;
 
 import java.util.ArrayList;
@@ -17,7 +19,9 @@ import javax.swing.JInternalFrame;
 import org.jdom2.Element;
 
 public class DefineServiceImpl implements IDefineService {
-	private DefineDomainService defineDomainService = new DefineDomainService();
+	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
+	private ModuleDomainService moduleService = new ModuleDomainService();
+	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private DomainParser domainParser = new DomainParser();
 	
 	@Override
@@ -34,21 +38,21 @@ public class DefineServiceImpl implements IDefineService {
 	
 	@Override
 	public ModuleDTO[] getRootModules() {	
-		Module[] modules = defineDomainService.getRootModules();
+		Module[] modules = this.moduleService.getRootModules();
 		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
 		return moduleDTOs;
 	}
 	
 	@Override
 	public RuleDTO[] getDefinedRules() {
-		AppliedRule[] rules = defineDomainService.getAppliedRules();
+		AppliedRule[] rules = this.appliedRuleService.getAppliedRules();
 		RuleDTO[] ruleDTOs = domainParser.parseRule(rules);
 		return ruleDTOs;
 	}
 
 	@Override
 	public ModuleDTO[] getChildsFromModule(String logicalPath) {
-		Module module = defineDomainService.getModuleByLogicalPath(logicalPath);
+		Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
 		ModuleDTO moduleDTO = domainParser.parseModule(module);
 		ModuleDTO[] childModuleDTOs = moduleDTO.subModules;
 		//TODO removes subModules from childModulesDTOs

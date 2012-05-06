@@ -102,7 +102,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
-			UiDialogs.showOnScreen(0, softwareUnitFrame);
+			softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
 			softwareUnitFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
