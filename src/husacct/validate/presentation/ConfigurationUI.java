@@ -136,6 +136,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		cancel.setText(ResourceBundles.getValue("Cancel"));
 
 		loadModels();
+		removeLanguageTabs();
 		loadLanguageTabs();
 	}
 	
@@ -220,8 +221,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void loadLanguageTabs() {
 		for (String language : ts.getAvailableLanguages()) {
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(
-					language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
+			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
 			jTabbedPane1.addTab(language, lcp);
 		}
 		if (ts.getAvailableLanguages().length == 0) {
@@ -230,8 +230,14 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 
 	private void removeLanguageTabs() {
-		while (jTabbedPane1.getTabCount() > 1) {
-			jTabbedPane1.remove(1);
+		for(int i = 0; i < jTabbedPane1.getTabCount(); i++){
+			final String tabTitle = jTabbedPane1.getTitleAt(i);
+			for(String language : ts.getAvailableLanguages()){
+				if(tabTitle.equals(language)){
+					jTabbedPane1.remove(i);
+					i--;
+				}
+			}
 		}
 	}
 }
