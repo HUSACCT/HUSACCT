@@ -30,6 +30,7 @@ public class InterfaceConventionRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
+		System.out.println("aapje");
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
 		this.mappings = CheckConformanceUtil.filter(currentRule);

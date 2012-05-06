@@ -3,6 +3,7 @@ package husacct.validate.domain.configuration;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
@@ -15,7 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 public class SeverityPerTypeRepository {
+	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
+	
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
 	private final RuleTypesFactory ruletypefactory;
@@ -53,6 +58,9 @@ public class SeverityPerTypeRepository {
 					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
 				}				
 			}
+		}
+		else{
+			logger.debug("Warning no language specified in define component");
 		}
 		return severitiesPerTypePerProgrammingLanguage;
 	}

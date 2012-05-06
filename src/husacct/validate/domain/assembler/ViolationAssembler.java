@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class ViolationAssembler {
-	private Logger logger = Logger.getLogger(Main.class);
+	private Logger logger = Logger.getLogger(ViolationAssembler.class);
 
 	private AbstractViolationType violationtypeFactory;
 	private RuleTypesFactory ruleFactory;
@@ -38,9 +38,14 @@ public class ViolationAssembler {
 		this.ruleFactory = ruleFactory;
 		this.ruleAssembler = new RuletypeAssembler();
 		this.messagebuilder = new Messagebuilder();
-		
+
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
-		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
+		if(abstractViolationtypeFactory != null){
+			this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
+		}
+		else{
+			logger.debug("Warning no language specified in define component");
+		}
 	}
 
 	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
@@ -83,7 +88,7 @@ public class ViolationAssembler {
 				final  String userDefinedName = severity.getUserName();
 				final String systemDefinedName = severity.getDefaultName();
 				final int severityValue = configuration.getSeverityValue(violation.getSeverity());
-				
+
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, severityValue);
 			}
 			else{				

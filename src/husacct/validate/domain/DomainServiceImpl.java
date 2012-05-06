@@ -15,7 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 public class DomainServiceImpl {
+	private Logger logger = Logger.getLogger(DomainServiceImpl.class);
+	
 	private RuleTypesFactory ruletypefactory;
 	private ViolationTypeFactory violationtypefactory;
 	private final CheckConformanceController checkConformanceController;
@@ -39,6 +43,7 @@ public class DomainServiceImpl {
 			return violationtypefactory.getAllViolationTypes();
 		}
 		else{
+			logger.debug("Warning no language specified in define component");
 			return Collections.emptyMap();
 		}
 	}
