@@ -4,7 +4,7 @@ import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
-public class JavaInheritanceDefinitionGenerator extends JavaGenerator{
+public class JavaImplementsDefinitionGenerator extends JavaGenerator{
 
 	private String from;
 	private String to = "";
@@ -12,25 +12,25 @@ public class JavaInheritanceDefinitionGenerator extends JavaGenerator{
 
 	public void generateModelObject(CommonTree tree, String belongsToClass) {
 		from = belongsToClass;
-		createInheritanceDefinitionDetails(tree);
+		createImplemetsDetails(tree);
 		createDomainObject();
 	}
 
 	private void createDomainObject() {
 		to = to.substring(0, to.length() -1); //delete last point
-		modelService.createInheritanceDefinition(from, to, lineNumber);
+		modelService.createImplementsDefinition(from, to, lineNumber);
 	}
 
-	private void createInheritanceDefinitionDetails(Tree tree) {
+	private void createImplemetsDetails(Tree tree) {
 		if (tree != null) {
 			for (int i = 0; i < tree.getChildCount(); i++) {
-				if(tree.getType() == JavaParser.EXTENDS_CLAUSE){
+				if(tree.getType() == JavaParser.IMPLEMENTS_CLAUSE){
 					lineNumber = tree.getLine();
 				}
 				if(tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
 					to += tree.getChild(i).getText() + ".";
 				}
-				createInheritanceDefinitionDetails(tree.getChild(i));
+				createImplemetsDetails(tree.getChild(i));
 			}
 		}
 	}

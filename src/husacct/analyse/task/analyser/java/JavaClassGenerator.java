@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.antlr.runtime.tree.BaseTree;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 
 class JavaClassGenerator extends JavaGenerator{
 	
-	private static final int classNode = JavaParser.CLASS;
 	private static final int abstractNode = JavaParser.ABSTRACT;
 	
 	private String name = "";
@@ -17,7 +17,7 @@ class JavaClassGenerator extends JavaGenerator{
 	private String belongsToPackage = "";
 	private String belongsToClass = null;
 	
-	private boolean isInnerClass = false; //TODO Goed implementeren. 
+	private boolean isInnerClass = false; 
 	private boolean isAbstract = false; 
 	
 	public JavaClassGenerator(String uniquePackageName){
@@ -31,7 +31,7 @@ class JavaClassGenerator extends JavaGenerator{
 		}else{
 			this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
 		}
-		this.isAbstract = isAbstract(commonTree);
+		this.isAbstract = isAbstract((CommonTree)commonTree.getFirstChildWithType(JavaParser.MODIFIER_LIST));
 		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass);
 		return uniqueName;
 	}
@@ -40,7 +40,7 @@ class JavaClassGenerator extends JavaGenerator{
 		this.name = commonTree.getChild(1).toString();
 		this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
 		this.isInnerClass = true;
-		this.isAbstract = isAbstract(commonTree);
+		this.isAbstract = isAbstract((CommonTree)commonTree);
 		this.isInnerClass = true;
 		this.belongsToClass = parentClassName;
 		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass);
@@ -48,12 +48,6 @@ class JavaClassGenerator extends JavaGenerator{
 	}
 	
 	private boolean isAbstract(CommonTree tree){
-		List<BaseTree> trees = tree.getChildren();
-		if(trees != null){
-			for(BaseTree aTree: trees){
-				if(aTree.getFirstChildWithType(abstractNode) != null) return true;
-			}
-		}
-		return false;
+		return tree.getFirstChildWithType(abstractNode) != null;
 	}
 }

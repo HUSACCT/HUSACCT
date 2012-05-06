@@ -2,6 +2,8 @@ package husacct.analyse.domain;
 
 public interface ModelCreationService {
 	
+	public void clearModel( );
+	
 	public void createPackage(String uniqieName, String belongsToPackage, String name);
 	
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
@@ -12,6 +14,7 @@ public interface ModelCreationService {
 	public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 	
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName);
+	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 	
 	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 	
@@ -21,10 +24,15 @@ public interface ModelCreationService {
 			String belongsToClass, boolean isConstructor, boolean isAbstract,
 			boolean hasClassScope);
 	
-	public void createInheritanceDefinition(String from, String to,
-			int lineNumber, String type);
+	public void createInheritanceDefinition(String from, String to, int lineNumber);
+	public void createImplementsDefinition(String from, String to, int lineNumber);
 	
+	void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName);
+	void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName);
+	void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName);
 	
+	//Function to connect dependencies, after all modules are known in the model
+	public void connectDependencies();
 	
 	//Debug-functies voor in de main:
 	public String represent();

@@ -51,41 +51,43 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		return stub.getChildModulesInModule(from, depth);
+		return service.getChildModulesInModule(from, depth);
 	}
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		return stub.getParentModuleForModule(child);
+		return service.getParentModuleForModule(child);
 	}
 
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
-		return service.getDependency(from, to);
+		return service.getDependencies(from, to);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
+		return service.getDependencies(from, to, dependencyFilter);
 	}
 
 	@Override
 	public DependencyDTO[] getDependenciesFrom(String from) {
-		return stub.getDependenciesFrom(from);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependenciesTo(String to){
-		return stub.getDependenciesTo(to);
-	}
-
-	@Override
-	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
-		return stub.getDependencies(from, to, dependencyFilter);
+		return service.getDependenciesFrom(from);
 	}
 	
 	@Override
 	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
-		return stub.getDependenciesFrom(from, dependencyFilter);
+		return service.getDependenciesFrom(from, dependencyFilter);
 	}
 	
 	@Override
-	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
-		return stub.getDependenciesTo(to, dependencyFilter);
+	public DependencyDTO[] getDependenciesTo(String to){
+		return service.getDependenciesTo(to);
 	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
+		return service.getDependenciesTo(to, dependencyFilter);
+	}
+	
+	
 }

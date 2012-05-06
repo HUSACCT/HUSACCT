@@ -13,8 +13,10 @@ class FamixImport extends FamixAssociation{
 	
 	public String toString(){
 		String importRepresentation = "";
+		importRepresentation += "\ntype: " + super.type;
 		importRepresentation += "\nimportingClass: " + this.importingClass;
 		importRepresentation += "\nimportedModule: " + this.importedModule;
+		importRepresentation += "\nlinenumber: " + super.lineNumber;
 		importRepresentation += "\nisCompletePackage: ";
 		if(importsCompletePackage) importRepresentation += "true";
 		else importRepresentation += "false";
@@ -22,4 +24,3 @@ class FamixImport extends FamixAssociation{
 		return importRepresentation;
 	}
 }
-

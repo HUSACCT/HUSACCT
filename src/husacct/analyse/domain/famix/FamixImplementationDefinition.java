@@ -1,13 +1,12 @@
 package husacct.analyse.domain.famix;
 
-class FamixInheritanceDefinition extends FamixAssociation{
-	
-	public FamixInheritanceDefinition(){
-		super.type = "extends";
+class FamixImplementationDefinition extends FamixAssociation{
+
+	public FamixImplementationDefinition(){
+		super.type = "implements";
 	}
 	//public String accessControlQualifier;
 	public int index;  //index??
-	
 
 	public String toString(){
 		String inheritRepesentation = "";
@@ -18,7 +17,6 @@ class FamixInheritanceDefinition extends FamixAssociation{
 
 		inheritRepesentation += "\n";
 		inheritRepesentation += "\n";
-
 		return inheritRepesentation;
 	}
 }
