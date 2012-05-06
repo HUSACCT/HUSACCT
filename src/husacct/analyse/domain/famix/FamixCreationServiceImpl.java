@@ -80,12 +80,10 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		FamixMethod famixMethod = new FamixMethod();
 		famixMethod.name = name;
 		famixMethod.uniqueName = uniqueName;
-
 		famixMethod.accessControlQualifier = accessControlQualifier;
 		famixMethod.signature = signature;
 		famixMethod.isPureAccessor = isPureAccessor;
 		famixMethod.declaredReturnType = declaredReturnType;
-
 		famixMethod.belongsToClass = belongsToClass;
 		famixMethod.isConstructor = isConstructor;
 		famixMethod.isAbstract = isAbstract;
@@ -102,12 +100,13 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixAttribute.declareType = declareType;
 		famixAttribute.name = name;
 		famixAttribute.uniqueName = uniqueName;
+		model.waitingStructuralEntitys.add(famixAttribute);
 		addToModel(famixAttribute);
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
 		fAssocation.type = "declaration";
-		fAssocation.lineNumber = 0; //in this case, the linenumber is not given
+		fAssocation.lineNumber = 0;
 		model.waitingAssociations.add(fAssocation);
 	}
 	
@@ -121,6 +120,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixAttribute.name = name;
 		famixAttribute.uniqueName = uniqueName;
 		addToModel(famixAttribute);
+		model.waitingStructuralEntitys.add(famixAttribute);
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
@@ -158,31 +158,150 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
+	public void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName) {
+		FamixInvocation famixInvocation = new FamixInvocation();
+		famixInvocation.type = "invocConstructor";
+		famixInvocation.from = from;
+		famixInvocation.invocationType = type;
+		famixInvocation.lineNumber = lineNumber;
+		famixInvocation.to = to;
+		famixInvocation.inovcationName = invocationName;
+		model.waitingAssociations.add(famixInvocation);
+	}
+	
+	@Override
+	public void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName) {
+		FamixInvocation famixInvocation = new FamixInvocation();
+		famixInvocation.type = "invocMethod";
+		famixInvocation.from = from;
+		famixInvocation.invocationType = type;
+		famixInvocation.lineNumber = lineNumber;
+		famixInvocation.to = to;
+		famixInvocation.inovcationName = invocationName;
+		model.waitingAssociations.add(famixInvocation);
+		
+	}
+
+	@Override
+	public void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName) {
+		FamixInvocation famixInvocation = new FamixInvocation();
+		famixInvocation.type = "accessPropertyOrField";
+		famixInvocation.from = from;
+		famixInvocation.invocationType = type;
+		famixInvocation.lineNumber = lineNumber;
+		famixInvocation.to = to;
+		famixInvocation.inovcationName = invocationName;
+		model.waitingAssociations.add(famixInvocation);
+		
+	}
+	
+	@Override
 	public void connectDependencies(){
-		for(FamixAssociation assocation: model.waitingAssociations){
+		connectStructuralEntityDependecies();
+		connectAssociationDependencies();
+	}
+	
+	private void connectStructuralEntityDependecies() {
+		for (FamixStructuralEntity structuralEntity : model.waitingStructuralEntitys){
 			boolean found = false;
-			if(!assocation.to.contains("\\.")){
-				FamixClass theClass = getClassForUniqueName(assocation.from);
+			if(!structuralEntity.declareType.contains("\\.")){
+				FamixClass theClass = getClassForUniqueName(structuralEntity.belongsToClass);
 				String thePackage = theClass.belongsToPackage;
 				List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
 				for(FamixImport fImport: importsInClass){
 					String importString = fImport.completeImportString;
 					if(fImport.importsCompletePackage){
 						for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
-							if(getClassOfUniqueName(uniqueClassName).equals(assocation.to)){
-								assocation.to = uniqueClassName;
+							if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+								structuralEntity.declareType = uniqueClassName;
 								found = true;
 							}
 						}
 						for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
-							if(getClassOfUniqueName(uniqueClassName).equals(assocation.to)){
-								assocation.to = uniqueClassName;
+							if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+								structuralEntity.declareType = uniqueClassName;
 								found = true;
 							}
 						}
 					}else{
-						if(importString.endsWith(assocation.to)){
-							assocation.to = importString;
+						List<String> classesInPackage = getClassesOrInterfacesInPackage(fImport.completeImportString);
+						for(String uniqueClassName: classesInPackage){
+							if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+								structuralEntity.declareType = uniqueClassName;
+								found = true;
+							}
+						}
+					}
+				}
+				if(!found){
+					List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
+					for(String uniqueClassName: classesInPackage){
+						if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+							structuralEntity.declareType = uniqueClassName;
+						}
+					}
+				}
+			}
+			addToModel(structuralEntity);
+		}
+		
+	}
+	
+	private void connectAssociationDependencies() {
+		for(FamixAssociation association: model.waitingAssociations){
+			boolean found = false;
+			
+			//voor de FamixAttribute(MethodInvocation).TO moeten we uit de famixAttribute de naam van de klasse van het gedeclareerde object halen 
+			//ipv de zelfgekozen naam voor het object te gebruiken binnen de klasse.
+			//bijv: User jaap = new User()
+			//jaap.doSomething() <-- 'invocMethod' jaap moet geconverteerd worden naar User
+			//TODO translate above comment to english...?
+			
+			if(association instanceof FamixInvocation){
+				if (((FamixInvocation) association).invocationType.equals("invocMethod") || ((FamixInvocation) association).invocationType.equals("accessPropertyOrField")){
+					for (FamixAttribute attribute : model.getAttributes()){
+						if (attribute.belongsToClass.equals(association.from)){
+							if (attribute.name.equals(association.to)){
+								association.to = attribute.declareType;
+								((FamixInvocation) association).nameOfInstance = attribute.name;
+
+							}
+						}
+					}
+				}
+				else {
+					for (FamixAttribute attribute : model.getAttributes()){
+						if (attribute.belongsToClass.equals(association.from)){
+							if (getClassForUniqueName(attribute.declareType).name.equals(association.to)){
+								((FamixInvocation) association).nameOfInstance = attribute.name;
+							}
+						}
+					}
+				}
+			}
+			if(!association.to.contains("\\.")){
+				FamixClass theClass = getClassForUniqueName(association.from);
+				String thePackage = theClass.belongsToPackage;
+				List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
+				for(FamixImport fImport: importsInClass){
+					String importString = fImport.completeImportString;
+					if(fImport.importsCompletePackage){
+						for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
+							if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
+								association.to = uniqueClassName;
+								found = true;
+							}
+						}
+						for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
+							if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
+								association.to = uniqueClassName;
+								found = true;
+							}
+						}
+					}else{
+						//erik's code
+						if(importString.endsWith(association.to)){
+							association.to = importString;
 							found = true;
 						}
 					}
@@ -190,14 +309,15 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 				if(!found){
 					List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
 					for(String uniqueClassName: classesInPackage){
-						if(getClassOfUniqueName(uniqueClassName).equals(assocation.to)){
-							assocation.to = uniqueClassName;
+						if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
+							association.to = uniqueClassName;
 						}
 					}
 				}
 			}
-			addToModel(assocation);
+			addToModel(association);
 		}
+		
 	}
 	
 	private String getClassOfUniqueName(String uniqueName){
@@ -225,7 +345,6 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		}
 		return result;
 	}
-	
 	
 	private FamixClass getClassForUniqueName(String uniqueName){
 		Iterator<Entry<String, FamixClass>> classIterator = model.classes.entrySet().iterator();

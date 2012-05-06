@@ -10,6 +10,7 @@ class FamixModel extends FamixObject{
 
 	private static FamixModel currentInstance;
 
+	public List<FamixStructuralEntity> waitingStructuralEntitys;
 	public List<FamixAssociation> waitingAssociations;
 	
 	public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
@@ -32,6 +33,7 @@ class FamixModel extends FamixObject{
 	private FamixModel(){
 		this.exporterDate = new Date().toString();
 		waitingAssociations = new ArrayList<FamixAssociation>();
+		waitingStructuralEntitys = new ArrayList<FamixStructuralEntity>();
 		
 		associations = new ArrayList<FamixAssociation>();
 		classes = new HashMap<String, FamixClass>();
@@ -79,6 +81,16 @@ class FamixModel extends FamixObject{
 	public ArrayList<FamixAssociation> getAssociations(){
 		return associations;
 	}
+	
+	public ArrayList<FamixAttribute> getAttributes(){
+		ArrayList<FamixAttribute> result = new ArrayList<FamixAttribute>();
+		for (FamixStructuralEntity entity: structuralEntities.values()){
+			if (entity instanceof FamixAttribute){
+				result.add((FamixAttribute) entity);
+			}
+		}
+		return result;
+	}
 
 	public ArrayList<FamixInvocation> getInvocations(){
 		ArrayList<FamixInvocation> result = new ArrayList<FamixInvocation>();
@@ -125,6 +137,7 @@ class FamixModel extends FamixObject{
 //				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
 
 	}
+	
 
 	public void clear() {
 		FamixModel.currentInstance = new FamixModel();

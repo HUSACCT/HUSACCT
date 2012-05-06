@@ -19,7 +19,7 @@ public class AnalysedModuleDTO extends AbstractDTO{
 		this.subModules = new ArrayList<AnalysedModuleDTO>();
 	}
 	
-	public AnalysedModuleDTO(String uniqueName, String name, String type, List<AnalysedModuleDTO> subModules){
+	public AnalysedModuleDTO(String uniqueName, String name, String type, String visibility, List<AnalysedModuleDTO> subModules){
 		this.uniqueName = uniqueName;
 		this.name = name;
 		this.type = type;

@@ -1,16 +1,10 @@
 package husacct.analyse;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.UIManager;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.ModelCreationService;
-import husacct.analyse.domain.ModelQueryService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseDebuggingFrame;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.IDefineService;
 
 public class AnalyseMain {

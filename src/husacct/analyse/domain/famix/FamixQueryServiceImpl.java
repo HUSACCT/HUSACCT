@@ -28,7 +28,6 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 				String uniqueName = fPackage.uniqueName;
 				String name = fPackage.name;
 				String type = "package";
-				//FIXME AnalysedModuleDTO Constructor not correct!
 				rootModuleDTO = new AnalysedModuleDTO(uniqueName,name,type, "");
 				rootModules.add(rootModuleDTO);
 			}

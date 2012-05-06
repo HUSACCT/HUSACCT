@@ -2,17 +2,19 @@ package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
+
 class JavaAttributeGenerator {
 	
-	private int line;
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
 	private String belongsToClass; 
 	private String declareClass; //example: package.package.class
 	private String declareType = "";  //int, string, CustomClass etc
+	private int lineNumber;
 	
 	private ModelCreationService modelService = new FamixCreationServiceImpl();
 
@@ -24,11 +26,12 @@ class JavaAttributeGenerator {
 	private final static int TYPE = 157;
 	private final static int VAR_DECLARATOR_LIST = 162;
 	private final static int IDENT = 164;
+	private final static int STATIC_ARRAY_CREATOR = 120;
 	
 	
 	public void generateModel(Tree attributeTree, String belongsToClass) {
-		this.line = attributeTree.getLine();
 		this.belongsToClass = belongsToClass;
+		lineNumber = attributeTree.getLine();
 		walkThroughAST(attributeTree);
 		createAttributeObject();
 	}
@@ -45,13 +48,17 @@ class JavaAttributeGenerator {
 			}else if(treeType == VAR_DECLARATOR_LIST){
 				setAttributeName(child);	
 			}
+			else if(treeType == STATIC_ARRAY_CREATOR){
+				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree);
+			}
 			walkThroughAST(child);
 		}
 	}
 
 	private void createAttributeObject(){
-		if(declareType.contains(".")) declareType = declareType.substring(0, declareType.length() -1);
-		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, line);
+		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
+		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	}
 
 	private void setAttributeName(Tree tree) {

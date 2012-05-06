@@ -13,6 +13,7 @@ class FamixAssociation extends FamixObject{
 		s+= "\nFrom: " + from;
 		s+= "\nTo: " + to;
 		s+= "\nLinenumber: " + lineNumber;
+		s+= "\n\n";
 		return s;
 	}
 }

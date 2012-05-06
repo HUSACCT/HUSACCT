@@ -27,11 +27,13 @@ public interface ModelCreationService {
 	public void createInheritanceDefinition(String from, String to, int lineNumber);
 	public void createImplementsDefinition(String from, String to, int lineNumber);
 	
+	void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName);
+	void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName);
+	void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName);
+	
 	//Function to connect dependencies, after all modules are known in the model
 	public void connectDependencies();
 	
 	//Debug-functies voor in de main:
 	public String represent();
-
-	
 }
