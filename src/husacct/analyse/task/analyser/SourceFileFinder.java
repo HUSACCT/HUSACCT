@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class SourceFileFinder {
-
 	private String requiredFileExtension;
 	
 	List<MetaFile> getFileInfoFromProject(String projectPath, String fileExtension) throws Exception {
@@ -19,22 +18,21 @@ class SourceFileFinder {
 	
 	private List<MetaFile> walk(String path) throws IOException {
 		File root = new File(path);
-		File[] list = root.listFiles();
-		
-		List<MetaFile> paths = new ArrayList<MetaFile>();
-		for (File f : list) {
-			if (f.getAbsoluteFile().isDirectory()) {
-				paths.addAll(walk(f.getAbsolutePath()));
+		File[] listFiles = root.listFiles();
+		List<MetaFile> filePaths = new ArrayList<MetaFile>();
+		for (File file : listFiles) {
+			if (file.getAbsoluteFile().isDirectory()) {
+				filePaths.addAll(walk(file.getAbsolutePath()));
 			}
 			else {
-				if (getSourceFiles(f.getAbsolutePath())){
-					LineNumberReader  lnr = new LineNumberReader(new FileReader(f));
-					lnr.skip(Long.MAX_VALUE);
-					paths.add(new MetaFile(f.getAbsolutePath(),lnr.getLineNumber()));
+				if (getSourceFiles(file.getAbsolutePath())){
+					LineNumberReader  lineNumberReader = new LineNumberReader(new FileReader(file));
+					lineNumberReader.skip(Long.MAX_VALUE);
+					filePaths.add(new MetaFile(file.getAbsolutePath(),lineNumberReader.getLineNumber()));
 				}
 			}
 		}
-		return paths;
+		return filePaths;
 	}
 	
 	private boolean getSourceFiles(String filepath) {

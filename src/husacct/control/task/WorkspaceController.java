@@ -44,12 +44,12 @@ public class WorkspaceController {
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		WorkspaceController.currentWorkspace = workspace;
-		mainController.getMainGui().setTitle(name);
+		if(mainController.guiEnabled) mainController.getMainGui().setTitle(name);
 	}
 	
 	public void closeWorkspace() {
 		WorkspaceController.currentWorkspace = null;
-		mainController.getMainGui().setTitle("");
+		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
 	}
 	
 	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
@@ -137,7 +137,7 @@ public class WorkspaceController {
 
 	public static void setWorkspace(Workspace workspace) {
 		WorkspaceController.currentWorkspace = workspace;
-		if(mainController != null) {
+		if(mainController != null && mainController.guiEnabled) {
 			mainController.getMainGui().setTitle(workspace.getName());
 		}
 	}

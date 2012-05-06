@@ -1,6 +1,9 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.presentation.jframe.JFrameAppliedRule;
+import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableAppliedRule;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
@@ -14,6 +17,7 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
@@ -103,14 +107,29 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 			this.removeRule();
 		}
 	}
+	
 	private void addRule() {
-		DefinitionController.getInstance().createRuleGUI();
+		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+		if (moduleId != -1) {
+			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, -1L);
+			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			appliedRuleFrame.setVisible(true);
+			//DefinitionController.getInstance().createRuleGUI();
+		} else {
+			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void editRule() {
-		//FIXME
-//		long selectedAppliedRuleId = (Long) appliedRulesTable.getValueAt(getSelectedRow(), 0);
-//		DefinitionController.getInstance().createRuleGUI(selectedAppliedRuleId);
+		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+		if (moduleId != -1) {
+			JOptionPane.showMessageDialog(this, "Currently under construction", "Under Construction", JOptionPane.ERROR_MESSAGE);
+			//FIXME
+//			long selectedAppliedRuleId = (Long) appliedRulesTable.getValueAt(getSelectedRow(), 0);
+//			DefinitionController.getInstance().createRuleGUI(selectedAppliedRuleId);
+		} else {
+			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void removeRule() {

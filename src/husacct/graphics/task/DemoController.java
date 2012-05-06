@@ -17,7 +17,10 @@ public class DemoController extends DrawingController {
 	private final int ITEMS_PER_ROW = 2;
 
 	public DemoController() {
-
+		initializeDrawing();
+	}
+	
+	private void initializeDrawing(){
 		AbstractDTO[] modules = new AbstractDTO[5];
 
 		ModuleDTO presentationLayer = new ModuleDTO();
@@ -45,12 +48,20 @@ public class DemoController extends DrawingController {
 		testLayer.logicalPath = "test";
 		modules[4] = testLayer;
 
-		this.drawModules(modules);
-
-		this.drawLinesBasedOnSetting();
-
 		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 		bls.doLayout(ITEMS_PER_ROW);
+		
+		this.drawModules(modules);
+		
+		bls = new BasicLayoutStrategy(drawing);
+		bls.doLayout(ITEMS_PER_ROW);
+		
+		this.drawLinesBasedOnSetting();
+	}
+	
+	@Override
+	public void refreshDrawing() {
+		initializeDrawing();
 	}
 
 	@Override

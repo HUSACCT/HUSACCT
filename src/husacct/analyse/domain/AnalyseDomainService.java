@@ -4,9 +4,15 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public interface AnalyseDomainService {
-		
-	public DependencyDTO[] getDependency(String from, String to);
-	public DependencyDTO[] getDependency(String from);
+	
+	public void clearModel();
+	
+	public DependencyDTO[] getDependencies(String from, String to);
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
+	public DependencyDTO[] getDependenciesFrom(String from);
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
+	public DependencyDTO[] getDependenciesTo(String to);
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 	
 	public AnalysedModuleDTO[] getRootModules();
 	public AnalysedModuleDTO[] getChildModulesInModule(String from); 

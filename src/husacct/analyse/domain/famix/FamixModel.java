@@ -3,17 +3,21 @@ package husacct.analyse.domain.famix;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
+import java.util.List;
 import javax.naming.directory.InvalidAttributesException;
 
 class FamixModel extends FamixObject{
 
 	private static FamixModel currentInstance;
 
+	public List<FamixStructuralEntity> waitingStructuralEntitys;
+	public List<FamixAssociation> waitingAssociations;
+	
 	public HashMap<String, FamixBehaviouralEntity> behaviouralEntities;
 	public HashMap<String, FamixStructuralEntity> structuralEntities;
 	public HashMap<String, FamixPackage> packages;
 	public HashMap<String, FamixClass> classes;
+	public HashMap<String, FamixInterface> interfaces;
 	public ArrayList<FamixAssociation> associations;
 	
 	public String exporterName;
@@ -28,9 +32,13 @@ class FamixModel extends FamixObject{
 	
 	private FamixModel(){
 		this.exporterDate = new Date().toString();
+		waitingAssociations = new ArrayList<FamixAssociation>();
+		waitingStructuralEntitys = new ArrayList<FamixStructuralEntity>();
+		
 		associations = new ArrayList<FamixAssociation>();
 		classes = new HashMap<String, FamixClass>();
 		packages = new HashMap<String, FamixPackage>();
+		interfaces = new HashMap<String, FamixInterface>();
 		structuralEntities = new HashMap<String, FamixStructuralEntity>();
 		behaviouralEntities = new HashMap<String, FamixBehaviouralEntity>();
 	}
@@ -38,6 +46,10 @@ class FamixModel extends FamixObject{
 	public static FamixModel getInstance(){
 		if(currentInstance == null) currentInstance = new FamixModel(); 
 		return currentInstance;
+	}
+	
+	public void clearModel(){
+		currentInstance = new FamixModel();
 	}
 
 	public void addObject(Object e) throws InvalidAttributesException{
@@ -54,6 +66,9 @@ class FamixModel extends FamixObject{
 			else if (e instanceof FamixClass){
 				classes.put(((FamixEntity) e).uniqueName, (FamixClass) e);
 			}
+			else if (e instanceof FamixInterface){
+				interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
+			}
 		}
 		else if (e instanceof FamixAssociation){
 			associations.add((FamixAssociation) e);
@@ -66,6 +81,16 @@ class FamixModel extends FamixObject{
 	public ArrayList<FamixAssociation> getAssociations(){
 		return associations;
 	}
+	
+	public ArrayList<FamixAttribute> getAttributes(){
+		ArrayList<FamixAttribute> result = new ArrayList<FamixAttribute>();
+		for (FamixStructuralEntity entity: structuralEntities.values()){
+			if (entity instanceof FamixAttribute){
+				result.add((FamixAttribute) entity);
+			}
+		}
+		return result;
+	}
 
 	public ArrayList<FamixInvocation> getInvocations(){
 		ArrayList<FamixInvocation> result = new ArrayList<FamixInvocation>();
@@ -74,6 +99,19 @@ class FamixModel extends FamixObject{
 				result.add((FamixInvocation) association);
 		}
 		return result;
+	}
+	
+	public List<FamixImport> getImportsInClass(String uniqueClassName){
+		List<FamixImport> imports = new ArrayList<FamixImport>();
+		for(FamixAssociation association: associations){
+			if(association instanceof FamixImport){
+				FamixImport theImport = (FamixImport)association;
+				if(theImport.from.equals(uniqueClassName)){
+					imports.add((FamixImport)association);
+				}
+			}
+		}
+		return imports;
 	}
 
 	public FamixStructuralEntity getTypeForVariable(String uniqueVarName) throws Exception{
@@ -92,10 +130,16 @@ class FamixModel extends FamixObject{
 		return 
 				"\n ------------Packages------------- \n" + packages
 				+ "\n ------------Classes------------- \n" + classes
-				+ "\n -----------Imports:-------------- \n" + associations
+				+ "\n ------------Interfaces------------\n" + interfaces
+				+ "\n -----------Assocations:-------------- \n" + associations
 				+ "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
-				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities
-				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
+				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities;
+//				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
 
+	}
+	
+
+	public void clear() {
+		FamixModel.currentInstance = new FamixModel();
 	}
 }
