@@ -13,6 +13,7 @@ import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
@@ -106,14 +107,14 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private void createMenuBars() {
 		int totalWidth = getWidth();
-		int menuItemMaxWidth = 120;
+		int menuItemMaxWidth = 140;
 		int menuItemMaxHeight = 45;
 
 		menuBar = new JMenuBar();
 		menuBar.setSize(totalWidth, 20);
-		JMenuItem goToParentMenu = new JMenuItem("Level up");
-		goToParentMenu.setSize(50, 20);
-		goToParentMenu.setMaximumSize(new Dimension(70, menuItemMaxHeight));
+		JButton goToParentMenu = new JButton("Level up");
+		goToParentMenu.setSize(50, menuItemMaxHeight);
+		goToParentMenu.setMaximumSize(new Dimension(90, menuItemMaxHeight));
 		goToParentMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -122,8 +123,8 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(goToParentMenu);
 		
-		JMenuItem refreshMenu = new JMenuItem("Refresh");
-		refreshMenu.setSize(50, 20);
+		JButton refreshMenu = new JButton("Refresh");
+		refreshMenu.setSize(50, menuItemMaxHeight);
 		refreshMenu.setMaximumSize(new Dimension(90, menuItemMaxHeight));
 		refreshMenu.addActionListener(new ActionListener() {
 			@Override
@@ -134,7 +135,7 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.add(refreshMenu);
 
 		JCheckBoxMenuItem showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
-		showViolationsOptionMenu.setSize(50, 20);
+		showViolationsOptionMenu.setSize(50, menuItemMaxHeight);
 		showViolationsOptionMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		showViolationsOptionMenu.addActionListener(new ActionListener() {
 			@Override
@@ -144,8 +145,8 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(showViolationsOptionMenu);
 		
-		JMenuItem exportToImageMenu = new JMenuItem("Export to image");
-		exportToImageMenu.setSize(50, 20);
+		JButton exportToImageMenu = new JButton("Export to image");
+		exportToImageMenu.setSize(50, menuItemMaxHeight);
 		exportToImageMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		exportToImageMenu.addActionListener(new ActionListener() {
 			@Override
