@@ -1,15 +1,24 @@
 package husacct.define.presentation.moduletree;
 
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.ComponentComponent;
+import husacct.define.task.components.ExternalLibraryComponent;
+import husacct.define.task.components.LayerComponent;
+import husacct.define.task.components.ModuleComponent;
+import husacct.define.task.components.SoftwareArchitectureComponent;
+
 import java.awt.Component;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
-import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
-public class ModuleCellRenderer implements TreeCellRenderer {
-	TreeCellRenderer renderer;
+public class ModuleCellRenderer extends DefaultTreeCellRenderer {
 	
-	public ModuleCellRenderer(TreeCellRenderer renderer) {
-	  this.renderer = renderer;
+	private static final long serialVersionUID = 7222224490353685412L;
+	
+	public ModuleCellRenderer() {
+		
 	}
 	
 	/**
@@ -17,13 +26,28 @@ public class ModuleCellRenderer implements TreeCellRenderer {
 	 * Compute the String to display, and pass it to the wrapped renderer
 	 */
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		String newvalue = value.getClass().getName(); // Component type
-		String name = ((Component) value).getName(); // Component name
-		if (name != null) {
-		    newvalue += " (" + name + ")"; // unless null
+		if(value instanceof AbstractDefineComponent) {
+			AbstractDefineComponent component = (AbstractDefineComponent) value;
+			super.getTreeCellRendererComponent(tree,  component.getName(), selected, expanded, leaf, row, hasFocus);
+			
+			this.determineIcon(value);
 		}
-		 
-		// Use the wrapped renderer object to do the real work
-		return renderer.getTreeCellRendererComponent(tree, newvalue, selected, expanded, leaf, row, hasFocus);
+		return this;
+	}
+	
+	private void determineIcon(Object value) {
+		ImageIcon icon = new ImageIcon();
+		if(value instanceof ComponentComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-component.png"));
+		} else if(value instanceof ExternalLibraryComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-library.png"));
+		} else if(value instanceof LayerComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-layer.png"));
+		} else if(value instanceof ModuleComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-module.png"));
+		} else if(value instanceof SoftwareArchitectureComponent) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-software_architecture.png"));
+		}
+		this.setIcon(icon);
 	}
 }

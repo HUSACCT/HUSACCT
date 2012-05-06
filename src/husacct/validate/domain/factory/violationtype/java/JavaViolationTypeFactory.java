@@ -1,28 +1,35 @@
 package husacct.validate.domain.factory.violationtype.java;
 
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.java.JavaDependencyRecognition;
 
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 class JavaViolationTypeFactory extends AbstractViolationType {
 	private EnumSet<JavaDependencyRecognition> defaultDependencies = EnumSet.allOf(JavaDependencyRecognition.class);
 	//private EnumSet<JavaAccessTypes> defaultAccess = EnumSet.allOf(JavaAccessTypes.class);	
-	private static final String javaViolationTypesLocation = "husacct.validate.domain.validation.violationtype.java";
+	private static final String javaViolationTypesRootPackagename = "java";
 
-	public JavaViolationTypeFactory(){
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();
-		this.allViolationKeys = generator.getAllViolationTypeKeys(javaViolationTypesLocation);
+	public JavaViolationTypeFactory(ConfigurationServiceImpl configuration){
+		super(configuration, "Java");
+		this.allViolationKeys = generator.getAllViolationTypes(javaViolationTypesRootPackagename);
 	}
 
 	@Override
-	public List<ViolationType> createViolationTypesByRule(String ruleKey){
-		if(isCategoryLegalityOfDependency(ruleKey)){
+	public List<ViolationType> createViolationTypesByRule(String ruleTypeKey){
+		if(isCategoryLegalityOfDependency(ruleTypeKey)){	
 			return generateViolationTypes(defaultDependencies);
+		}
+		else if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION.toString())){			
+			return generateViolationTypes(EnumSet.of(JavaDependencyRecognition.IMPLEMENTS));
+		}
+		else if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION.toString())){
+			return generateViolationTypes(EnumSet.of(JavaDependencyRecognition.EXTENDS_ABSTRACT, JavaDependencyRecognition.EXTENDS_CONCRETE));
 		}
 		else{
 			return Collections.emptyList();
@@ -31,8 +38,6 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 
 	@Override
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();
-		Map<String, String> violationTypeKeysAndCategories = generator.getAllViolationTypesWithCategory(javaViolationTypesLocation);
-		return getAllViolationTypes(violationTypeKeysAndCategories);
+		return getAllViolationTypes(allViolationKeys);
 	}
 }

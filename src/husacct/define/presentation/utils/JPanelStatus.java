@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+import org.apache.log4j.Logger;
+
 public class JPanelStatus extends JPanel {
 
 	private static final long serialVersionUID = -7360960342696885795L;
@@ -18,12 +20,14 @@ public class JPanelStatus extends JPanel {
 	private Stack<String> messages = new Stack<String>();
 	private JLabel jLabelStatus;
 	private JProgressBar jProgressBar1;
+	private Logger logger;
 
 	private static JPanelStatus instance;
 
 	private JPanelStatus() {
 		super();
-
+		logger = Logger.getLogger(JPanelStatus.class);
+		
 		GridBagLayout jPanel1Layout = new GridBagLayout();
 		jPanel1Layout.rowWeights = new double[] { 0.1 };
 		jPanel1Layout.rowHeights = new int[] { 7 };
@@ -82,7 +86,7 @@ public class JPanelStatus extends JPanel {
 	 * This method shows the given message and starts the progressbar.
 	 */
 	public void start() {
-		Log.i(this, "start() - Message: " + messages.peek());
+		logger.info("start() - Message: " + messages.peek());
 
 		jLabelStatus.setText(messages.peek());
 		jProgressBar1.setIndeterminate(true);
@@ -103,7 +107,7 @@ public class JPanelStatus extends JPanel {
 	 * This method will replace the message with an default message and stops the progressbar.
 	 */
 	public void stop() {
-		Log.i(this, "stop() - Message: " + defaultMessage);
+		logger.info("stop() - Message: " + defaultMessage);
 
 		// Remove the last message from the stack
 		messages.pop();

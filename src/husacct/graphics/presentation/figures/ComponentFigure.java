@@ -7,8 +7,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ComponentFigure extends NamedFigure
-{
+public class ComponentFigure extends NamedFigure {
 	private static final long serialVersionUID = -344477017055924400L;
 
 	public static final int SPACE_LEFT = 34;
@@ -20,10 +19,9 @@ public class ComponentFigure extends NamedFigure
 	private RectangleFigure box2;
 	private TextFigure textBox;
 
-	public ComponentFigure(String name)
-	{
-		super(name);
-		
+	public ComponentFigure(String name) {
+		super(name, false);
+
 		this.mainBox = new RectangleFigure();
 		this.box1 = new RectangleFigure();
 		this.box2 = new RectangleFigure();
@@ -35,8 +33,7 @@ public class ComponentFigure extends NamedFigure
 		this.children.add(textBox);
 	}
 
-	private void sizeChildBoxes(Point2D.Double anchor, Point2D.Double lead)
-	{
+	private void sizeChildBoxes(Point2D.Double anchor, Point2D.Double lead) {
 		if ((lead.x - anchor.x) < getMinimumWidth()) {
 			lead.x = anchor.x + getMinimumWidth();
 		}
@@ -51,14 +48,12 @@ public class ComponentFigure extends NamedFigure
 
 		Point2D.Double newBox1Anchor = (Point2D.Double) anchor.clone();
 		newBox1Anchor.y += COMP_DISTANCE;
-		Point2D.Double newBox1Lead = new Point2D.Double(newBox1Anchor.x
-				+ SPACE_LEFT * 2, newBox1Anchor.y + COMP_HEIGHT);
+		Point2D.Double newBox1Lead = new Point2D.Double(newBox1Anchor.x + SPACE_LEFT * 2, newBox1Anchor.y + COMP_HEIGHT);
 		this.box1.setBounds(newBox1Anchor, newBox1Lead);
 
 		Point2D.Double newBox2Anchor = (Point2D.Double) newBox1Anchor.clone();
 		newBox2Anchor.y += COMP_HEIGHT + COMP_DISTANCE;
-		Point2D.Double newBox2Lead = new Point2D.Double(newBox2Anchor.x
-				+ SPACE_LEFT * 2, newBox2Anchor.y + COMP_HEIGHT);
+		Point2D.Double newBox2Lead = new Point2D.Double(newBox2Anchor.x + SPACE_LEFT * 2, newBox2Anchor.y + COMP_HEIGHT);
 		this.box2.setBounds(newBox2Anchor, newBox2Lead);
 
 		Point2D.Double textBoxOrigin = (Point2D.Double) newBox1Anchor.clone();
@@ -66,41 +61,46 @@ public class ComponentFigure extends NamedFigure
 		this.textBox.setBounds(textBoxOrigin, null);
 	}
 
-	public static int getMinimumHeight()
-	{
-		return COMP_DISTANCE + COMP_HEIGHT + COMP_DISTANCE + COMP_HEIGHT
-				+ COMP_DISTANCE;
+	public static int getMinimumHeight() {
+		return COMP_DISTANCE + COMP_HEIGHT + COMP_DISTANCE + COMP_HEIGHT + COMP_DISTANCE;
 	}
 
-	public static int getMinimumWidth()
-	{
+	public static int getMinimumWidth() {
 		return SPACE_LEFT * 4;
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
-	{
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
 		this.sizeChildBoxes(anchor, lead);
 
 		invalidate();
 	}
 
 	@Override
-	public ComponentFigure clone()
-	{
+	public ComponentFigure clone() {
 		ComponentFigure that = (ComponentFigure) super.clone();
-		
+
 		that.mainBox = this.mainBox.clone();
 		that.box1 = this.box1.clone();
 		that.box2 = this.box2.clone();
 		that.textBox = this.textBox.clone();
-		
+
 		that.children = new ArrayList<Figure>();
 		that.children.add(that.mainBox);
 		that.children.add(that.box1);
 		that.children.add(that.box2);
 		that.children.add(that.textBox);
-		
+
 		return that;
+	}
+
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
 	}
 }

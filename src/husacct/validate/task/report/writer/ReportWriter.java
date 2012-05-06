@@ -1,7 +1,8 @@
 package husacct.validate.task.report.writer;
 
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
+import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,21 @@ public abstract class ReportWriter {
 			return "indirect";
 		}
 	}
+	
+
+	protected String getDependencyKindValue(String violationtypeKey,
+			boolean indirect) {
+		String value = ResourceBundles.getValue(violationtypeKey);
+		value += ", ";
+		if(indirect) {
+			value += "indirect";
+		} else {
+			value += "direct";
+		}
+		return value;
+	}
+
+	
 	public String getCurrentDate(){
 		return new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
 	}
@@ -50,6 +66,8 @@ public abstract class ReportWriter {
 		} else {
 			s = path + File.separatorChar + fileName;
 		}
+		s = s.replaceAll("." + extensionType.getExtension(), "");
+		
 		s += "." + extensionType.getExtension();
 		return s;
 	}

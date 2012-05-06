@@ -1,10 +1,9 @@
 package husacct.common.dto;
 
 public class ViolationTypeDTO extends AbstractDTO {
-	private final String key;
-	private final String descriptionKey;
-	private final boolean isDefault;
-	
+	public final String key;
+	public final String descriptionKey;
+	public final boolean isDefault;	
 
 	public ViolationTypeDTO(String key, String descriptionKey, boolean isDefault) {
 		this.key = key;
@@ -12,15 +11,18 @@ public class ViolationTypeDTO extends AbstractDTO {
 		this.isDefault = isDefault;
 	}
 
+
 	public String getKey() {
 		return key;
 	}
 
-	public boolean getIsDefault() {
-		return isDefault;
-	}
 
 	public String getDescriptionKey() {
 		return descriptionKey;
+	}
+
+
+	public boolean isDefault() {
+		return isDefault;
 	}
 }

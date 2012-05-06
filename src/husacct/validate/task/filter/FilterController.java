@@ -2,25 +2,33 @@ package husacct.validate.task.filter;
 
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.assembler.ViolationAssembler;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FilterController {
-	private TaskServiceImpl taskServiceImpl;
+	private final TaskServiceImpl taskServiceImpl;
+	private final RuleTypesFactory ruletypesfactory;
+	private final ConfigurationServiceImpl configuration;
 
 	private ArrayList<String> ruletypes = new ArrayList<String>();
 	private ArrayList<String> violationtypes = new ArrayList<String>();
 	private ArrayList<String> paths = new ArrayList<String>();
 	private boolean hidefilter = true;
 
-
-	public FilterController(TaskServiceImpl ts){
+	public FilterController(TaskServiceImpl ts, RuleTypesFactory ruletypesfactory, ConfigurationServiceImpl configuration){
 		this.taskServiceImpl = ts;
+		this.ruletypesfactory = ruletypesfactory;
+		this.configuration = configuration;
 	}
+	
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {
 		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
@@ -79,10 +87,9 @@ public class FilterController {
 		return AppliedViolationtypes;
 	}
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
-		ViolationAssembler assembler = new ViolationAssembler();
+		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		ArrayList<Violation> violations = new ArrayList<Violation>();
-		
-		for (Violation violation : taskServiceImpl.getAllViolations()) {	
+		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
 					violations.add(violation);
@@ -95,16 +102,37 @@ public class FilterController {
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
-			String physicalPathTo) {
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		List<Violation> violations = new ArrayList<Violation>();
 		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if(violation.getClassPathFrom().startsWith(physicalPathFrom) || violation.getClassPathTo().startsWith(physicalPathTo)) {
 				violations.add(violation);
 			}
 		}
-		ViolationAssembler assembler = new ViolationAssembler();
+		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
+	}
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter) {
+		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
+		for(Severity severity : taskServiceImpl.getAllSeverities()) {
+			int violationsCount = 0;
+			List<Violation> violations;
+			if(!applyFilter) {
+				violations = taskServiceImpl.getAllViolations();
+			} else {
+				violations = taskServiceImpl.applyFilterViolations(true);
+			}
+			for(Violation violation : violations) {
+				if(violation.getSeverity() != null) {
+					if(violation.getSeverity().equals(severity)) {
+						violationsCount++;
+					}
+				}
+			}
+			
+			violationsPerSeverity.put(severity, violationsCount);
+		}
+		return violationsPerSeverity;
 	}
 }

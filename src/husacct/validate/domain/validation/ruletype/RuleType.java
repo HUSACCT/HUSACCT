@@ -1,8 +1,13 @@
 package husacct.validate.domain.validation.ruletype;
 
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.define.IDefineService;
+import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
+import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -21,15 +26,18 @@ public abstract class RuleType {
 	protected List<RuleType> exceptionrules;
 	protected final Severity severity;
 
-	protected RuleTypesFactory ruletypelanguagefactory;
+	protected AbstractViolationType violationtypefactory;
+	
+	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes){
+	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
 		this.violationtypes = violationtypes;
 		this.exceptionRuleKeys = exceptionRuletypes;
-		this.severity = null;
+		this.severity = severity;
 	}
 
 	public String getKey(){
@@ -43,7 +51,7 @@ public abstract class RuleType {
 	public String getCategoryKey(){
 		return categoryKey;
 	}
-	
+
 	public EnumSet<RuleTypes> getExceptionRuleKeys(){
 		return exceptionRuleKeys;
 	}
@@ -51,18 +59,35 @@ public abstract class RuleType {
 	public List<ViolationType> getViolationTypes(){
 		return violationtypes;
 	}
-	
+
 	public void setExceptionrules(List<RuleType> ruletypes){
 		this.exceptionrules = ruletypes;
 	}
-	
+
 	public List<RuleType> getExceptionrules(){
 		return exceptionrules;
 	}
+	
+	public Severity getSeverity(){
+		return severity;
+	}
 
-	public abstract List<Violation> check(RuleDTO appliedRule);
+	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule);
 
-	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message){
-		return new Violation(dependency.lineNumber, null, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
+		return new Violation(dependency.lineNumber, severity, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+	}
+
+	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity){
+		return new Violation(0, severity, ruleKey, "", from, "", inDirect, message, logicalModules);		
+	}
+
+	protected Severity getViolationTypeSeverity(String violationTypeKey){
+		try{
+			return violationtypefactory.createViolationType(violationTypeKey).getSeverity();
+		}catch(ViolationTypeNotFoundException e){
+
+		}
+		return null;
 	}
 }

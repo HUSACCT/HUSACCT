@@ -1,11 +1,10 @@
 package husacct.validate.task.report.writer;
 
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.domain.factory.message.Messagebuilder;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +40,10 @@ public class PDFReportWriter extends ReportWriter {
 	public void createReport() throws DocumentException, MalformedURLException, IOException  {
 		document = new Document();
 		checkDirsExist();
-		
+
 		final String fileName = getFileName();		
 		PdfWriter.getInstance(document, new FileOutputStream(fileName));
-		
+
 		document.open();
 		document.setPageSize(new Rectangle(1280, 600));
 		document.newPage();
@@ -106,6 +105,7 @@ public class PDFReportWriter extends ReportWriter {
 		document.add(new Paragraph(" "));
 
 		PdfPTable pdfTable = new PdfPTable(report.getLocaleColumnHeaders().length);
+		pdfTable.setWidths(new int[]{3, 4, 1, 2, 2, 1});
 		pdfTable.setWidthPercentage(100);
 
 		for(String columnHeader : report.getLocaleColumnHeaders()) {
@@ -113,32 +113,47 @@ public class PDFReportWriter extends ReportWriter {
 		}
 
 		for(Violation violation : report.getViolations()) {
+			//Source
 			if(violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
-			addCellToTable(pdfTable,violation.getClassPathFrom(), BaseColor.WHITE, false);
+				addCellToTable(pdfTable,violation.getClassPathFrom(), BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
 			}
-			if(violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
-				addCellToTable(pdfTable,violation.getClassPathTo(), BaseColor.WHITE, false);
+
+			//Rule
+			if(violation.getMessage() != null) {
+				String message = new Messagebuilder().createMessage(violation.getMessage());
+				addCellToTable(pdfTable, message, BaseColor.WHITE, false);
 			} else {
-				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
+				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
+
+			//LineNumber
 			if(!(violation.getLinenumber() == 0)) {
 				addCellToTable(pdfTable,"" + violation.getLinenumber(), BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
-			
-			addCellToTable(pdfTable,"" + violation.getSeverity().toString(), BaseColor.WHITE, false);
-			if(violation.getLogicalModules() != null) {
-				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
-				String message = new Messagebuilder().createMessage(messageObject);
-				addCellToTable(pdfTable, message, BaseColor.WHITE, false);
+
+			//DependencyKind
+			if(violation.getViolationtypeKey() != null) {
+				addCellToTable(pdfTable, getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()), BaseColor.WHITE, false);
 			} else {
-				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
+				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
 			}
-			addCellToTable(pdfTable, violation.getViolationtypeKey(), BaseColor.WHITE, false);
-			addCellToTable(pdfTable, convertIsIndirectBooleanToString(violation.isIndirect()), BaseColor.WHITE, false);
+			//Target
+			if(violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
+				addCellToTable(pdfTable,violation.getClassPathTo(), BaseColor.WHITE, false);
+			} else {
+				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
+			}
+
+			//Severity
+			if(violation.getSeverity() != null) {
+				addCellToTable(pdfTable,"" + violation.getSeverity().toString(), BaseColor.WHITE, false);
+			} else {
+				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
+			}
 		}
 
 		document.add(pdfTable);

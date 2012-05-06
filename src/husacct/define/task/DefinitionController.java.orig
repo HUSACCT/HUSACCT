@@ -1,0 +1,505 @@
+package husacct.define.task;
+
+import husacct.define.domain.DefineDomainService;
+import husacct.define.domain.module.Component;
+import husacct.define.domain.module.ExternalLibrary;
+<<<<<<< HEAD
+import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
+=======
+import husacct.define.domain.module.ModuleComparator;
+>>>>>>> 4ac7a72281250235ff8da1c711bef97967cc4d7a
+import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.jpanel.DefinitionJPanel;
+import husacct.define.presentation.tables.JTableAppliedRule;
+import husacct.define.presentation.tables.JTableSoftwareUnits;
+import husacct.define.presentation.tables.JTableTableModel;
+import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.DefineComponentFactory;
+import husacct.define.task.components.SoftwareArchitectureComponent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JPanel;
+
+import org.apache.log4j.Logger;
+
+public class DefinitionController extends Observable implements Observer {
+	
+	private DefinitionJPanel definitionJPanel;
+	private static DefinitionController instance;
+	private List<Observer> observers;
+	private Logger logger;
+	private long selectedModuleId = -1;
+	
+	public static DefinitionController getInstance() {
+		return instance == null ? (instance = new DefinitionController()) : instance;
+	}
+
+	public DefinitionController() {
+		observers = new ArrayList<Observer>();
+		logger = Logger.getLogger(DefinitionController.class);
+	}
+	
+	public void initSettings() {
+		observers.clear();
+		definitionJPanel = new DefinitionJPanel();
+	}
+
+	/**
+	 * Init the user interface for creating/editting the definition.
+	 * 
+	 * @return JPanel The jpanel
+	 */
+	public JPanel initUi() {
+		return definitionJPanel;
+	}
+
+	public void setSelectedModuleId(long moduleId) {
+		this.selectedModuleId = moduleId;
+		notifyObservers(moduleId);
+	}
+
+	public long getSelectedModuleId() {
+		return selectedModuleId;
+	}
+	
+	public void addLayer(long selectedModuleId, String layerName, String layerDescription, int hierarchicalLevel){
+		logger.info("Adding layer " + layerName);
+		try {
+			JPanelStatus.getInstance("Adding Layer").start();
+			Layer newLayer = new Layer(layerName, layerDescription, hierarchicalLevel);
+			this.passModuleToService(selectedModuleId, newLayer);
+		} catch (Exception e) {
+			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
+		logger.info("Adding module " + moduleName);
+		try {
+			JPanelStatus.getInstance("Adding module").start();
+			Module newModule = new Module(moduleName, moduleDescription);
+			this.passModuleToService(selectedModuleId, newModule);
+		} catch (Exception e) {
+			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void addComponent(long selectedModuleId, String componentName, String componentDescription){
+		logger.info("Adding component " + componentName);
+		try {
+			JPanelStatus.getInstance("Adding component").start();
+			Component newComponent = new Component(componentName, componentDescription);
+			this.passModuleToService(selectedModuleId, newComponent);
+		} catch (Exception e) {
+			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void addExternalLibrary(long selectedModuleId, String libraryName, String libraryDescription){
+		logger.info("Adding external library " + libraryName);
+		try {
+			JPanelStatus.getInstance("Adding external library").start();
+			ExternalLibrary newComponent = new ExternalLibrary(libraryName, libraryDescription);
+			this.passModuleToService(selectedModuleId, newComponent);
+		} catch (Exception e) {
+			logger.error("addExternalLibrary(" + libraryName + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	private void passModuleToService(long selectedModuleId, Module module) {
+		if(selectedModuleId == -1) {
+			DefineDomainService.getInstance().addModuleToRoot(module);
+		} else {
+			logger.debug("Adding child");
+			DefineDomainService.getInstance().addModuleToParent(selectedModuleId, module);
+		}
+		this.notifyObservers();
+	}
+
+	/**
+	 * Remove a module by Id
+	 */
+	public void removeModuleById(long moduleId) {
+		logger.info("Removing module by Id " + moduleId);
+		try {
+			JPanelStatus.getInstance("Removing Module").start();
+			DefineDomainService.getInstance().removeModuleById(moduleId);
+			this.setSelectedModuleId(-1);
+			this.notifyObservers();
+		} catch (Exception e) {
+			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+
+	/**
+	 * Move a layer one up in hierarchy
+	 */
+	public void moveLayerUp(long layerId) {
+		logger.info("Moving layer up");
+		try {
+			if (layerId != -1) {
+				JPanelStatus.getInstance("Moving layer up").start();
+				DefineDomainService.getInstance().moveLayerUp(layerId);
+				this.notifyObservers();
+			}
+		} catch (Exception e) {
+			logger.error("moveLayerUp() - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+
+	/**
+	 * Move a layer one down in hierarchy
+	 */
+	public void moveLayerDown(long layerId) {
+		logger.info("Moving layer down");
+		try {
+			if (layerId != -1) {
+				JPanelStatus.getInstance("Moving layer down").start();
+				DefineDomainService.getInstance().moveLayerDown(layerId);
+				this.notifyObservers();
+			}
+		} catch (Exception e) {
+			logger.error("moveLayerDown() - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+
+	/**
+	 * Add a new software unit to the selected module. This method will make pop-up a new jframe who will handle everything for creating a new sotware unit.
+	 */
+	public void createSoftwareUnitGUI() {
+		try {
+			long moduleId = getSelectedModuleId();
+			
+			if (moduleId != -1) {
+				// Create a new software unit controller
+				SoftwareUnitController c = new SoftwareUnitController(moduleId, "");
+				// Set the action of the view
+				c.setAction(PopUpController.ACTION_NEW);
+				c.addObserver(this);
+				// Build and show the ui
+				c.initUi();
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		}
+	}
+
+	/**
+	 * Remove the selected software unit
+	 */
+	public void removeSoftwareUnit(String softwareUnitName) {
+		logger.info("Removing software unit " + softwareUnitName);
+		try {
+			long moduleId = getSelectedModuleId();
+
+			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
+				// Ask the user if he is sure to remove the software unit
+				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, "Are you sure you want to remove software unit: \"" + softwareUnitName + "\"", "Remove?");
+				if (confirm) {
+					// Remove the software unit
+					JPanelStatus.getInstance("Removing software unit").start();
+					DefineDomainService.getInstance().removeSoftwareUnit(moduleId, softwareUnitName);
+					// Update the software unit table
+					this.notifyObservers();
+				}
+			}
+		} catch (Exception e) {
+			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void createRuleGUI() {
+		
+		try {
+			long moduleId = getSelectedModuleId();
+
+			if (moduleId != -1) {
+				// Create a new software unit controller
+				AppliedRuleController a = new AppliedRuleController(moduleId, -1L);
+				// Set the action of the view
+				a.setAction(PopUpController.ACTION_NEW);
+				a.addObserver(this);
+				// Build and show the ui
+				a.initUi();
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		}
+	}
+	
+	public void createRuleGUI(long appliedRuleId) {
+		try {
+			long moduleId = getSelectedModuleId();
+
+			if (moduleId != -1 && appliedRuleId != -1L) {
+				// Create a new software unit controller
+				AppliedRuleController a = new AppliedRuleController(moduleId, appliedRuleId);
+				// Set the action of the view
+				a.setAction(PopUpController.ACTION_EDIT);
+				a.addObserver(this);
+				// Build and show the ui
+				a.initUi();
+			} else {
+				UiDialogs.errorDialog(definitionJPanel, "Select an applied rule", "Error");
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		}
+	}
+	
+	public void removeRule(long appliedRuleId) {
+		logger.info("Removing rule " + appliedRuleId);
+		try {
+			long moduleId = getSelectedModuleId();
+//			int appliedRuleId = (int)definitionJPanel.getSelectedAppliedRule();
+
+			if (moduleId != -1 && appliedRuleId != -1L) {
+				// Ask the user if he is sure to remove the software unit
+				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, "Are you sure you want to remove the applied rule: \"" + DefineDomainService.getInstance().getRuleTypeByAppliedRule(appliedRuleId) + "\"", "Remove?");
+				if (confirm) {
+					// Remove the software unit
+					JPanelStatus.getInstance("Removing applied rule").start();
+					DefineDomainService.getInstance().removeAppliedRule(appliedRuleId);
+
+					// Update the applied rules table
+					this.notifyObservers();
+				}
+			}
+		} catch (Exception e) {
+			logger.error("removeRule() - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+
+	/**
+	 * Function which will save the name and description changes to the module
+	 */
+	public void updateModule(String moduleName, String moduleDescription) {
+		logger.info("Updating module " + moduleName);
+		try {
+			JPanelStatus.getInstance("Saving layer").start();
+			long moduleId = getSelectedModuleId();
+			if (moduleId != -1) {
+				DefineDomainService.getInstance().updateModule(moduleId, moduleName, moduleDescription);
+			}
+			this.notifyObservers();
+		} catch (Exception e) {
+			logger.error("updateModule() - exception: " + e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public AbstractDefineComponent getModuleTreeComponents() {
+		logger.info("getting Module Tree Components");
+		JPanelStatus.getInstance("Updating Modules").start();
+		
+		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
+<<<<<<< HEAD
+		Module[] modules = DefineDomainService.getInstance().getRootModules();
+=======
+		ArrayList<Module> modules = DefineDomainService.getInstance().getSortedModules();
+>>>>>>> 4ac7a72281250235ff8da1c711bef97967cc4d7a
+		for (Module module : modules) {
+			this.addChildComponents(rootComponent, module);
+		}
+
+		JPanelStatus.getInstance().stop();
+		return rootComponent;
+	}
+	
+	private void addChildComponents(AbstractDefineComponent parentComponent, Module module) {
+		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
+		for(Module subModule : module.getSubModules()) {
+			this.addChildComponents(childComponent, subModule);
+		}
+		parentComponent.addChild(childComponent);
+	}
+
+	/**
+	 * This function will return a hashmap with the details of the requested module.
+	 */
+	public HashMap<String, Object> getModuleDetails(long moduleId) {
+		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
+		logger.info("loading Module Detail " + moduleId);
+
+		if (moduleId != -1) {
+			try {
+				//TODO maybe isolate domain classes
+				Module module = DefineDomainService.getInstance().getModuleById(moduleId);
+				moduleDetails.put("id", module.getId());
+				moduleDetails.put("name", module.getName());
+				moduleDetails.put("description", module.getDescription());
+				moduleDetails.put("type", module.getType());
+				
+			} catch (Exception e) {
+				logger.error("getModuleDetails() - exception: " + e.getMessage());
+				UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			}
+		}
+		return moduleDetails;
+	}
+	
+	/**
+	 * TODO:: TASK SHOULD NOT CALL VIEW
+	 * This method updates the component table in the jpanel
+	 * @param softwareUnitsTable 
+	 * 
+	 * @param layer
+	 */
+	@Deprecated
+	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
+		try {
+			long layerId = getSelectedModuleId();
+			JPanelStatus.getInstance("Updating software unit table").start();
+			if (layerId != -1) {
+
+				// Get all components from the service
+				ArrayList<String> softwareUnitNames = DefineDomainService.getInstance().getSoftwareUnitNames(layerId);
+
+				// Get the tablemodel from the table
+				JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();//definitionJPanel.sofwareUnitsPanel.getModel();
+
+				// Remove all items in the table
+				atm.getDataVector().removeAllElements();
+				
+				if (softwareUnitNames != null) {
+					for (String softwareUnitName : softwareUnitNames) {
+						String softwareUnitType = DefineDomainService.getInstance().getSoftwareUnitType(softwareUnitName);
+						Object rowdata[] = {softwareUnitName, softwareUnitType};
+						
+						atm.addRow(rowdata);
+					}
+				}
+				atm.fireTableDataChanged();
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	@Deprecated
+	// #TODO:: CONTROLLER SHOULD NOT CALL VIEW
+	public void updateAppliedRulesTable(JTableAppliedRule appliedRuleTable) {
+		try {
+			long layerId = getSelectedModuleId();
+			JPanelStatus.getInstance("Updating rules applied table").start();
+			if (layerId != -1) {
+
+				// Get all applied rules from the service
+				ArrayList<Long> appliedRulesIds = DefineDomainService.getInstance().getAppliedRulesIdsByModule(layerId);
+
+				// Get the tablemodel from the table
+				JTableTableModel atm = (JTableTableModel) appliedRuleTable.getModel();//definitionJPanel.appliedRulesPanel.getModel();//jTableAppliedRules.getModel();
+
+				// Remove all items in the table
+				atm.getDataVector().removeAllElements();
+				if (appliedRulesIds != null) {
+					for (long appliedRuleId : appliedRulesIds) {
+						String ruleTypeKey = DefineDomainService.getInstance().getRuleTypeByAppliedRule(appliedRuleId);
+						DataHelper datahelper = new DataHelper();
+						datahelper.setId(appliedRuleId);
+						datahelper.setValue(ruleTypeKey);
+
+						// To layer
+						long toLayerId = DefineDomainService.getInstance().getModuleToIdOfAppliedRule(appliedRuleId);
+						String moduleNameTo = DefineDomainService.getInstance().getModuleNameById(toLayerId);
+						// Is enabled
+						boolean appliedRuleIsEnabled = DefineDomainService.getInstance().getAppliedRuleIsEnabled(appliedRuleId);
+						String enabled = "Off";
+						if (appliedRuleIsEnabled) {
+							enabled = "On";
+						}
+						// Number of exceptions
+						ArrayList<Long> appliedRulesExceptionIds = DefineDomainService.getInstance().getExceptionIdsByAppliedRule(appliedRuleId);
+						int numberofexceptions = appliedRulesExceptionIds.size();
+
+						Object rowdata[] = { appliedRuleId, ruleTypeKey, moduleNameTo , enabled, numberofexceptions };
+
+						atm.addRow(rowdata);
+					}
+				}
+				atm.fireTableDataChanged();
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	public void update(Observable o, Object arg) {
+		logger.info("update(" + o + ", " + arg + ")");
+		long moduleId = getSelectedModuleId();
+		notifyObservers(moduleId);
+	}
+	
+	@Override
+	public void notifyObservers(){
+		long moduleId = getSelectedModuleId();
+		for (Observer o : this.observers){
+			o.update(this, moduleId);
+		}
+	}
+	
+	/**
+	 * This function will load notify all to update their data
+	 */
+	public void notifyObservers(long moduleId){
+		for (Observer o : this.observers){
+			o.update(this, moduleId);
+		}
+	}
+	
+	public void addObserver(Observer o){
+		if (!this.observers.contains(o)){
+			this.observers.add(o);
+		}
+	}
+	
+	public void removeObserver(Observer o){
+		if (this.observers.contains(o)){
+			this.observers.remove(o);
+		}
+	}
+}

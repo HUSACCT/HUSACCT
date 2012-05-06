@@ -6,5 +6,9 @@ public class ExternalLibrary extends Module{
 	{
 		super();
 	}
-
+	
+	public ExternalLibrary(String name, String description)
+	{
+		super(name, description);
+	}
 }

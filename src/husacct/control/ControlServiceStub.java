@@ -22,5 +22,9 @@ public class ControlServiceStub implements IControlService{
 	public Locale getLocale() {
 		return LocaleController.getLocale();
 	}
+
+	public void displayErrorMessage(Exception exception) {
+		
+	}
 	
 }

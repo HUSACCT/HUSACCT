@@ -1,9 +1,10 @@
 package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
-import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -22,15 +23,14 @@ import java.util.List;
 public class IsOnlyAllowedToUseRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_NOT_ALLOWED);
 
-	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationtypes) {
-		super(key, category, violationtypes, exceptionrules);
+	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override
-	public List<Violation> check(RuleDTO appliedRule) {
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
 		List<Violation> violations = new ArrayList<Violation>();
-		//TODO replace with real implementation
-		AnalyseServiceStub analysestub = new AnalyseServiceStub();
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
 		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
@@ -38,8 +38,8 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo ){
-				DependencyDTO[] dependencies = analysestub.getDependenciesFrom(classPathFrom.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analysestub.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependenciesFrom(classPathFrom.getPhysicalPath());
+				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
 				for(DependencyDTO dependency: dependencies){
 					for(DependencyDTO allowedDependency: allowedDependencies){
 						if(dependency != allowedDependency){
@@ -49,8 +49,9 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 							LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 							LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
-							//TODO: retrieve severity for this ruletype
-							Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message);
+							final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
+							Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);
+							Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 							violations.add(violation);
 						}
 					}
