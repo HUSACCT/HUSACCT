@@ -48,12 +48,15 @@ public class DemoController extends DrawingController {
 		testLayer.logicalPath = "test";
 		modules[4] = testLayer;
 
-		this.drawModules(modules);
-
-		this.drawLinesBasedOnSetting();
-
 		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
 		bls.doLayout(ITEMS_PER_ROW);
+		
+		this.drawModules(modules);
+		
+		bls = new BasicLayoutStrategy(drawing);
+		bls.doLayout(ITEMS_PER_ROW);
+		
+		this.drawLinesBasedOnSetting();
 	}
 	
 	@Override
