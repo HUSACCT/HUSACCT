@@ -102,7 +102,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			task.importValidationWorkspace(workspaceData);
-			this.validationExecuted = true;
 		} catch (DatatypeConfigurationException e) {
 			logger.error("Error exporting the workspace: " + e.getMessage(), e);
 		}
