@@ -50,13 +50,17 @@
 			<classpath refid="classpath" />
 			<formatter type="xml" usefile="yes" />
 			<formatter type="plain" usefile="yes" />
-			<test name="husaccttest.TestAll" todir="${reports.dir}" outfile="Testreport" />
+			<test name="husaccttest.analyse.AnalyseTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.control.ControlTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.define.DefineTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.graphics.GraphicsTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.validate.ValidateTestSuite" todir="${reports.dir}" />
 		</junit>
 		
 		<!-- Transform XML report to HTML, fails horribly, other methods?-->
 		<junitreport todir="${reports.dir}">
 		    <fileset dir="${reports.dir}" >
-		      <include name="Testreport.xml"/>
+		      <include name="*.xml"/>
 		    </fileset>
 		    <report todir="${reports.dir}" format="noframes" styledir="conf"/>
 		</junitreport>
