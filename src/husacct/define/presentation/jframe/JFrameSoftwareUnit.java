@@ -109,16 +109,16 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
 		
-		cancelButton = new JButton("Add");
-		buttonPanel.add(cancelButton);
-		cancelButton.addActionListener(this);
+		saveButton = new JButton("Add");
+		buttonPanel.add(saveButton);
+		saveButton.addActionListener(this);
 		
 		return buttonPanel;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.cancelButton) {
+		if (action.getSource() == this.saveButton) {
 			this.save();
 		} else if (action.getSource() == this.cancelButton) {
 			this.cancel();
