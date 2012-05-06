@@ -230,8 +230,14 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 
 	private void removeLanguageTabs() {
-		while (jTabbedPane1.getTabCount() > 1) {
-			jTabbedPane1.remove(1);
+		for(int i = 0; i < jTabbedPane1.getTabCount(); i++){
+			final String tabTitle = jTabbedPane1.getTitleAt(i);
+			for(String language : ts.getAvailableLanguages()){
+				if(tabTitle.equals(language)){
+					jTabbedPane1.remove(i);
+					i--;
+				}
+			}
 		}
 	}
 }
