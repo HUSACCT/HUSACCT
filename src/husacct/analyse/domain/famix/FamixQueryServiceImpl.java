@@ -110,8 +110,19 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		// TODO implement service getChildModulesInModule(String from, int depth)
-		return null;
+		List<AnalysedModuleDTO> moduleList = new ArrayList<AnalysedModuleDTO>();
+		moduleList.addAll(getChildModulesInModule(from));
+		for(AnalysedModuleDTO module: moduleList){
+			int counter = 1; //current depth is already 1
+			while(counter < depth){
+				AnalysedModuleDTO[] childs = getChildModulesInModule(module.uniqueName, depth-counter);
+				for(AnalysedModuleDTO subModule: childs){
+					module.subModules.add(subModule);
+				}
+				counter++;
+			}
+		}
+		return moduleList.toArray(new AnalysedModuleDTO[moduleList.size()]);
 	}
 
 	@Override
@@ -124,8 +135,6 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 			parentUniqueName += nameParts[i] + ".";
 		}
 		parentUniqueName = parentUniqueName.substring(0, parentUniqueName.length() -1);
-		
-		System.out.println("Parent unique name found: " + parentUniqueName);
 		
 		FamixClass foundClass = theModel.classes.get(parentUniqueName);
 		FamixPackage foundPackage = theModel.packages.get(parentUniqueName);
