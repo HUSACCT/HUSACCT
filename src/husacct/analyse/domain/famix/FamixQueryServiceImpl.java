@@ -116,8 +116,30 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO implement service getParentModuleForModule(String child)
-		return null;
+		AnalysedModuleDTO parent;
+		
+		String parentUniqueName = "";
+		String[] nameParts = child.split("\\.");
+		for(int i=0; i<nameParts.length -1; i++) {
+			parentUniqueName += nameParts[i] + ".";
+		}
+		parentUniqueName = parentUniqueName.substring(0, parentUniqueName.length() -1);
+		
+		System.out.println("Parent unique name found: " + parentUniqueName);
+		
+		FamixClass foundClass = theModel.classes.get(parentUniqueName);
+		FamixPackage foundPackage = theModel.packages.get(parentUniqueName);
+		FamixInterface foundInterface = theModel.interfaces.get(parentUniqueName);
+		if(foundClass != null){
+			parent = new AnalysedModuleDTO(foundClass.uniqueName, foundClass.name, "class", "");
+		}else if(foundPackage != null){
+			parent = new AnalysedModuleDTO(foundPackage.uniqueName, foundPackage.name, "package", "");
+		}else if(foundInterface != null){
+			parent = new AnalysedModuleDTO(foundInterface.uniqueName, foundInterface.name, "interface", "");
+		}else{
+			parent = new AnalysedModuleDTO("", "", "", "");
+		}
+		return parent;
 	}
 	
 	@Override

@@ -3,7 +3,9 @@ package husacct.analyse;
 import javax.swing.UIManager;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.ModelQueryService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;
 
@@ -23,6 +25,8 @@ public class AnalyseMain {
 		ModelCreationService creation = new FamixCreationServiceImpl();
 		System.out.println(creation.represent());
 		
+		ModelQueryService queryService = new FamixQueryServiceImpl();
+		System.out.println(queryService.getParentModuleForModule("parentmoduletest.firstpackage.FirstPackageClass"));
 		try {  
 	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
 	     } catch (Exception ex) { }
