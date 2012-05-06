@@ -1,6 +1,5 @@
 package husacct.validate.domain.assembler;
 
-import husacct.Main;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -40,10 +39,8 @@ public class ViolationAssembler {
 		this.messagebuilder = new Messagebuilder();
 
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
-		if(abstractViolationtypeFactory != null){
-			this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
-		}
-		else{
+		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
+		if(violationtypeFactory == null){
 			logger.debug("Warning no language specified in define component");
 		}
 	}
