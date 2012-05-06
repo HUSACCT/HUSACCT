@@ -1,7 +1,11 @@
 package husacct.validate.domain.check;
 
+import husacct.ServiceProvider;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -20,6 +24,7 @@ public class CheckConformanceController {
 	private Logger logger = Logger.getLogger(CheckConformanceController.class);
 	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
+	private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory){
 		this.configuration = configuration;
@@ -29,19 +34,25 @@ public class CheckConformanceController {
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules){
-		for(RuleDTO appliedRule : appliedRules){
-			try{
-				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-				List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
-				configuration.addViolations(newViolations);
-				if(appliedRule.exceptionRules != null){
-					checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
+		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
+		if(applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()){
+			for(RuleDTO appliedRule : appliedRules){
+				try{
+					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
+					configuration.addViolations(newViolations);
+					if(appliedRule.exceptionRules != null){
+						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
+					}
+				}catch(RuleTypeNotFoundException e){
+					logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+				} catch (RuleInstantionException e) {
+					logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 				}
-			}catch(RuleTypeNotFoundException e){
-				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-			} catch (RuleInstantionException e) {
-				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 			}
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException();
 		}
 	}
 

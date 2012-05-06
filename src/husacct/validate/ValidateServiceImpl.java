@@ -69,7 +69,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	@Override
 	public void checkConformance() {		
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
-		domain.checkConformance(appliedRules);
+		domain.checkConformance(appliedRules);		
 		this.validationExecuted = true;
 	}
 
