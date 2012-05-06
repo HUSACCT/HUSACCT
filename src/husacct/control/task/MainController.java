@@ -17,7 +17,7 @@ public class MainController {
 	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
-	private boolean guiEnabled = true; 
+	public boolean guiEnabled = true; 
 	
 	public MainController(String[] args){
 		readArguments(args);
