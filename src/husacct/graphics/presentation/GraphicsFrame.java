@@ -35,12 +35,13 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
-	public GraphicsFrame(DrawingView drawingView) {
-		this.drawingView = drawingView;
-		this.initializeComponents();
-		this.setCurrentPathInfo("");
-		this.setSize(500, 500);
-		this.addHierarchyBoundsListener(new HierarchyBoundsListener() {
+	public GraphicsFrame(DrawingView givenDrawingView) {
+		setVisible(false);
+		drawingView = givenDrawingView;
+		initializeComponents();
+		setCurrentPathInfo("");
+		setSize(500, 500);
+		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override
 			public void ancestorMoved(HierarchyEvent arg0) {
 			}
@@ -53,63 +54,63 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void initializeComponents() {
-		this.drawingScollPane = new JScrollPane();
-		this.drawingScollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		this.drawingScollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		this.drawingScollPane.setViewportView(drawingView);
+		drawingScollPane = new JScrollPane();
+		drawingScollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		drawingScollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		drawingScollPane.setViewportView(drawingView);
 
-		this.propertiesScrollPane = new JScrollPane();
-		this.propertiesScrollPane
+		propertiesScrollPane = new JScrollPane();
+		propertiesScrollPane
 				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		this.propertiesScrollPane
+		propertiesScrollPane
 				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		createMenuBars();
 
-		this.setLayout(new java.awt.BorderLayout());
-		this.add(this.menuBar, BorderLayout.NORTH);
-		this.add(this.locationBar, BorderLayout.SOUTH);
+		setLayout(new java.awt.BorderLayout());
+		add(menuBar, BorderLayout.NORTH);
+		add(locationBar, BorderLayout.SOUTH);
 
-		this.layoutComponents(false);
+		layoutComponents(false);
 	}
 
 	private void layoutComponents(boolean showProperties) {
 		showingProperties = showProperties;
-		if (this.centerPane != null) {
-			this.remove(this.centerPane);
+		if (centerPane != null) {
+			remove(centerPane);
 		}
 
 		if (!showProperties) {
-			this.centerPane = this.drawingScollPane;
+			centerPane = drawingScollPane;
 		} else {
-			this.centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, this.drawingScollPane,
-					this.propertiesScrollPane);
+			centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawingScollPane,
+					propertiesScrollPane);
 			positionLayoutComponents();
 			((JSplitPane) centerPane).setOneTouchExpandable(true);
 			((JSplitPane) centerPane).setContinuousLayout(true);
 		}
-		this.add(this.centerPane, java.awt.BorderLayout.CENTER);
+		add(centerPane, java.awt.BorderLayout.CENTER);
 
-		if (this.isVisible()) {
-			this.validate();
+		if (isVisible()) {
+			validate();
 		}
 	}
 
 	private void positionLayoutComponents() {
 		if (showingProperties) {
-			((JSplitPane) centerPane).setSize(this.getWidth(), this.getHeight());
+			((JSplitPane) centerPane).setSize(getWidth(), getHeight());
 			int smallerSize = ((JSplitPane) centerPane).getSize().height / 5 * 3;
 			((JSplitPane) centerPane).setDividerLocation(smallerSize);
 		}
 	}
 
 	private void createMenuBars() {
-		int totalWidth = this.getWidth();
+		int totalWidth = getWidth();
 		int menuItemMaxWidth = 120;
 		int menuItemMaxHeight = 45;
 
-		this.menuBar = new JMenuBar();
-		this.menuBar.setSize(totalWidth, 20);
+		menuBar = new JMenuBar();
+		menuBar.setSize(totalWidth, 20);
 		JMenuItem goToParentMenu = new JMenuItem("Level up");
 		goToParentMenu.setSize(50, 20);
 		goToParentMenu.setMaximumSize(new Dimension(70, menuItemMaxHeight));
@@ -120,17 +121,17 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 		menuBar.add(goToParentMenu);
-
-		JMenuItem exportToImageMenu = new JMenuItem("Export to image");
-		exportToImageMenu.setSize(50, 20);
-		exportToImageMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
-		exportToImageMenu.addActionListener(new ActionListener() {
+		
+		JMenuItem refreshMenu = new JMenuItem("Refresh");
+		refreshMenu.setSize(50, 20);
+		refreshMenu.setMaximumSize(new Dimension(90, menuItemMaxHeight));
+		refreshMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				exportToImage();
+				refreshDrawing();
 			}
 		});
-		menuBar.add(exportToImageMenu);
+		menuBar.add(refreshMenu);
 
 		JCheckBoxMenuItem showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
 		showViolationsOptionMenu.setSize(50, 20);
@@ -142,8 +143,19 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 		menuBar.add(showViolationsOptionMenu);
+		
+		JMenuItem exportToImageMenu = new JMenuItem("Export to image");
+		exportToImageMenu.setSize(50, 20);
+		exportToImageMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
+		exportToImageMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportToImage();
+			}
+		});
+		menuBar.add(exportToImageMenu);
 
-		this.add(menuBar, java.awt.BorderLayout.AFTER_LINE_ENDS);
+		add(menuBar, java.awt.BorderLayout.NORTH);
 
 		locationBar = new JMenuBar();
 		locationBar.setSize(totalWidth, 20);
@@ -153,7 +165,7 @@ public class GraphicsFrame extends JInternalFrame {
 		locationString.setMinimumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		locationBar.add(locationString);
 
-		this.add(locationBar, java.awt.BorderLayout.WEST);
+		add(locationBar, java.awt.BorderLayout.WEST);
 	}
 
 	public void setCurrentPathInfo(String path) {
@@ -180,6 +192,12 @@ public class GraphicsFrame extends JInternalFrame {
 			l.toggleViolations();
 		}
 	}
+	
+	private void refreshDrawing() {
+		for (UserInputListener l : listeners) {
+			l.refreshDrawing();
+		}
+	}
 
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
@@ -190,8 +208,8 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
-		this.propertiesScrollPane.setViewportView(this.createViolationsTable(violationDTOs));
-		this.layoutComponents(true);
+		propertiesScrollPane.setViewportView(createViolationsTable(violationDTOs));
+		layoutComponents(true);
 	}
 
 	// TODO: Sort violations based on severity value
@@ -223,12 +241,12 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void hidePropertiesPane() {
-		this.layoutComponents(false);
+		layoutComponents(false);
 	}
 
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
-		this.propertiesScrollPane.setViewportView(this.createDependencyTable(dependencyDTOs));
-		this.layoutComponents(true);
+		propertiesScrollPane.setViewportView(createDependencyTable(dependencyDTOs));
+		layoutComponents(true);
 	}
 
 	private Component createDependencyTable(DependencyDTO[] dependencyDTOs) {

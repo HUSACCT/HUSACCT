@@ -1,6 +1,5 @@
 package husacct.graphics.task;
 
-import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
@@ -10,7 +9,6 @@ import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
-import husacct.validate.IValidateService;
 
 import javax.swing.JInternalFrame;
 
@@ -31,9 +29,6 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
 	protected BasicLayoutStrategy layoutStrategy;
-
-	protected IAnalyseService analyseService;
-	protected IValidateService validateService;
 
 	protected FigureMap figureMap = new FigureMap();
 
@@ -122,7 +117,7 @@ public abstract class DrawingController implements UserInputListener {
 			drawTarget.hidePropertiesPane();
 		}
 	}
-
+	
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModules(AbstractDTO[] modules) {
@@ -182,7 +177,6 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void drawViolationsForShownModules() {
 		BaseFigure[] shownModules = drawing.getShownModules();
-		validateService.checkConformance();
 		for (BaseFigure figureFrom : shownModules) {
 			for (BaseFigure figureTo : shownModules) {
 				if (figureFrom == figureTo) {
