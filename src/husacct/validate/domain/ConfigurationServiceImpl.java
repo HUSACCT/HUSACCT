@@ -3,6 +3,7 @@ package husacct.validate.domain;
 import husacct.validate.domain.configuration.SeverityConfigRepository;
 import husacct.validate.domain.configuration.SeverityPerTypeRepository;
 import husacct.validate.domain.configuration.ViolationRepository;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import java.util.HashMap;
@@ -13,14 +14,15 @@ public class ConfigurationServiceImpl {
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityRepository;
 	private final ViolationRepository violationRepository;
+	private final RuleTypesFactory ruletypefactory;
 	
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severityRepository = new SeverityPerTypeRepository(this);
-		this.severityRepository.initializeDefaultSeverities();
+		this.severityRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
+		this.severityRepository.initializeDefaultSeverities();		
 	}
-
+	
 	public void clearViolations() {
 		violationRepository.clear();
 	}
@@ -75,5 +77,9 @@ public class ConfigurationServiceImpl {
 	
 	public void restoreSeveritiesToDefault(){
 		severityConfig.restoreToDefault();
+	}
+	
+	public RuleTypesFactory getRuleTypesFactory(){
+		return ruletypefactory;
 	}
 }

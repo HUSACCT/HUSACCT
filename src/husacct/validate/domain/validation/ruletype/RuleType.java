@@ -12,6 +12,7 @@ import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.EnumSet;
@@ -27,6 +28,8 @@ public abstract class RuleType {
 	protected final Severity severity;
 
 	protected AbstractViolationType violationtypefactory;
+	protected List<Violation> violations;
+	protected Mappings mappings;
 	
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
@@ -72,7 +75,7 @@ public abstract class RuleType {
 		return severity;
 	}
 
-	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule);
+	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
 		return new Violation(dependency.lineNumber, severity, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
