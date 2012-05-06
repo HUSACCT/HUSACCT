@@ -6,22 +6,34 @@ import org.apache.log4j.Logger;
 
 public class MainController {
 	
-	ViewController viewController;
-	WorkspaceController workspaceController;
-	LocaleController localeController;
-	StateController stateController;
-	ApplicationController applicationController;
-	ImportExportController importExportController;
+	private ViewController viewController;
+	private WorkspaceController workspaceController;
+	private LocaleController localeController;
+	private StateController stateController;
+	private ApplicationController applicationController;
+	private ImportExportController importExportController;
 	
 	public MainGui mainGUI;
 	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
-	public MainController(){
+	private boolean guiEnabled = true; 
+	
+	public MainController(String[] args){
+		readArguments(args);
 		setControllers();
-		openMainGui();
+		if(guiEnabled) openMainGui();
 	}
 
+	private void readArguments(String[] args){
+		logger.debug("Arguments:" + args);
+		for(String s : args){
+			if(s.equals("nogui")){
+				guiEnabled = false;
+			}
+		}
+	}
+	
 	private void setControllers() {
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
