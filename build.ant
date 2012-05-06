@@ -4,23 +4,27 @@
     <property name="build.dir"   	value="build"/>
     <property name="classes.dir" 	value="${build.dir}/classes"/>
     <property name="jar.dir"     	value="${build.dir}/jar"/>
-	<property name="reports.dir" 	value="build/reports" />
+	<property name="reports.dir" 	value="${build.dir}/reports" />
 	
     <property name="main-class"  	value="husacct.Main"/>
 	 
 	<path id="classpath">
 	  <fileset dir="lib">
-	    <include name="*.jar" />
+	    <include name="**/*.jar" />
 	  </fileset>
-	  <pathelement location="${classes.dir}"/>
+	 <pathelement location="${classes.dir}" />
 	</path>
 	
 	<target name="main" depends="clean,compile,jar,test,run"/>
 	
+	<!-- Cleanup working directory -->
     <target name="clean">
-        <delete dir="${build.dir}"/>
+        <delete dir="${classes.dir}"/>
+    	<delete dir="${jar.dir}"/>
+        <delete dir="${reports.dir}"/>
     </target>
 
+	<!-- Compile source -->
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
@@ -28,6 +32,7 @@
     	</javac>
     </target>
 
+	<!-- Create runnable Jar -->
     <target name="jar">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
@@ -38,20 +43,27 @@
     </target>
 	
 	<target name="test">
-		<mkdir dir="${reports.dir}"/>
-		<junit fork="yes" printsummary="yes" haltonfailure="no">
+		
+		<!-- Run JUnit tests, export as XML -->
+		<mkdir dir="${reports.dir}" />
+		<junit fork="yes" printsummary="yes" haltonfailure="no" haltonerror="no">
 			<classpath refid="classpath" />
-			<formatter type="xml" />
-			<test name="husaccttest.TestAll" todir="${reports.dir}"/>
+			<formatter type="xml" usefile="yes" />
+			<formatter type="plain" usefile="yes" />
+			<test name="husaccttest.TestAll" todir="${reports.dir}" outfile="Testreport" />
 		</junit>
-		<junitreport>
-		    <fileset dir="${reports.dir}">
-		      <include name="TEST-*.xml" />
+		
+		<!-- Transform XML report to HTML, fails horribly, other methods?-->
+		<junitreport todir="${reports.dir}">
+		    <fileset dir="${reports.dir}" >
+		      <include name="Testreport.xml"/>
 		    </fileset>
-		    <report todir="${reports.dir}" />
+		    <report todir="${reports.dir}" format="noframes" styledir="conf"/>
 		</junitreport>
+		
 	</target>
 	
+	<!-- Try to run executeable Jar -->
 	<target name="run">
 		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
 	</target>
