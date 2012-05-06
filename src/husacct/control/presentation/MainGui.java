@@ -1,4 +1,5 @@
 package husacct.control.presentation;
+import husacct.control.presentation.menubar.AnalyseMenu;
 import husacct.control.presentation.menubar.DefineMenu;
 import husacct.control.presentation.menubar.FileMenu;
 import husacct.control.presentation.menubar.HelpMenu;
@@ -37,12 +38,14 @@ public class MainGui extends JFrame{
 		
 		FileMenu fileMenu = new FileMenu(mainController);
 		DefineMenu defineMenu = new DefineMenu(mainController);
+		AnalyseMenu analyseMenu = new AnalyseMenu(mainController);
 		ValidateMenu validateMenu = new ValidateMenu(mainController);
 		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
 
 		menuBar.add(fileMenu);
 		menuBar.add(defineMenu);
+		menuBar.add(analyseMenu);
 		menuBar.add(validateMenu);
 		menuBar.add(languageMenu);
 		menuBar.add(helpMenu);

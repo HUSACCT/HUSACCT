@@ -14,9 +14,7 @@ import javax.swing.event.MenuEvent;
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
 	private JMenuItem defineLogicalArchitectureItem;
-	private JMenuItem setApplicationDetailsItem;
 	private JMenuItem showLogicalGraphicsItem;
-	private JMenuItem showAnalysedGraphicsItem;
 	private JMenuItem exportLogicalArchitectureItem;
 	private JMenuItem importLogicalArchitectureItem;
 
@@ -31,28 +29,12 @@ public class DefineMenu extends JMenu{
 				mainController.getViewController().showDefineGui();
 			}
 		});
-
-		setApplicationDetailsItem = new JMenuItem("Application details");
-		this.add(setApplicationDetailsItem);
-		setApplicationDetailsItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getApplicationController().showApplicationDetailsGui();
-			}
-		});
 		
 		showLogicalGraphicsItem = new JMenuItem("Show logical architecture graphics");
 		this.add(showLogicalGraphicsItem);
 		showLogicalGraphicsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showDefinedArchitectureGui();
-			}
-		});
-		
-		showAnalysedGraphicsItem = new JMenuItem("Show analysed architecture graphics");
-		this.add(showAnalysedGraphicsItem);
-		showAnalysedGraphicsItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showAnalysedArchitectureGui();
 			}
 		});
 		
@@ -75,9 +57,7 @@ public class DefineMenu extends JMenu{
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(int state) {
 				defineLogicalArchitectureItem.setEnabled(false);
-				setApplicationDetailsItem.setEnabled(false);
 				showLogicalGraphicsItem.setEnabled(false);
-				showAnalysedGraphicsItem.setEnabled(false);
 				importLogicalArchitectureItem.setEnabled(false);
 				exportLogicalArchitectureItem.setEnabled(false);
 				switch(state){
@@ -85,13 +65,10 @@ public class DefineMenu extends JMenu{
 					case StateController.MAPPED: {
 						importLogicalArchitectureItem.setEnabled(true);
 					}
-					case StateController.ANALYSED: {
-						showAnalysedGraphicsItem.setEnabled(true);
-					}
+					case StateController.ANALYSED:
 					case StateController.DEFINED: {
 						exportLogicalArchitectureItem.setEnabled(true);
 						showLogicalGraphicsItem.setEnabled(true);	
-						setApplicationDetailsItem.setEnabled(true);
 					}
 					case StateController.EMPTY: {
 						defineLogicalArchitectureItem.setEnabled(true);
