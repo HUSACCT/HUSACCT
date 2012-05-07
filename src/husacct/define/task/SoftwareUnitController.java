@@ -61,7 +61,7 @@ public class SoftwareUnitController extends PopUpController {
 	}
 	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
-		logger.info("getting Sofware Unit Tree Components");
+//		logger.info("getting Sofware Unit Tree Components");
 		
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();
@@ -89,7 +89,6 @@ public class SoftwareUnitController extends PopUpController {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
-			//pokeObservers();
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());

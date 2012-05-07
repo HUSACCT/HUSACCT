@@ -3,7 +3,6 @@ package husacct.define.task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 

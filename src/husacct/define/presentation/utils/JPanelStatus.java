@@ -86,8 +86,8 @@ public class JPanelStatus extends JPanel {
 	 * This method shows the given message and starts the progressbar.
 	 */
 	public void start() {
-		logger.info("start() - Message: " + messages.peek());
-
+//		logger.info("start() - Message: " + messages.peek());
+//		logger.info("Message: " + messages.peek());
 		jLabelStatus.setText(messages.peek());
 		jProgressBar1.setIndeterminate(true);
 
@@ -107,7 +107,7 @@ public class JPanelStatus extends JPanel {
 	 * This method will replace the message with an default message and stops the progressbar.
 	 */
 	public void stop() {
-		logger.info("stop() - Message: " + defaultMessage);
+//		logger.info("stop() - Message: " + defaultMessage);
 
 		// Remove the last message from the stack
 		messages.pop();

@@ -28,6 +28,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	
 	private JPanel innerPanel;
 	
+	private JLabel parentModuleNameLabel;
 	private JTextField moduleNameField;
 	private JTextField moduleDescriptionField;
 	private JTextField hierarchicalLevelField;
@@ -43,7 +44,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	public void initUI() {
 		this.innerPanel = new JPanel();
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-		this.innerPanel.setLayout(this.getGridLayout(5, 2));
+		this.innerPanel.setLayout(this.getGridLayout(6, 2));
 		this.createInnerPanel();
 		this.add(this.innerPanel);
 		
@@ -60,12 +61,24 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	}
 	
 	private void createInnerPanel() {
+		this.addParentModule();
 		this.addModuleValues();
 		this.addModuleDescriptionTextArea();
 		this.addModuleTypeComboBox();
 		this.addHierarchicalLevelValues();
 		this.addButtons();
 		this.setVisibles();
+	}
+	
+	private void addParentModule() {
+		JLabel parentModuleLabel = new JLabel("Parent module");
+		this.innerPanel.add(parentModuleLabel);
+		
+		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
+		String parentModuleName = DefinitionController.getInstance().getModuleName(selectedModuleId);
+		
+		parentModuleNameLabel = new JLabel(parentModuleName);
+		this.innerPanel.add(parentModuleNameLabel);
 	}
 	
 	private void addModuleValues() {
@@ -114,6 +127,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel.add(this.saveButton);
 		this.saveButton.setText("Save");
 		this.saveButton.addActionListener(this);
+//		this.saveButton.requestFocus();
 	}
 	
 	private void setVisibles() {

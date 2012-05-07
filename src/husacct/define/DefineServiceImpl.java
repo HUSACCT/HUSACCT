@@ -36,7 +36,7 @@ public class DefineServiceImpl implements IDefineService {
 		return appDTO;		
 	}
 	
-	@Override
+	@Override 
 	public ModuleDTO[] getRootModules() {	
 		Module[] modules = this.moduleService.getRootModules();
 		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
@@ -46,7 +46,7 @@ public class DefineServiceImpl implements IDefineService {
 	@Override
 	public RuleDTO[] getDefinedRules() {
 		AppliedRule[] rules = this.appliedRuleService.getAppliedRules();
-		RuleDTO[] ruleDTOs = domainParser.parseRule(rules);
+		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
 		return ruleDTOs;
 	}
 
@@ -55,7 +55,12 @@ public class DefineServiceImpl implements IDefineService {
 		Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
 		ModuleDTO moduleDTO = domainParser.parseModule(module);
 		ModuleDTO[] childModuleDTOs = moduleDTO.subModules;
-		//TODO removes subModules from childModulesDTOs
+		
+		//Removing nested childs
+		for (ModuleDTO modDTO : childModuleDTOs){
+			modDTO.subModules = new ModuleDTO[]{};
+		}
+
 		return childModuleDTOs;
 	}
 
@@ -68,7 +73,7 @@ public class DefineServiceImpl implements IDefineService {
 			for (int i = 1;i<moduleNames.length-1;i++){
 				parentLogicalPath += "." + moduleNames[i];
 			}
-			//Check if exists, an exception with automaticly be thrown
+			//Check if exists, an exception will automaticly be thrown
 			SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath);
 		}
 		else {
