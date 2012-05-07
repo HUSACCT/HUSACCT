@@ -108,7 +108,7 @@ public class FilterController {
 			if(violation.getClassPathFrom().startsWith(physicalPathFrom) && violation.getClassPathTo().startsWith(physicalPathTo)) {
 				violations.add(violation);
 			}
-			else if(violation.getClassPathFrom().startsWith(physicalPathFrom) && physicalPathFrom.equals(physicalPathTo)){
+			else if(violation.getClassPathFrom().startsWith(physicalPathFrom) && physicalPathFrom.equals(physicalPathTo) && violation.getClassPathTo().isEmpty()){
 				violations.add(violation);
 			}
 		}
