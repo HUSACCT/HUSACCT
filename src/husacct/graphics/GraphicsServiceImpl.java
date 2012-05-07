@@ -1,6 +1,5 @@
 package husacct.graphics;
 
-import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
@@ -16,7 +15,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	private DefinedController definedController;
 
 	public GraphicsServiceImpl() {
-		ServiceProvider.getInstance().getAnalyseService();
+		createControllers();
 	}
 
 	private void createControllers() {
@@ -30,51 +29,45 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 
 	@Override
 	public JInternalFrame getAnalysedArchitectureGUI() {
-		createControllers();
 		return analysedController.getGUI();
 	}
 
 	@Override
 	public JInternalFrame getDefinedArchitectureGUI() {
-		createControllers();
 		return definedController.getGUI();
 	}
 
 	@Override
 	public void drawAnalysedArchitecture() {
-		createControllers();
 		analysedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawAnalysedArchitectureWithViolations() {
-		createControllers();
 		analysedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitecture() {
-		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITHOUT_VIOLATIONS);
 	}
 
 	@Override
 	public void drawDefinedArchitectureWithViolations() {
-		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		createControllers();
 		Element data = new Element("ArchitecureGraphicsService");
+		// TODO: Save violations on or off
 		data.addContent("testdata");
 		return data;
 	}
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		createControllers();
-		//TODO: Set workspace data.
+		// TODO: Set workspace data.
+		// - show violations = on/off?
 	}
 }

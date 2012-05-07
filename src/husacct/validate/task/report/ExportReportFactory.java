@@ -1,10 +1,11 @@
 package husacct.validate.task.report;
 
-import husacct.define.DefineServiceStub;
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
+import husacct.ServiceProvider;
+import husacct.define.IDefineService;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.task.report.writer.HTMLReportWriter;
 import husacct.validate.task.report.writer.PDFReportWriter;
 import husacct.validate.task.report.writer.ReportWriter;
@@ -18,11 +19,10 @@ import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
 	private ReportWriter writer;
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	public void exportReport(String fileType, List<Violation> violations, String name, String path, List<Severity> severities) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException  {
-		DefineServiceStub stub = new DefineServiceStub();
-		
-		Report report = new Report(stub.getApplicationDetails().name, "TODO Version", violations, path, severities);
+		Report report = new Report(defineService.getApplicationDetails().name, "TODO Version", violations, path, severities);
 		
 		if(fileType.equals(ExtensionType.XML.getExtension())) {
 			writer = new XMLReportWriter(report, path, name);

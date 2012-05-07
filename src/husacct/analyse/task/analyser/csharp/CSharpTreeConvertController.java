@@ -14,6 +14,7 @@ class CSharpTreeConvertController {
 	private List<CommonTree> namespaceTrees;
 	private List<CommonTree> classTrees;
 	private List<CommonTree> usageTrees;
+	private List<CommonTree> attributeTrees;
 	private int amoutofAccolades;
 	private boolean isAbstractClass;
 	private CommonTree abstractTree;
@@ -32,8 +33,10 @@ class CSharpTreeConvertController {
 		namespaceTrees = new ArrayList<CommonTree>();
 		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
+		attributeTrees = new ArrayList<CommonTree>();
 		boolean namespace = false;
 		boolean isClassPart = false;
+		boolean isAttributePart = false;
 		depth = 0;
 		innerClassDepth = new ArrayList<Integer>();
 		boolean usage = false;
@@ -42,10 +45,16 @@ class CSharpTreeConvertController {
 			namespace = namespaceChecking(tree, namespace);
 			isClassPart = setClassTree(tree, isClassPart);
 			usage = usageCheck(tree, usage);
+			isAttributePart = attributeChecking(tree, isAttributePart);
 		}
 		CSharpNamespaceGenerator namespaceGenerator = new CSharpNamespaceGenerator(namespaceTrees);
 		new CSharpClassGenerator(classTrees, namespaceGenerator.getName());
 		new CSharpImportGenerator(usageTrees, "classname");
+	}
+
+	private boolean attributeChecking(CommonTree tree, boolean isAttributePart) {
+		System.out.println(tree);
+		return false;
 	}
 
 	private boolean setClassTree(CommonTree tree, boolean isClassPart) {

@@ -2,6 +2,8 @@ package husacct.define.presentation.jframe;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +15,7 @@ import husacct.define.task.ValueInputController;
  * @author Henk ter Harmsel
  *
  */
-public abstract class AbstractValuesJFrame extends JFrame implements ActionListener {
+public abstract class AbstractValuesJFrame extends JFrame implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 545921025909901624L;
 	
@@ -29,6 +31,9 @@ public abstract class AbstractValuesJFrame extends JFrame implements ActionListe
 	public abstract void initUI();
 	protected abstract void addButtons();
 	public abstract void actionPerformed(ActionEvent event);
-	protected abstract void cancelButtonAction(ActionEvent event);
-	protected abstract void saveButtonAction(ActionEvent event);
+	public abstract void keyPressed(KeyEvent event);
+	public abstract void keyReleased(KeyEvent event);
+	public abstract void keyTyped(KeyEvent event);
+	protected abstract void cancelButtonAction();
+	protected abstract void saveButtonAction();
 }

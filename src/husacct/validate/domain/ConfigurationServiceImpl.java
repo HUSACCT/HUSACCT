@@ -17,11 +17,16 @@ public class ConfigurationServiceImpl {
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severityRepository = new SeverityPerTypeRepository();
+		this.severityRepository = new SeverityPerTypeRepository(this);
+		this.severityRepository.initializeDefaultSeverities();
 	}
 
 	public void clearViolations() {
 		violationRepository.clear();
+	}
+	
+	public int getSeverityValue(Severity severity){
+		return severityConfig.getSeverityValue(severity);
 	}
 
 	public List<Violation> getAllViolations() {
@@ -39,6 +44,10 @@ public class ConfigurationServiceImpl {
 	public void addSeverities(List<Severity> severities) {
 		severityConfig.addSeverities(severities);
 	}
+	
+	public Severity getSeverityByName(String severityName){
+		return severityConfig.getSeverityByName(severityName);
+	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
 		return severityRepository.getSeveritiesPerTypePerProgrammingLanguage();
@@ -50,5 +59,21 @@ public class ConfigurationServiceImpl {
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(String language, HashMap<String, Severity> severitiesPerTypesPerProgrammingLanguages) {
 		severityRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
+	}
+	
+	public Severity getSeverityFromKey(String language, String key){
+		return severityRepository.getSeverity(language, key);
+	}
+	
+	public void restoreAllToDefault(String language){
+		severityRepository.restoreAllToDefault(language);
+	}
+	
+	public void restoreToDefault(String language, String key){
+		severityRepository.restoreDefaultSeverity(language, key);
+	}
+	
+	public void restoreSeveritiesToDefault(){
+		severityConfig.restoreToDefault();
 	}
 }

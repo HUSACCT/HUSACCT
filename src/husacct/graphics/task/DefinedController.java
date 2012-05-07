@@ -2,16 +2,17 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 
-public class DefinedController extends BaseController {
+public class DefinedController extends DrawingController {
 	private IDefineService defineService;
 
 	public DefinedController() {
 		super();
-		
+
 		defineService = ServiceProvider.getInstance().getDefineService();
 	}
 
@@ -20,36 +21,31 @@ public class DefinedController extends BaseController {
 		drawModules(modules);
 	}
 
-	private void drawModules(AbstractDTO[] modules) {
-		ModuleDTO[] castedModules = (ModuleDTO[]) modules;
-
-		for (ModuleDTO dto : castedModules) {
-			BaseFigure logicalFigure = figureFactory.createFigure(dto);
-			drawing.add(logicalFigure);
-		}
+	protected void drawModules(AbstractDTO[] modules) {
+		super.drawModules(modules);
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure zoomedModuleFigure) {
-		// TODO
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
 	}
 
 	@Override
 	public void moduleZoomOut() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void exportToImage() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void toggleViolations() {
-		// TODO Auto-generated method stub
-		
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		return null;
 	}
 
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		return null;
+	}
 }

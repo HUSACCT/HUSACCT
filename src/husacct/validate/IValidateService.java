@@ -13,13 +13,11 @@ import org.xml.sax.SAXException;
 import com.itextpdf.text.DocumentException;
 
 import husacct.common.dto.CategoryDTO;
-import husacct.common.dto.MessageDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.task.report.UnknownStorageTypeException;
 
 public interface IValidateService
 {
-	public String buildDefinedRuleMessage(MessageDTO message);
 	public CategoryDTO[] getCategories();
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo);
@@ -29,4 +27,5 @@ public interface IValidateService
 	public boolean isValidated();
 	public JInternalFrame getBrowseViolationsGUI();
 	public JInternalFrame getConfigurationGUI();
+	public void reloadGUI();
 }

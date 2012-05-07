@@ -8,7 +8,6 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,23 +18,21 @@ public class CheckConformanceController {
 	private final ConfigurationServiceImpl configuration;
 
 	private Logger logger = Logger.getLogger(CheckConformanceController.class);
-	private List<Violation> violations;
 	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
 
-	public CheckConformanceController(ConfigurationServiceImpl configuration){
+	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory){
 		this.configuration = configuration;
 		this.configuration.clearViolations();
-		this.violations = new ArrayList<Violation>();
 		this.ruleCache = new HashMap<String, RuleType>();
-		this.ruleFactory = new RuleTypesFactory();
+		this.ruleFactory = ruleFactory;
 	}
 
 	public void checkConformance(RuleDTO[] appliedRules){
 		for(RuleDTO appliedRule : appliedRules){
 			try{
 				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-				List<Violation> newViolations = rule.check(appliedRule);
+				List<Violation> newViolations = rule.check(configuration, appliedRule);
 				configuration.addViolations(newViolations);
 			}catch(RuleTypeNotFoundException e){
 				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
@@ -55,9 +52,5 @@ public class CheckConformanceController {
 		}
 
 		return rule;
-	}
-
-	public List<Violation> getViolations(){
-		return violations;
 	}
 }

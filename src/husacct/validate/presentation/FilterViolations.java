@@ -2,16 +2,25 @@ package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class FilterViolations extends JFrame {
-
 	private static final long serialVersionUID = -6295611607558238501L;
-	
+
 	private TaskServiceImpl ts;
 	private BrowseViolations bv;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
@@ -34,7 +43,7 @@ public class FilterViolations extends JFrame {
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 
 			private static final long serialVersionUID = -2752815747553087143L;
-			
+
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -53,7 +62,7 @@ public class FilterViolations extends JFrame {
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
 
 			private static final long serialVersionUID = -2076057432618819613L;
-			
+
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -72,7 +81,7 @@ public class FilterViolations extends JFrame {
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
 
 			private static final long serialVersionUID = 8399838627659517010L;
-			
+
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, true};
 
@@ -243,7 +252,7 @@ public class FilterViolations extends JFrame {
 				);
 
 		pack();
-	}// </editor-fold>
+	}
 
 	private void cancelActionPerformed() {
 		dispose();
@@ -306,14 +315,14 @@ public class FilterViolations extends JFrame {
 	}
 
 	private void loadRuletypes(){
-		ArrayList<String> ruletypes = ts.loadRuletypes();
+		ArrayList<String> ruletypes = ts.loadRuletypesForFilter();
 		for(String ruletype : ruletypes){
 			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
 		}
 	}
 
 	private void loadViolationtypes(){
-		ArrayList<String> violationtypes = ts.loadViolationtypes();
+		ArrayList<String> violationtypes = ts.loadViolationtypesForFilter();
 		for(String violationtype : violationtypes){
 			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
 		}
