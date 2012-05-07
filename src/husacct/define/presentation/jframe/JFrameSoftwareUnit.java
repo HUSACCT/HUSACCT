@@ -153,7 +153,7 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 	private void save() {
 		TreePath path = this.softwareDefinitionTree.getSelectionPath();
 		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		this.softwareUnitController.save(selectedComponent.getName(), selectedComponent.getType());
+		this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());
 		this.dispose();
 	}
 	

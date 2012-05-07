@@ -1,6 +1,5 @@
 package husacct.define.presentation.jpanel;
 
-import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.presentation.jframe.AddModuleValuesJFrame;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;

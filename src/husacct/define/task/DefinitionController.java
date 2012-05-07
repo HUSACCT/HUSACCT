@@ -269,7 +269,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	public AbstractDefineComponent getModuleTreeComponents() {
-		logger.info("getting Module Tree Components");
+//		logger.info("getting Module Tree Components");
 		JPanelStatus.getInstance("Updating Modules").start();
 		
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
@@ -290,6 +290,15 @@ public class DefinitionController extends Observable implements Observer {
 		parentComponent.addChild(childComponent);
 	}
 
+	
+	public String getModuleName(long moduleId){
+		String moduleName = "Root";
+		if (this.getSelectedModuleId() != -1){
+			moduleName = this.moduleService.getModuleNameById(this.getSelectedModuleId());
+		}
+		return moduleName;
+	}
+	
 	/**
 	 * This function will return a hash map with the details of the requested module.
 	 */

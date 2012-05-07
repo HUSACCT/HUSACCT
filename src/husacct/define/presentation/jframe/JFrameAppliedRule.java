@@ -5,7 +5,6 @@ import husacct.define.presentation.jpanel.RuleDetailsJPanel;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.KeyValueComboBox;
-import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.BorderLayout;
@@ -31,8 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
-
-import org.apache.log4j.Logger;
 
 
 public class JFrameAppliedRule extends JFrame implements KeyListener, ActionListener, ItemListener, Observer{
