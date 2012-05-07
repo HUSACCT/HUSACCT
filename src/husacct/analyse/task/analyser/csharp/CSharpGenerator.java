@@ -12,6 +12,8 @@ public abstract class CSharpGenerator {
 	protected final int USING = 18;
 	protected final int NAMESPACE = 61;
 	protected final int SEMICOLON = 25;
+	protected final int INTERFACE = 172;
 	protected ModelCreationService modelService = new FamixCreationServiceImpl();
 
+	
 }

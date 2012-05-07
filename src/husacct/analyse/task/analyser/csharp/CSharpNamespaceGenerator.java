@@ -5,18 +5,15 @@ import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpNamespaceGenerator extends CSharpGenerator {
-	private String namespaceString = null;
-	public CSharpNamespaceGenerator(List<CommonTree> namespaceTrees){
+	public String namespaceGenerator(List<CommonTree> namespaceTrees){
+		String namespaceString = "";
 		for (CommonTree commonTree : namespaceTrees){
-			namespaceString += commonTree.getText();
+			if (commonTree.getType() != NAMESPACE) {
+				namespaceString += commonTree.getText();
+			}
 		}
-		namespaceString = namespaceString.split("namespace")[1];
-		String belongsToPackage = namespaceString.substring(0, namespaceString.lastIndexOf("."));
-		String name = namespaceString.substring(namespaceString.lastIndexOf(".")+1,namespaceString.length());
-		modelService.createPackage(namespaceString, belongsToPackage, name);
-	}
-
-	public String getName() {
+		String name = namespaceTrees.get(namespaceTrees.size()-1).getText();
+		modelService.createPackage(namespaceString, namespaceString, name);
 		return namespaceString;
 	}
 }
