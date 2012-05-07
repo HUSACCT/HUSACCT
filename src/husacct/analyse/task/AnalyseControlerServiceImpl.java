@@ -10,6 +10,7 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 
 	private ApplicationAnalyser analyserService; 
 	private AnalyseDomainService domainService;
+	private boolean isAnalysed = false;
 	
 	public AnalyseControlerServiceImpl(){
 		this.domainService = new AnalyseDomainServiceImpl();
@@ -18,7 +19,9 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 	
 	@Override
 	public void analyseApplication() {
+		if(isAnalysed) domainService.clearModel();
 		analyserService.analyseApplication();
+		isAnalysed = true;
 	}
 	
 	@Override
@@ -26,43 +29,54 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 		return analyserService.getAvailableLanguages();
 	}
 	
-	
-	
-	
-
-	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
-		// TODO 
-		return null;
-	}
-
-	@Override
-	public DependencyDTO[] getDependency(String from) {
-		// TODO 
-		return null;
-	}
-
 	@Override
 	public AnalysedModuleDTO[] getRootModules() {
-		// TODO 
-		return null;
+		return domainService.getRootModules();
 	}
+	
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		// TODO 
-		return null;
+		return domainService.getChildModulesInModule(from);
 	}
-
+	
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		// TODO 
-		return null;
+		return domainService.getChildModulesInModule(from, depth);
+	}
+	
+	@Override
+	public AnalysedModuleDTO getParentModuleForModule(String child) {
+		return domainService.getParentModuleForModule(child);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to) {
+		return domainService.getDependencies(from, to);
 	}
 
 	@Override
-	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		// TODO 
-		return null;
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
+		return domainService.getDependencies(from, to, dependencyFilter);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from) {
+		return domainService.getDependenciesFrom(from);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
+		return domainService.getDependenciesFrom(from, dependencyFilter);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to) {
+		return domainService.getDependenciesTo(to);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
+		return domainService.getDependenciesTo(to, dependencyFilter);
 	}
 }

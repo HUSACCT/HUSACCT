@@ -1,21 +1,22 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.ModelService;
-import husacct.analyse.domain.famix.FamixModelServiceImpl;
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 
-public class JavaAttributeGenerator {
+class JavaAttributeGenerator {
 	
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
 	private String belongsToClass; 
 	private String declareClass; //example: package.package.class
-	private String declareType;  //int, string, CustomClass etc
+	private String declareType = "";  //int, string, CustomClass etc
+	private int lineNumber;
 	
-	private ModelService modelService = new FamixModelServiceImpl();
+	private ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	private String name;
 
@@ -25,10 +26,12 @@ public class JavaAttributeGenerator {
 	private final static int TYPE = 157;
 	private final static int VAR_DECLARATOR_LIST = 162;
 	private final static int IDENT = 164;
+	private final static int STATIC_ARRAY_CREATOR = 120;
 	
 	
 	public void generateModel(Tree attributeTree, String belongsToClass) {
 		this.belongsToClass = belongsToClass;
+		lineNumber = attributeTree.getLine();
 		walkThroughAST(attributeTree);
 		createAttributeObject();
 	}
@@ -45,12 +48,17 @@ public class JavaAttributeGenerator {
 			}else if(treeType == VAR_DECLARATOR_LIST){
 				setAttributeName(child);	
 			}
+			else if(treeType == STATIC_ARRAY_CREATOR){
+				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree);
+			}
 			walkThroughAST(child);
 		}
 	}
 
 	private void createAttributeObject(){
-		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name);
+		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
+		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	}
 
 	private void setAttributeName(Tree tree) {
@@ -73,7 +81,12 @@ public class JavaAttributeGenerator {
 		if(child.getType() != QUALIFIED_TYPE_IDENT){
 			declareType = child.getText();
 		}else{
-			declareType = declaretype.getText();
+			if(child.getChildCount() > 1){
+				for(int i=0; i<child.getChildCount(); i++){
+					this.declareType += child.getChild(i).toString() + ".";
+				}
+			}
+			else declareType = declaretype.getText();
 		}
 	}
 

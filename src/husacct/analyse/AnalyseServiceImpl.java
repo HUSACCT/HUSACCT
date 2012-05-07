@@ -1,8 +1,7 @@
 package husacct.analyse;
 
 import javax.swing.JInternalFrame;
-
-import husacct.analyse.presentation.AnalyzePanelGetRootModules;
+import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -36,58 +35,59 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		return new AnalyzePanelGetRootModules();
+		return new AnalyseInternalFrame();
 	}
 	
-	
-
-	@Override
-	public DependencyDTO[] getDependencies(String from, String to) {
-		return stub.getDependencies(from, to);
-	}
-
-	@Override
-	public DependencyDTO[] getDependenciesFrom(String from) {
-		return stub.getDependenciesFrom(from);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependenciesTo(String to){
-		return stub.getDependenciesTo(to);
-	}
-
-	@Override
-	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
-		return stub.getDependencies(from, to, dependencyFilter);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
-		return stub.getDependenciesFrom(from, dependencyFilter);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
-		return stub.getDependenciesTo(to, dependencyFilter);
-	}
-		
 	@Override
 	public AnalysedModuleDTO[] getRootModules() {
-		return stub.getRootModules();
+		return service.getRootModules();
 	}
+	
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		return stub.getChildModulesInModule(from);
+		return service.getChildModulesInModule(from);
 	}
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		return stub.getChildModulesInModule(from, depth);
+		return service.getChildModulesInModule(from, depth);
 	}
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		return stub.getParentModuleForModule(child);
+		return service.getParentModuleForModule(child);
 	}
+
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to) {
+		return service.getDependencies(from, to);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
+		return service.getDependencies(from, to, dependencyFilter);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from) {
+		return service.getDependenciesFrom(from);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
+		return service.getDependenciesFrom(from, dependencyFilter);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to){
+		return service.getDependenciesTo(to);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
+		return service.getDependenciesTo(to, dependencyFilter);
+	}
+	
+	
 }

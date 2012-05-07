@@ -15,6 +15,6 @@ public abstract class AbstractDefinitionJPanel extends JPanel {
 		
 	}
 	
-	public abstract void initGui();
-	protected abstract JPanel addButtonPanel();
+//	public abstract void initGui();
+//	protected abstract JPanel addButtonPanel();
 }

@@ -1,6 +1,5 @@
 package husacct.graphics;
 
-import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
@@ -16,7 +15,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	private DefinedController definedController;
 
 	public GraphicsServiceImpl() {
-		ServiceProvider.getInstance().getAnalyseService();
+		
 	}
 
 	private void createControllers() {
@@ -68,6 +67,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	public Element getWorkspaceData() {
 		createControllers();
 		Element data = new Element("ArchitecureGraphicsService");
+		// TODO: Save violations on or off
 		data.addContent("testdata");
 		return data;
 	}
@@ -75,6 +75,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		createControllers();
-		//TODO: Set workspace data.
+		// TODO: Set workspace data.
+		// - show violations = on/off?
 	}
 }

@@ -2,7 +2,6 @@ package husacct.analyse.domain.famix;
 
 class FamixAttribute extends FamixStructuralEntity{
 
-	public String belongsToClass;
 	public String accessControlQualifier;
 	public boolean hasClassScope;
 	
@@ -10,7 +9,7 @@ class FamixAttribute extends FamixStructuralEntity{
 		String importRepresentation = "";
 		importRepresentation += "\nname: " + super.name;
 		importRepresentation += "\nuniquename: " + super.uniqueName;
-		importRepresentation += "\nbelongsToClass: " + belongsToClass;
+		importRepresentation += "\nbelongsToClass: " + super.belongsToClass;
 		importRepresentation += "\naccessControlQualifier: " + accessControlQualifier;
 		importRepresentation += "\nhasClassScope: " + hasClassScope;
 		importRepresentation += "\ndeclareType: " + super.declareType;
@@ -18,5 +17,4 @@ class FamixAttribute extends FamixStructuralEntity{
 		importRepresentation += "\n";
 		return importRepresentation;
 	}
-	
 }

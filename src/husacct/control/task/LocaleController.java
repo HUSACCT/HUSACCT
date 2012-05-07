@@ -29,7 +29,7 @@ public class LocaleController {
 		ArrayList<Locale> locales = new ArrayList<Locale>();
 		
 		locales.add(Locale.ENGLISH);
-		locales.add(Locale.GERMAN);
+		locales.add(new Locale("nl", "NL"));
 		
 		return locales;
 	}

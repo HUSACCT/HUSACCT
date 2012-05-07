@@ -4,7 +4,7 @@ import husacct.define.domain.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
 
-public class Module {
+public class Module implements Comparable<Module> {
 	
 	protected static long STATIC_ID;
 	protected long id;
@@ -220,6 +220,17 @@ public class Module {
 			}
 		}
 		return isMapped;
+	}
+
+	@Override
+	public int compareTo(Module compareObject) {
+		int compareResult = 0;
+		if(compareObject instanceof Layer || this.getId() < compareObject.getId()) {
+			compareResult = -1;
+		} else if(this.getId() > compareObject.getId()) {
+			compareResult = 1;
+		}
+		return compareResult;
 	}
 
 }

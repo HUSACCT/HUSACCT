@@ -4,7 +4,6 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
@@ -16,73 +15,136 @@ public class DefineServiceStub implements IDefineService{
 		
 	}
 	
+	@SuppressWarnings("unused")
 	@Override
 	public RuleDTO[] getDefinedRules() {
 		//Temporary architecture
-		ModuleDTO lbDAOModule = new ModuleDTO();
-		lbDAOModule.logicalPath = "InfrastructureLayer.locationbasedDAO";
-		lbDAOModule.physicalPaths = new String[] {"infrastructure.socialmedia.locationbased.foursquare.AccountDAO",
+		String logicalPath = "InfrastructureLayer.locationbasedDAO";
+		String[] physicalPaths = new String[] {"infrastructure.socialmedia.locationbased.foursquare.AccountDAO",
 				"infrastructure.socialmedia.locationbased.foursquare.FriendsDAO",
 				"infrastructure.socialmedia.locationbased.foursquare.IMap",
 				"infrastructure.socialmedia.locationbased.foursquare.HistoryDAO"};
-		lbDAOModule.subModules = new ModuleDTO[]{};
-		lbDAOModule.type = "Module";
+		String type = "Module";
+		ModuleDTO[] subModules = new ModuleDTO[]{};
+		ModuleDTO lbDAOModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO latitudeModule = new ModuleDTO();
-		latitudeModule.logicalPath = "DomainLayer.locationbasedConnections.latitudeConnection";
-		latitudeModule.physicalPaths = new String[] {"domain.locationbased.latitude.Account",
+		logicalPath = "DomainLayer.locationbasedConnections.latitudeConnection";
+		physicalPaths = new String[] {"domain.locationbased.latitude.Account",
 				"domain.locationbased.latitude.Friends", "domain.locationbased.latitude.Map"};
-		latitudeModule.subModules = new ModuleDTO[]{};
-		latitudeModule.type = "Module";
+		type = "Module";
+		subModules = new ModuleDTO[]{};
+		ModuleDTO latitudeModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO fqConnectionModule = new ModuleDTO();
-		fqConnectionModule.logicalPath = "DomainLayer.locationbasedConnections.foursquareConnection";
-		fqConnectionModule.physicalPaths = new String[] {"domain.locationbased.foursquare.Account",
+		logicalPath = "DomainLayer.locationbasedConnections.foursquareConnection";
+		physicalPaths = new String[] {"domain.locationbased.foursquare.Account",
 				"domain.locationbased.foursquare.Friends", "domain.locationbased.foursquare.Map"};
-		fqConnectionModule.subModules = new ModuleDTO[]{};
-		fqConnectionModule.type = "Module";
+		type = "Module";
+		subModules = new ModuleDTO[]{};
+		ModuleDTO fqConnectionModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO lbHistoryModule = new ModuleDTO();
-		lbHistoryModule.logicalPath = "DomainLayer.locationbasedHistory";
-		lbHistoryModule.physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
-		lbHistoryModule.subModules = new ModuleDTO[]{};
-		lbHistoryModule.type = "Module";
+		logicalPath = "DomainLayer.locationbasedHistory";
+		physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
+		type = "Module";
+		subModules = new ModuleDTO[]{};
+		ModuleDTO lbHistoryModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO lbConnectionsModule = new ModuleDTO();
-		lbConnectionsModule.logicalPath = "DomainLayer.locationbasedConnections";
-		lbConnectionsModule.physicalPaths = new String[] {};
-		lbConnectionsModule.subModules = new ModuleDTO[]{fqConnectionModule, latitudeModule};
-		lbConnectionsModule.type = "Module";
+		logicalPath = "DomainLayer.locationbasedConnections";
+		physicalPaths = new String[] {};
+		subModules = new ModuleDTO[]{fqConnectionModule, latitudeModule};
+		type = "Module";
+		ModuleDTO lbConnectionsModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO infrastructureLayer = new ModuleDTO();
-		infrastructureLayer.logicalPath = "InfrastructureLayer";
-		infrastructureLayer.subModules = new ModuleDTO[]{lbDAOModule};
-		infrastructureLayer.type = "Layer";
+		logicalPath = "InfrastructureLayer";
+		type = "Layer";
+		subModules = new ModuleDTO[]{lbDAOModule};
+		ModuleDTO infrastructureLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO domainLayer = new ModuleDTO();
-		domainLayer.logicalPath = "DomainLayer";
-		domainLayer.subModules = new ModuleDTO[]{lbConnectionsModule, lbHistoryModule};
-		domainLayer.type = "Layer";
+		logicalPath = "DomainLayer";
+		type = "Layer";
+		subModules = new ModuleDTO[]{lbConnectionsModule, lbHistoryModule};
+		ModuleDTO domainLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		//ACTUAL RULES
 		//ACTUAL RULES
-		RuleDTO ruleOne = new RuleDTO();
-		ruleOne.ruleTypeKey = "IsNotAllowedToUse";
+		String ruleTypeKey = "IsNotAllowedToUse";
 			//IGNORE FOR ELABORATION VERSION
-			ruleOne.violationTypeKeys = new String[]{"InvocMethod", "InvocConstructor","ExtendsAbstract", "Implements"};
-		ruleOne.moduleFrom = lbConnectionsModule;			
-		ruleOne.moduleTo = lbDAOModule;
-		ruleOne.exceptionRules = new RuleDTO[]{};
+			String[] violationTypeKeys = new String[]{"InvocMethod", "InvocConstructor","ExtendsAbstract", "Implements"};
+		ModuleDTO moduleFrom = lbConnectionsModule;			
+		ModuleDTO moduleTo = lbDAOModule;
+		String regex = "";
+		RuleDTO[] exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleOne = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+		ruleTypeKey = "IsNotAllowedToUse";		
+			//IGNORE FOR ELABORATION VERSION
+			violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = lbHistoryModule;
+		moduleTo = lbDAOModule;
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleTwo = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
+		
+//		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo};
+		
+		ruleTypeKey = "IsAllowedToUse";		
+		//IGNORE FOR ELABORATION VERSION
+		violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = lbHistoryModule;
+		moduleTo = lbDAOModule;
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleThree = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
+	
+		ruleTypeKey = "IsOnlyAllowedToUse";		
+		//IGNORE FOR ELABORATION VERSION
+		violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = lbHistoryModule;
+		moduleTo = lbDAOModule;
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleFour = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
+	
+		ruleTypeKey = "IsOnlyModuleAllowedToUse";		
+		//IGNORE FOR ELABORATION VERSION
+		violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = lbHistoryModule;
+		moduleTo = lbDAOModule;
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleFive = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
+		
+		ruleTypeKey = "MustUse";		
+		//IGNORE FOR ELABORATION VERSION
+		violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = lbHistoryModule;
+		moduleTo = lbDAOModule;
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleSix = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
+		
+		ruleTypeKey = "BackCall";		
+		//IGNORE FOR ELABORATION VERSION
+		violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = domainLayer;
+		moduleTo = new ModuleDTO();
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleSeven = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
+		
+		ruleTypeKey = "SkipCall";		
+		//IGNORE FOR ELABORATION VERSION
+		violationTypeKeys = new String[] {"ExtendsConcrete"};
+		moduleFrom = domainLayer;
+		moduleTo = new ModuleDTO();
+		regex = "";
+		exceptionRules = new RuleDTO[]{};
+		RuleDTO ruleEight = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
+	
+		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo, ruleThree, ruleFour, ruleFive, ruleSix, ruleSeven, ruleEight};
 
-		RuleDTO ruleTwo = new RuleDTO();
-		ruleTwo.ruleTypeKey = "IsNotAllowedToUse";		
-			//IGNORE FOR ELABORATION VERSION
-			ruleTwo.violationTypeKeys = new String[] {"ExtendsConcrete"};
-		ruleTwo.moduleFrom = lbHistoryModule;
-		ruleTwo.moduleTo = lbDAOModule;
-		ruleOne.exceptionRules = new RuleDTO[]{};
-		
-		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo};
 		return rules;
 	}
 
@@ -90,15 +152,17 @@ public class DefineServiceStub implements IDefineService{
 	public ModuleDTO[] getRootModules() {			
 		//Gets only the top level abstraction Modules
 		
-		ModuleDTO infrastructureLayer = new ModuleDTO();
-		infrastructureLayer.logicalPath = "InfrastructureLayer";
-		infrastructureLayer.subModules = new ModuleDTO[]{};
-		infrastructureLayer.type = "Layer";
+		String logicalPath = "InfrastructureLayer";
+		String[] physicalPaths = new String[]{};
+		String type = "Layer";
+		ModuleDTO[] subModules = new ModuleDTO[]{};
+		ModuleDTO infrastructureLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO domainLayer = new ModuleDTO();
-		domainLayer.logicalPath = "DomainLayer";
-		domainLayer.subModules = new ModuleDTO[]{};
-		domainLayer.type = "Layer";
+		logicalPath = "DomainLayer";
+		physicalPaths = new String[]{};
+		type = "Layer";
+		subModules = new ModuleDTO[]{};
+		ModuleDTO domainLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 
 		ModuleDTO[] allLayers = new ModuleDTO[]{domainLayer,infrastructureLayer};
 		return allLayers;
@@ -106,27 +170,30 @@ public class DefineServiceStub implements IDefineService{
 
 	@Override
 	public ApplicationDTO getApplicationDetails() {
-		ApplicationDTO application = new ApplicationDTO();
-		application.name = "Application1";
-		application.paths = new String[] {"c:/Application1/"};
-		application.programmingLanguage = "Java";
+		String name = "Application1";
+		String[] paths = new String[] {"c:/Application1/"};
+		String programmingLanguage = "Java";
+		String version = "1.0";
+		ApplicationDTO application = new ApplicationDTO(name, paths, programmingLanguage, version);
 		return application;
 	}
 
 	@Override
-	public ModuleDTO[] getChildsFromModule(String logicalPath) {
-		ModuleDTO lbHistoryModule = new ModuleDTO();
-		lbHistoryModule.logicalPath = "DomainLayer.locationbasedHistory";
-		lbHistoryModule.physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
-		lbHistoryModule.subModules = new ModuleDTO[]{};
+	public ModuleDTO[] getChildsFromModule(String tmplogicalPath) {
+		String logicalPath = "DomainLayer.locationbasedHistory";
+		String[] physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
+		String type = "Module";
+		ModuleDTO[] subModules = new ModuleDTO[]{};
+		ModuleDTO lbHistoryModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO lbConnectionsModule = new ModuleDTO();
-		lbConnectionsModule.logicalPath = "DomainLayer.locationbasedConnections";
-		lbConnectionsModule.physicalPaths = new String[] {};
-		lbConnectionsModule.subModules = new ModuleDTO[]{};
+		logicalPath = "DomainLayer.locationbasedConnections";
+		physicalPaths = new String[] {};
+		type = "Module";
+		subModules = new ModuleDTO[]{};
+		ModuleDTO lbConnectionsModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		ModuleDTO[] subModules = new ModuleDTO[]{lbConnectionsModule,lbHistoryModule};
-		return subModules;
+		ModuleDTO[] childModules = new ModuleDTO[]{lbConnectionsModule,lbHistoryModule};
+		return childModules;
 	}
 
 	@Override

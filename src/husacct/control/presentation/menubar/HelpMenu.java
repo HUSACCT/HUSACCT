@@ -26,5 +26,7 @@ public class HelpMenu extends JMenu {
 				// TODO: help
 			}
 		});
+		
+		
 	}
 }

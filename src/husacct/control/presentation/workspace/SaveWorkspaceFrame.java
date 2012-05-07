@@ -2,8 +2,8 @@ package husacct.control.presentation.workspace;
 
 import husacct.control.presentation.workspace.savers.ISaverFrame;
 import husacct.control.presentation.workspace.savers.SaverFrameFactory;
-import husacct.control.task.WorkspaceController;
-import husacct.control.task.workspace.savers.SaveFactory;
+import husacct.control.task.MainController;
+import husacct.control.task.resources.ResourceFactory;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -24,14 +24,14 @@ import javax.swing.event.ListSelectionListener;
 @SuppressWarnings("serial")
 public class SaveWorkspaceFrame extends JFrame{
 
-	private WorkspaceController workspaceController;
+	private MainController mainController;
 	private JList saverList;
 	private List<String> saverListData;
 	private JButton next, cancel;
 	
-	public SaveWorkspaceFrame(WorkspaceController workspaceController){
+	public SaveWorkspaceFrame(MainController mainController){
 		super("Save workspace");
-		this.workspaceController = workspaceController;
+		this.mainController = mainController;
 		this.setup();
 		this.setSavers();
 		this.addComponents();
@@ -43,11 +43,12 @@ public class SaveWorkspaceFrame extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(300, 400));
+		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void setSavers(){
-		List<String> savers = SaveFactory.getAvailableSavers();
-		saverListData = savers;
+		List<String> workspaceResources = ResourceFactory.getAvailableResources();
+		saverListData = workspaceResources;
 	}
 	
 	private void addComponents(){
@@ -100,7 +101,7 @@ public class SaveWorkspaceFrame extends JFrame{
 	private void openLoaderFrame(){
 		String selectedSaver = (String) saverList.getSelectedValue();
 		ISaverFrame saverFrame = SaverFrameFactory.get(selectedSaver);
-		saverFrame.setWorkspaceController(workspaceController);
+		saverFrame.setWorkspaceController(mainController.getWorkspaceController());
 		saverFrame.setVisible(true);
 	}
 }

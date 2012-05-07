@@ -9,70 +9,69 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
-	private MainController maincontroller;
-	private int currentState;
-	private JMenuItem mntmConfigure;
-	private JMenuItem mntmValidateNow;
+	private JMenuItem configureItem;
+	private JMenuItem validateNowItem;
+	private JMenuItem exportViolationReportItem;
 	
-	public ValidateMenu(MainController mainController){
+	public ValidateMenu(final MainController mainController){
 		super("Validate");
 		
-		this.maincontroller = mainController;
-		currentState = maincontroller.getStateController().getState();
-		
-		mntmValidateNow = new JMenuItem("Validate now");
-		this.add(mntmValidateNow);
-		mntmValidateNow.addActionListener(new ActionListener(){
+		validateNowItem = new JMenuItem("Validate now");
+		this.add(validateNowItem);
+		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Validate now
-				maincontroller.getViewController().setViolationsGui();
-				maincontroller.getViewController().showViolationsGui();
-				maincontroller.getStateController().setState(4);
+				mainController.getViewController().showViolationsGui();
 			}
 		});
 		
-		mntmConfigure = new JMenuItem("Configuration");
-		this.add(mntmConfigure);
-		mntmConfigure.addActionListener(new ActionListener(){
+		configureItem = new JMenuItem("Configuration");
+		this.add(configureItem);
+		configureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Configuration
-				
+				mainController.getViewController().showConfigurationGui();
 			}
 		});
-		
-		//disable buttons on start
-		mntmValidateNow.setEnabled(false);
-		mntmConfigure.setEnabled(false);
-		
-		
-		maincontroller.getStateController().addStateChangeListener(new IStateChangeListener() {
 
-			@Override
+		exportViolationReportItem = new JMenuItem("Violation report");
+
+		this.add(exportViolationReportItem);
+		
+		exportViolationReportItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getImportExportController().showExportViolationsReportGui();
+			}
+		});
+
+		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(int state) {
-				currentState = maincontroller.getStateController().getState();
-				if(currentState == maincontroller.getStateController().NONE){
-					mntmValidateNow.setEnabled(false);
-					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().EMPTY){
-					mntmValidateNow.setEnabled(false);
-					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().DEFINED){
-					mntmValidateNow.setEnabled(true);
-					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().MAPPED){
-					mntmValidateNow.setEnabled(true);
-					mntmConfigure.setEnabled(false);
-				}else if(currentState == maincontroller.getStateController().VALIDATED){
-					mntmValidateNow.setEnabled(true);
-					mntmConfigure.setEnabled(true);
+				validateNowItem.setEnabled(false);
+				configureItem.setEnabled(false);
+				exportViolationReportItem.setEnabled(false);
+				switch(state){
+					case StateController.VALIDATED: {
+						exportViolationReportItem.setEnabled(true);
+					}
+					case StateController.MAPPED: {
+						validateNowItem.setEnabled(true);
+					}
+					case StateController.ANALYSED:
+					case StateController.DEFINED:
+					case StateController.EMPTY:
+					case StateController.NONE: {
+						configureItem.setEnabled(true);
+					}
 				}
 			}
-			
+		});
+		
+		this.addMenuListener(new MenuListenerAdapter() {
+			public void menuSelected(MenuEvent e) {
+				mainController.getStateController().checkState();		
+			}
 		});
 	}
-	
-	
 }

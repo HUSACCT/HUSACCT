@@ -1,6 +1,8 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
@@ -14,6 +16,7 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
@@ -39,7 +42,6 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	/**
 	 * Creating Gui
 	 */
-	@Override
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
@@ -57,7 +59,6 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		return softwareUnitsPane;
 	}
 	
-	@Override
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
@@ -97,12 +98,21 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		}
 	}
 	
-	private void addSoftwareUnit(){
-		DefinitionController.getInstance().createSoftwareUnitGUI();
+	private void addSoftwareUnit() {
+		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+		if (moduleId != -1) {
+			JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
+			softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
+			softwareUnitFrame.setVisible(true);
+		} else {
+			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	private void removeSoftwareUnit(){
-		String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
-		DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
+		if (getSelectedRow() != -1){
+			String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
+			DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
+		}
 	}
 		
 	/**

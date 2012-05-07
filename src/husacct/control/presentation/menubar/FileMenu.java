@@ -11,33 +11,26 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class FileMenu extends JMenu {
 
-	private StateController stateController;
 	private WorkspaceController workspaceController;
-	private MainController mainController;
 	private JMenuItem createWorkspaceItem;
 	private JMenuItem openWorkspaceItem;
 	private JMenuItem saveWorkspaceItem;
 	private JMenuItem closeWorkspaceItem;
-	private int currentState;
 	
-	public FileMenu(MainController controller){
+	public FileMenu(final MainController mainController){
 		super("File");
-		this.mainController = controller;
-		this.workspaceController = controller.getWorkspaceController();
-		
-		this.stateController = controller.getStateController();
-		currentState = stateController.getState();
+		this.workspaceController = mainController.getWorkspaceController();
 		
 		createWorkspaceItem = new JMenuItem("Create workspace");
 		this.add(createWorkspaceItem);
 		createWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showCreateWorkspaceGui();
-				stateController.setState(1);
 			}
 		});
 		
@@ -46,7 +39,6 @@ public class FileMenu extends JMenu {
 		openWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showOpenWorkspaceGui();
-				stateController.setState(1);
 			}
 		});
 		
@@ -77,43 +69,33 @@ public class FileMenu extends JMenu {
 			}
 		});
 		
-		//disable buttons on start
-		saveWorkspaceItem.setEnabled(false);
-		closeWorkspaceItem.setEnabled(false);
-		
-		controller.getStateController().addStateChangeListener(new IStateChangeListener() {
-
-			@Override
+		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(int state) {
-				currentState = stateController.getState();
-				if(currentState == stateController.NONE){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(false);
-					closeWorkspaceItem.setEnabled(false);
-				}else if(currentState == stateController.EMPTY){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == stateController.DEFINED){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == stateController.MAPPED){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
-				}else if(currentState == stateController.VALIDATED){
-					createWorkspaceItem.setEnabled(true);
-					openWorkspaceItem.setEnabled(true);
-					saveWorkspaceItem.setEnabled(true);
-					closeWorkspaceItem.setEnabled(true);
+				createWorkspaceItem.setEnabled(false);
+				openWorkspaceItem.setEnabled(false);
+				saveWorkspaceItem.setEnabled(false);
+				closeWorkspaceItem.setEnabled(false);
+				switch(state){
+					case StateController.VALIDATED:
+					case StateController.MAPPED:
+					case StateController.ANALYSED:
+					case StateController.DEFINED:
+					case StateController.EMPTY: {
+						closeWorkspaceItem.setEnabled(true);
+						saveWorkspaceItem.setEnabled(true);
+					}
+					case StateController.NONE: {
+						createWorkspaceItem.setEnabled(true);
+						openWorkspaceItem.setEnabled(true);
+					}
 				}
 			}
-			
+		});
+		
+		this.addMenuListener(new MenuListenerAdapter() {
+			public void menuSelected(MenuEvent e) {
+				mainController.getStateController().checkState();
+			}
 		});
 	}
 }

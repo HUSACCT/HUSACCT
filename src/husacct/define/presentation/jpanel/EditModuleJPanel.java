@@ -14,7 +14,6 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -37,7 +36,6 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 		super();
 	}
 
-	@Override
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
@@ -114,19 +112,12 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		// TODO UI 
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		updateModule();
-	}
-
-	//TODO Lookinto this
-	//I have no idea what this method does, but somehow its required for the focusListener
-	@Override
-	protected JPanel addButtonPanel() {
-		return null;
 	}
 }

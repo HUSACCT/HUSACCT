@@ -3,19 +3,15 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
-import husacct.control.presentation.workspace.CreateWorkspaceFrame;
+import husacct.control.presentation.workspace.CreateWorkspaceDialog;
 import husacct.control.presentation.workspace.OpenWorkspaceFrame;
 import husacct.control.presentation.workspace.SaveWorkspaceFrame;
-import husacct.control.task.workspace.loaders.ILoadWorkspace;
-import husacct.control.task.workspace.loaders.LoadFactory;
-import husacct.control.task.workspace.savers.ISaveWorkspace;
-import husacct.control.task.workspace.savers.SaveFactory;
+import husacct.control.task.resources.IResource;
+import husacct.control.task.resources.ResourceFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -26,29 +22,45 @@ public class WorkspaceController {
 	private Logger logger = Logger.getLogger(WorkspaceController.class);
 	private static Workspace currentWorkspace;
 
+	private static MainController mainController;
+	
+	public WorkspaceController(MainController mainController){
+		WorkspaceController.mainController = mainController;
+	}
+
 	public void showCreateWorkspaceGui() {
-		new CreateWorkspaceFrame(this);
+		new CreateWorkspaceDialog(mainController);
 	}
-
+	
 	public void showOpenWorkspaceGui() {
-		new OpenWorkspaceFrame(this);
-
+		new OpenWorkspaceFrame(mainController);
 	}
 	
-	public void showSaveWorkspaceGui() {
-		new SaveWorkspaceFrame(this);
-
+	public SaveWorkspaceFrame showSaveWorkspaceGui() {
+		return new SaveWorkspaceFrame(mainController);
 	}
 	
-	public void saveWorkspace(String saverIdentifier, HashMap<String, Object> dataValues) {
-		ISaveWorkspace saver = SaveFactory.get(saverIdentifier);
+	public void createWorkspace(String name){
+		Workspace workspace = new Workspace();
+		workspace.setName(name);
+		WorkspaceController.currentWorkspace = workspace;
+		if(mainController.guiEnabled) mainController.getMainGui().setTitle(name);
+	}
+	
+	public void closeWorkspace() {
+		WorkspaceController.currentWorkspace = null;
+		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
+	}
+	
+	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
+		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
-		saver.save(document, dataValues);
+		workspaceResource.save(document, dataValues);
 	}
 	
-	public void loadWorkspace(String loaderIdentifier, HashMap<String, Object> dataValues){
-		ILoadWorkspace loader = LoadFactory.get(loaderIdentifier);
-		Document doc = loader.load(dataValues);
+	public void loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
+		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
+		Document doc = workspaceResource.load(dataValues);
 		loadWorkspace(doc);
 	}
 	
@@ -111,30 +123,22 @@ public class WorkspaceController {
 		}
 		return saveableServices;
 	}
-
-	public void closeWorkspace() {	
-		Object[] options = { "Yes", "No", "Cancel" };
-		int n = JOptionPane.showOptionDialog(null,
-				"Save changes?",
-				"Close workspace", JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
-		if (n == JOptionPane.YES_OPTION) {
-			//saveWorkspace();
-		} else if (n == JOptionPane.NO_OPTION) {
-			System.out.println("no");
-		} else if (n == JOptionPane.CANCEL_OPTION) {
-			System.out.println("cancel");
-		} else {
-			System.out.println("none");
-		}
-		
-	}
 	
 	public static boolean isOpenWorkspace(){
 		if(WorkspaceController.currentWorkspace != null){
 			return true;
-		} else {
-			return false;
+		}
+		return false;
+	}
+	
+	public static Workspace getCurrentWorkspace(){
+		return WorkspaceController.currentWorkspace;
+	}
+
+	public static void setWorkspace(Workspace workspace) {
+		WorkspaceController.currentWorkspace = workspace;
+		if(mainController != null && mainController.guiEnabled) {
+			mainController.getMainGui().setTitle(workspace.getName());
 		}
 	}
 

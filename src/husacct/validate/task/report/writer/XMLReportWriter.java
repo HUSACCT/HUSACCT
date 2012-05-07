@@ -1,11 +1,11 @@
 package husacct.validate.task.report.writer;
 
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,9 +22,7 @@ public class XMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws IOException {
-
-		
+	public void createReport() throws IOException {		
 		Document document = new Document();
 
 		Element reportElement = new Element("report");
@@ -70,7 +68,7 @@ public class XMLReportWriter extends ReportWriter {
 			lineNr.setText("" + violation.getLinenumber());
 			severity.setText(violation.getSeverity().toString());
 			if(violation.getLogicalModules() != null) {
-				Message messageObject = new Message(violation.getLogicalModules(),violation.getRuletypeKey());
+				Message messageObject = violation.getMessage();
 				String message = new Messagebuilder().createMessage(messageObject);
 				ruleType.setText(message);
 			}
@@ -90,5 +88,4 @@ public class XMLReportWriter extends ReportWriter {
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.output(document, new FileWriter(getFileName()));
 	}
-
 }

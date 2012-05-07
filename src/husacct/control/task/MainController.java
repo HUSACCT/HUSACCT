@@ -6,25 +6,41 @@ import org.apache.log4j.Logger;
 
 public class MainController {
 	
-	ViewController viewController;
-	WorkspaceController workspaceController;
-	LocaleController localeController;
-	StateController stateController;
+	private ViewController viewController;
+	private WorkspaceController workspaceController;
+	private LocaleController localeController;
+	private StateController stateController;
+	private ApplicationController applicationController;
+	private ImportExportController importExportController;
 	
 	public MainGui mainGUI;
 	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
-	public MainController(){
+	public boolean guiEnabled = true; 
+	
+	public MainController(String[] args){
+		readArguments(args);
 		setControllers();
-		openMainGui();
+		if(guiEnabled) openMainGui();
 	}
 
+	private void readArguments(String[] args){
+		logger.debug("Arguments:" + args);
+		for(String s : args){
+			if(s.equals("nogui")){
+				guiEnabled = false;
+			}
+		}
+	}
+	
 	private void setControllers() {
-		this.workspaceController = new WorkspaceController();
+		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
 		this.stateController = new StateController();
+		this.applicationController = new ApplicationController(this);
+		this.importExportController = new ImportExportController(this);
 	}
 
 	private void openMainGui() {
@@ -45,6 +61,14 @@ public class MainController {
 	
 	public StateController getStateController(){
 		return this.stateController;
+	}
+	
+	public ApplicationController getApplicationController(){
+		return this.applicationController;
+	}
+	
+	public ImportExportController getImportExportController(){
+		return this.importExportController;
 	}
 	
 	public void exit(){

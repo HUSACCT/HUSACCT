@@ -1,9 +1,11 @@
 package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.exception.SeverityNotFoundException;
+import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
-import java.awt.Color;
+
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 public class SeverityConfigRepository {
@@ -25,30 +27,35 @@ public class SeverityConfigRepository {
 	public void addSeverities(List<Severity> severities){
 		this.currentSeverities = severities;
 	}
-	
-	public Severity getSeverity(String key){
+
+	public Severity getSeverityByName(String severityName){
 		for(Severity defaultSeverity : defaultSeverities){
-			if(key.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
+			if(severityName.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
 				return defaultSeverity;
 			}
 		}
-		
+
 		for(Severity customSeverity : currentSeverities){
-			if(key.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
 				return customSeverity;
 			}		
 		}
 		throw new SeverityNotFoundException();
 	}
 
+	public int getSeverityValue(Severity severity){
+		return currentSeverities.indexOf(severity);
+	}
+	
+	public void restoreToDefault(){
+		currentSeverities = defaultSeverities;
+	}
+	
 	private void generateDefaultSeverities(){
-		Severity defaultLowSeverity = new Severity("Low", "", Color.GREEN);
-		Severity defaultMediumSeverity = new Severity("Medium", "", Color.ORANGE);
-		Severity defaultHighSeverity = new Severity("High", "", Color.RED);
-
-		this.defaultSeverities.add(defaultLowSeverity);
-		this.defaultSeverities.add(defaultMediumSeverity);
-		this.defaultSeverities.add(defaultHighSeverity);
+		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
+			Severity severity = new Severity(defaultSeverity.toString(), "", defaultSeverity.getColor());
+			this.defaultSeverities.add(severity);
+		}
 	}
 
 	private void initializeCurrentSeverities(){	

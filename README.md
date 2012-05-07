@@ -59,14 +59,38 @@ The application we were instructed to build is meant to be a contribution to the
 The tool itself is written in Java.  
 Currently there is (only) support for the following **languages**:
 
-- Java _(Using Antler)_
-- .NET C# _(Using Antler)_
+- Java _(Using Antlr)_
+- .NET C# _(Using Antlr)_
 
 We are trying to build support for the following **rule types**:
 
+- Unique responsibility
+- Visibility convention
+- Naming convention
+- Subclass convention
+- Interface convention
 - Is allowed to use
-- Is not allowed to use
-- more?
+					- Is only allowed to use
+					- Is the only module allowed to use
+					- Must use
+- Is not allowed to
+					- use modules in a higher layer
+					- use modules in a not directly lower layer
+- Exceptions to all those rules
+
+Also we will try to support the following **violation types**:
+
+- Invocation of a Method
+- Invocation of a Constructor
+- Access to a property or field
+- Extending a concrete class
+- Extending a abstract class
+- Implementing a interface
+- Declaration
+- Annotation
+- Import
+- Exception
+
 
 The architecture should allow for expansions to support more languages and rule types.
 

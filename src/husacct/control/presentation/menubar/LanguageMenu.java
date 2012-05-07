@@ -14,23 +14,19 @@ import javax.swing.JMenu;
 
 @SuppressWarnings("serial")
 public class LanguageMenu extends JMenu{
-	LocaleController controller;
 	
-	public LanguageMenu(LocaleController localeController){
+	public LanguageMenu(final LocaleController localeController){
 		super("Language");
-		this.controller = localeController;
-		
+
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
-		
-		
-		for(Locale locale : controller.getAvailableLocales()){
+
+		for(Locale locale : localeController.getAvailableLocales()){
 			
 			final JCheckBoxMenuItem item = new JCheckBoxMenuItem(locale.getLanguage());
-			if(controller.getLocale().getLanguage().equals(locale.getLanguage())){
+			if(LocaleController.getLocale().getLanguage().equals(locale.getLanguage())){
 				item.setSelected(true);
 			}
-			
-			
+
 			controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 				@Override
 				public void update(Locale newLocale) {
@@ -42,24 +38,20 @@ public class LanguageMenu extends JMenu{
 				}
 			});
 			
-			
 			item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JCheckBoxMenuItem source = (JCheckBoxMenuItem)e.getSource();
 					if(source.isSelected()){
-						controller.setNewLocaleFromString(source.getText());
+						localeController.setNewLocaleFromString(source.getText());
 					} else {
-						// TODO: mag niet uitgezet worden als het de currentLocale is
+						if(source.getText().equals(LocaleController.getLocale().getLanguage())){
+							source.setSelected(true);
+						}
 					}
-					
 				}
 			});
-			
 			this.add(item);
-
 		}		
-		
 	}
-
 }

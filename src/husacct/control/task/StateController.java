@@ -12,8 +12,8 @@ public class StateController {
 	public static final int NONE = 0;
 	public static final int EMPTY = 1;
 	public static final int DEFINED = 2;
-	public static final int MAPPED = 3;
-	public static final int ANALYSED = 4;
+	public static final int ANALYSED = 3;
+	public static final int MAPPED = 4;
 	public static final int VALIDATED = 5;
 	
 	private int state;
@@ -25,6 +25,7 @@ public class StateController {
 	}
 	
 	public void checkState(){
+		
 		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
@@ -39,21 +40,19 @@ public class StateController {
 			newState = StateController.DEFINED;
 		}
 		
-		if(defineService.isMapped()){
-			newState = StateController.MAPPED;
-		}
-		
 		if(analyseService.isAnalysed()){
 			newState = StateController.ANALYSED;
+		}
+
+		if(defineService.isMapped()){
+			newState = StateController.MAPPED;
 		}
 		
 		if(validateService.isValidated()){
 			newState = StateController.VALIDATED;
 		}
 		
-		if(newState != this.getState()){
-			this.setState(newState);
-		}
+		this.setState(newState);
 	}
 	
 	public int getState(){

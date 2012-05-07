@@ -2,8 +2,8 @@ package husacct.control.presentation.workspace;
 
 import husacct.control.presentation.workspace.loaders.ILoaderFrame;
 import husacct.control.presentation.workspace.loaders.LoaderFrameFactory;
-import husacct.control.task.WorkspaceController;
-import husacct.control.task.workspace.loaders.LoadFactory;
+import husacct.control.task.MainController;
+import husacct.control.task.resources.ResourceFactory;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -21,20 +21,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.log4j.Logger;
-
 @SuppressWarnings("serial")
 public class OpenWorkspaceFrame extends JFrame{
-	
-	private Logger logger = Logger.getLogger(OpenWorkspaceFrame.class);
-	private WorkspaceController workspaceController;
+
+	private MainController mainController;
 	private JList loaderList;
 	private List<String> loaderListData;
 	private JButton next, cancel;
 	
-	public OpenWorkspaceFrame(WorkspaceController workspaceController){
+	public OpenWorkspaceFrame(MainController mainController){
 		super("Open workspace");
-		this.workspaceController = workspaceController;
+		this.mainController = mainController;
 		this.setup();
 		this.setLoaders();
 		this.addComponents();
@@ -46,10 +43,11 @@ public class OpenWorkspaceFrame extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(300, 400));
+		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void setLoaders(){
-		List<String> loaders = LoadFactory.getAvailableLoaders();
+		List<String> loaders = ResourceFactory.getAvailableResources();
 		loaderListData = loaders;
 	}
 	
@@ -103,7 +101,7 @@ public class OpenWorkspaceFrame extends JFrame{
 	private void openLoaderFrame(){
 		String selectedLoader = (String) loaderList.getSelectedValue();
 		ILoaderFrame loaderFrame = LoaderFrameFactory.get(selectedLoader);
-		loaderFrame.setWorkspaceController(workspaceController);
+		loaderFrame.setWorkspaceController(mainController.getWorkspaceController());
 		loaderFrame.setVisible(true);
 	}
 }

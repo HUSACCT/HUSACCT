@@ -19,11 +19,29 @@ public class AnalysedModuleDTO extends AbstractDTO{
 		this.subModules = new ArrayList<AnalysedModuleDTO>();
 	}
 	
-	public AnalysedModuleDTO(String uniqueName, String name, String type, List<AnalysedModuleDTO> subModules){
+	public AnalysedModuleDTO(String uniqueName, String name, String type, String visibility, List<AnalysedModuleDTO> subModules){
 		this.uniqueName = uniqueName;
 		this.name = name;
 		this.type = type;
 		this.visibility = "";
 		this.subModules = subModules;
+	}
+	
+	public boolean equals(AnalysedModuleDTO other){
+		boolean result = true;
+		result = result && (this.uniqueName == other.uniqueName);
+		result = result && (this.name == other.name);
+		result = result && (this.type == other.type);
+		result = result && (this.visibility == other.visibility);
+		return result;
+	}
+	
+	public String toString(){
+		String result = "";
+		result += "Type: " + type + "\n";
+		result += "Uniqename: " + uniqueName + "\n";
+		result += "name: " + name + "\n";
+		result += "Visibility: " + visibility + "\n";
+		return result;
 	}
 }

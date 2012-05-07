@@ -1,10 +1,13 @@
 package husacct.validate.task.report;
 
-import husacct.define.DefineServiceStub;
-import husacct.validate.abstraction.extensiontypes.ExtensionTypes.ExtensionType;
+import husacct.ServiceProvider;
+import husacct.common.dto.ApplicationDTO;
+import husacct.define.IDefineService;
+import husacct.validate.domain.exception.ReportException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 import husacct.validate.task.report.writer.HTMLReportWriter;
 import husacct.validate.task.report.writer.PDFReportWriter;
 import husacct.validate.task.report.writer.ReportWriter;
@@ -18,22 +21,37 @@ import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
 	private ReportWriter writer;
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-	public void exportReport(String fileType, List<Violation> violations, String name, String path, List<Severity> severities) throws UnknownStorageTypeException, IOException, URISyntaxException, DocumentException  {
-		DefineServiceStub stub = new DefineServiceStub();
-		
-		Report report = new Report(stub.getApplicationDetails().name, "TODO Version", violations, path, severities);
-		
-		if(fileType.equals(ExtensionType.XML.getExtension())) {
-			writer = new XMLReportWriter(report, path, name);
-		} else if(fileType.equals(ExtensionType.HTML.getExtension())) {
-			writer = new HTMLReportWriter(report, path, name);
-		} else if(fileType.equals(ExtensionType.PDF.getExtension())) {
-			writer = new PDFReportWriter(report, path, name);
-		}
-		if(writer == null) {
-			throw new UnknownStorageTypeException("Storage type " + fileType + " doesn't exist or is not implemented");
-		}
-		writer.createReport();
+	public void exportReport(String fileType, List<Violation> violations, String name, String path, List<Severity> severities) {
+		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
+		Report report = new Report(applicationDetails.name, applicationDetails.version, violations, path, severities);
+
+		try{
+			if(fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {
+				writer = new XMLReportWriter(report, path, name);
+			} else if(fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
+				writer = new HTMLReportWriter(report, path, name);
+			} else if(fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {
+				writer = new PDFReportWriter(report, path, name);
+			}
+			if(writer == null) {
+				throw new UnknownStorageTypeException("Storage type " + fileType + " doesn't exist or is not implemented");
+			}
+
+			writer.createReport();
+		}catch(IOException e){
+			createException(e);
+		} catch (UnknownStorageTypeException e) {
+			createException(e);
+		} catch (URISyntaxException e) {
+			createException(e);
+		} catch (DocumentException e) {
+			createException(e);
+		}		
+	}
+
+	private void createException(Exception exception){
+		throw new ReportException(exception.getMessage(), exception);
 	}
 }

@@ -1,7 +1,9 @@
 package husacct.control;
 
 import husacct.common.savechain.ISaveable;
+import husacct.control.domain.Workspace;
 import husacct.control.task.LocaleController;
+import husacct.control.task.WorkspaceController;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -30,13 +32,21 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 	}
 
 	public Element getWorkspaceData() {
-		Element data = new Element("MyControlData");
-		data.addContent("testdata");
+		Element data = new Element("workspace");
+		Workspace workspace = WorkspaceController.getCurrentWorkspace();
+		data.setAttribute("name", workspace.getName());
 		return data;
 	}
 
 	public void loadWorkspaceData(Element workspaceData) {
-		logger.debug(workspaceData);	
+		try {
+			String workspaceName = workspaceData.getAttributeValue("name");
+			Workspace workspace = new Workspace();
+			workspace.setName(workspaceName);
+			WorkspaceController.setWorkspace(workspace);			
+		} catch (Exception e){
+			logger.debug("WorkspaceData corrupt: " + e);
+		}
 	}
 	
 	public void displayErrorMessage(Exception exception){
