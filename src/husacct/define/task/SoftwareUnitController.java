@@ -79,7 +79,8 @@ public class SoftwareUnitController extends PopUpController {
 	
 	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
-		for(AnalysedModuleDTO subModule : module.subModules) {
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		for(AnalysedModuleDTO subModule : children) {
 			this.addChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);
