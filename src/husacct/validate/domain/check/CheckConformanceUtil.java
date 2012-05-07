@@ -36,7 +36,7 @@ public class CheckConformanceUtil {
 	}
 	
 	private static boolean emptyModule(ModuleDTO module){
-		if(module.type == null){
+		if(module.type == null || module.type.isEmpty()){
 			return true;
 		}
 		else{

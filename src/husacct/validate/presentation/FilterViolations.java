@@ -171,6 +171,7 @@ public final class FilterViolations extends JFrame {
 				);
 
 		pack();
+		//setSize(800, 600);
 	}
 	
 	public void loadGUIText(){

@@ -28,7 +28,7 @@ public class FilterController {
 		this.ruletypesfactory = ruletypesfactory;
 		this.configuration = configuration;
 	}
-	
+
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {
 		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
@@ -51,9 +51,9 @@ public class FilterController {
 		for (Violation violation : taskServiceImpl.getAllViolations()) {
 			if(applyfilter){
 				if (hidefilter && ( !ruletypes.contains(ResourceBundles.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) ) ) {
-						tempViolations.add(violation);
+					tempViolations.add(violation);
 				} else if ((!hidefilter) && (ruletypes.contains(ResourceBundles.getValue(violation.getRuletypeKey())) || violationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey())) || paths.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) ) ) {
-						tempViolations.add(violation);
+					tempViolations.add(violation);
 				}
 			} else{
 				tempViolations.add(violation);
@@ -105,12 +105,16 @@ public class FilterController {
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		List<Violation> violations = new ArrayList<Violation>();
 		for (Violation violation : taskServiceImpl.getAllViolations()) {
-			if(violation.getClassPathFrom().startsWith(physicalPathFrom) || violation.getClassPathTo().startsWith(physicalPathTo)) {
+			if(violation.getClassPathFrom().startsWith(physicalPathFrom) && violation.getClassPathTo().startsWith(physicalPathTo)) {
+				violations.add(violation);
+			}
+			else if(violation.getClassPathFrom().startsWith(physicalPathFrom) && physicalPathFrom.equals(physicalPathTo)){
 				violations.add(violation);
 			}
 		}
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		List<ViolationDTO> violationDTOs = assembler.createViolationDTO(violations);
+
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter) {
@@ -130,7 +134,7 @@ public class FilterController {
 					}
 				}
 			}
-			
+
 			violationsPerSeverity.put(severity, violationsCount);
 		}
 		return violationsPerSeverity;
