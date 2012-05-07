@@ -170,8 +170,7 @@ public final class FilterViolations extends JFrame {
 												.addComponent(showFilteredValues))))
 				);
 
-		pack();
-		//setSize(800, 600);
+		setSize(800, 600);
 	}
 	
 	public void loadGUIText(){
