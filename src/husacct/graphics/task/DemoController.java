@@ -14,48 +14,54 @@ import java.util.ArrayList;
 
 public class DemoController extends DrawingController {
 
-	private final int ITEMS_PER_ROW = 2;
+	//private final int ITEMS_PER_ROW = 2;
 
 	public DemoController() {
 		initializeDrawing();
 	}
 	
 	private void initializeDrawing(){
-		AbstractDTO[] modules = new AbstractDTO[5];
+		ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
+		//AbstractDTO[] modules = new AbstractDTO[5];
 
 		ModuleDTO presentationLayer = new ModuleDTO();
 		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
-		modules[0] = presentationLayer;
+		modules.add(presentationLayer);
 
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
-		modules[1] = taskLayer;
+		modules.add(taskLayer);
 
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
 		infrastructureLayer.logicalPath = "infrastructure";
-		modules[2] = infrastructureLayer;
+		modules.add(infrastructureLayer);
 
 		ModuleDTO domainLayer = new ModuleDTO();
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain";
-		modules[3] = domainLayer;
+		modules.add(domainLayer);
 
 		ModuleDTO testLayer = new ModuleDTO();
 		testLayer.type = "layer";
 		testLayer.logicalPath = "test";
-		modules[4] = testLayer;
-
-		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
-		bls.doLayout(ITEMS_PER_ROW);
+		modules.add(testLayer);
 		
-		this.drawModules(modules);
+		ModuleDTO testClass = new ModuleDTO();
+		testClass.type = "class";
+		testClass.logicalPath = "*";
+		//modules.add(testClass);
 		
-		bls = new BasicLayoutStrategy(drawing);
-		bls.doLayout(ITEMS_PER_ROW);
+		ModuleDTO testModule = new ModuleDTO();
+		testModule.type = "module";
+		testModule.logicalPath = "myModule";
+		//modules.add(testModule);
 		
+		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
+		dtos = modules.toArray(dtos);
+		this.drawModules(dtos);
 		this.drawLinesBasedOnSetting();
 	}
 	
