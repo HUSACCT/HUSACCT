@@ -18,6 +18,9 @@ import javax.swing.*;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public final class BrowseViolations extends JInternalFrame {
 
@@ -38,9 +41,11 @@ public final class BrowseViolations extends JInternalFrame {
 	private JScrollPane violationPanel;
 	private JTable violationTable;
 	private DefaultTableModel violationModel;
+	private JLabel lineNumberValueLabel;
+	private JLabel logicalModulesValueLabel;
 
 	public BrowseViolations(TaskServiceImpl ts) {
-		setSize(new Dimension(800, 600));
+		setSize(new Dimension(798, 639));
 		this.ts = ts;
 		this.fv = new FilterViolations(ts, this);
 		initComponents();
@@ -154,29 +159,75 @@ public final class BrowseViolations extends JInternalFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Violation details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setHorizontalGroup(
-				layout.createParallelGroup(Alignment.LEADING)
+			layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(filterPanel, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
-						.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
-						.addComponent(displayPanel, GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
-				);
+					.addContainerGap()
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(filterPanel, GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+				.addComponent(displayPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
+				.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE)
+					.addContainerGap())
+				.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
+		);
 		layout.setVerticalGroup(
-				layout.createParallelGroup(Alignment.LEADING)
+			layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(displayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
-				);
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(displayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		
+		JLabel lblLineNumber = new JLabel("Line number");
+		
+		JLabel lblLogicalModule = new JLabel("Logical Module");
+		
+		lineNumberValueLabel = new JLabel(" ");
+		
+		logicalModulesValueLabel = new JLabel(" ");
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblLineNumber)
+						.addComponent(lblLogicalModule))
+					.addGap(35)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(logicalModulesValueLabel)
+						.addComponent(lineNumberValueLabel))
+					.addContainerGap(590, Short.MAX_VALUE))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblLineNumber)
+						.addComponent(lineNumberValueLabel))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblLogicalModule)
+						.addComponent(logicalModulesValueLabel))
+					.addContainerGap(31, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
 
 		
 		scrollPane.setViewportView(informationPanel);
@@ -186,6 +237,23 @@ public final class BrowseViolations extends JInternalFrame {
 		setClosable(true);
 		setIconifiable(true);
 		setMaximizable(true);
+		
+		
+		violationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting()) {
+					return;
+				}
+				
+			Violation v = ts.getAllViolations().get(violationTable.getSelectedRow());
+				
+				lineNumberValueLabel.setText("" + v.getLinenumber());
+				logicalModulesValueLabel.setText(v.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+			}
+		});
+		
 	}
 	
 	public void loadGUIText(){
