@@ -30,7 +30,15 @@ public class ExportViolationsHistory {
 					Element violationElement = new Element("violation");
 
 					XMLUtils.createElementWithContent("lineNumber", "" + violation.getLinenumber(), violationElement);
-					XMLUtils.createElementWithContent("severityId", "" + violation.getSeverity().getId().toString(), violationElement);
+				//	XMLUtils.createElementWithContent("severityId", "" + violation.getSeverity().getId().toString(), violationElement);
+					Element severityElement = new Element("severity");
+					XMLUtils.createElementWithContent("defaultName", violation.getSeverity().getDefaultName(), severityElement);
+					XMLUtils.createElementWithContent("userName", violation.getSeverity().getUserName(), severityElement);
+					XMLUtils.createElementWithContent("id", "" + violation.getSeverity().getId().toString(), severityElement);
+					XMLUtils.createElementWithContent("color", "" + violation.getSeverity().getColor().getRGB(), severityElement);
+					
+					violationElement.addContent(severityElement);
+					
 					XMLUtils.createElementWithContent("ruletypeKey", violation.getRuletypeKey(), violationElement);
 					XMLUtils.createElementWithContent("violationtypeKey",violation.getViolationtypeKey(), violationElement);
 					XMLUtils.createElementWithContent("classPathFrom",violation.getClassPathFrom(), violationElement);

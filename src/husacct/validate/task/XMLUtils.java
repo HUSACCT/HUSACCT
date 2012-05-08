@@ -6,7 +6,7 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import org.jdom2.Element;
 
 public class XMLUtils {
-	
+
 	public static void createElementWithContent(String name, String content, Element destination) {
 		Element element = new Element(name);
 		element.addContent(content);
@@ -17,7 +17,7 @@ public class XMLUtils {
 		destination.addContent(element);
 		return element;
 	}
-	
+
 	public static void createLogicalModulesElement(LogicalModules logicalModules, Element destinationElement) {
 		Element logicalModulesElement =XMLUtils.createElementWithoutContent("logicalModules", destinationElement);
 		Element logicalModuleFrom = XMLUtils.createElementWithoutContent("logicalModuleFrom", logicalModulesElement);
@@ -30,16 +30,18 @@ public class XMLUtils {
 	}
 
 	public static void addMessage(Element destination, Message message) {
-		Element messageElement = XMLUtils.createElementWithoutContent("message", destination);
+		Element messageElement = createElementWithoutContent("message", destination);
 		createLogicalModulesElement(message.getLogicalModules(), messageElement);
-		XMLUtils.createElementWithContent("ruleKey", message.getRuleKey(), messageElement);
-		Element violationTypeKeysElement = XMLUtils.createElementWithoutContent("violationTypeKeys", messageElement);
+		createElementWithContent("ruleKey", message.getRuleKey(), messageElement);
+		Element violationTypeKeysElement = createElementWithoutContent("violationTypeKeys", messageElement);
 		for(String violationTypeKey : message.getViolationTypeKeys()) {
-			XMLUtils.createElementWithContent("violationTypeKey", violationTypeKey, violationTypeKeysElement);
+			createElementWithContent("violationTypeKey", violationTypeKey, violationTypeKeysElement);
 		}
-		Element exceptionMessages = XMLUtils.createElementWithoutContent("exceptionMessages", messageElement);
-		for(Message exceptionMessage : message.getExceptionMessage()) {
-			addMessage(exceptionMessages, exceptionMessage);
+		Element exceptionMessages = createElementWithoutContent("exceptionMessages", messageElement);
+		if(message.getExceptionMessage() != null) {
+			for(Message exceptionMessage : message.getExceptionMessage()) {
+				addMessage(exceptionMessages, exceptionMessage);
+			}
 		}
 	}
 

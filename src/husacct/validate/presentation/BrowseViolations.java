@@ -69,6 +69,7 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		violationTable.setFillsViewportHeight(true);
 		violationTable.getTableHeader().setReorderingAllowed(false);
+		violationTable.setRowHeight(200);
 		violationPanel.setViewportView(violationTable);
 		
 		shownViolationsNumber = new JLabel();
