@@ -8,7 +8,6 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
-import husacct.graphics.presentation.figures.NamedFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import javax.swing.JInternalFrame;
@@ -201,7 +200,6 @@ public abstract class DrawingController implements UserInputListener {
 
 	private void getAndDrawViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
-		System.out.println("from "+((NamedFigure)figureFrom).getName()+" to "+((NamedFigure)figureTo).getName()+": "+violations.length);
 		if (violations.length > 0) {
 			RelationFigure violationFigure = figureFactory.createFigure(violations);
 			figureMap.linkViolations(violationFigure, violations);
