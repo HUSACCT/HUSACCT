@@ -1,6 +1,8 @@
 package husacct.validate.domain.validation;
 
+import husacct.validate.abstraction.language.ResourceBundles;
 import java.awt.Color;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 public class Severity {
@@ -66,7 +68,7 @@ public class Severity {
 		if (userName != null && !userName.isEmpty()) {
 			return userName;
 		} else{
-			return defaultName;
+			return ResourceBundles.getValue(defaultName);
 		}
 	}
 
