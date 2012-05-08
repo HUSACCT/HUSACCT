@@ -25,18 +25,19 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
     	try{
     		DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
         	AnalysedModuleDTO moduleSelected = (AnalysedModuleDTO)node.getUserObject();
-        	
+        	ImageIcon icon;
         	if(moduleSelected.uniqueName.equals("")){
-        		label.setIcon(new ImageIcon("img/application.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/application.png"));
         	}else if(moduleSelected.type.equals("package")){
-        		label.setIcon(new ImageIcon("img/package.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/package.png"));
         	}else if(moduleSelected.type.equals("class")){
-        		label.setIcon(new ImageIcon("img/class.gif"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/class.gif"));
         	}else if(moduleSelected.type.equals("interface")){
-        		label.setIcon(new ImageIcon("img/interface.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/interface.png"));
         	}else{
-        		label.setIcon(new ImageIcon("img/module.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/module.png"));
         	}
+        	label.setIcon(icon);
             
         	if(moduleSelected.name.equals("")) label.setText("Application");
         	else label.setText(moduleSelected.name);
