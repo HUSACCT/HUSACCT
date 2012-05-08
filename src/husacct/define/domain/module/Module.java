@@ -182,7 +182,7 @@ public class Module implements Comparable<Module> {
 		}
 		for (Module mod : subModules){
 			if (mod.hasSoftwareUnit(softwareUnitName)){
-				softwareUnit = getSoftwareUnitByName(softwareUnitName);
+				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
 		}
 		if (softwareUnit == null){ throw new RuntimeException("This Software Unit does not exist!");}

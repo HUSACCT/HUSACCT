@@ -4,6 +4,7 @@ import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
 
 public class SoftwareArchitectureDomainService {
+	private Application app;
 	
 	/**
 	 * Software Architecture
@@ -16,12 +17,13 @@ public class SoftwareArchitectureDomainService {
 	 * Application
 	 */
 	public void createApplication(String name, String[] paths, String language, String version) {
-			Application app = new Application(name, paths, language, version);
-			Application.setInstance(app);	
+		    app = new Application(name, paths, language, version);
+//			Application.setInstance(app);	
 	}
 	
 	public Application getApplicationDetails(){
-		return Application.getInstance();
+		if (app == null) { app = new Application();}
+		return app;
 	}
 
 }

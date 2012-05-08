@@ -3,14 +3,13 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
-import husacct.define.domain.module.Module;
 import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.JFrameAppliedRule;
-import husacct.define.presentation.jframe.JFrameExceptionRule;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.presentation.utils.UiDialogs;
 
@@ -24,7 +23,6 @@ import javax.swing.DefaultComboBoxModel;
 public class AppliedRuleController extends PopUpController {
 
 	private JFrameAppliedRule jframeAppliedRule;
-	private JFrameExceptionRule jframeExceptionRule;
 	private long currentAppliedRuleId;
 	private String selectedRuleTypeKey;
 	private ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();

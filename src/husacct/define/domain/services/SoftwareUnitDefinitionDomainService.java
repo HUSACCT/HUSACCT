@@ -7,6 +7,8 @@ import husacct.define.domain.module.Module;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class SoftwareUnitDefinitionDomainService {
 	
 	public ArrayList<String> getSoftwareUnitNames(long moduleId) {
@@ -33,10 +35,14 @@ public class SoftwareUnitDefinitionDomainService {
 
 	public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		//TODO add try catch fopr type
-		Type type = Type.valueOf(t);
-		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
-		module.addSUDefinition(unit);
+		try {
+			Type type = Type.valueOf(t);
+			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+			module.addSUDefinition(unit);
+		} catch (Exception e){
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + t);
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
+		}
 	}
 	
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
