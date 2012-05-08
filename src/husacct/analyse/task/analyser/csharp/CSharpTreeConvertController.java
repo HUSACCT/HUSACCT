@@ -52,7 +52,6 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		boolean isPartOfClass = false;
 		boolean isPartOfUsage = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
-		variousTrees = new ArrayList<CommonTree>();
 		
 		for (CommonTree tree : children) {
 			//System.out.print(tree.getText()); System.out.print(tree.getType());
