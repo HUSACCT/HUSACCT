@@ -172,6 +172,15 @@ public class DemoController extends DrawingController {
 					"error 4", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
+		
+		if(figFrom.getName().equals("presentation") && figTo.getName().equals("test")) {
+			violations = new ViolationDTO[] {
+				new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType,
+						"error 5", 1, Color.blue, "", "", 1),
+				new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType,
+						"error 6", 1, Color.orange, "", "", 2)
+			};
+		}
 
 		return violations;
 	}

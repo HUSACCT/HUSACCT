@@ -36,8 +36,9 @@ public final class FigureFactory {
 				highestColor = dto.severityColor;
 			}
 		}
+		System.out.println("sever: "+highestSeverity);
 		if (highestColor != null) {
-			violatedRelationFigure.setLineColor(highestColor);
+			violatedRelationFigure.setViolatedColor(highestColor);
 		}
 
 		return violatedRelationFigure;

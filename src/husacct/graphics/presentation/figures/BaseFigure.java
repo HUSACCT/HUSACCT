@@ -17,12 +17,21 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
 	private boolean isSizeable = false;
 	private boolean violated = false;
+	private Color violatedColor = Color.RED;
 
 	// private LinkedList<Connector> connectors = new LinkedList();
 
 	public BaseFigure(boolean violationBoolean) {
 		super();
 		violated = violationBoolean;
+	}
+	
+	public void setViolatedColor(Color color) {
+		this.violatedColor = color;
+	}
+	
+	public Color getViolatedColor() {
+		return this.violatedColor;
 	}
 
 	@Override
@@ -64,6 +73,15 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	public BaseFigure clone() {
 		BaseFigure other = (BaseFigure) super.clone();
 		return other;
+	}
+	
+	@Override
+	public void draw(Graphics2D g) {
+		if(this.isViolated()) {
+			this.setStrokeColor(this.violatedColor);
+		}
+		
+		super.draw(g);
 	}
 
 	@Override
