@@ -57,7 +57,7 @@ public class SetApplicationFrame extends JFrame {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		this.setSize(new Dimension(350, 380));
-		this.setResizable(false);
+		this.setResizable(true);
 		this.setVisible(true);
 	}
 
