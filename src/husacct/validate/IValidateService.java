@@ -1,16 +1,23 @@
 package husacct.validate;
 
-import com.itextpdf.text.DocumentException;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.report.UnknownStorageTypeException;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Calendar;
+import java.util.List;
+
 import javax.swing.JInternalFrame;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
+
+import com.itextpdf.text.DocumentException;
 
 public interface IValidateService
 {
@@ -23,4 +30,6 @@ public interface IValidateService
 	public boolean isValidated();
 	public JInternalFrame getBrowseViolationsGUI();
 	public JInternalFrame getConfigurationGUI();
+	public List<Violation> getViolationsByDate(Calendar date);
+	public Calendar[] getViolationHistoryDates();
 }
