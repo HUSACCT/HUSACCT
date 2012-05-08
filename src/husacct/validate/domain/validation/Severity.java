@@ -2,7 +2,6 @@ package husacct.validate.domain.validation;
 
 import husacct.validate.abstraction.language.ResourceBundles;
 import java.awt.Color;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 public class Severity {
