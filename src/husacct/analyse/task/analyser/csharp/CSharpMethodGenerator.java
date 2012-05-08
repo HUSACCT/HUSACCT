@@ -7,7 +7,6 @@ import org.antlr.runtime.tree.CommonTree;
 public class CSharpMethodGenerator extends CSharpGenerator {
 
 	public void generate(List<CommonTree> tree, String uniqueClassName) {
-		System.out.println(tree);
 		String returnType = checkForReturnType(tree);
 		
 	}

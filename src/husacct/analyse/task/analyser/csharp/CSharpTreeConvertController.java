@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 class CSharpTreeConvertController extends CSharpGenerator{
 
@@ -54,7 +53,6 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		tempNamespaceTrees = new ArrayList<CommonTree>();
 		
 		for (CommonTree tree : children) {
-			//System.out.print(tree.getText()); System.out.print(tree.getType());
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceChecking(tree, isPartOfNamespace);
 			isPartOfClass = classCheck(tree, isPartOfClass);
