@@ -6,6 +6,7 @@ import husacct.analyse.infrastructure.antlr.java.JavaParser.compilationUnit_retu
 import org.antlr.runtime.RecognitionException; 
 import org.antlr.runtime.tree.CommonTree; 
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 class JavaTreeConvertController { 
     
@@ -14,6 +15,7 @@ class JavaTreeConvertController {
     private String currentClass = null; 
     private String parentClass = null; 
     private int classCount = 0; 
+    private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
         
     public void delegateModelGenerators(JavaParser javaParser) throws RecognitionException { 
         compilationUnit_return compilationUnit = javaParser.compilationUnit(); 
@@ -28,9 +30,13 @@ class JavaTreeConvertController {
                 delegatePackage(packageTree); 
         } else this.thePackage = ""; 
         Tree classTree = completeTree.getFirstChildWithType(JavaParser.CLASS); 
-        if(classTree == null){ 
-                classTree = completeTree.getFirstChildWithType(JavaParser.INTERFACE); 
-                this.theClass = this.currentClass = delegateInterface(classTree); 
+        if(classTree == null){
+        		try {
+        			classTree = completeTree.getFirstChildWithType(JavaParser.INTERFACE);
+        			this.theClass = this.currentClass = delegateInterface(classTree);
+        		} catch (NullPointerException e){
+        			logger.warn("Annotations are not supported yet");
+        		}
         }else{ 
                 this.theClass = this.currentClass = delegateClass(classTree, false); 
         } 
