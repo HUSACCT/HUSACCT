@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
@@ -29,6 +30,9 @@ public class ClassFigure extends NamedFigure {
 		children.add(middle);
 		children.add(text);
 		children.add(bottom);
+		
+		set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 	}
 
 	@Override

@@ -81,8 +81,7 @@ public final class FigureFactory {
 		if (type.toLowerCase().equals("layer")) {
 			return new LayerFigure(name);
 		} else if (type.toLowerCase().equals("module")) {
-			//TODO: This works, but is it correct?
-			return new LayerFigure(name);
+			return new ComponentFigure(name);
 		} else if (type.toLowerCase().equals("class")) {
 			return new ClassFigure(name);
 		} else if (type.toLowerCase().equals("abstract")) {

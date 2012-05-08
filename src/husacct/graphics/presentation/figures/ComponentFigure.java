@@ -3,6 +3,7 @@ package husacct.graphics.presentation.figures;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
@@ -22,15 +23,17 @@ public class ComponentFigure extends NamedFigure {
 	public ComponentFigure(String name) {
 		super(name, false);
 
-		this.mainBox = new RectangleFigure();
-		this.box1 = new RectangleFigure();
-		this.box2 = new RectangleFigure();
-		this.textBox = new TextFigure(this.getName());
+		mainBox = new RectangleFigure();
+		box1 = new RectangleFigure();
+		box2 = new RectangleFigure();
+		textBox = new TextFigure(getName());
 
-		this.children.add(mainBox);
-		this.children.add(box1);
-		this.children.add(box2);
-		this.children.add(textBox);
+		children.add(mainBox);
+		children.add(box1);
+		children.add(box2);
+		children.add(textBox);
+		
+		set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 	}
 
 	private void sizeChildBoxes(Point2D.Double anchor, Point2D.Double lead) {
@@ -44,21 +47,21 @@ public class ComponentFigure extends NamedFigure {
 
 		Point2D.Double newMainBoxAnchor = (Point2D.Double) anchor.clone();
 		newMainBoxAnchor.x += SPACE_LEFT;
-		this.mainBox.setBounds(newMainBoxAnchor, lead);
+		mainBox.setBounds(newMainBoxAnchor, lead);
 
 		Point2D.Double newBox1Anchor = (Point2D.Double) anchor.clone();
 		newBox1Anchor.y += COMP_DISTANCE;
 		Point2D.Double newBox1Lead = new Point2D.Double(newBox1Anchor.x + SPACE_LEFT * 2, newBox1Anchor.y + COMP_HEIGHT);
-		this.box1.setBounds(newBox1Anchor, newBox1Lead);
+		box1.setBounds(newBox1Anchor, newBox1Lead);
 
 		Point2D.Double newBox2Anchor = (Point2D.Double) newBox1Anchor.clone();
 		newBox2Anchor.y += COMP_HEIGHT + COMP_DISTANCE;
 		Point2D.Double newBox2Lead = new Point2D.Double(newBox2Anchor.x + SPACE_LEFT * 2, newBox2Anchor.y + COMP_HEIGHT);
-		this.box2.setBounds(newBox2Anchor, newBox2Lead);
+		box2.setBounds(newBox2Anchor, newBox2Lead);
 
 		Point2D.Double textBoxOrigin = (Point2D.Double) newBox1Anchor.clone();
 		textBoxOrigin.x += SPACE_LEFT * 2 + 8;
-		this.textBox.setBounds(textBoxOrigin, null);
+		textBox.setBounds(textBoxOrigin, null);
 	}
 
 	public static int getMinimumHeight() {
@@ -80,10 +83,10 @@ public class ComponentFigure extends NamedFigure {
 	public ComponentFigure clone() {
 		ComponentFigure that = (ComponentFigure) super.clone();
 
-		that.mainBox = this.mainBox.clone();
-		that.box1 = this.box1.clone();
-		that.box2 = this.box2.clone();
-		that.textBox = this.textBox.clone();
+		that.mainBox = mainBox.clone();
+		that.box1 = box1.clone();
+		that.box2 = box2.clone();
+		that.textBox = textBox.clone();
 
 		that.children = new ArrayList<Figure>();
 		that.children.add(that.mainBox);

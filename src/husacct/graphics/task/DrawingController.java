@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 public abstract class DrawingController implements UserInputListener {
 
-	public final int ITEMS_PER_ROW = 4;
+	public final int ITEMS_PER_ROW = 3;
 
 	protected Drawing drawing;
 	protected DrawingView view;
