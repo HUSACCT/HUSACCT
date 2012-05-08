@@ -31,14 +31,12 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	
 	private AppliedRuleController appliedRuleController;
 	private JFrameAppliedRule appliedRuleFrame;
-	
 	private JPanel jPanelMain;
-	public RuleDetailsJPanel jPanelRuleDetails;
 	private JLabel jLabelRuleType;
 	private JPanel jPanelUpdateCancel;
 		
-	public KeyValueComboBox keyValueComboBoxAppliedRule;
-		
+	public RuleDetailsJPanel jPanelRuleDetails;
+	public KeyValueComboBox keyValueComboBoxExceptionRule;
 	public JButton jButtonCancel;
 	public JButton jButtonSave;
 
@@ -95,14 +93,14 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 					jLabelRuleType.setText("RuleType");
 				}
 				{
-					keyValueComboBoxAppliedRule = new KeyValueComboBox();
-					jPanelMain.add(keyValueComboBoxAppliedRule, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-					this.appliedRuleController.fillRuleTypeComboBoxWithExceptions(keyValueComboBoxAppliedRule);
-					keyValueComboBoxAppliedRule.addItemListener(this);	
+					keyValueComboBoxExceptionRule = new KeyValueComboBox();
+					jPanelMain.add(keyValueComboBoxExceptionRule, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+					this.appliedRuleController.fillRuleTypeComboBoxWithExceptions(keyValueComboBoxExceptionRule);
+					keyValueComboBoxExceptionRule.addItemListener(this);	
 				}
 				{
 					jPanelRuleDetails = new RuleDetailsJPanel(appliedRuleController);
-					String ruleTypeKey = keyValueComboBoxAppliedRule.getSelectedItemKey();
+					String ruleTypeKey = keyValueComboBoxExceptionRule.getSelectedItemKey();
 					jPanelRuleDetails.initGui(ruleTypeKey);
 					jPanelMain.add(jPanelRuleDetails, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 				}
@@ -149,8 +147,8 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		if (e.getSource() == keyValueComboBoxAppliedRule){
-			String ruleTypeKey = keyValueComboBoxAppliedRule.getSelectedItemKey();
+		if (e.getSource() == keyValueComboBoxExceptionRule){
+			String ruleTypeKey = keyValueComboBoxExceptionRule.getSelectedItemKey();
 			appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 			jPanelRuleDetails.initGui(ruleTypeKey);
 		}
@@ -161,7 +159,9 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	}
 
 	private void save() {	
-		HashMap<String, Object> ruleDetails = jPanelRuleDetails.saveToHashMap();	
+		HashMap<String, Object> ruleDetails = jPanelRuleDetails.saveToHashMap();
+		String ruleTypeKey = this.keyValueComboBoxExceptionRule.getSelectedItemKey();
+		ruleDetails.put("ruleTypeKey", ruleTypeKey);
 		this.appliedRuleController.addException(ruleDetails);
 		this.appliedRuleFrame.updateExceptionTable();
 		this.dispose();
