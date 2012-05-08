@@ -60,7 +60,7 @@ public class CSharpAnalyser extends AbstractAnalyser{
 			cSharpParser = generateCSharpParser(sourceFilePath);
 			cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}		
 	}
 

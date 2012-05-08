@@ -13,6 +13,7 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
+
 		String path = "/Users/Thijmen/Documents/benchmark";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");

@@ -1,13 +1,11 @@
 package husacct.analyse.task.analyser.csharp;
 
-import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 
-public class CSharpImportGenerator {
+public class CSharpImportGenerator extends CSharpGenerator{
 	List<String> seperatedAndMergedUsages = new ArrayList<String>();
 	
 	public CSharpImportGenerator(List<CommonTree> usageTrees, String classname){
@@ -34,10 +32,8 @@ public class CSharpImportGenerator {
 	}
 	
 	private void createFamixObject(List<String> seperatedAndMergedUsages, String classname) {
-		FamixCreationServiceImpl model = new FamixCreationServiceImpl();
-		
 		for(String usage : seperatedAndMergedUsages){
-			model.createImport(classname, usage, 0, usage, true);
+			modelService.createImport(classname, usage, 0, usage, true);
 		}
 	}
 }
