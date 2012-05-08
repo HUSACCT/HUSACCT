@@ -8,13 +8,16 @@ import java.util.List;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 
 class CSharpTreeConvertController extends CSharpGenerator{
 
 	private List<List<CommonTree>> namespaceTrees;
 	private List<CommonTree> classTrees;
 	private List<CommonTree> usageTrees;
+	private List<CommonTree> variousTrees;
 	private CommonTree abstractTree;
+	private boolean isScanning = false;
 	private boolean isClassName = false;
 	private boolean isNamespaceName = false;
 	private int indentLevel = 0;
@@ -35,6 +38,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		namespaceTrees = new ArrayList<List<CommonTree>>();
 		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
+		variousTrees = new ArrayList<CommonTree>();
 		walkAST(compilationUnitTree.getChildren());
 		new CSharpImportGenerator(usageTrees);
 		new CSharpClassGenerator(classTrees, indentClassLevel);
@@ -48,11 +52,14 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		boolean isPartOfClass = false;
 		boolean isPartOfUsage = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
+		
 		for (CommonTree tree : children) {
+			//System.out.print(tree.getText()); System.out.print(tree.getType());
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceChecking(tree, isPartOfNamespace);
 			isPartOfClass = classCheck(tree, isPartOfClass);
 			isPartOfUsage = usageCheck(tree, isPartOfUsage);
+			isScanning = check(tree, isScanning);
 		}
 	}
 
@@ -90,6 +97,52 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			}
 		}
 	}
+	
+	private boolean check(CommonTree tree, boolean isScanning) {
+        int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID};
+     
+        for(int type : ListOfTypes){
+               if(tree.getType() == type){
+                      isScanning = true;
+               }
+        }
+        
+        if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
+               isScanning = false;
+               MultipleChecks(tree);
+               variousTrees.clear();
+        }
+        
+        if(isScanning){
+        	variousTrees.add(tree);
+        }
+               
+        return isScanning;
+  }
+
+  private void MultipleChecks(CommonTree tree) {
+	  checkForMethod();
+        //attributeCheck aanroep hier
+  }
+
+  private void checkForMethod() {
+        boolean isNewInstance = false;
+        boolean hasBrackets = false;
+        for(CommonTree thistree : variousTrees){
+               if(thistree.getType() == NEW){
+                      isNewInstance = true;
+               }
+               if(thistree.getType() == FORWARDBRACKET){
+                      hasBrackets = true;
+               }
+        }
+      
+        if(isNewInstance == false && hasBrackets == true){
+        	CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
+        	methodGenerator.generate(variousTrees, "className");
+        }
+  }
+
 
 	private boolean classCheck(CommonTree tree, boolean isClassPart) {
 		if (tree.getType() == ABSTRACT) {
