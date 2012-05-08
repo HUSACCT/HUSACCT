@@ -16,7 +16,7 @@ public class AnalyseInternalFrame extends JInternalFrame {
 		super("Analysed Application", true, true, false, true);
 		setBounds(200, 200, 550, 400);
 
-		setFrameIcon(new ImageIcon("img/husacct.png"));
+		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
 		
 		JTabbedPane tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel.setBackground(UIManager.getColor("Panel.background"));

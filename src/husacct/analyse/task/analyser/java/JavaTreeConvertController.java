@@ -21,7 +21,9 @@ class JavaTreeConvertController {
         compilationUnit_return compilationUnit = javaParser.compilationUnit(); 
         CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree(); 
         createClassOrInterfaceInformation(compilationUnitTree); 
-        walkAST(compilationUnitTree); 
+        if(this.theClass != null){
+            walkAST(compilationUnitTree); 
+        }
     } 
     
     private void createClassOrInterfaceInformation(CommonTree completeTree){ 
