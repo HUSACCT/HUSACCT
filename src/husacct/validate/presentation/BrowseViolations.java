@@ -69,7 +69,7 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		violationTable.setFillsViewportHeight(true);
 		violationTable.getTableHeader().setReorderingAllowed(false);
-		violationTable.setRowHeight(200);
+		violationTable.setRowHeight(35);
 		violationPanel.setViewportView(violationTable);
 		
 		shownViolationsNumber = new JLabel();
@@ -203,15 +203,19 @@ public final class BrowseViolations extends JInternalFrame {
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Information")));
 		loadModels();
-		createInformationPanel();
+		setViolations();
+	}
+	
+	public void reloadAfterViolationsChanged(){
+		System.out.println("entered the reload");
+		setViolations();
+		loadInformationPanel();
 	}
 	
 	private void loadModels(){
 		String[] columnNames = {
-			ResourceBundles.getValue("LogicalModule"),
 			ResourceBundles.getValue("Source"),
 			ResourceBundles.getValue("Rule"),
-			ResourceBundles.getValue("LineNumber"),
 			ResourceBundles.getValue("DependencyKind"),
 			ResourceBundles.getValue("Target"),
 			ResourceBundles.getValue("Severity")};
@@ -220,11 +224,10 @@ public final class BrowseViolations extends JInternalFrame {
 
 			private static final long serialVersionUID = -6892927200143239311L;
 			Class<?>[] types = new Class[]{
-					String.class, String.class, String.class, Integer.class,
-					String.class, String.class, String.class
+					String.class, String.class, String.class, String.class, String.class
 			};
 			boolean[] canEdit = new boolean[]{
-					false, false, false, false, false, false, false
+					false, false, false, false, false
 			};
 
 			@Override
@@ -240,10 +243,25 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.setModel(violationModel);
 		violationTable.getRowSorter().toggleSortOrder(4);
 		violationTable.getRowSorter().toggleSortOrder(4);
-		setViolations();
+	}
+	
+	private void setViolations() {
+		System.out.println("entered the setviolations");
+		while (violationModel.getRowCount() > 0) {
+			violationModel.removeRow(0);
+		}
+
+		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
+		for (Violation violation : violationRows) {
+			String message = new Messagebuilder().createMessage(violation.getMessage());
+			violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+		}
+
+//		setColumnWidth(3, 50);
 	}
 
-	public void createInformationPanel() {
+	private void loadInformationPanel() {
+		System.out.println("enterd information");
 		informationPanel.removeAll();
 		
 		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");
@@ -267,25 +285,8 @@ public final class BrowseViolations extends JInternalFrame {
 		informationPanel.updateUI();
 	}
 
-	protected void setViolations() {
-
-		while (violationModel.getRowCount() > 0) {
-			violationModel.removeRow(0);
-		}
-
-		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
-		for (Violation violation : violationRows) {
-			String message = new Messagebuilder().createMessage(violation.getMessage());
-			violationModel.addRow(new Object[]{violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath(), violation.getClassPathFrom(), message, violation.getLinenumber(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
-		}
-
-		setColumnWidth(3, 50);
-
-		createInformationPanel();
-	}
-
-	private void setColumnWidth(int columnIndex, int width){
-		TableColumn col = violationTable.getColumnModel().getColumn(columnIndex);
-		col.setPreferredWidth(width);
-	}
+//	private void setColumnWidth(int columnIndex, int width){
+//		TableColumn col = violationTable.getColumnModel().getColumn(columnIndex);
+//		col.setPreferredWidth(width);
+//	}
 }

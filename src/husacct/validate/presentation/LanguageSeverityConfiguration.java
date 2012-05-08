@@ -481,7 +481,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void avtApplyActionPerformed() {
-//		System.out.println(7);
+		//TODO Make apply for last tab!!!
 	}
 
 	private void avtCategoryValueChanged() {
@@ -614,10 +614,8 @@ public class LanguageSeverityConfiguration extends JPanel {
 				List<RuleType> rules = ruletypes.get(categoryString);
 				for(RuleType ruletype: rules){
 					if (ResourceBundles.getValue(ruletype.getKey()).equals(ruletypekey)){
-						System.out.println(ruletypekey);
 						for(ViolationType violationtype : ruletype.getViolationTypes()){
 							avtViolationtypeModel.addRow(new Object[]{ResourceBundles.getValue(violationtype.getViolationtypeKey()), violationtype.isActive()});
-							System.out.println(violationtype.getViolationtypeKey());
 						}
 					}
 				}
