@@ -2,12 +2,16 @@ package husacct.validate.domain;
 
 import husacct.validate.domain.configuration.SeverityConfigRepository;
 import husacct.validate.domain.configuration.SeverityPerTypeRepository;
+import husacct.validate.domain.configuration.ViolationHistoryRepository;
 import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConfigurationServiceImpl {
 
@@ -15,12 +19,14 @@ public class ConfigurationServiceImpl {
 	private final SeverityPerTypeRepository severityRepository;
 	private final ViolationRepository violationRepository;
 	private final RuleTypesFactory ruletypefactory;
+	private final ViolationHistoryRepository violationHistoryRepository;
 	
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
 		this.severityRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
 		this.severityRepository.initializeDefaultSeverities();		
+		this.violationHistoryRepository = new ViolationHistoryRepository();
 	}
 	
 	public void clearViolations() {
@@ -79,7 +85,15 @@ public class ConfigurationServiceImpl {
 		severityConfig.restoreToDefault();
 	}
 	
+	public Map<Calendar, List<Violation>> getViolationHistory() {
+		return violationHistoryRepository.getViolationsHistory();
+	}
+	
 	public RuleTypesFactory getRuleTypesFactory(){
 		return ruletypefactory;
 	}
+	public void setViolationsHistory(Map<Calendar, List<Violation>> violationsHistory) {
+		violationHistoryRepository.setViolationsHistory(violationsHistory);
+	}
+
 }

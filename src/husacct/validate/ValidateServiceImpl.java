@@ -8,9 +8,13 @@ import husacct.common.savechain.ISaveable;
 import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
+import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
+
+import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -116,5 +120,10 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	//This method is only used for testing with the Testsuite
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
+	}
+
+	@Override
+	public List<Violation> getViolationsByDate(Calendar date) {
+		return task.getViolationsByDate(date);
 	}
 }

@@ -1,12 +1,15 @@
 package husacct.validate;
 
-import java.awt.Color;
-
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.validate.domain.validation.Violation;
+
+import java.awt.Color;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 
@@ -120,4 +123,10 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 			return new ViolationDTO[] { };
 		}
 	}
+
+	@Override
+	public List<Violation> getViolationsByDate(Calendar date) {
+		return null;
+	}
+
 }

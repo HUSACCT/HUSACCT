@@ -5,7 +5,9 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -28,6 +30,7 @@ public class ImportController {
 		importSeverties(element);
 		importViolations(element);
 		importSeveritiesPerTypesPerProgrammingLanguages(element);
+		importViolationHistory(element);
 	}
 
 	private void importSeverties(Element element) {
@@ -46,5 +49,12 @@ public class ImportController {
 		Element severitiesPerTypesPerProgrammingLanguagesElement = element.getChild("severitiesPerTypesPerProgrammingLanguages");
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguagesElement, severities);
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
-	}	
+	}
+	
+	private void importViolationHistory(Element element) {
+		Element violationHistoryElement = element.getChild("violationHistory");
+		LinkedHashMap<Calendar, List<Violation>> violationsHistory = importFactory.importViolationHistory(violationHistoryElement);
+		configuration.setViolationsHistory(violationsHistory);
+	}
+	
 }
