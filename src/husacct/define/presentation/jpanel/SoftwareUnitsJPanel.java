@@ -52,7 +52,6 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
-		softwareUnitsPane.setPreferredSize(new java.awt.Dimension(227, 249));
 		softwareUnitsTable = new JTableSoftwareUnits();
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		return softwareUnitsPane;
@@ -62,6 +61,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+		buttonPanel.setPreferredSize(new java.awt.Dimension(90, 156));
 		
 		addSoftwareUnitButton = new JButton();
 		buttonPanel.add(addSoftwareUnitButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
