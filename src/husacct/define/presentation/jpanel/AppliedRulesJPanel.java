@@ -1,9 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.jframe.JFrameAppliedRule;
-import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableAppliedRule;
-import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
@@ -142,10 +140,10 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		updateSoftwareUnitTable();
+		updateAppliedRuleTable();
 	}
 	
-	public void updateSoftwareUnitTable() {
+	public void updateAppliedRuleTable() {
 		DefinitionController.getInstance().updateAppliedRulesTable(this.appliedRulesTable);
 	}
 	

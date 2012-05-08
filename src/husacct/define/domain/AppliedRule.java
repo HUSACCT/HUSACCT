@@ -11,8 +11,8 @@ public class AppliedRule {
 	private String description;
 	private String[] dependencies;
 	private String regex;
-	private Module usedModule;
-	private Module restrictedModule;
+	private Module moduleTo;
+	private Module moduleFrom;
 	private String ruleType;
 	private boolean enabled;
 	private ArrayList<AppliedRule> exceptions;
@@ -22,16 +22,16 @@ public class AppliedRule {
 	 * Contructors
 	 */
 	public AppliedRule(String ruleType, String description, String[] dependencies,
-			String regex, Module usedModule,
-			Module restrictedModule, boolean enabled) {
+			String regex, Module moduleTo,
+			Module moduleFrom, boolean enabled) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.ruleType = ruleType;
 		this.description = description;
 		this.dependencies = dependencies;
 		this.regex = regex;
-		this.usedModule = usedModule;
-		this.restrictedModule = restrictedModule;
+		this.moduleTo = moduleTo;
+		this.moduleFrom = moduleFrom;
 		this.exceptions = new ArrayList<AppliedRule>();
 		this.enabled = enabled;
 	}
@@ -91,9 +91,9 @@ public class AppliedRule {
 	
 	public boolean usesModule(long moduleId) {
 		boolean usesModule = false;
-		if (usedModule.getId() == moduleId){
+		if (moduleTo.getId() == moduleId){
 			usesModule = true;
-		}else if( restrictedModule.getId() == moduleId){
+		}else if( moduleFrom.getId() == moduleId){
 			usesModule = true;
 		}else{			
 			for (AppliedRule ruleExceptions : exceptions){
@@ -143,7 +143,6 @@ public class AppliedRule {
 		return id;
 	}
 
-
 	public void setExceptions(ArrayList<AppliedRule> exceptions) {
 		this.exceptions = exceptions;
 	}
@@ -151,25 +150,6 @@ public class AppliedRule {
 
 	public ArrayList<AppliedRule> getExceptions() {
 		return exceptions;
-	}
-
-	public void setUsedModule(Module usedModule) {
-		this.usedModule = usedModule;
-	}
-
-
-	public Module getUsedModule() {
-		return usedModule;
-	}
-
-
-	public void setRestrictedModule(Module restrictedModule) {
-		this.restrictedModule = restrictedModule;
-	}
-
-
-	public Module getRestrictedModule() {
-		return restrictedModule;
 	}
 
 	public void setDependencies(String[] dependencies) {
@@ -186,6 +166,22 @@ public class AppliedRule {
 
 	public String getRegex() {
 		return regex;
+	}
+
+	public Module getModuleTo() {
+		return moduleTo;
+	}
+
+	public void setModuleTo(Module moduleTo) {
+		this.moduleTo = moduleTo;
+	}
+
+	public Module getModuleFrom() {
+		return moduleFrom;
+	}
+
+	public void setModuleFrom(Module moduleFrom) {
+		this.moduleFrom = moduleFrom;
 	}
 
 }
