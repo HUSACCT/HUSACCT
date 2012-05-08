@@ -126,4 +126,9 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public List<Violation> getViolationsByDate(Calendar date) {
 		return task.getViolationsByDate(date);
 	}
+	
+	@Override
+	public Calendar[] getViolationHistoryDates() {
+		return task.getViolationHistoryDates();
+	}
 }

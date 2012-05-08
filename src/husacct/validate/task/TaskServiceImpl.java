@@ -156,4 +156,9 @@ public class TaskServiceImpl{
 		}
 		throw new NullPointerException("no violations found at date given");
 	}
+
+	public Calendar[] getViolationHistoryDates() {
+		Calendar[] calendar = new Calendar[configuration.getViolationHistory().size()];
+		return configuration.getViolationHistory().keySet().toArray(calendar);
+	}
 }

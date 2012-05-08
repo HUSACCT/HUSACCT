@@ -129,4 +129,10 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		return null;
 	}
 
+	@Override
+	public Calendar[] getViolationHistoryDates() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

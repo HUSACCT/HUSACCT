@@ -31,4 +31,5 @@ public interface IValidateService
 	public JInternalFrame getBrowseViolationsGUI();
 	public JInternalFrame getConfigurationGUI();
 	public List<Violation> getViolationsByDate(Calendar date);
+	public Calendar[] getViolationHistoryDates();
 }
