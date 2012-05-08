@@ -36,7 +36,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
 		walkAST(compilationUnitTree.getChildren());
-		new CSharpImportGenerator(usageTrees, "classname");
+		new CSharpImportGenerator(usageTrees);
 		new CSharpClassGenerator(classTrees, indentClassLevel);
 		CSharpNamespaceGenerator generator = new CSharpNamespaceGenerator();
 		for (List<CommonTree> trees: namespaceTrees)

@@ -13,7 +13,11 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
 			}
 		}
 		String name = namespaceTrees.get(namespaceTrees.size()-1).getText();
-		modelService.createPackage(namespaceString, namespaceString, name);
+		String belongsToPackage = namespaceString.replace("."+name, "");
+		if (belongsToPackage.equals(namespaceString)) {
+			belongsToPackage = "";
+		}
+		modelService.createPackage(namespaceString, belongsToPackage, name);
 		return namespaceString;
 	}
 }

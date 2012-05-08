@@ -74,7 +74,11 @@ public class CSharpClassGenerator extends CSharpGenerator{
 		}
 		cSharpClassData.setClassName(tree.getText());
 		cSharpClassData.setAbstract(isAbstract);
-		cSharpClassData.setBelongsToPackage(data.getBelongsToPackage());
+		if (data.getBelongsToPackage() != null) {
+			cSharpClassData.setBelongsToPackage(data.getBelongsToPackage());
+		} else {
+			cSharpClassData.setBelongsToPackage("");
+		}
 		cSharpClassData.setParentClass(data.getBelongsToPackage() + "." + data.getParentClass());
 		cSharpClassData.setHasParent(data.isHasParent());
 	}

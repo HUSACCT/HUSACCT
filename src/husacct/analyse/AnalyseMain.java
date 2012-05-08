@@ -3,6 +3,7 @@ package husacct.analyse;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;
 
 import javax.swing.UIManager;
@@ -26,6 +27,6 @@ public class AnalyseMain {
 		
 		ModelCreationService modelService = new FamixCreationServiceImpl();
 		System.out.println(modelService.represent());
-		//new AnalyseDebuggingFrame();
+		new AnalyseDebuggingFrame();
 	}
 }	

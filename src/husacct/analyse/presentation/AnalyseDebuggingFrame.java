@@ -27,7 +27,7 @@ public class AnalyseDebuggingFrame extends JFrame {
 		setContentPane(desktop);
 		
 		Image icon = Toolkit.getDefaultToolkit().getImage("img/husacct.png");
-		setIconImage(icon);	
+		//setIconImage(icon);	
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout(0, 0));
