@@ -1,11 +1,12 @@
 package husacct.analyse;
 
-import javax.swing.UIManager;
 import husacct.ServiceProvider;
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;
+
+import javax.swing.UIManager;
 
 public class AnalyseMain {
 	public static void main(String[] args){
@@ -13,10 +14,9 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-
-		String path = "/Users/Thijmen/Documents/benchmark";
+		String path = "/Users/Thijmen/Dropbox/Themaopdracht/Code/c#";
 		String[] paths = new String[]{path};
-		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
+		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
@@ -26,7 +26,7 @@ public class AnalyseMain {
 	     } catch (Exception ex) { }
 		
 		ModelCreationService modelService = new FamixCreationServiceImpl();
-		System.out.println(modelService.represent());
-		new AnalyseDebuggingFrame();
+		//System.out.println(modelService.represent());
+		//new AnalyseDebuggingFrame();
 	}
 }	

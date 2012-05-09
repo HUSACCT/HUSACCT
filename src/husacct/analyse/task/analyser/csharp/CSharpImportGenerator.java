@@ -8,11 +8,11 @@ import org.antlr.runtime.tree.CommonTree;
 public class CSharpImportGenerator extends CSharpGenerator{
 	List<String> seperatedAndMergedUsages = new ArrayList<String>();
 	
-	public CSharpImportGenerator(List<CommonTree> usageTrees, String classname){
+	public CSharpImportGenerator(List<CommonTree> usageTrees){
 		String mergedUsages = mergeTree(usageTrees);
 		seperateUsages(mergedUsages);
 		
-		createFamixObject(seperatedAndMergedUsages, classname);
+		createFamixObject(seperatedAndMergedUsages);
 	}
 
 	private String mergeTree(List<CommonTree> usageTrees) {
@@ -31,9 +31,9 @@ public class CSharpImportGenerator extends CSharpGenerator{
 		}
 	}
 	
-	private void createFamixObject(List<String> seperatedAndMergedUsages, String classname) {
+	private void createFamixObject(List<String> seperatedAndMergedUsages) {
 		for(String usage : seperatedAndMergedUsages){
-			modelService.createImport(classname, usage, 0, usage, true);
+			modelService.createImport("", usage, 0, usage, true);
 		}
 	}
 }

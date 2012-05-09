@@ -5,18 +5,27 @@ import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpNamespaceGenerator extends CSharpGenerator {
-	private String namespaceString = null;
-	public CSharpNamespaceGenerator(List<CommonTree> namespaceTrees){
+	public void namespaceGenerator(List<CommonTree> namespaceTrees){
+		String namespaceString = "";
+		String uniqueName = "";
 		for (CommonTree commonTree : namespaceTrees){
-			namespaceString += commonTree.getText();
+			String name = "";
+			if (commonTree.getType() != NAMESPACE) {
+				name = commonTree.getText();
+				uniqueName += name;
+			}
+			if (commonTree.getType() == IDENTIFIER) {
+				recursiveNamespaces(name, uniqueName, namespaceString);
+				if (namespaceString.equals("")) {
+					namespaceString = name;
+				} else {
+					namespaceString += "." + name;
+				}
+			}
 		}
-		namespaceString = namespaceString.split("namespace")[1];
-		String belongsToPackage = namespaceString.substring(0, namespaceString.lastIndexOf("."));
-		String name = namespaceString.substring(namespaceString.lastIndexOf(".")+1,namespaceString.length());
-		modelService.createPackage(namespaceString, belongsToPackage, name);
 	}
-
-	public String getName() {
-		return namespaceString;
+	
+	public void recursiveNamespaces(String name, String uniqueName, String namespaceString) {
+		modelService.createPackage(uniqueName, namespaceString, name);
 	}
 }

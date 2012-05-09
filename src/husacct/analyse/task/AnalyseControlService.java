@@ -3,8 +3,6 @@ package husacct.analyse.task;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-import java.util.List;
-
 public interface AnalyseControlService {
 		
 	public void analyseApplication();

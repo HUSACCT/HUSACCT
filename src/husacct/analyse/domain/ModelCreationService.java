@@ -2,7 +2,7 @@ package husacct.analyse.domain;
 
 public interface ModelCreationService {
 	
-	public void createPackage(String uniqieName, String belongsToPackage, String name);
+	public void createPackage(String uniqueName, String belongsToPackage, String name);
 	
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
