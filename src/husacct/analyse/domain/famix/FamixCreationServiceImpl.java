@@ -203,121 +203,143 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	private void connectStructuralEntityDependecies() {
 		for (FamixStructuralEntity structuralEntity : model.waitingStructuralEntitys){
-			boolean found = false;
-			if(!structuralEntity.declareType.contains("\\.")){
-				FamixClass theClass = getClassForUniqueName(structuralEntity.belongsToClass);
-				String thePackage = theClass.belongsToPackage;
-				List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
-				for(FamixImport fImport: importsInClass){
-					String importString = fImport.completeImportString;
-					if(fImport.importsCompletePackage){
-						for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
-							if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
-								structuralEntity.declareType = uniqueClassName;
-								found = true;
+			try{
+				boolean found = false;
+				if(!structuralEntity.declareType.contains("\\.")){
+					FamixClass theClass = getClassForUniqueName(structuralEntity.belongsToClass);
+					String thePackage = theClass.belongsToPackage;
+					List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
+					for(FamixImport fImport: importsInClass){
+						String importString = fImport.completeImportString;
+						if(fImport.importsCompletePackage){
+							for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
+								if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+									structuralEntity.declareType = uniqueClassName;
+									found = true;
+								}
+							}
+							for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
+								if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+									structuralEntity.declareType = uniqueClassName;
+									found = true;
+								}
+							}
+						}else{
+							List<String> classesInPackage = getClassesOrInterfacesInPackage(getPackageFromUniqueClassName(fImport.completeImportString));
+							for(String uniqueClassName: classesInPackage){
+								if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
+									structuralEntity.declareType = uniqueClassName;
+									found = true;
+								}
 							}
 						}
-						for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
-							if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
-								structuralEntity.declareType = uniqueClassName;
-								found = true;
-							}
-						}
-					}else{
-						List<String> classesInPackage = getClassesOrInterfacesInPackage(fImport.completeImportString);
+					}
+					if(!found){
+						List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
 						for(String uniqueClassName: classesInPackage){
 							if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
 								structuralEntity.declareType = uniqueClassName;
-								found = true;
 							}
 						}
 					}
 				}
-				if(!found){
-					List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
-					for(String uniqueClassName: classesInPackage){
-						if(getClassOfUniqueName(uniqueClassName).equals(structuralEntity.declareType)){
-							structuralEntity.declareType = uniqueClassName;
-						}
-					}
-				}
+				addToModel(structuralEntity);
+			}catch(Exception e){
+				//TODO Custom exception opgpooien: type/to not recognized
 			}
-			addToModel(structuralEntity);
 		}
 		
 	}
 	
+
+
 	private void connectAssociationDependencies() {
 		for(FamixAssociation association: model.waitingAssociations){
-			boolean found = false;
-			
-			//voor de FamixAttribute(MethodInvocation).TO moeten we uit de famixAttribute de naam van de klasse van het gedeclareerde object halen 
-			//ipv de zelfgekozen naam voor het object te gebruiken binnen de klasse.
-			//bijv: User jaap = new User()
-			//jaap.doSomething() <-- 'invocMethod' jaap moet geconverteerd worden naar User
-			//TODO translate above comment to english...?
-			
-			if(association instanceof FamixInvocation){
-				if (((FamixInvocation) association).invocationType.equals("invocMethod") || ((FamixInvocation) association).invocationType.equals("accessPropertyOrField")){
-					for (FamixAttribute attribute : model.getAttributes()){
-						if (attribute.belongsToClass.equals(association.from)){
-							if (attribute.name.equals(association.to)){
-								association.to = attribute.declareType;
-								((FamixInvocation) association).nameOfInstance = attribute.name;
-
+			try{
+				boolean found = false;
+				
+				//voor de FamixAttribute(MethodInvocation).TO moeten we uit de famixAttribute de naam van de klasse van het gedeclareerde object halen 
+				//ipv de zelfgekozen naam voor het object te gebruiken binnen de klasse.
+				//bijv: User jaap = new User()
+				//jaap.doSomething() <-- 'invocMethod' jaap moet geconverteerd worden naar User
+				//TODO translate above comment to english...?
+				
+				if(association instanceof FamixInvocation){
+					if (((FamixInvocation) association).invocationType.equals("invocMethod") || ((FamixInvocation) association).invocationType.equals("accessPropertyOrField")){
+						for (FamixAttribute attribute : model.getAttributes()){
+							if (attribute.belongsToClass.equals(association.from)){
+								if (attribute.name.equals(association.to)){
+									association.to = attribute.declareType;
+									((FamixInvocation) association).nameOfInstance = attribute.name;
+	
+								}
+							}
+						}
+					}
+					else {
+						for (FamixAttribute attribute : model.getAttributes()){
+							if (attribute.belongsToClass.equals(association.from)){
+								if (getClassForUniqueName(attribute.declareType) != null){
+									if (getClassForUniqueName(attribute.declareType).name.equals(association.to)){
+										((FamixInvocation) association).nameOfInstance = attribute.name;
+									}
+								}
 							}
 						}
 					}
 				}
-				else {
-					for (FamixAttribute attribute : model.getAttributes()){
-						if (attribute.belongsToClass.equals(association.from)){
-							if (getClassForUniqueName(attribute.declareType).name.equals(association.to)){
-								((FamixInvocation) association).nameOfInstance = attribute.name;
+				if(!association.to.contains("\\.")){
+					FamixClass theClass = getClassForUniqueName(association.from);
+					String thePackage = theClass.belongsToPackage;
+					List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
+					for(FamixImport fImport: importsInClass){
+						String importString = fImport.completeImportString;
+						if(fImport.importsCompletePackage){
+							for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
+								if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
+									association.to = uniqueClassName;
+									found = true;
+								}
 							}
-						}
-					}
-				}
-			}
-			if(!association.to.contains("\\.")){
-				FamixClass theClass = getClassForUniqueName(association.from);
-				String thePackage = theClass.belongsToPackage;
-				List<FamixImport> importsInClass = model.getImportsInClass(theClass.uniqueName);
-				for(FamixImport fImport: importsInClass){
-					String importString = fImport.completeImportString;
-					if(fImport.importsCompletePackage){
-						for(String uniqueClassName: getClassesOrInterfacesInPackage(fImport.importedModule)){
-							if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
-								association.to = uniqueClassName;
+							for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
+								if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
+									association.to = uniqueClassName;
+									found = true;
+								}
+							}
+						}else{
+							//erik's code
+							if(importString.endsWith(association.to)){
+								association.to = importString;
 								found = true;
 							}
 						}
-						for(String uniqueClassName: getClassesOrInterfacesInPackage(importString.substring(0, importString.length() -2))){
+					}
+					if(!found){
+						List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
+						for(String uniqueClassName: classesInPackage){
 							if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
 								association.to = uniqueClassName;
-								found = true;
 							}
 						}
-					}else{
-						//erik's code
-						if(importString.endsWith(association.to)){
-							association.to = importString;
-							found = true;
-						}
 					}
 				}
-				if(!found){
-					List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
-					for(String uniqueClassName: classesInPackage){
-						if(getClassOfUniqueName(uniqueClassName).equals(association.to)){
-							association.to = uniqueClassName;
-						}
-					}
-				}
+				addToModel(association);
+			}catch(Exception e){
+				//TODO Throw custom exception : Dependency-type / to not recognized
 			}
-			addToModel(association);
 		}
 		
+	}
+	
+	private String getPackageFromUniqueClassName(String completeImportString) {
+		List<FamixClass> classes = model.getClasses();
+		for (FamixClass fclass : classes){
+			if (fclass.uniqueName.equals(completeImportString)){
+				return fclass.belongsToPackage;
+			}
+		}
+		return "";
 	}
 	
 	private String getClassOfUniqueName(String uniqueName){
