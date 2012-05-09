@@ -16,7 +16,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.jdom2.Element;
 
 public class ImportController {
-
 	private List<Severity> severities;
 	private final ImportFactory importFactory;
 	private final ConfigurationServiceImpl configuration;
@@ -64,5 +63,4 @@ public class ImportController {
 		Map<String, List<ActiveRuleType>> activeViolationTypes = importFactory.importActiveViolationTypes(activeViolationTypesElement);
 		configuration.setActiveViolationTypes(activeViolationTypes);
 	}
-
 }

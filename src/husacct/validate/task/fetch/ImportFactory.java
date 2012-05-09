@@ -51,8 +51,7 @@ public class ImportFactory {
 		return importViolationsHistory.importViolationsHistory(violationHistoryElement);
 	}
 
-	public Map<String, List<ActiveRuleType>> importActiveViolationTypes(
-			Element activeViolationTypes) {
+	public Map<String, List<ActiveRuleType>> importActiveViolationTypes(Element activeViolationTypes) {
 		return importActiveViolationTypes.importActiveViolationTypes(activeViolationTypes);
 	}
 }

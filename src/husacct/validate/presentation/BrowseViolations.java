@@ -1,6 +1,5 @@
 package husacct.validate.presentation;
 
-import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;

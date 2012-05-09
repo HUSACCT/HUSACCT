@@ -32,7 +32,7 @@ public class FilterController {
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {
 		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
-		for(Violation violation : taskServiceImpl.getAllViolations()){
+		for(Violation violation : taskServiceImpl.getAllViolations().getValue()){
 			for(String path : paths){
 				if(!modulesFilter.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) && regex.matchRegex(regex.makeRegexString(path), violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath())){
 					modulesFilter.add(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
@@ -48,7 +48,7 @@ public class FilterController {
 	public ArrayList<Violation> filterViolations(Boolean applyfilter) {
 		ArrayList<Violation> tempViolations = new ArrayList<Violation>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if(applyfilter){
 				if (hidefilter && ( !ruletypes.contains(ResourceBundles.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) ) ) {
 					tempViolations.add(violation);
@@ -66,7 +66,7 @@ public class FilterController {
 	public ArrayList<String> loadRuletypes(){
 		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if(!AppliedRuletypes.contains(ResourceBundles.getValue(violation.getRuletypeKey()))){
 				AppliedRuletypes.add(ResourceBundles.getValue(violation.getRuletypeKey()));
 			}
@@ -78,7 +78,7 @@ public class FilterController {
 	public ArrayList<String> loadViolationtypes(){
 		ArrayList<String> AppliedViolationtypes = new ArrayList<String>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if(!AppliedViolationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey()))){
 				AppliedViolationtypes.add(ResourceBundles.getValue(violation.getViolationtypeKey()));
 			}
@@ -89,7 +89,7 @@ public class FilterController {
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		ArrayList<Violation> violations = new ArrayList<Violation>();
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
 					violations.add(violation);
@@ -104,7 +104,7 @@ public class FilterController {
 
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		List<Violation> violations = new ArrayList<Violation>();
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if(violation.getClassPathFrom().startsWith(physicalPathFrom) && violation.getClassPathTo().startsWith(physicalPathTo)) {
 				violations.add(violation);
 			}
@@ -117,13 +117,14 @@ public class FilterController {
 
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
+	
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
 		for(Severity severity : taskServiceImpl.getAllSeverities()) {
 			int violationsCount = 0;
 			List<Violation> violations;
 			if(!applyFilter) {
-				violations = taskServiceImpl.getAllViolations();
+				violations = taskServiceImpl.getAllViolations().getValue();
 			} else {
 				violations = taskServiceImpl.applyFilterViolations(true);
 			}

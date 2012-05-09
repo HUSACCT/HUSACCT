@@ -169,6 +169,6 @@ public class TaskServiceImpl{
 	}
 
 	public void saveInHistory(String description) {
-//		configurarion.saveInHistory(description);
+		configuration.createHistoryPoint(description);
 	}
 }

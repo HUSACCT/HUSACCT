@@ -31,8 +31,8 @@ public class ConfigurationServiceImpl {
 		this.violationRepository = new ViolationRepository();
 		this.severityRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
 		this.severityRepository.initializeDefaultSeverities();	
-		
-		this.violationHistoryRepository = new ViolationHistoryRepository(this);
+
+		this.violationHistoryRepository = new ViolationHistoryRepository();
 		this.activeViolationTypesRepository = new ActiveViolationTypesRepository();
 	}
 
@@ -99,7 +99,7 @@ public class ConfigurationServiceImpl {
 	public List<ViolationHistory> getViolationHistory() {
 		return violationHistoryRepository.getViolationHistory();
 	}
-	
+
 	public void setViolationHistory(List<ViolationHistory> list){
 		violationHistoryRepository.setViolationHistory(list);
 	}
@@ -108,8 +108,20 @@ public class ConfigurationServiceImpl {
 		return activeViolationTypesRepository.getActiveViolationTypes();
 	}
 
-	public void setActiveViolationTypes(
-			Map<String, List<ActiveRuleType>> activeViolationTypes) {
+	public void setActiveViolationTypes(String programmingLanguage, List<ActiveRuleType> activeViolationTypes) {
+		activeViolationTypesRepository.setActiveViolationTypes(programmingLanguage, activeViolationTypes);
+	}
+
+	public void setActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
 		activeViolationTypesRepository.setActiveViolationTypes(activeViolationTypes);
+	}
+
+	public void createHistoryPoint(String description) {
+		SimpleEntry<Calendar, List<Violation>> violationsResult = getAllViolations();
+		final Calendar date = violationsResult.getKey();
+		final List<Violation> violations = violationsResult.getValue();
+		//FIXME: clone Severities
+		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);	
+		violationHistoryRepository.addViolationHistory(violationHistory);
 	}
 }
