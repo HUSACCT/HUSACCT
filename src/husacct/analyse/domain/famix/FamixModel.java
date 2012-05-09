@@ -82,6 +82,14 @@ class FamixModel extends FamixObject{
 		return associations;
 	}
 	
+	public List<FamixClass> getClasses() {
+		ArrayList<FamixClass> result = new ArrayList<FamixClass>();
+		for (FamixClass fclass : classes.values()){
+			result.add(fclass);
+		}
+		return result;
+	}
+	
 	public ArrayList<FamixAttribute> getAttributes(){
 		ArrayList<FamixAttribute> result = new ArrayList<FamixAttribute>();
 		for (FamixStructuralEntity entity: structuralEntities.values()){
