@@ -22,7 +22,7 @@ public class ExportController {
 
 	public Element exportAllData(ConfigurationServiceImpl configuration){
 		Element rootValidateElement = new Element("validate");
-		rootValidateElement.addContent(exportViolationsXML(configuration.getAllViolations()));
+		rootValidateElement.addContent(exportViolationsXML(configuration.getAllViolations().getValue()));
 		rootValidateElement.addContent(exportSeveritiesXML(configuration.getAllSeverities()));
 		rootValidateElement.addContent(exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
 		rootValidateElement.addContent(exportViolationHistory(configuration.getViolationHistory()));

@@ -6,23 +6,37 @@ import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.LayoutStyle;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.table.DefaultTableModel;
 
 public final class BrowseViolations extends JInternalFrame {
 
@@ -48,7 +62,7 @@ public final class BrowseViolations extends JInternalFrame {
 	private JButton buttonSaveInHistory;
 
 	public BrowseViolations(TaskServiceImpl ts) {
-		setSize(new Dimension(798, 639));
+		setSize(new Dimension(800, 640));
 		this.ts = ts;
 		this.fv = new FilterViolations(ts, this);
 		initComponents();
@@ -169,7 +183,7 @@ public final class BrowseViolations extends JInternalFrame {
 		buttonSaveInHistory = new JButton("Save in History");
 		buttonSaveInHistory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ServiceProvider.getInstance().getValidateService().saveInHistory(areaDescription.getText());
+				ts.saveInHistory(areaDescription.getText());
 			}
 		});
 		
@@ -274,7 +288,7 @@ public final class BrowseViolations extends JInternalFrame {
 					return;
 				}
 				
-			Violation v = ts.getAllViolations().get(violationTable.getSelectedRow());
+			Violation v = ts.getAllViolations().getValue().get(violationTable.getSelectedRow());
 				
 				lineNumberValueLabel.setText("" + v.getLinenumber());
 				logicalModulesValueLabel.setText(v.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
@@ -364,7 +378,7 @@ public final class BrowseViolations extends JInternalFrame {
 		informationPanel.add(totalViolation);
 
 		
-		totalViolationNumber.setText("" + ts.getAllViolations().size());
+		totalViolationNumber.setText("" + ts.getAllViolations().getValue().size());
 		informationPanel.add(totalViolationNumber);
 		
 		shownViolations.setText(ResourceBundles.getValue("ShownViolations") + ":");

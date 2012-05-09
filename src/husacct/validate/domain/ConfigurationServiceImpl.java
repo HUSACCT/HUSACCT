@@ -11,9 +11,11 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
 
 public class ConfigurationServiceImpl {
 
@@ -28,8 +30,9 @@ public class ConfigurationServiceImpl {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
 		this.severityRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
-		this.severityRepository.initializeDefaultSeverities();		
-		this.violationHistoryRepository = new ViolationHistoryRepository();
+		this.severityRepository.initializeDefaultSeverities();	
+		
+		this.violationHistoryRepository = new ViolationHistoryRepository(this);
 		this.activeViolationTypesRepository = new ActiveViolationTypesRepository();
 	}
 
@@ -41,7 +44,7 @@ public class ConfigurationServiceImpl {
 		return severityConfig.getSeverityValue(severity);
 	}
 
-	public List<Violation> getAllViolations() {
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations() {
 		return violationRepository.getAllViolations();
 	}
 
@@ -89,7 +92,6 @@ public class ConfigurationServiceImpl {
 		severityConfig.restoreToDefault();
 	}
 
-
 	public RuleTypesFactory getRuleTypesFactory(){
 		return ruletypefactory;
 	}
@@ -97,9 +99,9 @@ public class ConfigurationServiceImpl {
 	public List<ViolationHistory> getViolationHistory() {
 		return violationHistoryRepository.getViolationHistory();
 	}
-
-	public void setViolationHistory(List<ViolationHistory> violationHistory) {
-		violationHistoryRepository.setViolationHistory(violationHistory);
+	
+	public void setViolationHistory(List<ViolationHistory> list){
+		violationHistoryRepository.setViolationHistory(list);
 	}
 
 	public Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
@@ -110,9 +112,4 @@ public class ConfigurationServiceImpl {
 			Map<String, List<ActiveRuleType>> activeViolationTypes) {
 		activeViolationTypesRepository.setActiveViolationTypes(activeViolationTypes);
 	}
-	public void createCurrentDate() {
-		violationRepository.createCurrentDate();
-	}
-
-
 }

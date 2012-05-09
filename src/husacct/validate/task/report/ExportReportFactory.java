@@ -15,7 +15,9 @@ import husacct.validate.task.report.writer.XMLReportWriter;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Calendar;
 import java.util.List;
+import java.util.AbstractMap.SimpleEntry;
 
 import com.itextpdf.text.DocumentException;
 
@@ -23,9 +25,9 @@ public class ExportReportFactory {
 	private ReportWriter writer;
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-	public void exportReport(String fileType, List<Violation> violations, String name, String path, List<Severity> severities) {
+	public void exportReport(String fileType, SimpleEntry<Calendar, List<Violation>> violations, String name, String path, List<Severity> severities) {
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-		Report report = new Report(applicationDetails.name, applicationDetails.version, violations, path, severities);
+		Report report = new Report(applicationDetails.name, applicationDetails.version, violations.getValue(), path, severities);
 
 		try{
 			if(fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {

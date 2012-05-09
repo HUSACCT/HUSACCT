@@ -2,6 +2,7 @@ package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.validation.Violation;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -23,15 +24,11 @@ public class ViolationRepository {
 		this.violations.add(violation);
 	}
 
-	public List<Violation> getAllViolations(){
-		return violations;
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations(){
+		return new SimpleEntry<Calendar, List<Violation>>(date, new ArrayList<Violation>());
 	}
 
 	public void clear(){
 		this.violations = new ArrayList<Violation>();
-	}
-	
-	public void createCurrentDate() {
-		this.date = Calendar.getInstance();
 	}
 }

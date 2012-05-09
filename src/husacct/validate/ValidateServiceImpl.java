@@ -8,9 +8,7 @@ import husacct.common.savechain.ISaveable;
 import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
-import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
@@ -136,7 +134,6 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public void saveInHistory(String description) {
-		task.saveInHistory(description);
-		
+		task.saveInHistory(description);		
 	}
 }

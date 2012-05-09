@@ -9,6 +9,7 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,27 +24,29 @@ public class ImportViolationsHistory {
 		List<ViolationHistory> violationHistories = new ArrayList<ViolationHistory>();
 		try {
 			for(Element violationHistoryElement : violationHistoriesElement.getChildren()) {
-				ViolationHistory violationHistory = new ViolationHistory();
+				List<Severity> severities = new ArrayList<Severity>();
+				List<Violation> violations = new ArrayList<Violation>();
 				//severities
+
 				for(Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {
 					Severity severity = new Severity(UUID.fromString(severityElement.getChildText("id")), severityElement.getChildText("defaultName"), severityElement.getChildText("userName"), new Color(Integer.parseInt(severityElement.getChildText("color"))));
-					violationHistory.getSeverities().add(severity);
+					severities.add(severity);
 				}
 
 				//date
-				violationHistory.setDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(violationHistoryElement.getAttributeValue("date")).toGregorianCalendar());
-				
+				Calendar date = DatatypeFactory.newInstance().newXMLGregorianCalendar(violationHistoryElement.getAttributeValue("date")).toGregorianCalendar();
+
 				//description 
-				violationHistory.setDescription(violationHistoryElement.getChildText("description"));
-				
+				final String description = violationHistoryElement.getChildText("description");
+
 				//violations
 				for(Element violationElement : violationHistoryElement.getChild("violations").getChildren()) {
 					Violation violation = new Violation();
-					violationHistory.getViolations().add(violation);
+					violations.add(violation);
 					violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
 
 					//search the appropiate severity of the violation by the uuid.
-					for(Severity severity : violationHistory.getSeverities()) {
+					for(Severity severity : severities) {
 						UUID id = UUID.fromString(violationElement.getChildText("severityId"));
 						if(id.equals(severity.getId())) {
 							violation.setSeverity(severity);
@@ -59,7 +62,8 @@ public class ImportViolationsHistory {
 					violation.setMessage(getMessage(violationElement.getChild("message")));
 					violation.setIndirect(Boolean.parseBoolean(violationElement.getChildText("isIndirect")));
 					violation.setOccured(DatatypeFactory.newInstance().newXMLGregorianCalendar(violationElement.getChildText("occured")).toGregorianCalendar());
-				}
+				}				
+				violationHistories.add(new ViolationHistory(violations, severities, date, description));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,5 +100,4 @@ public class ImportViolationsHistory {
 		Message message = new Message(logicalModules,ruleKey, violationTypeKeysList, exceptionMessages);
 		return message;
 	}
-
 }

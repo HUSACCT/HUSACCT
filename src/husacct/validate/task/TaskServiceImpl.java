@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -44,7 +45,7 @@ public class TaskServiceImpl{
 		this.filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
 	}
 
-	public List<Violation> getAllViolations(){
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations(){
 		return configuration.getAllViolations();
 	}
 
@@ -147,7 +148,7 @@ public class TaskServiceImpl{
 	public void restoreSeveritiesToDefault(){
 		configuration.restoreSeveritiesToDefault();
 	}
-	
+
 	public List<Violation> getViolationsByDate(Calendar date) {
 		for(ViolationHistory violationHistory : configuration.getViolationHistory()) {
 			if(violationHistory.getDate().equals(date)) {
@@ -168,10 +169,6 @@ public class TaskServiceImpl{
 	}
 
 	public void saveInHistory(String description) {
-		ViolationHistory violationHistory = new ViolationHistory();
-		violationHistory.setDescription(description);
-		violationHistory.setSeverities(getAllSeverities());
-		violationHistory.setViolations(getAllViolations());
-		configuration.getViolationHistory().add(violationHistory);
+//		configurarion.saveInHistory(description);
 	}
 }
