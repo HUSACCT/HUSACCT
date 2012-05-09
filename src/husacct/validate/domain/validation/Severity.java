@@ -3,11 +3,11 @@ package husacct.validate.domain.validation;
 import java.awt.Color;
 import java.util.UUID;
 
-public class Severity {
+public class Severity implements Cloneable {
+	private final UUID id;
 	private String defaultName;
 	private String userName;
 	private Color color;
-	private UUID id;
 
 	public Severity(String defaultName, String userName, Color color){
 		this.id = UUID.randomUUID();
@@ -92,25 +92,26 @@ public class Severity {
 			return false;
 		}
 		if (this.color != other.color &&
-			(this.color == null || !this.color.equals(other.color))) {
+				(this.color == null || !this.color.equals(other.color))) {
 			return false;
 		}
 		if (this.id != other.id &&
-			(this.id == null || !this.id.equals(other.id))) {
+				(this.id == null || !this.id.equals(other.id))) {
 			return false;
 		}
 		return true;
 	}
 
+	public Severity clone() throws CloneNotSupportedException {
+		Severity clone = (Severity)super.clone();		
+		return clone;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash =
-				73 * hash +
-				(this.defaultName != null ? this.defaultName.hashCode() : 0);
-		hash =
-				73 * hash +
-				(this.userName != null ? this.userName.hashCode() : 0);
+		hash = 73 * hash + (this.defaultName != null ? this.defaultName.hashCode() : 0);
+		hash = 73 * hash + (this.userName != null ? this.userName.hashCode() : 0);
 		hash = 73 * hash + (this.color != null ? this.color.hashCode() : 0);
 		hash = 73 * hash + (this.id != null ? this.id.hashCode() : 0);
 		return hash;
