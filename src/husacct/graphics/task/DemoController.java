@@ -64,6 +64,11 @@ public class DemoController extends DrawingController {
 		unrecognizableModuleTypeDTO.logicalPath = "tests";
 		modules.add(unrecognizableModuleTypeDTO);
 		
+		ModuleDTO component = new ModuleDTO();
+		component.type = "component";
+		component.logicalPath = "uml2component";
+		modules.add(component);
+		
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
 		this.drawModules(dtos);
