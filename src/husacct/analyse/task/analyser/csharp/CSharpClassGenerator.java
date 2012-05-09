@@ -20,7 +20,7 @@ public class CSharpClassGenerator extends CSharpGenerator{
 	}
 
 	private void walkASTTree(CommonTree tree) {
-		if (tree.getType() == CLASS) {
+		if (tree.getType() == CLASS || tree.getType() == STRUCT) {
 			isClass = true;
 		}else if (tree.getType() == INTERFACE) {
 			isInterface = true;

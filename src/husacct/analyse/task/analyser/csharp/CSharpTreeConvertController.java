@@ -27,7 +27,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	private List<CSharpData> indentNamespaceLevel;
 	private String tempFullNamespaceName;
 
-	
+
 	@SuppressWarnings("unchecked")
 	public void delegateDomainObjectGenerators(CSharpParser cSharpParser) throws RecognitionException {
 		indentClassLevel = new ArrayList<CSharpData>();
@@ -43,7 +43,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		new CSharpClassGenerator(classTrees, indentClassLevel);
 		CSharpNamespaceGenerator generator = new CSharpNamespaceGenerator();
 		for (List<CommonTree> trees: namespaceTrees)
-		generator.namespaceGenerator(trees);
+			generator.namespaceGenerator(trees);
 	}
 
 	private void walkAST(List<CommonTree> children) {
@@ -51,7 +51,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		boolean isPartOfClass = false;
 		boolean isPartOfUsage = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
-		
+
 		for (CommonTree tree : children) {
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceChecking(tree, isPartOfNamespace);
@@ -71,14 +71,14 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			indentLevel--;
 		}
 	}
-	
+
 	private void checkData(CSharpData cSharpData, List<CSharpData> indentDataLevel) {
 		if (indentLevel == cSharpData.getIntentLevel() && !cSharpData.getClosed()) {
 			checkEveryClass(cSharpData,indentDataLevel);
 			cSharpData.setClosed(true);
 		}
 	}
-	
+
 	private void checkIfClosed(CommonTree tree, List<CSharpData> indentDataLevel) {
 		for (CSharpData classData : indentDataLevel) {
 			checkData(classData,indentDataLevel);
@@ -95,51 +95,51 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			}
 		}
 	}
-	
+
 	private boolean check(CommonTree tree, boolean isScanning) {
-        int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID};
-     
-        for(int type : ListOfTypes){
-               if(tree.getType() == type){
-                      isScanning = true;
-               }
-        }
-        
-        if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
-               isScanning = false;
-               MultipleChecks(tree);
-               variousTrees.clear();
-        }
-        
-        if(isScanning){
-        	variousTrees.add(tree);
-        }
-               
-        return isScanning;
-  }
+		int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID};
 
-  private void MultipleChecks(CommonTree tree) {
-	  checkForMethod();
-        //attributeCheck aanroep hier
-  }
+		for(int type : ListOfTypes){
+			if(tree.getType() == type){
+				isScanning = true;
+			}
+		}
 
-  private void checkForMethod() {
-        boolean isNewInstance = false;
-        boolean hasBrackets = false;
-        for(CommonTree thistree : variousTrees){
-               if(thistree.getType() == NEW){
-                      isNewInstance = true;
-               }
-               if(thistree.getType() == FORWARDBRACKET){
-                      hasBrackets = true;
-               }
-        }
-      
-        if(isNewInstance == false && hasBrackets == true){
-        	CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
-        	methodGenerator.generate(variousTrees, "className");
-        }
-  }
+		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
+			isScanning = false;
+			MultipleChecks(tree);
+			variousTrees.clear();
+		}
+
+		if(isScanning){
+			variousTrees.add(tree);
+		}
+
+		return isScanning;
+	}
+
+	private void MultipleChecks(CommonTree tree) {
+		checkForMethod();
+		//attributeCheck aanroep hier
+	}
+
+	private void checkForMethod() {
+		boolean isNewInstance = false;
+		boolean hasBrackets = false;
+		for(CommonTree thistree : variousTrees){
+			if(thistree.getType() == NEW){
+				isNewInstance = true;
+			}
+			if(thistree.getType() == FORWARDBRACKET){
+				hasBrackets = true;
+			}
+		}
+		
+		if(isNewInstance == false && hasBrackets == true){
+			CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
+			methodGenerator.generate(variousTrees, "className");
+		}
+	}
 
 
 	private boolean classCheck(CommonTree tree, boolean isClassPart) {
@@ -150,7 +150,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			tempClassName = tree.getText();
 			isClassName = false;
 		}
-		if (tree.getType() == CLASS|| tree.getType() == INTERFACE) {
+		if (tree.getType() == CLASS|| tree.getType() == INTERFACE || tree.getType() == STRUCT) {
 			isClassPart = true;
 			isClassName = true;
 		}
@@ -185,7 +185,6 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			tempNamespaceTrees = new ArrayList<CommonTree>();
 			indentNamespaceLevel.add(new CSharpData(tempNamespaceName,indentLevel));
 		}
-
 		if (isNamespacePart) {
 			tempNamespaceTrees.add(tree);
 		}
