@@ -29,7 +29,7 @@ public abstract class AbstractViolationType {
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName){
 		this.configuration = configuration;
 		this.languageName = languageName;
-		generator = new ViolationtypeGenerator();		
+		this.generator = new ViolationtypeGenerator();		
 	}
 
 	protected List<ViolationType> generateViolationTypes(EnumSet<?> enums){
@@ -116,9 +116,9 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	private Severity createSeverity(String language, String violationKey){
+	private Severity createSeverity(String programmingLanguage, String violationKey){
 		try{
-			return configuration.getSeverityFromKey(language, violationKey);			
+			return configuration.getSeverityFromKey(programmingLanguage, violationKey);			
 		}catch(SeverityNotFoundException e){
 			CategoryKeySeverityDTO violation = getCategoryKeySeverityDTO(violationKey);
 			if(violation != null){

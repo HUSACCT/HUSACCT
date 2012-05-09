@@ -21,7 +21,6 @@ public class VisibilityConventionRule extends RuleType {
 	
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		// TODO Auto-generated method stub
 		return Collections.emptyList();
 	}
 }
