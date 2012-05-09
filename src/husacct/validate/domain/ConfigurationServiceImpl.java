@@ -7,6 +7,8 @@ import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -85,15 +87,20 @@ public class ConfigurationServiceImpl {
 		severityConfig.restoreToDefault();
 	}
 	
-	public Map<Calendar, List<Violation>> getViolationHistory() {
-		return violationHistoryRepository.getViolationsHistory();
-	}
 	
 	public RuleTypesFactory getRuleTypesFactory(){
 		return ruletypefactory;
 	}
-	public void setViolationsHistory(Map<Calendar, List<Violation>> violationsHistory) {
-		violationHistoryRepository.setViolationsHistory(violationsHistory);
+
+	public List<ViolationHistory> getViolationHistory() {
+		return violationHistoryRepository.getViolationHistory();
 	}
+	
+	public void setViolationHistory(List<ViolationHistory> violationHistory) {
+		violationHistoryRepository.setViolationHistory(violationHistory);
+	}
+
+	
+	
 
 }

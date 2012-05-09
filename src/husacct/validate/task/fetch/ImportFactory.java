@@ -2,6 +2,7 @@ package husacct.validate.task.fetch;
 
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.fetch.xml.ImportSeverities;
 import husacct.validate.task.fetch.xml.ImportSeveritiesPerTypesPerProgrammingLanguages;
 import husacct.validate.task.fetch.xml.ImportViolationsHistory;
@@ -42,7 +43,7 @@ public class ImportFactory {
 	}
 
 
-	public LinkedHashMap<Calendar, List<Violation>> importViolationHistory(
+	public List<ViolationHistory> importViolationHistory(
 			Element violationHistoryElement) {
 		return importViolationsHistory.importViolationsHistory(violationHistoryElement);
 	}

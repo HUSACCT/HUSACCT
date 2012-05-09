@@ -3,6 +3,7 @@ package husacct.validate.task.fetch;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,8 +54,8 @@ public class ImportController {
 	
 	private void importViolationHistory(Element element) {
 		Element violationHistoryElement = element.getChild("violationHistory");
-		LinkedHashMap<Calendar, List<Violation>> violationsHistory = importFactory.importViolationHistory(violationHistoryElement);
-		configuration.setViolationsHistory(violationsHistory);
+		List<ViolationHistory> violationHistory = importFactory.importViolationHistory(violationHistoryElement);
+		configuration.setViolationHistory(violationHistory);
 	}
 	
 }
