@@ -24,8 +24,8 @@ public class ComponentFigure extends NamedFigure {
 	private BufferedImage compIcon;
 	private ImageFigure compIconFig;
 
-	protected int minWidth = 100;
-	protected int minHeight = 100;
+	protected int minWidth = 130;
+	protected int minHeight = 90;
 
 	public ComponentFigure(String name) {
 		super(name, false);
