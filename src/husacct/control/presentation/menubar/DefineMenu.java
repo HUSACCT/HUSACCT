@@ -2,10 +2,11 @@ package husacct.control.presentation.menubar;
 
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
-import husacct.control.task.StateController;
+import husacct.control.task.States;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -55,25 +56,20 @@ public class DefineMenu extends JMenu{
 		});
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-			public void changeState(int state) {
+			public void changeState(List<States> states) {
 				defineLogicalArchitectureItem.setEnabled(false);
 				showLogicalGraphicsItem.setEnabled(false);
 				importLogicalArchitectureItem.setEnabled(false);
 				exportLogicalArchitectureItem.setEnabled(false);
-				switch(state){
-					case StateController.VALIDATED:
-					case StateController.MAPPED: {
-						importLogicalArchitectureItem.setEnabled(true);
-					}
-					case StateController.ANALYSED:
-					case StateController.DEFINED: {
-						exportLogicalArchitectureItem.setEnabled(true);
-						showLogicalGraphicsItem.setEnabled(true);	
-					}
-					case StateController.EMPTY: {
-						defineLogicalArchitectureItem.setEnabled(true);
-						importLogicalArchitectureItem.setEnabled(true);
-					}
+				
+				if(states.contains(States.OPENED)){
+					defineLogicalArchitectureItem.setEnabled(true);
+					importLogicalArchitectureItem.setEnabled(true);
+				}
+				
+				if(states.contains(States.DEFINED) || states.contains(States.MAPPED)){
+					exportLogicalArchitectureItem.setEnabled(true);
+					showLogicalGraphicsItem.setEnabled(true);
 				}
 			}
 		});

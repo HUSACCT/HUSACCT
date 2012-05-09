@@ -2,11 +2,12 @@ package husacct.control.presentation.menubar;
 
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
-import husacct.control.task.StateController;
+import husacct.control.task.States;
 import husacct.control.task.WorkspaceController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -70,24 +71,20 @@ public class FileMenu extends JMenu {
 		});
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
-			public void changeState(int state) {
+			public void changeState(List<States> states) {
 				createWorkspaceItem.setEnabled(false);
 				openWorkspaceItem.setEnabled(false);
 				saveWorkspaceItem.setEnabled(false);
 				closeWorkspaceItem.setEnabled(false);
-				switch(state){
-					case StateController.VALIDATED:
-					case StateController.MAPPED:
-					case StateController.ANALYSED:
-					case StateController.DEFINED:
-					case StateController.EMPTY: {
-						closeWorkspaceItem.setEnabled(true);
-						saveWorkspaceItem.setEnabled(true);
-					}
-					case StateController.NONE: {
-						createWorkspaceItem.setEnabled(true);
-						openWorkspaceItem.setEnabled(true);
-					}
+				
+				if(states.contains(States.OPENED)){
+					closeWorkspaceItem.setEnabled(true);
+					saveWorkspaceItem.setEnabled(true);					
+				}
+				
+				if(states.contains(States.NONE) || states.contains(States.OPENED)){
+					createWorkspaceItem.setEnabled(true);
+					openWorkspaceItem.setEnabled(true);
 				}
 			}
 		});
