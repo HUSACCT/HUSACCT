@@ -26,7 +26,6 @@ public class SoftwareUnitController extends PopUpController {
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
 	
-	@Deprecated
 	public void fillSoftwareUnitsList(ArrayList<SoftwareUnitDefinition> softwareUnitList){
 		AnalysedModuleDTO[] modules = getAnalyzedModules();
 		for(AnalysedModuleDTO module : modules) {
@@ -37,7 +36,6 @@ public class SoftwareUnitController extends PopUpController {
 		filterAddedSoftwareUnits(softwareUnitList);
 	}
 	
-	@Deprecated
 	private void filterAddedSoftwareUnits(ArrayList<SoftwareUnitDefinition> softwareUnitList) {
 		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.softwareUnitDefinitionDomainService.getSoftwareUnit(moduleId);
 		for (SoftwareUnitDefinition addedUnit : addedsoftwareUnitList){
@@ -48,21 +46,7 @@ public class SoftwareUnitController extends PopUpController {
 		}
 	}
 	
-	@Deprecated
-	private ArrayList<SoftwareUnitDefinition> getAnalayzedSoftwareUnits(){
-		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
-		AnalysedModuleDTO[] modules = getAnalyzedModules();
-		for(AnalysedModuleDTO module : modules) {
-			SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(module.name, SoftwareUnitDefinition.Type.valueOf(module.type.toUpperCase()));
-			softwareUnits.add(softwareUnit);
-		}
-		filterAddedSoftwareUnits(softwareUnits);
-		return softwareUnits;
-	}
-	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
-//		logger.info("getting Sofware Unit Tree Components");
-		
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();
 		for(AnalysedModuleDTO module : modules) {

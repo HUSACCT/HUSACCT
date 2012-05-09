@@ -46,14 +46,13 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Applied rules for this layer"));
+		this.setBorder(BorderFactory.createTitledBorder("Applied rules for this module"));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 	}
 	
 	private JScrollPane addAppliedRulesTable() {
 		appliedRulesPane = new JScrollPane();
-		appliedRulesPane.setPreferredSize(new java.awt.Dimension(278, 32));
 		appliedRulesTable = new JTableAppliedRule();
 		appliedRulesPane.setViewportView(appliedRulesTable);
 		return appliedRulesPane;
@@ -63,7 +62,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 4));
-		buttonPanel.setPreferredSize(new java.awt.Dimension(78, 156));
+		buttonPanel.setPreferredSize(new java.awt.Dimension(90, 156));
 		
 		addRuleButton = new JButton();
 		buttonPanel.add(addRuleButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));

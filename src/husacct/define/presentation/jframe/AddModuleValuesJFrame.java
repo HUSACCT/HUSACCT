@@ -48,6 +48,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.createInnerPanel();
 		this.add(this.innerPanel);
 		
+		this.setResizable(false);
 		this.setVisible(true);
 		this.pack();
 		this.setSize(700, 190);
@@ -86,6 +87,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel.add(moduleLabel);
 		
 		this.moduleNameField = new JTextField();
+		this.moduleNameField.addKeyListener(this);
 		this.innerPanel.add(this.moduleNameField);
 	}
 	
@@ -105,6 +107,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
+		this.moduleTypeComboBox.addKeyListener(this);
 		this.innerPanel.add(this.moduleTypeComboBox);
 	}
 	
@@ -113,6 +116,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel.add(hierarchicalLevelLabel);
 		
 		this.hierarchicalLevelField = new JTextField();
+		this.hierarchicalLevelField.addKeyListener(this);
 		this.innerPanel.add(this.hierarchicalLevelField);
 	}
 	
@@ -127,7 +131,6 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel.add(this.saveButton);
 		this.saveButton.setText("Save");
 		this.saveButton.addActionListener(this);
-//		this.saveButton.requestFocus();
 	}
 	
 	private void setVisibles() {
@@ -142,6 +145,24 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 			this.saveButtonAction();
 		} else if (event.getSource() == this.moduleTypeComboBox) {
 			this.moduleTypeComboBoxAction();
+		}
+	}
+	
+	private void moduleTypeComboBoxAction() {
+		this.setVisibles();
+		this.checkSelectedModuleType();
+	}
+	
+	private void checkSelectedModuleType() {
+		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
+		if(moduleType == "Module") {
+			
+		} else if(moduleType =="Layer") {
+			this.hierarchicalLevelField.setVisible(true);
+		} else if(moduleType =="Component") {
+			
+		} else if(moduleType =="External Library") {
+			
 		}
 	}
 	
@@ -270,21 +291,5 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		JOptionPane.showMessageDialog(this, errorMessage, "Wrong input!", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	private void moduleTypeComboBoxAction() {
-		this.setVisibles();
-		this.checkSelectedModuleType();
-	}
-	
-	private void checkSelectedModuleType() {
-		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
-		if(moduleType == "Module") {
-			
-		} else if(moduleType =="Layer") {
-			this.hierarchicalLevelField.setVisible(true);
-		} else if(moduleType =="Component") {
-			
-		} else if(moduleType =="External Library") {
-			
-		}
-	}
+
 }
