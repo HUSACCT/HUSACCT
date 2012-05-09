@@ -262,6 +262,8 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	public void keyReleased(KeyEvent arg0) {
 		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			this.dispose();
+		} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			this.save();
 		}
 	}
 
