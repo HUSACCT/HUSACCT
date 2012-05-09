@@ -2,6 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.control.presentation.util.AboutHusacctFrame;
 import husacct.control.presentation.util.SetApplicationFrame;
 
 public class ApplicationController {
@@ -23,5 +24,9 @@ public class ApplicationController {
 				applicationDTO.version
 		);
 		ServiceProvider.getInstance().getAnalyseService().analyseApplication();
+	}
+	
+	public void showAboutHusacctGui(){
+		new AboutHusacctFrame();
 	}
 }

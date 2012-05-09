@@ -42,7 +42,7 @@ public class MainGui extends JFrame{
 		AnalyseMenu analyseMenu = new AnalyseMenu(mainController);
 		ValidateMenu validateMenu = new ValidateMenu(mainController);
 		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
-		HelpMenu helpMenu = new HelpMenu();
+		HelpMenu helpMenu = new HelpMenu(mainController);
 
 		fileMenu.setMnemonic('F');
 		defineMenu.setMnemonic('D');
