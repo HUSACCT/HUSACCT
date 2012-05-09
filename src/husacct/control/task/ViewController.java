@@ -104,7 +104,7 @@ public class ViewController {
 	
 	public void setApplicationTreeGui(){
 		applicationTreeInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
-		setupFrame(applicationTreeInternalFrame, "Violations");
+		setupFrame(applicationTreeInternalFrame, "Analysed Application Overview");
 		applicationTreeInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(applicationTreeInternalFrame);
 	}
