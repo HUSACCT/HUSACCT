@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -166,5 +165,13 @@ public class TaskServiceImpl{
 			i++;
 		}
 		return calendars;
+	}
+
+	public void saveInHistory(String description) {
+		ViolationHistory violationHistory = new ViolationHistory();
+		violationHistory.setDescription(description);
+		violationHistory.setSeverities(getAllSeverities());
+		violationHistory.setViolations(getAllViolations());
+		configuration.getViolationHistory().add(violationHistory);
 	}
 }

@@ -1,11 +1,11 @@
 package husacct.validate.presentation;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ResourceBundles;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,26 +14,15 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle;
+import javax.swing.*;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
 
 public final class BrowseViolations extends JInternalFrame {
 
@@ -41,7 +30,7 @@ public final class BrowseViolations extends JInternalFrame {
 
 	private TaskServiceImpl ts;
 	private FilterViolations fv;
-
+	private JTextArea areaDescription;
 	private JRadioButton allDependencies, directDependencies,
 	indirectDependencies;
 	private ButtonGroup dependencyLevel;
@@ -56,6 +45,7 @@ public final class BrowseViolations extends JInternalFrame {
 	private DefaultTableModel violationModel;
 	private JLabel lineNumberValueLabel;
 	private JLabel logicalModulesValueLabel;
+	private JButton buttonSaveInHistory;
 
 	public BrowseViolations(TaskServiceImpl ts) {
 		setSize(new Dimension(798, 639));
@@ -175,6 +165,15 @@ public final class BrowseViolations extends JInternalFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Violation details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		buttonSaveInHistory = new JButton("Save in History");
+		buttonSaveInHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ServiceProvider.getInstance().getValidateService().saveInHistory(areaDescription.getText());
+			}
+		});
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setHorizontalGroup(
@@ -185,11 +184,18 @@ public final class BrowseViolations extends JInternalFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(filterPanel, GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
 				.addComponent(displayPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
-				.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE)
-					.addContainerGap())
 				.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 579, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup()
+							.addComponent(buttonSaveInHistory)
+							.addGap(43))
+						.addGroup(layout.createSequentialGroup()
+							.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+							.addContainerGap())))
 		);
 		layout.setVerticalGroup(
 			layout.createParallelGroup(Alignment.LEADING)
@@ -200,11 +206,19 @@ public final class BrowseViolations extends JInternalFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(displayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(layout.createSequentialGroup()
+							.addComponent(buttonSaveInHistory)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
+		
+		areaDescription = new JTextArea();
+		scrollPane_1.setViewportView(areaDescription);
 		
 		JLabel lblLineNumber = new JLabel("Line number");
 		
@@ -270,6 +284,7 @@ public final class BrowseViolations extends JInternalFrame {
 	}
 	
 	public void loadGUIText(){
+		buttonSaveInHistory.setText(ResourceBundles.getValue("SaveInHistory"));
 		setTitle(ResourceBundles.getValue("BrowseViolations"));
 		displayPanel.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Display")));
@@ -365,9 +380,4 @@ public final class BrowseViolations extends JInternalFrame {
 		
 		informationPanel.updateUI();
 	}
-
-//	private void setColumnWidth(int columnIndex, int width){
-//		TableColumn col = violationTable.getColumnModel().getColumn(columnIndex);
-//		col.setPreferredWidth(width);
-//	}
 }

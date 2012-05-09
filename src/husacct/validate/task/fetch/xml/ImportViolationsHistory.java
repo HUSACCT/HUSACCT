@@ -32,7 +32,10 @@ public class ImportViolationsHistory {
 
 				//date
 				violationHistory.setDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(violationHistoryElement.getAttributeValue("date")).toGregorianCalendar());
-
+				
+				//description 
+				violationHistory.setDescription(violationHistoryElement.getChildText("description"));
+				
 				//violations
 				for(Element violationElement : violationHistoryElement.getChild("violations").getChildren()) {
 					Violation violation = new Violation();

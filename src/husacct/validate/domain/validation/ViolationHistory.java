@@ -9,6 +9,7 @@ public class ViolationHistory {
 	private List<Violation> violations;
 	private Calendar date;
 	private List<Severity> severities;
+	private String description;
 	
 	public ViolationHistory() {
 		violations = new ArrayList<Violation>();
@@ -38,6 +39,14 @@ public class ViolationHistory {
 
 	public void setSeverities(List<Severity> severities) {
 		this.severities = severities;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
