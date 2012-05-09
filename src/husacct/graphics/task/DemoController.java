@@ -59,6 +59,11 @@ public class DemoController extends DrawingController {
 		testModule.logicalPath = "myModule";
 		//modules.add(testModule);
 		
+		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
+		unrecognizableModuleTypeDTO.type = "foobar";
+		unrecognizableModuleTypeDTO.logicalPath = "tests";
+		modules.add(unrecognizableModuleTypeDTO);
+		
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
 		this.drawModules(dtos);
@@ -71,7 +76,32 @@ public class DemoController extends DrawingController {
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
+		BaseFigure zoomedFigure = zoomedModuleFigures[0];
+		
+		if(zoomedFigure instanceof NamedFigure
+				&& ((NamedFigure)zoomedFigure).getName() == "tests")	{
+			ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
+			
+			ModuleDTO child1 = new ModuleDTO();
+			child1.type = "abstract";
+			child1.logicalPath = "tests.test1";
+			modules.add(child1);
+			
+			ModuleDTO child2 = new ModuleDTO();
+			child2.type = "class";
+			child2.logicalPath = "tests.test2";
+			modules.add(child2);
+			
+			ModuleDTO child3 = new ModuleDTO();
+			child3.type = "interface";
+			child3.logicalPath = "tests.test3";
+			modules.add(child3);
+			
+			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
+			dtos = modules.toArray(dtos);
+			this.drawModules(dtos);
+		}			
 	}
 
 	@Override
@@ -82,8 +112,7 @@ public class DemoController extends DrawingController {
 
 	@Override
 	public void moduleZoomOut() {
-		// TODO Auto-generated method stub
-
+		this.refreshDrawing();
 	}
 
 	@Override

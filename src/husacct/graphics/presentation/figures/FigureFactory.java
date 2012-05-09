@@ -78,22 +78,21 @@ public final class FigureFactory {
 					+ "' is not recognized as a module dto");
 		}
 
+		//TODO check these values with the define team
 		if (type.toLowerCase().equals("layer")) {
 			return new LayerFigure(name);
-		} else if (type.toLowerCase().equals("module")) {
+		} else if (type.toLowerCase().equals("component")) {
 			return new ComponentFigure(name);
 		} else if (type.toLowerCase().equals("class")) {
 			return new ClassFigure(name);
 		} else if (type.toLowerCase().equals("abstract")) {
-			// TODO Abstract class
-			return new ClassFigure(name);
+			return new AbstractClassFigure(name);
 		} else if (type.toLowerCase().equals("interface")) {
-			// TODO Interface obj
-			return new ClassFigure(name);
+			return new InterfaceFigure(name);
 		} else if (type.toLowerCase().equals("package")) {
 			return new PackageFigure(name);
 		} else {
-			throw new RuntimeException("module dto type '" + type + "' not implemented");
+			return new ModuleFigure(name);
 		}
 	}
 }
