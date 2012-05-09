@@ -48,11 +48,11 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private JPanel activeViolationtype, ruletypeSeverity, violationtypeSeverity;
 	private JButton avtApply, avtDeselectAll, avtSelectAll, rtsApply, rtsRestore,
 			rtsRestoreAll, vtsApply, vtsRestore, vtsRestoreAll;
-	private JList avtCategory, avtViolationtypeTable, rtsCategory, vtsCategory;
+	private JList avtCategory, avtRuletype, rtsCategory, vtsCategory;
 	private JScrollPane avtCategoryScrollpane, avtRuletypeScrollpane,
 			avtViolationtypeScrollpane, rtsCategoryScrollpane, rtsRuletypeScrollpane,
 			vtsCategoryScrollpane, vtsViolationtypeScrollpane;
-	private JTable avtRuletype, rtsRuletypeTable, vtsViolationtypeTable;
+	private JTable avtViolationtypeTable, rtsRuletypeTable, vtsViolationtypeTable;
 	private JTabbedPane tabbedPane;
 
 	public LanguageSeverityConfiguration(String language, Map<String, List<ViolationType>> violationTypes,
@@ -75,7 +75,23 @@ public class LanguageSeverityConfiguration extends JPanel {
 		violationtypeModel.setCanEdit(new Boolean[]{false, true});
 
 		String[] avtViolationtypeModelHeaders = {ResourceBundles.getValue("Violationtype"), ResourceBundles.getValue("Active")};
-		avtViolationtypeModel = new DefaultTableModel(avtViolationtypeModelHeaders, 0);
+		avtViolationtypeModel = new DefaultTableModel(avtViolationtypeModelHeaders, 0){
+
+			private static final long serialVersionUID = -2752815747553087143L;
+
+			Class<?>[] types = new Class[]{String.class, Boolean.class};
+			boolean[] canEdit = new boolean[]{false, true};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
 
 		rtsCategoryModel = new DefaultListModel();
 		vtsCategoryModel = new DefaultListModel();
@@ -114,9 +130,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 		avtCategoryScrollpane = new JScrollPane();
 		avtCategory = new JList();
 		avtRuletypeScrollpane = new JScrollPane();
-		avtRuletype = new JTable();
+		avtViolationtypeTable = new JTable();
 		avtViolationtypeScrollpane = new JScrollPane();
-		avtViolationtypeTable = new JList();
+		avtRuletype = new JList();
 		avtSelectAll = new JButton();
 		avtDeselectAll = new JButton();
 		avtApply = new JButton();
@@ -319,25 +335,26 @@ public class LanguageSeverityConfiguration extends JPanel {
 		});
 		avtCategoryScrollpane.setViewportView(avtCategory);
 
-		avtRuletype.setModel(avtViolationtypeModel);
-		avtRuletype.setFillsViewportHeight(true);
-		avtRuletype.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		avtRuletypeScrollpane.setViewportView(avtRuletype);
+		avtViolationtypeTable.setModel(avtViolationtypeModel);
+		avtViolationtypeTable.getTableHeader().setReorderingAllowed(false);
+		avtViolationtypeTable.setFillsViewportHeight(true);
+		avtViolationtypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		avtRuletypeScrollpane.setViewportView(avtViolationtypeTable);
 
-		avtViolationtypeTable.setBorder(BorderFactory.createTitledBorder(
+		avtRuletype.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Ruletypes")));
-		avtViolationtypeTable.setModel(avtRuletypeModel);
+		avtRuletype.setModel(avtRuletypeModel);
 		vtsViolationtypeTable.getTableHeader().setReorderingAllowed(false);
-		avtViolationtypeTable.setSelectionMode(
+		avtRuletype.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
-		avtViolationtypeTable.addListSelectionListener(new ListSelectionListener() {
+		avtRuletype.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
 				avtViolationtypeTableValueChanged();
 			}
 		});
-		avtViolationtypeScrollpane.setViewportView(avtViolationtypeTable);
+		avtViolationtypeScrollpane.setViewportView(avtRuletype);
 
 		avtSelectAll.setText(ResourceBundles.getValue("SelectAll"));
 		avtSelectAll.setActionCommand(ResourceBundles.getValue("RestoreToDefault"));
@@ -421,10 +438,6 @@ public class LanguageSeverityConfiguration extends JPanel {
 		loadViolationTypeCategories();
 	}
 
-	private void avtSelectAllActionPerformed() {
-//		System.out.println(1);
-	}
-
 	private void rtsRestoreActionPerformed() {		
 		ts.restoreToDefault(language, ResourceBundles.getKey((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
 		rtsCategoryValueChanged();
@@ -454,21 +467,29 @@ public class LanguageSeverityConfiguration extends JPanel {
 		checkRestoreButtonEnabled();
 		updateViolationtypeSeverities();
 	}
-
+	
+	private void avtSelectAllActionPerformed() {
+		for(int i = 0; i < avtViolationtypeModel.getRowCount(); i++){
+			avtViolationtypeModel.setValueAt(true, i, 1);
+		}
+	}
+	
 	private void avtDeselectAllActionPerformed() {
-//		System.out.println(6);
+		for(int i = 0; i < avtViolationtypeModel.getRowCount(); i++){
+			avtViolationtypeModel.setValueAt(false, i, 1);
+		}
 	}
 
 	private void avtApplyActionPerformed() {
-//		System.out.println(7);
+		//TODO Make apply for last tab!!!
 	}
 
 	private void avtCategoryValueChanged() {
-//		System.out.println(8);
+		avtLoadRuletypes((String) avtCategory.getSelectedValue());
 	}
 
 	private void avtViolationtypeTableValueChanged() {
-//		System.out.println(9);
+		avtLoadViolationtypes((String) avtCategory.getSelectedValue(), (String) avtRuletype.getSelectedValue());
 	}
 
 	private void rtsCategoryValueChanged() {
@@ -504,6 +525,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 		rtsCategoryModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
 			rtsCategoryModel.addElement(ResourceBundles.getValue(categoryString));
+			avtCategoryModel.addElement(ResourceBundles.getValue(categoryString));
 		}
 	}
 
@@ -566,6 +588,38 @@ public class LanguageSeverityConfiguration extends JPanel {
 			vtsRestore.setEnabled(true);
 		} else{
 			vtsRestore.setEnabled(false);
+		}
+	}
+
+	private void avtLoadRuletypes(String category) {
+		avtRuletypeModel.clear();
+		for (String categoryString : ruletypes.keySet()) {
+			if (ResourceBundles.getValue(categoryString).equals(category)){
+				List<RuleType> rules = ruletypes.get(categoryString);
+				for(RuleType ruletype: rules){
+					avtRuletypeModel.addElement(ResourceBundles.getValue(ruletype.getKey()));
+				}
+			}
+
+		}
+		ruletypeModel.checkValuesAreValid();
+	}
+
+	private void avtLoadViolationtypes(String category, String ruletypekey) {
+		while(avtViolationtypeModel.getRowCount() > 0){
+			avtViolationtypeModel.removeRow(0);
+		}
+		for (String categoryString : ruletypes.keySet()) {
+			if (ResourceBundles.getValue(categoryString).equals(category)){
+				List<RuleType> rules = ruletypes.get(categoryString);
+				for(RuleType ruletype: rules){
+					if (ResourceBundles.getValue(ruletype.getKey()).equals(ruletypekey)){
+						for(ViolationType violationtype : ruletype.getViolationTypes()){
+							avtViolationtypeModel.addRow(new Object[]{ResourceBundles.getValue(violationtype.getViolationtypeKey()), violationtype.isActive()});
+						}
+					}
+				}
+			}
 		}
 	}
 }

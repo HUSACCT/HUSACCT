@@ -35,7 +35,7 @@ public class SkipCallRule extends RuleType {
 		
 		this.mappings = CheckConformanceUtil.filter(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();		
-		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getRootModules()),currentRule);
+		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildsFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> physicalClasspathsTo : modulesTo){

@@ -16,10 +16,12 @@ import husacct.validate.task.filter.FilterController;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -144,5 +146,19 @@ public class TaskServiceImpl{
 
 	public void restoreSeveritiesToDefault(){
 		configuration.restoreSeveritiesToDefault();
+	}
+	
+	public List<Violation> getViolationsByDate(Calendar date) {
+		for(Entry<Calendar, List<Violation>> violations : configuration.getViolationHistory().entrySet()) {
+			if(date.equals(violations.getKey())) {
+				return violations.getValue();
+			}
+		}
+		throw new NullPointerException("no violations found at date given");
+	}
+
+	public Calendar[] getViolationHistoryDates() {
+		Calendar[] calendar = new Calendar[configuration.getViolationHistory().size()];
+		return configuration.getViolationHistory().keySet().toArray(calendar);
 	}
 }

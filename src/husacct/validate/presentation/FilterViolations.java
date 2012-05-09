@@ -264,7 +264,7 @@ public final class FilterViolations extends JFrame {
 		pathsfilter = getPathFilter();
 		ts.setFilterValues(ruletypesfilter, violationtypesfilter,
 				pathsfilter, hideFilteredValues.isSelected());
-		bv.setViolations();
+		bv.reloadAfterViolationsChanged();
 		dispose();
 	}
 

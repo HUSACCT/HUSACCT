@@ -4,8 +4,10 @@ import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom2.Element;
 
@@ -22,6 +24,7 @@ public class ExportController {
 		rootValidateElement.addContent(exportViolationsXML(configuration.getAllViolations()));
 		rootValidateElement.addContent(exportSeveritiesXML(configuration.getAllSeverities()));
 		rootValidateElement.addContent(exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
+		rootValidateElement.addContent(exportViolationHistory(configuration.getViolationHistory()));
 		return rootValidateElement;
 	}
 
@@ -35,5 +38,9 @@ public class ExportController {
 
 	private Element exportSeveritiesPerTypesPerProgrammingLanguagesXML(HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
 		return exportFactory.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
+	}
+	
+	private Element exportViolationHistory(Map<Calendar, List<Violation>> violationsHistory) {
+		return exportFactory.exportViolationHistory(violationsHistory);
 	}
 }
