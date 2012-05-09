@@ -3,6 +3,7 @@ package husacct.validate.task.export;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class ExportController {
 		return exportFactory.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
 	}
 	
-	private Element exportViolationHistory(Map<Calendar, List<Violation>> violationsHistory) {
-		return exportFactory.exportViolationHistory(violationsHistory);
+	private Element exportViolationHistory(List<ViolationHistory> violationHistories) {
+		return exportFactory.exportViolationHistory(violationHistories);
 	}
 }
