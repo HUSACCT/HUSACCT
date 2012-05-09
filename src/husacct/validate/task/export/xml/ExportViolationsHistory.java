@@ -25,6 +25,9 @@ public class ExportViolationsHistory {
 
 				//date
 				violationHistoryElement.setAttribute(new Attribute("date", DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)violationHistory.getDate()).toString()));
+				
+				//description
+				XMLUtils.createElementWithContent("description", violationHistory.getDescription(), violationHistoryElement);
 
 				//severities
 				Element severitiesElement = XMLUtils.createElementWithoutContent("severities", violationHistoryElement);

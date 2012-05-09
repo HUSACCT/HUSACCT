@@ -5,6 +5,7 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 
 import java.awt.Color;
@@ -133,6 +134,13 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	public Calendar[] getViolationHistoryDates() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void saveInHistory(List<Violation> violations,
+			List<Severity> severities, String description) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,11 +1,11 @@
 package husacct.validate.task.export;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,7 @@ public class ExportController {
 		rootValidateElement.addContent(exportSeveritiesXML(configuration.getAllSeverities()));
 		rootValidateElement.addContent(exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
 		rootValidateElement.addContent(exportViolationHistory(configuration.getViolationHistory()));
+		rootValidateElement.addContent(exportActiveViolationTypesPerRuleTypes(configuration.getActiveViolationTypes()));
 		return rootValidateElement;
 	}
 
@@ -43,5 +44,8 @@ public class ExportController {
 	
 	private Element exportViolationHistory(List<ViolationHistory> violationHistories) {
 		return exportFactory.exportViolationHistory(violationHistories);
+	}
+	private Element exportActiveViolationTypesPerRuleTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
+		return exportFactory.exportActiveViolationTypes(activeViolationTypes);
 	}
 }

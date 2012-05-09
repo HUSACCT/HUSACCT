@@ -1,15 +1,15 @@
 package husacct.validate.task.fetch;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -32,6 +32,7 @@ public class ImportController {
 		importViolations(element);
 		importSeveritiesPerTypesPerProgrammingLanguages(element);
 		importViolationHistory(element);
+		importActiveViolationTypes(element);
 	}
 
 	private void importSeverties(Element element) {
@@ -41,9 +42,9 @@ public class ImportController {
 	}
 
 	private void importViolations(Element element) throws DatatypeConfigurationException{
-			Element violationElement = element.getChild("violations");
-			List<Violation> violations = importFactory.importViolations(violationElement, severities);
-			configuration.addViolations(violations);
+		Element violationElement = element.getChild("violations");
+		List<Violation> violations = importFactory.importViolations(violationElement, severities);
+		configuration.addViolations(violations);
 	}
 
 	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element){
@@ -51,11 +52,17 @@ public class ImportController {
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguagesElement, severities);
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
 	}
-	
+
 	private void importViolationHistory(Element element) {
-		Element violationHistoryElement = element.getChild("violationHistory");
+		Element violationHistoryElement = element.getChild("violationHistories");
 		List<ViolationHistory> violationHistory = importFactory.importViolationHistory(violationHistoryElement);
 		configuration.setViolationHistory(violationHistory);
 	}
-	
+
+	private void importActiveViolationTypes(Element element) {
+		Element activeViolationTypesElement = element.getChild("activeViolationTypes");
+		Map<String, List<ActiveRuleType>> activeViolationTypes = importFactory.importActiveViolationTypes(activeViolationTypesElement);
+		configuration.setActiveViolationTypes(activeViolationTypes);
+	}
+
 }
