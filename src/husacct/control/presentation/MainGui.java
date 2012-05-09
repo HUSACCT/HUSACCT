@@ -44,6 +44,13 @@ public class MainGui extends JFrame{
 		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
 		HelpMenu helpMenu = new HelpMenu();
 
+		fileMenu.setMnemonic('F');
+		defineMenu.setMnemonic('D');
+		analyseMenu.setMnemonic('A');
+		validateMenu.setMnemonic('V');
+		languageMenu.setMnemonic('L');
+		helpMenu.setMnemonic('H');
+		
 		menuBar.add(fileMenu);
 		menuBar.add(defineMenu);
 		menuBar.add(analyseMenu);

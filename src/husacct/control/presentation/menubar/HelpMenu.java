@@ -11,22 +11,13 @@ public class HelpMenu extends JMenu {
 	public HelpMenu(){
 		super("Help");
 		
-		JMenuItem versionItem = new JMenuItem("Version");
+		JMenuItem versionItem = new JMenuItem("About HUSACCT");
+		versionItem.setMnemonic('a');
 		this.add(versionItem);
 		versionItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// TODO: Version
 			}
 		});
-		
-		JMenuItem mntmAbout = new JMenuItem("Help");
-		this.add(mntmAbout);
-		mntmAbout.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				// TODO: help
-			}
-		});
-		
-		
 	}
 }

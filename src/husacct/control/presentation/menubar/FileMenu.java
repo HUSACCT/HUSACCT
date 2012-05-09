@@ -7,11 +7,13 @@ import husacct.control.task.WorkspaceController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
@@ -28,6 +30,8 @@ public class FileMenu extends JMenu {
 		this.workspaceController = mainController.getWorkspaceController();
 		
 		createWorkspaceItem = new JMenuItem("Create workspace");
+		createWorkspaceItem.setMnemonic('c');
+		createWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('N', KeyEvent.CTRL_DOWN_MASK));
 		this.add(createWorkspaceItem);
 		createWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -36,6 +40,8 @@ public class FileMenu extends JMenu {
 		});
 		
 		openWorkspaceItem = new JMenuItem("Open workspace");
+		openWorkspaceItem.setMnemonic('o');
+		openWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
 		this.add(openWorkspaceItem);
 		openWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -44,6 +50,8 @@ public class FileMenu extends JMenu {
 		});
 		
 		saveWorkspaceItem = new JMenuItem("Save workspace");
+		saveWorkspaceItem.setMnemonic('s');
+		saveWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
 		this.add(saveWorkspaceItem);
 		saveWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -52,6 +60,7 @@ public class FileMenu extends JMenu {
 		});
 		
 		closeWorkspaceItem = new JMenuItem("Close workspace");
+		closeWorkspaceItem.setMnemonic('l');
 		this.add(closeWorkspaceItem);
 		closeWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -63,6 +72,7 @@ public class FileMenu extends JMenu {
 		this.add(separator);
 
 		JMenuItem exitItem = new JMenuItem("Exit");
+		exitItem.setMnemonic('x');
 		this.add(exitItem);
 		exitItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
