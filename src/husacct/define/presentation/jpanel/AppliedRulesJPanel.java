@@ -133,8 +133,12 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	}
 
 	private void removeRule() {
-		long selectedAppliedRuleId = (Long) appliedRulesTable.getValueAt(getSelectedRow(), 0);
-		DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
+		long selectedAppliedRuleId = appliedRulesTable.getValueAt(getSelectedRow(), 0);
+		if(selectedAppliedRuleId != -1) {
+			DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
+		} else {
+			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	/**
@@ -160,6 +164,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	@Override
 	public void update(Locale newLocale) {
 		this.setButtonTexts();
+		this.appliedRulesTable.changeColumnHeaders();
 	}
 	
 	private void setButtonTexts() {
