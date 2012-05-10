@@ -148,12 +148,18 @@ class JavaMethodGenerator extends JavaGenerator{
 						CommonTree qualifiedTypeTree = (CommonTree) typeTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
 						functionParameterTypes += ", " + qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT).toString();
 						break;
+					case JavaParser.INT:
+					case JavaParser.FLOAT:
 					case JavaParser.BOOLEAN:
+					case JavaParser.DOUBLE:
+					case JavaParser.SHORT:
+					case JavaParser.LONG:
 					case JavaParser.CHAR:
+					case JavaParser.BYTE:
 						functionParameterTypes += ", " + typeTree.getChild(0).toString();
 						break;
 					default:
-						logger.warn("Cant parse a attribute for methods, unknown property");
+						logger.warn("Cant parse a attribute for methods, unknown property [" + valueTree.getType() + "]");
 						break;
 				}
 			}
