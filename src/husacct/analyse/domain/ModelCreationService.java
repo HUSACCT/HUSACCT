@@ -16,6 +16,8 @@ public interface ModelCreationService {
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName);
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int lineNumber);
 	
+	public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber);
+	
 	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 	
 	public void createMethod(String name, String uniqueName,

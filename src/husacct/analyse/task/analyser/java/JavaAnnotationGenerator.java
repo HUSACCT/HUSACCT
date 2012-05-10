@@ -32,6 +32,7 @@ class JavaAnnotationGenerator extends JavaGenerator{
 		this.uniqueName += this.name;
 		
 		int linenumber = commonTree.getLine();
-		modelService.createAttribute(false, "private", this.belongsToPackage, this.name, this.name, this.uniqueName, linenumber);
+		//modelService.createAttribute(false, "private", this.belongsToPackage, this.name, this.name, this.uniqueName, linenumber);
+		modelService.createAnnotation(this.belongsToPackage, this.name, this.name, this.uniqueName, linenumber);
 	}
 }

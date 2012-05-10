@@ -130,6 +130,25 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
+	public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber) {
+		FamixAttribute famixAttribute = new FamixAttribute();
+		famixAttribute.hasClassScope = false;
+		famixAttribute.accessControlQualifier = "public";
+		famixAttribute.belongsToClass = belongsToClass;
+		famixAttribute.declareType = declareType;
+		famixAttribute.name = name;
+		famixAttribute.uniqueName = uniqueName;
+		addToModel(famixAttribute);
+		model.waitingStructuralEntitys.add(famixAttribute);
+		FamixAssociation fAssocation = new FamixAssociation();
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "annotation";
+		fAssocation.lineNumber = linenumber;
+		model.waitingAssociations.add(fAssocation);
+	}
+	
+	@Override
 	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType) {
 		FamixException exception = new FamixException();
 		exception.from = fromClass;
