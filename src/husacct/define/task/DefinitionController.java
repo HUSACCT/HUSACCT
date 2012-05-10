@@ -1,6 +1,8 @@
 package husacct.define.task;
 
 import husacct.define.domain.AppliedRule;
+import husacct.ServiceProvider;
+import husacct.control.ILocaleChangeListener;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Layer;
@@ -18,6 +20,7 @@ import husacct.define.task.components.SoftwareArchitectureComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 

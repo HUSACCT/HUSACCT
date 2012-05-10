@@ -1,5 +1,7 @@
 package husacct.define.presentation.tables;
 
+import husacct.define.abstraction.language.DefineTranslator;
+
 import javax.swing.table.TableColumn;
 
 public class JTableAppliedRule extends AbstractJTable {
@@ -16,12 +18,29 @@ public class JTableAppliedRule extends AbstractJTable {
 	}
 	
 	@Override
+	public Long getValueAt(int row, int column) {
+		Long value;
+		try {
+			value = (Long) super.getValueAt(row, column);
+		} catch(Exception e) {
+			value = -1L;
+		}
+		return value;
+	}
+	
+	@Override
 	protected void setColumnHeaders() {
-//		tablemodel.addColumn("Id");
-		tablemodel.addColumn("Rule Type");
-		tablemodel.addColumn("To layer");
-		tablemodel.addColumn("Enabled");
-		tablemodel.addColumn("# Exceptions");
+		tablemodel.addColumn(DefineTranslator.translate("RuleType"));
+		tablemodel.addColumn(DefineTranslator.translate("ToModule"));
+		tablemodel.addColumn(DefineTranslator.translate("Enabled"));
+		tablemodel.addColumn("# " + DefineTranslator.translate("Exceptions"));
+	}
+	
+	public void changeColumnHeaders() {
+		this.getTableHeader().getColumnModel().getColumn(0).setHeaderValue(DefineTranslator.translate("RuleType"));
+		this.getTableHeader().getColumnModel().getColumn(1).setHeaderValue(DefineTranslator.translate("ToModule"));
+		this.getTableHeader().getColumnModel().getColumn(2).setHeaderValue(DefineTranslator.translate("Enabled"));
+		this.getTableHeader().getColumnModel().getColumn(3).setHeaderValue(DefineTranslator.translate("Exceptions"));
 	}
 	
 	@Override
