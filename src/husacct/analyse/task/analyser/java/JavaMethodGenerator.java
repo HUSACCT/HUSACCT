@@ -1,10 +1,22 @@
 package husacct.analyse.task.analyser.java;
 
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
+
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class JavaMethodGenerator extends JavaGenerator{
 
+	private static final int CONSTRUCTOR_DECLARATION = JavaParser.CONSTRUCTOR_DECL;
+	private static final int MODIFIER_LIST = JavaParser.MODIFIER_LIST;
+	private static final int ABSTRACT = JavaParser.ABSTRACT;
+	private static final int STATIC = JavaParser.STATIC;
+	private static final int PROTECTED = JavaParser.PROTECTED;
+	private static final int PRIVATE = JavaParser.PRIVATE;
+	private static final int PUBLIC = JavaParser.PUBLIC;
+	private static final int FINAl = JavaParser.FINAL;
+	private static final int THROWS_CLAUSE = JavaParser.THROWS_CLAUSE;
+	
 	private boolean hasClassScope;
 	private boolean isAbstract = false;
 	private boolean isConstructor;
@@ -28,18 +40,18 @@ class JavaMethodGenerator extends JavaGenerator{
 	private void fillMethodObject(CommonTree methodTree) {
 		if (methodTree != null) {
 				// If constructor...
-				if(methodTree.getType() == 124){
+				if(methodTree.getType() == CONSTRUCTOR_DECLARATION){
 					createMethodDetails(methodTree);
 					isConstructor = true;
 					declaredReturnType = "";
 					//name = "Constructor";
 					uniqueName = belongsToClass + "." + signature;
-				}else{
+				} else {
 					createMethodDetails(methodTree);
 					isConstructor = false;
 					uniqueName = belongsToClass + "." + signature;
 				}
-			}
+		}
 	}
 
 	private void createMethodDetails(Tree tree) {
@@ -47,7 +59,7 @@ class JavaMethodGenerator extends JavaGenerator{
 			for (int i = 0; i < tree.getChildCount(); i++) {
 
 				// Dit is vrij logisch, hier wordt gekeken of het een abstracte methode is.
-				if(tree.getChild(i).getChild(1) != null && tree.getChild(i).getChild(1).getType() == 53 )
+				if(tree.getChild(i).getChild(1) != null && tree.getChild(i).getChild(1).getType() == ABSTRACT )
 				{
 					isAbstract = true;
 				}
@@ -76,16 +88,16 @@ class JavaMethodGenerator extends JavaGenerator{
 	}
 
 	public void fillMethodSignature(Tree tree, int i)
-	{
+	{		
 		// Een methode signature is het volgende: http://java.about.com/od/m/g/methodsignature.htm
 		String methodSignature = "";
 		// Als het een constructor is (124), dan gebruik je de classname voor signature
-		if(tree.getType() == 124)
+		if(tree.getType() == CONSTRUCTOR_DECLARATION)
 			methodSignature =  belongsToClass + "(";
 		// Anders de methode naam.
 		else
 			methodSignature = name + "(";
-
+		
 		// Kijken of er een FORMAL_PARAM_LIST element is
 		if(tree.getChild(i).getType() == 133)
 		{
@@ -130,21 +142,43 @@ class JavaMethodGenerator extends JavaGenerator{
 			methodSignature += ")";
 			signature = methodSignature;
 		}
+		
+		if(tree.getChild(i).getType() == THROWS_CLAUSE){
+			JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator();
+			CommonTree exceptionTree = (CommonTree) tree.getChild(i);
+			exceptionGenerator.generateModel(exceptionTree, this.belongsToClass);
+			
+			
+			
+			//exceptionGenerator.generateModel((CommonTree) tree.getChild(i), this.belongsToClass.toString());
+			
+//			System.out.println(tree.getChild(i).toStringTree());
+//			
+//			String fromClass = this.belongsToClass.toString();
+//			
+//			for(int ii = 0; ii <= tree.getChild(i).getChildCount(); ii++){
+//				System.out.println(tree.getChild(i).getChild(ii).getType());
+//			}
+//						
+			//modelService.createException(fromClass, ExceptionClass, lineNumber, declarationType)
+		}
+		
+		
 	}
 	public void fillAccessControlQualifier(Tree tree, int i)
 	{
-		if(tree.getChild(i).getType() == 145){ //Modifier List, (public, private, static?)
+		if(tree.getChild(i).getType() == MODIFIER_LIST){ //Modifier List, (public, private, static?)
 			for (int childOfGivenTree = 0; childOfGivenTree < tree.getChild(i).getChildCount(); childOfGivenTree++){
-				if (tree.getChild(i).getChild(childOfGivenTree).getType() == 90){ //90 = static
+				if (tree.getChild(i).getChild(childOfGivenTree).getType() == STATIC){ //90 = static
 					hasClassScope = true;
 				}
-				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == 87){ //87 = public
+				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == PUBLIC){ //87 = public
 					accessControlQualifier = "public";
 				}
-				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == 85){ //85 = private
+				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == PRIVATE){ //85 = private
 					accessControlQualifier = "private";
 				}
-				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == 86){ //85 = protected
+				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == PROTECTED){ //86 = protected
 					accessControlQualifier = "protected";
 				}
 			}

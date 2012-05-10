@@ -32,7 +32,6 @@ public class MainGui extends JFrame{
 		this.setContentPane(new JDesktopPane());
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setVisible(true);	
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
 	}
 
 	private void createMenuBar() {

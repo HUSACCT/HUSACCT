@@ -2,7 +2,6 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
-import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;

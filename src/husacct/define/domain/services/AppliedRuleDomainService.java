@@ -19,7 +19,7 @@ public class AppliedRuleDomainService {
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
 		Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
 
-		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex, moduleFrom, moduleTo, enabled);
+		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex, moduleTo, moduleFrom, enabled);
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		return rule.getId();
 	}
@@ -33,8 +33,8 @@ public class AppliedRuleDomainService {
 		rule.setRegex(regex);
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
 		Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
-		rule.setRestrictedModule(moduleFrom);
-		rule.setUsedModule(moduleTo);
+		rule.setModuleFrom(moduleFrom);
+		rule.setModuleTo(moduleTo);
 		rule.setEnabled(enabled);
 	}
 	
@@ -60,7 +60,7 @@ public class AppliedRuleDomainService {
 
 	public long getModuleToIdOfAppliedRule(long appliedRuleId) {
 		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
-		Long moduleToId = rule.getRestrictedModule().getId();
+		Long moduleToId = rule.getModuleTo().getId();
 		return moduleToId;
 	}
 	

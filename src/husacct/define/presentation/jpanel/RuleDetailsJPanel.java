@@ -3,7 +3,6 @@ package husacct.define.presentation.jpanel;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.task.AppliedRuleController;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
