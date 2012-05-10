@@ -33,11 +33,11 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56, Color.RED, "Catastrophic", "", 4);
 
 	private boolean validationExecuted;
-	
+
 	public ValidateServiceStub(){
 		this.validationExecuted = false;
 	}
-	
+
 	public CategoryDTO[] getCategories() {
 		return new CategoryDTO[] { category };
 	}
@@ -45,7 +45,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	public String[] getExportExtentions() {
 		return new String[] { "pdf", "xml", "html" };
 	}
-	
+
 	public void checkConformance() {
 		validationExecuted = true;
 	}
@@ -129,4 +129,17 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		return null;
 	}
 
+	@Override
+	public Calendar[] getViolationHistoryDates() {
+		Calendar date1 = Calendar.getInstance();
+		date1.set(2012, 3, 28);
+
+		Calendar date2 = Calendar.getInstance();	
+		return new Calendar[] {date1, date2};
+	}
+
+	@Override
+	public void saveInHistory(String description) {
+		// TODO Auto-generated method stub		
+	}
 }

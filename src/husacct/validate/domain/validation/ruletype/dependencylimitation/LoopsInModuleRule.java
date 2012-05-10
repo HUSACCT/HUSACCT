@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.ruletype.contentsofamodule;
+package husacct.validate.domain.validation.ruletype.dependencylimitation;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -12,16 +12,16 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
-public class SubClassConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+public class LoopsInModuleRule extends RuleType{
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 	
-	public SubClassConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public LoopsInModuleRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		// TODO Auto-generated method stub
+		//TODO
 		return Collections.emptyList();
 	}
 }

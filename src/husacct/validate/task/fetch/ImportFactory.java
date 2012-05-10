@@ -1,16 +1,18 @@
 package husacct.validate.task.fetch;
 
+import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.task.fetch.xml.ImportActiveViolationTypes;
 import husacct.validate.task.fetch.xml.ImportSeverities;
 import husacct.validate.task.fetch.xml.ImportSeveritiesPerTypesPerProgrammingLanguages;
-import husacct.validate.task.fetch.xml.ImportViolationsHistory;
 import husacct.validate.task.fetch.xml.ImportViolations;
+import husacct.validate.task.fetch.xml.ImportViolationsHistory;
 
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -21,12 +23,14 @@ public class ImportFactory {
 	private final ImportViolations importViolations;
 	private final ImportSeveritiesPerTypesPerProgrammingLanguages importSeveritiesPerRuleTypesPerProgrammingLanguages;
 	private final ImportViolationsHistory importViolationsHistory;
+	private final ImportActiveViolationTypes importActiveViolationTypes;
 	
 	public ImportFactory(){
 		this.importSeverities = new ImportSeverities();
 		this.importViolations = new ImportViolations();
 		this.importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
 		this.importViolationsHistory = new ImportViolationsHistory();
+		this.importActiveViolationTypes = new ImportActiveViolationTypes();
 	}
 
 	public List<Severity> importSeverities(Element element) {
@@ -42,8 +46,12 @@ public class ImportFactory {
 	}
 
 
-	public LinkedHashMap<Calendar, List<Violation>> importViolationHistory(
+	public List<ViolationHistory> importViolationHistory(
 			Element violationHistoryElement) {
 		return importViolationsHistory.importViolationsHistory(violationHistoryElement);
+	}
+
+	public Map<String, List<ActiveRuleType>> importActiveViolationTypes(Element activeViolationTypes) {
+		return importActiveViolationTypes.importActiveViolationTypes(activeViolationTypes);
 	}
 }

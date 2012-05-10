@@ -1,26 +1,26 @@
 package husacct.validate.domain.configuration;
 
-import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 
-import java.util.Calendar;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ViolationHistoryRepository {
-	
-	private Map<Calendar, List<Violation>> violationsHistory;
-	
+public class ViolationHistoryRepository {	
+	private List<ViolationHistory> violationHistories;
+
 	public ViolationHistoryRepository() {
-		violationsHistory = new LinkedHashMap<Calendar, List<Violation>>();
+		this.violationHistories = new ArrayList<ViolationHistory>();
 	}
 
-	public Map<Calendar, List<Violation>> getViolationsHistory() {
-		return violationsHistory;
+	public List<ViolationHistory> getViolationHistory() {
+		return violationHistories;
 	}
 
-	public void setViolationsHistory(Map<Calendar, List<Violation>> violationsHistory) {
-		this.violationsHistory = violationsHistory;
+	public void addViolationHistory(ViolationHistory violationHistory){
+		this.violationHistories.add(violationHistory);
 	}
-	
+
+	public void setViolationHistory(List<ViolationHistory> violationhistories){
+		this.violationHistories = violationhistories;
+	}
 }

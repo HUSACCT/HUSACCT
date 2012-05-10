@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.ruletype.contentsofamodule;
+package husacct.validate.domain.validation.ruletype.dependencylimitation;
 
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
@@ -12,15 +12,16 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class VisibilityConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.VISIBILITY_CONVENTION);
+public class LoopsInModuleExceptionRule extends RuleType {
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 	
-	public VisibilityConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public LoopsInModuleExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
-	
+
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		//TODO
 		return Collections.emptyList();
 	}
 }

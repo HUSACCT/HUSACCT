@@ -7,6 +7,7 @@ import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -44,7 +45,7 @@ public class TaskServiceImpl{
 		this.filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
 	}
 
-	public List<Violation> getAllViolations(){
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations(){
 		return configuration.getAllViolations();
 	}
 
@@ -147,13 +148,27 @@ public class TaskServiceImpl{
 	public void restoreSeveritiesToDefault(){
 		configuration.restoreSeveritiesToDefault();
 	}
-	
+
 	public List<Violation> getViolationsByDate(Calendar date) {
-		for(Entry<Calendar, List<Violation>> violations : configuration.getViolationHistory().entrySet()) {
-			if(date.equals(violations.getKey())) {
-				return violations.getValue();
+		for(ViolationHistory violationHistory : configuration.getViolationHistory()) {
+			if(violationHistory.getDate().equals(date)) {
+				return violationHistory.getViolations();
 			}
 		}
 		throw new NullPointerException("no violations found at date given");
+	}
+
+	public Calendar[] getViolationHistoryDates() {
+		Calendar[] calendars = new Calendar[configuration.getViolationHistory().size()];
+		int i = 0;
+		for(ViolationHistory violationHistory : configuration.getViolationHistory()) {
+			calendars[i] = violationHistory.getDate();
+			i++;
+		}
+		return calendars;
+	}
+
+	public void saveInHistory(String description) {
+		configuration.createHistoryPoint(description);
 	}
 }

@@ -2,7 +2,7 @@ package husacct.validate.domain.factory.violationtype.java;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.ruletype.RuleTypes;
+import husacct.validate.domain.validation.violationtype.java.JavaAccessModifiers;
 import husacct.validate.domain.validation.violationtype.java.JavaDependencyRecognition;
 
 import java.util.Collections;
@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 
 class JavaViolationTypeFactory extends AbstractViolationType {
-	private EnumSet<JavaDependencyRecognition> defaultDependencies = EnumSet.allOf(JavaDependencyRecognition.class);
-	//private EnumSet<JavaAccessTypes> defaultAccess = EnumSet.allOf(JavaAccessTypes.class);	
+	private final EnumSet<JavaDependencyRecognition> defaultDependencies = EnumSet.allOf(JavaDependencyRecognition.class);
+	private final EnumSet<JavaAccessModifiers> defaultAccess = EnumSet.allOf(JavaAccessModifiers.class);	
 	private static final String javaViolationTypesRootPackagename = "java";
 
 	public JavaViolationTypeFactory(ConfigurationServiceImpl configuration){
@@ -25,11 +25,14 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 		if(isCategoryLegalityOfDependency(ruleTypeKey)){	
 			return generateViolationTypes(defaultDependencies);
 		}
-		else if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION.toString())){			
-			return generateViolationTypes(EnumSet.of(JavaDependencyRecognition.IMPLEMENTS));
+		else if(isVisibilityConvenctionRule(ruleTypeKey)){
+			return generateViolationTypes(defaultAccess);
 		}
-		else if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION.toString())){
-			return generateViolationTypes(EnumSet.of(JavaDependencyRecognition.EXTENDS_ABSTRACT, JavaDependencyRecognition.EXTENDS_CONCRETE));
+		else if(isNamingConvention(ruleTypeKey)){
+			return generateViolationTypes(EnumSet.noneOf(JavaDependencyRecognition.class));
+		}
+		else if(isLoopsInModule(ruleTypeKey)){
+			return generateViolationTypes(defaultDependencies);
 		}
 		else{
 			return Collections.emptyList();

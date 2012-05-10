@@ -34,7 +34,6 @@ public class SeverityPerTypeRepository {
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
 
-
 	public void initializeDefaultSeverities() {		
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
 			severitiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));

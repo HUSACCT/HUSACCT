@@ -29,7 +29,7 @@ public abstract class AbstractViolationType {
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName){
 		this.configuration = configuration;
 		this.languageName = languageName;
-		generator = new ViolationtypeGenerator();		
+		this.generator = new ViolationtypeGenerator();		
 	}
 
 	protected List<ViolationType> generateViolationTypes(EnumSet<?> enums){
@@ -80,8 +80,8 @@ public abstract class AbstractViolationType {
 		return new ViolationType(enumValue.toString(), severity);
 	}
 
-	protected boolean isCategoryLegalityOfDependency(String ruleKey){
-		if(ruleKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleKey.equals(RuleTypes.MUST_USE.toString())||ruleKey.equals(RuleTypes.BACK_CALL.toString())||ruleKey.equals(RuleTypes.SKIP_CALL.toString())){
+	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.MUST_USE.toString())||ruleTypeKey.equals(RuleTypes.BACK_CALL.toString())||ruleTypeKey.equals(RuleTypes.SKIP_CALL.toString())){
 			return true;
 		}
 		else {
@@ -89,9 +89,36 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	private Severity createSeverity(String language, String violationKey){
+	protected boolean isVisibilityConvenctionRule(String ruleTypKey){
+		if(ruleTypKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString())){
+			return true;
+		}
+		else{ 
+			return false;		
+		}
+	}
+
+	protected boolean isNamingConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString())){
+			return true;
+		}
+		else{ 
+			return false;
+		}
+	}
+
+	protected boolean isLoopsInModule(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.LOOPS_IN_MODULE.toString())){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	private Severity createSeverity(String programmingLanguage, String violationKey){
 		try{
-			return configuration.getSeverityFromKey(language, violationKey);			
+			return configuration.getSeverityFromKey(programmingLanguage, violationKey);			
 		}catch(SeverityNotFoundException e){
 			CategoryKeySeverityDTO violation = getCategoryKeySeverityDTO(violationKey);
 			if(violation != null){
