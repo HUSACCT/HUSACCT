@@ -148,14 +148,12 @@ class FamixModel extends FamixObject{
 	
 
 	public void clear() {
-		//FamixModel.currentInstance = new FamixModel();
-		associations.clear();
-		behaviouralEntities.clear();
-		classes.clear();
-		interfaces.clear();
-		packages.clear();
-		structuralEntities.clear();
-		waitingAssociations.clear();
-		waitingStructuralEntitys.clear();
+		currentInstance.waitingAssociations.clear();
+		currentInstance.waitingStructuralEntitys.clear();
+		currentInstance.associations.clear();
+		currentInstance.classes.clear();
+		currentInstance.packages.clear();
+		currentInstance.structuralEntities.clear();
+		currentInstance.behaviouralEntities.clear();
 	}
 }
