@@ -433,7 +433,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 				tabbedPane)));
 	}
 	
-	public void initializeEverything() {
+	private void initializeEverything() {
 		loadRuleTypeCategories();
 		loadViolationTypeCategories();
 	}

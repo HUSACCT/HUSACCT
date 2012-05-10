@@ -14,8 +14,9 @@ import javax.swing.*;
 public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private static final long serialVersionUID = 3568220674416621458L;
-	private TaskServiceImpl ts;
+	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
+	private List<Severity> severities;
 
 	private JButton add, remove, down, up, cancel, applySeverity, restore;
 	private JTabbedPane jTabbedPane1;
@@ -24,7 +25,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private JTable severityNameTable;
 
 	public ConfigurationUI(TaskServiceImpl ts) {
-		this.ts = ts;
+		this.taskServiceImpl = ts;
+		severities = ts.getAllSeverities();
 		initComponents();
 		loadGUIText();
 	}
@@ -123,7 +125,72 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(jTabbedPane1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(cancel).addGap(16, 16, 16)));
 	}
+
+	//Button Action
+	private void downActionPerformed() {
+		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() - 1) {
+			severityModel.moveRow(severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow() + 1);
+			severityNameTable.changeSelection(severityNameTable.getSelectedRow() + 1, 0, false, false);
+			Severity severity = severities.get(severityNameTable.getSelectedRow());
+			severities.remove(severityNameTable.getSelectedRow());
+			severities.add(severityNameTable.getSelectedRow() + 1, severity);
+		}
+	}
+
+	private void upActionPerformed() {
+		if (severityNameTable.getSelectedRow() > 0) {
+			severityModel.moveRow(severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow() - 1);
+			severityNameTable.changeSelection(severityNameTable.getSelectedRow() - 1, 0, false, false);
+			Severity severity = severities.get(severityNameTable.getSelectedRow());
+			severities.remove(severityNameTable.getSelectedRow());
+			severities.add(severityNameTable.getSelectedRow() - 1, severity);
+		}
+	}
+
+	private void removeActionPerformed() {
+		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
+			severityModel.removeRow(severityNameTable.getSelectedRow());
+			severities.remove(severityNameTable.getSelectedRow());
+		}
+	}
+
+	private void addActionPerformed() {
+		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
+		severityNameTable.changeSelection(0, 0, false, false);
+		Severity severity = new Severity("", Color.black);
+		severities.add(0, severity);
+	}
+
+	private void applySeverityActionPerformed() {
+		
+		for (int i = 0; i < severityModel.getRowCount(); i++) {
+			try{
+				Severity severity = severities.get(i);
+				severity.setUserName((String) severityModel.getValueAt(i, 0));
+				severity.setColor((Color) severityModel.getValueAt(i, 1));
+				severities.set(i, severity);
+			} catch (IndexOutOfBoundsException e){
+				severities.add(new Severity((String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)));
+			}
+		}
+		
+//		taskServiceImpl.applySeverities(list);
+		taskServiceImpl.addSeverities(severities);
+		loadSeverity();
+		removeLanguageTabs();
+		loadLanguageTabs();
+	}
+
+	private void cancelActionPerformed() {
+		dispose();
+	}
+
+	private void restore() {
+		taskServiceImpl.restoreSeveritiesToDefault();
+		loadSeverity();
+	}
 	
+	//User Functions
 	public void loadGUIText(){
 		setTitle(ResourceBundles.getValue("Configuration"));
 		add.setText(ResourceBundles.getValue("Add"));
@@ -147,68 +214,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		loadSeverity();
 	}
 
-	private void downActionPerformed() {
-		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount()
-				- 1) {
-			severityModel.moveRow(severityNameTable.getSelectedRow(),
-					severityNameTable.getSelectedRow(),
-					severityNameTable.getSelectedRow() + 1);
-			severityNameTable.changeSelection(severityNameTable.getSelectedRow()
-					+ 1, 0, false, false);
-		}
-	}
-
-	private void upActionPerformed() {
-		if (severityNameTable.getSelectedRow() > 0) {
-			severityModel.moveRow(severityNameTable.getSelectedRow(),
-					severityNameTable.getSelectedRow(),
-					severityNameTable.getSelectedRow() - 1);
-			severityNameTable.changeSelection(severityNameTable.getSelectedRow()
-					- 1, 0, false, false);
-		}
-	}
-
-	private void removeActionPerformed() {
-		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
-			severityModel.removeRow(severityNameTable.getSelectedRow());
-		}
-	}
-
-	private void addActionPerformed() {
-		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
-		severityNameTable.changeSelection(0, 0,
-				false, false);
-	}
-
-	private void applySeverityActionPerformed() {
-		List<Object[]> list = new ArrayList<Object[]>();
-
-		for (int i = 0; i < severityModel.getRowCount(); i++) {
-			list.add(new Object[]{(String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)});
-		}
-
-		ts.applySeverities(list);
-		loadSeverity();
-		removeLanguageTabs();
-		loadLanguageTabs();
-	}
-
-	private void cancelActionPerformed() {
-		dispose();
-	}
-
-	private void restore() {
-		ts.restoreSeveritiesToDefault();
-		loadSeverity();
-	}
-
 	private void loadSeverity() {
 		clearModel(severityModel);
-		List<Severity> severities = ts.getAllSeverities();
+		severities = taskServiceImpl.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.toString(),
-					severity.getColor()});
-			severityModel.setRowColour(severityModel.getRowCount() - 1, severity.getColor());
+			severityModel.addRow(new Object[]{severity.toString(), severity.getColor()});
 		}
 
 	}
@@ -220,19 +230,19 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 
 	private void loadLanguageTabs() {
-		for (String language : ts.getAvailableLanguages()) {
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, ts.getViolationTypes(language), ts.getRuletypes(language), ts.getAllSeverities(), ts);
+		for (String language : taskServiceImpl.getAvailableLanguages()) {
+			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl.getAllSeverities(), taskServiceImpl);
 			jTabbedPane1.addTab(language, lcp);
 		}
-		if (ts.getAvailableLanguages().length == 0) {
-			jTabbedPane1.addTab(ResourceBundles.getValue("No programming language availible"), new JPanel());
+		if (taskServiceImpl.getAvailableLanguages().length == 0) {
+			jTabbedPane1.addTab(ResourceBundles.getValue("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 
 	private void removeLanguageTabs() {
 		for(int i = 0; i < jTabbedPane1.getTabCount(); i++){
 			final String tabTitle = jTabbedPane1.getTitleAt(i);
-			for(String language : ts.getAvailableLanguages()){
+			for(String language : taskServiceImpl.getAvailableLanguages()){
 				if(tabTitle.equals(language)){
 					jTabbedPane1.remove(i);
 					i--;

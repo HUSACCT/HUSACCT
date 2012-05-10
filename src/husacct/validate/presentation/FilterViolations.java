@@ -55,6 +55,7 @@ public final class FilterViolations extends JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		setResizable(false);
+		setType(java.awt.Window.Type.UTILITY);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -194,8 +195,6 @@ public final class FilterViolations extends JFrame {
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 
-			private static final long serialVersionUID = -2752815747553087143L;
-
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -212,8 +211,6 @@ public final class FilterViolations extends JFrame {
 
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
 
-			private static final long serialVersionUID = -2076057432618819613L;
-
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -229,8 +226,6 @@ public final class FilterViolations extends JFrame {
 		};
 
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
-
-			private static final long serialVersionUID = 8399838627659517010L;
 
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, true};
@@ -264,7 +259,7 @@ public final class FilterViolations extends JFrame {
 		pathsfilter = getPathFilter();
 		ts.setFilterValues(ruletypesfilter, violationtypesfilter,
 				pathsfilter, hideFilteredValues.isSelected());
-		bv.reloadAfterViolationsChanged();
+		bv.loadAfterViolationsChanged();
 		dispose();
 	}
 
@@ -313,18 +308,37 @@ public final class FilterViolations extends JFrame {
 
 		return paths;
 	}
+	
+	public void loadFilterValues(){
+		loadRuletypes();
+		loadViolationtypes();
+	}
 
 	private void loadRuletypes(){
+		while(ruletypeModelFilter.getRowCount() > 0){
+			ruletypeModelFilter.removeRow(0);
+		}
 		ArrayList<String> ruletypes = ts.loadRuletypesForFilter();
+		System.out.println(ruletypes);
 		for(String ruletype : ruletypes){
 			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
+			System.out.println("added");
+			System.out.println(ruletypeModelFilter.getRowCount());
+			System.out.println(ruletypeModelFilter.toString());
 		}
+		ruletypeModelFilter.fireTableDataChanged();
+		ruletypeTable.repaint();
+		ruletypeTable.revalidate();
 	}
 
 	private void loadViolationtypes(){
+		while(violationtypeModelFilter.getRowCount() > 0){
+			violationtypeModelFilter.removeRow(0);
+		}
 		ArrayList<String> violationtypes = ts.loadViolationtypesForFilter();
 		for(String violationtype : violationtypes){
 			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
 		}
+		violationtypeTable.updateUI();
 	}
 }

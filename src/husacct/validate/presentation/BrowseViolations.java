@@ -14,13 +14,12 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.*;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 public final class BrowseViolations extends JInternalFrame {
 
@@ -132,7 +131,7 @@ public final class BrowseViolations extends JInternalFrame {
 
 			@Override
 			public void itemStateChanged(ItemEvent evt) {
-				setViolations();
+				loadAfterViolationsChanged();
 			}
 		});
 
@@ -247,10 +246,15 @@ public final class BrowseViolations extends JInternalFrame {
 					return;
 				}
 				
-			Violation v = ts.getAllViolations().get(violationTable.getSelectedRow());
-				
-				lineNumberValueLabel.setText("" + v.getLinenumber());
-				logicalModulesValueLabel.setText(v.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+				if(violationTable.getSelectedRow() > -1){
+					Violation v = ts.getAllViolations().get(violationTable.getSelectedRow());
+
+					lineNumberValueLabel.setText("" + v.getLinenumber());
+					logicalModulesValueLabel.setText(v.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+				} else{
+					lineNumberValueLabel.setText("");
+					logicalModulesValueLabel.setText("");
+				}
 			}
 		});
 		
@@ -271,11 +275,10 @@ public final class BrowseViolations extends JInternalFrame {
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
 				ResourceBundles.getValue("Information")));
 		loadModels();
-		setViolations();
+		loadAfterViolationsChanged();
 	}
 	
-	public void reloadAfterViolationsChanged(){
-		System.out.println("entered the reload");
+	public void loadAfterViolationsChanged(){
 		setViolations();
 		loadInformationPanel();
 	}
@@ -314,7 +317,6 @@ public final class BrowseViolations extends JInternalFrame {
 	}
 	
 	private void setViolations() {
-		System.out.println("entered the setviolations");
 		while (violationModel.getRowCount() > 0) {
 			violationModel.removeRow(0);
 		}
@@ -329,7 +331,6 @@ public final class BrowseViolations extends JInternalFrame {
 	}
 
 	private void loadInformationPanel() {
-		System.out.println("enterd information");
 		informationPanel.removeAll();
 		
 		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");

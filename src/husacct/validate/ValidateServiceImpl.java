@@ -75,6 +75,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
 		domain.checkConformance(appliedRules);		
 		this.validationExecuted = true;
+		gui.violationChanged();
 	}
 
 	@Override
