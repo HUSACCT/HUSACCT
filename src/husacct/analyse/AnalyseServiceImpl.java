@@ -2,6 +2,7 @@ package husacct.analyse;
 
 import javax.swing.JInternalFrame;
 import husacct.analyse.presentation.AnalyseInternalFrame;
+import husacct.analyse.presentation.AnalyseUIController;
 import husacct.analyse.task.AnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -11,6 +12,7 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	private AnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
+	private AnalyseUIController analyseGui;
 	private boolean isAnalysed = false;
 	
 	public AnalyseServiceImpl(){
@@ -35,7 +37,8 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		return new AnalyseInternalFrame();
+		this.analyseGui = new AnalyseUIController();
+		return analyseGui.getAnalysedCodeFrame();
 	}
 	
 	@Override
