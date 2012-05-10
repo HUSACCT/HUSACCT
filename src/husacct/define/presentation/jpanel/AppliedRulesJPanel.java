@@ -1,5 +1,8 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.ServiceProvider;
+import husacct.control.ILocaleChangeListener;
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jframe.JFrameAppliedRule;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.task.DefinitionController;
@@ -10,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,7 +29,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements ActionListener,  Observer{
+public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements ActionListener, Observer, ILocaleChangeListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
 	private JTableAppliedRule appliedRulesTable;
@@ -49,6 +53,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		this.setBorder(BorderFactory.createTitledBorder("Applied rules for this module"));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
+		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
 	}
 	
 	private JScrollPane addAppliedRulesTable() {
@@ -66,19 +71,17 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		
 		addRuleButton = new JButton();
 		buttonPanel.add(addRuleButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		addRuleButton.setText("Add");
 		addRuleButton.addActionListener(this);
 		
 		editRuleButton = new JButton();
 		buttonPanel.add(editRuleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		editRuleButton.setText("Edit");
 		editRuleButton.addActionListener(this);
 			
 		removeRuleButton = new JButton();
 		buttonPanel.add(removeRuleButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		removeRuleButton.setText("Remove");
 		removeRuleButton.addActionListener(this);
 		
+		this.setButtonTexts();
 		return buttonPanel;
 	}
 	
@@ -153,5 +156,15 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	public int getSelectedRow() {
 		return appliedRulesTable.getSelectedRow();
 	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.setButtonTexts();
+	}
 	
+	private void setButtonTexts() {
+		addRuleButton.setText(DefineTranslator.translate("Add"));
+		editRuleButton.setText(DefineTranslator.translate("Edit"));
+		removeRuleButton.setText(DefineTranslator.translate("Remove"));
+	}
 }

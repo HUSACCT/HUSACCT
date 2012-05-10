@@ -1,5 +1,8 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.ServiceProvider;
+import husacct.control.ILocaleChangeListener;
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.task.DefinitionController;
@@ -10,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,7 +29,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements ActionListener,  Observer{
+public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements ActionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JTableSoftwareUnits softwareUnitsTable;
@@ -48,6 +52,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		this.setBorder(BorderFactory.createTitledBorder("Software units which are assigned to this module"));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
+		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
 	}
 	
 	private JScrollPane addSoftwareUnitsTable() {
@@ -65,14 +70,13 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		
 		addSoftwareUnitButton = new JButton();
 		buttonPanel.add(addSoftwareUnitButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		addSoftwareUnitButton.setText("Add");
 		addSoftwareUnitButton.addActionListener(this);
 			
 		removeSoftwareUnitButton = new JButton();
 		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		removeSoftwareUnitButton.setText("Remove");
 		removeSoftwareUnitButton.addActionListener(this);
 		
+		this.setButtonTexts();
 		return buttonPanel;
 	}
 	
@@ -132,5 +136,15 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 
 	public int getSelectedRow() {
 		return softwareUnitsTable.getSelectedRow();
+	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.setButtonTexts();
+	}
+	
+	private void setButtonTexts() {
+		addSoftwareUnitButton.setText(DefineTranslator.translate("Add"));
+		removeSoftwareUnitButton.setText(DefineTranslator.translate("Remove"));
 	}
 }

@@ -1,5 +1,8 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.ServiceProvider;
+import husacct.control.ILocaleChangeListener;
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jframe.AddModuleValuesJFrame;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
@@ -11,6 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,12 +26,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer {
+public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 
@@ -49,6 +48,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		this.add(createInnerModulePanel(), BorderLayout.CENTER);
 		this.updateModuleTree();
+		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
 	}
 	
 	public JPanel createInnerModulePanel() {
@@ -83,24 +83,21 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		
 		this.newModuleButton = new JButton();
 		buttonPanel.add(this.newModuleButton);
-		this.newModuleButton.setText("New Module");
 		this.newModuleButton.addActionListener(this);
 			
 		this.moveModuleUpButton = new JButton();
 		buttonPanel.add(this.moveModuleUpButton);
-		this.moveModuleUpButton.setText("Move up");
 		this.moveModuleUpButton.addActionListener(this);
 
 		this.removeModuleButton = new JButton();
 		buttonPanel.add(this.removeModuleButton);
-		this.removeModuleButton.setText("Remove Module");
 		this.removeModuleButton.addActionListener(this);
 
 		this.moveModuleDownButton = new JButton();
 		buttonPanel.add(this.moveModuleDownButton);
-		this.moveModuleDownButton.setText("Move down");
 		this.moveModuleDownButton.addActionListener(this);
 		
+		this.setButtonTexts();
 		return buttonPanel;
 	}
 	
@@ -224,5 +221,17 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	public void enableMoveLayerButtons() {
 		this.moveModuleDownButton.setEnabled(true);
 		this.moveModuleUpButton.setEnabled(true);
+	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.setButtonTexts();
+	}
+	
+	private void setButtonTexts() {
+		this.newModuleButton.setText(DefineTranslator.translate("NewModule"));
+		this.moveModuleUpButton.setText(DefineTranslator.translate("MoveUp"));
+		this.removeModuleButton.setText(DefineTranslator.translate("RemoveModule"));
+		this.moveModuleDownButton.setText(DefineTranslator.translate("MoveDown"));
 	}
 }

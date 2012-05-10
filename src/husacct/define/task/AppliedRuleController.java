@@ -3,6 +3,7 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -69,7 +70,7 @@ public class AppliedRuleController extends PopUpController {
 					if(!(selectedModule instanceof Layer) && (ruleTypeDTO.key.equals("SkipCall") || ruleTypeDTO.key.equals("BackCall"))) {
 						continue;
 					} else {
-						String value = resourceBundle.getString(ruleTypeDTO.key);
+						String value = DefineTranslator.translate(ruleTypeDTO.key);
 						ruleTypeKeys.add(ruleTypeDTO.key);
 						ruleTypeValues.add(value);
 					}
@@ -100,7 +101,7 @@ public class AppliedRuleController extends PopUpController {
 							
 					//Get the correct display value for each ruletypekey from the resourcebundle
 					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
-						String value = resourceBundle.getString(ruleDTO.key);
+						String value = DefineTranslator.translate(ruleDTO.key);
 						ruleTypeValues.add(value);
 					}
 					keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
