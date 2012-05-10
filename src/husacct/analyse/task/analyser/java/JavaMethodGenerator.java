@@ -1,5 +1,9 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.ArrayList;
+
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -22,6 +26,7 @@ class JavaMethodGenerator extends JavaGenerator{
 	public String name;
 	public String uniqueName;
 	private Logger logger = Logger.getLogger(JavaMethodGenerator.class);
+	private ArrayList<String> functionParameterTypes;
 
 	public void generateModelObject(CommonTree methodTree, String className) {
 		this.belongsToClass = className;
@@ -132,7 +137,7 @@ class JavaMethodGenerator extends JavaGenerator{
 			methodSignature = methodNameTree != null ? methodNameTree.toString() : "";
 		}
 		
-		String functionParameterTypes = "";
+		functionParameterTypes = new ArrayList<String>();
 		
 		CommonTree paramListTree = (CommonTree) totalTree.getFirstChildWithType(JavaParser.FORMAL_PARAM_LIST);
 		
@@ -146,7 +151,9 @@ class JavaMethodGenerator extends JavaGenerator{
 				switch(valueTree.getType()){
 					case JavaParser.QUALIFIED_TYPE_IDENT:
 						CommonTree qualifiedTypeTree = (CommonTree) typeTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
-						functionParameterTypes += ", " + qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT).toString();
+						saveParameter((CommonTree) qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT));
+						//functionParameterTypes.add(qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT).toString());
+						//functionParameterTypes += ", " + qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT).toString();
 						break;
 					case JavaParser.INT:
 					case JavaParser.FLOAT:
@@ -156,7 +163,9 @@ class JavaMethodGenerator extends JavaGenerator{
 					case JavaParser.LONG:
 					case JavaParser.CHAR:
 					case JavaParser.BYTE:
-						functionParameterTypes += ", " + typeTree.getChild(0).toString();
+						//functionParameterTypes += ", " + typeTree.getChild(0).toString();
+						//functionParameterTypes.add(typeTree.getChild(0).toString());
+						saveParameter((CommonTree) typeTree.getChild(0));
 						break;
 					default:
 						logger.warn("Cant parse a attribute for methods, unknown property [" + valueTree.getType() + "]");
@@ -166,9 +175,17 @@ class JavaMethodGenerator extends JavaGenerator{
 		}
 		
 		if(!methodSignature.equals("")){
-			functionParameterTypes = functionParameterTypes != "" ? functionParameterTypes.substring(2) : "";
-			methodSignature = methodSignature + "(" + functionParameterTypes + ")";
+			String parameterString = "";
+			for(String s : functionParameterTypes){
+				parameterString += parameterString != "" ? ", " : "";
+				parameterString += s;
+			}
+			
+			//functionParameterTypes = functionParameterTypes != "" ? functionParameterTypes.substring(2) : "";
+			//methodSignature = methodSignature + "(" + functionParameterTypes + ")";
+			methodSignature = methodSignature + "(" + parameterString + ")";
 			signature = methodSignature;
+			System.out.println(signature);
 		}
 		
 		if(tree.getChild(i).getType() == JavaParser.THROWS_CLAUSE){ //156
@@ -178,6 +195,20 @@ class JavaMethodGenerator extends JavaGenerator{
 		}
 		
 		
+	}
+	
+	private void saveParameter(CommonTree parameterTree){
+		if(parameterTree.getChildCount() != 0){
+			logger.warn("Generics are not supported yet!");
+			return;
+		}
+		
+		String parameterType = parameterTree.toStringTree();
+		functionParameterTypes.add(parameterType);
+		int linenumber = parameterTree.getLine();
+		
+		ModelCreationService creationService = new FamixCreationServiceImpl();
+		modelService.createAttribute(false, this.accessControlQualifier, this.belongsToClass, parameterType, this.name, this.belongsToClass + "." + this.name, linenumber);		
 	}
 
 	private void createMethodObject(){
