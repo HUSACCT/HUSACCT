@@ -124,4 +124,13 @@ public class ConfigurationServiceImpl {
 		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);	
 		violationHistoryRepository.addViolationHistory(violationHistory);
 	}
+
+	public void removeViolationHistory(Calendar date) {
+		violationHistoryRepository.removeViolationHistory(date);
+		
+	}
+
+	public ViolationHistory getViolationHistoryByDate(Calendar date) {
+		return violationHistoryRepository.getViolationHistoryByDate(date);
+	}
 }

@@ -278,7 +278,7 @@ public final class BrowseViolations extends JInternalFrame {
 				}
 				
 				if(violationTable.getSelectedRow() > -1){
-					Violation v = ts.getAllViolations().get(violationTable.getSelectedRow());
+					Violation v = ts.getAllViolations().getValue().get(violationTable.getSelectedRow());
 
 					lineNumberValueLabel.setText("" + v.getLinenumber());
 					logicalModulesValueLabel.setText(v.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());

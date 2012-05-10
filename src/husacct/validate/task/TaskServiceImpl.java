@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
+import husacct.validate.domain.configuration.ViolationHistoryRepository;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -170,5 +171,12 @@ public class TaskServiceImpl{
 
 	public void saveInHistory(String description) {
 		configuration.createHistoryPoint(description);
+	}
+	public void removeViolationHistory(Calendar date) {
+		configuration.removeViolationHistory(date);
+	}
+
+	public ViolationHistory getViolationHistoryByDate(Calendar date) {
+		return configuration.getViolationHistoryByDate(date);
 	}
 }

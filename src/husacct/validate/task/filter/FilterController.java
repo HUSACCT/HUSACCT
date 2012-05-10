@@ -78,7 +78,7 @@ public class FilterController {
 	public ArrayList<String> loadViolationtypes(){
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if(!appliedViolationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey()))){
 				appliedViolationtypes.add(ResourceBundles.getValue(violation.getViolationtypeKey()));
 			}
