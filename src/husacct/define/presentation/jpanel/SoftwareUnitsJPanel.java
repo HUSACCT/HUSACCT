@@ -2,6 +2,9 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
+import husacct.define.presentation.tables.JTableTableModel;
+import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
@@ -10,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,6 +52,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		this.setBorder(BorderFactory.createTitledBorder("Software units which are assigned to this module"));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
+		setButtonEnableState();
 	}
 	
 	private JScrollPane addSoftwareUnitsTable() {
@@ -120,10 +125,57 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	@Override
 	public void update(Observable o, Object arg) {
 		updateSoftwareUnitTable();
+		setButtonEnableState();
 	}
 	
 	public void updateSoftwareUnitTable() {
-		DefinitionController.getInstance().updateSoftwareUnitTable(this.softwareUnitsTable);
+		try {
+			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			JPanelStatus.getInstance("Updating software unit table").start();
+			if (moduleId != -1) {
+
+				// Get all components from the service
+				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule();
+
+				// Get the tablemodel from the table
+				JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
+
+				// Remove all items in the table
+				atm.getDataVector().removeAllElements();
+				
+				if (softwareUnitNames != null) {
+					for (String softwareUnitName : softwareUnitNames) {
+						String softwareUnitType = DefinitionController.getInstance().getSoftwareUnitTypeBySoftwareUnitName(softwareUnitName);
+						Object rowdata[] = {softwareUnitName, softwareUnitType};
+						
+						atm.addRow(rowdata);
+					}
+				}
+				atm.fireTableDataChanged();
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(this, e.getMessage(), "Error!");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
+	}
+	
+	private void setButtonEnableState() {
+		if (DefinitionController.getInstance().getSelectedModuleId() == -1){
+			disableButtons();
+		} else {
+			enableButtons();
+		}
+	}
+	
+	private void enableButtons() {
+		addSoftwareUnitButton.setEnabled(true);
+		removeSoftwareUnitButton.setEnabled(true);
+	}
+
+	private void disableButtons() {
+		addSoftwareUnitButton.setEnabled(false);
+		removeSoftwareUnitButton.setEnabled(false);
 	}
 	
 	public TableModel getModel(){

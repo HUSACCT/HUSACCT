@@ -3,6 +3,7 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -16,6 +17,7 @@ import husacct.define.presentation.utils.UiDialogs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.MissingResourceException;
+import java.util.Observer;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -158,6 +160,10 @@ public class AppliedRuleController extends PopUpController {
 		return this.selectedRuleTypeKey;
 	}
 	
+	public long getCurrentAppliedRuleId(){
+		return this.currentAppliedRuleId;
+	}
+	
 	public String getCurrentModuleName(){
 		long currentModuleId = getModuleId();
 		return this.moduleService.getModuleNameById(currentModuleId);
@@ -179,7 +185,7 @@ public class AppliedRuleController extends PopUpController {
 				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFromId, moduleToId, isEnabled);
 			}
 			this.saveAllExceptionRules();
-			DefinitionController.getInstance().notifyObservers(this.moduleId);
+			DefinitionController.getInstance().notifyObservers(this.currentModuleId);
 		} catch (Exception e) {
 			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage(), "Error");
 		}
@@ -210,8 +216,32 @@ public class AppliedRuleController extends PopUpController {
 				exceptionRules.remove(exRule);
 			}
 		}
+	}
+	
+	/**
+	 * This function will load notify all to update their data
+	 */
+	public void notifyObservers(long currentAppliedRuleId){
+		for (Observer o : this.observers){
+			o.update(this, currentAppliedRuleId);
+		}
+	}
 		
-
+	public HashMap<String, Object> getAppliedRuleDetails(long appliedRuleId){
+		AppliedRule rule = this.appliedRuleService.getAppliedRuleById(appliedRuleId);
+		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
+		ruleDetails.put("id", rule.getId());
+		ruleDetails.put("description", rule.getDescription());
+		ruleDetails.put("dependencies", rule.getDependencies());
+		ruleDetails.put("moduleFromName", rule.getModuleFrom().getName());
+		ruleDetails.put("moduleToName", rule.getModuleTo().getName());
+		ruleDetails.put("enabled", rule.isEnabled());
+		ruleDetails.put("regex", rule.getRegex());
+		ruleDetails.put("ruleTypeKey", rule.getRuleType());
+		ruleDetails.put("numberofexceptions", rule.getExceptions().size());
+		return ruleDetails;
+	}
+	
 //		logger.info("Removing software unit " + softwareUnitName);
 //		try {
 //			long moduleId = getSelectedModuleId();
@@ -233,8 +263,7 @@ public class AppliedRuleController extends PopUpController {
 //		} finally {
 //			JPanelStatus.getInstance().stop();
 //		}
-		
-	}
+
 	
 	public ArrayList<HashMap<String, Object>> getExceptionRules(){
 		return exceptionRules;

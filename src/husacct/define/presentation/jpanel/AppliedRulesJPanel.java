@@ -1,7 +1,11 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jframe.JFrameAppliedRule;
 import husacct.define.presentation.tables.JTableAppliedRule;
+import husacct.define.presentation.tables.JTableTableModel;
+import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
@@ -10,6 +14,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -28,6 +34,9 @@ import javax.swing.table.TableModel;
 public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements ActionListener,  Observer{
 	
 	private static final long serialVersionUID = -2052083182258803790L;
+	
+	
+	
 	private JTableAppliedRule appliedRulesTable;
 	private JScrollPane appliedRulesPane;
 	
@@ -49,6 +58,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		this.setBorder(BorderFactory.createTitledBorder("Applied rules for this module"));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
+		setButtonEnableState();
 	}
 	
 	private JScrollPane addAppliedRulesTable() {
@@ -111,7 +121,6 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, -1L);
 			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
 			appliedRuleFrame.setVisible(true);
-			//DefinitionController.getInstance().createRuleGUI();
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -120,13 +129,24 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	private void editRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
-			JOptionPane.showMessageDialog(this, "Currently under construction", "Under Construction", JOptionPane.ERROR_MESSAGE);
-			//FIXME
-//			long selectedAppliedRuleId = (Long) appliedRulesTable.getValueAt(getSelectedRow(), 0);
-//			DefinitionController.getInstance().createRuleGUI(selectedAppliedRuleId);
+			long selectedAppliedRuleId = getSelectedAppliedRuleId();
+			
+			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, selectedAppliedRuleId);
+			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	private long getSelectedAppliedRuleId(){
+		long selectedAppliedRuleId = -1;
+		Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
+		if (o instanceof DataHelper) {
+			DataHelper datahelper = (DataHelper) o;
+			selectedAppliedRuleId = datahelper.getId();
+		}
+		return selectedAppliedRuleId;
 	}
 
 	private void removeRule() {
@@ -140,10 +160,73 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	@Override
 	public void update(Observable o, Object arg) {
 		updateAppliedRuleTable();
+		setButtonEnableState();
+	}
+
+	public void updateAppliedRuleTable() {
+		try {
+			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			JPanelStatus.getInstance("Updating rules applied table").start();
+			if (moduleId != -1) {
+
+				// Get all appliedRuleIds from the service
+				ArrayList<Long> appliedRulesIds = DefinitionController.getInstance().getAppliedRuleIdsBySelectedModule();
+				
+				// Get the tablemodel from the table
+				JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
+
+				// Remove all items in the table
+				atm.getDataVector().removeAllElements();
+				if (appliedRulesIds != null) {
+					for (long appliedRuleId : appliedRulesIds) {
+						
+						HashMap<String, Object> ruleDetails = DefinitionController.getInstance().getRuleDetailsByAppliedRuleId(appliedRuleId);
+						String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
+						//SetDataHelper to help retrieve the applied Rule id through the ruleTypeKey
+						DataHelper datahelperRuleType = new DataHelper();
+						datahelperRuleType.setId(appliedRuleId);
+						datahelperRuleType.setValue(ruleTypeKey);
+
+						String moduleToName = (String) ruleDetails.get("moduleToName");
+						boolean appliedRuleIsEnabled = (Boolean) ruleDetails.get("enabled");
+						String enabled = "Off";
+						if (appliedRuleIsEnabled) {
+							enabled = "On";
+						}
+						int numberofexceptions = (Integer) ruleDetails.get("numberofexceptions");
+
+						Object rowdata[] = {datahelperRuleType, moduleToName , enabled, numberofexceptions };
+
+						atm.addRow(rowdata);
+					}
+				}
+				atm.fireTableDataChanged();
+			}
+		} catch (Exception e) {
+			UiDialogs.errorDialog(this, e.getMessage(), "Error!");
+		} finally {
+			JPanelStatus.getInstance().stop();
+		}
 	}
 	
-	public void updateAppliedRuleTable() {
-		DefinitionController.getInstance().updateAppliedRulesTable(this.appliedRulesTable);
+	private void setButtonEnableState() {
+		if (DefinitionController.getInstance().getSelectedModuleId() == -1){
+			disableButtons();
+		} else {
+			enableButtons();
+		}
+	}
+	
+	private void enableButtons() {
+		addRuleButton.setEnabled(true);
+		editRuleButton.setEnabled(true);
+		removeRuleButton.setEnabled(true);
+	}
+
+	private void disableButtons() {
+		addRuleButton.setEnabled(false);
+		editRuleButton.setEnabled(false);
+		removeRuleButton.setEnabled(false);
 	}
 	
 	public TableModel getModel() {

@@ -1,4 +1,4 @@
-package husacct.define.presentation.jpanel;
+package husacct.define.presentation.jpanel.ruledetails;
 
 import husacct.define.presentation.helper.DataHelper;
 import husacct.define.task.AppliedRuleController;
@@ -296,5 +296,10 @@ public class RuleDetailsJPanel extends JPanel{
 		ruleDetails.put("moduleFromId", datahelper1.getId());
 		ruleDetails.put("enabled", this.ruleEnabledCheckBox.isSelected());
 		ruleDetails.put("description", this.descriptionTextArea.getText());
+	}
+
+	public void updateDetails(HashMap<String, Object> ruleDetails) {
+			//FIXME
+		//update Details
 	}
 }

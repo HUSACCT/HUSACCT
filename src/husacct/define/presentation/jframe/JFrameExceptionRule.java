@@ -1,6 +1,6 @@
 package husacct.define.presentation.jframe;
 
-import husacct.define.presentation.jpanel.RuleDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.RuleDetailsJPanel;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.PopUpController;

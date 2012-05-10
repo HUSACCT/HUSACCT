@@ -37,7 +37,7 @@ public class SoftwareUnitController extends PopUpController {
 	}
 	
 	private void filterAddedSoftwareUnits(ArrayList<SoftwareUnitDefinition> softwareUnitList) {
-		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.softwareUnitDefinitionDomainService.getSoftwareUnit(moduleId);
+		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.softwareUnitDefinitionDomainService.getSoftwareUnit(currentModuleId);
 		for (SoftwareUnitDefinition addedUnit : addedsoftwareUnitList){
 			if (softwareUnitList.contains(addedUnit)) {
 				softwareUnitList.remove(addedUnit);

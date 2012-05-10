@@ -1,7 +1,7 @@
 package husacct.define.presentation.jframe;
 
 import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jpanel.RuleDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.RuleDetailsJPanel;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.KeyValueComboBox;
@@ -37,7 +37,6 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	private static final long serialVersionUID = -3491664038962722000L;
 	
 	private AppliedRuleController appliedRuleController;
-	
 	private RuleDetailsJPanel ruleDetailsJPanel;
 	private KeyValueComboBox appliedRuleKeyValueComboBox;
 
@@ -52,6 +51,7 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		super();
 		this.appliedRuleController = new AppliedRuleController(moduleId, appliedRuleId);
 		initGUI();
+		update();
 	}
 
 	private void initGUI() {
@@ -170,11 +170,36 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		return buttonPanel;
 	}
 	
+	public void update() {
+		update(appliedRuleController, appliedRuleController.getCurrentAppliedRuleId());
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		updateDetails();
 		updateExceptionTable();
 	}
 	
+	private void updateDetails() {
+		if (appliedRuleController.getCurrentAppliedRuleId() != -1){
+			HashMap<String, Object> ruleDetails = appliedRuleController.getAppliedRuleDetails(appliedRuleController.getCurrentAppliedRuleId());
+			String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
+			setSelectedRuleTypeKey(ruleTypeKey);
+
+			ruleDetailsJPanel.updateDetails(ruleDetails);
+		}
+	}
+	
+	private void setSelectedRuleTypeKey(String ruleTypeKey){
+		for (int i = 0;i < appliedRuleKeyValueComboBox.getItemCount();i++){
+			String iteratingItemKey = (String) appliedRuleKeyValueComboBox.getItemKeyAt(i);
+			if (iteratingItemKey.equals(ruleTypeKey)){
+				appliedRuleKeyValueComboBox.setSelectedIndex(i);
+				break;
+			}
+		}
+	}
+
 	public void updateExceptionTable() {
 		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
 		JTableTableModel tableModel = (JTableTableModel) jTableException.getModel();
@@ -241,8 +266,9 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	}
 
 	private void save() {	
-		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+		
+		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		long moduleFromId = (Long) ruleDetails.get("moduleFromId");
 		long moduleToId = (Long) ruleDetails.get("moduleToId");
 		boolean isEnabled = (Boolean) ruleDetails.get("enabled");
