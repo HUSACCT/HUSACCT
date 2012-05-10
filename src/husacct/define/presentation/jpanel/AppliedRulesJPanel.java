@@ -131,29 +131,32 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 
 	private void editRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-		if (moduleId != -1) {
-			long selectedAppliedRuleId = getSelectedAppliedRuleId();
-			
+		long selectedAppliedRuleId = getSelectedAppliedRuleId();
+		if (selectedAppliedRuleId != -1){
 			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, selectedAppliedRuleId);
 			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
 			appliedRuleFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private long getSelectedAppliedRuleId(){
 		long selectedAppliedRuleId = -1;
-		Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
-		if (o instanceof DataHelper) {
-			DataHelper datahelper = (DataHelper) o;
-			selectedAppliedRuleId = datahelper.getId();
+		try {//TODO check if selectedRow exists
+			Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
+			if (o instanceof DataHelper) {
+				DataHelper datahelper = (DataHelper) o;
+				selectedAppliedRuleId = datahelper.getId();
+			}
+		} catch(Exception e){
+			
 		}
 		return selectedAppliedRuleId;
 	}
 
 	private void removeRule() {
-		long selectedAppliedRuleId = appliedRulesTable.getValueAt(getSelectedRow(), 0);
+		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if(selectedAppliedRuleId != -1) {
 			DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
 		} else {

@@ -18,17 +18,6 @@ public class JTableAppliedRule extends AbstractJTable {
 	}
 	
 	@Override
-	public Long getValueAt(int row, int column) {
-		Long value;
-		try {
-			value = (Long) super.getValueAt(row, column);
-		} catch(Exception e) {
-			value = -1L;
-		}
-		return value;
-	}
-	
-	@Override
 	protected void setColumnHeaders() {
 		tablemodel.addColumn(DefineTranslator.translate("RuleType"));
 		tablemodel.addColumn(DefineTranslator.translate("ToModule"));
