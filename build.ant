@@ -30,6 +30,7 @@
         <javac srcdir="${src.dir}" destdir="${bin.dir}" debug="true" deprecation="on" includeantruntime="false">
         	<classpath refid="classpath" />
     	</javac>
+    	<!-- Extract external libraries -->
     	<unzip dest="${bin.dir}">
     	    <fileset dir="${lib.dir}">
     	        <include name="**/*.jar"/>
@@ -61,7 +62,7 @@
 			<test name="husaccttest.validate.ValidateTestSuite" todir="${reports.dir}" />
 		</junit>
 		
-		<!-- Transform XML report to HTML, fails horribly, other methods?-->
+		<!-- Transform XML report to HTML using XSL?-->
 		<junitreport todir="${reports.dir}">
 		    <fileset dir="${reports.dir}" >
 		      <include name="*.xml"/>
