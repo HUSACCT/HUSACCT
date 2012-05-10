@@ -14,7 +14,7 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 	
 	public AnalyseDomainServiceImpl(){
 		this.queryService = new FamixQueryServiceImpl();
-		creationService = new FamixCreationServiceImpl();
+		this.creationService = new FamixCreationServiceImpl();
 	}	
 	
 	public void clearModel(){
