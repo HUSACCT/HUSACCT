@@ -5,15 +5,21 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.control.presentation.util.AboutHusacctFrame;
 import husacct.control.presentation.util.SetApplicationFrame;
 
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+
 public class ApplicationController {
 
-	private MainController mainController;
+	private static MainController mainController;
+	private static Logger logger = Logger.getLogger(ApplicationController.class);
+	
 	public ApplicationController(MainController mainController) {
-		this.mainController = mainController;
+		ApplicationController.mainController = mainController;
 	}
 
 	public void showApplicationDetailsGui(){
-		new SetApplicationFrame(mainController);
+		new SetApplicationFrame(ApplicationController.mainController);
 	}
 	
 	public void setApplicationData(ApplicationDTO applicationDTO) {
@@ -28,5 +34,15 @@ public class ApplicationController {
 	
 	public void showAboutHusacctGui(){
 		new AboutHusacctFrame();
+	}
+	
+	public static void showErrorMessage(String message){
+		if(ApplicationController.mainController != null){
+			JOptionPane.showMessageDialog(ApplicationController.mainController.getMainGui(),
+				    message,
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+		}
+		ApplicationController.logger.error("Error: " + message);
 	}
 }

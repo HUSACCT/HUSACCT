@@ -2,6 +2,7 @@ package husacct.control;
 
 import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
+import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
 import husacct.control.task.WorkspaceController;
 
@@ -49,8 +50,8 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 		}
 	}
 	
-	public void displayErrorMessage(Exception exception){
-		logger.debug(exception.getMessage());
+	public void showErrorMessage(String message){
+		ApplicationController.showErrorMessage(message);
 	}
 	
 	public String getTranslatedString(String stringIdentifier){
