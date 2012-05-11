@@ -7,6 +7,7 @@ import husacct.validate.domain.validation.Severity;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 
 public class SeverityConfigRepository {
 	private List<Severity> currentSeverities;
@@ -43,14 +44,44 @@ public class SeverityConfigRepository {
 		throw new SeverityNotFoundException();
 	}
 
+	private void checkDefaultSeveritiesChanged(List<Severity> severities){
+		for(Severity defaultSeverity : defaultSeverities){
+			boolean defaultSeverityFound = false;
+			
+			for(Severity severity : severities){		
+				if(severity.getId().equals(severity.getId())){
+					defaultSeverityFound = true;
+				}
+				if(severity.getDefaultName().isEmpty() && severity.getUserName().isEmpty()){
+					//severity user name must not be empty
+				}
+			
+				
+			
+			}
+			if(!defaultSeverityFound){
+			//throw new DefaultSeverityNotFoundException	
+			}			
+		}
+	}
+
+	private Severity getSeverityByUUID(UUID uuid){
+		for(Severity severity : currentSeverities){
+			if(severity.getId().equals(uuid)){
+				return severity;
+			}
+		}
+		throw new SeverityNotFoundException();
+	}
+
 	public int getSeverityValue(Severity severity){
 		return currentSeverities.indexOf(severity);
 	}
-	
+
 	public void restoreToDefault(){
 		currentSeverities = defaultSeverities;
 	}
-	
+
 	private void generateDefaultSeverities(){
 		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
 			Severity severity = new Severity(defaultSeverity.toString(), "", defaultSeverity.getColor());
