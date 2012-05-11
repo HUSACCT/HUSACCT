@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.AbstractMap.SimpleEntry;
 
 public class ConfigurationServiceImpl {
-
+	
 	private final SeverityConfigRepository severityConfig;
-	private final SeverityPerTypeRepository severityRepository;
+	private final SeverityPerTypeRepository severityPerTypeRepository;
 	private final ViolationRepository violationRepository;
 	private final RuleTypesFactory ruletypefactory;
 	private final ViolationHistoryRepository violationHistoryRepository;
@@ -29,13 +29,13 @@ public class ConfigurationServiceImpl {
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
 		this.violationRepository = new ViolationRepository();
-		this.severityRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
-		this.severityRepository.initializeDefaultSeverities();	
+		this.severityPerTypeRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
+		this.severityPerTypeRepository.initializeDefaultSeverities();	
 
 		this.violationHistoryRepository = new ViolationHistoryRepository();
 		this.activeViolationTypesRepository = new ActiveViolationTypesRepository();
 	}
-
+	
 	public void clearViolations() {
 		violationRepository.clear();
 	}
@@ -65,27 +65,27 @@ public class ConfigurationServiceImpl {
 	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
-		return severityRepository.getSeveritiesPerTypePerProgrammingLanguage();
+		return severityPerTypeRepository.getSeveritiesPerTypePerProgrammingLanguage();
 	}
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {
-		severityRepository.setSeverityMap(severitiesPerTypesPerProgrammingLanguages);
+		severityPerTypeRepository.setSeverityMap(severitiesPerTypesPerProgrammingLanguages);
 	}
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(String language, HashMap<String, Severity> severitiesPerTypesPerProgrammingLanguages) {
-		severityRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
+		severityPerTypeRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
 	}
 
 	public Severity getSeverityFromKey(String language, String key){
-		return severityRepository.getSeverity(language, key);
+		return severityPerTypeRepository.getSeverity(language, key);
 	}
 
 	public void restoreAllToDefault(String language){
-		severityRepository.restoreAllToDefault(language);
+		severityPerTypeRepository.restoreAllToDefault(language);
 	}
 
 	public void restoreToDefault(String language, String key){
-		severityRepository.restoreDefaultSeverity(language, key);
+		severityPerTypeRepository.restoreDefaultSeverity(language, key);
 	}
 
 	public void restoreSeveritiesToDefault(){
@@ -117,10 +117,10 @@ public class ConfigurationServiceImpl {
 	}
 
 	public void createHistoryPoint(String description) {
-		SimpleEntry<Calendar, List<Violation>> violationsResult = getAllViolations();
+		final SimpleEntry<Calendar, List<Violation>> violationsResult = getAllViolations();
 		final Calendar date = violationsResult.getKey();
 		final List<Violation> violations = violationsResult.getValue();
-		//FIXME: clone Severities
+
 		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);	
 		violationHistoryRepository.addViolationHistory(violationHistory);
 	}

@@ -1,7 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -55,10 +55,11 @@ public class ViolationHistoryGUI extends JInternalFrame {
 
 	private void loadModels(){
 		String[] columnNames = {
-				ResourceBundles.getValue("Source"),
-				ResourceBundles.getValue("DependencyKind"),
-				ResourceBundles.getValue("Target"),
-				ResourceBundles.getValue("Severity")};
+
+				ValidateTranslator.getValue("Source"),
+				ValidateTranslator.getValue("DependencyKind"),
+				ValidateTranslator.getValue("Target"),
+				ValidateTranslator.getValue("Severity")};
 
 		violationModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = -6892927200143239311L;
@@ -89,7 +90,8 @@ public class ViolationHistoryGUI extends JInternalFrame {
 		selectedViolationHistory = taskServiceImpl.getViolationHistoryByDate(date);
 		textAreaDescription.setText(selectedViolationHistory.getDescription());
 		for (Violation violation : selectedViolationHistory.getViolations()) {
-			violationModel.addRow(new Object[]{violation.getClassPathFrom(), ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+			violationModel.addRow(new Object[]{violation.getClassPathFrom(), ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+
 		}
 	}
 

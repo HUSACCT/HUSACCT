@@ -1,6 +1,6 @@
 package husacct.validate.presentation.tableModels;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.presentation.ColorRenderer;
 
 import java.awt.Color;
@@ -19,7 +19,7 @@ public class ColorTableModel extends AbstractTableModel {
 	
 	@SuppressWarnings("rawtypes")
 	private Vector dataVector = new Vector();
-    private String columnNames[] = {ResourceBundles.getValue("SeverityName"), ResourceBundles.getValue("Color")};
+    private String columnNames[] = {ValidateTranslator.getValue("SeverityName"), ValidateTranslator.getValue("Color")};
     private Class<?>[] types = new Class[]{String.class, JButton.class};
     private boolean[] canEdit = new boolean[]{true, true};
     private List<Color> rowColours = new ArrayList<Color>();

@@ -1,6 +1,6 @@
 package husacct.validate.presentation;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -16,9 +16,6 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.*;
@@ -292,20 +289,20 @@ public final class BrowseViolations extends JInternalFrame {
 	}
 	
 	public void loadGUIText(){
-		buttonSaveInHistory.setText(ResourceBundles.getValue("SaveInHistory"));
-		setTitle(ResourceBundles.getValue("BrowseViolations"));
+		buttonSaveInHistory.setText(ValidateTranslator.getValue("SaveInHistory"));
+		setTitle(ValidateTranslator.getValue("BrowseViolations"));
 		displayPanel.setBorder(BorderFactory.createTitledBorder(
-				ResourceBundles.getValue("Display")));
-		dependencies.setText(ResourceBundles.getValue("Dependencies") + ":");
-		allDependencies.setText(ResourceBundles.getValue("All"));
-		directDependencies.setText(ResourceBundles.getValue("Direct"));
-		indirectDependencies.setText(ResourceBundles.getValue("Indirect"));
+				ValidateTranslator.getValue("Display")));
+		dependencies.setText(ValidateTranslator.getValue("Dependencies") + ":");
+		allDependencies.setText(ValidateTranslator.getValue("All"));
+		directDependencies.setText(ValidateTranslator.getValue("Direct"));
+		indirectDependencies.setText(ValidateTranslator.getValue("Indirect"));
 		filterPanel.setBorder(BorderFactory.createTitledBorder(
-				ResourceBundles.getValue("Filter")));
-		editFilter.setText(ResourceBundles.getValue("EditFilter"));
-		applyFilter.setText(ResourceBundles.getValue("ApplyFilter"));
+				ValidateTranslator.getValue("Filter")));
+		editFilter.setText(ValidateTranslator.getValue("EditFilter"));
+		applyFilter.setText(ValidateTranslator.getValue("ApplyFilter"));
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
-				ResourceBundles.getValue("Information")));
+				ValidateTranslator.getValue("Information")));
 		loadModels();
 		loadAfterViolationsChanged();
 	}
@@ -317,11 +314,11 @@ public final class BrowseViolations extends JInternalFrame {
 	
 	private void loadModels(){
 		String[] columnNames = {
-			ResourceBundles.getValue("Source"),
-			ResourceBundles.getValue("Rule"),
-			ResourceBundles.getValue("DependencyKind"),
-			ResourceBundles.getValue("Target"),
-			ResourceBundles.getValue("Severity")};
+			ValidateTranslator.getValue("Source"),
+			ValidateTranslator.getValue("Rule"),
+			ValidateTranslator.getValue("DependencyKind"),
+			ValidateTranslator.getValue("Target"),
+			ValidateTranslator.getValue("Severity")};
 		
 		violationModel = new DefaultTableModel(columnNames, 0) {
 
@@ -356,7 +353,7 @@ public final class BrowseViolations extends JInternalFrame {
 		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
 		for (Violation violation : violationRows) {
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ResourceBundles.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+			violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		}
 
 //		setColumnWidth(3, 50);
@@ -365,14 +362,14 @@ public final class BrowseViolations extends JInternalFrame {
 	private void loadInformationPanel() {
 		informationPanel.removeAll();
 		
-		totalViolation.setText(ResourceBundles.getValue("TotalViolations") + ":");
+		totalViolation.setText(ValidateTranslator.getValue("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
 
 		
 		totalViolationNumber.setText("" + ts.getAllViolations().getValue().size());
 		informationPanel.add(totalViolationNumber);
 		
-		shownViolations.setText(ResourceBundles.getValue("ShownViolations") + ":");
+		shownViolations.setText(ValidateTranslator.getValue("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
 		
 		shownViolationsNumber.setText("" + violationModel.getRowCount());

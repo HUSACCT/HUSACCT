@@ -33,14 +33,14 @@ public class RuleTypesFactory {
 	private final ConfigurationServiceImpl configuration;
 	
 	private AbstractViolationType violationtypefactory;
-	private HashMap<String, CategoryKeyClassDTO> allRuletypes;
+	private HashMap<String, CategoryKeyClassDTO> allRuleTypes;
 	private HashMap<String, CategoryKeyClassDTO> mainRuleTypes;
 
 	public RuleTypesFactory(ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
 
 		RuleTypesGenerator ruletypegenerator = new RuleTypesGenerator();
-		this.allRuletypes = ruletypegenerator.generateAllRules();
+		this.allRuleTypes = ruletypegenerator.generateAllRules();
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
@@ -87,7 +87,7 @@ public class RuleTypesFactory {
 
 		List<RuleType> rules = new ArrayList<RuleType>();		
 
-		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
+		for(Entry<String, CategoryKeyClassDTO> set : allRuleTypes.entrySet()){
 			try{
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();
@@ -125,7 +125,7 @@ public class RuleTypesFactory {
 	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
 		setViolationTypeFactory();
 
-		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
+		CategoryKeyClassDTO categoryKeyClass = allRuleTypes.get(ruleKey);
 		if(categoryKeyClass != null){
 			Class<RuleType> ruletypeClass = categoryKeyClass.getRuleClass();
 			String categoryKey = categoryKeyClass.getCategoryKey();
@@ -191,7 +191,7 @@ public class RuleTypesFactory {
 	}
 
 	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey) throws RuleInstantionException{
-		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
+		CategoryKeyClassDTO categoryKeyClass = allRuleTypes.get(ruleKey);
 		if(categoryKeyClass != null){
 			Class<RuleType> ruletypeClass = categoryKeyClass.getRuleClass();
 			String categoryKey = categoryKeyClass.getCategoryKey();
@@ -245,7 +245,7 @@ public class RuleTypesFactory {
 	}	
 
 	private DefaultSeverities getCategoryKeyClassDTO(String ruleTypeKey){
-		for(CategoryKeyClassDTO ruleType : allRuletypes.values()){
+		for(CategoryKeyClassDTO ruleType : allRuleTypes.values()){
 			if(ruleType.getRuleClass().getSimpleName().toLowerCase().replace("rule", "").equals(ruleTypeKey.toLowerCase())){
 				return ruleType.getDefaultSeverity();
 			}

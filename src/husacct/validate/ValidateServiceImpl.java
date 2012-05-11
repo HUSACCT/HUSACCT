@@ -67,7 +67,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public String[] getExportExtentions() {
-		return task.getExportExtentions();
+		return report.getExportExtentions();
 	}
 
 	@Override

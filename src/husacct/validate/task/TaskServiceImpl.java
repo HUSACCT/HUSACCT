@@ -12,18 +12,17 @@ import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
-import husacct.validate.task.extensiontypes.ExtensionTypes;
 import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
 
 import java.awt.Color;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.AbstractMap.SimpleEntry;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -128,10 +127,6 @@ public class TaskServiceImpl{
 
 	public Element exportValidationWorkspace() {
 		return exportController.exportAllData(configuration);
-	}
-
-	public String[] getExportExtentions() {
-		return new ExtensionTypes().getExtensionTypes();
 	}
 
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter){

@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.report;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerSeverity;
@@ -41,12 +41,12 @@ public class Report {
 
 	public String[] getLocaleColumnHeaders() {
 		String[] headers = new String[] {
-				ResourceBundles.getValue("Source"),
-				ResourceBundles.getValue("Rule"),
-				ResourceBundles.getValue("LineNumber"),
-				ResourceBundles.getValue("DependencyKind"),
-				ResourceBundles.getValue("Target"),
-				ResourceBundles.getValue("Severity")
+				ValidateTranslator.getValue("Source"),
+				ValidateTranslator.getValue("Rule"),
+				ValidateTranslator.getValue("LineNumber"),
+				ValidateTranslator.getValue("DependencyKind"),
+				ValidateTranslator.getValue("Target"),
+				ValidateTranslator.getValue("Severity")
 		};
 		return headers;
 	}
