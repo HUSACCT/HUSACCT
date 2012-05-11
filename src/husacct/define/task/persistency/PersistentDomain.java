@@ -1,10 +1,6 @@
 package husacct.define.task.persistency;
 
-import java.io.IOException;
-
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
@@ -51,22 +47,14 @@ public class PersistentDomain implements ISaveable {
 
 	@Override
 	public Element getWorkspaceData() {
-		try {
-			this.domainParser = new DomainXML();
-			switch (this.parseData){
-				case LOGICAL:
-					return this.domainParser.getApplicationInXML( this.domainService.getApplicationDetails() );
-				case APPLICATION:
-				case PHYSICAL:
-				default:
-					return this.domainParser.getApplicationInXML( this.domainService.getApplicationDetails() );
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} catch (JDOMException e) {
-			e.printStackTrace();			
-			return null;
+		this.domainParser = new DomainXML();
+		switch (this.parseData){
+			case LOGICAL:
+				return this.domainParser.getApplicationInXML( this.domainService.getApplicationDetails() );
+			case APPLICATION:
+			case PHYSICAL:
+			default:
+				return this.domainParser.getApplicationInXML( this.domainService.getApplicationDetails() );
 		}
 	}
 
@@ -81,7 +69,6 @@ public class PersistentDomain implements ISaveable {
 		
 		switch (this.parseData) {
 			case LOGICAL:
-				// doe dingen
 			case APPLICATION:
 			case PHYSICAL:
 			default:

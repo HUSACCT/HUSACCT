@@ -1,7 +1,5 @@
 package husacct.define.task.persistency;
 
-import java.io.IOException;
-
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
@@ -9,25 +7,13 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
-import org.jdom2.Document;
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 
 public class DomainXML {
 
-	private SAXBuilder builder;
-	
-	private Document doc;
-	
-	private Element rootElement;
-	
-	public DomainXML() throws JDOMException, IOException {
-		this.builder = new SAXBuilder();
+	public DomainXML(){
 		
-		//@todo Need to make this in temp memory instead of a file.
-		this.doc = builder.build("pers.xml");
-		this.rootElement = doc.getRootElement();
 	}
 	
 	public Element getSoftwareUnitDefinitionInXML(SoftwareUnitDefinition SUD) {
@@ -55,6 +41,7 @@ public class DomainXML {
 		SADescription.addContent(SA.getDescription());
 		XMLArchitecture.addContent(SADescription);
 		
+		System.out.println("size van modules : " + SA.getModules().size());
 		if (SA.getModules().size() > 0) {
 			Element SAModules = new Element("modules");
 			for (Module m : SA.getModules()) {
@@ -70,7 +57,6 @@ public class DomainXML {
 			}
 			XMLArchitecture.addContent(SARules);
 		}
-		
 		
 		return XMLArchitecture;
 	}
@@ -218,32 +204,8 @@ public class DomainXML {
 		applicationVersion.addContent(App.getVersion());
 		XMLApplication.addContent(applicationVersion);
 		
-		XMLApplication.addContent(this.getSoftwareArchitectureInXML(App.getArchitecture()));
+		XMLApplication.addContent(this.getSoftwareArchitectureInXML(SoftwareArchitecture.getInstance()));
 		
 		return XMLApplication;
-	}
-
-	public void setBuilder(SAXBuilder builder) {
-		this.builder = builder;
-	}
-
-	public SAXBuilder getBuilder() {
-		return builder;
-	}
-
-	public void setDoc(Document doc) {
-		this.doc = doc;
-	}
-
-	public Document getDoc() {
-		return doc;
-	}
-
-	public void setRootElement(Element rootElement) {
-		this.rootElement = rootElement;
-	}
-
-	public Element getRootElement() {
-		return rootElement;
 	}
 }
