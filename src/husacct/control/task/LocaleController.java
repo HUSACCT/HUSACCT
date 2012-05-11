@@ -49,7 +49,11 @@ public class LocaleController {
 	}
 	
 	public void reloadBundle(){
-		LocaleController.resourceBundle = ResourceBundle.getBundle(bundleLocation, getLocale());
+		try {
+			LocaleController.resourceBundle = ResourceBundle.getBundle(bundleLocation, getLocale());
+		} catch (Exception e){
+			logger.debug("Unable to reload resource bundle: " + e.getMessage());
+		}
 	}
 	
 	public static Locale getLocale(){

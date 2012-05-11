@@ -1,5 +1,8 @@
 package husacct.control.presentation.menubar;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.control.ILocaleChangeListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.States;
@@ -8,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -20,10 +24,13 @@ public class ValidateMenu extends JMenu{
 	private JMenuItem validateNowItem;
 	private JMenuItem exportViolationReportItem;
 	
+	IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public ValidateMenu(final MainController mainController){
-		super("Validate");
+		super();
+		setText(controlService.getTranslatedString("Validate"));
 		
-		validateNowItem = new JMenuItem("Validate now");
+		validateNowItem = new JMenuItem(controlService.getTranslatedString("ValidateNow"));
 		validateNowItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
 		validateNowItem.setMnemonic('v');
 		this.add(validateNowItem);
@@ -33,7 +40,7 @@ public class ValidateMenu extends JMenu{
 			}
 		});
 		
-		configureItem = new JMenuItem("Configuration");
+		configureItem = new JMenuItem(controlService.getTranslatedString("Configuration"));
 		configureItem.setMnemonic('c');
 		this.add(configureItem);
 		configureItem.addActionListener(new ActionListener(){
@@ -42,7 +49,7 @@ public class ValidateMenu extends JMenu{
 			}
 		});
 
-		exportViolationReportItem = new JMenuItem("Violation report");
+		exportViolationReportItem = new JMenuItem(controlService.getTranslatedString("ViolationReport"));
 		exportViolationReportItem.setMnemonic('i');
 		this.add(exportViolationReportItem);
 		
@@ -75,6 +82,16 @@ public class ValidateMenu extends JMenu{
 		this.addMenuListener(new MenuListenerAdapter() {
 			public void menuSelected(MenuEvent e) {
 				mainController.getStateController().checkState();		
+			}
+		});
+		
+		final ValidateMenu validateMenu = this;
+		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			public void update(Locale newLocale) {
+				validateMenu.setText(controlService.getTranslatedString("Validate"));
+				configureItem.setText(controlService.getTranslatedString("Configuration"));
+				validateNowItem.setText(controlService.getTranslatedString("ValidateNow"));
+				exportViolationReportItem.setText(controlService.getTranslatedString("ViolationReport"));
 			}
 		});
 	}
