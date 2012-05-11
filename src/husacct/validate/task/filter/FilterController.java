@@ -79,6 +79,7 @@ public class FilterController {
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
 		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
+
 			if(!appliedViolationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey()))){
 				appliedViolationtypes.add(ValidateTranslator.getValue(violation.getViolationtypeKey()));
 			}

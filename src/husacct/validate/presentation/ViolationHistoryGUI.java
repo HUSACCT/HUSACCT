@@ -55,6 +55,7 @@ public class ViolationHistoryGUI extends JInternalFrame {
 
 	private void loadModels(){
 		String[] columnNames = {
+
 				ValidateTranslator.getValue("Source"),
 				ValidateTranslator.getValue("DependencyKind"),
 				ValidateTranslator.getValue("Target"),
@@ -90,6 +91,7 @@ public class ViolationHistoryGUI extends JInternalFrame {
 		textAreaDescription.setText(selectedViolationHistory.getDescription());
 		for (Violation violation : selectedViolationHistory.getViolations()) {
 			violationModel.addRow(new Object[]{violation.getClassPathFrom(), ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+
 		}
 	}
 
