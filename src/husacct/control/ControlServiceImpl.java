@@ -52,5 +52,9 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 	public void displayErrorMessage(Exception exception){
 		logger.debug(exception.getMessage());
 	}
+	
+	public String getTranslatedString(String stringIdentifier){
+		return LocaleController.getTranslatedString(stringIdentifier);
+	}
 
 }
