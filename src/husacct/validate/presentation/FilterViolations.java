@@ -1,6 +1,6 @@
 package husacct.validate.presentation;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,7 +55,8 @@ public final class FilterViolations extends JDialog {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		setResizable(false);
-//		setType(java.awt.Window.Type.UTILITY);
+		//JAVA 7 only fix this
+		//setType(java.awt.Window.Type.UTILITY);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -175,23 +176,23 @@ public final class FilterViolations extends JDialog {
 	}
 	
 	public void loadGUIText(){
-		setTitle(ResourceBundles.getValue("TotalViolations"));
-		TabbedPane.addTab(ResourceBundles.getValue("FilterViolations"), filterViolationPanel);
-		addPath.setText(ResourceBundles.getValue("Add"));
-		removePath.setText(ResourceBundles.getValue("Remove"));
-		TabbedPane.addTab(ResourceBundles.getValue("FilterPaths"), pathFilterPanel);
-		save.setText(ResourceBundles.getValue("Save"));
-		cancel.setText(ResourceBundles.getValue("Cancel"));
-		showFilteredValues.setText(ResourceBundles.getValue("ShowSelectedValues"));
-		hideFilteredValues.setText(ResourceBundles.getValue("HideSelectedValues"));
+		setTitle(ValidateTranslator.getValue("TotalViolations"));
+		TabbedPane.addTab(ValidateTranslator.getValue("FilterViolations"), filterViolationPanel);
+		addPath.setText(ValidateTranslator.getValue("Add"));
+		removePath.setText(ValidateTranslator.getValue("Remove"));
+		TabbedPane.addTab(ValidateTranslator.getValue("FilterPaths"), pathFilterPanel);
+		save.setText(ValidateTranslator.getValue("Save"));
+		cancel.setText(ValidateTranslator.getValue("Cancel"));
+		showFilteredValues.setText(ValidateTranslator.getValue("ShowSelectedValues"));
+		hideFilteredValues.setText(ValidateTranslator.getValue("HideSelectedValues"));
 		
 		loadModels();
 	}
 	
 	public void loadModels(){
-		String[] columnNamesRuletype = {"", ResourceBundles.getValue("Ruletypes")};
-		String[] columnNamesViolationtype = {"", ResourceBundles.getValue("Violationtypes")};
-		String[] columnNamesPath = {" ", ResourceBundles.getValue("Path")};
+		String[] columnNamesRuletype = {"", ValidateTranslator.getValue("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ValidateTranslator.getValue("Violationtypes")};
+		String[] columnNamesPath = {" ", ValidateTranslator.getValue("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 

@@ -19,17 +19,18 @@ import org.apache.log4j.Logger;
 
 public class SeverityPerTypeRepository {
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
+	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
 	
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
 	private final RuleTypesFactory ruletypefactory;
-	private final ConfigurationServiceImpl configuration;
-	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
+	private final ConfigurationServiceImpl configuration;	
 	private AbstractViolationType violationtypefactory;
 
 	public SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
 		this.ruletypefactory = ruletypefactory;
+	
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
@@ -43,7 +44,9 @@ public class SeverityPerTypeRepository {
 
 	private HashMap<String, HashMap<String, Severity>> initializeDefaultSeverityForLanguage(String programmingLanguage){
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+		
 		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
+	
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
 			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
@@ -133,6 +136,7 @@ public class SeverityPerTypeRepository {
 			}
 			local.put(entry.getKey(), entry.getValue());
 		}
+		
 		severitiesPerTypePerProgrammingLanguage.remove(language);
 		severitiesPerTypePerProgrammingLanguage.put(language, local);
 	}

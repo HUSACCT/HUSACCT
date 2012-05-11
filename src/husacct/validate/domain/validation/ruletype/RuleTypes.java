@@ -14,7 +14,7 @@ public enum RuleTypes {
 	SKIP_CALL("SkipCall", DefaultSeverities.LOW),
 	
 	NAMING_CONVENTION("NamingConvention", DefaultSeverities.MEDIUM),
-	NAMING_CONVENTION_EXCEPTION("NamingConventionExample", DefaultSeverities.MEDIUM),
+	NAMING_CONVENTION_EXCEPTION("NamingConventionException", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION("VisibilityConvention", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION_EXCEPTION("VisibilityConventionException", DefaultSeverities.MEDIUM),
 	LOOPS_IN_MODULE("LoopsInModule", DefaultSeverities.HIGH),

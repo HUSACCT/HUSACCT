@@ -1,6 +1,6 @@
 package husacct.validate.presentation;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
@@ -192,15 +192,15 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	
 	//User Functions
 	public void loadGUIText(){
-		setTitle(ResourceBundles.getValue("Configuration"));
-		add.setText(ResourceBundles.getValue("Add"));
-		remove.setText(ResourceBundles.getValue("Remove"));
-		up.setText(ResourceBundles.getValue("Up"));
-		down.setText(ResourceBundles.getValue("Down"));
-		applySeverity.setText(ResourceBundles.getValue("Apply"));
-		restore.setText(ResourceBundles.getValue("RestoreToDefault"));
-		jTabbedPane1.addTab(ResourceBundles.getValue("SeverityConfiguration"), severityNamePanel);
-		cancel.setText(ResourceBundles.getValue("Cancel"));
+		setTitle(ValidateTranslator.getValue("Configuration"));
+		add.setText(ValidateTranslator.getValue("Add"));
+		remove.setText(ValidateTranslator.getValue("Remove"));
+		up.setText(ValidateTranslator.getValue("Up"));
+		down.setText(ValidateTranslator.getValue("Down"));
+		applySeverity.setText(ValidateTranslator.getValue("Apply"));
+		restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
+		jTabbedPane1.addTab(ValidateTranslator.getValue("SeverityConfiguration"), severityNamePanel);
+		cancel.setText(ValidateTranslator.getValue("Cancel"));
 
 		loadModels();
 		removeLanguageTabs();
@@ -235,7 +235,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			jTabbedPane1.addTab(language, lcp);
 		}
 		if (taskServiceImpl.getAvailableLanguages().length == 0) {
-			jTabbedPane1.addTab(ResourceBundles.getValue("NoProgrammingLanguageAvailible"), new JPanel());
+			jTabbedPane1.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 
