@@ -55,8 +55,7 @@ public final class FilterViolations extends JDialog {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		setResizable(false);
-		//JAVA 7 only fix this
-		//setType(java.awt.Window.Type.UTILITY);
+		setModal(true);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
