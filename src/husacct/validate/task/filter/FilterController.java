@@ -5,6 +5,7 @@ import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.task.TaskServiceImpl;
