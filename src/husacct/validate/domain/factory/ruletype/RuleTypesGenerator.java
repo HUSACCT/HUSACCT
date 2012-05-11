@@ -7,30 +7,22 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeyCla
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
 
 class RuleTypesGenerator {		
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
-	
+
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
-	private static final String ruleTypeAbstractClass = "husacct.validate.domain.validation.ruletype.RuleType";
-	
+	private static final String[] ruleTypeLocations = new String[]{"husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency"};
+
 	RuleTypesGenerator(){
 		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
@@ -38,6 +30,7 @@ class RuleTypesGenerator {
 	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		HashMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
+		
 		for (Enum<RuleTypes> ruleKey : rules) {		
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
 			if (ruleCategory != null) {
@@ -52,8 +45,8 @@ class RuleTypesGenerator {
 	@SuppressWarnings("unchecked")
 	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
-		List<Class<?>> ruleClasses = getRuleClasses();		
-		for (Class<?> ruleClass : ruleClasses) {
+		List<Class<?>> ruleClasses = getRuleClasses(EnumSet.allOf(RuleTypes.class));
+		for (Class<?> ruleClass : ruleClasses) {			
 			String ruleKey = "";
 			try{
 				if (isInstanceOfRule(ruleClass)) {
@@ -66,7 +59,6 @@ class RuleTypesGenerator {
 				logger.warn(String.format("No default severity found for: %s, thus this ruleType will be ignored", ruleKey), e);
 			}
 		}
-
 		return keyClasses;
 	}
 
@@ -80,81 +72,28 @@ class RuleTypesGenerator {
 		}
 	}
 
-	private List<Class<?>> getRuleClasses() {
-		return getRuleClasses(ruleTypeAbstractClass);
+	private List<Class<?>> getRuleClasses(EnumSet<RuleTypes> ruleTypes) {
+		return getRuleClasses(ruleTypeLocations, ruleTypes);
 	}
 
-	private List<Class<?>> getRuleClasses(String packageName) {
-		try {
-			List<String> directories = getDirectories(packageName);
-			TreeSet<String> classes = new TreeSet<String>();
-			for (String directory : directories) {
-				classes.addAll(findClasses(directory, packageName.replace(".RuleType", "")));
-			}
-			List<Class<?>> classList = loadRuleClasses(classes);
-			return classList;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return Collections.emptyList();
-	}
-
-	private List<String> getDirectories(String packageName) throws IOException {
-		List<String> directories = new ArrayList<String>();
-
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		assert classLoader != null;
-
-		final String path = packageName.replace('.', '/');
-		Enumeration<URL> resources;
-		resources = classLoader.getResources(path + ".class");
-		if (resources != null) {
-			while (resources.hasMoreElements()) {
-				URL resource = resources.nextElement();
-				directories.add(resource.getFile().replace("/RuleType.class", ""));
-			}
-		}
-		return directories;
-	}
-
-	private TreeSet<String> findClasses(String directory, String packageName) throws IOException {
-		TreeSet<String> classes = new TreeSet<String>();
-		if (directory.startsWith("file:") && directory.contains("!")) {
-			String[] split = directory.split("!");
-			URL jar = new URL(split[0]);
-			ZipInputStream zip = new ZipInputStream(jar.openStream());
-			ZipEntry entry = null;
-			while ((entry = zip.getNextEntry()) != null) {
-				if (entry.getName().startsWith("husacct/validate/domain/validation/ruletype") && entry.getName().endsWith(".class")) {
-					final String className = entry.getName().replaceAll("[$].*", "").replaceAll("[.]class", "").replace('/', '.');
-					classes.add(className);
-				}
-			}
-		}
-		File dir = new File(URLDecoder.decode(directory, "UTF-8"));
-		if (!dir.exists()) {
-			return classes;
-		}
-		File[] files = dir.listFiles();
-		for (File file : files) {
-			if (file.isDirectory()) {
-				assert !file.getName().contains(".");
-				classes.addAll(findClasses(file.getAbsolutePath(), packageName + "." + file.getName()));
-			} else if (file.getName().endsWith(".class")) {
-				classes.add(packageName + '.' + file.getName().substring(0, file.getName().length() - 6));
-			}
-		}
-		return classes;
-	}
-
-	private List<Class<?>> loadRuleClasses(TreeSet<String> classes) throws ClassNotFoundException {
+	private List<Class<?>> getRuleClasses(String[] packageNames, EnumSet<RuleTypes> ruleTypes) {
 		List<Class<?>> classList = new ArrayList<Class<?>>();
-		for (String clazz : classes) {
-			Class<?> ruleClass = Class.forName(clazz);
-			if (!Modifier.isAbstract(ruleClass.getModifiers()) && classHasRuleConstructor(ruleClass)) {
-				classList.add(Class.forName(clazz));
+
+		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+		for(String packageName : packageNames){
+			for(Enum<RuleTypes> ruleType : ruleTypes){
+				String classPath = "";
+				try {	
+					classPath = packageName + "." + ruleType.toString() + "Rule";					
+					Class<?> myClass = myClassLoader.loadClass(classPath);
+					
+					if (!Modifier.isAbstract(myClass.getModifiers()) && classHasRuleConstructor(myClass)) {
+						classList.add(myClass);
+					}
+				} catch (ClassNotFoundException e) {
+					//System.out.println(classPath);
+					//logger.debug(String.format("Classpath: %s not found" , classPath));
+				} 
 			}
 		}
 		return classList;
@@ -176,7 +115,7 @@ class RuleTypesGenerator {
 	}
 
 	private boolean isInstanceOfRule(Class<?> ruleClass) {
-		return ruleClass.getSimpleName().matches("^(.+Rule*)$") && !ruleClass.isAnonymousClass() && !ruleClass.isEnum() && ruleClass.getSuperclass().getName().equals(ruleTypeAbstractClass);
+		return ruleClass.getSimpleName().matches("^(.+Rule*)$") && !ruleClass.isAnonymousClass() && !ruleClass.isEnum() && ruleClass.getSuperclass().getName().equals("husacct.validate.domain.validation.ruletype.RuleType");
 	}
 
 	private String getCategoryKey(Class<?> ruleClass) {
