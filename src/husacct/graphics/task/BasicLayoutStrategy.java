@@ -18,9 +18,9 @@ public class BasicLayoutStrategy {
 
 	private Drawing drawing = null;
 
-	public BasicLayoutStrategy(Drawing drawing) {
+	public BasicLayoutStrategy(Drawing givenDrawing) {
 
-		this.drawing = drawing;
+		drawing = givenDrawing;
 	}
 
 	// TODO: Update doLayout() to take screen resolution into account and
@@ -72,14 +72,11 @@ public class BasicLayoutStrategy {
 	// code. It's ugly and unneccessary I think.
 	private boolean isConnector(Figure figure) {
 		if (figure instanceof BaseFigure) {
-
 			if (figure instanceof RelationFigure)
 				return true;
-
 		} else if (figure instanceof ConnectionFigure) {
 			return true;
 		}
-
 		return false;
 	}
 }

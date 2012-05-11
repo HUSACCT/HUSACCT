@@ -14,7 +14,6 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.jdom2.Element;
 
-
 public class ImportViolations {
 	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
 		List<Violation> violations = new ArrayList<Violation>();

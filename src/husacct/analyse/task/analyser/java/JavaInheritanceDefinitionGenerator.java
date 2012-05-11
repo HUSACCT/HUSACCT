@@ -7,9 +7,8 @@ import org.antlr.runtime.tree.Tree;
 public class JavaInheritanceDefinitionGenerator extends JavaGenerator{
 
 	private String from;
-	private String to;
+	private String to = "";
 	private int lineNumber;
-	private String type;
 
 	public void generateModelObject(CommonTree tree, String belongsToClass) {
 		from = belongsToClass;
@@ -18,24 +17,19 @@ public class JavaInheritanceDefinitionGenerator extends JavaGenerator{
 	}
 
 	private void createDomainObject() {
-		modelService.createInheritanceDefinition(from, to, lineNumber, type);
+		to = to.substring(0, to.length() -1); //delete last point
+		modelService.createInheritanceDefinition(from, to, lineNumber);
 	}
 
 	private void createInheritanceDefinitionDetails(Tree tree) {
 		if (tree != null) {
 			for (int i = 0; i < tree.getChildCount(); i++) {
 				if(tree.getType() == JavaParser.EXTENDS_CLAUSE){
-					type = "extend";
-					lineNumber = tree.getLine();
-				}
-				else if(tree.getType() == JavaParser.IMPLEMENTS_CLAUSE){
-					type = "implement";
 					lineNumber = tree.getLine();
 				}
 				if(tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
-					to = tree.getChild(i).getText();
+					to += tree.getChild(i).getText() + ".";
 				}
-
 				createInheritanceDefinitionDetails(tree.getChild(i));
 			}
 		}

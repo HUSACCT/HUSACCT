@@ -16,8 +16,7 @@ public class Layer extends Module {
 	
 	public Layer(String name, String description, int level)
 	{
-		super.name = name;
-		super.description = description;
+		super(name, description);
 		super.type = "Layer";
 		this.hierarchicalLevel = level;
 	}
@@ -38,7 +37,7 @@ public class Layer extends Module {
 	        return false;
 	    if (obj instanceof Layer){
 	    	Layer l = (Layer)obj;
-	    	if (l.hierarchicalLevel != this.hierarchicalLevel){
+	    	if (l.id != this.id){
 	    		return false;
 	    	}
 	    	return true;

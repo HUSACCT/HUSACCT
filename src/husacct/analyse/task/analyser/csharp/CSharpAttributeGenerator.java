@@ -3,7 +3,7 @@ package husacct.analyse.task.analyser.csharp;
 import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 
-public class CSharpAttributeGenerator {
+public class CSharpAttributeGenerator extends CSharpGenerator{
 	List<CommonTree> attributeTrees;
 	String uniqueClassName;
 	public CSharpAttributeGenerator(List<CommonTree> attributeTrees, String uniqueClassName){
@@ -13,7 +13,8 @@ public class CSharpAttributeGenerator {
 	}
 
 	public void scan() {
-		// TODO Auto-generated method stub
-		System.out.println(attributeTrees);
+		//System.out.println(attributeTrees);
+		//modelService.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName)
+		//modelService.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, lineNumber)
 	}
 }

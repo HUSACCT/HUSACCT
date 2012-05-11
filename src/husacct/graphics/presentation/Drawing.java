@@ -29,14 +29,12 @@ public class Drawing extends DefaultDrawing {
 		File selectedFile = filemanager.getFile();
 
 		try {
-
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setVisible(true);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
 
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-
 				filemanager.setFile(fileChooser.getSelectedFile());
 				filemanager.createOutputStream();
 				imageoutputformat.write(filemanager.getOutputStream(),this);
@@ -49,7 +47,6 @@ public class Drawing extends DefaultDrawing {
 
 	public BaseFigure[] getShownModules() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
-
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
 			if (figure.isModule()) {
@@ -60,9 +57,7 @@ public class Drawing extends DefaultDrawing {
 	}
 	
 	public RelationFigure[] getShownLines() {
-
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
-
 		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
 			if (figure.isLine()) {
@@ -76,7 +71,6 @@ public class Drawing extends DefaultDrawing {
 	public boolean add(Figure f) {
 		// this triggers at least the minimum sizes
 		f.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
-
 		return super.add(f);
 	}
 	
@@ -112,7 +106,6 @@ public class Drawing extends DefaultDrawing {
 		// 1 relation, small
 		if (1 == figures.length) {
 			figures[0].setLineThickness(1);
-
 		}
 		// 2 relations; both small, or one slightly bigger
 		else if (figures.length == 2) {
@@ -136,7 +129,6 @@ public class Drawing extends DefaultDrawing {
 			int maxAmount = -1;
 			for (RelationFigure figure : figures) {
 				int length = figure.getAmount();
-
 				if (maxAmount == -1 || maxAmount < length) {
 					maxAmount = length;
 				}

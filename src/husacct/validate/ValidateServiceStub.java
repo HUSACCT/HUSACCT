@@ -120,9 +120,4 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 			return new ViolationDTO[] { };
 		}
 	}
-
-	@Override
-	public void reloadGUI() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
 }

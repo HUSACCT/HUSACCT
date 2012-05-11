@@ -10,24 +10,20 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
-	private int currentState;
 	private JMenuItem configureItem;
 	private JMenuItem validateNowItem;
 	private JMenuItem exportViolationReportItem;
 	
 	public ValidateMenu(final MainController mainController){
 		super("Validate");
-		currentState = mainController.getStateController().getState();
 		
 		validateNowItem = new JMenuItem("Validate now");
 		this.add(validateNowItem);
 		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// TODO: Validate now
 				mainController.getViewController().showViolationsGui();
 			}
 		});
@@ -49,59 +45,33 @@ public class ValidateMenu extends JMenu{
 				mainController.getImportExportController().showExportViolationsReportGui();
 			}
 		});
-		
-		validateNowItem.setEnabled(false);
-		configureItem.setEnabled(true);
-		exportViolationReportItem.setEnabled(false);
-		
-		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 
-			@Override
+		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(int state) {
-				currentState = mainController.getStateController().getState();
-				if(currentState == StateController.NONE){
-					validateNowItem.setEnabled(false);
-					exportViolationReportItem.setEnabled(false);
-				}else if(currentState == StateController.EMPTY){
-					validateNowItem.setEnabled(false);
-					exportViolationReportItem.setEnabled(false);
-				}else if(currentState == StateController.DEFINED){
-					validateNowItem.setEnabled(true);
-					exportViolationReportItem.setEnabled(false);
-				}else if(currentState == StateController.MAPPED){
-					validateNowItem.setEnabled(true);
-					exportViolationReportItem.setEnabled(false);
-				}else if(currentState == StateController.VALIDATED){
-					validateNowItem.setEnabled(true);
-					exportViolationReportItem.setEnabled(true);
+				validateNowItem.setEnabled(false);
+				configureItem.setEnabled(false);
+				exportViolationReportItem.setEnabled(false);
+				switch(state){
+					case StateController.VALIDATED: {
+						exportViolationReportItem.setEnabled(true);
+					}
+					case StateController.MAPPED: {
+						validateNowItem.setEnabled(true);
+					}
+					case StateController.ANALYSED:
+					case StateController.DEFINED:
+					case StateController.EMPTY:
+					case StateController.NONE: {
+						configureItem.setEnabled(true);
+					}
 				}
 			}
-			
 		});
 		
-		// TODO: refactor including adapter
-		this.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent arg0) {
-				mainController.getStateController().checkState();
-				
+		this.addMenuListener(new MenuListenerAdapter() {
+			public void menuSelected(MenuEvent e) {
+				mainController.getStateController().checkState();		
 			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
 		});
 	}
-	
-	
 }

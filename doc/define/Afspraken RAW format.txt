@@ -1,0 +1,16 @@
+1. Alle moduleDTOs van rules zijn altijd gevult met alle children van die module, die module is ook weer gevult met zijn children
+2. Skipcall,Backcall, Naming Convention rules hebben alleen een moduleFrom maar geen moduleTo
+3. Als er geen module gegeven wordt, is dit een lege moduleDTO zonder data
+4. Als er rule gedefineerd op een elke klasse dan is logicalpath leeg en is de physicalPaths alleen gevult met de path van de klasse
+	Ook is het type van de module dan "Physical"
+(Voorbeeld "all must extend Class Mysql.java" dan krijgt men een module zonder logicalpath met physicalPath van Mysql.java)
+5. De regex houdt volgende format aan:  "*Mysql*" must contains the word Mysql
+					"Mysql*" must start with Mysql
+					"*Mysql" must ends with Mysql
+(Aan de hand van de physicalPathDTO kan achterhaalt worden op het op packages of klassen slaat.)
+6. ModuleDTO physicalPaths wordt zijn eigen DTO met path en type attributen.
+7. physicalPath van een package houdt bij validate in dat het alleen om de package gaat en niet om de klassen binnen die package.
+(Wil men wel de klassen meenemen dan moet Define alle classen binnen die package ophalen en vullen.)
+8. Huidige zou een skipcall en backcall, moduleFrom alleen een laag mogen zijn.
+   Deze regel is leidend. Alternatief:	[[8. Wanneer men een skipcall of een backcall defineerd op een module. 
+					Geldt de regel alleen voor die module en wordt er voor het principe van de regel naar de parent layer gekeken.]]

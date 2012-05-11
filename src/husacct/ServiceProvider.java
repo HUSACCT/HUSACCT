@@ -17,9 +17,9 @@ public final class ServiceProvider {
 
 	private IControlService controlService;
 	private IAnalyseService analyseService;
-	private IGraphicsService graphicsService;
 	private IDefineService defineService;
 	private IValidateService validateService;
+	private IGraphicsService graphicsService;
 
 	private ServiceProvider() {
 		try {
@@ -27,13 +27,13 @@ public final class ServiceProvider {
 			
 			this.controlService = new ControlServiceImpl();
 			this.analyseService = new AnalyseServiceImpl();
-			this.graphicsService = new GraphicsServiceImpl();
 			this.defineService = new DefineServiceImpl();
 			this.validateService = new ValidateServiceImpl();
+			this.graphicsService = new GraphicsServiceImpl();
+			
 		} catch (StackOverflowError error) {
 			System.out.println(error);
-			System.out
-					.println("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
+			System.out.println("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
 			System.exit(0);
 		}
 	}
@@ -53,16 +53,16 @@ public final class ServiceProvider {
 		return analyseService;
 	}
 
-	public IGraphicsService getGraphicsService() {
-		return graphicsService;
-	}
-
 	public IDefineService getDefineService() {
 		return defineService;
 	}
 
 	public IValidateService getValidateService() {
 		return validateService;
+	}
+	
+	public IGraphicsService getGraphicsService() {
+		return graphicsService;
 	}
 
 }

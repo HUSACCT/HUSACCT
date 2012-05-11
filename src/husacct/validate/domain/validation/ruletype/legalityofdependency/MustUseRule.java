@@ -10,7 +10,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -28,23 +27,23 @@ public class MustUseRule extends RuleType{
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {	
-		List<Violation> violations = new ArrayList<Violation>();
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {	
+		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
+		this.mappings = CheckConformanceUtil.filter(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		int totalCounter = 0, noDependencyCounter = 0;
+		int counter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
 				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
-				totalCounter++;
+				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
-			if(noDependencyCounter == totalCounter){
-				Message message = new Message(appliedRule);
+			if(noDependencyCounter == counter){
+				Message message = new Message(rootRule);
 
 				LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
@@ -53,8 +52,9 @@ public class MustUseRule extends RuleType{
 				violations.add(violation);
 			}
 		}	
-		if(noDependencyCounter != totalCounter)
+		if(noDependencyCounter != counter){
 			violations.clear();
+		}
 		return violations;
 	}
 }

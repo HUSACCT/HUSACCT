@@ -58,7 +58,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			isPartOfNamespace = namespaceChecking(tree, isPartOfNamespace);
 			isPartOfClass = classCheck(tree, isPartOfClass);
 			isPartOfUsage = usageCheck(tree, isPartOfUsage);
-			isScanning = check(tree, isScanning);
+			isScanning = splitAttributeAndMethods(tree, isScanning);
 		}
 	}
 
@@ -97,31 +97,30 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		}
 	}
 
-	private boolean check(CommonTree tree, boolean isScanning) {
-		int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID};
-
-		for(int type : ListOfTypes){
-			if(tree.getType() == type){
-				isScanning = true;
-			}
-		}
-
-		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
-			isScanning = false;
-			MultipleChecks(tree);
-			variousTrees.clear();
-		}
-
+	private boolean splitAttributeAndMethods(CommonTree tree, boolean isScanning) {
+		boolean thisIsAnAttributeAndNotAUsing = false;
+		//System.out.println(tree);
+		if (tree.getType() != USING) {
+			thisIsAnAttributeAndNotAUsing = true;
+			System.out.println(tree);
+		}	
 		if(isScanning){
 			variousTrees.add(tree);
+			
 		}
-
+				
+		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
+			isScanning = false;
+			MultipleChecks();
+			
+			variousTrees.clear();
+		}
+		
 		return isScanning;
 	}
 
-	private void MultipleChecks(CommonTree tree) {
+	private void MultipleChecks() {
 		checkForMethod();
-		//attributeCheck aanroep hier
 		checkForAttribute();
 	}
 
@@ -140,11 +139,10 @@ class CSharpTreeConvertController extends CSharpGenerator{
 				hasSemicolon = true;
 			}
 			if(hasBrackets == false && hasSemicolon){
-				CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(variousTrees, "className");
+				System.out.println(thistree);
+				CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(variousTrees, tempClassName);
 				attributeGenerator.scan();
 			}
-			//System.out.println(isNewInstance + " " + hasBrackets + " " + hasSemicolon);
-			System.out.println(thistree);
 		}
 		
 		

@@ -34,6 +34,7 @@ public class XmlResource implements IResource{
 			FileOutputStream outputStream = new FileOutputStream(file);
 			XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
 			xout.output(doc, outputStream);
+			outputStream.close();
 		} catch (Exception e){
 			logger.error(e.getMessage());
 			new RuntimeException(e);
