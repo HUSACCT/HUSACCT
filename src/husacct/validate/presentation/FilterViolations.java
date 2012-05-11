@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public final class FilterViolations extends JFrame {
+public final class FilterViolations extends JDialog {
 	private static final long serialVersionUID = -6295611607558238501L;
 
 	private TaskServiceImpl ts;
@@ -55,7 +55,7 @@ public final class FilterViolations extends JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		setResizable(false);
-		setType(java.awt.Window.Type.UTILITY);
+//		setType(java.awt.Window.Type.UTILITY);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -319,12 +319,8 @@ public final class FilterViolations extends JFrame {
 			ruletypeModelFilter.removeRow(0);
 		}
 		ArrayList<String> ruletypes = ts.loadRuletypesForFilter();
-		System.out.println(ruletypes);
 		for(String ruletype : ruletypes){
 			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
-			System.out.println("added");
-			System.out.println(ruletypeModelFilter.getRowCount());
-			System.out.println(ruletypeModelFilter.toString());
 		}
 		ruletypeModelFilter.fireTableDataChanged();
 		ruletypeTable.repaint();

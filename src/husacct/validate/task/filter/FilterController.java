@@ -78,12 +78,11 @@ public class FilterController {
 	public ArrayList<String> loadViolationtypes(){
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations()) {
+		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if(!appliedViolationtypes.contains(ResourceBundles.getValue(violation.getViolationtypeKey()))){
 				appliedViolationtypes.add(ResourceBundles.getValue(violation.getViolationtypeKey()));
 			}
 		}
-		System.out.println(appliedViolationtypes);
 		return appliedViolationtypes;
 	}
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
