@@ -1,24 +1,26 @@
-package husacct.validate.domain.factory.violationtype.java;
+package husacct.validate.domain.factory.violationtype;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.violationtype.csharp.CSharpAccessModifiers;
-import husacct.validate.domain.validation.violationtype.csharp.CSharpDependencyRecognition;
-import husacct.validate.domain.validation.violationtype.java.JavaDependencyRecognition;
+import husacct.validate.domain.validation.violationtype.CSharpViolationTypes;
+import husacct.validate.domain.validation.violationtype.IViolationType;
+import husacct.validate.domain.validation.violationtype.JavaViolationTypes;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
 class CSharpViolationTypeFactory extends AbstractViolationType {
-	private final EnumSet<CSharpDependencyRecognition> defaultDependencies = EnumSet.allOf(CSharpDependencyRecognition.class);		
-	private final EnumSet<CSharpAccessModifiers> defaultAccess = EnumSet.allOf(CSharpAccessModifiers.class);
-	private static final String csharpViolationTypesRootPackagename = "csharp";	
+	private final EnumSet<CSharpViolationTypes> defaultDependencies;
+	private final EnumSet<CSharpViolationTypes> defaultAccess;
 
 	public CSharpViolationTypeFactory(ConfigurationServiceImpl configuration){
 		super(configuration, "C#");
-		this.allViolationKeys = generator.getAllViolationTypes(csharpViolationTypesRootPackagename);
+		this.defaultDependencies = EnumSet.allOf(CSharpViolationTypes.class);
+		this.defaultAccess = EnumSet.of(CSharpViolationTypes.PUBLIC, CSharpViolationTypes.PROTECTED, CSharpViolationTypes.DEFAULT, CSharpViolationTypes.PRIVATE);
+		this.defaultDependencies.removeAll(defaultAccess);		
 	}
 
 	@Override
@@ -30,7 +32,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 			return generateViolationTypes(defaultAccess);
 		}
 		else if(isNamingConvention(ruleTypeKey)){
-			return generateViolationTypes(EnumSet.noneOf(JavaDependencyRecognition.class));
+			return generateViolationTypes(EnumSet.noneOf(JavaViolationTypes.class));
 		}
 		else if(isLoopsInModule(ruleTypeKey)){
 			return generateViolationTypes(defaultDependencies);
@@ -38,6 +40,11 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 		else{
 			return Collections.emptyList();
 		}
+	}
+	
+	@Override
+	List<IViolationType> createViolationTypesMetaData(){
+		return Arrays.asList(EnumSet.allOf(CSharpViolationTypes.class).toArray(new IViolationType[]{}));
 	}
 	
 	@Override

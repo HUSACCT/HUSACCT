@@ -1,23 +1,25 @@
-package husacct.validate.domain.factory.violationtype.java;
+package husacct.validate.domain.factory.violationtype;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.violationtype.java.JavaAccessModifiers;
-import husacct.validate.domain.validation.violationtype.java.JavaDependencyRecognition;
+import husacct.validate.domain.validation.violationtype.IViolationType;
+import husacct.validate.domain.validation.violationtype.JavaViolationTypes;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
 class JavaViolationTypeFactory extends AbstractViolationType {
-	private final EnumSet<JavaDependencyRecognition> defaultDependencies = EnumSet.allOf(JavaDependencyRecognition.class);
-	private final EnumSet<JavaAccessModifiers> defaultAccess = EnumSet.allOf(JavaAccessModifiers.class);	
-	private static final String javaViolationTypesRootPackagename = "java";
+	private final EnumSet<JavaViolationTypes> defaultDependencies;
+	private final EnumSet<JavaViolationTypes> defaultAccess;
 
 	public JavaViolationTypeFactory(ConfigurationServiceImpl configuration){
 		super(configuration, "Java");
-		this.allViolationKeys = generator.getAllViolationTypes(javaViolationTypesRootPackagename);
+		this.defaultDependencies = EnumSet.allOf(JavaViolationTypes.class);
+		this.defaultAccess = EnumSet.of(JavaViolationTypes.PUBLIC, JavaViolationTypes.PROTECTED, JavaViolationTypes.DEFAULT, JavaViolationTypes.PRIVATE);
+		this.defaultDependencies.removeAll(defaultAccess);
 	}
 
 	@Override
@@ -29,7 +31,7 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 			return generateViolationTypes(defaultAccess);
 		}
 		else if(isNamingConvention(ruleTypeKey)){
-			return generateViolationTypes(EnumSet.noneOf(JavaDependencyRecognition.class));
+			return generateViolationTypes(EnumSet.noneOf(JavaViolationTypes.class));
 		}
 		else if(isLoopsInModule(ruleTypeKey)){
 			return generateViolationTypes(defaultDependencies);
@@ -37,6 +39,11 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 		else{
 			return Collections.emptyList();
 		}
+	}
+	
+	@Override
+	List<IViolationType> createViolationTypesMetaData(){
+		return Arrays.asList(EnumSet.allOf(JavaViolationTypes.class).toArray(new IViolationType[]{}));
 	}
 
 	@Override

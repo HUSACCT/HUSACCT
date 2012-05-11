@@ -54,10 +54,7 @@ public class SeverityConfigRepository {
 				}
 				if(severity.getDefaultName().isEmpty() && severity.getUserName().isEmpty()){
 					//severity user name must not be empty
-				}
-			
-				
-			
+				}			
 			}
 			if(!defaultSeverityFound){
 			//throw new DefaultSeverityNotFoundException	

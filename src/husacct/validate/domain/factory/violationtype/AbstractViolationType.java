@@ -1,4 +1,4 @@
-package husacct.validate.domain.factory.violationtype.java;
+package husacct.validate.domain.factory.violationtype;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
 
@@ -8,6 +8,7 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
+import husacct.validate.domain.validation.violationtype.IViolationType;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -25,11 +26,13 @@ public abstract class AbstractViolationType {
 
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
 	public abstract HashMap<String, List<ViolationType>> getAllViolationTypes();
+	abstract List<IViolationType> createViolationTypesMetaData();
 
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName){
 		this.configuration = configuration;
 		this.languageName = languageName;
 		this.generator = new ViolationtypeGenerator();		
+		this.allViolationKeys = generator.getAllViolationTypes(createViolationTypesMetaData());
 	}
 
 	protected List<ViolationType> generateViolationTypes(EnumSet<?> enums){
