@@ -10,6 +10,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -132,5 +133,15 @@ public class ConfigurationServiceImpl {
 
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
 		return violationHistoryRepository.getViolationHistoryByDate(date);
+	}
+
+	public List<ViolationHistory> getViolationHistories() {
+		return violationHistoryRepository.getViolationHistory();
+	}
+
+	public void attachViolationHistoryRepositoryObserver(
+			ViolationHistoryRepositoryObserver observer) {
+		violationHistoryRepository.attachObserver(observer);
+		
 	}
 }

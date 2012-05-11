@@ -3,6 +3,7 @@ package husacct.validate;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.report.UnknownStorageTypeException;
 
 import java.io.IOException;
@@ -33,4 +34,5 @@ public interface IValidateService
 	public List<Violation> getViolationsByDate(Calendar date);
 	public Calendar[] getViolationHistoryDates();
 	public void saveInHistory(String description);
+	public void exportViolationHistoryReport(String name, String fileType, String path, ViolationHistory violationHistory);
 }

@@ -1,6 +1,7 @@
 package husacct.validate.domain.configuration;
 
 import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,7 +9,12 @@ import java.util.List;
 
 public class ViolationHistoryRepository {	
 	private List<ViolationHistory> violationHistories;
-
+	private List<ViolationHistoryRepositoryObserver> observers = new ArrayList<ViolationHistoryRepositoryObserver>();
+	
+	public void attachObserver(ViolationHistoryRepositoryObserver observer) {
+		observers.add(observer);
+	}
+	
 	public ViolationHistoryRepository() {
 		this.violationHistories = new ArrayList<ViolationHistory>();
 	}
@@ -19,6 +25,9 @@ public class ViolationHistoryRepository {
 
 	public void addViolationHistory(ViolationHistory violationHistory){
 		this.violationHistories.add(violationHistory);
+		for(ViolationHistoryRepositoryObserver observer : observers) {
+			observer.updateViolationHistories();
+		}
 	}
 
 	public void setViolationHistory(List<ViolationHistory> violationhistories){

@@ -80,7 +80,8 @@ public class PDFReportWriter extends ReportWriter {
 		document.add(new Paragraph(title));
 
 
-		document.add(new Paragraph("Total violations: " + report.getViolations().size()));
+		document.add(new Paragraph("Total violations: " + report.getViolations().getValue().size()));
+		document.add(new Paragraph("Violations generated on: " + report.getFormattedDate()));
 		document.add(new Paragraph(" "));
 		List<ViolationsPerSeverity> violationsPerSeverity = report.getViolationsPerSeverity();
 		if(violationsPerSeverity.isEmpty()) {
@@ -112,7 +113,7 @@ public class PDFReportWriter extends ReportWriter {
 			addCellToTable(pdfTable, columnHeader, BaseColor.GRAY, true);
 		}
 
-		for(Violation violation : report.getViolations()) {
+		for(Violation violation : report.getViolations().getValue()) {
 			//Source
 			if(violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
 				addCellToTable(pdfTable,violation.getClassPathFrom(), BaseColor.WHITE, false);

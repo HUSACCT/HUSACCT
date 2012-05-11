@@ -1,18 +1,28 @@
 package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public final class FilterViolations extends JDialog {
+public final class FilterViolations extends JDialog  {
 	private static final long serialVersionUID = -6295611607558238501L;
 
 	private TaskServiceImpl ts;
-	private BrowseViolations bv;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane TabbedPane;
 	private JButton addPath, removePath, save, cancel;
@@ -21,14 +31,15 @@ public final class FilterViolations extends JDialog {
 	private JRadioButton hideFilteredValues, showFilteredValues;
 	private JScrollPane pathFilterScrollPane, ruletypepanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
+	private FilterViolationsObserver vilterViolationsObserver;
 
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
 
-	public FilterViolations(TaskServiceImpl ts, BrowseViolations bv) {
+	public FilterViolations(TaskServiceImpl ts, FilterViolationsObserver filterViolationsObserver) {
+		this.vilterViolationsObserver = filterViolationsObserver;
 		this.ts = ts;
-		this.bv = bv;
 		initComponents();
 		loadGUIText();
 	}
@@ -259,9 +270,10 @@ public final class FilterViolations extends JDialog {
 		pathsfilter = getPathFilter();
 		ts.setFilterValues(ruletypesfilter, violationtypesfilter,
 				pathsfilter, hideFilteredValues.isSelected());
-		bv.loadAfterViolationsChanged();
+		vilterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
+	
 
 	private void addPathActionPerformed() {
 		pathFilterModel.addRow(new Object[]{true, ""});
@@ -337,4 +349,5 @@ public final class FilterViolations extends JDialog {
 		}
 		violationtypeTable.updateUI();
 	}
+	
 }

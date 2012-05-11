@@ -4,6 +4,7 @@ import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.Cursor;
@@ -24,7 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-public final class BrowseViolations extends JInternalFrame {
+public final class BrowseViolations extends JInternalFrame implements FilterViolationsObserver {
 
 	private static final long serialVersionUID = -7189769674996804424L;
 
@@ -79,14 +80,14 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.getTableHeader().setReorderingAllowed(false);
 		violationTable.setRowHeight(35);
 		violationPanel.setViewportView(violationTable);
-		
+
 		shownViolationsNumber = new JLabel();
 		shownViolations = new JLabel();
 		totalViolationNumber = new JLabel();
 		totalViolation = new JLabel();
 		informationPanel = new JPanel();
 		informationPanel.setLayout(new GridLayout(0, 2,0,1));
-		
+
 		shownViolationsNumber.setText("0");
 
 		dependencyLevel.add(allDependencies);
@@ -162,101 +163,104 @@ public final class BrowseViolations extends JInternalFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(null);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Violation details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
+
 		buttonSaveInHistory = new JButton("Save in History");
 		buttonSaveInHistory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ts.saveInHistory(areaDescription.getText());
+				String input = JOptionPane.showInputDialog(ValidateTranslator.getValue("SaveInHistoryDialog"));
+				if(input != null || input.equals("")) {
+					ts.saveInHistory(input);
+				}
 			}
 		});
-		
+
 		JScrollPane scrollPane_1 = new JScrollPane();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
+				layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(filterPanel, GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
-				.addComponent(displayPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
-				.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 579, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addContainerGap()
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(filterPanel, GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+						.addComponent(displayPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
+						.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
 						.addGroup(layout.createSequentialGroup()
-							.addComponent(buttonSaveInHistory)
-							.addGap(43))
-						.addGroup(layout.createSequentialGroup()
-							.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-							.addContainerGap())))
-		);
+								.addContainerGap()
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 579, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(buttonSaveInHistory)
+												.addGap(43))
+												.addGroup(layout.createSequentialGroup()
+														.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+														.addContainerGap())))
+				);
 		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
+				layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(displayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(layout.createSequentialGroup()
-							.addComponent(buttonSaveInHistory)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(displayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(violationPanel, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(buttonSaveInHistory)
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+												.addComponent(panel, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
+												.addContainerGap())
+				);
+
 		areaDescription = new JTextArea();
 		scrollPane_1.setViewportView(areaDescription);
-		
+
 		JLabel lblLineNumber = new JLabel("Line number");
-		
+
 		JLabel lblLogicalModule = new JLabel("Logical Module");
-		
+
 		lineNumberValueLabel = new JLabel(" ");
-		
+
 		logicalModulesValueLabel = new JLabel(" ");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
+				gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblLineNumber)
-						.addComponent(lblLogicalModule))
-					.addGap(35)
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(logicalModulesValueLabel)
-						.addComponent(lineNumberValueLabel))
-					.addContainerGap(590, Short.MAX_VALUE))
-		);
+						.addContainerGap()
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblLineNumber)
+								.addComponent(lblLogicalModule))
+								.addGap(35)
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+										.addComponent(logicalModulesValueLabel)
+										.addComponent(lineNumberValueLabel))
+										.addContainerGap(590, Short.MAX_VALUE))
+				);
 		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
+				gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblLineNumber)
-						.addComponent(lineNumberValueLabel))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblLogicalModule)
-						.addComponent(logicalModulesValueLabel))
-					.addContainerGap(31, Short.MAX_VALUE))
-		);
+						.addContainerGap()
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblLineNumber)
+								.addComponent(lineNumberValueLabel))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblLogicalModule)
+										.addComponent(logicalModulesValueLabel))
+										.addContainerGap(31, Short.MAX_VALUE))
+				);
 		panel.setLayout(gl_panel);
 
-		
+
 		scrollPane.setViewportView(informationPanel);
 
 		getContentPane().setLayout(layout);
@@ -264,8 +268,8 @@ public final class BrowseViolations extends JInternalFrame {
 		setClosable(true);
 		setIconifiable(true);
 		setMaximizable(true);
-		
-		
+
+
 		violationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -273,21 +277,23 @@ public final class BrowseViolations extends JInternalFrame {
 				if (e.getValueIsAdjusting()) {
 					return;
 				}
-				
-				if(violationTable.getSelectedRow() > -1){
-					Violation v = ts.getAllViolations().getValue().get(violationTable.getSelectedRow());
 
-					lineNumberValueLabel.setText("" + v.getLinenumber());
-					logicalModulesValueLabel.setText(v.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+				if(violationTable.getSelectedRow() > -1){
+					int row = violationTable.convertRowIndexToModel(violationTable.getSelectedRow());
+					Violation violation = ts.applyFilterViolations(applyFilter.isSelected()).get(row);
+
+					lineNumberValueLabel.setText("" + violation.getLinenumber());
+					logicalModulesValueLabel.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 				} else{
 					lineNumberValueLabel.setText("");
 					logicalModulesValueLabel.setText("");
 				}
 			}
 		});
-		
+
+
 	}
-	
+
 	public void loadGUIText(){
 		buttonSaveInHistory.setText(ValidateTranslator.getValue("SaveInHistory"));
 		setTitle(ValidateTranslator.getValue("BrowseViolations"));
@@ -306,20 +312,20 @@ public final class BrowseViolations extends JInternalFrame {
 		loadModels();
 		loadAfterViolationsChanged();
 	}
-	
+
 	public void loadAfterViolationsChanged(){
 		setViolations();
 		loadInformationPanel();
 	}
-	
+
 	private void loadModels(){
 		String[] columnNames = {
-			ValidateTranslator.getValue("Source"),
-			ValidateTranslator.getValue("Rule"),
-			ValidateTranslator.getValue("DependencyKind"),
-			ValidateTranslator.getValue("Target"),
-			ValidateTranslator.getValue("Severity")};
-		
+				ValidateTranslator.getValue("Source"),
+				ValidateTranslator.getValue("Rule"),
+				ValidateTranslator.getValue("DependencyKind"),
+				ValidateTranslator.getValue("Target"),
+				ValidateTranslator.getValue("Severity")};
+
 		violationModel = new DefaultTableModel(columnNames, 0) {
 
 			private static final long serialVersionUID = -6892927200143239311L;
@@ -344,7 +350,7 @@ public final class BrowseViolations extends JInternalFrame {
 		violationTable.getRowSorter().toggleSortOrder(4);
 		violationTable.getRowSorter().toggleSortOrder(4);
 	}
-	
+
 	private void setViolations() {
 		while (violationModel.getRowCount() > 0) {
 			violationModel.removeRow(0);
@@ -356,22 +362,22 @@ public final class BrowseViolations extends JInternalFrame {
 			violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		}
 
-//		setColumnWidth(3, 50);
+		//		setColumnWidth(3, 50);
 	}
 
 	private void loadInformationPanel() {
 		informationPanel.removeAll();
-		
+
 		totalViolation.setText(ValidateTranslator.getValue("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
 
-		
+
 		totalViolationNumber.setText("" + ts.getAllViolations().getValue().size());
 		informationPanel.add(totalViolationNumber);
-		
+
 		shownViolations.setText(ValidateTranslator.getValue("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
-		
+
 		shownViolationsNumber.setText("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
 
@@ -379,7 +385,12 @@ public final class BrowseViolations extends JInternalFrame {
 			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
 			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
 		}
-		
+
 		informationPanel.updateUI();
+	}
+
+	@Override
+	public void updateViolationsTable() {
+		loadAfterViolationsChanged();
 	}
 }

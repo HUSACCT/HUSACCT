@@ -27,7 +27,7 @@ public class ExportReportFactory {
 
 	public void exportReport(String fileType, SimpleEntry<Calendar, List<Violation>> violations, String name, String path, List<Severity> severities) {
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-		Report report = new Report(applicationDetails.name, applicationDetails.version, violations.getValue(), path, severities);
+		Report report = new Report(applicationDetails.name, applicationDetails.version, violations, path, severities);
 
 		try{
 			if(fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {

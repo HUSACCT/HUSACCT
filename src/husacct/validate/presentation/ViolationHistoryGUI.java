@@ -5,11 +5,12 @@ import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.presentation.tableModels.CalendarListModel;
+import husacct.validate.presentation.tableModels.ViolationHistoryListModel;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -35,7 +36,7 @@ public class ViolationHistoryGUI extends JInternalFrame {
 	private JList listDates;
 	private DefaultTableModel violationModel;
 	private final TaskServiceImpl taskServiceImpl;
-	private CalendarListModel calendarListModel;
+	private ViolationHistoryListModel calendarListModel;
 	private JTextArea textAreaDescription;
 	private ViolationHistory selectedViolationHistory;
 
@@ -49,7 +50,7 @@ public class ViolationHistoryGUI extends JInternalFrame {
 	private void updateList() {
 		Calendar[] dates = ServiceProvider.getInstance().getValidateService().getViolationHistoryDates();
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
-		calendarListModel = new CalendarListModel(dates);
+		calendarListModel = new ViolationHistoryListModel(dates, taskServiceImpl);
 		listDates.setModel(calendarListModel);
 	}
 

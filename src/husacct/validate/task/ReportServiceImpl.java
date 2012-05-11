@@ -1,8 +1,14 @@
 package husacct.validate.task;
 
 import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.extensiontypes.ExtensionTypes;
 import husacct.validate.task.report.ExportReportFactory;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Calendar;
+import java.util.List;
 
 public class ReportServiceImpl{
 	private final ConfigurationServiceImpl configuration;
@@ -19,5 +25,11 @@ public class ReportServiceImpl{
 
 	public void createReport(String fileType, String name, String path) {
 		reportFactory.exportReport(fileType, configuration.getAllViolations(), name, path, configuration.getAllSeverities());
+	}
+
+	public void createReport(String fileType, String name, String path,
+			ViolationHistory violationHistory) {
+		reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), name, path, violationHistory.getSeverities());
+		
 	}
 }

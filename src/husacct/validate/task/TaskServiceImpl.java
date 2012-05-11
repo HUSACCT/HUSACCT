@@ -11,6 +11,7 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
+import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
@@ -173,5 +174,11 @@ public class TaskServiceImpl{
 
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
 		return configuration.getViolationHistoryByDate(date);
+	}
+	public List<ViolationHistory> getViolationHistories() {
+		return configuration.getViolationHistories();
+	}
+	public void attachViolationHistoryObserver(ViolationHistoryRepositoryObserver observer) {
+		configuration.attachViolationHistoryRepositoryObserver(observer);
 	}
 }
