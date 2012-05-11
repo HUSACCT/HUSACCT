@@ -64,7 +64,7 @@ public class MainGui extends JFrame{
 
 	private void setupFrame(){
 		setTitle();
-		Image icon = Toolkit.getDefaultToolkit().getImage("img/husacct.png");
+		Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("husacct/common/resources/husacct.png"));
 		setIconImage(icon);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setBounds(100, 100, 783, 535);
