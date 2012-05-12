@@ -31,7 +31,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	private JLabel parentModuleNameLabel;
 	private JTextField moduleNameField;
 	private JTextField moduleDescriptionField;
-	private JTextField hierarchicalLevelField;
+//	private JTextField hierarchicalLevelField;
 	
 	private JComboBox moduleTypeComboBox;
 	
@@ -66,7 +66,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.addModuleValues();
 		this.addModuleDescriptionTextArea();
 		this.addModuleTypeComboBox();
-		this.addHierarchicalLevelValues();
+//		this.addHierarchicalLevelValues();
 		this.addButtons();
 		this.setVisibles();
 	}
@@ -111,14 +111,14 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.innerPanel.add(this.moduleTypeComboBox);
 	}
 	
-	private void addHierarchicalLevelValues() {
-		JLabel hierarchicalLevelLabel = new JLabel("Hierarchical Level");
-		this.innerPanel.add(hierarchicalLevelLabel);
-		
-		this.hierarchicalLevelField = new JTextField();
-		this.hierarchicalLevelField.addKeyListener(this);
-		this.innerPanel.add(this.hierarchicalLevelField);
-	}
+//	private void addHierarchicalLevelValues() {
+//		JLabel hierarchicalLevelLabel = new JLabel("Hierarchical Level");
+//		this.innerPanel.add(hierarchicalLevelLabel);
+//		
+//		this.hierarchicalLevelField = new JTextField();
+//		this.hierarchicalLevelField.addKeyListener(this);
+//		this.innerPanel.add(this.hierarchicalLevelField);
+//	}
 	
 	@Override
 	protected void addButtons() {
@@ -133,9 +133,9 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.saveButton.addActionListener(this);
 	}
 	
-	private void setVisibles() {
-		this.hierarchicalLevelField.setVisible(false);
-	}
+//	private void setVisibles() {
+////		this.hierarchicalLevelField.setVisible(false);
+//	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -150,15 +150,15 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	
 	private void moduleTypeComboBoxAction() {
 		this.setVisibles();
-		this.checkSelectedModuleType();
+//		this.checkSelectedModuleType();
 	}
 	
-	private void checkSelectedModuleType() {
+	private void setVisibles() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
 		if(moduleType == "SubSystem") {
 			
 		} else if(moduleType =="Layer") {
-			this.hierarchicalLevelField.setVisible(true);
+//			this.hierarchicalLevelField.setVisible(true);
 		} else if(moduleType =="Component") {
 			
 		} else if(moduleType =="External Library") {
@@ -228,13 +228,13 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	}
 	
 	private void submitLayer() {
-		if(this.checkModuleName() && this.checkModuleHierarchicalLevel()) {
+		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
 			String moduleDescription = this.moduleDescriptionField.getText();
-			int level = Integer.parseInt(this.hierarchicalLevelField.getText());
+//			int level = Integer.parseInt(this.hierarchicalLevelField.getText());
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription, level);
+			definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();
@@ -277,15 +277,15 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		return false;
 	}
 	
-	private boolean checkModuleHierarchicalLevel() {
-		String levelValue = this.hierarchicalLevelField.getText();
-		if(this.inputController.checkHierarchicalLevelInput(levelValue)) {
-			return true;
-		} else {
-			this.throwError(this.inputController.getErrorMessage());
-		}
-		return false;
-	}
+//	private boolean checkModuleHierarchicalLevel() {
+////		String levelValue = this.hierarchicalLevelField.getText();
+//		if(this.inputController.checkHierarchicalLevelInput(levelValue)) {
+//			return true;
+//		} else {
+//			this.throwError(this.inputController.getErrorMessage());
+//		}
+//		return false;
+//	}
 	
 	private void throwError(String errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage, "Wrong input!", JOptionPane.ERROR_MESSAGE);

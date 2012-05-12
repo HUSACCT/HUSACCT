@@ -74,11 +74,11 @@ public class DefinitionController extends Observable implements Observer {
 		return selectedModuleId;
 	}
 	
-	public void addLayer(long selectedModuleId, String layerName, String layerDescription, int hierarchicalLevel){
+	public void addLayer(long selectedModuleId, String layerName, String layerDescription){
 		logger.info("Adding layer " + layerName);
 		try {
 			JPanelStatus.getInstance("Adding Layer").start();
-			Layer newLayer = new Layer(layerName, layerDescription, hierarchicalLevel);
+			Layer newLayer = new Layer(layerName, layerDescription);
 			this.passModuleToService(selectedModuleId, newLayer);
 		} catch (Exception e) {
 			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
