@@ -5,6 +5,7 @@ import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
@@ -87,14 +88,28 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
-		logger.info("Adding module " + moduleName);
+//	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
+//		logger.info("Adding module " + moduleName);
+//		try {
+//			JPanelStatus.getInstance("Adding module").start();
+//			Module newModule = new Module(moduleName, moduleDescription);
+//			this.passModuleToService(selectedModuleId, newModule);
+//		} catch (Exception e) {
+//			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
+//			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+//		} finally {
+//			JPanelStatus.getInstance().stop();
+//		}
+//	}
+	
+	public void addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
+		logger.info("Adding subsystem " + moduleName);
 		try {
-			JPanelStatus.getInstance("Adding module").start();
-			Module newModule = new Module(moduleName, moduleDescription);
+			JPanelStatus.getInstance("Adding subsystem").start();
+			SubSystem newModule = new SubSystem(moduleName, moduleDescription);
 			this.passModuleToService(selectedModuleId, newModule);
 		} catch (Exception e) {
-			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
+			logger.error("addSubSystem(" + moduleName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();

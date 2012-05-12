@@ -103,7 +103,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		JLabel moduleTypeLabel = new JLabel("Module type");
 		this.innerPanel.add(moduleTypeLabel);
 		
-		String[] moduleTypes = {"Module", "Layer", "Component", "External Library"};
+		String[] moduleTypes = {"SubSystem", "Layer", "Component", "External Library"};
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
@@ -155,7 +155,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	
 	private void checkSelectedModuleType() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
-		if(moduleType == "Module") {
+		if(moduleType == "SubSystem") {
 			
 		} else if(moduleType =="Layer") {
 			this.hierarchicalLevelField.setVisible(true);
@@ -203,8 +203,8 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	}
 	
 	private void submitForModuleType(String moduleType) {
-		if(moduleType == "Module") {
-			this.submitModule();
+		if(moduleType == "SubSystem") {
+			this.submitSubSystem();
 		} else if(moduleType == "Layer") {
 			this.submitLayer();
 		} else if(moduleType == "Component") {
@@ -214,13 +214,13 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		}
 	}
 	
-	private void submitModule() {
+	private void submitSubSystem() {
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addModule(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			definitionController.addSubSystem(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
 			//update tree view
 			this.modulePanel.updateModuleTree();
 			this.dispose();

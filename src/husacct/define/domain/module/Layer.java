@@ -7,6 +7,7 @@ public class Layer extends Module {
 	public Layer()
 	{
 		this("", "", -1);
+		
 	}
 
 	public Layer(String name, int level)
