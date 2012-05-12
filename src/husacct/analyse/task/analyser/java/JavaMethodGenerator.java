@@ -185,7 +185,6 @@ class JavaMethodGenerator extends JavaGenerator{
 			//methodSignature = methodSignature + "(" + functionParameterTypes + ")";
 			methodSignature = methodSignature + "(" + parameterString + ")";
 			signature = methodSignature;
-			System.out.println(signature);
 		}
 		
 		if(tree.getChild(i).getType() == JavaParser.THROWS_CLAUSE){ //156
