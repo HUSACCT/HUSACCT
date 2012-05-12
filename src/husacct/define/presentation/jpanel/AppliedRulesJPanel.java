@@ -59,7 +59,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Applied rules for this module"));
+		this.setBorder(BorderFactory.createTitledBorder("Applied Rules"));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
@@ -229,7 +229,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
-		editRuleButton.setEnabled(true);
+//		editRuleButton.setEnabled(true);
 		removeRuleButton.setEnabled(true);
 	}
 

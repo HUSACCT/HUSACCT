@@ -53,7 +53,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 		this.setLayout(softwareUnitsPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Software units which are assigned to this module"));
+		this.setBorder(BorderFactory.createTitledBorder("Software Units Assigned"));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
@@ -107,13 +107,17 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	}
 	
 	private void addSoftwareUnit() {
-		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-		if (moduleId != -1) {
-			JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
-			softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
-			softwareUnitFrame.setVisible(true);
+		if (DefinitionController.getInstance().isAnalysed()){
+			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
+			if (moduleId != -1) {
+				JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
+				softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
+				softwareUnitFrame.setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please analyse an application first! \nYou can do this by filling in the application details", "Not yet analysed!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	private void removeSoftwareUnit(){

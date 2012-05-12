@@ -1,5 +1,6 @@
 package husacct.define.task;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
@@ -262,7 +263,7 @@ public class DefinitionController extends Observable implements Observer {
 	public void updateModule(String moduleName, String moduleDescription) {
 		logger.info("Updating module " + moduleName);
 		try {
-			JPanelStatus.getInstance("Saving layer").start();
+			JPanelStatus.getInstance("Updating module").start();
 			long moduleId = getSelectedModuleId();
 			if (moduleId != -1) {
 				this.moduleService.updateModule(moduleId, moduleName, moduleDescription);
@@ -390,5 +391,8 @@ public class DefinitionController extends Observable implements Observer {
 	public String getSoftwareUnitTypeBySoftwareUnitName(String softwareUnitName){
 		return this.softwareUnitDefinitionDomainService.getSoftwareUnitType(softwareUnitName);
 	}
-
+	
+	public boolean isAnalysed(){
+		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
+	}
 }

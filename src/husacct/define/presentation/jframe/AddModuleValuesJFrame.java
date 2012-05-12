@@ -44,7 +44,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	public void initUI() {
 		this.innerPanel = new JPanel();
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-		this.innerPanel.setLayout(this.getGridLayout(6, 2));
+		this.innerPanel.setLayout(this.getGridLayout(5, 2));
 		this.createInnerPanel();
 		this.add(this.innerPanel);
 		

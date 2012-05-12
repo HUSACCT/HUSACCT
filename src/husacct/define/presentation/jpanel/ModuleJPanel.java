@@ -55,7 +55,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		JPanel innerModulePanel = new JPanel();
 		BorderLayout innerModulePanelLayout = new BorderLayout();
 		innerModulePanel.setLayout(innerModulePanelLayout);
-		innerModulePanel.setBorder(BorderFactory.createTitledBorder("Module hierarchy"));
+		innerModulePanel.setBorder(BorderFactory.createTitledBorder("Module Hierarchy"));
 		innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
@@ -126,7 +126,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		this.checkLayerComponentIsSelected();
 		
 		//FIXME need to get the reselect the node with the currently selectedmoduleid
-///////////////////////////////////////
 		
 		for (int i = 0; i < moduleTree.getRowCount(); i++) {
 			moduleTree.expandRow(i);
@@ -187,7 +186,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
 			moduleId = selectedComponent.getModuleId();
 		}
-//		Logger.getLogger(this.getClass()).debug("moduleId " + moduleId);
 		return moduleId;
 	}
 
