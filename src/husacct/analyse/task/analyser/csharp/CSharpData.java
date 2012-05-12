@@ -1,7 +1,6 @@
 package husacct.analyse.task.analyser.csharp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CSharpData {
 	private String className;

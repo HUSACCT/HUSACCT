@@ -17,7 +17,6 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	private List<CommonTree> variousTrees;
 	private List<CommonTree> attributeTrees;
 	private CommonTree abstractTree;
-	private boolean isScanning = false;
 	private boolean isClassName = false;
 	private boolean isNamespaceName = false;
 	private int indentLevel = 0;
@@ -68,7 +67,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	private boolean attributeCheck(CommonTree tree, boolean isPartOfAttribute) {
 		
 		if(isPartOfAttribute && tree.getType() == SEMICOLON){
-			CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, tempClassName);
+			CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, tempFullNamespaceName + "." + tempClassName);
 			
 			attributeGenerator.scan();
 			attributeTrees.clear();

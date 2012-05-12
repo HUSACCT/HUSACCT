@@ -36,10 +36,7 @@ public class CSharpClassGenerator extends CSharpGenerator{
 		
 		if(hasInheritance && tree.getType() == 4) {
 				hasInheritance = false;
-				cSharpInheritanceData.setInheritanceFrom(cSharpClassData.getUniqueName());
-				cSharpInheritanceData.setInheritanceTo(tree.getText());
-				CSharpInheritanceDefinitionGenerator inheritanceGenerator = new CSharpInheritanceDefinitionGenerator();
-				inheritanceGenerator.addToModelService(cSharpInheritanceData);
+				createInheritanceGenerator(tree);
 		}
 		
 		if(tree.getType() == 89) {
@@ -48,10 +45,7 @@ public class CSharpClassGenerator extends CSharpGenerator{
 		
 		if(hasMore && tree.getType() == 4) {
 			hasMore = false;
-			cSharpInheritanceData.setInheritanceFrom(cSharpClassData.getUniqueName());
-			cSharpInheritanceData.setInheritanceTo(tree.getText());
-			CSharpInheritanceDefinitionGenerator inheritanceGenerator = new CSharpInheritanceDefinitionGenerator();
-			inheritanceGenerator.addToModelService(cSharpInheritanceData);
+			createInheritanceGenerator(tree);
 		}
 		
 		if(counter == amountOfTrees) {
@@ -71,10 +65,16 @@ public class CSharpClassGenerator extends CSharpGenerator{
 		}
 	}
 
+	private void createInheritanceGenerator(CommonTree tree) {
+		cSharpInheritanceData.setInheritanceFrom(cSharpClassData.getUniqueName());
+		cSharpInheritanceData.setInheritanceTo(tree.getText());
+		CSharpInheritanceDefinitionGenerator inheritanceGenerator = new CSharpInheritanceDefinitionGenerator();
+		inheritanceGenerator.addToModelService(cSharpInheritanceData, tree.getLine());
+	}
+
 	private void processToModelService(CommonTree tree) {
 		isClass = false;
 		getRequiredParameters(tree);
-
 		if (!isInterface) {
 			addToModelService();
 		} else {
@@ -84,8 +84,7 @@ public class CSharpClassGenerator extends CSharpGenerator{
 		classDataIndex++;		
 	}
 	
-	public CSharpData retrieveInheritance(CommonTree tree)
-	{
+	public CSharpData retrieveInheritance(CommonTree tree) {
 		CSharpData inheritanceInfo = new CSharpData();
 		inheritanceInfo.setInheritanceTo(tree.getText());
 		inheritanceInfo.setInheritanceFrom(cSharpClassData.getUniqueName());
@@ -93,8 +92,6 @@ public class CSharpClassGenerator extends CSharpGenerator{
 	}
 
 	private void addToModelService() {
-	//	modelService.createInheritanceDefinition(cSharpClassData.getClassName(), to, lineNumber, type)
-		//modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass)
 		if (cSharpClassData.isHasParent()) {
 			modelService.createClass(
 					cSharpClassData.getUniqueName(),

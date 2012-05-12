@@ -17,8 +17,6 @@ public class CSharpAttributeGenerator extends CSharpGenerator{
 	}
 
 	public void scan() {
-		
-		System.out.println(attributeTrees);
 		int childNumber = 0;
 		for(CommonTree attributeChild : attributeTrees){
 			childNumber++;
@@ -33,15 +31,9 @@ public class CSharpAttributeGenerator extends CSharpGenerator{
 			}
 			if(childNumber >= 2 && attributeChild.getType() == IDENTIFIER){
 				declareType = attributeChild.getText();
-			}
-			
-			//System.out.println(attributeChild.getText() + " " + attributeChild.getType());
-			 
-			
-			
+			}			
 		}
-		
-		modelService.createAttribute(classScope, accesControlQualifier, this.uniqueClassName, declareType, attributeName, (this.uniqueClassName + attributeName));
+		modelService.createAttribute(classScope, accesControlQualifier, this.uniqueClassName, declareType, attributeName, (this.uniqueClassName + attributeName),attributeTrees.get(0).getLine());
 		
 	}
 }

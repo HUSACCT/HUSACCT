@@ -11,8 +11,9 @@ public class CSharpImportGenerator extends CSharpGenerator{
 	public CSharpImportGenerator(List<CommonTree> usageTrees){
 		String mergedUsages = mergeTree(usageTrees);
 		seperateUsages(mergedUsages);
-		
-		createFamixObject(seperatedAndMergedUsages);
+		for(String usage : seperatedAndMergedUsages){
+			createFamixObject(usage,usageTrees.get(seperatedAndMergedUsages.indexOf(usage)).getLine());
+		}
 	}
 
 	private String mergeTree(List<CommonTree> usageTrees) {
@@ -31,9 +32,9 @@ public class CSharpImportGenerator extends CSharpGenerator{
 		}
 	}
 	
-	private void createFamixObject(List<String> seperatedAndMergedUsages) {
-		for(String usage : seperatedAndMergedUsages){
-			modelService.createImport("", usage, 0, usage, true);
+	private void createFamixObject(String usage, int lineNumber) {
+		
+			modelService.createImport("", usage, lineNumber, usage, true);
 		}
-	}
+	
 }
