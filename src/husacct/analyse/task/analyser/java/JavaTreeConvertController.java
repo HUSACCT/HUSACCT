@@ -43,7 +43,6 @@ class JavaTreeConvertController {
         }
         
         if(classTree != null){
-        	//System.out.println(classTree.toStringTree());
         	switch(classTree.getType()){
         		case JavaParser.CLASS:
         			this.theClass = this.currentClass = delegateClass(classTree, false);

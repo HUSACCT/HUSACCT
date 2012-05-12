@@ -334,6 +334,20 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 							}
 						}
 					}
+					
+					if(!found){
+						String currentPackage = association.from;
+						currentPackage = currentPackage.substring(0, currentPackage.lastIndexOf('.'));
+						String predictUniquename = currentPackage + "." + association.to;
+						
+						boolean foundAsClass = model.classes.get(predictUniquename) != null;
+						boolean foundAsInterface = model.interfaces.get(predictUniquename) != null;
+						if(foundAsClass || foundAsInterface){
+							association.to = predictUniquename;
+							found = true;
+						}						
+					}
+					
 					if(!found){
 						List<String> classesInPackage = getClassesOrInterfacesInPackage(thePackage);
 						for(String uniqueClassName: classesInPackage){
