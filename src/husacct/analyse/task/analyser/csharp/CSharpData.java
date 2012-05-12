@@ -1,5 +1,8 @@
 package husacct.analyse.task.analyser.csharp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class CSharpData {
 	private String className;
 	private String uniqueName;
@@ -9,6 +12,9 @@ public class CSharpData {
 	private boolean hasParent;
 	private String belongsToPackage;
 	private boolean isAbstract;
+	private String inheritanceTo;
+	public String inheritanceFrom;
+	private ArrayList<String> moreInherit = new ArrayList<String>();
 	
 	public CSharpData(String className, int intentLevel, String belongsToPackage) {
 		this.className = className;
@@ -25,6 +31,16 @@ public class CSharpData {
 		this.intentLevel = indentLevel;
 	}
 
+	public ArrayList<String> getInherits()
+	{
+		return moreInherit;
+	}
+	
+	public void addInherit(String to)
+	{
+		moreInherit.add(to);
+	}
+	
 	public void setClassName(String className) {
 		this.className = className;
 	}
@@ -82,6 +98,22 @@ public class CSharpData {
 
 	public boolean isAbstract() {
 		return isAbstract;
+	}
+
+	public String getInheritanceFrom() {
+		return inheritanceFrom;
+	}
+
+	public void setInheritanceFrom(String inheritanceClass) {
+		this.inheritanceFrom = inheritanceClass;
+	}
+
+	public String getInheritanceTo() {
+		return inheritanceTo;
+	}
+
+	public void setInheritanceTo(String inheritanceTo) {
+		this.inheritanceTo = inheritanceTo;
 	}
 	
 }

@@ -14,7 +14,7 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-		String path = "/home/thomas/Dropbox/School/Themaopdracht 9/Code/c#";
+		String path = "/Users/mittchel/Dropbox/Themaopdracht/Code/c#";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
 		
@@ -27,6 +27,6 @@ public class AnalyseMain {
 		
 		ModelCreationService modelService = new FamixCreationServiceImpl();
 		System.out.println(modelService.represent());
-		new AnalyseDebuggingFrame();
+		//new AnalyseDebuggingFrame();
 	}
 }	

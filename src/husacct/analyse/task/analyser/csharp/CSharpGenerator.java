@@ -22,6 +22,7 @@ public abstract class CSharpGenerator {
 	protected final int INTERFACE = 172;
 	protected final int IDENTIFIER = 4;
 	protected final int STRUCT = 169;
+	protected final int COLON = 90;
 	protected ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	
