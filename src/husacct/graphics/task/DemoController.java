@@ -111,7 +111,6 @@ public class DemoController extends DrawingController {
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -223,6 +222,11 @@ public class DemoController extends DrawingController {
 		}
 
 		return violations;
+	}
+
+	@Override
+	public void moduleOpen(String path) {
+		
 	}
 
 }

@@ -119,4 +119,8 @@ public class AnalysedController extends DrawingController {
 			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
 	}
+
+	public void moduleOpen(String path) {
+		getAndDrawModulesIn(path);
+	}
 }

@@ -127,7 +127,7 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-		drawTarget.setCurrentPathInfo(getCurrentPath());
+		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
 		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 
