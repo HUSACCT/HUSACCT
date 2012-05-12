@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.delegate_creation_expression_return;
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.qualified_identifier_return;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.JavaParser.qualifiedTypeIdentSimplified_return;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -40,14 +43,14 @@ class JavaMethodGenerator extends JavaGenerator{
 		}
 		
 		if(methodTree.getType() == JavaParser.CONSTRUCTOR_DECL){
-			createMethodDetails(methodTree);
 			isConstructor = true;
 			declaredReturnType = "";
-			uniqueName = belongsToClass + "." + signature;
-		} else {
+			uniqueName = belongsToClass;
 			createMethodDetails(methodTree);
+		} else {
 			isConstructor = false;
-			uniqueName = belongsToClass + "." + signature;
+			uniqueName = belongsToClass;
+			createMethodDetails(methodTree);
 		}
 	}
 
@@ -126,6 +129,7 @@ class JavaMethodGenerator extends JavaGenerator{
 	
 	public void fillMethodSignature(Tree tree, int i)
 	{	
+		String attributeName = "";
 		CommonTree totalTree = (CommonTree) tree;
 		CommonTree methodNameTree = (CommonTree) totalTree.getFirstChildWithType(JavaParser.IDENT);
 		
@@ -135,6 +139,7 @@ class JavaMethodGenerator extends JavaGenerator{
 			methodSignature = belongsToClass;
 		} else {
 			methodSignature = methodNameTree != null ? methodNameTree.toString() : "";
+			uniqueName += methodNameTree != null ? "." + methodSignature : "";
 		}
 		
 		functionParameterTypes = new ArrayList<String>();
@@ -145,15 +150,18 @@ class JavaMethodGenerator extends JavaGenerator{
 			int paramListCount = paramListTree.getChildCount();
 			for(int param = 0; param < paramListCount; param++){
 				CommonTree declarationTree = (CommonTree) paramListTree.getChild(param);
+
+				CommonTree attributeNameTree = (CommonTree) declarationTree.getFirstChildWithType(JavaParser.IDENT);
+				attributeName = attributeNameTree.toString();
+				
 				CommonTree typeTree = (CommonTree) declarationTree.getFirstChildWithType(JavaParser.TYPE);
+				
 				
 				CommonTree valueTree = (CommonTree) typeTree.getChild(0);
 				switch(valueTree.getType()){
 					case JavaParser.QUALIFIED_TYPE_IDENT:
 						CommonTree qualifiedTypeTree = (CommonTree) typeTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
-						saveParameter((CommonTree) qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT));
-						//functionParameterTypes.add(qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT).toString());
-						//functionParameterTypes += ", " + qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT).toString();
+						saveParameter(attributeName, (CommonTree) qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT));
 						break;
 					case JavaParser.INT:
 					case JavaParser.FLOAT:
@@ -163,9 +171,7 @@ class JavaMethodGenerator extends JavaGenerator{
 					case JavaParser.LONG:
 					case JavaParser.CHAR:
 					case JavaParser.BYTE:
-						//functionParameterTypes += ", " + typeTree.getChild(0).toString();
-						//functionParameterTypes.add(typeTree.getChild(0).toString());
-						saveParameter((CommonTree) typeTree.getChild(0));
+						saveParameter(attributeName, (CommonTree) typeTree.getChild(0));
 						break;
 					default:
 						logger.warn("Cant parse a attribute for methods, unknown property [" + valueTree.getType() + "]");
@@ -180,9 +186,6 @@ class JavaMethodGenerator extends JavaGenerator{
 				parameterString += parameterString != "" ? ", " : "";
 				parameterString += s;
 			}
-			
-			//functionParameterTypes = functionParameterTypes != "" ? functionParameterTypes.substring(2) : "";
-			//methodSignature = methodSignature + "(" + functionParameterTypes + ")";
 			methodSignature = methodSignature + "(" + parameterString + ")";
 			signature = methodSignature;
 		}
@@ -196,18 +199,26 @@ class JavaMethodGenerator extends JavaGenerator{
 		
 	}
 	
-	private void saveParameter(CommonTree parameterTree){
+	private void saveParameter(String attributeName, CommonTree parameterTree){
+
 		if(parameterTree.getChildCount() != 0){
 			logger.warn("Generics are not supported yet!");
 			return;
 		}
+
 		
 		String parameterType = parameterTree.toStringTree();
 		functionParameterTypes.add(parameterType);
 		int linenumber = parameterTree.getLine();
 		
-		ModelCreationService creationService = new FamixCreationServiceImpl();
-		modelService.createAttribute(false, this.accessControlQualifier, this.belongsToClass, parameterType, this.name, this.belongsToClass + "." + this.name, linenumber);		
+		if(this.name == null){
+			logger.warn("Something went wrong (this.name == null?!) ("+ attributeName +")");
+			return;
+		}
+		
+		String attributeUnique = this.uniqueName + "." + attributeName;
+
+		modelService.createAttribute(false, this.accessControlQualifier, this.belongsToClass, parameterType, attributeName, attributeUnique, linenumber);
 	}
 
 	private void createMethodObject(){
