@@ -77,7 +77,7 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 		softwareUnitsPanel.setLayout(this.createSoftwareUnitsPanelLayout());
 		softwareUnitsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
-		JLabel softwareUnitsLabel = new JLabel("Selecteer software definitie");
+		JLabel softwareUnitsLabel = new JLabel("Select software definition");
 		softwareUnitsPanel.add(softwareUnitsLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		softwareUnitsPanel.add(this.getSoftwareUnitScrollPane(), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 220));
 		return softwareUnitsPanel;
@@ -109,16 +109,16 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
 		
-		cancelButton = new JButton("Add");
-		buttonPanel.add(cancelButton);
-		cancelButton.addActionListener(this);
+		saveButton = new JButton("Add");
+		buttonPanel.add(saveButton);
+		saveButton.addActionListener(this);
 		
 		return buttonPanel;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.cancelButton) {
+		if (action.getSource() == this.saveButton) {
 			this.save();
 		} else if (action.getSource() == this.cancelButton) {
 			this.cancel();
@@ -153,7 +153,7 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 	private void save() {
 		TreePath path = this.softwareDefinitionTree.getSelectionPath();
 		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		this.softwareUnitController.save(selectedComponent.getName(), selectedComponent.getType());
+		this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());
 		this.dispose();
 	}
 	

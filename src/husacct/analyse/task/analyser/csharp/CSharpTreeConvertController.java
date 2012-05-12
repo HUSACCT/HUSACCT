@@ -15,6 +15,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	private List<CommonTree> classTrees;
 	private List<CommonTree> usageTrees;
 	private List<CommonTree> variousTrees;
+	private List<CommonTree> attributeTrees;
 	private CommonTree abstractTree;
 	private boolean isScanning = false;
 	private boolean isClassName = false;
@@ -37,6 +38,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		namespaceTrees = new ArrayList<List<CommonTree>>();
 		usageTrees = new ArrayList<CommonTree>();
 		classTrees = new ArrayList<CommonTree>();
+		attributeTrees = new ArrayList<CommonTree>();
 		variousTrees = new ArrayList<CommonTree>();
 		walkAST(compilationUnitTree.getChildren());
 		new CSharpImportGenerator(usageTrees);
@@ -50,6 +52,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 		boolean isPartOfNamespace = false;
 		boolean isPartOfClass = false;
 		boolean isPartOfUsage = false;
+		boolean isPartOfAttribute = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
 
 		for (CommonTree tree : children) {
@@ -57,8 +60,34 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			isPartOfNamespace = namespaceChecking(tree, isPartOfNamespace);
 			isPartOfClass = classCheck(tree, isPartOfClass);
 			isPartOfUsage = usageCheck(tree, isPartOfUsage);
-			isScanning = check(tree, isScanning);
+			isPartOfAttribute = attributeCheck(tree, isPartOfAttribute);
+			//isScanning = splitAttributeAndMethods(tree, isScanning);
 		}
+	}
+
+	private boolean attributeCheck(CommonTree tree, boolean isPartOfAttribute) {
+		
+		if(isPartOfAttribute && tree.getType() == SEMICOLON){
+			CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, tempClassName);
+			
+			attributeGenerator.scan();
+			attributeTrees.clear();
+			isPartOfAttribute = false;
+		}
+		
+		if (isPartOfAttribute && (tree.getType() == FORWARDCURLYBRACKET || tree.getType() == USING || tree.getType() == NAMESPACE || tree.getType()==CLASS)) {
+			isPartOfAttribute = false;
+			attributeTrees.clear();
+		}
+		
+		if(isPartOfAttribute){
+			attributeTrees.add(tree);
+		}
+		
+		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON || tree.getType() == BACKWARDCURLYBRACKET){
+			isPartOfAttribute = true;
+		}
+		return isPartOfAttribute;
 	}
 
 	private void setIndentLevel(CommonTree tree) {
@@ -95,33 +124,57 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			}
 		}
 	}
-
-	private boolean check(CommonTree tree, boolean isScanning) {
-		int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID};
-
-		for(int type : ListOfTypes){
-			if(tree.getType() == type){
-				isScanning = true;
-			}
-		}
-
-		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
-			isScanning = false;
-			MultipleChecks(tree);
-			variousTrees.clear();
-		}
-
+/*
+	private boolean splitAttributeAndMethods(CommonTree tree, boolean isScanning) {
+		boolean thisIsAnAttributeAndNotAUsing = false;
+		//System.out.println(tree);
+		if (tree.getType() != USING) {
+			thisIsAnAttributeAndNotAUsing = true;
+			System.out.println(tree);
+		}	
 		if(isScanning){
 			variousTrees.add(tree);
+			
 		}
-
+				
+		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
+			isScanning = false;
+			MultipleChecks();
+			
+			variousTrees.clear();
+		}
+		
 		return isScanning;
 	}
-
-	private void MultipleChecks(CommonTree tree) {
+*/
+	private void MultipleChecks() {
 		checkForMethod();
-		//attributeCheck aanroep hier
+		//checkForAttribute();
 	}
+	
+/*
+	private void checkForAttribute() {
+		boolean isNewInstance = false;
+		boolean hasBrackets = false;
+		boolean hasSemicolon = false;
+		for(CommonTree thistree : variousTrees){
+			if(thistree.getType() == NEW){
+				isNewInstance = true;
+			}
+			if(thistree.getType() == FORWARDBRACKET){
+				hasBrackets = true;
+			}
+			if(thistree.getType() == SEMICOLON){
+				hasSemicolon = true;
+			}
+			if(hasBrackets == false && hasSemicolon){
+				System.out.println(thistree);
+				CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(variousTrees, tempClassName);
+				attributeGenerator.scan();
+			}
+		}
+		
+	}*/
 
 	private void checkForMethod() {
 		boolean isNewInstance = false;

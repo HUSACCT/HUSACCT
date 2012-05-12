@@ -392,12 +392,12 @@ public class AnalyseServiceStub implements IAnalyseService{
 		latitudeSub.add(new AnalysedModuleDTO("domain.locationbased.latitude.Map", "Map", "class", "public"));		
 
 		ArrayList<AnalysedModuleDTO> locationbasedSub = new ArrayList<AnalysedModuleDTO>();
-		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare", "foursquare", "package", foursquareSub));
-		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.latitude", "latitude", "package", latitudeSub));
+		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.foursquare", "foursquare", "package", "", foursquareSub));
+		locationbasedSub.add(new AnalysedModuleDTO("domain.locationbased.latitude", "latitude", "package", "", latitudeSub));
 
 
 		ArrayList<AnalysedModuleDTO> domainSub = new ArrayList<AnalysedModuleDTO>();
-		domainSub.add(new AnalysedModuleDTO("domain.locationbased", "locationbased", "package", locationbasedSub));
+		domainSub.add(new AnalysedModuleDTO("domain.locationbased", "locationbased", "package", "", locationbasedSub));
 
 
 		ArrayList<AnalysedModuleDTO> foursquare1Sub = new ArrayList<AnalysedModuleDTO>();
@@ -412,20 +412,20 @@ public class AnalyseServiceStub implements IAnalyseService{
 		latitude1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "interface", "public"));
 
 		ArrayList<AnalysedModuleDTO> locationbased1Sub = new ArrayList<AnalysedModuleDTO>();
-		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare", "foursquare", "package", foursquare1Sub));
-		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude", "latitude", "package", latitude1Sub));
+		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.foursquare", "foursquare", "package", "", foursquare1Sub));
+		locationbased1Sub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased.latitude", "latitude", "package", "",latitude1Sub));
 
 		ArrayList<AnalysedModuleDTO> socialmediaSub = new ArrayList<AnalysedModuleDTO>();
-		socialmediaSub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased", "locationbased", "package", locationbased1Sub));
+		socialmediaSub.add(new AnalysedModuleDTO("infrastructure.socialmedia.locationbased", "locationbased", "package", "", locationbased1Sub));
 
 		ArrayList<AnalysedModuleDTO> infrastructureSub = new ArrayList<AnalysedModuleDTO>();
-		infrastructureSub.add(new AnalysedModuleDTO("infrastructure.socialmedia", "socialmedia", "package", socialmediaSub));
+		infrastructureSub.add(new AnalysedModuleDTO("infrastructure.socialmedia", "socialmedia", "package", "",  socialmediaSub));
 
 		ArrayList<AnalysedModuleDTO> analysedSub = new ArrayList<AnalysedModuleDTO>();
-		analysedSub.add(new AnalysedModuleDTO("domain", "domain", "package", domainSub));
-		analysedSub.add(new AnalysedModuleDTO("infrastructure", "infrastructure", "package", infrastructureSub));
+		analysedSub.add(new AnalysedModuleDTO("domain", "domain", "package", "", domainSub));
+		analysedSub.add(new AnalysedModuleDTO("infrastructure", "infrastructure", "package", "",  infrastructureSub));
 
-		AnalysedModuleDTO analysedModules = new AnalysedModuleDTO("", "root", "package", analysedSub);
+		AnalysedModuleDTO analysedModules = new AnalysedModuleDTO("", "root", "package", "",  analysedSub);
 		analysed = new HashMap<String, ArrayList<Object>>();
 
 		ArrayList<AnalysedModuleDTO> rootElement = new ArrayList<AnalysedModuleDTO>();
@@ -470,13 +470,13 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public boolean isAnalysed() {
-		// TODO Auto-generated method stub
+		// TODO Analyse-team implement stub if nessacery
 		return false;
 	}
 
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		// TODO Auto-generated method stub
+		// TODO Analyse-team implement stub if nessacery
 		return null;
 	}
 	

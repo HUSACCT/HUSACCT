@@ -1,6 +1,5 @@
 package husacct.validate.domain.assembler;
 
-import husacct.Main;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -25,20 +24,25 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class ViolationAssembler {
-	private Logger logger = Logger.getLogger(Main.class);
+	private Logger logger = Logger.getLogger(ViolationAssembler.class);
 
 	private AbstractViolationType violationtypeFactory;
 	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
 	private Messagebuilder messagebuilder;
+	private final ConfigurationServiceImpl configuration;
 
 	public ViolationAssembler(RuleTypesFactory ruleFactory, ConfigurationServiceImpl configuration){
-		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
-		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
-
+		this.configuration = configuration;
 		this.ruleFactory = ruleFactory;
 		this.ruleAssembler = new RuletypeAssembler();
 		this.messagebuilder = new Messagebuilder();
+
+		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
+		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
+		if(violationtypeFactory == null){
+			logger.debug("Warning no language specified in define component");
+		}
 	}
 
 	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
@@ -80,8 +84,9 @@ public class ViolationAssembler {
 				final Color color = severity.getColor();
 				final  String userDefinedName = severity.getUserName();
 				final String systemDefinedName = severity.getDefaultName();
-				//FIXME: get severityValue from config attributte in this class
-				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, 0);
+				final int severityValue = configuration.getSeverityValue(violation.getSeverity());
+
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, severityValue);
 			}
 			else{				
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", "", 0);

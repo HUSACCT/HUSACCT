@@ -1,10 +1,17 @@
 package husacct.common.dto;
 
 public class ModuleDTO extends AbstractDTO{
-//	public final String logicalPath;
-//	public final String[] physicalPaths;
-//	public final ModuleDTO[] subModules;
-//	public final String type;
+	public String logicalPath;
+	public String[] physicalPaths;
+	public ModuleDTO[] subModules;
+	public String type;
+	
+	public ModuleDTO(){
+		this.logicalPath = "";
+		this.physicalPaths = new String[]{};
+		this.subModules = new ModuleDTO[]{};
+		this.type = "";
+	}
 	
 	public ModuleDTO(String logicalPath, String[] physicalPaths,
 			String type, ModuleDTO[] subModules) {
@@ -14,11 +21,4 @@ public class ModuleDTO extends AbstractDTO{
 		this.subModules = subModules;
 		this.type = type;
 	}
-	
-	//Dit wordt verwijdert
-	public String logicalPath;
-	public String[] physicalPaths;
-	public ModuleDTO[] subModules;
-	public String type;
-	public ModuleDTO(){}
 }

@@ -2,7 +2,6 @@ package husacct.define.presentation.jpanel;
 
 import husacct.define.presentation.jframe.JFrameSoftwareUnit;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
-import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
@@ -102,7 +101,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
-			UiDialogs.showOnScreen(0, softwareUnitFrame);
+			softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
 			softwareUnitFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);

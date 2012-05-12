@@ -110,10 +110,16 @@ public class RuleTypesFactory {
 
 	private void setViolationTypeFactory(String language){
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language, configuration);
+		if(violationtypefactory == null){
+			logger.debug("Warning language does not exists: " + language);
+		}
 	}
 
 	private void setViolationTypeFactory(){
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
+		if(violationtypefactory == null){
+			logger.debug("Warning no language specified in define component");
+		}
 	}
 
 	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
@@ -140,6 +146,7 @@ public class RuleTypesFactory {
 	//Return all the default instances of Rule
 	private List<RuleType> generateDefaultRuleTypes(){
 		List<RuleType> rules = new ArrayList<RuleType>();
+		setViolationTypeFactory();
 		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
 			try{
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
@@ -184,8 +191,6 @@ public class RuleTypesFactory {
 	}
 
 	private RuleType generateRuleTypeWithoutExceptionRules(String ruleKey) throws RuleInstantionException{
-		setViolationTypeFactory();
-
 		CategoryKeyClassDTO categoryKeyClass = allRuletypes.get(ruleKey);
 		if(categoryKeyClass != null){
 			Class<RuleType> ruletypeClass = categoryKeyClass.getRuleClass();

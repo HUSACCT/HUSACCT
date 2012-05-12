@@ -2,11 +2,12 @@ package husacct.analyse.domain.famix;
 
 class FamixInheritanceDefinition extends FamixAssociation{
 	
-	public FamixInheritanceDefinition(String type){
-		super.type = type;
+	public FamixInheritanceDefinition(){
+		super.type = "extends";
 	}
 	//public String accessControlQualifier;
 	public int index;  //index??
+	
 
 	public String toString(){
 		String inheritRepesentation = "";

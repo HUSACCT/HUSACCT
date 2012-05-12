@@ -19,10 +19,10 @@ public class ApplicationAnalyser {
 	public void analyseApplication() {				
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService definitionService = provider.getDefineService();
-		ApplicationDTO applicationDTO = definitionService.getApplicationDetails();
-		String language = applicationDTO.programmingLanguage;
-		for(String workspacePath: applicationDTO.paths){
-			AbstractAnalyser analyser = builder.getAnalyser(language);
+		ApplicationDTO appDto = definitionService.getApplicationDetails();
+		String language = appDto.programmingLanguage;
+		AbstractAnalyser analyser = builder.getAnalyser(language);
+		for(String workspacePath: appDto.paths){
 			SourceFileFinder sourceFileFinder = new SourceFileFinder();
 			try{
 				String sourceFileExtension = getExtensionForLanguage(language);
@@ -35,6 +35,7 @@ public class ApplicationAnalyser {
 				//TODO Generate Custom Exception
 			}
 		}
+		analyser.connectDependencies();
 	}
 
 	public String[] getAvailableLanguages() {

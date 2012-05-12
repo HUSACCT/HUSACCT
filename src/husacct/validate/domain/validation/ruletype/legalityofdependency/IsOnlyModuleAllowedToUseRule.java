@@ -10,7 +10,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -28,11 +27,11 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO appliedRule) {
-		List<Violation> violations = new ArrayList<Violation>();
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		Mappings mappings = CheckConformanceUtil.filter(appliedRule);
+		this.mappings = CheckConformanceUtil.filter(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -44,7 +43,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 					if(allowedDependencies.length != 0){
 						for(DependencyDTO allowedDependency: allowedDependencies){
 							if(dependency != allowedDependency){
-								Message message = new Message(appliedRule);
+								Message message = new Message(rootRule);
 	
 								LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 								LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
@@ -58,7 +57,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 						}
 					}
 					else{
-						Message message = new Message(appliedRule);
+						Message message = new Message(rootRule);
 						
 						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 						LogicalModule logicalModuleTo = new LogicalModule(classPathTo);

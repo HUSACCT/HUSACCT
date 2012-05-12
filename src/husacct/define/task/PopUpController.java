@@ -1,38 +1,27 @@
 package husacct.define.task;
 
-import husacct.define.domain.DefineDomainService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-public abstract class PopUpController extends Observable {
+import org.apache.log4j.Logger;
+
+public abstract class PopUpController {
 	public static final String ACTION_NEW = "NEW";
 	public static final String ACTION_EDIT = "EDIT";
 	public ResourceBundle resourceBundle = ResourceBundle.getBundle("husacct/common/locale/defineLang", new Locale("en", "GB"));
 
-	protected DefineDomainService defineDomainService = DefineDomainService.getInstance();
 	protected String action = PopUpController.ACTION_NEW;
 	protected long moduleId;
+	protected Logger logger;
 	
 	protected List<Observer> observers;
 	
 	public PopUpController(){
 		observers = new ArrayList<Observer>();
-	}
-
-	@Deprecated
-	public abstract void initUi() throws Exception;
-	
-	/**
-	 * Use this function to notify the definitioncontroller that there is a change
-	 */
-	protected void pokeObservers() {
-		setChanged();
-		notifyObservers();
+		logger = Logger.getLogger(DefinitionController.class);
 	}
 
 	public void setModuleId(long moduleId) {
@@ -49,26 +38,7 @@ public abstract class PopUpController extends Observable {
 		}
 	}
 
-	protected String getAction() {
+	public String getAction() {
 		return action;
-	}
-
-	public void addObserver(Observer o){
-		if (!this.observers.contains(o)){
-			this.observers.add(o);
-		}
-	}
-	
-	public void removeObserver(Observer o){
-		if (this.observers.contains(o)){
-			this.observers.remove(o);
-		}
-	}
-	
-	@Override
-	public void notifyObservers(){
-		for (Observer o : this.observers){
-			o.update(this, moduleId);
-		}
 	}
 }

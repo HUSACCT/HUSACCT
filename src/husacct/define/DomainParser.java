@@ -48,6 +48,7 @@ public class DomainParser {
 		return moduleDTOs;
 	}
 	
+	//TODO performance check if you have to parse SubModules
 	public ModuleDTO parseModule(Module module){
 		String logicalPath = getLogicalPath(module.getId());
 		String[] physicalPaths = module.getPhysicalPaths();
@@ -86,7 +87,7 @@ public class DomainParser {
 	/**
 	 * Applied Rules
 	 **/
-	public RuleDTO[] parseRule(AppliedRule[] rules) {
+	public RuleDTO[] parseRules(AppliedRule[] rules) {
 		ArrayList<RuleDTO> ruleDTOsList = new ArrayList<RuleDTO>();
 		for (AppliedRule rule : rules){
 			RuleDTO ruleDTO = parseRule(rule);
@@ -100,9 +101,10 @@ public class DomainParser {
 	public RuleDTO parseRule(AppliedRule rule){
 		
 		String ruleTypeKey = rule.getRuleType();
-		ModuleDTO moduleFrom = parseModule(rule.getUsedModule());
-		ModuleDTO moduleTo = parseModule(rule.getRestrictedModule());
+		ModuleDTO moduleFrom = parseModule(rule.getModuleFrom());
+		ModuleDTO moduleTo = parseModule(rule.getModuleTo());
 		String[] violationTypeKeys = rule.getDependencies();
+		String regex = rule.getRegex();
 		
 		ArrayList<RuleDTO> exceptionRuleList = new ArrayList<RuleDTO>();
 		for (AppliedRule exceptionRule : rule.getExceptions()){
@@ -114,7 +116,7 @@ public class DomainParser {
 		exceptionRuleList.toArray(exceptionRuleDTOs);
 		RuleDTO[] exceptionRules = exceptionRuleDTOs; 
 		
-		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, exceptionRules);
+		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
 		return ruleDTO;
 	}
 }

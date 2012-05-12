@@ -38,134 +38,31 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	
 	private AppliedRuleController appliedRuleController;
 	
-	private JPanel jPanelMain;
-	private RuleDetailsJPanel jPanelRuleDetails;
-	private JPanel jPanelExceptionTable;
-	private JPanel jPanelExceptionButtons;
-	private JPanel jPanelUpdateCancel;
+	private RuleDetailsJPanel ruleDetailsJPanel;
+	private KeyValueComboBox appliedRuleKeyValueComboBox;
+
+	private JTableException jTableException;
 	
-	private JLabel jLabelRuleType;
-	private JScrollPane jScrollPane1;
-	private JLabel jLabelExceptions;
-		
-	public KeyValueComboBox keyValueComboBoxAppliedRule;
-
-	public JTableException jTableException;
-	public JButton jButtonAddExceptionRow;
-	public JButton jButtonRemoveExceptionRow;
-		
-	public JButton jButtonCancel;
-	public JButton jButtonSave;
-
-	/**
-	 * Constructor
-	 */
-	public JFrameAppliedRule(AppliedRuleController appliedRuleController) {
+	private JButton jButtonAddExceptionRow;
+	private JButton jButtonRemoveExceptionRow;	
+	private JButton jButtonCancel;
+	private JButton jButtonSave;
+	
+	public JFrameAppliedRule(long moduleId, long appliedRuleId) {
 		super();
-		this.appliedRuleController = appliedRuleController;
-		this.appliedRuleController.addObserver(this);
+		this.appliedRuleController = new AppliedRuleController(moduleId, appliedRuleId);
 		initGUI();
 	}
 
-	/**
-	 * Creating Gui
-	 */
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle("New Applied Rule");
 			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
-			{
-				jPanelMain = new JPanel();
-				GridBagLayout jPanel1Layout = new GridBagLayout();
-				jPanel1Layout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
-				jPanel1Layout.rowHeights = new int[] { 30, 23, 6, 0 };
-				jPanel1Layout.columnWeights = new double[] { 0.0, 0.1 };
-				jPanel1Layout.columnWidths = new int[] { 132, 7 };
-				getContentPane().add(jPanelMain, BorderLayout.CENTER);
-				
-				jPanelMain.setLayout(jPanel1Layout);
-				jPanelMain.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-				{
-					jLabelRuleType = new JLabel();
-					jPanelMain.add(jLabelRuleType, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-					jLabelRuleType.setText("RuleType");
-				}
-				{
-					keyValueComboBoxAppliedRule = new KeyValueComboBox();
-					jPanelMain.add(keyValueComboBoxAppliedRule, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-					this.appliedRuleController.fillRuleTypeComboBox(keyValueComboBoxAppliedRule);
-					keyValueComboBoxAppliedRule.addItemListener(this);
-				}
-				{
-					jPanelRuleDetails = new RuleDetailsJPanel(appliedRuleController);
-					String ruleTypeKey = keyValueComboBoxAppliedRule.getSelectedItemKey();
-					appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-					jPanelRuleDetails.initGui(ruleTypeKey);
-					jPanelMain.add(jPanelRuleDetails, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-				}
-				{
-					jLabelExceptions = new JLabel();
-					jPanelMain.add(jLabelExceptions, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-					jLabelExceptions.setText("Exceptions");
-				}
-				{
-					jPanelExceptionTable = new JPanel();
-					BorderLayout jPanel3Layout = new BorderLayout();
-					jPanelExceptionTable.setLayout(jPanel3Layout);
-					jPanelMain.add(jPanelExceptionTable, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-					{
-						jScrollPane1 = new JScrollPane();
-						jPanelExceptionTable.add(jScrollPane1, BorderLayout.CENTER);
-						jScrollPane1.setPreferredSize(new java.awt.Dimension(516, 155));
-						{
-							jTableException = new JTableException();
-							jTableException.setSize(516, 155);
-							jScrollPane1.setViewportView(jTableException);
-						}
-					}
-					{
-						jPanelExceptionButtons = new JPanel();
-						GridBagLayout jPanel4Layout = new GridBagLayout();
-						jPanelExceptionTable.add(jPanelExceptionButtons, BorderLayout.EAST);
-						jPanel4Layout.rowWeights = new double[] { 0.0, 0.1 };
-						jPanel4Layout.rowHeights = new int[] { 15, 7 };
-						jPanel4Layout.columnWeights = new double[] { 0.1 };
-						jPanel4Layout.columnWidths = new int[] { 7 };
-						jPanelExceptionButtons.setLayout(jPanel4Layout);
-						jPanelExceptionButtons.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-						{
-							jButtonAddExceptionRow = new JButton();
-							jPanelExceptionButtons.add(jButtonAddExceptionRow, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-							jButtonAddExceptionRow.setText("Add exception");
-							jButtonAddExceptionRow.addActionListener(this);
-						}
-						{
-							jButtonRemoveExceptionRow = new JButton();
-							jPanelExceptionButtons.add(jButtonRemoveExceptionRow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-							jButtonRemoveExceptionRow.setText("Remove exception");
-							jButtonRemoveExceptionRow.addActionListener(this);
-						}
-					}
-				}
-			}
-			{
-				jPanelUpdateCancel = new JPanel();
-				getContentPane().add(jPanelUpdateCancel, BorderLayout.SOUTH);
-				{
-					jButtonCancel = new JButton();
-					jPanelUpdateCancel.add(jButtonCancel);
-					jButtonCancel.setText("Cancel");
-					jButtonCancel.addActionListener(this);
-				}
-				{
-					jButtonSave = new JButton();
-					jPanelUpdateCancel.add(jButtonSave);
-					jButtonSave.setText("Add");
-					jButtonSave.addActionListener(this);
-				}
-
-			}
+			
+			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
+			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
+			
 			this.setResizable(false);
 			pack();
 			this.setSize(815, 435);
@@ -175,24 +72,114 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		}
 	}
 	
-	/**
-	 * Handling Updating Observerable
-	 */
+	private JPanel createMainPanel() {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(this.createMainPanelLayout());
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		
+		mainPanel.add(new JLabel("RuleType"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		
+		this.createAppliedRuleKeyValueComboBox();
+		mainPanel.add(this.appliedRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		
+		this.ruleDetailsJPanel = new RuleDetailsJPanel(this.appliedRuleController);
+		this.refreshRuleDetailsJPanel();
+		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		
+		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		
+		return mainPanel;
+	}
+	
+	private GridBagLayout createMainPanelLayout() {
+		GridBagLayout mainPanelLayout = new GridBagLayout();
+		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
+		mainPanelLayout.rowHeights = new int[] { 30, 23, 6, 0 };
+		mainPanelLayout.columnWeights = new double[] { 0.0, 0.1 };
+		mainPanelLayout.columnWidths = new int[] { 132, 7 };
+		return mainPanelLayout;
+	}
+	
+	private void createAppliedRuleKeyValueComboBox() {
+		this.appliedRuleKeyValueComboBox = new KeyValueComboBox();
+		this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
+		this.appliedRuleKeyValueComboBox.addItemListener(this);
+	}
+	
+	private void refreshRuleDetailsJPanel() {
+		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
+		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
+		this.ruleDetailsJPanel.initGui(ruleTypeKey);
+		this.repaint();
+	}
+	
+	private JPanel createExceptionsPanel() {
+		JPanel exceptionsPanel = new JPanel();
+		exceptionsPanel.setLayout(new BorderLayout());
+		exceptionsPanel.add(this.createExceptionsScrollPane(), BorderLayout.CENTER);
+		exceptionsPanel.add(this.createExceptionsButtonPanel(), BorderLayout.EAST);
+		return exceptionsPanel;
+	}
+	
+	private JScrollPane createExceptionsScrollPane() {
+		JScrollPane exceptionsScrollPane = new JScrollPane();
+		exceptionsScrollPane.setPreferredSize(new java.awt.Dimension(516, 155));
+		jTableException = new JTableException();
+		jTableException.setSize(516, 155);
+		exceptionsScrollPane.setViewportView(jTableException);
+		return exceptionsScrollPane;
+	}
+	
+	private JPanel createExceptionsButtonPanel() {
+		JPanel exceptionsButtonPanel = new JPanel();
+		exceptionsButtonPanel.setLayout(this.createExceptionsButtonPanelLayout());
+		exceptionsButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+		
+		jButtonAddExceptionRow = new JButton("Add exception");
+		exceptionsButtonPanel.add(jButtonAddExceptionRow, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		jButtonAddExceptionRow.addActionListener(this);
+		
+		jButtonRemoveExceptionRow = new JButton("Remove exception");
+		exceptionsButtonPanel.add(jButtonRemoveExceptionRow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		jButtonRemoveExceptionRow.addActionListener(this);
+		
+		return exceptionsButtonPanel;
+	}
+	
+	private GridBagLayout createExceptionsButtonPanelLayout() {
+		GridBagLayout exceptionsButtonPanelLayout = new GridBagLayout();
+		exceptionsButtonPanelLayout.rowWeights = new double[] { 0.0, 0.1 };
+		exceptionsButtonPanelLayout.rowHeights = new int[] { 15, 7 };
+		exceptionsButtonPanelLayout.columnWeights = new double[] { 0.1 };
+		exceptionsButtonPanelLayout.columnWidths = new int[] { 7 };
+		return exceptionsButtonPanelLayout;
+	}
+	
+	private JPanel createButtonPanel() {
+		JPanel buttonPanel = new JPanel();
+		
+		jButtonCancel = new JButton("Cancel");
+		buttonPanel.add(jButtonCancel);
+		jButtonCancel.addActionListener(this);
+		
+		jButtonSave = new JButton("Add");
+		buttonPanel.add(jButtonSave);
+		jButtonSave.addActionListener(this);
+		
+		return buttonPanel;
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		updateExceptionTable();
 	}
 	
-	private void updateExceptionTable() {
-
-		// Get all applied rules from the service
+	public void updateExceptionTable() {
 		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
-
-		// Get the tablemodel from the table
-		JTableTableModel atm = (JTableTableModel) jTableException.getModel();
-
-		// Remove all items in the table
-		atm.getDataVector().removeAllElements();
+		JTableTableModel tableModel = (JTableTableModel) jTableException.getModel();
+		tableModel.getDataVector().removeAllElements();
+		
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {	
 			String description = (String) exceptionRule.get("description");
 			Long moduleIdFrom = (Long) exceptionRule.get("moduleFromId");
@@ -207,15 +194,12 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 			}
 
 			Object rowdata[] = {moduleFrom, moduleTo, description, enabled};
-			atm.addRow(rowdata);
+			tableModel.addRow(rowdata);
 		}
-		atm.fireTableDataChanged();
+		tableModel.fireTableDataChanged();
 		this.repaint();
 	}
 
-	/**
-	 * Handling ActionPerformed
-	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == this.jButtonSave) {
@@ -232,25 +216,23 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 
 	private void addException() {
 		//TODO ugly code
-		Long selectedModuleFromId = appliedRuleController.getCurrentModuleId();
-		DataHelper datahelper = (DataHelper) jPanelRuleDetails.jComboBoxModuleTo.getSelectedItem();
+		Long selectedModuleFromId = this.appliedRuleController.getCurrentModuleId();
+		DataHelper datahelper = (DataHelper) this.ruleDetailsJPanel.toModuleJComboBox.getSelectedItem();
 		Long selectedModuleToId = datahelper.getId();
-		appliedRuleController.createExceptionGUI(selectedModuleFromId, selectedModuleToId);
+		
+		JFrameExceptionRule exceptionFrame = new JFrameExceptionRule(this.appliedRuleController, this, selectedModuleFromId, selectedModuleToId);
+		exceptionFrame.setLocationRelativeTo(exceptionFrame.getRootPane());
+		exceptionFrame.setVisible(true);
 	}
 	
 	private void removeException() {
 //		appliedRuleController.removeException(exceptionRuleId);
 	}
 
-	/**
-	 * Handling ItemListener
-	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		if (e.getSource() == keyValueComboBoxAppliedRule){
-			String ruleTypeKey = keyValueComboBoxAppliedRule.getSelectedItemKey();
-			appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-			jPanelRuleDetails.initGui(ruleTypeKey);
+		if (e.getSource() == this.appliedRuleKeyValueComboBox && e.getStateChange() == 1) {
+			this.refreshRuleDetailsJPanel();
 		}
 	}
 
@@ -259,8 +241,8 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 	}
 
 	private void save() {	
-		String ruleTypeKey = keyValueComboBoxAppliedRule.getSelectedItemKey();
-		HashMap<String, Object> ruleDetails = jPanelRuleDetails.saveToHashMap();
+		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
+		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 		long moduleFromId = (Long) ruleDetails.get("moduleFromId");
 		long moduleToId = (Long) ruleDetails.get("moduleToId");
 		boolean isEnabled = (Boolean) ruleDetails.get("enabled");
@@ -273,9 +255,6 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		this.dispose();
 	}
 	
-	/**
-	 * Handling KeyPresses
-	 */
 	public void keyPressed(KeyEvent arg0) {
 		// Ignore
 	}
@@ -290,5 +269,8 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 		// Ignore
 	}
 
-
+	@Deprecated
+	public void setSaveButtonText(String text) {
+		this.jButtonSave.setText(text);
+	}
 }
