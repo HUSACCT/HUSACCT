@@ -1,7 +1,6 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.KeyEvent;
