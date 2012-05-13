@@ -46,6 +46,14 @@ public class KeyValueComboBox extends JComboBox{
 		return getHaskMapKeyFromValue(selectedItemValue);
 	}
 	
+	public String getItemKeyAt(int i){
+		String selectedItemValue = "";
+		if (getItemAt(i) != null) {
+			selectedItemValue = super.getItemAt(i).toString();
+		}
+		return getHaskMapKeyFromValue(selectedItemValue);
+	}
+	
 	private String getHaskMapKeyFromValue(String value){
 		String key = "";
 		for (Iterator iterator = keyValuePair.entrySet().iterator(); iterator.hasNext();) {

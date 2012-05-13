@@ -1,18 +1,16 @@
 package husacct.define.task;
 
+import husacct.ServiceProvider;
+import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
-import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
-import husacct.define.presentation.tables.JTableAppliedRule;
-import husacct.define.presentation.tables.JTableSoftwareUnits;
-import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AbstractDefineComponent;
@@ -39,7 +37,6 @@ public class DefinitionController extends Observable implements Observer {
 	
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
-	private AppliedRuleExceptionDomainService appliedRuleExceptionService;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public static DefinitionController getInstance() {
@@ -51,7 +48,6 @@ public class DefinitionController extends Observable implements Observer {
 		this.logger = Logger.getLogger(DefinitionController.class);
 		this.moduleService = new ModuleDomainService();
 		this.appliedRuleService = new AppliedRuleDomainService();
-		this.appliedRuleExceptionService = new AppliedRuleExceptionDomainService();
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
 	
@@ -79,11 +75,11 @@ public class DefinitionController extends Observable implements Observer {
 		return selectedModuleId;
 	}
 	
-	public void addLayer(long selectedModuleId, String layerName, String layerDescription, int hierarchicalLevel){
+	public void addLayer(long selectedModuleId, String layerName, String layerDescription){
 		logger.info("Adding layer " + layerName);
 		try {
 			JPanelStatus.getInstance("Adding Layer").start();
-			Layer newLayer = new Layer(layerName, layerDescription, hierarchicalLevel);
+			Layer newLayer = new Layer(layerName, layerDescription);
 			this.passModuleToService(selectedModuleId, newLayer);
 		} catch (Exception e) {
 			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
@@ -93,14 +89,28 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
-		logger.info("Adding module " + moduleName);
+//	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
+//		logger.info("Adding module " + moduleName);
+//		try {
+//			JPanelStatus.getInstance("Adding module").start();
+//			Module newModule = new Module(moduleName, moduleDescription);
+//			this.passModuleToService(selectedModuleId, newModule);
+//		} catch (Exception e) {
+//			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
+//			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+//		} finally {
+//			JPanelStatus.getInstance().stop();
+//		}
+//	}
+	
+	public void addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
+		logger.info("Adding subsystem " + moduleName);
 		try {
-			JPanelStatus.getInstance("Adding module").start();
-			Module newModule = new Module(moduleName, moduleDescription);
+			JPanelStatus.getInstance("Adding subsystem").start();
+			SubSystem newModule = new SubSystem(moduleName, moduleDescription);
 			this.passModuleToService(selectedModuleId, newModule);
 		} catch (Exception e) {
-			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
+			logger.error("addSubSystem(" + moduleName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -226,7 +236,6 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Removing rule " + appliedRuleId);
 		try {
 			long moduleId = getSelectedModuleId();
-//			int appliedRuleId = (int)definitionJPanel.getSelectedAppliedRule();
 
 			if (moduleId != -1 && appliedRuleId != -1L) {
 				// Ask the user if he is sure to remove the software unit
@@ -254,7 +263,7 @@ public class DefinitionController extends Observable implements Observer {
 	public void updateModule(String moduleName, String moduleDescription) {
 		logger.info("Updating module " + moduleName);
 		try {
-			JPanelStatus.getInstance("Saving layer").start();
+			JPanelStatus.getInstance("Updating module").start();
 			long moduleId = getSelectedModuleId();
 			if (moduleId != -1) {
 				this.moduleService.updateModule(moduleId, moduleName, moduleDescription);
@@ -269,7 +278,6 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	public AbstractDefineComponent getModuleTreeComponents() {
-//		logger.info("getting Module Tree Components");
 		JPanelStatus.getInstance("Updating Modules").start();
 		
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
@@ -322,95 +330,6 @@ public class DefinitionController extends Observable implements Observer {
 		return moduleDetails;
 	}
 	
-	/**
-	 * #FIXME:: TASK SHOULD NOT CALL VIEW
-	 */
-	@Deprecated
-	public void updateSoftwareUnitTable(JTableSoftwareUnits softwareUnitsTable) {
-		try {
-			long layerId = getSelectedModuleId();
-			JPanelStatus.getInstance("Updating software unit table").start();
-			if (layerId != -1) {
-
-				// Get all components from the service
-				ArrayList<String> softwareUnitNames = this.softwareUnitDefinitionDomainService.getSoftwareUnitNames(layerId);
-
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();//definitionJPanel.sofwareUnitsPanel.getModel();
-
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
-				
-				if (softwareUnitNames != null) {
-					for (String softwareUnitName : softwareUnitNames) {
-						String softwareUnitType = this.softwareUnitDefinitionDomainService.getSoftwareUnitType(softwareUnitName);
-						Object rowdata[] = {softwareUnitName, softwareUnitType};
-						
-						atm.addRow(rowdata);
-					}
-				}
-				atm.fireTableDataChanged();
-			}
-		} catch (Exception e) {
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
-		} finally {
-			JPanelStatus.getInstance().stop();
-		}
-	}
-	
-
-	/**
-	 * #FIXME:: TASK SHOULD NOT CALL VIEW
-	 */
-	@Deprecated
-	public void updateAppliedRulesTable(JTableAppliedRule appliedRuleTable) {
-		try {
-			long layerId = getSelectedModuleId();
-			JPanelStatus.getInstance("Updating rules applied table").start();
-			if (layerId != -1) {
-
-				// Get all applied rules from the service
-				ArrayList<Long> appliedRulesIds = this.appliedRuleService.getAppliedRulesIdsByModule(layerId);
-
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) appliedRuleTable.getModel();//definitionJPanel.appliedRulesPanel.getModel();//jTableAppliedRules.getModel();
-
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
-				if (appliedRulesIds != null) {
-					for (long appliedRuleId : appliedRulesIds) {
-						String ruleTypeKey = this.appliedRuleService.getRuleTypeByAppliedRule(appliedRuleId);
-						DataHelper datahelper = new DataHelper();
-						datahelper.setId(appliedRuleId);
-						datahelper.setValue(ruleTypeKey);
-
-						// To layer
-						long toLayerId = this.appliedRuleService.getModuleToIdOfAppliedRule(appliedRuleId);
-						String moduleNameTo = this.moduleService.getModuleNameById(toLayerId);
-						// Is enabled
-						boolean appliedRuleIsEnabled = this.appliedRuleService.getAppliedRuleIsEnabled(appliedRuleId);
-						String enabled = "Off";
-						if (appliedRuleIsEnabled) {
-							enabled = "On";
-						}
-						// Number of exceptions
-						ArrayList<Long> appliedRulesExceptionIds = this.appliedRuleExceptionService.getExceptionIdsByAppliedRule(appliedRuleId);
-						int numberofexceptions = appliedRulesExceptionIds.size();
-
-						Object rowdata[] = { appliedRuleId, ruleTypeKey, moduleNameTo , enabled, numberofexceptions };
-
-						atm.addRow(rowdata);
-					}
-				}
-				atm.fireTableDataChanged();
-			}
-		} catch (Exception e) {
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error!");
-		} finally {
-			JPanelStatus.getInstance().stop();
-		}
-	}
-	
 	public void update(Observable o, Object arg) {
 		logger.info("update(" + o + ", " + arg + ")");
 		long moduleId = getSelectedModuleId();
@@ -444,5 +363,36 @@ public class DefinitionController extends Observable implements Observer {
 		if (this.observers.contains(o)){
 			this.observers.remove(o);
 		}
+	}
+
+	public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
+		return this.appliedRuleService.getAppliedRulesIdsByModule(getSelectedModuleId());
+	}
+	
+	public HashMap<String, Object> getRuleDetailsByAppliedRuleId(long appliedRuleId){
+		AppliedRule rule = this.appliedRuleService.getAppliedRuleById(appliedRuleId);
+		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
+		ruleDetails.put("id", rule.getId());
+		ruleDetails.put("description", rule.getDescription());
+		ruleDetails.put("dependencies", rule.getDependencies());
+		ruleDetails.put("moduleFromName", rule.getModuleFrom().getName());
+		ruleDetails.put("moduleToName", rule.getModuleTo().getName());
+		ruleDetails.put("enabled", rule.isEnabled());
+		ruleDetails.put("regex", rule.getRegex());
+		ruleDetails.put("ruleTypeKey", rule.getRuleType());
+		ruleDetails.put("numberofexceptions", rule.getExceptions().size());
+		return ruleDetails;
+	}
+	
+	public ArrayList<String> getSoftwareUnitNamesBySelectedModule() {
+		return this.softwareUnitDefinitionDomainService.getSoftwareUnitNames(getSelectedModuleId());
+	}
+	
+	public String getSoftwareUnitTypeBySoftwareUnitName(String softwareUnitName){
+		return this.softwareUnitDefinitionDomainService.getSoftwareUnitType(softwareUnitName);
+	}
+	
+	public boolean isAnalysed(){
+		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
 	}
 }
