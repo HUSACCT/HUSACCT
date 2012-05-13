@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
@@ -23,6 +24,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
+	
+	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		this.taskServiceImpl = ts;
@@ -235,6 +238,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			jTabbedPane1.addTab(language, lcp);
 		}
 		if (taskServiceImpl.getAvailableLanguages().length == 0) {
+			logger.error("No programming language set");
 			jTabbedPane1.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}

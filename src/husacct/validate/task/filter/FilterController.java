@@ -30,13 +30,13 @@ public class FilterController {
 		this.configuration = configuration;
 	}
 
-	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter) {
+	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter, List<Violation> violations) {
 		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
-		for(Violation violation : taskServiceImpl.getAllViolations().getValue()){
+		for(Violation violation : violations){
 			for(String path : paths){
-				if(!modulesFilter.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) && regex.matchRegex(regex.makeRegexString(path), violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath())){
-					modulesFilter.add(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+				if(!modulesFilter.contains(violation.getClassPathFrom()) && regex.matchRegex(regex.makeRegexString(path), violation.getClassPathFrom())){
+					modulesFilter.add(violation.getClassPathFrom());
 				}
 			}
 		}
@@ -46,28 +46,28 @@ public class FilterController {
 		this.hidefilter = hideFilter;
 	}
 
-	public ArrayList<Violation> filterViolations(Boolean applyfilter) {
-		ArrayList<Violation> tempViolations = new ArrayList<Violation>();
+	public ArrayList<Violation> filterViolations(Boolean applyfilter, List<Violation> violations) {
+		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
+		for (Violation violation : violations) {
 			if(applyfilter){
 				if (hidefilter && ( !ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) ) ) {
-					tempViolations.add(violation);
+					filteredViolations.add(violation);
 				} else if ((!hidefilter) && (ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) || violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) || paths.contains(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath()) ) ) {
-					tempViolations.add(violation);
+					filteredViolations.add(violation);
 				}
 			} else{
-				tempViolations.add(violation);
+				filteredViolations.add(violation);
 			}
 		}
 
-		return tempViolations;
+		return filteredViolations;
 	}
 
-	public ArrayList<String> loadRuletypes(){
+	public ArrayList<String> loadRuletypes(List<Violation> violations){
 		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
+		for (Violation violation : violations) {
 			if(!AppliedRuletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey()))){
 				AppliedRuletypes.add(ValidateTranslator.getValue(violation.getRuletypeKey()));
 			}
@@ -76,10 +76,10 @@ public class FilterController {
 		return AppliedRuletypes;
 	}
 
-	public ArrayList<String> loadViolationtypes(){
+	public ArrayList<String> loadViolationtypes(List<Violation> violations){
 		ArrayList<String> appliedViolationtypes = new ArrayList<String>();
 
-		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
+		for (Violation violation : violations) {
 
 			if(!appliedViolationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey()))){
 				appliedViolationtypes.add(ValidateTranslator.getValue(violation.getViolationtypeKey()));
@@ -127,7 +127,7 @@ public class FilterController {
 			if(!applyFilter) {
 				violations = taskServiceImpl.getAllViolations().getValue();
 			} else {
-				violations = taskServiceImpl.applyFilterViolations(true);
+				violations = taskServiceImpl.applyFilterViolations(true, null);//TODO set Date!!
 			}
 			for(Violation violation : violations) {
 				if(violation.getSeverity() != null) {

@@ -29,6 +29,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import org.apache.log4j.Logger;
 
 public class LanguageSeverityConfiguration extends JPanel {
 	private static final long serialVersionUID = 4125846168658642242L;
@@ -43,7 +44,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;
 	private final Map<String, List<ViolationType>> violationTypes;
-	private final TaskServiceImpl ts;
+	private final TaskServiceImpl taskServiceImpl;
+	
+	private static Logger logger = Logger.getLogger(LanguageSeverityConfiguration.class);
 
 	private JPanel activeViolationtype, ruletypeSeverity, violationtypeSeverity;
 	private JButton avtApply, avtDeselectAll, avtSelectAll, rtsApply, rtsRestore,
@@ -60,7 +63,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			TaskServiceImpl ts) {
 		this.language = language;
 		this.ruletypes = ruletypes;
-		this.ts = ts;
+		this.taskServiceImpl = ts;
 		this.violationTypes = violationTypes;
 		String[] ruletypeColumnNames = {ValidateTranslator.getValue("Ruletype"), ValidateTranslator.getValue("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0,
@@ -439,12 +442,12 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void rtsRestoreActionPerformed() {		
-		ts.restoreToDefault(language, ValidateTranslator.getKey((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
+		taskServiceImpl.restoreToDefault(language, ValidateTranslator.getKey((String) ruletypeModel.getValueAt(rtsRuletypeTable.getSelectedRow(), 0)));
 		rtsCategoryValueChanged();
 	}
 
 	private void rtsRestoreAllActionPerformed() {
-		ts.restoreAllToDefault(language);
+		taskServiceImpl.restoreAllToDefault(language);
 		rtsCategoryValueChanged();
 	}
 
@@ -454,12 +457,12 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void vtsRestoreActionPerformed() {		
-		ts.restoreToDefault(language, ValidateTranslator.getKey((String) violationtypeModel.getValueAt(vtsViolationtypeTable.getSelectedRow(), 0)));
+		taskServiceImpl.restoreToDefault(language, ValidateTranslator.getKey((String) violationtypeModel.getValueAt(vtsViolationtypeTable.getSelectedRow(), 0)));
 		vtsCategoryValueChanged();
 	}
 
 	private void vtsRestoreAllActionPerformed() {
-		ts.restoreAllToDefault(language);
+		taskServiceImpl.restoreAllToDefault(language);
 		vtsCategoryValueChanged();
 	}
 
@@ -508,7 +511,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			map.put(ValidateTranslator.getKey((String) ruletypeModel.getValueAt(i, 0)), (Severity) ruletypeModel.getValueAt(i, 1));
 		}
 		
-		ts.updateSeverityPerType(map, language);
+		taskServiceImpl.updateSeverityPerType(map, language);
 	}
 	
 	private void updateViolationtypeSeverities() {
@@ -518,7 +521,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 			map.put(ValidateTranslator.getKey((String) violationtypeModel.getValueAt(i, 0)), (Severity) violationtypeModel.getValueAt(i, 1));
 		}
 
-		ts.updateSeverityPerType(map, language);
+		taskServiceImpl.updateSeverityPerType(map, language);
 	}
 	
 	private void loadRuleTypeCategories() {
@@ -537,9 +540,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 				for(RuleType ruletype: rules){
 					Severity severity;
 					try{
-						severity = ts.getSeverityFromKey(language, ruletype.getKey());
+						severity = taskServiceImpl.getSeverityFromKey(language, ruletype.getKey());
 					} catch (Exception e){
-						severity = ts.getAllSeverities().get(0);
+						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
 					ruletypeModel.addRow(new Object[]{ValidateTranslator.getValue(ruletype.getKey()), severity});
 				}
@@ -565,9 +568,10 @@ public class LanguageSeverityConfiguration extends JPanel {
 				for(ViolationType violationtype: violationtypes){
 					Severity severity;
 					try{
-						severity = ts.getSeverityFromKey(language, violationtype.getViolationtypeKey());
+						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationtypeKey());
 					} catch (Exception e){
-						severity = ts.getAllSeverities().get(0);
+						logger.error(e);
+						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
 					violationtypeModel.addRow(new Object[]{ValidateTranslator.getValue(violationtype.getViolationtypeKey()), severity});
 				}

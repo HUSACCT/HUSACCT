@@ -6,7 +6,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -16,7 +15,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.*;
@@ -29,8 +27,8 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 	private static final long serialVersionUID = -7189769674996804424L;
 
-	private TaskServiceImpl ts;
-	private FilterViolations fv;
+	private TaskServiceImpl taskServiceImpl;
+	private FilterViolations filterViolations;
 	private JTextArea areaDescription;
 	private JRadioButton allDependencies, directDependencies,
 	indirectDependencies;
@@ -50,8 +48,8 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 	public BrowseViolations(TaskServiceImpl ts) {
 		setSize(new Dimension(800, 640));
-		this.ts = ts;
-		this.fv = new FilterViolations(ts, this);
+		this.taskServiceImpl = ts;
+		this.filterViolations = new FilterViolations(ts, this);
 		initComponents();
 		loadGUIText();
 		violationTable.doLayout();
@@ -128,7 +126,8 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				fv.setVisible(true);
+				filterViolations.loadFilterValues();
+				filterViolations.setVisible(true);
 			}
 		});
 
@@ -169,10 +168,16 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 		buttonSaveInHistory = new JButton("Save in History");
 		buttonSaveInHistory.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String input = JOptionPane.showInputDialog(ValidateTranslator.getValue("SaveInHistoryDialog"));
-				if(input != null || input.equals("")) {
-					ts.saveInHistory(input);
+				if(violationModel.getRowCount() > 0){
+					String input = JOptionPane.showInputDialog(ValidateTranslator.getValue("SaveInHistoryDialog"));
+					if(input != null || input.equals("")) {
+						taskServiceImpl.saveInHistory(input);
+						buttonSaveInHistory.setEnabled(false);
+					}
+				} else{
+					JOptionPane.showMessageDialog(null, "NoValue", "NoValueTitle", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -280,7 +285,7 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 				if(violationTable.getSelectedRow() > -1){
 					int row = violationTable.convertRowIndexToModel(violationTable.getSelectedRow());
-					Violation violation = ts.applyFilterViolations(applyFilter.isSelected()).get(row);
+					Violation violation = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null).get(row);
 
 					lineNumberValueLabel.setText("" + violation.getLinenumber());
 					logicalModulesValueLabel.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
@@ -316,6 +321,7 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 	public void loadAfterViolationsChanged(){
 		setViolations();
 		loadInformationPanel();
+		buttonSaveInHistory.setEnabled(true);
 	}
 
 	private void loadModels(){
@@ -356,7 +362,7 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 			violationModel.removeRow(0);
 		}
 
-		ArrayList<Violation> violationRows = ts.applyFilterViolations(applyFilter.isSelected());
+		ArrayList<Violation> violationRows = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null);
 		for (Violation violation : violationRows) {
 			String message = new Messagebuilder().createMessage(violation.getMessage());
 			violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
@@ -372,7 +378,7 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 		informationPanel.add(totalViolation);
 
 
-		totalViolationNumber.setText("" + ts.getAllViolations().getValue().size());
+		totalViolationNumber.setText("" + taskServiceImpl.getAllViolations().getValue().size());
 		informationPanel.add(totalViolationNumber);
 
 		shownViolations.setText(ValidateTranslator.getValue("ShownViolations") + ":");
@@ -381,7 +387,7 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 		shownViolationsNumber.setText("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
 
-		for(Entry<Severity, Integer> violationPerSeverity: ts.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
+		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
 			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
 			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
 		}

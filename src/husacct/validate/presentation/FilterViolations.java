@@ -3,26 +3,17 @@ package husacct.validate.presentation;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
+import java.util.Calendar;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public final class FilterViolations extends JDialog  {
 	private static final long serialVersionUID = -6295611607558238501L;
 
-	private TaskServiceImpl ts;
+	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane TabbedPane;
 	private JButton addPath, removePath, save, cancel;
@@ -36,10 +27,11 @@ public final class FilterViolations extends JDialog  {
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
+	private Calendar violationDate = null;
 
-	public FilterViolations(TaskServiceImpl ts, FilterViolationsObserver filterViolationsObserver) {
+	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
 		this.vilterViolationsObserver = filterViolationsObserver;
-		this.ts = ts;
+		this.taskServiceImpl = taskServiceImpl;
 		initComponents();
 		loadGUIText();
 	}
@@ -185,6 +177,10 @@ public final class FilterViolations extends JDialog  {
 		setSize(800, 600);
 	}
 	
+	public void setViolationDate(Calendar date){
+		violationDate = date;
+	}
+	
 	public void loadGUIText(){
 		setTitle(ValidateTranslator.getValue("TotalViolations"));
 		TabbedPane.addTab(ValidateTranslator.getValue("FilterViolations"), filterViolationPanel);
@@ -268,8 +264,8 @@ public final class FilterViolations extends JDialog  {
 		ruletypesfilter = getRuletypesFilter();
 		violationtypesfilter = getViolationtypesFilter();
 		pathsfilter = getPathFilter();
-		ts.setFilterValues(ruletypesfilter, violationtypesfilter,
-				pathsfilter, hideFilteredValues.isSelected());
+		taskServiceImpl.setFilterValues(ruletypesfilter, violationtypesfilter,
+				pathsfilter, hideFilteredValues.isSelected(), violationDate);
 		vilterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
@@ -330,24 +326,20 @@ public final class FilterViolations extends JDialog  {
 		while(ruletypeModelFilter.getRowCount() > 0){
 			ruletypeModelFilter.removeRow(0);
 		}
-		ArrayList<String> ruletypes = ts.loadRuletypesForFilter();
+		ArrayList<String> ruletypes = taskServiceImpl.loadRuletypesForFilter(violationDate);
 		for(String ruletype : ruletypes){
 			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
 		}
-		ruletypeModelFilter.fireTableDataChanged();
-		ruletypeTable.repaint();
-		ruletypeTable.revalidate();
 	}
 
 	private void loadViolationtypes(){
 		while(violationtypeModelFilter.getRowCount() > 0){
 			violationtypeModelFilter.removeRow(0);
 		}
-		ArrayList<String> violationtypes = ts.loadViolationtypesForFilter();
+		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
 		for(String violationtype : violationtypes){
 			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
 		}
-		violationtypeTable.updateUI();
 	}
 	
 }
