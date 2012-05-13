@@ -58,6 +58,7 @@
         <jar jarfile="${jar.dir}/${ant.project.name}.jar" update="true">
 			<fileset dir="${src.dir}" >
 				<include name="husacct/common/resources/**/*" />
+				<include name="husacct/common/locale/**/*" />
 			</fileset>
         </jar>
 	</target>
