@@ -145,4 +145,10 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		report.createReport(fileType, name, path, violationHistory);
 		
 	}
+	
+	@Override 
+	public JInternalFrame getViolationHistoryGUI(){
+		//FIXME add ViolationHistoryGUI
+		return new JInternalFrame();
+	}
 }
