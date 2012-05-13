@@ -1,2 +1,5 @@
 package husacct.analyse.infrastructure;
-//TODO MAKEN
+
+public class Infrastructure{
+	
+}

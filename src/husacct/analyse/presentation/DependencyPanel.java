@@ -3,6 +3,8 @@ package husacct.analyse.presentation;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+
+import husacct.analyse.abstraction.language.AnalyseTranslater;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import javax.swing.GroupLayout;
@@ -42,6 +44,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		
 		dependencyTable = new JTable();
 		tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>());
+		
 		dependencyTable.setModel(tableModel);
 		dependencyScrollPane.setViewportView(dependencyTable);
 		
@@ -109,13 +112,13 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	
 	private void createLayout(){
 		fromModuleScrollPane = new JScrollPane();
-		fromModuleScrollPane.setBorder(new TitledBorder("From Module"));
+		fromModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("FromModuleTreeTitle")));
 		
 		toModuleScrollPane = new JScrollPane();
-		toModuleScrollPane.setBorder(new TitledBorder("To Module"));
+		toModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("ToModuleTreeTitle")));
 		
 		dependencyScrollPane = new JScrollPane();
-		dependencyScrollPane.setBorder(new TitledBorder("Found Depdencies for selected modules"));
+		dependencyScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("DependencyTableTitle")));
 		
 		theLayout = new GroupLayout(this);
 		theLayout.setHorizontalGroup(
@@ -166,5 +169,17 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		List<DependencyDTO> allFoundDependencies = dataControl.listDependencies(fromSelected, toSelected);
 		dependencyTable.setModel(new DependencyTableModel(allFoundDependencies));
 		dependencyTable.repaint();
+	}
+	
+	public void reload(){
+		tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>());
+		fromModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("FromModuleTreeTitle")));
+		toModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("ToModuleTreeTitle")));
+		dependencyScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("DependencyTableTitle")));
+		toModuleScrollPane.repaint(); 
+		fromModuleScrollPane.repaint();
+		dependencyScrollPane.repaint();
+		updateTableModel();
+		this.repaint();
 	}
  }

@@ -1,12 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-
-import java.util.List;
-
-import org.antlr.runtime.tree.BaseTree;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 class JavaClassGenerator extends JavaGenerator{
 	
@@ -25,13 +20,22 @@ class JavaClassGenerator extends JavaGenerator{
 	}
 	
 	public String generateModel(CommonTree commonTree) {
+		
 		this.name = commonTree.getChild(1).toString();
 		if(belongsToPackage.equals("")) {
 			this.uniqueName = commonTree.getChild(1).toString();
 		}else{
 			this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
 		}
-		this.isAbstract = isAbstract((CommonTree)commonTree.getFirstChildWithType(JavaParser.MODIFIER_LIST));
+		
+		CommonTree modifierListTree = (CommonTree)commonTree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
+		
+		if(modifierListTree.getFirstChildWithType(JavaParser.AT) != null){
+			JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(uniqueName);
+			annotationGenerator.generateMethod((CommonTree) modifierListTree.getFirstChildWithType(JavaParser.AT));
+		}
+		
+		this.isAbstract = isAbstract(modifierListTree);
 		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass);
 		return uniqueName;
 	}

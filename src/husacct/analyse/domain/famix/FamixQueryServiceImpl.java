@@ -190,9 +190,10 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		for(FamixAssociation assocation: allAssocations){
 			if(assocation.from.startsWith(from)){
 				if(assocation.to.startsWith(to)){
+					String currentType = determineType(assocation);
 					for(String tempDependencyFilter: dependencyFilter){
-						if(assocation.type.equalsIgnoreCase(tempDependencyFilter)){
-					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+						if(currentType.equalsIgnoreCase(tempDependencyFilter)){
+					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, currentType, assocation.lineNumber);
 							if(!dependencyAlreadyListed(result, foundDepency)){
 								result.add(foundDepency);
 							}
@@ -212,7 +213,8 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		DependencyDTO foundDepency;
 		for(FamixAssociation assocation: allAssocations){
 			if(assocation.from.startsWith(from)){
-				 	foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+					String currentType = determineType(assocation);
+				 	foundDepency = new DependencyDTO(assocation.from, assocation.to, currentType, assocation.lineNumber);
 					if(!dependencyAlreadyListed(result, foundDepency)){
 						result.add(foundDepency);
 					}
@@ -229,8 +231,9 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		for(FamixAssociation assocation: allAssocations){
 			if(assocation.from.startsWith(from)){ 
 					for(String tempDependencyFilter: dependencyFilter){
-						if(assocation.type.equalsIgnoreCase(tempDependencyFilter)){
-					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+						String currentType = determineType(assocation);
+						if(currentType.equalsIgnoreCase(tempDependencyFilter)){
+					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, currentType, assocation.lineNumber);
 							if(!dependencyAlreadyListed(result, foundDepency)){
 								result.add(foundDepency);
 							}
@@ -249,7 +252,8 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		DependencyDTO foundDepency;		
 		for(FamixAssociation assocation: allAssocations){
 			if(assocation.to.startsWith(to)){
-				foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+				String currentType = determineType(assocation);
+				foundDepency = new DependencyDTO(assocation.from, assocation.to, currentType, assocation.lineNumber);
 				if(!dependencyAlreadyListed(result, foundDepency)){
 					result.add(foundDepency);
 				}
@@ -265,8 +269,9 @@ public class FamixQueryServiceImpl implements ModelQueryService{
 		DependencyDTO foundDepency;
 		for(FamixAssociation assocation: allAssocations){
 					for(String tempDependencyFilter: dependencyFilter){
-						if(assocation.to.startsWith(to) && assocation.type.equalsIgnoreCase(tempDependencyFilter)){
-					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, assocation.type, assocation.lineNumber);
+						String currentType = determineType(assocation);
+						if(assocation.to.startsWith(to) && currentType.equalsIgnoreCase(tempDependencyFilter)){
+					 	 	foundDepency = new DependencyDTO(assocation.from, assocation.to, currentType, assocation.lineNumber);
 							if(!dependencyAlreadyListed(result, foundDepency)){
 								result.add(foundDepency);
 							}
