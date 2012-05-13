@@ -15,10 +15,14 @@ import javax.swing.JMenu;
 @SuppressWarnings("serial")
 public class LanguageMenu extends JMenu{
 	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public LanguageMenu(final LocaleController localeController){
-		super("Language");
-
-		IControlService controlService = ServiceProvider.getInstance().getControlService();
+		super();
+		
+		setText(controlService.getTranslatedString("Language"));
+		
+		controlService = ServiceProvider.getInstance().getControlService();
 
 		for(Locale locale : localeController.getAvailableLocales()){
 			
@@ -52,6 +56,13 @@ public class LanguageMenu extends JMenu{
 				}
 			});
 			this.add(item);
-		}		
+		}
+		
+		final LanguageMenu languageMenu = this;
+		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			public void update(Locale newLocale) {
+				languageMenu.setText(controlService.getTranslatedString("Language"));				
+			}
+		});
 	}
 }

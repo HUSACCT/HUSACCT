@@ -42,8 +42,15 @@ public class MainGui extends JFrame{
 		AnalyseMenu analyseMenu = new AnalyseMenu(mainController);
 		ValidateMenu validateMenu = new ValidateMenu(mainController);
 		LanguageMenu languageMenu = new LanguageMenu(mainController.getLocaleController());
-		HelpMenu helpMenu = new HelpMenu();
+		HelpMenu helpMenu = new HelpMenu(mainController);
 
+		fileMenu.setMnemonic('F');
+		defineMenu.setMnemonic('D');
+		analyseMenu.setMnemonic('A');
+		validateMenu.setMnemonic('V');
+		languageMenu.setMnemonic('L');
+		helpMenu.setMnemonic('H');
+		
 		menuBar.add(fileMenu);
 		menuBar.add(defineMenu);
 		menuBar.add(analyseMenu);
@@ -57,7 +64,7 @@ public class MainGui extends JFrame{
 
 	private void setupFrame(){
 		setTitle();
-		Image icon = Toolkit.getDefaultToolkit().getImage("img/husacct.png");
+		Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/husacct/common/resources/husacct.png"));
 		setIconImage(icon);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setBounds(100, 100, 783, 535);
