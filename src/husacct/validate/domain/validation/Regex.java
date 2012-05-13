@@ -1,4 +1,4 @@
-package husacct.validate.task.filter;
+package husacct.validate.domain.validation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

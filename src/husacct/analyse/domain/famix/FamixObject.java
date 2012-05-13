@@ -33,8 +33,8 @@ abstract class FamixObject{
 		String fieldName = field.getName();
 		String methodName = getFieldMethodName(fieldName);
 		try{
-			Method method = this.getClass().getMethod(methodName, null);
-			java.lang.Object response = (java.lang.Object) method.invoke(this, null);
+			Method method = this.getClass().getMethod(methodName, (Class<?>) null);
+			java.lang.Object response = (java.lang.Object) method.invoke(this, (Object) null);
 			if (response == null) return "null";
 			return response.toString();
 		}

@@ -1,4 +1,4 @@
-package husacct.validate.domain.factory.violationtype.java;
+package husacct.validate.domain.factory.violationtype;
 
 import husacct.ServiceProvider;
 import husacct.define.IDefineService;
