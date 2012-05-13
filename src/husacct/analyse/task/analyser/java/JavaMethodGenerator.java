@@ -34,7 +34,7 @@ class JavaMethodGenerator extends JavaGenerator{
 	public void generateModelObject(CommonTree methodTree, String className) {
 		this.belongsToClass = className;
 		fillMethodObject(methodTree);
-		createMethodObject();		
+		createMethodObject();	
 	}
 
 	private void fillMethodObject(CommonTree methodTree) {
@@ -46,6 +46,7 @@ class JavaMethodGenerator extends JavaGenerator{
 			isConstructor = true;
 			declaredReturnType = "";
 			uniqueName = belongsToClass;
+			name = belongsToClass.substring(belongsToClass.lastIndexOf(".") + 1, belongsToClass.length());
 			createMethodDetails(methodTree);
 		} else {
 			isConstructor = false;
@@ -72,7 +73,7 @@ class JavaMethodGenerator extends JavaGenerator{
 					parseScopeProperties(childTree);
 					break;
 			}						
-		}
+		}		
 		fillMethodSignature(tree, 1);
 	}
 
@@ -160,8 +161,9 @@ class JavaMethodGenerator extends JavaGenerator{
 				CommonTree valueTree = (CommonTree) typeTree.getChild(0);
 				switch(valueTree.getType()){
 					case JavaParser.QUALIFIED_TYPE_IDENT:
+						
 						CommonTree qualifiedTypeTree = (CommonTree) typeTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
-						saveParameter(attributeName, (CommonTree) qualifiedTypeTree.getFirstChildWithType(JavaParser.IDENT));
+						saveParameter(attributeName, (CommonTree) qualifiedTypeTree);						
 						break;
 					case JavaParser.INT:
 					case JavaParser.FLOAT:
@@ -201,24 +203,39 @@ class JavaMethodGenerator extends JavaGenerator{
 	
 	private void saveParameter(String attributeName, CommonTree parameterTree){
 
-		if(parameterTree.getChildCount() != 0){
-			logger.warn("Generics are not supported yet!");
+		String parameterTypeName = "";
+		CommonTree specificAttributeTree = (CommonTree) parameterTree.getFirstChildWithType(JavaParser.IDENT);
+		if(specificAttributeTree == null){
+			parameterTypeName = parameterTree.toString();
+			
+			if(parameterTypeName.equals("")) {
+				logger.warn("ATTRIBUTE TREE IS NOT PARSEBLE!! (" +this.belongsToClass+ ") (" + parameterTree.getType() + ")");
+				return;
+			}
+		} else if(parameterTree.getChildCount() > 1){
+			int totalChilds = parameterTree.getChildCount();
+			for(int i = 0; i < totalChilds; i++){
+				parameterTypeName += parameterTypeName != "" ? "." : "";
+				parameterTypeName += parameterTree.getChild(i).toString();
+			}
+		} else if(specificAttributeTree.getFirstChildWithType(JavaParser.GENERIC_TYPE_ARG_LIST) != null){
+			logger.warn("Generics are not supported yet");
 			return;
+		} else {
+			parameterTypeName = specificAttributeTree.toString();
 		}
-
 		
-		String parameterType = parameterTree.toStringTree();
-		functionParameterTypes.add(parameterType);
+		functionParameterTypes.add(parameterTypeName);
 		int linenumber = parameterTree.getLine();
-		
+
 		if(this.name == null){
-			logger.warn("Something went wrong (this.name == null?!) ("+ attributeName +")");
+			logger.warn("Something went wrong (this.name == null?!) ("+ attributeName +") :" + this.belongsToClass);
 			return;
 		}
 		
 		String attributeUnique = this.uniqueName + "." + attributeName;
 
-		modelService.createAttribute(false, this.accessControlQualifier, this.belongsToClass, parameterType, attributeName, attributeUnique, linenumber);
+		modelService.createAttribute(false, this.accessControlQualifier, this.belongsToClass, parameterTypeName, attributeName, attributeUnique, linenumber);
 	}
 
 	private void createMethodObject(){

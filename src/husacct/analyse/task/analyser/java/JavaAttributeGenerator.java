@@ -26,6 +26,13 @@ class JavaAttributeGenerator {
 	
 	
 	public void generateModel(Tree attributeTree, String belongsToClass) {
+		
+		CommonTree currentTree = (CommonTree) attributeTree;
+		CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);
+		if(IdentTree != null){
+			this.name = IdentTree.getText();
+		}
+		
 		this.belongsToClass = belongsToClass;
 		lineNumber = attributeTree.getLine();
 		walkThroughAST(attributeTree);
