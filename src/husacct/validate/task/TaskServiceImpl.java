@@ -58,8 +58,9 @@ public class TaskServiceImpl{
 			ArrayList<String> paths, boolean hideFilter, Calendar date) {
 		if (date == null){
 			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getAllViolations().getValue());
+		} else{
+			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
 		}
-		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
 	}
 
 	public ArrayList<Violation> applyFilterViolations(Boolean applyfilter, Calendar date) {
