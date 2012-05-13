@@ -7,7 +7,6 @@ import husacct.validate.domain.validation.Severity;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.UUID;
 
 public class SeverityConfigRepository {
 	private List<Severity> currentSeverities;
@@ -30,14 +29,8 @@ public class SeverityConfigRepository {
 	}
 
 	public Severity getSeverityByName(String severityName){
-		for(Severity defaultSeverity : defaultSeverities){
-			if(severityName.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
-				return defaultSeverity;
-			}
-		}
-
 		for(Severity customSeverity : currentSeverities){
-			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getDefaultName().toLowerCase())){
 				return customSeverity;
 			}		
 		}
@@ -60,15 +53,6 @@ public class SeverityConfigRepository {
 			//throw new DefaultSeverityNotFoundException	
 			}			
 		}
-	}
-
-	private Severity getSeverityByUUID(UUID uuid){
-		for(Severity severity : currentSeverities){
-			if(severity.getId().equals(uuid)){
-				return severity;
-			}
-		}
-		throw new SeverityNotFoundException();
 	}
 
 	public int getSeverityValue(Severity severity){

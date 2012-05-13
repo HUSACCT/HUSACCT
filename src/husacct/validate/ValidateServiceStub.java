@@ -147,4 +147,9 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	public void exportViolationHistoryReport(String name, String fileType,
 			String path, ViolationHistory violationHistory) {
 	}
+
+	@Override
+	public JInternalFrame getViolationHistoryGUI() {
+		return new JInternalFrame();
+	}
 }

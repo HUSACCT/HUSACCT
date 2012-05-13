@@ -35,4 +35,5 @@ public interface IValidateService
 	public Calendar[] getViolationHistoryDates();
 	public void saveInHistory(String description);
 	public void exportViolationHistoryReport(String name, String fileType, String path, ViolationHistory violationHistory);
+	public JInternalFrame getViolationHistoryGUI();
 }
