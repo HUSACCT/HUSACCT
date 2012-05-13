@@ -1,11 +1,9 @@
 package husacct.graphics.presentation.figures;
 
-import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -33,7 +31,7 @@ public class ComponentFigure extends NamedFigure {
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		children.add(body);
-		
+
 		text = new TextFigure(name);
 		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(text);
@@ -41,22 +39,17 @@ public class ComponentFigure extends NamedFigure {
 		compIconFig = new ImageFigure();
 		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
 		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
-		
-		try	{
-			InputStream iconStream = ClassLoader.getSystemResourceAsStream("husacct/graphics/presentation/resources/component.png");
-			if(iconStream == null) {
-				throw new IOException();
-			}
-			compIcon = ImageIO.read(iconStream);
-			
+
+		try {
+			URL componentImageURL = getClass().getResource("/husacct/common/resources/graphics/component_icon.png");
+			compIcon = ImageIO.read(componentImageURL);
 			compIconFig.setImage(null, compIcon);
 			children.add(compIconFig);
-		}
-		catch(IOException e) {
+		} catch (Exception e) {
 			compIconFig = null;
 			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
 		}
-		
+
 	}
 
 	@Override
@@ -67,10 +60,10 @@ public class ComponentFigure extends NamedFigure {
 		if ((lead.y - anchor.y) < this.minHeight) {
 			lead.y = anchor.y + this.minHeight;
 		}
-		
+
 		// bigger than text
-		double requestTextWidth = this.text.getBounds().width+10;
-		if((lead.x - anchor.x) < requestTextWidth) {
+		double requestTextWidth = this.text.getBounds().width + 10;
+		if ((lead.x - anchor.x) < requestTextWidth) {
 			lead.x = anchor.x + requestTextWidth;
 		}
 
@@ -84,15 +77,14 @@ public class ComponentFigure extends NamedFigure {
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
-		
-		if(this.compIconFig != null) {
+
+		if (this.compIconFig != null) {
 			double iconAnchorX = lead.x - 6 - this.compIcon.getWidth();
 			double iconAnchorY = anchor.y + 6;
 			double iconLeadX = iconAnchorX + this.compIcon.getWidth();
 			double iconLeadY = iconAnchorY + this.compIcon.getHeight();
-			this.compIconFig.setBounds(
-					new Point2D.Double(iconAnchorX, iconAnchorY), 
-					new Point2D.Double(iconLeadX, iconLeadY));
+			this.compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX,
+					iconLeadY));
 		}
 
 		this.invalidate();
@@ -100,7 +92,6 @@ public class ComponentFigure extends NamedFigure {
 
 	@Override
 	public ComponentFigure clone() {
-
 		ComponentFigure other = (ComponentFigure) super.clone();
 		other.body = body.clone();
 		other.text = text.clone();
@@ -109,7 +100,7 @@ public class ComponentFigure extends NamedFigure {
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.body);
 		other.children.add(other.text);
-		if(compIconFig != null) {
+		if (compIconFig != null) {
 			other.children.add(other.compIconFig);
 		}
 
