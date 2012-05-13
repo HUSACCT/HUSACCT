@@ -91,7 +91,6 @@ class RuleTypesGenerator {
 						classList.add(myClass);
 					}
 				} catch (ClassNotFoundException e) {
-					//System.out.println(classPath);
 					//logger.debug(String.format("Classpath: %s not found" , classPath));
 				} 
 			}

@@ -16,14 +16,16 @@ public class ImportActiveViolationTypes {
 		Map<String, List<ActiveRuleType>> activeRuleTypesMap = new HashMap<String, List<ActiveRuleType>>();
 		for(Element activeViolationTypeElement : activeViolationTypesElement.getChildren()) {
 			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
-			for(Element ruleTypeElement : activeViolationTypeElement.getChildren()) {
-				ActiveRuleType activeRuleType = new ActiveRuleType();
-				activeRuleType.setRuleType(ruleTypeElement.getAttributeValue("type"));
+			for(Element ruleTypeElement : activeViolationTypeElement.getChildren()) {				
+				final String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
+				ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey);
+				
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
 				for(Element violationTypeElement : ruleTypeElement.getChildren()) {
-					ActiveViolationType activeViolationType = new ActiveViolationType();
-					activeViolationType.setEnabled(Boolean.parseBoolean(violationTypeElement.getChildText("enabled")));
-					activeViolationType.setType(violationTypeElement.getChildText("type"));
+					final String violationTypeKey = violationTypeElement.getChildText("type");
+					final boolean enabled = Boolean.parseBoolean(violationTypeElement.getChildText("enabled"));
+					ActiveViolationType activeViolationType = new ActiveViolationType(violationTypeKey, enabled);
+					activeViolationTypes.add(activeViolationType);
 				}
 				activeRuleType.setViolationTypes(activeViolationTypes);
 			}

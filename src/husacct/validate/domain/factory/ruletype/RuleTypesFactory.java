@@ -122,7 +122,7 @@ public class RuleTypesFactory {
 		}
 	}
 
-	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
+	public RuleType generateRuleType(String ruleKey) throws RuleInstantionException{
 		setViolationTypeFactory();
 
 		CategoryKeyClassDTO categoryKeyClass = allRuleTypes.get(ruleKey);

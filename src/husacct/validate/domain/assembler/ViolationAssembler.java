@@ -45,7 +45,7 @@ public class ViolationAssembler {
 		}
 	}
 
-	public List<ViolationDTO> createViolationDTO(List<Violation> violations) {
+	public List<ViolationDTO> createViolationDTO(List<Violation> violations) throws RuleTypeNotFoundException {
 		List<ViolationDTO> violationDTOList = new ArrayList<ViolationDTO>();
 
 		for (Violation violation : violations) {
@@ -58,16 +58,14 @@ public class ViolationAssembler {
 			catch(LanguageNotFoundException e){
 				logger.warn(e.getMessage());
 			}
-			catch(RuleTypeNotFoundException e){
-				logger.warn(e.getMessage());
-			} catch (RuleInstantionException e) {
+			catch (RuleInstantionException e) {
 				logger.warn(e.getMessage());
 			}
 		}
 		return violationDTOList;
 	}
 
-	private ViolationDTO createViolationDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
+	private ViolationDTO createViolationDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException{
 		try{
 			RuleTypeDTO rule = createRuleTypeDTO(violation);
 			ViolationTypeDTO violationtype = rule.getViolationTypes()[0];
@@ -97,12 +95,12 @@ public class ViolationAssembler {
 	}
 
 
-	private RuleTypeDTO createRuleTypeDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException, RuleTypeNotFoundException{
+	private RuleTypeDTO createRuleTypeDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException{
 		try{
 			if(violationtypeFactory == null){
 				throw new LanguageNotFoundException();
 			}			
-			ViolationType violationtype = violationtypeFactory.createViolationType(violation.getViolationtypeKey());
+			ViolationType violationtype = violationtypeFactory.createViolationType(violation.getRuletypeKey(), violation.getViolationtypeKey());
 			RuleType rule = ruleFactory.generateRuleType(violation.getRuletypeKey());
 
 			RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);

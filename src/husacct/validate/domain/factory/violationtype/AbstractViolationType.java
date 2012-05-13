@@ -35,10 +35,10 @@ public abstract class AbstractViolationType {
 		this.allViolationKeys = generator.getAllViolationTypes(createViolationTypesMetaData());
 	}
 
-	protected List<ViolationType> generateViolationTypes(EnumSet<?> enums){
+	protected List<ViolationType> generateViolationTypes(String ruleTypeKey, EnumSet<?> enums){
 		List<ViolationType> violationtypes = new ArrayList<ViolationType>();
 		for(Enum<?> enumValue : enums){			
-			ViolationType violationtype = generateViolationType(enumValue);	
+			ViolationType violationtype = generateViolationType(ruleTypeKey, enumValue);	
 			violationtypes.add(violationtype);
 		}
 		return violationtypes;
@@ -62,25 +62,43 @@ public abstract class AbstractViolationType {
 		return categoryViolations;
 	}
 
-	public ViolationType createViolationType(String violationKey){
+	public ViolationType createViolationType(String violationTypeKey){
 		List<String> violationKeysToLower = new ArrayList<String>();
 		for(CategoryKeySeverityDTO violationtype : allViolationKeys){
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
 		}		
 
-		if(violationKeysToLower.contains(violationKey.toLowerCase())){
-			final Severity severity = createSeverity(languageName, violationKey);
-			return new ViolationType(violationKey, severity);
+		if(violationKeysToLower.contains(violationTypeKey.toLowerCase())){
+			final Severity severity = createSeverity(languageName, violationTypeKey);
+			return new ViolationType(violationTypeKey, severity);
 		}
 		else{
-			logger.warn(String.format("Warning specified %s not found in the system", violationKey));			
+			logger.warn(String.format("Warning specified %s not found in the system", violationTypeKey));			
+		}
+		throw new ViolationTypeNotFoundException();
+	}
+	
+	public ViolationType createViolationType(String ruleTypeKey, String violationTypeKey){
+		List<String> violationKeysToLower = new ArrayList<String>();
+		for(CategoryKeySeverityDTO violationtype : allViolationKeys){
+			violationKeysToLower.add(violationtype.getKey().toLowerCase());
+		}		
+
+		if(violationKeysToLower.contains(violationTypeKey.toLowerCase())){
+			final Severity severity = createSeverity(languageName, violationTypeKey);
+			boolean enabled = configuration.isViolationEnabled(languageName, ruleTypeKey, violationTypeKey);
+			return new ViolationType(violationTypeKey, enabled, severity);
+		}
+		else{
+			logger.warn(String.format("Warning specified %s not found in the system", violationTypeKey));			
 		}
 		throw new ViolationTypeNotFoundException();
 	}
 
-	private ViolationType generateViolationType(Enum<?> enumValue){		
+	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue){		
 		final Severity severity = createSeverity(languageName, enumValue.toString());
-		return new ViolationType(enumValue.toString(), severity);
+		final boolean isEnabled = configuration.isViolationEnabled(languageName, ruleTypeKey, enumValue.toString());
+		return new ViolationType(enumValue.toString(), isEnabled, severity);
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey){
