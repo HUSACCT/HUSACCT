@@ -64,5 +64,14 @@ public final class ServiceProvider {
 	public IGraphicsService getGraphicsService() {
 		return graphicsService;
 	}
+	
+	public void destroy(){
+		this.controlService = null;
+		this.analyseService = null;
+		this.defineService = null;
+		this.validateService = null;
+		this.graphicsService = null;
+		_instance = null;
+	}
 
 }
