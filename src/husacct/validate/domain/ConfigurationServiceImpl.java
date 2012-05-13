@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.AbstractMap.SimpleEntry;
 
 public class ConfigurationServiceImpl {
-	
+
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
 	private final ViolationRepository violationRepository;
@@ -29,14 +29,13 @@ public class ConfigurationServiceImpl {
 
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
-		this.violationRepository = new ViolationRepository();
+		this.violationRepository = new ViolationRepository();		
 		this.severityPerTypeRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
-		this.severityPerTypeRepository.initializeDefaultSeverities();	
-
-		this.violationHistoryRepository = new ViolationHistoryRepository();
-		this.activeViolationTypesRepository = new ActiveViolationTypesRepository();
+		this.activeViolationTypesRepository = new ActiveViolationTypesRepository(this.ruletypefactory);
+		this.severityPerTypeRepository.initializeDefaultSeverities();			
+		this.violationHistoryRepository = new ViolationHistoryRepository();		
 	}
-	
+
 	public void clearViolations() {
 		violationRepository.clear();
 	}
@@ -128,7 +127,7 @@ public class ConfigurationServiceImpl {
 
 	public void removeViolationHistory(Calendar date) {
 		violationHistoryRepository.removeViolationHistory(date);
-		
+
 	}
 
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
@@ -139,9 +138,16 @@ public class ConfigurationServiceImpl {
 		return violationHistoryRepository.getViolationHistory();
 	}
 
-	public void attachViolationHistoryRepositoryObserver(
-			ViolationHistoryRepositoryObserver observer) {
-		violationHistoryRepository.attachObserver(observer);
-		
+	public void attachViolationHistoryRepositoryObserver(ViolationHistoryRepositoryObserver observer) {
+		violationHistoryRepository.attachObserver(observer);		
+	}
+
+	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
+		if(activeViolationTypesRepository != null){
+			return activeViolationTypesRepository.isEnabled(programmingLanguage, ruleTypeKey, violationTypeKey);
+		}
+		else{
+			return true;
+		}
 	}
 }

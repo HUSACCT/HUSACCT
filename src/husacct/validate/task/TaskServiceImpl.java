@@ -168,6 +168,7 @@ public class TaskServiceImpl{
 	public void saveInHistory(String description) {
 		configuration.createHistoryPoint(description);
 	}
+	
 	public void removeViolationHistory(Calendar date) {
 		configuration.removeViolationHistory(date);
 	}
@@ -175,9 +176,11 @@ public class TaskServiceImpl{
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
 		return configuration.getViolationHistoryByDate(date);
 	}
+	
 	public List<ViolationHistory> getViolationHistories() {
 		return configuration.getViolationHistories();
 	}
+	
 	public void attachViolationHistoryObserver(ViolationHistoryRepositoryObserver observer) {
 		configuration.attachViolationHistoryRepositoryObserver(observer);
 	}

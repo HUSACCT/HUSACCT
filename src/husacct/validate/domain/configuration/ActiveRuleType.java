@@ -5,15 +5,15 @@ import java.util.List;
 
 public class ActiveRuleType {
 
-	private String ruleType;
+	private final String ruleType;
 	private List<ActiveViolationType> violationTypes;
+	
+	public ActiveRuleType(String ruleType){
+		this.ruleType = ruleType;
+	}
 
 	public String getRuleType() {
 		return ruleType;
-	}
-
-	public void setRuleType(String ruleType) {
-		this.ruleType = ruleType;
 	}
 
 	public List<ActiveViolationType> getViolationTypes() {

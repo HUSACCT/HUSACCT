@@ -25,16 +25,16 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 	@Override
 	public List<ViolationType> createViolationTypesByRule(String ruleTypeKey){
 		if(isCategoryLegalityOfDependency(ruleTypeKey)){	
-			return generateViolationTypes(defaultDependencies);
+			return generateViolationTypes(ruleTypeKey, defaultDependencies);
 		}
 		else if(isVisibilityConvenctionRule(ruleTypeKey)){
-			return generateViolationTypes(defaultAccess);
+			return generateViolationTypes(ruleTypeKey, defaultAccess);
 		}
 		else if(isNamingConvention(ruleTypeKey)){
-			return generateViolationTypes(EnumSet.noneOf(JavaViolationTypes.class));
+			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(JavaViolationTypes.class));
 		}
 		else if(isLoopsInModule(ruleTypeKey)){
-			return generateViolationTypes(defaultDependencies);
+			return generateViolationTypes(ruleTypeKey, defaultDependencies);
 		}
 		else{
 			return Collections.emptyList();

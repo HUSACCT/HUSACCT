@@ -6,8 +6,9 @@ import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Observable;
 
-public class ViolationHistoryRepository {	
+public class ViolationHistoryRepository extends Observable {	
 	private List<ViolationHistory> violationHistories;
 	private List<ViolationHistoryRepositoryObserver> observers = new ArrayList<ViolationHistoryRepositoryObserver>();
 	

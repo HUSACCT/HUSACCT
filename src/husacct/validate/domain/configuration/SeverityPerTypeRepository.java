@@ -18,14 +18,17 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 public class SeverityPerTypeRepository {
+	
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
+	
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
+	private final RuleTypesFactory ruletypefactory;
+	private final ConfigurationServiceImpl configuration;		
 	
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
-	private final RuleTypesFactory ruletypefactory;
-	private final ConfigurationServiceImpl configuration;	
-	private AbstractViolationType violationtypefactory;
+	private AbstractViolationType violationtypefactory;	
+	
 
 	public SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
