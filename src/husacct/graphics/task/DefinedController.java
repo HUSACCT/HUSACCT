@@ -132,4 +132,7 @@ public class DefinedController extends DrawingController {
 		}
 	}
 
+	public void moduleOpen(String path) {
+		getAndDrawModulesIn(path);
+	}
 }
