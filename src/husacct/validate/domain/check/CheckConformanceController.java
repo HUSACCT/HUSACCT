@@ -71,7 +71,7 @@ public class CheckConformanceController {
 		}
 	}
 
-	private RuleType getRuleType(String ruleKey) throws RuleInstantionException, RuleTypeNotFoundException{
+	private RuleType getRuleType(String ruleKey) throws RuleInstantionException{
 		RuleType rule = ruleCache.get(ruleKey);
 		if(rule == null){
 			rule = ruleFactory.generateRuleType(ruleKey);

@@ -9,19 +9,19 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-public class ResourceBundles {
+public class ValidateTranslator {
 	private static final String bundleLocation = "husacct.common.locale.validateLang";
-	private static Logger logger = Logger.getLogger(ResourceBundles.class);
+	private static Logger logger = Logger.getLogger(ValidateTranslator.class);
 
-	public static String getValue(String key){			
+	public static String getValue(String key){	
 		try{
 			Locale locale = getLocale();
 			ResourceBundle languageValues = ResourceBundle.getBundle(bundleLocation, locale);
 			return languageValues.getString(key);
 		}catch(MissingResourceException m){
-			logger.warn(m.getMessage(), m);
+			logger.warn(m.getMessage());
+			return key;
 		}
-		return key;
 	}
 
 	public static String getKey(String remoteValue){
@@ -37,9 +37,10 @@ public class ResourceBundles {
 				}
 			}
 		}catch(MissingResourceException m){
-			logger.error(m.getMessage(), m);
+			logger.error(m.getMessage());
+			return remoteValue;
 		}
-		return remoteValue;
+		return remoteValue;		
 	}
 
 	private static Locale getLocale() {
