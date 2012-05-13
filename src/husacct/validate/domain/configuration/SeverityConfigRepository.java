@@ -73,7 +73,7 @@ public class SeverityConfigRepository {
 	private void initializeCurrentSeverities(){	
 		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
 		for(Severity severity : defaultSeverities){
-			if(!severity.getDefaultName().equals("unidentified")){
+			if(!severity.getDefaultName().toLowerCase().equals("unidentified")){
 				currentSeverities.add(severity);
 			}
 		}
