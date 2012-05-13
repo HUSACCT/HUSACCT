@@ -24,6 +24,17 @@ public class Layer extends Module {
 		STATIC_LEVEL++;
 	}
 	
+	//TODO this contructor is only for importing
+	public Layer(String name, String description, int hierarchicalLevel)
+	{
+		super(name, description);
+		super.type = "Layer";
+		this.hierarchicalLevel = hierarchicalLevel;
+		if (hierarchicalLevel >= STATIC_LEVEL){
+			STATIC_LEVEL = hierarchicalLevel + 1;
+		}
+	}
+	
 	public void setHierarchicalLevel(int hierarchicalLevel) {
 		this.hierarchicalLevel = hierarchicalLevel;
 	}
