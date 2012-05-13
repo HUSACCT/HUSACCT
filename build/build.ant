@@ -31,7 +31,6 @@
         <mkdir dir="${bin.dir}"/>
         <javac srcdir="${src.dir}" destdir="${bin.dir}" debug="true" deprecation="on" includeantruntime="false">
         	<classpath refid="classpath" />
-        	<exclude name="husaccttest/**"/>
     	</javac>
     </target>
     
@@ -47,7 +46,7 @@
 	<!-- Create runnable Jar -->
     <target name="jar">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" >
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" excludes="husaccttest/**">
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
