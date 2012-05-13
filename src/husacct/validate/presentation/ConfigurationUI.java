@@ -4,12 +4,14 @@ import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.*;
+
 import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends javax.swing.JInternalFrame {
@@ -167,6 +169,10 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private void applySeverityActionPerformed() {
 		
 		for (int i = 0; i < severityModel.getRowCount(); i++) {
+			if(severityModel.getValueAt(i, 0).toString().isEmpty()){
+				JOptionPane.showMessageDialog(null, "SeverityNameNotSet, Change The name to save the severities", "SeverityNameNotSet", JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 			try{
 				Severity severity = severities.get(i);
 				severity.setUserName((String) severityModel.getValueAt(i, 0));

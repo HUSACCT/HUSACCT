@@ -40,7 +40,7 @@ public class SeverityConfigRepository {
 	private void checkDefaultSeveritiesChanged(List<Severity> severities){
 		for(Severity defaultSeverity : defaultSeverities){
 			boolean defaultSeverityFound = false;
-			
+
 			for(Severity severity : severities){		
 				if(severity.getId().equals(severity.getId())){
 					defaultSeverityFound = true;
@@ -50,7 +50,7 @@ public class SeverityConfigRepository {
 				}			
 			}
 			if(!defaultSeverityFound){
-			//throw new DefaultSeverityNotFoundException	
+				//throw new DefaultSeverityNotFoundException	
 			}			
 		}
 	}
@@ -60,7 +60,7 @@ public class SeverityConfigRepository {
 	}
 
 	public void restoreToDefault(){
-		currentSeverities = defaultSeverities;
+		initializeCurrentSeverities();
 	}
 
 	private void generateDefaultSeverities(){
@@ -73,7 +73,9 @@ public class SeverityConfigRepository {
 	private void initializeCurrentSeverities(){	
 		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
 		for(Severity severity : defaultSeverities){
-			currentSeverities.add(severity);
+			if(!severity.getDefaultName().equals("unidentified")){
+				currentSeverities.add(severity);
+			}
 		}
 	}
 }
