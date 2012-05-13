@@ -25,7 +25,7 @@ public class ViolationRepository {
 	}
 
 	public SimpleEntry<Calendar, List<Violation>> getAllViolations(){
-		return new SimpleEntry<Calendar, List<Violation>>(date, new ArrayList<Violation>());
+		return new SimpleEntry<Calendar, List<Violation>>(date, violations);
 	}
 
 	public void clear(){
