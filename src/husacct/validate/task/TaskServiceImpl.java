@@ -5,7 +5,6 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
-import husacct.validate.domain.configuration.ViolationHistoryRepository;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -56,20 +55,32 @@ public class TaskServiceImpl{
 
 	public void setFilterValues(ArrayList<String> ruletypesKeys,
 			ArrayList<String> violationtypesKeys,
-			ArrayList<String> paths, boolean hideFilter) {
-		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter);
+			ArrayList<String> paths, boolean hideFilter, Calendar date) {
+		if (date == null){
+			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getAllViolations().getValue());
+		}
+		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
 	}
 
-	public ArrayList<Violation> applyFilterViolations(Boolean applyfilter) {
-		return filterController.filterViolations(applyfilter);
+	public ArrayList<Violation> applyFilterViolations(Boolean applyfilter, Calendar date) {
+		if (date == null){
+			return filterController.filterViolations(applyfilter, getAllViolations().getValue());
+		}
+		return filterController.filterViolations(applyfilter, getViolationsByDate(date));
 	}
 
-	public ArrayList<String> loadRuletypesForFilter() {
-		return filterController.loadRuletypes();
+	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
+		if (date == null){
+			return filterController.loadRuletypes(getAllViolations().getValue());
+		}
+		return filterController.loadRuletypes(getViolationsByDate(date));
 	}
 
-	public ArrayList<String> loadViolationtypesForFilter() {
-		return filterController.loadViolationtypes();
+	public ArrayList<String> loadViolationtypesForFilter(Calendar date) {
+		if (date == null){
+			return filterController.loadViolationtypes(getAllViolations().getValue());
+		}
+		return filterController.loadViolationtypes(getViolationsByDate(date));
 	}
 
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {
