@@ -1,4 +1,7 @@
 bin
+build/bin
+build/jar
+build/reports
 .classpath
 .project
 .settings

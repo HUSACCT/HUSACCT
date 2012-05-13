@@ -1,12 +1,16 @@
 package husacct.validate;
 
-import java.awt.Color;
-
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
+
+import java.awt.Color;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 
@@ -30,11 +34,11 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56, Color.RED, "Catastrophic", "", 4);
 
 	private boolean validationExecuted;
-	
+
 	public ValidateServiceStub(){
 		this.validationExecuted = false;
 	}
-	
+
 	public CategoryDTO[] getCategories() {
 		return new CategoryDTO[] { category };
 	}
@@ -42,7 +46,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	public String[] getExportExtentions() {
 		return new String[] { "pdf", "xml", "html" };
 	}
-	
+
 	public void checkConformance() {
 		validationExecuted = true;
 	}
@@ -119,5 +123,33 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		else{
 			return new ViolationDTO[] { };
 		}
+	}
+
+	@Override
+	public List<Violation> getViolationsByDate(Calendar date) {
+		return null;
+	}
+
+	@Override
+	public Calendar[] getViolationHistoryDates() {
+		Calendar date1 = Calendar.getInstance();
+		date1.set(2012, 3, 28);
+
+		Calendar date2 = Calendar.getInstance();	
+		return new Calendar[] {date1, date2};
+	}
+
+	@Override
+	public void saveInHistory(String description) {
+	}
+
+	@Override
+	public void exportViolationHistoryReport(String name, String fileType,
+			String path, ViolationHistory violationHistory) {
+	}
+
+	@Override
+	public JInternalFrame getViolationHistoryGUI() {
+		return new JInternalFrame();
 	}
 }

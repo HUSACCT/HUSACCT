@@ -1,21 +1,19 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.ArrayList;
+
+import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.delegate_creation_expression_return;
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.qualified_identifier_return;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.infrastructure.antlr.java.JavaParser.qualifiedTypeIdentSimplified_return;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 class JavaMethodGenerator extends JavaGenerator{
-
-	private static final int CONSTRUCTOR_DECLARATION = JavaParser.CONSTRUCTOR_DECL;
-	private static final int MODIFIER_LIST = JavaParser.MODIFIER_LIST;
-	private static final int ABSTRACT = JavaParser.ABSTRACT;
-	private static final int STATIC = JavaParser.STATIC;
-	private static final int PROTECTED = JavaParser.PROTECTED;
-	private static final int PRIVATE = JavaParser.PRIVATE;
-	private static final int PUBLIC = JavaParser.PUBLIC;
-	private static final int FINAl = JavaParser.FINAL;
-	private static final int THROWS_CLAUSE = JavaParser.THROWS_CLAUSE;
 	
 	private boolean hasClassScope;
 	private boolean isAbstract = false;
@@ -30,165 +28,217 @@ class JavaMethodGenerator extends JavaGenerator{
 
 	public String name;
 	public String uniqueName;
+	private Logger logger = Logger.getLogger(JavaMethodGenerator.class);
+	private ArrayList<String> functionParameterTypes;
 
 	public void generateModelObject(CommonTree methodTree, String className) {
 		this.belongsToClass = className;
 		fillMethodObject(methodTree);
-		createMethodObject();
+		createMethodObject();	
 	}
 
 	private void fillMethodObject(CommonTree methodTree) {
-		if (methodTree != null) {
-				// If constructor...
-				if(methodTree.getType() == CONSTRUCTOR_DECLARATION){
-					createMethodDetails(methodTree);
-					isConstructor = true;
-					declaredReturnType = "";
-					//name = "Constructor";
-					uniqueName = belongsToClass + "." + signature;
-				} else {
-					createMethodDetails(methodTree);
-					isConstructor = false;
-					uniqueName = belongsToClass + "." + signature;
-				}
+		if (methodTree == null) {
+			return;
+		}
+		
+		if(methodTree.getType() == JavaParser.CONSTRUCTOR_DECL){
+			isConstructor = true;
+			declaredReturnType = "";
+			uniqueName = belongsToClass;
+			name = belongsToClass.substring(belongsToClass.lastIndexOf(".") + 1, belongsToClass.length());
+			createMethodDetails(methodTree);
+		} else {
+			isConstructor = false;
+			uniqueName = belongsToClass;
+			createMethodDetails(methodTree);
 		}
 	}
 
 	private void createMethodDetails(Tree tree) {
-		if (tree != null) {
-			for (int i = 0; i < tree.getChildCount(); i++) {
-
-				// Dit is vrij logisch, hier wordt gekeken of het een abstracte methode is.
-				if(tree.getChild(i).getChild(1) != null && tree.getChild(i).getChild(1).getType() == ABSTRACT )
-				{
-					isAbstract = true;
-				}
-
-				// Hier wordt de return type geset, maar het object heeft een DeclaredReturnType, maar ook een DeclaredClassReturnType.
-				// Misschien handig om die class eruit te halen? Want als het een class is, kun je die ook gewoon hier in setten:)
-				if(tree.getChild(i).getType() == 157)
-				{
-					if(tree.getChild(i).getChild(0).getType() == 151)
-					{
-						declaredReturnType = tree.getChild(i).getChild(0).getChild(0).getText();
-					} else {
-						declaredReturnType = tree.getChild(i).getChild(0).getText();
-					}
-				}
-
-				// De methode naam setten!
-				if(tree.getChild(i).getType() == 164){
-					name = tree.getChild(i).getText();
-				}
-
-				fillMethodSignature(tree, i);
-				fillAccessControlQualifier(tree, i);
-			}
+		if (tree == null) {
+			return;
 		}
+		for (int i = 0; i < tree.getChildCount(); i++) {
+			CommonTree childTree = (CommonTree) tree.getChild(i);
+			
+			switch(childTree.getType()){
+				case JavaParser.IDENT:
+					name = childTree.getText();
+					break;
+				case JavaParser.TYPE:
+					declaredReturnType = retrieveMethodReturnType(childTree);
+					break;
+				case JavaParser.MODIFIER_LIST:
+					parseScopeProperties(childTree);
+					break;
+			}						
+		}		
+		fillMethodSignature(tree, 1);
 	}
 
-	public void fillMethodSignature(Tree tree, int i)
-	{		
-		// Een methode signature is het volgende: http://java.about.com/od/m/g/methodsignature.htm
-		String methodSignature = "";
-		// Als het een constructor is (124), dan gebruik je de classname voor signature
-		if(tree.getType() == CONSTRUCTOR_DECLARATION)
-			methodSignature =  belongsToClass + "(";
-		// Anders de methode naam.
-		else
-			methodSignature = name + "(";
+	private String retrieveMethodReturnType(Tree returnTypetree){
+		String type = "";
+		CommonTree myTree = (CommonTree) returnTypetree;
+		try {
+			CommonTree typeWrapperTree = (CommonTree) myTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+			type = typeWrapperTree.getFirstChildWithType(JavaParser.IDENT).toString();
+		} catch (Exception e){
+			
+		}
+		return type;
+	}
+	
+	private boolean parseScopeProperties(CommonTree scopeTree){
+		int scopeTreeChildCount = scopeTree.getChildCount();
 		
-		// Kijken of er een FORMAL_PARAM_LIST element is
-		if(tree.getChild(i).getType() == 133)
-		{
-			// Als hij paramters heeft, dan gaan we ze zoeken..
-			if(tree.getChild(i).getChildCount() > 0)
-			{
-				// Een loop voor elke parameter..
-				for(int i2 = 0; i2 < tree.getChild(i).getChildCount(); i2++)
-				{
-					// Hebben we een FORMAL_PARAM_STD_DECL element (134)
-					if(tree.getChild(i).getChild(i2).getType() == 134)
-					{
-						// Hebben we een TYPE element (157)
-						if(tree.getChild(i).getChild(i2).getChild(1).getType() == 157)
-						{
-							// ALS we een QUALIFIED_TYPE_IDENT(151) hebben, dan moeten we verder in de boom, want dan 
-							// beschikt de methode over een specifieke type parameter zoals String.
-							// QUALIFIED_TYPE_IDENT(151) hoeft er niet te zijn, bij bijvoorbeeld een boolean.
-							if(tree.getChild(i).getChild(i2).getChild(1).getChild(0).getType() == 151)
-							{
-								// Welke type is het argument? IDENT (164)
-								if(tree.getChild(i).getChild(i2).getChild(1).getChild(0).getChild(0).getType() == 164)
-								{
-									methodSignature += tree.getChild(i).getChild(i2).getChild(1).getChild(0).getChild(0).getText();
+		for(int currentChild = 0; currentChild < scopeTreeChildCount; currentChild++){
+			CommonTree currentElement = (CommonTree) scopeTree.getChild(currentChild);
+			switch(currentElement.getType()){
+				case JavaParser.PUBLIC:
+					accessControlQualifier = "public";
+					break;
+				case JavaParser.PROTECTED:
+					accessControlQualifier = "protected";
+					break;
+				case JavaParser.PRIVATE:
+					accessControlQualifier = "private";
+					break;
+				case JavaParser.ABSTRACT:
+					isAbstract = true;
+					break;
+				case JavaParser.STATIC:
+					hasClassScope = true;
+					break;
+				case JavaParser.AT:
+					JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(this.belongsToClass);
+					annotationGenerator.generateMethod(currentElement);
+					break;
+				default:
+					logger.warn("Method type unknown (like private public static abstract) ["+ currentElement.getType() +"]");
+					break;
+			}
+		}	
+		
+		if (scopeTreeChildCount == 0 || hasClassScope && accessControlQualifier == null){
+			accessControlQualifier = "package-private";
+		}
+		
+		return true;
+	}
 
-								}
-							// Als er GEEN QUALIFIED_TYPE_IDENT(151) is dan pakken we gelijk het type
-							} else {
-								methodSignature += tree.getChild(i).getChild(i2).getChild(1).getChild(0).getText();
-							}
-						}
-					}
+	
+	public void fillMethodSignature(Tree tree, int i)
+	{	
+		String attributeName = "";
+		CommonTree totalTree = (CommonTree) tree;
+		CommonTree methodNameTree = (CommonTree) totalTree.getFirstChildWithType(JavaParser.IDENT);
+		
+		String methodSignature = "";
+		
+		if(tree.getType() == JavaParser.CONSTRUCTOR_DECL){
+			methodSignature = belongsToClass;
+		} else {
+			methodSignature = methodNameTree != null ? methodNameTree.toString() : "";
+			uniqueName += methodNameTree != null ? "." + methodSignature : "";
+		}
+		
+		functionParameterTypes = new ArrayList<String>();
+		
+		CommonTree paramListTree = (CommonTree) totalTree.getFirstChildWithType(JavaParser.FORMAL_PARAM_LIST);
+		
+		if(paramListTree != null && paramListTree.getChildCount() > 0){
+			int paramListCount = paramListTree.getChildCount();
+			for(int param = 0; param < paramListCount; param++){
+				CommonTree declarationTree = (CommonTree) paramListTree.getChild(param);
 
-					// Zodra je nog niet bij de laatste parameter bent, dan zetten we een komma.
-					if(i2 < tree.getChild(i).getChildCount()-1)
-					{
-						methodSignature += ",";
-					}
+				CommonTree attributeNameTree = (CommonTree) declarationTree.getFirstChildWithType(JavaParser.IDENT);
+				attributeName = attributeNameTree.toString();
+				
+				CommonTree typeTree = (CommonTree) declarationTree.getFirstChildWithType(JavaParser.TYPE);
+				
+				
+				CommonTree valueTree = (CommonTree) typeTree.getChild(0);
+				switch(valueTree.getType()){
+					case JavaParser.QUALIFIED_TYPE_IDENT:
+						
+						CommonTree qualifiedTypeTree = (CommonTree) typeTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+						saveParameter(attributeName, (CommonTree) qualifiedTypeTree);						
+						break;
+					case JavaParser.INT:
+					case JavaParser.FLOAT:
+					case JavaParser.BOOLEAN:
+					case JavaParser.DOUBLE:
+					case JavaParser.SHORT:
+					case JavaParser.LONG:
+					case JavaParser.CHAR:
+					case JavaParser.BYTE:
+						saveParameter(attributeName, (CommonTree) typeTree.getChild(0));
+						break;
+					default:
+						logger.warn("Cant parse a attribute for methods, unknown property [" + valueTree.getType() + "]");
+						break;
 				}
 			}
-			// Signature afsluiten en aan het object toevoegen uiteraard!
-			methodSignature += ")";
+		}
+		
+		if(!methodSignature.equals("")){
+			String parameterString = "";
+			for(String s : functionParameterTypes){
+				parameterString += parameterString != "" ? ", " : "";
+				parameterString += s;
+			}
+			methodSignature = methodSignature + "(" + parameterString + ")";
 			signature = methodSignature;
 		}
 		
-		if(tree.getChild(i).getType() == THROWS_CLAUSE){
+		if(tree.getChild(i).getType() == JavaParser.THROWS_CLAUSE){ //156
 			JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator();
 			CommonTree exceptionTree = (CommonTree) tree.getChild(i);
 			exceptionGenerator.generateModel(exceptionTree, this.belongsToClass);
-			
-			
-			
-			//exceptionGenerator.generateModel((CommonTree) tree.getChild(i), this.belongsToClass.toString());
-			
-//			System.out.println(tree.getChild(i).toStringTree());
-//			
-//			String fromClass = this.belongsToClass.toString();
-//			
-//			for(int ii = 0; ii <= tree.getChild(i).getChildCount(); ii++){
-//				System.out.println(tree.getChild(i).getChild(ii).getType());
-//			}
-//						
-			//modelService.createException(fromClass, ExceptionClass, lineNumber, declarationType)
 		}
 		
 		
 	}
-	public void fillAccessControlQualifier(Tree tree, int i)
-	{
-		if(tree.getChild(i).getType() == MODIFIER_LIST){ //Modifier List, (public, private, static?)
-			for (int childOfGivenTree = 0; childOfGivenTree < tree.getChild(i).getChildCount(); childOfGivenTree++){
-				if (tree.getChild(i).getChild(childOfGivenTree).getType() == STATIC){ //90 = static
-					hasClassScope = true;
-				}
-				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == PUBLIC){ //87 = public
-					accessControlQualifier = "public";
-				}
-				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == PRIVATE){ //85 = private
-					accessControlQualifier = "private";
-				}
-				else if (tree.getChild(i).getChild(childOfGivenTree).getType() == PROTECTED){ //86 = protected
-					accessControlQualifier = "protected";
-				}
+	
+	private void saveParameter(String attributeName, CommonTree parameterTree){
+
+		String parameterTypeName = "";
+		CommonTree specificAttributeTree = (CommonTree) parameterTree.getFirstChildWithType(JavaParser.IDENT);
+		if(specificAttributeTree == null){
+			parameterTypeName = parameterTree.toString();
+			
+			if(parameterTypeName.equals("")) {
+				logger.warn("ATTRIBUTE TREE IS NOT PARSEBLE!! (" +this.belongsToClass+ ") (" + parameterTree.getType() + ")");
+				return;
 			}
-			if (tree.getChild(i).getChildCount() == 0 || hasClassScope && accessControlQualifier == null){
-				accessControlQualifier = "package-private";
+		} else if(parameterTree.getChildCount() > 1){
+			int totalChilds = parameterTree.getChildCount();
+			for(int i = 0; i < totalChilds; i++){
+				parameterTypeName += parameterTypeName != "" ? "." : "";
+				parameterTypeName += parameterTree.getChild(i).toString();
 			}
+		} else if(specificAttributeTree.getFirstChildWithType(JavaParser.GENERIC_TYPE_ARG_LIST) != null){
+			logger.warn("Generics are not supported yet");
+			return;
+		} else {
+			parameterTypeName = specificAttributeTree.toString();
 		}
+		
+		functionParameterTypes.add(parameterTypeName);
+		int linenumber = parameterTree.getLine();
+
+		if(this.name == null){
+			logger.warn("Something went wrong (this.name == null?!) ("+ attributeName +") :" + this.belongsToClass);
+			return;
+		}
+		
+		String attributeUnique = this.uniqueName + "." + attributeName;
+
+		modelService.createAttribute(false, this.accessControlQualifier, this.belongsToClass, parameterTypeName, attributeName, attributeUnique, linenumber);
 	}
 
 	private void createMethodObject(){
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
-	}
+	}	
 }

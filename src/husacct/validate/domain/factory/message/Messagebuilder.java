@@ -4,7 +4,7 @@ import java.util.IllegalFormatException;
 
 import org.apache.log4j.Logger;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 
@@ -66,7 +66,7 @@ public class Messagebuilder {
 	private String getTextFormat(String ruleTypeKey){
 		try{
 			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
-			return ResourceBundles.getValue(ruleTextKey);		
+			return ValidateTranslator.getValue(ruleTextKey);		
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
 		}
@@ -85,7 +85,7 @@ public class Messagebuilder {
 
 	private String generateFirstExceptionMessage(Message message){
 		try{
-			final String exceptionKey = ResourceBundles.getValue("ExceptionMessage");
+			final String exceptionKey = ValidateTranslator.getValue("ExceptionMessage");
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
@@ -95,7 +95,7 @@ public class Messagebuilder {
 
 	private String generateRestExceptionMessage(Message message){
 		try{
-			final String exceptionKey = ResourceBundles.getValue("EnumerationMessage");
+			final String exceptionKey = ValidateTranslator.getValue("EnumerationMessage");
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);

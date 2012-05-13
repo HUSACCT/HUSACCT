@@ -1,0 +1,95 @@
+<project name="HUSACCT" basedir="../" default="main">
+
+    <property name="src.dir"     	value="src"/>
+    <property name="build.dir"   	value="build"/>
+	<property name="lib.dir"		value="lib" />	
+	
+	<property name="conf.dir"		value="${build.dir}/conf"/>
+    <property name="bin.dir" 		value="${build.dir}/bin"/>
+    <property name="jar.dir"     	value="${build.dir}/jar"/>
+	<property name="reports.dir" 	value="${build.dir}/reports" />
+	
+    <property name="main-class"  	value="husacct.Main"/>
+	 
+	<path id="classpath">
+		<pathelement location="${bin.dir}" />
+		<pathelement location="${src.dir}" />
+		<fileset dir="${lib.dir}" includes="*.jar" />
+	</path>
+	
+	<target name="main" depends="clean,compile,extractlib,jar,addresources,test,run"/>
+	
+	<!-- Cleanup working directory -->
+    <target name="clean">
+        <delete dir="${bin.dir}"/>
+    	<delete dir="${jar.dir}"/>
+        <delete dir="${reports.dir}"/>
+    </target>
+
+	<!-- Compile source -->
+    <target name="compile">
+        <mkdir dir="${bin.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${bin.dir}" debug="true" deprecation="on" includeantruntime="false">
+        	<classpath refid="classpath" />
+        	<exclude name="husaccttest/**"/>
+    	</javac>
+    </target>
+    
+    <!-- Extract external libraries -->
+    <target name="extractlib">	
+    	<unzip dest="${bin.dir}">
+    	    <fileset dir="${lib.dir}">
+    	        <include name="**/*.jar"/>
+    	    </fileset>
+    	</unzip>	
+    </target>
+	    	
+	<!-- Create runnable Jar -->
+    <target name="jar">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" >
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+	
+	<target name="addresources">
+        <jar jarfile="${jar.dir}/${ant.project.name}.jar" update="true">
+			<fileset dir="${src.dir}" >
+				<include name="husacct/common/resources/**/*" />
+				<include name="husacct/common/locale/**/*" />
+			</fileset>
+        </jar>
+	</target>
+		
+	<target name="test">
+		
+		<!-- Run JUnit tests, export as XML -->
+		<mkdir dir="${reports.dir}" />
+		<junit fork="yes" printsummary="yes" haltonfailure="no" haltonerror="no">
+			<classpath refid="classpath" />
+			<formatter type="xml" usefile="yes" />
+			<test name="husaccttest.analyse.AnalyseTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.control.ControlTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.define.DefineTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.graphics.GraphicsTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.validate.ValidateTestSuite" todir="${reports.dir}" />
+		</junit>
+		
+		<!-- Transform XML report to HTML using XSL?-->
+		<junitreport todir="${reports.dir}">
+		    <fileset dir="${reports.dir}" >
+		      <include name="*.xml"/>
+		    </fileset>
+		    <report todir="${reports.dir}" format="noframes" styledir="${conf.dir}"/>
+		</junitreport>
+		
+	</target>
+	
+	<!-- Try to run executeable Jar -->
+	<target name="run">
+		<!--<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" args="nogui"/> -->
+	</target>
+
+</project>

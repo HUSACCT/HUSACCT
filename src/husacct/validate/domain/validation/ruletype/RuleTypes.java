@@ -13,11 +13,15 @@ public enum RuleTypes {
 	BACK_CALL("BackCall", DefaultSeverities.HIGH),
 	SKIP_CALL("SkipCall", DefaultSeverities.LOW),
 	
-	INTERFACE_CONVENTION("InterfaceConvention", DefaultSeverities.MEDIUM),
-	SUBCLASS_CONVENTION("SubClassConvention", DefaultSeverities.MEDIUM);
+	NAMING_CONVENTION("NamingConvention", DefaultSeverities.MEDIUM),
+	NAMING_CONVENTION_EXCEPTION("NamingConventionException", DefaultSeverities.MEDIUM),
+	VISIBILITY_CONVENTION("VisibilityConvention", DefaultSeverities.MEDIUM),
+	VISIBILITY_CONVENTION_EXCEPTION("VisibilityConventionException", DefaultSeverities.MEDIUM),
+	LOOPS_IN_MODULE("LoopsInModule", DefaultSeverities.HIGH),
+	LOOPS_IN_MODULE_EXCEPTION("LoopsInModuleException", DefaultSeverities.MEDIUM);	
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED,IS_ONLY_MODULE_ALLOWED,MUST_USE,BACK_CALL,SKIP_CALL,INTERFACE_CONVENTION, SUBCLASS_CONVENTION);
-	//public static final EnumSet<RuleTypes> allRuleTypes = EnumSet.allOf(RuleTypes.class);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, LOOPS_IN_MODULE);
+
 	private final String key;
 	private final DefaultSeverities defaultSeverity;
 

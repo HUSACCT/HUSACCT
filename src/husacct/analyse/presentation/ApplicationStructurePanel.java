@@ -1,7 +1,6 @@
 package husacct.analyse.presentation;
 
 import husacct.common.dto.AnalysedModuleDTO;
-import java.awt.Color;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane; 
@@ -18,13 +17,16 @@ import javax.swing.UIManager;
 class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{  
 	
 	private static final long serialVersionUID = 1L;
+	
 	private JTree analyzedCodeTree;
 	private JScrollPane jScrollPaneTree;
+	private DefaultTreeCellRenderer renderer;
 	
 	private AnalyseUIController dataControl;
 	
 	public ApplicationStructurePanel(){
 		dataControl = new AnalyseUIController();
+		renderer = new SoftwareTreeCellRenderer();
 		createPanel();
 	} 
 	
@@ -64,12 +66,6 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 					.addContainerGap())
 		);
 		
-		DefaultTreeCellRenderer renderer = new SoftwareTreeCellRenderer();
-		renderer.setBackground(UIManager.getColor("Panel.background"));
-		renderer.setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
-		renderer.setBackgroundSelectionColor(UIManager.getColor("Panel.background"));
-		renderer.setTextNonSelectionColor(Color.black);
-		renderer.setTextSelectionColor(Color.black);
 		analyzedCodeTree.setCellRenderer(renderer);
 		setLayout(groupLayout);
 	} 
@@ -85,5 +81,11 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 			 	currentNode.add(childNode); 
 			} 
 		}
+	}
+	
+	public void reload(){
+		renderer = new SoftwareTreeCellRenderer();
+		analyzedCodeTree.setCellRenderer(renderer);
+		repaint();
 	}
  }
