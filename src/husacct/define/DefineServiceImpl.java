@@ -11,6 +11,8 @@ import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.task.ApplicationController;
+import husacct.define.task.persistency.PersistentDomain;
+import husacct.define.task.persistency.PersistentDomain.DomainElement;
 
 import java.util.ArrayList;
 
@@ -92,25 +94,27 @@ public class DefineServiceImpl implements IDefineService {
 	}
 	
 	public Element getLogicalArchitectureData(){
-		//TODO: Implement in Construction I
-		Element e = new Element("RootElement");
-		return e;
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		pd.setParseData(DomainElement.LOGICAL);
+		return pd.getWorkspaceData();
 	}
 
 	public void loadLogicalArchitectureData(Element e){
-		//TODO: Implement in Construction I
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		pd.setParseData(DomainElement.LOGICAL);
+		pd.loadWorkspaceData(e);
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		//TODO: Implement in Construction I
-		Element e = new Element("RootElement");
-		return e;
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		return pd.getWorkspaceData();
 	}
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		//TODO: Implement in Construction I
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		pd.loadWorkspaceData(workspaceData);
 	}
 
 	@Override
