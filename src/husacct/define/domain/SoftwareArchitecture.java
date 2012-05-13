@@ -198,6 +198,7 @@ public class SoftwareArchitecture {
 	
 	public void removeModule(Module moduleToRemove)
 	{
+		removeRelatedRules(moduleToRemove);
 		Module currentModule = null;
 		boolean moduleFound = false;
 		if(modules.contains(moduleToRemove)) {
@@ -228,6 +229,25 @@ public class SoftwareArchitecture {
 		if (!moduleFound) {	throw new RuntimeException("This module does not exist!");}
 	}
 	
+	private void removeRelatedRules(Module module) {
+		//Copy all currentValues into another list to prevent ConcurrentModificationExceptions 
+		ArrayList<AppliedRule> tmpList = (ArrayList<AppliedRule>) appliedRules.clone();
+			for (AppliedRule rule : appliedRules){
+				if (rule.getModuleFrom().equals(module) || 
+						rule.getModuleTo().equals(module)){
+					tmpList.remove(rule);
+				}	
+				
+				for (AppliedRule exceptionRule : rule.getExceptions()){
+					if (exceptionRule.getModuleFrom().equals(module) || 
+							exceptionRule.getModuleTo().equals(module)){
+						rule.getExceptions().remove(exceptionRule);
+					}		
+				}
+			}
+			appliedRules = tmpList;	
+	}
+
 	private boolean hasModule(String name) 
 	{
 		for(Module module : modules) 

@@ -6,8 +6,8 @@ import husacct.define.task.DefinitionController;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -23,7 +23,7 @@ import javax.swing.JTextField;
  * @author Henk ter Harmsel
  *
  */
-public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusListener, Observer{
+public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyListener, Observer{
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private JLabel nameLabel;
@@ -39,7 +39,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
-		this.setBorder(BorderFactory.createTitledBorder("Module configuration"));
+		this.setBorder(BorderFactory.createTitledBorder("Module Properties"));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
 		
 		this.addModuleNameLabel();
@@ -66,9 +66,9 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 	
 	private void addModuleNameTextField() {
 		nameTextfield = new JTextField();
-		nameTextfield.setToolTipText(DefaultMessages.TIP_LAYER);
+		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
 		this.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		nameTextfield.addFocusListener(this);
+		nameTextfield.addKeyListener(this);
 	}
 	
 	private void addModuleDescriptionLabel() {
@@ -87,8 +87,8 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 	private JTextArea createModuleDescriptionTextArea() {
 		descriptionTextArea = new JTextArea();
 		descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
-		descriptionTextArea.setToolTipText(DefaultMessages.TIP_LAYERDESCRIPTION);
-		descriptionTextArea.addFocusListener(this);
+		descriptionTextArea.setToolTipText(DefaultMessages.TIP_MODULEDESCRIPTION);
+		descriptionTextArea.addKeyListener(this);
 		return descriptionTextArea;
 	}
 
@@ -111,13 +111,19 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements FocusL
 	}
 
 	@Override
-	public void focusGained(FocusEvent arg0) {
-		// TODO UI 
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void focusLost(FocusEvent arg0) {
+	public void keyReleased(KeyEvent e) {
 		updateModule();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
