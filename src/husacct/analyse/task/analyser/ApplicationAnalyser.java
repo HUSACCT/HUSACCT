@@ -22,8 +22,9 @@ public class ApplicationAnalyser {
 		ApplicationDTO appDto = definitionService.getApplicationDetails();
 		String language = appDto.programmingLanguage;
 		AbstractAnalyser analyser = builder.getAnalyser(language);
+		SourceFileFinder sourceFileFinder = new SourceFileFinder();
 		for(String workspacePath: appDto.paths){
-			SourceFileFinder sourceFileFinder = new SourceFileFinder();
+//			SourceFileFinder sourceFileFinder = new SourceFileFinder();
 			try{
 				String sourceFileExtension = getExtensionForLanguage(language);
 				List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);
@@ -36,6 +37,10 @@ public class ApplicationAnalyser {
 			}
 		}
 		analyser.connectDependencies();
+	}
+	
+	public boolean isZip(String path){
+		return path.endsWith(".zip");
 	}
 
 	public String[] getAvailableLanguages() {
