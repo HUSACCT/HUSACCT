@@ -8,7 +8,10 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 
-class JavaAttributeGenerator {
+class JavaAttributeAndLocalVariableGenerator {
+	
+	public final static int ATTRIBUTE = 0;
+	public final static int LOCALVARIABLE = 0;
 	
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
@@ -25,7 +28,7 @@ class JavaAttributeGenerator {
 
 	
 	
-	public void generateModel(Tree attributeTree, String belongsToClass) {
+	public void generateModel(Tree attributeTree, String belongsToClass, int type) {
 		
 		CommonTree currentTree = (CommonTree) attributeTree;
 		CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);

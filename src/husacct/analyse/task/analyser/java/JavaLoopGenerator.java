@@ -20,8 +20,8 @@ public class JavaLoopGenerator {
 		switch(currentElementType){
 			case JavaParser.TYPE:
 //				System.out.println(currentElement.parent.toStringTree());
-					JavaAttributeGenerator attributeGenerator = new JavaAttributeGenerator();
-					attributeGenerator.generateModel(currentElement.parent, currentClass);
+					JavaAttributeAndLocalVariableGenerator attributeGenerator = new JavaAttributeAndLocalVariableGenerator();
+					attributeGenerator.generateModel(currentElement.parent, currentClass, attributeGenerator.LOCALVARIABLE);
 		}
 		
 		for(int currentE = 0; currentE < currentElementChildCount; currentE++){

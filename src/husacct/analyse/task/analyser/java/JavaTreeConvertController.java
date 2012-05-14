@@ -118,10 +118,8 @@ class JavaTreeConvertController {
                                     }
                                 } 
                                 if(nodeType == JavaParser.FUNCTION_METHOD_DECL || nodeType == JavaParser.CONSTRUCTOR_DECL || nodeType == JavaParser.VOID_METHOD_DECL){
-
-                                        delegateMethod(treeNode); 
-                                        // methodes moet je niet willen verwijderen wellicht, want er kunnen nog zoveel attributen en function calls
-                                        //in die methode zitten die je overslaat als je de tree verwijderd.
+                                        delegateMethod(treeNode);
+                                        deleteTreeChild(treeNode); 
                                 } 
                                 if(nodeType == JavaParser.THROW || nodeType == JavaParser.CATCH || nodeType == JavaParser.THROWS){
 
@@ -197,8 +195,8 @@ class JavaTreeConvertController {
     } 
     
     private void delegateAttribute(Tree attributeTree){ 
-        JavaAttributeGenerator javaAttributeGenerator = new JavaAttributeGenerator(); 
-        javaAttributeGenerator.generateModel(attributeTree, this.currentClass); 
+        JavaAttributeAndLocalVariableGenerator javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator(); 
+        javaAttributeGenerator.generateModel(attributeTree, this.currentClass, javaAttributeGenerator.ATTRIBUTE); 
     } 
     
     private void delegateMethod(Tree methodTree){ 
