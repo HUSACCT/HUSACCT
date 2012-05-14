@@ -33,7 +33,9 @@ public class CSharpAttributeGenerator extends CSharpGenerator{
 				declareType = attributeChild.getText();
 			}			
 		}
-		modelService.createAttribute(classScope, accesControlQualifier, this.uniqueClassName, declareType, attributeName, (this.uniqueClassName + attributeName),attributeTrees.get(0).getLine());
+		if (attributeName != null) {
+			modelService.createAttribute(classScope, accesControlQualifier, this.uniqueClassName, declareType, attributeName, (this.uniqueClassName + "." + attributeName),attributeTrees.get(0).getLine());
+		}
 		
 	}
 }
