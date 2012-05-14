@@ -141,21 +141,21 @@ public class ValidateTest {
 	}
 	private boolean listContainsFromValue(ViolationDTO[] violationDTOs, String value){
 		for(ViolationDTO v: violationDTOs){
-			if(v.getFromClasspath().equals(value))
+			if(v.fromClasspath.equals(value))
 				return true;
 		}
 		return false;
 	}
 	private boolean listContainsToValue(ViolationDTO[] violationDTOs, String value){
 		for(ViolationDTO v: violationDTOs){
-			if(v.getToClasspath().equals(value))
+			if(v.toClasspath.equals(value))
 				return true;
 		}
 		return false;
 	}
 	private boolean listContainsKey(ViolationDTO[] violationDTOs, String value){
 		for(ViolationDTO v: violationDTOs){
-			if(v.getViolationType().getKey().equals(value))
+			if(v.violationType.getKey().equals(value))
 				return true;
 		}
 		return false;
