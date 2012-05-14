@@ -50,6 +50,8 @@ public class WorkspaceController {
 	public void closeWorkspace() {
 		WorkspaceController.currentWorkspace = null;
 		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
+		mainController.getViewController().closeAll();
+		ServiceProvider.getInstance().resetServices();
 	}
 	
 	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {

@@ -1,6 +1,5 @@
 package husaccttest.control;
 
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
@@ -34,14 +33,6 @@ public class ServiceProviderTest {
 		ServiceProvider provider1 = ServiceProvider.getInstance();
 		ServiceProvider provider2 = ServiceProvider.getInstance();
 		assertSame(provider1, provider2);
-	}
-	
-	@Test
-	public void testServiceProviderDestroy(){
-		ServiceProvider provider1 = ServiceProvider.getInstance();
-		provider1.destroy();
-		ServiceProvider provider2 = ServiceProvider.getInstance();
-		assertNotSame(provider1, provider2);
 	}
 	
 	@Test
