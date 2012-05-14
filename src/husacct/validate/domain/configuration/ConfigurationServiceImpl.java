@@ -1,12 +1,5 @@
-package husacct.validate.domain;
+package husacct.validate.domain.configuration;
 
-import husacct.validate.domain.configuration.ActiveRuleType;
-import husacct.validate.domain.configuration.ActiveViolationType;
-import husacct.validate.domain.configuration.ActiveViolationTypesRepository;
-import husacct.validate.domain.configuration.SeverityConfigRepository;
-import husacct.validate.domain.configuration.SeverityPerTypeRepository;
-import husacct.validate.domain.configuration.ViolationHistoryRepository;
-import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;

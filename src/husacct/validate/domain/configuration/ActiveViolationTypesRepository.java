@@ -13,14 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActiveViolationTypesRepository {
+class ActiveViolationTypesRepository {
 
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();	
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private final RuleTypesFactory ruletypesfactory;
 	private Map<String, List<ActiveRuleType>> activeViolationTypes;
 
-	public ActiveViolationTypesRepository(RuleTypesFactory ruletypesfactory) {
+	ActiveViolationTypesRepository(RuleTypesFactory ruletypesfactory) {
 		this.activeViolationTypes = new HashMap<String, List<ActiveRuleType>>();
 		this.ruletypesfactory = ruletypesfactory;
 		initializeActiveViolationTypes();
@@ -47,22 +47,22 @@ public class ActiveViolationTypesRepository {
 			}
 		}		
 	}
-	
-	public boolean isEnabled(String ruleTypeKey, String violationTypeKey){
+
+	boolean isEnabled(String ruleTypeKey, String violationTypeKey){
 		final String currentLanguage = defineService.getApplicationDetails().programmingLanguage;
 		return isEnabled(currentLanguage, ruleTypeKey, violationTypeKey);
 	}
 
-	public boolean isEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){		
+	boolean isEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){		
 		List<ActiveRuleType> activeRuleTypes = this.activeViolationTypes.get(programmingLanguage);
 		if(activeRuleTypes != null){
 			for(ActiveRuleType activeRuleType : activeRuleTypes){
 				if(activeRuleType.getRuleType().toLowerCase().equals(ruleTypeKey.toLowerCase())){
-					
+
 					if(activeRuleType.getViolationTypes().isEmpty()){
 						return false;
 					}
-					
+
 					for(ActiveViolationType activeViolationType : activeRuleType.getViolationTypes()){
 						if(activeViolationType.getType().toLowerCase().equals(violationTypeKey.toLowerCase())){
 							return activeViolationType.isEnabled();
@@ -77,11 +77,11 @@ public class ActiveViolationTypesRepository {
 		return false;
 	}
 
-	public Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
+	Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
 		return activeViolationTypes;
 	}
 
-	public void setActiveViolationTypes(String programmingLanguage , List<ActiveRuleType> newActiveViolationTypes) {
+	void setActiveViolationTypes(String programmingLanguage , List<ActiveRuleType> newActiveViolationTypes) {
 		if(this.activeViolationTypes.containsKey(programmingLanguage)){
 			@SuppressWarnings("unused")
 			List<ActiveRuleType> activeViolationTypesForLanguage = this.activeViolationTypes.get(programmingLanguage);
@@ -92,7 +92,7 @@ public class ActiveViolationTypesRepository {
 		}
 	}
 
-	public void setActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes){
+	void setActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes){
 		this.activeViolationTypes = activeViolationTypes;
 	}
 }

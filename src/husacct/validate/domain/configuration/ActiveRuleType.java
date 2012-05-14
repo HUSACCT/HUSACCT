@@ -7,7 +7,7 @@ public class ActiveRuleType {
 
 	private final String ruleType;
 	private List<ActiveViolationType> violationTypes;
-	
+
 	public ActiveRuleType(String ruleType){
 		this.ruleType = ruleType;
 	}

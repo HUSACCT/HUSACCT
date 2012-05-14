@@ -1,7 +1,7 @@
 package husacct.validate.domain.factory.violationtype;
 
-import husacct.validate.domain.ConfigurationServiceImpl;
 
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.SeverityNotFoundException;

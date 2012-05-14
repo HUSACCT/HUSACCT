@@ -1,7 +1,7 @@
 package husacct.validate.task.export;
 
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;

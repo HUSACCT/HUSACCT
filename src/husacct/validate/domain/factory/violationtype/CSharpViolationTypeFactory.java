@@ -1,6 +1,6 @@
 package husacct.validate.domain.factory.violationtype;
 
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.violationtype.CSharpViolationTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;

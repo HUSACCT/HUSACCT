@@ -8,34 +8,34 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 
-public class ViolationHistoryRepository extends Observable {	
+class ViolationHistoryRepository extends Observable {	
 	private List<ViolationHistory> violationHistories;
 	private List<ViolationHistoryRepositoryObserver> observers = new ArrayList<ViolationHistoryRepositoryObserver>();
-	
-	public void attachObserver(ViolationHistoryRepositoryObserver observer) {
+
+	void attachObserver(ViolationHistoryRepositoryObserver observer) {
 		observers.add(observer);
 	}
-	
-	public ViolationHistoryRepository() {
+
+	ViolationHistoryRepository() {
 		this.violationHistories = new ArrayList<ViolationHistory>();
 	}
 
-	public List<ViolationHistory> getViolationHistory() {
+	List<ViolationHistory> getViolationHistory() {
 		return violationHistories;
 	}
 
-	public void addViolationHistory(ViolationHistory violationHistory){
+	void addViolationHistory(ViolationHistory violationHistory){
 		this.violationHistories.add(violationHistory);
 		for(ViolationHistoryRepositoryObserver observer : observers) {
 			observer.updateViolationHistories();
 		}
 	}
 
-	public void setViolationHistory(List<ViolationHistory> violationhistories){
+	void setViolationHistory(List<ViolationHistory> violationhistories){
 		this.violationHistories = violationhistories;
 	}
 
-	public void removeViolationHistory(Calendar date) {
+	void removeViolationHistory(Calendar date) {
 		ViolationHistory recordToDelete = null;
 		for(ViolationHistory violationHistory : violationHistories) {
 			if(violationHistory.getDate().equals(date)) {
@@ -46,7 +46,7 @@ public class ViolationHistoryRepository extends Observable {
 		violationHistories.remove(recordToDelete);
 	}
 
-	public ViolationHistory getViolationHistoryByDate(Calendar date) {
+	ViolationHistory getViolationHistoryByDate(Calendar date) {
 		for(ViolationHistory violationHistory : violationHistories) {
 			if(violationHistory.getDate().equals(date)) {
 				return violationHistory;
