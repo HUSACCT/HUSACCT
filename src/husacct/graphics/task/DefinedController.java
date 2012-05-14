@@ -122,9 +122,9 @@ public class DefinedController extends DrawingController {
 	
 	private void getAndDrawModulesIn(String parentName) {
 		try{
-			setCurrentPath(parentName);
 			ModuleDTO[] children = defineService.getChildsFromModule(parentName);
 			if (children.length > 0) {
+				setCurrentPath(parentName);
 				drawModules(children);
 				drawLinesBasedOnSetting();
 			} else {

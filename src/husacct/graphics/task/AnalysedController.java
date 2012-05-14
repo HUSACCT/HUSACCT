@@ -110,9 +110,9 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		setCurrentPath(parentName);
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 		if (children.length > 0) {
+			setCurrentPath(parentName);
 			drawModules(children);
 			drawLinesBasedOnSetting();
 		} else {

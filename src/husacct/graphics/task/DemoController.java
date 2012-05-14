@@ -105,6 +105,7 @@ public class DemoController extends DrawingController {
 			
 			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 			dtos = modules.toArray(dtos);
+			setCurrentPath("tests");
 			this.drawModules(dtos);
 		}			
 	}
