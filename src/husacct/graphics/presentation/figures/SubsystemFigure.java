@@ -19,7 +19,7 @@ public class SubsystemFigure extends NamedFigure {
 	protected int minHeight = 100;
 
 	public SubsystemFigure(String name) {
-		super(name, false);
+		super(name);
 
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);

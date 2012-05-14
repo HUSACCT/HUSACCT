@@ -20,7 +20,7 @@ public class PackageFigure extends NamedFigure {
 	private static final int MIN_HEIGHT = 120;
 
 	public PackageFigure(String name) {
-		super(name, false);
+		super(name);
 
 		top = new RectangleFigure();
 		body = new RectangleFigure();

@@ -204,13 +204,14 @@ public class DemoController extends DrawingController {
 		}
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("task")) {
-			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 3", 1, Color.red, "", "", 3);
-			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 4", 1, Color.red, "", "", 3);
-			violations[1] = taskLayerErr2;
+			return new ViolationDTO[]{
+				new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
+						"error 3", 1, Color.red, "", "", 3),
+				new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
+						"error 4", 1, Color.red, "", "", 3),
+				new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, 
+						"error 5", 1, Color.PINK, "", "", 99)
+			};
 		}
 		
 		if(figFrom.getName().equals("presentation") && figTo.getName().equals("test")) {

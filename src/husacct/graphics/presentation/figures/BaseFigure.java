@@ -1,9 +1,12 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.graphics.presentation.decorators.Decorator;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -20,26 +23,42 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
 	public  static final Color defaultBackgroundColor = new Color(252, 255, 182);
 	private boolean isSizeable = false;
-
-	private Color violatedColor = Color.RED;
-	private boolean isViolated = false;
+	
+	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 
 	//private LinkedList<Connector> connectors = new LinkedList<Connector>();
 	
-	public BaseFigure(boolean isViolated) {
+	public BaseFigure() {
 		super();
-		
-		this.isViolated = isViolated;
-		
-		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 	}
 	
-	public void setViolatedColor(Color color) {
-		this.violatedColor = color;
+	public void addDecorator(Decorator decorator) {
+		this.decorators.add(decorator);
 	}
 	
-	public Color getViolatedColor() {
-		return this.violatedColor;
+	public void removeDecoratorByType(Class<?> searchClass) {
+		ArrayList<Decorator> removes = new ArrayList<Decorator>();
+		
+		for(Decorator decorator : this.decorators) {
+			if(decorator.getClass().isAssignableFrom(searchClass)) {
+				removes.add(decorator);
+			}
+		}
+		
+		this.removeDecorators(removes.toArray(new Decorator[]{}));
+	}
+	
+	public void removeDecorators(Decorator[] decorators) {
+		for(Decorator decorator : decorators) {
+			this.removeDecorator(decorator);
+		}
+	}
+	
+	public void removeDecorator(Decorator decorator) {
+		this.willChange();
+		decorator.deDecorate(this);
+		this.decorators.remove(decorator);
+		this.changed();
 	}
 
 	@Override
@@ -52,17 +71,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		newLead = (Point2D.Double) at.transform(lead, newLead);
 
 		setBounds(newAnchor, newLead);
-	}
-
-	// TODO: This should be a decorator!
-	public void setViolated(boolean newValue) {
-		willChange();
-		isViolated = newValue;
-		changed();
-	}
-
-	public boolean isViolated() {
-		return isViolated;
 	}
 
 	@Override
@@ -89,9 +97,11 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	@Override
 	public void draw(Graphics2D g) {
-		if(this.isViolated()) {
-			this.setStrokeColor(this.violatedColor);
+		for(Decorator decorator : this.decorators) {
+			decorator.decorate(this);
 		}
+		
+		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 		
 		super.draw(g);
 	}
