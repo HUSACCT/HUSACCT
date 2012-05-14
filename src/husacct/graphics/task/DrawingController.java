@@ -127,7 +127,7 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-		drawTarget.setCurrentPathInfo(getCurrentPath());
+		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
 		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 
@@ -151,9 +151,7 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
 		drawing.resizeRelationFigures();
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
 
 	public void drawDependenciesForShownModules() {

@@ -29,28 +29,40 @@ public class SeverityConfigRepository {
 	}
 
 	public Severity getSeverityByName(String severityName){
-		for(Severity defaultSeverity : defaultSeverities){
-			if(severityName.toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
-				return defaultSeverity;
-			}
-		}
-
 		for(Severity customSeverity : currentSeverities){
-			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase())){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getDefaultName().toLowerCase())){
 				return customSeverity;
 			}		
 		}
 		throw new SeverityNotFoundException();
 	}
 
+	private void checkDefaultSeveritiesChanged(List<Severity> severities){
+		for(Severity defaultSeverity : defaultSeverities){
+			boolean defaultSeverityFound = false;
+
+			for(Severity severity : severities){		
+				if(severity.getId().equals(severity.getId())){
+					defaultSeverityFound = true;
+				}
+				if(severity.getDefaultName().isEmpty() && severity.getUserName().isEmpty()){
+					//severity user name must not be empty
+				}			
+			}
+			if(!defaultSeverityFound){
+				//throw new DefaultSeverityNotFoundException	
+			}			
+		}
+	}
+
 	public int getSeverityValue(Severity severity){
 		return currentSeverities.indexOf(severity);
 	}
-	
+
 	public void restoreToDefault(){
-		currentSeverities = defaultSeverities;
+		initializeCurrentSeverities();
 	}
-	
+
 	private void generateDefaultSeverities(){
 		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
 			Severity severity = new Severity(defaultSeverity.toString(), "", defaultSeverity.getColor());
@@ -61,7 +73,9 @@ public class SeverityConfigRepository {
 	private void initializeCurrentSeverities(){	
 		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
 		for(Severity severity : defaultSeverities){
-			currentSeverities.add(severity);
+			if(!severity.getDefaultName().equals("unidentified")){
+				currentSeverities.add(severity);
+			}
 		}
 	}
 }

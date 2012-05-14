@@ -6,6 +6,7 @@ import husacct.analyse.infrastructure.antlr.java.JavaParser.compilationUnit_retu
 import org.antlr.runtime.RecognitionException; 
 import org.antlr.runtime.tree.CommonTree; 
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 class JavaTreeConvertController { 
     
@@ -14,27 +15,59 @@ class JavaTreeConvertController {
     private String currentClass = null; 
     private String parentClass = null; 
     private int classCount = 0; 
+    private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
         
     public void delegateModelGenerators(JavaParser javaParser) throws RecognitionException { 
         compilationUnit_return compilationUnit = javaParser.compilationUnit(); 
-        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree(); 
+        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
         createClassOrInterfaceInformation(compilationUnitTree); 
-        walkAST(compilationUnitTree); 
+
+        
+        if(this.theClass != null){
+            walkAST(compilationUnitTree); 
+        }
     } 
     
     private void createClassOrInterfaceInformation(CommonTree completeTree){ 
         Tree packageTree = completeTree.getFirstChildWithType(JavaParser.PACKAGE); 
         if(hasPackageElement(completeTree)){ 
                 delegatePackage(packageTree); 
-        } else this.thePackage = ""; 
-        Tree classTree = completeTree.getFirstChildWithType(JavaParser.CLASS); 
-        if(classTree == null){ 
-                classTree = completeTree.getFirstChildWithType(JavaParser.INTERFACE); 
-                this.theClass = this.currentClass = delegateInterface(classTree); 
-        }else{ 
-                this.theClass = this.currentClass = delegateClass(classTree, false); 
-        } 
-        this.parentClass = theClass; 
+        } else {
+        	this.thePackage = ""; 
+        }
+        
+        Tree classTree = completeTree.getFirstChildWithType(JavaParser.CLASS);
+        if(classTree == null){
+        	classTree = completeTree.getFirstChildWithType(JavaParser.INTERFACE);
+        }
+        if(classTree == null){
+        	classTree = completeTree.getFirstChildWithType(JavaParser.AT);
+        }
+        
+        if(classTree != null){
+        	switch(classTree.getType()){
+        		case JavaParser.CLASS:
+        			this.theClass = this.currentClass = delegateClass(classTree, false);
+        			break;
+        		case JavaParser.INTERFACE:
+        			this.theClass = this.currentClass = delegateInterface(classTree);
+        			break;
+        		case JavaParser.AT:
+        			this.theClass = this.currentClass = delegateAnnotation(classTree);
+        			break;
+        		default:
+        			logger.warn("Detected a not supported type");
+        	}
+        } else {
+        	String warnMessage = "Detected a not supported type";
+        	
+        	CommonTree warnTree = (CommonTree) completeTree.getChild(2);
+        	if(warnTree != null){
+        		warnMessage += " [Probably type id " + warnTree.getType() + " ]";
+        	}
+        	
+        	logger.warn(warnMessage);
+        }
     } 
         
     private void walkAST(CommonTree tree) { 
@@ -95,6 +128,9 @@ class JavaTreeConvertController {
                                         delegateException(treeNode); 
                                         deleteTreeChild(treeNode); 
                                 } 
+                        		if(nodeType == JavaParser.FOR_EACH || nodeType == JavaParser.FOR){
+                        				delegateLoop(treeNode);
+                        		}
                         }
 
                         walkAST((CommonTree) tree.getChild(i));
@@ -140,16 +176,20 @@ class JavaTreeConvertController {
         return javaInterfaceGenerator.generateModel((CommonTree)interfaceTree); 
     } 
     
-    private void delegateImplementsDefinition(CommonTree treeNode) { 
-                JavaImplementsDefinitionGenerator implementsGenerator = new JavaImplementsDefinitionGenerator(); 
-                implementsGenerator.generateModelObject(treeNode, this.theClass); 
-        } 
+    private String delegateAnnotation(Tree annotationTree){
+    	JavaAnnotationGenerator javaAnnotationGenerator = new JavaAnnotationGenerator(thePackage);
+    	return javaAnnotationGenerator.generateModel((CommonTree) annotationTree);
+    }
     
-    private void delegateInheritanceDefinition(CommonTree treeNode) { 
-                JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
-
-                javaInheritanceDefinitionGenerator.generateModelObject(treeNode, this.theClass); 
-        } 
+    private void delegateImplementsDefinition(CommonTree treeNode) {
+    	JavaImplementsDefinitionGenerator implementsGenerator = new JavaImplementsDefinitionGenerator();
+    	implementsGenerator.generateModelObject(treeNode, this.theClass); 
+    } 
+    
+    private void delegateInheritanceDefinition(CommonTree treeNode) {
+    	JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
+    	javaInheritanceDefinitionGenerator.generateModelObject(treeNode, this.theClass);
+    } 
         
     private void delegateImport(CommonTree importTree){ 
         JavaImportGenerator javaImportGenerator = new JavaImportGenerator(); 
@@ -171,7 +211,12 @@ class JavaTreeConvertController {
         exceptionGenerator.generateModel((CommonTree)exceptionTree, this.currentClass); 
     } 
     
+    private void delegateLoop(Tree loopTree){
+    	JavaLoopGenerator loopGenerator = new JavaLoopGenerator();
+    	loopGenerator.generateModel((CommonTree) loopTree, this.currentClass);
+    }
+    
     private boolean hasPackageElement(CommonTree tree){ 
         return tree.getFirstChildWithType(JavaParser.PACKAGE) != null; 
-    } 
+    }     
 }

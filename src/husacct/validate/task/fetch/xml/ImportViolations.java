@@ -66,7 +66,7 @@ public class ImportViolations {
 				exceptionMessages.add(getMessage(exceptionMessageElement));
 			}
 		}
-		Message message = new Message(logicalModules,ruleKey, violationTypeKeysList, exceptionMessages);
+		Message message = new Message(logicalModules, ruleKey, violationTypeKeysList, exceptionMessages);
 		return message;
 	}
 	

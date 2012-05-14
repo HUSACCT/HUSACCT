@@ -94,8 +94,9 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</div>");
 		html.append("<span class=\"title\">HUSACCT HTML REPORT</span><br/>");
 		html.append("<span>Date generated: " + getCurrentDate() + "</span><br />Project: " + report.getProjectName() + "<br />Version: " + report.getVersion() + "<br />");
+		html.append("<span>Violations generated on: " + report.getFormattedDate() + "</span><br />");
 		html.append("<span class=\"stats\">Statistics</span><br/>");
-		html.append("Total violations: " + report.getViolations().size() + "<br />"+ "<br />");
+		html.append("Total violations: " + report.getViolations().getValue().size() + "<br />"+ "<br />");
 		for(ViolationsPerSeverity severityPerViolation : report.getViolationsPerSeverity()) {
 			html.append(severityPerViolation.getSeverity().getDefaultName() + ": " + severityPerViolation.getAmount() + "<br />");
 		}
@@ -117,7 +118,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</tr>");
 		html.append("</thead>");
 		html.append("<tbody>");
-		for(Violation violation : report.getViolations()) {
+		for(Violation violation : report.getViolations().getValue()) {
 			html.append("<tr>");
 			//Source
 			if(violation.getClassPathFrom() != null) {

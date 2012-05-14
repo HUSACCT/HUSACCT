@@ -6,12 +6,22 @@ public class DependencyDTO extends AbstractDTO{
 	public String to;
 	public String type;
 	public int lineNumber;
+	public boolean isIndirect;
 	
 	public DependencyDTO(String from, String to, String type, int lineNumber){
 		this.from = from;
 		this.to = to;
 		this.type = type;
 		this.lineNumber = lineNumber;
+		this.isIndirect = false;
+	}
+	
+	public DependencyDTO(String from, String to, String type, boolean indirect, int lineNumber){
+		this.from = from;
+		this.to = to;
+		this.type = type;
+		this.lineNumber = lineNumber;
+		this.isIndirect = indirect;
 	}
 	
 	public boolean equals(DependencyDTO other){
@@ -20,6 +30,7 @@ public class DependencyDTO extends AbstractDTO{
 		result = result && (this.to == other.to);
 		result = result && (this.type == other.type);
 		result = result && (this.lineNumber == other.lineNumber);
+		result = result && (this.isIndirect == other.isIndirect);
 		return result;
 	}
 	
@@ -29,6 +40,7 @@ public class DependencyDTO extends AbstractDTO{
 		result += "To: " + to + ", ";
 		result += "Type: " + type + " ,";
 		result += "Line: " + lineNumber + ".";
+		result += "Indirect : " + isIndirect + ".";
 		return result;
 	}
 }

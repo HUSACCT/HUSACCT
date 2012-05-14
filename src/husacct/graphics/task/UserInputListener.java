@@ -3,6 +3,8 @@ package husacct.graphics.task;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 public interface UserInputListener {
+	
+	public void moduleOpen(String path);
 
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure);
 

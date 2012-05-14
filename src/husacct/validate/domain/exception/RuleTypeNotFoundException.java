@@ -1,6 +1,6 @@
 package husacct.validate.domain.exception;
 
-public class RuleTypeNotFoundException extends Exception {
+public class RuleTypeNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 3803347656795776775L;
 
 	public RuleTypeNotFoundException(){
