@@ -55,9 +55,9 @@ public class DemoController extends DrawingController {
 		//modules.add(testClass);
 		
 		ModuleDTO testModule = new ModuleDTO();
-		testModule.type = "module";
+		testModule.type = "subsystem";
 		testModule.logicalPath = "myModule";
-		//modules.add(testModule);
+		modules.add(testModule);
 		
 		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
 		unrecognizableModuleTypeDTO.type = "foobar";

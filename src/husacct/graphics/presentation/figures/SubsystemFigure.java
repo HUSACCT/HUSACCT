@@ -9,7 +9,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ModuleFigure extends NamedFigure {
+public class SubsystemFigure extends NamedFigure {
 	private static final long serialVersionUID = -2743753116624138171L;
 	private RectangleFigure body;
 	private TextFigure moduleText;
@@ -18,13 +18,13 @@ public class ModuleFigure extends NamedFigure {
 	protected int minWidth = 100;
 	protected int minHeight = 100;
 
-	public ModuleFigure(String name, String type) {
+	public SubsystemFigure(String name) {
 		super(name, false);
 
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		
-		moduleText = new TextFigure('\u00AB'+type+'\u00BB');
+		moduleText = new TextFigure('\u00AB'+"subsystem"+'\u00BB');
 		
 		text = new TextFigure(name);
 		text.set(AttributeKeys.FONT_BOLD, true);
@@ -70,9 +70,9 @@ public class ModuleFigure extends NamedFigure {
 	}
 
 	@Override
-	public ModuleFigure clone() {
+	public SubsystemFigure clone() {
 
-		ModuleFigure other = (ModuleFigure) super.clone();
+		SubsystemFigure other = (SubsystemFigure) super.clone();
 		other.body = body.clone();
 		other.text = text.clone();
 		other.moduleText = moduleText.clone();

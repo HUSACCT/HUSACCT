@@ -91,8 +91,10 @@ public final class FigureFactory {
 			return new InterfaceFigure(name);
 		} else if (type.toLowerCase().equals("package")) {
 			return new PackageFigure(name);
+		} else if (type.toLowerCase().equals("subsystem")) {
+			return new SubsystemFigure(name);
 		} else {
-			return new ModuleFigure(name);
+			return new ModuleFigure(name, type);
 		}
 	}
 }
