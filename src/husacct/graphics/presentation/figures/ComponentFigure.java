@@ -26,7 +26,7 @@ public class ComponentFigure extends NamedFigure {
 	protected int minHeight = 90;
 
 	public ComponentFigure(String name) {
-		super(name, false);
+		super(name);
 
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);

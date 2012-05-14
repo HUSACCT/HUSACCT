@@ -191,7 +191,7 @@ public abstract class DrawingController implements UserInputListener {
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureFrom);
 		if (violations.length > 0) {
-			figureFrom.setViolated(true);
+			figureFrom.addDecorator(figureFactory.createViolationsDecorator(violations));
 			figureMap.linkViolatedModule(figureFrom, violations);
 		}
 	}

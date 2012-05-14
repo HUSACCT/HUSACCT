@@ -19,7 +19,7 @@ public class ModuleFigure extends NamedFigure {
 	protected int minHeight = 100;
 
 	public ModuleFigure(String name, String type) {
-		super(name, false);
+		super(name);
 
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
