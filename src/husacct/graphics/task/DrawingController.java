@@ -82,11 +82,13 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void hideViolations() {
 		isViolationsShown = false;
+		drawTarget.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	public void showViolations() {
 		isViolationsShown = true;
+		drawTarget.turnOnViolations();
 	}
 
 	protected DrawingDetail getCurrentDrawingDetail() {

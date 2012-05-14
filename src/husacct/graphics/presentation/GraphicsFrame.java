@@ -30,6 +30,7 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private DrawingView drawingView;
 	private JMenuBar menuBar, locationBar;
+	private JCheckBoxMenuItem showViolationsOptionMenu;
 	private String currentPath;
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
@@ -134,7 +135,7 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(refreshMenu);
 
-		JCheckBoxMenuItem showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
+		showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
 		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
 		showViolationsOptionMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		showViolationsOptionMenu.addActionListener(new ActionListener() {
@@ -320,5 +321,13 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 
 		return new JTable(rows.toArray(new String[][] {}), columnNames);
+	}
+
+	public void turnOnViolations() {
+		showViolationsOptionMenu.setState(true);
+	}
+	
+	public void turnOffViolations() {
+		showViolationsOptionMenu.setState(false);
 	}
 }
