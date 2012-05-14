@@ -38,7 +38,7 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo ){
 				DependencyDTO[] dependencies = analyseService.getDependenciesFrom(classPathFrom.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), currentRule.violationTypeKeys);
 				for(DependencyDTO dependency: dependencies){
 					if(allowedDependencies.length != 0){
 						for(DependencyDTO allowedDependency: allowedDependencies){

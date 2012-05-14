@@ -40,7 +40,7 @@ public class BackCallRule extends RuleType {
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> moduleTo : modulesTo){
 				for(Mapping physicalClasspathsTo : moduleTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),physicalClasspathsTo.getPhysicalPath());	
+					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), physicalClasspathsTo.getPhysicalPath(), currentRule.violationTypeKeys);	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(rootRule);
 	

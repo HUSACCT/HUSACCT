@@ -4,8 +4,6 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
-import husacct.validate.domain.exception.RuleTypeNotFoundException;
-import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class ActiveViolationTypesRepository {
 

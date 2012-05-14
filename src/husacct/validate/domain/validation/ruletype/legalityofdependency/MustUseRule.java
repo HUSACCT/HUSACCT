@@ -38,7 +38,7 @@ public class MustUseRule extends RuleType{
 		int counter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), currentRule.violationTypeKeys);
 				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
