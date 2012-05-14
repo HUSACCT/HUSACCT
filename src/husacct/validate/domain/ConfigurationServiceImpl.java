@@ -1,6 +1,7 @@
 package husacct.validate.domain;
 
 import husacct.validate.domain.configuration.ActiveRuleType;
+import husacct.validate.domain.configuration.ActiveViolationType;
 import husacct.validate.domain.configuration.ActiveViolationTypesRepository;
 import husacct.validate.domain.configuration.SeverityConfigRepository;
 import husacct.validate.domain.configuration.SeverityPerTypeRepository;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 public class ConfigurationServiceImpl {
 
@@ -144,6 +146,7 @@ public class ConfigurationServiceImpl {
 
 	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
 		if(activeViolationTypesRepository != null){
+			getActiveViolationTypes();
 			return activeViolationTypesRepository.isEnabled(programmingLanguage, ruleTypeKey, violationTypeKey);
 		}
 		else{

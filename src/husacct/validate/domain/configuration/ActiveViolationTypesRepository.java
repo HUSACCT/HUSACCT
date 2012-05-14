@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class ActiveViolationTypesRepository {
 
@@ -30,10 +31,11 @@ public class ActiveViolationTypesRepository {
 
 	private void initializeActiveViolationTypes(){
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
-			this.activeViolationTypes.put(programmingLanguage, new ArrayList<ActiveRuleType>());
+			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
+			this.activeViolationTypes.put(programmingLanguage, activeRuleTypes);
 			for(List<RuleType> ruleTypes : ruletypesfactory.getRuleTypes(programmingLanguage).values()){
 				for(RuleType ruleType : ruleTypes){
-					final String ruleTypeKey = ruleType.getKey();
+					final String ruleTypeKey = ruleType.getKey();					
 					List<ActiveViolationType> initialActiveViolationTypes = new ArrayList<ActiveViolationType>();
 					for(ViolationType violationType : ruleType.getViolationTypes()){
 						final String violationTypeKey = violationType.getViolationtypeKey();
@@ -43,9 +45,10 @@ public class ActiveViolationTypesRepository {
 					}
 					ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey);
 					activeRuleType.setViolationTypes(initialActiveViolationTypes);
-				}
+					activeRuleTypes.add(activeRuleType);
+				}				
 			}
-		}
+		}		
 	}
 	
 	public boolean isEnabled(String ruleTypeKey, String violationTypeKey){
@@ -58,16 +61,16 @@ public class ActiveViolationTypesRepository {
 		if(activeRuleTypes != null){
 			for(ActiveRuleType activeRuleType : activeRuleTypes){
 				if(activeRuleType.getRuleType().toLowerCase().equals(ruleTypeKey.toLowerCase())){
+					
+					if(activeRuleType.getViolationTypes().isEmpty()){
+						return false;
+					}
+					
 					for(ActiveViolationType activeViolationType : activeRuleType.getViolationTypes()){
 						if(activeViolationType.getType().toLowerCase().equals(violationTypeKey.toLowerCase())){
 							return activeViolationType.isEnabled();
-						}
-						else{
-							throw new ViolationTypeNotFoundException();
-						}
+						}					
 					}
-				}else{
-					throw new RuleTypeNotFoundException();
 				}
 			}
 		}
