@@ -15,8 +15,8 @@ import java.util.Arrays;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -25,7 +25,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class SetApplicationFrame extends JFrame {
+public class SetApplicationDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,8 +41,8 @@ public class SetApplicationFrame extends JFrame {
 	
 	private GridBagConstraints constraint = new GridBagConstraints();
 	
-	public SetApplicationFrame(MainController mainController) {
-		super();
+	public SetApplicationDialog(MainController mainController) {
+		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		this.applicationData = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
 		this.languages = ServiceProvider.getInstance().getAnalyseService().getAvailableLanguages();
@@ -51,6 +51,7 @@ public class SetApplicationFrame extends JFrame {
 		addComponents();
 		setDefaultValues();
 		setListeners();
+		this.setVisible(true);
 	}
 
 	private void setup(){
@@ -58,7 +59,7 @@ public class SetApplicationFrame extends JFrame {
 		this.setLayout(new GridBagLayout());
 		this.setSize(new Dimension(350, 380));
 		this.setResizable(true);
-		this.setVisible(true);
+		DialogUtils.alignCenter(this);
 	}
 
 	private void addComponents(){

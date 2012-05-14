@@ -1,7 +1,7 @@
 package husacct.control.presentation.workspace;
 
-import husacct.control.presentation.workspace.savers.ISaverFrame;
-import husacct.control.presentation.workspace.savers.SaverFrameFactory;
+import husacct.control.presentation.workspace.loaders.ILoaderFrame;
+import husacct.control.presentation.workspace.loaders.LoaderFrameFactory;
 import husacct.control.task.MainController;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -22,18 +22,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings("serial")
-public class SaveWorkspaceFrame extends JFrame{
+public class OpenWorkspaceDialog extends JDialog{
 
 	private MainController mainController;
-	private JList saverList;
-	private List<String> saverListData;
+	private JList loaderList;
+	private List<String> loaderListData;
 	private JButton next, cancel;
 	
-	public SaveWorkspaceFrame(MainController mainController){
-		super("Save workspace");
+	public OpenWorkspaceDialog(MainController mainController){
+		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		this.setup();
-		this.setSavers();
+		this.setLoaders();
 		this.addComponents();
 		this.setListeners();
 		this.setVisible(true);
@@ -46,17 +46,17 @@ public class SaveWorkspaceFrame extends JFrame{
 		this.setLocationRelativeTo(getRootPane());
 	}
 	
-	private void setSavers(){
-		List<String> workspaceResources = ResourceFactory.getAvailableResources();
-		saverListData = workspaceResources;
+	private void setLoaders(){
+		List<String> loaders = ResourceFactory.getAvailableResources();
+		loaderListData = loaders;
 	}
 	
 	private void addComponents(){
-		saverList = new JList(saverListData.toArray());
-		saverList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		saverList.setLayoutOrientation(JList.VERTICAL);
-		saverList.setVisibleRowCount(-1);
-		JScrollPane listScroller = new JScrollPane(saverList);
+		loaderList = new JList(loaderListData.toArray());
+		loaderList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		loaderList.setLayoutOrientation(JList.VERTICAL);
+		loaderList.setVisibleRowCount(-1);
+		JScrollPane listScroller = new JScrollPane(loaderList);
 		listScroller.setPreferredSize(new Dimension(250, 80));
 		listScroller.setAlignmentX(LEFT_ALIGNMENT);
 		this.getContentPane().add(listScroller);
@@ -70,13 +70,13 @@ public class SaveWorkspaceFrame extends JFrame{
 	}
 	
 	private void setListeners(){
-		saverList.addListSelectionListener(new ListSelectionListener() {
+		loaderList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				next.setEnabled(true);				
 			}
 		});
 		
-		saverList.addMouseListener(new MouseAdapter() {
+		loaderList.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent e) {
 		        if (e.getClickCount() == 2) {
 		        	next.doClick();
@@ -99,9 +99,9 @@ public class SaveWorkspaceFrame extends JFrame{
 	}
 	
 	private void openLoaderFrame(){
-		String selectedSaver = (String) saverList.getSelectedValue();
-		ISaverFrame saverFrame = SaverFrameFactory.get(selectedSaver);
-		saverFrame.setWorkspaceController(mainController.getWorkspaceController());
-		saverFrame.setVisible(true);
+		String selectedLoader = (String) loaderList.getSelectedValue();
+		ILoaderFrame loaderFrame = LoaderFrameFactory.get(selectedLoader);
+		loaderFrame.setWorkspaceController(mainController.getWorkspaceController());
+		loaderFrame.setVisible(true);
 	}
 }

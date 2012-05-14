@@ -9,14 +9,14 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class ExportLogicalArchitectureFrame extends JFrame {
+public class ExportLogicalArchitectureDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,20 +28,21 @@ public class ExportLogicalArchitectureFrame extends JFrame {
 
 	private File selectedFile;
 
-	public ExportLogicalArchitectureFrame(MainController mainController) {
-		super();
+	public ExportLogicalArchitectureDialog(MainController mainController) {
+		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		setTitle("Export Logical Architecture");
 		setup();
 		addComponents();
 		setListeners();
+		this.setVisible(true);
 	}
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(350, 100));
-		this.setVisible(true);
+		DialogUtils.alignCenter(this);
 	}
 
 	private void addComponents(){

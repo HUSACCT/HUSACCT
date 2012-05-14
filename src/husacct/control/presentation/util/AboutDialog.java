@@ -1,5 +1,7 @@
 package husacct.control.presentation.util;
 
+import husacct.control.task.MainController;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -12,11 +14,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class AboutHusacctFrame extends JFrame {
+public class AboutDialog extends JDialog {
 	
 		private static final long serialVersionUID = 1L;
 
@@ -27,12 +29,13 @@ public class AboutHusacctFrame extends JFrame {
 		
 		private GridBagConstraints constraint = new GridBagConstraints();
 		
-		public AboutHusacctFrame() {
-			super();
+		public AboutDialog(MainController mainController) {
+			super(mainController.mainGUI, true);
 			setTitle("About HUSACCT");
 			setup();
 			addComponents();
 			setListeners();
+			this.setVisible(true);
 		}
 
 		private void setup(){
@@ -40,7 +43,6 @@ public class AboutHusacctFrame extends JFrame {
 			this.setSize(new Dimension(420, 380));
 			this.setLayout(new FlowLayout());
 			this.setResizable(false);
-			this.setVisible(true);
 		}
 
 		private void addComponents(){

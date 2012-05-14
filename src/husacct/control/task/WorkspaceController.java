@@ -4,8 +4,8 @@ import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
-import husacct.control.presentation.workspace.OpenWorkspaceFrame;
-import husacct.control.presentation.workspace.SaveWorkspaceFrame;
+import husacct.control.presentation.workspace.OpenWorkspaceDialog;
+import husacct.control.presentation.workspace.SaveWorkspaceDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -33,11 +33,11 @@ public class WorkspaceController {
 	}
 	
 	public void showOpenWorkspaceGui() {
-		new OpenWorkspaceFrame(mainController);
+		new OpenWorkspaceDialog(mainController);
 	}
 	
-	public SaveWorkspaceFrame showSaveWorkspaceGui() {
-		return new SaveWorkspaceFrame(mainController);
+	public SaveWorkspaceDialog showSaveWorkspaceGui() {
+		return new SaveWorkspaceDialog(mainController);
 	}
 	
 	public void createWorkspace(String name){
