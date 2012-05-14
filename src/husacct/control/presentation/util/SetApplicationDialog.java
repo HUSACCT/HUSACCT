@@ -20,12 +20,12 @@ public class SetApplicationDialog extends JDialog {
 
 	private JButton saveButton;
 	private MainController mainController;
-	private SetApplicationPanel applicationDialogComponents;
+	private SetApplicationPanel setApplicationPanel;
 	
 	public SetApplicationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		applicationDialogComponents = new SetApplicationPanel();
+		setApplicationPanel = new SetApplicationPanel();
 		setTitle("Application details");
 		setup();
 		addComponents();
@@ -47,7 +47,7 @@ public class SetApplicationDialog extends JDialog {
 		savePanel.add(saveButton);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(applicationDialogComponents);
+		mainPanel.add(setApplicationPanel);
 		mainPanel.add(savePanel);
 		add(mainPanel);
 	}
@@ -55,7 +55,7 @@ public class SetApplicationDialog extends JDialog {
 	private void setListeners(){
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ApplicationDTO applicationData = applicationDialogComponents.getApplicationData();
+				ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
 				mainController.getApplicationController().setApplicationData(applicationData);
 				dispose();
 			}
