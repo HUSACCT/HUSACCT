@@ -68,7 +68,7 @@ public class AnalysedController extends DrawingController {
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
-		if(!dtoFrom.uniqueName.equals(dtoTo.uniqueName)){
+		if(!figureFrom.equals(figureTo)){
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[]{};
