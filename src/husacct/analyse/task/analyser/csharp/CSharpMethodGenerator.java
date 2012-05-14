@@ -25,7 +25,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		signature = createSignature(tree);
 		hasClassScope = checkForClassScope(tree);
 		//System.out.println("method: " + uniqueName + accessControlQualifier + isConstructor + isAbstract + "returnType: " + declaredReturnType + " signature: "+signature + hasClassScope);
-
+		isPureAccessor = false;
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, className, isConstructor, isAbstract, hasClassScope);
 //		Boolean isPureAccessor = false; //todo
 	}

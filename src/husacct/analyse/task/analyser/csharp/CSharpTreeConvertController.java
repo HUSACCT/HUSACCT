@@ -90,7 +90,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	          
 	            if(isNewInstance == false && hasBrackets == true){
 	            	CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
-	            	methodGenerator.generate(methodTrees, tempClassName);
+	            	methodGenerator.generate(methodTrees, tempNamespaceName + "." + tempClassName);
 	            }
 	        	
 	            methodTrees.clear();
@@ -162,29 +162,6 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			}
 		}
 	}
-/*
-	private boolean splitAttributeAndMethods(CommonTree tree, boolean isScanning) {
-		boolean thisIsAnAttributeAndNotAUsing = false;
-		//System.out.println(tree);
-		if (tree.getType() != USING) {
-			thisIsAnAttributeAndNotAUsing = true;
-			System.out.println(tree);
-		}	
-		if(isScanning){
-			variousTrees.add(tree);
-			
-		}
-				
-		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
-			isScanning = false;
-			MultipleChecks();
-			
-			variousTrees.clear();
-		}
-		
-		return isScanning;
-	}
-*/
 
 	private boolean classCheck(CommonTree tree, boolean isClassPart) {
 		if (tree.getType() == ABSTRACT) {
