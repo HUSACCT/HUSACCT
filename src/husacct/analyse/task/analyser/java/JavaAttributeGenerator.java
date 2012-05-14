@@ -2,6 +2,7 @@ package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -20,16 +21,18 @@ class JavaAttributeGenerator {
 
 	private String name;
 
-	private final static int STATIC = 90;
-	private final static int MODIFIER_LIST = 145;
-	private final static int QUALIFIED_TYPE_IDENT = 151;
-	private final static int TYPE = 157;
-	private final static int VAR_DECLARATOR_LIST = 162;
-	private final static int IDENT = 164;
-	private final static int STATIC_ARRAY_CREATOR = 120;
+
+
 	
 	
 	public void generateModel(Tree attributeTree, String belongsToClass) {
+		
+		CommonTree currentTree = (CommonTree) attributeTree;
+		CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);
+		if(IdentTree != null){
+			this.name = IdentTree.getText();
+		}
+		
 		this.belongsToClass = belongsToClass;
 		lineNumber = attributeTree.getLine();
 		walkThroughAST(attributeTree);
@@ -40,17 +43,20 @@ class JavaAttributeGenerator {
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
-			if(treeType == MODIFIER_LIST){
+			if(treeType == JavaParser.MODIFIER_LIST){
 				setAccesControllQualifier(tree);
 				setClassScope(child);
-			}else if(treeType == TYPE){
+			}else if(treeType == JavaParser.TYPE){
 				setDeclareType(child);		
-			}else if(treeType == VAR_DECLARATOR_LIST){
+			}else if(treeType == JavaParser.VAR_DECLARATOR_LIST){
 				setAttributeName(child);	
 			}
-			else if(treeType == STATIC_ARRAY_CREATOR){
+			else if(treeType == JavaParser.STATIC_ARRAY_CREATOR){
 				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
 				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree);
+			} else if(treeType == JavaParser.AT){
+				JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
+				annotationGenerator.generateMethod((CommonTree) child);
 			}
 			walkThroughAST(child);
 		}
@@ -65,7 +71,7 @@ class JavaAttributeGenerator {
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
-			if(treeType == IDENT){
+			if(treeType == JavaParser.IDENT){
 				name = child.getText();
 				break;
 			} 		
@@ -78,7 +84,7 @@ class JavaAttributeGenerator {
 		
 		Tree child = typeTree.getChild(0);
 		Tree declaretype = child.getChild(0);
-		if(child.getType() != QUALIFIED_TYPE_IDENT){
+		if(child.getType() != JavaParser.QUALIFIED_TYPE_IDENT){
 			declareType = child.getText();
 		}else{
 			if(child.getChildCount() > 1){
@@ -102,7 +108,7 @@ class JavaAttributeGenerator {
 
 	private void setClassScope(Tree ModifierList){
 		for(int i = 0; i < ModifierList.getChildCount(); i++){
-			if(ModifierList.getChild(i).getType() == STATIC){
+			if(ModifierList.getChild(i).getType() == JavaParser.STATIC){
 				classScope = true;
 				break;
 			}

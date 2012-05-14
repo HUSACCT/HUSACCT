@@ -7,7 +7,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
-import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
+import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;

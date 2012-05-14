@@ -5,6 +5,7 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import java.util.Calendar;
 
 public class Violation {
+	
 	private int linenumber;
 	private Severity severity;
 	private String ruletypeKey;

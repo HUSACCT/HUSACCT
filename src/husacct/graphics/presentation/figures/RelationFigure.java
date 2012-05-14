@@ -75,6 +75,10 @@ public class RelationFigure extends NamedFigure
 	
 	@Override
 	public void draw(Graphics2D graphics) {
+		if(this.isViolated()) {
+			this.amountFigure.set(AttributeKeys.TEXT_COLOR, this.getViolatedColor());
+		}
+		
 		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
 		this.set(AttributeKeys.END_DECORATION, arrowTip);
 		

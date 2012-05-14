@@ -14,48 +14,64 @@ import java.util.ArrayList;
 
 public class DemoController extends DrawingController {
 
-	private final int ITEMS_PER_ROW = 2;
+	//private final int ITEMS_PER_ROW = 2;
 
 	public DemoController() {
 		initializeDrawing();
 	}
 	
 	private void initializeDrawing(){
-		AbstractDTO[] modules = new AbstractDTO[5];
+		ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
+		//AbstractDTO[] modules = new AbstractDTO[5];
 
 		ModuleDTO presentationLayer = new ModuleDTO();
 		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
-		modules[0] = presentationLayer;
+		modules.add(presentationLayer);
 
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
-		modules[1] = taskLayer;
+		modules.add(taskLayer);
 
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
 		infrastructureLayer.logicalPath = "infrastructure";
-		modules[2] = infrastructureLayer;
+		modules.add(infrastructureLayer);
 
 		ModuleDTO domainLayer = new ModuleDTO();
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain";
-		modules[3] = domainLayer;
+		modules.add(domainLayer);
 
 		ModuleDTO testLayer = new ModuleDTO();
 		testLayer.type = "layer";
 		testLayer.logicalPath = "test";
-		modules[4] = testLayer;
-
-		BasicLayoutStrategy bls = new BasicLayoutStrategy(drawing);
-		bls.doLayout(ITEMS_PER_ROW);
+		modules.add(testLayer);
 		
-		this.drawModules(modules);
+		ModuleDTO testClass = new ModuleDTO();
+		testClass.type = "class";
+		testClass.logicalPath = "*";
+		//modules.add(testClass);
 		
-		bls = new BasicLayoutStrategy(drawing);
-		bls.doLayout(ITEMS_PER_ROW);
+		ModuleDTO testModule = new ModuleDTO();
+		testModule.type = "module";
+		testModule.logicalPath = "myModule";
+		//modules.add(testModule);
 		
+		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
+		unrecognizableModuleTypeDTO.type = "foobar";
+		unrecognizableModuleTypeDTO.logicalPath = "tests";
+		modules.add(unrecognizableModuleTypeDTO);
+		
+		ModuleDTO component = new ModuleDTO();
+		component.type = "component";
+		component.logicalPath = "uml2component";
+		modules.add(component);
+		
+		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
+		dtos = modules.toArray(dtos);
+		this.drawModules(dtos);
 		this.drawLinesBasedOnSetting();
 	}
 	
@@ -65,19 +81,42 @@ public class DemoController extends DrawingController {
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
+		BaseFigure zoomedFigure = zoomedModuleFigures[0];
+		
+		if(zoomedFigure instanceof NamedFigure
+				&& ((NamedFigure)zoomedFigure).getName() == "tests")	{
+			ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
+			
+			ModuleDTO child1 = new ModuleDTO();
+			child1.type = "abstract";
+			child1.logicalPath = "tests.test1";
+			modules.add(child1);
+			
+			ModuleDTO child2 = new ModuleDTO();
+			child2.type = "class";
+			child2.logicalPath = "tests.test2";
+			modules.add(child2);
+			
+			ModuleDTO child3 = new ModuleDTO();
+			child3.type = "interface";
+			child3.logicalPath = "tests.test3";
+			modules.add(child3);
+			
+			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
+			dtos = modules.toArray(dtos);
+			this.drawModules(dtos);
+		}			
 	}
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void moduleZoomOut() {
-		// TODO Auto-generated method stub
-
+		this.refreshDrawing();
 	}
 
 	@Override
@@ -172,8 +211,22 @@ public class DemoController extends DrawingController {
 					"error 4", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
+		
+		if(figFrom.getName().equals("presentation") && figTo.getName().equals("test")) {
+			violations = new ViolationDTO[] {
+				new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType,
+						"error 5", 1, Color.blue, "", "", 1),
+				new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType,
+						"error 6", 1, Color.orange, "", "", 2)
+			};
+		}
 
 		return violations;
+	}
+
+	@Override
+	public void moduleOpen(String path) {
+		
 	}
 
 }

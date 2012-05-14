@@ -69,4 +69,9 @@ public class AppliedRuleDomainService {
 		boolean isEnabled = rule.isEnabled();
 		return isEnabled;
 	}
+
+	public AppliedRule getAppliedRuleById(long appliedRuleId) {
+		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
+		return rule;
+	}
 }

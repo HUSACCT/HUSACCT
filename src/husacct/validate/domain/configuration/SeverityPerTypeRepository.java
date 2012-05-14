@@ -5,8 +5,8 @@ import husacct.analyse.IAnalyseService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
-import husacct.validate.domain.factory.violationtype.java.AbstractViolationType;
-import husacct.validate.domain.factory.violationtype.java.ViolationTypeFactory;
+import husacct.validate.domain.factory.violationtype.AbstractViolationType;
+import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -18,22 +18,25 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 public class SeverityPerTypeRepository {
+	
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
+	
+	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
+	private final RuleTypesFactory ruletypefactory;
+	private final ConfigurationServiceImpl configuration;		
 	
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
-	private final RuleTypesFactory ruletypefactory;
-	private final ConfigurationServiceImpl configuration;
-	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
-	private AbstractViolationType violationtypefactory;
+	private AbstractViolationType violationtypefactory;	
+	
 
 	public SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
 		this.ruletypefactory = ruletypefactory;
+	
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
-
 
 	public void initializeDefaultSeverities() {		
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
@@ -44,7 +47,9 @@ public class SeverityPerTypeRepository {
 
 	private HashMap<String, HashMap<String, Severity>> initializeDefaultSeverityForLanguage(String programmingLanguage){
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+		
 		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
+	
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
 			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
@@ -134,6 +139,7 @@ public class SeverityPerTypeRepository {
 			}
 			local.put(entry.getKey(), entry.getValue());
 		}
+		
 		severitiesPerTypePerProgrammingLanguage.remove(language);
 		severitiesPerTypePerProgrammingLanguage.put(language, local);
 	}
