@@ -13,8 +13,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ImportViolationsHistory {
@@ -65,8 +68,8 @@ public class ImportViolationsHistory {
 				}				
 				violationHistories.add(new ViolationHistory(violations, severities, date, description));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (DatatypeConfigurationException e) {
+			Logger.getLogger(ImportViolationsHistory.class).log(Level.FATAL, "The date for a violation could not be configured");
 		}
 		return violationHistories;
 	}
