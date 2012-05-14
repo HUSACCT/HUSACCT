@@ -2,9 +2,12 @@ package husaccttest.validate;
 
 import static org.junit.Assert.assertEquals;
 import husacct.validate.ValidateServiceImpl;
+import husacct.validate.domain.configuration.ActiveRuleType;
+import husacct.validate.domain.configuration.ActiveViolationType;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.awt.Color;
@@ -14,6 +17,7 @@ import java.net.URISyntaxException;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -39,12 +43,12 @@ public class ImportExportTest {
 	{
 		validate = new ValidateServiceImpl();
 	}
-	
-	
+
+
 	public void testImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
 		ClassLoader.getSystemResource("husaccttest/validate/testfile.xml").toURI();
 		DocumentBuilderFactory domfactory = DocumentBuilderFactory.newInstance();
-	    DocumentBuilder dombuilder = domfactory.newDocumentBuilder();
+		DocumentBuilder dombuilder = domfactory.newDocumentBuilder();
 		File file = new File(ClassLoader.getSystemResource("husaccttest/validate/testfile.xml").toURI());
 		DOMBuilder domBuilder = new DOMBuilder();
 		Document document = domBuilder.build(dombuilder.parse(file));
@@ -52,6 +56,40 @@ public class ImportExportTest {
 		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration().getAllSeverities(), document.getRootElement().getChild("severities"));
 		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(), document.getRootElement().getChild("severitiesPerTypesPerProgrammingLanguages"));
 		checkViolationsTheSameAsViolationsElement(validate.getConfiguration().getAllViolations().getValue(), document.getRootElement().getChild("violations"));
+		checkViolationHistoriesTheSameAsViolationHistoriesElement(validate.getConfiguration().getViolationHistories(), document.getRootElement().getChild("violationHistories"));
+		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate.getConfiguration().getActiveViolationTypes(), document.getRootElement().getChild("activeViolationTypes"));
+	}
+
+	private void checkActiveViolationTypesTheSameAsActiveViolationTypesElement(
+			Map<String, List<ActiveRuleType>> activeViolationTypes, Element child) {
+		int i = 0;
+		for(Entry<String, List<ActiveRuleType>> activeViolationType : activeViolationTypes.entrySet()) {
+			Element activeViolationTypeElement = child.getChildren().get(i);
+			assertEquals(activeViolationType.getKey(), activeViolationTypeElement.getAttributeValue("language"));
+			for(int ruleTypeIndex = 0; ruleTypeIndex < activeViolationTypeElement.getChildren().size(); ruleTypeIndex++) {
+				ActiveRuleType activeRuleType = activeViolationType.getValue().get(ruleTypeIndex);
+				Element activeRuleTypeElement = activeViolationTypeElement.getChildren().get(ruleTypeIndex);
+				assertEquals(activeRuleType.getRuleType(), activeRuleTypeElement.getAttributeValue("type"));
+				for(int violationTypeIndex = 0; violationTypeIndex < 0; violationTypeIndex++) {
+					ActiveViolationType violationType = activeRuleType.getViolationTypes().get(violationTypeIndex);
+					Element violationTypeElement = activeRuleTypeElement.getChildren().get(violationTypeIndex);
+					assertEquals(violationType.getType(), violationTypeElement.getChildText("violationKey"));
+					assertEquals(violationType.isEnabled(), Boolean.parseBoolean(violationTypeElement.getChildText("enabled")));
+				}
+			}
+			i++;
+		}
+	}
+
+	private void checkViolationHistoriesTheSameAsViolationHistoriesElement(
+			List<ViolationHistory> violationHistories, Element child) throws DatatypeConfigurationException {
+		for(int i = 0; i < child.getChildren().size(); i++) {
+			Element violationHistoryElement = child.getChildren().get(i);
+			ViolationHistory violationHistory = violationHistories.get(i);
+			assertEquals(violationHistory.getDescription(), violationHistoryElement.getChildText("description"));
+			checkViolationsTheSameAsViolationsElement(violationHistory.getViolations(), violationHistoryElement.getChild("violations"));
+			checkSeveritiesTheSameAsSeveritiesElement(violationHistory.getSeverities(), violationHistoryElement.getChild("severities"));
+		}
 	}
 
 	public void checkViolationsTheSameAsViolationsElement(List<Violation> violations, Element violationsElement) throws DatatypeConfigurationException {
@@ -123,6 +161,8 @@ public class ImportExportTest {
 		checkViolationsTheSameAsViolationsElement(validate.getConfiguration().getAllViolations().getValue(), validate.getWorkspaceData().getChild("violations"));
 		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration().getAllSeverities(), validate.getWorkspaceData().getChild("severities"));
 		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(), validate.getWorkspaceData().getChild("severitiesPerTypesPerProgrammingLanguages"));
+		checkViolationHistoriesTheSameAsViolationHistoriesElement(validate.getConfiguration().getViolationHistories(), validate.getWorkspaceData().getChild("violationHistories"));
+		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate.getConfiguration().getActiveViolationTypes(), validate.getWorkspaceData().getChild("activeViolationTypes"));
 	}
 
 	public void checkLogicalModulesTheSameAsLogicalModulesElement(Element logicalModulesElement, LogicalModules logicalModiles) {
