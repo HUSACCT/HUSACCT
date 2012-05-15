@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -20,23 +21,23 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private String declareName;
 	private String uniqueName;
 	
-	
 	private Logger logger = Logger.getLogger(JavaParameterGenerator.class);
 	private String signature = "";
 	private boolean nameFound = false;
 	private boolean declareTypeFound = false;
 	
+	private ArrayList<Object> saveQueue;
+	
 	public String generateParameterObjects(Tree tree, String belongsToMethod, String belongsToClass){
 		//returns the signature, which MethodGenerator uses
-		
-		System.out.println(tree.toStringTree());
+
+		this.saveQueue = new ArrayList<Object>();
 		
 		this.belongsToMethod = belongsToMethod;
 		this.belongsToClass = belongsToClass;
 		lineNumber = tree.getLine();
 		
-		DelegateParametersFromTree(tree);
-		createSignature();
+		DelegateParametersFromTree(tree);		
 		return signature;
 	}
 
@@ -49,7 +50,9 @@ public class JavaParameterGenerator extends JavaGenerator {
 			if(treeType == JavaParser.FORMAL_PARAM_STD_DECL ){
 				getAttributeName(child);
 				getParameterAttributes(child, 1);
-				writeParameterToDomain();
+				if(this.nameFound && this.declareTypeFound){
+					writeParameterToDomain();
+				}
 				deleteTreeChild(child);
 				nameFound = false;
 				declareTypeFound = false;
@@ -64,10 +67,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 		Tree attributeNameTree = attributeTree.getFirstChildWithType(JavaParser.IDENT);
 		try{
 			this.declareName = attributeNameTree.getText();
-			this.nameFound = true;
-			logger.debug("FOUND ATTRIBUTE NAME \t " + declareName);
-			
-			
+			this.nameFound = true;			
 		} catch (Exception e) { }		
 	}
 	
@@ -105,19 +105,21 @@ public class JavaParameterGenerator extends JavaGenerator {
 		return attributeType;
 	}
 
-	private void getParameterAttributes(Tree tree, int indent) {
+	private String getParameterAttributes(Tree tree, int indent) {
 		int childrenCount = tree.getChildCount();
 		for(int i = 0; i < childrenCount; i++){
 			CommonTree currentChild = (CommonTree) tree.getChild(i);
 			
 			if(currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
+				this.declareType = getAttributeType(currentChild);
+				this.declareTypeFound = true;
 				this.signature += !this.signature.equals("") ? "," : "";
-				this.signature += getAttributeType(currentChild);
+				this.signature += this.declareType;
 			} else {
 				getParameterAttributes(currentChild, indent + 1);
 			}
 		}
-
+		return "";
 	}
 	
 	
@@ -127,11 +129,14 @@ public class JavaParameterGenerator extends JavaGenerator {
         } 
     } 
 	
-	private void createSignature() {
+	private void addToQueue(){
+		ArrayList<Object> myParam = new ArrayList<Object>();
 		
+		saveQueue.add(myParam);
 	}
 	
 	private void writeParameterToDomain() {
-		modelService.createParameter(declareName, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, declareTypes);
+		this.uniqueName = this.belongsToClass + "." + this.signature + "." + this.declareType;
+		modelService.createParameter(declareName, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, declareType);
 	}
 }

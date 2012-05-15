@@ -46,5 +46,6 @@ public interface ModelCreationService {
 
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
-			String belongsToMethod, List<String> declareTypes);
+			String belongsToMethod, String declareTypes);
+	
 }

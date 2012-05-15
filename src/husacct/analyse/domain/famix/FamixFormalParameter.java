@@ -14,5 +14,18 @@ class FamixFormalParameter extends FamixStructuralEntity{
 	//but now the declaredTypes have 2 properties: a User and a HomeAddress object.
 	public List<String> declaredTypes = new ArrayList<String>(); 
 	//public int position;
+
+	public String toString(){
+		String importRepresentation = "";
+		importRepresentation += "\nname: " + super.name;
+		importRepresentation += "\nuniquename: " + super.uniqueName;
+		importRepresentation += "\nbelongsToClass: " + super.belongsToClass;
+		importRepresentation += "\nbelongsToMethod: " + this.belongsToMethod;
+		importRepresentation += "\ndeclareType: " + super.declareType;
+		importRepresentation += "\ndeclaredTypes: " + this.declaredTypes.toString();
+		importRepresentation += "\n";
+		importRepresentation += "\n";
+		return importRepresentation;
+	}
 	
 }

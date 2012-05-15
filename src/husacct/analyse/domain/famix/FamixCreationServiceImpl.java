@@ -160,9 +160,16 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	@Override
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
-			String belongsToMethod, List<String> declareTypes) {
-		// TODO Auto-generated method stub
+			String belongsToMethod, String declareTypes) {
 		
+		FamixFormalParameter famixParameter = new FamixFormalParameter();
+		famixParameter.belongsToClass = belongsToClass;
+		famixParameter.belongsToMethod = belongsToMethod;
+		famixParameter.declareType = declareType;
+		famixParameter.lineNumber = lineNumber;
+		famixParameter.name = name;
+		famixParameter.uniqueName = uniqueName;
+		addToModel(famixParameter);
 	}
 	
 	@Override
@@ -378,12 +385,31 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		Package[] packagesloaded = Package.getPackages();
 		for(Package p : packagesloaded){
 			String packageName = p.getName();
-			String predictUniquename = packageName + "." + type;
-			try {
+			String newType = "";
+			if (type != null && type.length() > 0) {
+				char[] typeCharArray = type.toCharArray();
+				typeCharArray[0] = Character.toUpperCase(typeCharArray[0]);
+				newType = new String(typeCharArray);
+			}
+			String predictUniquename;
+			if(!newType.equals("")) {
+				predictUniquename = packageName + "." + newType;
+			}
+			else {
+				predictUniquename = packageName + "." + type;
+			}
+			try {	
 				Class.forName(predictUniquename);
 				return predictUniquename;
 			} catch (ClassNotFoundException e) {
-
+				predictUniquename = packageName + "." + type;
+				try {	
+					Class.forName(predictUniquename);
+					return predictUniquename;
+				} catch (ClassNotFoundException e2) {
+					
+				}
+				//TODO Logger
 			}
 		}
 		return "";
