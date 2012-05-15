@@ -38,6 +38,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 		lineNumber = tree.getLine();
 		
 		DelegateParametersFromTree(tree);		
+		writeParameterToDomain();
 		return signature;
 	}
 
@@ -51,7 +52,8 @@ public class JavaParameterGenerator extends JavaGenerator {
 				getAttributeName(child);
 				getParameterAttributes(child, 1);
 				if(this.nameFound && this.declareTypeFound){
-					writeParameterToDomain();
+//					writeParameterToDomain();
+					this.addToQueue();
 				}
 				deleteTreeChild(child);
 				nameFound = false;
@@ -131,12 +133,19 @@ public class JavaParameterGenerator extends JavaGenerator {
 	
 	private void addToQueue(){
 		ArrayList<Object> myParam = new ArrayList<Object>();
-		
+		myParam.add(this.declareType);
+		myParam.add(this.declareName);		
 		saveQueue.add(myParam);
 	}
 	
 	private void writeParameterToDomain() {
-		this.uniqueName = this.belongsToClass + "." + this.signature + "." + this.declareType;
-		modelService.createParameter(declareName, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, declareType);
+		System.out.println("boe");
+		for(Object object : saveQueue){
+			ArrayList<Object> currentParam = (ArrayList<Object>) object;
+			String type = (String) currentParam.get(0);
+			String name = (String) currentParam.get(1);
+			this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
+			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethod, type);
+		}
 	}
 }
