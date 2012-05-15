@@ -6,35 +6,22 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
-
-import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
 public class AnalysedController extends DrawingController {
-	private IControlService controlService;
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
 		super();
-		initializeServices();
-		
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			@Override
-			public void update(Locale newLocale) {
-				refreshDrawing();
-			}
-		});		
+		initializeServices();	
 	}
 	
 	private void initializeServices() {
-		controlService = ServiceProvider.getInstance().getControlService();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 	}

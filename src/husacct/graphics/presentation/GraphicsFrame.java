@@ -1,12 +1,13 @@
 package husacct.graphics.presentation;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.control.IControlService;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -26,28 +27,37 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
 public class GraphicsFrame extends JInternalFrame {
+	protected IControlService controlService;
 	private static final long serialVersionUID = -4683140198375851034L;
 
 	private DrawingView drawingView;
 	private JMenuBar menuBar, locationBar;
-	private JCheckBoxMenuItem showViolationsOptionMenu;
+	private JCheckBox showViolationsOptionMenu;
 	private String currentPath;
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
-	private String ROOT_LEVEL = "Root";
+	private String ROOT_LEVEL;
 	private final String LOCATION_SEPERATOR = ".";
 	private boolean showingProperties = false;
 
 	int frameTotalWidth = getWidth();
 	int menuItemMaxWidth = 140;
 	int menuItemMaxHeight = 45;
+	
+	private JButton goToParentMenu, refreshMenu, exportToImageMenu, rootLocationButton;
+	private ArrayList<String> violationColumnNames;
+	private ArrayList<String> dependencyColumnNames;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	private HashMap<JButton, String> buttonPaths = new HashMap<JButton, String>();
 
 	public GraphicsFrame(DrawingView givenDrawingView) {
-		resetCurrentPath();
 		setVisible(false);
+
+		controlService = ServiceProvider.getInstance().getControlService();
+		ROOT_LEVEL = controlService.getTranslatedString("Root");
+		resetCurrentPath();
+		
 		drawingView = givenDrawingView;
 		initializeComponents();
 		setSize(500, 500);
@@ -79,8 +89,38 @@ public class GraphicsFrame extends JInternalFrame {
 		setLayout(new java.awt.BorderLayout());
 		add(menuBar, BorderLayout.NORTH);
 		add(locationBar, BorderLayout.SOUTH);
+		
+		updateComponents();
 
 		layoutComponents(false);
+	}
+	
+	private void updateComponents(){
+		goToParentMenu.setText(controlService.getTranslatedString("LevelUp"));
+		refreshMenu.setText(controlService.getTranslatedString("Refresh"));
+		showViolationsOptionMenu.setText(controlService.getTranslatedString("ShowViolations"));
+		exportToImageMenu.setText(controlService.getTranslatedString("ExportToImage"));
+		
+		String[] dependencyColumnNamesArray = { "From", "To", "LineNumber", "DependencyType" };
+		dependencyColumnNames = new ArrayList<String>();
+		for(String key : dependencyColumnNamesArray){
+			dependencyColumnNames.add(controlService.getTranslatedString(key));
+		}
+		
+		violationColumnNames = new ArrayList<String>();
+		String[] violationColumnNamesArray = { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
+		for(String key : violationColumnNamesArray){
+			violationColumnNames.add(controlService.getTranslatedString(key));
+		}
+		
+		ROOT_LEVEL = controlService.getTranslatedString("Root");
+		if(null!=rootLocationButton){
+			rootLocationButton.setText(ROOT_LEVEL);
+		}
+	}
+	
+	public void refreshFrame() {
+		updateComponents();
 	}
 
 	private void layoutComponents(boolean showProperties) {
@@ -115,7 +155,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private void createMenuBar() {
 		menuBar = new JMenuBar();
 		menuBar.setSize(frameTotalWidth, 20);
-		JButton goToParentMenu = new JButton("Level up");
+		goToParentMenu = new JButton();
 		goToParentMenu.setSize(50, menuItemMaxHeight);
 		goToParentMenu.addActionListener(new ActionListener() {
 			@Override
@@ -125,7 +165,7 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(goToParentMenu);
 
-		JButton refreshMenu = new JButton("Refresh");
+		refreshMenu = new JButton();
 		refreshMenu.setSize(50, menuItemMaxHeight);
 		refreshMenu.addActionListener(new ActionListener() {
 			@Override
@@ -135,9 +175,8 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(refreshMenu);
 
-		showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
+		showViolationsOptionMenu = new JCheckBox();
 		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
-		showViolationsOptionMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		showViolationsOptionMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -146,7 +185,7 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(showViolationsOptionMenu);
 
-		JButton exportToImageMenu = new JButton("Export to image");
+		exportToImageMenu = new JButton();
 		exportToImageMenu.setSize(50, menuItemMaxHeight);
 		exportToImageMenu.addActionListener(new ActionListener() {
 			@Override
@@ -170,7 +209,7 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private void updateLocationBar() {
 		clearLocationBar();
-		addLocationButton(ROOT_LEVEL, "");
+		createAndAddRootLocationButton();
 		
 		String path = getCurrentPath();
 		String pathUntilNow = "";
@@ -182,7 +221,7 @@ public class GraphicsFrame extends JInternalFrame {
 			addLocationSeperator();
 			for (String part : pathParts) {
 				pathUntilNow = pathUntilNow + part;
-				addLocationButton(part, pathUntilNow);
+				createAndAddLocationButton(part, pathUntilNow);
 	
 				if (!pathParts[pathParts.length - 1].equals(part)) {
 					addLocationSeperator();
@@ -193,7 +232,16 @@ public class GraphicsFrame extends JInternalFrame {
 		updateUI();
 	}
 	
-	private void addLocationButton(String levelName, String fullPath){
+	private void createAndAddRootLocationButton(){
+		rootLocationButton = createLocationButton(ROOT_LEVEL, "");
+		locationBar.add(rootLocationButton);
+	}
+	
+	private void createAndAddLocationButton(String levelName, String fullPath){
+		locationBar.add(createLocationButton(levelName, fullPath));
+	}
+	
+	private JButton createLocationButton(String levelName, String fullPath){
 		JButton locationStringButton = new JButton(levelName);
 		locationStringButton.setSize(10, menuItemMaxHeight);
 		locationStringButton.setMargin(new Insets(0, 0, 0, 0));
@@ -204,7 +252,7 @@ public class GraphicsFrame extends JInternalFrame {
 				moduleOpen(selectedPath);
 			}
 		});
-		locationBar.add(locationStringButton);
+		return locationStringButton;
 	}
 	
 	private void addLocationSeperator(){
@@ -278,8 +326,6 @@ public class GraphicsFrame extends JInternalFrame {
 	// TODO: Sort violations based on severity value
 	// TODO: Make small columns smaller in the GUI
 	private JTable createViolationsTable(ViolationDTO[] violationDTOs) {
-		String[] columnNames = { "Error Message", "Rule Type", "Violation Type", "Severity", "Line" };
-
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 		for (ViolationDTO violation : violationDTOs) {
 			String message = violation.message;
@@ -300,7 +346,7 @@ public class GraphicsFrame extends JInternalFrame {
 			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
 		}
 
-		return new JTable(rows.toArray(new String[][] {}), columnNames);
+		return new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[][] {}));
 	}
 
 	public void hidePropertiesPane() {
@@ -313,21 +359,19 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private Component createDependencyTable(DependencyDTO[] dependencyDTOs) {
-		String[] columnNames = { "From", "To", "Line number", "Dependency Type" };
-
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 		for (DependencyDTO dependency : dependencyDTOs) {
 			rows.add(new String[] { dependency.from, dependency.to, "" + dependency.lineNumber, dependency.type });
 		}
 
-		return new JTable(rows.toArray(new String[][] {}), columnNames);
+		return new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[][] {}));
 	}
 
 	public void turnOnViolations() {
-		showViolationsOptionMenu.setState(true);
+		showViolationsOptionMenu.setSelected(true);
 	}
 	
 	public void turnOffViolations() {
-		showViolationsOptionMenu.setState(false);
+		showViolationsOptionMenu.setSelected(false);
 	}
 }

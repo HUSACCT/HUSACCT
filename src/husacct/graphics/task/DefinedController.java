@@ -6,36 +6,23 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class DefinedController extends DrawingController {
-	private IControlService controlService;
 	protected IAnalyseService analyseService;
 	protected IDefineService defineService;
 	protected IValidateService validateService;
 
 	public DefinedController() {
 		super();
-
 		initializeServices();
-
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			@Override
-			public void update(Locale newLocale) {
-				refreshDrawing();
-			}
-		});
 	}
 
 	private void initializeServices() {
-		controlService = ServiceProvider.getInstance().getControlService();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
