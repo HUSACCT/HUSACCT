@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
@@ -20,29 +22,41 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
+	FileManager filemanager = new FileManager();
+	File selectedFile = filemanager.getFile();
 
 	public Drawing() {
 		super();
 	}
 	
 	public void showExportToImagePanel(){
-		FileManager filemanager = new FileManager();
-		File selectedFile = filemanager.getFile();
 
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
 			JFileChooser fileChooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png", "png");
+			fileChooser.setFileFilter(filter);
 			fileChooser.setVisible(true);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
 
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				filemanager.setFile(fileChooser.getSelectedFile());
+				selectedFile = fileChooser.getSelectedFile();
+				checkAndAddFileExtension();
+				filemanager.setFile(selectedFile);
 				filemanager.createOutputStream();
 				imageoutputformat.write(filemanager.getOutputStream(),this);
 				filemanager.closeOutputStream();
 	        }
 		} catch (IOException e) {
 			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
+		}
+	}
+
+	private void checkAndAddFileExtension() {
+		String absolutePathName = selectedFile.getAbsolutePath();
+		String extension = absolutePathName.substring(absolutePathName.length()-4, absolutePathName.length());
+		if(!extension.equalsIgnoreCase(".png")){
+			selectedFile = new File(absolutePathName+".png");
 		}
 	}
 

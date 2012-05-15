@@ -41,7 +41,7 @@ public abstract class DrawingController implements UserInputListener {
 	public DrawingController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
-		
+
 		initializeComponents();
 		
 		controlService = ServiceProvider.getInstance().getControlService();
@@ -134,7 +134,7 @@ public abstract class DrawingController implements UserInputListener {
 			drawTarget.hidePropertiesPane();
 		}
 	}
-	
+
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModules(AbstractDTO[] modules) {
@@ -144,8 +144,16 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
+
 		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
+		// updateLayout();
+	}
+
+	protected void updateLayout() {
+		int width = drawTarget.getWidth();
+		int height = drawTarget.getHeight();
+
+		layoutStrategy.doLayout(width, height);
 	}
 
 	public void toggleViolations() {
@@ -168,7 +176,9 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
+
 		drawing.resizeRelationFigures();
+		// updateLayout();
 	}
 
 	public void drawDependenciesForShownModules() {
