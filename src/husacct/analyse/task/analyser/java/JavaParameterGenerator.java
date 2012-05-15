@@ -22,7 +22,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 	
 	
 	private Logger logger = Logger.getLogger(JavaParameterGenerator.class);
-	private String signature;
+	private String signature = "";
 	private boolean nameFound = false;
 	private boolean declareTypeFound = false;
 	
