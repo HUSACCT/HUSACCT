@@ -12,6 +12,7 @@ import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
@@ -30,7 +31,8 @@ public abstract class RuleType {
 	protected AbstractViolationType violationtypefactory;
 	protected List<Violation> violations;
 	protected Mappings mappings;
-	
+	protected List<Mapping> physicalClasspathsFrom;
+		
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 

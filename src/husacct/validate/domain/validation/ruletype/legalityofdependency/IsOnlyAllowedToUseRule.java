@@ -32,7 +32,7 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
 		this.mappings = CheckConformanceUtil.filter(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
