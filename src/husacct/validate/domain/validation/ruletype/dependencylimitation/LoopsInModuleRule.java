@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation.ruletype.dependencylimitation;
 
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtil;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class LoopsInModuleRule extends RuleType{
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
-	
+
 	public LoopsInModuleRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
@@ -27,24 +28,33 @@ public class LoopsInModuleRule extends RuleType{
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		
+		this.physicalClasspathsFrom = new ArrayList<Mapping>();
+
 		this.mappings = CheckConformanceUtil.filter(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		
+		if(mappings.getMappingFrom().isEmpty()){
+			for(ModuleDTO module : defineService.getRootModules()){
+				physicalClasspathsFrom.addAll(CheckConformanceUtil.getAllModulesFromLayer(module));
+			}
+			
+		}else{
+			physicalClasspathsFrom = mappings.getMappingFrom();
+		}
 		
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
 			getClassPathsTo(physicalClassPathFrom.getPhysicalPath(),physicalClassPathFrom.getPhysicalPath(),violations);
 		}
 		return violations;
 	}
-	
+
 	private List<Violation> getClassPathsTo(String physicalPath, String startPath, List<Violation> violations)	{
 		for(DependencyDTO dependency :analyseService.getDependenciesFrom(physicalPath)){
 			for (DependencyDTO dependencyTo :analyseService.getDependenciesFrom(dependency.to)){
-				if(dependency.to.equals(dependencyTo.from)){
+				if(dependency.to.equals(dependencyTo.from) || dependencyTo.from.equals(dependencyTo.to)){
 					System.out.println("violations!!");
 				}
 			}
-			if(physicalPath.equals(dependency.from) && startPath.equals(dependency.to)){
+			if(physicalPath.equals(dependency.from) && startPath.equals(dependency.to) || dependency.from.equals(dependency.to)){
 				System.out.println("violations2!!");
 			}
 		}

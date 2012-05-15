@@ -34,7 +34,7 @@ public class BackCallRule extends RuleType {
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		
 		this.mappings = CheckConformanceUtil.filter(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();			
+		this.physicalClasspathsFrom = mappings.getMappingFrom();			
 		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildsFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
