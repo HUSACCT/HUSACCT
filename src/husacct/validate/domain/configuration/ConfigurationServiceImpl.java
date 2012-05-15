@@ -6,14 +6,14 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
+import java.util.Observable;
 
-public class ConfigurationServiceImpl {
+public class ConfigurationServiceImpl extends Observable {
 
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
