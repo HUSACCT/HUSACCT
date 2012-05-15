@@ -2,23 +2,37 @@ package husacct.define.domain.module;
 
 public class Layer extends Module {
 	
+	private static int STATIC_LEVEL;
 	private int hierarchicalLevel;
 	
 	public Layer()
 	{
-		this("", "", -1);
+		this("", "");
+		
 	}
 
-	public Layer(String name, int level)
+	public Layer(String name)
 	{
-		this(name, "", level);
+		this(name, "");
 	}
 	
-	public Layer(String name, String description, int level)
+	public Layer(String name, String description)
 	{
 		super(name, description);
 		super.type = "Layer";
-		this.hierarchicalLevel = level;
+		this.hierarchicalLevel = STATIC_LEVEL++;
+		STATIC_LEVEL++;
+	}
+	
+	//TODO this contructor is only for importing
+	public Layer(String name, String description, int hierarchicalLevel)
+	{
+		super(name, description);
+		super.type = "Layer";
+		this.hierarchicalLevel = hierarchicalLevel;
+		if (hierarchicalLevel >= STATIC_LEVEL){
+			STATIC_LEVEL = hierarchicalLevel + 1;
+		}
 	}
 	
 	public void setHierarchicalLevel(int hierarchicalLevel) {

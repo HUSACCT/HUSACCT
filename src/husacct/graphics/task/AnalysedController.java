@@ -42,6 +42,8 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void refreshDrawing() {
 		getAndDrawModulesIn(getCurrentPath());
+		
+		updateLayout();
 	}
 	
 	public void showViolations(){
@@ -62,13 +64,15 @@ public class AnalysedController extends DrawingController {
 			showViolations();
 		}
 		drawLinesBasedOnSetting();
+		
+		updateLayout();
 	}
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
-		if(!dtoFrom.uniqueName.equals(dtoTo.uniqueName)){
+		if(!figureFrom.equals(figureTo)){
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[]{};
@@ -90,6 +94,8 @@ public class AnalysedController extends DrawingController {
 			try {
 				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.uniqueName);
+				
+				updateLayout();
 			} catch (Exception e) {
 				logger.debug("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
@@ -102,6 +108,8 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
+			
+			updateLayout();
 		} else {
 			logger.debug("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
@@ -110,13 +118,17 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		setCurrentPath(parentName);
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 		if (children.length > 0) {
+			setCurrentPath(parentName);
 			drawModules(children);
 			drawLinesBasedOnSetting();
 		} else {
 			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
+	}
+
+	public void moduleOpen(String path) {
+		getAndDrawModulesIn(path);
 	}
 }

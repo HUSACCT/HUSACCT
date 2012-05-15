@@ -32,7 +32,7 @@ public class RelationFigure extends NamedFigure
 
 	public RelationFigure(String name, boolean violated, int amount)
 	{		
-		super(name, violated);
+		super(name);
 		
 		this.line = new LineConnectionFigure();
 		this.add(this.line);
@@ -74,11 +74,7 @@ public class RelationFigure extends NamedFigure
 	}
 	
 	@Override
-	public void draw(Graphics2D graphics) {
-		if(this.isViolated()) {
-			this.amountFigure.set(AttributeKeys.TEXT_COLOR, this.getViolatedColor());
-		}
-		
+	public void draw(Graphics2D graphics) {		
 		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
 		this.set(AttributeKeys.END_DECORATION, arrowTip);
 		

@@ -55,14 +55,25 @@ public class DemoController extends DrawingController {
 		//modules.add(testClass);
 		
 		ModuleDTO testModule = new ModuleDTO();
-		testModule.type = "module";
+		testModule.type = "subsystem";
 		testModule.logicalPath = "myModule";
-		//modules.add(testModule);
+		modules.add(testModule);
+		
+		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
+		unrecognizableModuleTypeDTO.type = "foobar";
+		unrecognizableModuleTypeDTO.logicalPath = "tests";
+		modules.add(unrecognizableModuleTypeDTO);
+		
+		ModuleDTO component = new ModuleDTO();
+		component.type = "component";
+		component.logicalPath = "uml2component";
+		modules.add(component);
 		
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
 		this.drawModules(dtos);
 		this.drawLinesBasedOnSetting();
+		updateLayout();
 	}
 	
 	@Override
@@ -71,19 +82,43 @@ public class DemoController extends DrawingController {
 	}
 
 	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
+		BaseFigure zoomedFigure = zoomedModuleFigures[0];
+		
+		if(zoomedFigure instanceof NamedFigure
+				&& ((NamedFigure)zoomedFigure).getName() == "tests")	{
+			ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
+			
+			ModuleDTO child1 = new ModuleDTO();
+			child1.type = "abstract";
+			child1.logicalPath = "tests.test1";
+			modules.add(child1);
+			
+			ModuleDTO child2 = new ModuleDTO();
+			child2.type = "class";
+			child2.logicalPath = "tests.test2";
+			modules.add(child2);
+			
+			ModuleDTO child3 = new ModuleDTO();
+			child3.type = "interface";
+			child3.logicalPath = "tests.test3";
+			modules.add(child3);
+			
+			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
+			dtos = modules.toArray(dtos);
+			setCurrentPath("tests");
+			this.drawModules(dtos);
+		}			
 	}
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void moduleZoomOut() {
-		// TODO Auto-generated method stub
-
+		this.refreshDrawing();
 	}
 
 	@Override
@@ -170,13 +205,14 @@ public class DemoController extends DrawingController {
 		}
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("task")) {
-			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 3", 1, Color.red, "", "", 3);
-			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 4", 1, Color.red, "", "", 3);
-			violations[1] = taskLayerErr2;
+			return new ViolationDTO[]{
+				new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
+						"error 3", 1, Color.red, "", "", 3),
+				new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
+						"error 4", 1, Color.red, "", "", 3),
+				new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, 
+						"error 5", 1, Color.PINK, "", "", 99)
+			};
 		}
 		
 		if(figFrom.getName().equals("presentation") && figTo.getName().equals("test")) {
@@ -189,6 +225,11 @@ public class DemoController extends DrawingController {
 		}
 
 		return violations;
+	}
+
+	@Override
+	public void moduleOpen(String path) {
+		
 	}
 
 }

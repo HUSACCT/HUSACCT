@@ -1,6 +1,7 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.abstraction.FileManager;
+import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
@@ -77,7 +78,7 @@ public class Drawing extends DefaultDrawing {
 	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList){
 		this.willChange();
 		for(BaseFigure figure : arrayList){
-			figure.setViolated(false);
+			figure.removeDecoratorByType(ViolationsDecorator.class);
 		}
 		this.invalidate();
 		this.changed();

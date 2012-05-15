@@ -13,7 +13,7 @@ import org.jhotdraw.draw.Figure;
 
 public class BasicLayoutStrategy {
 
-	private static final double VERT_ITEM_SPACING = 20.0;
+	private static final double VERT_ITEM_SPACING = 40.0;
 	private static final double HORZ_ITEM_SPACING = 35.0;
 
 	private Drawing drawing = null;
@@ -23,12 +23,50 @@ public class BasicLayoutStrategy {
 		drawing = givenDrawing;
 	}
 
+	public void doLayout(int screenWidth, int screenHeight) {
+		//System.out.println("Width: " + width + "; Height: " + height);
+		double x = HORZ_ITEM_SPACING, y = VERT_ITEM_SPACING;
+		double maxHeightOnLine = 0.0;
+		int figuresOnLine = 0;
+
+		ArrayList<Figure> figures = new ArrayList<Figure>();
+		ArrayList<Figure> connectors = new ArrayList<Figure>();
+		figures.addAll(drawing.getChildren());
+
+		for (Figure f : figures) {
+			if (!isConnector(f)) {
+				
+				Rectangle2D.Double bounds = f.getBounds();
+	
+				if (x + bounds.width > screenWidth && figuresOnLine > 0) {
+					x = HORZ_ITEM_SPACING;
+					y += maxHeightOnLine + VERT_ITEM_SPACING;
+					figuresOnLine = 0;
+					maxHeightOnLine = 0;
+				}
+				
+				bounds.x = x;
+				bounds.y = y;
+				Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
+				Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);
+			
+				f.willChange();
+				f.setBounds(anchor, lead);
+				f.changed();
+
+				x += bounds.width + HORZ_ITEM_SPACING;
+				maxHeightOnLine = Math.max(maxHeightOnLine, bounds.height);
+				figuresOnLine++;
+			} else {
+				connectors.add(f);
+			}
+		}		
+	}
+	
 	// TODO: Update doLayout() to take screen resolution into account and
 	// attempt to make it all fit
 	// on the screen without the use of scrollbars.
 	public void doLayout(int maxHorizontalItems) {
-		Rectangle2D.Double drawingBounds = drawing.getDrawingArea();
-
 		double x = HORZ_ITEM_SPACING, y = VERT_ITEM_SPACING;
 		double maxHeightOnLine = 0.0;
 		int itemsOnCurrentLine = 0;

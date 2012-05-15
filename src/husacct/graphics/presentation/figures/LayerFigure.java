@@ -14,14 +14,15 @@ public class LayerFigure extends NamedFigure {
 	private RectangleFigure body;
 	private TextFigure text;
 
-	private final int MIN_WIDTH = 300;
-	private final int MIN_HEIGHT = 50;
+	protected int minWidth = 300;
+	protected int minHeight = 50;
 
 	public LayerFigure(String name) {
-		super(name, false);
+		super(name);
 
 		body = new RectangleFigure();
 		text = new TextFigure(name);
+		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(body);
 		children.add(text);
 		
@@ -30,11 +31,11 @@ public class LayerFigure extends NamedFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < this.MIN_WIDTH) {
-			lead.x = anchor.x + this.MIN_WIDTH;
+		if ((lead.x - anchor.x) < this.minWidth) {
+			lead.x = anchor.x + this.minWidth;
 		}
-		if ((lead.y - anchor.y) < this.MIN_HEIGHT) {
-			lead.y = anchor.y + this.MIN_HEIGHT;
+		if ((lead.y - anchor.y) < this.minHeight) {
+			lead.y = anchor.y + this.minHeight;
 		}
 
 		body.setBounds(anchor, lead);

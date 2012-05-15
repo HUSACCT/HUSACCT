@@ -5,6 +5,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
 import java.awt.Color;
 
@@ -19,13 +20,13 @@ public final class FigureFactory {
 				dependencyDTOs.length);
 	}
 
-	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {
+	/**
+	 * Get a decorator for decorating a violated figure
+	 */
+	public ViolationsDecorator createViolationsDecorator(ViolationDTO[] violationDTOs) {
 		if (violationDTOs.length <= 0) {
 			throw new RuntimeException("No violations received. Cannot create a violation figure.");
 		}
-
-		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from "
-				+ violationDTOs[0].fromClasspath + " to " + violationDTOs[0].toClasspath, true, violationDTOs.length);
 
 		// get the highest severity color
 		int highestSeverity = -1;
@@ -36,11 +37,25 @@ public final class FigureFactory {
 				highestColor = dto.severityColor;
 			}
 		}
-		System.out.println("sever: "+highestSeverity);
-		if (highestColor != null) {
-			violatedRelationFigure.setViolatedColor(highestColor);
+		
+		if (highestColor == null) {
+			throw new RuntimeException("no violation severity color found");
 		}
 
+		return new ViolationsDecorator(highestColor);
+	}
+	
+	public RelationFigure createFigure(ViolationDTO[] violationDTOs)
+	{
+		if (violationDTOs.length <= 0) {
+			throw new RuntimeException("No violations received. Cannot create a violation figure.");
+		}
+		
+		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from "
+				+ violationDTOs[0].fromClasspath + " to " + violationDTOs[0].toClasspath, true, violationDTOs.length);
+		
+		violatedRelationFigure.addDecorator(this.createViolationsDecorator(violationDTOs));
+		
 		return violatedRelationFigure;
 	}
 
@@ -79,22 +94,23 @@ public final class FigureFactory {
 					+ "' is not recognized as a module dto");
 		}
 
+		//TODO check these values with the define team
 		if (type.toLowerCase().equals("layer")) {
 			return new LayerFigure(name);
-		} else if (type.toLowerCase().equals("module")) {
+		} else if (type.toLowerCase().equals("component")) {
 			return new ComponentFigure(name);
 		} else if (type.toLowerCase().equals("class")) {
 			return new ClassFigure(name);
 		} else if (type.toLowerCase().equals("abstract")) {
-			// TODO Abstract class
-			return new ClassFigure(name);
+			return new AbstractClassFigure(name);
 		} else if (type.toLowerCase().equals("interface")) {
-			// TODO Interface obj
-			return new ClassFigure(name);
+			return new InterfaceFigure(name);
 		} else if (type.toLowerCase().equals("package")) {
 			return new PackageFigure(name);
+		} else if (type.toLowerCase().equals("subsystem")) {
+			return new SubsystemFigure(name);
 		} else {
-			throw new RuntimeException("module dto type '" + type + "' not implemented");
+			return new ModuleFigure(name, type);
 		}
 	}
 }

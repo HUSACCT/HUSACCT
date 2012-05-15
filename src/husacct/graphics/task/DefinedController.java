@@ -64,6 +64,8 @@ public class DefinedController extends DrawingController {
 			showViolations();
 		}
 		drawLinesBasedOnSetting();
+		
+		updateLayout();
 	}
 
 	@Override
@@ -75,6 +77,8 @@ public class DefinedController extends DrawingController {
 			try {
 				ModuleDTO parentDTO = (ModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.logicalPath);
+				
+				updateLayout();
 			} catch (Exception e) {
 				logger.debug("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
@@ -87,6 +91,8 @@ public class DefinedController extends DrawingController {
 		String parentPath = defineService.getParentFromModule(getCurrentPath());
 		if (null != parentPath) {
 			getAndDrawModulesIn(parentPath);
+			
+			updateLayout();
 		} else {
 			logger.debug("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
@@ -99,11 +105,14 @@ public class DefinedController extends DrawingController {
 		ModuleDTO dtoFrom = (ModuleDTO) figureMap.getModuleDTO(figureFrom);
 		ModuleDTO dtoTo = (ModuleDTO) figureMap.getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
-		for(String physicalFromPath : dtoFrom.physicalPaths){
-			for(String physicalToPath : dtoTo.physicalPaths){
-				DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPath,physicalToPath);
-				for(DependencyDTO tempDependency : foundDependencies){
-					dependencies.add(tempDependency);
+		
+		if(!figureFrom.equals(figureTo)){
+			for(String physicalFromPath : dtoFrom.physicalPaths){
+				for(String physicalToPath : dtoTo.physicalPaths){
+					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPath,physicalToPath);
+					for(DependencyDTO tempDependency : foundDependencies){
+						dependencies.add(tempDependency);
+					}
 				}
 			}
 		}
@@ -119,9 +128,9 @@ public class DefinedController extends DrawingController {
 	
 	private void getAndDrawModulesIn(String parentName) {
 		try{
-			setCurrentPath(parentName);
 			ModuleDTO[] children = defineService.getChildsFromModule(parentName);
 			if (children.length > 0) {
+				setCurrentPath(parentName);
 				drawModules(children);
 				drawLinesBasedOnSetting();
 			} else {
@@ -132,4 +141,7 @@ public class DefinedController extends DrawingController {
 		}
 	}
 
+	public void moduleOpen(String path) {
+		getAndDrawModulesIn(path);
+	}
 }

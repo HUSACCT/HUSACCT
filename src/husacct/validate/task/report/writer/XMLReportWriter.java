@@ -37,11 +37,15 @@ public class XMLReportWriter extends ReportWriter {
 		reportElement.addContent(projectVersion);
 
 		Element totalViolations = new Element("totalViolations");
-		totalViolations.setText("" + report.getViolations().size());
+		totalViolations.setText("" + report.getViolations().getValue().size());
 		reportElement.addContent(totalViolations);
 		
+		Element violationGeneratedOn = new Element("violationsGeneratedOn");
+		violationGeneratedOn.setText(report.getFormattedDate());
+		reportElement.addContent(violationGeneratedOn);
+		
 		Element violationsSeverities = new Element("violations");
-		violationsSeverities.setAttribute(new Attribute("totalViolations" , "" +  report.getViolations().size()));
+		violationsSeverities.setAttribute(new Attribute("totalViolations" , "" +  report.getViolations().getValue().size()));
 		for(ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
 			Element violationElement = new Element(violationPerSeverity.getSeverity().getDefaultName().replace(" ", ""));
 			violationElement.setText("" + violationPerSeverity.getAmount());
@@ -52,7 +56,7 @@ public class XMLReportWriter extends ReportWriter {
 		Element violations = new Element("violations");
 		reportElement.addContent(violations);
 
-		for(Violation violation : report.getViolations()) {
+		for(Violation violation : report.getViolations().getValue()) {
 			Element xmlViolation = new Element("violation");
 
 			Element source = new Element("source");

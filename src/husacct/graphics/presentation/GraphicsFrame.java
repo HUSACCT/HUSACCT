@@ -7,18 +7,20 @@ import husacct.graphics.task.UserInputListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -28,19 +30,26 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private DrawingView drawingView;
 	private JMenuBar menuBar, locationBar;
-	private JMenuItem locationString;
+	private JCheckBoxMenuItem showViolationsOptionMenu;
+	private String currentPath;
 	private JScrollPane drawingScollPane, propertiesScrollPane;
 	private JComponent centerPane;
 	private String ROOT_LEVEL = "Root";
+	private final String LOCATION_SEPERATOR = ".";
 	private boolean showingProperties = false;
 
+	int frameTotalWidth = getWidth();
+	int menuItemMaxWidth = 140;
+	int menuItemMaxHeight = 45;
+
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
+	private HashMap<JButton, String> buttonPaths = new HashMap<JButton, String>();
 
 	public GraphicsFrame(DrawingView givenDrawingView) {
+		resetCurrentPath();
 		setVisible(false);
 		drawingView = givenDrawingView;
 		initializeComponents();
-		setCurrentPathInfo("");
 		setSize(500, 500);
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override
@@ -61,12 +70,11 @@ public class GraphicsFrame extends JInternalFrame {
 		drawingScollPane.setViewportView(drawingView);
 
 		propertiesScrollPane = new JScrollPane();
-		propertiesScrollPane
-				.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		propertiesScrollPane
-				.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		propertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		propertiesScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		createMenuBars();
+		createMenuBar();
+		createLocationBar();
 
 		setLayout(new java.awt.BorderLayout());
 		add(menuBar, BorderLayout.NORTH);
@@ -84,8 +92,7 @@ public class GraphicsFrame extends JInternalFrame {
 		if (!showProperties) {
 			centerPane = drawingScollPane;
 		} else {
-			centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawingScollPane,
-					propertiesScrollPane);
+			centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawingScollPane, propertiesScrollPane);
 			positionLayoutComponents();
 			((JSplitPane) centerPane).setOneTouchExpandable(true);
 			((JSplitPane) centerPane).setContinuousLayout(true);
@@ -105,16 +112,11 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 
-	private void createMenuBars() {
-		int totalWidth = getWidth();
-		int menuItemMaxWidth = 140;
-		int menuItemMaxHeight = 45;
-
+	private void createMenuBar() {
 		menuBar = new JMenuBar();
-		menuBar.setSize(totalWidth, 20);
+		menuBar.setSize(frameTotalWidth, 20);
 		JButton goToParentMenu = new JButton("Level up");
 		goToParentMenu.setSize(50, menuItemMaxHeight);
-		goToParentMenu.setMaximumSize(new Dimension(90, menuItemMaxHeight));
 		goToParentMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -122,10 +124,9 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 		menuBar.add(goToParentMenu);
-		
+
 		JButton refreshMenu = new JButton("Refresh");
 		refreshMenu.setSize(50, menuItemMaxHeight);
-		refreshMenu.setMaximumSize(new Dimension(90, menuItemMaxHeight));
 		refreshMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -134,8 +135,8 @@ public class GraphicsFrame extends JInternalFrame {
 		});
 		menuBar.add(refreshMenu);
 
-		JCheckBoxMenuItem showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
-		showViolationsOptionMenu.setSize(50, menuItemMaxHeight);
+		showViolationsOptionMenu = new JCheckBoxMenuItem("Show violations");
+		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
 		showViolationsOptionMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		showViolationsOptionMenu.addActionListener(new ActionListener() {
 			@Override
@@ -144,10 +145,9 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 		menuBar.add(showViolationsOptionMenu);
-		
+
 		JButton exportToImageMenu = new JButton("Export to image");
 		exportToImageMenu.setSize(50, menuItemMaxHeight);
-		exportToImageMenu.setMaximumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
 		exportToImageMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -157,23 +157,85 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.add(exportToImageMenu);
 
 		add(menuBar, java.awt.BorderLayout.NORTH);
-
-		locationBar = new JMenuBar();
-		locationBar.setSize(totalWidth, 20);
-
-		locationString = new JMenuItem(ROOT_LEVEL);
-		locationString.setSize(menuItemMaxWidth, menuItemMaxHeight);
-		locationString.setMinimumSize(new Dimension(menuItemMaxWidth, menuItemMaxHeight));
-		locationBar.add(locationString);
-
-		add(locationBar, java.awt.BorderLayout.WEST);
 	}
 
-	public void setCurrentPathInfo(String path) {
-		if (path.equals("")) {
-			path = ROOT_LEVEL;
+	public void createLocationBar() {
+		locationBar = new JMenuBar();
+		locationBar.setSize(frameTotalWidth, 20);
+
+		updateLocationBar();
+
+		add(locationBar, java.awt.BorderLayout.SOUTH);
+	}
+
+	private void updateLocationBar() {
+		clearLocationBar();
+		addLocationButton(ROOT_LEVEL, "");
+		
+		String path = getCurrentPath();
+		String pathUntilNow = "";
+		String[] pathParts = new String[]{};
+		if(!path.equals("")){
+			pathParts = path.split("\\" + LOCATION_SEPERATOR);
 		}
-		locationString.setText(path);
+		if(pathParts.length > 0){
+			addLocationSeperator();
+			for (String part : pathParts) {
+				pathUntilNow = pathUntilNow + part;
+				addLocationButton(part, pathUntilNow);
+	
+				if (!pathParts[pathParts.length - 1].equals(part)) {
+					addLocationSeperator();
+					pathUntilNow = pathUntilNow + LOCATION_SEPERATOR;
+				}
+			}
+		}
+		updateUI();
+	}
+	
+	private void addLocationButton(String levelName, String fullPath){
+		JButton locationStringButton = new JButton(levelName);
+		locationStringButton.setSize(10, menuItemMaxHeight);
+		locationStringButton.setMargin(new Insets(0, 0, 0, 0));
+		buttonPaths.put(locationStringButton, fullPath);
+		locationStringButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String selectedPath = buttonPaths.get(event.getSource());
+				moduleOpen(selectedPath);
+			}
+		});
+		locationBar.add(locationStringButton);
+	}
+	
+	private void addLocationSeperator(){
+		locationBar.add(new JLabel(" " + LOCATION_SEPERATOR + " "));
+	}
+
+	private void clearLocationBar() {
+		locationBar.removeAll();
+	}
+
+	public String getCurrentPath() {
+		return currentPath;
+	}
+	
+	public void resetCurrentPath(){
+		currentPath = "";
+	}
+
+	public void setCurrentPath(String path) {
+		currentPath = path;
+	}
+	
+	public void setCurrentPathAndUpdateGUI(String path) {
+		setCurrentPath(path);
+		updateLocationBar();
+	}
+	
+	private void moduleOpen(String path) {
+		for (UserInputListener l : listeners) {
+			l.moduleOpen(path);
+		}
 	}
 
 	private void moduleZoomOut() {
@@ -193,7 +255,7 @@ public class GraphicsFrame extends JInternalFrame {
 			l.toggleViolations();
 		}
 	}
-	
+
 	private void refreshDrawing() {
 		for (UserInputListener l : listeners) {
 			l.refreshDrawing();
@@ -259,5 +321,13 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 
 		return new JTable(rows.toArray(new String[][] {}), columnNames);
+	}
+
+	public void turnOnViolations() {
+		showViolationsOptionMenu.setState(true);
+	}
+	
+	public void turnOffViolations() {
+		showViolationsOptionMenu.setState(false);
 	}
 }
