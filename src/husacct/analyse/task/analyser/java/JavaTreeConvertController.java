@@ -101,22 +101,6 @@ class JavaTreeConvertController {
                                         delegateAttribute(treeNode); 
                                         deleteTreeChild(treeNode); 
                                 } 
-                                if(nodeType == JavaParser.CLASS_CONSTRUCTOR_CALL ){ 
-                                    delegateInvocation(treeNode, "invocConstructor"); 
-                                    //ik ben er nog niet uit of deze wel gedelete mag worden
-                                } 
-                                if(nodeType == JavaParser.METHOD_CALL ){ 
-                                    if (treeNode.getChild(0).getType() == 15){ //getType omdat 15 een punt is
-                                    	delegateInvocation(treeNode, "invocMethod");
-                                    	deleteTreeChild(treeNode); 
-                                    }
-                                } 
-                                if(nodeType == JavaParser.ASSIGN ){ 
-                                    if (treeNode.getChild(0).getType() == 15){ //getType omdat 15 een punt is
-                                    	delegateInvocation(treeNode, "accessPropertyOrField");
-                                    	deleteTreeChild(treeNode); 
-                                    }
-                                } 
                                 if(nodeType == JavaParser.FUNCTION_METHOD_DECL || nodeType == JavaParser.CONSTRUCTOR_DECL || nodeType == JavaParser.VOID_METHOD_DECL){
                                         delegateMethod(treeNode);
                                         deleteTreeChild(treeNode); 
@@ -137,18 +121,7 @@ class JavaTreeConvertController {
         } 
         } 
     
-    private void delegateInvocation(Tree treeNode, String type) {
-		JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.theClass);
-		if (type.equals("invocConstructor")){
-			javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) treeNode);
-		}
-		else if (type.equals("invocMethod")){
-			javaInvocationGenerator.generateMethodInvocToModel((CommonTree) treeNode);
-		}
-		else if (type.equals("accessPropertyOrField")){
-			javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) treeNode);
-		}
-	}
+    
 
 	private void deleteTreeChild(Tree treeNode){ 
         for (int child = 0 ; child < treeNode.getChildCount();){ 
