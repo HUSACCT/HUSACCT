@@ -170,6 +170,13 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixParameter.name = name;
 		famixParameter.uniqueName = uniqueName;
 		addToModel(famixParameter);
+		model.waitingStructuralEntitys.add(famixParameter);
+		FamixAssociation fAssocation = new FamixAssociation();
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "parameter";
+		fAssocation.lineNumber = lineNumber;
+		model.waitingAssociations.add(fAssocation);
 	}
 	
 	@Override
