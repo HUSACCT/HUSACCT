@@ -1,4 +1,4 @@
-package husacct.define.task.persistency;
+package husacct.define.persitency;
 
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
@@ -60,23 +60,23 @@ public class DomainXML {
 	}
 
 	public Element getModuleInXML(Module M) {
-		Element XMLM = new Element("Module");
+		Element xmlModule = new Element("Module");
 
 		Element moduleType = new Element("type");
 		moduleType.addContent(M.getClass().getSimpleName());
-		XMLM.addContent(moduleType);
+		xmlModule.addContent(moduleType);
 
 		Element moduleDescription = new Element("description");
 		moduleDescription.addContent(M.getDescription());
-		XMLM.addContent(moduleDescription);
+		xmlModule.addContent(moduleDescription);
 
 		Element moduleId = new Element("id");
 		moduleId.addContent(Long.toString(M.getId()));
-		XMLM.addContent(moduleId);
+		xmlModule.addContent(moduleId);
 
 		Element moduleName = new Element("name");
 		moduleName.addContent(M.getName());
-		XMLM.addContent(moduleName);
+		xmlModule.addContent(moduleName);
 
 		/**
 		 * build extra elements based on type (Module is generic)
@@ -84,7 +84,7 @@ public class DomainXML {
 		if (M.getClass().getSimpleName().toLowerCase().equals("layer")) {
 			Element moduleLevel = new Element("HierarchicalLevel");
 			moduleLevel.addContent("" + ((Layer)M).getHierarchicalLevel());
-			XMLM.addContent(moduleLevel);
+			xmlModule.addContent(moduleLevel);
 		}
 
 		/**
@@ -95,7 +95,7 @@ public class DomainXML {
 			for (SoftwareUnitDefinition SUD : M.getUnits()) {
 				units.addContent(this.getSoftwareUnitDefinitionInXML(SUD));
 			}
-			XMLM.addContent(units);
+			xmlModule.addContent(units);
 		}
 
 		/**
@@ -106,7 +106,7 @@ public class DomainXML {
 			for (Module m : M.getSubModules()) {
 				subModule.addContent(this.getModuleInXML(m));	
 			}
-			XMLM.addContent(subModule);
+			xmlModule.addContent(subModule);
 		}
 
 		if (M.getPhysicalPaths().length > 0) {
@@ -115,10 +115,10 @@ public class DomainXML {
 				physicalPaths.addContent(this.getPhysicalPathInXML(M.getPhysicalPaths()[i].toString()));
 			}
 
-			XMLM.addContent(physicalPaths);
+			xmlModule.addContent(physicalPaths);
 		}
 
-		return XMLM;
+		return xmlModule;
 	}
 
 	public Element getPhysicalPathInXML(String path) {
@@ -128,15 +128,15 @@ public class DomainXML {
 	}
 
 	public Element getAppliedRuleInXML(AppliedRule AR) {
-		Element XMLAR = new Element("AppliedRule");
+		Element XMLAppliedRule = new Element("AppliedRule");
 
 		Element ruleRegex = new Element("regex");
 		ruleRegex.addContent(AR.getRegex());
-		XMLAR.addContent(ruleRegex);
+		XMLAppliedRule.addContent(ruleRegex);
 
 		Element ruleDescription = new Element("description");
 		ruleDescription.addContent(AR.getDescription());
-		XMLAR.addContent(ruleDescription);
+		XMLAppliedRule.addContent(ruleDescription);
 
 		Element ruleEnabled = new Element("enabled");
 		if (AR.isEnabled()) {
@@ -144,26 +144,26 @@ public class DomainXML {
 		} else {
 			ruleEnabled.addContent("false");
 		}
-		XMLAR.addContent(ruleEnabled);
+		XMLAppliedRule.addContent(ruleEnabled);
 
 		Element ruleId = new Element("id");
 		ruleId.addContent(Long.toString(AR.getId()));
-		XMLAR.addContent(ruleId);
+		XMLAppliedRule.addContent(ruleId);
 
 		Element ruleType = new Element("type");
 		ruleType.addContent(AR.getRuleType());
-		XMLAR.addContent(ruleType);
+		XMLAppliedRule.addContent(ruleType);
 
 		if (AR.getModuleFrom() instanceof Module) {
 			Element restrictedModule = new Element("restrictedmodule");
 			restrictedModule.addContent(this.getModuleInXML(AR.getModuleFrom()));
-			XMLAR.addContent(restrictedModule);
+			XMLAppliedRule.addContent(restrictedModule);
 		}
 
 		if (AR.getModuleTo() instanceof Module) {
 			Element usedModule = new Element("usedmodule");
 			usedModule.addContent(this.getModuleInXML(AR.getModuleTo()));
-			XMLAR.addContent(usedModule);
+			XMLAppliedRule.addContent(usedModule);
 		}
 
 		Element dependencies = new Element("dependencies");
@@ -174,17 +174,17 @@ public class DomainXML {
 				dependencies.addContent(dependency);
 			}
 		}
-		XMLAR.addContent(dependencies);
+		XMLAppliedRule.addContent(dependencies);
 
 		if (AR.getExceptions().size() > 0) {
 			Element ruleExceptions = new Element("exceptions");
 			for (AppliedRule ap : AR.getExceptions()) {
 				ruleExceptions.addContent(this.getAppliedRuleInXML(ap));
 			}
-			XMLAR.addContent(ruleExceptions);
+			XMLAppliedRule.addContent(ruleExceptions);
 		}
 
-		return XMLAR;
+		return XMLAppliedRule;
 	}
 
 	public Element getApplicationInXML(Application App) {

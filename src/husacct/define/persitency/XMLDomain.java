@@ -1,4 +1,4 @@
-package husacct.define.task.persistency;
+package husacct.define.persitency;
 
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
