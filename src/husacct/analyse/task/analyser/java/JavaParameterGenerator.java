@@ -36,7 +36,6 @@ public class JavaParameterGenerator extends JavaGenerator {
 		lineNumber = tree.getLine();
 		
 		DelegateParametersFromTree(tree);
-		
 		createSignature();
 		return signature;
 	}
@@ -112,7 +111,8 @@ public class JavaParameterGenerator extends JavaGenerator {
 			CommonTree currentChild = (CommonTree) tree.getChild(i);
 			
 			if(currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
-				this.signature = getAttributeType(currentChild);
+				this.signature += !this.signature.equals("") ? "," : "";
+				this.signature += getAttributeType(currentChild);
 			} else {
 				getParameterAttributes(currentChild, indent + 1);
 			}
