@@ -196,12 +196,12 @@ class JavaTreeConvertController {
     
     private void delegateAttribute(Tree attributeTree){ 
         JavaAttributeAndLocalVariableGenerator javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator(); 
-        javaAttributeGenerator.generateModel(attributeTree, this.currentClass, javaAttributeGenerator.ATTRIBUTE); 
+        javaAttributeGenerator.generateAttributeModel(attributeTree, this.currentClass); 
     } 
     
     private void delegateMethod(Tree methodTree){ 
-        JavaMethodGenerator methodGenerator = new JavaMethodGenerator(); 
-        methodGenerator.generateModelObject((CommonTree)methodTree, this.currentClass); 
+        JavaMethodGeneratorController methodGenerator = new JavaMethodGeneratorController(); 
+        methodGenerator.delegateMethodBlock((CommonTree)methodTree, this.currentClass); 
     } 
     
     private void delegateException(Tree exceptionTree){ 

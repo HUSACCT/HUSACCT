@@ -135,6 +135,37 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
+	public void createLocalVariable(String belongsToMethodString,
+			String belongsToClass, String declareType, String name,
+			String uniqueName, int lineNumber) {
+
+		FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
+		famixLocalVariable.belongsToMethod = belongsToMethodString;
+		famixLocalVariable.belongsToClass = belongsToClass;
+		famixLocalVariable.declareType = declareType;
+		famixLocalVariable.name = name;
+		famixLocalVariable.uniqueName = uniqueName;
+		famixLocalVariable.lineNumber = lineNumber;
+		model.waitingStructuralEntitys.add(famixLocalVariable);
+		addToModel(famixLocalVariable);
+		FamixAssociation fAssocation = new FamixAssociation();
+		
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "declaration";
+		fAssocation.lineNumber = lineNumber;
+		model.waitingAssociations.add(fAssocation);
+	}
+	
+	@Override
+	public void createParameter(String name, String uniqueName,
+			String declareType, String belongsToClass, int lineNumber,
+			String belongsToMethod, List<String> declareTypes) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber) {
 		FamixAttribute famixAttribute = new FamixAttribute();
 		famixAttribute.hasClassScope = false;
@@ -429,5 +460,9 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	public String represent(){
 		return model.toString();
 	}
+
+
+
+
 
 }
