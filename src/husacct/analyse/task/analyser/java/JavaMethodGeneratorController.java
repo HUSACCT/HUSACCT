@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
@@ -38,6 +39,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		WalkThroughMethod(methodTree);
 		createMethodObject();	
 	}
+
 
 	private void checkMethodType(CommonTree methodTree) {
 		if (methodTree.getType() == JavaParser.CONSTRUCTOR_DECL){ 
@@ -83,9 +85,12 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				name = child.getText();
 			}
 			if(treeType == JavaParser.FORMAL_PARAM_LIST){
-				JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
-				signature = this.name + "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
-				deleteTreeChild(child);
+				if (child.getChildCount() > 0){
+					JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
+					signature = this.name + "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
+					// = this.name + "(" +  + ")";
+					deleteTreeChild(child);
+				}
 			}
 			
 			if(treeType == JavaParser.BLOCK_SCOPE){
@@ -157,6 +162,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
             treeNode.deleteChild(treeNode.getChild(child).getChildIndex()); 
         } 
     } 
+	
 	private void createMethodObject(){
 		uniqueName = belongsToClass + "." + signature;
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
