@@ -27,7 +27,7 @@ public class BasicLayoutStrategy {
 	// attempt to make it all fit
 	// on the screen without the use of scrollbars.
 	public void doLayout(int maxHorizontalItems) {
-		// Rectangle2D.Double drawingBounds = drawing.getBounds();
+		Rectangle2D.Double drawingBounds = drawing.getDrawingArea();
 
 		double x = HORZ_ITEM_SPACING, y = VERT_ITEM_SPACING;
 		double maxHeightOnLine = 0.0;

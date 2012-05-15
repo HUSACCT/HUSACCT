@@ -1,5 +1,7 @@
 package husacct.graphics.task;
 
+import java.awt.Dimension;
+
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
@@ -129,8 +131,16 @@ public abstract class DrawingController implements UserInputListener {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 		drawTarget.setCurrentPathInfo(getCurrentPath());
+		updateLayout();
+	}
+	
+	protected void updateLayout() {
+		@SuppressWarnings("unused")
+		Dimension dim = view.getPreferredSize();
+		
 		layoutStrategy.doLayout(ITEMS_PER_ROW);
 	}
+
 
 	public void toggleViolations() {
 		if (areViolationsShown()) {
@@ -152,9 +162,9 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
+		//layoutStrategy.doLayout(ITEMS_PER_ROW);
 		drawing.resizeRelationFigures();
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
+		updateLayout();
 	}
 
 	public void drawDependenciesForShownModules() {
@@ -209,6 +219,6 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(violationFigure);
 		}
 	}
-
+	
 	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
 }
