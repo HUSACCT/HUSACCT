@@ -40,17 +40,17 @@ public class DefinedController extends DrawingController {
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
 	}
-	
+
 	@Override
 	public void refreshDrawing() {
 		getAndDrawModulesIn(getCurrentPath());
 	}
-	
-	public void showViolations(){
+
+	public void showViolations() {
 		super.showViolations();
-		try{
+		try {
 			validateService.checkConformance();
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			logger.warn("NullPointerException, I think the validate service isn't started.");
 		}
 	}
@@ -93,24 +93,25 @@ public class DefinedController extends DrawingController {
 			drawArchitecture(getCurrentDrawingDetail());
 		}
 	}
-	
+
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		ModuleDTO dtoFrom = (ModuleDTO) figureMap.getModuleDTO(figureFrom);
 		ModuleDTO dtoTo = (ModuleDTO) figureMap.getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
-		
-		if(!figureFrom.equals(figureTo)){
-			for(String physicalFromPath : dtoFrom.physicalPaths){
-				for(String physicalToPath : dtoTo.physicalPaths){
-					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPath,physicalToPath);
-					for(DependencyDTO tempDependency : foundDependencies){
+
+		if (!figureFrom.equals(figureTo)) {
+			for (String physicalFromPath : dtoFrom.physicalPaths) {
+				for (String physicalToPath : dtoTo.physicalPaths) {
+					DependencyDTO[] foundDependencies = analyseService
+							.getDependencies(physicalFromPath, physicalToPath);
+					for (DependencyDTO tempDependency : foundDependencies) {
 						dependencies.add(tempDependency);
 					}
 				}
 			}
 		}
-		return dependencies.toArray(new DependencyDTO[]{});
+		return dependencies.toArray(new DependencyDTO[] {});
 	}
 
 	@Override
@@ -119,9 +120,11 @@ public class DefinedController extends DrawingController {
 		ModuleDTO dtoTo = (ModuleDTO) figureMap.getModuleDTO(figureTo);
 		return validateService.getViolationsByLogicalPath(dtoFrom.logicalPath, dtoTo.logicalPath);
 	}
-	
+
 	private void getAndDrawModulesIn(String parentName) {
-		try{
+		if (parentName.equals("")||parentName.equals("**")) {
+			drawArchitecture(getCurrentDrawingDetail());
+		} else {
 			ModuleDTO[] children = defineService.getChildsFromModule(parentName);
 			if (children.length > 0) {
 				setCurrentPath(parentName);
@@ -130,9 +133,8 @@ public class DefinedController extends DrawingController {
 			} else {
 				logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 			}
-		}catch(NullPointerException e){
-			logger.warn("NullPointerException, I think the define service isn't started.");
 		}
+
 	}
 
 	public void moduleOpen(String path) {
