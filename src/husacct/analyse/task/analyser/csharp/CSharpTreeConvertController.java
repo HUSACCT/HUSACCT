@@ -61,7 +61,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			isPartOfClass = classCheck(tree, isPartOfClass);
 			isPartOfUsage = usageCheck(tree, isPartOfUsage);
 			isPartOfAttribute = attributeCheck(tree, isPartOfAttribute);
-			//isPartOfMethod = methodCheck(tree, isPartOfMethod);
+			isPartOfMethod = methodCheck(tree, isPartOfMethod);
 		}
 	}
 

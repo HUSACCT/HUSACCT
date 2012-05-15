@@ -9,21 +9,22 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	private String uniqueName;
 	private String accessControlQualifier;
 	private String signature;
-	private Boolean isPureAccessor;
+	private boolean isPureAccessor;
 	private String declaredReturnType;
-	private Boolean isConstructor;
-	private Boolean isAbstract;
-	private Boolean hasClassScope;
+	private boolean isConstructor;
+	private boolean isAbstract;
+	private boolean hasClassScope;
 	
 	public void generate(List<CommonTree> tree, String className) {
 		System.out.print("classname: "+className);
 		name = getName(tree);
-		uniqueName = className+"."+name;
+		
 		accessControlQualifier = checkForAccessControlQualifier(tree.get(0));
 		isConstructor = checkForConstructor(tree, className);
 		isAbstract = checkForAbstract(tree);
 		declaredReturnType = checkForReturnType(tree);
 		signature = createSignature(tree);
+		uniqueName = className+"."+signature;
 		hasClassScope = checkForClassScope(tree);
 		System.out.println("method: " + uniqueName + accessControlQualifier + isConstructor + isAbstract + "returnType: " + declaredReturnType + " signature: "+signature + hasClassScope);
 
