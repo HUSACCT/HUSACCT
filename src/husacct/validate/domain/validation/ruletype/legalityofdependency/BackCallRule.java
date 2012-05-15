@@ -3,8 +3,8 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
@@ -40,7 +40,7 @@ public class BackCallRule extends RuleType {
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> moduleTo : modulesTo){
 				for(Mapping physicalClasspathsTo : moduleTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),physicalClasspathsTo.getPhysicalPath());	
+					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), physicalClasspathsTo.getPhysicalPath(), currentRule.violationTypeKeys);	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(rootRule);
 	

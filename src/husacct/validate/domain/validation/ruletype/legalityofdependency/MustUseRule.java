@@ -2,8 +2,8 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
@@ -38,7 +38,7 @@ public class MustUseRule extends RuleType{
 		int counter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), currentRule.violationTypeKeys);
 				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}

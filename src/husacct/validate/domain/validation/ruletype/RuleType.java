@@ -5,7 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.validation.Message;

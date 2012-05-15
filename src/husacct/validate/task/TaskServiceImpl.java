@@ -3,7 +3,6 @@ package husacct.validate.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.validation.Severity;

@@ -3,7 +3,7 @@ package husacct.validate.domain.assembler;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.LanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
