@@ -16,6 +16,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	private Boolean hasClassScope;
 	
 	public void generate(List<CommonTree> tree, String className) {
+		System.out.print("classname: "+className);
 		name = getName(tree);
 		uniqueName = className+"."+name;
 		accessControlQualifier = checkForAccessControlQualifier(tree.get(0));
@@ -24,7 +25,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		declaredReturnType = checkForReturnType(tree);
 		signature = createSignature(tree);
 		hasClassScope = checkForClassScope(tree);
-		//System.out.println("method: " + uniqueName + accessControlQualifier + isConstructor + isAbstract + "returnType: " + declaredReturnType + " signature: "+signature + hasClassScope);
+		System.out.println("method: " + uniqueName + accessControlQualifier + isConstructor + isAbstract + "returnType: " + declaredReturnType + " signature: "+signature + hasClassScope);
 
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, className, isConstructor, isAbstract, hasClassScope);
 //		Boolean isPureAccessor = false; //todo

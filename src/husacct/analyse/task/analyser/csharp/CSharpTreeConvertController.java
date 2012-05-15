@@ -61,7 +61,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			isPartOfClass = classCheck(tree, isPartOfClass);
 			isPartOfUsage = usageCheck(tree, isPartOfUsage);
 			isPartOfAttribute = attributeCheck(tree, isPartOfAttribute);
-			isPartOfMethod = methodCheck(tree, isPartOfMethod);
+			//isPartOfMethod = methodCheck(tree, isPartOfMethod);
 		}
 	}
 
@@ -90,7 +90,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	          
 	            if(isNewInstance == false && hasBrackets == true){
 	            	CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
-	            	methodGenerator.generate(methodTrees, tempClassName);
+	            	methodGenerator.generate(methodTrees, tempNamespaceName+ "."+tempClassName);
 	            }
 	        	
 	            methodTrees.clear();
