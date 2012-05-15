@@ -177,6 +177,20 @@ public class XMLDomain {
     			}
     		}
 		}
+		
+		Element SubModules = e.getChild("SubModules");
+		if (SubModules != null) {
+			List<Element> SubModulesList = SubModules.getChildren("Module");
+			Iterator ModuleIterator = SubModulesList.iterator();
+			while (ModuleIterator.hasNext()) {
+				Object o = ModuleIterator.next();
+				
+				if (o instanceof Element) {
+					xmlModule.addSubModule( this.getModuleFromXML((Element) o ));
+				}
+			}
+			
+		}
 
 		return xmlModule;
 	}
