@@ -20,12 +20,12 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionListener, ItemListener{
+public class JFrameExceptionRule  extends JDialog implements KeyListener, ActionListener, ItemListener{
 
 	private static final long serialVersionUID = -3491664038962722000L;
 	
@@ -78,8 +78,9 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
 			this.setResizable(false);
-			pack();
+			this.pack();
 			this.setSize(740, 280);
+			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
 			e.printStackTrace();

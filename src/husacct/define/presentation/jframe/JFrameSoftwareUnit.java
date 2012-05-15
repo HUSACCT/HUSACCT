@@ -18,14 +18,14 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
-public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyListener {
+public class JFrameSoftwareUnit extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	
@@ -65,8 +65,10 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
-			pack();
+			this.setResizable(false);
+			this.pack();
 			this.setSize(650, 300);
+			this.setModal(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

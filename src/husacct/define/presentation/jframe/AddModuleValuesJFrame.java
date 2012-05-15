@@ -49,9 +49,9 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.add(this.innerPanel);
 		
 		this.setResizable(false);
-		this.setVisible(true);
 		this.pack();
 		this.setSize(700, 190);
+		this.setVisible(true);
 	}
 	
 	private GridLayout getGridLayout(int rows, int columns) {

@@ -25,14 +25,14 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 
-public class JFrameAppliedRule extends JFrame implements KeyListener, ActionListener, ItemListener, Observer{
+public class JFrameAppliedRule extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
 	
@@ -64,8 +64,9 @@ public class JFrameAppliedRule extends JFrame implements KeyListener, ActionList
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
 			this.setResizable(false);
-			pack();
+			this.pack();
 			this.setSize(815, 435);
+			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
 			e.printStackTrace();
