@@ -81,7 +81,6 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			}
 			if(treeType == JavaParser.IDENT){
 				name = child.getText();
-				uniqueName = belongsToClass + "." + name;
 			}
 			if(treeType == JavaParser.FORMAL_PARAM_LIST){
 				JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
@@ -159,6 +158,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
         } 
     } 
 	private void createMethodObject(){
+		uniqueName = belongsToClass + "." + signature;
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
 	}	
 }
