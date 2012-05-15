@@ -1,6 +1,8 @@
 package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.validate.domain.configuration.ActiveRuleType;
+import husacct.validate.domain.configuration.ActiveViolationType;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -10,6 +12,7 @@ import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -484,7 +487,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 
 	private void avtApplyActionPerformed() {
-		//TODO Make apply for last tab!!!
+		
+		
+		taskServiceImpl.setActiveViolationTypes(language, null);
 	}
 
 	private void avtCategoryValueChanged() {
@@ -613,15 +618,16 @@ public class LanguageSeverityConfiguration extends JPanel {
 		while(avtViolationtypeModel.getRowCount() > 0){
 			avtViolationtypeModel.removeRow(0);
 		}
-		for (String categoryString : ruletypes.keySet()) {
-			if (ValidateTranslator.getValue(categoryString).equals(category)){
-				List<RuleType> rules = ruletypes.get(categoryString);
-				for(RuleType ruletype: rules){
-					if (ValidateTranslator.getValue(ruletype.getKey()).equals(ruletypekey)){
-						for(ViolationType violationtype : ruletype.getViolationTypes()){
-							avtViolationtypeModel.addRow(new Object[]{ValidateTranslator.getValue(violationtype.getViolationtypeKey()), violationtype.isActive()});
-						}
-					}
+
+		System.out.println(ruletypekey);
+		System.out.println(taskServiceImpl.getActiveViolationTypes().get(language));
+		for (ActiveRuleType ruletypeKey : taskServiceImpl.getActiveViolationTypes().get(language)) {
+			
+			System.out.println(ruletypeKey.getRuleType());
+			if(ruletypeKey.getRuleType().equals(ValidateTranslator.getKey(ruletypekey))){
+				for(ActiveViolationType violationtype : ruletypeKey.getViolationTypes()){
+
+					avtViolationtypeModel.addRow(new Object[]{ValidateTranslator.getValue(violationtype.getType()), violationtype.isEnabled()});
 				}
 			}
 		}

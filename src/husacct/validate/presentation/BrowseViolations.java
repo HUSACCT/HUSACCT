@@ -126,7 +126,6 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				filterViolations.loadFilterValues();
 				filterViolations.setVisible(true);
 			}
 		});
@@ -319,6 +318,12 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 	}
 
 	public void loadAfterViolationsChanged(){
+		internalAfterViolationsChanged();
+		filterViolations.loadFilterValues();
+		
+	}
+	
+	public void internalAfterViolationsChanged(){
 		setViolations();
 		loadInformationPanel();
 		buttonSaveInHistory.setEnabled(true);
@@ -397,6 +402,11 @@ public final class BrowseViolations extends JInternalFrame implements FilterViol
 
 	@Override
 	public void updateViolationsTable() {
+		internalAfterViolationsChanged();
+	}
+	
+	@Override
+	public void updateAll() {
 		loadAfterViolationsChanged();
 	}
 }

@@ -47,7 +47,6 @@ public class GuiController {
 	
 	public void violationChanged(){
 		browseViolations.loadAfterViolationsChanged();
-		filterViolations.loadFilterValues();
 	}
 	
 	private void initializeAllScreens(){

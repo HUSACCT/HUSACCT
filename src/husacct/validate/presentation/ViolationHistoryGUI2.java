@@ -340,4 +340,9 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 		taskServiceImpl.attachViolationHistoryObserver(this);
 	}
 
+	@Override
+	public void updateAll() {
+		//No update at all!
+	}
+
 }
