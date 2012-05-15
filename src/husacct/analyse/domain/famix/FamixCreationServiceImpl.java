@@ -279,6 +279,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 					}
 
 					if(uniqueName.equals("")){
+						System.out.println("geen assoc gevonden");
 						logger.warn("Couldn't find association; " + association.from + " -> " + association.to);
 						uniqueName = association.to;
 					}
@@ -292,7 +293,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 				}
 				addToModel(association);
 			} catch(Exception e){
-
+				e.printStackTrace();
 			}
 		}		
 	}	
@@ -348,16 +349,30 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		Package[] packagesloaded = Package.getPackages();
 		for(Package p : packagesloaded){
 			String packageName = p.getName();
-			String predictUniquename = packageName + "." + type;
+			String newType = "";
+			if (type != null && type.length() > 0) {
+				char[] typeCharArray = type.toCharArray();
+				typeCharArray[0] = Character.toUpperCase(typeCharArray[0]);
+				newType = new String(typeCharArray);
+			}
+			String predictUniquename;
+			if(!newType.equals("")) {
+				predictUniquename = packageName + "." + newType;
+			}
+			else {
+				predictUniquename = packageName + "." + type;
+			}
 			try {	
-				int indexOfSlash = predictUniquename.lastIndexOf("/");
-				char[] predictUniqueNameCharArray = predictUniquename.toCharArray();
-				predictUniqueNameCharArray[indexOfSlash] = Character.toUpperCase(predictUniqueNameCharArray[indexOfSlash]);
-				predictUniquename = new String(predictUniqueNameCharArray);
 				Class.forName(predictUniquename);
 				return predictUniquename;
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				predictUniquename = packageName + "." + type;
+				try {	
+					Class.forName(predictUniquename);
+					return predictUniquename;
+				} catch (ClassNotFoundException e2) {
+					
+				}
 				//TODO Logger
 			}
 		}
@@ -428,6 +443,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 			model.addObject(newObject);
 			return true;
 		} catch (InvalidAttributesException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

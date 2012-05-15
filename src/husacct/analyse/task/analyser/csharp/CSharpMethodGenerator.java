@@ -115,7 +115,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 				isAllowedToAdd = true;
 			}
 			
-			if(thisTree.getType() == FORWARDBRACKET || thisTree.getType() == BACKWARDBRACKET || thisTree.getType() == KOMMA){
+			if(thisTree.getType() == FORWARDBRACKET || thisTree.getType() == BACKWARDBRACKET || thisTree.getType() == COMMA){
 				signature = signature + thisTree.getText();
 				lastPosititionWasIdent = false;
 			}
