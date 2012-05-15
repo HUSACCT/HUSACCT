@@ -7,7 +7,6 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
-import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class DomainXML {

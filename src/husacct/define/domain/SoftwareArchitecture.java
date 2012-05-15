@@ -39,9 +39,9 @@ public class SoftwareArchitecture {
 		setAppliedRules(rules);
 	}
 	
-	//GETTERS & SETTERS
-	//GETTERS & SETTERS
-	//GETTERS & SETTERS
+	/*
+	 * Getters and Setters
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
