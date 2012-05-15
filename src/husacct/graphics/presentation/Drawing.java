@@ -15,11 +15,11 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.QuadTreeDrawing;
 import org.jhotdraw.draw.io.ImageOutputFormat;
 
-public class Drawing extends DefaultDrawing {
+public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
 	FileManager filemanager = new FileManager();

@@ -64,6 +64,8 @@ public class DefinedController extends DrawingController {
 			showViolations();
 		}
 		drawLinesBasedOnSetting();
+		
+		updateLayout();
 	}
 
 	@Override
@@ -75,6 +77,8 @@ public class DefinedController extends DrawingController {
 			try {
 				ModuleDTO parentDTO = (ModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.logicalPath);
+				
+				updateLayout();
 			} catch (Exception e) {
 				logger.debug("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
@@ -87,6 +91,8 @@ public class DefinedController extends DrawingController {
 		String parentPath = defineService.getParentFromModule(getCurrentPath());
 		if (null != parentPath) {
 			getAndDrawModulesIn(parentPath);
+			
+			updateLayout();
 		} else {
 			logger.debug("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
