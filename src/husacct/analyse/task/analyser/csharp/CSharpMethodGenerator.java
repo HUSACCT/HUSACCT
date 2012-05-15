@@ -15,10 +15,8 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	private boolean isAbstract;
 	private boolean hasClassScope;
 	
-	public void generate(List<CommonTree> tree, String className) {
-		System.out.print("classname: "+className);
-		name = getName(tree);
-		
+	public void generateMethod(List<CommonTree> tree, String className) {
+		name = getName(tree);	
 		accessControlQualifier = checkForAccessControlQualifier(tree.get(0));
 		isConstructor = checkForConstructor(tree, className);
 		isAbstract = checkForAbstract(tree);
@@ -26,10 +24,9 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		signature = createSignature(tree);
 		uniqueName = className+"."+signature;
 		hasClassScope = checkForClassScope(tree);
-		System.out.println("method: " + uniqueName + accessControlQualifier + isConstructor + isAbstract + "returnType: " + declaredReturnType + " signature: "+signature + hasClassScope);
 
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, className, isConstructor, isAbstract, hasClassScope);
-//		Boolean isPureAccessor = false; //todo
+//		boolean isPureAccessor = false; //todo
 	}
 
 	private String getName(List<CommonTree> tree) {
@@ -46,8 +43,8 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		return null;
 	}
 
-	private Boolean checkForClassScope(List<CommonTree> tree) {
-		Boolean hasClassScope = false;
+	private boolean checkForClassScope(List<CommonTree> tree) {
+		boolean hasClassScope = false;
 		for(CommonTree thisTree : tree){
 			if(thisTree.getType() == STATIC){
 				hasClassScope = true;
@@ -68,8 +65,8 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	}
 
 
-	private Boolean checkForConstructor(List<CommonTree> tree, String className) {
-		Boolean isConstructor = false;
+	private boolean checkForConstructor(List<CommonTree> tree, String className) {
+		boolean isConstructor = false;
 		for(CommonTree thisTree : tree){	
 			if(thisTree.getType() == IDENTIFIER && (thisTree.getText().equals(className))){
 				isConstructor = true;
@@ -78,8 +75,8 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		return isConstructor;
 	}
 
-	private Boolean checkForAbstract(List<CommonTree> tree) {
-		Boolean isAbstract = false;
+	private boolean checkForAbstract(List<CommonTree> tree) {
+		boolean isAbstract = false;
 		for(CommonTree thisTree : tree){
 			if(thisTree.getType() == ABSTRACT){
 				isAbstract = true;
@@ -110,8 +107,8 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	
 	private String createSignature(List<CommonTree> tree){
 		String signature = "";
-		Boolean isAllowedToAdd = false;
-		Boolean lastPosititionWasIdent = false;
+		boolean isAllowedToAdd = false;
+		boolean lastPosititionWasIdent = false;
 		for(CommonTree thisTree : tree){
 			if(thisTree.getType() == FORWARDBRACKET){
 				isAllowedToAdd = true;

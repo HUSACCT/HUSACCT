@@ -90,7 +90,7 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	          
 	            if(isNewInstance == false && hasBrackets == true){
 	            	CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
-	            	methodGenerator.generate(methodTrees, tempNamespaceName+ "."+tempClassName);
+	            	methodGenerator.generateMethod(methodTrees, tempNamespaceName+ "."+tempClassName);
 	            }
 	        	
 	            methodTrees.clear();
