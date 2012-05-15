@@ -6,17 +6,12 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
-
-import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
 public class AnalysedController extends DrawingController {
-	private IControlService controlService;
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
@@ -24,31 +19,25 @@ public class AnalysedController extends DrawingController {
 	public AnalysedController() {
 		super();
 		initializeServices();
-		
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			@Override
-			public void update(Locale newLocale) {
-				refreshDrawing();
-			}
-		});		
 	}
-	
+
 	private void initializeServices() {
-		controlService = ServiceProvider.getInstance().getControlService();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 	}
-	
+
 	@Override
 	public void refreshDrawing() {
 		getAndDrawModulesIn(getCurrentPath());
+		
+		updateLayout();
 	}
-	
-	public void showViolations(){
+
+	public void showViolations() {
 		super.showViolations();
-		try{
+		try {
 			validateService.checkConformance();
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			logger.warn("NullPointerException, I think the validate service isn't started.");
 		}
 	}
@@ -62,16 +51,18 @@ public class AnalysedController extends DrawingController {
 			showViolations();
 		}
 		drawLinesBasedOnSetting();
+		
+		updateLayout();
 	}
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
-		if(!figureFrom.equals(figureTo)){
+		if (!figureFrom.equals(figureTo)) {
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
-		return new DependencyDTO[]{};
+		return new DependencyDTO[] {};
 	}
 
 	@Override
@@ -90,6 +81,8 @@ public class AnalysedController extends DrawingController {
 			try {
 				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.uniqueName);
+				
+				updateLayout();
 			} catch (Exception e) {
 				logger.debug("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
@@ -102,6 +95,8 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
+			
+			updateLayout();
 		} else {
 			logger.debug("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
@@ -111,7 +106,9 @@ public class AnalysedController extends DrawingController {
 
 	private void getAndDrawModulesIn(String parentName) {
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
-		if (children.length > 0) {
+		if (parentName.equals("")) {
+			drawArchitecture(getCurrentDrawingDetail());
+		} else if (children.length > 0) {
 			setCurrentPath(parentName);
 			drawModules(children);
 			drawLinesBasedOnSetting();

@@ -1,8 +1,13 @@
 package husacct.graphics.task;
 
+import java.util.Locale;
+
+import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.control.IControlService;
+import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
@@ -24,6 +29,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected String currentPath = "";
 	private boolean isViolationsShown = false;
 
+	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
 
 	protected FigureFactory figureFactory;
@@ -35,8 +41,17 @@ public abstract class DrawingController implements UserInputListener {
 	public DrawingController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
-		
+
 		initializeComponents();
+		
+		controlService = ServiceProvider.getInstance().getControlService();
+		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			@Override
+			public void update(Locale newLocale) {
+				refreshFrame();
+				refreshDrawing();
+			}
+		});	
 	}
 
 	private void initializeComponents() {
@@ -119,7 +134,7 @@ public abstract class DrawingController implements UserInputListener {
 			drawTarget.hidePropertiesPane();
 		}
 	}
-	
+
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModules(AbstractDTO[] modules) {
@@ -129,8 +144,16 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
+
 		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
+		// updateLayout();
+	}
+
+	protected void updateLayout() {
+		int width = drawTarget.getWidth();
+		int height = drawTarget.getHeight();
+
+		layoutStrategy.doLayout(width, height);
 	}
 
 	public void toggleViolations() {
@@ -153,7 +176,11 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
+
 		drawing.updateLineFigureToContext();
+
+		//TODO drawing.resizeRelationFigures();
+		// updateLayout();
 	}
 
 	public void drawDependenciesForShownModules() {
@@ -209,4 +236,10 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
+	
+	public abstract void refreshDrawing();
+	
+	public void refreshFrame(){
+		drawTarget.refreshFrame();
+	}
 }

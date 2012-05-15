@@ -73,6 +73,7 @@ public class DemoController extends DrawingController {
 		dtos = modules.toArray(dtos);
 		this.drawModules(dtos);
 		this.drawLinesBasedOnSetting();
+		updateLayout();
 	}
 	
 	@Override
