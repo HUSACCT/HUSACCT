@@ -66,64 +66,63 @@ class CSharpTreeConvertController extends CSharpGenerator{
 	}
 
 	private boolean methodCheck(CommonTree tree, boolean isPartOfMethod) {
-		 int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /*synchronised*/};
-	     
-	        for(int type : ListOfTypes){
-	               if(tree.getType() == type){
-	            	   isPartOfMethod = true;
-	               }
-	        }
-	        
-	        if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
-	        	isPartOfMethod = false;
-	        	
-	        	boolean isNewInstance = false;
-	            boolean hasBrackets = false;
-	            for(CommonTree thistree : methodTrees){
-	                   if(thistree.getType() == NEW){
-	                          isNewInstance = true;
-	                   }
-	                   if(thistree.getType() == FORWARDBRACKET){
-	                          hasBrackets = true;
-	                   }
-	            }
-	          
-	            if(isNewInstance == false && hasBrackets == true){
-	            	CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
-	            	methodGenerator.generateMethod(methodTrees, tempNamespaceName+ "."+tempClassName);
-	            }
-	        	
-	            methodTrees.clear();
-	        }
-	        
-	        if(isPartOfMethod){
-	        	methodTrees.add(tree);
-	        }
-	               
-        return isPartOfMethod;
+		int[] ListOfTypes = new int[]{FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /*synchronised*/};
+
+		for(int type : ListOfTypes){
+			if(tree.getType() == type){
+				isPartOfMethod = true;
+			}
+		}
+
+		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
+			isPartOfMethod = false;
+
+			boolean isNewInstance = false;
+			boolean hasBrackets = false;
+			for(CommonTree thistree : methodTrees){
+				if(thistree.getType() == NEW){
+					isNewInstance = true;
+				}
+				if(thistree.getType() == FORWARDBRACKET){
+					hasBrackets = true;
+				}
+			}
+
+			if(isNewInstance == false && hasBrackets == true){
+				CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
+				methodGenerator.generateMethod(methodTrees, tempNamespaceName + "." + tempClassName);
+			}
+
+			methodTrees.clear();
+		}
+
+		if(isPartOfMethod){
+			methodTrees.add(tree);
+		}
+
+		return isPartOfMethod;
 	}
 
 	private boolean attributeCheck(CommonTree tree, boolean isPartOfAttribute) {
-		
-		if(isPartOfAttribute && tree.getType() == SEMICOLON){
+		if(isPartOfAttribute && tree.getType() == SEMICOLON && attributeTrees.size() > 1){
 			CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, tempFullNamespaceName + "." + tempClassName);
-			
 			attributeGenerator.scan();
 			attributeTrees.clear();
 			isPartOfAttribute = false;
-		}
-		
+		}	
 		if (isPartOfAttribute && (tree.getType() == FORWARDCURLYBRACKET || tree.getType() == USING || tree.getType() == NAMESPACE || tree.getType()==CLASS)) {
 			isPartOfAttribute = false;
 			attributeTrees.clear();
 		}
-		
 		if(isPartOfAttribute){
 			attributeTrees.add(tree);
 		}
-		
 		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON || tree.getType() == BACKWARDCURLYBRACKET){
 			isPartOfAttribute = true;
+		}
+		if (tree.getType() == RETURN || tree.getType() == SET || tree.getType() == GET || tree.getType() == DOT) {
+			isPartOfAttribute = false;
+			attributeTrees.clear();
 		}
 		return isPartOfAttribute;
 	}
@@ -162,29 +161,6 @@ class CSharpTreeConvertController extends CSharpGenerator{
 			}
 		}
 	}
-/*
-	private boolean splitAttributeAndMethods(CommonTree tree, boolean isScanning) {
-		boolean thisIsAnAttributeAndNotAUsing = false;
-		//System.out.println(tree);
-		if (tree.getType() != USING) {
-			thisIsAnAttributeAndNotAUsing = true;
-			System.out.println(tree);
-		}	
-		if(isScanning){
-			variousTrees.add(tree);
-			
-		}
-				
-		if(tree.getType() == FORWARDCURLYBRACKET || tree.getType() == SEMICOLON){
-			isScanning = false;
-			MultipleChecks();
-			
-			variousTrees.clear();
-		}
-		
-		return isScanning;
-	}
-*/
 
 	private boolean classCheck(CommonTree tree, boolean isClassPart) {
 		if (tree.getType() == ABSTRACT) {

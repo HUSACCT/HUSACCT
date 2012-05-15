@@ -24,7 +24,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		signature = createSignature(tree);
 		uniqueName = className+"."+signature;
 		hasClassScope = checkForClassScope(tree);
-
+		isPureAccessor = false;
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, className, isConstructor, isAbstract, hasClassScope);
 //		boolean isPureAccessor = false; //todo
 	}
@@ -40,7 +40,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 				return name;
 			}
 		}
-		return null;
+		return name;
 	}
 
 	private boolean checkForClassScope(List<CommonTree> tree) {
@@ -86,17 +86,17 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	}
 
 	private String checkForReturnType(List<CommonTree> tree) {
-		String returnType = null;
-		int[] listOfPrimitiveTypes = new int[]{INT};
+		String returnType = "";
+		int[] listOfPrimitiveTypes = new int[]{INT, BYTE, SBYTE, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, DECIMAL, VAR};
 		for(CommonTree thisTree : tree){
 			for(int type : listOfPrimitiveTypes){
-				if(returnType == null){
+				if(returnType == ""){
 					if(type == thisTree.getType()){
 						returnType = thisTree.getText();
 					}
 					else{
 						if(thisTree.getType() == IDENTIFIER){
-							returnType = thisTree.getText();
+							return thisTree.getText();
 						}
 					}
 				}
@@ -114,7 +114,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 				isAllowedToAdd = true;
 			}
 			
-			if(thisTree.getType() == FORWARDBRACKET || thisTree.getType() == BACKWARDBRACKET || thisTree.getType() == KOMMA){
+			if(thisTree.getType() == FORWARDBRACKET || thisTree.getType() == BACKWARDBRACKET || thisTree.getType() == COMMA){
 				signature = signature + thisTree.getText();
 				lastPosititionWasIdent = false;
 			}

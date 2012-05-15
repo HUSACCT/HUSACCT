@@ -1,18 +1,19 @@
 package husacct.validate.presentation;
 
-import husacct.validate.abstraction.language.ResourceBundles;
+import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public final class FilterViolations extends JFrame {
+public final class FilterViolations extends JDialog  {
 	private static final long serialVersionUID = -6295611607558238501L;
 
-	private TaskServiceImpl ts;
-	private BrowseViolations bv;
+	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane TabbedPane;
 	private JButton addPath, removePath, save, cancel;
@@ -21,14 +22,16 @@ public final class FilterViolations extends JFrame {
 	private JRadioButton hideFilteredValues, showFilteredValues;
 	private JScrollPane pathFilterScrollPane, ruletypepanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
+	private FilterViolationsObserver vilterViolationsObserver;
 
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
+	private Calendar violationDate = null;
 
-	public FilterViolations(TaskServiceImpl ts, BrowseViolations bv) {
-		this.ts = ts;
-		this.bv = bv;
+	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
+		this.vilterViolationsObserver = filterViolationsObserver;
+		this.taskServiceImpl = taskServiceImpl;
 		initComponents();
 		loadGUIText();
 	}
@@ -55,6 +58,7 @@ public final class FilterViolations extends JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		setResizable(false);
+		setModal(true);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -173,28 +177,30 @@ public final class FilterViolations extends JFrame {
 		setSize(800, 600);
 	}
 	
+	public void setViolationDate(Calendar date){
+		violationDate = date;
+	}
+	
 	public void loadGUIText(){
-		setTitle(ResourceBundles.getValue("TotalViolations"));
-		TabbedPane.addTab(ResourceBundles.getValue("FilterViolations"), filterViolationPanel);
-		addPath.setText(ResourceBundles.getValue("Add"));
-		removePath.setText(ResourceBundles.getValue("Remove"));
-		TabbedPane.addTab(ResourceBundles.getValue("FilterPaths"), pathFilterPanel);
-		save.setText(ResourceBundles.getValue("Save"));
-		cancel.setText(ResourceBundles.getValue("Cancel"));
-		showFilteredValues.setText(ResourceBundles.getValue("ShowSelectedValues"));
-		hideFilteredValues.setText(ResourceBundles.getValue("HideSelectedValues"));
+		setTitle(ValidateTranslator.getValue("TotalViolations"));
+		TabbedPane.addTab(ValidateTranslator.getValue("FilterViolations"), filterViolationPanel);
+		addPath.setText(ValidateTranslator.getValue("Add"));
+		removePath.setText(ValidateTranslator.getValue("Remove"));
+		TabbedPane.addTab(ValidateTranslator.getValue("FilterPaths"), pathFilterPanel);
+		save.setText(ValidateTranslator.getValue("Save"));
+		cancel.setText(ValidateTranslator.getValue("Cancel"));
+		showFilteredValues.setText(ValidateTranslator.getValue("ShowSelectedValues"));
+		hideFilteredValues.setText(ValidateTranslator.getValue("HideSelectedValues"));
 		
 		loadModels();
 	}
 	
 	public void loadModels(){
-		String[] columnNamesRuletype = {"", ResourceBundles.getValue("Ruletypes")};
-		String[] columnNamesViolationtype = {"", ResourceBundles.getValue("Violationtypes")};
-		String[] columnNamesPath = {" ", ResourceBundles.getValue("Path")};
+		String[] columnNamesRuletype = {"", ValidateTranslator.getValue("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ValidateTranslator.getValue("Violationtypes")};
+		String[] columnNamesPath = {" ", ValidateTranslator.getValue("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
-
-			private static final long serialVersionUID = -2752815747553087143L;
 
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
@@ -212,8 +218,6 @@ public final class FilterViolations extends JFrame {
 
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
 
-			private static final long serialVersionUID = -2076057432618819613L;
-
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -229,8 +233,6 @@ public final class FilterViolations extends JFrame {
 		};
 
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
-
-			private static final long serialVersionUID = 8399838627659517010L;
 
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, true};
@@ -262,11 +264,12 @@ public final class FilterViolations extends JFrame {
 		ruletypesfilter = getRuletypesFilter();
 		violationtypesfilter = getViolationtypesFilter();
 		pathsfilter = getPathFilter();
-		ts.setFilterValues(ruletypesfilter, violationtypesfilter,
-				pathsfilter, hideFilteredValues.isSelected());
-		bv.setViolations();
+		taskServiceImpl.setFilterValues(ruletypesfilter, violationtypesfilter,
+				pathsfilter, hideFilteredValues.isSelected(), violationDate);
+		vilterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
+	
 
 	private void addPathActionPerformed() {
 		pathFilterModel.addRow(new Object[]{true, ""});
@@ -313,18 +316,30 @@ public final class FilterViolations extends JFrame {
 
 		return paths;
 	}
+	
+	public void loadFilterValues(){
+		loadRuletypes();
+		loadViolationtypes();
+	}
 
 	private void loadRuletypes(){
-		ArrayList<String> ruletypes = ts.loadRuletypesForFilter();
+		while(ruletypeModelFilter.getRowCount() > 0){
+			ruletypeModelFilter.removeRow(0);
+		}
+		ArrayList<String> ruletypes = taskServiceImpl.loadRuletypesForFilter(violationDate);
 		for(String ruletype : ruletypes){
 			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
 		}
 	}
 
 	private void loadViolationtypes(){
-		ArrayList<String> violationtypes = ts.loadViolationtypesForFilter();
+		while(violationtypeModelFilter.getRowCount() > 0){
+			violationtypeModelFilter.removeRow(0);
+		}
+		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
 		for(String violationtype : violationtypes){
 			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
 		}
 	}
+	
 }

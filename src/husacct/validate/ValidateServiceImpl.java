@@ -8,9 +8,14 @@ import husacct.common.savechain.ISaveable;
 import husacct.define.IDefineService;
 import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
+
+import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -63,7 +68,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public String[] getExportExtentions() {
-		return task.getExportExtentions();
+		return report.getExportExtentions();
 	}
 
 	@Override
@@ -71,6 +76,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
 		domain.checkConformance(appliedRules);		
 		this.validationExecuted = true;
+		gui.violationChanged();
 	}
 
 	@Override
@@ -116,5 +122,33 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	//This method is only used for testing with the Testsuite
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
+	}
+
+	@Override
+	public List<Violation> getViolationsByDate(Calendar date) {
+		return task.getViolationsByDate(date);
+	}
+	
+	@Override
+	public Calendar[] getViolationHistoryDates() {
+		return task.getViolationHistoryDates();
+	}
+
+	@Override
+	public void saveInHistory(String description) {
+		task.saveInHistory(description);		
+	}
+
+	@Override
+	public void exportViolationHistoryReport(String name, String fileType,
+			String path, ViolationHistory violationHistory) {
+		report.createReport(fileType, name, path, violationHistory);
+		
+	}
+	
+	@Override 
+	public JInternalFrame getViolationHistoryGUI(){
+		//FIXME add ViolationHistoryGUI
+		return new JInternalFrame();
 	}
 }

@@ -1,6 +1,8 @@
 package husacct.analyse.domain;
 
 import java.util.List;
+
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -12,6 +14,7 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 	
 	public AnalyseDomainServiceImpl(){
 		this.queryService = new FamixQueryServiceImpl();
+		this.creationService = new FamixCreationServiceImpl();
 	}	
 	
 	public void clearModel(){

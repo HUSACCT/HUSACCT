@@ -14,24 +14,16 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
+
 		String path = "C:/Users/MvH/benchmark/CSharpBenchmark";
+		//String path = "C:\\Users\\Thomas\\Downloads\\Mittchel-benchmark-73d2abb\\CSharpBenchmark";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		
-		ModelCreationService creation = new FamixCreationServiceImpl();
-		//System.out.println(creation.represent());
-		
-		
-//		ModelQueryService queryService = new FamixQueryServiceImpl();
-		//Testing the getChildModulesInModule(String child, int dept):
-//		List<AnalysedModuleDTO> foundModules = new ArrayList<AnalysedModuleDTO>();
-//		for(AnalysedModuleDTO module: queryService.getChildModulesInModule("declarations", 2)){
-//			foundModules.add(module);
-//		}
-//		printRecursive(foundModules, "");
+		new FamixCreationServiceImpl();
 		
 		try {  
 	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
@@ -42,13 +34,4 @@ public class AnalyseMain {
 		new AnalyseDebuggingFrame();
 
 	}
-	//Testing the getChildModulesInModule(String child, int dept):
-//	private static void printRecursive(List<AnalysedModuleDTO> modules, String indent){
-//		if(modules != null && !modules.isEmpty()){
-//			for(AnalysedModuleDTO module: modules){
-//				System.out.println("Module:\n" + module.toString());
-//				printRecursive(module.subModules, "\t");
-//			}
-//		}
-//	}
 }	

@@ -68,11 +68,11 @@ class FamixModel extends FamixObject{
 			}
 			else if (e instanceof FamixInterface){
 				interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
-			}
+			} 
 		}
 		else if (e instanceof FamixAssociation){
 			associations.add((FamixAssociation) e);
-		}
+		}			
 		else{
 			throw new InvalidAttributesException("Wrongtype (not of type entity or association) ");
 		}
@@ -141,13 +141,19 @@ class FamixModel extends FamixObject{
 				+ "\n ------------Interfaces------------\n" + interfaces
 				+ "\n -----------Assocations:-------------- \n" + associations
 				+ "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
-				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities;
-//				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
+				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities
+				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
 
 	}
 	
 
 	public void clear() {
-		FamixModel.currentInstance = new FamixModel();
+		currentInstance.waitingAssociations.clear();
+		currentInstance.waitingStructuralEntitys.clear();
+		currentInstance.associations.clear();
+		currentInstance.classes.clear();
+		currentInstance.packages.clear();
+		currentInstance.structuralEntities.clear();
+		currentInstance.behaviouralEntities.clear();
 	}
 }

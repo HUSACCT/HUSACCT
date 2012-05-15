@@ -45,6 +45,11 @@ public class GuiController {
 		return configurationUI;
 	}
 	
+	public void violationChanged(){
+		browseViolations.loadAfterViolationsChanged();
+		filterViolations.loadFilterValues();
+	}
+	
 	private void initializeAllScreens(){
 		initializeBrowseViolations();
 		initializeConfigurationUI();
