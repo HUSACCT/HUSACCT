@@ -153,7 +153,7 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		drawing.resizeRelationFigures();
+		drawing.updateLineFigureToContext();
 	}
 
 	public void drawDependenciesForShownModules() {

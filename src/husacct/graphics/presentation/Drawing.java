@@ -9,6 +9,9 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 
@@ -20,6 +23,7 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
+	public final int RELATIONS_DISTANCE = 30;
 
 	public Drawing() {
 		super();
@@ -102,8 +106,18 @@ public class Drawing extends QuadTreeDrawing {
 		this.changed();
 	}
 	
-	public void resizeRelationFigures() {
+	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
+		
+		// context dependent line thicknesses
+		this.updateLineFigureThicknesses(figures);
+		
+		// overlapping relations
+		this.seperateOverlappingLineFigures(figures);		
+	}
+	
+	private void updateLineFigureThicknesses(RelationFigure[] figures)
+	{
 		// 1 relation, small
 		if (1 == figures.length) {
 			figures[0].setLineThickness(1);
@@ -147,5 +161,68 @@ public class Drawing extends QuadTreeDrawing {
 				}
 			}
 		}
+	}
+	
+	private void seperateOverlappingLineFigures(RelationFigure[] figures)
+	{
+		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = 
+				new HashMap<RelationFigure, Set<RelationFigure>>();
+	
+		for(RelationFigure figure1 : figures)
+		{
+			Figure figure1start = figure1.getStartConnector().getOwner();
+			Figure figure1end = figure1.getEndConnector().getOwner();
+			
+			for(RelationFigure figure2 : figures)
+			{				
+				if(figure1 == figure2)
+				{
+					continue;
+				}
+				
+				Figure figure2start = figure2.getStartConnector().getOwner();
+				Figure figure2end = figure2.getEndConnector().getOwner();
+				
+				if(!((figure1start == figure2start && figure1end == figure2end)
+						|| (figure1start == figure2end && figure1end == figure2start)))
+				{
+					continue;
+				}
+				
+				Set<RelationFigure> addTo;
+				if(overlappingFigureSets.containsKey(figure1))
+				{
+					addTo = overlappingFigureSets.get(figure1);
+				}
+				else if (overlappingFigureSets.containsKey(figure2))
+				{
+					addTo = overlappingFigureSets.get(figure2);
+				}
+				else
+				{
+					addTo = new HashSet<RelationFigure>();
+					overlappingFigureSets.put(figure1, addTo);
+				}
+				
+				addTo.add(figure1);
+				addTo.add(figure2);
+			}
+		}
+		
+		for(RelationFigure keyFigure : overlappingFigureSets.keySet())
+		{
+			HashSet<RelationFigure> overlappingFigures = new HashSet<RelationFigure>();
+			overlappingFigures.add(keyFigure);
+			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
+			
+			double start = (0 - ((overlappingFigures.size()/2)*this.RELATIONS_DISTANCE))/2;
+			
+			for(RelationFigure figure : overlappingFigures)
+			{
+				figure.setDistance(start);
+				start += this.RELATIONS_DISTANCE;
+			}
+		}
+		
 	}
 }

@@ -21,6 +21,7 @@ import org.jhotdraw.draw.handle.BezierNodeHandle;
 import org.jhotdraw.draw.handle.BezierOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.geom.BezierPath.Node;
 
 public class RelationFigure extends NamedFigure 
@@ -28,13 +29,16 @@ public class RelationFigure extends NamedFigure
 {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
+	private RoundedLiner liner;
 	private TextFigure amountFigure;
 
-	public RelationFigure(String name, boolean violated, int amount)
+	public RelationFigure(String name, boolean violated, int amount, double distance)
 	{		
 		super(name);
 		
+		this.liner = new RoundedLiner(distance);
 		this.line = new LineConnectionFigure();
+		this.line.setLiner(this.liner);
 		this.add(this.line);
 
 		this.amountFigure = new TextFigure(Integer.toString(amount));
@@ -43,6 +47,16 @@ public class RelationFigure extends NamedFigure
 		line.addFigureListener(this);
 	}
 	
+	public RelationFigure(String name, boolean violated, int amount)
+	{		
+		this(name, violated, amount, 0);
+	}
+	
+	public void setDistance(double distance) {
+		this.willChange();
+		this.liner.setDistance(distance);
+		this.changed();
+	}	
 	
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
