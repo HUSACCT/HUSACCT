@@ -59,7 +59,7 @@ class JavaAttributeAndLocalVariableGenerator {
 			}else if(treeType == JavaParser.VAR_DECLARATOR_LIST){
 				setAttributeName(child);	
 			}
-			else if(treeType == JavaParser.STATIC_ARRAY_CREATOR){
+			else if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL){
 				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
 				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree);
 			} else if(treeType == JavaParser.AT){

@@ -88,6 +88,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 //				signature = javaParameterGenerator.generateParameterObjects(child, name, belongsToClass);
 				deleteTreeChild(child);
 			}
+			
 			if(treeType == JavaParser.BLOCK_SCOPE){
 				loopThroughBlockMethod(child);
 				deleteTreeChild(child);
@@ -97,6 +98,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		}
 	}
 
+	
+
 	private void loopThroughBlockMethod(Tree tree) {		
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
@@ -105,6 +108,22 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				javaLocalVariableGenerator.generateLocalVariableModel(child, belongsToClass, name);
 				deleteTreeChild(child);
 			}
+			if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL ){ 
+                delegateInvocation(child, "invocConstructor"); 
+                //ik ben er nog niet uit of deze wel gedelete mag worden
+            } 
+            if(treeType == JavaParser.METHOD_CALL ){ 
+                if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
+                	delegateInvocation(child, "invocMethod");
+                	deleteTreeChild(child); 
+                }
+            } 
+            if(treeType == JavaParser.ASSIGN ){ 
+                if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
+                	delegateInvocation(child, "accessPropertyOrField");
+                	deleteTreeChild(child); 
+                }
+            } 
 			loopThroughBlockMethod(child);
 		}
 		
@@ -118,6 +137,19 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		}
 		else{
 			return tree.getChild(0).getText();
+		}
+	}
+	
+	private void delegateInvocation(Tree treeNode, String type) {
+		JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);
+		if (type.equals("invocConstructor")){
+			javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) treeNode);
+		}
+		else if (type.equals("invocMethod")){
+			javaInvocationGenerator.generateMethodInvocToModel((CommonTree) treeNode);
+		}
+		else if (type.equals("accessPropertyOrField")){
+			javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) treeNode);
 		}
 	}
 
