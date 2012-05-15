@@ -67,6 +67,7 @@ public class GraphicsFrame extends JInternalFrame {
 		drawingScrollPane = new JScrollPane();
 		drawingScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		drawingScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		drawingScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		drawingScrollPane.setViewportView(drawingView);
 
 		propertiesScrollPane = new JScrollPane();
