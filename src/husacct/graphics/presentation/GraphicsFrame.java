@@ -32,7 +32,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private JMenuBar menuBar, locationBar;
 	private JCheckBoxMenuItem showViolationsOptionMenu;
 	private String currentPath;
-	private JScrollPane drawingScollPane, propertiesScrollPane;
+	private JScrollPane drawingScrollPane, propertiesScrollPane;
 	private JComponent centerPane;
 	private String ROOT_LEVEL = "Root";
 	private final String LOCATION_SEPERATOR = ".";
@@ -64,10 +64,10 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void initializeComponents() {
-		drawingScollPane = new JScrollPane();
-		drawingScollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		drawingScollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		drawingScollPane.setViewportView(drawingView);
+		drawingScrollPane = new JScrollPane();
+		drawingScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		drawingScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		drawingScrollPane.setViewportView(drawingView);
 
 		propertiesScrollPane = new JScrollPane();
 		propertiesScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -90,9 +90,9 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 
 		if (!showProperties) {
-			centerPane = drawingScollPane;
+			centerPane = drawingScrollPane;
 		} else {
-			centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawingScollPane, propertiesScrollPane);
+			centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawingScrollPane, propertiesScrollPane);
 			positionLayoutComponents();
 			((JSplitPane) centerPane).setOneTouchExpandable(true);
 			((JSplitPane) centerPane).setContinuousLayout(true);

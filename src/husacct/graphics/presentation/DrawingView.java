@@ -61,12 +61,6 @@ public class DrawingView extends DefaultDrawingView {
 				onMouseClicked(e);
 			}
 		});
-
-		addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				onMouseWheel(e);
-			}
-		});
 	}
 
 	private void onMouseClicked(MouseEvent e) {
@@ -94,10 +88,6 @@ public class DrawingView extends DefaultDrawingView {
 
 		previousSelection.clear();
 		previousSelection.addAll(getSelectedFigures());
-	}
-
-	private void onMouseWheel(MouseWheelEvent e) {
-
 	}
 
 	private void handleDeselect() {
