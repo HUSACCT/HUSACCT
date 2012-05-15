@@ -26,7 +26,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	private boolean isPureAccessor;  //TODO Fille isPureAccessor
 	private String declaredReturnType;
 
-	private String signature;
+	private String signature = "";
 	public String name;
 	public String uniqueName;
 	private Logger logger = Logger.getLogger(JavaMethodGeneratorController.class);
@@ -39,12 +39,15 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		WalkThroughMethod(methodTree);
 		createMethodObject();	
 	}
-
+	
+	
 
 	private void checkMethodType(CommonTree methodTree) {
 		if (methodTree.getType() == JavaParser.CONSTRUCTOR_DECL){ 
 			declaredReturnType = "";
 			isConstructor = true;
+			name = getClassOfUniqueName(belongsToClass);
+			
 		}
 		else if(methodTree.getType() == JavaParser.VOID_METHOD_DECL){
 			declaredReturnType = "";
@@ -56,6 +59,11 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		else {
 			logger.warn("MethodGenerator aangeroepen maar geen herkenbaar type methode");
 		}
+	}
+	
+	private String getClassOfUniqueName(String uniqueName){
+		String[] parts = uniqueName.split("\\.");
+		return parts[parts.length -1];
 	}
 
 	private void WalkThroughMethod(Tree tree) {
@@ -87,7 +95,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			if(treeType == JavaParser.FORMAL_PARAM_LIST){
 				if (child.getChildCount() > 0){
 					JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
-					signature = this.name + "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
+					signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
 					// = this.name + "(" +  + ")";
 					deleteTreeChild(child);
 				}
@@ -164,7 +172,10 @@ class JavaMethodGeneratorController extends JavaGenerator{
     } 
 	
 	private void createMethodObject(){
-		uniqueName = belongsToClass + "." + signature;
+		if (signature.equals("")){
+			signature = "()";
+		}
+		uniqueName = belongsToClass + "." + this.name + signature;
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
 	}	
 }
