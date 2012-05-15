@@ -97,12 +97,12 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		}
 	}
 
-	private void loopThroughBlockMethod(Tree tree) {
+	private void loopThroughBlockMethod(Tree tree) {		
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
 			if(treeType == JavaParser.VAR_DECLARATION){
-				javaLocalVariableGenerator.generateLocalVariableModel(child, name, belongsToClass);
+				javaLocalVariableGenerator.generateLocalVariableModel(child, belongsToClass, name);
 				deleteTreeChild(child);
 			}
 			loopThroughBlockMethod(child);
