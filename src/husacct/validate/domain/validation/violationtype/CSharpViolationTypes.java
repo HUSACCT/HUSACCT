@@ -13,11 +13,14 @@ public enum CSharpViolationTypes implements IViolationType {
 	ANNOTATION("Annotation", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	IMPORT("Import", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	EXCEPTION("Exception", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	
+
 	PUBLIC("public", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	PROTECTED("protected", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	DEFAULT("default", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
-	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW);
+	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
+
+	PACKAGE("package", ViolationCategories.PACKAGING, DefaultSeverities.LOW),
+	CLASS("class", ViolationCategories.PACKAGING, DefaultSeverities.LOW);
 
 	private final String key;
 	private final DefaultSeverities defaultSeverity;

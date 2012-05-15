@@ -18,8 +18,11 @@ public enum JavaViolationTypes implements IViolationType{
 	PUBLIC("public", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	PROTECTED("protected", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	DEFAULT("default", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
-	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW);
+	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
 
+	PACKAGE("package", ViolationCategories.PACKAGING, DefaultSeverities.LOW),
+	CLASS("class", ViolationCategories.PACKAGING, DefaultSeverities.LOW);
+	
 	private final String key;
 	private final DefaultSeverities defaultSeverity;
 	private final ViolationCategories violationCategory;
