@@ -8,6 +8,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
@@ -118,27 +119,35 @@ public class FilterController {
 
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
-	
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter) {
+
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, boolean applyFilter) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
-		for(Severity severity : taskServiceImpl.getAllSeverities()) {
-			int violationsCount = 0;
-			List<Violation> violations;
-			if(!applyFilter) {
-				violations = taskServiceImpl.getAllViolations().getValue();
+			List<Violation> violations = null;
+			List<Severity> severities = null;
+			if(violationHistory != null) {
+				violations = violationHistory.getViolations();
+				severities = violationHistory.getSeverities();
 			} else {
-				violations = taskServiceImpl.applyFilterViolations(true, null);//TODO set Date!!
+				violations = taskServiceImpl.getAllViolations().getValue();
+				severities = taskServiceImpl.getAllSeverities();
 			}
-			for(Violation violation : violations) {
-				if(violation.getSeverity() != null) {
-					if(violation.getSeverity().equals(severity)) {
-						violationsCount++;
+			if(applyFilter) {
+				violations = taskServiceImpl.applyFilterViolations(violations);
+			}
+			
+			for(Severity severity : severities) {
+				int violationsCount = 0;
+			
+				for(Violation violation : violations) {
+					if(violation.getSeverity() != null) {
+						if(violation.getSeverity().getId().equals(severity.getId())) {
+							violationsCount++;
+						}
 					}
 				}
-			}
 
-			violationsPerSeverity.put(severity, violationsCount);
-		}
+				violationsPerSeverity.put(severity, violationsCount);
+			}
 		return violationsPerSeverity;
 	}
 }

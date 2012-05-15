@@ -3,6 +3,7 @@ package husacct.validate.presentation;
 import husacct.control.ILocaleChangeListener;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.factory.message.Messagebuilder;
+import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
@@ -15,23 +16,24 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.border.TitledBorder;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectionListener, ILocaleChangeListener, ActionListener, FilterViolationsObserver, ViolationHistoryRepositoryObserver {
@@ -54,6 +56,7 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private final FilterViolations filterViolations;
+	private JPanel informationPanel;
 
 	public ViolationHistoryGUI2(TaskServiceImpl taskServiceImpl) {
 		this.taskServiceImpl = taskServiceImpl;
@@ -63,6 +66,7 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 		loadModels();
 		fillChooseViolationHistoryTable();
 		updateGuiText();
+		loadInformationPanel(null);
 	}
 
 	private void loadModels() {
@@ -174,25 +178,25 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 		applyFilter.setText(ValidateTranslator.getValue("ApplyFilter"));
 		buttonEditFilter.setText(ValidateTranslator.getValue("EditFilter"));
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource().equals(buttonEditFilter)) {
 			filterViolations.setVisible(true);
 		}
 	}
-	
+
 	@Override
 	public void updateViolationsTable() {
-	//	fillViolationsTable(ts.get)
+		//	fillViolationsTable(ts.get)
 	}
-	
+
 
 	@Override
 	public void updateViolationHistories() {
 		fillChooseViolationHistoryTable();
 	}
-	
+
 	public void init() {
 		setClosable(true);
 		setMaximizable(true);
@@ -243,48 +247,57 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 
 		violationDetailPane = new JPanel();
 		violationDetailPane.setBorder(new TitledBorder(null, "Details TODO Local", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		informationPanel = new JPanel();
+		informationPanel.setBorder(new TitledBorder(null, "Information panel", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GroupLayout gl_rightSidePane = new GroupLayout(rightSidePane);
 		gl_rightSidePane.setHorizontalGroup(
-				gl_rightSidePane.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_rightSidePane.createSequentialGroup()
+				gl_rightSidePane.createParallelGroup(Alignment.TRAILING)
+				.addComponent(violationDetailPane, GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+				.addGroup(gl_rightSidePane.createSequentialGroup()
 						.addGroup(gl_rightSidePane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(violationsTableScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
-								.addComponent(filterPane, GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE))
-								.addGap(1))
-								.addComponent(violationDetailPane, GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+								.addGroup(gl_rightSidePane.createSequentialGroup()
+										.addComponent(informationPanel, GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+										.addGap(2)
+										.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 284, GroupLayout.PREFERRED_SIZE))
+										.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE))
+										.addGap(1))
 				);
 		gl_rightSidePane.setVerticalGroup(
 				gl_rightSidePane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_rightSidePane.createSequentialGroup()
-						.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
-						.addGap(8)
-						.addComponent(violationDetailPane, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap()
+						.addGroup(gl_rightSidePane.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(informationPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(filterPane, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+								.addGap(8)
+								.addComponent(violationDetailPane, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
 				);
-		
+
 		applyFilter = new JCheckBox("Apply Filter");
-		
+
 		buttonEditFilter = new JButton("Edit Filter");
 		GroupLayout gl_filterPane = new GroupLayout(filterPane);
 		gl_filterPane.setHorizontalGroup(
-			gl_filterPane.createParallelGroup(Alignment.LEADING)
+				gl_filterPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_filterPane.createSequentialGroup()
-					.addGap(26)
-					.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(buttonEditFilter)
-						.addComponent(applyFilter))
-					.addContainerGap(459, Short.MAX_VALUE))
-		);
+						.addGap(26)
+						.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(buttonEditFilter)
+								.addComponent(applyFilter))
+								.addContainerGap(459, Short.MAX_VALUE))
+				);
 		gl_filterPane.setVerticalGroup(
-			gl_filterPane.createParallelGroup(Alignment.TRAILING)
+				gl_filterPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(Alignment.LEADING, gl_filterPane.createSequentialGroup()
-					.addGap(37)
-					.addComponent(applyFilter)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(buttonEditFilter)
-					.addContainerGap(39, Short.MAX_VALUE))
-		);
+						.addGap(37)
+						.addComponent(applyFilter)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(buttonEditFilter)
+						.addContainerGap(39, Short.MAX_VALUE))
+				);
 		filterPane.setLayout(gl_filterPane);
 
 		detailsLineNumberLabel = new JLabel("Line number (locale)");
@@ -292,46 +305,46 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 		detailsLogicalModuleLabel = new JLabel("Logical module");
 
 		detailsMessageLabel = new JLabel("Message");
-		
+
 		detailLineNumberLabelValue = new JLabel("");
-		
+
 		detailLogicalModuleLabelValue = new JLabel("");
-		
+
 		detailMessageLabelValue = new JLabel("");
 		GroupLayout gl_violationDetailPane = new GroupLayout(violationDetailPane);
 		gl_violationDetailPane.setHorizontalGroup(
-			gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
+				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_violationDetailPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(detailsLogicalModuleLabel)
-						.addComponent(detailsMessageLabel)
-						.addGroup(gl_violationDetailPane.createSequentialGroup()
-							.addComponent(detailsLineNumberLabel)
-							.addGap(53)
-							.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(detailLogicalModuleLabelValue)
-								.addComponent(detailLineNumberLabelValue)
-								.addComponent(detailMessageLabelValue))))
-					.addContainerGap(397, Short.MAX_VALUE))
-		);
+						.addContainerGap()
+						.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(detailsLogicalModuleLabel)
+								.addComponent(detailsMessageLabel)
+								.addGroup(gl_violationDetailPane.createSequentialGroup()
+										.addComponent(detailsLineNumberLabel)
+										.addGap(53)
+										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(detailLogicalModuleLabelValue)
+												.addComponent(detailLineNumberLabelValue)
+												.addComponent(detailMessageLabelValue))))
+												.addContainerGap(397, Short.MAX_VALUE))
+				);
 		gl_violationDetailPane.setVerticalGroup(
-			gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
+				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_violationDetailPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(detailsLineNumberLabel)
-						.addComponent(detailLineNumberLabelValue))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(detailsLogicalModuleLabel)
-						.addComponent(detailLogicalModuleLabelValue))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(detailsMessageLabel)
-						.addComponent(detailMessageLabelValue))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+						.addContainerGap()
+						.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(detailsLineNumberLabel)
+								.addComponent(detailLineNumberLabelValue))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
+										.addComponent(detailsLogicalModuleLabel)
+										.addComponent(detailLogicalModuleLabelValue))
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
+												.addComponent(detailsMessageLabel)
+												.addComponent(detailMessageLabelValue))
+												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				);
 		violationDetailPane.setLayout(gl_violationDetailPane);
 
 		violationsTable = new JTable();
@@ -340,9 +353,36 @@ public class ViolationHistoryGUI2 extends JInternalFrame implements ListSelectio
 		taskServiceImpl.attachViolationHistoryObserver(this);
 	}
 
-	@Override
-	public void updateAll() {
-		//No update at all!
+	private void loadInformationPanel(ViolationHistory violationHistory) {
+		informationPanel.removeAll();
+
+		JLabel totalViolation = new JLabel();
+		totalViolation.setText(ValidateTranslator.getValue("TotalViolations") + ":");
+		informationPanel.add(totalViolation);
+
+		JLabel totalViolationNumber = new JLabel();
+		if(violationHistory == null)
+			totalViolationNumber.setText("" + taskServiceImpl.getAllViolations().getValue().size());
+		else 
+			totalViolationNumber.setText("" + violationHistory.getViolations().size());
+		informationPanel.add(totalViolationNumber);
+
+		JLabel shownViolations = new JLabel();
+		shownViolations.setText(ValidateTranslator.getValue("ShownViolations") + ":");
+		informationPanel.add(shownViolations);
+
+		JLabel shownViolationsNumber = new JLabel();
+		shownViolationsNumber.setText("" + violationsTableModel.getRowCount());
+		informationPanel.add(shownViolationsNumber);
+		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(violationHistory, applyFilter.isSelected()).entrySet()) {
+			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
+			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
+		}
+		informationPanel.updateUI();
 	}
 
+	@Override
+	public void updateAll() {
+		//TODO do this method!
+	}
 }
