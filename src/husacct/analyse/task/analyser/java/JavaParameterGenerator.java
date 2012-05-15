@@ -5,7 +5,9 @@ import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class JavaParameterGenerator extends JavaGenerator {
 
@@ -19,12 +21,15 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private String uniqueName;
 	
 	
+	private Logger logger = Logger.getLogger(JavaParameterGenerator.class);
 	private String signature;
 	private boolean nameFound = false;
 	private boolean declareTypeFound = false;
 	
 	public String generateParameterObjects(Tree tree, String belongsToMethod, String belongsToClass){
 		//returns the signature, which MethodGenerator uses
+		
+		System.out.println(tree.toStringTree());
 		
 		this.belongsToMethod = belongsToMethod;
 		this.belongsToClass = belongsToClass;
@@ -40,9 +45,10 @@ public class JavaParameterGenerator extends JavaGenerator {
 
 	private void DelegateParametersFromTree(Tree tree) {
 		for(int i = 0; i < tree.getChildCount(); i++){
-			Tree child = tree.getChild(i);
+			CommonTree child = (CommonTree) tree.getChild(i);
 			int treeType = child.getType();
 			if(treeType == JavaParser.FORMAL_PARAM_STD_DECL ){
+				getAttributeName(child);
 				getParameterAttributes(child, 1);
 				writeParameterToDomain();
 				deleteTreeChild(child);
@@ -54,38 +60,64 @@ public class JavaParameterGenerator extends JavaGenerator {
 	}
 
 
-
-	private void getParameterAttributes(Tree tree, int indent) {
-		for(int i = 0; i < tree.getChildCount(); i++){
-			Tree child = tree.getChild(i);
-			int treeType = child.getType();
-			if(treeType == JavaParser.LOCAL_MODIFIER_LIST && (nameFound == false)){
-				declareName = tree.getChild(2).getText();
-				nameFound = true;
-			}
-			if(treeType == JavaParser.TYPE ){
-				if(declareTypeFound = false){
-					if (child.getChild(0).getType() != JavaParser.QUALIFIED_TYPE_IDENT){
-						declareType = child.getChild(0).getText();
-					} else{
-						declareType = child.getChild(0).getChild(0).getText();
+	private void getAttributeName(Tree tree){
+		CommonTree attributeTree = (CommonTree) tree;
+		Tree attributeNameTree = attributeTree.getFirstChildWithType(JavaParser.IDENT);
+		try{
+			this.declareName = attributeNameTree.getText();
+			this.nameFound = true;
+			logger.debug("FOUND ATTRIBUTE NAME \t " + declareName);
+			
+			
+		} catch (Exception e) { }		
+	}
+	
+	public String getAttributeType(CommonTree tree){
+		String attributeType = "";
+		attributeType = getAttributeRecursive(tree);
+		attributeType = attributeType.replace("<,", "<");
+		attributeType = attributeType.substring(1);
+		return attributeType;
+	}
+	
+	public String getAttributeRecursive(CommonTree tree){
+		String attributeType = "";
+		int childCount = tree.getChildCount();
+		for(int i = 0; i < childCount; i++){
+			CommonTree childTree = (CommonTree) tree.getChild(i);
+			
+			switch(childTree.getType()){
+				case JavaParser.IDENT:
+					attributeType += "," + childTree.getText();
+					if(childTree.getChildCount() > 0){
+						attributeType += getAttributeRecursive(childTree);
 					}
-					declareTypeFound = true;
-				} else {
-					if (child.getChild(0).getType() != JavaParser.QUALIFIED_TYPE_IDENT){
-						declareTypes.add(child.getChild(0).getText());
-					} else{
-						declareTypes.add(child.getChild(0).getChild(0).getText());
-					}
-					
-				}
-			}
-			if(treeType == JavaParser.GENERIC_TYPE_ARG_LIST){
-				declareTypes.add("<");
+					break;
+				case JavaParser.GENERIC_TYPE_ARG_LIST:
+					attributeType += "<";
+					attributeType += getAttributeRecursive(childTree);
+					attributeType += ">";
+					break;
+				default:
+					attributeType += getAttributeRecursive(childTree);
 				
 			}
-			getParameterAttributes(child, indent + 1);
 		}
+		return attributeType;
+	}
+
+	private void getParameterAttributes(Tree tree, int indent) {
+		int childrenCount = tree.getChildCount();
+		for(int i = 0; i < childrenCount; i++){
+			CommonTree currentChild = (CommonTree) tree.getChild(i);
+			
+			if(currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
+				this.signature = getAttributeType(currentChild);
+			} else {
+				getParameterAttributes(currentChild, indent + 1);
+			}
+		}
+
 	}
 	
 	

@@ -84,8 +84,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				uniqueName = belongsToClass + "." + name;
 			}
 			if(treeType == JavaParser.FORMAL_PARAM_LIST){
-//				JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
-//				signature = javaParameterGenerator.generateParameterObjects(child, name, belongsToClass);
+				JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
+				signature = this.name + "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
 				deleteTreeChild(child);
 			}
 			if(treeType == JavaParser.BLOCK_SCOPE){
