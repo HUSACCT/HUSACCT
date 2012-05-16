@@ -96,6 +96,18 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixMethod.hasClassScope = hasClassScope;
 		addToModel(famixMethod);
 	}
+	
+	public void createLocalVariable(String name, String uniqueName, String belongsToBehaviour, String belongsToClass, String declareClass, String declareType, int lineNumber){
+		FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
+		famixLocalVariable.name = name;
+		famixLocalVariable.uniqueName = uniqueName;
+		famixLocalVariable.belongsToBehaviour = "";
+		famixLocalVariable.belongsToClass = belongsToClass;
+		famixLocalVariable.declareClass = declareClass;
+		famixLocalVariable.declareType = declareType;
+		famixLocalVariable.lineNumber = lineNumber;
+		addToModel(famixLocalVariable);
+	}
 
 	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {
@@ -161,6 +173,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		exception.to = ExceptionClass;
 		exception.lineNumber = lineNumber;
 		exception.exceptionType = declarationType;
+		System.out.print(exception);
 		model.waitingAssociations.add(exception);
 	}
 
