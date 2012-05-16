@@ -1,10 +1,11 @@
 package husacct.graphics.task.layout;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.jhotdraw.draw.Figure;
 
-class NodeList {
+public class NodeList implements Iterable<Node> {
 	private ArrayList<Node> nodes;
 	
 	public NodeList() {
@@ -20,7 +21,12 @@ class NodeList {
 	}
 	
 	public boolean contains(Figure f) {
-		return nodes.contains(f);
+		for (Node node : nodes) {
+			if (node.equals(f))
+				return true;
+		}
+		
+		return false;
 	}
 	
 	public Node getByFigure(Figure f) {
@@ -33,6 +39,11 @@ class NodeList {
 		// Please check the Java API documentation concerning collections to see how 
 		// the Java API solves this.
 		return null;
+	}
+
+	@Override
+	public Iterator<Node> iterator() {
+		return nodes.iterator();
 	}
 	
 }

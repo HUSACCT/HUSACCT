@@ -2,16 +2,14 @@ package husacct.graphics.task.layout;
 
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.NamedFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Vector;
 
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
@@ -32,9 +30,33 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 	@Override
 	public void doLayout(int screenWidth, int screenHeight) {
 
-		indexFigures(findAllConnectors());
+		List<ConnectionFigure> connectors = findAllConnectors();
+		indexFigures(connectors);
+		
+		printPositions();
+		
 		updatePositions();
 	}
+	
+	private void printPositions() {
+		for (Node n : nodes) {
+			NamedFigure f = (NamedFigure) n.getFigure();
+			System.out.println(String.format("%s: level %d", f.getName(), n.getLevel()));
+		}
+	}
+	
+	private List<ConnectionFigure> findAllConnectors() {
+		List<Figure> figures = drawing.getChildren();
+		ArrayList<ConnectionFigure> list = new ArrayList<ConnectionFigure>();
+
+		for (Figure f : figures) {
+			if (isConnector(f)) {
+				list.add((ConnectionFigure) f);
+			}
+		}
+
+		return Collections.unmodifiableList(list);
+	}	
 	
 	private void indexFigures(List<ConnectionFigure> connectors) {
 		for (ConnectionFigure cf : connectors) {
@@ -47,28 +69,16 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 		}
 	}	
 
-	private List<ConnectionFigure> findAllConnectors() {
-		List<Figure> figures = drawing.getChildren();
-		ArrayList<ConnectionFigure> list = new ArrayList<ConnectionFigure>();
-
-		for (Figure f : figures) {
-			if (isConnector(f)) {
-				list.add((ConnectionFigure) f);
-			}
-		}
-
-		return Collections.unmodifiableList(list);
-	}
-	
 	private void updatePositions() {
 		List<Node> rootNodes = getRootNodes();
-		//List<Node> unconnectedNodes = getUnconnectedNodes();
 		
-		Point2D.Double startPoint = new Point2D.Double(4 * HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
+		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
 		
 		for (Node n : rootNodes) {
 			double width = positionFigure(n, startPoint);
-			//startPoint = updateStartPoint(startPoint, width);
+			
+			startPoint.y = VERT_ITEM_SPACING;
+			startPoint.x += HORZ_ITEM_SPACING + width;
 		}
 	}
 	
@@ -80,12 +90,14 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 		double columnWidth = 0;
 
 		startPoint = updatePosition(figure, startPoint);
-		columnWidth = figure.getBounds().width; // Trainwreck, no work around for this
+		columnWidth = figure.getBounds().width; 
 		
 		List<Node> connections = node.getConnections();
-		//Point2D.Double 
+		Point2D.Double pos = (Point2D.Double) startPoint.clone();
 		for (Node childNode : connections) {
-			columnWidth = Math.max(positionFigure(childNode, startPoint), columnWidth);
+			columnWidth = Math.max(positionFigure(childNode, pos), columnWidth);
+			pos.y = startPoint.y;
+			pos.x += columnWidth + HORZ_ITEM_SPACING;
 		}
 			
 		return columnWidth;
@@ -93,8 +105,8 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 	
 	private Point2D.Double updatePosition(Figure figure, Point2D.Double point) {
 		Rectangle2D.Double bounds = figure.getBounds();
-		Point2D.Double lead = new Point2D.Double(point.x, point.y);
-		Point2D.Double anchor = new Point2D.Double(point.x + bounds.width, point.y + bounds.height);
+		Point2D.Double anchor = new Point2D.Double(point.x, point.y);
+		Point2D.Double lead = new Point2D.Double(point.x + bounds.width, point.y + bounds.height);
 		
 		figure.willChange();
 		figure.setBounds(anchor, lead);
@@ -105,28 +117,16 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 	}
 	
 	private List<Node> getRootNodes() {
-		ArrayList<Node> nodes = new ArrayList<Node>();
+		ArrayList<Node> list = new ArrayList<Node>();
 		
 		for (Node n : nodes) {
-			if (n.getConnectionCount() > 0) {
-				nodes.add(n);
+			if (n.getLevel() == 0) {
+				list.add(n);
 			}
 		}
 		
-		return Collections.unmodifiableList(nodes);
+		return Collections.unmodifiableList(list);
 	}
-	
-//	private List<Node> getUnconnectedNodes() {
-//		ArrayList<Node> nodes = new ArrayList<Node>();
-//		
-//		for (Node n : nodes) {
-//			if (n.getConnectionCount() == 0) {
-//				nodes.add(n);
-//			}
-//		}
-//		
-//		return Collections.unmodifiableList(nodes);
-//	}
 	
 	private Node getNode(Figure figure) {
 		if (nodes.contains(figure)) {

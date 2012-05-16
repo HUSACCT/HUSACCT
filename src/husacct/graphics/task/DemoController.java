@@ -32,6 +32,16 @@ public class DemoController extends DrawingController {
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
 		modules.add(taskLayer);
+		
+		ModuleDTO extraTaskLayer = new ModuleDTO();
+		extraTaskLayer.type = "layer";
+		extraTaskLayer.logicalPath = "extra_task";
+		modules.add(extraTaskLayer);
+
+		extraTaskLayer = new ModuleDTO();
+		extraTaskLayer.type = "layer";
+		extraTaskLayer.logicalPath = "task_two";
+		modules.add(extraTaskLayer);		
 
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
@@ -42,6 +52,11 @@ public class DemoController extends DrawingController {
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain";
 		modules.add(domainLayer);
+		
+		domainLayer = new ModuleDTO();
+		domainLayer.type = "layer";
+		domainLayer.logicalPath = "domain_two";
+		modules.add(domainLayer);		
 //
 //		ModuleDTO testLayer = new ModuleDTO();
 //		testLayer.type = "layer";
@@ -127,6 +142,12 @@ public class DemoController extends DrawingController {
 		if (figFrom.getName().equals("presentation") && figTo.getName().equals("task")) {
 			dependencies.add(new DependencyDTO("task", "presentation", "wa", 1));
 		}
+		if (figFrom.getName().equals("presentation") && figTo.getName().equals("extra_task")) {
+			dependencies.add(new DependencyDTO("extra_task", "presentation", "wa", 1));
+		}		
+		if (figFrom.getName().equals("presentation") && figTo.getName().equals("task_two")) {
+			dependencies.add(new DependencyDTO("task_two", "presentation", "wa", 1));
+		}		
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("domain")) {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 1));
@@ -141,6 +162,10 @@ public class DemoController extends DrawingController {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 4));
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 5));
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 6));
+		}
+		
+		if (figFrom.getName().equals("domain") && figTo.getName().equals("domain_two")) {
+			dependencies.add(new DependencyDTO("domain_two", "domain", "wa", 1));
 		}
 
 		if (figFrom.getName().equals("infrastructure") && figTo.getName().equals("test")) {

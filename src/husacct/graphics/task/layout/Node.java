@@ -7,10 +7,9 @@ import java.util.Vector;
 
 import org.jhotdraw.draw.Figure;
 
-class Node {
+public class Node {
 	private Figure figure;
 	private int level = 0;
-	// private ArrayList<Node> parents = new ArrayList<Node>();
 	private ArrayList<Node> connectedTo = new ArrayList<Node>();
 
 	public Node(Figure f, int l) {
@@ -23,6 +22,9 @@ class Node {
 	}
 
 	public void connectTo(Node n) {
+		if (equals(n)) 
+			throw new IllegalArgumentException("Cannot connect a node to itself!");
+			
 		if (!connectedTo.contains(n))
 			connectedTo.add(n);
 	}
