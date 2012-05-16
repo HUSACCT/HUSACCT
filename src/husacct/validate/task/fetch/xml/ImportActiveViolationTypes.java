@@ -19,7 +19,7 @@ public class ImportActiveViolationTypes {
 			for(Element ruleTypeElement : activeViolationTypeElement.getChildren()) {				
 				final String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
 				ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey);
-				
+				activeRuleTypes.add(activeRuleType);
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
 				for(Element violationTypeElement : ruleTypeElement.getChildren()) {
 					final String violationTypeKey = violationTypeElement.getChildText("type");

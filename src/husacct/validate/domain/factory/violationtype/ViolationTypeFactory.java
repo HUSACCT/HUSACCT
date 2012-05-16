@@ -2,7 +2,7 @@ package husacct.validate.domain.factory.violationtype;
 
 import husacct.ServiceProvider;
 import husacct.define.IDefineService;
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 
 public class ViolationTypeFactory {
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();

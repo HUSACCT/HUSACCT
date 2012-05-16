@@ -1,6 +1,6 @@
 package husacct.validate.domain.factory.violationtype;
 
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.violationtype.CSharpViolationTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
@@ -15,12 +15,15 @@ import java.util.List;
 class CSharpViolationTypeFactory extends AbstractViolationType {
 	private final EnumSet<CSharpViolationTypes> defaultDependencies;
 	private final EnumSet<CSharpViolationTypes> defaultAccess;
+	private final EnumSet<CSharpViolationTypes> defaultPackaging;
 
 	public CSharpViolationTypeFactory(ConfigurationServiceImpl configuration){
 		super(configuration, "C#");
 		this.defaultDependencies = EnumSet.allOf(CSharpViolationTypes.class);
 		this.defaultAccess = EnumSet.of(CSharpViolationTypes.PUBLIC, CSharpViolationTypes.PROTECTED, CSharpViolationTypes.DEFAULT, CSharpViolationTypes.PRIVATE);
-		this.defaultDependencies.removeAll(defaultAccess);		
+		this.defaultPackaging = EnumSet.of(CSharpViolationTypes.PACKAGE, CSharpViolationTypes.CLASS);
+		this.defaultDependencies.removeAll(defaultAccess);	
+		this.defaultDependencies.removeAll(defaultPackaging);
 	}
 
 	@Override
@@ -41,12 +44,12 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 			return Collections.emptyList();
 		}
 	}
-	
+
 	@Override
 	List<IViolationType> createViolationTypesMetaData(){
 		return Arrays.asList(EnumSet.allOf(CSharpViolationTypes.class).toArray(new IViolationType[]{}));
 	}
-	
+
 	@Override
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(){		
 		return getAllViolationTypes(allViolationKeys);

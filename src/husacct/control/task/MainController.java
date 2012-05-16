@@ -23,6 +23,7 @@ public class MainController {
 		readArguments(args);
 		setControllers();
 		if(guiEnabled) openMainGui();
+		stateController.checkState();
 	}
 
 	private void readArguments(String[] args){

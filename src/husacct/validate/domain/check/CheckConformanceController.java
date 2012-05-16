@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
@@ -12,6 +12,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ public class CheckConformanceController {
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
 					configuration.addViolations(newViolations);
+					
 					if(appliedRule.exceptionRules != null){
 						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
 					}
@@ -55,6 +57,20 @@ public class CheckConformanceController {
 		else{
 			throw new ProgrammingLanguageNotFoundException();
 		}
+	}
+	
+	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
+		return new RuleDTO[]{};
+	}
+	
+	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
+		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
+		for(RuleDTO rule : allCurrentRules){
+			if(rule.equals(toValidateRule)){
+				allCurrentRules.remove(rule);
+			}
+		}
+		return allCurrentRules;
 	}
 
 	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
