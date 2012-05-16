@@ -55,16 +55,16 @@ public class WorkspaceController {
 		ServiceProvider.getInstance().resetServices();
 	}
 	
-	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
+	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
-		workspaceResource.save(document, dataValues);
+		return workspaceResource.save(document, dataValues);
 	}
 	
-	public void loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
+	public boolean loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document doc = workspaceResource.load(dataValues);
-		loadWorkspace(doc);
+		return loadWorkspace(doc);
 	}
 	
 	public Document getWorkspaceData(){
@@ -87,7 +87,7 @@ public class WorkspaceController {
 		return doc;
 	}
 
-	public void loadWorkspace(Document document){
+	public boolean loadWorkspace(Document document){
 		try {
 			List<ISaveable> savableServices = getSaveableServices();
 			if(document.hasRootElement()){
@@ -101,11 +101,13 @@ public class WorkspaceController {
 					}
 				}
 			}
+			return true;
 		} catch (Exception exception){
 			String message = "Unable to load workspacedata\n\n" + exception.getMessage();
 			IControlService controlService = ServiceProvider.getInstance().getControlService();
 			controlService.showErrorMessage(message);
 		}
+		return false;
 	}
 	
 	private List<ISaveable> getSaveableServices() {

@@ -1,7 +1,10 @@
 package husacct.control.presentation.workspace;
 
-import husacct.control.presentation.workspace.savers.ISaverFrame;
-import husacct.control.presentation.workspace.savers.SaverFrameFactory;
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.control.presentation.workspace.loaders.LoaderPanel;
+import husacct.control.presentation.workspace.savers.SaverPanel;
+import husacct.control.presentation.workspace.savers.SaverPanelFactory;
 import husacct.control.task.MainController;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -9,14 +12,16 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,81 +32,101 @@ public class SaveWorkspaceDialog extends JDialog{
 	private MainController mainController;
 	private JList saverList;
 	private List<String> saverListData;
-	private JButton next, cancel;
+	private JButton saveButton, cancelButton;
+	
+	private JPanel saverPanelContainer;
+	private JPanel savePanel;
+	private SaverPanel selectedSaverPanel;
+	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public SaveWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
+		this.setTitle("Save Workspace");
 		this.mainController = mainController;
 		this.setup();
 		this.setSavers();
 		this.addComponents();
 		this.setListeners();
+		this.setResizable(true);
 		this.setVisible(true);
 	}
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setLayout(new FlowLayout());
-		this.setSize(new Dimension(300, 400));
+		this.setSize(new Dimension(500, 380));
 		this.setLocationRelativeTo(getRootPane());
 	}
 	
 	private void setSavers(){
-		List<String> workspaceResources = ResourceFactory.getAvailableResources();
-		saverListData = workspaceResources;
+		List<String> savers = ResourceFactory.getAvailableResources();
+		saverListData = savers;
 	}
 	
 	private void addComponents(){
+		
 		saverList = new JList(saverListData.toArray());
 		saverList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		saverList.setLayoutOrientation(JList.VERTICAL);
 		saverList.setVisibleRowCount(-1);
-		JScrollPane listScroller = new JScrollPane(saverList);
-		listScroller.setPreferredSize(new Dimension(250, 80));
-		listScroller.setAlignmentX(LEFT_ALIGNMENT);
-		this.getContentPane().add(listScroller);
+		JScrollPane listScrollPane = new JScrollPane(saverList);
+		listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
 		
-		next = new JButton("Next");
-		next.setEnabled(false);
-		this.getContentPane().add(next);
+		savePanel = new JPanel();
+		savePanel.setLayout(new BoxLayout(savePanel, BoxLayout.Y_AXIS));
 		
-		cancel = new JButton("Cancel");
-		this.getContentPane().add(cancel);
+		saverPanelContainer = new JPanel();
+		saverPanelContainer.setPreferredSize(new Dimension(350, 300));
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		
+		saveButton = new JButton(controlService.getTranslatedString("saveButton"));
+		cancelButton = new JButton(controlService.getTranslatedString("cancelButton"));
+		
+		buttonsPanel.add(saveButton);
+		buttonsPanel.add(cancelButton);
+		
+		savePanel.add(saverPanelContainer);
+		savePanel.add(buttonsPanel);
+		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, savePanel);
+		splitPane.setDividerLocation(150);
+		splitPane.setEnabled(false);
+		add(splitPane);
 	}
 	
 	private void setListeners(){
 		saverList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
-				next.setEnabled(true);				
+				loadSelectedOpenMethodPanel();
 			}
 		});
 		
-		saverList.addMouseListener(new MouseAdapter() {
-		    public void mouseClicked(MouseEvent e) {
-		        if (e.getClickCount() == 2) {
-		        	next.doClick();
-		        }
-		    }
-		});
-		
-		cancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();				
-			}
-		});
-		
-		next.addActionListener(new ActionListener() {
+		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				openLoaderFrame();
+			}
+		});
+		
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selectedSaverPanel.validateData() && saveWorkspace()){
+					dispose();
+				}
 			}
 		});
 	}
 	
-	private void openLoaderFrame(){
-		String selectedSaver = (String) saverList.getSelectedValue();
-		ISaverFrame saverFrame = SaverFrameFactory.get(selectedSaver);
-		saverFrame.setWorkspaceController(mainController.getWorkspaceController());
-		saverFrame.setVisible(true);
+	private boolean saveWorkspace(){
+		String selectedLoader = (String) saverList.getSelectedValue();
+		HashMap<String, Object> data = selectedSaverPanel.getData();
+		return mainController.getWorkspaceController().saveWorkspace(selectedLoader, data);
+	}
+	
+	private void loadSelectedOpenMethodPanel(){
+		String selectedLoader = (String) saverList.getSelectedValue();
+		selectedSaverPanel = SaverPanelFactory.get(selectedLoader);
+		saverPanelContainer.removeAll();
+		saverPanelContainer.add(selectedSaverPanel);
+		validate();
 	}
 }
