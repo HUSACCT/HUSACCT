@@ -13,7 +13,8 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-		String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Army\\src";
+		//String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Army\\src";
+		String path = "C:/Tools/Workspaces/School/TO Blok 3 Jaar 3/SimpleTestArmy/src";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		

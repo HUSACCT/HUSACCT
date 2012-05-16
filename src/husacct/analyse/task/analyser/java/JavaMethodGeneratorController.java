@@ -97,6 +97,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			}
 			
 			if(treeType == JavaParser.BLOCK_SCOPE){
+				setSignature();
 				loopThroughBlockMethod(child);
 				deleteTreeChild(child);
 			}
@@ -106,6 +107,15 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	}
 
 	
+
+	private void setSignature() {
+		if (signature.equals("")){
+			signature = "()";
+		}
+		
+	}
+
+
 
 	private void loopThroughBlockMethod(Tree tree) {		
 		for(int i = 0; i < tree.getChildCount(); i++){
@@ -159,13 +169,13 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	private void delegateInvocation(Tree treeNode, String type) {
 		JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);
 		if (type.equals("invocConstructor")){
-			javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) treeNode);
+			javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) treeNode, belongsToClass + "." + this.name + signature);
 		}
 		else if (type.equals("invocMethod")){
-			javaInvocationGenerator.generateMethodInvocToModel((CommonTree) treeNode);
+			javaInvocationGenerator.generateMethodInvocToModel((CommonTree) treeNode, belongsToClass + "." + this.name + signature);
 		}
 		else if (type.equals("accessPropertyOrField")){
-			javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) treeNode);
+			javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) treeNode, belongsToClass + "." + this.name + signature);
 		}
 	}
 
@@ -176,9 +186,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
     } 
 	
 	private void createMethodObject(){
-		if (signature.equals("")){
-			signature = "()";
-		}
+
 		uniqueName = belongsToClass + "." + this.name + signature;
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
 	}	

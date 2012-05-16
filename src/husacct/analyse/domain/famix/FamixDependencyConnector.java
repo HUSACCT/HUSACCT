@@ -42,16 +42,36 @@ class FamixDependencyConnector {
 	void connectAssociationDependencies() {
 		for(FamixAssociation association : theModel.waitingAssociations){
 			try{
+				boolean connected = false;
 				String theClass = association.from;
 				if(!isCompleteTypeDeclaration(association.to)){
 					String classFoundInImports = findClassInImports(theClass, association.to);
 					if(!classFoundInImports.equals("")){
 						association.to = classFoundInImports;
+						connected = true;
 					}else{
 						String belongsToPackage = getPackageFromUniqueClassName(association.from);
 						String to = findClassInPackage(association.to, belongsToPackage);
 						if(!to.equals("")){
 							association.to = to;
+							connected = true;
+						}
+					}
+				}
+				if(!connected){
+					if(isInvocation(association)){
+						FamixInvocation theInvocation = (FamixInvocation)association;
+						if (theInvocation.belongsToMethod.equals("")){
+							//Then it is an attribute
+							theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
+						}
+						else{
+							//Then it is a parameter of local variable
+							theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+							if (theInvocation.to.equals("")){
+								//now it's a local variable
+								theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+							}
 						}
 					}
 				}
@@ -62,6 +82,59 @@ class FamixDependencyConnector {
 		}		
 	}	
 	
+
+
+	private String getClassForAttribute(String delcareClass, String attributeName){
+		for(FamixAttribute famixAttribute: theModel.getAttributes()){
+			if(famixAttribute.belongsToClass.equals(delcareClass)){
+				if(famixAttribute.name.equals(attributeName)){
+					return famixAttribute.declareType;
+				}
+			}
+		}
+		return "";
+	}
+	
+	private String getClassForParameter(String declareClass, String declareMethod, String attributeName){
+		for(FamixFormalParameter parameter: theModel.getParametersForClass(declareClass)){
+			if(parameter.belongsToMethod.equals(declareMethod)){
+					if(parameter.name.equals(attributeName)){
+						return parameter.declareType;
+					}
+				}
+			}		
+		return "";
+	}
+	
+	private String getClassForLocalVariable(String declareClass, String belongsToMethod, String nameOfInstance) {
+		for(FamixLocalVariable variable: theModel.getLocalVariablesForClass(declareClass)){
+				if(variable.belongsToMethod.equals(belongsToMethod)){
+					if(variable.name.equals(nameOfInstance)){
+						return variable.declareType;
+					}
+				}
+		}
+		return "";
+	}
+	
+	private boolean isInvocation(FamixAssociation association){
+		return association instanceof FamixInvocation;
+	}
+//	
+//
+//	private List<FamixInvocation> getAllInvocationsFromClass(String from, String invocationName) {
+//		List<FamixInvocation> foundInvocations = new ArrayList<FamixInvocation>();
+//		for (FamixAssociation assocation : theModel.associations){
+//			if(assocation instanceof FamixInvocation){
+//				FamixInvocation theInvocation = (FamixInvocation) assocation;
+//				if(theInvocation.belongsToMethod.equals(from) && theInvocation.nameOfInstance.equals(invocationName)){
+//					foundInvocations.add(theInvocation);
+//				}
+//			}
+//		}
+//		return foundInvocations;
+//	}
+
 	private String findClassInImports(String importingClass, String typeDeclaration){
 		List<FamixImport> imports = theModel.getImportsInClass(importingClass);
 		for(FamixImport fImport: imports){
@@ -130,4 +203,6 @@ class FamixDependencyConnector {
 			return false;
 		}
 	}
+	
+
 }
