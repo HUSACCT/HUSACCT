@@ -1,6 +1,6 @@
 package husacct.validate.task;
 
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.extensiontypes.ExtensionTypes;

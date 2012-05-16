@@ -1,24 +1,18 @@
-package husacct.validate.domain;
+package husacct.validate.domain.configuration;
 
-import husacct.validate.domain.configuration.ActiveRuleType;
-import husacct.validate.domain.configuration.ActiveViolationTypesRepository;
-import husacct.validate.domain.configuration.SeverityConfigRepository;
-import husacct.validate.domain.configuration.SeverityPerTypeRepository;
-import husacct.validate.domain.configuration.ViolationHistoryRepository;
-import husacct.validate.domain.configuration.ViolationRepository;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.AbstractMap.SimpleEntry;
+import java.util.Observable;
 
-public class ConfigurationServiceImpl {
+public class ConfigurationServiceImpl extends Observable {
 
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
@@ -101,7 +95,7 @@ public class ConfigurationServiceImpl {
 	}
 
 	public void setViolationHistory(List<ViolationHistory> list){
-		violationHistoryRepository.setViolationHistory(list);
+		violationHistoryRepository.setViolationHistories(list);
 	}
 
 	public Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
@@ -127,7 +121,6 @@ public class ConfigurationServiceImpl {
 
 	public void removeViolationHistory(Calendar date) {
 		violationHistoryRepository.removeViolationHistory(date);
-
 	}
 
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
@@ -138,12 +131,9 @@ public class ConfigurationServiceImpl {
 		return violationHistoryRepository.getViolationHistory();
 	}
 
-	public void attachViolationHistoryRepositoryObserver(ViolationHistoryRepositoryObserver observer) {
-		violationHistoryRepository.attachObserver(observer);		
-	}
-
 	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
 		if(activeViolationTypesRepository != null){
+			getActiveViolationTypes();
 			return activeViolationTypesRepository.isEnabled(programmingLanguage, ruleTypeKey, violationTypeKey);
 		}
 		else{

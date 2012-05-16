@@ -252,8 +252,7 @@ public final class FilterViolations extends JDialog  {
 		violationtypeTable.setModel(violationtypeModelFilter);
 		pathFilterTable.setModel(pathFilterModel);
 		
-		loadRuletypes();
-		loadViolationtypes();
+		loadFilterValues();
 	}
 
 	private void cancelActionPerformed() {

@@ -6,8 +6,8 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.define.IDefineService;
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.GuiController;
@@ -41,7 +41,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		this.domain = new DomainServiceImpl(configuration);
 		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
-		this.gui = new GuiController(task);
+		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 	}
 
