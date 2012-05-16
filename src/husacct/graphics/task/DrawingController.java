@@ -23,8 +23,6 @@ import org.apache.log4j.Logger;
 
 public abstract class DrawingController implements UserInputListener {
 
-	public final int ITEMS_PER_ROW = 3;
-
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
@@ -142,16 +140,14 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
+		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-		
-		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
-		drawLinesBasedOnSetting();
-
 		updateLayout();
+		drawLinesBasedOnSetting();
 	}
 
 	protected void updateLayout() {
