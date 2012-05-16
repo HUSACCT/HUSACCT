@@ -1,4 +1,4 @@
-package husacct.define.presentation.helper;
+package husacct.define.presentation.utils;
 
 public class DataHelper {
 	private long id;

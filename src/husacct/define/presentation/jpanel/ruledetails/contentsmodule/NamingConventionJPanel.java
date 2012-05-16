@@ -14,8 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
 
 public class NamingConventionJPanel extends AbstractDetailsJPanel{
