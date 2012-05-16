@@ -25,7 +25,7 @@ public class RuleDetailsJPanel extends JPanel{
 	
 	private static final long serialVersionUID = 3058476011519393145L;
 	
-	private AppliedRuleController appliedRulesController;
+	private AppliedRuleController appliedRuleController;
 	private Logger logger;
 	
 	private JLabel fromModuleLabel;
@@ -41,7 +41,7 @@ public class RuleDetailsJPanel extends JPanel{
 	
 	public RuleDetailsJPanel(AppliedRuleController appliedRulesController) {
 		super();
-		this.appliedRulesController = appliedRulesController;
+		this.appliedRuleController = appliedRulesController;
 		this.logger = Logger.getLogger(RuleDetailsJPanel.class);
 	}
 
@@ -151,8 +151,8 @@ public class RuleDetailsJPanel extends JPanel{
 	
 	private void createFromModuleJComboBox() {
 		this.fromModuleJComboBox = new JComboBox();
-		String currentModuleName = appliedRulesController.getCurrentModuleName();
-		Long currentModuleID = appliedRulesController.getCurrentModuleId();
+		String currentModuleName = appliedRuleController.getCurrentModuleName();
+		Long currentModuleID = appliedRuleController.getCurrentModuleId();
 		
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 		DataHelper datahelper = new DataHelper();
@@ -174,7 +174,7 @@ public class RuleDetailsJPanel extends JPanel{
 	
 	private void createToModuleJComboBox() {
 		this.toModuleJComboBox = new JComboBox();
-		this.toModuleJComboBox.setModel(this.appliedRulesController.loadModulesToCombobox());
+		this.toModuleJComboBox.setModel(this.appliedRuleController.loadModulesToCombobox());
 	}
 	
 	private void addEnabledComponents(GridBagConstraints gridBagConstraints){
@@ -204,7 +204,7 @@ public class RuleDetailsJPanel extends JPanel{
 	public HashMap<String, Object> saveToHashMap(){
 		HashMap<String, Object> ruleDetails = saveDefaultDataToHashMap();
 		
-		String ruleTypeKey = appliedRulesController.getSelectedRuleTypeKey();
+		String ruleTypeKey = appliedRuleController.getSelectedRuleTypeKey();
 		if (ruleTypeKey.equals("IsNotAllowedToUse")){
 			saveIsNotAllowedToUse(ruleDetails);
 		} else if (ruleTypeKey.equals("IsAllowedToUse")){
