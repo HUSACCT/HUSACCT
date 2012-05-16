@@ -64,7 +64,7 @@ public class TaskServiceImpl{
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
-			return filterController.filterViolations(true, getAllViolations().getValue());
+			return filterController.filterViolations(true, violations);
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {

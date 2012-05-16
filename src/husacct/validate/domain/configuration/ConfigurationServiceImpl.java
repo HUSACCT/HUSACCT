@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
+import java.util.Observer;
 
-public class ConfigurationServiceImpl extends Observable {
+public class ConfigurationServiceImpl {
 
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
@@ -139,5 +139,8 @@ public class ConfigurationServiceImpl extends Observable {
 		else{
 			return true;
 		}
+	}
+	public void attachViolationHistoryRepositoryObserver(Observer observer) {
+		violationHistoryRepository.addObserver(observer);
 	}
 }

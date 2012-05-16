@@ -201,7 +201,7 @@ public final class FilterViolations extends JDialog  {
 		String[] columnNamesPath = {" ", ValidateTranslator.getValue("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
-
+			private static final long serialVersionUID = -7173080075671054375L;
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -217,7 +217,7 @@ public final class FilterViolations extends JDialog  {
 		};
 
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
-
+			private static final long serialVersionUID = -9191282154177444964L;
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -233,7 +233,7 @@ public final class FilterViolations extends JDialog  {
 		};
 
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
-
+			private static final long serialVersionUID = 1832644249597223838L;
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, true};
 
