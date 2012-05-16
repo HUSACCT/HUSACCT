@@ -3,6 +3,7 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
+import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Layer;
@@ -178,6 +179,25 @@ public class AppliedRuleController extends PopUpController {
 	 * Saving
 	 */
 	public void save(String ruleTypeKey, String description, String[] dependencies, String regex,long moduleFromId, long moduleToId, boolean isEnabled) {
+		//SUPER HOTFIX
+		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
+		
+		for (CategoryDTO categorie : categories){
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			//Get currently selected RuleType
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
+					ArrayList<String> tmpList = new ArrayList<String>();
+					
+					for (ViolationTypeDTO vt : ruleTypeDTO.violationTypes){
+						tmpList.add(vt.key.toString());
+					}	
+					dependencies = tmpList.toArray(new String[tmpList.size()]);
+				}
+			}
+		}
+		
+		
 		try {
 			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
 				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFromId, moduleToId, isEnabled);
