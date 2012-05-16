@@ -2,8 +2,8 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
-import husacct.control.presentation.util.AboutHusacctFrame;
-import husacct.control.presentation.util.SetApplicationFrame;
+import husacct.control.presentation.util.AboutDialog;
+import husacct.control.presentation.util.SetApplicationDialog;
 
 import javax.swing.JOptionPane;
 
@@ -19,7 +19,7 @@ public class ApplicationController {
 	}
 
 	public void showApplicationDetailsGui(){
-		new SetApplicationFrame(ApplicationController.mainController);
+		new SetApplicationDialog(ApplicationController.mainController);
 	}
 	
 	public void setApplicationData(ApplicationDTO applicationDTO) {
@@ -33,7 +33,7 @@ public class ApplicationController {
 	}
 	
 	public void showAboutHusacctGui(){
-		new AboutHusacctFrame();
+		new AboutDialog(ApplicationController.mainController);
 	}
 	
 	public static void showErrorMessage(String message){

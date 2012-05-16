@@ -18,23 +18,32 @@ public class FileManager {
 	}
 
 	public File getFile() {
-		return this.file;
+		return file;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
+	public void setFile(File selectedFile) {
+		file = selectedFile;
+		addFileExtensionIfMissing();
 	}
 
 	public FileOutputStream createOutputStream() throws FileNotFoundException {
-		this.outputstream = new FileOutputStream(file);
-		return this.outputstream;
+		outputstream = new FileOutputStream(file);
+		return outputstream;
 	}
 
 	public FileOutputStream getOutputStream() {
-		return this.outputstream;
+		return outputstream;
 	}
 
 	public void closeOutputStream() throws IOException {
-		this.outputstream.close();
+		outputstream.close();
+	}
+
+	private void addFileExtensionIfMissing() {
+		String absolutePathName = file.getAbsolutePath();
+		String extension = absolutePathName.substring(absolutePathName.length() - 4, absolutePathName.length());
+		if (!extension.equalsIgnoreCase(".png")) {
+			file = new File(absolutePathName + ".png");
+		}
 	}
 }

@@ -3,7 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.JFrameSoftwareUnit;
+import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -33,7 +33,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements ActionListener, Observer, ILocaleChangeListener {
+public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JTableSoftwareUnits softwareUnitsTable;
@@ -110,7 +110,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		if (DefinitionController.getInstance().isAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
-				JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
+				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
 				softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
 				softwareUnitFrame.setVisible(true);
 			} else {

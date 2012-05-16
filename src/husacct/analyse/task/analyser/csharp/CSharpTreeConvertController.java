@@ -14,7 +14,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 
 	private List<List<CommonTree>> namespaceTrees;
 	private List<CommonTree> classTrees;
-	private List<CommonTree> usageTrees;
+	private List<List<CommonTree>> usageTrees;
 	private List<CommonTree> methodTrees;
 	private List<CommonTree> attributeTrees;
 	private List<CommonTree> exceptionTrees;
@@ -25,6 +25,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 	private String tempClassName = "";
 	private String tempNamespaceName = "";
 	private List<CommonTree> tempNamespaceTrees;
+	private List<CommonTree> tempUsingTrees;
 	private List<CSharpData> indentClassLevel;
 	private List<CSharpData> indentNamespaceLevel;
 	private String tempFullNamespaceName;
@@ -96,6 +97,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		}
 		if (isClassName) {
 			tempClassName = tree.getText();
+			
 			isClassName = false;
 		}
 		if (type == CLASS || type == INTERFACE || type == STRUCT) {
@@ -104,8 +106,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		}
 		if (isClassPart && type == FORWARDCURLYBRACKET) {
 			isClassPart = false;
-			indentClassLevel.add(new CSharpData(tempClassName, indentLevel,
-					tempFullNamespaceName));
+			indentClassLevel.add(new CSharpData(tempClassName, indentLevel,tempFullNamespaceName));
 		}
 		if (isClassPart) {
 			if (abstractTree != null) {
@@ -124,13 +125,12 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
 		CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
 		namespaceTrees = new ArrayList<List<CommonTree>>();
-		usageTrees = new ArrayList<CommonTree>();
+		usageTrees = new ArrayList<List<CommonTree>>();
 		classTrees = new ArrayList<CommonTree>();
 		attributeTrees = new ArrayList<CommonTree>();
 		methodTrees = new ArrayList<CommonTree>();
 		exceptionTrees = new ArrayList<CommonTree>();
 		walkAST(compilationUnitTree.getChildren());
-		new CSharpImportGenerator(usageTrees);
 		new CSharpClassGenerator(classTrees, indentClassLevel);
 		CSharpNamespaceGenerator generator = new CSharpNamespaceGenerator();
 		for (List<CommonTree> trees : namespaceTrees) {
@@ -197,8 +197,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 			isNamespacePart = false;
 			namespaceTrees.add(tempNamespaceTrees);
 			tempNamespaceTrees = new ArrayList<CommonTree>();
-			indentNamespaceLevel.add(new CSharpData(tempNamespaceName,
-					indentLevel));
+			indentNamespaceLevel.add(new CSharpData(tempNamespaceName, indentLevel));
 		}
 		if (isNamespacePart) {
 			tempNamespaceTrees.add(tree);
@@ -222,13 +221,15 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		int type = tree.getType();
 		if (type == USING) {
 			usage = true;
+			usageTrees.add(tempUsingTrees);
+			tempUsingTrees = new ArrayList<CommonTree>();
 		}
 		if (usage) {
 			if (type != USING) {
-				usageTrees.add(tree);
+				tempUsingTrees.add(tree);
 			}
 		}
-		if (usage && tree.getType() == SEMICOLON) {
+		if (usage && type == SEMICOLON) {
 			usage = false;
 		}
 		return usage;
@@ -265,6 +266,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		boolean isPartOfMethod = false;
 		boolean isPartOfException = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
+		tempUsingTrees = new ArrayList<CommonTree>();
 
 		for (CommonTree tree : children) {
 			setIndentLevel(tree);

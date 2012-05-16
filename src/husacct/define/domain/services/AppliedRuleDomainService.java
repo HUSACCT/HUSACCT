@@ -17,7 +17,12 @@ public class AppliedRuleDomainService {
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, long moduleFromId, long moduleToId, boolean enabled) {
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
-		Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
+		Module moduleTo;
+		if (moduleToId != -1){
+			moduleTo = SoftwareArchitecture.getInstance().getModuleById(moduleToId);
+		} else {
+			moduleTo = new Module();
+		}
 
 		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex, moduleTo, moduleFrom, enabled);
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
