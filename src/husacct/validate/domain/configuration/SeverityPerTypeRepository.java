@@ -2,7 +2,6 @@ package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
@@ -17,28 +16,28 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-public class SeverityPerTypeRepository {
-	
+class SeverityPerTypeRepository {
+
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
-	
+
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
 	private final RuleTypesFactory ruletypefactory;
 	private final ConfigurationServiceImpl configuration;		
-	
+
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
 	private AbstractViolationType violationtypefactory;	
-	
 
-	public SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
+
+	SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
 		this.ruletypefactory = ruletypefactory;
-	
+
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
 
-	public void initializeDefaultSeverities() {		
+	void initializeDefaultSeverities() {		
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
 			severitiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));
 			defaultSeveritiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));
@@ -47,9 +46,9 @@ public class SeverityPerTypeRepository {
 
 	private HashMap<String, HashMap<String, Severity>> initializeDefaultSeverityForLanguage(String programmingLanguage){
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
-		
+
 		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
-	
+
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
 			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
@@ -70,11 +69,11 @@ public class SeverityPerTypeRepository {
 	}
 
 
-	public HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypePerProgrammingLanguage() {
+	HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypePerProgrammingLanguage() {
 		return severitiesPerTypePerProgrammingLanguage;
 	}
 
-	public Severity getSeverity(String language, String key){
+	Severity getSeverity(String language, String key){
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(language);
 		if(severityPerType == null){
 			throw new SeverityNotFoundException();
@@ -90,7 +89,7 @@ public class SeverityPerTypeRepository {
 		}
 	}
 
-	public void restoreDefaultSeverity(String language, String key){
+	void restoreDefaultSeverity(String language, String key){
 		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language);
 
 		//if there is no value, autmatically the default severities will be applied
@@ -122,15 +121,15 @@ public class SeverityPerTypeRepository {
 		}
 	}
 
-	public void restoreAllToDefault(String programmingLanguage){
+	void restoreAllToDefault(String programmingLanguage){
 		initializeDefaultSeverityForLanguage(programmingLanguage);
 	}
 
-	public void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){
+	void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){
 		this.severitiesPerTypePerProgrammingLanguage = severitiesPerTypePerProgrammingLanguage;
 	}
 
-	public void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
+	void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
 		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(language);
 
 		for(Entry<String, Severity> entry : severityMap.entrySet()){
@@ -139,7 +138,7 @@ public class SeverityPerTypeRepository {
 			}
 			local.put(entry.getKey(), entry.getValue());
 		}
-		
+
 		severitiesPerTypePerProgrammingLanguage.remove(language);
 		severitiesPerTypePerProgrammingLanguage.put(language, local);
 	}

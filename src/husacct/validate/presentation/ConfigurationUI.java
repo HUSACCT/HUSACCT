@@ -1,17 +1,18 @@
 package husacct.validate.presentation;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
-
 import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends javax.swing.JInternalFrame {
@@ -26,12 +27,16 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
+	private List<LanguageSeverityConfiguration> tabs;
 	
 	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 
 	public ConfigurationUI(TaskServiceImpl ts) {
+		tabs = new ArrayList<LanguageSeverityConfiguration>();
+		
 		this.taskServiceImpl = ts;
 		severities = ts.getAllSeverities();
+		
 		initComponents();
 		loadGUIText();
 	}
@@ -170,7 +175,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		
 		for (int i = 0; i < severityModel.getRowCount(); i++) {
 			if(severityModel.getValueAt(i, 0).toString().isEmpty()){
-				JOptionPane.showMessageDialog(null, "SeverityNameNotSet, Change The name to save the severities", "SeverityNameNotSet", JOptionPane.INFORMATION_MESSAGE);
+				IControlService controlServiceImpl = ServiceProvider.getInstance().getControlService();
+				controlServiceImpl.showErrorMessage("SeverityNameNotSet, Change The name to save the severities");
 				return;
 			}
 			try{
@@ -186,8 +192,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 //		taskServiceImpl.applySeverities(list);
 		taskServiceImpl.addSeverities(severities);
 		loadSeverity();
-		removeLanguageTabs();
-		loadLanguageTabs();
+//		removeLanguageTabs();
+//		loadLanguageTabs();
 	}
 
 	private void cancelActionPerformed() {
@@ -212,8 +218,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		cancel.setText(ValidateTranslator.getValue("Cancel"));
 
 		loadModels();
-		removeLanguageTabs();
-		loadLanguageTabs();
+		setLanguageTabsLanguage();
 	}
 	
 	private void loadModels(){
@@ -237,27 +242,26 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			model.removeRow(0);
 		}
 	}
-
+	
+	private void setLanguageTabsLanguage(){
+		if(jTabbedPane1.getTabCount() == 1){
+			loadLanguageTabs();
+			return;
+		}
+		for (LanguageSeverityConfiguration panel : tabs){
+			panel.setText();
+		}
+	}
+	
 	private void loadLanguageTabs() {
 		for (String language : taskServiceImpl.getAvailableLanguages()) {
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl.getAllSeverities(), taskServiceImpl);
+			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl, severities);
 			jTabbedPane1.addTab(language, lcp);
+			tabs.add(lcp);
 		}
 		if (taskServiceImpl.getAvailableLanguages().length == 0) {
 			logger.error("No programming language set");
 			jTabbedPane1.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
-		}
-	}
-
-	private void removeLanguageTabs() {
-		for(int i = 0; i < jTabbedPane1.getTabCount(); i++){
-			final String tabTitle = jTabbedPane1.getTitleAt(i);
-			for(String language : taskServiceImpl.getAvailableLanguages()){
-				if(tabTitle.equals(language)){
-					jTabbedPane1.remove(i);
-					i--;
-				}
-			}
 		}
 	}
 }
