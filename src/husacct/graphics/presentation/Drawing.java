@@ -57,7 +57,7 @@ public class Drawing extends QuadTreeDrawing {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 		for (Figure jhotdrawfigure : getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (figure.isModule()) {
+			if (figure.isModule() && !figure.getClass().getName().equals("ParentFigure")) {
 				moduleFigures.add(figure);
 			}
 		}
@@ -76,10 +76,10 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	@Override
-	public boolean add(Figure f) {
+	public boolean add(Figure figure) {
 		// this triggers at least the minimum sizes
-		f.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
-		return super.add(f);
+		figure.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
+		return super.add(figure);
 	}
 
 	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList) {

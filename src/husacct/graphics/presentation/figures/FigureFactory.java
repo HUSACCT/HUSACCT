@@ -106,4 +106,8 @@ public final class FigureFactory {
 			return new ModuleFigure(name, type);
 		}
 	}
+
+	public ParentFigure createParentFigure(String parentName) {
+		return new ParentFigure(parentName);
+	}
 }

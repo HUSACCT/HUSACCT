@@ -1,6 +1,7 @@
 package husacct.graphics.task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
@@ -10,6 +11,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
+import husacct.graphics.presentation.figures.NamedFigure;
 
 import org.apache.log4j.Logger;
 
@@ -54,6 +56,9 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
 		if (!figureFrom.equals(figureTo)) {
+			System.out.println("--------------------====---------------");
+			System.out.println(((NamedFigure) figureFrom).getName());
+			System.out.println(((NamedFigure) figureTo).getName());
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};
@@ -111,21 +116,23 @@ public class AnalysedController extends DrawingController {
 	}
 	
 	private void getAndDrawModulesIn(String[] parentNames) {
-		ArrayList<AnalysedModuleDTO> allChildren = new ArrayList<AnalysedModuleDTO>(); 
+		HashMap<String, ArrayList<AnalysedModuleDTO>> allChildren = new HashMap<String, ArrayList<AnalysedModuleDTO>>(); 
 		for(String parentName : parentNames){
 			AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
 			if (parentName.equals("")) {
 				drawArchitecture(getCurrentDrawingDetail());
 			} else if (children.length > 0) {
 //				setCurrentPath(parentName);
+				ArrayList<AnalysedModuleDTO> knownChildren = new ArrayList<AnalysedModuleDTO>();
 				for(AnalysedModuleDTO child : children){
-					allChildren.add(child);
+					knownChildren.add(child);
 				}
+				allChildren.put(parentName, knownChildren);
 			} else {
 				logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
 			}
 		}
-		drawModulesAndLines(allChildren.toArray(new AnalysedModuleDTO[]{}));
+		drawModulesAndLines(allChildren);
 	}
 
 	@Override

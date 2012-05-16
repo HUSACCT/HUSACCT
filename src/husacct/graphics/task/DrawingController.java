@@ -1,9 +1,12 @@
 package husacct.graphics.task;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
@@ -13,6 +16,7 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
+import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import javax.swing.JInternalFrame;
@@ -145,6 +149,23 @@ public abstract class DrawingController implements UserInputListener {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 		updateLayout();
+		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
+		drawLinesBasedOnSetting();
+	}
+	
+	protected void drawModulesAndLines(HashMap<String, ArrayList<AnalysedModuleDTO>> modules) {
+		clearDrawing();
+		for (String parentName : modules.keySet()) {
+			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
+			for(AnalysedModuleDTO dto : modules.get(parentName)){
+				BaseFigure generatedFigure = figureFactory.createFigure(dto);
+				parentFigure.addChildFigure(generatedFigure);
+//				drawing.add(generatedFigure);
+				figureMap.linkModule(generatedFigure, dto);
+			}
+			drawing.add(parentFigure);
+		}
+//		updateLayout();
 		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
 		drawLinesBasedOnSetting();
 	}
