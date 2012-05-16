@@ -25,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 public class GraphicsFrame extends JInternalFrame {
 	protected IControlService controlService;
@@ -45,6 +46,8 @@ public class GraphicsFrame extends JInternalFrame {
 	int menuItemMaxHeight = 45;
 
 	private JButton goToParentMenu, refreshMenu, exportToImageMenu, rootLocationButton;
+	private String[] violationColumnNamesArray;
+	private String[] dependencyColumnNamesArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
 
@@ -91,6 +94,9 @@ public class GraphicsFrame extends JInternalFrame {
 		add(menuBar, BorderLayout.NORTH);
 		add(locationBar, BorderLayout.SOUTH);
 
+		dependencyColumnNamesArray = new String[] { "From", "To", "LineNumber", "DependencyType" };
+		violationColumnNamesArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
+
 		updateComponents();
 
 		layoutComponents(false);
@@ -102,14 +108,12 @@ public class GraphicsFrame extends JInternalFrame {
 		showViolationsOptionMenu.setText(controlService.getTranslatedString("ShowViolations"));
 		exportToImageMenu.setText(controlService.getTranslatedString("ExportToImage"));
 
-		String[] dependencyColumnNamesArray = { "From", "To", "LineNumber", "DependencyType" };
 		dependencyColumnNames = new ArrayList<String>();
 		for (String key : dependencyColumnNamesArray) {
 			dependencyColumnNames.add(controlService.getTranslatedString(key));
 		}
 
 		violationColumnNames = new ArrayList<String>();
-		String[] violationColumnNamesArray = { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
 		for (String key : violationColumnNamesArray) {
 			violationColumnNames.add(controlService.getTranslatedString(key));
 		}
@@ -343,11 +347,12 @@ public class GraphicsFrame extends JInternalFrame {
 
 			String severity = "" + violation.severityValue;
 			String line = "" + violation.linenumber;
-
 			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
 		}
 
-		return new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[] {}));
+		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[] {}));
+		setColumnWidths(propertiesTable);
+		return propertiesTable;
 	}
 
 	public void hidePropertiesPane() {
@@ -364,7 +369,23 @@ public class GraphicsFrame extends JInternalFrame {
 		for (DependencyDTO dependency : dependencyDTOs) {
 			rows.add(new String[] { dependency.from, dependency.to, "" + dependency.lineNumber, dependency.type });
 		}
-		return new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[]{}));
+		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[] {}));
+		setColumnWidths(propertiesTable);
+		return propertiesTable;
+	}
+	
+	private void setColumnWidths(JTable table){
+		TableColumn column = null;
+		int lineNumberColumnWidth = 50;
+		int otherColumnWidth = (getWidth() / (table.getColumnCount())) - (lineNumberColumnWidth / table.getColumnCount());
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			column = table.getColumnModel().getColumn(i);
+			if (dependencyColumnNamesArray[i] == "LineNumber") {
+				column.setPreferredWidth(lineNumberColumnWidth);
+			} else {
+				column.setPreferredWidth(otherColumnWidth);
+			}
+		}
 	}
 
 	public void turnOnViolations() {
