@@ -1,14 +1,11 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,12 +72,7 @@ public class DrawingView extends DefaultDrawingView {
 
 			if (mouseButton == MouseEvent.BUTTON1) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				// if (mouseClicks == SingleClick) {
-				//
-				// BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				// figureSelected(selection);
-				// } else
-				
+
 				if (mouseClicks == DoubleClick) {
 					moduleZoom(selection);
 				}
@@ -162,13 +154,14 @@ public class DrawingView extends DefaultDrawingView {
 
 		if (hasSelection()) {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
-			
+
 			// show the selected figures on top
-			for(BaseFigure selectedFig : selection) {
+			for (BaseFigure selectedFig : selection) {
 				this.drawing.bringToFront(selectedFig);
-				//TODO also raise connection figures pointing to and from the selected figure(s)
+				// TODO also raise connection figures pointing to and from the
+				// selected figure(s)
 			}
-			
+
 			figureSelected(selection);
 		}
 	}

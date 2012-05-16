@@ -43,31 +43,31 @@ public class DemoController extends DrawingController {
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain";
 		modules.add(domainLayer);
-
-		ModuleDTO testLayer = new ModuleDTO();
-		testLayer.type = "layer";
-		testLayer.logicalPath = "test";
-		modules.add(testLayer);
-		
-		ModuleDTO testClass = new ModuleDTO();
-		testClass.type = "class";
-		testClass.logicalPath = "*";
-		//modules.add(testClass);
-		
-		ModuleDTO testModule = new ModuleDTO();
-		testModule.type = "subsystem";
-		testModule.logicalPath = "myModule";
-		modules.add(testModule);
-		
-		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
-		unrecognizableModuleTypeDTO.type = "foobar";
-		unrecognizableModuleTypeDTO.logicalPath = "tests";
-		modules.add(unrecognizableModuleTypeDTO);
-		
-		ModuleDTO component = new ModuleDTO();
-		component.type = "component";
-		component.logicalPath = "uml2component";
-		modules.add(component);
+//
+//		ModuleDTO testLayer = new ModuleDTO();
+//		testLayer.type = "layer";
+//		testLayer.logicalPath = "test";
+//		modules.add(testLayer);
+//		
+//		ModuleDTO testClass = new ModuleDTO();
+//		testClass.type = "class";
+//		testClass.logicalPath = "*";
+//		//modules.add(testClass);
+//		
+//		ModuleDTO testModule = new ModuleDTO();
+//		testModule.type = "subsystem";
+//		testModule.logicalPath = "myModule";
+//		modules.add(testModule);
+//		
+//		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
+//		unrecognizableModuleTypeDTO.type = "foobar";
+//		unrecognizableModuleTypeDTO.logicalPath = "tests";
+//		modules.add(unrecognizableModuleTypeDTO);
+//		
+//		ModuleDTO component = new ModuleDTO();
+//		component.type = "component";
+//		component.logicalPath = "uml2component";
+//		modules.add(component);
 		
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);

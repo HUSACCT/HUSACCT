@@ -14,6 +14,8 @@ import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.LayoutStrategy;
+import husacct.graphics.task.layout.SmartLayoutStrategy;
 
 import javax.swing.JInternalFrame;
 
@@ -34,7 +36,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
-	protected BasicLayoutStrategy layoutStrategy;
+	protected LayoutStrategy layoutStrategy;
 
 	protected FigureMap figureMap = new FigureMap();
 
@@ -62,7 +64,7 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 
-		layoutStrategy = new BasicLayoutStrategy(drawing);
+		layoutStrategy = new SmartLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
