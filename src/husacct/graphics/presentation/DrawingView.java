@@ -68,11 +68,6 @@ public class DrawingView extends DefaultDrawingView {
 
 			if (mouseButton == MouseEvent.BUTTON1) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				// if (mouseClicks == SingleClick) {
-				//
-				// BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				// figureSelected(selection);
-				// } else
 
 				if (mouseClicks == DoubleClick) {
 					moduleZoom(selection);

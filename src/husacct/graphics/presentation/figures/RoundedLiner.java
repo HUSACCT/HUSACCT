@@ -66,9 +66,7 @@ public class RoundedLiner implements Liner {
         
         double diffX = width/(width+height);
         double diffY = height/(width+height);
-        
-        System.out.println(diffX+","+diffY);
-        
+               
         centerPoint.x += diffX*this.distance;
         centerPoint.y += diffY*this.distance;
         Node centerNode = new Node(centerPoint);

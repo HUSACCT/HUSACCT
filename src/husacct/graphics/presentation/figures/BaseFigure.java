@@ -26,8 +26,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 
-	// private LinkedList<Connector> connectors = new LinkedList<Connector>();
-
 	public BaseFigure() {
 		super();
 	}
