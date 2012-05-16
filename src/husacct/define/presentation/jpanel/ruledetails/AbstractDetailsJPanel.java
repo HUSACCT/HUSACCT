@@ -1,38 +1,52 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
+import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
-public abstract class AbstractDetailsJPanel extends JPanel{
+public abstract class AbstractDetailsJPanel extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = -3429272079796935062L;
 	protected AppliedRuleController appliedRuleController;
 	protected Logger logger;
+	protected boolean isException;
+
+	private JButton configureViolationTypesJButton;
 	
 	public AbstractDetailsJPanel(AppliedRuleController appliedRuleController){
 		super();
 		this.appliedRuleController = appliedRuleController;
-		this.logger = Logger.getLogger(RuleDetailsJPanel.class);
+		this.logger = Logger.getLogger(AbstractDetailsJPanel.class);
+		isException = false;
 	}
 	
 	public void initGui(){
+		initGui(false);
+	}
+	
+	public void initGui(boolean isUsedAsException){
 		try {
 			this.removeAll();
 			this.setLayout(this.createRuleDetailsLayout());
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-			this.initDetails();
+			setIsUsedAsException(isUsedAsException);
+			initViolationTypes();
+			initDetails();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	protected GridBagLayout createRuleDetailsLayout() {
 		GridBagLayout ruleDetailsLayout = new GridBagLayout();
 		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
@@ -44,6 +58,32 @@ public abstract class AbstractDetailsJPanel extends JPanel{
 	
 	public abstract void initDetails();
 	
+	private void initViolationTypes() {
+		if (!isException){
+			configureViolationTypesJButton = new JButton("Configure filter");
+			configureViolationTypesJButton.addActionListener(this);
+			//TODO relocate filter button
+			//Dont add it like this. it will mess up the current layout, making it functional but not user friendly
+//			GridBagConstraints gbc = new GridBagConstraints(1, 900, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
+//			this.add(configureViolationTypesJButton, gbc);
+			configureViolationTypesJButton.setEnabled(false);
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent action) {
+		if (action.getSource() == this.configureViolationTypesJButton) {
+			this.initViolationTypeJDialog();
+		}
+		
+	}
+	
+	private void initViolationTypeJDialog() {
+		ViolationTypesJDialog violationTypesJDialog = new ViolationTypesJDialog();
+		violationTypesJDialog.setLocationRelativeTo(this.getRootPane());
+		violationTypesJDialog.setVisible(true);
+	}
+
 	public abstract HashMap<String, Object> saveToHashMap();
 
 	protected HashMap<String, Object> saveDefaultDataToHashMap() {
@@ -60,10 +100,13 @@ public abstract class AbstractDetailsJPanel extends JPanel{
 		ruleDetails.put("enabled", enabled);
 		ruleDetails.put("description", description);
 		ruleDetails.put("regex", regex);
-		ruleDetails.put("regex", violationTypes);
+		ruleDetails.put("violationTypes", violationTypes);
 		return ruleDetails;
 	}
 	
 	public abstract void updateDetails(HashMap<String, Object> ruleDetails);
 	
+	public void setIsUsedAsException(boolean isException) {
+		this.isException = isException;
+	}
 }

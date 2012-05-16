@@ -87,6 +87,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		mainPanel.add(this.appliedRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
+		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		this.ruleDetailsJPanel.initGui();
 		
@@ -256,13 +257,12 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	}
 
 	private void addException() {
-		Long selectedModuleFromId = this.appliedRuleController.getCurrentModuleId();
-		//FIXME
-//		DataHelper datahelper = (DataHelper) this.ruleDetailsJPanel.toModuleJComboBox.getSelectedItem();
-//		Long selectedModuleToId = datahelper.getId();
-		Long selectedModuleToId = -1L;
+		//TODO move this code to an event method
+			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+			long selectedModuleToId = (Long) ruleDetails.get("moduleToId");
+			this.appliedRuleController.setModuleToId(selectedModuleToId);
 		
-		ExceptionRuleJDialog exceptionFrame = new ExceptionRuleJDialog(this.appliedRuleController, this, selectedModuleFromId, selectedModuleToId);
+		ExceptionRuleJDialog exceptionFrame = new ExceptionRuleJDialog(this.appliedRuleController, this);
 		exceptionFrame.setLocationRelativeTo(exceptionFrame.getRootPane());
 		exceptionFrame.setVisible(true);
 	}

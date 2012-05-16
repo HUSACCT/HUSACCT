@@ -1,9 +1,5 @@
 package husacct.define.presentation.jpanel.ruledetails.contentsmodule;
 
-import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
-import husacct.define.task.AppliedRuleController;
-
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -16,20 +12,27 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
-public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
-	private static final long serialVersionUID = 6558565776330474148L;
-	public static final String ruleTypeKey = "VisibilityConvention";
+import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.task.AppliedRuleController;
 
+public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
+	private static final long serialVersionUID = 7255776882803354410L;
+	public static final String ruleTypeKey = "NamingConventionException";
+	
 	private JLabel moduleFromLabel;
 	private JLabel ruleEnabledLabel;
 	private JLabel descriptionLabel;
+	private JLabel regexLabel;
 	
 	public JComboBox moduleFromJComboBox;
 	public JCheckBox ruleEnabledCheckBox;
 	public JTextArea descriptionTextArea;
-	
-	public VisibilityConventionJPanel(AppliedRuleController appliedRuleController) {
+	public JTextField regexTextField;
+
+	public NamingConventionExceptionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 	}
 
@@ -37,7 +40,8 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
 	public void initDetails() {
 		this.addFromModuleComponents(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.addEnabledComponents(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.addDescriptionComponents(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.addRegexComponents(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.addDescriptionComponents(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.setSize(400, 350);
 	}
 
@@ -48,6 +52,7 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
 		DataHelper datahelper1 = (DataHelper) this.moduleFromJComboBox.getSelectedItem();
 		ruleDetails.put("moduleFromId", datahelper1.getId());
 		ruleDetails.put("enabled", this.ruleEnabledCheckBox.isSelected());
+		ruleDetails.put("regex", this.regexTextField.getText());
 		ruleDetails.put("description", this.descriptionTextArea.getText());
 		
 		return ruleDetails;
@@ -110,5 +115,14 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
 		this.descriptionTextArea.setText("");
 		JScrollPane descriptionScrollPane = new JScrollPane(this.descriptionTextArea);
 		return descriptionScrollPane;
+	}
+	
+	private void addRegexComponents(GridBagConstraints gridBagConstraints){
+		this.regexLabel = new JLabel("Regex");
+		this.add(this.regexLabel, gridBagConstraints);
+		gridBagConstraints.gridx++;
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		this.regexTextField = new JTextField();
+		this.add(this.regexTextField, gridBagConstraints);
 	}
 }

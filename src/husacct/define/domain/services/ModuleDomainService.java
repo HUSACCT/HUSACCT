@@ -33,8 +33,13 @@ public class ModuleDomainService {
 	}
 	
 	public String getModuleNameById(long moduleId) {
-		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		String moduleName = module.getName();
+		String moduleName;
+		if (moduleId != -1){
+			Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+			moduleName = module.getName();
+		} else {
+			moduleName = "";
+		}
 		return moduleName;
 	}
 
@@ -58,20 +63,37 @@ public class ModuleDomainService {
 		return moduleIdList;
 	}
 	
-	public ArrayList<Long> getSubModuleIds(Long parentModuleId) {
-		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
-		
-		ArrayList<Long> moduleIdList = new ArrayList<Long>();
-		for (Module module : parentModule.getSubModules()) {
-			moduleIdList.add(module.getId());
-			//get the submoduleIds of this submodule
-			//recursive
-			ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
-			for (Long l : subModuleIdList){
-				moduleIdList.add(l);
-			}
+	public ArrayList<Long> getSiblingModuleIds(long moduleId) {
+		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
+		if (moduleId != -1) {
+			long parentModuleId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
+			childModuleIdList = getSubModuleIds(parentModuleId);
+			
+			Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+			childModuleIdList.remove(module.getId());
 		}
-		return moduleIdList;
+		return childModuleIdList; 
+	}
+	
+	public ArrayList<Long> getSubModuleIds(Long parentModuleId) {
+		ArrayList<Long> childModuleIdList = new ArrayList<Long>();
+		
+		if (parentModuleId != -1) {
+			Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+			
+			for (Module module : parentModule.getSubModules()) {
+				childModuleIdList.add(module.getId());
+				//get the submoduleIds of this submodule
+				//recursive
+				ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
+				for (Long l : subModuleIdList){
+					childModuleIdList.add(l);
+				}
+			}
+		}else {
+			childModuleIdList = getRootModulesIds();
+		}
+		return childModuleIdList;
 	}
 	
 	
@@ -104,4 +126,5 @@ public class ModuleDomainService {
 	public void moveLayerDown(long layerId){
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
 	}
+
 }

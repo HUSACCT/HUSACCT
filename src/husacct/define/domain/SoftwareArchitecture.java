@@ -1,9 +1,9 @@
 package husacct.define.domain;
 
-import java.util.ArrayList;
-
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 public class SoftwareArchitecture {
 	
@@ -232,20 +232,20 @@ public class SoftwareArchitecture {
 	private void removeRelatedRules(Module module) {
 		//Copy all currentValues into another list to prevent ConcurrentModificationExceptions 
 		ArrayList<AppliedRule> tmpList = (ArrayList<AppliedRule>) appliedRules.clone();
-			for (AppliedRule rule : appliedRules){
-				if (rule.getModuleFrom().equals(module) || 
-						rule.getModuleTo().equals(module)){
-					tmpList.remove(rule);
-				}	
-				
-				for (AppliedRule exceptionRule : rule.getExceptions()){
-					if (exceptionRule.getModuleFrom().equals(module) || 
-							exceptionRule.getModuleTo().equals(module)){
-						rule.getExceptions().remove(exceptionRule);
-					}		
-				}
+		for (AppliedRule rule : appliedRules){
+			if (rule.getModuleFrom().equals(module) || 
+					rule.getModuleTo().equals(module)){
+				tmpList.remove(rule);
+			}	
+			
+			for (AppliedRule exceptionRule : rule.getExceptions()){
+				if (exceptionRule.getModuleFrom().equals(module) || 
+						exceptionRule.getModuleTo().equals(module)){
+					rule.getExceptions().remove(exceptionRule);
+				}		
 			}
-			appliedRules = tmpList;	
+		}
+		appliedRules = tmpList;	
 	}
 
 	private boolean hasModule(String name) 
@@ -312,7 +312,7 @@ public class SoftwareArchitecture {
 		return logicalPath;
 	}
 	
-	private long getParentModuleIdByChildId(long childModuleId) {
+	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 		for(Module module : modules) {
 			if (module.getId() != childModuleId && module.hasSubModule(childModuleId)) {

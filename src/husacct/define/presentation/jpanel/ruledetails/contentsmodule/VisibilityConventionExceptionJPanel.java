@@ -17,9 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
+public class VisibilityConventionExceptionJPanel extends AbstractDetailsJPanel{
 	private static final long serialVersionUID = 6558565776330474148L;
-	public static final String ruleTypeKey = "VisibilityConvention";
+	public static final String ruleTypeKey = "VisibilityConventionException";
 
 	private JLabel moduleFromLabel;
 	private JLabel ruleEnabledLabel;
@@ -29,7 +29,7 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
 	public JCheckBox ruleEnabledCheckBox;
 	public JTextArea descriptionTextArea;
 	
-	public VisibilityConventionJPanel(AppliedRuleController appliedRuleController) {
+	public VisibilityConventionExceptionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 	}
 

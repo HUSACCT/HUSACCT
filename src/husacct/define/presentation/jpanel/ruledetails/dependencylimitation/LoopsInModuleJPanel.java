@@ -1,8 +1,4 @@
-package husacct.define.presentation.jpanel.ruledetails.contentsmodule;
-
-import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
-import husacct.define.task.AppliedRuleController;
+package husacct.define.presentation.jpanel.ruledetails.dependencylimitation;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -17,9 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
-	private static final long serialVersionUID = 6558565776330474148L;
-	public static final String ruleTypeKey = "VisibilityConvention";
+import husacct.define.presentation.helper.DataHelper;
+import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.task.AppliedRuleController;
+
+public class LoopsInModuleJPanel extends AbstractDetailsJPanel{
+	private static final long serialVersionUID = 7498639445874148975L;
+	public static final String ruleTypeKey = "LoopsInModule";
 
 	private JLabel moduleFromLabel;
 	private JLabel ruleEnabledLabel;
@@ -29,7 +29,7 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
 	public JCheckBox ruleEnabledCheckBox;
 	public JTextArea descriptionTextArea;
 	
-	public VisibilityConventionJPanel(AppliedRuleController appliedRuleController) {
+	public LoopsInModuleJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 	}
 

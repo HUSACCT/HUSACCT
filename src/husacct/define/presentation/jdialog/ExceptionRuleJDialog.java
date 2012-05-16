@@ -42,32 +42,16 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	/**
 	 * Constructor
 	 */
-	public ExceptionRuleJDialog(AppliedRuleController appliedRulesController, AppliedRuleJDialog appliedRuleFrame, Long selectedModuleFromId, Long selectedModuleToId) {
+	public ExceptionRuleJDialog(AppliedRuleController appliedRulesController, AppliedRuleJDialog appliedRuleFrame) {
 		super();
 		this.appliedRuleController = appliedRulesController;
 		this.appliedRuleFrame = appliedRuleFrame;
 		this.factoryDetails = new FactoryDetails();
 		
 		this.initGUI();
-		this.loadComboboxes(selectedModuleFromId, selectedModuleToId);
 		this.setTextures();
 	}
-
-	private void loadComboboxes(Long selectedModuleFromId, Long selectedModuleToId) {
-//		this.ruleDetailsJPanel.fromModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
-//		this.ruleDetailsJPanel.toModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
-	}
 	
-	private void setTextures() {
-		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			this.saveButton.setText("Create");
-			this.setTitle("New exception rule");
-		} else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
-			this.saveButton.setText("Save");
-			this.setTitle("Edit exception rule");
-		}
-	}
-
 	/**
 	 * Creating Gui
 	 */
@@ -122,10 +106,8 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	private void createRuleDetailPanel() {
 		String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
-		this.ruleDetailsJPanel.initGui();
-		
-//		this.ruleDetailsPanel = new RuleDetailsJPanel(appliedRuleController);
-//		this.ruleDetailsPanel.initGui(ruleTypeKey);
+		this.ruleDetailsJPanel.setIsUsedAsException(true);
+		this.ruleDetailsJPanel.initGui(true);
 	}
 	
 	private JPanel createButtonPanel() {
@@ -140,6 +122,16 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 		this.saveButton.addActionListener(this);
 		
 		return buttonPanel;
+	}
+	
+	private void setTextures() {
+		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
+			this.saveButton.setText("Create");
+			this.setTitle("New exception rule");
+		} else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
+			this.saveButton.setText("Save");
+			this.setTitle("Edit exception rule");
+		}
 	}
 	
 	/**
@@ -162,7 +154,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 			this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
-			this.ruleDetailsJPanel.initGui();
+			this.ruleDetailsJPanel.initGui(true);
 		}
 	}
 

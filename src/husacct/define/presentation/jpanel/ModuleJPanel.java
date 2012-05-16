@@ -26,7 +26,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
+public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 

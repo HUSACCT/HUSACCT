@@ -35,7 +35,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements ActionListener, Observer, ILocaleChangeListener {
+public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
 	
