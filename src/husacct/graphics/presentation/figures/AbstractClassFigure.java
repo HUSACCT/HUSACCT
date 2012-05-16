@@ -7,8 +7,7 @@ public class AbstractClassFigure extends ClassFigure {
 
 	public AbstractClassFigure(String name) {
 		super(name);
-		
-		this.getClassNameText().set(AttributeKeys.FONT_ITALIC, true);
+		getClassNameText().set(AttributeKeys.FONT_ITALIC, true);
 	}
 
 }
