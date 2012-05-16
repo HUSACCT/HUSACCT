@@ -14,14 +14,14 @@ import java.util.List;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
-public class SmartLayoutStrategy implements LayoutStrategy {
+public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
 	private static final double HORZ_ITEM_SPACING = 35.0;
 	
 	private Drawing drawing;
 	private NodeList nodes = new NodeList();
 
-	public SmartLayoutStrategy(Drawing theDrawing) {
+	public LayeredLayoutStrategy(Drawing theDrawing) {
 		drawing = theDrawing;
 	}
 
