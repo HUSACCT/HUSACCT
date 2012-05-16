@@ -8,7 +8,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 
-class JavaAttributeGenerator {
+class JavaAttributeAndLocalVariableGenerator {
 	
 	private Boolean classScope = false;
 	private String AccesControlQualifier;
@@ -16,17 +16,24 @@ class JavaAttributeGenerator {
 	private String declareClass; //example: package.package.class
 	private String declareType = "";  //int, string, CustomClass etc
 	private int lineNumber;
+	private String belongsToMethod; //alleen voor local variables
 	
 	private ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	private String name;
 
-
-
+	public void generateAttributeModel(Tree attributeTree, String belongsToClass) {
+		startFiltering(attributeTree, belongsToClass);
+		createAttributeObject();
+	}
 	
-	
-	public void generateModel(Tree attributeTree, String belongsToClass) {
-		
+	public void generateLocalVariableModel(Tree attributeTree, String belongsToClass, String belongsToMethod){
+		this.belongsToMethod = belongsToMethod;
+		startFiltering(attributeTree, belongsToClass);
+		createLocalVariableObject();
+	}
+
+	private void startFiltering(Tree attributeTree, String belongsToClass){
 		CommonTree currentTree = (CommonTree) attributeTree;
 		CommonTree IdentTree = (CommonTree) currentTree.getFirstChildWithType(JavaParser.IDENT);
 		if(IdentTree != null){
@@ -35,9 +42,10 @@ class JavaAttributeGenerator {
 		
 		this.belongsToClass = belongsToClass;
 		lineNumber = attributeTree.getLine();
+		
 		walkThroughAST(attributeTree);
-		createAttributeObject();
 	}
+	
 
 	private void walkThroughAST(Tree tree) {
 		for(int i = 0; i < tree.getChildCount(); i++){
@@ -51,7 +59,7 @@ class JavaAttributeGenerator {
 			}else if(treeType == JavaParser.VAR_DECLARATOR_LIST){
 				setAttributeName(child);	
 			}
-			else if(treeType == JavaParser.STATIC_ARRAY_CREATOR){
+			else if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL){
 				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
 				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree);
 			} else if(treeType == JavaParser.AT){
@@ -64,7 +72,13 @@ class JavaAttributeGenerator {
 
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
+		System.out.println(declareType);
 		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+	}
+	
+	private void createLocalVariableObject() {
+		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
+		modelService.createLocalVariable("", belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	}
 
 	private void setAttributeName(Tree tree) {
@@ -114,5 +128,4 @@ class JavaAttributeGenerator {
 			}
 		}
 	}
-
 }
