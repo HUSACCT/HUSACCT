@@ -10,7 +10,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.List;
 
-public class ReportServiceImpl{
+public class ReportServiceImpl implements IReportService{
 	private final ConfigurationServiceImpl configuration;
 	ExportReportFactory reportFactory; 
 
@@ -19,14 +19,17 @@ public class ReportServiceImpl{
 		this.configuration = configuration;
 	}
 	
+	@Override
 	public String[] getExportExtentions() {
 		return new ExtensionTypes().getExtensionTypes();
 	}
-
+	
+	@Override
 	public void createReport(String fileType, String name, String path) {
 		reportFactory.exportReport(fileType, configuration.getAllViolations(), name, path, configuration.getAllSeverities());
 	}
-
+	
+	@Override
 	public void createReport(String fileType, String name, String path,
 			ViolationHistory violationHistory) {
 		reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), name, path, violationHistory.getSeverities());
