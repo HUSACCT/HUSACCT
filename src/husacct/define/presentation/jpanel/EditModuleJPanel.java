@@ -112,8 +112,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//Ignore, this method is not needed.
 	}
 
 	@Override
@@ -123,7 +122,6 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//Ignore, this method is not needed.
 	}
 }

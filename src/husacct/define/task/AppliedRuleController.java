@@ -11,7 +11,7 @@ import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jframe.JFrameAppliedRule;
+import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.presentation.utils.UiDialogs;
 
@@ -25,7 +25,7 @@ import javax.swing.DefaultComboBoxModel;
 
 public class AppliedRuleController extends PopUpController {
 
-	private JFrameAppliedRule jframeAppliedRule;
+	private AppliedRuleJDialog jframeAppliedRule;
 	private long currentAppliedRuleId;
 	private String selectedRuleTypeKey;
 	private ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();

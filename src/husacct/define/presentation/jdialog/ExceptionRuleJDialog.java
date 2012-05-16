@@ -1,6 +1,7 @@
-package husacct.define.presentation.jframe;
+package husacct.define.presentation.jdialog;
 
-import husacct.define.presentation.jpanel.ruledetails.RuleDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.PopUpController;
@@ -25,13 +26,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class JFrameExceptionRule  extends JDialog implements KeyListener, ActionListener, ItemListener{
+public class ExceptionRuleJDialog  extends JDialog implements KeyListener, ActionListener, ItemListener{
 
 	private static final long serialVersionUID = -3491664038962722000L;
 	
 	private AppliedRuleController appliedRuleController;
-	private JFrameAppliedRule appliedRuleFrame;
-	public RuleDetailsJPanel ruleDetailsPanel;
+	private AppliedRuleJDialog appliedRuleFrame;
+	private FactoryDetails factoryDetails;
+	public AbstractDetailsJPanel ruleDetailsJPanel;
 	public KeyValueComboBox exceptionRuleKeyValueComboBox;
 		
 	public JButton cancelButton;
@@ -40,10 +42,11 @@ public class JFrameExceptionRule  extends JDialog implements KeyListener, Action
 	/**
 	 * Constructor
 	 */
-	public JFrameExceptionRule(AppliedRuleController appliedRulesController, JFrameAppliedRule appliedRuleFrame, Long selectedModuleFromId, Long selectedModuleToId) {
+	public ExceptionRuleJDialog(AppliedRuleController appliedRulesController, AppliedRuleJDialog appliedRuleFrame, Long selectedModuleFromId, Long selectedModuleToId) {
 		super();
 		this.appliedRuleController = appliedRulesController;
 		this.appliedRuleFrame = appliedRuleFrame;
+		this.factoryDetails = new FactoryDetails();
 		
 		this.initGUI();
 		this.loadComboboxes(selectedModuleFromId, selectedModuleToId);
@@ -51,8 +54,8 @@ public class JFrameExceptionRule  extends JDialog implements KeyListener, Action
 	}
 
 	private void loadComboboxes(Long selectedModuleFromId, Long selectedModuleToId) {
-		this.ruleDetailsPanel.fromModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
-		this.ruleDetailsPanel.toModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
+//		this.ruleDetailsJPanel.fromModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleFromId));
+//		this.ruleDetailsJPanel.toModuleJComboBox.setModel(appliedRuleController.loadsubModulesToCombobox(selectedModuleToId));
 	}
 	
 	private void setTextures() {
@@ -96,7 +99,7 @@ public class JFrameExceptionRule  extends JDialog implements KeyListener, Action
 		this.createAppliedRuleKeyValueComboBox();
 		mainPanel.add(this.exceptionRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		this.createRuleDetailPanel();
-		mainPanel.add(this.ruleDetailsPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		
 		return mainPanel;
 	}
@@ -117,9 +120,12 @@ public class JFrameExceptionRule  extends JDialog implements KeyListener, Action
 	}
 	
 	private void createRuleDetailPanel() {
-		this.ruleDetailsPanel = new RuleDetailsJPanel(appliedRuleController);
 		String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
-		this.ruleDetailsPanel.initGui(ruleTypeKey);
+		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
+		this.ruleDetailsJPanel.initGui();
+		
+//		this.ruleDetailsPanel = new RuleDetailsJPanel(appliedRuleController);
+//		this.ruleDetailsPanel.initGui(ruleTypeKey);
 	}
 	
 	private JPanel createButtonPanel() {
@@ -155,7 +161,8 @@ public class JFrameExceptionRule  extends JDialog implements KeyListener, Action
 		if (e.getSource() == this.exceptionRuleKeyValueComboBox){
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-			this.ruleDetailsPanel.initGui(ruleTypeKey);
+			this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
+			this.ruleDetailsJPanel.initGui();
 		}
 	}
 
@@ -164,7 +171,7 @@ public class JFrameExceptionRule  extends JDialog implements KeyListener, Action
 	}
 
 	private void save() {	
-		HashMap<String, Object> ruleDetails = this.ruleDetailsPanel.saveToHashMap();
+		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 		String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 		ruleDetails.put("ruleTypeKey", ruleTypeKey);	
 		this.appliedRuleController.addException(ruleDetails);

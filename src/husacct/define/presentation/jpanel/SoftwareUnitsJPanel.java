@@ -3,7 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.JFrameSoftwareUnit;
+import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -110,7 +110,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		if (DefinitionController.getInstance().isAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
-				JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
+				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
 				softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
 				softwareUnitFrame.setVisible(true);
 			} else {

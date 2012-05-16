@@ -211,25 +211,21 @@ public class DefineServiceStub implements IDefineService{
 	}
 	
 	public Element getLogicalArchitectureData(){
-		//TODO: Implement in Construction I
 		Element e = new Element("Root Element");
 		return e;
 	}
 
 	public void loadLogicalArchitectureData(Element e){
-		//TODO: Implement in Construction I
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		//TODO: Implement in Construction I
 		Element e = new Element("Root Element");
 		return e;
 	}
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		//TODO: Implement in Construction I
 	}
 
 	@Override

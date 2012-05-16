@@ -3,7 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.AddModuleValuesJFrame;
+import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
@@ -150,7 +150,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
-		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
+		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
 		addModuleFrame.setLocationRelativeTo(addModuleFrame.getRootPane());
 		addModuleFrame.initUI();
 	}

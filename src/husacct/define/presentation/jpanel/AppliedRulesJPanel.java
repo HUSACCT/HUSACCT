@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.presentation.helper.DataHelper;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.JFrameAppliedRule;
+import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -121,7 +121,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	private void addRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
-			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, -1L);
+			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
 			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
 			appliedRuleFrame.setVisible(true);
 		} else {
@@ -133,7 +133,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if (selectedAppliedRuleId != -1){
-			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, selectedAppliedRuleId);
+			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, selectedAppliedRuleId);
 			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
 			appliedRuleFrame.setVisible(true);
 		} else {
@@ -143,6 +143,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	
 	private long getSelectedAppliedRuleId(){
 		long selectedAppliedRuleId = -1;
+//		if (appliedRulesTable))
 		try {//TODO check if selectedRow exists
 			Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
 			if (o instanceof DataHelper) {

@@ -1,4 +1,4 @@
-package husacct.define.presentation.jframe;
+package husacct.define.presentation.jdialog;
 
 import husacct.define.task.ValueInputController;
 
@@ -15,7 +15,7 @@ import javax.swing.JDialog;
  * @author Henk ter Harmsel
  *
  */
-public abstract class AbstractValuesJFrame extends JDialog implements ActionListener, KeyListener {
+public abstract class AbstractValuesJDialog extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 545921025909901624L;
 	
@@ -24,7 +24,7 @@ public abstract class AbstractValuesJFrame extends JDialog implements ActionList
 	protected JButton cancelButton;
 	protected JButton saveButton;
 	
-	public AbstractValuesJFrame() {
+	public AbstractValuesJDialog() {
 		inputController = new ValueInputController();
 		this.setModal(true);
 	}

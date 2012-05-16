@@ -1,4 +1,4 @@
-package husacct.define.presentation.jframe;
+package husacct.define.presentation.jdialog;
 
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
@@ -20,7 +20,7 @@ import javax.swing.JTextField;
  * @author Henk ter Harmsel
  *
  */
-public class AddModuleValuesJFrame extends AbstractValuesJFrame {
+public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	
@@ -35,7 +35,7 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	
 	private JComboBox moduleTypeComboBox;
 	
-	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
+	public AddModuleValuesJDialog(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
 	}

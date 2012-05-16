@@ -31,15 +31,14 @@ public class DefineServiceImpl implements IDefineService {
 		reset();
 	}
 
-	//TODO this is just a hotfix
 	private void reset() {
+		//TODO this is just a hotfix
 		defineDomainService = new SoftwareArchitectureDomainService();
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 		domainParser = new DomainParser();
 		
-		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
-		
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package husacct.define.presentation.jframe;
+package husacct.define.presentation.jdialog;
 
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.PopUpController;
@@ -17,7 +17,6 @@ import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,31 +24,20 @@ import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
-public class JFrameSoftwareUnit extends JDialog implements ActionListener, KeyListener {
+public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	
 	public JButton saveButton;
 	public JButton cancelButton;
 	
-	@Deprecated
-	public JComboBox jComboBoxSoftwareUnit;
-	
 	public AnalyzedModuleTree softwareDefinitionTree;
-	
 	private SoftwareUnitController softwareUnitController;
 	
-	public JFrameSoftwareUnit(long moduleId) {
+	public SoftwareUnitJDialog(long moduleId) {
 		super();
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
-		initUI();
-	}
-	
-	@Deprecated
-	public JFrameSoftwareUnit(SoftwareUnitController softwareUnitController) {
-		super();
-		this.softwareUnitController = softwareUnitController;
 		initUI();
 	}
 
