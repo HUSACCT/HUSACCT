@@ -2,7 +2,6 @@ package husacct.control.presentation.workspace;
 
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
-import husacct.control.presentation.workspace.loaders.LoaderPanel;
 import husacct.control.presentation.workspace.savers.SaverPanel;
 import husacct.control.presentation.workspace.savers.SaverPanelFactory;
 import husacct.control.task.MainController;
