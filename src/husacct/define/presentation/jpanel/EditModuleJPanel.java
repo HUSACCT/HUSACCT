@@ -19,11 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
 public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 
 	private static final long serialVersionUID = -9020336576931490389L;

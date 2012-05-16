@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails.contentsmodule;
 
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.GridBagConstraints;

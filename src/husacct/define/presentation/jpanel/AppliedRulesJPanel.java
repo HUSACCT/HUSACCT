@@ -1,12 +1,12 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.define.presentation.helper.DataHelper;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;

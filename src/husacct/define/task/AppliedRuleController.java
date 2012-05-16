@@ -11,8 +11,8 @@ import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.presentation.utils.UiDialogs;
 
