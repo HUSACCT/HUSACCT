@@ -4,7 +4,6 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
@@ -96,7 +95,7 @@ public class ConfigurationServiceImpl extends Observable {
 	}
 
 	public void setViolationHistory(List<ViolationHistory> list){
-		violationHistoryRepository.setViolationHistory(list);
+		violationHistoryRepository.setViolationHistories(list);
 	}
 
 	public Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
@@ -122,7 +121,6 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void removeViolationHistory(Calendar date) {
 		violationHistoryRepository.removeViolationHistory(date);
-
 	}
 
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
@@ -131,10 +129,6 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public List<ViolationHistory> getViolationHistories() {
 		return violationHistoryRepository.getViolationHistory();
-	}
-
-	public void attachViolationHistoryRepositoryObserver(ViolationHistoryRepositoryObserver observer) {
-		violationHistoryRepository.attachObserver(observer);		
 	}
 
 	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){

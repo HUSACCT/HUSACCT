@@ -284,10 +284,10 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 
 				if(violationTable.getSelectedRow() > -1){
 					int row = violationTable.convertRowIndexToModel(violationTable.getSelectedRow());
-					Violation violation = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null).get(row);
+					//Violation violation = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null).get(row);
 
-					lineNumberValueLabel.setText("" + violation.getLinenumber());
-					logicalModulesValueLabel.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+					//lineNumberValueLabel.setText("" + violation.getLinenumber());
+					//logicalModulesValueLabel.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 				} else{
 					lineNumberValueLabel.setText("");
 					logicalModulesValueLabel.setText("");
@@ -367,11 +367,11 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 			violationModel.removeRow(0);
 		}
 
-		ArrayList<Violation> violationRows = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null);
-		for (Violation violation : violationRows) {
-			String message = new Messagebuilder().createMessage(violation.getMessage());
-			violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
-		}
+		//ArrayList<Violation> violationRows = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null);
+		//for (Violation violation : violationRows) {
+		//	String message = new Messagebuilder().createMessage(violation.getMessage());
+		//	violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+		//}
 
 		//		setColumnWidth(3, 50);
 	}
@@ -392,10 +392,10 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 		shownViolationsNumber.setText("" + violationModel.getRowCount());
 		informationPanel.add(shownViolationsNumber);
 
-		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
-			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
-			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
-		}
+//		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(applyFilter.isSelected()).entrySet()) {
+//			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
+//			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
+//		}
 
 		informationPanel.updateUI();
 	}

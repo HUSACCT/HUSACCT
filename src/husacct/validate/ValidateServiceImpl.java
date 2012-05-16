@@ -41,7 +41,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		this.domain = new DomainServiceImpl(configuration);
 		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
-		this.gui = new GuiController(task);
+		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 	}
 
