@@ -71,8 +71,7 @@ public class DemoController extends DrawingController {
 
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
-		this.drawModulesAndLines(dtos);
-		updateLayout();
+		drawModulesAndLines(dtos);
 	}
 
 	@Override
