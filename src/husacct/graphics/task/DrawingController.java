@@ -45,7 +45,7 @@ public abstract class DrawingController implements UserInputListener {
 		connectionStrategy = new FigureConnectorStrategy();
 
 		initializeComponents();
-		
+
 		controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
@@ -53,7 +53,7 @@ public abstract class DrawingController implements UserInputListener {
 				refreshFrame();
 				refreshDrawing();
 			}
-		});	
+		});
 	}
 
 	private void initializeComponents() {
@@ -158,6 +158,7 @@ public abstract class DrawingController implements UserInputListener {
 		layoutStrategy.doLayout(width, height);
 	}
 
+	@Override
 	public void toggleViolations() {
 		if (areViolationsShown()) {
 			hideViolations();
@@ -165,11 +166,6 @@ public abstract class DrawingController implements UserInputListener {
 			showViolations();
 		}
 		drawLinesBasedOnSetting();
-	}
-
-	@Override
-	public void exportToImage() {
-		drawing.showExportToImagePanel();
 	}
 
 	protected void drawLinesBasedOnSetting() {
@@ -234,10 +230,15 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
-	
+
 	public abstract void refreshDrawing();
-	
-	public void refreshFrame(){
+
+	public void refreshFrame() {
 		drawTarget.refreshFrame();
+	}
+
+	@Override
+	public void exportToImage() {
+		drawing.showExportToImagePanel();
 	}
 }

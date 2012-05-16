@@ -8,8 +8,8 @@ import husacct.graphics.presentation.figures.BaseFigure;
 
 public class ViolationsDecorator implements Decorator {
 	private Color oldStrokeColor;
-	private Color severityColor;	
-	
+	private Color severityColor;
+
 	public ViolationsDecorator(Color severityColor) {
 		this.severityColor = severityColor;
 	}
@@ -17,7 +17,6 @@ public class ViolationsDecorator implements Decorator {
 	@Override
 	public void decorate(BaseFigure f) {
 		this.oldStrokeColor = f.get(AttributeKeys.STROKE_COLOR);
-		
 		f.setStrokeColor(this.severityColor);
 	}
 

@@ -53,7 +53,6 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeMouseListener() {
-
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				onMouseClicked(e);
@@ -62,11 +61,8 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void onMouseClicked(MouseEvent e) {
-
 		handleDeselect();
-
 		if (hasSelection()) {
-
 			int mouseButton = e.getButton();
 			int mouseClicks = e.getClickCount();
 
@@ -84,9 +80,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void handleDeselect() {
-
 		Set<Figure> deselectedFigures = getDeltaSelection();
-
 		if (deselectedFigures.size() > 0) {
 			BaseFigure[] deselection = new BaseFigure[deselectedFigures.size()];
 			deselection = deselectedFigures.toArray(deselection);
@@ -102,7 +96,6 @@ public class DrawingView extends DefaultDrawingView {
 	private BaseFigure[] toFigureArray(Collection<Figure> collection) {
 		BaseFigure[] retVal = new BaseFigure[collection.size()];
 		retVal = (BaseFigure[]) collection.toArray(retVal);
-
 		return retVal;
 	}
 
@@ -111,12 +104,10 @@ public class DrawingView extends DefaultDrawingView {
 		Set<Figure> selection = getSelectedFigures();
 
 		for (Figure f : previousSelection) {
-
 			if (!selection.contains(f)) {
 				deltaSelection.add(f);
 			}
 		}
-
 		return Collections.unmodifiableSet(deltaSelection);
 	}
 
@@ -139,9 +130,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeSelectionListener() {
-
 		addFigureSelectionListener(new FigureSelectionListener() {
-
 			@Override
 			public void selectionChanged(FigureSelectionEvent evt) {
 				onSelectionChanged(evt);
@@ -187,25 +176,20 @@ public class DrawingView extends DefaultDrawingView {
 	// }
 
 	protected void onKeyPressed(KeyEvent e) {
-
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_BACK_SPACE) {
-
 			moduleZoomOut();
 		} else if (key == KeyEvent.VK_ENTER) {
-
 			if (hasSelection()) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
 				moduleZoom(selection);
 			}
 		}
-
 		e.consume();
 	}
 
 	private void moduleZoomOut() {
-
 		for (UserInputListener l : listeners) {
 			l.moduleZoomOut();
 		}
