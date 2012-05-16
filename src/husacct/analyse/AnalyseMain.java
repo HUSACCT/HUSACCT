@@ -14,22 +14,19 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-		String path = "/home/thomas/Downloads/Mittchel-benchmark-73d2abb/CSharpBenchmark";
+		String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Army\\src";
 		String[] paths = new String[]{path};
-		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
+		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		
 		new FamixCreationServiceImpl();
 		
-		try {  
-	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
-	     } catch (Exception ex) { }
-		
-		ModelCreationService modelService = new FamixCreationServiceImpl();
-		System.out.println(modelService.represent());
-		new AnalyseDebuggingFrame();
-
+//		try {  
+//	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
+//	     } catch (Exception ex) { }
+//		
+//		new AnalyseDebuggingFrame();
 	}
 }	
