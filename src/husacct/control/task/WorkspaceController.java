@@ -2,6 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
+import husacct.control.IControlService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
 import husacct.control.presentation.workspace.OpenWorkspaceDialog;
@@ -87,17 +88,23 @@ public class WorkspaceController {
 	}
 
 	public void loadWorkspace(Document document){
-		List<ISaveable> savableServices = getSaveableServices();
-		if(document.hasRootElement()){
-			Element rootElement = document.getRootElement();
-			for(ISaveable service : savableServices){
-				String serviceName = service.getClass().getName();
-				List<Element> elementQuery = rootElement.getChildren(serviceName);
-				for(Element serviceDataContainer : elementQuery){
-					Element serviceData = serviceDataContainer.getChildren().get(0); 
-					service.loadWorkspaceData(serviceData);
+		try {
+			List<ISaveable> savableServices = getSaveableServices();
+			if(document.hasRootElement()){
+				Element rootElement = document.getRootElement();
+				for(ISaveable service : savableServices){
+					String serviceName = service.getClass().getName();
+					List<Element> elementQuery = rootElement.getChildren(serviceName);
+					for(Element serviceDataContainer : elementQuery){
+						Element serviceData = serviceDataContainer.getChildren().get(0); 
+						service.loadWorkspaceData(serviceData);
+					}
 				}
 			}
+		} catch (Exception exception){
+			String message = "Unable to load workspacedata\n\n" + exception.getMessage();
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			controlService.showErrorMessage(message);
 		}
 	}
 	
