@@ -135,6 +135,51 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
+	public void createLocalVariable(String belongsToMethodString,
+			String belongsToClass, String declareType, String name,
+			String uniqueName, int lineNumber) {
+
+		FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
+		famixLocalVariable.belongsToMethod = belongsToMethodString;
+		famixLocalVariable.belongsToClass = belongsToClass;
+		famixLocalVariable.declareType = declareType;
+		famixLocalVariable.name = name;
+		famixLocalVariable.uniqueName = uniqueName;
+		famixLocalVariable.lineNumber = lineNumber;
+		model.waitingStructuralEntitys.add(famixLocalVariable);
+		addToModel(famixLocalVariable);
+		FamixAssociation fAssocation = new FamixAssociation();
+		
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "declaration";
+		fAssocation.lineNumber = lineNumber;
+		model.waitingAssociations.add(fAssocation);
+	}
+	
+	@Override
+	public void createParameter(String name, String uniqueName,
+			String declareType, String belongsToClass, int lineNumber,
+			String belongsToMethod, String declareTypes) {
+		
+		FamixFormalParameter famixParameter = new FamixFormalParameter();
+		famixParameter.belongsToClass = belongsToClass;
+		famixParameter.belongsToMethod = belongsToMethod;
+		famixParameter.declareType = declareType;
+		famixParameter.lineNumber = lineNumber;
+		famixParameter.name = name;
+		famixParameter.uniqueName = uniqueName;
+		addToModel(famixParameter);
+		model.waitingStructuralEntitys.add(famixParameter);
+		FamixAssociation fAssocation = new FamixAssociation();
+		fAssocation.from = belongsToClass;
+		fAssocation.to = declareType;
+		fAssocation.type = "parameter";
+		fAssocation.lineNumber = lineNumber;
+		model.waitingAssociations.add(fAssocation);
+	}
+	
+	@Override
 	public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber) {
 		FamixAttribute famixAttribute = new FamixAttribute();
 		famixAttribute.hasClassScope = false;
@@ -347,12 +392,31 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		Package[] packagesloaded = Package.getPackages();
 		for(Package p : packagesloaded){
 			String packageName = p.getName();
-			String predictUniquename = packageName + "." + type;
-			try {
+			String newType = "";
+			if (type != null && type.length() > 0) {
+				char[] typeCharArray = type.toCharArray();
+				typeCharArray[0] = Character.toUpperCase(typeCharArray[0]);
+				newType = new String(typeCharArray);
+			}
+			String predictUniquename;
+			if(!newType.equals("")) {
+				predictUniquename = packageName + "." + newType;
+			}
+			else {
+				predictUniquename = packageName + "." + type;
+			}
+			try {	
 				Class.forName(predictUniquename);
 				return predictUniquename;
 			} catch (ClassNotFoundException e) {
-
+				predictUniquename = packageName + "." + type;
+				try {	
+					Class.forName(predictUniquename);
+					return predictUniquename;
+				} catch (ClassNotFoundException e2) {
+					
+				}
+				//TODO Logger
 			}
 		}
 		return "";
@@ -429,5 +493,9 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	public String represent(){
 		return model.toString();
 	}
+
+
+
+
 
 }

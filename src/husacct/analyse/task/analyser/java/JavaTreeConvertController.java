@@ -101,27 +101,9 @@ class JavaTreeConvertController {
                                         delegateAttribute(treeNode); 
                                         deleteTreeChild(treeNode); 
                                 } 
-                                if(nodeType == JavaParser.CLASS_CONSTRUCTOR_CALL ){ 
-                                    delegateInvocation(treeNode, "invocConstructor"); 
-                                    //ik ben er nog niet uit of deze wel gedelete mag worden
-                                } 
-                                if(nodeType == JavaParser.METHOD_CALL ){ 
-                                    if (treeNode.getChild(0).getType() == 15){ //getType omdat 15 een punt is
-                                    	delegateInvocation(treeNode, "invocMethod");
-                                    	deleteTreeChild(treeNode); 
-                                    }
-                                } 
-                                if(nodeType == JavaParser.ASSIGN ){ 
-                                    if (treeNode.getChild(0).getType() == 15){ //getType omdat 15 een punt is
-                                    	delegateInvocation(treeNode, "accessPropertyOrField");
-                                    	deleteTreeChild(treeNode); 
-                                    }
-                                } 
                                 if(nodeType == JavaParser.FUNCTION_METHOD_DECL || nodeType == JavaParser.CONSTRUCTOR_DECL || nodeType == JavaParser.VOID_METHOD_DECL){
-
-                                        delegateMethod(treeNode); 
-                                        // methodes moet je niet willen verwijderen wellicht, want er kunnen nog zoveel attributen en function calls
-                                        //in die methode zitten die je overslaat als je de tree verwijderd.
+                                        delegateMethod(treeNode);
+                                        deleteTreeChild(treeNode); 
                                 } 
                                 if(nodeType == JavaParser.THROW || nodeType == JavaParser.CATCH || nodeType == JavaParser.THROWS){
 
@@ -139,18 +121,7 @@ class JavaTreeConvertController {
         } 
         } 
     
-    private void delegateInvocation(Tree treeNode, String type) {
-		JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.theClass);
-		if (type.equals("invocConstructor")){
-			javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) treeNode);
-		}
-		else if (type.equals("invocMethod")){
-			javaInvocationGenerator.generateMethodInvocToModel((CommonTree) treeNode);
-		}
-		else if (type.equals("accessPropertyOrField")){
-			javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) treeNode);
-		}
-	}
+    
 
 	private void deleteTreeChild(Tree treeNode){ 
         for (int child = 0 ; child < treeNode.getChildCount();){ 
@@ -197,13 +168,13 @@ class JavaTreeConvertController {
     } 
     
     private void delegateAttribute(Tree attributeTree){ 
-        JavaAttributeGenerator javaAttributeGenerator = new JavaAttributeGenerator(); 
-        javaAttributeGenerator.generateModel(attributeTree, this.currentClass); 
+        JavaAttributeAndLocalVariableGenerator javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator(); 
+        javaAttributeGenerator.generateAttributeModel(attributeTree, this.currentClass); 
     } 
     
     private void delegateMethod(Tree methodTree){ 
-        JavaMethodGenerator methodGenerator = new JavaMethodGenerator(); 
-        methodGenerator.generateModelObject((CommonTree)methodTree, this.currentClass); 
+        JavaMethodGeneratorController methodGenerator = new JavaMethodGeneratorController(); 
+        methodGenerator.delegateMethodBlock((CommonTree)methodTree, this.currentClass); 
     } 
     
     private void delegateException(Tree exceptionTree){ 
