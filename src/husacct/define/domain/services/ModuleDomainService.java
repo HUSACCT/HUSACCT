@@ -98,7 +98,7 @@ public class ModuleDomainService {
 	}
 	
 	public void moveLayerUp(long layerId){
-		SoftwareArchitecture.getInstance().moveUpDown(layerId);
+		SoftwareArchitecture.getInstance().moveLayerUp(layerId);
 	}
 	
 	public void moveLayerDown(long layerId){

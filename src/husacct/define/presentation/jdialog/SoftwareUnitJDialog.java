@@ -48,7 +48,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle("New Software Unit");
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
+			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
 			
 			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -42,6 +43,9 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	
 	@Override
 	public void initUI() {
+		this.setTitle("New Module");
+		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+		
 		this.innerPanel = new JPanel();
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		this.innerPanel.setLayout(this.getGridLayout(5, 2));
