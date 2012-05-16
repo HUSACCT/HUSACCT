@@ -53,6 +53,9 @@ public abstract class CSharpGenerator {
 	protected final int DECIMAL = 197;
 	protected final int VAR = 177;
 	protected final int INTERNAL = 72;
+	protected final int THROW = 190;
+	protected final int CATCH = 192;
+	protected final int FINALLY = 193;
 	protected final int[] typeCollection = new int[] {BYTE, SBYTE, INT, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, VAR, DECIMAL, IDENTIFIER};
 	protected final int[] accessorCollection = new int[] {PRIVATE, PUBLIC, PROTECTED, INTERNAL};
 	protected ModelCreationService modelService = new FamixCreationServiceImpl();
