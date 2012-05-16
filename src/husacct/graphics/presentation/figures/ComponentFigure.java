@@ -25,14 +25,14 @@ public class ComponentFigure extends NamedFigure {
 	protected int minWidth = 130;
 	protected int minHeight = 90;
 
-	public ComponentFigure(String name) {
-		super(name, false);
+	public ComponentFigure(String figureName) {
+		super(figureName);
 
 		body = new RectangleFigure();
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		children.add(body);
 
-		text = new TextFigure(name);
+		text = new TextFigure(figureName);
 		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(text);
 
@@ -54,15 +54,15 @@ public class ComponentFigure extends NamedFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < this.minWidth) {
-			lead.x = anchor.x + this.minWidth;
+		if ((lead.x - anchor.x) < minWidth) {
+			lead.x = anchor.x + minWidth;
 		}
-		if ((lead.y - anchor.y) < this.minHeight) {
-			lead.y = anchor.y + this.minHeight;
+		if ((lead.y - anchor.y) < minHeight) {
+			lead.y = anchor.y + minHeight;
 		}
 
 		// bigger than text
-		double requestTextWidth = this.text.getBounds().width + 10;
+		double requestTextWidth = text.getBounds().width + 10;
 		if ((lead.x - anchor.x) < requestTextWidth) {
 			lead.x = anchor.x + requestTextWidth;
 		}
@@ -70,21 +70,20 @@ public class ComponentFigure extends NamedFigure {
 		body.setBounds(anchor, lead);
 
 		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - this.text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - this.text.getBounds().height) / 2);
+		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
 
-		if (this.compIconFig != null) {
-			double iconAnchorX = lead.x - 6 - this.compIcon.getWidth();
+		if (compIconFig != null) {
+			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
 			double iconAnchorY = anchor.y + 6;
-			double iconLeadX = iconAnchorX + this.compIcon.getWidth();
-			double iconLeadY = iconAnchorY + this.compIcon.getHeight();
-			this.compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX,
-					iconLeadY));
+			double iconLeadX = iconAnchorX + compIcon.getWidth();
+			double iconLeadY = iconAnchorY + compIcon.getHeight();
+			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
 		}
 
 		this.invalidate();

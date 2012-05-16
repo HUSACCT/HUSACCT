@@ -1,6 +1,6 @@
 package husacct.define.task;
 
-import husacct.define.presentation.ApplicationJFrame;
+import husacct.define.presentation.ApplicationJInternalFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 
 public class ApplicationController implements ActionListener {
-	public ApplicationJFrame jframe;
+	public ApplicationJInternalFrame jframe;
 	private static ApplicationController instance;
 	
 	private Logger logger;
@@ -26,7 +26,7 @@ public class ApplicationController implements ActionListener {
 		logger = Logger.getLogger(ApplicationController.class);
 	}
 
-	public ApplicationJFrame getApplicationFrame(){
+	public ApplicationJInternalFrame getApplicationFrame(){
 		return jframe;
 	}
 	/**
@@ -34,7 +34,7 @@ public class ApplicationController implements ActionListener {
 	 */
 	public void initUi() {
 		// Create a new instance of the jframe
-		jframe = new ApplicationJFrame();
+		jframe = new ApplicationJInternalFrame();
 
 		// This method sets the definition jpanel in the jframe.
 		DefinitionController definitionController = DefinitionController.getInstance();

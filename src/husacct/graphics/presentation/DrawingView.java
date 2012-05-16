@@ -6,8 +6,6 @@ import husacct.graphics.task.UserInputListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,37 +53,22 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeMouseListener() {
-
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				onMouseClicked(e);
 			}
 		});
-
-		addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				onMouseWheel(e);
-			}
-		});
 	}
 
 	private void onMouseClicked(MouseEvent e) {
-
 		handleDeselect();
-
 		if (hasSelection()) {
-
 			int mouseButton = e.getButton();
 			int mouseClicks = e.getClickCount();
 
 			if (mouseButton == MouseEvent.BUTTON1) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				// if (mouseClicks == SingleClick) {
-				//
-				// BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				// figureSelected(selection);
-				// } else
-				
+
 				if (mouseClicks == DoubleClick) {
 					moduleZoom(selection);
 				}
@@ -96,14 +79,8 @@ public class DrawingView extends DefaultDrawingView {
 		previousSelection.addAll(getSelectedFigures());
 	}
 
-	private void onMouseWheel(MouseWheelEvent e) {
-
-	}
-
 	private void handleDeselect() {
-
 		Set<Figure> deselectedFigures = getDeltaSelection();
-
 		if (deselectedFigures.size() > 0) {
 			BaseFigure[] deselection = new BaseFigure[deselectedFigures.size()];
 			deselection = deselectedFigures.toArray(deselection);
@@ -119,7 +96,6 @@ public class DrawingView extends DefaultDrawingView {
 	private BaseFigure[] toFigureArray(Collection<Figure> collection) {
 		BaseFigure[] retVal = new BaseFigure[collection.size()];
 		retVal = (BaseFigure[]) collection.toArray(retVal);
-
 		return retVal;
 	}
 
@@ -128,12 +104,10 @@ public class DrawingView extends DefaultDrawingView {
 		Set<Figure> selection = getSelectedFigures();
 
 		for (Figure f : previousSelection) {
-
 			if (!selection.contains(f)) {
 				deltaSelection.add(f);
 			}
 		}
-
 		return Collections.unmodifiableSet(deltaSelection);
 	}
 
@@ -156,9 +130,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeSelectionListener() {
-
 		addFigureSelectionListener(new FigureSelectionListener() {
-
 			@Override
 			public void selectionChanged(FigureSelectionEvent evt) {
 				onSelectionChanged(evt);
@@ -171,13 +143,14 @@ public class DrawingView extends DefaultDrawingView {
 
 		if (hasSelection()) {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
-			
+
 			// show the selected figures on top
-			for(BaseFigure selectedFig : selection) {
+			for (BaseFigure selectedFig : selection) {
 				this.drawing.bringToFront(selectedFig);
-				//TODO also raise connection figures pointing to and from the selected figure(s)
+				// TODO also raise connection figures pointing to and from the
+				// selected figure(s)
 			}
-			
+
 			figureSelected(selection);
 		}
 	}
@@ -203,25 +176,20 @@ public class DrawingView extends DefaultDrawingView {
 	// }
 
 	protected void onKeyPressed(KeyEvent e) {
-
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_BACK_SPACE) {
-
 			moduleZoomOut();
 		} else if (key == KeyEvent.VK_ENTER) {
-
 			if (hasSelection()) {
 				BaseFigure[] selection = toFigureArray(getSelectedFigures());
 				moduleZoom(selection);
 			}
 		}
-
 		e.consume();
 	}
 
 	private void moduleZoomOut() {
-
 		for (UserInputListener l : listeners) {
 			l.moduleZoomOut();
 		}

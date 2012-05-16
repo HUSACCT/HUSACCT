@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class SeverityConfigRepository {
+class SeverityConfigRepository {
 	private List<Severity> currentSeverities;
 	private final List<Severity> defaultSeverities;
 
@@ -20,15 +20,15 @@ public class SeverityConfigRepository {
 		initializeCurrentSeverities();
 	}
 
-	public List<Severity> getAllSeverities(){
+	List<Severity> getAllSeverities(){
 		return currentSeverities;
 	}
 
-	public void addSeverities(List<Severity> severities){
+	void addSeverities(List<Severity> severities){
 		this.currentSeverities = severities;
 	}
 
-	public Severity getSeverityByName(String severityName){
+	Severity getSeverityByName(String severityName){
 		for(Severity customSeverity : currentSeverities){
 			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getDefaultName().toLowerCase())){
 				return customSeverity;
@@ -55,11 +55,11 @@ public class SeverityConfigRepository {
 		}
 	}
 
-	public int getSeverityValue(Severity severity){
+	int getSeverityValue(Severity severity){
 		return currentSeverities.indexOf(severity);
 	}
 
-	public void restoreToDefault(){
+	void restoreToDefault(){
 		initializeCurrentSeverities();
 	}
 
@@ -73,7 +73,7 @@ public class SeverityConfigRepository {
 	private void initializeCurrentSeverities(){	
 		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
 		for(Severity severity : defaultSeverities){
-			if(!severity.getDefaultName().equals("unidentified")){
+			if(!severity.getDefaultName().toLowerCase().equals("unidentified")){
 				currentSeverities.add(severity);
 			}
 		}
