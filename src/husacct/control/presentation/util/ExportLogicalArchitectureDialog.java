@@ -1,100 +1,92 @@
-package husacct.control.presentation.workspace.loaders;
+package husacct.control.presentation.util;
 
-import husacct.control.task.WorkspaceController;
+import husacct.control.task.MainController;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashMap;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class XmlLoadFrame extends JFrame implements ILoaderFrame{
+
+public class ExportLogicalArchitectureDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private WorkspaceController workspaceController;
+	private MainController mainController;
 	
 	private JLabel pathLabel;
 	private JTextField pathText;
-	private JButton browseButton, openButton;
-	
+	private JButton browseButton, saveButton;
+
 	private File selectedFile;
-	
-	public XmlLoadFrame(){
-		super();
-		setTitle("Load XML");
-	}
-	
-	public void setWorkspaceController(WorkspaceController workspaceController) {
-		this.workspaceController = workspaceController;
+
+	public ExportLogicalArchitectureDialog(MainController mainController) {
+		super(mainController.getMainGui(), true);
+		this.mainController = mainController;
+		setTitle("Export Logical Architecture");
 		setup();
 		addComponents();
-		setListeners();		
+		setListeners();
+		this.setVisible(true);
 	}
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
-		this.setSize(new Dimension(350, 120));
-		this.setLocationRelativeTo(getRootPane());
+		this.setSize(new Dimension(350, 100));
+		DialogUtils.alignCenter(this);
 	}
-	
+
 	private void addComponents(){
 		pathLabel = new JLabel("Path");
 		pathText = new JTextField(20);
 		browseButton = new JButton("Browse");
-		openButton = new JButton("Open");
-		openButton.setEnabled(false);
+		saveButton = new JButton("Export");
+		saveButton.setEnabled(false);
 		pathText.setEnabled(false);
-		
+
 		add(pathLabel);
 		add(pathText);
 		add(browseButton);
-		add(openButton);
+		add(saveButton);
 	}
-	
+
 	private void setListeners(){
 		browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showFileDialog();				
 			}
 		});
-		openButton.addActionListener(new ActionListener() {
+		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				load();
+				mainController.getImportExportController().exportLogicalArchitecture(selectedFile);
+				dispose();
 			}
 		});
 	}
-	
+
 	protected void showFileDialog() {
 		JFileChooser chooser = new JFileChooser();
+		chooser.setApproveButtonText("Export");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
 		chooser.setFileFilter(filter);
-	    int returnVal = chooser.showOpenDialog(this);
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       setFile(chooser.getSelectedFile());	            
-	    }
+		int returnVal = chooser.showOpenDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			setFile(chooser.getSelectedFile());	            
+		}
 	}
 
 	private void setFile(File file) {
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
-		openButton.setEnabled(true);
+		saveButton.setEnabled(true);
 	}
-	
-	protected void load() {
-		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("file", selectedFile);
-		workspaceController.loadWorkspace("xml", data);
-		dispose();
-	}	
-
 }

@@ -1,15 +1,15 @@
-package husacct.control.presentation.workspace.loaders;
+package husacct.control.presentation.workspace.savers;
 
 
-public class LoaderFrameFactory {
+public class SaverPanelFactory {
 
-	public static ILoaderFrame get(String identifier){
+	public static SaverPanel get(String identifier){
         try {
             ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
-            String classNameToBeLoaded = "husacct.control.presentation.workspace.loaders." + identifier + "LoadFrame";
-            Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
+            String classNameToBeLoaded = "husacct.control.presentation.workspace.savers." + identifier + "SavePanel";
+			Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
             Object instance = myClass.newInstance();
-            return (ILoaderFrame) instance;
+            return (SaverPanel) instance;
         } catch (SecurityException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
@@ -22,6 +22,6 @@ public class LoaderFrameFactory {
             e.printStackTrace();
         }
         
-        return new XmlLoadFrame();
+        return new XmlSavePanel();
 	}
 }

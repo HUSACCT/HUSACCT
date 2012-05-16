@@ -2,10 +2,11 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
+import husacct.control.IControlService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
-import husacct.control.presentation.workspace.OpenWorkspaceFrame;
-import husacct.control.presentation.workspace.SaveWorkspaceFrame;
+import husacct.control.presentation.workspace.OpenWorkspaceDialog;
+import husacct.control.presentation.workspace.SaveWorkspaceDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -33,11 +34,11 @@ public class WorkspaceController {
 	}
 	
 	public void showOpenWorkspaceGui() {
-		new OpenWorkspaceFrame(mainController);
+		new OpenWorkspaceDialog(mainController);
 	}
 	
-	public SaveWorkspaceFrame showSaveWorkspaceGui() {
-		return new SaveWorkspaceFrame(mainController);
+	public SaveWorkspaceDialog showSaveWorkspaceGui() {
+		return new SaveWorkspaceDialog(mainController);
 	}
 	
 	public void createWorkspace(String name){
@@ -50,18 +51,20 @@ public class WorkspaceController {
 	public void closeWorkspace() {
 		WorkspaceController.currentWorkspace = null;
 		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
+		mainController.getViewController().closeAll();
+		ServiceProvider.getInstance().resetServices();
 	}
 	
-	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
+	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
-		workspaceResource.save(document, dataValues);
+		return workspaceResource.save(document, dataValues);
 	}
 	
-	public void loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
+	public boolean loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document doc = workspaceResource.load(dataValues);
-		loadWorkspace(doc);
+		return loadWorkspace(doc);
 	}
 	
 	public Document getWorkspaceData(){
@@ -84,19 +87,27 @@ public class WorkspaceController {
 		return doc;
 	}
 
-	public void loadWorkspace(Document document){
-		List<ISaveable> savableServices = getSaveableServices();
-		if(document.hasRootElement()){
-			Element rootElement = document.getRootElement();
-			for(ISaveable service : savableServices){
-				String serviceName = service.getClass().getName();
-				List<Element> elementQuery = rootElement.getChildren(serviceName);
-				for(Element serviceDataContainer : elementQuery){
-					Element serviceData = serviceDataContainer.getChildren().get(0); 
-					service.loadWorkspaceData(serviceData);
+	public boolean loadWorkspace(Document document){
+		try {
+			List<ISaveable> savableServices = getSaveableServices();
+			if(document.hasRootElement()){
+				Element rootElement = document.getRootElement();
+				for(ISaveable service : savableServices){
+					String serviceName = service.getClass().getName();
+					List<Element> elementQuery = rootElement.getChildren(serviceName);
+					for(Element serviceDataContainer : elementQuery){
+						Element serviceData = serviceDataContainer.getChildren().get(0); 
+						service.loadWorkspaceData(serviceData);
+					}
 				}
 			}
+			return true;
+		} catch (Exception exception){
+			String message = "Unable to load workspacedata\n\n" + exception.getMessage();
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			controlService.showErrorMessage(message);
 		}
+		return false;
 	}
 	
 	private List<ISaveable> getSaveableServices() {
