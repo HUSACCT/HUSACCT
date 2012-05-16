@@ -17,7 +17,7 @@ public class AnalyseDebuggingFrame extends JFrame {
 	public AnalyseDebuggingFrame() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int inset = 20; 
-		setBounds(inset, inset, screenSize.width - (inset *2), screenSize.height - (inset * 2));
+		setBounds(inset, inset, screenSize.width - (inset *2), screenSize.height - (inset *2));
 		
 		JInternalFrame theAnalyseFrame = new AnalyseInternalFrame();
 		desktop = new JDesktopPane();

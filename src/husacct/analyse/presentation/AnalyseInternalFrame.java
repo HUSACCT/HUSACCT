@@ -16,7 +16,7 @@ public class AnalyseInternalFrame extends JInternalFrame {
 
 	public AnalyseInternalFrame() {
 		setTitle(AnalyseTranslater.getValue("WindowTitle"));
-		
+		setResizable(true);
 		setBounds(200, 200, 550, 400);
 		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
 		
