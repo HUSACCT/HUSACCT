@@ -347,7 +347,7 @@ public class GraphicsFrame extends JInternalFrame {
 			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
 		}
 
-		return new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[][] {}));
+		return new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[] {}));
 	}
 
 	public void hidePropertiesPane() {
@@ -364,8 +364,7 @@ public class GraphicsFrame extends JInternalFrame {
 		for (DependencyDTO dependency : dependencyDTOs) {
 			rows.add(new String[] { dependency.from, dependency.to, "" + dependency.lineNumber, dependency.type });
 		}
-
-		return new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[][] {}));
+		return new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[]{}));
 	}
 
 	public void turnOnViolations() {
