@@ -45,12 +45,10 @@ public class AnalysedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		resetCurrentPath();
-		drawModules(modules);
-
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			showViolations();
 		}
-		drawLinesBasedOnSetting();
+		drawModulesAndLines(modules);
 		
 		updateLayout();
 	}
@@ -110,8 +108,7 @@ public class AnalysedController extends DrawingController {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else if (children.length > 0) {
 			setCurrentPath(parentName);
-			drawModules(children);
-			drawLinesBasedOnSetting();
+			drawModulesAndLines(children);
 		} else {
 			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
 		}

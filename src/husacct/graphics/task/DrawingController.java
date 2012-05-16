@@ -137,16 +137,16 @@ public abstract class DrawingController implements UserInputListener {
 
 	public abstract void drawArchitecture(DrawingDetail detail);
 
-	protected void drawModules(AbstractDTO[] modules) {
+	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-
+		updateLayout();
 		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
-		// updateLayout();
+		drawLinesBasedOnSetting();
 	}
 
 	protected void updateLayout() {
@@ -176,11 +176,7 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-
 		drawing.updateLineFigureToContext();
-
-		//TODO drawing.resizeRelationFigures();
-		// updateLayout();
 	}
 
 	public void drawDependenciesForShownModules() {

@@ -71,8 +71,7 @@ public class DemoController extends DrawingController {
 		
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
-		this.drawModules(dtos);
-		this.drawLinesBasedOnSetting();
+		this.drawModulesAndLines(dtos);
 		updateLayout();
 	}
 	
@@ -107,7 +106,7 @@ public class DemoController extends DrawingController {
 			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 			dtos = modules.toArray(dtos);
 			setCurrentPath("tests");
-			this.drawModules(dtos);
+			this.drawModulesAndLines(dtos);
 		}			
 	}
 
