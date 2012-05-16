@@ -1,9 +1,15 @@
 package husacct.analyse.task.analyser.csharp;
 
+import java.util.Arrays;
+
 import husacct.analyse.domain.ModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 public abstract class CSharpGenerator {
+	public CSharpGenerator() {
+		Arrays.sort(typeCollection);
+		Arrays.sort(accessorCollection);
+	}
 	protected final int IDENTIFIER = 4;
 	protected final int USING = 18;
 	protected final int SEMICOLON = 25;
@@ -47,6 +53,8 @@ public abstract class CSharpGenerator {
 	protected final int DECIMAL = 197;
 	protected final int VAR = 177;
 	protected final int INTERNAL = 72;
+	protected final int[] typeCollection = new int[] {BYTE, SBYTE, INT, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, VAR, DECIMAL, IDENTIFIER};
+	protected final int[] accessorCollection = new int[] {PRIVATE, PUBLIC, PROTECTED, INTERNAL};
 	protected ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	

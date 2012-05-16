@@ -14,13 +14,10 @@ public class CSharpClassGenerator extends CSharpGenerator{
 	private CSharpData cSharpInheritanceData;
 	private boolean isInterface;
 	private boolean hasMore;
-	private int amountOfTrees;
-	private int counter;
 
 	public CSharpClassGenerator(List<CommonTree> classTrees, List<CSharpData> indentClassLevel) {
 		this.indentClassLevel = indentClassLevel;
 		cSharpInheritanceData = new CSharpData();
-		this.amountOfTrees = classTrees.size();
 		for (CommonTree tree : classTrees) {
 			walkASTTree(tree);	
 		}
@@ -28,13 +25,12 @@ public class CSharpClassGenerator extends CSharpGenerator{
 
 	private void walkASTTree(CommonTree tree) {
 		if (tree.getType() == CLASS || tree.getType() == STRUCT) {
-		counter++;
 		}
 		if(tree.getType() == COLON) {
 			hasInheritance = true;
 		}
 		
-		if(hasInheritance && tree.getType() == 4) {
+		if(hasInheritance && tree.getType() == IDENTIFIER) {
 				hasInheritance = false;
 				createInheritanceGenerator(tree);
 		}
@@ -43,13 +39,9 @@ public class CSharpClassGenerator extends CSharpGenerator{
 			hasMore = true;
 		}
 		
-		if(hasMore && tree.getType() == 4) {
+		if(hasMore && tree.getType() == IDENTIFIER) {
 			hasMore = false;
 			createInheritanceGenerator(tree);
-		}
-		
-		if(counter == amountOfTrees) {
-
 		}
 		
 		if (tree.getType() == CLASS) {

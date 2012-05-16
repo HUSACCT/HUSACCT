@@ -1,58 +1,88 @@
 package husacct.analyse.task.analyser.csharp;
 
+import java.util.Arrays;
 import java.util.List;
+
 import org.antlr.runtime.tree.CommonTree;
 
-public class CSharpAttributeGenerator extends CSharpGenerator{
+public class CSharpAttributeGenerator extends CSharpGenerator {
 	private List<CommonTree> attributeTrees;
 	private String uniqueClassName;
 	private boolean classScope = false;
-	private String accesControlQualifier = "";
-	private String attributeName;
-	private String declareType;
-	
+	private String accessControlQualifier = "";
+	private String attributeName = "";
+	private String declareType = "";
 
-	public CSharpAttributeGenerator(List<CommonTree> attributeTrees, String uniqueClassName){
+	public CSharpAttributeGenerator(List<CommonTree> attributeTrees,
+			String uniqueClassName) {
 		this.attributeTrees = attributeTrees;
 		this.uniqueClassName = uniqueClassName;
 	}
 
-	public void scan() {
+	private void addToModelService() {
+		if (!attributeName.equals("") && !declareType.equals("")) {
+			int lineNumber = attributeTrees.get(0).getLine();
+			String uniqueName = uniqueClassName + "." + attributeName;
+			modelService.createAttribute(classScope, accessControlQualifier,
+					uniqueClassName, declareType, attributeName, uniqueName,
+					lineNumber);
+		}
+	}
+
+	private void checkAccessorCollection(int type, String text) {
+		if (Arrays.binarySearch(accessorCollection, type) > -1) {
+			accessControlQualifier += text + " ";
+		}
+	}
+
+	private void checkClassScope(int type) {
+		if (type == STATIC) {
+			classScope = true;
+		}
+	}
+
+	private boolean checkName(int type, String text) {
+		if (type == IDENTIFIER) {
+			attributeName = text;
+			return true;
+		}
+		return false;
+	}
+
+	private boolean checkType(int type, String text) {
+		if (Arrays.binarySearch(typeCollection, type) > -1) {
+			declareType = text;
+			return true;
+		}
+		return false;
+	}
+
+	private void editAccessControlQualifier() {
+		if (accessControlQualifier.equals("")) {
+			accessControlQualifier = "internal";
+		} else {
+			accessControlQualifier = accessControlQualifier.trim();
+		}
+	}
+
+	public void scanTree() {
 		boolean hadType = false;
 		boolean hadName = false;
-		for(CommonTree attributeChild : attributeTrees){
+		for (CommonTree attributeChild : attributeTrees) {
 			int type = attributeChild.getType();
-			if(type == STATIC){
-				classScope = true;
+			String text = attributeChild.getText();
+			checkClassScope(type);
+			checkAccessorCollection(type, text);
+			if (hadType) {
+				hadName = checkName(type, text);
+			} else {
+				hadType = checkType(type, text);
 			}
-			if(type == PRIVATE || type == PUBLIC || type == PROTECTED || type == INTERNAL){
-				accesControlQualifier += attributeChild.getText() + " ";
-			}
-			if(hadType && type == IDENTIFIER){
-				attributeName = attributeChild.getText();
-				hadName = true;
-			}
-			if (type == BYTE || type == SBYTE || type == INT || type == UINT 
-					|| type == SHORT || type == USHORT || type == LONG ||
-					type == ULONG || type == FLOAT || type == DOUBLE || type == CHAR
-					|| type == BOOL || type == OBJECT || type == STRING || type 
-					== DECIMAL || type == VAR || type == IDENTIFIER) {
-				declareType = attributeChild.getText();
-				hadType = true;
-			}
-			if (type == EQUALS) {
-				if (!hadName) {
-					return;
-				}
+			if (type == EQUALS && !hadName) {
+				return;
 			}
 		}
-		if (attributeName != null) {
-			if (accesControlQualifier == "") {
-				accesControlQualifier = "internal";
-			} else {
-				accesControlQualifier = accesControlQualifier.trim();
-			}
-			modelService.createAttribute(classScope, accesControlQualifier, this.uniqueClassName, declareType, attributeName, (this.uniqueClassName + "." + attributeName),attributeTrees.get(0).getLine());
-		} 
+		editAccessControlQualifier();
+		addToModelService();
 	}
 }
