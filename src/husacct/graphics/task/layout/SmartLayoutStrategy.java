@@ -33,11 +33,14 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 		List<ConnectionFigure> connectors = findAllConnectors();
 		indexFigures(connectors);
 		
+		// TODO: Remove after finishing this module
 		printPositions();
 		
 		updatePositions();
 	}
 	
+	// TODO: Debug function, please remove after finishing
+	// construction of this code.
 	private void printPositions() {
 		for (Node n : nodes) {
 			NamedFigure f = (NamedFigure) n.getFigure();
@@ -58,14 +61,32 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 		return Collections.unmodifiableList(list);
 	}	
 	
+	private String nodeName(Node n) {
+		NamedFigure nf = (NamedFigure) n.getFigure(); 
+		return nf.getName();
+	}
+	
 	private void indexFigures(List<ConnectionFigure> connectors) {
 		for (ConnectionFigure cf : connectors) {
 			Node startNode = getNode(cf.getStartFigure());
 			Node endNode = getNode(cf.getEndFigure());
+			
+			System.out.println(String.format("%s => %s", nodeName(startNode), nodeName(endNode)));
 
 			startNode.connectTo(endNode);
-			if (!startNode.isCyclicChain(endNode))
-				endNode.setLevel(startNode.getLevel() + 1);
+			if (!startNode.isCyclicChain(endNode)) {
+				int startLevel = startNode.getLevel();
+				int endLevel = endNode.getLevel();
+				int deltaLevel = Math.abs(endLevel - startLevel);
+				
+				// TODO: Expand this one for more 'special' cases
+				if (endLevel == startLevel)
+					endNode.setLevel(startLevel + 1);
+				else if (endLevel == 0)
+					endNode.setLevel(startLevel + 1);
+				else if (startLevel == 0 && deltaLevel >= 2)
+					startNode.setLevel(endLevel - 1);
+			}
 		}
 	}	
 
@@ -76,6 +97,7 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 		
 		for (Node n : rootNodes) {
 			double width = positionFigure(n, startPoint);
+			n.setPositionUpdated(true);
 			
 			startPoint.y = VERT_ITEM_SPACING;
 			startPoint.x += HORZ_ITEM_SPACING + width;
@@ -86,24 +108,31 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 	// that when 2(or more) child nodes are positioned the columnWidth should be
 	// as wide as nodeCount * nodeWidth(n) + (nodeCount * HORZ_ITEM_SPACING)
 	private double positionFigure(Node node, Point2D.Double startPoint) {
+		Point2D.Double position = (Point2D.Double) startPoint.clone();
 		Figure figure = node.getFigure();
 		double columnWidth = 0;
 
-		startPoint = updatePosition(figure, startPoint);
-		columnWidth = figure.getBounds().width; 
+		updatePosition(figure, position);
+		node.setPositionUpdated(true);
+		
+		columnWidth = node.getWidth();
+		position.y += node.getHeight() + VERT_ITEM_SPACING;
 		
 		List<Node> connections = node.getConnections();
-		Point2D.Double pos = (Point2D.Double) startPoint.clone();
-		for (Node childNode : connections) {
-			columnWidth = Math.max(positionFigure(childNode, pos), columnWidth);
-			pos.y = startPoint.y;
-			pos.x += columnWidth + HORZ_ITEM_SPACING;
+		for (Node child : connections) {
+			if (!child.isPositionUpdated() && child.getLevel() != node.getLevel()) {
+				columnWidth = Math.max(positionFigure(child, position), columnWidth);
+				position.y = startPoint.y;
+				position.x += child.getWidth() + HORZ_ITEM_SPACING;
+				
+				child.setPositionUpdated(true);
+			}
 		}
 			
 		return columnWidth;
 	}
 	
-	private Point2D.Double updatePosition(Figure figure, Point2D.Double point) {
+	private void updatePosition(Figure figure, Point2D.Double point) {
 		Rectangle2D.Double bounds = figure.getBounds();
 		Point2D.Double anchor = new Point2D.Double(point.x, point.y);
 		Point2D.Double lead = new Point2D.Double(point.x + bounds.width, point.y + bounds.height);
@@ -112,8 +141,7 @@ public class SmartLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 		
-		point.y += bounds.height + VERT_ITEM_SPACING;
-		return point;
+		System.out.println(String.format("Moving %s to (%d, %d)", ((NamedFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
 	}
 	
 	private List<Node> getRootNodes() {

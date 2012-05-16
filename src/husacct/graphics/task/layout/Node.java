@@ -10,6 +10,7 @@ import org.jhotdraw.draw.Figure;
 public class Node {
 	private Figure figure;
 	private int level = 0;
+	private boolean positionUpdated = false;
 	private ArrayList<Node> connectedTo = new ArrayList<Node>();
 
 	public Node(Figure f, int l) {
@@ -53,6 +54,14 @@ public class Node {
 		return figure;
 	}
 	
+	public boolean isPositionUpdated() {
+		return positionUpdated;
+	}
+	
+	public void setPositionUpdated(boolean newValue) {
+		positionUpdated = newValue;
+	}
+	
 	public boolean isCyclicChain(Node n) {
 		Vector<Node> unprocessedNodes = new Vector<Node>();
 		unprocessedNodes.addAll(connectedTo);
@@ -80,5 +89,13 @@ public class Node {
 		}
 		
 		return false;
+	}
+	
+	public int getWidth() {
+		return (int)figure.getBounds().width;
+	}
+	
+	public int getHeight() {
+		return (int)figure.getBounds().height;
 	}
 }

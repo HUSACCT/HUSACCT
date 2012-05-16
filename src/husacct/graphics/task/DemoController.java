@@ -27,21 +27,26 @@ public class DemoController extends DrawingController {
 		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
 		modules.add(presentationLayer);
+		
+		ModuleDTO neuralInterfaceLayer = new ModuleDTO();
+		neuralInterfaceLayer.type = "layer";
+		neuralInterfaceLayer.logicalPath = "neural_interface";
+		modules.add(neuralInterfaceLayer);		
 
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
 		modules.add(taskLayer);
 		
-		ModuleDTO extraTaskLayer = new ModuleDTO();
-		extraTaskLayer.type = "layer";
-		extraTaskLayer.logicalPath = "extra_task";
-		modules.add(extraTaskLayer);
-
-		extraTaskLayer = new ModuleDTO();
-		extraTaskLayer.type = "layer";
-		extraTaskLayer.logicalPath = "task_two";
-		modules.add(extraTaskLayer);		
+//		ModuleDTO extraTaskLayer = new ModuleDTO();
+//		extraTaskLayer.type = "layer";
+//		extraTaskLayer.logicalPath = "extra_task";
+//		modules.add(extraTaskLayer);
+//
+//		extraTaskLayer = new ModuleDTO();
+//		extraTaskLayer.type = "layer";
+//		extraTaskLayer.logicalPath = "task_two";
+//		modules.add(extraTaskLayer);		
 
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
@@ -147,6 +152,9 @@ public class DemoController extends DrawingController {
 		}		
 		if (figFrom.getName().equals("presentation") && figTo.getName().equals("task_two")) {
 			dependencies.add(new DependencyDTO("task_two", "presentation", "wa", 1));
+		}	
+		if (figFrom.getName().equals("neural_interface") && figTo.getName().equals("domain")) {
+			dependencies.add(new DependencyDTO("domain", "neural_interface", "wa", 1));
 		}		
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("domain")) {
