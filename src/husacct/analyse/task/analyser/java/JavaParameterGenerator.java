@@ -89,7 +89,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 			
 			switch(childTree.getType()){
 				case JavaParser.IDENT:
-					attributeType += "," + childTree.getText();
+					attributeType += "." + childTree.getText();
 					if(childTree.getChildCount() > 0){
 						attributeType += getAttributeRecursive(childTree);
 					}
@@ -115,7 +115,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 			if(currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
 				this.declareType = getAttributeType(currentChild);
 				this.declareTypeFound = true;
-				this.signature += !this.signature.equals("") ? "," : "";
+				this.signature += !this.signature.equals("") ? "." : "";
 				this.signature += this.declareType;
 			} else {
 				getParameterAttributes(currentChild, indent + 1);
@@ -139,7 +139,6 @@ public class JavaParameterGenerator extends JavaGenerator {
 	}
 	
 	private void writeParameterToDomain() {
-		System.out.println("boe");
 		for(Object object : saveQueue){
 			ArrayList<Object> currentParam = (ArrayList<Object>) object;
 			String type = (String) currentParam.get(0);

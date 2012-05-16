@@ -72,6 +72,7 @@ class JavaAttributeAndLocalVariableGenerator {
 
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
+		System.out.println(declareType);
 		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	}
 	

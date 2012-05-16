@@ -1,15 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import husacct.analyse.domain.ModelCreationService;
-import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.delegate_creation_expression_return;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.qualified_identifier_return;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-import husacct.analyse.infrastructure.antlr.java.JavaParser.qualifiedTypeIdentSimplified_return;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
@@ -84,6 +75,10 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			if(treeType == JavaParser.IDENT){
 				name = child.getText();
 			}
+			if(treeType == JavaParser.THROW || treeType == JavaParser.THROWS){
+				delegateException(child); 
+				deleteTreeChild(child); 
+			} 
 			if(treeType == JavaParser.FORMAL_PARAM_LIST){
 				if (child.getChildCount() > 0){
 					JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
@@ -122,6 +117,10 @@ class JavaMethodGeneratorController extends JavaGenerator{
                 	deleteTreeChild(child); 
                 }
             } 
+            if(treeType == JavaParser.THROW || treeType == JavaParser.CATCH || treeType == JavaParser.THROWS){
+				delegateException(child); 
+				deleteTreeChild(child); 
+			} 
             if(treeType == JavaParser.ASSIGN ){ 
                 if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
                 	delegateInvocation(child, "accessPropertyOrField");
@@ -143,6 +142,11 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			return tree.getChild(0).getText();
 		}
 	}
+	
+	private void delegateException(Tree exceptionTree){ 
+		JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator(); 
+		exceptionGenerator.generateModel((CommonTree)exceptionTree, this.belongsToClass); 
+	} 
 	
 	private void delegateInvocation(Tree treeNode, String type) {
 		JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);

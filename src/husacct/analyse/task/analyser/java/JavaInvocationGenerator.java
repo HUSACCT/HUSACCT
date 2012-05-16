@@ -18,11 +18,12 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		from = uniqueClassName;
 	}
 	
-	public void generateConstructorInvocToModel(CommonTree commonTree) {
+	public String generateConstructorInvocToModel(CommonTree commonTree) {
 		type = "invocConstructor";
 		invocationName = "Constructor";
 		createConstructorInvocationDetails(commonTree);
 		createConstructorInvocationDomainObject();
+		return to;
 	}
 	
 	private void createConstructorInvocationDetails(Tree tree) {
@@ -81,7 +82,5 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
 	private void createPropertyOrFieldInvocationDomainObject() {
 		modelService.createPropertyOrFieldInvocation(type, from, to, lineNumber, invocationName);
-		
 	}
-	
 }
