@@ -55,6 +55,12 @@
 	
 	<!-- Add resources -->
 	<target name="addresources">
+		<taskdef classpath="${lib.dir}/rscbundlecheck-1.31-bin.jar" resource="task.properties"/>
+		<resourceCheck>
+			<fileset dir="${src.dir}/husacct/common/locale/">
+				<include name="husacct_*.properties"/>
+			</fileset>
+		</resourceCheck>
 		<jar jarfile="${jar.dir}/${ant.project.name}.jar" update="true">
 			<fileset dir="${src.dir}" >
 				<include name="husacct/common/resources/**/*" />
