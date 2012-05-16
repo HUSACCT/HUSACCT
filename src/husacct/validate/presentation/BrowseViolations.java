@@ -2,6 +2,7 @@ package husacct.validate.presentation;
 
 import husacct.control.ILocaleChangeListener;
 import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -17,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -36,13 +39,17 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.log4j.Logger;
+
 import java.awt.GridLayout;
 
 @SuppressWarnings("serial")
-public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, ViolationHistoryRepositoryObserver {
+public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
 	private JTable chooseViolationHistoryTable;
 	private DefaultTableModel chooseViolationHistoryTableModel;
 	private final TaskServiceImpl taskServiceImpl;
+	private final ConfigurationServiceImpl configuration;
 	private final SimpleDateFormat dateFormat;
 	private JTable violationsTable;
 	private DefaultTableModel violationsTableModel;
@@ -66,9 +73,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private JLabel totalViolationNumber;
 	private JLabel shownViolations;
 	private JLabel shownViolationsNumber;
+	private final Logger logger;
 
-	public BrowseViolations(TaskServiceImpl taskServiceImpl) {
+	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
+		this.logger = Logger.getLogger(BrowseViolations.class);
 		this.taskServiceImpl = taskServiceImpl;
+		this.configuration = configuration;
 		this.dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
 		this.filterViolations = new FilterViolations(taskServiceImpl, this);
 		init();
@@ -164,6 +174,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	private void fillChooseViolationHistoryTable() {
+		logger.info("Testing - fillChooseViolationsHistoryTableMethod() called");
 		clearChooseViolationHistoryTableModelRows();
 		for(ViolationHistory violationHistory : taskServiceImpl.getViolationHistories()) {
 			chooseViolationHistoryTableModel.addRow(new Object[] {dateFormat.format(violationHistory.getDate().getTime()), violationHistory.getDescription()});
@@ -221,12 +232,6 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			fillViolationsTable(taskServiceImpl.applyFilterViolations(taskServiceImpl.getAllViolations().getValue()));
 		}
 
-	}
-
-
-	@Override
-	public void updateViolationHistories() {
-		fillChooseViolationHistoryTable();
 	}
 
 
@@ -452,7 +457,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable = new JTable();
 		violationsTableScrollPane.setViewportView(violationsTable);
 		rightSidePane.setLayout(gl_rightSidePane);
-		taskServiceImpl.attachViolationHistoryObserver(this);
+		configuration.addObserver(this);
 	}
 
 	private void loadInformationPanel(ViolationHistory violationHistory) {
@@ -497,5 +502,10 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		} else {
 			JOptionPane.showMessageDialog(null, "Select a violation history first");
 		}
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		fillChooseViolationHistoryTable();		
 	}
 }

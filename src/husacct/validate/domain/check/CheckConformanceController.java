@@ -59,20 +59,19 @@ public class CheckConformanceController {
 		}
 	}
 	
-//	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
-//		
-//		allCurrentRules.
-//		return new RuleDTO[]{};
-//	}
-//	
-//	private RuleDTO[] filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
-//		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
-//		for(RuleDTO rule : allCurrentRules){
-//			if(rule.equals(toValidateRule)){
-//				allCurrentRules.remove(rule);
-//			}
-//		}
-//	}
+	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
+		return new RuleDTO[]{};
+	}
+	
+	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
+		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
+		for(RuleDTO rule : allCurrentRules){
+			if(rule.equals(toValidateRule)){
+				allCurrentRules.remove(rule);
+			}
+		}
+		return allCurrentRules;
+	}
 
 	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
 		for(RuleDTO appliedRule : exceptionRules){
