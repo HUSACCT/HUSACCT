@@ -1,4 +1,4 @@
-package husacct.define.persitency;
+package husacct.define.persistency;
 
 import org.jdom2.Element;
 import husacct.common.savechain.ISaveable;

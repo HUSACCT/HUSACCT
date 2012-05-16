@@ -10,8 +10,8 @@ import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.ModuleDomainService;
-import husacct.define.persitency.PersistentDomain;
-import husacct.define.persitency.PersistentDomain.DomainElement;
+import husacct.define.persistency.PersistentDomain;
+import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
 
 import java.util.ArrayList;
