@@ -16,13 +16,13 @@ import javax.swing.WindowConstants;
  * Define Architecture main frame
  * 
  */
-public class ApplicationJFrame extends JInternalFrame {
+public class ApplicationJInternalFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 6858870868564931134L;
 	private String defaultTitle = "HUSACCT";
 	private JPanel overviewPanel;
 
-	public ApplicationJFrame() {
+	public ApplicationJInternalFrame() {
 		super();
 		initUi();
 	}

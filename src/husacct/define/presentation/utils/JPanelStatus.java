@@ -11,22 +11,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import org.apache.log4j.Logger;
-
 public class JPanelStatus extends JPanel {
 
 	private static final long serialVersionUID = -7360960342696885795L;
 	private String defaultMessage = "Idle";
 	private Stack<String> messages = new Stack<String>();
 	private JLabel jLabelStatus;
-	private JProgressBar jProgressBar1;
-	private Logger logger;
+	private JProgressBar jProgressBar;
 
 	private static JPanelStatus instance;
 
 	private JPanelStatus() {
 		super();
-		logger = Logger.getLogger(JPanelStatus.class);
 		
 		GridBagLayout jPanel1Layout = new GridBagLayout();
 		jPanel1Layout.rowWeights = new double[] { 0.1 };
@@ -39,11 +35,11 @@ public class JPanelStatus extends JPanel {
 		jLabelStatus = new JLabel(defaultMessage);
 		add(jLabelStatus, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-		jProgressBar1 = new JProgressBar();
-		jProgressBar1.setValue(0);
+		jProgressBar = new JProgressBar();
+		jProgressBar.setValue(0);
 
-		add(jProgressBar1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		jProgressBar1.setPreferredSize(new java.awt.Dimension(823, 14));
+		add(jProgressBar, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		jProgressBar.setPreferredSize(new java.awt.Dimension(823, 14));
 	}
 
 	/**
@@ -89,7 +85,7 @@ public class JPanelStatus extends JPanel {
 //		logger.info("start() - Message: " + messages.peek());
 //		logger.info("Message: " + messages.peek());
 		jLabelStatus.setText(messages.peek());
-		jProgressBar1.setIndeterminate(true);
+		jProgressBar.setIndeterminate(true);
 
 		repaint();
 	}
@@ -97,7 +93,7 @@ public class JPanelStatus extends JPanel {
 	private void gotoLastTask() {
 		if (messages.peek().equals(defaultMessage) || messages.peek().equals("") || messages.empty()) {
 			jLabelStatus.setText(defaultMessage);
-			jProgressBar1.setIndeterminate(false);
+			jProgressBar.setIndeterminate(false);
 		} else {
 			start();
 		}
