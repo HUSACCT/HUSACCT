@@ -1,5 +1,7 @@
 package husacct.graphics.task;
 
+import java.util.ArrayList;
+
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
@@ -67,17 +69,21 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		// FIXME: Make this code function with the multiple selected figures
-		BaseFigure figure = figures[0];
-
-		if (figure.isModule()) {
-			try {
-				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
-				getAndDrawModulesIn(parentDTO.uniqueName);
-			} catch (Exception e) {
-				logger.warn("Could not zoom on this object: " + figure);
-				logger.debug("Possible type cast failure.");
+		ArrayList<String> parentNames = new ArrayList<String>();
+		for(BaseFigure figure : figures){
+			if (figure.isModule()) {
+				try {
+					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
+//					getAndDrawModulesIn(parentDTO.uniqueName);
+					parentNames.add(parentDTO.uniqueName);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.warn("Could not zoom on this object: " + figure);
+					logger.debug("Possible type cast failure.");
+				}
 			}
 		}
+		getAndDrawModulesIn(parentNames.toArray(new String[]{}));
 	}
 
 	@Override
@@ -102,6 +108,24 @@ public class AnalysedController extends DrawingController {
 		} else {
 			logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
+	}
+	
+	private void getAndDrawModulesIn(String[] parentNames) {
+		ArrayList<AnalysedModuleDTO> allChildren = new ArrayList<AnalysedModuleDTO>(); 
+		for(String parentName : parentNames){
+			AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
+			if (parentName.equals("")) {
+				drawArchitecture(getCurrentDrawingDetail());
+			} else if (children.length > 0) {
+//				setCurrentPath(parentName);
+				for(AnalysedModuleDTO child : children){
+					allChildren.add(child);
+				}
+			} else {
+				logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
+			}
+		}
+		drawModulesAndLines(allChildren.toArray(new AnalysedModuleDTO[]{}));
 	}
 
 	@Override
