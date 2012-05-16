@@ -1,4 +1,4 @@
-package husacct.define.presentation.jframe;
+package husacct.define.presentation.jdialog;
 
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.PopUpController;
@@ -17,39 +17,27 @@ import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
-public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyListener {
+public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 3093579720278942807L;
 	
 	public JButton saveButton;
 	public JButton cancelButton;
 	
-	@Deprecated
-	public JComboBox jComboBoxSoftwareUnit;
-	
 	public AnalyzedModuleTree softwareDefinitionTree;
-	
 	private SoftwareUnitController softwareUnitController;
 	
-	public JFrameSoftwareUnit(long moduleId) {
+	public SoftwareUnitJDialog(long moduleId) {
 		super();
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
-		initUI();
-	}
-	
-	@Deprecated
-	public JFrameSoftwareUnit(SoftwareUnitController softwareUnitController) {
-		super();
-		this.softwareUnitController = softwareUnitController;
 		initUI();
 	}
 
@@ -60,13 +48,15 @@ public class JFrameSoftwareUnit extends JFrame implements ActionListener, KeyLis
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle("New Software Unit");
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
+			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
 			
 			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
-			pack();
+			this.setResizable(false);
+			this.pack();
 			this.setSize(650, 300);
+			this.setModal(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
