@@ -21,44 +21,44 @@ import org.jhotdraw.draw.handle.Handle;
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	private static final long serialVersionUID = 971276235252293165L;
-	public  static final Color defaultBackgroundColor = new Color(252, 255, 182);
+	public static final Color defaultBackgroundColor = new Color(252, 255, 182);
 	private boolean isSizeable = false;
-	
+
 	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 
-	//private LinkedList<Connector> connectors = new LinkedList<Connector>();
-	
+	// private LinkedList<Connector> connectors = new LinkedList<Connector>();
+
 	public BaseFigure() {
 		super();
 	}
-	
+
 	public void addDecorator(Decorator decorator) {
-		this.decorators.add(decorator);
+		decorators.add(decorator);
 	}
-	
+
 	public void removeDecoratorByType(Class<?> searchClass) {
 		ArrayList<Decorator> removes = new ArrayList<Decorator>();
-		
-		for(Decorator decorator : this.decorators) {
-			if(decorator.getClass().isAssignableFrom(searchClass)) {
+
+		for (Decorator decorator : decorators) {
+			if (decorator.getClass().isAssignableFrom(searchClass)) {
 				removes.add(decorator);
 			}
 		}
-		
-		this.removeDecorators(removes.toArray(new Decorator[]{}));
+
+		removeDecorators(removes.toArray(new Decorator[] {}));
 	}
-	
+
 	public void removeDecorators(Decorator[] decorators) {
-		for(Decorator decorator : decorators) {
-			this.removeDecorator(decorator);
+		for (Decorator decorator : decorators) {
+			removeDecorator(decorator);
 		}
 	}
-	
+
 	public void removeDecorator(Decorator decorator) {
-		this.willChange();
+		willChange();
 		decorator.deDecorate(this);
-		this.decorators.remove(decorator);
-		this.changed();
+		decorators.remove(decorator);
+		changed();
 	}
 
 	@Override
@@ -75,17 +75,23 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	@Override
 	protected void drawFill(Graphics2D g) {
-		// This function is used by the JHotDraw framework to draw the 'background' of a figure
-		// Since the BaseFigure is a composite figure it will not have to draw it's background
-		// and therefore this function is empty. However, it cannot be removed because of the
+		// This function is used by the JHotDraw framework to draw the
+		// 'background' of a figure
+		// Since the BaseFigure is a composite figure it will not have to draw
+		// it's background
+		// and therefore this function is empty. However, it cannot be removed
+		// because of the
 		// requirements to override it.
 	}
 
 	@Override
 	protected void drawStroke(Graphics2D g) {
-		// This function is used by the JHotDraw framework to draw the outline of a figure
-		// Since the BaseFigure is a composite figure it will not have to draw it's outline
-		// and therefore this function is empty. However, it cannot be removed because of the
+		// This function is used by the JHotDraw framework to draw the outline
+		// of a figure
+		// Since the BaseFigure is a composite figure it will not have to draw
+		// it's outline
+		// and therefore this function is empty. However, it cannot be removed
+		// because of the
 		// requirements to override it.
 	}
 
@@ -94,15 +100,15 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		BaseFigure other = (BaseFigure) super.clone();
 		return other;
 	}
-	
+
 	@Override
 	public void draw(Graphics2D g) {
-		for(Decorator decorator : this.decorators) {
+		for (Decorator decorator : this.decorators) {
 			decorator.decorate(this);
 		}
-		
+
 		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
-		
+
 		super.draw(g);
 	}
 
@@ -149,50 +155,52 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	public void setSizeable(boolean newValue) {
 		isSizeable = newValue;
 	}
-	
-    @Override 
-    public Connector findConnector(Point2D.Double p, ConnectionFigure figure) {
-    	return new ChopRectangleConnector(this);
-    }
-    
-    // TODO: Patrick: Re-enabled this code! Requires that the AbsoluteLocator works so that
-    // the location of connectors is properly determined.
-//    @Override
-//    public Collection<Connector> getConnectors(ConnectionFigure prototype) {
-//        return (List<Connector>) Collections.unmodifiableList(connectors);
-//    }	
-//    
 
-    	//LocatorConnector
-////    	Point2D.Double bounds = this.getStartPoint();
-////    	
-////    	if (bounds.y < p.y) {
-////    		// This figure is BELOW the other figure
-////    	} else {
-////    		// This figure is on the same level or below the other figure
-////    	}
-////    	
-////    	LocatorConnector lc = new LocatorConnector(this, RelativeLocator.north()); 
-////    	connectors.add(lc);
-////    	
-////    	return lc;
-//    }
-    
-//    @Override
-//    public Connector findCompatibleConnector(Connector c, boolean isStart) {
-//        if (c instanceof LocatorConnector) {
-//            LocatorConnector lc = (LocatorConnector) c;
-//            for (Connector cc : connectors) {
-//                LocatorConnector lcc = (LocatorConnector) cc;
-//                if (lcc.getLocator().equals(lc.getLocator())) {
-//                    return lcc;
-//                }
-//            }
-//        }
-//        return connectors.getFirst();
-//    }    
+	@Override
+	public Connector findConnector(Point2D.Double p, ConnectionFigure figure) {
+		return new ChopRectangleConnector(this);
+	}
 
-    
+	// TODO: Patrick: Re-enabled this code! Requires that the AbsoluteLocator
+	// works so that
+	// the location of connectors is properly determined.
+	// @Override
+	// public Collection<Connector> getConnectors(ConnectionFigure prototype) {
+	// return (List<Connector>) Collections.unmodifiableList(connectors);
+	// }
+	//
+
+	// LocatorConnector
+	// // Point2D.Double bounds = this.getStartPoint();
+	// //
+	// // if (bounds.y < p.y) {
+	// // // This figure is BELOW the other figure
+	// // } else {
+	// // // This figure is on the same level or below the other figure
+	// // }
+	// //
+	// // LocatorConnector lc = new LocatorConnector(this,
+	// RelativeLocator.north());
+	// // connectors.add(lc);
+	// //
+	// // return lc;
+	// }
+
+	// @Override
+	// public Connector findCompatibleConnector(Connector c, boolean isStart) {
+	// if (c instanceof LocatorConnector) {
+	// LocatorConnector lc = (LocatorConnector) c;
+	// for (Connector cc : connectors) {
+	// LocatorConnector lcc = (LocatorConnector) cc;
+	// if (lcc.getLocator().equals(lc.getLocator())) {
+	// return lcc;
+	// }
+	// }
+	// }
+	// return connectors.getFirst();
+	// }
+
 	public abstract boolean isModule();
+
 	public abstract boolean isLine();
 }

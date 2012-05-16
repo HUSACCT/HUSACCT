@@ -29,10 +29,9 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void refreshDrawing() {
 		getAndDrawModulesIn(getCurrentPath());
-		
-		updateLayout();
 	}
 
+	@Override
 	public void showViolations() {
 		super.showViolations();
 		try {
@@ -42,6 +41,7 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	@Override
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		resetCurrentPath();
@@ -49,8 +49,6 @@ public class AnalysedController extends DrawingController {
 			showViolations();
 		}
 		drawModulesAndLines(modules);
-		
-		updateLayout();
 	}
 
 	@Override
@@ -79,8 +77,6 @@ public class AnalysedController extends DrawingController {
 			try {
 				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.uniqueName);
-				
-				updateLayout();
 			} catch (Exception e) {
 				logger.debug("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
@@ -93,8 +89,6 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
-			
-			updateLayout();
 		} else {
 			logger.debug("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
 			logger.debug("Reverting to the root of the application.");
@@ -114,6 +108,7 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	@Override
 	public void moduleOpen(String path) {
 		getAndDrawModulesIn(path);
 	}
