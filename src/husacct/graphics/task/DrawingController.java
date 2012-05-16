@@ -1,9 +1,5 @@
 package husacct.graphics.task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -18,16 +14,18 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
-import husacct.graphics.task.layout.LayeredLayoutStrategy;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
 
 public abstract class DrawingController implements UserInputListener {
-
-	public final int ITEMS_PER_ROW = 3;
 
 	protected Drawing drawing;
 	protected DrawingView view;
@@ -68,7 +66,8 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 
-		layoutStrategy = new LayeredLayoutStrategy(drawing);
+		// layoutStrategy = new LayeredLayoutStrategy(drawing);
+		layoutStrategy = new BasicLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
@@ -145,31 +144,29 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
+		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-		
-		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
-		drawLinesBasedOnSetting();
-		
 		updateLayout();
+		drawLinesBasedOnSetting();
 	}
-	
+
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AnalysedModuleDTO>> modules) {
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
-			for(AnalysedModuleDTO dto : modules.get(parentName)){
+			for (AnalysedModuleDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
 				parentFigure.addChildFigure(generatedFigure);
-//				drawing.add(generatedFigure);
+				// drawing.add(generatedFigure);
 				figureMap.linkModule(generatedFigure, dto);
 			}
 			drawing.add(parentFigure);
 		}
-//		updateLayout();
+		// updateLayout();
 		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
 		drawLinesBasedOnSetting();
 	}

@@ -110,9 +110,9 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 	// code. It's ugly and unneccessary I think.
 	private boolean isConnector(Figure figure) {
 		if (figure instanceof BaseFigure) {
-			if (figure instanceof RelationFigure)
+			if (figure instanceof RelationFigure) // TODO Call the isLine method?
 				return true;
-		} else if (figure instanceof ConnectionFigure) {
+		} else if (figure instanceof ConnectionFigure) { //TODO extend it and implement the isLine method?
 			return true;
 		}
 		return false;
