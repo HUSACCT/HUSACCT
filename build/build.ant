@@ -60,6 +60,13 @@
 			<fileset dir="${src.dir}/husacct/common/locale/">
 				<include name="husacct_*.properties"/>
 			</fileset>
+			<checks>
+				<include name="cross bundle check"/>
+				<include name="empty value check"/>
+				<include name="line end check"/>
+				<include name="empty key check"/>
+				<include name="duplicate key check"/>
+			</checks>
 		</resourceCheck>
 		<jar jarfile="${jar.dir}/${ant.project.name}.jar" update="true">
 			<fileset dir="${src.dir}" >
