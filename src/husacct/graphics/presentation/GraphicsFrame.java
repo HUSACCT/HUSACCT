@@ -280,8 +280,7 @@ public class GraphicsFrame extends JInternalFrame {
 		currentPath = path;
 	}
 
-	public void setCurrentPathAndUpdateGUI(String path) {
-		setCurrentPath(path);
+	public void updateGUI() {
 		updateLocationBar();
 	}
 

@@ -141,16 +141,29 @@ public abstract class DrawingController implements UserInputListener {
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
 		
-		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
+		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.updateGUI();
+		
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
 		
+		// ATTN: The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
+		// are done specifically in that order for a reason!
+		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
+		// after updating the layout of the drawing. 
+		// To solve this we first draw the entire drawing, update the layout and then 
+		// remove all the lines and re-add them to the drawing. 
+		// As it's currently unknown what causes the bug or how to solve it and the
+		// deadline for Construction II is approaching, we have decided to go with a 
+		// work around. However, this bug should be fixed as soon as possible. 
 		drawLinesBasedOnSetting();
 		
 		updateLayout();
+		
+		drawLinesBasedOnSetting();
 	}
 
 	protected void updateLayout() {
