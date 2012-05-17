@@ -173,7 +173,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 			}
 			if (isNewInstance == false && hasBrackets == true) {
 				CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
-				methodGenerator.generateMethod(methodTrees, tempNamespaceName, tempClassName);
+				methodGenerator.generateMethod(methodTrees, tempFullNamespaceName, tempClassName);
 
 				tempMethodSignature = methodGenerator.getSignature();
 				methodIndentLevel = indentLevel -1;
@@ -316,7 +316,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		if(type == SEMICOLON || type == IS){
 			ispartOfLocalVariable = false;
 			int lineNumber = tree.getLine();
-			String belongsToClass = tempNamespaceName + "." + tempClassName;
+			String belongsToClass = tempFullNamespaceName + "." + tempClassName;
 			if(localVariableTrees.size() > 0){
 				cleanVariableList();
 			}
