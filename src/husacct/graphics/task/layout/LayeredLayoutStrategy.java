@@ -1,20 +1,19 @@
 package husacct.graphics.task.layout;
 
+import husacct.common.ListUtils;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.presentation.figures.NamedFigure;
+import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 import org.lambda.functions.implementations.F1;
+import org.lambda.functions.implementations.S1;
 
 public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
@@ -22,6 +21,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	
 	private Drawing drawing;
 	private NodeList nodes = new NodeList();
+	List<Figure> connectors = null;
 
 	public LayeredLayoutStrategy(Drawing theDrawing) {
 		drawing = theDrawing;
@@ -31,69 +31,17 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	// simpler / quicker to see if a figure has been processed yet or not.
 	@Override
 	public void doLayout(int screenWidth, int screenHeight) {
-		List<Figure> figures = drawing.getChildren();
-		List<Figure> connectors = find(figures, new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }});
-		indexFigures(connectors);
+		connectors = ListUtils.select(drawing.getChildren(), new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }});
 		
-		// TODO: Remove after finishing this module
-		printPositions();
+		indexFigures();	
+		updateFigurePositions();
 		
-		updatePositions();
+		ListUtils.apply(connectors, new S1<Figure>(new ModuleFigure("dummy", "empty")){{ a.willChange(); a.changed(); }});
 		
 		nodes.clear();
 	}
 	
-	// TODO: Debug function, please remove after finishing
-	// construction of this code.
-	private void printPositions() {
-		for (Node n : nodes) {
-			NamedFigure f = (NamedFigure) n.getFigure();
-			System.out.println(String.format("%s: level %d", f.getName(), n.getLevel()));
-		}
-	}
-	
-	private <T> List<T> find(Collection<T> coll, F1<T, Boolean> fn) {
-		ArrayList<T> results = new ArrayList<T>();
-		
-		for (T t : coll) {
-			if (fn.call(t))
-				results.add(t);
-		}
-		
-		return Collections.unmodifiableList(results);
-	}
-	
-//	private List<ConnectionFigure> findAllConnectors() {
-//		List<Figure> figures = drawing.getChildren();
-//		ArrayList<ConnectionFigure> list = new ArrayList<ConnectionFigure>();
-//
-//		for (Figure f : figures) {
-//			if (isConnector(f)) {
-//				list.add((ConnectionFigure) f);
-//			}
-//		}
-//
-//		return Collections.unmodifiableList(list);
-//	}	
-	
-//	private List<Node> getRootNodes() {
-//		ArrayList<Node> list = new ArrayList<Node>();
-//		
-//		for (Node n : nodes) {
-//			if (n.getLevel() == 0) {
-//				list.add(n);
-//			}
-//		}
-//		
-//		return Collections.unmodifiableList(list);
-//	}	
-	
-	private String nodeName(Node n) {
-		NamedFigure nf = (NamedFigure) n.getFigure(); 
-		return nf.getName();
-	}
-	
-	private void indexFigures(List<Figure> connectors) {
+	private void indexFigures() {
 		for (Figure f : connectors) {
 			ConnectionFigure cf = (ConnectionFigure)f;
 			
@@ -119,8 +67,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		}
 	}	
 
-	private void updatePositions() {
-		List<Node> rootNodes = find(nodes, new F1<Node, Boolean>(new Node(null, 0)){{ ret(a.getLevel() == 0);}});
+	private void updateFigurePositions() {
+		List<Node> rootNodes = ListUtils.select(nodes, new F1<Node, Boolean>(new Node(null, 0)){{ ret(a.getLevel() == 0);}});
 		
 		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
 		
@@ -170,7 +118,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 		
-		System.out.println(String.format("Moving %s to (%d, %d)", ((NamedFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
+		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
 	}
 	
 	private Node getNode(Figure figure) {
@@ -197,5 +145,19 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		}
 
 		return false;
+	}	
+	
+	// TODO: Debug function, please remove after finishing
+	// construction of this code.
+	private void printPositions() {
+		for (Node n : nodes) {
+			BaseFigure f = (BaseFigure)n.getFigure();
+			System.out.println(String.format("%s: level %d", f.getName(), n.getLevel()));
+		}
 	}
+	
+	private String nodeName(Node n) {
+		BaseFigure nf = (BaseFigure)n.getFigure(); 
+		return nf.getName();
+	}	
 }
