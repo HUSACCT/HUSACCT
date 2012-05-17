@@ -122,7 +122,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
 			if(treeType == JavaParser.VAR_DECLARATION){
-				javaLocalVariableGenerator.generateLocalVariableModel(child, belongsToClass, name);
+				javaLocalVariableGenerator.generateLocalVariableModel(child, belongsToClass, this.belongsToClass + "." + this.name + this.signature);
 				deleteTreeChild(child);
 			}
 			if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL ){ 
