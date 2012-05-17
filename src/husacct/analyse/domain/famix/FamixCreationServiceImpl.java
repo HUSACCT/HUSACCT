@@ -4,7 +4,7 @@ import javax.naming.directory.InvalidAttributesException;
 import husacct.analyse.domain.ModelCreationService;
 
 public class FamixCreationServiceImpl implements ModelCreationService{
-
+	
 	private FamixModel model;
 	private FamixDependencyConnector dependencyConnector;
 	
@@ -12,12 +12,12 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		model = FamixModel.getInstance();
 		dependencyConnector = new FamixDependencyConnector();
 	}
-
+	
 	@Override
 	public void clearModel() {
 		model.clear();
 	}
-
+	
 	public void createPackage(String uniqueName, String belongsToPackage, String name){
 		FamixPackage fPackage = new FamixPackage();
 		fPackage.uniqueName = uniqueName;
@@ -25,7 +25,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fPackage.name = name;
 		addToModel(fPackage);
 	}
-
+	
 	@Override
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass) {
 		FamixClass fClass = new FamixClass();
@@ -48,7 +48,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fClass.belongsToClass = belongsToClass;
 		addToModel(fClass);
 	}
-
+	
 	@Override
 	public void createInterface(String uniqueName, String name, String belongsToPackage) {
 		FamixInterface fInterface = new FamixInterface();
@@ -70,11 +70,11 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fImport.importsCompletePackage = importsCompletePackage;
 		addToModel(fImport);
 	}
-
+	
 	@Override
 	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature, boolean isPureAccessor, String declaredReturnType,
 			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
-
+		
 		FamixMethod famixMethod = new FamixMethod();
 		famixMethod.name = name;
 		famixMethod.uniqueName = uniqueName;
@@ -88,7 +88,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixMethod.hasClassScope = hasClassScope;
 		addToModel(famixMethod);
 	}
-
+	
 	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {
 		FamixAttribute famixAttribute = new FamixAttribute();
@@ -107,7 +107,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fAssocation.lineNumber = 0;
 		model.waitingAssociations.add(fAssocation);
 	}
-
+	
 	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int line) {
 		FamixAttribute famixAttribute = new FamixAttribute();
@@ -126,7 +126,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fAssocation.lineNumber = line;
 		model.waitingAssociations.add(fAssocation);
 	}
-
+	
 	@Override
 	public void createLocalVariable(String belongsToMethodString,
 			String belongsToClass, String declareType, String name,
@@ -190,7 +190,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fAssocation.lineNumber = linenumber;
 		model.waitingAssociations.add(fAssocation);
 	}
-
+	
 	@Override
 	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType) {
 		FamixException exception = new FamixException();
@@ -200,7 +200,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		exception.exceptionType = declarationType;
 		model.waitingAssociations.add(exception);
 	}
-
+	
 	@Override
 	public void createInheritanceDefinition(String from, String to, int lineNumber) {
 		FamixInheritanceDefinition famixInheritanceDefinition = new FamixInheritanceDefinition();
@@ -209,7 +209,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixInheritanceDefinition.lineNumber = lineNumber;
 		model.waitingAssociations.add(famixInheritanceDefinition);
 	}
-
+	
 	@Override
 	public void createImplementsDefinition(String from, String to, int lineNumber) {
 		FamixImplementationDefinition fImplements = new FamixImplementationDefinition();
@@ -218,7 +218,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		fImplements.lineNumber = lineNumber;
 		model.waitingAssociations.add(fImplements);
 	}
-
+	
 	@Override
 	public void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName) {
 		FamixInvocation famixInvocation = new FamixInvocation();
@@ -230,7 +230,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixInvocation.inovcationName = invocationName;
 		model.waitingAssociations.add(famixInvocation);
 	}
-
+	
 	@Override
 	public void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName) {
 		FamixInvocation famixInvocation = new FamixInvocation();
@@ -241,7 +241,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixInvocation.to = to;
 		famixInvocation.inovcationName = invocationName;
 		model.waitingAssociations.add(famixInvocation);
-
+		
 	}
 
 	@Override
@@ -255,7 +255,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixInvocation.inovcationName = invocationName;
 		model.waitingAssociations.add(famixInvocation);
 	}
-
+	
 	@Override
 	public void connectDependencies(){
 		dependencyConnector.connectStructuralDependecies();
@@ -267,11 +267,10 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 			model.addObject(newObject);
 			return true;
 		} catch (InvalidAttributesException e) {
-			e.printStackTrace();
 			return false;
 		}
 	}
-
+	
 	public String represent(){
 		return model.toString();
 	}

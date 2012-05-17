@@ -11,6 +11,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	private String to;
 	private int lineNumber;
 	private String invocationName;
+	private String belongsToMethod;
 	
 	private boolean invocationNameFound;
 	
@@ -18,9 +19,10 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		from = uniqueClassName;
 	}
 	
-	public String generateConstructorInvocToModel(CommonTree commonTree) {
+	public String generateConstructorInvocToModel(CommonTree commonTree, String belongsToMethod ) {
 		type = "invocConstructor";
 		invocationName = "Constructor";
+		this.belongsToMethod = belongsToMethod;
 		createConstructorInvocationDetails(commonTree);
 		createConstructorInvocationDomainObject();
 		return to;
@@ -39,12 +41,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 	
 	private void createConstructorInvocationDomainObject(){
-		modelService.createConstructorInvocation(type, from, to, lineNumber, invocationName);
+		modelService.createConstructorInvocation(type, from, to, lineNumber, invocationName, belongsToMethod);
 	}
 
-	public void generateMethodInvocToModel(CommonTree treeNode) {
+	public void generateMethodInvocToModel(CommonTree treeNode, String belongsToMethod) {
 		invocationNameFound = false;
 		type = "invocMethod";
+		this.belongsToMethod = belongsToMethod;
 		createMethodOrPropertyFieldInvocationDetails(treeNode);
 		createMethodInvocationDomainObject();
 	}
@@ -68,19 +71,20 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	
 
 	private void createMethodInvocationDomainObject() {
-		modelService.createMethodInvocation(type, from, to, lineNumber, invocationName);
+		modelService.createMethodInvocation(type, from, to, lineNumber, invocationName, belongsToMethod);
 		
 	}
 
-	public void generatePropertyOrFieldInvocToModel(CommonTree treeNode) {
+	public void generatePropertyOrFieldInvocToModel(CommonTree treeNode, String belongsToMethod) {
 		invocationNameFound = false;
 		type = "accessPropertyOrField";
+		this.belongsToMethod = belongsToMethod;
 		createMethodOrPropertyFieldInvocationDetails(treeNode);
 		createPropertyOrFieldInvocationDomainObject();
 		
 	}
 
 	private void createPropertyOrFieldInvocationDomainObject() {
-		modelService.createPropertyOrFieldInvocation(type, from, to, lineNumber, invocationName);
+		modelService.createPropertyOrFieldInvocation(type, from, to, lineNumber, invocationName, belongsToMethod);
 	}
 }

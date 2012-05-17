@@ -37,10 +37,21 @@ public class JavaParameterGenerator extends JavaGenerator {
 		this.belongsToClass = belongsToClass;
 		lineNumber = tree.getLine();
 		
-		DelegateParametersFromTree(tree);		
+		DelegateParametersFromTree(tree);	
+//		correctBelongsToMethod();
 		writeParameterToDomain();
 		return signature;
 	}
+
+
+
+//	private void correctBelongsToMethod() {
+//		String method = this.belongsToMethod + "(";
+//		for (String declaredType : decalareTypes){
+//			method += declareType;
+//		}
+//		
+//	}
 
 
 
@@ -115,7 +126,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 			if(currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
 				this.declareType = getAttributeType(currentChild);
 				this.declareTypeFound = true;
-				this.signature += !this.signature.equals("") ? "." : "";
+				this.signature += !this.signature.equals("") ? "," : "";
 				this.signature += this.declareType;
 			} else {
 				getParameterAttributes(currentChild, indent + 1);
@@ -144,7 +155,18 @@ public class JavaParameterGenerator extends JavaGenerator {
 			String type = (String) currentParam.get(0);
 			String name = (String) currentParam.get(1);
 			this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
-			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethod, type);
+			String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")";
+			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, type);
 		}
 	}
+//	
+//	private String getBelongsToMethodString(String completeName){
+//		System.err.println(completeName);
+//		String belongsToMethod = "";
+//		String[] parts = completeName.split(".");
+//		for(int i=0; i<parts.length-2; i++) {
+//			belongsToMethod += parts[i] + ".";
+//		}
+//		return belongsToMethod.substring(0, belongsToMethod.length() -1);
+//	}
 }

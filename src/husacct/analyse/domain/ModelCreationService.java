@@ -35,14 +35,18 @@ public interface ModelCreationService {
 	void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName);
 	void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName);
 	
+	void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName, String belongsToMethod);
+	void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName, String belongsToMethod);
+	void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName, String belongsToMethod);
+	
 	//Function to connect dependencies, after all modules are known in the model
 	public void connectDependencies();
 	
 	//Debug-functies voor in de main:
 	public String represent();
 
-	public void createLocalVariable(String belongsToMethodString, String belongsToClass,
-			String declareType, String name, String uniqueName, int lineNumber);
+	public void createLocalVariable(String belongsToClass,
+			String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString);
 
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,

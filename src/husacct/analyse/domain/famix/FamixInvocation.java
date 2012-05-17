@@ -10,6 +10,7 @@ class FamixInvocation extends FamixAssociation{
 	public String invocationType;
 	public String nameOfInstance;
 	public String inovcationName;
+	public String belongsToMethod;
 //	public String sourceFilePath;
 	
 	public String toString(){
@@ -21,6 +22,7 @@ class FamixInvocation extends FamixAssociation{
 		string += "linenumber: " + super.lineNumber + "\n";
 		string += "nameOfInstance: " + nameOfInstance + "\n";
 		string += "inovcationName: " + inovcationName + "\n";
+		string += "belongsToMethod: " + belongsToMethod + "\n";
 		return string;
 	}
 }
