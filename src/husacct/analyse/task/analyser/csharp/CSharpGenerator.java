@@ -18,6 +18,7 @@ public abstract class CSharpGenerator {
 	protected final int NAMESPACE = 61;
 	protected final int FORWARDCURLYBRACKET = 62;
 	protected final int BACKWARDCURLYBRACKET = 63;
+	protected final int IS = 66;
 	protected final int NEW	= 68;
 	protected final int PUBLIC = 69;
 	protected final int PROTECTED = 70;
