@@ -99,13 +99,12 @@ public class TaskServiceImpl{
 		for (int i = 0; i < list.size(); i++) {
 			try{
 				Severity severity = getAllSeverities().get(i);
-				severity.setUserName((String) list.get(i)[0]);
+				severity.setName((String) list.get(i)[0]);
 				severity.setColor((Color) list.get(i)[1]);
 				severityList.add(severity);
 			} catch (IndexOutOfBoundsException e){
 				severityList.add(new Severity((String) list.get(i)[0], (Color) list.get(i)[1]));
 			}
-
 		}
 		addSeverities(severityList);
 	}

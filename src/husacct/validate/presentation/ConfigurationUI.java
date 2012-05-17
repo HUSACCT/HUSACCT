@@ -181,7 +181,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 			try{
 				Severity severity = severities.get(i);
-				severity.setUserName((String) severityModel.getValueAt(i, 0));
+				severity.setName((String) severityModel.getValueAt(i, 0));
 				severity.setColor((Color) severityModel.getValueAt(i, 1));
 				severities.set(i, severity);
 			} catch (IndexOutOfBoundsException e){

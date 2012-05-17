@@ -1,5 +1,8 @@
 package husacct.validate.domain.configuration;
 
+import husacct.validate.domain.exception.ContainsUnidentifiedSeverityException;
+import husacct.validate.domain.exception.DuplicateSeverityException;
+import husacct.validate.domain.exception.EmptySeverityNameException;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
@@ -24,57 +27,92 @@ class SeverityConfigRepository {
 	}
 
 	void addSeverities(List<Severity> severities){
-		this.currentSeverities = severities;
+		checkSeverities(severities);
+		this.currentSeverities = matchNewWithCurrentSeverities(severities);
+	}
+
+	private List<Severity> matchNewWithCurrentSeverities(List<Severity> newSeverities){
+		List<Severity> finalSeverityList = new ArrayList<Severity>();
+		for(Severity newSeverity : newSeverities){
+			for(Severity oldSeverity : currentSeverities){			
+				if(oldSeverity == newSeverity){
+					finalSeverityList.add(newSeverity);
+				}
+				else{
+					finalSeverityList.add(newSeverity);
+				}
+			}
+		}
+		return finalSeverityList;
 	}
 
 	Severity getSeverityByName(String severityName){
 		for(Severity customSeverity : currentSeverities){
 			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getDefaultName().toLowerCase())){
-				return customSeverity;
+				return customSeverity;	
 			}		
 		}
 		throw new SeverityNotFoundException();
 	}
 
+	/** 	 
+	 * @throws: DuplicateSeverityException, EmptySeverityNameException, ContainsUnidentifiedSeverityException
+	 */
 	private void checkSeverities(List<Severity> newSeverities){
-		if(containsUnidentifiedSeverity(newSeverities)){
-			//throw error
-		}	
-		if(checkDefaultSeverityName(newSeverities)){
-			//throw error
-		}
+		checkSeverityName(newSeverities);
+		containsUnidentifiedSeverity(newSeverities);
+		checkDuplicatedSeverities(newSeverities);
 	}
-	
-//	private boolean checkDuplicatedDefaultSeverities(List<Severity> newSeverities){
-//		
-//	}
 
-	private boolean checkDefaultSeverityName(List<Severity> newSeverities){
-		boolean foundError = false;
-		for(Severity defaultSeverity : generateDefaultSeverities()){
-			for(Severity newSeverity : newSeverities){
-				if(newSeverity.getDefaultName().toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
-					if(!newSeverity.getUserName().isEmpty()){
-						foundError = true;
+	private void checkDuplicatedSeverities(List<Severity> newSeverities){
+		for(Severity severity : newSeverities){
+			int idCounter = 0;
+			int nameCounter = 0;
+			for(Severity checkDuplicateSeverity : newSeverities){
+				if(checkDuplicateSeverity.getId().equals(severity.getId())){
+					idCounter++;
+				}
+				if(checkDuplicateSeverity.getDefaultName().toLowerCase().equals(severity.getDefaultName().toLowerCase()) || checkDuplicateSeverity.getUserName().toLowerCase().equals(severity.getUserName().toLowerCase())){
+					nameCounter++;					
+				}
+
+				if(idCounter >= 3 || nameCounter >= 3){
+					String severityName = "";
+					if(checkDuplicateSeverity.getDefaultName() == null || checkDuplicateSeverity.getDefaultName().isEmpty()){
+						severityName = checkDuplicateSeverity.getUserName();
 					}
+					else{
+						severityName = checkDuplicateSeverity.getDefaultName();
+					}
+					throw new DuplicateSeverityException(severityName, checkDuplicateSeverity.getId());
 				}
 			}
 		}
-		return foundError;
 	}
 
-	private boolean containsUnidentifiedSeverity(List<Severity> newSeverities){
-		for(Severity defaultSeverity : generateDefaultSeverities()){
-			for(Severity newSeverity : newSeverities){		
-				if(newSeverity.getDefaultName().toLowerCase().equals(DefaultSeverities.UNIDENTIFIED.toString().toLowerCase())){				
-					return true;
+	private void checkSeverityName(List<Severity> newSeverities){		
+		for(Severity severity : newSeverities){
+			if(severity.getUserName() == null || severity.getDefaultName() == null || (severity.getDefaultName().isEmpty() && severity.getUserName().isEmpty())){
+				throw new EmptySeverityNameException();
+			}
+		}
+	}
+
+	private void containsUnidentifiedSeverity(List<Severity> newSeverities){
+		boolean foundError = false;
+		for(Severity defaultSeverity : defaultSeverities){
+			for(Severity newSeverity : newSeverities){
+				if(defaultSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED.toString()) || defaultSeverity.getId().equals(newSeverity.getId())){
+					foundError = true;					
 				}
-				if(defaultSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED.toString()) && defaultSeverity.getId().equals(newSeverity.getId())){
-					return true;
+				if(newSeverity.getDefaultName().toLowerCase().equals(DefaultSeverities.UNIDENTIFIED.toString().toLowerCase())){				
+					foundError = true;					
+				}
+				if(foundError){
+					throw new ContainsUnidentifiedSeverityException();
 				}
 			}
 		}
-		return false;
 	}
 
 	int getSeverityValue(Severity severity){

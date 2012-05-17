@@ -38,10 +38,6 @@ public class Severity implements Cloneable {
 		this.color = color;
 	}
 
-	public void setDefaultName(String defaultName) {
-		this.defaultName = defaultName;
-	}
-
 	public String getDefaultName() {
 		return defaultName;
 	}
@@ -50,7 +46,7 @@ public class Severity implements Cloneable {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
+	public void setName(String userName) {
 		this.userName = userName;
 	}
 
