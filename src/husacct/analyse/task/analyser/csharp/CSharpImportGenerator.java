@@ -7,18 +7,17 @@ import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpImportGenerator extends CSharpGenerator {
 	List<String> seperatedAndMergedUsages = new ArrayList<String>();
-
-	public CSharpImportGenerator(List<CommonTree> usageTrees) {
+	public CSharpImportGenerator(List<CommonTree> usageTrees, String className) {
 		String mergedUsages = mergeTree(usageTrees);
 		seperateUsages(mergedUsages);
 		for (String usage : seperatedAndMergedUsages) {
 			int lineNumber = usageTrees.get(seperatedAndMergedUsages.indexOf(usage)).getLine();
-			createFamixObject(usage,lineNumber);
+			createFamixObject(usage,lineNumber, className);
 		}
 	}
 
-	private void createFamixObject(String usage, int lineNumber) {
-		modelService.createImport("", usage, lineNumber, usage, true);
+	private void createFamixObject(String usage, int lineNumber, String className) {
+		modelService.createImport(className, usage, lineNumber, usage, true);
 	}
 
 	private String mergeTree(List<CommonTree> usageTrees) {
