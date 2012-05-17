@@ -30,7 +30,7 @@ public class AboutDialog extends JDialog {
 		private GridBagConstraints constraint = new GridBagConstraints();
 		
 		public AboutDialog(MainController mainController) {
-			super(mainController.mainGUI, true);
+			super(mainController.getMainGui(), true);
 			setTitle("About HUSACCT");
 			setup();
 			addComponents();
@@ -43,6 +43,7 @@ public class AboutDialog extends JDialog {
 			this.setSize(new Dimension(420, 380));
 			this.setLayout(new FlowLayout());
 			this.setResizable(false);
+			DialogUtils.alignCenter(this);
 		}
 
 		private void addComponents(){
@@ -50,7 +51,7 @@ public class AboutDialog extends JDialog {
 			textPanel = new JPanel();
 			textPanel.setLayout(new GridBagLayout());
 			
-			Image logo = Toolkit.getDefaultToolkit().getImage("img/husacct.png");
+			Image logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/husacct/common/resources/husacct.png"));
 			pictureLabel = new JLabel(new ImageIcon(logo));
 			husacctLabel = new JLabel("HUSACCT");
 			versionLabel = new JLabel("Version");
