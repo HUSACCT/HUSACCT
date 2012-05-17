@@ -3,15 +3,20 @@ package husacct.graphics.task.layout;
 import husacct.common.ListUtils;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.connector.Connector;
 import org.lambda.functions.implementations.F1;
 
 public class LayeredLayoutStrategy implements LayoutStrategy {
@@ -20,6 +25,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	
 	private static final F1<Node, Boolean> rootLambda = new F1<Node, Boolean>(new Node(null, 0)){{ ret(a.getLevel() == 0);}};
 	private static final F1<Figure, Boolean> connectorLambda = new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }};
+	private static final F1<Figure, Boolean> unconnectedLambda = new F1<Figure, Boolean>(new ModuleFigure("", "")) {{ ret(a.getConnectors(null).size() == 0); }};
 	
 	private Drawing drawing;
 	private NodeList nodes = new NodeList();
@@ -44,11 +50,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 	
 	private void calculateLayout() {
-		calculateLayoutGraph();
-		//rebalanceGraph();
-	}
-	
-	private void calculateLayoutGraph() {
 		for (Figure f : connectors) {
 			ConnectionFigure cf = (ConnectionFigure)f;
 			
@@ -71,23 +72,20 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 				else if (startLevel == 0 && deltaLevel >= 2)
 					startNode.setLevel(endLevel - 1);
 			}
-		}		
-	}
-	
-//	private void rebalanceGraph() {
-//		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
-//		
-//		for (Node n : rootNodes) {
-//			int lowestLevel = Integer.MAX_VALUE;
-//			
-//			for (Node c : n.getConnections()) {
-//				lowestLevel = Math.min(c.getLevel(), lowestLevel);
-//			}
-//			
-//			if (n.getLevel() < lowestLevel - 1)
-//				n.setLevel(lowestLevel - 1);
+		}
+		
+		ArrayList<Figure> unconnected = new ArrayList<Figure>();
+		for (Figure f : drawing.getChildren()) {
+			if (!isConnector(f) && !nodes.contains(f)) {
+				getNode(f);
+			}
+
+		}
+//		List<Figure> unconnected = ListUtils.select(drawing.getChildren(), unconnectedLambda);
+//		for (Figure f : unconnected) {
+//			getNode(f);
 //		}
-//	}
+	}
 
 	private void applyLayout() {
 		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
@@ -143,7 +141,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			lowestLevel = Math.min(child.getLevel(), lowestLevel);
 		}
 		
-		if (lowestLevel > 1) {
+		if (lowestLevel != Integer.MAX_VALUE && lowestLevel > 1) {
 			 retVal.y += (lowestLevel - 1) * (node.getHeight() + VERT_ITEM_SPACING);
 		}
 		
@@ -159,7 +157,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 		
-		//System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
+		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
 	}
 	
 	private Node getNode(Figure figure) {

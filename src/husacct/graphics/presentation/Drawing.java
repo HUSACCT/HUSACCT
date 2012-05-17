@@ -31,10 +31,6 @@ public class Drawing extends QuadTreeDrawing {
 	public Drawing() {
 		super();
 	}
-
-	public void redraw() {
-		this.invalidate();
-	}
 	
 	public void showExportToImagePanel() {
 		try {

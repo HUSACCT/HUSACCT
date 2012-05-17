@@ -37,16 +37,6 @@ public class DemoController extends DrawingController {
 		taskLayer.logicalPath = "task";
 		modules.add(taskLayer);
 		
-//		ModuleDTO extraTaskLayer = new ModuleDTO();
-//		extraTaskLayer.type = "layer";
-//		extraTaskLayer.logicalPath = "extra_task";
-//		modules.add(extraTaskLayer);
-//
-//		extraTaskLayer = new ModuleDTO();
-//		extraTaskLayer.type = "layer";
-//		extraTaskLayer.logicalPath = "task_two";
-//		modules.add(extraTaskLayer);		
-
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
 		infrastructureLayer.logicalPath = "infrastructure";
@@ -61,11 +51,11 @@ public class DemoController extends DrawingController {
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain_two";
 		modules.add(domainLayer);		
-//
-//		ModuleDTO testLayer = new ModuleDTO();
-//		testLayer.type = "layer";
-//		testLayer.logicalPath = "test";
-//		modules.add(testLayer);
+
+		ModuleDTO testLayer = new ModuleDTO();
+		testLayer.type = "layer";
+		testLayer.logicalPath = "floating";
+		modules.add(testLayer);
 //		
 //		ModuleDTO testClass = new ModuleDTO();
 //		testClass.type = "class";

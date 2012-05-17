@@ -171,7 +171,6 @@ public abstract class DrawingController implements UserInputListener {
 		int height = drawTarget.getHeight();
 
 		layoutStrategy.doLayout(width, height);
-		drawing.redraw();
 	}
 
 	@Override
