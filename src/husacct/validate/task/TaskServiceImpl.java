@@ -91,21 +91,6 @@ public class TaskServiceImpl{
 		return analyseService.getAvailableLanguages();
 	}
 
-	public void applySeverities(List<Object[]> list){
-		List<Severity> severityList = new ArrayList<Severity>();
-
-		for (int i = 0; i < list.size(); i++) {
-			try{
-				Severity severity = getAllSeverities().get(i);
-				severity.setName((String) list.get(i)[0]);
-				severity.setColor((Color) list.get(i)[1]);
-				severityList.add(severity);
-			} catch (IndexOutOfBoundsException e){
-				severityList.add(new Severity((String) list.get(i)[0], (Color) list.get(i)[1]));
-			}
-		}
-		addSeverities(severityList);
-	}
 	public void addSeverities(List<Severity> severities) {
 		configuration.setSeverities(severities);
 	}
@@ -114,8 +99,7 @@ public class TaskServiceImpl{
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
-			String physicalPathTo) {
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 
