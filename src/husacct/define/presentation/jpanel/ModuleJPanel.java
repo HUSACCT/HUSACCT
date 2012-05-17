@@ -3,7 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.AddModuleValuesJFrame;
+import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
@@ -26,7 +26,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
+public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 
@@ -150,7 +150,7 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
-		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
+		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
 		addModuleFrame.setLocationRelativeTo(addModuleFrame.getRootPane());
 		addModuleFrame.initUI();
 	}

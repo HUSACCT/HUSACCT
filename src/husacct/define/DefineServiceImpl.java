@@ -10,9 +10,9 @@ import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.persistency.PersistentDomain;
+import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
-import husacct.define.task.persistency.PersistentDomain;
-import husacct.define.task.persistency.PersistentDomain.DomainElement;
 
 import java.util.ArrayList;
 
@@ -26,6 +26,21 @@ public class DefineServiceImpl implements IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private DomainParser domainParser = new DomainParser();
 	
+	public DefineServiceImpl(){
+		super();
+		reset();
+	}
+
+	private void reset() {
+		//TODO this is just a hotfix
+		defineDomainService = new SoftwareArchitectureDomainService();
+		moduleService = new ModuleDomainService();
+		appliedRuleService = new AppliedRuleDomainService();
+		domainParser = new DomainParser();
+		
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
+	}
+
 	@Override
 	public void createApplication(String name, String[] paths, String language, String version) {
 		defineDomainService.createApplication(name, paths, language, version);

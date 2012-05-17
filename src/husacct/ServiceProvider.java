@@ -24,20 +24,14 @@ public final class ServiceProvider {
 	private ServiceProvider() {
 		try {
 			_instance = this;
-			
-			this.controlService = new ControlServiceImpl();
-			this.analyseService = new AnalyseServiceImpl();
-			this.defineService = new DefineServiceImpl();
-			this.validateService = new ValidateServiceImpl();
-			this.graphicsService = new GraphicsServiceImpl();
-			
+			resetServices();
 		} catch (StackOverflowError error) {
 			System.out.println(error);
 			System.out.println("Unable to initiate services, avoid using the ServiceProvider within the ServiceImpl constructor or field declaration. Terminating.");
 			System.exit(0);
 		}
 	}
-
+	
 	public static ServiceProvider getInstance() {
 		if (ServiceProvider._instance == null) {
 			new ServiceProvider();
@@ -45,6 +39,14 @@ public final class ServiceProvider {
 		return ServiceProvider._instance;
 	}
 
+	public void resetServices(){
+		this.controlService = new ControlServiceImpl();
+		this.analyseService = new AnalyseServiceImpl();
+		this.defineService = new DefineServiceImpl();
+		this.validateService = new ValidateServiceImpl();
+		this.graphicsService = new GraphicsServiceImpl();
+	}
+	
 	public IControlService getControlService() {
 		return controlService;
 	}

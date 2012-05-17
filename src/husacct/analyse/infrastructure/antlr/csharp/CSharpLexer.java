@@ -245,8 +245,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__61;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:20:7: ( 'namespace' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:20:9: 'namespace'
+            //:20:7: ( 'namespace' )
+            //:20:9: 'namespace'
             {
             match("namespace"); 
 
@@ -266,8 +266,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__62;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:21:7: ( '{' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:21:9: '{'
+            //:21:7: ( '{' )
+            //:21:9: '{'
             {
             match('{'); 
 
@@ -286,8 +286,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__63;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:22:7: ( '}' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:22:9: '}'
+            //:22:7: ( '}' )
+            //:22:9: '}'
             {
             match('}'); 
 
@@ -306,8 +306,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__64;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:23:7: ( 'extern' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:23:9: 'extern'
+            //:23:7: ( 'extern' )
+            //:23:9: 'extern'
             {
             match("extern"); 
 
@@ -327,8 +327,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__65;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:24:7: ( 'alias' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:24:9: 'alias'
+            //:24:7: ( 'alias' )
+            //:24:9: 'alias'
             {
             match("alias"); 
 
@@ -348,8 +348,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__66;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:25:7: ( '=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:25:9: '='
+            //:25:7: ( '=' )
+            //:25:9: '='
             {
             match('='); 
 
@@ -368,8 +368,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__67;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:26:7: ( 'partial' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:26:9: 'partial'
+            //:26:7: ( 'partial' )
+            //:26:9: 'partial'
             {
             match("partial"); 
 
@@ -389,8 +389,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__68;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:27:7: ( 'new' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:27:9: 'new'
+            //:27:7: ( 'new' )
+            //:27:9: 'new'
             {
             match("new"); 
 
@@ -410,8 +410,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__69;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:28:7: ( 'public' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:28:9: 'public'
+            //:28:7: ( 'public' )
+            //:28:9: 'public'
             {
             match("public"); 
 
@@ -431,8 +431,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__70;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:29:7: ( 'protected' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:29:9: 'protected'
+            //:29:7: ( 'protected' )
+            //:29:9: 'protected'
             {
             match("protected"); 
 
@@ -452,8 +452,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__71;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:30:7: ( 'private' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:30:9: 'private'
+            //:30:7: ( 'private' )
+            //:30:9: 'private'
             {
             match("private"); 
 
@@ -473,8 +473,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__72;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:31:7: ( 'internal' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:31:9: 'internal'
+            //:31:7: ( 'internal' )
+            //:31:9: 'internal'
             {
             match("internal"); 
 
@@ -494,8 +494,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__73;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:32:7: ( 'unsafe' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:32:9: 'unsafe'
+            //:32:7: ( 'unsafe' )
+            //:32:9: 'unsafe'
             {
             match("unsafe"); 
 
@@ -515,8 +515,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__74;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:33:7: ( 'abstract' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:33:9: 'abstract'
+            //:33:7: ( 'abstract' )
+            //:33:9: 'abstract'
             {
             match("abstract"); 
 
@@ -536,8 +536,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__75;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:34:7: ( 'sealed' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:34:9: 'sealed'
+            //:34:7: ( 'sealed' )
+            //:34:9: 'sealed'
             {
             match("sealed"); 
 
@@ -557,8 +557,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__76;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:35:7: ( 'static' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:35:9: 'static'
+            //:35:7: ( 'static' )
+            //:35:9: 'static'
             {
             match("static"); 
 
@@ -578,8 +578,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__77;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:36:7: ( 'readonly' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:36:9: 'readonly'
+            //:36:7: ( 'readonly' )
+            //:36:9: 'readonly'
             {
             match("readonly"); 
 
@@ -599,8 +599,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__78;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:37:7: ( 'volatile' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:37:9: 'volatile'
+            //:37:7: ( 'volatile' )
+            //:37:9: 'volatile'
             {
             match("volatile"); 
 
@@ -620,8 +620,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__79;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:38:7: ( 'virtual' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:38:9: 'virtual'
+            //:38:7: ( 'virtual' )
+            //:38:9: 'virtual'
             {
             match("virtual"); 
 
@@ -641,8 +641,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__80;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:39:7: ( 'override' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:39:9: 'override'
+            //:39:7: ( 'override' )
+            //:39:9: 'override'
             {
             match("override"); 
 
@@ -662,8 +662,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__81;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:40:7: ( 'const' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:40:9: 'const'
+            //:40:7: ( 'const' )
+            //:40:9: 'const'
             {
             match("const"); 
 
@@ -683,8 +683,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__82;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:41:7: ( 'void' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:41:9: 'void'
+            //:41:7: ( 'void' )
+            //:41:9: 'void'
             {
             match("void"); 
 
@@ -704,8 +704,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__83;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:42:7: ( 'this' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:42:9: 'this'
+            //:42:7: ( 'this' )
+            //:42:9: 'this'
             {
             match("this"); 
 
@@ -725,8 +725,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__84;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:43:7: ( '::' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:43:9: '::'
+            //:43:7: ( '::' )
+            //:43:9: '::'
             {
             match("::"); 
 
@@ -746,8 +746,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__85;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:44:7: ( 'base' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:44:9: 'base'
+            //:44:7: ( 'base' )
+            //:44:9: 'base'
             {
             match("base"); 
 
@@ -767,8 +767,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__86;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:45:7: ( '[' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:45:9: '['
+            //:45:7: ( '[' )
+            //:45:9: '['
             {
             match('['); 
 
@@ -787,8 +787,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__87;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:46:7: ( ']' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:46:9: ']'
+            //:46:7: ( ']' )
+            //:46:9: ']'
             {
             match(']'); 
 
@@ -807,8 +807,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__88;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:47:7: ( '(' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:47:9: '('
+            //:47:7: ( '(' )
+            //:47:9: '('
             {
             match('('); 
 
@@ -827,8 +827,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__89;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:48:7: ( ',' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:48:9: ','
+            //:48:7: ( ',' )
+            //:48:9: ','
             {
             match(','); 
 
@@ -847,8 +847,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__90;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:49:7: ( ':' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:49:9: ':'
+            //:49:7: ( ':' )
+            //:49:9: ':'
             {
             match(':'); 
 
@@ -867,8 +867,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__91;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:50:7: ( 'out' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:50:9: 'out'
+            //:50:7: ( 'out' )
+            //:50:9: 'out'
             {
             match("out"); 
 
@@ -888,8 +888,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__92;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:51:7: ( 'ref' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:51:9: 'ref'
+            //:51:7: ( 'ref' )
+            //:51:9: 'ref'
             {
             match("ref"); 
 
@@ -909,8 +909,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__93;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:52:7: ( 'sizeof' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:52:9: 'sizeof'
+            //:52:7: ( 'sizeof' )
+            //:52:9: 'sizeof'
             {
             match("sizeof"); 
 
@@ -930,8 +930,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__94;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:53:7: ( 'checked' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:53:9: 'checked'
+            //:53:7: ( 'checked' )
+            //:53:9: 'checked'
             {
             match("checked"); 
 
@@ -951,8 +951,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__95;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:54:7: ( 'unchecked' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:54:9: 'unchecked'
+            //:54:7: ( 'unchecked' )
+            //:54:9: 'unchecked'
             {
             match("unchecked"); 
 
@@ -972,8 +972,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__96;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:55:7: ( 'default' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:55:9: 'default'
+            //:55:7: ( 'default' )
+            //:55:9: 'default'
             {
             match("default"); 
 
@@ -993,8 +993,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__97;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:56:7: ( 'delegate' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:56:9: 'delegate'
+            //:56:7: ( 'delegate' )
+            //:56:9: 'delegate'
             {
             match("delegate"); 
 
@@ -1014,8 +1014,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__98;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:57:7: ( 'typeof' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:57:9: 'typeof'
+            //:57:7: ( 'typeof' )
+            //:57:9: 'typeof'
             {
             match("typeof"); 
 
@@ -1035,8 +1035,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__99;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:58:7: ( '<' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:58:9: '<'
+            //:58:7: ( '<' )
+            //:58:9: '<'
             {
             match('<'); 
 
@@ -1055,8 +1055,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__100;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:59:8: ( '*' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:59:10: '*'
+            //:59:8: ( '*' )
+            //:59:10: '*'
             {
             match('*'); 
 
@@ -1075,8 +1075,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__101;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:60:8: ( '?' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:60:10: '?'
+            //:60:8: ( '?' )
+            //:60:10: '?'
             {
             match('?'); 
 
@@ -1095,8 +1095,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__102;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:61:8: ( '++' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:61:10: '++'
+            //:61:8: ( '++' )
+            //:61:10: '++'
             {
             match("++"); 
 
@@ -1116,8 +1116,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__103;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:62:8: ( '--' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:62:10: '--'
+            //:62:8: ( '--' )
+            //:62:10: '--'
             {
             match("--"); 
 
@@ -1137,8 +1137,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__104;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:63:8: ( '+' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:63:10: '+'
+            //:63:8: ( '+' )
+            //:63:10: '+'
             {
             match('+'); 
 
@@ -1157,8 +1157,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__105;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:64:8: ( '!' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:64:10: '!'
+            //:64:8: ( '!' )
+            //:64:10: '!'
             {
             match('!'); 
 
@@ -1177,8 +1177,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__106;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:65:8: ( '~' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:65:10: '~'
+            //:65:8: ( '~' )
+            //:65:10: '~'
             {
             match('~'); 
 
@@ -1197,8 +1197,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__107;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:66:8: ( '+=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:66:10: '+='
+            //:66:8: ( '+=' )
+            //:66:10: '+='
             {
             match("+="); 
 
@@ -1218,8 +1218,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__108;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:67:8: ( '-=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:67:10: '-='
+            //:67:8: ( '-=' )
+            //:67:10: '-='
             {
             match("-="); 
 
@@ -1239,8 +1239,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__109;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:68:8: ( '*=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:68:10: '*='
+            //:68:8: ( '*=' )
+            //:68:10: '*='
             {
             match("*="); 
 
@@ -1260,8 +1260,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__110;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:69:8: ( '/=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:69:10: '/='
+            //:69:8: ( '/=' )
+            //:69:10: '/='
             {
             match("/="); 
 
@@ -1281,8 +1281,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__111;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:70:8: ( '%=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:70:10: '%='
+            //:70:8: ( '%=' )
+            //:70:10: '%='
             {
             match("%="); 
 
@@ -1302,8 +1302,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__112;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:71:8: ( '&=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:71:10: '&='
+            //:71:8: ( '&=' )
+            //:71:10: '&='
             {
             match("&="); 
 
@@ -1323,8 +1323,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__113;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:72:8: ( '|=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:72:10: '|='
+            //:72:8: ( '|=' )
+            //:72:10: '|='
             {
             match("|="); 
 
@@ -1344,8 +1344,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__114;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:73:8: ( '^=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:73:10: '^='
+            //:73:8: ( '^=' )
+            //:73:10: '^='
             {
             match("^="); 
 
@@ -1365,8 +1365,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__115;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:74:8: ( '<<=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:74:10: '<<='
+            //:74:8: ( '<<=' )
+            //:74:10: '<<='
             {
             match("<<="); 
 
@@ -1386,8 +1386,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__116;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:75:8: ( '>=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:75:10: '>='
+            //:75:8: ( '>=' )
+            //:75:10: '>='
             {
             match(">="); 
 
@@ -1407,8 +1407,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__117;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:76:8: ( '&' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:76:10: '&'
+            //:76:8: ( '&' )
+            //:76:10: '&'
             {
             match('&'); 
 
@@ -1427,8 +1427,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__118;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:77:8: ( '/' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:77:10: '/'
+            //:77:8: ( '/' )
+            //:77:10: '/'
             {
             match('/'); 
 
@@ -1447,8 +1447,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__119;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:78:8: ( '%' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:78:10: '%'
+            //:78:8: ( '%' )
+            //:78:10: '%'
             {
             match('%'); 
 
@@ -1467,8 +1467,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__120;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:79:8: ( '<<' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:79:10: '<<'
+            //:79:8: ( '<<' )
+            //:79:10: '<<'
             {
             match("<<"); 
 
@@ -1488,8 +1488,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__121;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:80:8: ( '<=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:80:10: '<='
+            //:80:8: ( '<=' )
+            //:80:10: '<='
             {
             match("<="); 
 
@@ -1509,8 +1509,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__122;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:81:8: ( 'is' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:81:10: 'is'
+            //:81:8: ( 'is' )
+            //:81:10: 'is'
             {
             match("is"); 
 
@@ -1530,8 +1530,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__123;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:82:8: ( 'as' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:82:10: 'as'
+            //:82:8: ( 'as' )
+            //:82:10: 'as'
             {
             match("as"); 
 
@@ -1551,8 +1551,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__124;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:83:8: ( '==' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:83:10: '=='
+            //:83:8: ( '==' )
+            //:83:10: '=='
             {
             match("=="); 
 
@@ -1572,8 +1572,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__125;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:84:8: ( '!=' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:84:10: '!='
+            //:84:8: ( '!=' )
+            //:84:10: '!='
             {
             match("!="); 
 
@@ -1593,8 +1593,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__126;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:85:8: ( '^' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:85:10: '^'
+            //:85:8: ( '^' )
+            //:85:10: '^'
             {
             match('^'); 
 
@@ -1613,8 +1613,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__127;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:86:8: ( '|' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:86:10: '|'
+            //:86:8: ( '|' )
+            //:86:10: '|'
             {
             match('|'); 
 
@@ -1633,8 +1633,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__128;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:87:8: ( '&&' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:87:10: '&&'
+            //:87:8: ( '&&' )
+            //:87:10: '&&'
             {
             match("&&"); 
 
@@ -1654,8 +1654,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__129;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:88:8: ( '||' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:88:10: '||'
+            //:88:8: ( '||' )
+            //:88:10: '||'
             {
             match("||"); 
 
@@ -1675,8 +1675,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__130;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:89:8: ( '??' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:89:10: '??'
+            //:89:8: ( '??' )
+            //:89:10: '??'
             {
             match("??"); 
 
@@ -1696,8 +1696,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__131;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:90:8: ( '=>' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:90:10: '=>'
+            //:90:8: ( '=>' )
+            //:90:10: '=>'
             {
             match("=>"); 
 
@@ -1717,8 +1717,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__132;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:91:8: ( 'into' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:91:10: 'into'
+            //:91:8: ( 'into' )
+            //:91:10: 'into'
             {
             match("into"); 
 
@@ -1738,8 +1738,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__133;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:92:8: ( 'from' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:92:10: 'from'
+            //:92:8: ( 'from' )
+            //:92:10: 'from'
             {
             match("from"); 
 
@@ -1759,8 +1759,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__134;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:93:8: ( 'in' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:93:10: 'in'
+            //:93:8: ( 'in' )
+            //:93:10: 'in'
             {
             match("in"); 
 
@@ -1780,8 +1780,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__135;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:94:8: ( 'join' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:94:10: 'join'
+            //:94:8: ( 'join' )
+            //:94:10: 'join'
             {
             match("join"); 
 
@@ -1801,8 +1801,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__136;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:95:8: ( 'on' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:95:10: 'on'
+            //:95:8: ( 'on' )
+            //:95:10: 'on'
             {
             match("on"); 
 
@@ -1822,8 +1822,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__137;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:96:8: ( 'equals' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:96:10: 'equals'
+            //:96:8: ( 'equals' )
+            //:96:10: 'equals'
             {
             match("equals"); 
 
@@ -1843,8 +1843,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__138;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:97:8: ( 'let' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:97:10: 'let'
+            //:97:8: ( 'let' )
+            //:97:10: 'let'
             {
             match("let"); 
 
@@ -1864,8 +1864,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__139;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:98:8: ( 'orderby' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:98:10: 'orderby'
+            //:98:8: ( 'orderby' )
+            //:98:10: 'orderby'
             {
             match("orderby"); 
 
@@ -1885,8 +1885,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__140;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:99:8: ( 'ascending' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:99:10: 'ascending'
+            //:99:8: ( 'ascending' )
+            //:99:10: 'ascending'
             {
             match("ascending"); 
 
@@ -1906,8 +1906,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__141;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:100:8: ( 'descending' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:100:10: 'descending'
+            //:100:8: ( 'descending' )
+            //:100:10: 'descending'
             {
             match("descending"); 
 
@@ -1927,8 +1927,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__142;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:101:8: ( 'select' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:101:10: 'select'
+            //:101:8: ( 'select' )
+            //:101:10: 'select'
             {
             match("select"); 
 
@@ -1948,8 +1948,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__143;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:102:8: ( 'group' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:102:10: 'group'
+            //:102:8: ( 'group' )
+            //:102:10: 'group'
             {
             match("group"); 
 
@@ -1969,8 +1969,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__144;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:103:8: ( 'by' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:103:10: 'by'
+            //:103:8: ( 'by' )
+            //:103:10: 'by'
             {
             match("by"); 
 
@@ -1990,8 +1990,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__145;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:104:8: ( 'where' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:104:10: 'where'
+            //:104:8: ( 'where' )
+            //:104:10: 'where'
             {
             match("where"); 
 
@@ -2011,8 +2011,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__146;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:105:8: ( 'assembly' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:105:10: 'assembly'
+            //:105:8: ( 'assembly' )
+            //:105:10: 'assembly'
             {
             match("assembly"); 
 
@@ -2032,8 +2032,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__147;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:106:8: ( 'module' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:106:10: 'module'
+            //:106:8: ( 'module' )
+            //:106:10: 'module'
             {
             match("module"); 
 
@@ -2053,8 +2053,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__148;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:107:8: ( 'field' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:107:10: 'field'
+            //:107:8: ( 'field' )
+            //:107:10: 'field'
             {
             match("field"); 
 
@@ -2074,8 +2074,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__149;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:108:8: ( 'event' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:108:10: 'event'
+            //:108:8: ( 'event' )
+            //:108:10: 'event'
             {
             match("event"); 
 
@@ -2095,8 +2095,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__150;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:109:8: ( 'method' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:109:10: 'method'
+            //:109:8: ( 'method' )
+            //:109:10: 'method'
             {
             match("method"); 
 
@@ -2116,8 +2116,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__151;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:110:8: ( 'param' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:110:10: 'param'
+            //:110:8: ( 'param' )
+            //:110:10: 'param'
             {
             match("param"); 
 
@@ -2137,8 +2137,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__152;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:111:8: ( 'property' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:111:10: 'property'
+            //:111:8: ( 'property' )
+            //:111:10: 'property'
             {
             match("property"); 
 
@@ -2158,8 +2158,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__153;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:112:8: ( 'return' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:112:10: 'return'
+            //:112:8: ( 'return' )
+            //:112:10: 'return'
             {
             match("return"); 
 
@@ -2179,8 +2179,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__154;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:113:8: ( 'type' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:113:10: 'type'
+            //:113:8: ( 'type' )
+            //:113:10: 'type'
             {
             match("type"); 
 
@@ -2200,8 +2200,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__155;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:114:8: ( 'class' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:114:10: 'class'
+            //:114:8: ( 'class' )
+            //:114:10: 'class'
             {
             match("class"); 
 
@@ -2221,8 +2221,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__156;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:115:8: ( 'get' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:115:10: 'get'
+            //:115:8: ( 'get' )
+            //:115:10: 'get'
             {
             match("get"); 
 
@@ -2242,8 +2242,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__157;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:116:8: ( 'set' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:116:10: 'set'
+            //:116:8: ( 'set' )
+            //:116:10: 'set'
             {
             match("set"); 
 
@@ -2263,8 +2263,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__158;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:117:8: ( 'add' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:117:10: 'add'
+            //:117:8: ( 'add' )
+            //:117:10: 'add'
             {
             match("add"); 
 
@@ -2284,8 +2284,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__159;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:118:8: ( 'remove' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:118:10: 'remove'
+            //:118:8: ( 'remove' )
+            //:118:10: 'remove'
             {
             match("remove"); 
 
@@ -2305,8 +2305,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__160;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:119:8: ( 'sbyte' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:119:10: 'sbyte'
+            //:119:8: ( 'sbyte' )
+            //:119:10: 'sbyte'
             {
             match("sbyte"); 
 
@@ -2326,8 +2326,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__161;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:120:8: ( 'byte' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:120:10: 'byte'
+            //:120:8: ( 'byte' )
+            //:120:10: 'byte'
             {
             match("byte"); 
 
@@ -2347,8 +2347,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__162;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:121:8: ( 'short' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:121:10: 'short'
+            //:121:8: ( 'short' )
+            //:121:10: 'short'
             {
             match("short"); 
 
@@ -2368,8 +2368,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__163;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:122:8: ( 'ushort' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:122:10: 'ushort'
+            //:122:8: ( 'ushort' )
+            //:122:10: 'ushort'
             {
             match("ushort"); 
 
@@ -2389,8 +2389,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__164;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:123:8: ( 'int' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:123:10: 'int'
+            //:123:8: ( 'int' )
+            //:123:10: 'int'
             {
             match("int"); 
 
@@ -2410,8 +2410,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__165;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:124:8: ( 'uint' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:124:10: 'uint'
+            //:124:8: ( 'uint' )
+            //:124:10: 'uint'
             {
             match("uint"); 
 
@@ -2431,8 +2431,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__166;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:125:8: ( 'long' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:125:10: 'long'
+            //:125:8: ( 'long' )
+            //:125:10: 'long'
             {
             match("long"); 
 
@@ -2452,8 +2452,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__167;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:126:8: ( 'ulong' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:126:10: 'ulong'
+            //:126:8: ( 'ulong' )
+            //:126:10: 'ulong'
             {
             match("ulong"); 
 
@@ -2473,8 +2473,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__168;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:127:8: ( 'char' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:127:10: 'char'
+            //:127:8: ( 'char' )
+            //:127:10: 'char'
             {
             match("char"); 
 
@@ -2494,8 +2494,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__169;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:128:8: ( 'struct' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:128:10: 'struct'
+            //:128:8: ( 'struct' )
+            //:128:10: 'struct'
             {
             match("struct"); 
 
@@ -2515,8 +2515,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__170;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:129:8: ( '__arglist' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:129:10: '__arglist'
+            //:129:8: ( '__arglist' )
+            //:129:10: '__arglist'
             {
             match("__arglist"); 
 
@@ -2536,8 +2536,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__171;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:130:8: ( 'params' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:130:10: 'params'
+            //:130:8: ( 'params' )
+            //:130:10: 'params'
             {
             match("params"); 
 
@@ -2557,8 +2557,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__172;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:131:8: ( 'interface' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:131:10: 'interface'
+            //:131:8: ( 'interface' )
+            //:131:10: 'interface'
             {
             match("interface"); 
 
@@ -2578,8 +2578,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__173;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:132:8: ( 'operator' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:132:10: 'operator'
+            //:132:8: ( 'operator' )
+            //:132:10: 'operator'
             {
             match("operator"); 
 
@@ -2599,8 +2599,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__174;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:133:8: ( 'implicit' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:133:10: 'implicit'
+            //:133:8: ( 'implicit' )
+            //:133:10: 'implicit'
             {
             match("implicit"); 
 
@@ -2620,8 +2620,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__175;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:134:8: ( 'explicit' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:134:10: 'explicit'
+            //:134:8: ( 'explicit' )
+            //:134:10: 'explicit'
             {
             match("explicit"); 
 
@@ -2641,8 +2641,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__176;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:135:8: ( 'fixed' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:135:10: 'fixed'
+            //:135:8: ( 'fixed' )
+            //:135:10: 'fixed'
             {
             match("fixed"); 
 
@@ -2662,8 +2662,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__177;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:136:8: ( 'var' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:136:10: 'var'
+            //:136:8: ( 'var' )
+            //:136:10: 'var'
             {
             match("var"); 
 
@@ -2683,8 +2683,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__178;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:137:8: ( 'dynamic' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:137:10: 'dynamic'
+            //:137:8: ( 'dynamic' )
+            //:137:10: 'dynamic'
             {
             match("dynamic"); 
 
@@ -2704,8 +2704,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__179;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:138:8: ( 'stackalloc' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:138:10: 'stackalloc'
+            //:138:8: ( 'stackalloc' )
+            //:138:10: 'stackalloc'
             {
             match("stackalloc"); 
 
@@ -2725,8 +2725,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__180;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:139:8: ( 'else' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:139:10: 'else'
+            //:139:8: ( 'else' )
+            //:139:10: 'else'
             {
             match("else"); 
 
@@ -2746,8 +2746,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__181;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:140:8: ( 'switch' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:140:10: 'switch'
+            //:140:8: ( 'switch' )
+            //:140:10: 'switch'
             {
             match("switch"); 
 
@@ -2767,8 +2767,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__182;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:141:8: ( 'case' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:141:10: 'case'
+            //:141:8: ( 'case' )
+            //:141:10: 'case'
             {
             match("case"); 
 
@@ -2788,8 +2788,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__183;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:142:8: ( 'while' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:142:10: 'while'
+            //:142:8: ( 'while' )
+            //:142:10: 'while'
             {
             match("while"); 
 
@@ -2809,8 +2809,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__184;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:143:8: ( 'do' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:143:10: 'do'
+            //:143:8: ( 'do' )
+            //:143:10: 'do'
             {
             match("do"); 
 
@@ -2830,8 +2830,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__185;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:144:8: ( 'for' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:144:10: 'for'
+            //:144:8: ( 'for' )
+            //:144:10: 'for'
             {
             match("for"); 
 
@@ -2851,8 +2851,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__186;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:145:8: ( 'foreach' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:145:10: 'foreach'
+            //:145:8: ( 'foreach' )
+            //:145:10: 'foreach'
             {
             match("foreach"); 
 
@@ -2872,8 +2872,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__187;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:146:8: ( 'break' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:146:10: 'break'
+            //:146:8: ( 'break' )
+            //:146:10: 'break'
             {
             match("break"); 
 
@@ -2893,8 +2893,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__188;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:147:8: ( 'continue' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:147:10: 'continue'
+            //:147:8: ( 'continue' )
+            //:147:10: 'continue'
             {
             match("continue"); 
 
@@ -2914,8 +2914,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__189;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:148:8: ( 'goto' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:148:10: 'goto'
+            //:148:8: ( 'goto' )
+            //:148:10: 'goto'
             {
             match("goto"); 
 
@@ -2935,8 +2935,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__190;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:149:8: ( 'throw' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:149:10: 'throw'
+            //:149:8: ( 'throw' )
+            //:149:10: 'throw'
             {
             match("throw"); 
 
@@ -2956,8 +2956,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__191;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:150:8: ( 'try' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:150:10: 'try'
+            //:150:8: ( 'try' )
+            //:150:10: 'try'
             {
             match("try"); 
 
@@ -2977,8 +2977,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__192;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:151:8: ( 'catch' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:151:10: 'catch'
+            //:151:8: ( 'catch' )
+            //:151:10: 'catch'
             {
             match("catch"); 
 
@@ -2998,8 +2998,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__193;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:152:8: ( 'finally' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:152:10: 'finally'
+            //:152:8: ( 'finally' )
+            //:152:10: 'finally'
             {
             match("finally"); 
 
@@ -3019,8 +3019,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__194;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:153:8: ( 'lock' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:153:10: 'lock'
+            //:153:8: ( 'lock' )
+            //:153:10: 'lock'
             {
             match("lock"); 
 
@@ -3040,8 +3040,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__195;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:154:8: ( 'yield' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:154:10: 'yield'
+            //:154:8: ( 'yield' )
+            //:154:10: 'yield'
             {
             match("yield"); 
 
@@ -3061,8 +3061,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__196;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:155:8: ( 'bool' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:155:10: 'bool'
+            //:155:8: ( 'bool' )
+            //:155:10: 'bool'
             {
             match("bool"); 
 
@@ -3082,8 +3082,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__197;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:156:8: ( 'decimal' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:156:10: 'decimal'
+            //:156:8: ( 'decimal' )
+            //:156:10: 'decimal'
             {
             match("decimal"); 
 
@@ -3103,8 +3103,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__198;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:157:8: ( 'double' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:157:10: 'double'
+            //:157:8: ( 'double' )
+            //:157:10: 'double'
             {
             match("double"); 
 
@@ -3124,8 +3124,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__199;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:158:8: ( 'float' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:158:10: 'float'
+            //:158:8: ( 'float' )
+            //:158:10: 'float'
             {
             match("float"); 
 
@@ -3145,8 +3145,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__200;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:159:8: ( 'object' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:159:10: 'object'
+            //:159:8: ( 'object' )
+            //:159:10: 'object'
             {
             match("object"); 
 
@@ -3166,8 +3166,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__201;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:160:8: ( 'string' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:160:10: 'string'
+            //:160:8: ( 'string' )
+            //:160:10: 'string'
             {
             match("string"); 
 
@@ -3187,8 +3187,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = T__202;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:161:8: ( 'pragma' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:161:10: 'pragma'
+            //:161:8: ( 'pragma' )
+            //:161:10: 'pragma'
             {
             match("pragma"); 
 
@@ -3208,8 +3208,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = TRUE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1055:6: ( 'true' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1055:8: 'true'
+            //:1055:6: ( 'true' )
+            //:1055:8: 'true'
             {
             match("true"); 
 
@@ -3229,8 +3229,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = FALSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1056:6: ( 'false' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1056:8: 'false'
+            //:1056:6: ( 'false' )
+            //:1056:8: 'false'
             {
             match("false"); 
 
@@ -3250,8 +3250,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = NULL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1057:6: ( 'null' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1057:8: 'null'
+            //:1057:6: ( 'null' )
+            //:1057:8: 'null'
             {
             match("null"); 
 
@@ -3271,8 +3271,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = DOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1058:5: ( '.' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1058:7: '.'
+            //:1058:5: ( '.' )
+            //:1058:7: '.'
             {
             match('.'); 
 
@@ -3291,8 +3291,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = PTR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1059:5: ( '->' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1059:7: '->'
+            //:1059:5: ( '->' )
+            //:1059:7: '->'
             {
             match("->"); 
 
@@ -3312,8 +3312,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = MINUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1060:7: ( '-' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1060:9: '-'
+            //:1060:7: ( '-' )
+            //:1060:9: '-'
             {
             match('-'); 
 
@@ -3332,8 +3332,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = GT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1061:4: ( '>' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1061:6: '>'
+            //:1061:4: ( '>' )
+            //:1061:6: '>'
             {
             match('>'); 
 
@@ -3352,8 +3352,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = USING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1062:7: ( 'using' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1062:9: 'using'
+            //:1062:7: ( 'using' )
+            //:1062:9: 'using'
             {
             match("using"); 
 
@@ -3373,8 +3373,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = ENUM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1063:6: ( 'enum' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1063:8: 'enum'
+            //:1063:6: ( 'enum' )
+            //:1063:8: 'enum'
             {
             match("enum"); 
 
@@ -3394,8 +3394,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1064:3: ( 'if' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1064:5: 'if'
+            //:1064:3: ( 'if' )
+            //:1064:5: 'if'
             {
             match("if"); 
 
@@ -3415,8 +3415,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = ELIF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1065:5: ( 'elif' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1065:7: 'elif'
+            //:1065:5: ( 'elif' )
+            //:1065:7: 'elif'
             {
             match("elif"); 
 
@@ -3436,8 +3436,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = ENDIF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1066:6: ( 'endif' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1066:8: 'endif'
+            //:1066:6: ( 'endif' )
+            //:1066:8: 'endif'
             {
             match("endif"); 
 
@@ -3457,8 +3457,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = DEFINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1067:7: ( 'define' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1067:9: 'define'
+            //:1067:7: ( 'define' )
+            //:1067:9: 'define'
             {
             match("define"); 
 
@@ -3478,8 +3478,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = UNDEF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1068:6: ( 'undef' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1068:8: 'undef'
+            //:1068:6: ( 'undef' )
+            //:1068:8: 'undef'
             {
             match("undef"); 
 
@@ -3499,8 +3499,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = SEMI;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1069:5: ( ';' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1069:7: ';'
+            //:1069:5: ( ';' )
+            //:1069:7: ';'
             {
             match(';'); 
 
@@ -3519,8 +3519,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = RPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1070:7: ( ')' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1070:9: ')'
+            //:1070:7: ( ')' )
+            //:1070:9: ')'
             {
             match(')'); 
 
@@ -3539,8 +3539,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1072:3: ( ( ' ' | '\\r' | '\\t' | '\\n' ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1073:5: ( ' ' | '\\r' | '\\t' | '\\n' )
+            //:1072:3: ( ( ' ' | '\\r' | '\\t' | '\\n' ) )
+            //:1073:5: ( ' ' | '\\r' | '\\t' | '\\n' )
             {
             if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
@@ -3567,8 +3567,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "TS"
     public final void mTS() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1076:3: ( ( ' ' | '\\t' ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1077:5: ( ' ' | '\\t' )
+            //:1076:3: ( ( ' ' | '\\t' ) )
+            //:1077:5: ( ' ' | '\\t' )
             {
             if ( input.LA(1)=='\t'||input.LA(1)==' ' ) {
                 input.consume();
@@ -3594,15 +3594,15 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = DOC_LINE_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:5: ( ( '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:9: ( '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
+            //:1080:5: ( ( '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ ) )
+            //:1080:9: ( '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:9: ( '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:10: '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+
+            //:1080:9: ( '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
+            //:1080:10: '///' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+
             {
             match("///"); 
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:16: (~ ( '\\n' | '\\r' ) )*
+            //:1080:16: (~ ( '\\n' | '\\r' ) )*
             loop1:
             do {
                 int alt1=2;
@@ -3615,7 +3615,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:16: ~ ( '\\n' | '\\r' )
+            	    //:1080:16: ~ ( '\\n' | '\\r' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -3635,7 +3635,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1080:31: ( '\\r' | '\\n' )+
+            //:1080:31: ( '\\r' | '\\n' )+
             int cnt2=0;
             loop2:
             do {
@@ -3649,7 +3649,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            	    //:
             	    {
             	    if ( input.LA(1)=='\n'||input.LA(1)=='\r' ) {
             	        input.consume();
@@ -3693,15 +3693,15 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = LINE_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:5: ( ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:7: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
+            //:1083:5: ( ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ ) )
+            //:1083:7: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:7: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:8: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+
+            //:1083:7: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
+            //:1083:8: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+
             {
             match("//"); 
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:13: (~ ( '\\n' | '\\r' ) )*
+            //:1083:13: (~ ( '\\n' | '\\r' ) )*
             loop3:
             do {
                 int alt3=2;
@@ -3714,7 +3714,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:13: ~ ( '\\n' | '\\r' )
+            	    //:1083:13: ~ ( '\\n' | '\\r' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -3734,7 +3734,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1083:28: ( '\\r' | '\\n' )+
+            //:1083:28: ( '\\r' | '\\n' )+
             int cnt4=0;
             loop4:
             do {
@@ -3748,7 +3748,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            	    //:
             	    {
             	    if ( input.LA(1)=='\n'||input.LA(1)=='\r' ) {
             	        input.consume();
@@ -3792,12 +3792,12 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1085:8: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1086:4: '/*' ( options {greedy=false; } : . )* '*/'
+            //:1085:8: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            //:1086:4: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1087:4: ( options {greedy=false; } : . )*
+            //:1087:4: ( options {greedy=false; } : . )*
             loop5:
             do {
                 int alt5=2;
@@ -3822,7 +3822,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt5) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1087:31: .
+            	    //:1087:31: .
             	    {
             	    matchAny(); 
 
@@ -3853,11 +3853,11 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = STRINGLITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1091:3: ( '\"' ( EscapeSequence | ~ ( '\"' | '\\\\' ) )* '\"' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1092:3: '\"' ( EscapeSequence | ~ ( '\"' | '\\\\' ) )* '\"'
+            //:1091:3: ( '\"' ( EscapeSequence | ~ ( '\"' | '\\\\' ) )* '\"' )
+            //:1092:3: '\"' ( EscapeSequence | ~ ( '\"' | '\\\\' ) )* '\"'
             {
             match('\"'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1092:7: ( EscapeSequence | ~ ( '\"' | '\\\\' ) )*
+            //:1092:7: ( EscapeSequence | ~ ( '\"' | '\\\\' ) )*
             loop6:
             do {
                 int alt6=3;
@@ -3873,14 +3873,14 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt6) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1092:8: EscapeSequence
+            	    //:1092:8: EscapeSequence
             	    {
             	    mEscapeSequence(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1092:25: ~ ( '\"' | '\\\\' )
+            	    //:1092:25: ~ ( '\"' | '\\\\' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -3917,12 +3917,12 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = Verbatim_string_literal;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1093:24: ( '@' '\"' ( Verbatim_string_literal_character )* '\"' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1094:3: '@' '\"' ( Verbatim_string_literal_character )* '\"'
+            //:1093:24: ( '@' '\"' ( Verbatim_string_literal_character )* '\"' )
+            //:1094:3: '@' '\"' ( Verbatim_string_literal_character )* '\"'
             {
             match('@'); 
             match('\"'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1094:13: ( Verbatim_string_literal_character )*
+            //:1094:13: ( Verbatim_string_literal_character )*
             loop7:
             do {
                 int alt7=2;
@@ -3944,7 +3944,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt7) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1094:13: Verbatim_string_literal_character
+            	    //:1094:13: Verbatim_string_literal_character
             	    {
             	    mVerbatim_string_literal_character(); 
 
@@ -3971,7 +3971,7 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "Verbatim_string_literal_character"
     public final void mVerbatim_string_literal_character() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1096:34: ( '\"' '\"' | ~ ( '\"' ) )
+            //:1096:34: ( '\"' '\"' | ~ ( '\"' ) )
             int alt8=2;
             int LA8_0 = input.LA(1);
 
@@ -3989,7 +3989,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt8) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1097:3: '\"' '\"'
+                    //:1097:3: '\"' '\"'
                     {
                     match('\"'); 
                     match('\"'); 
@@ -3997,7 +3997,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1097:13: ~ ( '\"' )
+                    //:1097:13: ~ ( '\"' )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='\uFFFF') ) {
                         input.consume();
@@ -4024,11 +4024,11 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1098:7: ( Decimal_digits ( INTEGER_TYPE_SUFFIX )? )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1099:3: Decimal_digits ( INTEGER_TYPE_SUFFIX )?
+            //:1098:7: ( Decimal_digits ( INTEGER_TYPE_SUFFIX )? )
+            //:1099:3: Decimal_digits ( INTEGER_TYPE_SUFFIX )?
             {
             mDecimal_digits(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1099:18: ( INTEGER_TYPE_SUFFIX )?
+            //:1099:18: ( INTEGER_TYPE_SUFFIX )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -4037,7 +4037,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt9) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1099:18: INTEGER_TYPE_SUFFIX
+                    //:1099:18: INTEGER_TYPE_SUFFIX
                     {
                     mINTEGER_TYPE_SUFFIX(); 
 
@@ -4067,8 +4067,8 @@ public class CSharpLexer extends Lexer {
             @SuppressWarnings("unused")
 			int d;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1113:3: (dil= Decimal_integer_literal d= '.' s= GooBallIdentifier )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1114:3: dil= Decimal_integer_literal d= '.' s= GooBallIdentifier
+            //:1113:3: (dil= Decimal_integer_literal d= '.' s= GooBallIdentifier )
+            //:1114:3: dil= Decimal_integer_literal d= '.' s= GooBallIdentifier
             {
             int dilStart1593 = getCharIndex();
             mDecimal_integer_literal(); 
@@ -4101,11 +4101,11 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "GooBallIdentifier"
     public final void mGooBallIdentifier() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1118:3: ( IdentifierStart ( IdentifierPart )* )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1118:5: IdentifierStart ( IdentifierPart )*
+            //:1118:3: ( IdentifierStart ( IdentifierPart )* )
+            //:1118:5: IdentifierStart ( IdentifierPart )*
             {
             mIdentifierStart(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1118:21: ( IdentifierPart )*
+            //:1118:21: ( IdentifierPart )*
             loop10:
             do {
                 int alt10=2;
@@ -4118,7 +4118,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt10) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1118:21: IdentifierPart
+            	    //:1118:21: IdentifierPart
             	    {
             	    mIdentifierPart(); 
 
@@ -4144,17 +4144,17 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = Real_literal;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1121:13: ( Decimal_digits '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )? | '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )? | Decimal_digits Exponent_part ( Real_type_suffix )? | Decimal_digits Real_type_suffix )
+            //:1121:13: ( Decimal_digits '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )? | '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )? | Decimal_digits Exponent_part ( Real_type_suffix )? | Decimal_digits Real_type_suffix )
             int alt16=4;
             alt16 = dfa16.predict(input);
             switch (alt16) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1122:3: Decimal_digits '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )?
+                    //:1122:3: Decimal_digits '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )?
                     {
                     mDecimal_digits(); 
                     match('.'); 
                     mDecimal_digits(); 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1122:43: ( Exponent_part )?
+                    //:1122:43: ( Exponent_part )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -4163,7 +4163,7 @@ public class CSharpLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1122:43: Exponent_part
+                            //:1122:43: Exponent_part
                             {
                             mExponent_part(); 
 
@@ -4172,7 +4172,7 @@ public class CSharpLexer extends Lexer {
 
                     }
 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1122:60: ( Real_type_suffix )?
+                    //:1122:60: ( Real_type_suffix )?
                     int alt12=2;
                     int LA12_0 = input.LA(1);
 
@@ -4181,7 +4181,7 @@ public class CSharpLexer extends Lexer {
                     }
                     switch (alt12) {
                         case 1 :
-                            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1122:60: Real_type_suffix
+                            //:1122:60: Real_type_suffix
                             {
                             mReal_type_suffix(); 
 
@@ -4194,11 +4194,11 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1123:5: '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )?
+                    //:1123:5: '.' Decimal_digits ( Exponent_part )? ( Real_type_suffix )?
                     {
                     match('.'); 
                     mDecimal_digits(); 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1123:28: ( Exponent_part )?
+                    //:1123:28: ( Exponent_part )?
                     int alt13=2;
                     int LA13_0 = input.LA(1);
 
@@ -4207,7 +4207,7 @@ public class CSharpLexer extends Lexer {
                     }
                     switch (alt13) {
                         case 1 :
-                            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1123:28: Exponent_part
+                            //:1123:28: Exponent_part
                             {
                             mExponent_part(); 
 
@@ -4216,7 +4216,7 @@ public class CSharpLexer extends Lexer {
 
                     }
 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1123:45: ( Real_type_suffix )?
+                    //:1123:45: ( Real_type_suffix )?
                     int alt14=2;
                     int LA14_0 = input.LA(1);
 
@@ -4225,7 +4225,7 @@ public class CSharpLexer extends Lexer {
                     }
                     switch (alt14) {
                         case 1 :
-                            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1123:45: Real_type_suffix
+                            //:1123:45: Real_type_suffix
                             {
                             mReal_type_suffix(); 
 
@@ -4238,11 +4238,11 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1124:5: Decimal_digits Exponent_part ( Real_type_suffix )?
+                    //:1124:5: Decimal_digits Exponent_part ( Real_type_suffix )?
                     {
                     mDecimal_digits(); 
                     mExponent_part(); 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1124:38: ( Real_type_suffix )?
+                    //:1124:38: ( Real_type_suffix )?
                     int alt15=2;
                     int LA15_0 = input.LA(1);
 
@@ -4251,7 +4251,7 @@ public class CSharpLexer extends Lexer {
                     }
                     switch (alt15) {
                         case 1 :
-                            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1124:38: Real_type_suffix
+                            //:1124:38: Real_type_suffix
                             {
                             mReal_type_suffix(); 
 
@@ -4264,7 +4264,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1125:5: Decimal_digits Real_type_suffix
+                    //:1125:5: Decimal_digits Real_type_suffix
                     {
                     mDecimal_digits(); 
                     mReal_type_suffix(); 
@@ -4286,11 +4286,11 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = Character_literal;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1126:18: ( '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ) '\\'' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1127:3: '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ) '\\''
+            //:1126:18: ( '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ) '\\'' )
+            //:1127:3: '\\'' ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ) '\\''
             {
             match('\''); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1128:5: ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )
+            //:1128:5: ( EscapeSequence | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) | ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) )
             int alt17=4;
             int LA17_0 = input.LA(1);
 
@@ -4334,14 +4334,14 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt17) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1128:9: EscapeSequence
+                    //:1128:9: EscapeSequence
                     {
                     mEscapeSequence(); 
 
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1130:9: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
+                    //:1130:9: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                         input.consume();
@@ -4356,7 +4356,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1131:9: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
+                    //:1131:9: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                         input.consume();
@@ -4380,7 +4380,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1132:9: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
+                    //:1132:9: ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' ) ~ ( '\\\\' | '\\'' | '\\r' | '\\n' )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                         input.consume();
@@ -4432,11 +4432,11 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1135:11: ( IdentifierStart ( IdentifierPart )* )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1136:5: IdentifierStart ( IdentifierPart )*
+            //:1135:11: ( IdentifierStart ( IdentifierPart )* )
+            //:1136:5: IdentifierStart ( IdentifierPart )*
             {
             mIdentifierStart(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1136:21: ( IdentifierPart )*
+            //:1136:21: ( IdentifierPart )*
             loop18:
             do {
                 int alt18=2;
@@ -4449,7 +4449,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt18) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1136:21: IdentifierPart
+            	    //:1136:21: IdentifierPart
             	    {
             	    mIdentifierPart(); 
 
@@ -4477,11 +4477,11 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = Pragma;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1137:7: ( '#' ( 'pragma' | 'region' | 'endregion' | 'line' | 'warning' | 'error' ) (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:3: '#' ( 'pragma' | 'region' | 'endregion' | 'line' | 'warning' | 'error' ) (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+
+            //:1137:7: ( '#' ( 'pragma' | 'region' | 'endregion' | 'line' | 'warning' | 'error' ) (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+ )
+            //:1139:3: '#' ( 'pragma' | 'region' | 'endregion' | 'line' | 'warning' | 'error' ) (~ ( '\\n' | '\\r' ) )* ( '\\r' | '\\n' )+
             {
             match('#'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:7: ( 'pragma' | 'region' | 'endregion' | 'line' | 'warning' | 'error' )
+            //:1139:7: ( 'pragma' | 'region' | 'endregion' | 'line' | 'warning' | 'error' )
             int alt19=6;
             switch ( input.LA(1) ) {
             case 'p':
@@ -4531,7 +4531,7 @@ public class CSharpLexer extends Lexer {
 
             switch (alt19) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:8: 'pragma'
+                    //:1139:8: 'pragma'
                     {
                     match("pragma"); 
 
@@ -4539,7 +4539,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:19: 'region'
+                    //:1139:19: 'region'
                     {
                     match("region"); 
 
@@ -4547,7 +4547,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:30: 'endregion'
+                    //:1139:30: 'endregion'
                     {
                     match("endregion"); 
 
@@ -4555,7 +4555,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:44: 'line'
+                    //:1139:44: 'line'
                     {
                     match("line"); 
 
@@ -4563,7 +4563,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 5 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:53: 'warning'
+                    //:1139:53: 'warning'
                     {
                     match("warning"); 
 
@@ -4571,7 +4571,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 6 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:65: 'error'
+                    //:1139:65: 'error'
                     {
                     match("error"); 
 
@@ -4581,7 +4581,7 @@ public class CSharpLexer extends Lexer {
 
             }
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:74: (~ ( '\\n' | '\\r' ) )*
+            //:1139:74: (~ ( '\\n' | '\\r' ) )*
             loop20:
             do {
                 int alt20=2;
@@ -4594,7 +4594,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:74: ~ ( '\\n' | '\\r' )
+            	    //:1139:74: ~ ( '\\n' | '\\r' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -4614,7 +4614,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1139:89: ( '\\r' | '\\n' )+
+            //:1139:89: ( '\\r' | '\\n' )+
             int cnt21=0;
             loop21:
             do {
@@ -4628,7 +4628,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt21) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            	    //:
             	    {
             	    if ( input.LA(1)=='\n'||input.LA(1)=='\r' ) {
             	        input.consume();
@@ -4669,7 +4669,7 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = PREPROCESSOR_DIRECTIVE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1141:23: ( | PP_CONDITIONAL )
+            //:1141:23: ( | PP_CONDITIONAL )
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -4680,12 +4680,12 @@ public class CSharpLexer extends Lexer {
                 alt22=1;}
             switch (alt22) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1142:3: 
+                    //:1142:3: 
                     {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1142:5: PP_CONDITIONAL
+                    //:1142:5: PP_CONDITIONAL
                     {
                     mPP_CONDITIONAL(); 
 
@@ -4704,43 +4704,43 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "PP_CONDITIONAL"
     public final void mPP_CONDITIONAL() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1144:15: ( ( IF_TOKEN | DEFINE_TOKEN | ELSE_TOKEN | ENDIF_TOKEN | UNDEF_TOKEN ) ( TS )* ( ( LINE_COMMENT )? | ( '\\r' | '\\n' )+ ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1145:3: ( IF_TOKEN | DEFINE_TOKEN | ELSE_TOKEN | ENDIF_TOKEN | UNDEF_TOKEN ) ( TS )* ( ( LINE_COMMENT )? | ( '\\r' | '\\n' )+ )
+            //:1144:15: ( ( IF_TOKEN | DEFINE_TOKEN | ELSE_TOKEN | ENDIF_TOKEN | UNDEF_TOKEN ) ( TS )* ( ( LINE_COMMENT )? | ( '\\r' | '\\n' )+ ) )
+            //:1145:3: ( IF_TOKEN | DEFINE_TOKEN | ELSE_TOKEN | ENDIF_TOKEN | UNDEF_TOKEN ) ( TS )* ( ( LINE_COMMENT )? | ( '\\r' | '\\n' )+ )
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1145:3: ( IF_TOKEN | DEFINE_TOKEN | ELSE_TOKEN | ENDIF_TOKEN | UNDEF_TOKEN )
+            //:1145:3: ( IF_TOKEN | DEFINE_TOKEN | ELSE_TOKEN | ENDIF_TOKEN | UNDEF_TOKEN )
             int alt23=5;
             alt23 = dfa23.predict(input);
             switch (alt23) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1145:4: IF_TOKEN
+                    //:1145:4: IF_TOKEN
                     {
                     mIF_TOKEN(); 
 
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1146:5: DEFINE_TOKEN
+                    //:1146:5: DEFINE_TOKEN
                     {
                     mDEFINE_TOKEN(); 
 
                     }
                     break;
                 case 3 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1147:5: ELSE_TOKEN
+                    //:1147:5: ELSE_TOKEN
                     {
                     mELSE_TOKEN(); 
 
                     }
                     break;
                 case 4 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1148:5: ENDIF_TOKEN
+                    //:1148:5: ENDIF_TOKEN
                     {
                     mENDIF_TOKEN(); 
 
                     }
                     break;
                 case 5 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:5: UNDEF_TOKEN
+                    //:1149:5: UNDEF_TOKEN
                     {
                     mUNDEF_TOKEN(); 
 
@@ -4749,7 +4749,7 @@ public class CSharpLexer extends Lexer {
 
             }
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:20: ( TS )*
+            //:1149:20: ( TS )*
             loop24:
             do {
                 int alt24=2;
@@ -4762,7 +4762,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt24) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:20: TS
+            	    //:1149:20: TS
             	    {
             	    mTS(); 
 
@@ -4774,7 +4774,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:26: ( ( LINE_COMMENT )? | ( '\\r' | '\\n' )+ )
+            //:1149:26: ( ( LINE_COMMENT )? | ( '\\r' | '\\n' )+ )
             int alt27=2;
             int LA27_0 = input.LA(1);
 
@@ -4785,9 +4785,9 @@ public class CSharpLexer extends Lexer {
                 alt27=1;}
             switch (alt27) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:27: ( LINE_COMMENT )?
+                    //:1149:27: ( LINE_COMMENT )?
                     {
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:27: ( LINE_COMMENT )?
+                    //:1149:27: ( LINE_COMMENT )?
                     int alt25=2;
                     int LA25_0 = input.LA(1);
 
@@ -4796,7 +4796,7 @@ public class CSharpLexer extends Lexer {
                     }
                     switch (alt25) {
                         case 1 :
-                            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:27: LINE_COMMENT
+                            //:1149:27: LINE_COMMENT
                             {
                             mLINE_COMMENT(); 
 
@@ -4809,9 +4809,9 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:45: ( '\\r' | '\\n' )+
+                    //:1149:45: ( '\\r' | '\\n' )+
                     {
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1149:45: ( '\\r' | '\\n' )+
+                    //:1149:45: ( '\\r' | '\\n' )+
                     int cnt26=0;
                     loop26:
                     do {
@@ -4825,7 +4825,7 @@ public class CSharpLexer extends Lexer {
 
                         switch (alt26) {
                     	case 1 :
-                    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+                    	    //:
                     	    {
                     	    if ( input.LA(1)=='\n'||input.LA(1)=='\r' ) {
                     	        input.consume();
@@ -4871,14 +4871,14 @@ public class CSharpLexer extends Lexer {
 			CommonToken ppe=null;
 
              boolean process = true; 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1152:33: ( ( '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:3: ( '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION )
+            //:1152:33: ( ( '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION ) )
+            //:1153:3: ( '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION )
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:3: ( '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:4: '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION
+            //:1153:3: ( '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION )
+            //:1153:4: '#' ( TS )* 'if' ( TS )+ ppe= PP_EXPRESSION
             {
             match('#'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:10: ( TS )*
+            //:1153:10: ( TS )*
             loop28:
             do {
                 int alt28=2;
@@ -4891,7 +4891,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt28) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:10: TS
+            	    //:1153:10: TS
             	    {
             	    mTS(); 
 
@@ -4905,7 +4905,7 @@ public class CSharpLexer extends Lexer {
 
             match("if"); 
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:22: ( TS )+
+            //:1153:22: ( TS )+
             int cnt29=0;
             loop29:
             do {
@@ -4919,7 +4919,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt29) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1153:22: TS
+            	    //:1153:22: TS
             	    {
             	    mTS(); 
 
@@ -4962,11 +4962,11 @@ public class CSharpLexer extends Lexer {
         try {
             CommonToken define=null;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1163:13: ( '#' ( TS )* 'define' ( TS )+ define= IDENTIFIER )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1164:3: '#' ( TS )* 'define' ( TS )+ define= IDENTIFIER
+            //:1163:13: ( '#' ( TS )* 'define' ( TS )+ define= IDENTIFIER )
+            //:1164:3: '#' ( TS )* 'define' ( TS )+ define= IDENTIFIER
             {
             match('#'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1164:9: ( TS )*
+            //:1164:9: ( TS )*
             loop30:
             do {
                 int alt30=2;
@@ -4979,7 +4979,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt30) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1164:9: TS
+            	    //:1164:9: TS
             	    {
             	    mTS(); 
 
@@ -4993,7 +4993,7 @@ public class CSharpLexer extends Lexer {
 
             match("define"); 
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1164:26: ( TS )+
+            //:1164:26: ( TS )+
             int cnt31=0;
             loop31:
             do {
@@ -5007,7 +5007,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt31) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1164:26: TS
+            	    //:1164:26: TS
             	    {
             	    mTS(); 
 
@@ -5043,11 +5043,11 @@ public class CSharpLexer extends Lexer {
         try {
             CommonToken define=null;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1169:12: ( '#' ( TS )* 'undef' ( TS )+ define= IDENTIFIER )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1170:3: '#' ( TS )* 'undef' ( TS )+ define= IDENTIFIER
+            //:1169:12: ( '#' ( TS )* 'undef' ( TS )+ define= IDENTIFIER )
+            //:1170:3: '#' ( TS )* 'undef' ( TS )+ define= IDENTIFIER
             {
             match('#'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1170:9: ( TS )*
+            //:1170:9: ( TS )*
             loop32:
             do {
                 int alt32=2;
@@ -5060,7 +5060,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt32) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1170:9: TS
+            	    //:1170:9: TS
             	    {
             	    mTS(); 
 
@@ -5074,7 +5074,7 @@ public class CSharpLexer extends Lexer {
 
             match("undef"); 
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1170:25: ( TS )+
+            //:1170:25: ( TS )+
             int cnt33=0;
             loop33:
             do {
@@ -5088,7 +5088,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt33) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1170:25: TS
+            	    //:1170:25: TS
             	    {
             	    mTS(); 
 
@@ -5125,18 +5125,18 @@ public class CSharpLexer extends Lexer {
         try {
             CommonToken e=null;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1176:11: ( ( '#' ( TS )* e= 'else' | '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1177:3: ( '#' ( TS )* e= 'else' | '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION )
+            //:1176:11: ( ( '#' ( TS )* e= 'else' | '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION ) )
+            //:1177:3: ( '#' ( TS )* e= 'else' | '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION )
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1177:3: ( '#' ( TS )* e= 'else' | '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION )
+            //:1177:3: ( '#' ( TS )* e= 'else' | '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION )
             int alt37=2;
             alt37 = dfa37.predict(input);
             switch (alt37) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1177:5: '#' ( TS )* e= 'else'
+                    //:1177:5: '#' ( TS )* e= 'else'
                     {
                     match('#'); 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1177:11: ( TS )*
+                    //:1177:11: ( TS )*
                     loop34:
                     do {
                         int alt34=2;
@@ -5149,7 +5149,7 @@ public class CSharpLexer extends Lexer {
 
                         switch (alt34) {
                     	case 1 :
-                    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1177:11: TS
+                    	    //:1177:11: TS
                     	    {
                     	    mTS(); 
 
@@ -5168,10 +5168,10 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1178:5: '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION
+                    //:1178:5: '#' ( TS )* 'elif' ( TS )+ PP_EXPRESSION
                     {
                     match('#'); 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1178:11: ( TS )*
+                    //:1178:11: ( TS )*
                     loop35:
                     do {
                         int alt35=2;
@@ -5184,7 +5184,7 @@ public class CSharpLexer extends Lexer {
 
                         switch (alt35) {
                     	case 1 :
-                    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1178:11: TS
+                    	    //:1178:11: TS
                     	    {
                     	    mTS(); 
 
@@ -5198,7 +5198,7 @@ public class CSharpLexer extends Lexer {
 
                     match("elif"); 
 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1178:26: ( TS )+
+                    //:1178:26: ( TS )+
                     int cnt36=0;
                     loop36:
                     do {
@@ -5212,7 +5212,7 @@ public class CSharpLexer extends Lexer {
 
                         switch (alt36) {
                     	case 1 :
-                    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1178:26: TS
+                    	    //:1178:26: TS
                     	    {
                     	    mTS(); 
 
@@ -5283,8 +5283,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "ENDIF_TOKEN"
     public final void mENDIF_TOKEN() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1218:12: ( '#' 'endif' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1219:3: '#' 'endif'
+            //:1218:12: ( '#' 'endif' )
+            //:1219:3: '#' 'endif'
             {
             match('#'); 
             match("endif"); 
@@ -5306,8 +5306,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "PP_EXPRESSION"
     public final void mPP_EXPRESSION() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1230:14: ( PP_OR_EXPRESSION )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1231:3: PP_OR_EXPRESSION
+            //:1230:14: ( PP_OR_EXPRESSION )
+            //:1231:3: PP_OR_EXPRESSION
             {
             mPP_OR_EXPRESSION(); 
 
@@ -5322,11 +5322,11 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "PP_OR_EXPRESSION"
     public final void mPP_OR_EXPRESSION() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1233:17: ( PP_AND_EXPRESSION ( TS )* ( '||' ( TS )* PP_AND_EXPRESSION ( TS )* )* )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:3: PP_AND_EXPRESSION ( TS )* ( '||' ( TS )* PP_AND_EXPRESSION ( TS )* )*
+            //:1233:17: ( PP_AND_EXPRESSION ( TS )* ( '||' ( TS )* PP_AND_EXPRESSION ( TS )* )* )
+            //:1234:3: PP_AND_EXPRESSION ( TS )* ( '||' ( TS )* PP_AND_EXPRESSION ( TS )* )*
             {
             mPP_AND_EXPRESSION(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:23: ( TS )*
+            //:1234:23: ( TS )*
             loop38:
             do {
                 int alt38=2;
@@ -5339,7 +5339,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt38) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:23: TS
+            	    //:1234:23: TS
             	    {
             	    mTS(); 
 
@@ -5351,7 +5351,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:29: ( '||' ( TS )* PP_AND_EXPRESSION ( TS )* )*
+            //:1234:29: ( '||' ( TS )* PP_AND_EXPRESSION ( TS )* )*
             loop41:
             do {
                 int alt41=2;
@@ -5364,11 +5364,11 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt41) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:30: '||' ( TS )* PP_AND_EXPRESSION ( TS )*
+            	    //:1234:30: '||' ( TS )* PP_AND_EXPRESSION ( TS )*
             	    {
             	    match("||"); 
 
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:37: ( TS )*
+            	    //:1234:37: ( TS )*
             	    loop39:
             	    do {
             	        int alt39=2;
@@ -5381,7 +5381,7 @@ public class CSharpLexer extends Lexer {
 
             	        switch (alt39) {
             	    	case 1 :
-            	    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:37: TS
+            	    	    //:1234:37: TS
             	    	    {
             	    	    mTS(); 
 
@@ -5394,7 +5394,7 @@ public class CSharpLexer extends Lexer {
             	    } while (true);
 
             	    mPP_AND_EXPRESSION(); 
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:63: ( TS )*
+            	    //:1234:63: ( TS )*
             	    loop40:
             	    do {
             	        int alt40=2;
@@ -5407,7 +5407,7 @@ public class CSharpLexer extends Lexer {
 
             	        switch (alt40) {
             	    	case 1 :
-            	    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1234:63: TS
+            	    	    //:1234:63: TS
             	    	    {
             	    	    mTS(); 
 
@@ -5440,11 +5440,11 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "PP_AND_EXPRESSION"
     public final void mPP_AND_EXPRESSION() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1236:18: ( PP_EQUALITY_EXPRESSION ( TS )* ( '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )* )* )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:3: PP_EQUALITY_EXPRESSION ( TS )* ( '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )* )*
+            //:1236:18: ( PP_EQUALITY_EXPRESSION ( TS )* ( '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )* )* )
+            //:1237:3: PP_EQUALITY_EXPRESSION ( TS )* ( '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )* )*
             {
             mPP_EQUALITY_EXPRESSION(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:28: ( TS )*
+            //:1237:28: ( TS )*
             loop42:
             do {
                 int alt42=2;
@@ -5457,7 +5457,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt42) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:28: TS
+            	    //:1237:28: TS
             	    {
             	    mTS(); 
 
@@ -5469,7 +5469,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:34: ( '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )* )*
+            //:1237:34: ( '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )* )*
             loop45:
             do {
                 int alt45=2;
@@ -5482,11 +5482,11 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt45) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:35: '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )*
+            	    //:1237:35: '&&' ( TS )* PP_EQUALITY_EXPRESSION ( TS )*
             	    {
             	    match("&&"); 
 
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:42: ( TS )*
+            	    //:1237:42: ( TS )*
             	    loop43:
             	    do {
             	        int alt43=2;
@@ -5499,7 +5499,7 @@ public class CSharpLexer extends Lexer {
 
             	        switch (alt43) {
             	    	case 1 :
-            	    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:42: TS
+            	    	    //:1237:42: TS
             	    	    {
             	    	    mTS(); 
 
@@ -5512,7 +5512,7 @@ public class CSharpLexer extends Lexer {
             	    } while (true);
 
             	    mPP_EQUALITY_EXPRESSION(); 
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:73: ( TS )*
+            	    //:1237:73: ( TS )*
             	    loop44:
             	    do {
             	        int alt44=2;
@@ -5525,7 +5525,7 @@ public class CSharpLexer extends Lexer {
 
             	        switch (alt44) {
             	    	case 1 :
-            	    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1237:73: TS
+            	    	    //:1237:73: TS
             	    	    {
             	    	    mTS(); 
 
@@ -5560,11 +5560,11 @@ public class CSharpLexer extends Lexer {
         try {
             CommonToken ne=null;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1239:23: ( PP_UNARY_EXPRESSION ( TS )* ( ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )* )* )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:3: PP_UNARY_EXPRESSION ( TS )* ( ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )* )*
+            //:1239:23: ( PP_UNARY_EXPRESSION ( TS )* ( ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )* )* )
+            //:1240:3: PP_UNARY_EXPRESSION ( TS )* ( ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )* )*
             {
             mPP_UNARY_EXPRESSION(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:25: ( TS )*
+            //:1240:25: ( TS )*
             loop46:
             do {
                 int alt46=2;
@@ -5577,7 +5577,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt46) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:25: TS
+            	    //:1240:25: TS
             	    {
             	    mTS(); 
 
@@ -5589,7 +5589,7 @@ public class CSharpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:31: ( ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )* )*
+            //:1240:31: ( ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )* )*
             loop50:
             do {
                 int alt50=2;
@@ -5602,9 +5602,9 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt50) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:32: ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )*
+            	    //:1240:32: ( '==' | ne= '!=' ) ( TS )* PP_UNARY_EXPRESSION ( TS )*
             	    {
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:32: ( '==' | ne= '!=' )
+            	    //:1240:32: ( '==' | ne= '!=' )
             	    int alt47=2;
             	    int LA47_0 = input.LA(1);
 
@@ -5622,7 +5622,7 @@ public class CSharpLexer extends Lexer {
             	    }
             	    switch (alt47) {
             	        case 1 :
-            	            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:33: '=='
+            	            //:1240:33: '=='
             	            {
             	            match("=="); 
 
@@ -5630,7 +5630,7 @@ public class CSharpLexer extends Lexer {
             	            }
             	            break;
             	        case 2 :
-            	            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:39: ne= '!='
+            	            //:1240:39: ne= '!='
             	            {
             	            int neStart = getCharIndex();
             	            match("!="); 
@@ -5641,7 +5641,7 @@ public class CSharpLexer extends Lexer {
 
             	    }
 
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:52: ( TS )*
+            	    //:1240:52: ( TS )*
             	    loop48:
             	    do {
             	        int alt48=2;
@@ -5654,7 +5654,7 @@ public class CSharpLexer extends Lexer {
 
             	        switch (alt48) {
             	    	case 1 :
-            	    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1240:52: TS
+            	    	    //:1240:52: TS
             	    	    {
             	    	    mTS(); 
 
@@ -5671,7 +5671,7 @@ public class CSharpLexer extends Lexer {
             	          boolean rt1 = Returns.pop(), rt2 = Returns.pop();
             	          Returns.push(rt1 == rt2 == (ne == null));
             	        
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1245:5: ( TS )*
+            	    //:1245:5: ( TS )*
             	    loop49:
             	    do {
             	        int alt49=2;
@@ -5684,7 +5684,7 @@ public class CSharpLexer extends Lexer {
 
             	        switch (alt49) {
             	    	case 1 :
-            	    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1245:5: TS
+            	    	    //:1245:5: TS
             	    	    {
             	    	    mTS(); 
 
@@ -5721,7 +5721,7 @@ public class CSharpLexer extends Lexer {
             CommonToken pe=null;
             CommonToken ue=null;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1248:20: (pe= PP_PRIMARY_EXPRESSION | '!' ( TS )* ue= PP_UNARY_EXPRESSION )
+            //:1248:20: (pe= PP_PRIMARY_EXPRESSION | '!' ( TS )* ue= PP_UNARY_EXPRESSION )
             int alt52=2;
             int LA52_0 = input.LA(1);
 
@@ -5739,7 +5739,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt52) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1249:3: pe= PP_PRIMARY_EXPRESSION
+                    //:1249:3: pe= PP_PRIMARY_EXPRESSION
                     {
                     int peStart2400 = getCharIndex();
                     mPP_PRIMARY_EXPRESSION(); 
@@ -5748,10 +5748,10 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1250:5: '!' ( TS )* ue= PP_UNARY_EXPRESSION
+                    //:1250:5: '!' ( TS )* ue= PP_UNARY_EXPRESSION
                     {
                     match('!'); 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1250:11: ( TS )*
+                    //:1250:11: ( TS )*
                     loop51:
                     do {
                         int alt51=2;
@@ -5764,7 +5764,7 @@ public class CSharpLexer extends Lexer {
 
                         switch (alt51) {
                     	case 1 :
-                    	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1250:11: TS
+                    	    //:1250:11: TS
                     	    {
                     	    mTS(); 
 
@@ -5796,7 +5796,7 @@ public class CSharpLexer extends Lexer {
         try {
             CommonToken IDENTIFIER1=null;
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1253:22: ( IDENTIFIER | '(' PP_EXPRESSION ')' )
+            //:1253:22: ( IDENTIFIER | '(' PP_EXPRESSION ')' )
             int alt53=2;
             int LA53_0 = input.LA(1);
 
@@ -5814,7 +5814,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt53) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1254:3: IDENTIFIER
+                    //:1254:3: IDENTIFIER
                     {
                     int IDENTIFIER1Start2437 = getCharIndex();
                     mIDENTIFIER(); 
@@ -5826,7 +5826,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1258:5: '(' PP_EXPRESSION ')'
+                    //:1258:5: '(' PP_EXPRESSION ')'
                     {
                     match('('); 
                     mPP_EXPRESSION(); 
@@ -5845,8 +5845,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "IdentifierStart"
     public final void mIdentifierStart() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1265:3: ( '@' | '_' | 'A' .. 'Z' | 'a' .. 'z' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            //:1265:3: ( '@' | '_' | 'A' .. 'Z' | 'a' .. 'z' )
+            //:
             {
             if ( (input.LA(1)>='@' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -5869,8 +5869,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "IdentifierPart"
     public final void mIdentifierPart() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1268:1: ( 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '_' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            //:1268:1: ( 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '_' )
+            //:
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -5893,103 +5893,103 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "EscapeSequence"
     public final void mEscapeSequence() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1271:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'v' | 'a' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) | 'x' HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ) )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1271:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'v' | 'a' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) | 'x' HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            //:1271:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'v' | 'a' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) | 'x' HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ) )
+            //:1271:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'v' | 'a' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) | 'x' HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
             {
             match('\\'); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1271:14: ( 'b' | 't' | 'n' | 'f' | 'r' | 'v' | 'a' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) | 'x' HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            //:1271:14: ( 'b' | 't' | 'n' | 'f' | 'r' | 'v' | 'a' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) | 'x' HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
             int alt54=19;
             alt54 = dfa54.predict(input);
             switch (alt54) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1272:18: 'b'
+                    //:1272:18: 'b'
                     {
                     match('b'); 
 
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1273:18: 't'
+                    //:1273:18: 't'
                     {
                     match('t'); 
 
                     }
                     break;
                 case 3 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1274:18: 'n'
+                    //:1274:18: 'n'
                     {
                     match('n'); 
 
                     }
                     break;
                 case 4 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1275:18: 'f'
+                    //:1275:18: 'f'
                     {
                     match('f'); 
 
                     }
                     break;
                 case 5 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1276:18: 'r'
+                    //:1276:18: 'r'
                     {
                     match('r'); 
 
                     }
                     break;
                 case 6 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1277:18: 'v'
+                    //:1277:18: 'v'
                     {
                     match('v'); 
 
                     }
                     break;
                 case 7 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1278:18: 'a'
+                    //:1278:18: 'a'
                     {
                     match('a'); 
 
                     }
                     break;
                 case 8 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1279:18: '\\\"'
+                    //:1279:18: '\\\"'
                     {
                     match('\"'); 
 
                     }
                     break;
                 case 9 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1280:18: '\\''
+                    //:1280:18: '\\''
                     {
                     match('\''); 
 
                     }
                     break;
                 case 10 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1281:18: '\\\\'
+                    //:1281:18: '\\\\'
                     {
                     match('\\'); 
 
                     }
                     break;
                 case 11 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    //:1282:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:18: ( '0' .. '3' )
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:19: '0' .. '3'
+                    //:1282:18: ( '0' .. '3' )
+                    //:1282:19: '0' .. '3'
                     {
                     matchRange('0','3'); 
 
                     }
 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:29: ( '0' .. '7' )
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:30: '0' .. '7'
+                    //:1282:29: ( '0' .. '7' )
+                    //:1282:30: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
                     }
 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:40: ( '0' .. '7' )
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1282:41: '0' .. '7'
+                    //:1282:40: ( '0' .. '7' )
+                    //:1282:41: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -5999,17 +5999,17 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 12 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1283:18: ( '0' .. '7' ) ( '0' .. '7' )
+                    //:1283:18: ( '0' .. '7' ) ( '0' .. '7' )
                     {
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1283:18: ( '0' .. '7' )
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1283:19: '0' .. '7'
+                    //:1283:18: ( '0' .. '7' )
+                    //:1283:19: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
                     }
 
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1283:29: ( '0' .. '7' )
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1283:30: '0' .. '7'
+                    //:1283:29: ( '0' .. '7' )
+                    //:1283:30: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -6019,10 +6019,10 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 13 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1284:18: ( '0' .. '7' )
+                    //:1284:18: ( '0' .. '7' )
                     {
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1284:18: ( '0' .. '7' )
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1284:19: '0' .. '7'
+                    //:1284:18: ( '0' .. '7' )
+                    //:1284:19: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -6032,7 +6032,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 14 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1285:18: 'x' HEX_DIGIT
+                    //:1285:18: 'x' HEX_DIGIT
                     {
                     match('x'); 
                     mHEX_DIGIT(); 
@@ -6040,7 +6040,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 15 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1286:18: 'x' HEX_DIGIT HEX_DIGIT
+                    //:1286:18: 'x' HEX_DIGIT HEX_DIGIT
                     {
                     match('x'); 
                     mHEX_DIGIT(); 
@@ -6049,7 +6049,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 16 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1287:18: 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT
+                    //:1287:18: 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT
                     {
                     match('x'); 
                     mHEX_DIGIT(); 
@@ -6059,7 +6059,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 17 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1288:18: 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+                    //:1288:18: 'x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
                     {
                     match('x'); 
                     mHEX_DIGIT(); 
@@ -6070,7 +6070,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 18 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1289:18: 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+                    //:1289:18: 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
                     {
                     match('u'); 
                     mHEX_DIGIT(); 
@@ -6081,7 +6081,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 19 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1290:18: 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+                    //:1290:18: 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
                     {
                     match('U'); 
                     mHEX_DIGIT(); 
@@ -6109,11 +6109,11 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "Decimal_integer_literal"
     public final void mDecimal_integer_literal() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1293:24: ( Decimal_digits ( INTEGER_TYPE_SUFFIX )? )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1294:3: Decimal_digits ( INTEGER_TYPE_SUFFIX )?
+            //:1293:24: ( Decimal_digits ( INTEGER_TYPE_SUFFIX )? )
+            //:1294:3: Decimal_digits ( INTEGER_TYPE_SUFFIX )?
             {
             mDecimal_digits(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1294:20: ( INTEGER_TYPE_SUFFIX )?
+            //:1294:20: ( INTEGER_TYPE_SUFFIX )?
             int alt55=2;
             int LA55_0 = input.LA(1);
 
@@ -6122,7 +6122,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt55) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1294:20: INTEGER_TYPE_SUFFIX
+                    //:1294:20: INTEGER_TYPE_SUFFIX
                     {
                     mINTEGER_TYPE_SUFFIX(); 
 
@@ -6145,8 +6145,8 @@ public class CSharpLexer extends Lexer {
         try {
             int _type = Hex_number;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1296:11: ( '0' ( 'x' | 'X' ) HEX_DIGITS ( INTEGER_TYPE_SUFFIX )? )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1297:3: '0' ( 'x' | 'X' ) HEX_DIGITS ( INTEGER_TYPE_SUFFIX )?
+            //:1296:11: ( '0' ( 'x' | 'X' ) HEX_DIGITS ( INTEGER_TYPE_SUFFIX )? )
+            //:1297:3: '0' ( 'x' | 'X' ) HEX_DIGITS ( INTEGER_TYPE_SUFFIX )?
             {
             match('0'); 
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
@@ -6159,7 +6159,7 @@ public class CSharpLexer extends Lexer {
                 throw mse;}
 
             mHEX_DIGITS(); 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1297:31: ( INTEGER_TYPE_SUFFIX )?
+            //:1297:31: ( INTEGER_TYPE_SUFFIX )?
             int alt56=2;
             int LA56_0 = input.LA(1);
 
@@ -6168,7 +6168,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt56) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1297:31: INTEGER_TYPE_SUFFIX
+                    //:1297:31: INTEGER_TYPE_SUFFIX
                     {
                     mINTEGER_TYPE_SUFFIX(); 
 
@@ -6191,10 +6191,10 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "Decimal_digits"
     public final void mDecimal_digits() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1299:15: ( ( DECIMAL_DIGIT )+ )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1300:3: ( DECIMAL_DIGIT )+
+            //:1299:15: ( ( DECIMAL_DIGIT )+ )
+            //:1300:3: ( DECIMAL_DIGIT )+
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1300:3: ( DECIMAL_DIGIT )+
+            //:1300:3: ( DECIMAL_DIGIT )+
             int cnt57=0;
             loop57:
             do {
@@ -6208,7 +6208,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt57) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1300:3: DECIMAL_DIGIT
+            	    //:1300:3: DECIMAL_DIGIT
             	    {
             	    mDECIMAL_DIGIT(); 
 
@@ -6236,8 +6236,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "DECIMAL_DIGIT"
     public final void mDECIMAL_DIGIT() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1302:14: ( '0' .. '9' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1303:3: '0' .. '9'
+            //:1302:14: ( '0' .. '9' )
+            //:1303:3: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -6252,40 +6252,40 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "INTEGER_TYPE_SUFFIX"
     public final void mINTEGER_TYPE_SUFFIX() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1305:20: ( 'U' | 'u' | 'L' | 'l' | 'UL' | 'Ul' | 'uL' | 'ul' | 'LU' | 'Lu' | 'lU' | 'lu' )
+            //:1305:20: ( 'U' | 'u' | 'L' | 'l' | 'UL' | 'Ul' | 'uL' | 'ul' | 'LU' | 'Lu' | 'lU' | 'lu' )
             int alt58=12;
             alt58 = dfa58.predict(input);
             switch (alt58) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:3: 'U'
+                    //:1306:3: 'U'
                     {
                     match('U'); 
 
                     }
                     break;
                 case 2 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:9: 'u'
+                    //:1306:9: 'u'
                     {
                     match('u'); 
 
                     }
                     break;
                 case 3 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:15: 'L'
+                    //:1306:15: 'L'
                     {
                     match('L'); 
 
                     }
                     break;
                 case 4 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:21: 'l'
+                    //:1306:21: 'l'
                     {
                     match('l'); 
 
                     }
                     break;
                 case 5 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:27: 'UL'
+                    //:1306:27: 'UL'
                     {
                     match("UL"); 
 
@@ -6293,7 +6293,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 6 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:34: 'Ul'
+                    //:1306:34: 'Ul'
                     {
                     match("Ul"); 
 
@@ -6301,7 +6301,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 7 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:41: 'uL'
+                    //:1306:41: 'uL'
                     {
                     match("uL"); 
 
@@ -6309,7 +6309,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 8 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:48: 'ul'
+                    //:1306:48: 'ul'
                     {
                     match("ul"); 
 
@@ -6317,7 +6317,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 9 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:55: 'LU'
+                    //:1306:55: 'LU'
                     {
                     match("LU"); 
 
@@ -6325,7 +6325,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 10 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:62: 'Lu'
+                    //:1306:62: 'Lu'
                     {
                     match("Lu"); 
 
@@ -6333,7 +6333,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 11 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:69: 'lU'
+                    //:1306:69: 'lU'
                     {
                     match("lU"); 
 
@@ -6341,7 +6341,7 @@ public class CSharpLexer extends Lexer {
                     }
                     break;
                 case 12 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1306:76: 'lu'
+                    //:1306:76: 'lu'
                     {
                     match("lu"); 
 
@@ -6359,10 +6359,10 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "HEX_DIGITS"
     public final void mHEX_DIGITS() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1307:20: ( ( HEX_DIGIT )+ )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1308:3: ( HEX_DIGIT )+
+            //:1307:20: ( ( HEX_DIGIT )+ )
+            //:1308:3: ( HEX_DIGIT )+
             {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1308:3: ( HEX_DIGIT )+
+            //:1308:3: ( HEX_DIGIT )+
             int cnt59=0;
             loop59:
             do {
@@ -6376,7 +6376,7 @@ public class CSharpLexer extends Lexer {
 
                 switch (alt59) {
             	case 1 :
-            	    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1308:3: HEX_DIGIT
+            	    //:1308:3: HEX_DIGIT
             	    {
             	    mHEX_DIGIT(); 
 
@@ -6404,8 +6404,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "HEX_DIGIT"
     public final void mHEX_DIGIT() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1309:19: ( '0' .. '9' | 'A' .. 'F' | 'a' .. 'f' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            //:1309:19: ( '0' .. '9' | 'A' .. 'F' | 'a' .. 'f' )
+            //:
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -6428,8 +6428,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "Exponent_part"
     public final void mExponent_part() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1312:14: ( ( 'e' | 'E' ) ( Sign )? Decimal_digits )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1313:3: ( 'e' | 'E' ) ( Sign )? Decimal_digits
+            //:1312:14: ( ( 'e' | 'E' ) ( Sign )? Decimal_digits )
+            //:1313:3: ( 'e' | 'E' ) ( Sign )? Decimal_digits
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -6440,7 +6440,7 @@ public class CSharpLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1313:15: ( Sign )?
+            //:1313:15: ( Sign )?
             int alt60=2;
             int LA60_0 = input.LA(1);
 
@@ -6449,7 +6449,7 @@ public class CSharpLexer extends Lexer {
             }
             switch (alt60) {
                 case 1 :
-                    // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1313:15: Sign
+                    //:1313:15: Sign
                     {
                     mSign(); 
 
@@ -6471,8 +6471,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "Sign"
     public final void mSign() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1315:5: ( '+' | '-' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            //:1315:5: ( '+' | '-' )
+            //:
             {
             if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
                 input.consume();
@@ -6495,8 +6495,8 @@ public class CSharpLexer extends Lexer {
     // $ANTLR start "Real_type_suffix"
     public final void mReal_type_suffix() throws RecognitionException {
         try {
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1318:17: ( 'F' | 'f' | 'D' | 'd' | 'M' | 'm' )
-            // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:
+            //:1318:17: ( 'F' | 'f' | 'D' | 'd' | 'M' | 'm' )
+            //:
             {
             if ( input.LA(1)=='D'||input.LA(1)=='F'||input.LA(1)=='M'||input.LA(1)=='d'||input.LA(1)=='f'||input.LA(1)=='m' ) {
                 input.consume();
@@ -6517,1209 +6517,1209 @@ public class CSharpLexer extends Lexer {
     // $ANTLR end "Real_type_suffix"
 
     public void mTokens() throws RecognitionException {
-        // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:8: ( T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | T__100 | T__101 | T__102 | T__103 | T__104 | T__105 | T__106 | T__107 | T__108 | T__109 | T__110 | T__111 | T__112 | T__113 | T__114 | T__115 | T__116 | T__117 | T__118 | T__119 | T__120 | T__121 | T__122 | T__123 | T__124 | T__125 | T__126 | T__127 | T__128 | T__129 | T__130 | T__131 | T__132 | T__133 | T__134 | T__135 | T__136 | T__137 | T__138 | T__139 | T__140 | T__141 | T__142 | T__143 | T__144 | T__145 | T__146 | T__147 | T__148 | T__149 | T__150 | T__151 | T__152 | T__153 | T__154 | T__155 | T__156 | T__157 | T__158 | T__159 | T__160 | T__161 | T__162 | T__163 | T__164 | T__165 | T__166 | T__167 | T__168 | T__169 | T__170 | T__171 | T__172 | T__173 | T__174 | T__175 | T__176 | T__177 | T__178 | T__179 | T__180 | T__181 | T__182 | T__183 | T__184 | T__185 | T__186 | T__187 | T__188 | T__189 | T__190 | T__191 | T__192 | T__193 | T__194 | T__195 | T__196 | T__197 | T__198 | T__199 | T__200 | T__201 | T__202 | TRUE | FALSE | NULL | DOT | PTR | MINUS | GT | USING | ENUM | IF | ELIF | ENDIF | DEFINE | UNDEF | SEMI | RPAREN | WS | DOC_LINE_COMMENT | LINE_COMMENT | COMMENT | STRINGLITERAL | Verbatim_string_literal | NUMBER | GooBall | Real_literal | Character_literal | IDENTIFIER | Pragma | PREPROCESSOR_DIRECTIVE | Hex_number )
+        //:1:8: ( T__61 | T__62 | T__63 | T__64 | T__65 | T__66 | T__67 | T__68 | T__69 | T__70 | T__71 | T__72 | T__73 | T__74 | T__75 | T__76 | T__77 | T__78 | T__79 | T__80 | T__81 | T__82 | T__83 | T__84 | T__85 | T__86 | T__87 | T__88 | T__89 | T__90 | T__91 | T__92 | T__93 | T__94 | T__95 | T__96 | T__97 | T__98 | T__99 | T__100 | T__101 | T__102 | T__103 | T__104 | T__105 | T__106 | T__107 | T__108 | T__109 | T__110 | T__111 | T__112 | T__113 | T__114 | T__115 | T__116 | T__117 | T__118 | T__119 | T__120 | T__121 | T__122 | T__123 | T__124 | T__125 | T__126 | T__127 | T__128 | T__129 | T__130 | T__131 | T__132 | T__133 | T__134 | T__135 | T__136 | T__137 | T__138 | T__139 | T__140 | T__141 | T__142 | T__143 | T__144 | T__145 | T__146 | T__147 | T__148 | T__149 | T__150 | T__151 | T__152 | T__153 | T__154 | T__155 | T__156 | T__157 | T__158 | T__159 | T__160 | T__161 | T__162 | T__163 | T__164 | T__165 | T__166 | T__167 | T__168 | T__169 | T__170 | T__171 | T__172 | T__173 | T__174 | T__175 | T__176 | T__177 | T__178 | T__179 | T__180 | T__181 | T__182 | T__183 | T__184 | T__185 | T__186 | T__187 | T__188 | T__189 | T__190 | T__191 | T__192 | T__193 | T__194 | T__195 | T__196 | T__197 | T__198 | T__199 | T__200 | T__201 | T__202 | TRUE | FALSE | NULL | DOT | PTR | MINUS | GT | USING | ENUM | IF | ELIF | ENDIF | DEFINE | UNDEF | SEMI | RPAREN | WS | DOC_LINE_COMMENT | LINE_COMMENT | COMMENT | STRINGLITERAL | Verbatim_string_literal | NUMBER | GooBall | Real_literal | Character_literal | IDENTIFIER | Pragma | PREPROCESSOR_DIRECTIVE | Hex_number )
         int alt61=172;
         alt61 = dfa61.predict(input);
         switch (alt61) {
             case 1 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:10: T__61
+                //:1:10: T__61
                 {
                 mT__61(); 
 
                 }
                 break;
             case 2 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:16: T__62
+                //:1:16: T__62
                 {
                 mT__62(); 
 
                 }
                 break;
             case 3 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:22: T__63
+                //:1:22: T__63
                 {
                 mT__63(); 
 
                 }
                 break;
             case 4 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:28: T__64
+                //:1:28: T__64
                 {
                 mT__64(); 
 
                 }
                 break;
             case 5 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:34: T__65
+                //:1:34: T__65
                 {
                 mT__65(); 
 
                 }
                 break;
             case 6 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:40: T__66
+                //:1:40: T__66
                 {
                 mT__66(); 
 
                 }
                 break;
             case 7 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:46: T__67
+                //:1:46: T__67
                 {
                 mT__67(); 
 
                 }
                 break;
             case 8 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:52: T__68
+                //:1:52: T__68
                 {
                 mT__68(); 
 
                 }
                 break;
             case 9 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:58: T__69
+                //:1:58: T__69
                 {
                 mT__69(); 
 
                 }
                 break;
             case 10 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:64: T__70
+                //:1:64: T__70
                 {
                 mT__70(); 
 
                 }
                 break;
             case 11 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:70: T__71
+                //:1:70: T__71
                 {
                 mT__71(); 
 
                 }
                 break;
             case 12 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:76: T__72
+                //:1:76: T__72
                 {
                 mT__72(); 
 
                 }
                 break;
             case 13 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:82: T__73
+                //:1:82: T__73
                 {
                 mT__73(); 
 
                 }
                 break;
             case 14 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:88: T__74
+                //:1:88: T__74
                 {
                 mT__74(); 
 
                 }
                 break;
             case 15 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:94: T__75
+                //:1:94: T__75
                 {
                 mT__75(); 
 
                 }
                 break;
             case 16 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:100: T__76
+                //:1:100: T__76
                 {
                 mT__76(); 
 
                 }
                 break;
             case 17 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:106: T__77
+                //:1:106: T__77
                 {
                 mT__77(); 
 
                 }
                 break;
             case 18 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:112: T__78
+                //:1:112: T__78
                 {
                 mT__78(); 
 
                 }
                 break;
             case 19 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:118: T__79
+                //:1:118: T__79
                 {
                 mT__79(); 
 
                 }
                 break;
             case 20 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:124: T__80
+                //:1:124: T__80
                 {
                 mT__80(); 
 
                 }
                 break;
             case 21 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:130: T__81
+                //:1:130: T__81
                 {
                 mT__81(); 
 
                 }
                 break;
             case 22 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:136: T__82
+                //:1:136: T__82
                 {
                 mT__82(); 
 
                 }
                 break;
             case 23 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:142: T__83
+                //:1:142: T__83
                 {
                 mT__83(); 
 
                 }
                 break;
             case 24 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:148: T__84
+                //:1:148: T__84
                 {
                 mT__84(); 
 
                 }
                 break;
             case 25 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:154: T__85
+                //:1:154: T__85
                 {
                 mT__85(); 
 
                 }
                 break;
             case 26 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:160: T__86
+                //:1:160: T__86
                 {
                 mT__86(); 
 
                 }
                 break;
             case 27 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:166: T__87
+                //:1:166: T__87
                 {
                 mT__87(); 
 
                 }
                 break;
             case 28 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:172: T__88
+                //:1:172: T__88
                 {
                 mT__88(); 
 
                 }
                 break;
             case 29 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:178: T__89
+                //:1:178: T__89
                 {
                 mT__89(); 
 
                 }
                 break;
             case 30 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:184: T__90
+                //:1:184: T__90
                 {
                 mT__90(); 
 
                 }
                 break;
             case 31 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:190: T__91
+                //:1:190: T__91
                 {
                 mT__91(); 
 
                 }
                 break;
             case 32 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:196: T__92
+                //:1:196: T__92
                 {
                 mT__92(); 
 
                 }
                 break;
             case 33 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:202: T__93
+                //:1:202: T__93
                 {
                 mT__93(); 
 
                 }
                 break;
             case 34 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:208: T__94
+                //:1:208: T__94
                 {
                 mT__94(); 
 
                 }
                 break;
             case 35 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:214: T__95
+                //:1:214: T__95
                 {
                 mT__95(); 
 
                 }
                 break;
             case 36 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:220: T__96
+                //:1:220: T__96
                 {
                 mT__96(); 
 
                 }
                 break;
             case 37 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:226: T__97
+                //:1:226: T__97
                 {
                 mT__97(); 
 
                 }
                 break;
             case 38 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:232: T__98
+                //:1:232: T__98
                 {
                 mT__98(); 
 
                 }
                 break;
             case 39 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:238: T__99
+                //:1:238: T__99
                 {
                 mT__99(); 
 
                 }
                 break;
             case 40 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:244: T__100
+                //:1:244: T__100
                 {
                 mT__100(); 
 
                 }
                 break;
             case 41 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:251: T__101
+                //:1:251: T__101
                 {
                 mT__101(); 
 
                 }
                 break;
             case 42 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:258: T__102
+                //:1:258: T__102
                 {
                 mT__102(); 
 
                 }
                 break;
             case 43 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:265: T__103
+                //:1:265: T__103
                 {
                 mT__103(); 
 
                 }
                 break;
             case 44 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:272: T__104
+                //:1:272: T__104
                 {
                 mT__104(); 
 
                 }
                 break;
             case 45 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:279: T__105
+                //:1:279: T__105
                 {
                 mT__105(); 
 
                 }
                 break;
             case 46 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:286: T__106
+                //:1:286: T__106
                 {
                 mT__106(); 
 
                 }
                 break;
             case 47 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:293: T__107
+                //:1:293: T__107
                 {
                 mT__107(); 
 
                 }
                 break;
             case 48 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:300: T__108
+                //:1:300: T__108
                 {
                 mT__108(); 
 
                 }
                 break;
             case 49 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:307: T__109
+                //:1:307: T__109
                 {
                 mT__109(); 
 
                 }
                 break;
             case 50 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:314: T__110
+                //:1:314: T__110
                 {
                 mT__110(); 
 
                 }
                 break;
             case 51 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:321: T__111
+                //:1:321: T__111
                 {
                 mT__111(); 
 
                 }
                 break;
             case 52 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:328: T__112
+                //:1:328: T__112
                 {
                 mT__112(); 
 
                 }
                 break;
             case 53 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:335: T__113
+                //:1:335: T__113
                 {
                 mT__113(); 
 
                 }
                 break;
             case 54 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:342: T__114
+                //:1:342: T__114
                 {
                 mT__114(); 
 
                 }
                 break;
             case 55 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:349: T__115
+                //:1:349: T__115
                 {
                 mT__115(); 
 
                 }
                 break;
             case 56 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:356: T__116
+                //:1:356: T__116
                 {
                 mT__116(); 
 
                 }
                 break;
             case 57 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:363: T__117
+                //:1:363: T__117
                 {
                 mT__117(); 
 
                 }
                 break;
             case 58 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:370: T__118
+                //:1:370: T__118
                 {
                 mT__118(); 
 
                 }
                 break;
             case 59 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:377: T__119
+                //:1:377: T__119
                 {
                 mT__119(); 
 
                 }
                 break;
             case 60 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:384: T__120
+                //:1:384: T__120
                 {
                 mT__120(); 
 
                 }
                 break;
             case 61 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:391: T__121
+                //:1:391: T__121
                 {
                 mT__121(); 
 
                 }
                 break;
             case 62 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:398: T__122
+                //:1:398: T__122
                 {
                 mT__122(); 
 
                 }
                 break;
             case 63 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:405: T__123
+                //:1:405: T__123
                 {
                 mT__123(); 
 
                 }
                 break;
             case 64 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:412: T__124
+                //:1:412: T__124
                 {
                 mT__124(); 
 
                 }
                 break;
             case 65 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:419: T__125
+                //:1:419: T__125
                 {
                 mT__125(); 
 
                 }
                 break;
             case 66 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:426: T__126
+                //:1:426: T__126
                 {
                 mT__126(); 
 
                 }
                 break;
             case 67 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:433: T__127
+                //:1:433: T__127
                 {
                 mT__127(); 
 
                 }
                 break;
             case 68 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:440: T__128
+                //:1:440: T__128
                 {
                 mT__128(); 
 
                 }
                 break;
             case 69 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:447: T__129
+                //:1:447: T__129
                 {
                 mT__129(); 
 
                 }
                 break;
             case 70 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:454: T__130
+                //:1:454: T__130
                 {
                 mT__130(); 
 
                 }
                 break;
             case 71 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:461: T__131
+                //:1:461: T__131
                 {
                 mT__131(); 
 
                 }
                 break;
             case 72 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:468: T__132
+                //:1:468: T__132
                 {
                 mT__132(); 
 
                 }
                 break;
             case 73 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:475: T__133
+                //:1:475: T__133
                 {
                 mT__133(); 
 
                 }
                 break;
             case 74 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:482: T__134
+                //:1:482: T__134
                 {
                 mT__134(); 
 
                 }
                 break;
             case 75 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:489: T__135
+                //:1:489: T__135
                 {
                 mT__135(); 
 
                 }
                 break;
             case 76 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:496: T__136
+                //:1:496: T__136
                 {
                 mT__136(); 
 
                 }
                 break;
             case 77 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:503: T__137
+                //:1:503: T__137
                 {
                 mT__137(); 
 
                 }
                 break;
             case 78 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:510: T__138
+                //:1:510: T__138
                 {
                 mT__138(); 
 
                 }
                 break;
             case 79 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:517: T__139
+                //:1:517: T__139
                 {
                 mT__139(); 
 
                 }
                 break;
             case 80 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:524: T__140
+                //:1:524: T__140
                 {
                 mT__140(); 
 
                 }
                 break;
             case 81 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:531: T__141
+                //:1:531: T__141
                 {
                 mT__141(); 
 
                 }
                 break;
             case 82 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:538: T__142
+                //:1:538: T__142
                 {
                 mT__142(); 
 
                 }
                 break;
             case 83 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:545: T__143
+                //:1:545: T__143
                 {
                 mT__143(); 
 
                 }
                 break;
             case 84 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:552: T__144
+                //:1:552: T__144
                 {
                 mT__144(); 
 
                 }
                 break;
             case 85 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:559: T__145
+                //:1:559: T__145
                 {
                 mT__145(); 
 
                 }
                 break;
             case 86 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:566: T__146
+                //:1:566: T__146
                 {
                 mT__146(); 
 
                 }
                 break;
             case 87 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:573: T__147
+                //:1:573: T__147
                 {
                 mT__147(); 
 
                 }
                 break;
             case 88 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:580: T__148
+                //:1:580: T__148
                 {
                 mT__148(); 
 
                 }
                 break;
             case 89 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:587: T__149
+                //:1:587: T__149
                 {
                 mT__149(); 
 
                 }
                 break;
             case 90 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:594: T__150
+                //:1:594: T__150
                 {
                 mT__150(); 
 
                 }
                 break;
             case 91 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:601: T__151
+                //:1:601: T__151
                 {
                 mT__151(); 
 
                 }
                 break;
             case 92 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:608: T__152
+                //:1:608: T__152
                 {
                 mT__152(); 
 
                 }
                 break;
             case 93 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:615: T__153
+                //:1:615: T__153
                 {
                 mT__153(); 
 
                 }
                 break;
             case 94 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:622: T__154
+                //:1:622: T__154
                 {
                 mT__154(); 
 
                 }
                 break;
             case 95 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:629: T__155
+                //:1:629: T__155
                 {
                 mT__155(); 
 
                 }
                 break;
             case 96 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:636: T__156
+                //:1:636: T__156
                 {
                 mT__156(); 
 
                 }
                 break;
             case 97 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:643: T__157
+                //:1:643: T__157
                 {
                 mT__157(); 
 
                 }
                 break;
             case 98 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:650: T__158
+                //:1:650: T__158
                 {
                 mT__158(); 
 
                 }
                 break;
             case 99 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:657: T__159
+                //:1:657: T__159
                 {
                 mT__159(); 
 
                 }
                 break;
             case 100 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:664: T__160
+                //:1:664: T__160
                 {
                 mT__160(); 
 
                 }
                 break;
             case 101 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:671: T__161
+                //:1:671: T__161
                 {
                 mT__161(); 
 
                 }
                 break;
             case 102 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:678: T__162
+                //:1:678: T__162
                 {
                 mT__162(); 
 
                 }
                 break;
             case 103 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:685: T__163
+                //:1:685: T__163
                 {
                 mT__163(); 
 
                 }
                 break;
             case 104 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:692: T__164
+                //:1:692: T__164
                 {
                 mT__164(); 
 
                 }
                 break;
             case 105 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:699: T__165
+                //:1:699: T__165
                 {
                 mT__165(); 
 
                 }
                 break;
             case 106 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:706: T__166
+                //:1:706: T__166
                 {
                 mT__166(); 
 
                 }
                 break;
             case 107 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:713: T__167
+                //:1:713: T__167
                 {
                 mT__167(); 
 
                 }
                 break;
             case 108 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:720: T__168
+                //:1:720: T__168
                 {
                 mT__168(); 
 
                 }
                 break;
             case 109 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:727: T__169
+                //:1:727: T__169
                 {
                 mT__169(); 
 
                 }
                 break;
             case 110 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:734: T__170
+                //:1:734: T__170
                 {
                 mT__170(); 
 
                 }
                 break;
             case 111 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:741: T__171
+                //:1:741: T__171
                 {
                 mT__171(); 
 
                 }
                 break;
             case 112 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:748: T__172
+                //:1:748: T__172
                 {
                 mT__172(); 
 
                 }
                 break;
             case 113 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:755: T__173
+                //:1:755: T__173
                 {
                 mT__173(); 
 
                 }
                 break;
             case 114 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:762: T__174
+                //:1:762: T__174
                 {
                 mT__174(); 
 
                 }
                 break;
             case 115 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:769: T__175
+                //:1:769: T__175
                 {
                 mT__175(); 
 
                 }
                 break;
             case 116 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:776: T__176
+                //:1:776: T__176
                 {
                 mT__176(); 
 
                 }
                 break;
             case 117 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:783: T__177
+                //:1:783: T__177
                 {
                 mT__177(); 
 
                 }
                 break;
             case 118 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:790: T__178
+                //:1:790: T__178
                 {
                 mT__178(); 
 
                 }
                 break;
             case 119 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:797: T__179
+                //:1:797: T__179
                 {
                 mT__179(); 
 
                 }
                 break;
             case 120 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:804: T__180
+                //:1:804: T__180
                 {
                 mT__180(); 
 
                 }
                 break;
             case 121 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:811: T__181
+                //:1:811: T__181
                 {
                 mT__181(); 
 
                 }
                 break;
             case 122 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:818: T__182
+                //:1:818: T__182
                 {
                 mT__182(); 
 
                 }
                 break;
             case 123 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:825: T__183
+                //:1:825: T__183
                 {
                 mT__183(); 
 
                 }
                 break;
             case 124 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:832: T__184
+                //:1:832: T__184
                 {
                 mT__184(); 
 
                 }
                 break;
             case 125 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:839: T__185
+                //:1:839: T__185
                 {
                 mT__185(); 
 
                 }
                 break;
             case 126 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:846: T__186
+                //:1:846: T__186
                 {
                 mT__186(); 
 
                 }
                 break;
             case 127 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:853: T__187
+                //:1:853: T__187
                 {
                 mT__187(); 
 
                 }
                 break;
             case 128 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:860: T__188
+                //:1:860: T__188
                 {
                 mT__188(); 
 
                 }
                 break;
             case 129 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:867: T__189
+                //:1:867: T__189
                 {
                 mT__189(); 
 
                 }
                 break;
             case 130 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:874: T__190
+                //:1:874: T__190
                 {
                 mT__190(); 
 
                 }
                 break;
             case 131 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:881: T__191
+                //:1:881: T__191
                 {
                 mT__191(); 
 
                 }
                 break;
             case 132 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:888: T__192
+                //:1:888: T__192
                 {
                 mT__192(); 
 
                 }
                 break;
             case 133 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:895: T__193
+                //:1:895: T__193
                 {
                 mT__193(); 
 
                 }
                 break;
             case 134 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:902: T__194
+                //:1:902: T__194
                 {
                 mT__194(); 
 
                 }
                 break;
             case 135 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:909: T__195
+                //:1:909: T__195
                 {
                 mT__195(); 
 
                 }
                 break;
             case 136 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:916: T__196
+                //:1:916: T__196
                 {
                 mT__196(); 
 
                 }
                 break;
             case 137 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:923: T__197
+                //:1:923: T__197
                 {
                 mT__197(); 
 
                 }
                 break;
             case 138 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:930: T__198
+                //:1:930: T__198
                 {
                 mT__198(); 
 
                 }
                 break;
             case 139 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:937: T__199
+                //:1:937: T__199
                 {
                 mT__199(); 
 
                 }
                 break;
             case 140 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:944: T__200
+                //:1:944: T__200
                 {
                 mT__200(); 
 
                 }
                 break;
             case 141 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:951: T__201
+                //:1:951: T__201
                 {
                 mT__201(); 
 
                 }
                 break;
             case 142 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:958: T__202
+                //:1:958: T__202
                 {
                 mT__202(); 
 
                 }
                 break;
             case 143 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:965: TRUE
+                //:1:965: TRUE
                 {
                 mTRUE(); 
 
                 }
                 break;
             case 144 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:970: FALSE
+                //:1:970: FALSE
                 {
                 mFALSE(); 
 
                 }
                 break;
             case 145 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:976: NULL
+                //:1:976: NULL
                 {
                 mNULL(); 
 
                 }
                 break;
             case 146 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:981: DOT
+                //:1:981: DOT
                 {
                 mDOT(); 
 
                 }
                 break;
             case 147 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:985: PTR
+                //:1:985: PTR
                 {
                 mPTR(); 
 
                 }
                 break;
             case 148 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:989: MINUS
+                //:1:989: MINUS
                 {
                 mMINUS(); 
 
                 }
                 break;
             case 149 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:995: GT
+                //:1:995: GT
                 {
                 mGT(); 
 
                 }
                 break;
             case 150 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:998: USING
+                //:1:998: USING
                 {
                 mUSING(); 
 
                 }
                 break;
             case 151 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1004: ENUM
+                //:1:1004: ENUM
                 {
                 mENUM(); 
 
                 }
                 break;
             case 152 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1009: IF
+                //:1:1009: IF
                 {
                 mIF(); 
 
                 }
                 break;
             case 153 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1012: ELIF
+                //:1:1012: ELIF
                 {
                 mELIF(); 
 
                 }
                 break;
             case 154 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1017: ENDIF
+                //:1:1017: ENDIF
                 {
                 mENDIF(); 
 
                 }
                 break;
             case 155 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1023: DEFINE
+                //:1:1023: DEFINE
                 {
                 mDEFINE(); 
 
                 }
                 break;
             case 156 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1030: UNDEF
+                //:1:1030: UNDEF
                 {
                 mUNDEF(); 
 
                 }
                 break;
             case 157 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1036: SEMI
+                //:1:1036: SEMI
                 {
                 mSEMI(); 
 
                 }
                 break;
             case 158 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1041: RPAREN
+                //:1:1041: RPAREN
                 {
                 mRPAREN(); 
 
                 }
                 break;
             case 159 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1048: WS
+                //:1:1048: WS
                 {
                 mWS(); 
 
                 }
                 break;
             case 160 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1051: DOC_LINE_COMMENT
+                //:1:1051: DOC_LINE_COMMENT
                 {
                 mDOC_LINE_COMMENT(); 
 
                 }
                 break;
             case 161 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1068: LINE_COMMENT
+                //:1:1068: LINE_COMMENT
                 {
                 mLINE_COMMENT(); 
 
                 }
                 break;
             case 162 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1081: COMMENT
+                //:1:1081: COMMENT
                 {
                 mCOMMENT(); 
 
                 }
                 break;
             case 163 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1089: STRINGLITERAL
+                //:1:1089: STRINGLITERAL
                 {
                 mSTRINGLITERAL(); 
 
                 }
                 break;
             case 164 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1103: Verbatim_string_literal
+                //:1:1103: Verbatim_string_literal
                 {
                 mVerbatim_string_literal(); 
 
                 }
                 break;
             case 165 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1127: NUMBER
+                //:1:1127: NUMBER
                 {
                 mNUMBER(); 
 
                 }
                 break;
             case 166 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1134: GooBall
+                //:1:1134: GooBall
                 {
                 mGooBall(); 
 
                 }
                 break;
             case 167 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1142: Real_literal
+                //:1:1142: Real_literal
                 {
                 mReal_literal(); 
 
                 }
                 break;
             case 168 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1155: Character_literal
+                //:1:1155: Character_literal
                 {
                 mCharacter_literal(); 
 
                 }
                 break;
             case 169 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1173: IDENTIFIER
+                //:1:1173: IDENTIFIER
                 {
                 mIDENTIFIER(); 
 
                 }
                 break;
             case 170 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1184: Pragma
+                //:1:1184: Pragma
                 {
                 mPragma(); 
 
                 }
                 break;
             case 171 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1191: PREPROCESSOR_DIRECTIVE
+                //:1:1191: PREPROCESSOR_DIRECTIVE
                 {
                 mPREPROCESSOR_DIRECTIVE(); 
 
                 }
                 break;
             case 172 :
-                // C:\\Users\\Thomas\\workspaceGallieo\\CSharpMapper\\src\\mapper\\cs.g:1:1214: Hex_number
+                //:1:1214: Hex_number
                 {
                 mHex_number(); 
 

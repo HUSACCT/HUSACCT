@@ -14,25 +14,39 @@ import java.util.ArrayList;
 
 public class DemoController extends DrawingController {
 
-	//private final int ITEMS_PER_ROW = 2;
+	// private final int ITEMS_PER_ROW = 2;
 
 	public DemoController() {
 		initializeDrawing();
 	}
-	
-	private void initializeDrawing(){
+
+	private void initializeDrawing() {
 		ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
-		//AbstractDTO[] modules = new AbstractDTO[5];
 
 		ModuleDTO presentationLayer = new ModuleDTO();
 		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
 		modules.add(presentationLayer);
+		
+		ModuleDTO neuralInterfaceLayer = new ModuleDTO();
+		neuralInterfaceLayer.type = "layer";
+		neuralInterfaceLayer.logicalPath = "neural_interface";
+		modules.add(neuralInterfaceLayer);		
 
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
 		modules.add(taskLayer);
+		
+//		ModuleDTO extraTaskLayer = new ModuleDTO();
+//		extraTaskLayer.type = "layer";
+//		extraTaskLayer.logicalPath = "extra_task";
+//		modules.add(extraTaskLayer);
+//
+//		extraTaskLayer = new ModuleDTO();
+//		extraTaskLayer.type = "layer";
+//		extraTaskLayer.logicalPath = "task_two";
+//		modules.add(extraTaskLayer);		
 
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
@@ -43,38 +57,42 @@ public class DemoController extends DrawingController {
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain";
 		modules.add(domainLayer);
+		
+		domainLayer = new ModuleDTO();
+		domainLayer.type = "layer";
+		domainLayer.logicalPath = "domain_two";
+		modules.add(domainLayer);		
+//
+//		ModuleDTO testLayer = new ModuleDTO();
+//		testLayer.type = "layer";
+//		testLayer.logicalPath = "test";
+//		modules.add(testLayer);
+//		
+//		ModuleDTO testClass = new ModuleDTO();
+//		testClass.type = "class";
+//		testClass.logicalPath = "*";
+//		//modules.add(testClass);
+//		
+//		ModuleDTO testModule = new ModuleDTO();
+//		testModule.type = "subsystem";
+//		testModule.logicalPath = "myModule";
+//		modules.add(testModule);
+//		
+//		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
+//		unrecognizableModuleTypeDTO.type = "foobar";
+//		unrecognizableModuleTypeDTO.logicalPath = "tests";
+//		modules.add(unrecognizableModuleTypeDTO);
+//		
+//		ModuleDTO component = new ModuleDTO();
+//		component.type = "component";
+//		component.logicalPath = "uml2component";
+//		modules.add(component);
 
-		ModuleDTO testLayer = new ModuleDTO();
-		testLayer.type = "layer";
-		testLayer.logicalPath = "test";
-		modules.add(testLayer);
-		
-		ModuleDTO testClass = new ModuleDTO();
-		testClass.type = "class";
-		testClass.logicalPath = "*";
-		//modules.add(testClass);
-		
-		ModuleDTO testModule = new ModuleDTO();
-		testModule.type = "module";
-		testModule.logicalPath = "myModule";
-		//modules.add(testModule);
-		
-		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
-		unrecognizableModuleTypeDTO.type = "foobar";
-		unrecognizableModuleTypeDTO.logicalPath = "tests";
-		modules.add(unrecognizableModuleTypeDTO);
-		
-		ModuleDTO component = new ModuleDTO();
-		component.type = "component";
-		component.logicalPath = "uml2component";
-		modules.add(component);
-		
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
-		this.drawModules(dtos);
-		this.drawLinesBasedOnSetting();
+		drawModulesAndLines(dtos);
 	}
-	
+
 	@Override
 	public void refreshDrawing() {
 		initializeDrawing();
@@ -83,30 +101,30 @@ public class DemoController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
 		BaseFigure zoomedFigure = zoomedModuleFigures[0];
-		
-		if(zoomedFigure instanceof NamedFigure
-				&& ((NamedFigure)zoomedFigure).getName() == "tests")	{
+
+		if (zoomedFigure instanceof NamedFigure && ((NamedFigure) zoomedFigure).getName() == "tests") {
 			ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
-			
+
 			ModuleDTO child1 = new ModuleDTO();
 			child1.type = "abstract";
 			child1.logicalPath = "tests.test1";
 			modules.add(child1);
-			
+
 			ModuleDTO child2 = new ModuleDTO();
 			child2.type = "class";
 			child2.logicalPath = "tests.test2";
 			modules.add(child2);
-			
+
 			ModuleDTO child3 = new ModuleDTO();
 			child3.type = "interface";
 			child3.logicalPath = "tests.test3";
 			modules.add(child3);
-			
+
 			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 			dtos = modules.toArray(dtos);
-			this.drawModules(dtos);
-		}			
+			setCurrentPath("tests");
+			this.drawModulesAndLines(dtos);
+		}
 	}
 
 	@Override
@@ -129,6 +147,15 @@ public class DemoController extends DrawingController {
 		if (figFrom.getName().equals("presentation") && figTo.getName().equals("task")) {
 			dependencies.add(new DependencyDTO("task", "presentation", "wa", 1));
 		}
+		if (figFrom.getName().equals("presentation") && figTo.getName().equals("extra_task")) {
+			dependencies.add(new DependencyDTO("extra_task", "presentation", "wa", 1));
+		}		
+		if (figFrom.getName().equals("presentation") && figTo.getName().equals("task_two")) {
+			dependencies.add(new DependencyDTO("task_two", "presentation", "wa", 1));
+		}	
+		if (figFrom.getName().equals("neural_interface") && figTo.getName().equals("domain")) {
+			dependencies.add(new DependencyDTO("domain", "neural_interface", "wa", 1));
+		}		
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("domain")) {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 1));
@@ -143,6 +170,10 @@ public class DemoController extends DrawingController {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 4));
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 5));
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 6));
+		}
+		
+		if (figFrom.getName().equals("domain") && figTo.getName().equals("domain_two")) {
+			dependencies.add(new DependencyDTO("domain_two", "domain", "wa", 1));
 		}
 
 		if (figFrom.getName().equals("infrastructure") && figTo.getName().equals("test")) {
@@ -183,42 +214,28 @@ public class DemoController extends DrawingController {
 		ViolationDTO[] violations = new ViolationDTO[0];
 
 		// From ValidateServiceStub.java
-		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor", "InvocConstructorDescription",
-				false);
+		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor", "InvocConstructorDescription", false);
 		ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends", "ExtendsDescription", false);
 		ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements", "ImplementsDescription", false);
 		ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends", "ExtendsDescription", false);
-		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse", "IsNotAllowedToUseDescription",
-				new ViolationTypeDTO[] { constructorCall, extendingAbstractClass, implementationOfInterface,
-						extendClass }, new RuleTypeDTO[] {});
+		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse", "IsNotAllowedToUseDescription", new ViolationTypeDTO[] { constructorCall, extendingAbstractClass, implementationOfInterface, extendClass }, new RuleTypeDTO[] {});
 
 		if (figFrom.getName().equals("domain") && figTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
-					"error 1", 1, Color.red, "", "", 3);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 1", 1, Color.red, "", "", 3);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
-					"error 2", 1, Color.red, "", "", 3);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 2", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
 
 		if (figFrom.getName().equals("task") && figTo.getName().equals("task")) {
-			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 3", 1, Color.red, "", "", 3);
-			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("task", "task", "task", "task", extendClass, ruleType,
-					"error 4", 1, Color.red, "", "", 3);
-			violations[1] = taskLayerErr2;
+			return new ViolationDTO[] { new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 3", 1, Color.red, "", "", 3),
+					new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 4", 1, Color.red, "", "", 3), new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 5", 1, Color.PINK, "", "", 99) };
 		}
-		
-		if(figFrom.getName().equals("presentation") && figTo.getName().equals("test")) {
-			violations = new ViolationDTO[] {
-				new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType,
-						"error 5", 1, Color.blue, "", "", 1),
-				new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType,
-						"error 6", 1, Color.orange, "", "", 2)
-			};
+
+		if (figFrom.getName().equals("presentation") && figTo.getName().equals("test")) {
+			violations = new ViolationDTO[] { new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType, "error 5", 1, Color.blue, "", "", 1),
+					new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType, "error 6", 1, Color.orange, "", "", 2) };
 		}
 
 		return violations;
@@ -226,7 +243,7 @@ public class DemoController extends DrawingController {
 
 	@Override
 	public void moduleOpen(String path) {
-		
+
 	}
 
 }

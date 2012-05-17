@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
-import husacct.define.presentation.jframe.JFrameSoftwareUnit;
+import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 public class SoftwareUnitController extends PopUpController {
 
-	private JFrameSoftwareUnit softwareUnitFrame;
+	private SoftwareUnitJDialog softwareUnitFrame;
 	private Logger logger;
 	
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;

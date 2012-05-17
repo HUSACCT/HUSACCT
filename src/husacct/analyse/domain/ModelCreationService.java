@@ -1,10 +1,12 @@
 package husacct.analyse.domain;
 
+import java.util.List;
+
 public interface ModelCreationService {
 	
+
+	public void createPackage(String uniqueName, String belongsToPackage, String name);
 	public void clearModel( );
-	
-	public void createPackage(String uniqieName, String belongsToPackage, String name);
 	
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
@@ -38,4 +40,12 @@ public interface ModelCreationService {
 	
 	//Debug-functies voor in de main:
 	public String represent();
+
+	public void createLocalVariable(String belongsToMethodString, String belongsToClass,
+			String declareType, String name, String uniqueName, int lineNumber);
+
+	public void createParameter(String name, String uniqueName,
+			String declareType, String belongsToClass, int lineNumber,
+			String belongsToMethod, String declareTypes);
+	
 }
