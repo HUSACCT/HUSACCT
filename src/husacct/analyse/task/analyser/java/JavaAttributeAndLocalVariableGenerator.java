@@ -86,7 +86,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	
 	private void createLocalVariableObject() {
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		modelService.createLocalVariable(belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.belongsToMethod);
+		modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	}
 
 	private void setAttributeName(Tree tree) {

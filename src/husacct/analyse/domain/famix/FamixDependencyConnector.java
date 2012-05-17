@@ -7,9 +7,12 @@ import java.util.Map.Entry;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import org.apache.log4j.Logger;
+
 class FamixDependencyConnector {
 
 	private FamixModel theModel;
+	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
 	public FamixDependencyConnector(){
 		theModel = FamixModel.getInstance();
@@ -60,6 +63,7 @@ class FamixDependencyConnector {
 					if(!connected){
 						if(isInvocation(association)){
 							FamixInvocation theInvocation = (FamixInvocation) association;
+							
 							if (theInvocation.belongsToMethod.equals("")){
 								//Then it is an attribute
 								theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
@@ -79,7 +83,11 @@ class FamixDependencyConnector {
 					}
 				}
 				
-				addToModel(association);
+				if(association.to.equals("") || association.to == null){
+					logger.info("couldn't connect " + association.from + " to the right entity. Linenumber " + association.lineNumber + ". Please inform us with classe where we fail on.");
+				} else {
+					addToModel(association);
+				}
 			} catch(Exception e){
 				
 			}
@@ -120,7 +128,7 @@ class FamixDependencyConnector {
 					}
 				}
 			}
-		}		
+		}
 		return "";
 	}
 	
@@ -202,7 +210,7 @@ class FamixDependencyConnector {
 		return result;
 	}
 	
-	private boolean addToModel(FamixObject newObject){
+	private boolean addToModel(FamixObject newObject){		
 		try {
 			theModel.addObject(newObject);
 			return true;
