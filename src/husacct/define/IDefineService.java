@@ -15,7 +15,7 @@ public interface IDefineService extends ISaveable{
 	public ModuleDTO[] getRootModules();
 	public ApplicationDTO getApplicationDetails();
 	public void createApplication(String name, String[] paths, String language, String version);
-	public ModuleDTO[] getChildsFromModule(String logicalPath);
+	public ModuleDTO[] getChildrenFromModule(String logicalPath);
 	public String getParentFromModule(String logicalPath);
 	public boolean isDefined();
 	public boolean isMapped();
