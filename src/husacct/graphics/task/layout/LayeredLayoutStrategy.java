@@ -8,11 +8,13 @@ import husacct.graphics.presentation.figures.RelationFigure;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
+import org.lambda.functions.implementations.F1;
 
 public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
@@ -29,8 +31,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	// simpler / quicker to see if a figure has been processed yet or not.
 	@Override
 	public void doLayout(int screenWidth, int screenHeight) {
-
-		List<ConnectionFigure> connectors = findAllConnectors();
+		List<Figure> figures = drawing.getChildren();
+		List<Figure> connectors = find(figures, new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }});
 		indexFigures(connectors);
 		
 		// TODO: Remove after finishing this module
@@ -50,38 +52,51 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		}
 	}
 	
-	private List<ConnectionFigure> findAllConnectors() {
-		List<Figure> figures = drawing.getChildren();
-		ArrayList<ConnectionFigure> list = new ArrayList<ConnectionFigure>();
-
-		for (Figure f : figures) {
-			if (isConnector(f)) {
-				list.add((ConnectionFigure) f);
-			}
+	private <T> List<T> find(Collection<T> coll, F1<T, Boolean> fn) {
+		ArrayList<T> results = new ArrayList<T>();
+		
+		for (T t : coll) {
+			if (fn.call(t))
+				results.add(t);
 		}
-
-		return Collections.unmodifiableList(list);
-	}	
+		
+		return Collections.unmodifiableList(results);
+	}
 	
-	private List<Node> getRootNodes() {
-		ArrayList<Node> list = new ArrayList<Node>();
-		
-		for (Node n : nodes) {
-			if (n.getLevel() == 0) {
-				list.add(n);
-			}
-		}
-		
-		return Collections.unmodifiableList(list);
-	}	
+//	private List<ConnectionFigure> findAllConnectors() {
+//		List<Figure> figures = drawing.getChildren();
+//		ArrayList<ConnectionFigure> list = new ArrayList<ConnectionFigure>();
+//
+//		for (Figure f : figures) {
+//			if (isConnector(f)) {
+//				list.add((ConnectionFigure) f);
+//			}
+//		}
+//
+//		return Collections.unmodifiableList(list);
+//	}	
+	
+//	private List<Node> getRootNodes() {
+//		ArrayList<Node> list = new ArrayList<Node>();
+//		
+//		for (Node n : nodes) {
+//			if (n.getLevel() == 0) {
+//				list.add(n);
+//			}
+//		}
+//		
+//		return Collections.unmodifiableList(list);
+//	}	
 	
 	private String nodeName(Node n) {
 		NamedFigure nf = (NamedFigure) n.getFigure(); 
 		return nf.getName();
 	}
 	
-	private void indexFigures(List<ConnectionFigure> connectors) {
-		for (ConnectionFigure cf : connectors) {
+	private void indexFigures(List<Figure> connectors) {
+		for (Figure f : connectors) {
+			ConnectionFigure cf = (ConnectionFigure)f;
+			
 			Node startNode = getNode(cf.getStartFigure());
 			Node endNode = getNode(cf.getEndFigure());
 			
@@ -105,7 +120,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}	
 
 	private void updatePositions() {
-		List<Node> rootNodes = getRootNodes();
+		List<Node> rootNodes = find(nodes, new F1<Node, Boolean>(new Node(null, 0)){{ ret(a.getLevel() == 0);}});
 		
 		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
 		
