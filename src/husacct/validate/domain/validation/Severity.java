@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation;
 
 import husacct.validate.abstraction.language.ValidateTranslator;
+
 import java.awt.Color;
 import java.util.UUID;
 
@@ -99,9 +100,13 @@ public class Severity implements Cloneable {
 		return true;
 	}
 
-	public Severity clone() throws CloneNotSupportedException {
-		Severity clone = (Severity)super.clone();		
-		return clone;
+	public Severity clone() {
+		try {
+			Severity clone = (Severity)super.clone();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new husacct.validate.domain.exception.CloneNotSupportedException(e);
+		}		
 	}
 
 	@Override
