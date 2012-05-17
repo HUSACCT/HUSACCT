@@ -25,11 +25,11 @@ public class DefineComponentFactory {
 		return returnComponent;
 	}
 	
-	private static ModuleComponent createModuleComponent(Module module) {
-		ModuleComponent moduleComponent = new ModuleComponent();
-		moduleComponent.setModuleId(module.getId());
-		moduleComponent.setName(module.getName());
-		return moduleComponent;
+	private static SubSystemComponent createModuleComponent(Module module) {
+		SubSystemComponent subSystemComponent = new SubSystemComponent();
+		subSystemComponent.setModuleId(module.getId());
+		subSystemComponent.setName(module.getName());
+		return subSystemComponent;
 	}
 	
 	private static LayerComponent createLayerComponent(Module module) {

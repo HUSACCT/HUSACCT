@@ -1,39 +1,38 @@
 package husacct.define.task.components;
 
-import java.awt.Component;
 import java.util.ArrayList;
 
-public class ModuleComponent extends AbstractDefineComponent {
+public class SubSystemComponent extends AbstractDefineComponent {
 	
 	private static final long serialVersionUID = 6711345066811693165L;
 
-	public ModuleComponent() {
+	public SubSystemComponent() {
 		super();
 	}
 
 	@Override
-	public void addChild(AbstractDefineComponent child) {
+	public void addChild(AbstractCombinedComponent child) {
 		this.children.add(child);
 	}
 	
 	@Override
-	public void addChild(int index, AbstractDefineComponent child) {
+	public void addChild(int index, AbstractCombinedComponent child) {
 		this.children.add(index, child);
 	}
 
 	@Override
-	public void setChildren(ArrayList<AbstractDefineComponent> children) {
+	public void setChildren(ArrayList<AbstractCombinedComponent> children) {
 		this.children = children;
 	}
 
 	@Override
-	public ArrayList<AbstractDefineComponent> getChildren() {
+	public ArrayList<AbstractCombinedComponent> getChildren() {
 		return this.children;
 	}
 
 	@Override
-	public void removeChild(AbstractDefineComponent child) {
-		for(Component currentchild : this.children) {
+	public void removeChild(AbstractCombinedComponent child) {
+		for(AbstractCombinedComponent currentchild : this.children) {
 			if(currentchild.equals(child)) {
 				this.children.remove(currentchild);
 			}

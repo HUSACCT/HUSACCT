@@ -1,6 +1,6 @@
 package husacct.define.presentation.moduletree;
 
-import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.AbstractCombinedComponent;
 
 import java.util.ArrayList;
 
@@ -8,10 +8,10 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-public class AnalyzedModuleTreeModel implements TreeModel {
-	AnalyzedModuleComponent root;
+public class CombinedModuleTreeModel implements TreeModel {
+	AbstractCombinedComponent root;
 	
-	public AnalyzedModuleTreeModel(AnalyzedModuleComponent root) {
+	public CombinedModuleTreeModel(AbstractCombinedComponent root) {
 		this.root = root;
 	}
 	
@@ -25,9 +25,9 @@ public class AnalyzedModuleTreeModel implements TreeModel {
 	 * children. We also define containers with no children as leaves.
 	 */
 	public boolean isLeaf(Object nodeObject) {
-		if (nodeObject instanceof AnalyzedModuleComponent) {
-			AnalyzedModuleComponent node = (AnalyzedModuleComponent) nodeObject;
-			ArrayList<AnalyzedModuleComponent> children = node.getChildren();
+		if (nodeObject instanceof AbstractCombinedComponent) {
+			AbstractCombinedComponent node = (AbstractCombinedComponent) nodeObject;
+			ArrayList<AbstractCombinedComponent> children = node.getChildren();
 			return (children.size() == 0);
 		} else {
 			return true;
@@ -35,33 +35,33 @@ public class AnalyzedModuleTreeModel implements TreeModel {
 	}
 	
 	public int getChildCount(Object nodeObject) {
-		if (nodeObject instanceof AnalyzedModuleComponent) {
-			AnalyzedModuleComponent node = (AnalyzedModuleComponent) nodeObject;
-			ArrayList<AnalyzedModuleComponent> children = node.getChildren();
+		if (nodeObject instanceof AbstractCombinedComponent) {
+			AbstractCombinedComponent node = (AbstractCombinedComponent) nodeObject;
+			ArrayList<AbstractCombinedComponent> children = node.getChildren();
 			return children.size();
 		}
 		return 0;
 	}
 	
 	public Object getChild(Object nodeObject, int index) {
-		if (nodeObject instanceof AnalyzedModuleComponent) {
-			AnalyzedModuleComponent node = (AnalyzedModuleComponent) nodeObject;
-			ArrayList<AnalyzedModuleComponent> children = node.getChildren();
+		if (nodeObject instanceof AbstractCombinedComponent) {
+			AbstractCombinedComponent node = (AbstractCombinedComponent) nodeObject;
+			ArrayList<AbstractCombinedComponent> children = node.getChildren();
 			return children.get(index);
 		}
 		return null;
 	}
 	
 	public int getIndexOfChild(Object nodeObject, Object child) {
-		if(nodeObject instanceof AnalyzedModuleComponent) {
-			AnalyzedModuleComponent node = (AnalyzedModuleComponent) nodeObject;
-			ArrayList<AnalyzedModuleComponent> children = node.getChildren();
+		if(nodeObject instanceof AbstractCombinedComponent) {
+			AbstractCombinedComponent node = (AbstractCombinedComponent) nodeObject;
+			ArrayList<AbstractCombinedComponent> children = node.getChildren();
 			return this.checkChildrenForIndex(children, child);
 		}
 		return -1;
 	}
 	
-	private int checkChildrenForIndex(ArrayList<AnalyzedModuleComponent> children, Object child) {
+	private int checkChildrenForIndex(ArrayList<AbstractCombinedComponent> children, Object child) {
 		if(children != null) {
 			for (int i = 0; i < children.size(); i++) {
 			    if (children.get(i) == child) {
@@ -73,7 +73,7 @@ public class AnalyzedModuleTreeModel implements TreeModel {
 	}
 	
 	/**
-	 * #TODO:: TreeModel never fires any events (since it is not editable)
+	 * #TODO TreeModel never fires any events (since it is not editable)
 	 */
 	@Override
 	public void valueForPathChanged(TreePath path, Object newvalue) {
@@ -82,7 +82,7 @@ public class AnalyzedModuleTreeModel implements TreeModel {
 	
 	
 	/**
-	 * #TODO:: TreeModel never fires any events (since it is not editable)
+	 * #TODO TreeModel never fires any events (since it is not editable)
 	 */
 	@Override
 	public void addTreeModelListener(TreeModelListener l) {
@@ -90,7 +90,7 @@ public class AnalyzedModuleTreeModel implements TreeModel {
 	}
 	
 	/**
-	 * #TODO:: TreeModel never fires any events (since it is not editable)
+	 * #TODO TreeModel never fires any events (since it is not editable)
 	 */
 	@Override
 	public void removeTreeModelListener(TreeModelListener l) {
