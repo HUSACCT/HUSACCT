@@ -18,13 +18,16 @@ class CSharpTreeConvertController extends CSharpGenerator {
 	private List<CommonTree> methodTrees;
 	private List<CommonTree> attributeTrees;
 	private List<CommonTree> exceptionTrees;
+	private List<CommonTree> localVariableTrees;
 	private CommonTree abstractTree;
 	private boolean isClassName = false;
 	private boolean isNamespaceName = false;
 	private int indentLevel = 0;
+	private int methodIndentLevel = -1;
 	private String tempClassName = "";
 	private String tempNamespaceName = "";
 	private String tempUsingName = "";
+	private String tempMethodSignature = "";
 	private List<CommonTree> tempNamespaceTrees;
 	private List<CommonTree> tempUsingTrees;
 	private List<CSharpData> indentClassLevel;
@@ -129,6 +132,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		attributeTrees = new ArrayList<CommonTree>();
 		methodTrees = new ArrayList<CommonTree>();
 		exceptionTrees = new ArrayList<CommonTree>();
+		localVariableTrees = new ArrayList<CommonTree>();
 		walkAST(compilationUnitTree.getChildren());
 		new CSharpClassGenerator(classTrees, indentClassLevel);
 		CSharpNamespaceGenerator generator = new CSharpNamespaceGenerator();
@@ -170,6 +174,9 @@ class CSharpTreeConvertController extends CSharpGenerator {
 			if (isNewInstance == false && hasBrackets == true) {
 				CSharpMethodGenerator methodGenerator = new CSharpMethodGenerator();
 				methodGenerator.generateMethod(methodTrees, tempNamespaceName, tempClassName);
+
+				tempMethodSignature = methodGenerator.getSignature();
+				methodIndentLevel = indentLevel -1;
 			}
 			methodTrees.clear();
 		}
@@ -245,14 +252,14 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		}
 		return usage;
 	}
-	
+
 	private boolean exceptionCheck(CommonTree tree, boolean isPartOfException){
 		int type = tree.getType();
-		
+
 		if(type == CATCH || type == THROW || type == FINALLY){
 			isPartOfException = true;
 		}
-		
+
 		if(!(exceptionTrees.isEmpty()) && (type == SEMICOLON || type == FORWARDCURLYBRACKET)){
 			isPartOfException = false;
 			int lineNumber = tree.getLine();
@@ -261,10 +268,10 @@ class CSharpTreeConvertController extends CSharpGenerator {
 			exceptionGenerator.generateException(exceptionTrees, uniqueClassName, lineNumber);
 			exceptionTrees.clear();
 		}
-		
+
 		if(isPartOfException){
 			exceptionTrees.add(tree);
-			
+
 		}
 		return isPartOfException;
 	}
@@ -276,6 +283,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		boolean isPartOfAttribute = false;
 		boolean isPartOfMethod = false;
 		boolean isPartOfException = false;
+		boolean ispartOfLocalVariable = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
 		tempUsingTrees = new ArrayList<CommonTree>();
 
@@ -287,6 +295,62 @@ class CSharpTreeConvertController extends CSharpGenerator {
 			isPartOfAttribute = attributeCheck(tree, isPartOfAttribute);
 			isPartOfMethod = methodCheck(tree, isPartOfMethod);
 			isPartOfException = exceptionCheck(tree, isPartOfException);
+			if((indentLevel > methodIndentLevel) && methodIndentLevel != -1){
+				ispartOfLocalVariable = localVariableCheck(tree, ispartOfLocalVariable);
+			}
+			
+		}
+	}
+
+	private boolean localVariableCheck(CommonTree tree, boolean ispartOfLocalVariable) {
+		int type = tree.getType();
+		
+		if(!(ispartOfLocalVariable)){
+			for(int thisType : typeCollection){
+				if(type == thisType){
+					ispartOfLocalVariable = true;
+				}
+			}
+		}
+		
+		if(type == SEMICOLON || type == IS){
+			ispartOfLocalVariable = false;
+			int lineNumber = tree.getLine();
+			String belongsToClass = tempNamespaceName + "." + tempClassName;
+			if(localVariableTrees.size() > 0){
+				cleanVariableList();
+			}
+			
+			if(localVariableTrees.size() > 1){
+				CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator();
+				localVariableGenerator.generateLocalVariable(localVariableTrees, tempMethodSignature, belongsToClass, lineNumber);
+			}
+			localVariableTrees.clear();
+		}
+		
+		if(ispartOfLocalVariable){
+			localVariableTrees.add(tree);
+		}
+		
+		return ispartOfLocalVariable;
+	}
+
+	private void cleanVariableList() {
+		boolean isLocalVariable = true;
+		final int[] notAllowedTypes = new int[]{DOT, FORWARDCURLYBRACKET, FORWARDBRACKET};
+		
+		for(CommonTree node : localVariableTrees){
+			int type = node.getType();
+			
+			for (int notAllowedtype : notAllowedTypes){
+				if(type == notAllowedtype){
+					isLocalVariable = false;
+				}
+			}
+		}
+		
+		if(!(isLocalVariable)){
+			localVariableTrees.clear();
 		}
 	}
 }
