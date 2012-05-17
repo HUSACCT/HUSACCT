@@ -179,7 +179,7 @@ public class DefineServiceStub implements IDefineService{
 	}
 
 	@Override
-	public ModuleDTO[] getChildsFromModule(String tmplogicalPath) {
+	public ModuleDTO[] getChildrenFromModule(String tmplogicalPath) {
 		String logicalPath = "DomainLayer.locationbasedHistory";
 		String[] physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
 		String type = "Module";

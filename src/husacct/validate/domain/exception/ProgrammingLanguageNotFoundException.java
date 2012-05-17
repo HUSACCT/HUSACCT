@@ -6,4 +6,8 @@ public class ProgrammingLanguageNotFoundException extends RuntimeException {
 	public ProgrammingLanguageNotFoundException(){
 		super();
 	}
+	
+	public ProgrammingLanguageNotFoundException(String programmingLanguage){
+		super(programmingLanguage);
+	}
 }

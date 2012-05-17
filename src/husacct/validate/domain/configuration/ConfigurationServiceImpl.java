@@ -10,9 +10,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Observer;
 
-public class ConfigurationServiceImpl {
+public class ConfigurationServiceImpl extends Observable {
 
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
