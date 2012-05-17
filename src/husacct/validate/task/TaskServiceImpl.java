@@ -53,9 +53,7 @@ public class TaskServiceImpl{
 		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
-	public void setFilterValues(ArrayList<String> ruletypesKeys,
-			ArrayList<String> violationtypesKeys,
-			ArrayList<String> paths, boolean hideFilter, Calendar date) {
+	public void setFilterValues(ArrayList<String> ruletypesKeys, ArrayList<String> violationtypesKeys, ArrayList<String> paths, boolean hideFilter, Calendar date) {
 		if (date == null){
 			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getAllViolations().getValue());
 		} else{
@@ -109,7 +107,7 @@ public class TaskServiceImpl{
 		addSeverities(severityList);
 	}
 	public void addSeverities(List<Severity> severities) {
-		configuration.addSeverities(severities);
+		configuration.setSeverities(severities);
 	}
 
 	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
@@ -121,8 +119,7 @@ public class TaskServiceImpl{
 		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 
-	public Map<String, List<ViolationType>> getViolationTypes(
-			String language) {
+	public Map<String, List<ViolationType>> getViolationTypes(String language) {
 		return domain.getAllViolationTypes(language);
 	}
 
@@ -160,7 +157,7 @@ public class TaskServiceImpl{
 				return violationHistory.getViolations();
 			}
 		}
-		throw new NullPointerException("no violations found at date given");
+		throw new NullPointerException("no violations found at given date");
 	}
 
 	public Calendar[] getViolationHistoryDates() {

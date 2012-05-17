@@ -26,7 +26,7 @@ class SeverityConfigRepository {
 		return currentSeverities;
 	}
 
-	void addSeverities(List<Severity> severities){
+	void setSeverities(List<Severity> severities){
 		checkSeverities(severities);
 		this.currentSeverities = matchNewWithCurrentSeverities(severities);
 	}

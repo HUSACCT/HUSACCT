@@ -12,28 +12,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 class ActiveViolationTypesRepository {
 
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();	
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private final RuleTypesFactory ruletypesfactory;
-	private Map<String, List<ActiveRuleType>> activeViolationTypes;
+	private final Map<String, List<ActiveRuleType>> startupViolationTypes;
+	private Map<String, List<ActiveRuleType>> currentActiveViolationTypes;
+
 
 	ActiveViolationTypesRepository(RuleTypesFactory ruletypesfactory) {
-		this.activeViolationTypes = new HashMap<String, List<ActiveRuleType>>();
+		this.startupViolationTypes = initializeActiveViolationTypes();
+		this.currentActiveViolationTypes = initializeActiveViolationTypes();
 		this.ruletypesfactory = ruletypesfactory;
-		initializeActiveViolationTypes();
+
 	}
 
-	private void initializeActiveViolationTypes(){
+	private Map<String, List<ActiveRuleType>> initializeActiveViolationTypes(){
+		Map<String, List<ActiveRuleType>> activeViolationTypes = new HashMap<String, List<ActiveRuleType>>();
+
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
 			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
-			this.activeViolationTypes.put(programmingLanguage, activeRuleTypes);
+			activeViolationTypes.put(programmingLanguage, activeRuleTypes);
+
 			for(List<RuleType> ruleTypes : ruletypesfactory.getRuleTypes(programmingLanguage).values()){
+
 				for(RuleType ruleType : ruleTypes){
 					final String ruleTypeKey = ruleType.getKey();					
 					List<ActiveViolationType> initialActiveViolationTypes = new ArrayList<ActiveViolationType>();
+
 					for(ViolationType violationType : ruleType.getViolationTypes()){
 						final String violationTypeKey = violationType.getViolationtypeKey();
 						boolean enabled = violationType.isActive();
@@ -46,6 +55,7 @@ class ActiveViolationTypesRepository {
 				}				
 			}
 		}		
+		return activeViolationTypes;
 	}
 
 	boolean isEnabled(String ruleTypeKey, String violationTypeKey){
@@ -54,7 +64,7 @@ class ActiveViolationTypesRepository {
 	}
 
 	boolean isEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){		
-		List<ActiveRuleType> activeRuleTypes = this.activeViolationTypes.get(programmingLanguage);
+		List<ActiveRuleType> activeRuleTypes = this.currentActiveViolationTypes.get(programmingLanguage);
 		if(activeRuleTypes != null){
 			for(ActiveRuleType activeRuleType : activeRuleTypes){
 				if(activeRuleType.getRuleType().toLowerCase().equals(ruleTypeKey.toLowerCase())){
@@ -78,21 +88,91 @@ class ActiveViolationTypesRepository {
 	}
 
 	Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
-		return activeViolationTypes;
-	}
-
-	void setActiveViolationTypes(String programmingLanguage , List<ActiveRuleType> newActiveViolationTypes) {
-		if(this.activeViolationTypes.containsKey(programmingLanguage)){
-			@SuppressWarnings("unused")
-			List<ActiveRuleType> activeViolationTypesForLanguage = this.activeViolationTypes.get(programmingLanguage);
-			activeViolationTypesForLanguage = newActiveViolationTypes;
-		}
-		else{
-			this.activeViolationTypes.put(programmingLanguage, newActiveViolationTypes);
-		}
+		return currentActiveViolationTypes;
 	}
 
 	void setActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes){
-		this.activeViolationTypes = activeViolationTypes;
+		for(Entry<String, List<ActiveRuleType>> activeViolationTypeSet : activeViolationTypes.entrySet()){
+			if(programmingLanguageExists(activeViolationTypeSet.getKey())){
+				setActiveViolationTypes(activeViolationTypeSet.getKey(), activeViolationTypes.get(activeViolationTypeSet.getKey()));
+			}			
+		}
+	}
+
+	void setActiveViolationTypes(String programmingLanguage , List<ActiveRuleType> newActiveViolationTypes) {
+		if(programmingLanguageExists(programmingLanguage)){
+			List<ActiveRuleType> checkedNewActiveViolationTypes = checkNewActiveViolationTypes(programmingLanguage, newActiveViolationTypes);
+
+			if(this.currentActiveViolationTypes.containsKey(programmingLanguage)){
+
+				List<ActiveRuleType> activeViolationTypesForLanguage = this.currentActiveViolationTypes.get(programmingLanguage);
+				activeViolationTypesForLanguage = checkedNewActiveViolationTypes;
+			}
+			else{
+				this.currentActiveViolationTypes.put(programmingLanguage, checkedNewActiveViolationTypes);
+			}
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+		}
+	}
+
+	private boolean programmingLanguageExists(String programmingLanguage){
+		for(String language : startupViolationTypes.keySet()){
+			if(language.toLowerCase().equals(programmingLanguage.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private List<ActiveRuleType> checkNewActiveViolationTypes(String programmingLanguage, List<ActiveRuleType> newActiveViolationTypes){
+		List<ActiveRuleType> activeViolationTypesForLanguage = new ArrayList<ActiveRuleType>();
+		for(ActiveRuleType newActiveRuleType : newActiveViolationTypes){
+			if(ruleTypeKeyExists(programmingLanguage, newActiveRuleType.getRuleType())){
+
+				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
+				ActiveRuleType activeRuleType = new ActiveRuleType(newActiveRuleType.getRuleType());
+				activeRuleType.setViolationTypes(activeViolationTypes);
+				activeViolationTypesForLanguage.add(activeRuleType);
+
+				for(ActiveViolationType newActiveViolationType : newActiveRuleType.getViolationTypes()){
+					if(violationTypeKeyExists(programmingLanguage, newActiveRuleType.getRuleType(), newActiveViolationType.getType())){
+						activeViolationTypes.add(new ActiveViolationType(newActiveViolationType.getType(), newActiveViolationType.isEnabled()));							
+					}							
+				}						
+			}
+		}
+		return activeViolationTypesForLanguage;
+	}
+
+	private boolean ruleTypeKeyExists(String programmingLanguage, String ruleTypeKey){
+		if(programmingLanguageExists(programmingLanguage)){
+
+			for(ActiveRuleType activeRuleType : startupViolationTypes.get(programmingLanguage)){
+				if(activeRuleType.getRuleType().toLowerCase().equals(ruleTypeKey.toLowerCase())){
+					return true;
+				}
+			}
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+		}
+		return false;
+	}
+
+	private boolean violationTypeKeyExists(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
+		if(programmingLanguageExists(programmingLanguage) && ruleTypeKeyExists(programmingLanguage, ruleTypeKey)){
+
+			for(ActiveRuleType activeRuleType : startupViolationTypes.get(programmingLanguage)){
+
+				for(ActiveViolationType activeViolationType : activeRuleType.getViolationTypes()){
+					if(activeViolationType.getType().toLowerCase().equals(violationTypeKey.toLowerCase())){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

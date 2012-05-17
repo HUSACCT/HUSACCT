@@ -36,7 +36,7 @@ public class ImportController {
 
 	private void importSeverties(Element element) {
 		this.severities = importFactory.importSeverities(element);
-		configuration.addSeverities(severities);
+		configuration.setSeverities(severities);
 	}
 
 	private void importViolations(Element element) throws DatatypeConfigurationException{

@@ -43,7 +43,7 @@ public class CheckConformanceController {
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
 					configuration.addViolations(newViolations);
-					
+
 					if(appliedRule.exceptionRules != null){
 						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
 					}
@@ -58,11 +58,11 @@ public class CheckConformanceController {
 			throw new ProgrammingLanguageNotFoundException();
 		}
 	}
-	
+
 	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
 		return new RuleDTO[]{};
 	}
-	
+
 	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
 		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
 		for(RuleDTO rule : allCurrentRules){

@@ -38,6 +38,18 @@ public class ConfigurationServiceImpl extends Observable {
 	public int getSeverityValue(Severity severity){
 		return severityConfig.getSeverityValue(severity);
 	}
+	
+	public List<Severity> getAllSeverities() {
+		return severityConfig.getAllSeverities();
+	}
+
+	public void setSeverities(List<Severity> severities) {
+		severityConfig.setSeverities(severities);
+	}
+
+	public Severity getSeverityByName(String severityName){
+		return severityConfig.getSeverityByName(severityName);
+	}
 
 	public SimpleEntry<Calendar, List<Violation>> getAllViolations() {
 		return violationRepository.getAllViolations();
@@ -45,18 +57,6 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
-	}
-
-	public List<Severity> getAllSeverities() {
-		return severityConfig.getAllSeverities();
-	}
-
-	public void addSeverities(List<Severity> severities) {
-		severityConfig.addSeverities(severities);
-	}
-
-	public Severity getSeverityByName(String severityName){
-		return severityConfig.getSeverityByName(severityName);
 	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
