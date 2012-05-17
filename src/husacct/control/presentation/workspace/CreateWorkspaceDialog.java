@@ -91,8 +91,10 @@ public class CreateWorkspaceDialog extends JDialog{
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-				mainController.getApplicationController().setApplicationData(applicationData);
+				if(setApplicationCheckbox.isSelected()){
+					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+					mainController.getApplicationController().setApplicationData(applicationData);
+				}
 				createWorkspace();
 				dispose();
 			}

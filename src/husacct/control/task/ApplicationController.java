@@ -1,8 +1,12 @@
 package husacct.control.task;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.control.presentation.util.AboutDialog;
+import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
 
 import javax.swing.JOptionPane;
@@ -29,7 +33,34 @@ public class ApplicationController {
 				applicationDTO.programmingLanguage, 
 				applicationDTO.version
 		);
-		ServiceProvider.getInstance().getAnalyseService().analyseApplication();
+		
+		analyseApplication();
+	}
+	
+	private void analyseApplication(){
+		AnalyseTask analyseTask = new AnalyseTask();
+		
+		final LoadingDialog loadingDialog = new LoadingDialog(mainController, "Analysing application");
+		final Thread analyseThread = new Thread(analyseTask);
+		Thread loadingThread = new Thread(loadingDialog);
+		
+		// Use new thread to listen if analysethread is finished
+		Thread monitorThread = new Thread(new Runnable() {
+			public void run() {
+				try {
+					analyseThread.join();
+					loadingDialog.dispose();
+					logger.debug("Monitor: analyse finished");
+				} catch (InterruptedException exception){
+					logger.debug("Monitor: analyse interupted");
+				}
+				
+			}
+		});
+		
+		loadingThread.start();
+		analyseThread.start();
+		monitorThread.start();
 	}
 	
 	public void showAboutHusacctGui(){
