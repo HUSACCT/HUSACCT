@@ -1,5 +1,8 @@
 package husacct.control.task;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.control.presentation.util.AboutDialog;
@@ -55,6 +58,13 @@ public class ApplicationController {
 			}
 		});
 		
+		loadingDialog.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				analyseThread.interrupt();
+			}
+		});
+		
 		loadingThread.start();
 		analyseThread.start();
 		monitorThread.start();
@@ -72,5 +82,15 @@ public class ApplicationController {
 				    JOptionPane.ERROR_MESSAGE);
 		}
 		ApplicationController.logger.error("Error: " + message);
+	}
+	
+	public static void showInfoMessage(String message){
+		if(ApplicationController.mainController != null){
+			JOptionPane.showMessageDialog(ApplicationController.mainController.getMainGui(),
+				    message,
+				    "Info",
+				    JOptionPane.INFORMATION_MESSAGE);
+		}
+		ApplicationController.logger.error("Info: " + message);
 	}
 }
