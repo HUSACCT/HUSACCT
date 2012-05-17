@@ -24,7 +24,7 @@ public class Layer extends Module {
 		STATIC_LEVEL++;
 	}
 	
-	//TODO this contructor is only for importing
+	//TODO Test this, this contructor is only for importing
 	public Layer(String name, String description, int hierarchicalLevel)
 	{
 		super(name, description);

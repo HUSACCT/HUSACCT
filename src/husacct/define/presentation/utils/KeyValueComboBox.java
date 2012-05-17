@@ -10,11 +10,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 public class KeyValueComboBox extends JComboBox{
-	private HashMap<String, String> keyValuePair = new HashMap<String,String>();
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2870095258058479405L;
+
+	private HashMap<String, String> keyValuePair = new HashMap<String,String>();
 
 	public KeyValueComboBox() {
 		super();

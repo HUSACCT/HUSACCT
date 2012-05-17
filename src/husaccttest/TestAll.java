@@ -17,7 +17,7 @@ import org.junit.runners.Suite;
 	ControlTestSuite.class,
 	DefineTestSuite.class, 
 	GraphicsTestSuite.class,
-	ValidateTestSuite.class,
+	ValidateTestSuite.class
 })
 public class TestAll {
 	@Before
