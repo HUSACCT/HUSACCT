@@ -256,7 +256,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		if(!(exceptionTrees.isEmpty()) && (type == SEMICOLON || type == FORWARDCURLYBRACKET)){
 			isPartOfException = false;
 			int lineNumber = tree.getLine();
-			String uniqueClassName = tempClassName+"."+tempClassName;
+			String uniqueClassName = tempFullNamespaceName + "." + tempClassName;
 			CSharpExceptionGenerator exceptionGenerator = new CSharpExceptionGenerator();
 			exceptionGenerator.generateException(exceptionTrees, uniqueClassName, lineNumber);
 			exceptionTrees.clear();
