@@ -91,21 +91,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	
 	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {
-		FamixAttribute famixAttribute = new FamixAttribute();
-		famixAttribute.hasClassScope = classScope;
-		famixAttribute.accessControlQualifier = accesControlQualifier;
-		famixAttribute.belongsToClass = belongsToClass;
-		famixAttribute.declareType = declareType;
-		famixAttribute.name = name;
-		famixAttribute.uniqueName = uniqueName;
-		model.waitingStructuralEntitys.add(famixAttribute);
-		addToModel(famixAttribute);
-		FamixAssociation fAssocation = new FamixAssociation();
-		fAssocation.from = belongsToClass;
-		fAssocation.to = declareType;
-		fAssocation.type = "declaration";
-		fAssocation.lineNumber = 0;
-		model.waitingAssociations.add(fAssocation);
+		this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, 0);
 	}
 	
 	@Override
@@ -117,6 +103,7 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixAttribute.declareType = declareType;
 		famixAttribute.name = name;
 		famixAttribute.uniqueName = uniqueName;
+		famixAttribute.lineNumber = line;
 		addToModel(famixAttribute);
 		model.waitingStructuralEntitys.add(famixAttribute);
 		FamixAssociation fAssocation = new FamixAssociation();
@@ -128,9 +115,8 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
-	public void createLocalVariable(String belongsToMethodString,
-			String belongsToClass, String declareType, String name,
-			String uniqueName, int lineNumber) {
+	public void createLocalVariable( String belongsToClass, String declareType, String name, 
+			String uniqueName, int lineNumber, String belongsToMethodString) {
 
 		FamixLocalVariable famixLocalVariable = new FamixLocalVariable();
 		famixLocalVariable.belongsToMethod = belongsToMethodString;
@@ -220,39 +206,62 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	}
 	
 	@Override
-	public void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName) {
-		FamixInvocation famixInvocation = new FamixInvocation();
-		famixInvocation.type = "invocConstructor";
-		famixInvocation.from = from;
-		famixInvocation.invocationType = type;
-		famixInvocation.lineNumber = lineNumber;
-		famixInvocation.to = to;
-		famixInvocation.inovcationName = invocationName;
-		model.waitingAssociations.add(famixInvocation);
-	}
-	
-	@Override
-	public void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName) {
-		FamixInvocation famixInvocation = new FamixInvocation();
-		famixInvocation.type = "invocMethod";
-		famixInvocation.from = from;
-		famixInvocation.invocationType = type;
-		famixInvocation.lineNumber = lineNumber;
-		famixInvocation.to = to;
-		famixInvocation.inovcationName = invocationName;
-		model.waitingAssociations.add(famixInvocation);
+	public void createPropertyOrFieldInvocation(String from, int lineNumber,
+			String to, String invocationName, String nameOfInstance) {
+		createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, "", nameOfInstance);
 		
 	}
 
 	@Override
-	public void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName) {
+	public void createMethodInvocation(String from, int lineNumber, String to,
+			String invocationName, String nameOfInstance) {
+		createMethodInvocation(from, to, lineNumber, invocationName, "", nameOfInstance);
+		
+	}
+
+	@Override
+	public void createConstructorInvocation(String from, int lineNumber,
+			String to, String invocationName, String nameOfInstance) {
+		createConstructorInvocation(from, to, lineNumber, invocationName, "", nameOfInstance);
+		
+	}
+	
+	@Override
+	public void createConstructorInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
 		FamixInvocation famixInvocation = new FamixInvocation();
-		famixInvocation.type = "accessPropertyOrField";
+		famixInvocation.type = "invocConstructor";
 		famixInvocation.from = from;
-		famixInvocation.invocationType = type;
 		famixInvocation.lineNumber = lineNumber;
 		famixInvocation.to = to;
 		famixInvocation.inovcationName = invocationName;
+		famixInvocation.belongsToMethod = belongsToMethod;
+		famixInvocation.nameOfInstance = nameOfInstance;
+		model.waitingAssociations.add(famixInvocation);
+	}
+	
+	@Override
+	public void createMethodInvocation( String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
+		FamixInvocation famixInvocation = new FamixInvocation();
+		famixInvocation.type = "invocMethod";
+		famixInvocation.from = from;
+		famixInvocation.lineNumber = lineNumber;
+		famixInvocation.to = to;
+		famixInvocation.inovcationName = invocationName;
+		famixInvocation.belongsToMethod = belongsToMethod;
+		famixInvocation.nameOfInstance = nameOfInstance;
+		model.waitingAssociations.add(famixInvocation);
+	}
+
+	@Override
+	public void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
+		FamixInvocation famixInvocation = new FamixInvocation();
+		famixInvocation.type = "accessPropertyOrField";
+		famixInvocation.from = from;
+		famixInvocation.lineNumber = lineNumber;
+		famixInvocation.to = to;
+		famixInvocation.inovcationName = invocationName;
+		famixInvocation.belongsToMethod = belongsToMethod;
+		famixInvocation.nameOfInstance = nameOfInstance;
 		model.waitingAssociations.add(famixInvocation);
 	}
 	
@@ -274,4 +283,6 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 	public String represent(){
 		return model.toString();
 	}
+
+
 }

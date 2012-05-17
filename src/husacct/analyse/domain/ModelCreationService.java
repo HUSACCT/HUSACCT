@@ -31,13 +31,13 @@ public interface ModelCreationService {
 	public void createInheritanceDefinition(String from, String to, int lineNumber);
 	public void createImplementsDefinition(String from, String to, int lineNumber);
 	
-	void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName);
-	void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName);
-	void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName);
+	void createPropertyOrFieldInvocation(String from, int lineNumber, String to, String invocationName, String nameOfInstance);
+	void createMethodInvocation(String from, int lineNumber, String to, String invocationName, String nameOfInstance);
+	void createConstructorInvocation(String from, int lineNumber, String to, String invocationName, String nameOfInstance);
 	
-	void createPropertyOrFieldInvocation(String type, String from, String to, int lineNumber, String invocationName, String belongsToMethod);
-	void createMethodInvocation(String type, String from, String to, int lineNumber, String invocationName, String belongsToMethod);
-	void createConstructorInvocation(String type, String from, String to, int lineNumber, String invocationName, String belongsToMethod);
+	void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
+	void createMethodInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
+	void createConstructorInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance);
 	
 	//Function to connect dependencies, after all modules are known in the model
 	public void connectDependencies();

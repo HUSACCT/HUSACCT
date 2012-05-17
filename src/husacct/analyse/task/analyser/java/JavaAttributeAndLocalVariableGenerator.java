@@ -101,7 +101,6 @@ class JavaAttributeAndLocalVariableGenerator {
 		}
 	}
 
-	//pakt nog geen primitieve types op.
 	private void setDeclareType(Tree typeTree) {
 		
 		Tree child = typeTree.getChild(0);

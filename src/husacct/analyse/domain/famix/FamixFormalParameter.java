@@ -23,6 +23,7 @@ class FamixFormalParameter extends FamixStructuralEntity{
 		importRepresentation += "\nbelongsToMethod: " + this.belongsToMethod;
 		importRepresentation += "\ndeclareType: " + super.declareType;
 		importRepresentation += "\ndeclaredTypes: " + this.declaredTypes.toString();
+		importRepresentation += "\nlineNumber: " + super.lineNumber;
 		importRepresentation += "\n";
 		importRepresentation += "\n";
 		return importRepresentation;

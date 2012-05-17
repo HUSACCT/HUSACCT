@@ -3,67 +3,152 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class JavaInvocationGenerator extends JavaGenerator {
 
-	private String type; //invocConstructor, accessPropertyOrField of invocMethod
-	private String from;
-	private String to;
+	private String type = ""; //invocConstructor, accessPropertyOrField of invocMethod
+	private String from = "";
+	private String to = "";
 	private int lineNumber;
-	private String invocationName;
-	private String belongsToMethod;
+	private String invocationName = "";
+	private String belongsToMethod = "";
+	private String nameOfInstance = "";
 	
 	private boolean invocationNameFound;
+	
+	private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
 	
 	public JavaInvocationGenerator(String uniqueClassName){
 		from = uniqueClassName;
 	}
 	
-	public String generateConstructorInvocToModel(CommonTree commonTree, String belongsToMethod ) {
+	public void generateConstructorInvocToModel(CommonTree commonTree, String belongsToMethod ) {
 		type = "invocConstructor";
 		invocationName = "Constructor";
 		this.belongsToMethod = belongsToMethod;
 		createConstructorInvocationDetails(commonTree);
 		createConstructorInvocationDomainObject();
-		return to;
 	}
 	
 	private void createConstructorInvocationDetails(Tree tree) {
-		if (tree != null) {
-			for (int i = 0; i < tree.getChildCount(); i++) {
-				if(tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
-					to = tree.getChild(i).getText();
-					lineNumber = tree.getLine();
-				}
-				createConstructorInvocationDetails(tree.getChild(i));
+		if (tree != null) {			
+			CommonTree firstChildClassConstructorCall = (CommonTree) tree;
+			firstChildClassConstructorCall =  getFirstChildThrougTree(tree, JavaParser.CLASS_CONSTRUCTOR_CALL);
+			if (firstChildClassConstructorCall != null){
+				createConstructorInvocationDetailsWhenFoundClassConstructorCall(firstChildClassConstructorCall);
 			}
+			else{
+				logger.warn("Couldn't handle Constructor Call Invocation Element");
+			}
+			
 		}
+		
 	}
 	
+	private CommonTree getFirstChildThrougTree(Tree tree,int classConstructorCall) {
+		for (int i = 0; i < tree.getChildCount(); i++) {
+			if (tree.getChild(i).getType() == classConstructorCall){
+				return (CommonTree) tree.getChild(i);
+			}
+			getFirstChildThrougTree(tree.getChild(i), classConstructorCall);
+		}
+		return null;
+	}
+
+	private void createConstructorInvocationDetailsWhenFoundClassConstructorCall(CommonTree firstChildClassConstructorCall) {
+			Tree child = firstChildClassConstructorCall.getChild(0);
+			if(child.getType() != JavaParser.QUALIFIED_TYPE_IDENT){
+				this.to = child.getText();
+				
+			}else{
+				if(child.getChildCount() > 1){
+					for(int i=0; i<child.getChildCount(); i++){
+						if (i == child.getChildCount() - 1){	
+							this.to += child.getChild(i).toString();
+						}else{
+							this.to += child.getChild(i).toString() + ".";
+						}
+					}
+				} else {
+					this.to = child.getChild(0).getText();
+				}
+			}
+			this.lineNumber = child.getLine();
+		
+	}
+
 	private void createConstructorInvocationDomainObject(){
-		modelService.createConstructorInvocation(type, from, to, lineNumber, invocationName, belongsToMethod);
+		modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 	}
 
 	public void generateMethodInvocToModel(CommonTree treeNode, String belongsToMethod) {
 		invocationNameFound = false;
 		type = "invocMethod";
 		this.belongsToMethod = belongsToMethod;
-		createMethodOrPropertyFieldInvocationDetails(treeNode);
+		lineNumber = treeNode.getLine();
+		if(treeHasConstructorInvocation(treeNode)){
+			createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
+			generateConstructorInvocToModel(treeNode, belongsToMethod);
+		} else {
+			createMethodOrPropertyFieldInvocationDetails(treeNode);
+		}	
 		createMethodInvocationDomainObject();
 	}
 	
+	private boolean treeHasConstructorInvocation(Tree tree) {
+		for (int i = 0; i < tree.getChildCount(); i++) {
+			if(tree.getType() == JavaParser.CLASS_CONSTRUCTOR_CALL){
+				return true;
+			}
+			
+			return treeHasConstructorInvocation(tree.getChild(i));
+			
+		}
+		return false;
+	}
+
+	private void createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(Tree tree) {
+		if (tree != null){
+			for (int i = 0; i < tree.getChildCount(); i++) {
+				CommonTree child = (CommonTree) tree.getChild(i);
+				if (child.getType() == JavaParser.DOT){ 
+					invocationName = child.getChild(1).getText();
+					child.deleteChild(1);
+				}
+				if (child.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
+					if(child.getChildCount() > 1){
+						for(int i2=0; i2<child.getChildCount(); i2++){
+							if (i2 == child.getChildCount() - 1){
+								this.to += child.getChild(i2).toString();
+							}else{
+								this.to += child.getChild(i2).toString() + ".";
+							}
+							
+						}
+					}
+					else this.to = child.getChild(i).getText();
+				}
+				createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(child);
+			}
+		}
+		
+	}
+
 	private void createMethodOrPropertyFieldInvocationDetails(Tree tree){
 		if (tree != null) {
 			for (int i = 0; i < tree.getChildCount(); i++) {
-				Tree treeNode = tree.getChild(i);
+				CommonTree treeNode = (CommonTree) tree.getChild(i);
 				if(treeNode.getType() == JavaParser.IDENT && i == 0){
 					to = treeNode.getText();
-					lineNumber = treeNode.getLine();
+					nameOfInstance = to;
+					
 				}
 				if(treeNode.getType() == JavaParser.IDENT && i == 1 && invocationNameFound == false){
 					invocationName = treeNode.getText();
 					invocationNameFound = true;
 				}
+				
 				createMethodOrPropertyFieldInvocationDetails(tree.getChild(i));
 			}
 		}
@@ -71,7 +156,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	
 
 	private void createMethodInvocationDomainObject() {
-		modelService.createMethodInvocation(type, from, to, lineNumber, invocationName, belongsToMethod);
+		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 		
 	}
 
@@ -84,7 +169,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		
 	}
 
-	private void createPropertyOrFieldInvocationDomainObject() {
-		modelService.createPropertyOrFieldInvocation(type, from, to, lineNumber, invocationName, belongsToMethod);
+	private void createPropertyOrFieldInvocationDomainObject() {	
+		modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 	}
 }

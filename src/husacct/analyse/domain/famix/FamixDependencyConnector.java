@@ -57,24 +57,28 @@ class FamixDependencyConnector {
 							connected = true;
 						}
 					}
-				}
-				if(!connected){
-					if(isInvocation(association)){
-						FamixInvocation theInvocation = (FamixInvocation)association;
-						if (theInvocation.belongsToMethod.equals("")){
-							//Then it is an attribute
-							theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
-						}
-						else{
-							//Then it is a parameter of local variable
-							theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
-							if (theInvocation.to.equals("")){
-								//now it's a local variable
-								theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+					if(!connected){
+						if(isInvocation(association)){
+							FamixInvocation theInvocation = (FamixInvocation)association;
+							if (theInvocation.belongsToMethod.equals("")){
+								//Then it is an attribute
+								theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
+							}
+							else{
+								//Then it is a parameter of local variable
+								theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+								if (theInvocation.to.equals("")){
+									//now it's a local variable
+									theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
+								}
+								if(theInvocation.to.equals("")){
+									theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
+								}
 							}
 						}
 					}
 				}
+				
 				addToModel(association);
 			} catch(Exception e){
 				
