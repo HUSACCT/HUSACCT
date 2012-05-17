@@ -36,7 +36,12 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		indexFigures();	
 		updateFigurePositions();
 		
-		ListUtils.apply(connectors, new S1<Figure>(new ModuleFigure("dummy", "empty")){{ a.willChange(); a.changed(); }});
+		S1<Figure> applyLambda = new S1<Figure>(new RelationFigure("dummy", false, 0)){{ ConnectionFigure cf = (ConnectionFigure)a; cf.updateConnection(); }};
+		ListUtils.apply(connectors, applyLambda);
+		
+		drawing.willChange();
+		ListUtils.apply(connectors, applyLambda);
+		drawing.changed();
 		
 		nodes.clear();
 	}
