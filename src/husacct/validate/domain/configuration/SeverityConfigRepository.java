@@ -14,8 +14,7 @@ class SeverityConfigRepository {
 
 	public SeverityConfigRepository(){
 		this.currentSeverities = new ArrayList<Severity>();
-		this.defaultSeverities = new ArrayList<Severity>();
-		generateDefaultSeverities();
+		this.defaultSeverities = generateDefaultSeverities();		
 
 		initializeCurrentSeverities();
 	}
@@ -37,22 +36,45 @@ class SeverityConfigRepository {
 		throw new SeverityNotFoundException();
 	}
 
-	private void checkDefaultSeveritiesChanged(List<Severity> severities){
-		for(Severity defaultSeverity : defaultSeverities){
-			boolean defaultSeverityFound = false;
-
-			for(Severity severity : severities){		
-				if(severity.getId().equals(severity.getId())){
-					defaultSeverityFound = true;
-				}
-				if(severity.getDefaultName().isEmpty() && severity.getUserName().isEmpty()){
-					//severity user name must not be empty
-				}			
-			}
-			if(!defaultSeverityFound){
-				//throw new DefaultSeverityNotFoundException	
-			}			
+	private void checkSeverities(List<Severity> newSeverities){
+		if(containsUnidentifiedSeverity(newSeverities)){
+			//throw error
+		}	
+		if(checkDefaultSeverityName(newSeverities)){
+			//throw error
 		}
+	}
+	
+//	private boolean checkDuplicatedDefaultSeverities(List<Severity> newSeverities){
+//		
+//	}
+
+	private boolean checkDefaultSeverityName(List<Severity> newSeverities){
+		boolean foundError = false;
+		for(Severity defaultSeverity : generateDefaultSeverities()){
+			for(Severity newSeverity : newSeverities){
+				if(newSeverity.getDefaultName().toLowerCase().equals(defaultSeverity.getDefaultName().toLowerCase())){
+					if(!newSeverity.getUserName().isEmpty()){
+						foundError = true;
+					}
+				}
+			}
+		}
+		return foundError;
+	}
+
+	private boolean containsUnidentifiedSeverity(List<Severity> newSeverities){
+		for(Severity defaultSeverity : generateDefaultSeverities()){
+			for(Severity newSeverity : newSeverities){		
+				if(newSeverity.getDefaultName().toLowerCase().equals(DefaultSeverities.UNIDENTIFIED.toString().toLowerCase())){				
+					return true;
+				}
+				if(defaultSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED.toString()) && defaultSeverity.getId().equals(newSeverity.getId())){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	int getSeverityValue(Severity severity){
@@ -63,11 +85,13 @@ class SeverityConfigRepository {
 		initializeCurrentSeverities();
 	}
 
-	private void generateDefaultSeverities(){
+	private List<Severity> generateDefaultSeverities(){
+		List<Severity> newDefaultSeverities = new ArrayList<Severity>();
 		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
 			Severity severity = new Severity(defaultSeverity.toString(), "", defaultSeverity.getColor());
-			this.defaultSeverities.add(severity);
+			newDefaultSeverities.add(severity);
 		}
+		return newDefaultSeverities;
 	}
 
 	private void initializeCurrentSeverities(){	
