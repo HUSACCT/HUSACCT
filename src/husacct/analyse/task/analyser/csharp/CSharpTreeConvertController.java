@@ -17,6 +17,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 	private List<List<CommonTree>> usageTrees;
 	private List<CommonTree> methodTrees;
 	private List<CommonTree> attributeTrees;
+	private List<CommonTree> exceptionTrees;
 	private CommonTree abstractTree;
 	private boolean isClassName = false;
 	private boolean isNamespaceName = false;
@@ -56,7 +57,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 	private void startNewAttributeGenerator() {
 		String className = tempFullNamespaceName + "." + tempClassName;
 		CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, className);
-		attributeGenerator.scanTree();
+		attributeGenerator.scanTree();	
 	}
 
 	private void checkData(CSharpData cSharpData, List<CSharpData> indentDataLevel) {
@@ -127,6 +128,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		classTrees = new ArrayList<CommonTree>();
 		attributeTrees = new ArrayList<CommonTree>();
 		methodTrees = new ArrayList<CommonTree>();
+		exceptionTrees = new ArrayList<CommonTree>();
 		walkAST(compilationUnitTree.getChildren());
 		new CSharpClassGenerator(classTrees, indentClassLevel);
 		CSharpNamespaceGenerator generator = new CSharpNamespaceGenerator();
@@ -243,6 +245,29 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		}
 		return usage;
 	}
+	
+	private boolean exceptionCheck(CommonTree tree, boolean isPartOfException){
+		int type = tree.getType();
+		
+		if(type == CATCH || type == THROW || type == FINALLY){
+			isPartOfException = true;
+		}
+		
+		if(!(exceptionTrees.isEmpty()) && (type == SEMICOLON || type == FORWARDCURLYBRACKET)){
+			isPartOfException = false;
+			int lineNumber = tree.getLine();
+			String uniqueClassName = tempClassName+"."+tempClassName;
+			CSharpExceptionGenerator exceptionGenerator = new CSharpExceptionGenerator();
+			exceptionGenerator.generateException(exceptionTrees, uniqueClassName, lineNumber);
+			exceptionTrees.clear();
+		}
+		
+		if(isPartOfException){
+			exceptionTrees.add(tree);
+			
+		}
+		return isPartOfException;
+	}
 
 	private void walkAST(List<CommonTree> children) {
 		boolean isPartOfNamespace = false;
@@ -250,6 +275,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 		boolean isPartOfUsing = false;
 		boolean isPartOfAttribute = false;
 		boolean isPartOfMethod = false;
+		boolean isPartOfException = false;
 		tempNamespaceTrees = new ArrayList<CommonTree>();
 		tempUsingTrees = new ArrayList<CommonTree>();
 
@@ -260,6 +286,7 @@ class CSharpTreeConvertController extends CSharpGenerator {
 			isPartOfUsing = usingCheck(tree, isPartOfUsing);
 			isPartOfAttribute = attributeCheck(tree, isPartOfAttribute);
 			isPartOfMethod = methodCheck(tree, isPartOfMethod);
+			isPartOfException = exceptionCheck(tree, isPartOfException);
 		}
 	}
 }
