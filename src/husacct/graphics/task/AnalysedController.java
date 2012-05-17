@@ -1,8 +1,5 @@
 package husacct.graphics.task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
@@ -11,7 +8,9 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
-import husacct.graphics.presentation.figures.NamedFigure;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
@@ -57,8 +56,8 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
 		if (!figureFrom.equals(figureTo)) {
 			System.out.println("--------------------====---------------");
-			System.out.println(((NamedFigure) figureFrom).getName());
-			System.out.println(((NamedFigure) figureTo).getName());
+			System.out.println(((BaseFigure) figureFrom).getName());
+			System.out.println(((BaseFigure) figureTo).getName());
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};

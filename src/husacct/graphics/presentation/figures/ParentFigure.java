@@ -10,7 +10,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ParentFigure extends NamedFigure {
+public class ParentFigure extends BaseFigure {
 	private static final long serialVersionUID = 5449552267500654293L;
 
 	private RectangleFigure top;
