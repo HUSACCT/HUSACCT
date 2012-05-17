@@ -197,7 +197,7 @@ public class Module implements Comparable<Module> {
 	        return false;
 	    if (obj instanceof Module){
 	    	Module m = (Module)obj;
-	    	if (!m.name.equals(this.name)){
+	    	if (m.id != this.id){
 	    		return false;
 	    	}
 	    	return true;
