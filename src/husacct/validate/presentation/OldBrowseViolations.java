@@ -405,8 +405,8 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 		internalAfterViolationsChanged();
 	}
 	
-	@Override
-	public void updateAll() {
-		loadAfterViolationsChanged();
-	}
+//	@Override
+//	public void updateAll() {
+//		loadAfterViolationsChanged();
+//	}
 }

@@ -1,5 +1,6 @@
 package husacct.validate.presentation;
 
+import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -15,12 +16,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -39,7 +42,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.log4j.Logger;
+import org.jhotdraw.samples.svg.gui.FillToolBar;
+
 import java.awt.GridLayout;
+import javax.swing.JRadioButton;
 
 @SuppressWarnings("serial")
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
@@ -70,8 +78,14 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private JLabel totalViolationNumber;
 	private JLabel shownViolations;
 	private JLabel shownViolationsNumber;
+	private final Logger logger;
+	private JRadioButton rdbtnDirect;
+	private JRadioButton rdbtnIndirect;
+	private JRadioButton rdbtnAll;
+	private List<Violation> currentViolations;
 
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
+		this.logger = Logger.getLogger(BrowseViolations.class);
 		this.taskServiceImpl = taskServiceImpl;
 		this.configuration = configuration;
 		this.dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
@@ -81,7 +95,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		fillChooseViolationHistoryTable();
 		fillViolationsTable(taskServiceImpl.getAllViolations().getValue());
 		loadGUIText();
-		loadInformationPanel(null);
+		loadInformationPanel();
 	}
 
 	private void loadModels() {
@@ -116,18 +130,17 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-				if(!arg0.getValueIsAdjusting()) {
+				if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 					int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
-					Violation violation = null;
-					if(selectedViolationHistory != null) {
-					violation = selectedViolationHistory.getViolations().get(row);
-					} else {
-						violation = taskServiceImpl.getAllViolations().getValue().get(row);
-					}
+					Violation violation = currentViolations.get(row);
 					detailLineNumberLabelValue.setText("" + violation.getLinenumber());
 					detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 					String message = new Messagebuilder().createMessage(violation.getMessage());
-					detailsMessageLabel.setText(message);
+					detailMessageLabelValue.setText(message);
+				} else {
+					detailLineNumberLabelValue.setText("");
+					detailLogicalModuleLabelValue.setText("");
+					detailMessageLabelValue.setText("");
 				}
 			}
 
@@ -154,23 +167,25 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		chooseViolationHistoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(!e.getValueIsAdjusting()) {
+				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
 					int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
 					selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
 					fillViolationsTable(selectedViolationHistory.getViolations());
-					loadInformationPanel(selectedViolationHistory);
+					loadInformationPanel();
 				}
 			}
 		});
 	}
 
 	private void fillChooseViolationHistoryTable() {
+		logger.info("Testing - fillChooseViolationsHistoryTableMethod() called");
 		clearChooseViolationHistoryTableModelRows();
 		for(ViolationHistory violationHistory : taskServiceImpl.getViolationHistories()) {
 			chooseViolationHistoryTableModel.addRow(new Object[] {dateFormat.format(violationHistory.getDate().getTime()), violationHistory.getDescription()});
 		}
 	}
 	private void fillViolationsTable(List<Violation> violations) {
+		currentViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ValidateTranslator.getValue(violation.getRuletypeKey()), ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
@@ -216,14 +231,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	@Override
 	public void updateViolationsTable() {
-		if(selectedViolationHistory != null) {
-			fillViolationsTable(taskServiceImpl.applyFilterViolations(selectedViolationHistory.getViolations()));
-		} else {
-			fillViolationsTable(taskServiceImpl.applyFilterViolations(taskServiceImpl.getAllViolations().getValue()));
-		}
-
+		fillViolationsTable(getViolationsFilteredOrNormal());
 	}
-
 
 	public void loadAfterViolationsChanged(){
 		internalAfterViolationsChanged();
@@ -234,7 +243,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	public void internalAfterViolationsChanged(){
 		if(selectedViolationHistory == null) {
 			fillViolationsTable(taskServiceImpl.getAllViolations().getValue());
-			loadInformationPanel(null);
+			loadInformationPanel();
 		} else {
 
 		}
@@ -257,6 +266,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		JScrollPane chooseViolationHistoryTableScrollPane = new JScrollPane();
 
 		buttonDeleteViolationHistoryPoint = new JButton("Delete TODO locale");
+		buttonDeleteViolationHistoryPoint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				removeViolationHistory(arg0);
+			}
+		});
 
 		buttonLatestViolations = new JButton("Current Violations");
 		buttonLatestViolations.addActionListener(new ActionListener() {
@@ -272,33 +286,42 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			}
 
 		});
+		
+		JButton btnValidate = new JButton("Validate");
+		btnValidate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ServiceProvider.getInstance().getValidateService().checkConformance();
+			}
+		});
 		GroupLayout gl_leftSidePane = new GroupLayout(leftSidePane);
 		gl_leftSidePane.setHorizontalGroup(
-				gl_leftSidePane.createParallelGroup(Alignment.TRAILING)
+			gl_leftSidePane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_leftSidePane.createSequentialGroup()
-						.addGroup(gl_leftSidePane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(buttonSaveInHistory, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-								.addComponent(chooseViolationHistoryTableScrollPane, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-								.addComponent(buttonLatestViolations, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
-								.addGap(2))
-								.addGroup(Alignment.LEADING, gl_leftSidePane.createSequentialGroup()
-										.addGap(10)
-										.addComponent(buttonDeleteViolationHistoryPoint, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-										.addContainerGap())
-				);
+					.addContainerGap()
+					.addComponent(buttonDeleteViolationHistoryPoint, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+					.addContainerGap())
+				.addComponent(btnValidate, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+				.addComponent(buttonLatestViolations, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+				.addComponent(buttonSaveInHistory, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+				.addGroup(gl_leftSidePane.createSequentialGroup()
+					.addGap(2)
+					.addComponent(chooseViolationHistoryTableScrollPane, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+		);
 		gl_leftSidePane.setVerticalGroup(
-				gl_leftSidePane.createParallelGroup(Alignment.TRAILING)
+			gl_leftSidePane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_leftSidePane.createSequentialGroup()
-						.addGap(5)
-						.addComponent(buttonLatestViolations, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addGap(4)
-						.addComponent(buttonSaveInHistory, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(chooseViolationHistoryTableScrollPane, GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(buttonDeleteViolationHistoryPoint, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-						.addGap(66))
-				);
+					.addGap(8)
+					.addComponent(btnValidate, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(buttonLatestViolations, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(buttonSaveInHistory, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(chooseViolationHistoryTableScrollPane, GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(buttonDeleteViolationHistoryPoint, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
 
 		chooseViolationHistoryTable = new JTable();
 		chooseViolationHistoryTableScrollPane.setViewportView(chooseViolationHistoryTable);
@@ -363,6 +386,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		informationPanel.add(shownViolationsNumber);
 
 		applyFilter = new JCheckBox("Apply Filter");
+		applyFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				applyFilterChanged(arg0);
+			}
+		});
 
 		buttonEditFilter = new JButton("Edit Filter");
 		buttonEditFilter.addActionListener(new ActionListener() {
@@ -371,25 +400,45 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			}
 
 		});
+		
+		rdbtnAll = new JRadioButton("All");
+		
+		rdbtnDirect = new JRadioButton("Direct");
+		
+		rdbtnIndirect = new JRadioButton("Indirect");
 		GroupLayout gl_filterPane = new GroupLayout(filterPane);
 		gl_filterPane.setHorizontalGroup(
-				gl_filterPane.createParallelGroup(Alignment.LEADING)
+			gl_filterPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_filterPane.createSequentialGroup()
-						.addGap(26)
-						.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_filterPane.createSequentialGroup()
+							.addGap(26)
+							.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(buttonEditFilter)
-								.addComponent(applyFilter))
-								.addContainerGap(459, Short.MAX_VALUE))
-				);
+								.addComponent(applyFilter)))
+						.addGroup(gl_filterPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(rdbtnAll)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(rdbtnDirect)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(rdbtnIndirect)))
+					.addContainerGap(15, Short.MAX_VALUE))
+		);
 		gl_filterPane.setVerticalGroup(
-				gl_filterPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_filterPane.createSequentialGroup()
-						.addGap(37)
-						.addComponent(applyFilter)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(buttonEditFilter)
-						.addContainerGap(39, Short.MAX_VALUE))
-				);
+			gl_filterPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_filterPane.createSequentialGroup()
+					.addGap(37)
+					.addComponent(applyFilter)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(buttonEditFilter)
+					.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+					.addGroup(gl_filterPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(rdbtnAll)
+						.addComponent(rdbtnDirect)
+						.addComponent(rdbtnIndirect))
+					.addContainerGap())
+		);
 		filterPane.setLayout(gl_filterPane);
 
 		detailsLineNumberLabel = new JLabel("Line number (locale)");
@@ -442,29 +491,67 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable = new JTable();
 		violationsTableScrollPane.setViewportView(violationsTable);
 		rightSidePane.setLayout(gl_rightSidePane);
-		configuration.addObserver(this);
+		
+		ButtonGroup filterIndirectButtonGroup = new ButtonGroup();
+		filterIndirectButtonGroup.add(rdbtnAll);
+		filterIndirectButtonGroup.add(rdbtnDirect);
+		filterIndirectButtonGroup.add(rdbtnIndirect);
+		rdbtnAll.setSelected(true);
+		
+		rdbtnAll.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateViolationsTable();
+			}
+		});
+		rdbtnDirect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				List<Violation> violationsIndirect = new ArrayList<Violation>();
+				List<Violation> violations = getViolationsFilteredOrNormal();
+				for(Violation violation : violations) {
+					if(!violation.isIndirect()) {
+						violationsIndirect.add(violation);
+					}
+				}
+				fillViolationsTable(violationsIndirect);
+			}
+		});
+		rdbtnIndirect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				List<Violation> violationsIndirect = new ArrayList<Violation>();
+				List<Violation> violations = getViolationsFilteredOrNormal();
+				for(Violation violation : violations) {
+					if(violation.isIndirect()) {
+						violationsIndirect.add(violation);
+					}
+				}
+				fillViolationsTable(violationsIndirect);
+			}
+		});
+		configuration.attachViolationHistoryRepositoryObserver(this);
 	}
 
-	private void loadInformationPanel(ViolationHistory violationHistory) {
+	private void loadInformationPanel() {
 		informationPanel.removeAll();
-		if(violationHistory == null)
+		if(selectedViolationHistory == null)
 			totalViolationNumber.setText("" + taskServiceImpl.getAllViolations().getValue().size());
 		else 
-			totalViolationNumber.setText("" + violationHistory.getViolations().size());
-		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(violationHistory, applyFilter.isSelected()).entrySet()) {
+			totalViolationNumber.setText("" + selectedViolationHistory.getViolations().size());
+		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(selectedViolationHistory, applyFilter.isSelected()).entrySet()) {
 			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
 			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
 		}
 		informationPanel.updateUI();
 	}
 
-	@Override
-	public void updateAll() {
-		//TODO do this method!
-	}
+
 	private void currentViolationsActionPerformed(ActionEvent e) {
 		fillViolationsTable(taskServiceImpl.getAllViolations().getValue());
-		loadInformationPanel(null);
+		chooseViolationHistoryTable.clearSelection();
+		loadInformationPanel();
+		selectedViolationHistory = null;
 	}
 
 	private void saveInHistoryActionPerformed(ActionEvent e) {
@@ -478,8 +565,39 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		filterViolations.setVisible(true);
 	}
 
+	private void removeViolationHistory(ActionEvent e) {
+		if(selectedViolationHistory != null) {
+			taskServiceImpl.removeViolationHistory(selectedViolationHistory.getDate());
+			chooseViolationHistoryTable.clearSelection();
+			clearViolationsTableModelRows();
+			fillChooseViolationHistoryTable();
+			selectedViolationHistory = null;
+		} else {
+			JOptionPane.showMessageDialog(null, "Select a violation history first");
+		}
+	}
+
+	private void applyFilterChanged(ActionEvent e) {
+		updateViolationsTable();
+		loadInformationPanel();
+	}
+
 	@Override
 	public void update(Observable o, Object arg) {
 		fillChooseViolationHistoryTable();		
+	}
+	
+	private List<Violation> getViolationsFilteredOrNormal() {
+		List<Violation> violations;
+		if(selectedViolationHistory != null) {
+			violations = selectedViolationHistory.getViolations();
+		} else {
+			violations = taskServiceImpl.getAllViolations().getValue();
+		}
+		
+		if(applyFilter.isSelected()) {
+			violations = taskServiceImpl.applyFilterViolations(violations);
+		}
+		return violations;
 	}
 }

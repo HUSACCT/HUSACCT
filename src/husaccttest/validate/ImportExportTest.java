@@ -93,6 +93,7 @@ public class ImportExportTest {
 	}
 
 	public void checkViolationsTheSameAsViolationsElement(List<Violation> violations, Element violationsElement) throws DatatypeConfigurationException {
+		assertEquals(violations.size(), violationsElement.getChildren().size());
 		for(int i = 0; i < violationsElement.getChildren().size(); i++) {
 			Element violationElement = violationsElement.getChildren().get(i);
 			Violation violation = violations.get(i);
