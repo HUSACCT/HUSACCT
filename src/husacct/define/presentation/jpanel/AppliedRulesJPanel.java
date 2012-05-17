@@ -166,20 +166,18 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		setButtonEnableState();
 	}
 
-	public void updateAppliedRuleTable() {
+	public void updateAppliedRuleTable() {		
 		try {
+			JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
+			atm.getDataVector().removeAllElements();
+			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			JPanelStatus.getInstance("Updating rules applied table").start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
 				ArrayList<Long> appliedRulesIds = DefinitionController.getInstance().getAppliedRuleIdsBySelectedModule();
-				
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
 
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
 				if (appliedRulesIds != null) {
 					for (long appliedRuleId : appliedRulesIds) {
 						

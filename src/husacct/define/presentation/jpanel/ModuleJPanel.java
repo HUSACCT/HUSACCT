@@ -139,10 +139,10 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == this.newModuleButton) {
 			this.newModule();
-		} else if (action.getSource() == this.moveModuleUpButton) {
-			this.moveLayerUp();
 		} else if (action.getSource() == this.removeModuleButton) {
 			this.removeModule();
+		} else if (action.getSource() == this.moveModuleUpButton) {
+			this.moveLayerUp();
 		} else if (action.getSource() == this.moveModuleDownButton) {
 			this.moveLayerDown();
 		}
@@ -162,7 +162,6 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 			if (confirm) {
 				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);
-				this.updateModuleTree();
 			}
 		}
 	}

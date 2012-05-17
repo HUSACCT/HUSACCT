@@ -138,18 +138,15 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	
 	public void updateSoftwareUnitTable() {
 		try {
+			JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
+			atm.getDataVector().removeAllElements();
+			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			JPanelStatus.getInstance("Updating software unit table").start();
 			if (moduleId != -1) {
 
 				// Get all components from the service
 				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule();
-
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
-
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
 				
 				if (softwareUnitNames != null) {
 					for (String softwareUnitName : softwareUnitNames) {
