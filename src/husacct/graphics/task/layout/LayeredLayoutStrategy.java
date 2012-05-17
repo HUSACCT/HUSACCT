@@ -39,10 +39,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		S1<Figure> applyLambda = new S1<Figure>(new RelationFigure("dummy", false, 0)){{ ConnectionFigure cf = (ConnectionFigure)a; cf.updateConnection(); }};
 		ListUtils.apply(connectors, applyLambda);
 		
-		drawing.willChange();
-		ListUtils.apply(connectors, applyLambda);
-		drawing.changed();
-		
 		nodes.clear();
 	}
 	
@@ -53,7 +49,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			Node startNode = getNode(cf.getStartFigure());
 			Node endNode = getNode(cf.getEndFigure());
 			
-			System.out.println(String.format("%s => %s", nodeName(startNode), nodeName(endNode)));
+			//System.out.println(String.format("%s => %s", nodeName(startNode), nodeName(endNode)));
 
 			startNode.connectTo(endNode);
 			if (!startNode.isCyclicChain(endNode)) {
@@ -123,7 +119,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 		
-		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
+		//System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
 	}
 	
 	private Node getNode(Figure figure) {
