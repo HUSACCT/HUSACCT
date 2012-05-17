@@ -42,7 +42,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
 				createConstructorInvocationDetailsWhenFoundClassConstructorCall(firstChildClassConstructorCall);
 			}
 			else{
-				CommonTree myTree = (CommonTree) tree;
 				logger.warn("Couldn't handle Constructor Call Invocation Element");
 			}
 			

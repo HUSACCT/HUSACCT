@@ -49,7 +49,7 @@ class FamixDependencyConnector {
 					if(!classFoundInImports.equals("")){
 						association.to = classFoundInImports;
 						connected = true;
-					}else{
+					} else {
 						String belongsToPackage = getPackageFromUniqueClassName(association.from);
 						String to = findClassInPackage(association.to, belongsToPackage);
 						if(!to.equals("")){
@@ -59,7 +59,7 @@ class FamixDependencyConnector {
 					}
 					if(!connected){
 						if(isInvocation(association)){
-							FamixInvocation theInvocation = (FamixInvocation)association;
+							FamixInvocation theInvocation = (FamixInvocation) association;
 							if (theInvocation.belongsToMethod.equals("")){
 								//Then it is an attribute
 								theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
@@ -111,13 +111,16 @@ class FamixDependencyConnector {
 	}
 	
 	private String getClassForLocalVariable(String declareClass, String belongsToMethod, String nameOfInstance) {
-		for(FamixLocalVariable variable: theModel.getLocalVariablesForClass(declareClass)){
+		for(String s : theModel.structuralEntities.keySet()){
+			if(s.startsWith(declareClass)){
+				FamixLocalVariable variable = (FamixLocalVariable) theModel.structuralEntities.get(s);
 				if(variable.belongsToMethod.equals(belongsToMethod)){
 					if(variable.name.equals(nameOfInstance)){
 						return variable.declareType;
 					}
 				}
-		}
+			}
+		}		
 		return "";
 	}
 	
