@@ -9,15 +9,12 @@ import husacct.graphics.presentation.figures.RelationFigure;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.connector.Connector;
 import org.lambda.functions.implementations.F1;
+import org.lambda.functions.implementations.S1;
 
 public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
@@ -25,7 +22,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	
 	private static final F1<Node, Boolean> rootLambda = new F1<Node, Boolean>(new Node(null, 0)){{ ret(a.getLevel() == 0);}};
 	private static final F1<Figure, Boolean> connectorLambda = new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }};
-	private static final F1<Figure, Boolean> unconnectedLambda = new F1<Figure, Boolean>(new ModuleFigure("", "")) {{ ret(a.getConnectors(null).size() == 0); }};
 	
 	private Drawing drawing;
 	private NodeList nodes = new NodeList();
@@ -35,12 +31,10 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		drawing = theDrawing;
 	}
 
-	// Perhaps an idea to have a list "unprocessedFigures", making it easier /
-	// simpler / quicker to see if a figure has been processed yet or not.
 	@Override
 	public void doLayout(int screenWidth, int screenHeight) {
 		initLayout();
-		calculateLayout();	
+		calculateLayout();
 		applyLayout();
 	}
 	
@@ -55,8 +49,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			
 			Node startNode = getNode(cf.getStartFigure());
 			Node endNode = getNode(cf.getEndFigure());
-			
-			//System.out.println(String.format("%s => %s", nodeName(startNode), nodeName(endNode)));
 
 			startNode.connectTo(endNode);
 			if (!startNode.isCyclicChain(endNode)) {
@@ -74,17 +66,9 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			}
 		}
 		
-		ArrayList<Figure> unconnected = new ArrayList<Figure>();
-		for (Figure f : drawing.getChildren()) {
-			if (!isConnector(f) && !nodes.contains(f)) {
-				getNode(f);
-			}
-
-		}
-//		List<Figure> unconnected = ListUtils.select(drawing.getChildren(), unconnectedLambda);
-//		for (Figure f : unconnected) {
-//			getNode(f);
-//		}
+		S1<Figure> addUnconnectedFigures = 
+				new S1<Figure>(new ModuleFigure("", ""), nodes){{if (!isConnector(a) && !nodes.contains(a)) getNode(a);}};
+		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
 	}
 
 	private void applyLayout() {
@@ -170,20 +154,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			return node;
 		}
 	}		
-	
-	// TODO: Debug function, please remove after finishing
-	// construction of this code.
-	private void printPositions() {
-		for (Node n : nodes) {
-			BaseFigure f = (BaseFigure)n.getFigure();
-			System.out.println(String.format("%s: level %d", f.getName(), n.getLevel()));
-		}
-	}
-	
-	private String nodeName(Node n) {
-		BaseFigure nf = (BaseFigure)n.getFigure(); 
-		return nf.getName();
-	}	
 	
 	// TODO: Patrick: I'm not quite sure if this code should be here. We really
 	// need to discuss this kind of code. It's ugly and unneccessary I think.
