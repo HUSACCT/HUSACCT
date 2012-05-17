@@ -1,8 +1,5 @@
 package husacct.control.task;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.control.presentation.util.AboutDialog;
