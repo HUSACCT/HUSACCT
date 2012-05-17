@@ -48,7 +48,6 @@ public class DomainParser {
 		return moduleDTOs;
 	}
 	
-	//TODO performance check if you have to parse SubModules
 	public ModuleDTO parseModule(Module module){
 		String logicalPath = getLogicalPath(module.getId());
 		String[] physicalPaths = module.getPhysicalPaths();

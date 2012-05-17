@@ -1,4 +1,4 @@
-package husacct.define.presentation.jframe;
+package husacct.define.presentation.jdialog;
 
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -20,7 +21,7 @@ import javax.swing.JTextField;
  * @author Henk ter Harmsel
  *
  */
-public class AddModuleValuesJFrame extends AbstractValuesJFrame {
+public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	
@@ -35,13 +36,16 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 	
 	private JComboBox moduleTypeComboBox;
 	
-	public AddModuleValuesJFrame(ModuleJPanel modulePanel) {
+	public AddModuleValuesJDialog(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
 	}
 	
 	@Override
 	public void initUI() {
+		this.setTitle("New Module");
+		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+		
 		this.innerPanel = new JPanel();
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		this.innerPanel.setLayout(this.getGridLayout(5, 2));
@@ -49,9 +53,9 @@ public class AddModuleValuesJFrame extends AbstractValuesJFrame {
 		this.add(this.innerPanel);
 		
 		this.setResizable(false);
-		this.setVisible(true);
 		this.pack();
 		this.setSize(700, 190);
+		this.setVisible(true);
 	}
 	
 	private GridLayout getGridLayout(int rows, int columns) {

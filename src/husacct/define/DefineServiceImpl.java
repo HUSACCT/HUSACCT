@@ -26,6 +26,21 @@ public class DefineServiceImpl implements IDefineService {
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private DomainParser domainParser = new DomainParser();
 	
+	public DefineServiceImpl(){
+		super();
+		reset();
+	}
+
+	private void reset() {
+		//TODO this is just a hotfix
+		defineDomainService = new SoftwareArchitectureDomainService();
+		moduleService = new ModuleDomainService();
+		appliedRuleService = new AppliedRuleDomainService();
+		domainParser = new DomainParser();
+		
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
+	}
+
 	@Override
 	public void createApplication(String name, String[] paths, String language, String version) {
 		defineDomainService.createApplication(name, paths, language, version);

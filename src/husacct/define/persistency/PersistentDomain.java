@@ -1,7 +1,6 @@
 package husacct.define.persistency;
 
 import java.util.ArrayList;
-
 import org.jdom2.Element;
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;

@@ -32,11 +32,11 @@ public class AnalyzedModuleCellRenderer extends DefaultTreeCellRenderer {
 	private void determineIcon(AnalyzedModuleComponent component) {
 		ImageIcon icon = new ImageIcon();
 		if(component.getType().equals("PACKAGE")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-package.png"));
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-package.png"));
 		} else if(component.getType().equals("CLASS")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-class.png"));
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
 		} else if(component.getType().equals("METHOD")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/icon-method.png"));
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-method.png"));
 		}
 		this.setIcon(icon);
 	}
