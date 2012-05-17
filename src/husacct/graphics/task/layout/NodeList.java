@@ -46,4 +46,8 @@ public class NodeList implements Iterable<Node> {
 		return nodes.iterator();
 	}
 	
+	public void clear() {
+		nodes.clear();
+	}
+	
 }

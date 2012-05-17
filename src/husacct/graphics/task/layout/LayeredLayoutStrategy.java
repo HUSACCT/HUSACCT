@@ -37,6 +37,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		printPositions();
 		
 		updatePositions();
+		
+		nodes.clear();
 	}
 	
 	// TODO: Debug function, please remove after finishing
@@ -58,6 +60,18 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			}
 		}
 
+		return Collections.unmodifiableList(list);
+	}	
+	
+	private List<Node> getRootNodes() {
+		ArrayList<Node> list = new ArrayList<Node>();
+		
+		for (Node n : nodes) {
+			if (n.getLevel() == 0) {
+				list.add(n);
+			}
+		}
+		
 		return Collections.unmodifiableList(list);
 	}	
 	
@@ -142,18 +156,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.changed();
 		
 		System.out.println(String.format("Moving %s to (%d, %d)", ((NamedFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
-	}
-	
-	private List<Node> getRootNodes() {
-		ArrayList<Node> list = new ArrayList<Node>();
-		
-		for (Node n : nodes) {
-			if (n.getLevel() == 0) {
-				list.add(n);
-			}
-		}
-		
-		return Collections.unmodifiableList(list);
 	}
 	
 	private Node getNode(Figure figure) {
