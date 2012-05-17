@@ -94,7 +94,8 @@ class JavaAttributeAndLocalVariableGenerator {
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
 			if(treeType == JavaParser.IDENT){
-				name = child.getText();
+				this.name = child.getText();
+				this.lineNumber = tree.getLine();
 				break;
 			} 		
 			setAttributeName((CommonTree) tree.getChild(i));
