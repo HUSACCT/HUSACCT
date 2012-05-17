@@ -175,6 +175,25 @@ public class AppliedRuleController extends PopUpController {
 		this.moduleToId = moduleToId;
 	}
 
+	public ArrayList<ViolationTypeDTO> getViolationTypesByRuleType(String ruleTypeKey){
+		ArrayList<ViolationTypeDTO> violationTypeDtoList = new ArrayList<ViolationTypeDTO>();
+		
+		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
+		
+		for (CategoryDTO categorie : categories){
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			//Get currently selected RuleType
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				if (ruleTypeDTO.key.equals(ruleTypeKey)){
+					for (ViolationTypeDTO vt : ruleTypeDTO.violationTypes){
+						violationTypeDtoList.add(vt);
+					}
+//						violationTypeDtoList = (ArrayList<ViolationTypeDTO>) Arrays.asList(ruleTypeDTO.violationTypes);
+				}
+			}
+		}
+		return violationTypeDtoList;
+	}
 	/*
 	 * Saving
 	 */

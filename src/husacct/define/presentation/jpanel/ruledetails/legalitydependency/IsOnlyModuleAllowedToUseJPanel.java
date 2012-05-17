@@ -47,7 +47,7 @@ public class IsOnlyModuleAllowedToUseJPanel extends AbstractDetailsJPanel{
 
 	@Override
 	public HashMap<String, Object> saveToHashMap() {
-		HashMap<String, Object> ruleDetails = saveDefaultDataToHashMap();
+		HashMap<String, Object> ruleDetails = super.saveToHashMap();
 		
 		DataHelper datahelper1 = (DataHelper) this.moduleFromJComboBox.getSelectedItem();
 		ruleDetails.put("moduleFromId", datahelper1.getId());

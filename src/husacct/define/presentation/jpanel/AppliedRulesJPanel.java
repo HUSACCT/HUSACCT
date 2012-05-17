@@ -30,16 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
 public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
-	
-	
 	
 	private JTableAppliedRule appliedRulesTable;
 	private JScrollPane appliedRulesPane;
@@ -143,7 +136,6 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private long getSelectedAppliedRuleId(){
 		long selectedAppliedRuleId = -1;
-//		if (appliedRulesTable))
 		try {//TODO check if selectedRow exists
 			Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
 			if (o instanceof DataHelper) {

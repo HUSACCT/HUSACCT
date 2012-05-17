@@ -3,7 +3,9 @@ package husacct.define.presentation.jpanel.ruledetails;
 import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	
 	private static final long serialVersionUID = -3429272079796935062L;
 	protected AppliedRuleController appliedRuleController;
+	protected ViolationTypesJDialog violationTypesJDialog;
 	protected Logger logger;
 	protected boolean isException;
 
@@ -62,11 +65,12 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 		if (!isException){
 			configureViolationTypesJButton = new JButton("Configure filter");
 			configureViolationTypesJButton.addActionListener(this);
+			violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
+			
 			//TODO relocate filter button
 			//Dont add it like this. it will mess up the current layout, making it functional but not user friendly
-//			GridBagConstraints gbc = new GridBagConstraints(1, 900, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
-//			this.add(configureViolationTypesJButton, gbc);
-			configureViolationTypesJButton.setEnabled(false);
+			GridBagConstraints gbc = new GridBagConstraints(1, 900, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
+			this.add(configureViolationTypesJButton, gbc);
 		}
 	}
 	
@@ -79,14 +83,19 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	}
 	
 	private void initViolationTypeJDialog() {
-		ViolationTypesJDialog violationTypesJDialog = new ViolationTypesJDialog();
+		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
+		violationTypesJDialog.initGUI();
 		violationTypesJDialog.setLocationRelativeTo(this.getRootPane());
 		violationTypesJDialog.setVisible(true);
 	}
 
-	public abstract HashMap<String, Object> saveToHashMap();
+	public HashMap<String, Object> saveToHashMap(){
+		HashMap<String, Object> hashMap = saveDefaultDataToHashMap();
+		hashMap.put("dependencies", violationTypesJDialog.save());
+		return hashMap;
+	}
 
-	protected HashMap<String, Object> saveDefaultDataToHashMap() {
+	private HashMap<String, Object> saveDefaultDataToHashMap() {
 		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
 		long moduleFromId = -1;
 		long moduleToId = -1;
