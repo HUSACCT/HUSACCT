@@ -1,4 +1,4 @@
-package husacct.analyse.task.analyser.csharp;
+package husacct.analyse.task.analyser.csharp.generators;
 
 import java.util.Arrays;
 
