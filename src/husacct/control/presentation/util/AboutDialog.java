@@ -1,5 +1,7 @@
 package husacct.control.presentation.util;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -29,9 +31,11 @@ public class AboutDialog extends JDialog {
 		
 		private GridBagConstraints constraint = new GridBagConstraints();
 		
+		private IControlService controlService = ServiceProvider.getInstance().getControlService();
+		
 		public AboutDialog(MainController mainController) {
 			super(mainController.getMainGui(), true);
-			setTitle("About HUSACCT");
+			setTitle(controlService.getTranslatedString("About"));
 			setup();
 			addComponents();
 			setListeners();
@@ -54,7 +58,7 @@ public class AboutDialog extends JDialog {
 			Image logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/husacct/common/resources/husacct.png"));
 			pictureLabel = new JLabel(new ImageIcon(logo));
 			husacctLabel = new JLabel("HUSACCT");
-			versionLabel = new JLabel("Version");
+			versionLabel = new JLabel(controlService.getTranslatedString("VersionLabel"));
 			versionNumberLabel = new JLabel(versionNumber);
 			okButton = new JButton("OK");
 			

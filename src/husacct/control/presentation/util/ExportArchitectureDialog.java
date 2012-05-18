@@ -1,5 +1,7 @@
 package husacct.control.presentation.util;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -16,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
-public class ExportLogicalArchitectureDialog extends JDialog {
+public class ExportArchitectureDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,14 +26,16 @@ public class ExportLogicalArchitectureDialog extends JDialog {
 	
 	private JLabel pathLabel;
 	private JTextField pathText;
-	private JButton browseButton, saveButton;
+	private JButton browseButton, exportButton;
 
 	private File selectedFile;
 
-	public ExportLogicalArchitectureDialog(MainController mainController) {
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
+	public ExportArchitectureDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setTitle("Export Logical Architecture");
+		setTitle(controlService.getTranslatedString("ExportArchitecture"));
 		setup();
 		addComponents();
 		setListeners();
@@ -42,21 +46,22 @@ public class ExportLogicalArchitectureDialog extends JDialog {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(350, 100));
+		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
 
 	private void addComponents(){
-		pathLabel = new JLabel("Path");
+		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton("Browse");
-		saveButton = new JButton("Export");
-		saveButton.setEnabled(false);
+		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
+		exportButton = new JButton(controlService.getTranslatedString("ExportButton"));
+		exportButton.setEnabled(false);
 		pathText.setEnabled(false);
 
 		add(pathLabel);
 		add(pathText);
 		add(browseButton);
-		add(saveButton);
+		add(exportButton);
 	}
 
 	private void setListeners(){
@@ -65,28 +70,28 @@ public class ExportLogicalArchitectureDialog extends JDialog {
 				showFileDialog();				
 			}
 		});
-		saveButton.addActionListener(new ActionListener() {
+		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				mainController.getImportExportController().exportLogicalArchitecture(selectedFile);
+				mainController.getExportController().exportLogicalArchitecture(selectedFile);
 				dispose();
 			}
 		});
 	}
 
 	protected void showFileDialog() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText("Export");
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setApproveButtonText(controlService.getTranslatedString("ExportButton"));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showOpenDialog(this);
+		fileChooser.setFileFilter(filter);
+		int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("ExportButton"));
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(chooser.getSelectedFile());	            
+			setFile(fileChooser.getSelectedFile());	            
 		}
 	}
 
 	private void setFile(File file) {
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
-		saveButton.setEnabled(true);
+		exportButton.setEnabled(true);
 	}
 }

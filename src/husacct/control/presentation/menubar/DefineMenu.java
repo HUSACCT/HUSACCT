@@ -20,71 +20,83 @@ import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
-	private JMenuItem defineLogicalArchitectureItem;
-	private JMenuItem showLogicalGraphicsItem;
-	private JMenuItem exportLogicalArchitectureItem;
-	private JMenuItem importLogicalArchitectureItem;
+	private MainController mainController;
+	private JMenuItem defineArchitectureItem;
+	private JMenuItem definedArchitectureDiagramItem;
+	private JMenuItem exportArchitectureItem;
+	private JMenuItem importArchitectureItem;
 
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public DefineMenu(final MainController mainController){
 		super();
+		this.mainController = mainController;
 		setText(controlService.getTranslatedString("Define"));
+		addComponents();
+		setListeners();
+	}
+	
+	private void addComponents() {
+		defineArchitectureItem = new JMenuItem(controlService.getTranslatedString("DefineArchitecture"));
+		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
+		defineArchitectureItem.setMnemonic('d');
+				
+		definedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("DefinedArchitectureDiagram"));
+		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
+		definedArchitectureDiagramItem.setMnemonic('s');
+				
+		importArchitectureItem = new JMenuItem(controlService.getTranslatedString("ImportArchitecture"));
+		importArchitectureItem.setMnemonic('i');
+				
+		exportArchitectureItem = new JMenuItem(controlService.getTranslatedString("ExportArchitecture"));
+		exportArchitectureItem.setMnemonic('e');		
 		
-		defineLogicalArchitectureItem = new JMenuItem(controlService.getTranslatedString("DefineLogicalArchitecture"));
-		defineLogicalArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
-		defineLogicalArchitectureItem.setMnemonic('d');
-		this.add(defineLogicalArchitectureItem);
-
-		defineLogicalArchitectureItem.addActionListener(new ActionListener(){
+		this.add(defineArchitectureItem);
+		this.add(definedArchitectureDiagramItem);
+		this.add(importArchitectureItem);
+		this.add(exportArchitectureItem);
+	}
+	
+	private void setListeners() {
+		defineArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showDefineGui();
 			}
 		});
 		
-		showLogicalGraphicsItem = new JMenuItem(controlService.getTranslatedString("ShowLogicalArchitectureGraphics"));
-		showLogicalGraphicsItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
-		showLogicalGraphicsItem.setMnemonic('s');
-		this.add(showLogicalGraphicsItem);
-		showLogicalGraphicsItem.addActionListener(new ActionListener(){
+		definedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showDefinedArchitectureGui();
 			}
 		});
 		
-		importLogicalArchitectureItem = new JMenuItem(controlService.getTranslatedString("ImportLogicalArchitecture"));
-		importLogicalArchitectureItem.setMnemonic('i');
-		this.add(importLogicalArchitectureItem);
-		importLogicalArchitectureItem.addActionListener(new ActionListener(){
+		importArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportExportController().showImportLogicalArchitectureGui();
+				mainController.getImportController().showImportArchitectureGui();
 			}
 		});
 		
-		exportLogicalArchitectureItem = new JMenuItem(controlService.getTranslatedString("ExportLogicalArchitecture"));
-		exportLogicalArchitectureItem.setMnemonic('e');
-		this.add(exportLogicalArchitectureItem);
-		exportLogicalArchitectureItem.addActionListener(new ActionListener(){
+		exportArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportExportController().showExportLogicalArchitectureGui();
+				mainController.getExportController().showExportArchitectureGui();
 			}
 		});
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
-				defineLogicalArchitectureItem.setEnabled(false);
-				showLogicalGraphicsItem.setEnabled(false);
-				importLogicalArchitectureItem.setEnabled(false);
-				exportLogicalArchitectureItem.setEnabled(false);
+				defineArchitectureItem.setEnabled(false);
+				definedArchitectureDiagramItem.setEnabled(false);
+				importArchitectureItem.setEnabled(false);
+				exportArchitectureItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
-					defineLogicalArchitectureItem.setEnabled(true);
-					importLogicalArchitectureItem.setEnabled(true);
+					defineArchitectureItem.setEnabled(true);
+					importArchitectureItem.setEnabled(true);
 				}
 				
 				if(states.contains(States.DEFINED) || states.contains(States.MAPPED)){
-					exportLogicalArchitectureItem.setEnabled(true);
-					showLogicalGraphicsItem.setEnabled(true);
+					exportArchitectureItem.setEnabled(true);
+					definedArchitectureDiagramItem.setEnabled(true);
 				}
 			}
 		});
@@ -99,10 +111,10 @@ public class DefineMenu extends JMenu{
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			public void update(Locale newLocale) {
 				defineMenu.setText(controlService.getTranslatedString("Define"));
-				defineLogicalArchitectureItem.setText(controlService.getTranslatedString("DefineLogicalArchitecture"));
-				showLogicalGraphicsItem.setText(controlService.getTranslatedString("ShowLogicalArchitectureGraphics"));
-				exportLogicalArchitectureItem.setText(controlService.getTranslatedString("ExportLogicalArchitecture"));
-				importLogicalArchitectureItem.setText(controlService.getTranslatedString("ImportLogicalArchitecture"));
+				defineArchitectureItem.setText(controlService.getTranslatedString("DefineArchitecture"));
+				definedArchitectureDiagramItem.setText(controlService.getTranslatedString("DefinedArchitectureDiagram"));
+				exportArchitectureItem.setText(controlService.getTranslatedString("ExportArchitecture"));
+				importArchitectureItem.setText(controlService.getTranslatedString("ImportArchitecture"));
 			}
 		});
 	}

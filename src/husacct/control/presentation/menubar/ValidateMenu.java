@@ -20,6 +20,7 @@ import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
+	private MainController mainController;
 	private JMenuItem configureItem;
 	private JMenuItem validateNowItem;
 	private JMenuItem exportViolationReportItem;
@@ -28,37 +29,47 @@ public class ValidateMenu extends JMenu{
 	
 	public ValidateMenu(final MainController mainController){
 		super();
+		this.mainController = mainController;
 		setText(controlService.getTranslatedString("Validate"));
-		
+		addComponents();
+		setListeners();
+	}
+	
+	private void addComponents() {
 		validateNowItem = new JMenuItem(controlService.getTranslatedString("ValidateNow"));
 		validateNowItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
 		validateNowItem.setMnemonic('v');
+				
+		configureItem = new JMenuItem(controlService.getTranslatedString("Configuration"));
+		configureItem.setMnemonic('c');
+				
+		exportViolationReportItem = new JMenuItem(controlService.getTranslatedString("ViolationReport"));
+		exportViolationReportItem.setMnemonic('i');
+		
 		this.add(validateNowItem);
+		this.add(configureItem);
+		this.add(exportViolationReportItem);
+	}
+	
+	private void setListeners() {
 		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showViolationsGui();
 			}
 		});
 		
-		configureItem = new JMenuItem(controlService.getTranslatedString("Configuration"));
-		configureItem.setMnemonic('c');
-		this.add(configureItem);
 		configureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showConfigurationGui();
 			}
 		});
-
-		exportViolationReportItem = new JMenuItem(controlService.getTranslatedString("ViolationReport"));
-		exportViolationReportItem.setMnemonic('i');
-		this.add(exportViolationReportItem);
 		
 		exportViolationReportItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportExportController().showExportViolationsReportGui();
+				mainController.getExportController().showExportViolationsReportGui();
 			}
 		});
-
+		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				validateNowItem.setEnabled(false);

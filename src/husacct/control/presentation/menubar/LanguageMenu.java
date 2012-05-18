@@ -48,11 +48,10 @@ public class LanguageMenu extends JMenu{
 				public void actionPerformed(ActionEvent e) {
 					JCheckBoxMenuItem source = (JCheckBoxMenuItem)e.getSource();
 					if(source.isSelected()){
+						// TODO: fix ConcurrentModificationException
 						localeController.setNewLocaleFromString(source.getText());
-					} else {
-						if(source.getText().equals(LocaleController.getLocale().getLanguage())){
-							source.setSelected(true);
-						}
+					} else if(source.getText().equals(LocaleController.getLocale().getLanguage())){
+						source.setSelected(true);
 					}
 				}
 			});
@@ -62,7 +61,7 @@ public class LanguageMenu extends JMenu{
 		final LanguageMenu languageMenu = this;
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			public void update(Locale newLocale) {
-				languageMenu.setText(controlService.getTranslatedString("Language"));				
+				languageMenu.setText(controlService.getTranslatedString("Language"));
 			}
 		});
 	}

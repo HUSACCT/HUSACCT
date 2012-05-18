@@ -1,6 +1,7 @@
 package husacct.control.presentation.workspace.savers;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -30,6 +31,8 @@ public class XmlSavePanel extends SaverPanel{
 	
 	private GridBagConstraints constraints;
 	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public XmlSavePanel(){
 		super();
 		setup();
@@ -44,10 +47,10 @@ public class XmlSavePanel extends SaverPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel("Save workspace to XML file");
-		pathLabel = new JLabel("Path");
+		descriptionLabel = new JLabel(controlService.getTranslatedString("SaveToXML"));
+		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton("Browse");
+		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
 		
 		JPanel hiddenPanel = new JPanel();
@@ -82,7 +85,7 @@ public class XmlSavePanel extends SaverPanel{
 		JFileChooser fileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
 		fileChooser.setFileFilter(filter);
-	    int returnVal = fileChooser.showOpenDialog(this);
+	    int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("SaveButton"));
 	    if(returnVal == JFileChooser.APPROVE_OPTION) {
 	       setFile(fileChooser.getSelectedFile());
 	    }
@@ -103,7 +106,7 @@ public class XmlSavePanel extends SaverPanel{
 	@Override
 	public boolean validateData() {
 		if(selectedFile == null){
-			ServiceProvider.getInstance().getControlService().showErrorMessage("Please set a file location");
+			ServiceProvider.getInstance().getControlService().showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}
 		return true;
