@@ -59,6 +59,9 @@ public abstract class CSharpGenerator {
 	protected final int FINALLY = 193;
 	protected final int[] typeCollection = new int[] {BYTE, SBYTE, INT, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, VAR, DECIMAL, IDENTIFIER};
 	protected final int[] accessorCollection = new int[] {PRIVATE, PUBLIC, PROTECTED, INTERNAL};
+	protected final int[] notPartOfAttribute = new int[] { FORWARDCURLYBRACKET, USING, NAMESPACE, CLASS, RETURN, SET, GET, DOT };
+	protected final int[] isAPartOfAttribute = new int[] { FORWARDCURLYBRACKET, SEMICOLON, BACKWARDCURLYBRACKET };
+	protected final int[] listOfMethodTypes = new int[] { FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /* synchronised */};
 	protected ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	

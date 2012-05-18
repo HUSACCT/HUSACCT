@@ -22,9 +22,7 @@ public class CSharpClassConvertController extends CSharpGenerator {
 			abstractTree = tree;
 		}
 		if (isClassName) {
-			treeConverter.setTempClassName(tree.getText());
-			treeConverter.createUsingGenerator();
-			isClassName = false;
+			setClassName(tree);
 		}
 		if (type == CLASS || type == INTERFACE || type == STRUCT) {
 			isClassPart = true;
@@ -32,16 +30,38 @@ public class CSharpClassConvertController extends CSharpGenerator {
 		}
 		if (isClassPart && type == FORWARDCURLYBRACKET) {
 			isClassPart = false;
-			treeConverter.getIndentClassLevel().add(new CSharpData(treeConverter.getTempClassName(), treeConverter.getIndentLevel(),treeConverter.getCurrentNamespaceName()));
+			CSharpData data = getCurrentData();
+			treeConverter.getIndentClassLevel().add(data);
 		}
 		if (isClassPart) {
-			if (abstractTree != null) {
-				treeConverter.getClassTrees().add(abstractTree);
-				abstractTree = null;
-			}
-			treeConverter.getClassTrees().add(tree);
+			addToClassTrees(tree);
 		}
 		return isClassPart;
+	}
+
+	private void setClassName(CommonTree tree) {
+		treeConverter.setCurrentClassName(tree.getText());
+		treeConverter.createUsingGenerator();
+		isClassName = false;
+	}
+
+	private void addToClassTrees(CommonTree tree) {
+		if (abstractTree != null) {
+			addAbstractTree();
+		}
+		treeConverter.getClassTrees().add(tree);
+	}
+
+	private void addAbstractTree() {
+		treeConverter.getClassTrees().add(abstractTree);
+		abstractTree = null;
+	}
+
+	private CSharpData getCurrentData() {
+		String className = treeConverter.getCurrentClassName();
+		int indentLevel = treeConverter.getIndentLevel();
+		String namespaceName = treeConverter.getCurrentNamespaceName();
+		return new CSharpData(className, indentLevel,namespaceName);
 	}
 
 }

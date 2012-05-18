@@ -16,13 +16,13 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	private boolean isAbstract;
 	private boolean hasClassScope;
 	
-	public void generateMethod(List<CommonTree> tree, String namespace, String className) {
+	public void generateMethod(List<CommonTree> tree, String className, String uniqueClassName) {
 		name = getName(tree);	
 		accessControlQualifier = checkForAccessControlQualifier(tree.get(0));
 		isConstructor = checkForConstructor(tree, className);
 		isAbstract = checkForAbstract(tree);
 		declaredReturnType = checkForReturnType(tree);
-		belongsToClass = namespace + "." + className;
+		belongsToClass = uniqueClassName;
 		signature = createSignature(tree);
 		uniqueName = belongsToClass+"."+signature;
 		hasClassScope = checkForClassScope(tree);

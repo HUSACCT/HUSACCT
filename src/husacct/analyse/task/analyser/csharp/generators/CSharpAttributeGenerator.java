@@ -13,8 +13,7 @@ public class CSharpAttributeGenerator extends CSharpGenerator {
 	private String attributeName = "";
 	private String declareType = "";
 
-	public CSharpAttributeGenerator(List<CommonTree> attributeTrees,
-			String uniqueClassName) {
+	public CSharpAttributeGenerator(List<CommonTree> attributeTrees, String uniqueClassName) {
 		this.attributeTrees = attributeTrees;
 		this.uniqueClassName = uniqueClassName;
 	}
@@ -23,9 +22,7 @@ public class CSharpAttributeGenerator extends CSharpGenerator {
 		if (!attributeName.equals("") && !declareType.equals("")) {
 			int lineNumber = attributeTrees.get(0).getLine();
 			String uniqueName = uniqueClassName + "." + attributeName;
-			modelService.createAttribute(classScope, accessControlQualifier,
-					uniqueClassName, declareType, attributeName, uniqueName,
-					lineNumber);
+			modelService.createAttribute(classScope, accessControlQualifier, uniqueClassName, declareType, attributeName, uniqueName, lineNumber);
 		}
 	}
 

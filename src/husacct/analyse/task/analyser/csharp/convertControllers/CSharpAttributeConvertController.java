@@ -21,16 +21,12 @@ public class CSharpAttributeConvertController extends CSharpGenerator{
 	
 	public boolean attributeCheck(CommonTree tree, boolean isPartOfAttribute) {
 		int type = tree.getType();
-		final int[] notPartOfAttribute = new int[] { FORWARDCURLYBRACKET, USING, NAMESPACE, CLASS, RETURN, SET, GET, DOT };
-		final int[] isAPartOfAttribute = new int[] { FORWARDCURLYBRACKET, SEMICOLON, BACKWARDCURLYBRACKET };
-		if (isPartOfAttribute && type == SEMICOLON && attributeTrees.size() > 1) {
-			startNewAttributeGenerator();
-			isPartOfAttribute = false;
-			attributeTrees.clear();
+		boolean biggerThanOne = attributeTrees.size() > 1;
+		if (isPartOfAttribute && type == SEMICOLON && biggerThanOne) {
+			isPartOfAttribute = startNewAttributeGenerator();
 		}
 		if (Arrays.binarySearch(notPartOfAttribute, type) > -1) {
-			isPartOfAttribute = false;
-			attributeTrees.clear();
+			isPartOfAttribute = clearAttributeTree();
 		}
 		if (isPartOfAttribute) {
 			attributeTrees.add(tree);
@@ -40,10 +36,17 @@ public class CSharpAttributeConvertController extends CSharpGenerator{
 		}
 		return isPartOfAttribute;
 	}
-	private void startNewAttributeGenerator() {
-		String className = treeController.getCurrentNamespaceName() + "." + treeController.getTempClassName();
-		CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, className);
+	
+	private boolean clearAttributeTree() {
+		attributeTrees.clear();
+		return false;
+	}
+	
+	private boolean startNewAttributeGenerator() {
+		String uniqueClassName = treeController.getUniqueClassName();
+		CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, uniqueClassName);
 		attributeGenerator.scanTree();	
+		return clearAttributeTree();
 	}
 
 }
