@@ -24,10 +24,9 @@ class ActiveViolationTypesRepository {
 
 
 	ActiveViolationTypesRepository(RuleTypesFactory ruletypesfactory) {
+		this.ruletypesfactory = ruletypesfactory;
 		this.startupViolationTypes = initializeActiveViolationTypes();
 		this.currentActiveViolationTypes = initializeActiveViolationTypes();
-		this.ruletypesfactory = ruletypesfactory;
-
 	}
 
 	private Map<String, List<ActiveRuleType>> initializeActiveViolationTypes(){
@@ -36,7 +35,7 @@ class ActiveViolationTypesRepository {
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
 			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
 			activeViolationTypes.put(programmingLanguage, activeRuleTypes);
-
+			
 			for(List<RuleType> ruleTypes : ruletypesfactory.getRuleTypes(programmingLanguage).values()){
 
 				for(RuleType ruleType : ruleTypes){

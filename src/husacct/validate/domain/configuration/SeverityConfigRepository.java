@@ -21,9 +21,43 @@ class SeverityConfigRepository {
 
 		initializeCurrentSeverities();
 	}
+	
+	void restoreToDefault(){
+		initializeCurrentSeverities();
+	}
+	
+	private void initializeCurrentSeverities(){	
+		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
+		for(Severity severity : defaultSeverities){
+			if(!severity.getDefaultName().toLowerCase().equals("unidentified")){
+				currentSeverities.add(severity);
+			}
+		}
+	}
+	
+	Severity getSeverityByName(String severityName){
+		for(Severity customSeverity : currentSeverities){
+			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getDefaultName().toLowerCase())){
+				return customSeverity;	
+			}		
+		}
+		throw new SeverityNotFoundException();
+	}
+	
+	int getSeverityValue(Severity severity){
+		return currentSeverities.indexOf(severity);
+	}
 
 	List<Severity> getAllSeverities(){
 		return currentSeverities;
+	}
+	
+	List<Severity> getAllSeveritiesCloned(){
+		List<Severity> severities = new ArrayList<Severity>(currentSeverities.size());
+		for(Severity currentSeverity : currentSeverities){
+			severities.add(currentSeverity.clone());
+		}
+		return severities;
 	}
 
 	void setSeverities(List<Severity> severities){
@@ -45,16 +79,7 @@ class SeverityConfigRepository {
 		}
 		return finalSeverityList;
 	}
-
-	Severity getSeverityByName(String severityName){
-		for(Severity customSeverity : currentSeverities){
-			if(severityName.toLowerCase().equals(customSeverity.getUserName().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getDefaultName().toLowerCase())){
-				return customSeverity;	
-			}		
-		}
-		throw new SeverityNotFoundException();
-	}
-
+	
 	/** 	 
 	 * @throws: DuplicateSeverityException, EmptySeverityNameException, ContainsUnidentifiedSeverityException
 	 */
@@ -103,9 +128,11 @@ class SeverityConfigRepository {
 		for(Severity defaultSeverity : defaultSeverities){
 			for(Severity newSeverity : newSeverities){
 				if(defaultSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED.toString()) || defaultSeverity.getId().equals(newSeverity.getId())){
+					System.out.println("deze1");
 					foundError = true;					
 				}
 				if(newSeverity.getDefaultName().toLowerCase().equals(DefaultSeverities.UNIDENTIFIED.toString().toLowerCase())){				
+					System.out.println("deze2");
 					foundError = true;					
 				}
 				if(foundError){
@@ -115,14 +142,6 @@ class SeverityConfigRepository {
 		}
 	}
 
-	int getSeverityValue(Severity severity){
-		return currentSeverities.indexOf(severity);
-	}
-
-	void restoreToDefault(){
-		initializeCurrentSeverities();
-	}
-
 	private List<Severity> generateDefaultSeverities(){
 		List<Severity> newDefaultSeverities = new ArrayList<Severity>();
 		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)){
@@ -130,14 +149,5 @@ class SeverityConfigRepository {
 			newDefaultSeverities.add(severity);
 		}
 		return newDefaultSeverities;
-	}
-
-	private void initializeCurrentSeverities(){	
-		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
-		for(Severity severity : defaultSeverities){
-			if(!severity.getDefaultName().toLowerCase().equals("unidentified")){
-				currentSeverities.add(severity);
-			}
-		}
 	}
 }

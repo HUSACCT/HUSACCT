@@ -44,7 +44,7 @@ public class RuleTypesFactory {
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
-	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){	
+	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){
 		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
 		return extractCategoriesFromRuleType(ruleTypes);
 	}

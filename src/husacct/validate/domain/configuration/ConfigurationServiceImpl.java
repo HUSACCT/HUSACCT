@@ -38,13 +38,16 @@ public class ConfigurationServiceImpl extends Observable {
 	public int getSeverityValue(Severity severity){
 		return severityConfig.getSeverityValue(severity);
 	}
-	
+
 	public List<Severity> getAllSeverities() {
 		return severityConfig.getAllSeverities();
 	}
 
 	public void setSeverities(List<Severity> severities) {
+		final Severity[] oldSeverities = severityConfig.getAllSeveritiesCloned().toArray(new Severity[]{});
 		severityConfig.setSeverities(severities);
+		setChanged();
+		notifyObservers(oldSeverities);
 	}
 
 	public Severity getSeverityByName(String severityName){
@@ -77,10 +80,14 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void restoreAllToDefault(String language){
 		severityPerTypeRepository.restoreAllToDefault(language);
+		setChanged();
+		notifyObservers();
 	}
 
 	public void restoreToDefault(String language, String key){
 		severityPerTypeRepository.restoreDefaultSeverity(language, key);
+		setChanged();
+		notifyObservers();
 	}
 
 	public void restoreSeveritiesToDefault(){
