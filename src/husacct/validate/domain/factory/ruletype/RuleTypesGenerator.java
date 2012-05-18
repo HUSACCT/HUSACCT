@@ -78,7 +78,7 @@ class RuleTypesGenerator {
 	private List<Class<?>> getRuleClasses(String[] packageNames, EnumSet<RuleTypes> ruleTypes) {
 		List<Class<?>> classList = new ArrayList<Class<?>>();
 
-		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+		ClassLoader myClassLoader = this.getClass().getClassLoader();
 		for(String packageName : packageNames){
 			for(Enum<RuleTypes> ruleType : ruleTypes){
 				String classPath;
