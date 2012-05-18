@@ -1,5 +1,7 @@
 package husacct.control.presentation.util;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -19,9 +21,11 @@ public class LoadingDialog extends JDialog implements Runnable{
 	
 	private String progressInfoText;
 	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public LoadingDialog(MainController mainController, String progressInfoText){
 		super(mainController.getMainGui(), true);
-		setTitle("Loading");
+		setTitle(controlService.getTranslatedString("Loading"));
 		this.progressInfoText = progressInfoText;
 		setup();
 		addComponents();
@@ -46,7 +50,7 @@ public class LoadingDialog extends JDialog implements Runnable{
 		progressPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		progressBar.setIndeterminate(true);
 		
-		JLabel waitLabel = new JLabel("Please wait...");
+		JLabel waitLabel = new JLabel(controlService.getTranslatedString("Wait"));
 		
 		labelPanel.add(progressLabel);
 		progressPanel.add(progressBar);

@@ -1,5 +1,7 @@
 package husacct.control.presentation.menubar;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
@@ -11,10 +13,12 @@ import javax.swing.JMenuItem;
 @SuppressWarnings("serial")
 public class HelpMenu extends JMenu {
 	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public HelpMenu(final MainController mainController){
-		super("Help");
-		
-		JMenuItem versionItem = new JMenuItem("About HUSACCT");
+		super();
+		setText(controlService.getTranslatedString("Help"));
+		JMenuItem versionItem = new JMenuItem(controlService.getTranslatedString("About"));
 		versionItem.setMnemonic('a');
 		this.add(versionItem);
 		versionItem.addActionListener(new ActionListener(){

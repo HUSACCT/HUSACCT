@@ -41,7 +41,7 @@ public class SaveWorkspaceDialog extends JDialog{
 	
 	public SaveWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
-		this.setTitle("Save Workspace");
+		this.setTitle(controlService.getTranslatedString("SaveWorkspace"));
 		this.mainController = mainController;
 		this.setup();
 		this.setSavers();
@@ -78,8 +78,8 @@ public class SaveWorkspaceDialog extends JDialog{
 		saverPanelContainer.setPreferredSize(new Dimension(350, 300));
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
-		saveButton = new JButton(controlService.getTranslatedString("saveButton"));
-		cancelButton = new JButton(controlService.getTranslatedString("cancelButton"));
+		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
+		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
 		
 		buttonsPanel.add(saveButton);
 		buttonsPanel.add(cancelButton);

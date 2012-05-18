@@ -1,6 +1,8 @@
 package husacct.control.presentation.util;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -22,11 +24,13 @@ public class SetApplicationDialog extends JDialog {
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
 	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public SetApplicationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		setApplicationPanel = new SetApplicationPanel();
-		setTitle("Application details");
+		setTitle(controlService.getTranslatedString("ApplicationDetails"));
 		setup();
 		addComponents();
 		setListeners();
@@ -43,7 +47,7 @@ public class SetApplicationDialog extends JDialog {
 	
 	private void addComponents(){
 		JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		saveButton = new JButton("Save");
+		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
 		savePanel.add(saveButton);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
