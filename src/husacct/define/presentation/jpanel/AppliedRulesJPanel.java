@@ -53,7 +53,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Applied Rules"));
+		this.setBorder(BorderFactory.createTitledBorder("Rules"));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();

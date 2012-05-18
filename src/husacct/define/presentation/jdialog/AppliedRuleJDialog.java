@@ -36,6 +36,7 @@ import javax.swing.WindowConstants;
 public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
+	private final String husacctIcon = "husacct/common/resources/husacct.png";
 	
 	private AppliedRuleController appliedRuleController;
 	private FactoryDetails factoryDetails;
@@ -61,8 +62,8 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle("New Applied Rule");
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			setTitle("New Rule");
+			setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
