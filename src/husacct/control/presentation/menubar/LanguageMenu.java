@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
 import husacct.control.task.LocaleController;
+import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,9 +18,9 @@ public class LanguageMenu extends JMenu{
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public LanguageMenu(final LocaleController localeController){
+	public LanguageMenu(MainController mainController){
 		super();
-		
+		final LocaleController localeController = mainController.getLocaleController();
 		setText(controlService.getTranslatedString("Language"));
 		
 		controlService = ServiceProvider.getInstance().getControlService();

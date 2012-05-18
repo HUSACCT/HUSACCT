@@ -77,7 +77,7 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 		
-		this.addMenuListener(new MenuListenerAdapter() {
+		this.addMenuListener(new MenuAdapter() {
 			public void menuSelected(MenuEvent e) {
 				mainController.getStateController().checkState();
 			}

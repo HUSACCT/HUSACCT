@@ -1,6 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.control.presentation.taskbar.TaskBar;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -28,6 +29,7 @@ public class ViewController {
 	public ViewController(MainController maincontroller){
 		this.mainController = maincontroller;
 		serviceProvider = ServiceProvider.getInstance();
+		
 	}
 	
 	public List<JInternalFrame> getOpenFrames(){
@@ -51,7 +53,7 @@ public class ViewController {
 		internalFrame.setTitle(title);
 		internalFrame.setMaximizable(true);
 		internalFrame.setResizable(true);
-		internalFrame.setIconifiable(true);
+		internalFrame.setIconifiable(false);
 		internalFrame.setClosable(true);
 		internalFrame.pack();
 		internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
@@ -59,15 +61,14 @@ public class ViewController {
 				internalFrame.dispose();
 			}
 		});
+		registerInternalFrameToTaskBar(internalFrame);
 	}
 	
 	private void resetFrame(JInternalFrame internalFrame){
 		if(internalFrame != null){
-			if(internalFrame.isIcon()){
-				internalFrame.getDesktopPane().getDesktopManager().deiconifyFrame(internalFrame);
-			}
-			mainController.getMainGui().getContentPane().remove(internalFrame);
-			mainController.getMainGui().getContentPane().repaint();
+			internalFrame.dispose();
+			mainController.getMainGui().getDesktopPane().remove(internalFrame);
+			mainController.getMainGui().getDesktopPane().repaint();
 			internalFrame = null;
 		}
 	}
@@ -79,53 +80,58 @@ public class ViewController {
 		}
 		return rect;
 	}
-
+	
 	private void setBounds(JInternalFrame internalFrame, Rectangle rect){
 		if(rect != null) internalFrame.setBounds(rect);
 	}
-
+	
+	private void registerInternalFrameToTaskBar(JInternalFrame internalFrame){
+		TaskBar taskBar = mainController.getMainGui().getTaskBar();
+		taskBar.registerInternalFrame(internalFrame);
+	}
+	
 	public void setDefineGui(){
 		defineInternalFrame = serviceProvider.getDefineService().getDefinedGUI();
+		mainController.getMainGui().getDesktopPane().add(defineInternalFrame);
 		setupFrame(defineInternalFrame, "Define Architecture");	
 		defineInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(defineInternalFrame);	
 	}
 	
 	public void setViolationsGui(){
 		violationsInternalFrame = serviceProvider.getValidateService().getBrowseViolationsGUI();
+		mainController.getMainGui().getDesktopPane().add(violationsInternalFrame);
 		setupFrame(violationsInternalFrame, "Violations");
 		violationsInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(violationsInternalFrame);
 	}
 	
 	public void setConfigurationGui() {
 		configurationInternalFrame = serviceProvider.getValidateService().getConfigurationGUI();
+		mainController.getMainGui().getDesktopPane().add(configurationInternalFrame);
 		setupFrame(configurationInternalFrame, "Configuration");
 		configurationInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(configurationInternalFrame);
 	}
 	
 	public void setDefinedArchitectureGui(){
 		serviceProvider.getGraphicsService().drawDefinedArchitecture();
 		definedArchitectureInternalFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
+		mainController.getMainGui().getDesktopPane().add(definedArchitectureInternalFrame);
 		setupFrame(definedArchitectureInternalFrame, "Defined architecture");
 		definedArchitectureInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(definedArchitectureInternalFrame);
 	}
 	
 	public void setAnalysedArchitectureGui(){
 		serviceProvider.getGraphicsService().drawAnalysedArchitecture();
 		analysedArchitectureInternalFrame = serviceProvider.getGraphicsService().getAnalysedArchitectureGUI();
+		mainController.getMainGui().getDesktopPane().add(analysedArchitectureInternalFrame);
 		setupFrame(analysedArchitectureInternalFrame, "Analysed architecture");
 		analysedArchitectureInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(analysedArchitectureInternalFrame);
 	}
 	
 	public void setApplicationTreeGui(){
 		applicationTreeInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
+		mainController.getMainGui().getDesktopPane().add(applicationTreeInternalFrame);
 		setupFrame(applicationTreeInternalFrame, "Analysed Application Overview");
 		applicationTreeInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(applicationTreeInternalFrame);
 	}
 	
 	public void showDefineGui() {		
