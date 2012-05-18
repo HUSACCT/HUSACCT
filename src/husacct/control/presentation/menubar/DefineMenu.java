@@ -20,6 +20,7 @@ import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
+	private MainController mainController;
 	private JMenuItem defineArchitectureItem;
 	private JMenuItem definedArchitectureDiagramItem;
 	private JMenuItem exportArchitectureItem;
@@ -29,41 +30,52 @@ public class DefineMenu extends JMenu{
 	
 	public DefineMenu(final MainController mainController){
 		super();
+		this.mainController = mainController;
 		setText(controlService.getTranslatedString("Define"));
-		
+		addComponents();
+		setListeners();
+	}
+	
+	private void addComponents() {
 		defineArchitectureItem = new JMenuItem(controlService.getTranslatedString("DefineArchitecture"));
 		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
 		defineArchitectureItem.setMnemonic('d');
+				
+		definedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("DefinedArchitectureDiagram"));
+		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
+		definedArchitectureDiagramItem.setMnemonic('s');
+				
+		importArchitectureItem = new JMenuItem(controlService.getTranslatedString("ImportArchitecture"));
+		importArchitectureItem.setMnemonic('i');
+				
+		exportArchitectureItem = new JMenuItem(controlService.getTranslatedString("ExportArchitecture"));
+		exportArchitectureItem.setMnemonic('e');		
+		
 		this.add(defineArchitectureItem);
-
+		this.add(definedArchitectureDiagramItem);
+		this.add(importArchitectureItem);
+		this.add(exportArchitectureItem);
+	}
+	
+	private void setListeners() {
 		defineArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showDefineGui();
 			}
 		});
 		
-		definedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("DefinedArchitectureDiagram"));
-		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
-		definedArchitectureDiagramItem.setMnemonic('s');
-		this.add(definedArchitectureDiagramItem);
 		definedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showDefinedArchitectureGui();
 			}
 		});
 		
-		importArchitectureItem = new JMenuItem(controlService.getTranslatedString("ImportArchitecture"));
-		importArchitectureItem.setMnemonic('i');
-		this.add(importArchitectureItem);
 		importArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getImportController().showImportArchitectureGui();
 			}
 		});
 		
-		exportArchitectureItem = new JMenuItem(controlService.getTranslatedString("ExportArchitecture"));
-		exportArchitectureItem.setMnemonic('e');
-		this.add(exportArchitectureItem);
 		exportArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getExportController().showExportArchitectureGui();
