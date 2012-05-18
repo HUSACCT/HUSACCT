@@ -1,7 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.control.presentation.util.ExportLogicalArchitectureDialog;
+import husacct.control.presentation.util.ExportArchitectureDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -21,8 +21,8 @@ public class ExportController {
 		this.mainController = mainController;
 	}
 	
-	public void showExportLogicalArchitectureGui() {
-		new ExportLogicalArchitectureDialog(mainController);
+	public void showExportArchitectureGui() {
+		new ExportArchitectureDialog(mainController);
 		
 	}
 

@@ -20,9 +20,9 @@ import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class AnalyseMenu extends JMenu{
-	private JMenuItem setApplicationDetailsItem;
-	private JMenuItem showAnalysedGraphicsItem;
-	private JMenuItem showApplicationTreeItem;
+	private JMenuItem setApplicationPropertiesItem;
+	private JMenuItem analysedArchitectureDiagramItem;
+	private JMenuItem analysedApplicationOverviewItem;
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
@@ -30,31 +30,31 @@ public class AnalyseMenu extends JMenu{
 		super();
 		setText(controlService.getTranslatedString("Analyse"));
 		
-		setApplicationDetailsItem = new JMenuItem(controlService.getTranslatedString("ApplicationDetails"));
-		setApplicationDetailsItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
-		setApplicationDetailsItem.setMnemonic('d');
-		this.add(setApplicationDetailsItem);
-		setApplicationDetailsItem.addActionListener(new ActionListener(){
+		setApplicationPropertiesItem = new JMenuItem(controlService.getTranslatedString("ApplicationProperties"));
+		setApplicationPropertiesItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
+		setApplicationPropertiesItem.setMnemonic('d');
+		this.add(setApplicationPropertiesItem);
+		setApplicationPropertiesItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().showApplicationDetailsGui();
 			}
 		});
 		
-		showApplicationTreeItem = new JMenuItem(controlService.getTranslatedString("ShowApplicationTree"));
-		showApplicationTreeItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
-		showApplicationTreeItem.setMnemonic('t');
-		this.add(showApplicationTreeItem);
-		showApplicationTreeItem.addActionListener(new ActionListener(){
+		analysedApplicationOverviewItem = new JMenuItem(controlService.getTranslatedString("AnalysedApplicationOverview"));
+		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
+		analysedApplicationOverviewItem.setMnemonic('t');
+		this.add(analysedApplicationOverviewItem);
+		analysedApplicationOverviewItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showApplicationTreeGui();
 			}
 		});
 		
-		showAnalysedGraphicsItem = new JMenuItem(controlService.getTranslatedString("ShowAnalysedArchitectureGraphics"));
-		showAnalysedGraphicsItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
-		showAnalysedGraphicsItem.setMnemonic('g');
-		this.add(showAnalysedGraphicsItem);
-		showAnalysedGraphicsItem.addActionListener(new ActionListener(){
+		analysedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
+		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
+		analysedArchitectureDiagramItem.setMnemonic('g');
+		this.add(analysedArchitectureDiagramItem);
+		analysedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showAnalysedArchitectureGui();
 			}
@@ -62,17 +62,17 @@ public class AnalyseMenu extends JMenu{
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
-				setApplicationDetailsItem.setEnabled(false);
-				showAnalysedGraphicsItem.setEnabled(false);
-				showApplicationTreeItem.setEnabled(false);
+				setApplicationPropertiesItem.setEnabled(false);
+				analysedArchitectureDiagramItem.setEnabled(false);
+				analysedApplicationOverviewItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
-					setApplicationDetailsItem.setEnabled(true);
+					setApplicationPropertiesItem.setEnabled(true);
 				}
 				
 				if(states.contains(States.ANALYSED)){
-					showAnalysedGraphicsItem.setEnabled(true);
-					showApplicationTreeItem.setEnabled(true);
+					analysedArchitectureDiagramItem.setEnabled(true);
+					analysedApplicationOverviewItem.setEnabled(true);
 				}
 			}
 		});
@@ -87,9 +87,9 @@ public class AnalyseMenu extends JMenu{
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			public void update(Locale newLocale) {
 				analyseMenu.setText(controlService.getTranslatedString("Analyse"));
-				setApplicationDetailsItem.setText(controlService.getTranslatedString("ApplicationDetails"));
-				showAnalysedGraphicsItem.setText(controlService.getTranslatedString("ShowApplicationTree"));
-				showApplicationTreeItem.setText(controlService.getTranslatedString("ShowAnalysedArchitectureGraphics"));
+				setApplicationPropertiesItem.setText(controlService.getTranslatedString("ApplicationProperties"));
+				analysedArchitectureDiagramItem.setText(controlService.getTranslatedString("AnalysedApplicationOverview"));
+				analysedApplicationOverviewItem.setText(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
 			}
 		});
 	}

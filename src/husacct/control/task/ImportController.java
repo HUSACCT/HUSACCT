@@ -1,7 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.control.presentation.util.ImportLogicalArchitectureDialog;
+import husacct.control.presentation.util.ImportArchitectureDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -21,8 +21,8 @@ public class ImportController {
 		this.mainController = mainController;
 	}
 	
-	public void showImportLogicalArchitectureGui(){
-		new ImportLogicalArchitectureDialog(mainController);
+	public void showImportArchitectureGui(){
+		new ImportArchitectureDialog(mainController);
 	}
 	
 	public void importLogicalArchitecture(File file){

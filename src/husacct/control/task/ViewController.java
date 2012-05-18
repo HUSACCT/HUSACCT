@@ -22,7 +22,7 @@ public class ViewController {
 	private JInternalFrame configurationInternalFrame;
 	private JInternalFrame definedArchitectureInternalFrame;
 	private JInternalFrame analysedArchitectureInternalFrame;
-	private JInternalFrame applicationTreeInternalFrame;
+	private JInternalFrame applicationOverviewInternalFrame;
 	
 	private Dimension defaultDimension = new Dimension(800, 600);
 	
@@ -40,7 +40,7 @@ public class ViewController {
 		frames.add(configurationInternalFrame);
 		frames.add(definedArchitectureInternalFrame);
 		frames.add(analysedArchitectureInternalFrame);
-		frames.add(applicationTreeInternalFrame);
+		frames.add(applicationOverviewInternalFrame);
 		
 		List<JInternalFrame> openedFrames = new ArrayList<JInternalFrame>();
 		for(JInternalFrame frame : frames){
@@ -124,11 +124,11 @@ public class ViewController {
 		mainController.getMainGui().getContentPane().add(analysedArchitectureInternalFrame);
 	}
 	
-	public void setApplicationTreeGui(){
-		applicationTreeInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
-		setupFrame(applicationTreeInternalFrame, controlService.getTranslatedString("AnalysedApplicationOverview"));
-		applicationTreeInternalFrame.setSize(defaultDimension);
-		mainController.getMainGui().getContentPane().add(applicationTreeInternalFrame);
+	public void setApplicationOverviewGui(){
+		applicationOverviewInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
+		setupFrame(applicationOverviewInternalFrame, controlService.getTranslatedString("AnalysedApplicationOverview"));
+		applicationOverviewInternalFrame.setSize(defaultDimension);
+		mainController.getMainGui().getContentPane().add(applicationOverviewInternalFrame);
 	}
 	
 	public void showDefineGui() {		
@@ -177,12 +177,12 @@ public class ViewController {
 	}
 	
 	public void showApplicationTreeGui() {		
-		Rectangle rect = getBounds(applicationTreeInternalFrame);
-		resetFrame(applicationTreeInternalFrame);
-		setApplicationTreeGui();
-		setBounds(applicationTreeInternalFrame, rect);
-		applicationTreeInternalFrame.setVisible(true);
-		applicationTreeInternalFrame.toFront();
+		Rectangle rect = getBounds(applicationOverviewInternalFrame);
+		resetFrame(applicationOverviewInternalFrame);
+		setApplicationOverviewGui();
+		setBounds(applicationOverviewInternalFrame, rect);
+		applicationOverviewInternalFrame.setVisible(true);
+		applicationOverviewInternalFrame.toFront();
 	}
 	
 	public void closeAll(){		
