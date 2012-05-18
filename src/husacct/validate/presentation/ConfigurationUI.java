@@ -199,8 +199,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void removeActionPerformed() {
 		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
-			severityModel.removeRow(severityNameTable.getSelectedRow());
 			severities.remove(severityNameTable.getSelectedRow());
+			severityModel.removeRow(severityNameTable.getSelectedRow());
 		}
 	}
 
