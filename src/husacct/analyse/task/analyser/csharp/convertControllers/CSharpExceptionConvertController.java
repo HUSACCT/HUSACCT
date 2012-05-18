@@ -22,7 +22,7 @@ public class CSharpExceptionConvertController extends CSharpGenerator{
 		if(type == CATCH || type == THROW || type == FINALLY){
 			isPartOfException = true;
 		}
-		if(!(exceptionTrees.isEmpty()) && (type == SEMICOLON || type == FORWARDCURLYBRACKET)){
+		if(!(exceptionTrees.isEmpty()) && (type == BACKWARDCURLYBRACKET)){
 			isPartOfException = endOfException(tree);
 		}
 		if(isPartOfException){
