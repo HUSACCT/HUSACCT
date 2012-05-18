@@ -139,7 +139,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				delegateException(child); 
 				deleteTreeChild(child); 
 			} 
-            if(treeType == JavaParser.ASSIGN ){ 
+            if(treeType == JavaParser.ASSIGN ){ //=
                 if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
                 	delegateInvocation(child, "accessPropertyOrField");
                 	deleteTreeChild(child); 

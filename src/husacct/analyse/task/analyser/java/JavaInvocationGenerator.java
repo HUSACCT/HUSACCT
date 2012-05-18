@@ -32,6 +32,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 	
 	private void createConstructorInvocationDetails(Tree tree) {
+		//expects: '.'
 		if (tree != null) {
 			CommonTree firstChildClassConstructorCall = (CommonTree) tree;
 			
@@ -91,7 +92,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		lineNumber = treeNode.getLine();
 		if(treeHasConstructorInvocation(treeNode)){
 			createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
-			generateConstructorInvocToModel(treeNode, belongsToMethod);
+			if(treeNode.getType() == JavaParser.EXPR){
+				generateConstructorInvocToModel((CommonTree) treeNode.getChild(0), belongsToMethod);
+			} 
+			else {
+				generateConstructorInvocToModel((CommonTree) treeNode, belongsToMethod);
+			}
+			
 		} else {
 			createMethodOrPropertyFieldInvocationDetails(treeNode);
 		}	
@@ -116,6 +123,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 				CommonTree child = (CommonTree) tree.getChild(i);
 				if (child.getType() == JavaParser.DOT){ 
 					invocationName = child.getChild(1).getText();
+					this.lineNumber = child.getLine();
 					child.deleteChild(1);
 				}
 				if (child.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
@@ -149,13 +157,19 @@ public class JavaInvocationGenerator extends JavaGenerator {
 				if(treeNode.getType() == JavaParser.IDENT && i == 1 && invocationNameFound == false){
 					invocationName = treeNode.getText();
 					invocationNameFound = true;
+					this.lineNumber = treeNode.getLine();
 				}
-				
+				if(treeNode.getType() == JavaParser.CLASS_CONSTRUCTOR_CALL){
+					generateConstructorInvocToModel((CommonTree) tree, belongsToMethod);
+				}
 				createMethodOrPropertyFieldInvocationDetails(tree.getChild(i));
 			}
 		}
 	}
+
+
 	
+
 
 	private void createMethodInvocationDomainObject() {
 		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
@@ -166,9 +180,21 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		invocationNameFound = false;
 		type = "accessPropertyOrField";
 		this.belongsToMethod = belongsToMethod;
-		createMethodOrPropertyFieldInvocationDetails(treeNode);
-		createPropertyOrFieldInvocationDomainObject();
 		
+		if(treeHasConstructorInvocation(treeNode)){
+			createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
+			createPropertyOrFieldInvocationDomainObject();
+			if(treeNode.getType() == JavaParser.EXPR){
+				generateConstructorInvocToModel((CommonTree) treeNode.getChild(0), belongsToMethod);
+			} 
+			else {
+				generateConstructorInvocToModel((CommonTree) treeNode, belongsToMethod);
+			}
+		} else {
+			
+			createMethodOrPropertyFieldInvocationDetails(treeNode);
+			createPropertyOrFieldInvocationDomainObject();
+		}		
 	}
 
 	private void createPropertyOrFieldInvocationDomainObject() {	

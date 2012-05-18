@@ -24,7 +24,7 @@ public class AnalyseMain {
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		
-		new FamixCreationServiceImpl();
+		System.out.println(new FamixCreationServiceImpl().represent());
 		
 //		try {  
 //	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    

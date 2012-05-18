@@ -71,13 +71,29 @@ class JavaAttributeAndLocalVariableGenerator {
 			} else if(treeType == JavaParser.AT){
 				JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
 				annotationGenerator.generateMethod((CommonTree) child);
-			} else if(treeType == JavaParser.METHOD_CALL){
+			} else if(treeType == JavaParser.EXPR){
 				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-				javaInvocationGenerator.generateMethodInvocToModel((CommonTree) tree, belongsToMethod);
+				if (child.getChild(0).getType() == JavaParser.METHOD_CALL){
+					javaInvocationGenerator.generateMethodInvocToModel((CommonTree) tree, belongsToMethod);
+				}
+				else if (child.getChild(0).getType() == JavaParser.EXPR){
+					javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) tree, belongsToMethod);
+					deleteTreeChild(child.getChild(0));
+				}
+				else if (child.getChild(0).getType() == JavaParser.DOT){
+					javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) child, belongsToMethod);
+					deleteTreeChild(child.getChild(0));
+				}
 			}
 			walkThroughAST(child);
 		}
 	}
+	
+	private void deleteTreeChild(Tree treeNode){ 
+        for (int child = 0 ; child < treeNode.getChildCount();){ 
+            treeNode.deleteChild(treeNode.getChild(child).getChildIndex()); 
+        } 
+    } 
 
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
@@ -98,7 +114,7 @@ class JavaAttributeAndLocalVariableGenerator {
 				this.lineNumber = tree.getLine();
 				break;
 			} 		
-			setAttributeName((CommonTree) tree.getChild(i));
+			setAttributeName(child);
 		}
 	}
 
