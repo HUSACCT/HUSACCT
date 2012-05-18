@@ -72,7 +72,7 @@ public class ExportArchitectureDialog extends JDialog {
 		});
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				mainController.getExportController().exportLogicalArchitecture(selectedFile);
+				mainController.getExportController().exportArchitecture(selectedFile);
 				dispose();
 			}
 		});

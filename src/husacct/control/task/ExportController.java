@@ -30,7 +30,7 @@ public class ExportController {
 		System.out.println("showExportViolationsReportGui");
 	}
 	
-	public void exportLogicalArchitecture(File file){
+	public void exportArchitecture(File file){
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");

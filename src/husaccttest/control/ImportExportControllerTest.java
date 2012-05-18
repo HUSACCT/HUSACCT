@@ -37,14 +37,14 @@ public class ImportExportControllerTest {
 	
 	@Test
 	public void testExport(){
-		exportController.exportLogicalArchitecture(testFile);
+		exportController.exportArchitecture(testFile);
 		assertTrue(testFile.exists());
 	}
 	
 	@Test
 	public void testImport(){
-		exportController.exportLogicalArchitecture(testFile);
-		importController.importLogicalArchitecture(testFile);
+		exportController.exportArchitecture(testFile);
+		importController.importArchitecture(testFile);
 		SAXBuilder sax = new SAXBuilder();
 		Document testDoc = new Document();
 		try {

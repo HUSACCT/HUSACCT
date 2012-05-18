@@ -25,7 +25,7 @@ public class ImportController {
 		new ImportArchitectureDialog(mainController);
 	}
 	
-	public void importLogicalArchitecture(File file){
+	public void importArchitecture(File file){
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", file);
 		IResource xmlResource = ResourceFactory.get("xml");
