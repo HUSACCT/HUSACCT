@@ -17,6 +17,9 @@ public class LocaleController {
 	private static ResourceBundle resourceBundle;
 	private static Logger logger = Logger.getLogger(LocaleController.class);
 	
+	private static Locale english = Locale.ENGLISH;
+	private static Locale nederlands = new Locale("nl", "NL");
+	
 	public LocaleController(){
 		setLocale(LocaleController.currentLocale);
 	}
@@ -31,8 +34,8 @@ public class LocaleController {
 	public ArrayList<Locale> getAvailableLocales(){
 		ArrayList<Locale> locales = new ArrayList<Locale>();
 		
-		locales.add(Locale.ENGLISH);
-		locales.add(new Locale("nl", "NL"));
+		locales.add(english);
+		locales.add(nederlands);
 		
 		return locales;
 	}

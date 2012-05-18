@@ -52,7 +52,7 @@ public class ApplicationController {
 					loadingDialog.dispose();
 					logger.debug("Monitor: analyse finished");
 				} catch (InterruptedException exception){
-					logger.debug("Monitor: analyse interupted");
+					logger.debug("Monitor: analyse interrupted");
 				}
 				
 			}
