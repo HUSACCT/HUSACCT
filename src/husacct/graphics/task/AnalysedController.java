@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
@@ -55,9 +56,6 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
 		if (!figureFrom.equals(figureTo)) {
-			System.out.println("--------------------====---------------");
-			System.out.println(((BaseFigure) figureFrom).getName());
-			System.out.println(((BaseFigure) figureTo).getName());
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};
@@ -115,15 +113,15 @@ public class AnalysedController extends DrawingController {
 	}
 	
 	private void getAndDrawModulesIn(String[] parentNames) {
-		HashMap<String, ArrayList<AnalysedModuleDTO>> allChildren = new HashMap<String, ArrayList<AnalysedModuleDTO>>(); 
+		HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>(); 
 		for(String parentName : parentNames){
-			AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
+			AbstractDTO[] children = analyseService.getChildModulesInModule(parentName);
 			if (parentName.equals("")) {
 				drawArchitecture(getCurrentDrawingDetail());
 			} else if (children.length > 0) {
 //				setCurrentPath(parentName);
-				ArrayList<AnalysedModuleDTO> knownChildren = new ArrayList<AnalysedModuleDTO>();
-				for(AnalysedModuleDTO child : children){
+				ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
+				for(AbstractDTO child : children){
 					knownChildren.add(child);
 				}
 				allChildren.put(parentName, knownChildren);

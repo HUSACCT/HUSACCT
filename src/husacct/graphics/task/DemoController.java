@@ -1,6 +1,7 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleTypeDTO;
@@ -10,6 +11,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DemoController extends DrawingController {
 
@@ -89,31 +91,43 @@ public class DemoController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
-		BaseFigure zoomedFigure = zoomedModuleFigures[0];
-
-		if (zoomedFigure.getName().equals("floating")) {
-			ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
-
-			ModuleDTO child1 = new ModuleDTO();
-			child1.type = "abstract";
-			child1.logicalPath = "tests.test1";
-			modules.add(child1);
-
-			ModuleDTO child2 = new ModuleDTO();
-			child2.type = "class";
-			child2.logicalPath = "tests.test2";
-			modules.add(child2);
-
-			ModuleDTO child3 = new ModuleDTO();
-			child3.type = "interface";
-			child3.logicalPath = "tests.test3";
-			modules.add(child3);
-
-			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
-			dtos = modules.toArray(dtos);
-			setCurrentPath("tests");
-			this.drawModulesAndLines(dtos);
+		
+		ArrayList<String> parentNames = new ArrayList<String>();
+		for(BaseFigure figure : zoomedModuleFigures){
+			if (figure.isModule()) {
+				parentNames.add(figure.getName());
+			}
 		}
+		HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>(); 
+		for(String name : parentNames){
+			ArrayList<AbstractDTO> children = new ArrayList<AbstractDTO>();
+			if(name.equals("floating")){
+				ModuleDTO child1 = new ModuleDTO();
+				child1.type = "abstract";
+				child1.logicalPath = "floating.test1";
+				children.add(child1);
+
+				ModuleDTO child2 = new ModuleDTO();
+				child2.type = "class";
+				child2.logicalPath = "floating.test2";
+				children.add(child2);
+
+				ModuleDTO child3 = new ModuleDTO();
+				child3.type = "interface";
+				child3.logicalPath = "floating.test3";
+				children.add(child3);
+				
+				allChildren.put(name, children);
+			}else if(name.equals("neural_interface")){
+				ModuleDTO child1 = new ModuleDTO();
+				child1.type = "class";
+				child1.logicalPath = "neural_interface.wa";
+				children.add(child1);
+
+				allChildren.put(name, children);
+			}
+		}
+		drawModulesAndLines(allChildren);
 	}
 
 	@Override

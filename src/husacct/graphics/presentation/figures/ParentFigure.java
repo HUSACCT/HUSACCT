@@ -83,6 +83,14 @@ public class ParentFigure extends BaseFigure {
 		add(figure);
 	}
 	
+	public void changed(){
+		super.changed();
+		for (Figure child : children) {
+			if(child instanceof BaseFigure)
+				((BaseFigure)child).updateLocation(getBounds().getX(), getBounds().getY());
+		}
+	}
+	
 	@Override
 	public boolean isModule() {
 		return false;

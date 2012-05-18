@@ -13,10 +13,14 @@ import java.util.LinkedList;
 import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+import org.jhotdraw.draw.handle.DragHandle;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.MoveHandle;
+import org.jhotdraw.draw.handle.ResizeHandleKit;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
@@ -122,12 +126,20 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	@Override
 	public Collection<Handle> createHandles(int detailLevel) {
 		LinkedList<Handle> handles = new LinkedList<Handle>();
+		
 		if (isSizeable) {
 			handles.addAll(createSizeableHandles(detailLevel));
 		} else {
 			handles.addAll(createSelectionHandles(detailLevel));
 		}
-		return handles;
+		
+		//TODO Remove
+//		MoveHandle.addMoveHandles(this, handles);
+		for (Figure child : getChildren()) {
+			MoveHandle.addMoveHandles(child, handles);
+			handles.add(new DragHandle(child));
+		}
+		return handles;		
 	}
 
 	private Collection<Handle> createSizeableHandles(int detailLevel) {
@@ -161,6 +173,12 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public void setSizeable(boolean newValue) {
 		isSizeable = newValue;
+	}
+	
+	public void updateLocation(double x, double y) {
+		willChange();
+		setBounds(new Point2D.Double(x+getBounds().getWidth(), y+getBounds().getHeight()), new Point2D.Double(x+getBounds().getWidth(), y+getBounds().getHeight()));
+		changed();
 	}
 
 	@Override
