@@ -5,6 +5,8 @@ import husacct.define.presentation.moduletree.CombinedModuleTree;
 import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeSelectionListener{
 	private static final long serialVersionUID = 376037038601799822L;
@@ -119,7 +122,7 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 	
 	private JScrollPane createToModuleScrollPane() {
 		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
-		this.moduleToTree = new CombinedModuleTree(rootComponent);
+		this.moduleToTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
 		this.moduleToTree.addTreeSelectionListener(this);
 		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleToTree);
 		return moduleTreeScrollPane;
@@ -150,9 +153,21 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 	}
 
 	@Override
-	public void valueChanged(TreeSelectionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void valueChanged(TreeSelectionEvent event) {
+		TreePath path = event.getPath();
+		AbstractCombinedComponent selectedComponent = (AbstractCombinedComponent) path.getLastPathComponent();
+		handleCombinedComponent(selectedComponent);
 	}
-
+	
+	private void handleCombinedComponent(AbstractCombinedComponent selectedComponent) {
+		if(selectedComponent instanceof AbstractDefineComponent) {
+			AbstractDefineComponent defineComponent = (AbstractDefineComponent) selectedComponent;
+			long selectedModuleId = defineComponent.getModuleId();
+			// #TODO:: do something with selectedModuleId
+		} else if(selectedComponent instanceof AnalyzedModuleComponent) {
+			AnalyzedModuleComponent analyzedComponent = (AnalyzedModuleComponent) selectedComponent;
+			String uniqueName = analyzedComponent.getUniqueName();
+			// #TODO:: do something with uniqueName
+		}
+	}
 }

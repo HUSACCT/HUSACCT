@@ -28,6 +28,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			AbstractCombinedComponent component = (AbstractCombinedComponent) value;
 			super.getTreeCellRendererComponent(tree, component.getName(), selected, expanded, leaf, row, hasFocus);
 			this.determineIcon(component);
+			this.checkEnabled(component, tree);
 		}
 		return this;
 	}
@@ -68,5 +69,17 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-software_architecture.png"));
 		}
 		return icon;
+	}
+	
+	private void checkEnabled(AbstractCombinedComponent component, JTree tree) {
+		if(component instanceof AbstractDefineComponent && tree instanceof CombinedModuleTree) {
+			AbstractDefineComponent abstractDefineComponent = (AbstractDefineComponent) component;
+			CombinedModuleTree moduleTree = (CombinedModuleTree) tree;
+			if(abstractDefineComponent.getModuleId() == moduleTree.getSelectedModuleId() || abstractDefineComponent.getModuleId() == -1L) {
+				this.setEnabled(false);
+				return;
+			}
+		}
+		this.setEnabled(true);
 	}
 }
