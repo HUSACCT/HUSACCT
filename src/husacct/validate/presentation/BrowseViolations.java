@@ -13,6 +13,7 @@ import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -44,10 +46,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.samples.svg.gui.FillToolBar;
-
-import java.awt.GridLayout;
-import javax.swing.JRadioButton;
 
 @SuppressWarnings("serial")
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
@@ -188,7 +186,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		currentViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ValidateTranslator.getValue(violation.getRuletypeKey()), ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ValidateTranslator.getValue(violation.getRuletypeKey()), ValidateTranslator.getValue(violation.getViolationtypeKey()) + ", " + getDirectKey(violation.isIndirect()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		}
 	}
 
@@ -238,6 +236,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		internalAfterViolationsChanged();
 		filterViolations.loadFilterValues();
 
+	}
+	
+	public String getDirectKey(boolean b) {
+		if(b)
+			return "direct";
+		return "indirect";
 	}
 
 	public void internalAfterViolationsChanged(){

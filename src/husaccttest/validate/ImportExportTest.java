@@ -102,6 +102,7 @@ public class ImportExportTest {
 	}
 
 	public void checkSeveritiesTheSameAsSeveritiesElement(List<Severity> severities, Element severitiesElement) {
+		assertEquals(severitiesElement.getChildren().size(), severities.size());
 		for(int i = 0; i < severitiesElement.getChildren().size(); i++) {
 			Element severityElement = severitiesElement.getChildren().get(i);
 			Severity severity = severities.get(i);

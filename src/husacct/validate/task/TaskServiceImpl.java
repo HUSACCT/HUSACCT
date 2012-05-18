@@ -6,6 +6,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ViolationsNotFoundAtDateException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -62,7 +63,7 @@ public class TaskServiceImpl{
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
-			return filterController.filterViolations(true, violations);
+			return filterController.filterViolations(violations);
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
@@ -141,7 +142,7 @@ public class TaskServiceImpl{
 				return violationHistory.getViolations();
 			}
 		}
-		throw new NullPointerException("no violations found at given date");
+		throw new ViolationsNotFoundAtDateException(date);
 	}
 
 	public Calendar[] getViolationHistoryDates() {

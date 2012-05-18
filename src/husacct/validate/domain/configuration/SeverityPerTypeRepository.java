@@ -141,7 +141,7 @@ class SeverityPerTypeRepository implements Observer {
 						keySeverity.setValue(isValidSeverity(keySeverity.getValue()));
 					}
 					else{
-						throw new KeyNotFoundException(keySeverity.getKey());
+			//			throw new KeyNotFoundException(keySeverity.getKey());
 					}
 				}
 			}
