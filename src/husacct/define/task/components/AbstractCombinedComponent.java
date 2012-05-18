@@ -1,14 +1,16 @@
 package husacct.define.task.components;
 
+import java.awt.Component;
 import java.util.ArrayList;
 
-public abstract class AbstractDefineComponent extends AbstractCombinedComponent {
-
-	private static final long serialVersionUID = -8598001531867139865L;
-	protected long moduleId;
+public abstract class AbstractCombinedComponent extends Component {
 	
-	public AbstractDefineComponent() {
+	private static final long serialVersionUID = 1L;
+	protected ArrayList<AbstractCombinedComponent> children;
+
+	public AbstractCombinedComponent() {
 		super();
+		this.children = new ArrayList<AbstractCombinedComponent>();
 	}
 	
 	public abstract void addChild(AbstractCombinedComponent child);
@@ -16,6 +18,4 @@ public abstract class AbstractDefineComponent extends AbstractCombinedComponent 
 	public abstract void setChildren(ArrayList<AbstractCombinedComponent> children);
 	public abstract ArrayList<AbstractCombinedComponent> getChildren();
 	public abstract void removeChild(AbstractCombinedComponent child);
-	public abstract void setModuleId(long moduleId);
-	public abstract long getModuleId();
 }

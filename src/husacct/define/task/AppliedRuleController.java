@@ -1,6 +1,7 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -15,6 +16,11 @@ import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.utils.DataHelper;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.DefineComponentFactory;
+import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -287,5 +293,39 @@ public class AppliedRuleController extends PopUpController {
 
 	public String getModuleName(Long moduleIdFrom) {
 		return this.moduleService.getModuleNameById(moduleIdFrom);
+	}
+	
+	public AbstractCombinedComponent getModuleTreeComponents() {
+		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
+		ArrayList<Module> modules = this.moduleService.getSortedModules();
+		for (Module module : modules) {
+			this.addDefineModuleChildComponents(rootComponent, module);
+		}
+		for(AnalysedModuleDTO moduleDTO : this.getAnalyzedModules()) {
+			this.addAnalyzedModuleChildComponents(rootComponent, moduleDTO);
+		}
+		return rootComponent;
+	}
+	
+	private void addDefineModuleChildComponents(AbstractCombinedComponent parentComponent, Module module) {
+		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
+		for(Module subModule : module.getSubModules()) {
+			this.addDefineModuleChildComponents(childComponent, subModule);
+		}
+		parentComponent.addChild(childComponent);
+	}
+	
+	private AnalysedModuleDTO[] getAnalyzedModules() {
+		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
+		return modules;
+	}
+	
+	private void addAnalyzedModuleChildComponents(AbstractCombinedComponent parentComponent, AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		for(AnalysedModuleDTO subModule : children) {
+			this.addAnalyzedModuleChildComponents(childComponent, subModule);
+		}
+		parentComponent.addChild(childComponent);
 	}
 }
