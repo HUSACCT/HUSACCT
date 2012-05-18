@@ -5,8 +5,11 @@ import husacct.define.presentation.moduletree.CombinedModuleTree;
 import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeSelectionListener{
 	private static final long serialVersionUID = 376037038601799822L;
@@ -42,10 +46,21 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 	@Override
 	public void initDetails() {
 		this.addFromModuleComponents(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.addToModuleComponents(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.addToModuleComponents(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(4, 0, 0, 0), 0, 0));
 		this.addEnabledComponents(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.addDescriptionComponents(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.setSize(400, 350);
+		this.addDescriptionComponents(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 4, 0), 0, 0));
+		this.setSize(400, 335);
+	}
+	
+	@Override
+	protected GridBagLayout createRuleDetailsLayout() {
+		GridBagLayout ruleDetailsLayout = new GridBagLayout();
+		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
+		// max total height = 290
+		ruleDetailsLayout.rowHeights = new int[] { 30, 150, 30, 80 };
+		ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.0 };
+		ruleDetailsLayout.columnWidths = new int[] { 130, 660  };
+		return ruleDetailsLayout;
 	}
 
 	@Override
@@ -101,18 +116,15 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 		this.moduleToLabel = new JLabel("To Module");
 		this.add(this.moduleToLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		this.add(this.createToModuleScrollPane(), gridBagConstraints);
 	}
 	
 	private JScrollPane createToModuleScrollPane() {
-		JScrollPane moduleTreeScrollPane = new JScrollPane();
-		moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(200, 150));
-		
 		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
-		this.moduleToTree = new CombinedModuleTree(rootComponent);
-		moduleTreeScrollPane.setViewportView(this.moduleToTree);
+		this.moduleToTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
 		this.moduleToTree.addTreeSelectionListener(this);
+		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleToTree);
 		return moduleTreeScrollPane;
 	}
 	
@@ -129,21 +141,33 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 		this.descriptionLabel = new JLabel("Description");
 		this.add(this.descriptionLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		this.add(this.createDescriptionScrollPane(), gridBagConstraints);
 	}
 		
 	private JScrollPane createDescriptionScrollPane() {
-		this.descriptionTextArea = new JTextArea(5, 50);
+		this.descriptionTextArea = new JTextArea();
 		this.descriptionTextArea.setText("");
 		JScrollPane descriptionScrollPane = new JScrollPane(this.descriptionTextArea);
 		return descriptionScrollPane;
 	}
 
 	@Override
-	public void valueChanged(TreeSelectionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void valueChanged(TreeSelectionEvent event) {
+		TreePath path = event.getPath();
+		AbstractCombinedComponent selectedComponent = (AbstractCombinedComponent) path.getLastPathComponent();
+		handleCombinedComponent(selectedComponent);
 	}
-
+	
+	private void handleCombinedComponent(AbstractCombinedComponent selectedComponent) {
+		if(selectedComponent instanceof AbstractDefineComponent) {
+			AbstractDefineComponent defineComponent = (AbstractDefineComponent) selectedComponent;
+			long selectedModuleId = defineComponent.getModuleId();
+			// #TODO:: do something with selectedModuleId
+		} else if(selectedComponent instanceof AnalyzedModuleComponent) {
+			AnalyzedModuleComponent analyzedComponent = (AnalyzedModuleComponent) selectedComponent;
+			String uniqueName = analyzedComponent.getUniqueName();
+			// #TODO:: do something with uniqueName
+		}
+	}
 }
