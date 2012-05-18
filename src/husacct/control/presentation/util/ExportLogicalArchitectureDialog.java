@@ -79,13 +79,13 @@ public class ExportLogicalArchitectureDialog extends JDialog {
 	}
 
 	protected void showFileDialog() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(controlService.getTranslatedString("ExportButton"));
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setApproveButtonText(controlService.getTranslatedString("ExportButton"));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showOpenDialog(this);
+		fileChooser.setFileFilter(filter);
+		int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("ExportButton"));
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(chooser.getSelectedFile());	            
+			setFile(fileChooser.getSelectedFile());	            
 		}
 	}
 

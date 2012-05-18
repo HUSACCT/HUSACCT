@@ -79,13 +79,13 @@ public class ImportLogicalArchitectureDialog extends JDialog {
 	}
 
 	protected void showFileDialog() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(controlService.getTranslatedString("ImportButton"));
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setApproveButtonText(controlService.getTranslatedString("ImportButton"));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showOpenDialog(this);
+		fileChooser.setFileFilter(filter);
+		int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("ImportButton"));
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(chooser.getSelectedFile());	            
+			setFile(fileChooser.getSelectedFile());	            
 		}
 	}
 
