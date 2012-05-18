@@ -1,6 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -24,6 +25,8 @@ public class ViewController {
 	private JInternalFrame applicationTreeInternalFrame;
 	
 	private Dimension defaultDimension = new Dimension(800, 600);
+	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public ViewController(MainController maincontroller){
 		this.mainController = maincontroller;
@@ -86,21 +89,21 @@ public class ViewController {
 
 	public void setDefineGui(){
 		defineInternalFrame = serviceProvider.getDefineService().getDefinedGUI();
-		setupFrame(defineInternalFrame, "Define Architecture");	
+		setupFrame(defineInternalFrame, controlService.getTranslatedString("DefineArchitecture"));	
 		defineInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(defineInternalFrame);	
 	}
 	
 	public void setViolationsGui(){
 		violationsInternalFrame = serviceProvider.getValidateService().getBrowseViolationsGUI();
-		setupFrame(violationsInternalFrame, "Violations");
+		setupFrame(violationsInternalFrame, controlService.getTranslatedString("Violations"));
 		violationsInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(violationsInternalFrame);
 	}
 	
 	public void setConfigurationGui() {
 		configurationInternalFrame = serviceProvider.getValidateService().getConfigurationGUI();
-		setupFrame(configurationInternalFrame, "Configuration");
+		setupFrame(configurationInternalFrame, controlService.getTranslatedString("Configuration"));
 		configurationInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(configurationInternalFrame);
 	}
@@ -108,7 +111,7 @@ public class ViewController {
 	public void setDefinedArchitectureGui(){
 		serviceProvider.getGraphicsService().drawDefinedArchitecture();
 		definedArchitectureInternalFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
-		setupFrame(definedArchitectureInternalFrame, "Defined architecture");
+		setupFrame(definedArchitectureInternalFrame, controlService.getTranslatedString("DefineArchitecture"));
 		definedArchitectureInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(definedArchitectureInternalFrame);
 	}
@@ -116,14 +119,14 @@ public class ViewController {
 	public void setAnalysedArchitectureGui(){
 		serviceProvider.getGraphicsService().drawAnalysedArchitecture();
 		analysedArchitectureInternalFrame = serviceProvider.getGraphicsService().getAnalysedArchitectureGUI();
-		setupFrame(analysedArchitectureInternalFrame, "Analysed architecture");
+		setupFrame(analysedArchitectureInternalFrame, controlService.getTranslatedString("AnalysedArchitecture"));
 		analysedArchitectureInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(analysedArchitectureInternalFrame);
 	}
 	
 	public void setApplicationTreeGui(){
 		applicationTreeInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
-		setupFrame(applicationTreeInternalFrame, "Analysed Application Overview");
+		setupFrame(applicationTreeInternalFrame, controlService.getTranslatedString("AnalysedApplicationOverview"));
 		applicationTreeInternalFrame.setSize(defaultDimension);
 		mainController.getMainGui().getContentPane().add(applicationTreeInternalFrame);
 	}
