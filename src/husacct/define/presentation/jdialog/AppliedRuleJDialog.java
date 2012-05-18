@@ -69,7 +69,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			
 			this.setResizable(false);
 			this.pack();
-			this.setSize(815, 435);
+			this.setSize(800, 500);
 			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
@@ -91,21 +91,20 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		this.ruleDetailsJPanel.initGui();
+		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		
-		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		
-		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(5, 0, 0, 0), 0, 0));
+		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 0, 0, 0), 0, 0));
 		
 		return mainPanel;
 	}
 	
 	private GridBagLayout createMainPanelLayout() {
 		GridBagLayout mainPanelLayout = new GridBagLayout();
-		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
-		mainPanelLayout.rowHeights = new int[] { 30, 23, 6, 0 };
-		mainPanelLayout.columnWeights = new double[] { 0.0, 0.1 };
-		mainPanelLayout.columnWidths = new int[] { 132, 7 };
+		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0 };
+		mainPanelLayout.rowHeights = new int[] { 30, 300, 90 };
+		mainPanelLayout.columnWeights = new double[] { 0.0, 0.0 };
+		mainPanelLayout.columnWidths = new int[] { 130, 660 };
 		return mainPanelLayout;
 	}
 	
@@ -167,10 +166,10 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	
 	private GridBagLayout createExceptionsButtonPanelLayout() {
 		GridBagLayout exceptionsButtonPanelLayout = new GridBagLayout();
-		exceptionsButtonPanelLayout.rowWeights = new double[] { 0.0, 0.1 };
-		exceptionsButtonPanelLayout.rowHeights = new int[] { 15, 7 };
-		exceptionsButtonPanelLayout.columnWeights = new double[] { 0.1 };
-		exceptionsButtonPanelLayout.columnWidths = new int[] { 7 };
+		exceptionsButtonPanelLayout.rowWeights = new double[] { 0.0 };
+		exceptionsButtonPanelLayout.rowHeights = new int[] { 30 };
+		exceptionsButtonPanelLayout.columnWeights = new double[] { 0.0, 0.0};
+		exceptionsButtonPanelLayout.columnWidths = new int[] { 50, 50 };
 		return exceptionsButtonPanelLayout;
 	}
 	

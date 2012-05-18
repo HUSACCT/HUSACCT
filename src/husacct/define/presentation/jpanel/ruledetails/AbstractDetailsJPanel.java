@@ -53,8 +53,6 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 
 	protected GridBagLayout createRuleDetailsLayout() {
 		GridBagLayout ruleDetailsLayout = new GridBagLayout();
-		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
-		ruleDetailsLayout.rowHeights = new int[] { 23, 23, 29, 7 };
 		ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.1 };
 		ruleDetailsLayout.columnWidths = new int[] { 132, 7 };
 		return ruleDetailsLayout;
