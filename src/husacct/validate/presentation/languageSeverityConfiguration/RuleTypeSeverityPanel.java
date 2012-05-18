@@ -15,7 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 
-public class RuleTypeSeverity extends javax.swing.JPanel {
+public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 
 	private ComboBoxTableModel ruletypeModel;
 	
@@ -30,7 +30,7 @@ public class RuleTypeSeverity extends javax.swing.JPanel {
 	private JScrollPane CategoryScrollpane, RuletypeScrollpane;
 	private JTable RuletypeTable;
 	
-	public RuleTypeSeverity(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, HashMap<String, List<RuleType>> ruletypes, String language) {
+	public RuleTypeSeverityPanel(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, HashMap<String, List<RuleType>> ruletypes, String language) {
 		rtsCategoryModel = new DefaultListModel();
 		
 		this.taskServiceImpl = taskServiceImpl;
@@ -41,8 +41,6 @@ public class RuleTypeSeverity extends javax.swing.JPanel {
 		initComponents();
 		setText();		
 	}
-
-	@SuppressWarnings("unchecked")
 
     private void initComponents() {
 		
@@ -114,27 +112,28 @@ public class RuleTypeSeverity extends javax.swing.JPanel {
 		ruletypeSeverityLayout.setHorizontalGroup(
 			ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
-					.addComponent(CategoryScrollpane, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+					.addComponent(CategoryScrollpane)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(RuletypeScrollpane, GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+					.addComponent(RuletypeScrollpane)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addGroup(ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-						.addGroup(ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addComponent(Restore, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-							.addComponent(RestoreAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-						.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addContainerGap())
+						.addComponent(Restore)
+						.addComponent(RestoreAll)
+						.addComponent(Apply)
+					)
+					.addContainerGap()
+				)
 		);
 		ruletypeSeverityLayout.setVerticalGroup(
 			ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addComponent(CategoryScrollpane)
-				.addComponent(RuletypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+				.addComponent(RuletypeScrollpane)
 				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(Restore, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addComponent(Restore)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(RestoreAll, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+					.addComponent(RestoreAll)
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addComponent(Apply)
 					.addContainerGap())
 		);

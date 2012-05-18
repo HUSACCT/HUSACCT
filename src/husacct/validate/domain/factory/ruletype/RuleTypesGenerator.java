@@ -42,7 +42,6 @@ class RuleTypesGenerator {
 		return keyClasses;
 	}
 
-	@SuppressWarnings("unchecked")
 	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		List<Class<?>> ruleClasses = getRuleClasses(EnumSet.allOf(RuleTypes.class));
@@ -82,7 +81,7 @@ class RuleTypesGenerator {
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 		for(String packageName : packageNames){
 			for(Enum<RuleTypes> ruleType : ruleTypes){
-				String classPath = "";
+				String classPath;
 				try {	
 					classPath = packageName + "." + ruleType.toString() + "Rule";					
 					Class<?> myClass = myClassLoader.loadClass(classPath);
@@ -131,11 +130,11 @@ class RuleTypesGenerator {
 	}	
 
 	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity(){
-		HashMap<String, DefaultSeverities> defaultRulesPerRuleType = new HashMap<String, DefaultSeverities>();
+		HashMap<String, DefaultSeverities> defaultRulesPerRuleTypeLocal = new HashMap<String, DefaultSeverities>();
 		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)){
-			defaultRulesPerRuleType.put(ruletype.toString(), ruletype.getDefaultSeverity());
+			defaultRulesPerRuleTypeLocal.put(ruletype.toString(), ruletype.getDefaultSeverity());
 		}
 
-		return defaultRulesPerRuleType;
+		return defaultRulesPerRuleTypeLocal;
 	}	
 }

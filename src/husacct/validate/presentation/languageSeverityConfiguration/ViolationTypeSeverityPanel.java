@@ -17,9 +17,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 
-public class ViolationTypeSeverity extends javax.swing.JPanel {
+public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
-	private static Logger logger = Logger.getLogger(ViolationTypeSeverity.class);
+	private static Logger logger = Logger.getLogger(ViolationTypeSeverityPanel.class);
 	
 	private ComboBoxTableModel violationtypeModel;
 	private TaskServiceImpl taskServiceImpl;
@@ -34,7 +34,7 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 	private final Map<String, List<ViolationType>> violationTypes;
 	private final LanguageSeverityConfiguration languageSeverityConfiguration;
 	
-	public ViolationTypeSeverity(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, Map<String, List<ViolationType>> violationtypes, String language) {
+	public ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, Map<String, List<ViolationType>> violationtypes, String language) {
 		
 		CategoryModel = new DefaultListModel();
 		
@@ -46,8 +46,6 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 		initComponents();
 		setText();
 	}
-
-	@SuppressWarnings("unchecked")
     
     private void initComponents() {
 		
@@ -117,27 +115,28 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 		violationtypeSeverityLayout.setHorizontalGroup(
 			violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(violationtypeSeverityLayout.createSequentialGroup()
-					.addComponent(CategoryScrollpane, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+					.addComponent(CategoryScrollpane)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(ViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+					.addComponent(ViolationtypeScrollpane)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addGroup(violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-						.addGroup(violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addComponent(Restore, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-							.addComponent(RestoreAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-						.addComponent(Apply, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+						.addComponent(Restore)
+						.addComponent(RestoreAll)
+						.addComponent(Apply)
+					)
+					.addContainerGap()
+				)
 		);
 		violationtypeSeverityLayout.setVerticalGroup(
 			violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addComponent(CategoryScrollpane)
-				.addComponent(ViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+				.addComponent(ViolationtypeScrollpane)
 				.addGroup(violationtypeSeverityLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(Restore, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addComponent(Restore)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(RestoreAll, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+					.addComponent(RestoreAll)
+					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addComponent(Apply)
 					.addContainerGap())
 		);

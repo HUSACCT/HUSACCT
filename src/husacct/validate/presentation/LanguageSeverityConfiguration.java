@@ -5,8 +5,8 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.presentation.languageSeverityConfiguration.ActiveViolationPanel;
-import husacct.validate.presentation.languageSeverityConfiguration.RuleTypeSeverity;
-import husacct.validate.presentation.languageSeverityConfiguration.ViolationTypeSeverity;
+import husacct.validate.presentation.languageSeverityConfiguration.RuleTypeSeverityPanel;
+import husacct.validate.presentation.languageSeverityConfiguration.ViolationTypeSeverityPanel;
 import husacct.validate.task.TaskServiceImpl;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +26,8 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private final TaskServiceImpl taskServiceImpl;
 
 	private ActiveViolationPanel activeViolationtype;
-	private RuleTypeSeverity ruletypeSeverity;
-	private ViolationTypeSeverity violationtypeSeverity;
+	private RuleTypeSeverityPanel ruletypeSeverity;
+	private ViolationTypeSeverityPanel violationtypeSeverity;
 	private JTabbedPane tabbedPane;
 
 	public LanguageSeverityConfiguration(String language, Map<String, List<ViolationType>> violationTypes,
@@ -45,8 +45,8 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private void initComponents() {		
 		tabbedPane = new JTabbedPane();
 		
-		ruletypeSeverity = new RuleTypeSeverity(taskServiceImpl, this, ruletypes, language);
-		violationtypeSeverity = new ViolationTypeSeverity(taskServiceImpl, this, violationTypes, language);
+		ruletypeSeverity = new RuleTypeSeverityPanel(taskServiceImpl, this, ruletypes, language);
+		violationtypeSeverity = new ViolationTypeSeverityPanel(taskServiceImpl, this, violationTypes, language);
 		activeViolationtype = new ActiveViolationPanel(taskServiceImpl, ruletypes, language);
 		
 		tabbedPane.addTab(ValidateTranslator.getValue("SetRuletypeSeverity"), ruletypeSeverity);

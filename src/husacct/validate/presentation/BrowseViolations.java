@@ -47,8 +47,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-@SuppressWarnings("serial")
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
+	private static final long serialVersionUID = 4912981274532255799L;
 	private JTable chooseViolationHistoryTable;
 	private DefaultTableModel chooseViolationHistoryTableModel;
 	private final TaskServiceImpl taskServiceImpl;
@@ -110,6 +110,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				ValidateTranslator.getValue("Severity")};
 
 		violationsTableModel = new DefaultTableModel(columnNames, 0) {
+			private static final long serialVersionUID = 7993526243751581611L;
+
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				return String.class;
@@ -150,6 +152,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				ValidateTranslator.getValue("Date"),
 				ValidateTranslator.getValue("Description")};
 		chooseViolationHistoryTableModel = new DefaultTableModel(columnNames, 0) {
+			private static final long serialVersionUID = 5804122455086043586L;
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				return String.class;
@@ -271,6 +274,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		buttonDeleteViolationHistoryPoint = new JButton("Delete TODO locale");
 		buttonDeleteViolationHistoryPoint.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				removeViolationHistory(arg0);
 			}
@@ -278,6 +282,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		buttonLatestViolations = new JButton("Current Violations");
 		buttonLatestViolations.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				currentViolationsActionPerformed(e);
 			}
@@ -285,6 +290,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		buttonSaveInHistory = new JButton("Save in history");
 		buttonSaveInHistory.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveInHistoryActionPerformed(e);
 			}
@@ -293,6 +299,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		
 		JButton btnValidate = new JButton("Validate");
 		btnValidate.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ServiceProvider.getInstance().getValidateService().checkConformance();
 			}

@@ -1,11 +1,9 @@
 package husacct.validate.presentation;
 
 import husacct.validate.abstraction.language.ValidateTranslator;
-import husacct.validate.domain.factory.message.Messagebuilder;
-import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -13,11 +11,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.Map.Entry;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.LayoutStyle;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.*;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -171,7 +182,7 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 			public void actionPerformed(ActionEvent arg0) {
 				if(violationModel.getRowCount() > 0){
 					String input = JOptionPane.showInputDialog(ValidateTranslator.getValue("SaveInHistoryDialog"));
-					if(input != null || input.equals("")) {
+					if(input != null && !input.equals("")) {
 						taskServiceImpl.saveInHistory(input);
 						buttonSaveInHistory.setEnabled(false);
 					}
@@ -283,7 +294,7 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 				}
 
 				if(violationTable.getSelectedRow() > -1){
-					int row = violationTable.convertRowIndexToModel(violationTable.getSelectedRow());
+			//		int row = violationTable.convertRowIndexToModel(violationTable.getSelectedRow());
 					//Violation violation = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null).get(row);
 
 					//lineNumberValueLabel.setText("" + violation.getLinenumber());
