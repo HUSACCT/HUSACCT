@@ -1,5 +1,6 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
@@ -85,7 +86,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	private void initViolationTypeJDialog() {
 		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
 		violationTypesJDialog.initGUI();
-		violationTypesJDialog.setLocationRelativeTo(this.getRootPane());
+		DialogUtils.alignCenter(violationTypesJDialog);
 		violationTypesJDialog.setVisible(true);
 	}
 

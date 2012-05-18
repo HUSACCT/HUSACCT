@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
@@ -111,7 +112,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
-				softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
+				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);

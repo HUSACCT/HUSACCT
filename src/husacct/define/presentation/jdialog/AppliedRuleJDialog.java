@@ -1,5 +1,6 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.tables.JTableException;
@@ -263,7 +264,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			this.appliedRuleController.setModuleToId(selectedModuleToId);
 		
 		ExceptionRuleJDialog exceptionFrame = new ExceptionRuleJDialog(this.appliedRuleController, this);
-		exceptionFrame.setLocationRelativeTo(exceptionFrame.getRootPane());
+		DialogUtils.alignCenter(exceptionFrame);
 		exceptionFrame.setVisible(true);
 	}
 	

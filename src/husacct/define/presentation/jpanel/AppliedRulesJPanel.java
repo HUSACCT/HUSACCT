@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -115,7 +116,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
-			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
@@ -127,7 +128,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if (selectedAppliedRuleId != -1){
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, selectedAppliedRuleId);
-			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);

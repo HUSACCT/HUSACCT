@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.moduletree.ModuleTree;
@@ -151,7 +152,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	
 	private void newModule() {
 		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
-		addModuleFrame.setLocationRelativeTo(addModuleFrame.getRootPane());
+		DialogUtils.alignCenter(addModuleFrame);
 		addModuleFrame.initUI();
 	}
 	
