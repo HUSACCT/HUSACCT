@@ -71,7 +71,7 @@ public class ImportLogicalArchitectureDialog extends JDialog {
 		});
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				mainController.getImportExportController().importLogicalArchitecture(selectedFile);
+				mainController.getImportController().importLogicalArchitecture(selectedFile);
 				dispose();
 			}
 		});

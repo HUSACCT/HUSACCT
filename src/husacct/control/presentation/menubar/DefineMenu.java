@@ -57,7 +57,7 @@ public class DefineMenu extends JMenu{
 		this.add(importLogicalArchitectureItem);
 		importLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportExportController().showImportLogicalArchitectureGui();
+				mainController.getImportController().showImportLogicalArchitectureGui();
 			}
 		});
 		
@@ -66,7 +66,7 @@ public class DefineMenu extends JMenu{
 		this.add(exportLogicalArchitectureItem);
 		exportLogicalArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportExportController().showExportLogicalArchitectureGui();
+				mainController.getExportController().showExportLogicalArchitectureGui();
 			}
 		});
 		

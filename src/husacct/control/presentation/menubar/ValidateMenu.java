@@ -55,7 +55,7 @@ public class ValidateMenu extends JMenu{
 		
 		exportViolationReportItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getImportExportController().showExportViolationsReportGui();
+				mainController.getExportController().showExportViolationsReportGui();
 			}
 		});
 
