@@ -25,7 +25,7 @@ public class ViewController {
 	private JInternalFrame analysedArchitectureInternalFrame;
 	private JInternalFrame applicationOverviewInternalFrame;
 	
-	private Dimension defaultDimension = new Dimension(800, 600);
+	public static Dimension defaultDimension = new Dimension(800, 600);
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	

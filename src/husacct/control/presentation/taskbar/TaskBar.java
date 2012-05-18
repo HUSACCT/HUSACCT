@@ -48,6 +48,8 @@ public class TaskBar extends JPanel{
 			@Override
 			public void internalFrameClosed(InternalFrameEvent e) {
 				remove(toggleButton);
+				validate();
+				repaint();
 			}
 			@Override
 			public void internalFrameOpened(InternalFrameEvent e) {
@@ -68,6 +70,8 @@ public class TaskBar extends JPanel{
 				activateFrame(internalFrame, toggleButton);
 			}
 		});
+		
+		toggleButton.addMouseListener(new ContextClickListener(internalFrame));
 		
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
