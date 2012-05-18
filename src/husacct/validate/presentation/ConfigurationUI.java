@@ -7,7 +7,6 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private List<Severity> severities;
 
 	private JButton add, remove, down, up, cancel, applySeverity, restore;
-	private JTabbedPane jTabbedPane1;
+	private JTabbedPane tabPanel;
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
@@ -43,7 +42,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void initComponents() {
 
-		jTabbedPane1 = new JTabbedPane();
+		tabPanel = new JTabbedPane();
 		severityNamePanel = new JPanel();
 		severityNameScrollPane = new JScrollPane();
 		severityNameTable = new JTable();
@@ -113,12 +112,43 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		javax.swing.GroupLayout severityNamePanelLayout = new javax.swing.GroupLayout(severityNamePanel);
+		GroupLayout severityNamePanelLayout = new GroupLayout(severityNamePanel);
 		severityNamePanel.setLayout(severityNamePanelLayout);
-		severityNamePanelLayout.setHorizontalGroup(
-				severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(severityNamePanelLayout.createSequentialGroup().addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(remove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore).addComponent(applySeverity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
-		severityNamePanelLayout.setVerticalGroup(
-				severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE).addGroup(severityNamePanelLayout.createSequentialGroup().addContainerGap().addComponent(add).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(remove).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(up).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(down).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(applySeverity).addContainerGap()));
+		
+		severityNamePanelLayout.setHorizontalGroup(severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addGroup(severityNamePanelLayout.createSequentialGroup()
+				.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				.addGroup(severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+					.addComponent(remove)
+					.addComponent(add)
+					.addComponent(up)
+					.addComponent(restore)
+					.addComponent(applySeverity)
+					.addComponent(down)
+				)
+				.addContainerGap()
+			)
+		);
+		
+		severityNamePanelLayout.setVerticalGroup(severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+			.addGroup(severityNamePanelLayout.createSequentialGroup()
+				.addContainerGap()
+				.addComponent(add)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addComponent(remove)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addComponent(up)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addComponent(down)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addComponent(restore)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addComponent(applySeverity)
+				.addContainerGap()
+			)
+		);
 
 		cancel.addActionListener(new ActionListener() {
 
@@ -128,15 +158,25 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(cancel).addContainerGap()));
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(jTabbedPane1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(cancel).addGap(16, 16, 16)));
+		GroupLayout baseLayout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(baseLayout);
+		
+		baseLayout.setHorizontalGroup(
+			baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addComponent(tabPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+			.addGroup(baseLayout.createSequentialGroup().addContainerGap().addComponent(cancel).addContainerGap())
+		);
+		baseLayout.setVerticalGroup(
+			baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addGroup(baseLayout.createSequentialGroup()
+				.addComponent(tabPanel)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				.addComponent(cancel)
+				.addGap(16, 16, 16)
+			)
+		);
 	}
 
-	//Button Action
 	private void downActionPerformed() {
 		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() - 1) {
 			severityModel.moveRow(severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow() + 1);
@@ -189,11 +229,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		}
 		
-//		taskServiceImpl.applySeverities(list);
 		taskServiceImpl.addSeverities(severities);
 		loadSeverity();
-//		removeLanguageTabs();
-//		loadLanguageTabs();
 	}
 
 	private void cancelActionPerformed() {
@@ -205,7 +242,6 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		loadSeverity();
 	}
 	
-	//User Functions
 	public void loadGUIText(){
 		setTitle(ValidateTranslator.getValue("Configuration"));
 		add.setText(ValidateTranslator.getValue("Add"));
@@ -214,7 +250,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		down.setText(ValidateTranslator.getValue("Down"));
 		applySeverity.setText(ValidateTranslator.getValue("Apply"));
 		restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
-		jTabbedPane1.addTab(ValidateTranslator.getValue("SeverityConfiguration"), severityNamePanel);
+		tabPanel.addTab(ValidateTranslator.getValue("SeverityConfiguration"), severityNamePanel);
 		cancel.setText(ValidateTranslator.getValue("Cancel"));
 
 		loadModels();
@@ -244,7 +280,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 	
 	private void setLanguageTabsLanguage(){
-		if(jTabbedPane1.getTabCount() == 1){
+		if(tabPanel.getTabCount() == 1){
 			loadLanguageTabs();
 			return;
 		}
@@ -256,12 +292,12 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private void loadLanguageTabs() {
 		for (String language : taskServiceImpl.getAvailableLanguages()) {
 			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl, severities);
-			jTabbedPane1.addTab(language, lcp);
+			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);
 		}
-		if (taskServiceImpl.getAvailableLanguages().length == 0) {
+		if (tabPanel.getTabCount() == 1) {
 			logger.error("No programming language set");
-			jTabbedPane1.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
+			tabPanel.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 }

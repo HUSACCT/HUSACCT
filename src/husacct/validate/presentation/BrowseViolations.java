@@ -10,46 +10,23 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
+import java.util.*;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
 import org.apache.log4j.Logger;
-import org.jhotdraw.samples.svg.gui.FillToolBar;
 
-import java.awt.GridLayout;
-import javax.swing.JRadioButton;
-
-@SuppressWarnings("serial")
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
 	private JTable chooseViolationHistoryTable;
 	private DefaultTableModel chooseViolationHistoryTableModel;
@@ -267,6 +244,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		buttonDeleteViolationHistoryPoint = new JButton("Delete TODO locale");
 		buttonDeleteViolationHistoryPoint.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				removeViolationHistory(arg0);
 			}
@@ -274,6 +252,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		buttonLatestViolations = new JButton("Current Violations");
 		buttonLatestViolations.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				currentViolationsActionPerformed(e);
 			}
@@ -281,6 +260,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		buttonSaveInHistory = new JButton("Save in history");
 		buttonSaveInHistory.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveInHistoryActionPerformed(e);
 			}
@@ -289,6 +269,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		
 		JButton btnValidate = new JButton("Validate");
 		btnValidate.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ServiceProvider.getInstance().getValidateService().checkConformance();
 			}

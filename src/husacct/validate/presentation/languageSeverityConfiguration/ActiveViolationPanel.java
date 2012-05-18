@@ -43,7 +43,6 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		setText();
 	}
 
-	@SuppressWarnings("unchecked")
     private void initComponents() {
 
         CategoryScrollpane = new JScrollPane();
@@ -114,32 +113,32 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		activeViolationtypeLayout.setHorizontalGroup(
 			activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(activeViolationtypeLayout.createSequentialGroup()
-					.addComponent(CategoryScrollpane, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(ViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-					.addComponent(RuletypeScrollpane, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+					.addComponent(CategoryScrollpane)
+//					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addComponent(ViolationtypeScrollpane)
+//					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+					.addComponent(RuletypeScrollpane)
 					.addGap(6)
 					.addGroup(activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-						.addComponent(SelectAll, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-						.addGroup(activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addComponent(DeselectAll, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-							.addComponent(Apply, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
+						.addComponent(SelectAll)
+						.addComponent(DeselectAll)
+						.addComponent(Apply)
+					)
+				)
 		);
 		activeViolationtypeLayout.setVerticalGroup(
 			activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-				.addComponent(RuletypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+				.addComponent(RuletypeScrollpane)
 				.addGroup(GroupLayout.Alignment.LEADING, activeViolationtypeLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(SelectAll)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addComponent(DeselectAll)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
+//					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addComponent(Apply)
 					.addContainerGap())
-				.addComponent(CategoryScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-				.addComponent(ViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+				.addComponent(CategoryScrollpane)
+				.addComponent(ViolationtypeScrollpane)
 		);
 		
 		this.setLayout(activeViolationtypeLayout);
