@@ -46,6 +46,7 @@ public class ExportLogicalArchitectureDialog extends JDialog {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new FlowLayout());
 		this.setSize(new Dimension(350, 100));
+		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
 

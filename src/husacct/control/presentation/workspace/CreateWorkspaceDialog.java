@@ -97,6 +97,7 @@ public class CreateWorkspaceDialog extends JDialog{
 				}
 				createWorkspace();
 				dispose();
+				mainController.getViewController().showDefineGui();
 			}
 		});
 
