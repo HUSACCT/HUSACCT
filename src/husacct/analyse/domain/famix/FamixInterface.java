@@ -19,5 +19,4 @@ public class FamixInterface extends FamixEntity {
 		s += "\n\n";
 		return s;
 	}
-	
 }
