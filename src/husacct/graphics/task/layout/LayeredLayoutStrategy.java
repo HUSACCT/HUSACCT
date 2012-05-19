@@ -3,6 +3,7 @@ package husacct.graphics.task.layout;
 import husacct.common.ListUtils;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ClassFigure;
 import husacct.graphics.presentation.figures.ModuleFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
@@ -24,7 +25,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final F1<Figure, Boolean> connectorLambda = new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }};
 	
 	private Drawing drawing;
-	private NodeList nodes = new NodeList();
+	private SortedNodeList nodes = new SortedNodeList();
 	List<Figure> connectors = null;
 
 	public LayeredLayoutStrategy(Drawing theDrawing) {
@@ -35,6 +36,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	public void doLayout(int screenWidth, int screenHeight) {
 		initLayout();
 		calculateLayout();
+		//nodes.sort();
+		ListUtils.apply(nodes, new S1<Node>(new Node(new ClassFigure("dummy"))){{ System.out.println(String.format("%s : level %d", ((BaseFigure)a.getFigure()).getName(), a.getLevel()));}});
 		applyLayout();
 	}
 	
@@ -66,8 +69,12 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			}
 		}
 		
+		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = 
-				new S1<Figure>(new ModuleFigure("", ""), nodes){{if (!isConnector(a) && !nodes.contains(a)) getNode(a);}};
+				new S1<Figure>(new ModuleFigure("", ""), compareList) {{
+					if (!isConnector(a) && !compareList.contains(a)) 
+						getNode(a);
+				}};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
 	}
 
@@ -141,7 +148,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 		
-		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
+		//System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure)figure).getName(), (int)anchor.x, (int)anchor.y));;
 	}
 	
 	private Node getNode(Figure figure) {

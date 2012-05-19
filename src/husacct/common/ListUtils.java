@@ -25,4 +25,11 @@ public class ListUtils {
 			fn.call(t);
 		}
 	}
+	
+	public static <T> T pop(List<T> list) {
+		T retVal = list.get(0);
+		list.remove(0);
+		
+		return retVal;
+	}
 }
