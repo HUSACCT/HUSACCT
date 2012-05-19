@@ -57,7 +57,9 @@ public class ExportViolationsReportDialog extends JDialog{
 		exportButton = new JButton(controlService.getTranslatedString("ExportButton"));
 		exportButton.setEnabled(false);
 		pathText.setEnabled(false);
-
+		
+		getRootPane().setDefaultButton(exportButton);
+		
 		add(pathLabel);
 		add(pathText);
 		add(browseButton);

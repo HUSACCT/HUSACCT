@@ -58,6 +58,8 @@ public class ImportArchitectureDialog extends JDialog {
 		importButton.setEnabled(false);
 		pathText.setEnabled(false);
 
+		getRootPane().setDefaultButton(importButton);
+		
 		add(pathLabel);
 		add(pathText);
 		add(browseButton);

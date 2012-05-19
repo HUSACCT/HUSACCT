@@ -49,6 +49,7 @@ public class SetApplicationDialog extends JDialog {
 		JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
 		savePanel.add(saveButton);
+		getRootPane().setDefaultButton(saveButton);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(setApplicationPanel);

@@ -63,7 +63,7 @@ public class AnalyseMenu extends JMenu{
 		
 		analysedApplicationOverviewItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showApplicationTreeGui();
+				mainController.getViewController().showApplicationOverviewGui();
 			}
 		});
 		

@@ -68,6 +68,8 @@ public class CreateWorkspaceDialog extends JDialog{
 		workspaceNameText = new JTextField(20);
 		workspaceNameText.setText("myHusacctWorkspace"); 
 		
+		getRootPane().setDefaultButton(okButton);
+		
 		workspacePanel.add(workspaceNameLabel);
 		workspacePanel.add(workspaceNameText);
 		workspacePanel.add(setApplicationCheckbox);
@@ -77,7 +79,6 @@ public class CreateWorkspaceDialog extends JDialog{
 		mainPanel.add(workspacePanel);
 		mainPanel.add(setApplicationPanel);
 		mainPanel.add(buttonPanel);
-
 		add(mainPanel);
 	}
 

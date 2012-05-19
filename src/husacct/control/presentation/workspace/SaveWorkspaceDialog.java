@@ -81,6 +81,9 @@ public class SaveWorkspaceDialog extends JDialog{
 		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
 		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
 		
+		saveButton.setEnabled(false);
+		getRootPane().setDefaultButton(saveButton);
+		
 		buttonsPanel.add(saveButton);
 		buttonsPanel.add(cancelButton);
 		
@@ -97,6 +100,7 @@ public class SaveWorkspaceDialog extends JDialog{
 		saverList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				loadSelectedOpenMethodPanel();
+				saveButton.setEnabled(true);
 			}
 		});
 		

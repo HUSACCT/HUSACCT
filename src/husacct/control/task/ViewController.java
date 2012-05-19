@@ -178,7 +178,7 @@ public class ViewController {
 		analysedArchitectureInternalFrame.toFront();
 	}
 	
-	public void showApplicationTreeGui() {		
+	public void showApplicationOverviewGui() {		
 		Rectangle rect = getBounds(applicationOverviewInternalFrame);
 		resetFrame(applicationOverviewInternalFrame);
 		setApplicationOverviewGui();

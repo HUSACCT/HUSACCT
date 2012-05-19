@@ -50,6 +50,7 @@ public class ApplicationController {
 				try {
 					analyseThread.join();
 					loadingDialog.dispose();
+					mainController.getViewController().showApplicationOverviewGui();
 					logger.debug("Monitor: analyse finished");
 				} catch (InterruptedException exception){
 					logger.debug("Monitor: analyse interrupted");

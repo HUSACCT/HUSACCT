@@ -60,8 +60,9 @@ public class AboutDialog extends JDialog {
 			husacctLabel = new JLabel("HUSACCT");
 			versionLabel = new JLabel(controlService.getTranslatedString("VersionLabel"));
 			versionNumberLabel = new JLabel(versionNumber);
-			okButton = new JButton("OK");
+			okButton = new JButton(controlService.getTranslatedString("OkButton"));
 			
+			getRootPane().setDefaultButton(okButton);
 			logoPanel.add(pictureLabel);
 			textPanel.add(husacctLabel, getConstraint(0, 0));
 			textPanel.add(versionLabel, getConstraint(0, 1));	
