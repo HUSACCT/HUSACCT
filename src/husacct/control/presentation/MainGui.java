@@ -8,7 +8,6 @@ import husacct.control.presentation.menubar.ValidateMenu;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.task.MainController;
 
-import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -21,11 +20,19 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.apache.log4j.Logger;
+
+import com.pagosoft.plaf.PgsLookAndFeel;
 
 public class MainGui extends JFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
 
+	private Logger logger = Logger.getLogger(MainGui.class);
+	
 	private MainController mainController;
 	private JMenuBar menuBar;
 	private String titlePrefix = "HUSACCT";
@@ -48,6 +55,7 @@ public class MainGui extends JFrame{
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 783, 535);
+		setLookAndFeel();
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -56,9 +64,17 @@ public class MainGui extends JFrame{
 		});
 	}
 	
+	private void setLookAndFeel(){
+		try {
+			UIManager.setLookAndFeel(new PgsLookAndFeel());
+		} catch (UnsupportedLookAndFeelException event) {
+			logger.debug("Unable to set look and feel" + event.getMessage());
+			
+		}
+	}
+	
 	private void addComponents(){
 		desktopPane = new JDesktopPane();
-		desktopPane.setBackground(new Color(210, 210, 210));
 		JPanel taskBarPane = new JPanel(new GridLayout());
 		
 		taskBar = new TaskBar();
