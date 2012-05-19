@@ -140,8 +140,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	}
 
 	@Override
-	public void exportViolationHistoryReport(String name, String fileType,
-			String path, ViolationHistory violationHistory) {
+	public void exportViolationHistoryReport(String name, String fileType, String path, ViolationHistory violationHistory) {
 		report.createReport(fileType, name, path, violationHistory);
 		
 	}
