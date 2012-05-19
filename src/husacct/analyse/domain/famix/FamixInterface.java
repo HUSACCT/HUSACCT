@@ -18,5 +18,4 @@ public class FamixInterface extends FamixEntity {
 		s += "\nBelongs to package; " + belongsToPackage;
 		return s;
 	}
-	
 }
