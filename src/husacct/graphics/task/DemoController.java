@@ -91,7 +91,7 @@ public class DemoController extends DrawingController {
 	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
 		BaseFigure zoomedFigure = zoomedModuleFigures[0];
 
-		if (zoomedFigure.getName().equals("tests")) {
+		if (zoomedFigure.getName().equals("floating")) {
 			ArrayList<AbstractDTO> modules = new ArrayList<AbstractDTO>();
 
 			ModuleDTO child1 = new ModuleDTO();
