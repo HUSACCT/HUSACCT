@@ -15,15 +15,15 @@ import org.apache.log4j.Logger;
 
 public class ApplicationController {
 
-	private static MainController mainController;
-	private static Logger logger = Logger.getLogger(ApplicationController.class);
+	private MainController mainController;
+	private Logger logger = Logger.getLogger(ApplicationController.class);
 	
 	public ApplicationController(MainController mainController) {
-		ApplicationController.mainController = mainController;
+		this.mainController = mainController;
 	}
 
 	public void showApplicationDetailsGui(){
-		new SetApplicationDialog(ApplicationController.mainController);
+		new SetApplicationDialog(mainController);
 	}
 	
 	public void setApplicationData(ApplicationDTO applicationDTO) {
@@ -71,26 +71,16 @@ public class ApplicationController {
 	}
 	
 	public void showAboutHusacctGui(){
-		new AboutDialog(ApplicationController.mainController);
+		new AboutDialog(mainController);
 	}
 	
-	public static void showErrorMessage(String message){
-		if(ApplicationController.mainController != null){
-			JOptionPane.showMessageDialog(ApplicationController.mainController.getMainGui(),
-				    message,
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-		}
-		ApplicationController.logger.error("Error: " + message);
+	public void showErrorMessage(String message){
+		JOptionPane.showMessageDialog(mainController.getMainGui(), message, "Error", JOptionPane.ERROR_MESSAGE);
+		logger.error("Error: " + message);
 	}
 	
-	public static void showInfoMessage(String message){
-		if(ApplicationController.mainController != null){
-			JOptionPane.showMessageDialog(ApplicationController.mainController.getMainGui(),
-				    message,
-				    "Info",
-				    JOptionPane.INFORMATION_MESSAGE);
-		}
-		ApplicationController.logger.error("Info: " + message);
+	public void showInfoMessage(String message){
+		JOptionPane.showMessageDialog(mainController.getMainGui(), message, "Info", JOptionPane.INFORMATION_MESSAGE);
+		logger.error("Info: " + message);
 	}
 }

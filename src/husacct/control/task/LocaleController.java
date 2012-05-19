@@ -1,7 +1,6 @@
 package husacct.control.task;
 
-import husacct.ServiceProvider;
-import husacct.control.ControlServiceImpl;
+import husacct.control.ILocaleChangeListener;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -12,23 +11,27 @@ import org.apache.log4j.Logger;
 
 public class LocaleController {
 	
-	private static Locale currentLocale = Locale.ENGLISH;
-	private static final String bundleLocation = "husacct.common.locale.husacct";
-	private static ResourceBundle resourceBundle;
-	private static Logger logger = Logger.getLogger(LocaleController.class);
+	private String bundleLocation = "husacct.common.locale.husacct";
+	private ResourceBundle resourceBundle;
+	private Logger logger = Logger.getLogger(LocaleController.class);
 	
-	private static Locale english = Locale.ENGLISH;
-	private static Locale nederlands = new Locale("nl", "NL");
+	private ArrayList<ILocaleChangeListener> listeners = new  ArrayList<ILocaleChangeListener>();
+	
+	public static Locale english = Locale.ENGLISH;
+	public static Locale nederlands = new Locale("nl", "NL");
+	private static Locale defaultLocale = english;
+	
+	private Locale currentLocale;
 	
 	public LocaleController(){
-		setLocale(LocaleController.currentLocale);
+		currentLocale = defaultLocale;
+		reloadBundle();
 	}
 	
 	public void setLocale(Locale locale){
-		ControlServiceImpl service = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-		LocaleController.currentLocale = locale;
+		currentLocale = locale;
 		reloadBundle();
-		service.notifyLocaleListeners(locale);
+		notifyLocaleListeners();
 	}
 	
 	public ArrayList<Locale> getAvailableLocales(){
@@ -48,27 +51,42 @@ public class LocaleController {
 				break;
 			}
 		}
-
 	}
 	
-	public void reloadBundle(){
+	private void reloadBundle(){
 		try {
-			LocaleController.resourceBundle = ResourceBundle.getBundle(bundleLocation, getLocale());
+			resourceBundle = ResourceBundle.getBundle(bundleLocation, getLocale());
 		} catch (Exception e){
 			logger.debug("Unable to reload resource bundle: " + e.getMessage());
 		}
 	}
 	
-	public static Locale getLocale(){
-		return LocaleController.currentLocale;
+	public Locale getLocale(){
+		return currentLocale;
 	}
 
-	public static String getTranslatedString(String key){
+	public String getTranslatedString(String key){
 		try {
-			key = LocaleController.resourceBundle.getString(key);
+			key = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){
 			logger.debug(missingResourceException.getMessage());
 		}
 		return key;
+	}
+	
+	public void addLocaleChangeListener(ILocaleChangeListener listener){
+		listeners.add(listener);
+	}
+	
+	private void notifyLocaleListeners(){		
+		// Copy the current listeners to avoid ConcurrentModificationExceptions
+		// Usually triggered when a listener is added while notifying the listeners
+		@SuppressWarnings("unchecked")
+		ArrayList<ILocaleChangeListener> listenersCopy = (ArrayList <ILocaleChangeListener>) this.listeners.clone();
+		
+		for(ILocaleChangeListener listener : listenersCopy){
+			logger.debug("Notifying: " + listener.getClass());
+			listener.update(currentLocale);
+		}
 	}
 }

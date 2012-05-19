@@ -81,7 +81,6 @@
 		<mkdir dir="${reports.dir}" />
 		<junit fork="yes" printsummary="yes" haltonfailure="no" haltonerror="no">
 			<classpath refid="classpath" />
-			<formatter type="xml" usefile="yes" />
 			<test name="husaccttest.analyse.AnalyseTestSuite" todir="${reports.dir}" />
 			<test name="husaccttest.control.ControlTestSuite" todir="${reports.dir}" />
 			<test name="husaccttest.define.DefineTestSuite" todir="${reports.dir}" />

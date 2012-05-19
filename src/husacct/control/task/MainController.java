@@ -18,34 +18,53 @@ public class MainController {
 	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
-	public boolean guiEnabled = true; 
+	public boolean guiEnabled = false; 
 	
-	public MainController(String[] args){
-		readArguments(args);
+	public MainController(){
 		setControllers();
-		if(guiEnabled) openMainGui();
-		stateController.checkState();
+		setAppleProperties();
 	}
+	
+	/**
+	 * @deprecated  As of 19 may, MainController is integrated within the ControlService.
+	 * To manually start the GUI, use ServiceProvider.getInstance().getControlService().startApplication() instead.
+	 */
+	@Deprecated
+	public MainController(String[] arguments){
 
-	private void readArguments(String[] args){
-		logger.debug("Arguments:" + args);
-		for(String s : args){
-			if(s.equals("nogui")){
-				guiEnabled = false;
-			}
-		}
+	}
+	
+	public void startGui(){
+		guiEnabled = true;
+		openMainGui();
 	}
 	
 	private void setControllers() {
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
-		this.stateController = new StateController();
+		this.stateController = new StateController(this);
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
 	}
-
+	
+	private void setAppleProperties(){
+		logger.debug("Setting apple specific properties");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Husacct");
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("apple.awt.fileDialogForDirectories", "true");
+	}
+	
+	public void readArguments(String[] consoleArguments){
+		logger.debug("Arguments:" + consoleArguments.toString());
+		for(String s : consoleArguments){
+			if(s.equals("nogui")){
+				guiEnabled = false;
+			}
+		}
+	}
+	
 	private void openMainGui() {
 		this.mainGUI = new MainGui(this);
 	}

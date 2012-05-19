@@ -3,6 +3,7 @@ package husaccttest.control;
 import static org.junit.Assert.assertEquals;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.task.LocaleController;
 
 import java.util.Locale;
 
@@ -26,7 +27,8 @@ public class LocaleControllerTest {
 				assertEquals(newLocale.getLanguage(), "en");
 			}
 		});
-		service.notifyLocaleListeners(Locale.ENGLISH);
+		LocaleController localeController = service.getMainController().getLocaleController();
+		localeController.setLocale(LocaleController.english);
 	}
 
 	@Test

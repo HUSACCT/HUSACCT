@@ -32,7 +32,6 @@ public class ImportController {
 		try {
 			Document doc = xmlResource.load(resourceData);	
 			Element logicalData = doc.getRootElement();
-			System.out.println(logicalData);
 			ServiceProvider.getInstance().getDefineService().loadLogicalArchitectureData(logicalData);
 		} catch (Exception e) {
 			logger.debug("Unable to import logical architecture: " + e.getMessage());

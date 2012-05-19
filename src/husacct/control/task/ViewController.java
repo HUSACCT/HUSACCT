@@ -1,7 +1,6 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
 import husacct.control.presentation.taskbar.TaskBar;
 
 import java.awt.Dimension;
@@ -27,12 +26,9 @@ public class ViewController {
 	
 	public static Dimension defaultDimension = new Dimension(800, 600);
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-	
 	public ViewController(MainController maincontroller){
 		this.mainController = maincontroller;
 		serviceProvider = ServiceProvider.getInstance();
-		
 	}
 	
 	public List<JInternalFrame> getOpenFrames(){
@@ -96,21 +92,21 @@ public class ViewController {
 	public void setDefineGui(){
 		defineInternalFrame = serviceProvider.getDefineService().getDefinedGUI();
 		mainController.getMainGui().getDesktopPane().add(defineInternalFrame);
-		setupFrame(defineInternalFrame, controlService.getTranslatedString("DefineArchitecture"));	
+		setupFrame(defineInternalFrame, serviceProvider.getControlService().getTranslatedString("DefineArchitecture"));	
 		defineInternalFrame.setSize(defaultDimension);
 	}
 	
 	public void setViolationsGui(){
 		violationsInternalFrame = serviceProvider.getValidateService().getBrowseViolationsGUI();
 		mainController.getMainGui().getDesktopPane().add(violationsInternalFrame);
-		setupFrame(violationsInternalFrame, controlService.getTranslatedString("Violations"));
+		setupFrame(violationsInternalFrame, serviceProvider.getControlService().getTranslatedString("Violations"));
 		violationsInternalFrame.setSize(defaultDimension);
 	}
 	
 	public void setConfigurationGui() {
 		configurationInternalFrame = serviceProvider.getValidateService().getConfigurationGUI();
 		mainController.getMainGui().getDesktopPane().add(configurationInternalFrame);
-		setupFrame(configurationInternalFrame, controlService.getTranslatedString("Configuration"));
+		setupFrame(configurationInternalFrame, serviceProvider.getControlService().getTranslatedString("Configuration"));
 		configurationInternalFrame.setSize(defaultDimension);
 	}
 	
@@ -118,7 +114,7 @@ public class ViewController {
 		serviceProvider.getGraphicsService().drawDefinedArchitecture();
 		definedArchitectureInternalFrame = serviceProvider.getGraphicsService().getDefinedArchitectureGUI();
 		mainController.getMainGui().getDesktopPane().add(definedArchitectureInternalFrame);
-		setupFrame(definedArchitectureInternalFrame, controlService.getTranslatedString("DefineArchitecture"));
+		setupFrame(definedArchitectureInternalFrame, serviceProvider.getControlService().getTranslatedString("DefineArchitecture"));
 		definedArchitectureInternalFrame.setSize(defaultDimension);
 	}
 	
@@ -126,14 +122,14 @@ public class ViewController {
 		serviceProvider.getGraphicsService().drawAnalysedArchitecture();
 		analysedArchitectureInternalFrame = serviceProvider.getGraphicsService().getAnalysedArchitectureGUI();
 		mainController.getMainGui().getDesktopPane().add(analysedArchitectureInternalFrame);
-		setupFrame(analysedArchitectureInternalFrame, controlService.getTranslatedString("AnalysedArchitecture"));
+		setupFrame(analysedArchitectureInternalFrame, serviceProvider.getControlService().getTranslatedString("AnalysedArchitecture"));
 		analysedArchitectureInternalFrame.setSize(defaultDimension);
 	}
 	
 	public void setApplicationOverviewGui(){
 		applicationOverviewInternalFrame = serviceProvider.getAnalyseService().getJInternalFrame();
 		mainController.getMainGui().getDesktopPane().add(applicationOverviewInternalFrame);
-		setupFrame(applicationOverviewInternalFrame, controlService.getTranslatedString("AnalysedApplicationOverview"));
+		setupFrame(applicationOverviewInternalFrame, serviceProvider.getControlService().getTranslatedString("AnalysedApplicationOverview"));
 		applicationOverviewInternalFrame.setSize(defaultDimension);
 	}
 	

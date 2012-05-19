@@ -4,6 +4,7 @@ import husacct.common.savechain.ISaveable;
 import husacct.control.domain.Workspace;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
+import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 
 import java.util.ArrayList;
@@ -17,49 +18,77 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
-
-	public void addLocaleChangeListener(ILocaleChangeListener listener) {
-		this.listeners.add(listener);
-	}
-
-	public Locale getLocale() {
-		return LocaleController.getLocale();
+	
+	private MainController mainController; 
+	private LocaleController localeController;
+	private WorkspaceController workspaceController;
+	private ApplicationController applicationController;
+	
+	public ControlServiceImpl(){
+		logger.debug("Starting HUSACCT");
+		mainController = new MainController();
+		localeController = mainController.getLocaleController();
+		workspaceController = mainController.getWorkspaceController();
+		applicationController = mainController.getApplicationController();
 	}
 	
-	public void notifyLocaleListeners(Locale newLocale){
-		for(ILocaleChangeListener listener : this.listeners){
-			listener.update(newLocale);
-		}
+	@Override
+	public void startApplication(){
+		startApplication(new String[]{});
+	}
+	
+	@Override
+	public void startApplication(String[] consoleArguments) {
+		mainController.readArguments(consoleArguments);
+		mainController.startGui();
+	}
+	
+	@Override
+	public void addLocaleChangeListener(ILocaleChangeListener listener) {
+		localeController.addLocaleChangeListener(listener);
 	}
 
+	@Override
+	public Locale getLocale() {
+		return localeController.getLocale();
+	}
+	
+	@Override
 	public Element getWorkspaceData() {
 		Element data = new Element("workspace");
-		Workspace workspace = WorkspaceController.getCurrentWorkspace();
+		Workspace workspace = workspaceController.getCurrentWorkspace();
 		data.setAttribute("name", workspace.getName());
 		return data;
 	}
-
+	
+	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
 			Workspace workspace = new Workspace();
 			workspace.setName(workspaceName);
-			WorkspaceController.setWorkspace(workspace);			
+			workspaceController.setWorkspace(workspace);
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
 		}
 	}
 	
+	@Override
 	public void showErrorMessage(String message){
-		ApplicationController.showErrorMessage(message);
+		applicationController.showErrorMessage(message);
 	}
 	
+	@Override
 	public void showInfoMessage(String message){
-		ApplicationController.showInfoMessage(message);
+		applicationController.showInfoMessage(message);
 	}
 	
+	@Override
 	public String getTranslatedString(String stringIdentifier){
-		return LocaleController.getTranslatedString(stringIdentifier);
+		return localeController.getTranslatedString(stringIdentifier);
 	}
-
+	
+	public MainController getMainController(){
+		return mainController;
+	}
 }

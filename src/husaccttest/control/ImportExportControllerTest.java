@@ -25,7 +25,7 @@ public class ImportExportControllerTest {
 	
 	@Before
 	public void setup(){
-		MainController mainController = new MainController(new String[]{"nogui"});
+		MainController mainController = new MainController();
 		importController = mainController.getImportController();
 		exportController = mainController.getExportController();
 	}

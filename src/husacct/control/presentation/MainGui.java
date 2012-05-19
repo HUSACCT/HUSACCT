@@ -8,6 +8,7 @@ import husacct.control.presentation.menubar.ValidateMenu;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.task.MainController;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -57,6 +58,7 @@ public class MainGui extends JFrame{
 	
 	private void addComponents(){
 		desktopPane = new JDesktopPane();
+		desktopPane.setBackground(new Color(210, 210, 210));
 		JPanel taskBarPane = new JPanel(new GridLayout());
 		
 		taskBar = new TaskBar();
@@ -110,7 +112,7 @@ public class MainGui extends JFrame{
 		}
 	}
 	
-	public void setTitle(){
+	private void setTitle(){
 		setTitle("");
 	}
 

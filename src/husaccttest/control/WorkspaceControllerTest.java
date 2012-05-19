@@ -25,7 +25,7 @@ public class WorkspaceControllerTest {
 	
 	@Before
 	public void setup(){
-		MainController mainController = new MainController(new String[]{"nogui"});
+		MainController mainController = new MainController();
 		workspaceController = mainController.getWorkspaceController();
 	}
 	
@@ -36,33 +36,33 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testInitialWorkspace(){
-		assertNull(WorkspaceController.getCurrentWorkspace());
+		assertNull(workspaceController.getCurrentWorkspace());
 	}
 	
 	@Test
 	public void testNewWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
-		assertNotNull(WorkspaceController.getCurrentWorkspace());
+		assertNotNull(workspaceController.getCurrentWorkspace());
 	}
 	
 	@Test
 	public void testIsOpenWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
-		assertTrue(WorkspaceController.isOpenWorkspace());
+		assertTrue(workspaceController.isOpenWorkspace());
 	}
 	
 	@Test
 	public void testCloseWorkspace(){
 		workspaceController.createWorkspace("JUnitTestWorkspace");
 		workspaceController.closeWorkspace();
-		assertNull(WorkspaceController.getCurrentWorkspace());
+		assertNull(workspaceController.getCurrentWorkspace());
 	}
 	
 	@Test
 	public void testSetWorkspace(){
 		Workspace workspace1 = new Workspace();
-		WorkspaceController.setWorkspace(workspace1);
-		Workspace workspace2 = WorkspaceController.getCurrentWorkspace();
+		workspaceController.setWorkspace(workspace1);
+		Workspace workspace2 = workspaceController.getCurrentWorkspace();
 		assertSame(workspace1, workspace2);
 	}
 	
@@ -96,7 +96,7 @@ public class WorkspaceControllerTest {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("file", testFile);
 		workspaceController.loadWorkspace("xml", data);
-		assertNotNull(WorkspaceController.getCurrentWorkspace());
+		assertNotNull(workspaceController.getCurrentWorkspace());
 		
 	}
 }

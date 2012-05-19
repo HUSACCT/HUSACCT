@@ -78,6 +78,7 @@ public class ExportArchitectureDialog extends JDialog {
 		});
 	}
 
+	// TODO: Why is this protected?
 	protected void showFileDialog() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setApproveButtonText(controlService.getTranslatedString("ExportButton"));

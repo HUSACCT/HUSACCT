@@ -13,56 +13,65 @@ import java.util.Locale;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 
+import org.apache.log4j.Logger;
+
 @SuppressWarnings("serial")
 public class LanguageMenu extends JMenu{
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private Logger logger = Logger.getLogger(LanguageMenu.class);
+	private LocaleController localeController;
+	private IControlService controlService;
 	
 	public LanguageMenu(MainController mainController){
 		super();
-		final LocaleController localeController = mainController.getLocaleController();
-		setText(controlService.getTranslatedString("Language"));
-		
 		controlService = ServiceProvider.getInstance().getControlService();
-
+		setText(controlService.getTranslatedString("Language"));
+		this.localeController = mainController.getLocaleController();
+		addComponents();
+		addListeners();
+	}
+	
+	private void addComponents(){
 		for(Locale locale : localeController.getAvailableLocales()){
+			String language = locale.getLanguage();
+			final JCheckBoxMenuItem languageItem = new JCheckBoxMenuItem(language);
 			
-			final JCheckBoxMenuItem item = new JCheckBoxMenuItem(locale.getLanguage());
-			if(LocaleController.getLocale().getLanguage().equals(locale.getLanguage())){
-				item.setSelected(true);
+			if(language.equals(localeController.getLocale().getLanguage())){
+				languageItem.setSelected(true);
 			}
-
+			
+			languageItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setLocaleFromString(languageItem.getText());
+				}
+			});
+			
 			controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 				@Override
 				public void update(Locale newLocale) {
-					if(newLocale.getLanguage().equals(item.getText())){
-						item.setSelected(true);
+					if(newLocale.getLanguage().equals(languageItem.getText())){
+						languageItem.setSelected(true);
 					} else {
-						item.setSelected(false);
+						languageItem.setSelected(false);
 					}
 				}
 			});
 			
-			item.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JCheckBoxMenuItem source = (JCheckBoxMenuItem)e.getSource();
-					if(source.isSelected()){
-						// TODO: fix ConcurrentModificationException
-						localeController.setNewLocaleFromString(source.getText());
-					} else if(source.getText().equals(LocaleController.getLocale().getLanguage())){
-						source.setSelected(true);
-					}
-				}
-			});
-			this.add(item);
+			add(languageItem);
 		}
-		
-		final LanguageMenu languageMenu = this;
+	}
+	
+	private void addListeners(){
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			@Override
 			public void update(Locale newLocale) {
-				languageMenu.setText(controlService.getTranslatedString("Language"));
+				setText(controlService.getTranslatedString("Language"));
 			}
 		});
+	}
+	
+	private void setLocaleFromString(String locale){
+		logger.debug("User sets language to: " + locale);
+		localeController.setNewLocaleFromString(locale);
 	}
 }
