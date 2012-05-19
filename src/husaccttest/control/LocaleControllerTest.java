@@ -20,7 +20,7 @@ public class LocaleControllerTest {
 	
 	private String translatedString = "JUnitTestValue";
 	private String stringIdentifier = "ControlJUnitTestKey";
-	private String stringIdentifierCopy = "ControlJUnitTestKey";
+	private String stringIdentifierCopy = "ControlJUnitTestKeyCopy";
 	
 	@Before
 	public void setup(){
