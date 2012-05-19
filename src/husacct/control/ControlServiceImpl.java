@@ -66,9 +66,7 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
-			Workspace workspace = new Workspace();
-			workspace.setName(workspaceName);
-			workspaceController.setWorkspace(workspace);
+			workspaceController.createWorkspace(workspaceName);
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
 		}

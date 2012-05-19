@@ -43,6 +43,7 @@ public class WorkspaceController {
 	}
 	
 	public void createWorkspace(String name){
+		System.out.println("Creating workspace" + name);
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		currentWorkspace = workspace;
@@ -51,8 +52,10 @@ public class WorkspaceController {
 	
 	public void closeWorkspace() {
 		currentWorkspace = null;
-		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
-		mainController.getViewController().closeAll();
+		if(mainController.guiEnabled) {
+			mainController.getMainGui().setTitle("");
+			mainController.getViewController().closeAll();
+		}
 		ServiceProvider.getInstance().resetServices();
 	}
 	
@@ -144,6 +147,7 @@ public class WorkspaceController {
 	}
 	
 	public Workspace getCurrentWorkspace(){
+		System.out.println("current workspace: " + currentWorkspace);
 		return currentWorkspace;
 	}
 

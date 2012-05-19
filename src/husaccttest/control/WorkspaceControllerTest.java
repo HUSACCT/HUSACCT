@@ -5,11 +5,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
 import husacct.control.domain.Workspace;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 
 import org.jdom2.Document;
@@ -22,11 +26,19 @@ public class WorkspaceControllerTest {
 
 	WorkspaceController workspaceController;
 	File testFile = new File("WorkspaceTestFile.xml");
+	File validTestFile;
 	
 	@Before
 	public void setup(){
-		MainController mainController = new MainController();
+		ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		MainController mainController = controlService.getMainController();
 		workspaceController = mainController.getWorkspaceController();
+		URL testFileURI = getClass().getResource("/husacct/common/resources/control/testworkspace.xml");
+		try {
+			validTestFile = new File(testFileURI.toURI());
+		} catch (URISyntaxException e) {
+			System.out.println("Unable to load valid test file from resources");
+		}
 	}
 	
 	@After
@@ -93,8 +105,9 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testLoadWorkspace(){
+		System.out.println("LoadWorkspace");
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		data.put("file", testFile);
+		data.put("file", validTestFile);
 		workspaceController.loadWorkspace("xml", data);
 		assertNotNull(workspaceController.getCurrentWorkspace());
 		
