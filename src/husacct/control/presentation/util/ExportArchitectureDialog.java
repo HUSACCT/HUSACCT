@@ -78,15 +78,12 @@ public class ExportArchitectureDialog extends JDialog {
 		});
 	}
 
-	// TODO: Why is this protected?
-	protected void showFileDialog() {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setApproveButtonText(controlService.getTranslatedString("ExportButton"));
+	private void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		fileChooser.setFileFilter(filter);
-		int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("ExportButton"));
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filter);
+		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(fileChooser.getSelectedFile());	            
+			setFile(fileDialog.getSelectedFile());
 		}
 	}
 

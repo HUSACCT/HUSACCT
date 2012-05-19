@@ -121,11 +121,10 @@ public class SetApplicationPanel extends JPanel{
 	}
 	
 	private void showAddFileDialog() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int returnVal = chooser.showOpenDialog(panel);
+		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, controlService.getTranslatedString("AddButton"));
+		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			pathListModel.add(pathListModel.size(), chooser.getSelectedFile().getAbsolutePath());
+			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
 		}
 	}
 	

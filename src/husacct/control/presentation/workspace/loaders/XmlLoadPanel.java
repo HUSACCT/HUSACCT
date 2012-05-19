@@ -85,13 +85,13 @@ public class XmlLoadPanel extends LoaderPanel{
 		JFileChooser fileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
 		fileChooser.setFileFilter(filter);
-	    int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("OpenButton"));
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       setFile(fileChooser.getSelectedFile());
-	    }
+		int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("OpenButton"));
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			setFile(fileChooser.getSelectedFile());
+		}
 	}
 	
-	private void setFile(File file) {
+	private void setFile(File file) {		
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
 	}

@@ -2,8 +2,11 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.control.presentation.util.ExportArchitectureDialog;
+import husacct.control.presentation.util.ExportViolationsReportDialog;
+import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
+import husacct.validate.IValidateService;
 
 import java.io.File;
 import java.util.HashMap;
@@ -26,8 +29,7 @@ public class ExportController {
 	}
 
 	public void showExportViolationsReportGui() {
-		// TODO: ShowExportViolationsReportGui
-		System.out.println("showExportViolationsReportGui");
+		new ExportViolationsReportDialog(mainController);
 	}
 	
 	public void exportArchitecture(File file){
@@ -41,5 +43,16 @@ public class ExportController {
 		} catch (Exception e) {
 			logger.debug("Unable to export logical architecture: " + e.getMessage());
 		}
+	}
+	
+	public void exportViolationsReport(File file){
+		Filename filename = new Filename(file, File.pathSeparatorChar, '.');
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		validateService.exportViolations(filename.getFilenameWithoutExtension(), filename.getExtension(), filename.getPath());
+	}
+	
+	public String[] getExportExtensions(){
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		return validateService.getExportExtentions();
 	}
 }
