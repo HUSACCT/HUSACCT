@@ -17,7 +17,7 @@
 		<fileset dir="${lib.dir}" includes="*.jar" />
 	</path>
 	
-	<target name="main" depends="clean,compile,extractlib,jar,addresources,test,run"/>
+	<target name="main" depends="clean,compile,extractlib,jar,addresources,test"/>
 	
 	<!-- Cleanup working directory -->
 	<target name="clean">
@@ -81,23 +81,20 @@
 		<mkdir dir="${reports.dir}" />
 		<junit fork="yes" printsummary="yes" haltonfailure="no" haltonerror="no">
 			<classpath refid="classpath" />
-			<test name="husaccttest.analyse.AnalyseTestSuite" todir="${reports.dir}" />
+			<formatter type="xml" usefile="yes" />
 			<test name="husaccttest.control.ControlTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.analyse.AnalyseTestSuite" todir="${reports.dir}" />
 			<test name="husaccttest.define.DefineTestSuite" todir="${reports.dir}" />
-			<test name="husaccttest.graphics.GraphicsTestSuite" todir="${reports.dir}" />
 			<test name="husaccttest.validate.ValidateTestSuite" todir="${reports.dir}" />
+			<test name="husaccttest.graphics.GraphicsTestSuite" todir="${reports.dir}" />
 		</junit>
+
 		<junitreport todir="${reports.dir}">
 			<fileset dir="${reports.dir}" >
 			  <include name="*.xml"/>
 			</fileset>
 			<report todir="${reports.dir}" format="noframes" styledir="${conf.dir}"/>
 		</junitreport>
-	</target>
-	
-	<!-- Try to run executeable Jar -->
-	<target name="run">
-		<!--<java jar="${jar.dir}/${ant.project.name}.jar" fork="true" args="nogui"/> -->
 	</target>
 
 </project>
