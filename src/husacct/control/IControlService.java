@@ -1,5 +1,6 @@
 package husacct.control;
 
+import java.util.List;
 import java.util.Locale;
 
 public interface IControlService {
@@ -11,5 +12,6 @@ public interface IControlService {
 	public void showErrorMessage(String message);
 	public void showInfoMessage(String message);
 	public String getTranslatedString(String stringIdentifier);
+	public List<String> getStringIdentifiers(String translatedString);
 
 }

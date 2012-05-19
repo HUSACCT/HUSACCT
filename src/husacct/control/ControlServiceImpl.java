@@ -8,6 +8,7 @@ import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
@@ -86,6 +87,11 @@ public class ControlServiceImpl implements IControlService, ISaveable{
 	@Override
 	public String getTranslatedString(String stringIdentifier){
 		return localeController.getTranslatedString(stringIdentifier);
+	}
+	
+	@Override
+	public List<String> getStringIdentifiers(String translatedString){
+		return localeController.getStringIdentifiers(translatedString);
 	}
 	
 	public MainController getMainController(){
