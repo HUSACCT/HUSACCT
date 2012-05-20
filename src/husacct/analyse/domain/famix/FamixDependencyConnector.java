@@ -85,7 +85,8 @@ class FamixDependencyConnector {
 				}
 				
 				if(association.to.equals("") || association.to == null){
-					logger.info("couldn't connect " + association.from + " to the right entity. Linenumber " + association.lineNumber + ". Please inform us with classe where we fail on.");
+					logger.info("Couldn't analyse dependency from " + association.from + ". Reason: External Libraries not implemented yet");
+//					logger.info("couldn't connect " + association.from + " to the right entity. Linenumber " + association.lineNumber + ".");
 				} else {
 					addToModel(association);
 				}
