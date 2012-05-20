@@ -38,6 +38,7 @@ public class ResourceFactory {
 	
 	public static List<String> getAvailableResources(){
 		List<String> list = new ArrayList<String>();
+		list.add("Husacct");
 		list.add("Xml");
 		return list;
 	}

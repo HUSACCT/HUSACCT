@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class XmlLoadPanel extends LoaderPanel{
+public class HusacctLoadPanel extends LoaderPanel{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -34,7 +34,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public XmlLoadPanel(){
+	public HusacctLoadPanel(){
 		super();
 		setup();
 		addComponents();
@@ -48,7 +48,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel(controlService.getTranslatedString("OpenFromXML"));
+		descriptionLabel = new JLabel(controlService.getTranslatedString("OpenFromHusacct"));
 		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
 		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
@@ -83,7 +83,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	}
 	
 	protected void showFileDialog() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("hu", "hu");
 		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("OpenButton"), filter);
 		int returnVal = fileChooser.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {

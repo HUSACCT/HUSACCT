@@ -1,4 +1,4 @@
-package husacct.control.presentation.workspace.loaders;
+package husacct.control.presentation.workspace.savers;
 
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class XmlLoadPanel extends LoaderPanel{
+public class HusacctSavePanel extends SaverPanel{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -34,7 +34,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public XmlLoadPanel(){
+	public HusacctSavePanel(){
 		super();
 		setup();
 		addComponents();
@@ -48,7 +48,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel(controlService.getTranslatedString("OpenFromXML"));
+		descriptionLabel = new JLabel(controlService.getTranslatedString("SaveToHusacct"));
 		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
 		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
@@ -83,15 +83,15 @@ public class XmlLoadPanel extends LoaderPanel{
 	}
 	
 	protected void showFileDialog() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("OpenButton"), filter);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("hu", "hu");
+		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
 		int returnVal = fileChooser.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			setFile(fileChooser.getSelectedFile());
 		}
 	}
 	
-	private void setFile(File file) {		
+	private void setFile(File file) {
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
 	}

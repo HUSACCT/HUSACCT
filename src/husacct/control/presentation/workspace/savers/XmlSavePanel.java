@@ -2,6 +2,7 @@ package husacct.control.presentation.workspace.savers;
 
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
+import husacct.control.presentation.util.FileDialog;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -82,13 +83,12 @@ public class XmlSavePanel extends SaverPanel{
 	}
 	
 	protected void showFileDialog() {
-		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		fileChooser.setFileFilter(filter);
-	    int returnVal = fileChooser.showDialog(this, controlService.getTranslatedString("SaveButton"));
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       setFile(fileChooser.getSelectedFile());
-	    }
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
+		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
+		int returnVal = fileChooser.showDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			setFile(fileChooser.getSelectedFile());
+		}
 	}
 	
 	private void setFile(File file) {
