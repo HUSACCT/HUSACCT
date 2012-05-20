@@ -71,7 +71,7 @@ public class DefinedController extends DrawingController {
 		if (null != parentPath) {
 			getAndDrawModulesIn(parentPath);
 		} else {
-			logger.warn("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
+			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -120,6 +120,10 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleOpen(String path) {
-		getAndDrawModulesIn(path);
+		if(path.isEmpty()){
+			drawArchitecture(getCurrentDrawingDetail());
+		}else{
+			getAndDrawModulesIn(path);
+		}
 	}
 }
