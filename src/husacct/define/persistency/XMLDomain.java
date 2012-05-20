@@ -143,6 +143,7 @@ public class XMLDomain {
 		}
 		
 		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), usedModule, restrictedModule, enabled);
+		AppliedXMLRule.setId(Integer.parseInt(ruleId.getValue()));
 		
 		if (ruleExceptions != null) {
 			List<Element> ExceptionList = ruleExceptions.getChildren("AppliedRule");
@@ -170,6 +171,8 @@ public class XMLDomain {
 
 		String moduleName = e.getChild("name").getValue();
 		String moduleDescription = e.getChild("description").getValue();
+		
+		String moduleId = e.getChild("id").getValue();
 
 		// type detection..
 		if (ModuleTypeText.equals("externallibrary")) {
@@ -181,6 +184,7 @@ public class XMLDomain {
 		} else {
 			xmlModule = new Module(moduleName, moduleDescription);
 		}
+		xmlModule.setId(Long.parseLong(moduleId));
 
 		Element SoftwareUnitDefinitions = e.getChild("SoftwareUnitDefinitions");
 		if (SoftwareUnitDefinitions != null) {
