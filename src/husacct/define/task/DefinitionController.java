@@ -395,4 +395,19 @@ public class DefinitionController extends Observable implements Observer {
 	public boolean isAnalysed(){
 		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
 	}
+
+	//Test method for development process
+	public void createTestData() {
+		try {
+			ServiceProvider.getInstance().getDefineService().createApplication("HUSACCT", new String[]{}, "Java", "1.0");
+			addSubSystem(-1, "Module 1", "This is test data");
+			addSubSystem(-1, "Module 2", "This is test data");
+			addSubSystem(0, "SubModule 1", "This is test data");
+			addSubSystem(2, "SubModule 2", "This is test data");
+			notifyObservers();
+			definitionJPanel.modulePanel.update(this, null);
+		} catch (Exception e){
+			
+		}
+	}
 }

@@ -3,6 +3,7 @@ package husacct.define.presentation;
 import husacct.Main;
 import husacct.define.DefineServiceImpl;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
+import husacct.define.task.DefinitionController;
 
 import java.net.URL;
 
@@ -57,5 +58,6 @@ public class MainGUI {
 //		mainFrame.add(appController.getApplicationFrame());
 //		mainFrame.repaint();
 
+		DefinitionController.getInstance().createTestData();
 	}
 }
