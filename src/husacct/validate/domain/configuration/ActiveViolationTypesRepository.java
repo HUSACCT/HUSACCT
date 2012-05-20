@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 class ActiveViolationTypesRepository {
 
 	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();	
@@ -21,6 +23,7 @@ class ActiveViolationTypesRepository {
 	private final RuleTypesFactory ruletypesfactory;
 	private final Map<String, List<ActiveRuleType>> startupViolationTypes;
 	private Map<String, List<ActiveRuleType>> currentActiveViolationTypes;
+	private Logger logger = Logger.getLogger(ActiveViolationTypesRepository.class);
 
 
 	ActiveViolationTypesRepository(RuleTypesFactory ruletypesfactory) {
@@ -132,13 +135,23 @@ class ActiveViolationTypesRepository {
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
 				ActiveRuleType activeRuleType = new ActiveRuleType(newActiveRuleType.getRuleType());
 				activeRuleType.setViolationTypes(activeViolationTypes);
-				activeViolationTypesForLanguage.add(activeRuleType);
+				boolean foundViolationTypeKey = false;				
 
 				for(ActiveViolationType newActiveViolationType : newActiveRuleType.getViolationTypes()){
 					if(violationTypeKeyExists(programmingLanguage, newActiveRuleType.getRuleType(), newActiveViolationType.getType())){
+						foundViolationTypeKey = true;
 						activeViolationTypes.add(new ActiveViolationType(newActiveViolationType.getType(), newActiveViolationType.isEnabled()));							
-					}							
-				}						
+					}	
+					else{
+						logger.debug(String.format("violationTypeKey %s not exists", newActiveViolationType.getType()));
+					}
+				}
+				if(foundViolationTypeKey){
+					activeViolationTypesForLanguage.add(activeRuleType);
+				}
+			}
+			else{
+				logger.debug(String.format("ruleTypeKey %s not exists in programminglanguage %s", newActiveRuleType.getRuleType(), programmingLanguage));
 			}
 		}
 		return activeViolationTypesForLanguage;

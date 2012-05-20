@@ -27,7 +27,7 @@ public interface IValidateService
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo);
 	public String[] getExportExtentions();
 	public void checkConformance();
-	public void exportViolations(String name, String fileType, String path) throws DOMException, UnknownStorageTypeException, ParserConfigurationException, SAXException, IOException, URISyntaxException, DocumentException, TransformerException;
+	public void exportViolations(String name, String fileType, String path);
 	public boolean isValidated();
 	public JInternalFrame getBrowseViolationsGUI();
 	public JInternalFrame getConfigurationGUI();

@@ -115,7 +115,7 @@ public class Severity implements Cloneable {
 		hash = 73 * hash + (this.defaultName != null ? this.defaultName.hashCode() : 0);
 		hash = 73 * hash + (this.userName != null ? this.userName.hashCode() : 0);
 		hash = 73 * hash + (this.color != null ? this.color.hashCode() : 0);
-		hash = 73 * hash + (this.id != null ? this.id.hashCode() : 0);
+		//hash = 73 * hash + (this.id != null ? this.id.hashCode() : 0);
 		return hash;
 	}
 }
