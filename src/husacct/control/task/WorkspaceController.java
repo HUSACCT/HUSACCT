@@ -21,12 +21,13 @@ import org.jdom2.Element;
 public class WorkspaceController {
 
 	private Logger logger = Logger.getLogger(WorkspaceController.class);
-	private static Workspace currentWorkspace;
+	private Workspace currentWorkspace;
 
-	private static MainController mainController;
+	private MainController mainController;
 	
 	public WorkspaceController(MainController mainController){
-		WorkspaceController.mainController = mainController;
+		this.mainController = mainController;
+		currentWorkspace = null;
 	}
 
 	public void showCreateWorkspaceGui() {
@@ -42,16 +43,19 @@ public class WorkspaceController {
 	}
 	
 	public void createWorkspace(String name){
+		logger.debug("New workspace: " + name);
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
-		WorkspaceController.currentWorkspace = workspace;
+		currentWorkspace = workspace;
 		if(mainController.guiEnabled) mainController.getMainGui().setTitle(name);
 	}
 	
 	public void closeWorkspace() {
-		WorkspaceController.currentWorkspace = null;
-		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
-		mainController.getViewController().closeAll();
+		currentWorkspace = null;
+		if(mainController.guiEnabled) {
+			mainController.getMainGui().setTitle("");
+			mainController.getViewController().closeAll();
+		}
 		ServiceProvider.getInstance().resetServices();
 	}
 	
@@ -103,7 +107,7 @@ public class WorkspaceController {
 			}
 			return true;
 		} catch (Exception exception){
-			String message = "Unable to load workspacedata\n\n" + exception.getMessage();
+			String message = "Unable to load workspacedata\n" + exception.getMessage();
 			IControlService controlService = ServiceProvider.getInstance().getControlService();
 			controlService.showErrorMessage(message);
 		}
@@ -135,19 +139,19 @@ public class WorkspaceController {
 		return saveableServices;
 	}
 	
-	public static boolean isOpenWorkspace(){
-		if(WorkspaceController.currentWorkspace != null){
+	public boolean isOpenWorkspace(){
+		if(currentWorkspace != null){
 			return true;
 		}
 		return false;
 	}
 	
-	public static Workspace getCurrentWorkspace(){
-		return WorkspaceController.currentWorkspace;
+	public Workspace getCurrentWorkspace(){
+		return currentWorkspace;
 	}
 
-	public static void setWorkspace(Workspace workspace) {
-		WorkspaceController.currentWorkspace = workspace;
+	public void setWorkspace(Workspace workspace) {
+		currentWorkspace = workspace;
 		if(mainController != null && mainController.guiEnabled) {
 			mainController.getMainGui().setTitle(workspace.getName());
 		}

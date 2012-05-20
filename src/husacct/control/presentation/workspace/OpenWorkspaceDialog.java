@@ -41,7 +41,7 @@ public class OpenWorkspaceDialog extends JDialog{
 	
 	public OpenWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
-		this.setTitle("Open Workspace");
+		this.setTitle(controlService.getTranslatedString("OpenWorkspace"));
 		this.mainController = mainController;
 		this.setup();
 		this.setLoaders();
@@ -78,8 +78,11 @@ public class OpenWorkspaceDialog extends JDialog{
 		loaderPanelContainer.setPreferredSize(new Dimension(350, 300));
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
-		openButton = new JButton(controlService.getTranslatedString("openButton"));
-		cancelButton = new JButton(controlService.getTranslatedString("cancelButton"));
+		openButton = new JButton(controlService.getTranslatedString("OpenButton"));
+		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
+		
+		openButton.setEnabled(false);
+		getRootPane().setDefaultButton(openButton);
 		
 		buttonsPanel.add(openButton);
 		buttonsPanel.add(cancelButton);
@@ -97,6 +100,7 @@ public class OpenWorkspaceDialog extends JDialog{
 		loaderList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				loadSelectedOpenMethodPanel();
+				openButton.setEnabled(true);
 			}
 		});
 		

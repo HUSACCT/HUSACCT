@@ -20,5 +20,4 @@ public class Workspace {
 		this.appData = appData;
 	}
 	
-	
 }

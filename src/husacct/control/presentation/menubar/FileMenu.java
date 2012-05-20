@@ -24,64 +24,79 @@ import javax.swing.event.MenuEvent;
 public class FileMenu extends JMenu {
 
 	private WorkspaceController workspaceController;
+	private MainController mainController;
 	private JMenuItem createWorkspaceItem;
 	private JMenuItem openWorkspaceItem;
 	private JMenuItem saveWorkspaceItem;
 	private JMenuItem closeWorkspaceItem;
 	private JMenuItem exitItem;
 	
+	
+	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public FileMenu(final MainController mainController){
 		super();
-		setText(controlService.getTranslatedString("File"));
+		this.mainController = mainController;
 		this.workspaceController = mainController.getWorkspaceController();
-		
+		setText(controlService.getTranslatedString("File"));
+		addComponents();
+		setListeners();
+	}
+	
+	private void addComponents(){
 		createWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CreateWorkspace"));
 		createWorkspaceItem.setMnemonic('c');
 		createWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('N', KeyEvent.CTRL_DOWN_MASK));
+				
+		openWorkspaceItem = new JMenuItem(controlService.getTranslatedString("OpenWorkspace"));
+		openWorkspaceItem.setMnemonic('o');
+		openWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
+				
+		saveWorkspaceItem = new JMenuItem(controlService.getTranslatedString("SaveWorkspace"));
+		saveWorkspaceItem.setMnemonic('s');
+		saveWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
+				
+		closeWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CloseWorkspace"));
+		closeWorkspaceItem.setMnemonic('l');
+				
+		JSeparator separator = new JSeparator();		
+		exitItem = new JMenuItem(controlService.getTranslatedString("Exit"));
+		exitItem.setMnemonic('x');
+		
 		this.add(createWorkspaceItem);
+		this.add(openWorkspaceItem);
+		this.add(saveWorkspaceItem);
+		this.add(closeWorkspaceItem);
+		this.add(separator);
+		this.add(exitItem);
+	}
+	
+	private void setListeners(){
 		createWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showCreateWorkspaceGui();
 			}
 		});
 		
-		openWorkspaceItem = new JMenuItem(controlService.getTranslatedString("OpenWorkspace"));
-		openWorkspaceItem.setMnemonic('o');
-		openWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
-		this.add(openWorkspaceItem);
 		openWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showOpenWorkspaceGui();
 			}
 		});
 		
-		saveWorkspaceItem = new JMenuItem(controlService.getTranslatedString("SaveWorkspace"));
-		saveWorkspaceItem.setMnemonic('s');
-		saveWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
-		this.add(saveWorkspaceItem);
 		saveWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.showSaveWorkspaceGui();
 			}
 		});
 		
-		closeWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CloseWorkspace"));
-		closeWorkspaceItem.setMnemonic('l');
-		this.add(closeWorkspaceItem);
 		closeWorkspaceItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				workspaceController.closeWorkspace();
 			}
-		});		
-
-		JSeparator separator = new JSeparator();
-		this.add(separator);
-
-		exitItem = new JMenuItem(controlService.getTranslatedString("Exit"));
-		exitItem.setMnemonic('x');
-		this.add(exitItem);
+		});	
+		
 		exitItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.exit();
@@ -107,7 +122,7 @@ public class FileMenu extends JMenu {
 			}
 		});
 		
-		this.addMenuListener(new MenuListenerAdapter() {
+		this.addMenuListener(new MenuAdapter() {
 			public void menuSelected(MenuEvent e) {
 				mainController.getStateController().checkState();
 			}
