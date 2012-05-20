@@ -1,6 +1,7 @@
 package husacct.control;
 
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
@@ -15,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 
-public class ControlServiceImpl implements IControlService, ISaveable{
+public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable{
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();

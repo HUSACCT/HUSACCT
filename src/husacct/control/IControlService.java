@@ -1,9 +1,11 @@
 package husacct.control;
 
+import husacct.common.services.IObservableService;
+
 import java.util.List;
 import java.util.Locale;
 
-public interface IControlService {
+public interface IControlService extends IObservableService{
 
 	public void startApplication();
 	public void startApplication(String[] userArguments);

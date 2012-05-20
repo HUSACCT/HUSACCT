@@ -1,5 +1,7 @@
 package husacct.control.task;
 
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
 
 import java.util.ArrayList;
@@ -105,5 +107,9 @@ public class LocaleController {
 			logger.debug("Notifying: " + listener.getClass());
 			listener.update(currentLocale);
 		}
+		
+		IControlService controlService = ServiceProvider.getInstance().getControlService();
+		controlService.notifyServiceListeners();
+		
 	}
 }

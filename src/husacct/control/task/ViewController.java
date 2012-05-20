@@ -53,6 +53,7 @@ public class ViewController {
 		internalFrame.setMaximizable(true);
 		internalFrame.setResizable(true);
 		internalFrame.setIconifiable(false);
+		internalFrame.setFrameIcon(null);
 		internalFrame.setClosable(true);
 		internalFrame.pack();
 		internalFrame.addInternalFrameListener(new InternalFrameAdapter() {

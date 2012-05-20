@@ -41,7 +41,7 @@ public class SetApplicationDialog extends JDialog {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		this.setSize(new Dimension(350, 380));
-		this.setResizable(true);
+		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
 	
