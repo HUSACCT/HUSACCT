@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.control.presentation.taskbar.TaskBar;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ViewController {
 	private JInternalFrame applicationOverviewInternalFrame;
 	
 	public static Dimension defaultDimension = new Dimension(800, 600);
+	private Point lastStartPosition = new Point(10, 10);
 	
 	public ViewController(MainController maincontroller){
 		this.mainController = maincontroller;
@@ -81,6 +83,25 @@ public class ViewController {
 		return rect;
 	}
 	
+	private void updateStartPosition(){
+		lastStartPosition = new Point((int)lastStartPosition.getX()+25, (int)lastStartPosition.getY()+25);
+	}
+	
+	private Point getNewPosition(JInternalFrame internalFrame){
+		Point newPosition = null;
+		if(internalFrame == null){
+			newPosition = new Point(lastStartPosition);
+			updateStartPosition();
+		}
+		return newPosition;
+	}
+	
+	private void setNewPosition(JInternalFrame internalFrame, Point newPosition){
+		if(newPosition != null) {
+			internalFrame.setLocation(newPosition);
+		}
+	}
+	
 	private void setBounds(JInternalFrame internalFrame, Rectangle rect){
 		if(rect != null) internalFrame.setBounds(rect);
 	}
@@ -134,56 +155,68 @@ public class ViewController {
 		applicationOverviewInternalFrame.setSize(defaultDimension);
 	}
 	
-	public void showDefineGui() {		
+	public void showDefineGui() {
+		Point newPosition = getNewPosition(defineInternalFrame);
 		Rectangle rect = getBounds(defineInternalFrame);
 		resetFrame(defineInternalFrame);
 		setDefineGui();
 		setBounds(defineInternalFrame, rect);
+		setNewPosition(defineInternalFrame, newPosition);
 		defineInternalFrame.setVisible(true);
 		defineInternalFrame.toFront();
 	}
 	
-	public void showViolationsGui() {		
+	public void showViolationsGui() {
+		Point newPosition = getNewPosition(violationsInternalFrame);
 		Rectangle rect = getBounds(violationsInternalFrame);
 		resetFrame(violationsInternalFrame);
 		setViolationsGui();
 		setBounds(violationsInternalFrame, rect);
+		setNewPosition(violationsInternalFrame, newPosition);
 		violationsInternalFrame.setVisible(true);
 		violationsInternalFrame.toFront();
 	}
 	
-	public void showConfigurationGui() {		
+	public void showConfigurationGui() {
+		Point newPosition = getNewPosition(configurationInternalFrame);
 		Rectangle rect = getBounds(configurationInternalFrame);
 		resetFrame(configurationInternalFrame);
 		setConfigurationGui();
 		setBounds(configurationInternalFrame, rect);
+		setNewPosition(configurationInternalFrame, newPosition);
 		configurationInternalFrame.setVisible(true);
 		configurationInternalFrame.toFront();
 	}	
 	
 	public void showDefinedArchitectureGui() {
+		Point newPosition = getNewPosition(definedArchitectureInternalFrame);
 		Rectangle rect = getBounds(definedArchitectureInternalFrame);
 		resetFrame(definedArchitectureInternalFrame);
 		setDefinedArchitectureGui();
 		setBounds(definedArchitectureInternalFrame, rect);
+		setNewPosition(definedArchitectureInternalFrame, newPosition);
 		definedArchitectureInternalFrame.setVisible(true);
 		definedArchitectureInternalFrame.toFront();
 	}	
 		
-	public void showAnalysedArchitectureGui() {		
+	public void showAnalysedArchitectureGui() {	
+		Point newPosition = getNewPosition(analysedArchitectureInternalFrame);
 		Rectangle rect = getBounds(analysedArchitectureInternalFrame);
 		resetFrame(analysedArchitectureInternalFrame);
 		setAnalysedArchitectureGui();
 		setBounds(analysedArchitectureInternalFrame, rect);
+		setNewPosition(analysedArchitectureInternalFrame, newPosition);
 		analysedArchitectureInternalFrame.setVisible(true);
 		analysedArchitectureInternalFrame.toFront();
 	}
 	
-	public void showApplicationOverviewGui() {		
+	public void showApplicationOverviewGui() {
+		Point newPosition = getNewPosition(applicationOverviewInternalFrame);
 		Rectangle rect = getBounds(applicationOverviewInternalFrame);
 		resetFrame(applicationOverviewInternalFrame);
 		setApplicationOverviewGui();
 		setBounds(applicationOverviewInternalFrame, rect);
+		setNewPosition(applicationOverviewInternalFrame, newPosition);
 		applicationOverviewInternalFrame.setVisible(true);
 		applicationOverviewInternalFrame.toFront();
 	}
