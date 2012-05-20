@@ -119,41 +119,47 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 			}
 		});
 
-		GroupLayout activeViolationtypeLayout = new GroupLayout(
-				this);
-		activeViolationtypeLayout.setHorizontalGroup(
-			activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(activeViolationtypeLayout.createSequentialGroup()
-					.addComponent(categoryScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-					.addComponent(violationtypeScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-					.addComponent(ruletypeScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-					.addGroup(activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-						.addComponent(selectAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(deselectAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					)
-				)
-		);
-		activeViolationtypeLayout.setVerticalGroup(
-			activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-				.addComponent(ruletypeScrollpane)
-				.addGroup(GroupLayout.Alignment.LEADING, activeViolationtypeLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(selectAll)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(deselectAll)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(apply)
-					.addContainerGap())
-				.addComponent(categoryScrollpane)
-				.addComponent(violationtypeScrollpane)
-		);
-		
-		this.setLayout(activeViolationtypeLayout);
+		createLayout();
     }
+	
+	private void createLayout(){
+		GroupLayout activeViolationtypeLayout = new GroupLayout(this);
+		
+		GroupLayout.ParallelGroup horizontalButtonGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		horizontalButtonGroup.addComponent(selectAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(deselectAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
+		GroupLayout.SequentialGroup horizontalPaneGroup = activeViolationtypeLayout.createSequentialGroup();
+		horizontalPaneGroup.addComponent(categoryScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneGroup.addComponent(violationtypeScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneGroup.addComponent(ruletypeScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		
+		activeViolationtypeLayout.setHorizontalGroup(horizontalPaneGroup);
+		
+		GroupLayout.SequentialGroup verticalButtonGroup = activeViolationtypeLayout.createSequentialGroup();
+		verticalButtonGroup.addContainerGap();
+		verticalButtonGroup.addComponent(selectAll);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(deselectAll);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(apply);
+		verticalButtonGroup.addContainerGap();
+		
+		GroupLayout.ParallelGroup verticalPaneGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		verticalPaneGroup.addComponent(ruletypeScrollpane);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
+		verticalPaneGroup.addComponent(categoryScrollpane);
+		verticalPaneGroup.addComponent(violationtypeScrollpane);
+		
+		activeViolationtypeLayout.setVerticalGroup(verticalPaneGroup);
+		
+		setLayout(activeViolationtypeLayout);
+	}
 	
 	public final void loadAfterChange(){
 		setText();

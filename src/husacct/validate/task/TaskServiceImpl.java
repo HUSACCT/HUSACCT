@@ -6,7 +6,6 @@ import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.exception.ViolationsNotFoundAtDateException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -160,5 +159,9 @@ public class TaskServiceImpl{
 	
 	public void setActiveViolationTypes(String language, List<ActiveRuleType> activeViolations){
 		configuration.setActiveViolationTypes(language, activeViolations);
+	}
+	
+	public void subscribe(Observer frame){
+		configuration.addObserver(frame);
 	}
 }

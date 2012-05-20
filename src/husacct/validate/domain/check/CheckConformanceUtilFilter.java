@@ -58,13 +58,13 @@ public class CheckConformanceUtilFilter {
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		
 		ArrayList<Mapping> mappingFrom;
 		ArrayList<Mapping> mappingTo;
-		if(emptyModule(rule.moduleFrom)== false){
+		if(!emptyModule(rule.moduleFrom)){
 			mappingFrom = getAllClasspathsFromModule(rule.moduleFrom);
 		}
 		else{
 			mappingFrom = new ArrayList<Mapping>();
 		}
-		if(emptyModule(rule.moduleTo)== false){
+		if(!emptyModule(rule.moduleTo)){
 			mappingTo = getAllClasspathsFromModule(rule.moduleTo);
 		}
 		else{

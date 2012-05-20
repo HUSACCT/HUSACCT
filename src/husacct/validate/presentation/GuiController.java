@@ -35,7 +35,7 @@ public class GuiController {
 	private void reloadGUIText(){		
 		browseViolations.loadGUIText();
 		filterViolations.loadGUIText();
-		configurationUI.loadGUIText();
+		configurationUI.loadAfterChange();
 	}
 
 	public JInternalFrame getBrowseViolationsGUI(){
