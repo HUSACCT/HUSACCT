@@ -2,6 +2,10 @@ package husacct.common.dto;
 
 public class ModuleDTO extends AbstractDTO{
 	public String logicalPath;
+	/**
+	 * @deprecated The physicalPaths are being changed. Currently the physicalPaths are being saved in an array of strings. 
+	 * This is being replaced by its own DTO, PhysicalPathDTO. Instead of the variable physicalPaths, please use physicalPathDTOs
+	 */
 	@Deprecated
 	public String[] physicalPaths;
 	public PhysicalPathDTO[] physicalPathDTOs;
@@ -25,6 +29,10 @@ public class ModuleDTO extends AbstractDTO{
 		this.type = type;
 	}
 	
+	/**
+	 * @deprecated The physicalPaths are being changed. Currently the physicalPaths are being saved in an array of strings. 
+	 * This is being replaced by its own DTO, PhysicalPathDTO. Instead of this constructor, please use contructor with the physicalPathDTOs
+	 */
 	@Deprecated
 	public ModuleDTO(String logicalPath, String[] physicalPaths,
 			String type, ModuleDTO[] subModules) {
