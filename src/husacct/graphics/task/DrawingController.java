@@ -2,9 +2,7 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
@@ -25,7 +23,6 @@ import java.util.Locale;
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
 

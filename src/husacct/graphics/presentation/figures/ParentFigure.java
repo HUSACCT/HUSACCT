@@ -12,32 +12,27 @@ import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.FigureListener;
 
 public class ParentFigure extends BaseFigure {
-	private static final long serialVersionUID = 5449552267500654293L;
-
-	private RectangleFigure top;
+	private static final long serialVersionUID = 101138923385231941L;
 	private RectangleFigure body;
 	private TextFigure text;
 
-	private static final int MIN_WIDTH = 500;
-	private static final int MIN_HEIGHT = 500;
-
-	private ArrayList<Figure> childrenOwnImpl;
+	protected int minWidth = 300;
+	protected int minHeight = 300;
 	
+	private ArrayList<Figure> childrenOwnImpl;
 	private double x, y;
 
 	public ParentFigure(String name) {
 		super(name);
 		childrenOwnImpl = new ArrayList<Figure>();
 
-		top = new RectangleFigure();
 		body = new RectangleFigure();
-		text = new TextFigure(getName());
-
-		children.add(top);
+		text = new TextFigure(name);
+		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(body);
 		children.add(text);
 
-		top.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		
 		addFigureListener(new FigureListener() {
 			@Override
@@ -79,25 +74,20 @@ public class ParentFigure extends BaseFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		// minimum size
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
+		if ((lead.x - anchor.x) < minWidth) {
+			lead.x = anchor.x + minWidth;
 		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
+		if ((lead.y - anchor.y) < minHeight) {
+			lead.y = anchor.y + minHeight;
 		}
 
-		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x) * 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
-
-		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x, (anchor.y + top.getBounds().height));
-
-		body.setBounds(bodyTopLeft, lead);
+		body.setBounds(anchor, lead);
 
 		// textbox centralising
-		double plusX = (((lead.x - bodyTopLeft.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - bodyTopLeft.y) - text.getBounds().height) / 2);
+		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
 
-		Point2D.Double textAnchor = (Double) bodyTopLeft.clone();
+		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
@@ -107,20 +97,18 @@ public class ParentFigure extends BaseFigure {
 
 	@Override
 	public ParentFigure clone() {
-		ParentFigure other = (ParentFigure) super.clone();
 
-		other.top = top.clone();
+		ParentFigure other = (ParentFigure) super.clone();
 		other.body = body.clone();
 		other.text = text.clone();
 
 		other.children = new ArrayList<Figure>();
-		other.children.add(other.top);
 		other.children.add(other.body);
 		other.children.add(other.text);
 
 		return other;
 	}
-
+	
 	public void addChildFigure(Figure figure) {
 		childrenOwnImpl.add(figure);
 		figure.addFigureListener(new FigureListener() {
