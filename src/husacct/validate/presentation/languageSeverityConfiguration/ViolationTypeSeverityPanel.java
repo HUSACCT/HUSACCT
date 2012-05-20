@@ -112,41 +112,45 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 			}
 		});
 
+		createLayout();
+    }
+	
+	private void createLayout(){
 		GroupLayout violationtypeSeverityLayout = new GroupLayout(this);
 		
-		GroupLayout.ParallelGroup horizontalButtonLayout = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
-		horizontalButtonLayout.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonLayout.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonLayout.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		GroupLayout.ParallelGroup horizontalButtonGroup = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		horizontalButtonGroup.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		
-		GroupLayout.SequentialGroup paneLayout = violationtypeSeverityLayout.createSequentialGroup();
-		paneLayout.addComponent(CategoryScrollpane);
-		paneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		paneLayout.addComponent(ViolationtypeScrollpane);
-		paneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		paneLayout.addGroup(horizontalButtonLayout);
-		paneLayout.addContainerGap();
+		GroupLayout.SequentialGroup horizontalPaneGroup = violationtypeSeverityLayout.createSequentialGroup();
+		horizontalPaneGroup.addComponent(CategoryScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalPaneGroup.addComponent(ViolationtypeScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		horizontalPaneGroup.addContainerGap();
 		
-		violationtypeSeverityLayout.setHorizontalGroup(paneLayout);
+		violationtypeSeverityLayout.setHorizontalGroup(horizontalPaneGroup);
 		
-		GroupLayout.SequentialGroup verticalButtonLayout = violationtypeSeverityLayout.createSequentialGroup();
-		verticalButtonLayout.addContainerGap();
-		verticalButtonLayout.addComponent(Restore);
-		verticalButtonLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonLayout.addComponent(RestoreAll);
-		verticalButtonLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonLayout.addComponent(Apply);
-		verticalButtonLayout.addContainerGap();
+		GroupLayout.SequentialGroup verticalButtonGroup = violationtypeSeverityLayout.createSequentialGroup();
+		verticalButtonGroup.addContainerGap();
+		verticalButtonGroup.addComponent(Restore);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(RestoreAll);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(Apply);
+		verticalButtonGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPaneLayout = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
-		verticalPaneLayout.addComponent(CategoryScrollpane);
-		verticalPaneLayout.addComponent(ViolationtypeScrollpane);
-		verticalPaneLayout.addGroup(verticalButtonLayout);
+		GroupLayout.ParallelGroup verticalPaneGroup = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalPaneGroup.addComponent(CategoryScrollpane);
+		verticalPaneGroup.addComponent(ViolationtypeScrollpane);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
 		
-		violationtypeSeverityLayout.setVerticalGroup(verticalPaneLayout);
+		violationtypeSeverityLayout.setVerticalGroup(verticalPaneGroup);
 		
 		setLayout(violationtypeSeverityLayout);
-    }
+	}
 	
 	public void loadAfterChange(){
 		setText();

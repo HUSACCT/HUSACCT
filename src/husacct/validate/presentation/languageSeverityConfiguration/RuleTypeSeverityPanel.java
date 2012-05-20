@@ -116,35 +116,35 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	private void createLayout(){
 		GroupLayout ruletypeSeverityLayout = new GroupLayout(this);
 		
-		GroupLayout.ParallelGroup horizontalButtonLayout = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
-		horizontalButtonLayout.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonLayout.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonLayout.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		GroupLayout.ParallelGroup horizontalButtonGroup = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		horizontalButtonGroup.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		
-		GroupLayout.SequentialGroup horizontalPaneLayout = ruletypeSeverityLayout.createSequentialGroup();
-		horizontalPaneLayout.addComponent(CategoryScrollpane);
-		horizontalPaneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
-		horizontalPaneLayout.addComponent(RuletypeScrollpane);
-		horizontalPaneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
-		horizontalPaneLayout.addGroup(horizontalButtonLayout);
-		horizontalPaneLayout.addContainerGap();
-		ruletypeSeverityLayout.setHorizontalGroup(horizontalPaneLayout);
+		GroupLayout.SequentialGroup horizontalPaneGroup = ruletypeSeverityLayout.createSequentialGroup();
+		horizontalPaneGroup.addComponent(CategoryScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneGroup.addComponent(RuletypeScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		horizontalPaneGroup.addContainerGap();
+		ruletypeSeverityLayout.setHorizontalGroup(horizontalPaneGroup);
 		
-		GroupLayout.SequentialGroup verticalButtonLayout = ruletypeSeverityLayout.createSequentialGroup();
-		verticalButtonLayout.addContainerGap();
-		verticalButtonLayout.addComponent(Restore);
-		verticalButtonLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonLayout.addComponent(RestoreAll);
-		verticalButtonLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonLayout.addComponent(Apply);
-		verticalButtonLayout.addContainerGap();
+		GroupLayout.SequentialGroup verticalButtonGroup = ruletypeSeverityLayout.createSequentialGroup();
+		verticalButtonGroup.addContainerGap();
+		verticalButtonGroup.addComponent(Restore);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(RestoreAll);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(Apply);
+		verticalButtonGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPaneLayout = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
-		verticalPaneLayout.addComponent(CategoryScrollpane);
-		verticalPaneLayout.addComponent(RuletypeScrollpane);
-		verticalPaneLayout.addGroup(verticalButtonLayout);
+		GroupLayout.ParallelGroup verticalPaneGroup = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalPaneGroup.addComponent(CategoryScrollpane);
+		verticalPaneGroup.addComponent(RuletypeScrollpane);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
 		
-		ruletypeSeverityLayout.setVerticalGroup(verticalPaneLayout);
+		ruletypeSeverityLayout.setVerticalGroup(verticalPaneGroup);
 		
 		setLayout(ruletypeSeverityLayout);
 	}

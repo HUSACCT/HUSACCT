@@ -1,7 +1,6 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -52,17 +51,23 @@ public class LanguageSeverityConfiguration extends JPanel {
 		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"), ruletypeSeverity);
 		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"), violationtypeSeverity);
 		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationtypeActivePerRuletype"), activeViolationtype);
-
+		
+		createLayout();
+	}
+	
+	private void createLayout(){
 		GroupLayout layout = new GroupLayout(this);
+		
+		GroupLayout.SequentialGroup horizontalGroup = layout.createSequentialGroup();
+		horizontalGroup.addComponent(tabbedPane);
+		layout.setHorizontalGroup(horizontalGroup);
+		
+		GroupLayout.SequentialGroup verticalGroup = layout.createSequentialGroup();
+		verticalGroup.addContainerGap();
+		verticalGroup.addComponent(tabbedPane);
+		layout.setVerticalGroup(verticalGroup);
+		
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING).
-				addComponent(tabbedPane));
-		layout.setVerticalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING).
-				addGroup(GroupLayout.Alignment.TRAILING, layout.
-				createSequentialGroup().addContainerGap().addComponent(
-				tabbedPane)));
 	}
 	
 	public void setSeverityNames(List<Severity> severities){
