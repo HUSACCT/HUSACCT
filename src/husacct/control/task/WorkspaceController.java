@@ -147,7 +147,6 @@ public class WorkspaceController {
 	}
 	
 	public Workspace getCurrentWorkspace(){
-		System.out.println("current workspace: " + currentWorkspace);
 		return currentWorkspace;
 	}
 

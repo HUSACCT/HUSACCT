@@ -105,7 +105,6 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testLoadWorkspace(){
-		System.out.println("LoadWorkspace");
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("file", validTestFile);
 		workspaceController.loadWorkspace("xml", data);
