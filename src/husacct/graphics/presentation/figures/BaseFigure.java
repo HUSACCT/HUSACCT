@@ -20,16 +20,25 @@ import org.jhotdraw.draw.handle.Handle;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
-	private static final long serialVersionUID = 971276235252293165L;
 	public static final Color defaultBackgroundColor = new Color(252, 255, 182);
+	
+	private static final long serialVersionUID = 971276235252293165L;
+	
 	private boolean isSizeable = false;
-
+	private String name;	
+	
 	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 
-	public BaseFigure() {
+	public BaseFigure(String theName) {
 		super();
+		
+		name = theName;
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	public void addDecorator(Decorator decorator) {
 		decorators.add(decorator);
 	}

@@ -4,11 +4,13 @@ import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
+import husacct.graphics.presentation.menubars.GraphicsMenuBar;
+import husacct.graphics.presentation.menubars.LocationButtonActionListener;
+import husacct.graphics.presentation.menubars.ZoomLocationBar;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.HierarchyBoundsListener;
@@ -16,12 +18,7 @@ import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -32,30 +29,26 @@ public class GraphicsFrame extends JInternalFrame {
 	private static final long serialVersionUID = -4683140198375851034L;
 
 	private DrawingView drawingView;
-	private JMenuBar menuBar, locationBar;
-	private JCheckBox showViolationsOptionMenu;
+	private GraphicsMenuBar menuBar;
+	private ZoomLocationBar locationBar;
 	private String currentPath;
 	private JScrollPane drawingScrollPane, propertiesScrollPane;
-	private JComponent centerPane;
+	private JSplitPane centerPane;
 	private String ROOT_LEVEL;
-	private final String LOCATION_SEPERATOR = ".";
 	private boolean showingProperties = false;
 
-	int frameTotalWidth = getWidth();
-	int menuItemMaxWidth = 140;
-	int menuItemMaxHeight = 45;
-
-	private JButton goToParentMenu, refreshMenu, exportToImageMenu, rootLocationButton;
-	private String[] violationColumnNamesArray;
-	private String[] dependencyColumnNamesArray;
+	private int frameTotalWidth;
+	
+	private String[] violationColumnKeysArray;
+	private String[] dependencyColumnKeysArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
-	private HashMap<JButton, String> buttonPaths = new HashMap<JButton, String>();
 
 	public GraphicsFrame(DrawingView givenDrawingView) {
 		setVisible(false);
+		frameTotalWidth = getWidth();
 
 		controlService = ServiceProvider.getInstance().getControlService();
 		ROOT_LEVEL = controlService.getTranslatedString("Root");
@@ -75,6 +68,22 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 	}
+	
+	public void refreshFrame() {
+		updateComponentsLocaleStrings();
+	}
+	
+	public String getCurrentPath() {
+		return currentPath;
+	}
+
+	public void resetCurrentPath() {
+		currentPath = "";
+	}
+
+	public void setCurrentPath(String path) {
+		currentPath = path;
+	}
 
 	private void initializeComponents() {
 		drawingScrollPane = new JScrollPane();
@@ -90,57 +99,55 @@ public class GraphicsFrame extends JInternalFrame {
 		createMenuBar();
 		createLocationBar();
 
-		setLayout(new java.awt.BorderLayout());
+		setLayout(new BorderLayout());
 		add(menuBar, BorderLayout.NORTH);
 		add(locationBar, BorderLayout.SOUTH);
 
-		dependencyColumnNamesArray = new String[] { "From", "To", "LineNumber", "DependencyType" };
-		violationColumnNamesArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
+		dependencyColumnKeysArray = new String[] { "From", "To", "LineNumber", "DependencyType" };
+		violationColumnKeysArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
 
-		updateComponents();
+		updateComponentsLocaleStrings();
 
-		layoutComponents(false);
+		layoutComponents();
 	}
 
-	private void updateComponents() {
-		goToParentMenu.setText(controlService.getTranslatedString("LevelUp"));
-		refreshMenu.setText(controlService.getTranslatedString("Refresh"));
-		showViolationsOptionMenu.setText(controlService.getTranslatedString("ShowViolations"));
-		exportToImageMenu.setText(controlService.getTranslatedString("ExportToImage"));
-
+	private void updateComponentsLocaleStrings() {
+		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
+		menuBarLocale.put("LevelUp", controlService.getTranslatedString("LevelUp"));
+		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
+		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
+		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
+		menuBar.setLocale(menuBarLocale);
+		
 		dependencyColumnNames = new ArrayList<String>();
-		for (String key : dependencyColumnNamesArray) {
+		for (String key : dependencyColumnKeysArray) {
 			dependencyColumnNames.add(controlService.getTranslatedString(key));
 		}
 
 		violationColumnNames = new ArrayList<String>();
-		for (String key : violationColumnNamesArray) {
+		for (String key : violationColumnKeysArray) {
 			violationColumnNames.add(controlService.getTranslatedString(key));
 		}
 
 		ROOT_LEVEL = controlService.getTranslatedString("Root");
-		if (null != rootLocationButton) {
-			rootLocationButton.setText(ROOT_LEVEL);
-		}
+		locationBar.setLocale(ROOT_LEVEL);
 	}
 
-	public void refreshFrame() {
-		updateComponents();
-	}
-
-	private void layoutComponents(boolean showProperties) {
-		showingProperties = showProperties;
+	private void layoutComponents() {
 		if (centerPane != null) {
 			remove(centerPane);
 		}
 
-		if (!showProperties) {
-			centerPane = drawingScrollPane;
+		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		if (!showingProperties) {
+			centerPane.add(drawingScrollPane);
+			centerPane.setDividerSize(0);
 		} else {
-			centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawingScrollPane, propertiesScrollPane);
+			centerPane.add(drawingScrollPane);
+			centerPane.add(propertiesScrollPane);
 			positionLayoutComponents();
-			((JSplitPane) centerPane).setOneTouchExpandable(true);
-			((JSplitPane) centerPane).setContinuousLayout(true);
+			centerPane.setOneTouchExpandable(true);
+			centerPane.setContinuousLayout(true);
 		}
 		add(centerPane, java.awt.BorderLayout.CENTER);
 
@@ -151,138 +158,63 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private void positionLayoutComponents() {
 		if (showingProperties) {
-			((JSplitPane) centerPane).setSize(getWidth(), getHeight());
-			int smallerSize = ((JSplitPane) centerPane).getSize().height / 5 * 3;
-			((JSplitPane) centerPane).setDividerLocation(smallerSize);
+			centerPane.setSize(getWidth(), getHeight());
+			int smallerSize = centerPane.getSize().height / 5 * 3;
+			centerPane.setDividerLocation(smallerSize);
 		}
 	}
 
 	private void createMenuBar() {
-		menuBar = new JMenuBar();
+		menuBar = new GraphicsMenuBar();
 		menuBar.setSize(frameTotalWidth, 20);
-		goToParentMenu = new JButton();
-		goToParentMenu.setSize(50, menuItemMaxHeight);
-		goToParentMenu.addActionListener(new ActionListener() {
+		menuBar.setLevelUpAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				moduleZoomOut();
 			}
 		});
-		menuBar.add(goToParentMenu);
-
-		refreshMenu = new JButton();
-		refreshMenu.setSize(50, menuItemMaxHeight);
-		refreshMenu.addActionListener(new ActionListener() {
+		menuBar.setRefreshAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				refreshDrawing();
 			}
 		});
-		menuBar.add(refreshMenu);
-
-		showViolationsOptionMenu = new JCheckBox();
-		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
-		showViolationsOptionMenu.addActionListener(new ActionListener() {
+		menuBar.setToggleViolationsAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleViolations();
 			}
 		});
-		menuBar.add(showViolationsOptionMenu);
-
-		exportToImageMenu = new JButton();
-		exportToImageMenu.setSize(50, menuItemMaxHeight);
-		exportToImageMenu.addActionListener(new ActionListener() {
+		menuBar.setExportToImageAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				exportToImage();
 			}
 		});
-		menuBar.add(exportToImageMenu);
-
 		add(menuBar, java.awt.BorderLayout.NORTH);
 	}
 
 	public void createLocationBar() {
-		locationBar = new JMenuBar();
+		locationBar = new ZoomLocationBar();
+		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
+			@Override
+			public void actionPerformed(String selectedPath) {
+				moduleOpen(selectedPath);
+			}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		locationBar.setSize(frameTotalWidth, 20);
 
-		updateLocationBar();
+		updateGUI();
 
 		add(locationBar, java.awt.BorderLayout.SOUTH);
 	}
 
-	private void updateLocationBar() {
-		clearLocationBar();
-		createAndAddRootLocationButton();
-
-		String path = getCurrentPath();
-		String pathUntilNow = "";
-		String[] pathParts = new String[] {};
-		if (!path.equals("")) {
-			pathParts = path.split("\\" + LOCATION_SEPERATOR);
-		}
-		if (pathParts.length > 0) {
-			addLocationSeperator();
-			for (String part : pathParts) {
-				pathUntilNow = pathUntilNow + part;
-				createAndAddLocationButton(part, pathUntilNow);
-
-				if (!pathParts[pathParts.length - 1].equals(part)) {
-					addLocationSeperator();
-					pathUntilNow = pathUntilNow + LOCATION_SEPERATOR;
-				}
-			}
-		}
+	public void updateGUI() {
+		locationBar.updateLocationBar(getCurrentPath());
 		updateUI();
-	}
-
-	private void createAndAddRootLocationButton() {
-		rootLocationButton = createLocationButton(ROOT_LEVEL, "");
-		locationBar.add(rootLocationButton);
-	}
-
-	private void createAndAddLocationButton(String levelName, String fullPath) {
-		locationBar.add(createLocationButton(levelName, fullPath));
-	}
-
-	private JButton createLocationButton(String levelName, String fullPath) {
-		JButton locationStringButton = new JButton(levelName);
-		locationStringButton.setSize(10, menuItemMaxHeight);
-		locationStringButton.setMargin(new Insets(0, 0, 0, 0));
-		buttonPaths.put(locationStringButton, fullPath);
-		locationStringButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				String selectedPath = buttonPaths.get(event.getSource());
-				moduleOpen(selectedPath);
-			}
-		});
-		return locationStringButton;
-	}
-
-	private void addLocationSeperator() {
-		locationBar.add(new JLabel(" " + LOCATION_SEPERATOR + " "));
-	}
-
-	private void clearLocationBar() {
-		locationBar.removeAll();
-	}
-
-	public String getCurrentPath() {
-		return currentPath;
-	}
-
-	public void resetCurrentPath() {
-		currentPath = "";
-	}
-
-	public void setCurrentPath(String path) {
-		currentPath = path;
-	}
-
-	public void setCurrentPathAndUpdateGUI(String path) {
-		setCurrentPath(path);
-		updateLocationBar();
 	}
 
 	private void moduleOpen(String path) {
@@ -325,11 +257,10 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
 		propertiesScrollPane.setViewportView(createViolationsTable(violationDTOs));
-		layoutComponents(true);
+		showProperties();
 	}
 
 	// TODO: Sort violations based on severity value
-	// TODO: Make small columns smaller in the GUI
 	private JTable createViolationsTable(ViolationDTO[] violationDTOs) {
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 		for (ViolationDTO violation : violationDTOs) {
@@ -351,17 +282,17 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 
 		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[] {}));
-		setColumnWidths(propertiesTable);
+		setColumnWidths(propertiesTable, violationColumnKeysArray);
 		return propertiesTable;
 	}
 
 	public void hidePropertiesPane() {
-		layoutComponents(false);
+		hideProperties();
 	}
 
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
 		propertiesScrollPane.setViewportView(createDependencyTable(dependencyDTOs));
-		layoutComponents(true);
+		showProperties();
 	}
 
 	private Component createDependencyTable(DependencyDTO[] dependencyDTOs) {
@@ -370,29 +301,39 @@ public class GraphicsFrame extends JInternalFrame {
 			rows.add(new String[] { dependency.from, dependency.to, "" + dependency.lineNumber, dependency.type });
 		}
 		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[] {}));
-		setColumnWidths(propertiesTable);
+		setColumnWidths(propertiesTable, dependencyColumnKeysArray);
 		return propertiesTable;
 	}
 	
-	private void setColumnWidths(JTable table){
+	private void setColumnWidths(JTable table, String[] columnNames){
 		TableColumn column = null;
 		int lineNumberColumnWidth = 50;
 		int otherColumnWidth = (getWidth() / (table.getColumnCount())) - (lineNumberColumnWidth / table.getColumnCount());
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			column = table.getColumnModel().getColumn(i);
-			if (dependencyColumnNamesArray[i] == "LineNumber") {
+			if (columnNames[i] == "LineNumber") {
 				column.setPreferredWidth(lineNumberColumnWidth);
 			} else {
 				column.setPreferredWidth(otherColumnWidth);
 			}
 		}
 	}
-
+	
+	public void showProperties(){
+		showingProperties = true;
+		layoutComponents();
+	}
+	
+	public void hideProperties(){
+		showingProperties = false;
+		layoutComponents();
+	}
+	
 	public void turnOnViolations() {
-		showViolationsOptionMenu.setSelected(true);
+		menuBar.setViolationToggle(true);
 	}
 
 	public void turnOffViolations() {
-		showViolationsOptionMenu.setSelected(false);
+		menuBar.setViolationToggle(false);
 	}
 }

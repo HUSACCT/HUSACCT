@@ -12,7 +12,7 @@ import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
-import husacct.graphics.task.layout.BasicLayoutStrategy;
+import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 
 import java.util.Locale;
@@ -62,8 +62,8 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 
-//		layoutStrategy = new LayeredLayoutStrategy(drawing);
-		layoutStrategy = new BasicLayoutStrategy(drawing);
+		layoutStrategy = new LayeredLayoutStrategy(drawing);
+//		layoutStrategy = new BasicLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
@@ -140,13 +140,29 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
-		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
+		
+		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.updateGUI();
+		
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
+		
+		// ATTN: The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
+		// are done specifically in that order for a reason!
+		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
+		// after updating the layout of the drawing. 
+		// To solve this we first draw the entire drawing, update the layout and then 
+		// remove all the lines and re-add them to the drawing. 
+		// As it's currently unknown what causes the bug or how to solve it and the
+		// deadline for Construction II is approaching, we have decided to go with a 
+		// work around. However, this bug should be fixed as soon as possible. 
+		drawLinesBasedOnSetting();
+		
 		updateLayout();
+		
 		drawLinesBasedOnSetting();
 	}
 
