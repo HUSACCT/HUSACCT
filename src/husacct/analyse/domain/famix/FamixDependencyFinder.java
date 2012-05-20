@@ -6,9 +6,9 @@ import java.util.List;
 
 class FamixDependencyFinder extends FamixFinder{
 
-	private static final String EXTENDS_ABSTRCT = "extendsAbstract";
-	private static final String EXTENDS_CONCRETE = "extendsConcrete";
-	private static final String EXTENDS_LIBRARY = "extendsLibrary";
+	private static final String EXTENDS_ABSTRCT = "ExtendsAbstract";
+	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
+	private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
 	
 	private static enum FinderFunction{FROM, TO, BOTH};
 	private FinderFunction currentFunction;
@@ -129,7 +129,7 @@ class FamixDependencyFinder extends FamixFinder{
 	
 	private String determineType(FamixAssociation assocation){
 		String type = assocation.type;
-		if(type.equals("extends")){
+		if(type.equals("Extends")){
 			FamixClass theClass = getClassForUniqueName(assocation.to);
 			if(theClass == null) type = EXTENDS_LIBRARY;
 			else if(theClass.isAbstract) type = EXTENDS_ABSTRCT;
