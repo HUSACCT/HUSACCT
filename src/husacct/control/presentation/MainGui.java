@@ -6,12 +6,18 @@ import husacct.control.presentation.menubar.HelpMenu;
 import husacct.control.presentation.menubar.LanguageMenu;
 import husacct.control.presentation.menubar.ValidateMenu;
 import husacct.control.presentation.taskbar.TaskBar;
+import husacct.control.presentation.toolbar.ToolBar;
+import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.task.MainController;
 
+import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -38,11 +44,15 @@ public class MainGui extends JFrame{
 	private String titlePrefix = "HUSACCT";
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
+	private MoonWalkPanel moonwalkPanel;
+	private Thread moonwalkThread;
+	private ToolBar toolBar;
 	
 	public MainGui(MainController controller) {
 		this.mainController = controller;
 		setup();
 		addComponents();
+		addListeners();
 		createMenuBar();
 		setVisible(true);
 	}
@@ -74,14 +84,38 @@ public class MainGui extends JFrame{
 	}
 	
 	private void addComponents(){
+		JPanel contentPane = new JPanel(new BorderLayout()); 
 		desktopPane = new JDesktopPane();
 		JPanel taskBarPane = new JPanel(new GridLayout());
-		
+		moonwalkPanel = new MoonWalkPanel();
+		moonwalkThread = new Thread(moonwalkPanel);
+		toolBar = new ToolBar(mainController);
 		taskBar = new TaskBar();
+		
 		taskBarPane.add(taskBar);
 		
-		add(desktopPane);
+		contentPane.add(toolBar, BorderLayout.NORTH);
+		contentPane.add(desktopPane, BorderLayout.CENTER);
+		
+		add(contentPane);
+		add(moonwalkPanel);
 		add(taskBarPane);
+	}
+	
+	private void addListeners(){
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent event) {
+				if(event.getKeyCode() == KeyEvent.VK_F12){
+					try {
+						moonwalkThread.start();
+					} catch (Exception e){
+						logger.debug("Unable to start Moonwalk");
+					}
+				}
+				return false;
+			}
+		});
 	}
 	
 	private void createMenuBar() {
