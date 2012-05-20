@@ -109,7 +109,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
-		fAssocation.type = "declaration";
+		fAssocation.type = "Declaration";
 		fAssocation.lineNumber = line;
 		model.waitingAssociations.add(fAssocation);
 	}
@@ -131,7 +131,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
-		fAssocation.type = "declaration";
+		fAssocation.type = "Declaration";
 		fAssocation.lineNumber = lineNumber;
 		model.waitingAssociations.add(fAssocation);
 	}
@@ -153,7 +153,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
-		fAssocation.type = "declaration";
+		fAssocation.type = "Declaration";
 		fAssocation.lineNumber = lineNumber;
 		model.waitingAssociations.add(fAssocation);
 	}
@@ -172,7 +172,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
-		fAssocation.type = "annotation";
+		fAssocation.type = "Annotation";
 		fAssocation.lineNumber = linenumber;
 		model.waitingAssociations.add(fAssocation);
 	}
@@ -229,7 +229,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	@Override
 	public void createConstructorInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
 		FamixInvocation famixInvocation = new FamixInvocation();
-		famixInvocation.type = "invocConstructor";
+		famixInvocation.type = "InvocConstructor";
 		famixInvocation.from = from;
 		famixInvocation.lineNumber = lineNumber;
 		famixInvocation.to = to;
@@ -242,7 +242,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	@Override
 	public void createMethodInvocation( String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
 		FamixInvocation famixInvocation = new FamixInvocation();
-		famixInvocation.type = "invocMethod";
+		famixInvocation.type = "InvocMethod";
 		famixInvocation.from = from;
 		famixInvocation.lineNumber = lineNumber;
 		famixInvocation.to = to;
@@ -255,7 +255,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	@Override
 	public void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
 		FamixInvocation famixInvocation = new FamixInvocation();
-		famixInvocation.type = "accessPropertyOrField";
+		famixInvocation.type = "AccessPropertyOrField";
 		famixInvocation.from = from;
 		famixInvocation.lineNumber = lineNumber;
 		famixInvocation.to = to;
