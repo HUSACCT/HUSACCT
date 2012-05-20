@@ -25,6 +25,7 @@ import java.util.Locale;
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
 
@@ -175,10 +176,12 @@ public abstract class DrawingController implements UserInputListener {
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
+			parentFigure.willChange();
+			parentFigure.changed();
 			for (AbstractDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
 				parentFigure.addChildFigure(generatedFigure);
-				// drawing.add(generatedFigure);
+				drawing.add(generatedFigure);
 				figureMap.linkModule(generatedFigure, dto);
 			}
 			drawing.add(parentFigure);
