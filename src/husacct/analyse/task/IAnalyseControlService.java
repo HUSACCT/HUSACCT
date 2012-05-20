@@ -3,7 +3,7 @@ package husacct.analyse.task;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-public interface AnalyseControlService {
+public interface IAnalyseControlService {
 		
 	public void analyseApplication();
 	
@@ -16,6 +16,7 @@ public interface AnalyseControlService {
 	
 	public String[] getAvailableLanguages();
 	
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 	public AnalysedModuleDTO[] getRootModules();
 	public AnalysedModuleDTO[] getChildModulesInModule(String from); 
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);

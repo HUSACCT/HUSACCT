@@ -3,7 +3,7 @@ package husacct.analyse.domain.famix;
 class FamixImplementationDefinition extends FamixAssociation{
 
 	public FamixImplementationDefinition(){
-		super.type = "implements";
+		super.type = "Implements";
 	}
 	//public String accessControlQualifier;
 	public int index;  //index??

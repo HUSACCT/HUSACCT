@@ -3,7 +3,7 @@ package husacct.analyse.domain.famix;
 class FamixInheritanceDefinition extends FamixAssociation{
 	
 	public FamixInheritanceDefinition(){
-		super.type = "extends";
+		super.type = "Extends";
 	}
 	//public String accessControlQualifier;
 	public int index;  //index??

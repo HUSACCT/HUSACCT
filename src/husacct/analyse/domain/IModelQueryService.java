@@ -5,8 +5,9 @@ import husacct.common.dto.DependencyDTO;
 
 import java.util.List;
 
-public interface ModelQueryService {
+public interface IModelQueryService {
 
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 	public List<AnalysedModuleDTO> getRootModules(); 
 	public List<AnalysedModuleDTO> getChildModulesInModule(String from);
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);

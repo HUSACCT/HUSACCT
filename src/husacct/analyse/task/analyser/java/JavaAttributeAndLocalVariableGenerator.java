@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
@@ -16,9 +16,9 @@ class JavaAttributeAndLocalVariableGenerator {
 	private String declareClass; //example: package.package.class
 	private String declareType = "";  //int, string, CustomClass etc
 	private int lineNumber;
-	private String belongsToMethod; //alleen voor local variables
+	private String belongsToMethod = ""; //alleen voor local variables
 	
-	private ModelCreationService modelService = new FamixCreationServiceImpl();
+	private IModelCreationService modelService = new FamixCreationServiceImpl();
 
 	private String name;
 
@@ -41,7 +41,13 @@ class JavaAttributeAndLocalVariableGenerator {
 		}
 		
 		this.belongsToClass = belongsToClass;
-		lineNumber = attributeTree.getLine();
+		CommonTree commonTree = (CommonTree) attributeTree; 
+		if (commonTree.getLine() == 0){
+			this.lineNumber = commonTree.getChild(0).getLine();
+		}
+		else{
+			this.lineNumber = commonTree.getLine();
+		}
 		
 		walkThroughAST(attributeTree);
 	}
@@ -61,24 +67,42 @@ class JavaAttributeAndLocalVariableGenerator {
 			}
 			else if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL){
 				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
-				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree);
+				javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) tree, belongsToMethod);
 			} else if(treeType == JavaParser.AT){
 				JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
 				annotationGenerator.generateMethod((CommonTree) child);
+			} else if(treeType == JavaParser.EXPR){
+				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+				if (child.getChild(0).getType() == JavaParser.METHOD_CALL){
+					javaInvocationGenerator.generateMethodInvocToModel((CommonTree) tree, belongsToMethod);
+				}
+				else if (child.getChild(0).getType() == JavaParser.EXPR){
+					javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) tree, belongsToMethod);
+					deleteTreeChild(child.getChild(0));
+				}
+				else if (child.getChild(0).getType() == JavaParser.DOT){
+					javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) child, belongsToMethod);
+					deleteTreeChild(child.getChild(0));
+				}
 			}
 			walkThroughAST(child);
 		}
 	}
+	
+	private void deleteTreeChild(Tree treeNode){ 
+        for (int child = 0 ; child < treeNode.getChildCount();){ 
+            treeNode.deleteChild(treeNode.getChild(child).getChildIndex()); 
+        } 
+    } 
 
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		System.out.println(declareType);
 		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
 	}
 	
 	private void createLocalVariableObject() {
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		modelService.createLocalVariable("", belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+		modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
 	}
 
 	private void setAttributeName(Tree tree) {
@@ -86,14 +110,14 @@ class JavaAttributeAndLocalVariableGenerator {
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
 			if(treeType == JavaParser.IDENT){
-				name = child.getText();
+				this.name = child.getText();
+				this.lineNumber = tree.getLine();
 				break;
 			} 		
-			setAttributeName((CommonTree) tree.getChild(i));
+			setAttributeName(child);
 		}
 	}
 
-	//pakt nog geen primitieve types op.
 	private void setDeclareType(Tree typeTree) {
 		
 		Tree child = typeTree.getChild(0);
