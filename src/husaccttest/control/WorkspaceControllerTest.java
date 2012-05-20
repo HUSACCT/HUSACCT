@@ -10,6 +10,7 @@ import husacct.control.ControlServiceImpl;
 import husacct.control.domain.Workspace;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.resources.XmlResource;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -17,6 +18,8 @@ import java.net.URL;
 import java.util.HashMap;
 
 import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.After;
 import org.junit.Before;
@@ -30,7 +33,9 @@ public class WorkspaceControllerTest {
 	
 	@Before
 	public void setup(){
-		ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		ServiceProvider serviceProvider = ServiceProvider.getInstance();
+		serviceProvider.resetServices();
+		ControlServiceImpl controlService = (ControlServiceImpl) serviceProvider.getControlService();
 		MainController mainController = controlService.getMainController();
 		workspaceController = mainController.getWorkspaceController();
 		URL testFileURI = getClass().getResource("/husacct/common/resources/control/testworkspace.xml");
@@ -86,12 +91,23 @@ public class WorkspaceControllerTest {
 	
 	@Test
 	public void testLoadWorkspaceData(){
-		Document doc1 = workspaceController.getWorkspaceData();
-		workspaceController.loadWorkspace(doc1);
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		data.put("file", validTestFile);
+		XmlResource xmlResource = new XmlResource();
+		Document doc1 = xmlResource.load(data);
+		
+		workspaceController.loadWorkspace("xml", data);
 		Document doc2 = workspaceController.getWorkspaceData();
+		
+		Element doc1ControlServiceElement = doc1.getRootElement().getChild("husacct.control.ControlServiceImpl");
+		Element doc2ControlServiceElement = doc2.getRootElement().getChild("husacct.control.ControlServiceImpl");
+		
 		XMLOutputter outputter = new XMLOutputter();
-		String doc1String = outputter.outputString(doc1);
-		String doc2String = outputter.outputString(doc2);
+		outputter.setFormat(Format.getCompactFormat());
+		
+		String doc1String = outputter.outputString(doc1ControlServiceElement);
+		String doc2String = outputter.outputString(doc2ControlServiceElement);
+		
 		assertEquals(doc1String.length(), doc2String.length());
 	}
 	
