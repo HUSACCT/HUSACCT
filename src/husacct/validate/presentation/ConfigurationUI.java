@@ -257,15 +257,15 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 	
 	public void loadGUIText(){
-		setTitle(ValidateTranslator.getValue("Configuration"));
-		add.setText(ValidateTranslator.getValue("Add"));
-		remove.setText(ValidateTranslator.getValue("Remove"));
-		up.setText(ValidateTranslator.getValue("Up"));
-		down.setText(ValidateTranslator.getValue("Down"));
-		applySeverity.setText(ValidateTranslator.getValue("Apply"));
-		restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
-		tabPanel.addTab(ValidateTranslator.getValue("SeverityConfiguration"), severityNamePanel);
-		cancel.setText(ValidateTranslator.getValue("Cancel"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("Configuration"));
+		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
+		remove.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
+		up.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Up"));
+		down.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Down"));
+		applySeverity.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
+		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
+		tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
+		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
 
 		loadModels();
 		setLanguageTabsLanguage();
@@ -311,7 +311,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		}
 		if (tabPanel.getTabCount() == 1) {
 			logger.error("No programming language set");
-			tabPanel.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
+			tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 }

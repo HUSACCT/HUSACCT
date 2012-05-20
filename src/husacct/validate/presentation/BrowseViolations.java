@@ -103,11 +103,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	private void loadViolationsTableModel() {
 		String[] columnNames = {
-				ValidateTranslator.getValue("Source"),
-				ValidateTranslator.getValue("Rule"),
-				ValidateTranslator.getValue("DependencyKind"),
-				ValidateTranslator.getValue("Target"),
-				ValidateTranslator.getValue("Severity")};
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Source"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Rule"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("DependencyKind"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Target"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 
 		violationsTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 7993526243751581611L;
@@ -149,8 +149,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	private void loadChooseViolationHistoryTableModel() {
 		String[] columnNames = {
-				ValidateTranslator.getValue("Date"),
-				ValidateTranslator.getValue("Description")};
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Date"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Description")};
 		chooseViolationHistoryTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 5804122455086043586L;
 			@Override
@@ -189,7 +189,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		currentViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ValidateTranslator.getValue(violation.getRuletypeKey()), ValidateTranslator.getValue(violation.getViolationtypeKey()) + ", " + getDirectKey(violation.isIndirect()), violation.getClassPathTo(), violation.getSeverity().toString()});
+			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + getDirectKey(violation.isIndirect()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		}
 	}
 
@@ -216,17 +216,17 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		if(selectedViolationHistory != null) {
 			fillViolationsTable(selectedViolationHistory.getViolations());
 		}
-		informationPanel.setBorder(new TitledBorder(ValidateTranslator.getValue("Information")));
-		violationDetailPane.setBorder(new TitledBorder(ValidateTranslator.getValue("Details")));
-		detailsLineNumberLabel.setText(ValidateTranslator.getValue("LineNumber"));
-		detailsLogicalModuleLabel.setText(ValidateTranslator.getValue("LogicalModule"));
-		detailsMessageLabel.setText(ValidateTranslator.getValue("Message"));
-		filterPane.setBorder(new TitledBorder(ValidateTranslator.getValue("Filter")));
-		buttonDeleteViolationHistoryPoint.setText(ValidateTranslator.getValue("Remove"));
-		applyFilter.setText(ValidateTranslator.getValue("ApplyFilter"));
-		buttonEditFilter.setText(ValidateTranslator.getValue("EditFilter"));
-		buttonLatestViolations.setText(ValidateTranslator.getValue("CurrentViolations"));
-		buttonSaveInHistory.setText(ValidateTranslator.getValue("SaveInHistory"));
+		informationPanel.setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Information")));
+		violationDetailPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Details")));
+		detailsLineNumberLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LineNumber"));
+		detailsLogicalModuleLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LogicalModule"));
+		detailsMessageLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Message"));
+		filterPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Filter")));
+		buttonDeleteViolationHistoryPoint.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
+		applyFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ApplyFilter"));
+		buttonEditFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("EditFilter"));
+		buttonLatestViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("CurrentViolations"));
+		buttonSaveInHistory.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistory"));
 	}
 
 
@@ -383,14 +383,14 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 
 		totalViolation = new JLabel();
-		totalViolation.setText(ValidateTranslator.getValue("TotalViolations") + ":");
+		totalViolation.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
 
 		totalViolationNumber = new JLabel();
 		informationPanel.add(totalViolationNumber);
 
 		shownViolations = new JLabel();
-		shownViolations.setText(ValidateTranslator.getValue("ShownViolations") + ":");
+		shownViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
 
 		shownViolationsNumber = new JLabel();
@@ -566,7 +566,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	private void saveInHistoryActionPerformed(ActionEvent e) {
-		String input = JOptionPane.showInputDialog(ValidateTranslator.getValue("SaveInHistoryDialog"));
+		String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistoryDialog"));
 		if(input != null && !input.equals("")) {
 			taskServiceImpl.saveInHistory(input);
 		}
