@@ -18,15 +18,11 @@ public final class FigureFactory {
 		return new RelationFigure("Dependency from " + dependencyDTOs[0].from + " to " + dependencyDTOs[0].to, false, dependencyDTOs.length);
 	}
 
-	/**
-	 * Get a decorator for decorating a violated figure
-	 */
 	public ViolationsDecorator createViolationsDecorator(ViolationDTO[] violationDTOs) {
 		if (violationDTOs.length <= 0) {
 			throw new RuntimeException("No violations received. Cannot create a violation figure.");
 		}
 
-		// get the highest severity color
 		int highestSeverity = -1;
 		Color highestColor = null;
 		for (ViolationDTO dto : violationDTOs) {
@@ -43,13 +39,14 @@ public final class FigureFactory {
 		return new ViolationsDecorator(highestColor);
 	}
 
+	// FIXME: Patrick: We've decided to NOT store DTOs inside decorators.
+	// The code below shows that DTOs are stored inside the decorator. Please
+	// fix the code and remove this comment.
 	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {
-		if (violationDTOs.length <= 0) {
+		if (violationDTOs.length == 0)
 			throw new RuntimeException("No violations received. Cannot create a violation figure.");
-		}
 
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " + violationDTOs[0].fromClasspath + " to " + violationDTOs[0].toClasspath, true, violationDTOs.length);
-
 		violatedRelationFigure.addDecorator(this.createViolationsDecorator(violationDTOs));
 
 		return violatedRelationFigure;

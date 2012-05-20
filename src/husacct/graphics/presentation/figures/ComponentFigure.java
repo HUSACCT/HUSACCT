@@ -15,7 +15,7 @@ import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ComponentFigure extends NamedFigure {
+public class ComponentFigure extends BaseFigure {
 	private static final long serialVersionUID = -3019979543942866990L;
 	private RectangleFigure body;
 	private TextFigure text;

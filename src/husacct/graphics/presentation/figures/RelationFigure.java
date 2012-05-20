@@ -23,7 +23,7 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends NamedFigure implements ConnectionFigure, FigureListener {
+public class RelationFigure extends BaseFigure implements ConnectionFigure, FigureListener {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
 	private RoundedLiner lineType;
@@ -97,7 +97,7 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure, Fig
 	public Collection<Handle> createHandles(int detailLevel) {
 		ArrayList<Handle> handles = new ArrayList<Handle>(getNodeCount());
 		switch (detailLevel) {
-		case -1: // Mouse hover handles
+		case -1:
 			handles.add(new BezierOutlineHandle(line, true));
 			break;
 		case 0:
@@ -232,8 +232,18 @@ public class RelationFigure extends NamedFigure implements ConnectionFigure, Fig
 	public int getAmount() {
 		return Integer.parseInt(amountFigure.getText());
 	}
-
-	// these methods listen to line events
+	
+	@Override 
+	public void willChange() {
+		line.willChange();
+		super.willChange();
+	}
+	
+	@Override
+	public void changed() {
+		line.changed();
+		super.changed();
+	}	
 
 	@Override
 	public void areaInvalidated(FigureEvent e) {
