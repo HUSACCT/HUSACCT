@@ -1,12 +1,12 @@
 package husacct.validate.domain.factory.message;
 
-import java.util.IllegalFormatException;
-
-import org.apache.log4j.Logger;
-
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
+
+import java.util.IllegalFormatException;
+
+import org.apache.log4j.Logger;
 
 public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
@@ -20,18 +20,7 @@ public class Messagebuilder {
 	}
 
 	private String generateMessage(Message message){
-		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
-		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
-
-		final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
-		final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
-
-		final String left = appendStrings(logicalModuleFromPath, logicalModuleFromType);
-		final String right = appendStrings(logicalModuleToPath, logicalModuleToType);
-
-		final String textFormat = getTextFormat(message.getRuleKey());
-
-		String messageText = generateMessage(textFormat, left, right);
+		String messageText = generateSingleMessage(message);
 
 		for(int i = 0; i < message.getExceptionMessage().size(); i ++ ){
 			if(i == 0){

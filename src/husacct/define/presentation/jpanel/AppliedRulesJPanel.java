@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
@@ -30,16 +31,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
 public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
-	
-	
 	
 	private JTableAppliedRule appliedRulesTable;
 	private JScrollPane appliedRulesPane;
@@ -59,7 +53,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Applied Rules"));
+		this.setBorder(BorderFactory.createTitledBorder("Rules"));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
@@ -122,7 +116,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
-			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
@@ -134,7 +128,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if (selectedAppliedRuleId != -1){
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, selectedAppliedRuleId);
-			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
@@ -143,7 +137,6 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private long getSelectedAppliedRuleId(){
 		long selectedAppliedRuleId = -1;
-//		if (appliedRulesTable))
 		try {//TODO check if selectedRow exists
 			Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
 			if (o instanceof DataHelper) {
@@ -174,20 +167,18 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		setButtonEnableState();
 	}
 
-	public void updateAppliedRuleTable() {
+	public void updateAppliedRuleTable() {		
 		try {
+			JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
+			atm.getDataVector().removeAllElements();
+			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			JPanelStatus.getInstance("Updating rules applied table").start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
 				ArrayList<Long> appliedRulesIds = DefinitionController.getInstance().getAppliedRuleIdsBySelectedModule();
-				
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
 
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
 				if (appliedRulesIds != null) {
 					for (long appliedRuleId : appliedRulesIds) {
 						

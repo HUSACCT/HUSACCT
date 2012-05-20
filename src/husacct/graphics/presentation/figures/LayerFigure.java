@@ -18,38 +18,38 @@ public class LayerFigure extends NamedFigure {
 	protected int minHeight = 50;
 
 	public LayerFigure(String name) {
-		super(name, false);
+		super(name);
 
 		body = new RectangleFigure();
 		text = new TextFigure(name);
 		text.set(AttributeKeys.FONT_BOLD, true);
 		children.add(body);
 		children.add(text);
-		
+
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 	}
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < this.minWidth) {
-			lead.x = anchor.x + this.minWidth;
+		if ((lead.x - anchor.x) < minWidth) {
+			lead.x = anchor.x + minWidth;
 		}
-		if ((lead.y - anchor.y) < this.minHeight) {
-			lead.y = anchor.y + this.minHeight;
+		if ((lead.y - anchor.y) < minHeight) {
+			lead.y = anchor.y + minHeight;
 		}
 
 		body.setBounds(anchor, lead);
 
 		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - this.text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - this.text.getBounds().height) / 2);
+		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
 
-		this.invalidate();
+		invalidate();
 	}
 
 	@Override

@@ -46,6 +46,7 @@ public class XMLDomain {
 	    return XMLAp;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public SoftwareArchitecture getArchitecture() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
 		Element ApArchitecture = (Element)applicationProperties.get(3);   	
@@ -78,6 +79,7 @@ public class XMLDomain {
 		return this.getAppliedRules((Element)applicationProperties.get(3));
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ArrayList<AppliedRule> getAppliedRules(Element ApplicationArchitecture) {
 		Element AppliedRulesRoot = ApplicationArchitecture.getChild("rules");
 		ArrayList<AppliedRule> ruleList = new ArrayList<AppliedRule>();
@@ -109,6 +111,7 @@ public class XMLDomain {
 		return returnList;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public AppliedRule getAppliedRuleFromXML(Element e) {
 		Element ruleDescription = e.getChild("description");
 		Element ruleRegex = e.getChild("regex");
@@ -160,6 +163,7 @@ public class XMLDomain {
 		return AppliedXMLRule;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Module getModuleFromXML(Element e) {
 		Element ModuleType = e.getChild("type");
 		String ModuleTypeText = ModuleType.getText().toLowerCase();

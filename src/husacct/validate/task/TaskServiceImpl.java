@@ -3,14 +3,14 @@ package husacct.validate.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
 import husacct.validate.domain.DomainServiceImpl;
+import husacct.validate.domain.configuration.ActiveRuleType;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.presentation.ViolationHistoryRepositoryObserver;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
@@ -63,11 +63,8 @@ public class TaskServiceImpl{
 		}
 	}
 
-	public ArrayList<Violation> applyFilterViolations(Boolean applyfilter, Calendar date) {
-		if (date == null){
-			return filterController.filterViolations(applyfilter, getAllViolations().getValue());
-		}
-		return filterController.filterViolations(applyfilter, getViolationsByDate(date));
+	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
+			return filterController.filterViolations(true, getAllViolations().getValue());
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
@@ -142,8 +139,8 @@ public class TaskServiceImpl{
 		return exportController.exportAllData(configuration);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(boolean applyFilter){
-		return filterController.getViolationsPerSeverity(applyFilter);
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, boolean applyFilter){
+		return filterController.getViolationsPerSeverity(violationHistory, applyFilter);
 	}
 
 	public void restoreAllToDefault(String language){
@@ -193,7 +190,11 @@ public class TaskServiceImpl{
 		return configuration.getViolationHistories();
 	}
 	
-	public void attachViolationHistoryObserver(ViolationHistoryRepositoryObserver observer) {
-		configuration.attachViolationHistoryRepositoryObserver(observer);
+	public Map<String, List<ActiveRuleType>> getActiveViolationTypes(){
+		return configuration.getActiveViolationTypes();
+	}
+	
+	public void setActiveViolationTypes(String language, List<ActiveRuleType> activeViolations){
+		configuration.setActiveViolationTypes(language, activeViolations);
 	}
 }

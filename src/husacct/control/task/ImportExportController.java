@@ -1,8 +1,8 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
-import husacct.control.presentation.util.ExportLogicalArchitectureFrame;
-import husacct.control.presentation.util.ImportLogicalArchitectureFrame;
+import husacct.control.presentation.util.ExportLogicalArchitectureDialog;
+import husacct.control.presentation.util.ImportLogicalArchitectureDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -23,11 +23,11 @@ public class ImportExportController {
 	}
 	
 	public void showImportLogicalArchitectureGui(){
-		new ImportLogicalArchitectureFrame(mainController);
+		new ImportLogicalArchitectureDialog(mainController);
 	}
 
 	public void showExportLogicalArchitectureGui() {
-		new ExportLogicalArchitectureFrame(mainController);
+		new ExportLogicalArchitectureDialog(mainController);
 		
 	}
 

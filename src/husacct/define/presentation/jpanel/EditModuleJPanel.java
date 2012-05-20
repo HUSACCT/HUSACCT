@@ -91,6 +91,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
+		resetGUI();
 		Long moduleId = Long.parseLong(arg.toString());
 		if (moduleId != -1){
 			HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
@@ -100,6 +101,11 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 		this.repaint();
 	}
 	
+	private void resetGUI() {
+		this.nameTextfield.setText("");
+		this.descriptionTextArea.setText("");
+	}
+
 	private void updateModule() {
 		String moduleName = nameTextfield.getText();
 		String moduleDescription = descriptionTextArea.getText();

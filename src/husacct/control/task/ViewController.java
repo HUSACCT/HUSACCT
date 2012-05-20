@@ -4,6 +4,8 @@ import husacct.ServiceProvider;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameAdapter;
@@ -26,6 +28,23 @@ public class ViewController {
 	public ViewController(MainController maincontroller){
 		this.mainController = maincontroller;
 		serviceProvider = ServiceProvider.getInstance();
+	}
+	
+	public List<JInternalFrame> getOpenFrames(){
+		List<JInternalFrame> frames = new ArrayList<JInternalFrame>();
+		frames.add(defineInternalFrame);
+		frames.add(violationsInternalFrame);
+		frames.add(configurationInternalFrame);
+		frames.add(definedArchitectureInternalFrame);
+		frames.add(analysedArchitectureInternalFrame);
+		frames.add(applicationTreeInternalFrame);
+		
+		List<JInternalFrame> openedFrames = new ArrayList<JInternalFrame>();
+		for(JInternalFrame frame : frames){
+			if(frame != null) openedFrames.add(frame);
+		}
+		
+		return openedFrames;
 	}
 	
 	private void setupFrame(final JInternalFrame internalFrame, String title){
@@ -161,5 +180,12 @@ public class ViewController {
 		setBounds(applicationTreeInternalFrame, rect);
 		applicationTreeInternalFrame.setVisible(true);
 		applicationTreeInternalFrame.toFront();
+	}
+	
+	public void closeAll(){		
+		for(JInternalFrame frame : getOpenFrames()){
+			frame.dispose();
+			frame = null;
+		}
 	}
 }

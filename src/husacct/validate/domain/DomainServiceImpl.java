@@ -4,6 +4,7 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.assembler.AssemblerController;
 import husacct.validate.domain.check.CheckConformanceController;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
