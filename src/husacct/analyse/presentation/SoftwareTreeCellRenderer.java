@@ -1,8 +1,6 @@
 package husacct.analyse.presentation;
 
-import husacct.analyse.abstraction.language.AnalyseTranslater;
 import husacct.common.dto.AnalysedModuleDTO;
-
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
@@ -16,10 +14,12 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel label;
+	private AnalyseUIController uiController;
 	
-	SoftwareTreeCellRenderer() {
+	SoftwareTreeCellRenderer(AnalyseUIController uiController) {
         label = new JLabel();
         label.setOpaque(true);
+        this.uiController = uiController;
         
         setBackground(UIManager.getColor("Panel.background"));
 		setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
@@ -37,19 +37,21 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
         	AnalysedModuleDTO moduleSelected = (AnalysedModuleDTO)node.getUserObject();
         	ImageIcon icon;
         	if(moduleSelected.uniqueName.equals("")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/application.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-source.png"));
         	}else if(moduleSelected.type.equals("package")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/package.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-package.png"));
         	}else if(moduleSelected.type.equals("class")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/class.gif"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
         	}else if(moduleSelected.type.equals("interface")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/interface.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface.png"));
+        	}else if(moduleSelected.type.equals("enumeration")){
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-enumeration.png"));
         	}else{
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/analyse/presentation/resources/module.png"));
+        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-module.png"));
         	}
         	label.setIcon(icon);
             
-        	if(moduleSelected.name.equals("")) label.setText(AnalyseTranslater.getValue("Application"));
+        	if(moduleSelected.name.equals("")) label.setText(uiController.translate("Application"));
         	else label.setText(moduleSelected.name);
             if (selected)label.setBackground(backgroundSelectionColor);
             else label.setBackground(backgroundNonSelectionColor);

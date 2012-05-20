@@ -7,42 +7,45 @@ import org.jdom2.Element;
 
 public class XMLUtils {
 
-	public static void createElementWithContent(String name, String content, Element destination) {
+	public static Element createElementWithContent(String name, String content) {
 		Element element = new Element(name);
 		element.addContent(content);
-		destination.addContent(element);
-	}
-	public static Element createElementWithoutContent(String name, Element destination) {
-		Element element = new Element(name);
-		destination.addContent(element);
 		return element;
 	}
+	
+	public static Element createLogicalModulesElement(LogicalModules logicalModules) {
+		Element logicalModulesElement = new Element("logicalModules");
+		Element logicalModuleFrom = new Element("logicalModuleFrom");
+		Element logicalModuleTo = new Element("logicalModuleTo");
+		
+		logicalModulesElement.addContent(logicalModuleFrom);
+		logicalModulesElement.addContent(logicalModuleTo);
 
-	public static void createLogicalModulesElement(LogicalModules logicalModules, Element destinationElement) {
-		Element logicalModulesElement =XMLUtils.createElementWithoutContent("logicalModules", destinationElement);
-		Element logicalModuleFrom = XMLUtils.createElementWithoutContent("logicalModuleFrom", logicalModulesElement);
-		Element logicalModuleTo = XMLUtils.createElementWithoutContent("logicalModuleTo", logicalModulesElement);
-
-		XMLUtils.createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleFrom().getLogicalModulePath(), logicalModuleFrom);
-		XMLUtils.createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleFrom().getLogicalModuleType(), logicalModuleFrom);
-		XMLUtils.createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleTo().getLogicalModulePath(), logicalModuleTo);
-		XMLUtils.createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleTo().getLogicalModuleType(), logicalModuleTo);
+		logicalModuleFrom.addContent(XMLUtils.createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleFrom().getLogicalModulePath()));
+		logicalModuleFrom.addContent(XMLUtils.createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleFrom().getLogicalModuleType()));
+		logicalModuleTo.addContent(XMLUtils.createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleTo().getLogicalModulePath()));
+		logicalModuleTo.addContent(XMLUtils.createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleTo().getLogicalModuleType()));
+		
+		return logicalModulesElement;
 	}
 
-	public static void addMessage(Element destination, Message message) {
-		Element messageElement = createElementWithoutContent("message", destination);
-		createLogicalModulesElement(message.getLogicalModules(), messageElement);
-		createElementWithContent("ruleKey", message.getRuleKey(), messageElement);
-		Element violationTypeKeysElement = createElementWithoutContent("violationTypeKeys", messageElement);
+	public static Element createMessageElementFromMessageObject(Message message) {
+		Element messageElement = new Element("message");
+		messageElement.addContent(createLogicalModulesElement(message.getLogicalModules()));
+		messageElement.addContent(createElementWithContent("ruleKey", message.getRuleKey()));
+		Element violationTypeKeysElement = new Element("violationTypeKeys");
+		messageElement.addContent(violationTypeKeysElement);
 		for(String violationTypeKey : message.getViolationTypeKeys()) {
-			createElementWithContent("violationTypeKey", violationTypeKey, violationTypeKeysElement);
+			violationTypeKeysElement.addContent(createElementWithContent("violationTypeKey", violationTypeKey));
 		}
-		Element exceptionMessages = createElementWithoutContent("exceptionMessages", messageElement);
+		Element exceptionMessages = new Element("exceptionMessages");
+		messageElement.addContent(exceptionMessages);
 		if(message.getExceptionMessage() != null) {
 			for(Message exceptionMessage : message.getExceptionMessage()) {
-				addMessage(exceptionMessages, exceptionMessage);
+				exceptionMessages.addContent(createMessageElementFromMessageObject(exceptionMessage));
 			}
 		}
+		return messageElement;
 	}
 
 }

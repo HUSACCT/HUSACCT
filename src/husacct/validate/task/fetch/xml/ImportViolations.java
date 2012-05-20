@@ -44,7 +44,6 @@ public class ImportViolations {
 			
 			violations.add(violation);
 		}
-
 		return violations;
 	}
 

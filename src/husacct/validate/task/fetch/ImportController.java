@@ -27,40 +27,35 @@ public class ImportController {
 	}
 
 	public void importWorkspace(Element element) throws DatatypeConfigurationException{
-		importSeverties(element);
-		importViolations(element);
-		importSeveritiesPerTypesPerProgrammingLanguages(element);
-		importViolationHistory(element);
-		importActiveViolationTypes(element);
+		importSeverties(element.getChild("severities"));
+		importViolations(element.getChild("violations"));
+		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
+		importViolationHistory(element.getChild("violationHistories"));
+		importActiveViolationTypes(element.getChild("activeViolationTypes"));
 	}
 
 	private void importSeverties(Element element) {
-		Element severityElement = element.getChild("severities");
-		this.severities = importFactory.importSeverities(severityElement);
-		configuration.addSeverities(severities);
+		this.severities = importFactory.importSeverities(element);
+		configuration.setSeverities(severities);
 	}
 
 	private void importViolations(Element element) throws DatatypeConfigurationException{
-		Element violationElement = element.getChild("violations");
-		List<Violation> violations = importFactory.importViolations(violationElement, severities);
+		List<Violation> violations = importFactory.importViolations(element, severities);
 		configuration.addViolations(violations);
 	}
 
 	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element){
-		Element severitiesPerTypesPerProgrammingLanguagesElement = element.getChild("severitiesPerTypesPerProgrammingLanguages");
-		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguagesElement, severities);
+		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(element, severities);
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
 	}
 
 	private void importViolationHistory(Element element) {
-		Element violationHistoryElement = element.getChild("violationHistories");
-		List<ViolationHistory> violationHistory = importFactory.importViolationHistory(violationHistoryElement);
+		List<ViolationHistory> violationHistory = importFactory.importViolationHistory(element);
 		configuration.setViolationHistory(violationHistory);
 	}
 
 	private void importActiveViolationTypes(Element element) {
-		Element activeViolationTypesElement = element.getChild("activeViolationTypes");
-		Map<String, List<ActiveRuleType>> activeViolationTypes = importFactory.importActiveViolationTypes(activeViolationTypesElement);
+		Map<String, List<ActiveRuleType>> activeViolationTypes = importFactory.importActiveViolationTypes(element);
 		configuration.setActiveViolationTypes(activeViolationTypes);
 	}
 }

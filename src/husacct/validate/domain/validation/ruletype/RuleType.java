@@ -80,11 +80,11 @@ public abstract class RuleType {
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
-		return new Violation(dependency.lineNumber, severity, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+			return new Violation(dependency.lineNumber, severity.clone(), ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
 	}
 
-	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity){
-		return new Violation(0, severity, ruleKey, "", from, "", inDirect, message, logicalModules);		
+	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity) {
+		return new Violation(0, severity.clone(), ruleKey, "", from, "", inDirect, message, logicalModules);		
 	}
 
 	protected Severity getViolationTypeSeverity(String violationTypeKey){

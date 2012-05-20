@@ -10,12 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-/**
- * 
- * @author Henk ter Harmsel
- * Define Architecture main frame
- * 
- */
 public class ApplicationJInternalFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 6858870868564931134L;
@@ -45,7 +39,6 @@ public class ApplicationJInternalFrame extends JInternalFrame {
 	
 	private void setLayoutSettings() {
 		this.setTitle(" - Define Architecture");
-//		setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
 	}
 	
 	private void addDefinitionPanel() {
@@ -77,5 +70,4 @@ public class ApplicationJInternalFrame extends JInternalFrame {
 			super.setTitle(defaultTitle + " - " + configuration);
 		}
 	}
-
 }

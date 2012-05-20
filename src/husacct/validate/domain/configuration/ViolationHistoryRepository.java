@@ -24,6 +24,8 @@ class ViolationHistoryRepository extends Observable {
 	
 	void addViolationHistory(ViolationHistory violationHistory){
 		violationHistories.add(violationHistory);
+		setChanged();
+		notifyObservers();
 	}
 
 	void removeViolationHistory(Calendar date) {

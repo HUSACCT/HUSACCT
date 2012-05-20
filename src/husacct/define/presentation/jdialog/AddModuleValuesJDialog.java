@@ -16,24 +16,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
 public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 
 	private static final long serialVersionUID = -1729066215610611394L;
+	private final String husacctIcon = "husacct/common/resources/husacct.png";
 	
 	private ModuleJPanel modulePanel;
-	
 	private JPanel innerPanel;
-	
 	private JLabel parentModuleNameLabel;
 	private JTextField moduleNameField;
-	private JTextField moduleDescriptionField;
-//	private JTextField hierarchicalLevelField;
-	
+	private JTextField moduleDescriptionField;	
 	private JComboBox moduleTypeComboBox;
 	
 	public AddModuleValuesJDialog(ModuleJPanel modulePanel) {
@@ -44,7 +36,7 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	@Override
 	public void initUI() {
 		this.setTitle("New Module");
-		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 		
 		this.innerPanel = new JPanel();
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -70,7 +62,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.addModuleValues();
 		this.addModuleDescriptionTextArea();
 		this.addModuleTypeComboBox();
-//		this.addHierarchicalLevelValues();
 		this.addButtons();
 		this.setVisibles();
 	}
@@ -115,15 +106,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.innerPanel.add(this.moduleTypeComboBox);
 	}
 	
-//	private void addHierarchicalLevelValues() {
-//		JLabel hierarchicalLevelLabel = new JLabel("Hierarchical Level");
-//		this.innerPanel.add(hierarchicalLevelLabel);
-//		
-//		this.hierarchicalLevelField = new JTextField();
-//		this.hierarchicalLevelField.addKeyListener(this);
-//		this.innerPanel.add(this.hierarchicalLevelField);
-//	}
-	
 	@Override
 	protected void addButtons() {
 		this.cancelButton = new JButton();
@@ -136,10 +118,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.saveButton.setText("Save");
 		this.saveButton.addActionListener(this);
 	}
-	
-//	private void setVisibles() {
-////		this.hierarchicalLevelField.setVisible(false);
-//	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -154,7 +132,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	
 	private void moduleTypeComboBoxAction() {
 		this.setVisibles();
-//		this.checkSelectedModuleType();
 	}
 	
 	private void setVisibles() {
@@ -162,7 +139,7 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		if(moduleType == "SubSystem") {
 			
 		} else if(moduleType =="Layer") {
-//			this.hierarchicalLevelField.setVisible(true);
+			
 		} else if(moduleType =="Component") {
 			
 		} else if(moduleType =="External Library") {
@@ -235,7 +212,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
 			String moduleDescription = this.moduleDescriptionField.getText();
-//			int level = Integer.parseInt(this.hierarchicalLevelField.getText());
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
 			definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
@@ -280,16 +256,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		}
 		return false;
 	}
-	
-//	private boolean checkModuleHierarchicalLevel() {
-////		String levelValue = this.hierarchicalLevelField.getText();
-//		if(this.inputController.checkHierarchicalLevelInput(levelValue)) {
-//			return true;
-//		} else {
-//			this.throwError(this.inputController.getErrorMessage());
-//		}
-//		return false;
-//	}
 	
 	private void throwError(String errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage, "Wrong input!", JOptionPane.ERROR_MESSAGE);

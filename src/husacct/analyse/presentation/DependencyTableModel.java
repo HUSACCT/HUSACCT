@@ -1,6 +1,5 @@
 package husacct.analyse.presentation;
 
-import husacct.analyse.abstraction.language.AnalyseTranslater;
 import husacct.common.dto.DependencyDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +12,15 @@ class DependencyTableModel extends AbstractTableModel{
 	private String titleFrom, titleTo, titleLine, titleType;
 	
 	private List<DependencyDTO> data = new ArrayList<DependencyDTO>();
+	private AnalyseUIController uiController;
 
-	public DependencyTableModel(List<DependencyDTO> data){
+	public DependencyTableModel(List<DependencyDTO> data, AnalyseUIController uiController){
 		this.data = data;
-		titleFrom = AnalyseTranslater.getValue("From");
-		titleTo = AnalyseTranslater.getValue("To");
-		titleLine = AnalyseTranslater.getValue("Linenumber");
-		titleType = AnalyseTranslater.getValue("Type");
+		this.uiController = uiController;
+		titleFrom = uiController.translate("From");
+		titleTo = uiController.translate("To");
+		titleLine = uiController.translate("Linenumber");
+		titleType = uiController.translate("Type");
 		fields = new String[]{titleFrom, titleTo, titleLine, titleType};
 	}
 	
@@ -43,7 +44,7 @@ class DependencyTableModel extends AbstractTableModel{
 		if(column.equals(titleFrom)) return data.get(row).from;
 		else if(column.equals(titleTo)) return data.get(row).to;
 		else if(column.equals(titleLine)) return data.get(row).lineNumber;
-		else if(column.equals(titleType)) return AnalyseTranslater.getValue(data.get(row).type);
+		else if(column.equals(titleType)) return uiController.translate(data.get(row).type);
 		else return null;
 	}
 	

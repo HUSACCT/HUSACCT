@@ -14,18 +14,9 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
-
-import java.awt.Color;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.jdom2.Element;
 
 public class TaskServiceImpl{
@@ -53,31 +44,19 @@ public class TaskServiceImpl{
 		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
-	public void setFilterValues(ArrayList<String> ruletypesKeys,
-			ArrayList<String> violationtypesKeys,
-			ArrayList<String> paths, boolean hideFilter, Calendar date) {
-		if (date == null){
-			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getAllViolations().getValue());
-		} else{
-			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
-		}
+	public void setFilterValues(ArrayList<String> ruletypesKeys, ArrayList<String> violationtypesKeys, ArrayList<String> paths, boolean hideFilter, Calendar date) {
+		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
-			return filterController.filterViolations(true, getAllViolations().getValue());
+		return filterController.filterViolations(violations);
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
-		if (date == null){
-			return filterController.loadRuletypes(getAllViolations().getValue());
-		}
 		return filterController.loadRuletypes(getViolationsByDate(date));
 	}
 
 	public ArrayList<String> loadViolationtypesForFilter(Calendar date) {
-		if (date == null){
-			return filterController.loadViolationtypes(getAllViolations().getValue());
-		}
 		return filterController.loadViolationtypes(getViolationsByDate(date));
 	}
 
@@ -93,37 +72,19 @@ public class TaskServiceImpl{
 		return analyseService.getAvailableLanguages();
 	}
 
-	public void applySeverities(List<Object[]> list){
-		List<Severity> severityList = new ArrayList<Severity>();
-
-		for (int i = 0; i < list.size(); i++) {
-			try{
-				Severity severity = getAllSeverities().get(i);
-				severity.setUserName((String) list.get(i)[0]);
-				severity.setColor((Color) list.get(i)[1]);
-				severityList.add(severity);
-			} catch (IndexOutOfBoundsException e){
-				severityList.add(new Severity((String) list.get(i)[0], (Color) list.get(i)[1]));
-			}
-
-		}
-		addSeverities(severityList);
-	}
 	public void addSeverities(List<Severity> severities) {
-		configuration.addSeverities(severities);
+		configuration.setSeverities(severities);
 	}
 
 	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom,
-			String physicalPathTo) {
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalPathFrom, String physicalPathTo) {
 		return filterController.getViolationsByPhysicalPath(physicalPathFrom, physicalPathTo);
 	}
 
-	public Map<String, List<ViolationType>> getViolationTypes(
-			String language) {
+	public Map<String, List<ViolationType>> getViolationTypes(String language) {
 		return domain.getAllViolationTypes(language);
 	}
 
@@ -161,7 +122,9 @@ public class TaskServiceImpl{
 				return violationHistory.getViolations();
 			}
 		}
-		throw new NullPointerException("no violations found at date given");
+		return getAllViolations().getValue();
+		
+//		throw new ViolationsNotFoundAtDateException(date);
 	}
 
 	public Calendar[] getViolationHistoryDates() {
@@ -196,5 +159,9 @@ public class TaskServiceImpl{
 	
 	public void setActiveViolationTypes(String language, List<ActiveRuleType> activeViolations){
 		configuration.setActiveViolationTypes(language, activeViolations);
+	}
+	
+	public void subscribe(Observer frame){
+		configuration.addObserver(frame);
 	}
 }

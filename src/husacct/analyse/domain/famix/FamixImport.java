@@ -8,7 +8,7 @@ class FamixImport extends FamixAssociation{
 	public boolean importsCompletePackage;
 	
 	public FamixImport(){
-		super.type = "import";
+		super.type = "Import";
 	}
 	
 	public String toString(){

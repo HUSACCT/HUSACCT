@@ -58,6 +58,7 @@ public class Module implements Comparable<Module> {
 		return mappedSUunits;
 	}
 	
+	@Deprecated
 	public String[] getPhysicalPaths(){
 		ArrayList<String> pathsList = new ArrayList<String>();
 		for (SoftwareUnitDefinition unit : mappedSUunits){
@@ -197,7 +198,7 @@ public class Module implements Comparable<Module> {
 	        return false;
 	    if (obj instanceof Module){
 	    	Module m = (Module)obj;
-	    	if (!m.name.equals(this.name)){
+	    	if (m.id != this.id){
 	    		return false;
 	    	}
 	    	return true;
@@ -207,6 +208,10 @@ public class Module implements Comparable<Module> {
 
 	public long getId() {
 		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public boolean isMapped() {

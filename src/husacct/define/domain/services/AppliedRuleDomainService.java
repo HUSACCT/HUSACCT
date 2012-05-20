@@ -8,10 +8,19 @@ import java.util.ArrayList;
 
 public class AppliedRuleDomainService {
 
-	public AppliedRule[] getAppliedRules() {
-		ArrayList<AppliedRule> ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
+	public AppliedRule[] getAppliedRules(boolean enabledRulesOnly) {
+		ArrayList<AppliedRule> ruleList;
+		if (enabledRulesOnly) {
+			ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
+		} else {
+			ruleList = SoftwareArchitecture.getInstance().getEnabledAppliedRules();
+		}
 		AppliedRule[] rules = new AppliedRule[ruleList.size()]; ruleList.toArray(rules);
 		return rules;
+	}
+	
+	public AppliedRule[] getAppliedRules() {
+		return getAppliedRules(true);
 	}
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
