@@ -188,6 +188,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		}
 	}
 	private void fillViolationsTable(List<Violation> violations) {
+		violationsTable.clearSelection();
 		currentViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
