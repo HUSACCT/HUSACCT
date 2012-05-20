@@ -25,7 +25,6 @@ public class AnalyseMain {
 		analyser.analyseApplication();
 		
 		System.out.println(new FamixCreationServiceImpl().represent());
-		
 //		try {  
 //	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
 //	     } catch (Exception ex) { }
