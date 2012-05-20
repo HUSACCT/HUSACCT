@@ -76,9 +76,7 @@ public class PersistentDomain implements ISaveable {
 			//case APPLICATION:
 			//case PHYSICAL:
 			default:
-				// create application
 				this.domainService.createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
-				// create architecture..
 				this.domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				// add modules
 				for (Module m : workspaceArchitecture.getModules()) {
@@ -86,7 +84,6 @@ public class PersistentDomain implements ISaveable {
 				}
 				for (AppliedRule ApplRule : AppliedRules) {
 					this.AppliedRuleService.addAppliedRule(ApplRule.getRuleType(), ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
-					System.out.println(this.AppliedRuleService.getAppliedRules().length);
 				}
 		}		
 	}

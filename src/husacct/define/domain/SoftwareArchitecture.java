@@ -159,23 +159,21 @@ public class SoftwareArchitecture {
 	//MODULES
 	public Module getModuleById(long moduleId) {
 		Module currentModule = null;
-		for(Module module : modules) 
-		{
-			if (module.getId() == moduleId ||
-					module.hasSubModule(moduleId)){
-
+		for(Module module : modules){
+			
+			if (module.getId() == moduleId || module.hasSubModule(moduleId)){
 				currentModule = module;
 				while (currentModule.getId() != moduleId){
 					for (Module subModule : currentModule.getSubModules()){
-						if (subModule.getId() == moduleId ||
-								subModule.hasSubModule(moduleId)){
+						if (subModule.getId() == moduleId || subModule.hasSubModule(moduleId)){
 							currentModule = subModule;
 						}
 					}
 				}
 				break;
 			}
-		}		
+			
+		}
 		if (currentModule == null){throw new RuntimeException("This module does not exist!");}
 		return currentModule;
 	}

@@ -208,6 +208,10 @@ public class Module implements Comparable<Module> {
 	public long getId() {
 		return id;
 	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public boolean isMapped() {
 		boolean isMapped = false;
