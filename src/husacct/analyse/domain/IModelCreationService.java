@@ -20,8 +20,7 @@ public interface IModelCreationService {
 	
 	public void createException(String fromClass, String ExceptionClass, int lineNumber, String declarationType);
 	
-	public void createMethod(String name, String uniqueName,
-			String accessControlQualifier, String signature,
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
 			boolean isPureAccessor, String declaredReturnType,
 			String belongsToClass, boolean isConstructor, boolean isAbstract,
 			boolean hasClassScope);
