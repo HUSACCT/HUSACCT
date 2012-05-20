@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation;
 
 import husacct.validate.abstraction.language.ValidateTranslator;
+
 import java.awt.Color;
 import java.util.UUID;
 
@@ -38,10 +39,6 @@ public class Severity implements Cloneable {
 		this.color = color;
 	}
 
-	public void setDefaultName(String defaultName) {
-		this.defaultName = defaultName;
-	}
-
 	public String getDefaultName() {
 		return defaultName;
 	}
@@ -50,7 +47,7 @@ public class Severity implements Cloneable {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
+	public void setName(String userName) {
 		this.userName = userName;
 	}
 
@@ -103,9 +100,13 @@ public class Severity implements Cloneable {
 		return true;
 	}
 
-	public Severity clone() throws CloneNotSupportedException {
-		Severity clone = (Severity)super.clone();		
-		return clone;
+	public Severity clone() {
+		try {
+			Severity clone = (Severity)super.clone();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new husacct.validate.domain.exception.CloneNotSupportedException(e);
+		}		
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class Severity implements Cloneable {
 		hash = 73 * hash + (this.defaultName != null ? this.defaultName.hashCode() : 0);
 		hash = 73 * hash + (this.userName != null ? this.userName.hashCode() : 0);
 		hash = 73 * hash + (this.color != null ? this.color.hashCode() : 0);
-		hash = 73 * hash + (this.id != null ? this.id.hashCode() : 0);
+		//hash = 73 * hash + (this.id != null ? this.id.hashCode() : 0);
 		return hash;
 	}
 }

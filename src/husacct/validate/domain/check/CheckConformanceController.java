@@ -12,7 +12,6 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class CheckConformanceController {
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
 					configuration.addViolations(newViolations);
-					
+
 					if(appliedRule.exceptionRules != null){
 						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
 					}
@@ -58,20 +57,21 @@ public class CheckConformanceController {
 			throw new ProgrammingLanguageNotFoundException();
 		}
 	}
-	
-	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
-		return new RuleDTO[]{};
-	}
-	
-	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
-		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
-		for(RuleDTO rule : allCurrentRules){
-			if(rule.equals(toValidateRule)){
-				allCurrentRules.remove(rule);
-			}
-		}
-		return allCurrentRules;
-	}
+
+//TODO implement filtering of contradictory rules
+//	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
+//		return new RuleDTO[]{};
+//	}
+//
+//	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
+//		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
+//		for(RuleDTO rule : allCurrentRules){
+//			if(rule.equals(toValidateRule)){
+//				allCurrentRules.remove(rule);
+//			}
+//		}
+//		return allCurrentRules;
+//	}
 
 	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
 		for(RuleDTO appliedRule : exceptionRules){

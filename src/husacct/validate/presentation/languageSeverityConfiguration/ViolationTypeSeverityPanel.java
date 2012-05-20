@@ -1,5 +1,6 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
@@ -17,9 +18,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 
-public class ViolationTypeSeverity extends javax.swing.JPanel {
+public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
-	private static Logger logger = Logger.getLogger(ViolationTypeSeverity.class);
+	private static Logger logger = Logger.getLogger(ViolationTypeSeverityPanel.class);
 	
 	private ComboBoxTableModel violationtypeModel;
 	private TaskServiceImpl taskServiceImpl;
@@ -34,7 +35,7 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 	private final Map<String, List<ViolationType>> violationTypes;
 	private final LanguageSeverityConfiguration languageSeverityConfiguration;
 	
-	public ViolationTypeSeverity(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, Map<String, List<ViolationType>> violationtypes, String language) {
+	public ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, Map<String, List<ViolationType>> violationtypes, String language) {
 		
 		CategoryModel = new DefaultListModel();
 		
@@ -46,8 +47,6 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 		initComponents();
 		setText();
 	}
-
-	@SuppressWarnings("unchecked")
     
     private void initComponents() {
 		
@@ -113,49 +112,61 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 			}
 		});
 
-		GroupLayout violationtypeSeverityLayout = new GroupLayout(this);
-		violationtypeSeverityLayout.setHorizontalGroup(
-			violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(violationtypeSeverityLayout.createSequentialGroup()
-					.addComponent(CategoryScrollpane, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(ViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addGroup(violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-						.addGroup(violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addComponent(Restore, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-							.addComponent(RestoreAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-						.addComponent(Apply, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		violationtypeSeverityLayout.setVerticalGroup(
-			violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-				.addComponent(CategoryScrollpane)
-				.addComponent(ViolationtypeScrollpane, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-				.addGroup(violationtypeSeverityLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(Restore, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(RestoreAll, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
-					.addComponent(Apply)
-					.addContainerGap())
-		);
-		
-		this.setLayout(violationtypeSeverityLayout);
+		createLayout();
     }
 	
-	public void setText(){
-		Category.setBorder(BorderFactory.createTitledBorder(ValidateTranslator.getValue("Category")));
-		Restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
-		RestoreAll.setText(ValidateTranslator.getValue("RestoreAllToDefault"));
-		Apply.setText(ValidateTranslator.getValue("Apply"));
+	private void createLayout(){
+		GroupLayout violationtypeSeverityLayout = new GroupLayout(this);
 		
+		GroupLayout.ParallelGroup horizontalButtonGroup = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		horizontalButtonGroup.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
+		GroupLayout.SequentialGroup horizontalPaneGroup = violationtypeSeverityLayout.createSequentialGroup();
+		horizontalPaneGroup.addComponent(CategoryScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalPaneGroup.addComponent(ViolationtypeScrollpane);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		horizontalPaneGroup.addContainerGap();
+		
+		violationtypeSeverityLayout.setHorizontalGroup(horizontalPaneGroup);
+		
+		GroupLayout.SequentialGroup verticalButtonGroup = violationtypeSeverityLayout.createSequentialGroup();
+		verticalButtonGroup.addContainerGap();
+		verticalButtonGroup.addComponent(Restore);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(RestoreAll);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(Apply);
+		verticalButtonGroup.addContainerGap();
+		
+		GroupLayout.ParallelGroup verticalPaneGroup = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalPaneGroup.addComponent(CategoryScrollpane);
+		verticalPaneGroup.addComponent(ViolationtypeScrollpane);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
+		
+		violationtypeSeverityLayout.setVerticalGroup(verticalPaneGroup);
+		
+		setLayout(violationtypeSeverityLayout);
+	}
+	
+	public void loadAfterChange(){
+		setText();
 		loadModel();
+		loadViolationTypeCategories();
+	}
+	
+	private void setText(){
+		Category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
+		Restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
+		RestoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
+		Apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
     
-	public void loadModel(){
-		String[] violationtypeModelHeaders = {ValidateTranslator.getValue("Violationtype"), ValidateTranslator.getValue("Severity")};
+	private void loadModel(){
+		String[] violationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, languageSeverityConfiguration.getSeverityNames());
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
 		violationtypeModel.setCanEdit(new Boolean[]{false, true});
@@ -164,8 +175,6 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 		
 		TableColumnModel tcm2 = ViolationtypeTable.getColumnModel();
 		tcm2.getColumn(1).setCellEditor(violationtypeModel.getEditor());
-		
-		loadViolationTypeCategories();
 	}
 	
 	private void vtsRestoreActionPerformed() {		
@@ -201,7 +210,7 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 	private void loadViolationTypeCategories() {
 		CategoryModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			CategoryModel.addElement(ValidateTranslator.getValue(categoryString));
+			CategoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
 		}
 
 	}
@@ -209,7 +218,7 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 	private void loadViolationType(String category) {
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			if (ValidateTranslator.getValue(categoryString).equals(category)){
+			if (ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString).equals(category)){
 				List<ViolationType> violationtypes = violationTypes.get(categoryString);
 				for(ViolationType violationtype: violationtypes){
 					Severity severity;
@@ -219,7 +228,7 @@ public class ViolationTypeSeverity extends javax.swing.JPanel {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[]{ValidateTranslator.getValue(violationtype.getViolationtypeKey()), severity});
+					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getViolationtypeKey()), severity});
 				}
 			}
 

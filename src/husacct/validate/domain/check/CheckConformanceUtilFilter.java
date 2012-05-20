@@ -4,8 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
@@ -14,47 +12,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CheckConformanceUtil {
+public class CheckConformanceUtilFilter {
 	private static IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-
-	public static Severity getSeverity(ConfigurationServiceImpl configuration, Severity ruleTypeSeverity, Severity violationTypeSeverity){
-		if(violationTypeSeverity == null && ruleTypeSeverity == null){
-			return null;
-		}
-
-		int ruleTypeValue = -1;
-		int violationTypeValue = -1;
-
-		if(ruleTypeSeverity != null){
-			ruleTypeValue = configuration.getSeverityValue(ruleTypeSeverity);
-		}
-		if(violationTypeSeverity != null){
-			violationTypeValue = configuration.getSeverityValue(violationTypeSeverity);
-		}
-
-
-		if(ruleTypeValue == -1 && violationTypeValue != -1){
-			return violationTypeSeverity;
-		}
-		else if(ruleTypeValue != -1 && violationTypeValue == -1){
-			return ruleTypeSeverity;
-		}
-		else if(ruleTypeValue != -1 && violationTypeValue != -1){
-			if(ruleTypeValue <= violationTypeValue){
-				return ruleTypeSeverity;
-			}
-			else{
-				return violationTypeSeverity;
-			}
-		}
-		else{
-			return null;
-		}		
-	}
 
 	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		ModuleDTO[] childModules = defineService.getChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = defineService.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpathsFrom.addAll(getAllClasspathsFromModule(module));
@@ -65,7 +28,7 @@ public class CheckConformanceUtil {
 	}
 
 	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths){
-		ModuleDTO[] childModules = defineService.getChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = defineService.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpaths.addAll(getAllClasspathsFromModule(module));
@@ -95,13 +58,13 @@ public class CheckConformanceUtil {
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		
 		ArrayList<Mapping> mappingFrom;
 		ArrayList<Mapping> mappingTo;
-		if(emptyModule(rule.moduleFrom)== false){
+		if(!emptyModule(rule.moduleFrom)){
 			mappingFrom = getAllClasspathsFromModule(rule.moduleFrom);
 		}
 		else{
 			mappingFrom = new ArrayList<Mapping>();
 		}
-		if(emptyModule(rule.moduleTo)== false){
+		if(!emptyModule(rule.moduleTo)){
 			mappingTo = getAllClasspathsFromModule(rule.moduleTo);
 		}
 		else{

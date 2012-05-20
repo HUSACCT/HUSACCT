@@ -2,48 +2,48 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.*;
 import org.apache.log4j.Logger;
 
-public final class ConfigurationUI extends javax.swing.JInternalFrame {
+public final class ConfigurationUI extends JInternalFrame implements Observer{
 
-	private static final long serialVersionUID = 3568220674416621458L;
+	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
+	
 	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
 	private List<Severity> severities;
 
 	private JButton add, remove, down, up, cancel, applySeverity, restore;
-	private JTabbedPane jTabbedPane1;
+	private JTabbedPane tabPanel;
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
 	private List<LanguageSeverityConfiguration> tabs;
-	
-	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		tabs = new ArrayList<LanguageSeverityConfiguration>();
 		
-		this.taskServiceImpl = ts;
-		severities = ts.getAllSeverities();
+		taskServiceImpl = ts;
+		severities = taskServiceImpl.getAllSeverities();
+		taskServiceImpl.subscribe(this);
 		
 		initComponents();
-		loadGUIText();
+		loadAfterChange();
 	}
 
 	private void initComponents() {
 
-		jTabbedPane1 = new JTabbedPane();
+		tabPanel = new JTabbedPane();
 		severityNamePanel = new JPanel();
 		severityNameScrollPane = new JScrollPane();
 		severityNameTable = new JTable();
@@ -77,7 +77,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				removeActionPerformed();
+				if(severityNameTable.getSelectedRow() > -1){
+					removeActionPerformed();
+				} else {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+				}
 			}
 		});
 
@@ -85,7 +89,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				upActionPerformed();
+				if(severityNameTable.getSelectedRow() > -1){
+					upActionPerformed();
+				} else {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+				}
 			}
 		});
 
@@ -93,7 +101,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				downActionPerformed();
+				if(severityNameTable.getSelectedRow() > -1){
+					downActionPerformed();
+				} else {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+				}
 			}
 		});
 
@@ -112,14 +124,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 				restore();
 			}
 		});
-
-		javax.swing.GroupLayout severityNamePanelLayout = new javax.swing.GroupLayout(severityNamePanel);
-		severityNamePanel.setLayout(severityNamePanelLayout);
-		severityNamePanelLayout.setHorizontalGroup(
-				severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(severityNamePanelLayout.createSequentialGroup().addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(remove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore).addComponent(applySeverity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap()));
-		severityNamePanelLayout.setVerticalGroup(
-				severityNamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(severityNameScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE).addGroup(severityNamePanelLayout.createSequentialGroup().addContainerGap().addComponent(add).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(remove).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(up).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(down).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(restore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(applySeverity).addContainerGap()));
-
+		
 		cancel.addActionListener(new ActionListener() {
 
 			@Override
@@ -128,15 +133,86 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		});
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(cancel).addContainerGap()));
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(jTabbedPane1).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(cancel).addGap(16, 16, 16)));
+		createSeverityPanelLayout();
+		createRootLayout();
+	}
+	
+	private void createSeverityPanelLayout(){
+		GroupLayout severityNamePanelLayout = new GroupLayout(severityNamePanel);
+		
+		GroupLayout.ParallelGroup horizontalButtonGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		horizontalButtonGroup.addComponent(remove, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(add, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(up, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(applySeverity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(down, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
+		GroupLayout.SequentialGroup horizontalPaneGroup = severityNamePanelLayout.createSequentialGroup();
+		horizontalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE);
+		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		horizontalPaneGroup.addContainerGap();
+		
+		severityNamePanelLayout.setHorizontalGroup(horizontalPaneGroup);
+		
+		GroupLayout.SequentialGroup verticalButtonGroup = severityNamePanelLayout.createSequentialGroup();
+		verticalButtonGroup.addContainerGap();
+		verticalButtonGroup.addComponent(add);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(remove);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(up);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(down);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(restore);
+		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addComponent(applySeverity);
+		verticalButtonGroup.addContainerGap();
+		
+		GroupLayout.SequentialGroup verticalPaneGroup = severityNamePanelLayout.createSequentialGroup();
+		verticalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
+		
+		severityNamePanelLayout.setVerticalGroup(verticalPaneGroup);
+		severityNamePanel.setLayout(severityNamePanelLayout);
+	}
+	
+	private void createRootLayout(){		
+		GroupLayout baseLayout = new GroupLayout(getRootPane());
+		
+		GroupLayout.SequentialGroup horizontalGroup = baseLayout.createSequentialGroup();
+		horizontalGroup.addComponent(tabPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE);
+		horizontalGroup.addContainerGap();
+		horizontalGroup.addComponent(cancel);
+		horizontalGroup.addContainerGap();
+		
+		baseLayout.setHorizontalGroup(horizontalGroup);
+		
+		GroupLayout.SequentialGroup verticalGroup = baseLayout.createSequentialGroup();
+		verticalGroup.addComponent(tabPanel);
+		verticalGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalGroup.addComponent(cancel);
+		verticalGroup.addGap(16, 16, 16);
+		
+		baseLayout.setVerticalGroup(verticalGroup);
+		
+		getRootPane().setLayout(baseLayout);
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		loadAfterChange();
+	}
+	
+	public void loadAfterChange(){
+		setText();
+		loadModels();
+		loadSeverity();
+		setLanguageTabsLanguage();
 	}
 
-	//Button Action
 	private void downActionPerformed() {
 		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() - 1) {
 			severityModel.moveRow(severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow() + 1);
@@ -159,8 +235,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private void removeActionPerformed() {
 		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
-			severityModel.removeRow(severityNameTable.getSelectedRow());
 			severities.remove(severityNameTable.getSelectedRow());
+			severityModel.removeRow(severityNameTable.getSelectedRow());
 		}
 	}
 
@@ -181,7 +257,9 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 			try{
 				Severity severity = severities.get(i);
-				severity.setUserName((String) severityModel.getValueAt(i, 0));
+				if(!severity.getDefaultName().equals((String) severityModel.getValueAt(i, 0))){
+					severity.setName((String) severityModel.getValueAt(i, 0));
+				}
 				severity.setColor((Color) severityModel.getValueAt(i, 1));
 				severities.set(i, severity);
 			} catch (IndexOutOfBoundsException e){
@@ -189,11 +267,8 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 		}
 		
-//		taskServiceImpl.applySeverities(list);
 		taskServiceImpl.addSeverities(severities);
 		loadSeverity();
-//		removeLanguageTabs();
-//		loadLanguageTabs();
 	}
 
 	private void cancelActionPerformed() {
@@ -205,27 +280,22 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 		loadSeverity();
 	}
 	
-	//User Functions
-	public void loadGUIText(){
-		setTitle(ValidateTranslator.getValue("Configuration"));
-		add.setText(ValidateTranslator.getValue("Add"));
-		remove.setText(ValidateTranslator.getValue("Remove"));
-		up.setText(ValidateTranslator.getValue("Up"));
-		down.setText(ValidateTranslator.getValue("Down"));
-		applySeverity.setText(ValidateTranslator.getValue("Apply"));
-		restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
-		jTabbedPane1.addTab(ValidateTranslator.getValue("SeverityConfiguration"), severityNamePanel);
-		cancel.setText(ValidateTranslator.getValue("Cancel"));
-
-		loadModels();
-		setLanguageTabsLanguage();
+	public void setText(){
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("Configuration"));
+		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
+		remove.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
+		up.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Up"));
+		down.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Down"));
+		applySeverity.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
+		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
+		tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
+		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
 	}
 	
 	private void loadModels(){
 		severityModel = new ColorTableModel();
 		severityNameTable.setModel(severityModel);
 		severityModel.setColorEditor(severityNameTable, 1);
-		loadSeverity();
 	}
 
 	private void loadSeverity() {
@@ -244,24 +314,24 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	}
 	
 	private void setLanguageTabsLanguage(){
-		if(jTabbedPane1.getTabCount() == 1){
+		if(tabPanel.getTabCount() == 1){
 			loadLanguageTabs();
 			return;
 		}
 		for (LanguageSeverityConfiguration panel : tabs){
-			panel.setText();
+			panel.loadAfterChange();
 		}
 	}
 	
 	private void loadLanguageTabs() {
 		for (String language : taskServiceImpl.getAvailableLanguages()) {
 			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl, severities);
-			jTabbedPane1.addTab(language, lcp);
+			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);
 		}
-		if (taskServiceImpl.getAvailableLanguages().length == 0) {
+		if (tabPanel.getTabCount() == 1) {
 			logger.error("No programming language set");
-			jTabbedPane1.addTab(ValidateTranslator.getValue("NoProgrammingLanguageAvailible"), new JPanel());
+			tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 }

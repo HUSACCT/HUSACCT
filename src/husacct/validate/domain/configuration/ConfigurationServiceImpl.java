@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 
 public class ConfigurationServiceImpl extends Observable {
 
@@ -38,24 +39,27 @@ public class ConfigurationServiceImpl extends Observable {
 		return severityConfig.getSeverityValue(severity);
 	}
 
+	public List<Severity> getAllSeverities() {
+		return severityConfig.getAllSeverities();
+	}
+
+	public void setSeverities(List<Severity> severities) {
+		final Severity[] oldSeverities = severityConfig.getAllSeveritiesCloned().toArray(new Severity[]{});
+		severityConfig.setSeverities(severities);
+		setChanged();
+		notifyObservers(oldSeverities);
+	}
+
+	public Severity getSeverityByName(String severityName){
+		return severityConfig.getSeverityByName(severityName);
+	}
+
 	public SimpleEntry<Calendar, List<Violation>> getAllViolations() {
 		return violationRepository.getAllViolations();
 	}
 
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
-	}
-
-	public List<Severity> getAllSeverities() {
-		return severityConfig.getAllSeverities();
-	}
-
-	public void addSeverities(List<Severity> severities) {
-		severityConfig.addSeverities(severities);
-	}
-
-	public Severity getSeverityByName(String severityName){
-		return severityConfig.getSeverityByName(severityName);
 	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
@@ -76,10 +80,14 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void restoreAllToDefault(String language){
 		severityPerTypeRepository.restoreAllToDefault(language);
+		setChanged();
+		notifyObservers();
 	}
 
 	public void restoreToDefault(String language, String key){
 		severityPerTypeRepository.restoreDefaultSeverity(language, key);
+		setChanged();
+		notifyObservers();
 	}
 
 	public void restoreSeveritiesToDefault(){
@@ -139,5 +147,8 @@ public class ConfigurationServiceImpl extends Observable {
 		else{
 			return true;
 		}
+	}
+	public void attachViolationHistoryRepositoryObserver(Observer observer) {
+		violationHistoryRepository.addObserver(observer);
 	}
 }
