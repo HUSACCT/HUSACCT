@@ -54,6 +54,15 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		
 		Category.setModel(rtsCategoryModel);
 		Category.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		CategoryScrollpane.setViewportView(Category);
+
+		RuletypeTable.setFillsViewportHeight(true);
+		RuletypeTable.getTableHeader().setReorderingAllowed(false);
+		RuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		RuletypeScrollpane.setViewportView(RuletypeTable);
+		
+		Restore.setEnabled(false);
+		
 		Category.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
@@ -64,11 +73,6 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 				rtsCategoryValueChanged();
 			}
 		});
-		CategoryScrollpane.setViewportView(Category);
-
-		RuletypeTable.setFillsViewportHeight(true);
-		RuletypeTable.getTableHeader().setReorderingAllowed(false);
-		RuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		RuletypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -81,8 +85,6 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 			}
 		});
 		
-		RuletypeScrollpane.setViewportView(RuletypeTable);
-		
 		Apply.addActionListener(new ActionListener() {
 
 			@Override
@@ -91,7 +93,6 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 			}
 		});
 		
-		Restore.setEnabled(false);
 		Restore.addActionListener(new ActionListener() {
 
 			@Override
@@ -108,6 +109,10 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 			}
 		});
 
+		createLayout();
+    }
+	
+	private void createLayout(){
 		GroupLayout ruletypeSeverityLayout = new GroupLayout(this);
 		
 		GroupLayout.ParallelGroup horizontalButtonLayout = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
@@ -122,26 +127,26 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		horizontalPaneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
 		horizontalPaneLayout.addGroup(horizontalButtonLayout);
 		horizontalPaneLayout.addContainerGap();
-		
 		ruletypeSeverityLayout.setHorizontalGroup(horizontalPaneLayout);
 		
-		ruletypeSeverityLayout.setVerticalGroup(
-			ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-				.addComponent(CategoryScrollpane)
-				.addComponent(RuletypeScrollpane)
-				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(Restore)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(RestoreAll)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-					.addComponent(Apply)
-					.addContainerGap()
-				)
-		);
+		GroupLayout.SequentialGroup verticalButtonLayout = ruletypeSeverityLayout.createSequentialGroup();
+		verticalButtonLayout.addContainerGap();
+		verticalButtonLayout.addComponent(Restore);
+		verticalButtonLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonLayout.addComponent(RestoreAll);
+		verticalButtonLayout.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonLayout.addComponent(Apply);
+		verticalButtonLayout.addContainerGap();
+		
+		GroupLayout.ParallelGroup verticalPaneLayout = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalPaneLayout.addComponent(CategoryScrollpane);
+		verticalPaneLayout.addComponent(RuletypeScrollpane);
+		verticalPaneLayout.addGroup(verticalButtonLayout);
+		
+		ruletypeSeverityLayout.setVerticalGroup(verticalPaneLayout);
 		
 		setLayout(ruletypeSeverityLayout);
-    }
+	}
 	
 	public final void loadAfterChange(){
 		setText();
