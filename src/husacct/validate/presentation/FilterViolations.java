@@ -1,5 +1,6 @@
 package husacct.validate.presentation;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
@@ -184,23 +185,23 @@ public final class FilterViolations extends JDialog  {
 	}
 	
 	public void loadGUIText(){
-		setTitle(ValidateTranslator.getValue("TotalViolations"));
-		TabbedPane.addTab(ValidateTranslator.getValue("FilterViolations"), filterViolationPanel);
-		addPath.setText(ValidateTranslator.getValue("Add"));
-		removePath.setText(ValidateTranslator.getValue("Remove"));
-		TabbedPane.addTab(ValidateTranslator.getValue("FilterPaths"), pathFilterPanel);
-		save.setText(ValidateTranslator.getValue("Save"));
-		cancel.setText(ValidateTranslator.getValue("Cancel"));
-		showFilteredValues.setText(ValidateTranslator.getValue("ShowSelectedValues"));
-		hideFilteredValues.setText(ValidateTranslator.getValue("HideSelectedValues"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterViolations"), filterViolationPanel);
+		addPath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
+		removePath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterPaths"), pathFilterPanel);
+		save.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Save"));
+		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
+		showFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShowSelectedValues"));
+		hideFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("HideSelectedValues"));
 		
 		loadModels();
 	}
 	
 	public void loadModels(){
-		String[] columnNamesRuletype = {"", ValidateTranslator.getValue("Ruletypes")};
-		String[] columnNamesViolationtype = {"", ValidateTranslator.getValue("Violationtypes")};
-		String[] columnNamesPath = {" ", ValidateTranslator.getValue("Path")};
+		String[] columnNamesRuletype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtypes")};
+		String[] columnNamesPath = {" ", ServiceProvider.getInstance().getControlService().getTranslatedString("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 			private static final long serialVersionUID = -7173080075671054375L;

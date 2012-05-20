@@ -1,5 +1,6 @@
 package husacct.validate.presentation;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
@@ -181,7 +182,7 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(violationModel.getRowCount() > 0){
-					String input = JOptionPane.showInputDialog(ValidateTranslator.getValue("SaveInHistoryDialog"));
+					String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistoryDialog"));
 					if(input != null && !input.equals("")) {
 						taskServiceImpl.saveInHistory(input);
 						buttonSaveInHistory.setEnabled(false);
@@ -310,20 +311,20 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 	}
 
 	public void loadGUIText(){
-		buttonSaveInHistory.setText(ValidateTranslator.getValue("SaveInHistory"));
-		setTitle(ValidateTranslator.getValue("BrowseViolations"));
+		buttonSaveInHistory.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistory"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("BrowseViolations"));
 		displayPanel.setBorder(BorderFactory.createTitledBorder(
-				ValidateTranslator.getValue("Display")));
-		dependencies.setText(ValidateTranslator.getValue("Dependencies") + ":");
-		allDependencies.setText(ValidateTranslator.getValue("All"));
-		directDependencies.setText(ValidateTranslator.getValue("Direct"));
-		indirectDependencies.setText(ValidateTranslator.getValue("Indirect"));
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Display")));
+		dependencies.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Dependencies") + ":");
+		allDependencies.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("All"));
+		directDependencies.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Direct"));
+		indirectDependencies.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Indirect"));
 		filterPanel.setBorder(BorderFactory.createTitledBorder(
-				ValidateTranslator.getValue("Filter")));
-		editFilter.setText(ValidateTranslator.getValue("EditFilter"));
-		applyFilter.setText(ValidateTranslator.getValue("ApplyFilter"));
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Filter")));
+		editFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("EditFilter"));
+		applyFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ApplyFilter"));
 		informationPanel.setBorder(BorderFactory.createTitledBorder(
-				ValidateTranslator.getValue("Information")));
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Information")));
 		loadModels();
 		loadAfterViolationsChanged();
 	}
@@ -342,11 +343,11 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 
 	private void loadModels(){
 		String[] columnNames = {
-				ValidateTranslator.getValue("Source"),
-				ValidateTranslator.getValue("Rule"),
-				ValidateTranslator.getValue("DependencyKind"),
-				ValidateTranslator.getValue("Target"),
-				ValidateTranslator.getValue("Severity")};
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Source"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Rule"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("DependencyKind"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Target"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 
 		violationModel = new DefaultTableModel(columnNames, 0) {
 
@@ -381,7 +382,7 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 		//ArrayList<Violation> violationRows = taskServiceImpl.applyFilterViolations(applyFilter.isSelected(), null);
 		//for (Violation violation : violationRows) {
 		//	String message = new Messagebuilder().createMessage(violation.getMessage());
-		//	violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ValidateTranslator.getValue(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
+		//	violationModel.addRow(new Object[]{violation.getClassPathFrom(), message, ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()), violation.getClassPathTo(), violation.getSeverity().toString()});
 		//}
 
 		//		setColumnWidth(3, 50);
@@ -390,14 +391,14 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 	private void loadInformationPanel() {
 		informationPanel.removeAll();
 
-		totalViolation.setText(ValidateTranslator.getValue("TotalViolations") + ":");
+		totalViolation.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations") + ":");
 		informationPanel.add(totalViolation);
 
 
 		totalViolationNumber.setText("" + taskServiceImpl.getAllViolations().getValue().size());
 		informationPanel.add(totalViolationNumber);
 
-		shownViolations.setText(ValidateTranslator.getValue("ShownViolations") + ":");
+		shownViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShownViolations") + ":");
 		informationPanel.add(shownViolations);
 
 		shownViolationsNumber.setText("" + violationModel.getRowCount());

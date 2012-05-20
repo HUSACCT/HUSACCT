@@ -1,5 +1,6 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ActiveViolationType;
@@ -161,16 +162,16 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 	}
 	
 	private void setText(){
-		categoryJList.setBorder(BorderFactory.createTitledBorder(ValidateTranslator.getValue("Category")));
-		ruletypeJList.setBorder(BorderFactory.createTitledBorder(ValidateTranslator.getValue("Ruletypes")));
-		selectAll.setText(ValidateTranslator.getValue("SelectAll"));
-		deselectAll.setText(ValidateTranslator.getValue("DeselectAll"));
-		apply.setText(ValidateTranslator.getValue("Apply"));
+		categoryJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
+		ruletypeJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")));
+		selectAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SelectAll"));
+		deselectAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("DeselectAll"));
+		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
 	
 	private void loadModels(){
 		
-		String[] ViolationtypeModelHeaders = {ValidateTranslator.getValue("Violationtype"), ValidateTranslator.getValue("Active")};
+		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Active")};
 		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0){
 
 			Class<?>[] types = new Class[]{String.class, Boolean.class};
@@ -194,7 +195,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 	private void loadRuleTypeCategories() {
 		categoryModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
-			categoryModel.addElement(ValidateTranslator.getValue(categoryString));
+			categoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
 		}
 	}
 	
@@ -237,7 +238,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 
 		List<RuleType> rules = ruletypes.get(ValidateTranslator.getKey(category));
 		for(RuleType ruletype: rules){
-			ruletypeModel.addElement(ValidateTranslator.getValue(ruletype.getKey()));
+			ruletypeModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(ruletype.getKey()));
 		}
 	}
 	
@@ -253,7 +254,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		for (ActiveRuleType ruletypeKey : activeRuletypes) {
 			if(ruletypeKey.getRuleType().equals(ValidateTranslator.getKey(ruletypekey))){
 				for(ActiveViolationType violationtype : ruletypeKey.getViolationTypes()){
-					violationtypeModel.addRow(new Object[]{ValidateTranslator.getValue(violationtype.getType()), violationtype.isEnabled()});
+					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
 				}
 				activeViolationtypes = ruletypeKey.getViolationTypes();
 			}

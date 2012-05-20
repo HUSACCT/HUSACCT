@@ -1,5 +1,6 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
@@ -154,14 +155,14 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void setText(){
-		Category.setBorder(BorderFactory.createTitledBorder(ValidateTranslator.getValue("Category")));
-		Restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
-		RestoreAll.setText(ValidateTranslator.getValue("RestoreAllToDefault"));
-		Apply.setText(ValidateTranslator.getValue("Apply"));
+		Category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
+		Restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
+		RestoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
+		Apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
     
 	private void loadModel(){
-		String[] violationtypeModelHeaders = {ValidateTranslator.getValue("Violationtype"), ValidateTranslator.getValue("Severity")};
+		String[] violationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, languageSeverityConfiguration.getSeverityNames());
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
 		violationtypeModel.setCanEdit(new Boolean[]{false, true});
@@ -205,7 +206,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	private void loadViolationTypeCategories() {
 		CategoryModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			CategoryModel.addElement(ValidateTranslator.getValue(categoryString));
+			CategoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
 		}
 
 	}
@@ -213,7 +214,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	private void loadViolationType(String category) {
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			if (ValidateTranslator.getValue(categoryString).equals(category)){
+			if (ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString).equals(category)){
 				List<ViolationType> violationtypes = violationTypes.get(categoryString);
 				for(ViolationType violationtype: violationtypes){
 					Severity severity;
@@ -223,7 +224,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[]{ValidateTranslator.getValue(violationtype.getViolationtypeKey()), severity});
+					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getViolationtypeKey()), severity});
 				}
 			}
 

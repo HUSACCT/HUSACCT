@@ -1,5 +1,6 @@
 package husacct.validate.presentation;
 
+import husacct.ServiceProvider;
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
@@ -48,9 +49,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 		violationtypeSeverity = new ViolationTypeSeverityPanel(taskServiceImpl, this, violationTypes, language);
 		activeViolationtype = new ActiveViolationPanel(taskServiceImpl, ruletypes, language);
 		
-		tabbedPane.addTab(ValidateTranslator.getValue("SetRuletypeSeverity"), ruletypeSeverity);
-		tabbedPane.addTab(ValidateTranslator.getValue("SetViolationSeverity"), violationtypeSeverity);
-		tabbedPane.addTab(ValidateTranslator.getValue("SetViolationtypeActivePerRuletype"), activeViolationtype);
+		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"), ruletypeSeverity);
+		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"), violationtypeSeverity);
+		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationtypeActivePerRuletype"), activeViolationtype);
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
@@ -81,8 +82,8 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 	
 	private void setText(){
-		tabbedPane.setTitleAt(0, ValidateTranslator.getValue("SetRuletypeSeverity"));
-		tabbedPane.setTitleAt(1, ValidateTranslator.getValue("SetViolationSeverity"));
-		tabbedPane.setTitleAt(2, ValidateTranslator.getValue("SetViolationtypeActivePerRuletype"));
+		tabbedPane.setTitleAt(0, ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"));
+		tabbedPane.setTitleAt(1, ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"));
+		tabbedPane.setTitleAt(2, ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationtypeActivePerRuletype"));
 	}
 }
