@@ -15,18 +15,9 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
-
-import java.awt.Color;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import javax.xml.datatype.DatatypeConfigurationException;
-
 import org.jdom2.Element;
 
 public class TaskServiceImpl{
@@ -55,28 +46,18 @@ public class TaskServiceImpl{
 	}
 
 	public void setFilterValues(ArrayList<String> ruletypesKeys, ArrayList<String> violationtypesKeys, ArrayList<String> paths, boolean hideFilter, Calendar date) {
-		if (date == null){
-			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getAllViolations().getValue());
-		} else{
-			filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
-		}
+		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
-			return filterController.filterViolations(violations);
+		return filterController.filterViolations(violations);
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
-		if (date == null){
-			return filterController.loadRuletypes(getAllViolations().getValue());
-		}
 		return filterController.loadRuletypes(getViolationsByDate(date));
 	}
 
 	public ArrayList<String> loadViolationtypesForFilter(Calendar date) {
-		if (date == null){
-			return filterController.loadViolationtypes(getAllViolations().getValue());
-		}
 		return filterController.loadViolationtypes(getViolationsByDate(date));
 	}
 
