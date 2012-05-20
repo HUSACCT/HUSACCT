@@ -4,6 +4,7 @@ import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,6 +23,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	private static final long serialVersionUID = -3429272079796935062L;
 	protected AppliedRuleController appliedRuleController;
 	protected ViolationTypesJDialog violationTypesJDialog;
+	protected int componentCount;
 	protected Logger logger;
 	protected boolean isException;
 
@@ -44,8 +46,8 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 			this.setLayout(this.createRuleDetailsLayout());
 			this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 			setIsUsedAsException(isUsedAsException);
-			initViolationTypes();
 			initDetails();
+			initViolationTypes();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -66,10 +68,16 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 			configureViolationTypesJButton.addActionListener(this);
 			violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
 			
-			//TODO relocate filter button
-			//Dont add it like this. it will mess up the current layout, making it functional but not user friendly
-			GridBagConstraints gbc = new GridBagConstraints(1, 900, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
+			GridBagConstraints gbc = new GridBagConstraints(1, componentCount++, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 			this.add(configureViolationTypesJButton, gbc);
+			
+			if (appliedRuleController.isAnalysed()){
+				configureViolationTypesJButton.setEnabled(true);
+				configureViolationTypesJButton.setToolTipText("You can configure each rule to only validate on specific dependencies.");
+			} else {
+				configureViolationTypesJButton.setEnabled(false);
+				configureViolationTypesJButton.setToolTipText("You need to analyse an application first");
+			}
 		}
 	}
 	
@@ -82,7 +90,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	}
 	
 	private void initViolationTypeJDialog() {
-		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
+		if (violationTypesJDialog == null) {violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);}
 		violationTypesJDialog.initGUI();
 		DialogUtils.alignCenter(violationTypesJDialog);
 		violationTypesJDialog.setVisible(true);
@@ -90,7 +98,9 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 
 	public HashMap<String, Object> saveToHashMap(){
 		HashMap<String, Object> hashMap = saveDefaultDataToHashMap();
-		hashMap.put("dependencies", violationTypesJDialog.save());
+		if (!isException){
+			hashMap.put("dependencies", violationTypesJDialog.save());
+		}
 		return hashMap;
 	}
 
@@ -117,4 +127,12 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	public void setIsUsedAsException(boolean isException) {
 		this.isException = isException;
 	}
+	
+	@Override
+	public void add(Component comp, Object constraint){
+		super.add(comp, constraint);
+		componentCount++;
+	}
+	
+	
 }

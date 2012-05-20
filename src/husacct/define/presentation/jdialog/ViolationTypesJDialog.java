@@ -67,28 +67,17 @@ public class ViolationTypesJDialog extends JDialog{
 		mainPanel = new JPanel();
 		mainPanel.setLayout(this.createViolationsLayout());
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-//		
-//		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
-//		for (ViolationTypeDTO vt : violationTypeDtoList){
-//			
-//		
-//			JCheckBox jCheckBox = new JCheckBox(DefineTranslator.translate(vt.key));
-//			jCheckBox.setSelected(vt.isDefault);
-//			mainPanel.add(jCheckBox, gridBagConstraints);
-//			violationCheckBoxHashMap.put(vt.key, jCheckBox);
-//			gridBagConstraints.gridy++;
-//		}
 		
 		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 		
 		Set<String> collection = violationCheckBoxHashMap.keySet();
-	    //iterate through HashMap values iterator
+	    //Iterate through HashMap values iterator
 	    for(String key : collection) {
 	    	JCheckBox currentCheckBox = violationCheckBoxHashMap.get(key);
 	    	mainPanel.add(currentCheckBox, gridBagConstraints);
 	    	gridBagConstraints.gridy++;
 	  	}
-		
+	    mainPanel.setVisible(true);
 		return mainPanel;
 	}
 

@@ -301,6 +301,7 @@ public class AppliedRuleController extends PopUpController {
 		for (Module module : modules) {
 			this.addDefineModuleChildComponents(rootComponent, module);
 		}
+		//TODO HERE
 		for(AnalysedModuleDTO moduleDTO : this.getAnalyzedModules()) {
 			this.addAnalyzedModuleChildComponents(rootComponent, moduleDTO);
 		}
@@ -327,5 +328,13 @@ public class AppliedRuleController extends PopUpController {
 			this.addAnalyzedModuleChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);
+	}
+
+	public boolean isAnalysed() {
+		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
+	}
+
+	public void clearRuleExceptions() {
+		this.exceptionRules.clear();
 	}
 }
