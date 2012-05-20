@@ -81,7 +81,7 @@ class FamixDependencyFinder extends FamixFinder{
 		for(FamixAssociation assocation: allAssocations){
 			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
 				DependencyDTO foundDependency = buildDependencyDTO(assocation);
-				result.add(foundDependency);
+				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
 		return result;
@@ -105,15 +105,18 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 	
 	private boolean connectsBoth(FamixAssociation association, String from, String to){
-		return association.from.startsWith(from) && association.to.startsWith(to);
+		boolean result = true;
+		result = result && (from.equals("") || association.from.equals(from) || association.from.startsWith(from + "."));
+		result = result && (to.equals("") || association.to.equals(from) || association.to.startsWith(from + "."));
+		return result;
 	}
 	
 	private boolean isFrom(FamixAssociation association, String from){
-		return association.from.startsWith(from);
+		return from.equals("") || association.from.equals(from) || association.from.startsWith(from + ".");
 	}
 	
 	private boolean isTo(FamixAssociation association, String to){
-		return association.to.startsWith(to);
+		return to.equals("") || association.to.equals(to) || association.to.startsWith(to + ".");
 	}
 	
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){

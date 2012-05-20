@@ -1,8 +1,9 @@
-package husacct.analyse.task.persistency;
+package husacct.analyse.domain.famix;
 
+import husacct.analyse.domain.IPersistencyService;
 import org.jdom2.Element;
 
-public class PersistencyServiceImpl implements IPersistencyService{
+public class FamixPersistencyServiceImpl implements IPersistencyService{
 
 	@Override
 	public Element exportAnalysedApplication() {

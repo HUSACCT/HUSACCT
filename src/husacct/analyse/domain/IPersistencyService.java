@@ -1,4 +1,4 @@
-package husacct.analyse.task.persistency;
+package husacct.analyse.domain;
 
 import org.jdom2.Element;
 

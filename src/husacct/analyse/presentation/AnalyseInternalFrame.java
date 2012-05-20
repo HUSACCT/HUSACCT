@@ -52,7 +52,6 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	}
 	
 	public void reloadText(){
-		setTitle(controller.translate("WindowTitle"));
 		cancelButton.setText(controller.translate("Cancel"));
 		tabPanel.setTitleAt(0, controller.translate("SourceOverview"));
 		tabPanel.setTitleAt(1, controller.translate("DependencyOverview"));
