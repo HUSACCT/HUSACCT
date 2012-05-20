@@ -2,7 +2,8 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
@@ -31,7 +32,7 @@ public class IsNotAllowedToUseRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtil.filter(currentRule);
+		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -46,7 +47,7 @@ public class IsNotAllowedToUseRule extends RuleType {
 					LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
 					final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-					Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);
+					Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);
 					Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 					violations.add(violation);
 				}

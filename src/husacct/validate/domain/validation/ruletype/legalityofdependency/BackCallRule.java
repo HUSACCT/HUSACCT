@@ -3,7 +3,8 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
@@ -33,7 +34,7 @@ public class BackCallRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		
-		this.mappings = CheckConformanceUtil.filter(currentRule);
+		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();			
 		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
@@ -49,7 +50,7 @@ public class BackCallRule extends RuleType {
 						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 	
 						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-						Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);
+						Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);
 						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 						violations.add(violation);
 					}
@@ -75,7 +76,7 @@ public class BackCallRule extends RuleType {
 	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(int i=0 ; i<counter ; i++){
-			returnList.add(CheckConformanceUtil.getAllModulesFromLayer(allModules.get(i)));
+			returnList.add(CheckConformanceUtilFilter.getAllModulesFromLayer(allModules.get(i)));
 		}		
 		return returnList;		
 	}

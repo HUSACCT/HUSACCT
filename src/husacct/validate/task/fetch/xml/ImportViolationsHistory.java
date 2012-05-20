@@ -57,22 +57,18 @@ public class ImportViolationsHistory {
 				//search the appropiate severity of the violation by the uuid.
 				for(Severity severity : severities) {
 					final String stringUUID = violationElement.getChildText("severityId");
-					boolean severityFound = false;
 					if(isValidUUID(stringUUID)){
 						UUID id = UUID.fromString(stringUUID);
 						if(id.equals(severity.getId())) {
 							violation.setSeverity(severity);
-							severityFound = true;
+							violations.add(violation);
 							break;
 						}							
-					}
-
-					if(isValidUUID(stringUUID) && severityFound){
-						violations.add(violation);
-					}
-					else{
+					} else{
 						logger.error(String.format("%s is not a valid severity UUID, violation will not be added", stringUUID));
+						break;
 					}
+					logger.error("Severity for the violation " + violation.getLinenumber() + "was not found (UUID: "+ stringUUID);
 				}
 
 				violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));

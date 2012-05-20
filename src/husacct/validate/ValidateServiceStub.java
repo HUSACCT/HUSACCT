@@ -9,6 +9,7 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
@@ -144,12 +145,13 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public void exportViolationHistoryReport(String name, String fileType,
-			String path, ViolationHistory violationHistory) {
+	public JInternalFrame getViolationHistoryGUI() {
+		return new JInternalFrame();
 	}
 
 	@Override
-	public JInternalFrame getViolationHistoryGUI() {
-		return new JInternalFrame();
+	public void exportViolations(File file, String fileType, Calendar date) {
+		// TODO Auto-generated method stub
+		
 	}
 }
