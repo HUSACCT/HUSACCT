@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 	private static final long serialVersionUID = 3568220674416621458L;
+	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
+	
 	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
 	private List<Severity> severities;
@@ -27,8 +29,6 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
 	private List<LanguageSeverityConfiguration> tabs;
-	
-	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		tabs = new ArrayList<LanguageSeverityConfiguration>();
@@ -76,7 +76,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				removeActionPerformed();
+				if(severityNameTable.getSelectedRow() > -1){
+					removeActionPerformed();
+				} else {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+				}
 			}
 		});
 
@@ -84,7 +88,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				upActionPerformed();
+				if(severityNameTable.getSelectedRow() > -1){
+					upActionPerformed();
+				} else {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+				}
 			}
 		});
 
@@ -92,7 +100,11 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				downActionPerformed();
+				if(severityNameTable.getSelectedRow() > -1){
+					downActionPerformed();
+				} else {
+					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+				}
 			}
 		});
 
@@ -119,13 +131,13 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			.addGroup(severityNamePanelLayout.createSequentialGroup()
 				.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
 				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-					.addComponent(remove)
-					.addComponent(add)
-					.addComponent(up)
-					.addComponent(restore)
-					.addComponent(applySeverity)
-					.addComponent(down)
+				.addGroup(severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+					.addComponent(remove, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(add, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(up, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(applySeverity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(down, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				)
 				.addContainerGap()
 			)
@@ -136,15 +148,15 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			.addGroup(severityNamePanelLayout.createSequentialGroup()
 				.addContainerGap()
 				.addComponent(add)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addComponent(remove)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addComponent(up)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addComponent(down)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addComponent(restore)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addComponent(applySeverity)
 				.addContainerGap()
 			)
@@ -221,7 +233,9 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			}
 			try{
 				Severity severity = severities.get(i);
-				severity.setName((String) severityModel.getValueAt(i, 0));
+				if(!severity.getDefaultName().equals((String) severityModel.getValueAt(i, 0))){
+					severity.setName((String) severityModel.getValueAt(i, 0));
+				}
 				severity.setColor((Color) severityModel.getValueAt(i, 1));
 				severities.set(i, severity);
 			} catch (IndexOutOfBoundsException e){
@@ -285,7 +299,7 @@ public final class ConfigurationUI extends javax.swing.JInternalFrame {
 			return;
 		}
 		for (LanguageSeverityConfiguration panel : tabs){
-			panel.setText();
+			panel.loadAfterChange();
 		}
 	}
 	

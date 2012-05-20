@@ -120,9 +120,9 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 					.addComponent(ViolationtypeScrollpane)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addGroup(violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-						.addComponent(Restore)
-						.addComponent(RestoreAll)
-						.addComponent(Apply)
+						.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					)
 					.addContainerGap()
 				)
@@ -144,16 +144,20 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 		this.setLayout(violationtypeSeverityLayout);
     }
 	
-	public void setText(){
+	public void loadAfterChange(){
+		setText();
+		loadModel();
+		loadViolationTypeCategories();
+	}
+	
+	private void setText(){
 		Category.setBorder(BorderFactory.createTitledBorder(ValidateTranslator.getValue("Category")));
 		Restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
 		RestoreAll.setText(ValidateTranslator.getValue("RestoreAllToDefault"));
 		Apply.setText(ValidateTranslator.getValue("Apply"));
-		
-		loadModel();
 	}
     
-	public void loadModel(){
+	private void loadModel(){
 		String[] violationtypeModelHeaders = {ValidateTranslator.getValue("Violationtype"), ValidateTranslator.getValue("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, languageSeverityConfiguration.getSeverityNames());
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
@@ -163,8 +167,6 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 		
 		TableColumnModel tcm2 = ViolationtypeTable.getColumnModel();
 		tcm2.getColumn(1).setCellEditor(violationtypeModel.getEditor());
-		
-		loadViolationTypeCategories();
 	}
 	
 	private void vtsRestoreActionPerformed() {		

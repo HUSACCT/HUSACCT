@@ -16,14 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class LanguageSeverityConfiguration extends JPanel {
-	private static final long serialVersionUID = 4125846168658642242L;
-	
-	private List<Severity> severityNames;
 	
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;
 	private final Map<String, List<ViolationType>> violationTypes;
 	private final TaskServiceImpl taskServiceImpl;
+	
+	private List<Severity> severityNames;
 
 	private ActiveViolationPanel activeViolationtype;
 	private RuleTypeSeverityPanel ruletypeSeverity;
@@ -73,13 +72,17 @@ public class LanguageSeverityConfiguration extends JPanel {
 		return severityNames;
 	}
 	
-	public void setText(){
+	public void loadAfterChange(){
+		setText();
+		
+		ruletypeSeverity.loadAfterChange();
+		violationtypeSeverity.loadAfterChange();
+		activeViolationtype.loadAfterChange();
+	}
+	
+	private void setText(){
 		tabbedPane.setTitleAt(0, ValidateTranslator.getValue("SetRuletypeSeverity"));
 		tabbedPane.setTitleAt(1, ValidateTranslator.getValue("SetViolationSeverity"));
 		tabbedPane.setTitleAt(2, ValidateTranslator.getValue("SetViolationtypeActivePerRuletype"));
-		
-		ruletypeSeverity.setText();
-		violationtypeSeverity.setText();
-		activeViolationtype.setText();
 	}
 }

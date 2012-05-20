@@ -39,7 +39,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		this.ruletypes = ruletypes;
 		
 		initComponents();
-		setText();		
+		loadAfterChange();
 	}
 
     private void initComponents() {
@@ -113,13 +113,13 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 			ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
 					.addComponent(CategoryScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
 					.addComponent(RuletypeScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
 					.addGroup(ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-						.addComponent(Restore)
-						.addComponent(RestoreAll)
-						.addComponent(Apply)
+						.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					)
 					.addContainerGap()
 				)
@@ -135,22 +135,27 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 					.addComponent(RestoreAll)
 					.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 					.addComponent(Apply)
-					.addContainerGap())
+					.addContainerGap()
+				)
 		);
 		
-		this.setLayout(ruletypeSeverityLayout);
+		setLayout(ruletypeSeverityLayout);
     }
 	
-	public void setText(){
+	public final void loadAfterChange(){
+		setText();
+		loadModel();
+		loadRuleTypeCategories();
+	}
+	
+	private void setText(){
 		Category.setBorder(BorderFactory.createTitledBorder(ValidateTranslator.getValue("Category")));
 		Apply.setText(ValidateTranslator.getValue("Apply"));
 		Restore.setText(ValidateTranslator.getValue("RestoreToDefault"));
 		RestoreAll.setText(ValidateTranslator.getValue("RestoreAllToDefault"));
-		
-		loadModel();
 	}
 	
-	public void loadModel(){
+	private void loadModel(){
 		String[] ruletypeColumnNames = {ValidateTranslator.getValue("Ruletype"), ValidateTranslator.getValue("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, languageSeverityConfiguration.getSeverityNames());
 		ruletypeModel.setTypes(new Class[]{String.class, Severity.class});
@@ -160,8 +165,6 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		
 		TableColumnModel tcm = RuletypeTable.getColumnModel();
 		tcm.getColumn(1).setCellEditor(ruletypeModel.getEditor());
-		
-		loadRuleTypeCategories();
 	}
 	
 	private void rtsRestoreActionPerformed() {		
@@ -193,20 +196,15 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	
 	private void loadRuleTypes(String category) {
 		ruletypeModel.clear();
-		for (String categoryString : ruletypes.keySet()) {
-			if (ValidateTranslator.getValue(categoryString).equals(category)){
-				List<RuleType> rules = ruletypes.get(categoryString);
-				for(RuleType ruletype: rules){
-					Severity severity;
-					try{
-						severity = taskServiceImpl.getSeverityFromKey(language, ruletype.getKey());
-					} catch (Exception e){
-						severity = taskServiceImpl.getAllSeverities().get(0);
-					}
-					ruletypeModel.addRow(new Object[]{ValidateTranslator.getValue(ruletype.getKey()), severity});
-				}
+		List<RuleType> rules = ruletypes.get(category);
+		for(RuleType ruletype: rules){
+			Severity severity;
+			try{
+				severity = taskServiceImpl.getSeverityFromKey(language, ruletype.getKey());
+			} catch (Exception e){
+				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
-
+			ruletypeModel.addRow(new Object[]{ValidateTranslator.getValue(ruletype.getKey()), severity});
 		}
 		ruletypeModel.checkValuesAreValid();	
 	}

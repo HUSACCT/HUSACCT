@@ -102,13 +102,12 @@ class ActiveViolationTypesRepository {
 		if(programmingLanguageExists(programmingLanguage)){
 			List<ActiveRuleType> checkedNewActiveViolationTypes = checkNewActiveViolationTypes(programmingLanguage, newActiveViolationTypes);
 
-			if(this.currentActiveViolationTypes.containsKey(programmingLanguage)){
-
-				List<ActiveRuleType> activeViolationTypesForLanguage = this.currentActiveViolationTypes.get(programmingLanguage);
-				activeViolationTypesForLanguage = checkedNewActiveViolationTypes;
+			if(currentActiveViolationTypes.containsKey(programmingLanguage)){
+				currentActiveViolationTypes.remove(programmingLanguage);
+				currentActiveViolationTypes.put(programmingLanguage, newActiveViolationTypes);
 			}
 			else{
-				this.currentActiveViolationTypes.put(programmingLanguage, checkedNewActiveViolationTypes);
+				currentActiveViolationTypes.put(programmingLanguage, newActiveViolationTypes);
 			}
 		}
 		else{
