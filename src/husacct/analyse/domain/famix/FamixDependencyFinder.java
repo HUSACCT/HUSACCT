@@ -107,7 +107,7 @@ class FamixDependencyFinder extends FamixFinder{
 	private boolean connectsBoth(FamixAssociation association, String from, String to){
 		boolean result = true;
 		result = result && (from.equals("") || association.from.equals(from) || association.from.startsWith(from + "."));
-		result = result && (to.equals("") || association.to.equals(from) || association.to.startsWith(from + "."));
+		result = result && (to.equals("") || association.to.equals(to) || association.to.startsWith(to + "."));
 		return result;
 	}
 	
