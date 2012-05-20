@@ -11,7 +11,7 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-		String path = "/Users/mittchel/Documents/School/Themaopdracht/benchmark/CSharpBenchmark";
+		String path = "C:/Users/Thomas/Downloads/Mittchel-benchmark-73d2abb/CSharpBenchmark";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
 		
@@ -20,6 +20,7 @@ public class AnalyseMain {
 		
 		FamixCreationServiceImpl impl = new FamixCreationServiceImpl();
 		System.out.println(impl.represent());
+		
 		
 //		try {  
 //	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
