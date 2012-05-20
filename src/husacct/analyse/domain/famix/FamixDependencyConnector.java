@@ -69,13 +69,14 @@ class FamixDependencyConnector {
 								theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
 							}
 							else{
-								//Then it is a parameter of local variable
+								//checking order now: 1) parameter, 2) localVariable, 3) attribute
 								theInvocation.to = getClassForParameter(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
 								if (theInvocation.to.equals("")){
-									//now it's a local variable
+									//checking if it's a localVariable
 									theInvocation.to = getClassForLocalVariable(theInvocation.from, theInvocation.belongsToMethod, theInvocation.nameOfInstance);
 								}
 								if(theInvocation.to.equals("")){
+									//now it is an attribute
 									theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
 								}
 							}
@@ -121,10 +122,14 @@ class FamixDependencyConnector {
 	private String getClassForLocalVariable(String declareClass, String belongsToMethod, String nameOfInstance) {
 		for(String s : theModel.structuralEntities.keySet()){
 			if(s.startsWith(declareClass)){
-				FamixLocalVariable variable = (FamixLocalVariable) theModel.structuralEntities.get(s);
-				if(variable.belongsToMethod.equals(belongsToMethod)){
-					if(variable.name.equals(nameOfInstance)){
-						return variable.declareType;
+				
+				FamixStructuralEntity entity = (FamixStructuralEntity) theModel.structuralEntities.get(s);
+				if (entity instanceof FamixLocalVariable){
+					FamixLocalVariable variable = (FamixLocalVariable) entity;
+					if(variable.belongsToMethod.equals(belongsToMethod)){
+						if(variable.name.equals(nameOfInstance)){
+							return variable.declareType;
+						}
 					}
 				}
 			}
