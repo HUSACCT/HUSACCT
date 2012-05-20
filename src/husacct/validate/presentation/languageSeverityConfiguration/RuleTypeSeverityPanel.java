@@ -109,21 +109,22 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		});
 
 		GroupLayout ruletypeSeverityLayout = new GroupLayout(this);
-		ruletypeSeverityLayout.setHorizontalGroup(
-			ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(ruletypeSeverityLayout.createSequentialGroup()
-					.addComponent(CategoryScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-					.addComponent(RuletypeScrollpane)
-					.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-					.addGroup(ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-						.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					)
-					.addContainerGap()
-				)
-		);
+		
+		GroupLayout.ParallelGroup horizontalButtonLayout = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		horizontalButtonLayout.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonLayout.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonLayout.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
+		GroupLayout.SequentialGroup horizontalPaneLayout = ruletypeSeverityLayout.createSequentialGroup();
+		horizontalPaneLayout.addComponent(CategoryScrollpane);
+		horizontalPaneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneLayout.addComponent(RuletypeScrollpane);
+		horizontalPaneLayout.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPaneLayout.addGroup(horizontalButtonLayout);
+		horizontalPaneLayout.addContainerGap();
+		
+		ruletypeSeverityLayout.setHorizontalGroup(horizontalPaneLayout);
+		
 		ruletypeSeverityLayout.setVerticalGroup(
 			ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addComponent(CategoryScrollpane)
