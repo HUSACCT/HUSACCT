@@ -88,6 +88,8 @@ public class FamixCreationServiceImpl implements ModelCreationService{
 		famixMethod.hasClassScope = hasClassScope;
 		addToModel(famixMethod);
 	}
+	
+
 
 	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {

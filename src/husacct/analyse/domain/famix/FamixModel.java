@@ -142,7 +142,8 @@ class FamixModel extends FamixObject{
 				+ "\n -----------Assocations:-------------- \n" + associations
 				+ "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
 				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities
-				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
+				+ "\n -----------Invocations-------------- \n" + associations
+				+ "num invocs " + associations.size();
 
 	}
 	

@@ -1,4 +1,4 @@
-package husacct.analyse.task.analyser.csharp;
+package husacct.analyse.task.analyser.csharp.generators;
 
 import java.util.Arrays;
 
@@ -18,6 +18,7 @@ public abstract class CSharpGenerator {
 	protected final int NAMESPACE = 61;
 	protected final int FORWARDCURLYBRACKET = 62;
 	protected final int BACKWARDCURLYBRACKET = 63;
+	protected final int IS = 66;
 	protected final int NEW	= 68;
 	protected final int PUBLIC = 69;
 	protected final int PROTECTED = 70;
@@ -53,8 +54,14 @@ public abstract class CSharpGenerator {
 	protected final int DECIMAL = 197;
 	protected final int VAR = 177;
 	protected final int INTERNAL = 72;
+	protected final int THROW = 190;
+	protected final int CATCH = 192;
+	protected final int FINALLY = 193;
 	protected final int[] typeCollection = new int[] {BYTE, SBYTE, INT, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, VAR, DECIMAL, IDENTIFIER};
 	protected final int[] accessorCollection = new int[] {PRIVATE, PUBLIC, PROTECTED, INTERNAL};
+	protected final int[] notPartOfAttribute = new int[] { FORWARDCURLYBRACKET, USING, NAMESPACE, CLASS, RETURN, SET, GET, DOT };
+	protected final int[] isAPartOfAttribute = new int[] { FORWARDCURLYBRACKET, SEMICOLON, BACKWARDCURLYBRACKET };
+	protected final int[] listOfMethodTypes = new int[] { FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /* synchronised */};
 	protected ModelCreationService modelService = new FamixCreationServiceImpl();
 
 	
