@@ -141,7 +141,7 @@ public class ToolBar extends JToolBar{
 		validateNow.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				viewController.setViolationsGui();
+				viewController.showViolationsGui();
 			}
 		});
 		
