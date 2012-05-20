@@ -2,7 +2,6 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
@@ -216,6 +215,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		if(selectedViolationHistory != null) {
 			fillViolationsTable(selectedViolationHistory.getViolations());
 		}
+		buttonLatestViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Validate"));
 		informationPanel.setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Information")));
 		violationDetailPane.setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Details")));
 		detailsLineNumberLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LineNumber"));
@@ -227,6 +227,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonEditFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("EditFilter"));
 		buttonLatestViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("CurrentViolations"));
 		buttonSaveInHistory.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistory"));
+		loadInformationPanel();
 	}
 
 
