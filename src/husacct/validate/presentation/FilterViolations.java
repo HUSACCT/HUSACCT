@@ -27,7 +27,7 @@ public final class FilterViolations extends JDialog  {
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
-	private Calendar violationDate = null;
+	private Calendar violationDate = Calendar.getInstance();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
 		this.vilterViolationsObserver = filterViolationsObserver;
@@ -106,22 +106,24 @@ public final class FilterViolations extends JDialog  {
 		GroupLayout pathFilterPanelLayout = new GroupLayout(pathFilterPanel);
 		pathFilterPanel.setLayout(pathFilterPanelLayout);
 		pathFilterPanelLayout.setHorizontalGroup(
-				pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(pathFilterPanelLayout.createSequentialGroup()
-						.addComponent(pathFilterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(removePath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(addPath, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addContainerGap())
-				);
+			pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addGroup(pathFilterPanelLayout.createSequentialGroup()
+				.addComponent(pathFilterScrollPane)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				.addGroup(pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+					.addComponent(removePath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(addPath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				)
+				.addContainerGap()
+			)
+		);
 		pathFilterPanelLayout.setVerticalGroup(
-				pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(pathFilterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pathFilterPanelLayout.createSequentialGroup()
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(pathFilterScrollPane)
+				.addGroup(GroupLayout.Alignment.TRAILING, pathFilterPanelLayout.createSequentialGroup()
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(addPath)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
 						.addComponent(removePath)
 						.addContainerGap())
 				);
