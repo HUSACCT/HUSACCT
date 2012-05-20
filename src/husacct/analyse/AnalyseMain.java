@@ -1,7 +1,7 @@
 package husacct.analyse;
 
 import husacct.ServiceProvider;
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;

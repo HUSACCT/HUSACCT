@@ -2,8 +2,8 @@ package husacct.analyse;
 
 import javax.swing.UIManager;
 import husacct.ServiceProvider;
-import husacct.analyse.domain.ModelCreationService;
-import husacct.analyse.domain.ModelQueryService;
+import husacct.analyse.domain.IModelCreationService;
+import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.analyse.presentation.AnalyseDebuggingFrame;
@@ -24,10 +24,10 @@ public class TestMain {
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		
-		ModelQueryService queryService = new FamixQueryServiceImpl();
+		IModelQueryService queryService = new FamixQueryServiceImpl();
 		for(AnalysedModuleDTO dto: queryService.getChildModulesInModule("annotation", 2)){
 		}
-		ModelCreationService creation = new FamixCreationServiceImpl();
+		IModelCreationService creation = new FamixCreationServiceImpl();
 		System.out.println(creation.represent());
 		
 		

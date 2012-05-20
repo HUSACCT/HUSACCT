@@ -1,8 +1,6 @@
 package husacct.analyse.domain;
 
-import java.util.List;
-
-public interface ModelCreationService {
+public interface IModelCreationService {
 	
 
 	public void createPackage(String uniqueName, String belongsToPackage, String name);
@@ -41,9 +39,6 @@ public interface ModelCreationService {
 	
 	//Function to connect dependencies, after all modules are known in the model
 	public void connectDependencies();
-	
-	//Debug-functies voor in de main:
-	public String represent();
 
 	public void createLocalVariable(String belongsToClass,
 			String declareType, String name, String uniqueName, int lineNumber, String belongsToMethodString);
@@ -51,5 +46,8 @@ public interface ModelCreationService {
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
 			String belongsToMethod, String declareTypes);
+	
+	//Single debugging functionality, to check the completeness of the implementation
+		public String represent();
 	
 }

@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 class FamixModuleFinder extends FamixFinder{
 	
-	private static enum FinderArguments{ROOT, CHILDS, PARENT};
+	private static enum FinderArguments{ROOT, CHILDS, PARENT, FETCH};
 	private String currentArgument;
 	private FinderArguments currentFunction = FinderArguments.ROOT;
 	private List<AnalysedModuleDTO> currentResult;
@@ -17,6 +17,12 @@ class FamixModuleFinder extends FamixFinder{
 		super(model);
 		this.currentResult = new ArrayList<AnalysedModuleDTO>();
 		this.currentArgument = "";
+	}
+	
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename){
+		this.performQuery(FinderArguments.FETCH, uniquename);
+		if(this.currentResult.isEmpty()) return new AnalysedModuleDTO("", "", "", "");
+		else return currentResult.get(0);
 	}
 	
 	public List<AnalysedModuleDTO> getRootModules() {
@@ -121,6 +127,7 @@ class FamixModuleFinder extends FamixFinder{
 		case ROOT: return isRootModule(uniqueName);
 		case CHILDS: return isChild(uniqueName, this.currentArgument);
 		case PARENT: return isParent(uniqueName, this.currentArgument);
+		case FETCH: return uniqueName.equals(this.currentArgument);
 		}
 		return false;
 	}

@@ -1,9 +1,9 @@
 package husacct.analyse.domain.famix;
 
 import javax.naming.directory.InvalidAttributesException;
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 
-public class FamixCreationServiceImpl implements ModelCreationService{
+public class FamixCreationServiceImpl implements IModelCreationService{
 	
 	private FamixModel model;
 	private FamixDependencyConnector dependencyConnector;

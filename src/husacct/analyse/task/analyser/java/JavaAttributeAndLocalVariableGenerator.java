@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.java;
 
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
@@ -18,7 +18,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	private int lineNumber;
 	private String belongsToMethod = ""; //alleen voor local variables
 	
-	private ModelCreationService modelService = new FamixCreationServiceImpl();
+	private IModelCreationService modelService = new FamixCreationServiceImpl();
 
 	private String name;
 
