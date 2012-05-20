@@ -179,8 +179,8 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		severityNamePanel.setLayout(severityNamePanelLayout);
 	}
 	
-	private void createRootLayout(){
-		GroupLayout baseLayout = new GroupLayout(this);
+	private void createRootLayout(){		
+		GroupLayout baseLayout = new GroupLayout(getRootPane());
 		
 		GroupLayout.SequentialGroup horizontalGroup = baseLayout.createSequentialGroup();
 		horizontalGroup.addComponent(tabPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE);
@@ -198,9 +198,8 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		
 		baseLayout.setVerticalGroup(verticalGroup);
 		
-		setLayout(baseLayout);
+		getRootPane().setLayout(baseLayout);
 	}
-	
 	
 	@Override
 	public void update(Observable o, Object arg) {
