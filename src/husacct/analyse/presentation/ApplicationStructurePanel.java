@@ -26,7 +26,7 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 	
 	public ApplicationStructurePanel(){
 		dataControl = new AnalyseUIController();
-		renderer = new SoftwareTreeCellRenderer();
+		renderer = new SoftwareTreeCellRenderer(dataControl);
 		createPanel();
 	} 
 	
@@ -84,7 +84,7 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 	}
 	
 	public void reload(){
-		renderer = new SoftwareTreeCellRenderer();
+		renderer = new SoftwareTreeCellRenderer(dataControl);
 		analyzedCodeTree.setCellRenderer(renderer);
 		repaint();
 	}

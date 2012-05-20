@@ -3,7 +3,7 @@ package husacct.analyse.domain;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-public interface AnalyseDomainService {
+public interface IAnalyseDomainService {
 	
 	public void clearModel();
 	
@@ -14,6 +14,7 @@ public interface AnalyseDomainService {
 	public DependencyDTO[] getDependenciesTo(String to);
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 	
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 	public AnalysedModuleDTO[] getRootModules();
 	public AnalysedModuleDTO[] getChildModulesInModule(String from); 
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
