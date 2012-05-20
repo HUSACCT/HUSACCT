@@ -11,46 +11,58 @@ import org.jdom2.Element;
 
 public class DomainXML {
 
-	public DomainXML(){
-
+	private SoftwareArchitecture DomainSoftwareArchitecture;
+	
+	private Boolean parseLogical = true;
+	
+	public DomainXML(SoftwareArchitecture sa){
+		this.DomainSoftwareArchitecture = sa;
+	}
+	
+	public Boolean getParseLogical() {
+		return this.parseLogical;
+	}
+	
+	public void setParseLogical(Boolean doParse) {
+		this.parseLogical = doParse;
 	}
 
 	public Element getSoftwareUnitDefinitionInXML(SoftwareUnitDefinition SUD) {
-		Element XMLSud = new Element("SoftwareUnitDefinition");
+		Element XMLSoftwareUnitDefinition = new Element("SoftwareUnitDefinition");
 
 		Element SudName = new Element("name");
 		SudName.addContent(SUD.getName());
-		XMLSud.addContent(SudName);
+		XMLSoftwareUnitDefinition.addContent(SudName);
 
 		Element SudType = new Element("type");
 		SudType.addContent(SUD.getType().toString());
-		XMLSud.addContent(SudType);
+		XMLSoftwareUnitDefinition.addContent(SudType);
 
-		return XMLSud;
+		return XMLSoftwareUnitDefinition;
 	}
 
-	public Element getSoftwareArchitectureInXML(SoftwareArchitecture SA) {
+	public Element getSoftwareArchitectureInXML() {
 		Element XMLArchitecture = new Element("Architecture");
 
 		Element SAName = new Element("name");
-		SAName.addContent(SA.getName());
+		SAName.addContent(this.DomainSoftwareArchitecture.getName());
 		XMLArchitecture.addContent(SAName);
 
 		Element SADescription = new Element("description");
-		SADescription.addContent(SA.getDescription());
+		SADescription.addContent(this.DomainSoftwareArchitecture.getDescription());
 		XMLArchitecture.addContent(SADescription);
 
-		if (SA.getModules().size() > 0) {
+		if (this.DomainSoftwareArchitecture.getModules().size() > 0) {
 			Element SAModules = new Element("modules");
-			for (Module m : SA.getModules()) {
+			for (Module m : this.DomainSoftwareArchitecture.getModules()) {
 				SAModules.addContent(this.getModuleInXML(m));
 			}
 			XMLArchitecture.addContent(SAModules);
 		}
 
-		if (SA.getAppliedRules().size() > 0) {
+		if (this.DomainSoftwareArchitecture.getAppliedRules().size() > 0 && this.getParseLogical() == false) {
 			Element SARules = new Element("rules");
-			for (AppliedRule ar : SA.getAppliedRules()) {
+			for (AppliedRule ar : this.DomainSoftwareArchitecture.getAppliedRules()) {
 				SARules.addContent(this.getAppliedRuleInXML(ar));
 			}
 			XMLArchitecture.addContent(SARules);
@@ -202,7 +214,7 @@ public class DomainXML {
 		applicationVersion.addContent(App.getVersion());
 		XMLApplication.addContent(applicationVersion);
 
-		XMLApplication.addContent(this.getSoftwareArchitectureInXML(SoftwareArchitecture.getInstance()));
+		XMLApplication.addContent(this.getSoftwareArchitectureInXML());
 
 		return XMLApplication;
 	}

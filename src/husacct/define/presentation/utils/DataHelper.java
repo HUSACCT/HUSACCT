@@ -1,9 +1,11 @@
-package husacct.define.presentation.helper;
+package husacct.define.presentation.utils;
 
 public class DataHelper {
 	private long id;
+	private Object key;
 	private String value;
 
+	//TODO remove id and replace with key
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -22,6 +24,14 @@ public class DataHelper {
 
 	public String toString() {
 		return getValue();
+	}
+
+	public Object getKey() {
+		return key;
+	}
+
+	public void setKey(Object key) {
+		this.key = key;
 	}
 
 }

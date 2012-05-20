@@ -107,7 +107,7 @@ public class DefinedController extends DrawingController {
 		if (parentName.equals("") || parentName.equals("**")) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else {
-			ModuleDTO[] children = defineService.getChildsFromModule(parentName);
+			ModuleDTO[] children = defineService.getChildrenFromModule(parentName);
 			if (children.length > 0) {
 				setCurrentPath(parentName);
 				drawModulesAndLines(children);

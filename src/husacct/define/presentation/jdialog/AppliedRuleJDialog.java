@@ -1,5 +1,6 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.tables.JTableException;
@@ -35,6 +36,7 @@ import javax.swing.WindowConstants;
 public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
+	private final String husacctIcon = "husacct/common/resources/husacct.png";
 	
 	private AppliedRuleController appliedRuleController;
 	private FactoryDetails factoryDetails;
@@ -60,15 +62,15 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle("New Applied Rule");
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			setTitle("New Rule");
+			setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
 			this.setResizable(false);
 			this.pack();
-			this.setSize(815, 435);
+			this.setSize(880, 460);
 			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
@@ -90,21 +92,20 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		this.ruleDetailsJPanel.initGui();
-		
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		
-		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(5, 0, 0, 0), 0, 0));
+		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 0, 0, 0), 0, 0));
 		
 		return mainPanel;
 	}
 	
 	private GridBagLayout createMainPanelLayout() {
 		GridBagLayout mainPanelLayout = new GridBagLayout();
-		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
-		mainPanelLayout.rowHeights = new int[] { 30, 23, 6, 0 };
-		mainPanelLayout.columnWeights = new double[] { 0.0, 0.1 };
-		mainPanelLayout.columnWidths = new int[] { 132, 7 };
+		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0 };
+		mainPanelLayout.rowHeights = new int[] { 30, 30, 30};//30 500 90
+		mainPanelLayout.columnWeights = new double[] { 0.0, 0.0 };
+		mainPanelLayout.columnWidths = new int[] { 130, 660 };
 		return mainPanelLayout;
 	}
 	
@@ -117,6 +118,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private void refreshRuleDetailsJPanel() {
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
+		this.appliedRuleController.clearRuleExceptions();
 		
 		this.mainPanel.remove(this.ruleDetailsJPanel);
 		
@@ -127,8 +129,19 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		if(this.getComponentCount() > 0) {
 			this.getRootPane().revalidate();
 		}
+		
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		
+		//TODO /////////////////////////////////////
+		jButtonAddExceptionRow.setEnabled(true);
+		jButtonRemoveExceptionRow.setEnabled(true);
+		if (ruleTypeKey.equals("IsAllowedToUse")){
+			jButtonAddExceptionRow.setEnabled(false);
+			jButtonRemoveExceptionRow.setEnabled(false);
+		}
+		////////////////////////////////////////////
 		this.repaint();
+		this.update();
 	}
 	
 	private JPanel createExceptionsPanel() {
@@ -166,10 +179,10 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	
 	private GridBagLayout createExceptionsButtonPanelLayout() {
 		GridBagLayout exceptionsButtonPanelLayout = new GridBagLayout();
-		exceptionsButtonPanelLayout.rowWeights = new double[] { 0.0, 0.1 };
-		exceptionsButtonPanelLayout.rowHeights = new int[] { 15, 7 };
-		exceptionsButtonPanelLayout.columnWeights = new double[] { 0.1 };
-		exceptionsButtonPanelLayout.columnWidths = new int[] { 7 };
+		exceptionsButtonPanelLayout.rowWeights = new double[] { 0.0 };
+		exceptionsButtonPanelLayout.rowHeights = new int[] { 30 };
+		exceptionsButtonPanelLayout.columnWeights = new double[] { 0.0, 0.0};
+		exceptionsButtonPanelLayout.columnWidths = new int[] { 50, 50 };
 		return exceptionsButtonPanelLayout;
 	}
 	
@@ -263,7 +276,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			this.appliedRuleController.setModuleToId(selectedModuleToId);
 		
 		ExceptionRuleJDialog exceptionFrame = new ExceptionRuleJDialog(this.appliedRuleController, this);
-		exceptionFrame.setLocationRelativeTo(exceptionFrame.getRootPane());
+		DialogUtils.alignCenter(exceptionFrame);
 		exceptionFrame.setVisible(true);
 	}
 	

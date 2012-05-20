@@ -3,6 +3,9 @@ package husacct.define.presentation;
 import husacct.Main;
 import husacct.define.DefineServiceImpl;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
+import husacct.define.task.DefinitionController;
+
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -12,9 +15,15 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class MainGUI {
 
-	public static void main(String args[])
+	public static void main(String[] args) {
+		new MainGUI(args);
+	}
+	
+	public MainGUI(String[] args)
 	{
-		PropertyConfigurator.configure("husacct.properties");
+		URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
+		PropertyConfigurator.configure(propertiesFile);
+
 		Logger logger = Logger.getLogger(Main.class);
 		logger.info("Starting Define");
 		
@@ -49,5 +58,6 @@ public class MainGUI {
 //		mainFrame.add(appController.getApplicationFrame());
 //		mainFrame.repaint();
 
+		DefinitionController.getInstance().createTestData();
 	}
 }

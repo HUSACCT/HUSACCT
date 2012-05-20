@@ -13,33 +13,36 @@ public class DefineTranslator {
 	private static final String bundleLocation = "husacct.common.locale.defineLang";
 	private static Logger logger = Logger.getLogger(DefineTranslator.class);
 
-	public static String translate(String key){			
+	public static String translate(String key){	
+		String value = key;
+		
 		try{
 			Locale locale = getLocale();
 			ResourceBundle languageValues = ResourceBundle.getBundle(bundleLocation, locale);
-			return languageValues.getString(key);
+			value = languageValues.getString(key);
 		}catch(MissingResourceException m){
 			logger.warn(m.getMessage(), m);
 		}
-		return key;
+		return value;
 	}
 
 	public static String getKey(String remoteValue){
+		String key = remoteValue;
 		try{	
 			Locale locale = getLocale();
 			ResourceBundle languageValues = ResourceBundle.getBundle(bundleLocation, locale);
-			Enumeration<String> keys = languageValues.getKeys();
-			while (keys.hasMoreElements()) {
-				String key = (String)keys.nextElement();
-				String value = languageValues.getString(key);
+			Enumeration<String> keyList = languageValues.getKeys();
+			while (keyList.hasMoreElements()) {
+				String tmpKey = (String)keyList.nextElement();
+				String value = languageValues.getString(tmpKey);
 				if(value.equals(remoteValue)){
-					return key;
+					key = tmpKey;
 				}
 			}
 		}catch(MissingResourceException m){
 			logger.error(m.getMessage(), m);
 		}
-		return remoteValue;
+		return key;
 	}
 
 	private static Locale getLocale() {

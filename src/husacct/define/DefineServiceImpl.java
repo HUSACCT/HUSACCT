@@ -68,7 +68,7 @@ public class DefineServiceImpl implements IDefineService {
 	}
 
 	@Override
-	public ModuleDTO[] getChildsFromModule(String logicalPath) {
+	public ModuleDTO[] getChildrenFromModule(String logicalPath) {
 		Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
 		ModuleDTO moduleDTO = domainParser.parseModule(module);
 		ModuleDTO[] childModuleDTOs = moduleDTO.subModules;

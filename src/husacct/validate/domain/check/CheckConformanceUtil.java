@@ -54,7 +54,7 @@ public class CheckConformanceUtil {
 
 	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		ModuleDTO[] childModules = defineService.getChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = defineService.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpathsFrom.addAll(getAllClasspathsFromModule(module));
@@ -65,7 +65,7 @@ public class CheckConformanceUtil {
 	}
 
 	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths){
-		ModuleDTO[] childModules = defineService.getChildsFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = defineService.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpaths.addAll(getAllClasspathsFromModule(module));
