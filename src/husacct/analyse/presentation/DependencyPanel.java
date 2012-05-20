@@ -3,8 +3,6 @@ package husacct.analyse.presentation;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import husacct.analyse.abstraction.language.AnalyseTranslater;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import javax.swing.GroupLayout;
@@ -43,7 +41,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		createLayout();
 		
 		dependencyTable = new JTable();
-		tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>());
+		tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>(), dataControl);
 		
 		dependencyTable.setModel(tableModel);
 		dependencyScrollPane.setViewportView(dependencyTable);
@@ -88,7 +86,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	}
 	
 	private void createTreeLayout(JTree theTree){
-		DefaultTreeCellRenderer moduleNodeRenderer = new SoftwareTreeCellRenderer();
+		DefaultTreeCellRenderer moduleNodeRenderer = new SoftwareTreeCellRenderer(dataControl);
 		moduleNodeRenderer.setBackground(UIManager.getColor("Panel.background"));
 		moduleNodeRenderer.setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
 		moduleNodeRenderer.setBackgroundSelectionColor(UIManager.getColor("Table.sortIconColor"));
@@ -112,13 +110,13 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	
 	private void createLayout(){
 		fromModuleScrollPane = new JScrollPane();
-		fromModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("FromModuleTreeTitle")));
+		fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
 		
 		toModuleScrollPane = new JScrollPane();
-		toModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("ToModuleTreeTitle")));
+		toModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("ToModuleTreeTitle")));
 		
 		dependencyScrollPane = new JScrollPane();
-		dependencyScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("DependencyTableTitle")));
+		dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
 		
 		theLayout = new GroupLayout(this);
 		theLayout.setHorizontalGroup(
@@ -167,15 +165,15 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	
 	private void updateTableModel(){
 		List<DependencyDTO> allFoundDependencies = dataControl.listDependencies(fromSelected, toSelected);
-		dependencyTable.setModel(new DependencyTableModel(allFoundDependencies));
+		dependencyTable.setModel(new DependencyTableModel(allFoundDependencies, dataControl));
 		dependencyTable.repaint();
 	}
 	
 	public void reload(){
-		tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>());
-		fromModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("FromModuleTreeTitle")));
-		toModuleScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("ToModuleTreeTitle")));
-		dependencyScrollPane.setBorder(new TitledBorder(AnalyseTranslater.getValue("DependencyTableTitle")));
+		tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>(), dataControl);
+		fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
+		toModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("ToModuleTreeTitle")));
+		dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
 		toModuleScrollPane.repaint(); 
 		fromModuleScrollPane.repaint();
 		dependencyScrollPane.repaint();

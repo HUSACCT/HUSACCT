@@ -1,9 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
-import husacct.analyse.abstraction.language.AnalyseTranslater;
 import husacct.control.ILocaleChangeListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
@@ -22,13 +20,14 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	private DependencyPanel dependencyPanel;
 	private JTabbedPane tabPanel;
 	private JButton cancelButton;
+	private AnalyseUIController controller;
 
 	public AnalyseInternalFrame() {
-		setTitle(AnalyseTranslater.getValue("WindowTitle"));
 		setResizable(true);
 		setBounds(200, 200, 550, 471);
 		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
 		registerLocaleChangeListener();
+		this.controller = new AnalyseUIController();
 		
 		tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel.setBackground(UIManager.getColor("Panel.background"));
@@ -39,13 +38,13 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		
 		treePanel = new ApplicationStructurePanel();
 		dependencyPanel = new DependencyPanel();
-		tabPanel.addTab(AnalyseTranslater.getValue("SourceOverview"), null, treePanel, null);
-		tabPanel.addTab(AnalyseTranslater.getValue("DependencyOverview"), null, dependencyPanel, null);
+		tabPanel.addTab(controller.translate("SourceOverview"), null, treePanel, null);
+		tabPanel.addTab(controller.translate("DependencyOverview"), null, dependencyPanel, null);
 		
 		cancelButton = new JButton("Cancel");
 		getContentPane().add(cancelButton, BorderLayout.SOUTH);
 		cancelButton.addActionListener(this);
-		cancelButton.setText(AnalyseTranslater.getValue("Cancel"));
+		cancelButton.setText(controller.translate("Cancel"));
 	}
 	
 	private void registerLocaleChangeListener(){
@@ -53,10 +52,10 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	}
 	
 	public void reloadText(){
-		setTitle(AnalyseTranslater.getValue("WindowTitle"));
-		cancelButton.setText(AnalyseTranslater.getValue("Cancel"));
-		tabPanel.setTitleAt(0, AnalyseTranslater.getValue("SourceOverview"));
-		tabPanel.setTitleAt(1, AnalyseTranslater.getValue("DependencyOverview"));
+		setTitle(controller.translate("WindowTitle"));
+		cancelButton.setText(controller.translate("Cancel"));
+		tabPanel.setTitleAt(0, controller.translate("SourceOverview"));
+		tabPanel.setTitleAt(1, controller.translate("DependencyOverview"));
 		dependencyPanel.reload();
 		treePanel.reload();
 		tabPanel.repaint();

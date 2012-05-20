@@ -1,8 +1,6 @@
 package husacct.analyse.presentation;
 
-import husacct.analyse.abstraction.language.AnalyseTranslater;
 import husacct.common.dto.AnalysedModuleDTO;
-
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
@@ -16,10 +14,12 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel label;
+	private AnalyseUIController uiController;
 	
-	SoftwareTreeCellRenderer() {
+	SoftwareTreeCellRenderer(AnalyseUIController uiController) {
         label = new JLabel();
         label.setOpaque(true);
+        this.uiController = uiController;
         
         setBackground(UIManager.getColor("Panel.background"));
 		setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
@@ -51,7 +51,7 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
         	}
         	label.setIcon(icon);
             
-        	if(moduleSelected.name.equals("")) label.setText(AnalyseTranslater.getValue("Application"));
+        	if(moduleSelected.name.equals("")) label.setText(uiController.translate("Application"));
         	else label.setText(moduleSelected.name);
             if (selected)label.setBackground(backgroundSelectionColor);
             else label.setBackground(backgroundNonSelectionColor);

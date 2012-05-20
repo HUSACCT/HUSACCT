@@ -2,17 +2,25 @@ package husacct.analyse.presentation;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import husacct.ServiceProvider;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.control.IControlService;
 
 public class AnalyseUIController {
 
+	private IControlService husacctControlService = ServiceProvider.getInstance().getControlService();
 	private IAnalyseControlService analyseTaskService = new AnalyseControlerServiceImpl();
 	
 	public AnalyseUIController(){
 		this.analyseTaskService = new AnalyseControlerServiceImpl();
+	}
+	
+	public String translate(String key){
+		return husacctControlService.getTranslatedString(key);
 	}
 		
 	public List<AnalysedModuleDTO> getRootModules(){
