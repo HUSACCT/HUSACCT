@@ -15,13 +15,13 @@ public class GuiController {
 	private BrowseViolations browseViolations;
 	private FilterViolations filterViolations;
 	private ConfigurationUI configurationUI;
-		
+
 	public GuiController(TaskServiceImpl task, ConfigurationServiceImpl configuration){
 		this.task = task;	
 		this.configuration = configuration;
 		subscribeToLocalChangeListener();
 	}
-	
+
 	private void subscribeToLocalChangeListener() {
 		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
@@ -31,7 +31,7 @@ public class GuiController {
 			}
 		});		
 	}
-	
+
 	private void reloadGUIText(){		
 		browseViolations.loadGUIText();
 		filterViolations.loadGUIText();
@@ -42,34 +42,36 @@ public class GuiController {
 		initializeBrowseViolations();
 		return browseViolations;
 	}
-	
+
 	public JInternalFrame getConfigurationGUI(){
 		initializeConfigurationUI();
 		return configurationUI;
 	}
-	
+
 	public void violationChanged(){
-		browseViolations.loadAfterViolationsChanged();
+		if(browseViolations != null){
+			browseViolations.loadAfterViolationsChanged();
+		}
 	}
-	
+
 	private void initializeAllScreens(){
 		initializeBrowseViolations();
 		initializeConfigurationUI();
 		initializeFilterViolations();
 	}
-	
+
 	private void initializeBrowseViolations(){
 		if(browseViolations == null){
 			this.browseViolations = new BrowseViolations(task, configuration);
 		}
 	}
-	
+
 	private void initializeConfigurationUI(){
 		if(configurationUI == null){
 			this.configurationUI = new ConfigurationUI(task);
 		}
 	}
-	
+
 	private void initializeFilterViolations(){
 		if(filterViolations == null){
 			initializeBrowseViolations();
