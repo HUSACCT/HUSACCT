@@ -58,6 +58,7 @@ public class Module implements Comparable<Module> {
 		return mappedSUunits;
 	}
 	
+	@Deprecated
 	public String[] getPhysicalPaths(){
 		ArrayList<String> pathsList = new ArrayList<String>();
 		for (SoftwareUnitDefinition unit : mappedSUunits){
