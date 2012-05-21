@@ -89,11 +89,6 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		addToModel(famixMethod);
 	}
 	
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 4a0b025e09524d932a7f287ceb42721caba2a26d
 	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {
 		this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, 0);
