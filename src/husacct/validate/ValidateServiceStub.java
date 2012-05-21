@@ -127,7 +127,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public List<Violation> getViolationsByDate(Calendar date) {
+	public List<Violation> getHistoryViolationsByDate(Calendar date) {
 		return null;
 	}
 
@@ -141,7 +141,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public void saveInHistory(String description) {
+	public void createHistoryPoint(String description) {
 	}
 
 	@Override

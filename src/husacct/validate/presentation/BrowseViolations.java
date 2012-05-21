@@ -581,7 +581,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private void saveInHistoryActionPerformed(ActionEvent e) {
 		String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistoryDialog"));
 		if(input != null && !input.equals("")) {
-			taskServiceImpl.saveInHistory(input);
+			taskServiceImpl.createHistoryPoint(input);
 		}
 	}
 

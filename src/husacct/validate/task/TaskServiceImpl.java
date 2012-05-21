@@ -6,6 +6,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ViolationsNotFoundAtDateException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -16,6 +17,7 @@ import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.jdom2.Element;
 
@@ -45,7 +47,7 @@ public class TaskServiceImpl{
 	}
 
 	public void setFilterValues(ArrayList<String> ruletypesKeys, ArrayList<String> violationtypesKeys, ArrayList<String> paths, boolean hideFilter, Calendar date) {
-		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getViolationsByDate(date));
+		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getHistoryViolations(date));
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {
@@ -53,11 +55,11 @@ public class TaskServiceImpl{
 	}
 
 	public ArrayList<String> loadRuletypesForFilter(Calendar date) {
-		return filterController.loadRuletypes(getViolationsByDate(date));
+		return filterController.loadRuletypes(getHistoryViolations(date));
 	}
 
 	public ArrayList<String> loadViolationtypesForFilter(Calendar date) {
-		return filterController.loadViolationtypes(getViolationsByDate(date));
+		return filterController.loadViolationtypes(getHistoryViolations(date));
 	}
 
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {
@@ -116,15 +118,13 @@ public class TaskServiceImpl{
 		configuration.restoreSeveritiesToDefault();
 	}
 
-	public List<Violation> getViolationsByDate(Calendar date) {
+	public List<Violation> getHistoryViolations(Calendar date) {
 		for(ViolationHistory violationHistory : configuration.getViolationHistory()) {
 			if(violationHistory.getDate().equals(date)) {
 				return violationHistory.getViolations();
 			}
 		}
-		return getAllViolations().getValue();
-		
-//		throw new ViolationsNotFoundAtDateException(date);
+		throw new ViolationsNotFoundAtDateException(date);
 	}
 
 	public Calendar[] getViolationHistoryDates() {
@@ -137,10 +137,10 @@ public class TaskServiceImpl{
 		return calendars;
 	}
 
-	public void saveInHistory(String description) {
+	public void createHistoryPoint(String description) {
 		configuration.createHistoryPoint(description);
 	}
-	
+
 	public void removeViolationHistory(Calendar date) {
 		configuration.removeViolationHistory(date);
 	}
@@ -148,19 +148,19 @@ public class TaskServiceImpl{
 	public ViolationHistory getViolationHistoryByDate(Calendar date) {
 		return configuration.getViolationHistoryByDate(date);
 	}
-	
+
 	public List<ViolationHistory> getViolationHistories() {
 		return configuration.getViolationHistories();
 	}
-	
+
 	public Map<String, List<ActiveRuleType>> getActiveViolationTypes(){
 		return configuration.getActiveViolationTypes();
 	}
-	
+
 	public void setActiveViolationTypes(String language, List<ActiveRuleType> activeViolations){
 		configuration.setActiveViolationTypes(language, activeViolations);
 	}
-	
+
 	public void subscribe(Observer frame){
 		configuration.addObserver(frame);
 	}

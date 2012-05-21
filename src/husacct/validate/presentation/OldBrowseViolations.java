@@ -184,7 +184,7 @@ public final class OldBrowseViolations extends JInternalFrame implements FilterV
 				if(violationModel.getRowCount() > 0){
 					String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistoryDialog"));
 					if(input != null && !input.equals("")) {
-						taskServiceImpl.saveInHistory(input);
+						taskServiceImpl.createHistoryPoint(input);
 						buttonSaveInHistory.setEnabled(false);
 					}
 				} else{
