@@ -9,7 +9,6 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.control.task.MainController;
 import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
@@ -24,12 +23,11 @@ import org.junit.Test;
 public class ValidateTest {
 	IDefineService define;
 	IValidateService validate;
-	MainController mainController;
-
+	
 	@Before
 	public void setup()
 	{
-		this.mainController = new MainController(new String[]{"nogui"});
+		ServiceProvider.getInstance().getControlService().startApplication(new String[]{"nogui"});
 		this.define = ServiceProvider.getInstance().getDefineService();
 		this.validate = ServiceProvider.getInstance().getValidateService();
 	}
