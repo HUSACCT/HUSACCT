@@ -5,6 +5,7 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -23,7 +24,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class ValidateServiceImpl implements IValidateService, ISaveable {		
+public class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
@@ -76,6 +77,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
 		domain.checkConformance(appliedRules);		
 		this.validationExecuted = true;
+		notifyServiceListeners();
 		gui.violationChanged();
 	}
 
@@ -101,6 +103,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		} catch (DatatypeConfigurationException e) {
 			logger.error("Error exporting the workspace: " + e.getMessage(), e);
 		}
+		notifyServiceListeners();
 	}
 
 	@Override
@@ -120,7 +123,8 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 
 	@Override
 	public void createHistoryPoint(String description) {
-		task.createHistoryPoint(description);		
+		task.createHistoryPoint(description);	
+		notifyServiceListeners();
 	}
 
 	@Override
@@ -141,5 +145,11 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	//This method is only used for testing with the Testsuite
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
+	}
+
+	@Override
+	@Deprecated
+	public void exportViolations(String s1, String s2, String s3) {
+		
 	}
 }

@@ -5,6 +5,7 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IServiceListener;
 import husacct.validate.domain.validation.Violation;
 
 import java.awt.Color;
@@ -154,5 +155,20 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	public void exportViolations(File file, String fileType) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void exportViolations(String s1, String s2, String s3) {
+				
+	}
+
+	@Override
+	public void addServiceListener(IServiceListener listener) {
+		
+	}
+
+	@Override
+	public void notifyServiceListeners() {
+
 	}
 }

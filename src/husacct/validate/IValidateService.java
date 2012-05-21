@@ -2,6 +2,7 @@ package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.services.IObservableService;
 import husacct.validate.domain.validation.Violation;
 
 import java.io.File;
@@ -10,7 +11,7 @@ import java.util.List;
 
 import javax.swing.JInternalFrame;
 
-public interface IValidateService
+public interface IValidateService extends IObservableService
 {
 	public CategoryDTO[] getCategories();
 
@@ -22,6 +23,9 @@ public interface IValidateService
 	public Calendar[] getViolationHistoryDates();
 	public String[] getExportExtentions();
 	public List<Violation> getHistoryViolationsByDate(Calendar date);
+	
+	@Deprecated
+	public void exportViolations(String s1, String s2, String s3);
 	public void exportViolations(File file, String fileType, Calendar date);	
 	public void exportViolations(File file, String fileType);
 
