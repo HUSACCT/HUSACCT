@@ -18,6 +18,8 @@ import org.apache.log4j.Logger;
 
 public class ActiveViolationPanel extends javax.swing.JPanel {
 	
+	private static final long serialVersionUID = 3957004303176017057L;
+
 	private static Logger logger = Logger.getLogger(ActiveViolationPanel.class);
 	
 	private final DefaultListModel categoryModel;
@@ -175,11 +177,12 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
 	
-	private void loadModels(){
-		
+	private void loadModels(){		
 		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Active")};
 		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0){
-
+			
+			private static final long serialVersionUID = 3779670097825676765L;
+			
 			Class<?>[] types = new Class[]{String.class, Boolean.class};
 			boolean[] canEdit = new boolean[]{false, true};
 

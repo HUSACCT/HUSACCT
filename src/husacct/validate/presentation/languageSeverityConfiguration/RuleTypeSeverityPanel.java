@@ -18,6 +18,8 @@ import javax.swing.table.TableColumnModel;
 
 public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 
+	private static final long serialVersionUID = 5947125752371446966L;
+
 	private ComboBoxTableModel ruletypeModel;
 	
 	private final DefaultListModel rtsCategoryModel;
