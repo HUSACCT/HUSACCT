@@ -23,11 +23,11 @@ import org.junit.Test;
 public class ValidateTest {
 	IDefineService define;
 	IValidateService validate;
-	
+
 	@Before
 	public void setup()
 	{
-		ServiceProvider.getInstance().getControlService().startApplication(new String[]{"nogui"});
+		ServiceProvider.getInstance().getControlService();
 		this.define = ServiceProvider.getInstance().getDefineService();
 		this.validate = ServiceProvider.getInstance().getValidateService();
 	}
@@ -49,14 +49,14 @@ public class ValidateTest {
 		CategoryDTO[] dtos = validate.getCategories();		
 		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency", "dependencylimitation"}, getCategoryStringArray(dtos));	
 	}
-	
+
 	@Test
 	public void getRuleTypes(){
 		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"NamingConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "IsAllowedToUse", "MustUse", "SkipCall", "BackCall", "LoopsInModule"};
+		final String [] currentRuletypes = new String[]{"NamingConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall", "LoopsInModule"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
-	
+
 	@Test
 	public void getViolationTypesJavaLanguage(){
 		define.createApplication("", new String[]{}, "Java", "");
@@ -65,7 +65,7 @@ public class ValidateTest {
 		assertEquals(11, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
 		assertEquals(4, getViolationTypesStringArray(dtos, "VisibilityConvention").length);
 	}
-	
+
 	@Test
 	public void getViolationTypesCSharpLanguage(){
 		define.createApplication("", new String[]{}, "C#", "");
@@ -74,7 +74,7 @@ public class ValidateTest {
 		assertEquals(10, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
 		assertEquals(4, getViolationTypesStringArray(dtos, "VisibilityConvention").length);
 	}
-	
+
 	@Test
 	public void getViolationTypesNoLanguage(){
 		define.createApplication("", new String[]{}, "", "");
@@ -106,13 +106,26 @@ public class ValidateTest {
 		for(CategoryDTO cDTO : dtos){
 			for(RuleTypeDTO rDTO : cDTO.getRuleTypes()){
 				if(rDTO.getKey().equals(ruleTypeKey)){
-					for(ViolationTypeDTO vDTO : rDTO.getViolationTypes()){
-						violationtypeList.add(vDTO.getKey());
+					return getViolationTypesStringArray(rDTO);
+				}
+				else{
+					for(RuleTypeDTO exceptionDTO : rDTO.getExceptionRuleTypes()){
+						if(exceptionDTO.getKey().equals(ruleTypeKey)){
+							return getViolationTypesStringArray(exceptionDTO);
+						}
 					}
 				}
 			}
 		}
 		return violationtypeList.toArray(new String[]{});
+	}
+
+	private String[] getViolationTypesStringArray(RuleTypeDTO rule){
+		List<String> violationTypeList = new ArrayList<String>();
+		for(ViolationTypeDTO vDTO : rule.getViolationTypes()){
+			violationTypeList.add(vDTO.getKey());
+		}
+		return violationTypeList.toArray(new String[]{});
 	}
 
 	@Test
