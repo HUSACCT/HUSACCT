@@ -1,20 +1,17 @@
 package husacct.define.task.components;
 
-import java.awt.Component;
 import java.util.ArrayList;
 
-public class AnalyzedModuleComponent extends Component{
+public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 
 	private static final long serialVersionUID = 1713515026043620607L;
-	
-	ArrayList<AnalyzedModuleComponent> children;
 	
 	private String uniqueName = "";
 	private String type = "";
 	private String visibility;
 	
 	public AnalyzedModuleComponent() {
-		this.children = new ArrayList<AnalyzedModuleComponent>();
+		super();
 	}
 	
 	public AnalyzedModuleComponent(String uniqueName, String name, String type, String visibility) {
@@ -25,24 +22,24 @@ public class AnalyzedModuleComponent extends Component{
 		this.setVisibility(visibility);
 	}
 
-	public void addChild(AnalyzedModuleComponent child) {
+	public void addChild(AbstractCombinedComponent child) {
 		this.children.add(child);
 	}
 	
-	public void addChild(int index, AnalyzedModuleComponent child) {
+	public void addChild(int index, AbstractCombinedComponent child) {
 		this.children.add(index, child);
 	}
 
-	public void setChildren(ArrayList<AnalyzedModuleComponent> children) {
+	public void setChildren(ArrayList<AbstractCombinedComponent> children) {
 		this.children = children;
 	}
 
-	public ArrayList<AnalyzedModuleComponent> getChildren() {
+	public ArrayList<AbstractCombinedComponent> getChildren() {
 		return this.children;
 	}
 
-	public void removeChild(AnalyzedModuleComponent child) {
-		for(Component currentchild : this.children) {
+	public void removeChild(AbstractCombinedComponent child) {
+		for(AbstractCombinedComponent currentchild : this.children) {
 			if(currentchild.equals(child)) {
 				this.children.remove(currentchild);
 			}

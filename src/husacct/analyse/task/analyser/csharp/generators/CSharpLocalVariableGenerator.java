@@ -12,8 +12,8 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 	public void generateLocalVariable(List<CommonTree> tree, String methodSignature, String belongsToClass, int lineNumber){
 		declareType = checkForDeclareType(tree);
 		name = checkForName(tree);
-		uniqueName = belongsToClass + "." + methodSignature + "." + name;
-		modelService.createLocalVariable(methodSignature, belongsToClass, declareType, name, uniqueName, lineNumber);
+		uniqueName = belongsToClass + "." + methodSignature + "." + name;		
+		modelService.createLocalVariable(belongsToClass, declareType, name, uniqueName, lineNumber,methodSignature);
 	}
 
 	private String checkForDeclareType(List<CommonTree> tree) {

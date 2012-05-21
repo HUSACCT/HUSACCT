@@ -2,7 +2,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import java.util.Arrays;
 
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 public abstract class CSharpGenerator {
@@ -62,7 +62,8 @@ public abstract class CSharpGenerator {
 	protected final int[] notPartOfAttribute = new int[] { FORWARDCURLYBRACKET, USING, NAMESPACE, CLASS, RETURN, SET, GET, DOT };
 	protected final int[] isAPartOfAttribute = new int[] { FORWARDCURLYBRACKET, SEMICOLON, BACKWARDCURLYBRACKET };
 	protected final int[] listOfMethodTypes = new int[] { FINAL, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /* synchronised */};
-	protected ModelCreationService modelService = new FamixCreationServiceImpl();
+	protected IModelCreationService modelService = new FamixCreationServiceImpl();
+
 
 	
 }

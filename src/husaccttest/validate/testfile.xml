@@ -14,7 +14,7 @@
 			<color>-256</color>
 		</severity>
 		<severity>
-			<defaultName>low</defaultName>
+			<defaultName>Low</defaultName>
 			<userName />
 			<id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
 			<color>-16711936</color>
@@ -275,7 +275,7 @@
 		</severityPerTypePerProgrammingLanguage>
 	</severitiesPerTypesPerProgrammingLanguages>
 	<violationHistories>
-		<violationHistory date="2012-05-14T15:22:17.207+02:00">
+		<violationHistory date="2012-05-16T18:35:28.368+02:00">
 			<description>description</description>
 			<severities>
 				<severity>
@@ -512,7 +512,7 @@
 				</violation>
 			</violations>
 		</violationHistory>
-		<violationHistory date="1000-12-01T15:22:17.207+01:00">
+		<violationHistory date="1000-12-01T18:35:28.368+01:00">
 			<description>description2</description>
 			<severities>
 				<severity>

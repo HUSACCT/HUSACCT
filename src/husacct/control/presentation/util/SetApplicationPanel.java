@@ -36,7 +36,6 @@ public class SetApplicationPanel extends JPanel{
 	private JButton addButton, removeButton;
 	private String[] languages;
 	private DefaultListModel pathListModel = new DefaultListModel();
-	private ApplicationDTO applicationData;
 	
 	private JPanel panel;
 	private GridBagConstraints constraint = new GridBagConstraints();
@@ -51,7 +50,6 @@ public class SetApplicationPanel extends JPanel{
 	
 	public void addComponents(){
 		this.setLayout(new GridBagLayout());
-		this.applicationData = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
 		this.languages = ServiceProvider.getInstance().getAnalyseService().getAvailableLanguages();
 		
 		applicationNameLabel = new JLabel(controlService.getTranslatedString("ApplicationNameLabel"));
@@ -123,15 +121,15 @@ public class SetApplicationPanel extends JPanel{
 	}
 	
 	private void showAddFileDialog() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int returnVal = chooser.showOpenDialog(panel);
+		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, controlService.getTranslatedString("AddButton"));
+		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			pathListModel.add(pathListModel.size(), chooser.getSelectedFile().getAbsolutePath());
+			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
 		}
 	}
 	
 	private void setDefaultValues(){
+		ApplicationDTO applicationData = ServiceProvider.getInstance().getDefineService().getApplicationDetails();;
 		applicationNameText.setText(applicationData.name);
 		for(int i=0; i<languages.length; i++){
 			if(applicationData.programmingLanguage.equals(languages[i])){
@@ -143,14 +141,14 @@ public class SetApplicationPanel extends JPanel{
 		for (int i=0; i<items.length; i++) {
 			pathListModel.add(i, items[i]);
 		}
-		
 	}
 	
 	public ApplicationDTO getApplicationData(){
-		applicationData.name = applicationNameText.getText();
-		applicationData.programmingLanguage = languages[languageSelect.getSelectedIndex()];
-		applicationData.version = versionText.getText();
-		applicationData.paths = Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class);
+		String name = applicationNameText.getText();
+		String language = languages[languageSelect.getSelectedIndex()];
+		String version = versionText.getText();
+		String[] paths = Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class);
+		ApplicationDTO applicationData = new ApplicationDTO(name, paths, language, version);
 		return applicationData;
 	}
 	

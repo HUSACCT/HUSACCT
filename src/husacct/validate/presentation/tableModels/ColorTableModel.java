@@ -2,12 +2,10 @@ package husacct.validate.presentation.tableModels;
 
 import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.presentation.ColorRenderer;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -17,7 +15,6 @@ import javax.swing.table.TableColumn;
 public class ColorTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 2492345975488386436L;
 	
-	@SuppressWarnings("rawtypes")
 	private Vector dataVector = new Vector();
     private String columnNames[] = {ValidateTranslator.getValue("SeverityName"), ValidateTranslator.getValue("Color")};
     private Class<?>[] types = new Class[]{String.class, JButton.class};
@@ -50,14 +47,12 @@ public class ColorTableModel extends AbstractTableModel {
     }
     
 	@Override
-	@SuppressWarnings("rawtypes")
     public Object getValueAt(int row, int column) {
         Vector rowVector = (Vector) dataVector.elementAt(row);
         return rowVector.elementAt(column);
     }
     
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
     public void setValueAt(Object value, int row, int column) {
         Vector rowVector = (Vector) dataVector.elementAt(row);
         rowVector.setElementAt(value, column);
@@ -71,7 +66,6 @@ public class ColorTableModel extends AbstractTableModel {
         column.setCellRenderer(new ColorRenderer(true));
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
 	protected static Vector convertToVector(Object[] anArray) {
         if (anArray == null) {
             return null;
@@ -83,7 +77,6 @@ public class ColorTableModel extends AbstractTableModel {
         return v;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	private void justifyRows(int from, int to) {
         dataVector.setSize(getRowCount());
 
@@ -95,7 +88,6 @@ public class ColorTableModel extends AbstractTableModel {
         }
     }
 
-    @SuppressWarnings("rawtypes")
 	public void addRow(Vector rowData) {
         insertRow(getRowCount(), rowData);
     }
@@ -104,7 +96,6 @@ public class ColorTableModel extends AbstractTableModel {
         addRow(convertToVector(rowData));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public void insertRow(int row, Vector rowData) {
         dataVector.insertElementAt(rowData, row);
         justifyRows(row, row + 1);
@@ -119,7 +110,6 @@ public class ColorTableModel extends AbstractTableModel {
         return (j == 0) ? i : gcd(j, i % j);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void rotate(Vector v, int a, int b, int shift) {
         int size = b - a;
         int r = size - shift;

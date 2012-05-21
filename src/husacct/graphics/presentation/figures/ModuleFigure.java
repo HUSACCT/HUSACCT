@@ -9,7 +9,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ModuleFigure extends NamedFigure {
+public class ModuleFigure extends BaseFigure {
 	private static final long serialVersionUID = -2743753116624138171L;
 	private RectangleFigure body;
 	private TextFigure moduleText;

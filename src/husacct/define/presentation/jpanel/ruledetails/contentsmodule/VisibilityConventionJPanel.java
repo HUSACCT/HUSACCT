@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails.contentsmodule;
 
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.GridBagConstraints;
@@ -43,7 +43,7 @@ public class VisibilityConventionJPanel extends AbstractDetailsJPanel{
 
 	@Override
 	public HashMap<String, Object> saveToHashMap() {
-		HashMap<String, Object> ruleDetails = saveDefaultDataToHashMap();
+		HashMap<String, Object> ruleDetails = super.saveToHashMap();
 		
 		DataHelper datahelper1 = (DataHelper) this.moduleFromJComboBox.getSelectedItem();
 		ruleDetails.put("moduleFromId", datahelper1.getId());

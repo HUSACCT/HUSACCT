@@ -9,11 +9,11 @@ import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
@@ -39,8 +39,8 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public ValidateServiceImpl(){
 		this.configuration = new ConfigurationServiceImpl();
 		this.domain = new DomainServiceImpl(configuration);
-		this.report = new ReportServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
+		this.report = new ReportServiceImpl(task);
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 	}
@@ -138,17 +138,15 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public void saveInHistory(String description) {
 		task.saveInHistory(description);		
 	}
-
-	@Override
-	public void exportViolationHistoryReport(String name, String fileType,
-			String path, ViolationHistory violationHistory) {
-		report.createReport(fileType, name, path, violationHistory);
-		
-	}
 	
 	@Override 
 	public JInternalFrame getViolationHistoryGUI(){
 		//FIXME add ViolationHistoryGUI
 		return new JInternalFrame();
+	}
+
+	@Override
+	public void exportViolations(File file, String fileType, Calendar date) {
+		report.createReport(file, fileType, date);
 	}
 }

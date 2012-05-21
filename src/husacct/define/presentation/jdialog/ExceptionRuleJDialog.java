@@ -66,7 +66,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			
 			this.setResizable(false);
 			this.pack();
-			this.setSize(740, 280);
+//			this.setSize(740, 510);
 			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
@@ -90,8 +90,8 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	
 	private GridBagLayout createMainPanelLayout() {
 		GridBagLayout mainPanelLayout = new GridBagLayout();
-		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
-		mainPanelLayout.rowHeights = new int[] { 30, 23, 6, 0 };
+		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0};
+		mainPanelLayout.rowHeights = new int[] { 30, 30};
 		mainPanelLayout.columnWeights = new double[] { 0.0, 0.1 };
 		mainPanelLayout.columnWidths = new int[] { 132, 7 };
 		return mainPanelLayout;

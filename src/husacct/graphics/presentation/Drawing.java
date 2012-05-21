@@ -31,7 +31,7 @@ public class Drawing extends QuadTreeDrawing {
 	public Drawing() {
 		super();
 	}
-
+	
 	public void showExportToImagePanel() {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();

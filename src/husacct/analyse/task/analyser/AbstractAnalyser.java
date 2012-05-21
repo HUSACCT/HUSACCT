@@ -1,11 +1,11 @@
 package husacct.analyse.task.analyser;
 
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 public abstract class AbstractAnalyser {
 	
-	private ModelCreationService modelCreationService;
+	private IModelCreationService modelCreationService;
 	
 	public AbstractAnalyser(){
 		this.modelCreationService = new FamixCreationServiceImpl();

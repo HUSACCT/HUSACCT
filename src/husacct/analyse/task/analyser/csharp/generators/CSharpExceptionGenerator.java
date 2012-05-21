@@ -26,7 +26,7 @@ public class CSharpExceptionGenerator extends CSharpGenerator{
 		
 		for(CSharpData invocation : allInvocations)
 		{
-			modelService.createMethodInvocation("invocation", belongsToClass,invocation.getInvocationTo() , invocation.getLineNumber(), invocation.getInvocationName());
+			modelService.createMethodInvocation(belongsToClass,invocation.getLineNumber(),invocation.getInvocationTo() , invocation.getInvocationName(),"invocation");
 		}
 	}
 

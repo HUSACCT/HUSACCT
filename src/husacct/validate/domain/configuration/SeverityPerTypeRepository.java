@@ -2,6 +2,8 @@ package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.validate.domain.exception.KeyNotFoundException;
+import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
@@ -10,13 +12,16 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
-class SeverityPerTypeRepository {
+class SeverityPerTypeRepository implements Observer {
 
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
 
@@ -28,11 +33,11 @@ class SeverityPerTypeRepository {
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
 	private AbstractViolationType violationtypefactory;	
 
-
 	SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
 		this.configuration = configuration;
 		this.ruletypefactory = ruletypefactory;
 
+		configuration.addObserver(this);		
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
@@ -126,20 +131,134 @@ class SeverityPerTypeRepository {
 	}
 
 	void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){
+		for(String programmingLanguage : severitiesPerTypePerProgrammingLanguage.keySet()){
+			if(!programmingLanguageExists(programmingLanguage)){
+				throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+			}
+			else{
+				for(Entry<String, Severity> keySeverity  : severitiesPerTypePerProgrammingLanguage.get(programmingLanguage).entrySet()){
+					if(isValidKey(programmingLanguage, keySeverity.getKey())){
+						keySeverity.setValue(isValidSeverity(keySeverity.getValue()));
+					}
+					else{
+			//			throw new KeyNotFoundException(keySeverity.getKey());
+					}
+				}
+			}
+		}
 		this.severitiesPerTypePerProgrammingLanguage = severitiesPerTypePerProgrammingLanguage;
 	}
 
-	void setSeverityMap(String language, HashMap<String, Severity> severityMap) {
-		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(language);
-
-		for(Entry<String, Severity> entry : severityMap.entrySet()){
-			if(local.containsKey(entry.getKey())){
-				local.remove(entry.getKey());
+	void setSeverityMap(String programmingLanguage, HashMap<String, Severity> severityMap) {
+		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
+		if(local != null && programmingLanguageExists(programmingLanguage)){
+			for(Entry<String, Severity> entry : severityMap.entrySet()){
+				if(isValidKey(programmingLanguage, entry.getKey())){
+					if(local.containsKey(entry.getKey())){
+						local.remove(entry.getKey());
+					}
+					Severity severity = isValidSeverity(entry.getValue());
+					local.put(entry.getKey(), severity);
+				}
+				else{
+					logger.warn(String.format("%s is not a valid key and will not be set in configuration for programminglanguage %s", entry.getValue(), programmingLanguage));
+				}
 			}
-			local.put(entry.getKey(), entry.getValue());
+			severitiesPerTypePerProgrammingLanguage.remove(programmingLanguage);
+			severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, local);
 		}
+		else{
+			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+		}
+	}
 
-		severitiesPerTypePerProgrammingLanguage.remove(language);
-		severitiesPerTypePerProgrammingLanguage.put(language, local);
+	private boolean isValidKey(String programmingLanguage, String key){
+		boolean foundKey = false;
+		if(programmingLanguageExists(programmingLanguage)){			
+			for(String defaultKey : defaultSeveritiesPerTypePerProgrammingLanguage.get(programmingLanguage).keySet()){
+				if(defaultKey.toLowerCase().equals(key.toLowerCase())){
+					foundKey = true;
+				}
+			}
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+		}
+		return foundKey;
+	}
+
+	private boolean programmingLanguageExists(String programmingLanguage){
+		HashMap<String, Severity> local = defaultSeveritiesPerTypePerProgrammingLanguage.get(programmingLanguage);
+		if(local != null){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	private Severity isValidSeverity(Severity severity){
+		for(Severity currentSeverity : configuration.getAllSeverities()){
+			if(severity == currentSeverity){
+				return severity;
+			}
+		}
+		Severity newSeverity = configuration.getSeverityByName(severity.toString());
+		if(newSeverity != null){
+			return newSeverity;			
+		}
+		throw new SeverityNotFoundException();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if(arg instanceof Severity[]){
+			checkForChangedSeverities((Severity[]) arg);
+		}
+	}
+
+	private void checkForChangedSeverities(Severity[] oldSeverities){
+		List<Severity> previousSeverities = Arrays.asList(oldSeverities);
+		List<Severity> currentSeverities = configuration.getAllSeverities();
+		for(Entry<String, HashMap<String, Severity>> severityPerProgramminglanguageSet : severitiesPerTypePerProgrammingLanguage.entrySet()){
+			for(Entry<String, Severity> severityPerTypeSet : severityPerProgramminglanguageSet.getValue().entrySet()){
+				getLowerSeverity(currentSeverities, previousSeverities, severityPerTypeSet.getValue());
+			}
+		}
+	}
+
+	private Severity getLowerSeverity(List<Severity> currentSeverities, List<Severity> previousSeverities, Severity currentSeverity){
+		try{
+			if(!previousSeverities.contains(currentSeverity) && currentSeverities.contains(currentSeverity)){
+				//just added, no need for further actions
+				return currentSeverity;
+			}
+			else if(previousSeverities.contains(currentSeverity) && !currentSeverities.contains(currentSeverity)){
+				if(currentSeverities.isEmpty()){
+					return getUnidentifiedSeverity();
+				}
+				else{
+					int index = getLowerSeverityIndex(currentSeverities, previousSeverities, currentSeverity);
+					return currentSeverities.get(index);				
+				}
+			}
+			else{
+				return getUnidentifiedSeverity();
+			}
+		}catch(IndexOutOfBoundsException e){
+			return getUnidentifiedSeverity();
+		}
+	}
+
+	private Severity getUnidentifiedSeverity(){
+		return configuration.getSeverityByName("Unidentified");
+	}
+
+	private int getLowerSeverityIndex(List<Severity> currentSeverities, List<Severity> previousSeverities, Severity currentSeverity){
+		int index = previousSeverities.indexOf(currentSeverity);
+		if(index > currentSeverities.size()-1){
+			index = currentSeverities.size()-1;
+		}
+		return index;
 	}
 }
