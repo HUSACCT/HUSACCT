@@ -6,7 +6,6 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 
 import java.awt.Color;
 import java.io.File;
@@ -40,22 +39,22 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		this.validationExecuted = false;
 	}
 
+	@Override
 	public CategoryDTO[] getCategories() {
 		return new CategoryDTO[] { category };
 	}
 
+	@Override
 	public String[] getExportExtentions() {
 		return new String[] { "pdf", "xml", "html" };
 	}
 
+	@Override
 	public void checkConformance() {
 		validationExecuted = true;
 	}
 
-	public void exportViolations(String name, String fileType, String path) {
-
-	}
-
+	@Override
 	public JInternalFrame getBrowseViolationsGUI(){
 		return new JInternalFrame();
 	}
@@ -144,13 +143,15 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	public void createHistoryPoint(String description) {
 	}
 
+	
 	@Override
-	public JInternalFrame getViolationHistoryGUI() {
-		return new JInternalFrame();
+	public void exportViolations(File file, String fileType, Calendar date) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void exportViolations(File file, String fileType, Calendar date) {
+	public void exportViolations(File file, String fileType) {
 		// TODO Auto-generated method stub
 		
 	}
