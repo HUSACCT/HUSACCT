@@ -1,13 +1,7 @@
 package husacct.control.presentation;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
-import husacct.control.presentation.menubar.AnalyseMenu;
-import husacct.control.presentation.menubar.DefineMenu;
-import husacct.control.presentation.menubar.FileMenu;
-import husacct.control.presentation.menubar.HelpMenu;
-import husacct.control.presentation.menubar.LanguageMenu;
-import husacct.control.presentation.menubar.ValidateMenu;
+import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
 import husacct.control.presentation.util.MoonWalkPanel;
@@ -23,14 +17,11 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Locale;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -45,28 +36,23 @@ public class MainGui extends JFrame{
 	private Logger logger = Logger.getLogger(MainGui.class);
 	
 	private MainController mainController;
-	private JMenuBar menuBar;
+	private MenuBar menuBar;
 	private String titlePrefix = "HUSACCT";
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
+	
 	private ToolBar toolBar;
-	private FileMenu fileMenu;
-	private DefineMenu defineMenu;
-	private AnalyseMenu analyseMenu;
-	private ValidateMenu validateMenu;
-	private LanguageMenu languageMenu;
-	private HelpMenu helpMenu;
 	
 	IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public MainGui(MainController controller) {
 		this.mainController = controller;
 		setup();
+		createMenuBar();
 		addComponents();
 		addListeners();
-		createMenuBar();
 		setVisible(true);
 	}
 
@@ -102,7 +88,7 @@ public class MainGui extends JFrame{
 		JPanel taskBarPane = new JPanel(new GridLayout());
 		moonwalkPanel = new MoonWalkPanel();
 		moonwalkThread = new Thread(moonwalkPanel);
-		toolBar = new ToolBar(mainController);
+		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
 		
 		taskBarPane.add(taskBar);
@@ -129,45 +115,11 @@ public class MainGui extends JFrame{
 				return false;
 			}
 		});
-		
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
-				fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
-				defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
-				analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
-				validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
-				languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
-				helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
-			}
-		});
 	}
 	
 	private void createMenuBar() {
-		this.menuBar = new JMenuBar();
-		
-		fileMenu = new FileMenu(mainController);
-		defineMenu = new DefineMenu(mainController);
-		analyseMenu = new AnalyseMenu(mainController);
-		validateMenu = new ValidateMenu(mainController);
-		languageMenu = new LanguageMenu(mainController);
-		helpMenu = new HelpMenu(mainController);
-
-		fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
-		defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
-		analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
-		validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
-		languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
-		helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
-		
-		menuBar.add(fileMenu);
-		menuBar.add(defineMenu);
-		menuBar.add(analyseMenu);
-		menuBar.add(validateMenu);
-		menuBar.add(languageMenu);
-		menuBar.add(helpMenu);
-		
+		menuBar = new MenuBar(mainController);		
 		setJMenuBar(menuBar);
-
 	}
 	
 	public JDesktopPane getDesktopPane(){
@@ -176,6 +128,10 @@ public class MainGui extends JFrame{
 	
 	public TaskBar getTaskBar(){
 		return taskBar;
+	}
+	
+	public MenuBar getMenu(){
+		return menuBar;
 	}
 	
 	public void setTitle(String title){
@@ -188,12 +144,6 @@ public class MainGui extends JFrame{
 	
 	private void setTitle(){
 		setTitle("");
-	}
-
-	private int getMnemonicKeycode(String translatedString) {
-		String mnemonicString = controlService.getTranslatedString(translatedString);
-		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
-		return keyCode;
 	}
 	
 }

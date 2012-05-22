@@ -110,6 +110,18 @@ public class ValidateMenu extends JMenu{
 		});
 	}
 	
+	public JMenuItem getConfigureItem(){
+		return configureItem;
+	}
+	
+	public JMenuItem getValidateNowItem(){
+		return validateNowItem;
+	}
+
+	public JMenuItem getExportViolationReportItem(){
+		return exportViolationReportItem;
+	}
+	
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = controlService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();

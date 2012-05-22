@@ -116,6 +116,18 @@ public class AnalyseMenu extends JMenu{
 		});
 	}
 	
+	public JMenuItem getSetApplicationPropertiesItem(){
+		return setApplicationPropertiesItem;
+	}
+	
+	public JMenuItem getAnalysedArchitectureDiagramItem(){
+		return analysedArchitectureDiagramItem;
+	}
+	
+	public JMenuItem getAnalysedApplicationOverviewItem(){
+		return analysedApplicationOverviewItem;
+	}
+	
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = controlService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();

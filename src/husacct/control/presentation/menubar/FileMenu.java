@@ -30,9 +30,7 @@ public class FileMenu extends JMenu {
 	private JMenuItem saveWorkspaceItem;
 	private JMenuItem closeWorkspaceItem;
 	private JMenuItem exitItem;
-	
-	
-	
+
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public FileMenu(final MainController mainController){
@@ -144,6 +142,26 @@ public class FileMenu extends JMenu {
 				exitItem.setMnemonic(getMnemonicKeycode("ExitMnemonic"));
 			}
 		});
+	}
+	
+	public JMenuItem getCreateWorkspaceItem(){
+		return createWorkspaceItem;
+	}
+	
+	public JMenuItem getOpenWorkspaceItem(){
+		return openWorkspaceItem;
+	}
+	
+	public JMenuItem getSaveWorkspaceItem(){
+		return saveWorkspaceItem;
+	}
+	
+	public JMenuItem getCloseWorkspace(){
+		return closeWorkspaceItem;
+	}
+	
+	public JMenuItem getExitItem(){
+		return exitItem;
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {

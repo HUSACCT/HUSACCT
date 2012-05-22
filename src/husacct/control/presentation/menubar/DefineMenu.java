@@ -123,6 +123,19 @@ public class DefineMenu extends JMenu{
 		});
 	}
 	
+	public JMenuItem getDefineArchitectureItem(){
+		return defineArchitectureItem;
+	}
+	public JMenuItem getDefinedArchitectureDiagramItem(){
+		return definedArchitectureDiagramItem;
+	}
+	public JMenuItem getExportArchitectureItem(){
+		return exportArchitectureItem;
+	}
+	public JMenuItem getIimportArchitectureItem(){
+		return importArchitectureItem;
+	}
+	
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = controlService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
