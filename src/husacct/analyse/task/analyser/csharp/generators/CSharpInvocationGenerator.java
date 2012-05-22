@@ -8,10 +8,18 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	private String uniqueClassName;
 	
 	public CSharpInvocationGenerator(String uniqueClassName){
-		this.uniqueClassName = uniqueClassName;
+		this.setUniqueClassName(uniqueClassName);
 	}
 	
 	public void generateConstructorInvocation(List<CommonTree> tree, int lineNumber){
 		
+	}
+
+	public String getUniqueClassName() {
+		return uniqueClassName;
+	}
+
+	public void setUniqueClassName(String uniqueClassName) {
+		this.uniqueClassName = uniqueClassName;
 	}
 }

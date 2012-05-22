@@ -47,8 +47,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	}
 
 	private CommonTree getCompilationTree(final CSharpParser cSharpParser) throws RecognitionException {
-		final compilation_unit_return compilationUnit = cSharpParser
-				.compilation_unit();
+		final compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
 		return (CommonTree) compilationUnit.getTree();
 	}
 
