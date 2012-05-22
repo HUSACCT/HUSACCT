@@ -182,11 +182,9 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private void createRootLayout(){		
 		GroupLayout baseLayout = new GroupLayout(getRootPane());
 		
-		GroupLayout.SequentialGroup horizontalGroup = baseLayout.createSequentialGroup();
+		GroupLayout.ParallelGroup horizontalGroup = baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
 		horizontalGroup.addComponent(tabPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE);
-		horizontalGroup.addContainerGap();
 		horizontalGroup.addComponent(cancel);
-		horizontalGroup.addContainerGap();
 		
 		baseLayout.setHorizontalGroup(horizontalGroup);
 		
