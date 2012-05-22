@@ -26,7 +26,7 @@ public class ImportViolationsHistory {
 
 
 		List<ViolationHistory> violationHistories = new ArrayList<ViolationHistory>();
-		for(Element violationHistoryElement : violationHistoriesElement.getChildren()) {
+		for(Element violationHistoryElement : violationHistoriesElement.getChildren("violationHistory")) {
 			List<Severity> severities = new ArrayList<Severity>();
 			List<Violation> violations = new ArrayList<Violation>();
 			//severities
@@ -53,24 +53,6 @@ public class ImportViolationsHistory {
 			for(Element violationElement : violationHistoryElement.getChild("violations").getChildren()) {
 				Violation violation = new Violation();					
 				violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
-
-				//search the appropiate severity of the violation by the uuid.
-				for(Severity severity : severities) {
-					final String stringUUID = violationElement.getChildText("severityId");
-					if(isValidUUID(stringUUID)){
-						UUID id = UUID.fromString(stringUUID);
-						if(id.equals(severity.getId())) {
-							violation.setSeverity(severity);
-							violations.add(violation);
-							break;
-						}							
-					} else{
-						logger.error(String.format("%s is not a valid severity UUID, violation will not be added", stringUUID));
-						break;
-					}
-					logger.error("Severity for the violation " + violation.getLinenumber() + "was not found (UUID: "+ stringUUID);
-				}
-
 				violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));
 				violation.setViolationtypeKey(violationElement.getChildText("violationtypeKey"));
 				violation.setClassPathFrom(violationElement.getChildText("classPathFrom"));
@@ -81,6 +63,31 @@ public class ImportViolationsHistory {
 				
 				final String stringCalendar = violationElement.getChildText("occured");
 				violation.setOccured(getCalendar(stringCalendar));
+
+				//search the appropiate severity of the violation by the uuid.
+				final String stringUUID = violationElement.getChildText("severityId");
+                boolean found = false;
+                for(Severity severity : severities) {
+                    
+                    if(isValidUUID(stringUUID)){
+                        UUID id = UUID.fromString(stringUUID);
+                        if(id.equals(severity.getId())) {
+                            violation.setSeverity(severity);
+                            violations.add(violation);
+                            found = true;
+                            break;
+                        }                            
+                    } else{
+                        logger.error(String.format("%s is not a valid severity UUID, violation will not be added", stringUUID));
+                        break;
+                    }
+                    
+                } 
+                if(!found) {
+                    logger.error("Severity for the violation " + violation.getLinenumber() + "was not found (UUID: "+ stringUUID);
+                } 
+			
+				violations.add(violation);
 			}				
 			violationHistories.add(new ViolationHistory(violations, severities, date, description));
 		}	
