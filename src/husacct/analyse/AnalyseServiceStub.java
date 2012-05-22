@@ -479,5 +479,11 @@ public class AnalyseServiceStub implements IAnalyseService{
 		// TODO Analyse-team implement stub if nessacery
 		return null;
 	}
+
+	@Override
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

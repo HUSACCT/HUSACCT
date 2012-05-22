@@ -20,17 +20,17 @@ public class ExportViolations {
 		for(Violation violation : violations) {
 			Element violationElement = new Element("violation");
 
-			XMLUtils.createElementWithContent("lineNumber", "" + violation.getLinenumber(), violationElement);
-			XMLUtils.createElementWithContent("severityId", "" + violation.getSeverity().getId().toString(), violationElement);
-			XMLUtils.createElementWithContent("ruletypeKey", violation.getRuletypeKey(), violationElement);
-			XMLUtils.createElementWithContent("violationtypeKey",violation.getViolationtypeKey(), violationElement);
-			XMLUtils.createElementWithContent("classPathFrom",violation.getClassPathFrom(), violationElement);
-			XMLUtils.createElementWithContent("classPathTo",violation.getClassPathTo(), violationElement);
-			XMLUtils.createLogicalModulesElement(violation.getLogicalModules(), violationElement);
-			XMLUtils.addMessage(violationElement, violation.getMessage());
-			XMLUtils.createElementWithContent("isIndirect",""+violation.isIndirect(), violationElement);
+			violationElement.addContent(XMLUtils.createElementWithContent("lineNumber", "" + violation.getLinenumber()));
+			violationElement.addContent(XMLUtils.createElementWithContent("severityId", "" + violation.getSeverity().getId().toString()));
+			violationElement.addContent(XMLUtils.createElementWithContent("ruletypeKey", violation.getRuletypeKey()));
+			violationElement.addContent(XMLUtils.createElementWithContent("violationtypeKey",violation.getViolationtypeKey()));
+			violationElement.addContent(XMLUtils.createElementWithContent("classPathFrom",violation.getClassPathFrom()));
+			violationElement.addContent(XMLUtils.createElementWithContent("classPathTo",violation.getClassPathTo()));
+			violationElement.addContent(XMLUtils.createLogicalModulesElement(violation.getLogicalModules()));
+			violationElement.addContent(XMLUtils.createMessageElementFromMessageObject(violation.getMessage()));
+			violationElement.addContent(XMLUtils.createElementWithContent("isIndirect",""+violation.isIndirect()));
 			try {
-				XMLUtils.createElementWithContent("occured", DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)violation.getOccured()).toXMLFormat(), violationElement);
+				violationElement.addContent(XMLUtils.createElementWithContent("occured", DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)violation.getOccured()).toXMLFormat()));
 			} catch (DatatypeConfigurationException e) {
 				Logger.getLogger(ExportViolations.class.getName()).log(Level.ERROR, "There was a error creating a new date in ExportViolations", e);
 			}
@@ -38,9 +38,5 @@ public class ExportViolations {
 		}
 		return violationsElement;
 	}
-
-	
-
-	
 
 }

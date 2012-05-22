@@ -2,7 +2,7 @@ package husacct.analyse.task.analyser.csharp;
 
 import java.util.Arrays;
 
-import husacct.analyse.domain.ModelCreationService;
+import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 public abstract class CSharpGenerator {
@@ -55,7 +55,7 @@ public abstract class CSharpGenerator {
 	protected final int INTERNAL = 72;
 	protected final int[] typeCollection = new int[] {BYTE, SBYTE, INT, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, VAR, DECIMAL, IDENTIFIER};
 	protected final int[] accessorCollection = new int[] {PRIVATE, PUBLIC, PROTECTED, INTERNAL};
-	protected ModelCreationService modelService = new FamixCreationServiceImpl();
+	protected IModelCreationService modelService = new FamixCreationServiceImpl();
 
 	
 }

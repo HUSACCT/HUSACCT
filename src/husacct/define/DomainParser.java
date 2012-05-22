@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 
 public class DomainParser {
@@ -51,6 +53,7 @@ public class DomainParser {
 	public ModuleDTO parseModule(Module module){
 		String logicalPath = getLogicalPath(module.getId());
 		String[] physicalPaths = module.getPhysicalPaths();
+		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(module.getUnits());
 		String type = module.getType();
 		
 		
@@ -64,20 +67,41 @@ public class DomainParser {
 		subModuleDTOsList.toArray(subModuleDTOs);
 		ModuleDTO[] subModules = subModuleDTOs; 
 		
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPaths, type, subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPaths,physicalPathDTOs, type, subModules);
 		return modDTO;
 	}
 	
 	public ModuleDTO parseRootModule(Module module){
 		String logicalPath = getLogicalPath(module.getId());
 		String[] physicalPaths = module.getPhysicalPaths();
+		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(module.getUnits());
+		
 		String type = module.getType();
 		ModuleDTO[] subModules = new ModuleDTO[0]; 
 		
-		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPaths, type, subModules);
+		ModuleDTO modDTO = new ModuleDTO(logicalPath, physicalPaths,physicalPathDTOs, type, subModules);
 		return modDTO;
 	}
 	
+	/**
+	 * PhysicalPaths
+	 **/
+	public PhysicalPathDTO[] parsePhysicalPathDTOs(ArrayList<SoftwareUnitDefinition> softwareUnits){
+		ArrayList<PhysicalPathDTO> physicalPathDTOList = new ArrayList<PhysicalPathDTO>();
+		for (SoftwareUnitDefinition su : softwareUnits){
+			PhysicalPathDTO physicalPathDTO = parsePhysicalPathDTO(su);
+			physicalPathDTOList.add(physicalPathDTO);
+		}
+		PhysicalPathDTO[] physicalPathDTOs = physicalPathDTOList.toArray(new PhysicalPathDTO[physicalPathDTOList.size()]);
+		return physicalPathDTOs;
+	}
+	
+	private PhysicalPathDTO parsePhysicalPathDTO(SoftwareUnitDefinition su) {
+		String path = su.getName();
+		String type = su.getType().toString();
+		PhysicalPathDTO physicalPathDTO = new PhysicalPathDTO(path, type);
+		return physicalPathDTO;
+	}
 	public String getLogicalPath(long moduleId){
 		String logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(moduleId);
 		return logicalPath;

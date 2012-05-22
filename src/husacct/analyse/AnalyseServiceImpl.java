@@ -2,17 +2,16 @@ package husacct.analyse;
 
 import javax.swing.JInternalFrame;
 import husacct.analyse.presentation.AnalyseInternalFrame;
-import husacct.analyse.presentation.AnalyseUIController;
-import husacct.analyse.task.AnalyseControlService;
+import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public class AnalyseServiceImpl implements IAnalyseService{
 
-	private AnalyseControlService service = new AnalyseControlerServiceImpl();
+	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
-	private AnalyseUIController analyseGui;
+	private AnalyseInternalFrame analyseInternalFrame;
 	private boolean isAnalysed = false;
 	
 	public AnalyseServiceImpl(){
@@ -37,8 +36,13 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		this.analyseGui = new AnalyseUIController();
-		return analyseGui.getAnalysedCodeFrame();
+		if(analyseInternalFrame == null) analyseInternalFrame = new AnalyseInternalFrame();
+		return analyseInternalFrame;
+	}
+	
+	@Override
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
+		return service.getModuleForUniqueName(uniquename);
 	}
 	
 	@Override
@@ -91,6 +95,4 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
 		return service.getDependenciesTo(to, dependencyFilter);
 	}
-	
-	
 }

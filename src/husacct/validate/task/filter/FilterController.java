@@ -47,21 +47,15 @@ public class FilterController {
 		this.hidefilter = hideFilter;
 	}
 
-	public ArrayList<Violation> filterViolations(Boolean applyfilter, List<Violation> violations) {
+	public ArrayList<Violation> filterViolations(List<Violation> violations) {
 		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
-
 		for (Violation violation : violations) {
-			if(applyfilter){
-				if (hidefilter && ( !ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
-					filteredViolations.add(violation);
-				} else if ((!hidefilter) && (ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) || violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
-					filteredViolations.add(violation);
-				}
-			} else{
+			if (hidefilter && ( !ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
+				filteredViolations.add(violation);
+			} else if ((!hidefilter) && (ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) || violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
 			}
 		}
-
 		return filteredViolations;
 	}
 
@@ -122,32 +116,32 @@ public class FilterController {
 
 	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, boolean applyFilter) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
-			List<Violation> violations = null;
-			List<Severity> severities = null;
-			if(violationHistory != null) {
-				violations = violationHistory.getViolations();
-				severities = violationHistory.getSeverities();
-			} else {
-				violations = taskServiceImpl.getAllViolations().getValue();
-				severities = taskServiceImpl.getAllSeverities();
-			}
-			if(applyFilter) {
-				violations = taskServiceImpl.applyFilterViolations(violations);
-			}
-			
-			for(Severity severity : severities) {
-				int violationsCount = 0;
-			
-				for(Violation violation : violations) {
-					if(violation.getSeverity() != null) {
-						if(violation.getSeverity().getId().equals(severity.getId())) {
-							violationsCount++;
-						}
+		List<Violation> violations = null;
+		List<Severity> severities = null;
+		if(violationHistory != null) {
+			violations = violationHistory.getViolations();
+			severities = violationHistory.getSeverities();
+		} else {
+			violations = taskServiceImpl.getAllViolations().getValue();
+			severities = taskServiceImpl.getAllSeverities();
+		}
+		if(applyFilter) {
+			violations = taskServiceImpl.applyFilterViolations(violations);
+		}
+
+		for(Severity severity : severities) {
+			int violationsCount = 0;
+
+			for(Violation violation : violations) {
+				if(violation.getSeverity() != null) {
+					if(violation.getSeverity().getId().equals(severity.getId())) {
+						violationsCount++;
 					}
 				}
-
-				violationsPerSeverity.put(severity, violationsCount);
 			}
+
+			violationsPerSeverity.put(severity, violationsCount);
+		}
 		return violationsPerSeverity;
 	}
 }

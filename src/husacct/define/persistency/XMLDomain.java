@@ -38,55 +38,65 @@ public class XMLDomain {
 	    Element ApName = (Element)applicationProperties.get(0);
 	    Element ApLanguage = (Element)applicationProperties.get(1);
 	    Element ApVersion = (Element)applicationProperties.get(2);
-
+	    
 	    Application XMLAp = new Application(ApName.getText(), ApLanguage.getText());
 	    XMLAp.setVersion(ApVersion.getText());
 	    XMLAp.setArchitecture( this.getArchitecture() );
-
+	    
 	    return XMLAp;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public SoftwareArchitecture getArchitecture() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
-		Element ApArchitecture = (Element)applicationProperties.get(3);
-    	
+		Element ApArchitecture = (Element)applicationProperties.get(3);   	
     	Element ArchitectureName = (Element)ApArchitecture.getChild("name");
-    	Element ArchitectureDescription = (Element)ApArchitecture.getChild("description");
-    	
-    	SoftwareArchitecture XMLsa = new SoftwareArchitecture(ArchitectureName.getText(), ArchitectureDescription.getText());
-    	XMLsa.setAppliedRules(this.getAppliedRules(ApArchitecture));
-    	
-    	Element ArchitectureModuleRoot  = ApArchitecture.getChild("modules");
+    	Element ArchitectureDescription = (Element)ApArchitecture.getChild("description");   	
+    	SoftwareArchitecture XMLArchitecture = new SoftwareArchitecture(ArchitectureName.getText(), ArchitectureDescription.getText());    	
+    	Element ArchitectureModuleRoot = ApArchitecture.getChild("modules");
     	if (ArchitectureModuleRoot != null) {
 	    	List<Element> ArchitectureModules = ArchitectureModuleRoot.getChildren("Module");
-	    	// kijken of er modules beschikbaar zijn.. if yes; bouwen!
 	    	if (ArchitectureModules.size() > 0) {
 	    		Iterator moduleIterator = ArchitectureModules.iterator();
 	    		while (moduleIterator.hasNext()){ 
 	    			Object o = moduleIterator.next();
 
 	    			if (o instanceof Element) {
-	    				XMLsa.addModule(this.getModuleFromXML((Element) o));
+	    				XMLArchitecture.addModule(this.getModuleFromXML((Element) o));
 	    			}
 	    		}
 	    	}
     	
-	    	XMLsa.setModules(this.getModules(ArchitectureModules));
+	    	XMLArchitecture.setModules(this.getModules(ArchitectureModules));
     	}
     	
-    	return XMLsa;
+    	XMLArchitecture.setAppliedRules(this.getAppliedRules(ApArchitecture));
+    	return XMLArchitecture;
+	}
+	
+	public ArrayList<AppliedRule> getAppliedRules() {
+		List<Element> applicationProperties = this.getWorkspaceChildren();
+		return this.getAppliedRules((Element)applicationProperties.get(3));
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ArrayList<AppliedRule> getAppliedRules(Element ApplicationArchitecture) {
 		Element AppliedRulesRoot = ApplicationArchitecture.getChild("rules");
 		ArrayList<AppliedRule> ruleList = new ArrayList<AppliedRule>();
+		
 		if (AppliedRulesRoot != null) {
     		List<Element> AppliedRules = AppliedRulesRoot.getChildren("AppliedRule");
-    		for (int i = 0; i < AppliedRules.size(); i++) {
-    			ruleList.add( this.getAppliedRuleFromXML((Element)AppliedRules.get(i)));
+    		if (AppliedRules.size() > 0) {
+    			Iterator appliedIterator = AppliedRules.iterator();
+    			while (appliedIterator.hasNext()) {
+    				Object o = appliedIterator.next();
+    				if (o instanceof Element) {
+    					ruleList.add(this.getAppliedRuleFromXML((Element) o));
+    				}
+    			}
     		}
     	}
-
+		
 		return ruleList;
 	}
 
@@ -101,6 +111,7 @@ public class XMLDomain {
 		return returnList;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public AppliedRule getAppliedRuleFromXML(Element e) {
 		Element ruleDescription = e.getChild("description");
 		Element ruleRegex = e.getChild("regex");
@@ -117,35 +128,42 @@ public class XMLDomain {
 		ArrayList<String> dependencies = new ArrayList<String>();
 		List<Element> ruleDependencyList = ruleDependencies.getChildren("dependency");
 		Iterator DependencyIterator = ruleDependencyList.iterator();
-		while (DependencyIterator.hasNext()) {
-			Object o = DependencyIterator.next();
-			if (o instanceof Element) {
-				dependencies.add(((Element) o).getValue());
+		if (ruleDependencyList.size() > 0) {
+			while (DependencyIterator.hasNext()) {
+				Object o = DependencyIterator.next();
+				if (o instanceof Element) {
+					dependencies.add(((Element) o).getValue());
+				}
 			}
 		}
-
-		Boolean enabled = true;
+		
+		boolean enabled = true;
 		if (ruleEnabled.getValue().toLowerCase().equals("false")) {
 			enabled = false;
 		}
-
-		ArrayList<AppliedRule> ExceptionsArray = new ArrayList<AppliedRule>();
-		List<Element> ExceptionList = ruleExceptions.getChildren("AppliedRule");
-		Iterator ExceptionIterator = ExceptionList.iterator();
-		while (ExceptionIterator.hasNext()) {
-			Object o = ExceptionIterator.next();
-			if (o instanceof Element) {
-				ExceptionsArray.add(this.getAppliedRuleFromXML((Element) o));
-			}
-		}
-
+		
 		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), usedModule, restrictedModule, enabled);
 		AppliedXMLRule.setId(Integer.parseInt(ruleId.getValue()));
-		AppliedXMLRule.setExceptions(ExceptionsArray);
+		
+		if (ruleExceptions != null) {
+			List<Element> ExceptionList = ruleExceptions.getChildren("AppliedRule");
+			Iterator ExceptionIterator = ExceptionList.iterator();
+			if (ExceptionList.size() > 0) {
+				while (ExceptionIterator.hasNext()) {
+					Object o = ExceptionIterator.next();
+					if (o instanceof Element) {
+						AppliedXMLRule.addException( this.getAppliedRuleFromXML((Element) o));
+					}
+				}
+			}
+		}
+		
+		AppliedXMLRule.setId(Integer.parseInt(ruleId.getValue()));
 
 		return AppliedXMLRule;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Module getModuleFromXML(Element e) {
 		Element ModuleType = e.getChild("type");
 		String ModuleTypeText = ModuleType.getText().toLowerCase();
@@ -153,6 +171,8 @@ public class XMLDomain {
 
 		String moduleName = e.getChild("name").getValue();
 		String moduleDescription = e.getChild("description").getValue();
+		
+		String moduleId = e.getChild("id").getValue();
 
 		// type detection..
 		if (ModuleTypeText.equals("externallibrary")) {
@@ -164,6 +184,7 @@ public class XMLDomain {
 		} else {
 			xmlModule = new Module(moduleName, moduleDescription);
 		}
+		xmlModule.setId(Long.parseLong(moduleId));
 
 		Element SoftwareUnitDefinitions = e.getChild("SoftwareUnitDefinitions");
 		if (SoftwareUnitDefinitions != null) {

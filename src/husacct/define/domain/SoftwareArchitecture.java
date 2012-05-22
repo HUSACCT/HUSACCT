@@ -74,9 +74,9 @@ public class SoftwareArchitecture {
 		return appliedRules;
 	}
 
-	//APPLIEDRULES
-	//APPLIEDRULES
-	//APPLIEDRULES
+	/*
+	 * Applied Rules
+	 */
 	public ArrayList<Long> getAppliedRulesIdsByModule(long moduleId) {
 		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
 		for (AppliedRule rule : appliedRules){
@@ -138,10 +138,20 @@ public class SoftwareArchitecture {
 		}
 		return appliedRule;
 	}
+	
+	public ArrayList<AppliedRule> getEnabledAppliedRules() {
+		ArrayList<AppliedRule> enabledRuleList =  new ArrayList<AppliedRule>();
+		for (AppliedRule ar : appliedRules){
+			if (ar.isEnabled()){
+				enabledRuleList.add(ar);
+			}
+		}
+		return enabledRuleList;
+	}
 
-	//SoftwareUnitDefinitions
-	//SoftwareUnitDefinitions
-	//SoftwareUnitDefinitions
+	/*
+	 * SoftwareUnitDefinitions
+	 */
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName) {
 		SoftwareUnitDefinition softwareUnit = null;
 		for (Module mod : modules){
@@ -154,28 +164,26 @@ public class SoftwareArchitecture {
 		return softwareUnit;
 	}
 	
-	//MODULES
-	//MODULES
-	//MODULES
+	/*
+	 * MODULES
+	 */
 	public Module getModuleById(long moduleId) {
 		Module currentModule = null;
-		for(Module module : modules) 
-		{
-			if (module.getId() == moduleId ||
-					module.hasSubModule(moduleId)){
-
+		for(Module module : modules){
+			
+			if (module.getId() == moduleId || module.hasSubModule(moduleId)){
 				currentModule = module;
 				while (currentModule.getId() != moduleId){
 					for (Module subModule : currentModule.getSubModules()){
-						if (subModule.getId() == moduleId ||
-								subModule.hasSubModule(moduleId)){
+						if (subModule.getId() == moduleId || subModule.hasSubModule(moduleId)){
 							currentModule = subModule;
 						}
 					}
 				}
 				break;
 			}
-		}		
+			
+		}
 		if (currentModule == null){throw new RuntimeException("This module does not exist!");}
 		return currentModule;
 	}
@@ -231,6 +239,7 @@ public class SoftwareArchitecture {
 	
 	private void removeRelatedRules(Module module) {
 		//Copy all currentValues into another list to prevent ConcurrentModificationExceptions 
+		@SuppressWarnings("unchecked")
 		ArrayList<AppliedRule> tmpList = (ArrayList<AppliedRule>) appliedRules.clone();
 		for (AppliedRule rule : appliedRules){
 			if (rule.getModuleFrom().equals(module) || 
@@ -334,11 +343,9 @@ public class SoftwareArchitecture {
 		return parentModuleId;
 	}
 	
-	//LAYERS
-	//LAYERS
-	//LAYERS
-	
-	
+	/*
+	 * Layers
+	 */
 	public void moveLayerUp(long layerId) {
 		Layer layer = (Layer) getModuleById(layerId);
 		Layer layerAboveLayer = getTheFirstLayerAbove(layer.getHierarchicalLevel(), getParentModuleIdByChildId(layerId));

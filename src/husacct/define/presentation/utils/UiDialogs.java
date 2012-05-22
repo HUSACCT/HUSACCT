@@ -2,7 +2,6 @@ package husacct.define.presentation.utils;
 
 import java.awt.Component;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -81,30 +80,5 @@ public class UiDialogs {
 		int result = JOptionPane.showConfirmDialog(component, message, title, JOptionPane.OK_CANCEL_OPTION);
 
 		return result == JOptionPane.OK_OPTION;
-	}
-
-	/**
-	 * This method is a safe way of centring the jframe on an screen if there are multiple screens.
-	 * 
-	 * @param screen
-	 * @param frame
-	 */
-	public static void showOnScreen(int screen, JFrame frame) {
-		frame.setLocationRelativeTo(frame.getRootPane());
-		
-//		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//		GraphicsDevice[] gs = ge.getScreenDevices();
-//		if (screen > -1 && screen < gs.length) {
-//			Rectangle r = gs[screen].getDefaultConfiguration().getBounds();
-//			int windowWidth = (int) r.getWidth();
-//			int windowHeigh = (int) r.getHeight();
-//
-//			int frameWidth = (int) frame.getWidth();
-//			int frameHeigh = (int) frame.getHeight();
-//
-//			frame.setLocation((windowWidth - frameWidth) / 2, (windowHeigh - frameHeigh) / 2);
-//		} else if (gs.length <= 0) {
-//			throw new RuntimeException("No Screens Found");
-//		}
 	}
 }

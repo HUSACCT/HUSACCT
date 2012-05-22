@@ -1,15 +1,15 @@
 package husacct.analyse.task;
 
-import husacct.analyse.domain.AnalyseDomainService;
+import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-public class AnalyseControlerServiceImpl implements AnalyseControlService{
+public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 
 	private ApplicationAnalyser analyserService; 
-	private AnalyseDomainService domainService;
+	private IAnalyseDomainService domainService;
 	private boolean isAnalysed = false;
 	
 	public AnalyseControlerServiceImpl(){
@@ -27,6 +27,10 @@ public class AnalyseControlerServiceImpl implements AnalyseControlService{
 	@Override
 	public String[] getAvailableLanguages() {
 		return analyserService.getAvailableLanguages();
+	}
+	
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename){
+		return domainService.getModuleForUniqueName(uniquename);
 	}
 	
 	@Override

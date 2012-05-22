@@ -1,6 +1,8 @@
 package husacct.control.presentation.workspace.loaders;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.control.presentation.util.FileDialog;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -30,6 +32,8 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private GridBagConstraints constraints;
 	
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	
 	public XmlLoadPanel(){
 		super();
 		setup();
@@ -44,10 +48,10 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel("Open workspace from XML file");
-		pathLabel = new JLabel("Path");
+		descriptionLabel = new JLabel(controlService.getTranslatedString("OpenFromXML"));
+		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton("Browse");
+		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
 		
 		JPanel hiddenPanel = new JPanel();
@@ -79,16 +83,15 @@ public class XmlLoadPanel extends LoaderPanel{
 	}
 	
 	protected void showFileDialog() {
-		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		fileChooser.setFileFilter(filter);
-	    int returnVal = fileChooser.showOpenDialog(this);
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       setFile(fileChooser.getSelectedFile());
-	    }
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
+		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("OpenButton"), filter);
+		int returnVal = fileChooser.showDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			setFile(fileChooser.getSelectedFile());
+		}
 	}
 	
-	private void setFile(File file) {
+	private void setFile(File file) {		
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
 	}
@@ -103,7 +106,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	@Override
 	public boolean validateData() {
 		if(selectedFile == null){
-			ServiceProvider.getInstance().getControlService().showErrorMessage("Please set a file location");
+			ServiceProvider.getInstance().getControlService().showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}
 		return true;
