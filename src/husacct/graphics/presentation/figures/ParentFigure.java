@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.figures;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
@@ -32,7 +33,10 @@ public class ParentFigure extends BaseFigure {
 		children.add(body);
 		children.add(text);
 
-		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		body.set(AttributeKeys.FILL_COLOR, new Color(204,204,255));
+		
+		baseZIndex = -2;
+		resetLayer();
 		
 		setSizeable(true);
 		
@@ -99,7 +103,6 @@ public class ParentFigure extends BaseFigure {
 
 	@Override
 	public ParentFigure clone() {
-
 		ParentFigure other = (ParentFigure) super.clone();
 		other.body = body.clone();
 		other.text = text.clone();
@@ -111,8 +114,8 @@ public class ParentFigure extends BaseFigure {
 		return other;
 	}
 	
-	public Figure[] getChildFigures(){
-		return childrenOwnImpl.toArray(new Figure[]{});
+	public BaseFigure[] getChildFigures(){
+		return childrenOwnImpl.toArray(new BaseFigure[]{});
 	}
 	
 	public void addChildFigure(Figure figure) {
@@ -130,42 +133,42 @@ public class ParentFigure extends BaseFigure {
 
 			@Override
 			public void figureChanged(FigureEvent e) {
-				double parentStartX = getBounds().getX();
-				double parentWidth = getBounds().getWidth();
-				double parentEndX = parentStartX + parentWidth;
-				double parentStartY = getBounds().getY();
-				double parentHeight = getBounds().getHeight();
-				double parentEndY = parentStartY + parentHeight;
+				double parentFigureStartX = getBounds().getX();
+				double parentFigureWidth = getBounds().getWidth();
+				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
+				double parentFigureStartY = getBounds().getY();
+				double parentFigureHeight = getBounds().getHeight();
+				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
 
-				BaseFigure figure = ((BaseFigure) e.getFigure());
-				java.awt.geom.Rectangle2D.Double figureBounds = figure.getBounds();
-				double figureX = figureBounds.getX();
-				double figureWidth = figureBounds.getWidth();
-				double figureY = figureBounds.getY();
-				double figureHeight = figureBounds.getHeight();
+				BaseFigure childFigure = ((BaseFigure) e.getFigure());
+				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
+				double childFigureX = figureBounds.getX();
+				double childFigureWidth = figureBounds.getWidth();
+				double childFigureY = figureBounds.getY();
+				double childFigureHeight = figureBounds.getHeight();
 
-				boolean outsideLeft = figureX < parentStartX;
-				boolean outsideRight = (figureX + figureWidth) > parentEndX;
+				boolean outsideLeft = childFigureX < parentFigureStartX;
+				boolean outsideRight = (childFigureX + childFigureWidth) > parentFigureEndX;
 				if (outsideLeft || outsideRight) {
-					figure.willChange();
+					childFigure.willChange();
 					if (outsideLeft) {
-						figure.updateLocation(parentStartX + 20, figureY);
+						childFigure.updateLocation(parentFigureStartX, childFigureY);
 					} else {
-						figure.updateLocation(parentEndX - figureWidth - 20, figureY);
+						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
 					}
-					figure.changed();
+					childFigure.changed();
 				}
 
-				boolean outsideTop = figureY < parentStartY;
-				boolean outsideBottom = (figureY + figureHeight) > parentEndY;
+				boolean outsideTop = childFigureY < parentFigureStartY;
+				boolean outsideBottom = (childFigureY + childFigureHeight) > parentFigureEndY;
 				if (outsideTop || outsideBottom) {
-					figure.willChange();
+					childFigure.willChange();
 					if (outsideTop) {
-						figure.updateLocation(figureX, parentStartY + 20);
+						childFigure.updateLocation(childFigureX, parentFigureStartY);
 					} else {
-						figure.updateLocation(figureX, parentEndY - figureHeight - 20);
+						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
 					}
-					figure.changed();
+					childFigure.changed();
 				}
 			}
 
@@ -182,12 +185,23 @@ public class ParentFigure extends BaseFigure {
 	}
 
 	@Override
-	public int getLayer() {
-		return -2;
-	}
-
-	@Override
 	public boolean isParent() {
 		return true;
+	}
+	
+	@Override
+	public void raiseLayer(){
+		zIndex = raiseZIndex-1;
+		for(BaseFigure childFigure : getChildFigures()){
+			childFigure.raiseLayer();
+		}
+	}
+	
+	@Override
+	public void resetLayer(){
+		super.resetLayer();
+		for(BaseFigure childFigure : getChildFigures()){
+			childFigure.resetLayer();
+		}
 	}
 }

@@ -71,6 +71,10 @@ public class DrawingView extends DefaultDrawingView {
 
 				if (mouseClicks == DoubleClick) {
 					moduleZoom(selection);
+				}else{
+					for(BaseFigure figure : selection){
+						figure.raiseLayer();
+					}
 				}
 			}
 		}
@@ -86,6 +90,9 @@ public class DrawingView extends DefaultDrawingView {
 			deselection = deselectedFigures.toArray(deselection);
 
 			figureDeselected(deselection);
+			for(BaseFigure figure : deselection){
+				figure.resetLayer();
+			}
 		}
 	}
 

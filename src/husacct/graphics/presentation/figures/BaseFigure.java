@@ -19,10 +19,10 @@ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
+	private static final long serialVersionUID = 971276235252293165L;
 
 	public static final Color defaultBackgroundColor = new Color(252, 255, 182);
-	
-	private static final long serialVersionUID = 971276235252293165L;
+	protected int baseZIndex, zIndex, raiseZIndex;
 	
 	private boolean isSizeable = false;
 	private String name;	
@@ -31,8 +31,23 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public BaseFigure(String theName) {
 		super();
-		
 		name = theName;
+		baseZIndex = 0;
+		raiseZIndex = 5;
+		zIndex = baseZIndex;
+	}
+	
+	public void raiseLayer(){
+		zIndex = raiseZIndex;
+	}
+	
+	public void resetLayer(){
+		zIndex = baseZIndex;
+	}
+	
+	@Override
+	public int getLayer(){
+		return zIndex;
 	}
 
 	public String getName() {
