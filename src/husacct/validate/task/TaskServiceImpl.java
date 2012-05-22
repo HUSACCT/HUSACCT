@@ -124,7 +124,7 @@ public class TaskServiceImpl{
 				return violationHistory.getViolations();
 			}
 		}
-		throw new ViolationsNotFoundAtDateException(date);
+		return getAllViolations().getValue();
 	}
 
 	public Calendar[] getViolationHistoryDates() {
