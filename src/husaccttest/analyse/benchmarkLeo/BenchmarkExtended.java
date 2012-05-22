@@ -28,6 +28,7 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		
 		try {
 			service.analyseApplication();
+
 		} catch (Exception e){
 			System.out.println("We're sorry. You need to have a java project 'benchmark_application' with inside the benchmark_application. Or you have the wrong version of the benchmark_application.");
 			System.out.println("git://github.com/timmuller/benchmark_application.git");
@@ -37,15 +38,5 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 	
 	@Override
 	public void tearDown(){
-		
-	}
-	
-	
-	
-	public void printDependencies(DependencyDTO[] dependencies){
-		for(DependencyDTO d : dependencies){
-			System.out.println(d.from + " -> " + d.to + " ( " + d.type + " | " + d.lineNumber + " )" );
-		}
-	}
-	
+	}	
 }

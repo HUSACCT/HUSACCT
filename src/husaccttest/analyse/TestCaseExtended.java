@@ -3,6 +3,7 @@ package husaccttest.analyse;
 import husacct.analyse.AnalyseServiceImpl;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -162,6 +163,7 @@ public abstract class TestCaseExtended extends TestCase{
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.AccountDAO", "AccountDAO", "infrastructure.socialmedia.locationbased.latitude", false, false);
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.FriendsDAO", "FriendsDAO", "infrastructure.socialmedia.locationbased.latitude", true, false);
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "infrastructure.socialmedia.locationbased.latitude", false, false);
+		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMapp", "IMapp", "infrastructure.socialmedia.locationbased.latitude", false, false);
 		
 		famix.createConstructorInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "");
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", 10);
@@ -170,6 +172,7 @@ public abstract class TestCaseExtended extends TestCase{
 		famix.createConstructorInvocation("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 11, "Account", "AccountDAO()", "");
 		famix.createInheritanceDefinition("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", 10);
 		famix.createImplementsDefinition("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 10);
+		famix.createImplementsDefinition("domain.locationbased.latitude.Mapp", "infrastructure.socialmedia.locationbased.latitude.IMap", 10);
 		
 		famix.createImport("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 3, "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", false);
 		famix.createImport("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", 3, "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", false);
@@ -180,6 +183,12 @@ public abstract class TestCaseExtended extends TestCase{
 		famix.createImport("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 3, "infrastructure.socialmedia.locationbased.latitude.IMap", false);
 		
 		famix.connectDependencies();
+	}
+	
+	public void printDependencies(DependencyDTO[] dependencies){
+		for(DependencyDTO d : dependencies){
+			System.out.println(d.from + " -> " + d.to + " ( " + d.type + " | " + d.lineNumber + " )" );
+		}
 	}
 	
 }
