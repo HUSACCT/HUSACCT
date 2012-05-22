@@ -6,6 +6,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
@@ -24,10 +25,18 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+//	    TODO: Uncomment wanneer analyse addServiceListener heeft geïmplementeerd!
+//	    ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener(){
+//	        @Override
+//			public void update() {
+//				refreshDrawing();				
+//			}
+//	    });
 	}
 
 	@Override
 	public void refreshDrawing() {
+		super.notifyServiceListeners();
 		getAndDrawModulesIn(getCurrentPath());
 	}
 
@@ -39,6 +48,7 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
+		super.notifyServiceListeners();
 		AbstractDTO[] modules = analyseService.getRootModules();
 		resetCurrentPath();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
@@ -66,6 +76,7 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
+		super.notifyServiceListeners();
 		// FIXME: Make this code function with the multiple selected figures
 		BaseFigure figure = figures[0];
 
@@ -82,6 +93,7 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleZoomOut() {
+		super.notifyServiceListeners();
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
@@ -106,6 +118,7 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleOpen(String path) {
+		super.notifyServiceListeners();
 		if(path.isEmpty()){
 			drawArchitecture(getCurrentDrawingDetail());
 		}else{
