@@ -1,38 +1,43 @@
 package husacct.validate.domain.check;
 
 import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class CheckConformanceUtilFilter {
-	private static IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
+	private static IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
 
-	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule){
+	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, String [] violationTypeKeys){
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		ModuleDTO[] childModules = defineService.getChildrenFromModule(layerModule.logicalPath);
+		ModuleDTO[] childModules = define.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
-				classpathsFrom.addAll(getAllClasspathsFromModule(module));
-				classpathsFrom.addAll(getAllModulesFromLayer(module,classpathsFrom));
+				classpathsFrom.addAll(getAllClasspathsFromModule(module, violationTypeKeys));
+				classpathsFrom.addAll(getAllModulesFromLayer(module,classpathsFrom, violationTypeKeys));
 			}			
 		}
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 
-	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths){
-		ModuleDTO[] childModules = defineService.getChildrenFromModule(layerModule.logicalPath);
+	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths, String [] violationTypeKeys){
+		ModuleDTO[] childModules = define.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
-				classpaths.addAll(getAllClasspathsFromModule(module));
-				return getAllModulesFromLayer(module,classpaths);
+				classpaths.addAll(getAllClasspathsFromModule(module, violationTypeKeys));
+				return getAllModulesFromLayer(module, classpaths, violationTypeKeys);
 			}
 		}
 		return classpaths;
@@ -59,13 +64,13 @@ public class CheckConformanceUtilFilter {
 		ArrayList<Mapping> mappingFrom;
 		ArrayList<Mapping> mappingTo;
 		if(!emptyModule(rule.moduleFrom)){
-			mappingFrom = getAllClasspathsFromModule(rule.moduleFrom);
+			mappingFrom = getAllClasspathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
 		}
 		else{
 			mappingFrom = new ArrayList<Mapping>();
 		}
 		if(!emptyModule(rule.moduleTo)){
-			mappingTo = getAllClasspathsFromModule(rule.moduleTo);
+			mappingTo = getAllClasspathsFromModule(rule.moduleTo, rule.violationTypeKeys);
 		}
 		else{
 			mappingTo = new ArrayList<Mapping>();
@@ -82,21 +87,43 @@ public class CheckConformanceUtilFilter {
 		}
 	}
 
-	private static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO rootModule){
-		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
-		for(String classpath : rootModule.physicalPaths){
-			classpathsFrom.add(new Mapping(rootModule.logicalPath, rootModule.type, classpath));
+	private static ArrayList<Mapping> getAllClasspathsFromModule(ModuleDTO rootModule, String[] violationTypeKeys){
+		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();		
+
+		for(PhysicalPathDTO classpath : rootModule.physicalPathDTOs){
+			if(classpath.type.toLowerCase().equals("package")){
+				AnalysedModuleDTO[] analysedModules = analyse.getChildModulesInModule(classpath.path);
+				for(AnalysedModuleDTO analysedClass : analysedModules){
+					classpathsFrom.add(new Mapping(rootModule.logicalPath, rootModule.type, analysedClass.uniqueName, violationTypeKeys));
+					//check for innerclasses
+				}
+			}
+			else{
+				classpathsFrom.add(new Mapping(rootModule.logicalPath, rootModule.type, classpath.path, violationTypeKeys));
+				//class check innerclasses
+			}
 		}
-		getAllClasspathsFromModule(rootModule, classpathsFrom);	
+		getAllClasspathsFromModule(rootModule, classpathsFrom, violationTypeKeys);	
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 
-	private static HashSet<Mapping> getAllClasspathsFromModule(ModuleDTO module, HashSet<Mapping> classpaths){
-		for(ModuleDTO submodule : module.subModules){
-			for(String classpath : submodule.physicalPaths){
-				classpaths.add(new Mapping(submodule.logicalPath, submodule.type, classpath));
+	private static HashSet<Mapping> getAllClasspathsFromModule(ModuleDTO module, HashSet<Mapping> classpaths, String[] violationTypeKeys){
+		for(ModuleDTO subModule : module.subModules){
+			for(PhysicalPathDTO classpath : subModule.physicalPathDTOs){
+				if(classpath.type.toLowerCase().equals("package")){
+					AnalysedModuleDTO[] analysedModules = analyse.getChildModulesInModule(classpath.path);
+					for(AnalysedModuleDTO analysedClass : analysedModules){
+						classpaths.add(new Mapping(subModule.logicalPath, subModule.type, analysedClass.uniqueName, violationTypeKeys));
+						//check for innerclasses
+					}
+				}
+				else{
+					classpaths.add(new Mapping(subModule.logicalPath, subModule.type, classpath.path, violationTypeKeys));
+					//class check innerclasses
+				}
 			}
-			classpaths.addAll(getAllClasspathsFromModule(submodule, classpaths));
+
+			classpaths.addAll(getAllClasspathsFromModule(subModule, classpaths, violationTypeKeys));
 		}
 		return classpaths;
 	}	
@@ -111,8 +138,18 @@ public class CheckConformanceUtilFilter {
 		for(int i = 0; i<mainClasspaths.size(); i++){
 			for(Mapping exceptionMapping : exceptionClasspaths){
 				if(mainClasspaths.get(i).getPhysicalPath().equals(exceptionMapping.getPhysicalPath())){
-					mainClasspaths.remove(i);
-					i--;
+
+					for(String violationTypeKey : mainClasspaths.get(i).getViolationTypes()){
+						if(Arrays.asList(exceptionMapping.getViolationTypes()).contains(violationTypeKey)){
+							mainClasspaths.get(i).removeViolationType(violationTypeKey);
+						}
+					}
+
+					//if there are no violationtypes attached to this class you can remove this class for better validate performance
+					if(mainClasspaths.get(i).getViolationTypes().length == 0){
+						mainClasspaths.remove(i);
+						i--;
+					}
 				}
 			}
 		}

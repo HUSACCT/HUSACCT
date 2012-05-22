@@ -34,7 +34,7 @@ public class LoopsInModuleRule extends RuleType{
 		
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
-				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module));
+				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
 			}
 			
 		}else{

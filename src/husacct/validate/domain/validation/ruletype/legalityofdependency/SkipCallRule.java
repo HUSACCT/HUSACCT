@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SkipCallRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
-	
+
 	public SkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
@@ -33,7 +33,7 @@ public class SkipCallRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		
+
 		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();		
 		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
@@ -41,14 +41,14 @@ public class SkipCallRule extends RuleType {
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> physicalClasspathsTo : modulesTo){
 				for(Mapping classPathTo : physicalClasspathsTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(physicalClassPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), currentRule.violationTypeKeys);	
+					DependencyDTO[] dependencies = analyseService.getDependencies(physicalClassPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), physicalClassPathFrom.getViolationTypes());	
 					for(DependencyDTO dependency: dependencies){
 						Message message = new Message(rootRule);
-	
+
 						LogicalModule logicalModuleFrom = new LogicalModule(physicalClassPathFrom);
 						LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-	
+
 						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
 						Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);
 						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
@@ -59,24 +59,24 @@ public class SkipCallRule extends RuleType {
 		}		
 		return violations;
 	}
-	
+
 	private List<List<Mapping>> filerLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
 		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
 		for (ModuleDTO module :allModules){
 			if(module.type.toLowerCase().contains("layer"))
 			{
 				if(module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
-					returnModules = getModulesTo(allModules,allModules.indexOf(module));				
+					returnModules = getModulesTo(allModules,allModules.indexOf(module), currentRule.violationTypeKeys);				
 			}
 		}			
 		return returnModules;	
 	}	
-	
-	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber){
+
+	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber, String[] violationTypeKeys){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(ModuleDTO module : allModules){
 			if(allModules.indexOf(module) > moduleFromNumber+1)
-			returnList.add(CheckConformanceUtilFilter.getAllModulesFromLayer(allModules.get(allModules.indexOf(module))));
+				returnList.add(CheckConformanceUtilFilter.getAllModulesFromLayer(allModules.get(allModules.indexOf(module)), violationTypeKeys));
 		}		
 		return returnList;
 	}

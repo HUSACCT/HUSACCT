@@ -39,6 +39,7 @@ public class NamingConventionRule extends RuleType {
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
 			for(AnalysedModuleDTO analyzedModule : analyseService.getChildModulesInModule(physicalClasspathFrom.getPhysicalPath())){
 				if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analyzedModule.name)){
+
 					Message message = new Message(rootRule);
 
 					LogicalModule logicalModuleFrom = new LogicalModule(physicalClasspathFrom);

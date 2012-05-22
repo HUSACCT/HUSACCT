@@ -1,6 +1,5 @@
 package husacct.validate.presentation;
 
-import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.TaskServiceImpl;
 
 import javax.swing.JCheckBox;
@@ -14,9 +13,7 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 	private final JCheckBox applyFilter;
 
 	
-	public LoadViolationHistoryPointsTask(JTable chooseViolationHistoryTable,
-			BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl,
-			JCheckBox applyFilter) {
+	public LoadViolationHistoryPointsTask(JTable chooseViolationHistoryTable, BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl, JCheckBox applyFilter) {
 		this.chooseViolationHistoryTable = chooseViolationHistoryTable;
 		this.browseViolations = browseViolations;
 		this.taskServiceImpl = taskServiceImpl;
@@ -32,5 +29,4 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 		browseViolations.loadInformationPanel();
 		applyFilter.setSelected(false);
 	}
-
 }
