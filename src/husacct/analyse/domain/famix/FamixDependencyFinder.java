@@ -106,29 +106,19 @@ class FamixDependencyFinder extends FamixFinder{
 	
 
 	private boolean isFrom(FamixAssociation association, String from){
-		
-		boolean result = from.equals("") || association.from.equals(from) || association.from.startsWith(from);
-		
-//		if(association.from.length() > from.length()){
-//			result = result && association.from.charAt(from.length()) == '.';
-//		}
-		
+		boolean result = from.equals("") || association.from.equals(from);
+		result = result || association.from.startsWith(from + ".");
 		result = result && !association.from.equals(association.to);
 		return result;
-		
-//		boolean result = from.equals("") || association.from.equals(from) || association.from.startsWith(from);
-//		result = result && !association.from.equals(association.to);
-//		return result;
 	}
 
 	private boolean isTo(FamixAssociation association, String to){
-		boolean result = to.equals("") || association.to.equals(to) || association.to.startsWith(to);
-//		if(association.to.length() > to.length()){
-//			result = result && association.to.charAt(to.length()) == '.';
-//		}
+		boolean result = to.equals("") || association.to.equals(to);
+		result = result || association.to.startsWith(to + ".");
 		result = result && !association.to.equals(association.from);
 		return result;
 	}
+	
 	
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){
 		String dependencyFrom = association.from;
