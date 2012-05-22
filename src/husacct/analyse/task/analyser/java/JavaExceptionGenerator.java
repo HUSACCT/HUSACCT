@@ -39,7 +39,7 @@ class JavaExceptionGenerator extends JavaGenerator{
 		return tree.getType() == throwNewNode;
 	}
 	
-	private void setExceptionClass(CommonTree tree){		
+	private void setExceptionClass(CommonTree tree){
 		if(tree != null){
 			for(int index = 0; index < tree.getChildCount(); index++){
 				if(tree.getType() == typeIdentifierNode) {
@@ -55,8 +55,8 @@ class JavaExceptionGenerator extends JavaGenerator{
 	}
 	
 	
-	private String parserUniquename(CommonTree tree){
-		String path = "";
+	private String parserUniquename(CommonTree tree){		
+		String path = "";		
 		if(tree.getType() == JavaParser.DOT){
 			path += packageClassPath(tree);
 		} else if (tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
@@ -67,20 +67,17 @@ class JavaExceptionGenerator extends JavaGenerator{
 			}
 		} else {
 			path = tree.toString();
-		}
+		}		
 		return path;
 	}
 	
 	private String packageClassPath(CommonTree tree){
 		String path = "";
-		CommonTree elementsTree = (CommonTree) tree.getChild(0);
-		int totalElementen = elementsTree.getChildCount();
-		for(int iterator = 0; iterator < totalElementen; iterator++){
-			path += path != "" ? "." : "";
-			path += elementsTree.getChild(iterator);
-		}
-		path += "." + tree.getChild(1).toString();
-				
+		int totalElementen = tree.getChildCount();		
+		for(int iterator = 0; iterator < totalElementen; iterator++){			
+			path += !path.equals("") ? "." : "";
+			path += tree.getChild(iterator);
+		}		
 		return path;
 	}
 	
