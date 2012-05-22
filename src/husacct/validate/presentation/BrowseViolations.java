@@ -97,6 +97,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		fillViolationsTable(taskServiceImpl.getAllViolations().getValue());
 		loadGUIText();
 		loadInformationPanel();
+		addListListeners();
 	}
 
 	private void loadModels() {
@@ -130,24 +131,6 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable.setAutoCreateRowSorter(true);
 		violationsTable.getRowSorter().toggleSortOrder(2);
 		violationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		violationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
-					int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
-					Violation violation = shownViolations.get(row);
-					detailLineNumberLabelValue.setText("" + violation.getLinenumber());
-					detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
-					String message = new Messagebuilder().createMessage(violation.getMessage());
-					detailMessageLabelValue.setText(message);
-				} else {
-					detailLineNumberLabelValue.setText("");
-					detailLogicalModuleLabelValue.setText("");
-					detailMessageLabelValue.setText("");
-				}
-			}
-
-		});
 	}
 
 	private void loadChooseViolationHistoryTableModel() {
@@ -168,11 +151,31 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		chooseViolationHistoryTable.setModel(chooseViolationHistoryTableModel);
 		chooseViolationHistoryTable.setFillsViewportHeight(true);
 		chooseViolationHistoryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	private void addListListeners(){
+		violationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
+					int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
+					Violation violation = shownViolations.get(row);
+					detailLineNumberLabelValue.setText("" + violation.getLinenumber());
+					detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+					String message = new Messagebuilder().createMessage(violation.getMessage());
+					detailMessageLabelValue.setText(message);
+				} else {
+					detailLineNumberLabelValue.setText("");
+					detailLogicalModuleLabelValue.setText("");
+					detailMessageLabelValue.setText("");
+				}
+			}
+
+		});
 		chooseViolationHistoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
-					
+				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {			
 					LoadViolationHistoryPointsTask loadViolationsHistoryTask = new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, thisScreen, taskServiceImpl, applyFilter);
 					final LoadingDialog loadingDialog = new LoadingDialog("Analysing application");
 					final Thread analyseThread = new Thread(loadViolationsHistoryTask);
@@ -193,6 +196,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 					loadingThread.start();
 					analyseThread.start();
 					monitorThread.start();
+					
+					int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
+					selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
+					fillViolationsTable(selectedViolationHistory.getViolations());
+					loadInformationPanel();
+					applyFilter.setSelected(false);
 				}
 			}
 		});
