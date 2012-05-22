@@ -156,11 +156,10 @@ class FamixModuleFinder extends FamixFinder{
 	}
 	
 	private boolean moduleExists(String uniqueName){
-		boolean result = true;
 		if(theModel.classes.get(uniqueName) != null) return true;
 		if(theModel.packages.get(uniqueName) != null) return true;
 		if(theModel.interfaces.get(uniqueName) != null) return true;
-		return result;
+		return false;
 	}
 	
 	private AnalysedModuleDTO createAnalysedModuleDTO(String type, FamixEntity theEntity, List<AnalysedModuleDTO> childs){
