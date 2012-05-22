@@ -125,7 +125,7 @@ public class DefinedController extends DrawingController {
 				setCurrentPath(parentName);
 				drawModulesAndLines(children);
 			} else {
-				logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
+				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 			}
 		}
 

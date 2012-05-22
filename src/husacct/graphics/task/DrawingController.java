@@ -154,6 +154,7 @@ public abstract class DrawingController implements UserInputListener {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 		
+		// TODO FIXME
 		// ATTN: The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
 		// are done specifically in that order for a reason!
 		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
@@ -176,13 +177,13 @@ public abstract class DrawingController implements UserInputListener {
 			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
 			parentFigure.willChange();
 			parentFigure.changed();
+			drawing.add(parentFigure);
 			for (AbstractDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
 				parentFigure.addChildFigure(generatedFigure);
 				drawing.add(generatedFigure);
 				figureMap.linkModule(generatedFigure, dto);
 			}
-			drawing.add(parentFigure);
 		}
 		drawTarget.setCurrentPath(getCurrentPath());
 		drawTarget.updateGUI();

@@ -12,6 +12,7 @@ import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -80,13 +81,11 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
-		// FIXME: Make this code function with the multiple selected figures
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for(BaseFigure figure : figures){
 			if (figure.isModule()) {
 				try {
 					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
-//					getAndDrawModulesIn(parentDTO.uniqueName);
 					parentNames.add(parentDTO.uniqueName);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -119,7 +118,7 @@ public class AnalysedController extends DrawingController {
 			setCurrentPath(parentName);
 			drawModulesAndLines(children);
 		} else {
-			logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
+			logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 		}
 	}
 	
@@ -137,10 +136,18 @@ public class AnalysedController extends DrawingController {
 				}
 				allChildren.put(parentName, knownChildren);
 			} else {
-				logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
+				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 			}
 		}
-		drawModulesAndLines(allChildren);
+		
+		Set<String> parentNamesKeySet = allChildren.keySet();
+		if(parentNamesKeySet.size()==1){
+			String onlyParentModule = parentNamesKeySet.iterator().next();
+			ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+			drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[]{}));
+		}else{
+			drawModulesAndLines(allChildren);
+		}
 	}
 
 	@Override
