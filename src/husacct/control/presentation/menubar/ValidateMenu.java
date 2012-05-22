@@ -106,4 +106,16 @@ public class ValidateMenu extends JMenu{
 			}
 		});
 	}
+	
+	public JMenuItem getConfigureItem(){
+		return configureItem;
+	}
+	
+	public JMenuItem getValidateNowItem(){
+		return validateNowItem;
+	}
+
+	public JMenuItem getExportViolationReportItem(){
+		return exportViolationReportItem;
+	}
 }

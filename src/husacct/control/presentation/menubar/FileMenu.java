@@ -30,9 +30,7 @@ public class FileMenu extends JMenu {
 	private JMenuItem saveWorkspaceItem;
 	private JMenuItem closeWorkspaceItem;
 	private JMenuItem exitItem;
-	
-	
-	
+
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public FileMenu(final MainController mainController){
@@ -105,6 +103,7 @@ public class FileMenu extends JMenu {
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
+				System.out.println("Filemenu listener");
 				createWorkspaceItem.setEnabled(false);
 				openWorkspaceItem.setEnabled(false);
 				saveWorkspaceItem.setEnabled(false);
@@ -140,4 +139,25 @@ public class FileMenu extends JMenu {
 			}
 		});
 	}
+	
+	public JMenuItem getCreateWorkspaceItem(){
+		return createWorkspaceItem;
+	}
+	
+	public JMenuItem getOpenWorkspaceItem(){
+		return openWorkspaceItem;
+	}
+	
+	public JMenuItem getSaveWorkspaceItem(){
+		return saveWorkspaceItem;
+	}
+	
+	public JMenuItem getCloseWorkspace(){
+		return closeWorkspaceItem;
+	}
+	
+	public JMenuItem getExitItem(){
+		return exitItem;
+	}
+
 }

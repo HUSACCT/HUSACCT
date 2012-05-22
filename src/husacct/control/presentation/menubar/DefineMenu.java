@@ -118,4 +118,17 @@ public class DefineMenu extends JMenu{
 			}
 		});
 	}
+	
+	public JMenuItem getDefineArchitectureItem(){
+		return defineArchitectureItem;
+	}
+	public JMenuItem getDefinedArchitectureDiagramItem(){
+		return definedArchitectureDiagramItem;
+	}
+	public JMenuItem getExportArchitectureItem(){
+		return exportArchitectureItem;
+	}
+	public JMenuItem getIimportArchitectureItem(){
+		return importArchitectureItem;
+	}
 }

@@ -54,6 +54,7 @@ public class WorkspaceController {
 		}
 		
 		ServiceProvider.getInstance().resetServices();
+		mainController.getStateController().checkState();
 	}
 	
 	public void closeWorkspace() {
@@ -63,6 +64,7 @@ public class WorkspaceController {
 			mainController.getViewController().closeAll();
 		}
 		ServiceProvider.getInstance().resetServices();
+		mainController.getStateController().checkState();
 	}
 	
 	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {

@@ -112,4 +112,16 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 	}
+	
+	public JMenuItem getSetApplicationPropertiesItem(){
+		return setApplicationPropertiesItem;
+	}
+	
+	public JMenuItem getAnalysedArchitectureDiagramItem(){
+		return analysedArchitectureDiagramItem;
+	}
+	
+	public JMenuItem getAnalysedApplicationOverviewItem(){
+		return analysedApplicationOverviewItem;
+	}
 }
