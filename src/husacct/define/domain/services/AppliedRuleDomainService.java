@@ -81,8 +81,12 @@ public class AppliedRuleDomainService {
 		rule.setEnabled(enabled);
 	}
 	
-	public ArrayList<Long> getAppliedRulesIdsByModule(long moduleId) {
-		return SoftwareArchitecture.getInstance().getAppliedRulesIdsByModule(moduleId);
+	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
+		return SoftwareArchitecture.getInstance().getAppliedRulesIdsByModuleFromId(moduleId);
+	}
+	
+	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
+		return SoftwareArchitecture.getInstance().getAppliedRulesIdsByModuleToId(moduleId);
 	}
 
 	public long getModuleToIdOfAppliedRule(long appliedRuleId) {

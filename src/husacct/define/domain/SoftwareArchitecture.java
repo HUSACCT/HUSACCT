@@ -77,10 +77,20 @@ public class SoftwareArchitecture {
 	/*
 	 * Applied Rules
 	 */
-	public ArrayList<Long> getAppliedRulesIdsByModule(long moduleId) {
+	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
 		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
 		for (AppliedRule rule : appliedRules){
 			if (rule.getModuleFrom().getId() == moduleId){
+				appliedRuleIds.add(rule.getId());
+			}
+		}
+		return appliedRuleIds;
+	}
+	
+	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
+		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
+		for (AppliedRule rule : appliedRules){
+			if (rule.getModuleTo().getId() == moduleId){
 				appliedRuleIds.add(rule.getId());
 			}
 		}

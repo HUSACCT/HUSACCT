@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -13,16 +14,18 @@ public class RuleConventionsChecker {
 	private Module moduleTo;
 	private String ruleTypeKey;
 	
-	private ArrayList<AppliedRule> appliedRules;
+	private ArrayList<AppliedRule> fromAppliedRules;
+	private ArrayList<AppliedRule> toAppliedRules;
 	
-	private String errorKey;
+	private String errorMessage;
 	
 	public RuleConventionsChecker(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
 		this.setModuleFrom(moduleFrom);
 		this.setModuleTo(moduleTo);
 		this.setRuleTypeKey(ruleTypeKey);
-		this.appliedRules = new ArrayList<AppliedRule>();
-		this.errorKey = "";
+		this.fromAppliedRules = new ArrayList<AppliedRule>();
+		this.toAppliedRules = new ArrayList<AppliedRule>();
+		this.errorMessage = "";
 	}
 	
 	public boolean checkRuleConventions() {
@@ -38,16 +41,25 @@ public class RuleConventionsChecker {
 			conventionError = checkNamingConventionException();
 		} else if(ruleTypeKey.equals("IsNotAllowedToUse")) {
 			conventionError = checkIsNotAllowedToUse();
+		} else if(ruleTypeKey.equals("IsOnlyAllowedToUse")) {
+			conventionError = checkIsOnlyAllowedToUse();
+		} else if(ruleTypeKey.equals("IsOnlyModuleAllowedToUse")) {
+			conventionError = checkIsOnlyModuleAllowedToUse();
 		}
 		return conventionError;
 	}
 	
 	private void fillAppliedRules() {
 		AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
-		ArrayList<Long> appliedRuleIds = appliedRuleService.getAppliedRulesIdsByModule(moduleFrom.getId());
-		for(Long appliedRuleId : appliedRuleIds) {
+		ArrayList<Long> fromAppliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleFromId(moduleFrom.getId());
+		for(Long appliedRuleId : fromAppliedRuleIds) {
 			AppliedRule appliedRule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-			this.appliedRules.add(appliedRule);
+			this.fromAppliedRules.add(appliedRule);
+		}
+		ArrayList<Long> toAppliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleToId(moduleTo.getId());
+		for(Long appliedRuleId : toAppliedRuleIds) {
+			AppliedRule appliedRule = appliedRuleService.getAppliedRuleById(appliedRuleId);
+			this.toAppliedRules.add(appliedRule);
 		}
 	}
 	
@@ -72,36 +84,93 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkIsNotAllowedToUse() {
-		boolean isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("IsOnlyAllowedToUse");
+		boolean isNotAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsOnlyAllowedToUse");
 		if(isNotAllowedToUseSucces) {
-			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("IsOnlyModuleAllowedToUse");
+			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsOnlyModuleAllowedToUse");
 		}
 		if(isNotAllowedToUseSucces) {
-			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("IsAllowedToUse");
+			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsAllowedToUse");
 		}
 		if(isNotAllowedToUseSucces) {
-			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("MustUse");
+			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("MustUse");
 		}
 		return isNotAllowedToUseSucces;
 	}
 	
+	private boolean checkIsOnlyAllowedToUse() {
+		boolean isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse");
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse");
+		}
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
+		}
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("IsAllowedToUse");
+		}
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("MustUse");
+		}
+		return isOnlyAllowedToUseSucces;
+	}
+	
+	private boolean checkIsOnlyModuleAllowedToUse() {
+		boolean isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse");
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse");
+		}
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
+		}
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsAllowedToUse");
+		}
+		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("MustUse");
+		}
+		return isOnlyAllowedToUseSucces;
+	}
+	
 	private boolean checkRuleTypeAlreadySet() {
-		for(AppliedRule appliedRule : appliedRules) {
+		for(AppliedRule appliedRule : fromAppliedRules) {
 			if(appliedRule.getRuleType().equals(ruleTypeKey)) {
-				setErrorKey("RuleTypeAlreadySet");
+				setErrorMessage(DefineTranslator.translate("RuleTypeAlreadySet"));
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	private boolean checkRuleTypeAlreadyFromToSelected(String ruleType) {
-		for(AppliedRule appliedRule : appliedRules) {
-			Logger.getLogger(this.getClass()).debug(appliedRule.getRuleType());
+	private boolean checkRuleTypeAlreadyFromThisToSelected(String ruleType) {
+		for(AppliedRule appliedRule : fromAppliedRules) {
 			if(appliedRule.getRuleType().equals(ruleType) &&
 				appliedRule.getModuleFrom().getId() == moduleFrom.getId() &&
 				appliedRule.getModuleTo().getId() == moduleTo.getId()) {
-				setErrorKey(ruleType + "AlreadyFromToSelected");
+				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromThisToSelected"));
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean checkRuleTypeAlreadyFromThisToOther(String ruleType) {
+		for(AppliedRule appliedRule : fromAppliedRules) {
+			if(appliedRule.getRuleType().equals(ruleType) &&
+				appliedRule.getModuleFrom().getId() == moduleFrom.getId() &&
+				appliedRule.getModuleTo().getId() != moduleTo.getId()) {
+				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromThisToOther"));
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType) {
+		for(AppliedRule appliedRule : toAppliedRules) {
+			if(appliedRule.getRuleType().equals(ruleType) &&
+				appliedRule.getModuleFrom().getId() != moduleFrom.getId() &&
+				appliedRule.getModuleTo().getId() == moduleTo.getId()) {
+				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromOtherToSelected") + " \"" + appliedRule.getModuleFrom().getName() + "\"");
 				return false;
 			}
 		}
@@ -132,11 +201,11 @@ public class RuleConventionsChecker {
 		this.ruleTypeKey = ruleTypeKey;
 	}
 	
-	public void setErrorKey(String errorKey) {
-		this.errorKey = errorKey;
+	public void setErrorMessage(String errorKey) {
+		this.errorMessage = errorKey;
 	}
 	
-	public String getErrorKey() {
-		return this.errorKey;
+	public String getErrorMessage() {
+		return this.errorMessage;
 	}
 }
