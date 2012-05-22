@@ -51,9 +51,9 @@ public class ApplicationController {
 					analyseThread.join();
 					loadingDialog.dispose();
 					mainController.getViewController().showApplicationOverviewGui();
-					logger.debug("Monitor: analyse finished");
+					logger.debug("analyse thread finished");
 				} catch (InterruptedException exception){
-					logger.debug("Monitor: analyse interrupted");
+					logger.debug("analyse thread interrupted");
 				}
 				
 			}
@@ -65,6 +65,10 @@ public class ApplicationController {
 				analyseThread.interrupt();
 			}
 		});
+		
+		loadingThread.setName("loading");
+		analyseThread.setName("analyse");
+		monitorThread.setName("monitor");
 		
 		loadingThread.start();
 		analyseThread.start();
