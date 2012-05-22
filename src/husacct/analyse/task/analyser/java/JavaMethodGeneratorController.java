@@ -25,8 +25,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
 
 	public void delegateMethodBlock(CommonTree methodTree, String className) {
-		this.belongsToClass = className;
-		checkMethodType(methodTree);
+		this.belongsToClass = className;		
+		checkMethodType(methodTree);		
 		WalkThroughMethod(methodTree);
 		createMethodObject();	
 	}
@@ -83,7 +83,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			if(treeType == JavaParser.IDENT){
 				name = child.getText();
 			}
-			if(treeType == JavaParser.THROW || treeType == JavaParser.THROWS){
+			if(treeType == JavaParser.THROW || treeType == JavaParser.THROWS_CLAUSE || treeType == JavaParser.THROWS){
 				delegateException(child); 
 				deleteTreeChild(child); 
 			} 
