@@ -11,7 +11,7 @@ public class AnalyseMain {
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
-		String path = "C:/Users/Thomas/Downloads/Mittchel-benchmark-73d2abb/CSharpBenchmark";
+		String path = "/home/thomas/Downloads/Mittchel-benchmark-73d2abb/";
 		//String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Army\\src";
 		//C:\Tools\Workspaces\School\TO Blok 3 Jaar 3\Copy of Java Recognition Test\src
 		//String path = "C:/Tools/Workspaces/School/TO Blok 3 Jaar 3/SimpleTestArmy/src";
