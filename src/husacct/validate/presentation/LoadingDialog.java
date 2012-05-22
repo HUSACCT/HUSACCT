@@ -3,7 +3,6 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.control.task.MainController;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;

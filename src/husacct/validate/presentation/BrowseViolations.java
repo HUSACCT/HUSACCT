@@ -83,7 +83,6 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private JRadioButton rdbtnIndirect;
 	private JRadioButton rdbtnAll;
 	private List<Violation> shownViolations;
-	private BrowseViolations thisScreen = this;
 
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
 		this.logger = Logger.getLogger(BrowseViolations.class);
@@ -176,32 +175,37 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {			
-					LoadViolationHistoryPointsTask loadViolationsHistoryTask = new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, thisScreen, taskServiceImpl, applyFilter);
-					final LoadingDialog loadingDialog = new LoadingDialog("Analysing application");
-					final Thread analyseThread = new Thread(loadViolationsHistoryTask);
+//					LoadViolationHistoryPointsTask loadViolationsHistoryTask = new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, thisScreen, taskServiceImpl, applyFilter);
+					final LoadingDialog loadingDialog = new LoadingDialog("Loading Violations");
+					final Thread validateThread = new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
+							selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
+							fillViolationsTable(selectedViolationHistory.getViolations());
+							loadInformationPanel();
+							applyFilter.setSelected(false);
+						}
+					});
 					Thread loadingThread = new Thread(loadingDialog);
 					
 					Thread monitorThread = new Thread(new Runnable() {
+						@Override
 						public void run() {
 							try {
-								analyseThread.join();
+								validateThread.join();
 								loadingDialog.dispose();
-								logger.debug("Monitor: analyse finished");
+								logger.debug("Monitor: validate finished");
 							} catch (InterruptedException exception){
-								logger.debug("Monitor: analyse interrupted");
+								logger.debug("Monitor: validate interrupted");
 							}
 							
 						}
 					});
 					loadingThread.start();
-					analyseThread.start();
+					validateThread.start();
 					monitorThread.start();
-					
-					int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
-					selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
-					fillViolationsTable(selectedViolationHistory.getViolations());
-					loadInformationPanel();
-					applyFilter.setSelected(false);
 				}
 			}
 		});
@@ -289,7 +293,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonSaveInHistory.setEnabled(true);
 	}
 
-	public void init() {
+	private void init() {
 		setClosable(true);
 		setMaximizable(true);
 		setIconifiable(true);
