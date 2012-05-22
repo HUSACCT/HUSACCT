@@ -12,12 +12,16 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
-import husacct.define.presentation.helper.DataHelper;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.moduletree.CombinedModuleTree;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
+import husacct.define.task.components.AbstractCombinedComponent;
 
-public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
+public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeSelectionListener{
 	private static final long serialVersionUID = 6479697173853306907L;
 	public static final String ruleTypeKey = "IsNotAllowedToUse";
 	
@@ -27,7 +31,9 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
 	private JLabel descriptionLabel;
 	
 	public JComboBox moduleFromJComboBox;
+	public CombinedModuleTree moduleFromTree;
 	public JComboBox moduleToJComboBox;
+	public CombinedModuleTree moduleToTree;
 	public JCheckBox ruleEnabledCheckBox;
 	public JTextArea descriptionTextArea;
 	
@@ -46,7 +52,7 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
 
 	@Override
 	public HashMap<String, Object> saveToHashMap() {
-		HashMap<String, Object> ruleDetails = saveDefaultDataToHashMap();
+		HashMap<String, Object> ruleDetails = super.saveToHashMap();
 		
 		DataHelper datahelper1 = (DataHelper) this.moduleFromJComboBox.getSelectedItem();
 		ruleDetails.put("moduleFromId", datahelper1.getId());
@@ -69,6 +75,12 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
 		this.add(this.moduleFromLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+//		if (!isException){
+//			this.createFromModuleJComboBox();
+//			this.add(this.moduleFromJComboBox, gridBagConstraints);
+//		} else {
+//			this.add(createFromModuleScrollPane(), gridBagConstraints);
+//		}
 		this.createFromModuleJComboBox();
 		this.add(this.moduleFromJComboBox, gridBagConstraints);
 	}
@@ -93,11 +105,26 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
 		this.moduleFromJComboBox.setModel(comboBoxModel);
 	}
 	
+	private JScrollPane createFromModuleScrollPane() {
+		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
+		this.moduleFromTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
+		this.moduleFromTree.addTreeSelectionListener(this);
+		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleToTree);
+		return moduleTreeScrollPane;
+	}
+	
+	
 	private void addToModuleComponents(GridBagConstraints gridBagConstraints) {
 		this.moduleToLabel = new JLabel("To Module");
 		this.add(this.moduleToLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+//		if (!isException){
+//			this.createToModuleJComboBox();
+//			this.add(this.moduleToJComboBox, gridBagConstraints);
+//		} else {
+//			this.add(createToModuleScrollPane(), gridBagConstraints);
+//		}
 		this.createToModuleJComboBox();
 		this.add(this.moduleToJComboBox, gridBagConstraints);
 	}
@@ -112,6 +139,14 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
 		}
 		ComboBoxModel comboBoxModel = new DefaultComboBoxModel(dataHelperList.toArray());
 		this.moduleToJComboBox.setModel(comboBoxModel);
+	}
+	
+	private JScrollPane createToModuleScrollPane() {
+		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
+		this.moduleToTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
+		this.moduleToTree.addTreeSelectionListener(this);
+		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleToTree);
+		return moduleTreeScrollPane;
 	}
 	
 	private void addEnabledComponents(GridBagConstraints gridBagConstraints){
@@ -136,5 +171,10 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel{
 		this.descriptionTextArea.setText("");
 		JScrollPane descriptionScrollPane = new JScrollPane(this.descriptionTextArea);
 		return descriptionScrollPane;
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent arg0) {
+		
 	}
 }

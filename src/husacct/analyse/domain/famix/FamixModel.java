@@ -109,6 +109,32 @@ class FamixModel extends FamixObject{
 		return result;
 	}
 	
+	public ArrayList<FamixFormalParameter> getParametersForClass(String uniqueClassName){
+		ArrayList<FamixFormalParameter> result = new ArrayList<FamixFormalParameter>();
+		for (FamixStructuralEntity entity: structuralEntities.values()){
+			if (entity instanceof FamixFormalParameter){
+				FamixFormalParameter parameter = (FamixFormalParameter)entity;
+				if(parameter.belongsToClass.equals(uniqueClassName)){
+					result.add(parameter);
+				}
+			}
+		}
+		return result;
+	}
+	
+	public ArrayList<FamixLocalVariable> getLocalVariablesForClass(String declareClass) {
+		ArrayList<FamixLocalVariable> localVariables = new ArrayList<FamixLocalVariable>();
+		for (FamixStructuralEntity entity: structuralEntities.values()){
+			if (entity instanceof FamixLocalVariable){
+				FamixLocalVariable variable = (FamixLocalVariable) entity;
+				if (variable.belongsToClass.equals(declareClass)){
+					localVariables.add(variable);
+				}
+			}
+		}
+		return localVariables;
+	}
+	
 	public List<FamixImport> getImportsInClass(String uniqueClassName){
 		List<FamixImport> imports = new ArrayList<FamixImport>();
 		for(FamixAssociation association: associations){
@@ -156,4 +182,6 @@ class FamixModel extends FamixObject{
 		currentInstance.structuralEntities.clear();
 		currentInstance.behaviouralEntities.clear();
 	}
+
+
 }

@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 
 public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
+	private static final long serialVersionUID = 1283848062887016417L;
+
 	private static Logger logger = Logger.getLogger(ViolationTypeSeverityPanel.class);
 	
 	private ComboBoxTableModel violationtypeModel;

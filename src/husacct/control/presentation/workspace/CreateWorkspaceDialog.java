@@ -50,7 +50,7 @@ public class CreateWorkspaceDialog extends JDialog{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		this.setSize(new Dimension(350, 150));
-		this.setResizable(true);
+		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
 
@@ -68,6 +68,8 @@ public class CreateWorkspaceDialog extends JDialog{
 		workspaceNameText = new JTextField(20);
 		workspaceNameText.setText("myHusacctWorkspace"); 
 		
+		getRootPane().setDefaultButton(okButton);
+		
 		workspacePanel.add(workspaceNameLabel);
 		workspacePanel.add(workspaceNameText);
 		workspacePanel.add(setApplicationCheckbox);
@@ -77,7 +79,6 @@ public class CreateWorkspaceDialog extends JDialog{
 		mainPanel.add(workspacePanel);
 		mainPanel.add(setApplicationPanel);
 		mainPanel.add(buttonPanel);
-
 		add(mainPanel);
 	}
 
@@ -91,10 +92,13 @@ public class CreateWorkspaceDialog extends JDialog{
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-				mainController.getApplicationController().setApplicationData(applicationData);
+				if(setApplicationCheckbox.isSelected()){
+					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+					mainController.getApplicationController().setApplicationData(applicationData);
+				}
 				createWorkspace();
 				dispose();
+				mainController.getViewController().showDefineGui();
 			}
 		});
 

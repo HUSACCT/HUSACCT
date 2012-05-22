@@ -32,11 +32,10 @@ public class FilterController {
 	}
 
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter, List<Violation> violations) {
-		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
 		for(Violation violation : violations){
 			for(String path : paths){
-				if(!modulesFilter.contains(violation.getClassPathFrom()) && regex.matchRegex(regex.makeRegexString(path), violation.getClassPathFrom())){
+				if(!modulesFilter.contains(violation.getClassPathFrom()) && Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())){
 					modulesFilter.add(violation.getClassPathFrom());
 				}
 			}

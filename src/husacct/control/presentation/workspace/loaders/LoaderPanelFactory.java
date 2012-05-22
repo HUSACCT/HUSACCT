@@ -22,6 +22,6 @@ public class LoaderPanelFactory {
             e.printStackTrace();
         }
         
-        return new XmlLoadPanel();
+        return new HusacctLoadPanel();
 	}
 }

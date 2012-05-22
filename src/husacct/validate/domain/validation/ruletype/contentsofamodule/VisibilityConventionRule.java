@@ -21,7 +21,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class VisibilityConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.VISIBILITY_CONVENTION);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.VISIBILITY_CONVENTION, RuleTypes.VISIBILITY_CONVENTION_EXCEPTION);
 
 	public VisibilityConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);

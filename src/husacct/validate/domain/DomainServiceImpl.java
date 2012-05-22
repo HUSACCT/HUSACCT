@@ -60,7 +60,8 @@ public class DomainServiceImpl {
 	}
 	
 	public CategoryDTO[] getCategories(){
-		return new AssemblerController().createCategoryDTO(ruletypefactory.getRuleTypes());
+		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
+		return new AssemblerController().createCategoryDTO(ruleTypes);
 	}
 	
 	public RuleTypesFactory getRuleTypesFactory(){

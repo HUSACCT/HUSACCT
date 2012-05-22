@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ResourceFactory {
 
-	public static IResource getDefault(){
+	private static IResource getDefault(){
 		List<String> list = getAvailableResources();
 		return get(list.get(0));
 	}
@@ -38,6 +38,7 @@ public class ResourceFactory {
 	
 	public static List<String> getAvailableResources(){
 		List<String> list = new ArrayList<String>();
+		list.add("Husacct");
 		list.add("Xml");
 		return list;
 	}

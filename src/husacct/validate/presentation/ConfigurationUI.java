@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends JInternalFrame implements Observer{
 
+	private static final long serialVersionUID = 7721461596323704063L;
+
 	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 	
 	private TaskServiceImpl taskServiceImpl;

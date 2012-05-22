@@ -10,12 +10,15 @@ import java.util.List;
 
 public class StateController {
 	
-	private List<States> states;
+	private List<States> states = new ArrayList<States>();
 	
 	ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
 	
-	public StateController(){
-		checkState();
+	private WorkspaceController workspaceController;
+	
+	public StateController(MainController mainController){
+		workspaceController = mainController.getWorkspaceController();
+		states.add(States.NONE);
 	}
 	
 	public void checkState(){
@@ -42,7 +45,7 @@ public class StateController {
 			newStates.add(States.DEFINED);
 		}
 		
-		if(WorkspaceController.isOpenWorkspace()){
+		if(workspaceController.isOpenWorkspace()){
 			newStates.add(States.OPENED);
 		}
 		

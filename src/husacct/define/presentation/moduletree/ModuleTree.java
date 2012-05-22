@@ -10,8 +10,8 @@ public class ModuleTree extends JTree {
 	private static final long serialVersionUID = 3282591641481691737L;
 	
 	public ModuleTree(AbstractDefineComponent rootComponent) {
-		super(new ModuleTreeModel(rootComponent));
-		ModuleCellRenderer moduleCellRenderer = new ModuleCellRenderer();
+		super(new CombinedModuleTreeModel(rootComponent));
+		CombinedModuleCellRenderer moduleCellRenderer = new CombinedModuleCellRenderer();
 	    this.setCellRenderer(moduleCellRenderer);
 	    this.setDefaultSettings();
 	}

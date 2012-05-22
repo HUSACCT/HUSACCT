@@ -7,10 +7,10 @@ import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-public class AnalyseDomainServiceImpl implements AnalyseDomainService{
+public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 
-	private ModelQueryService queryService;
-	private ModelCreationService creationService;
+	private IModelQueryService queryService;
+	private IModelCreationService creationService;
 	
 	public AnalyseDomainServiceImpl(){
 		this.queryService = new FamixQueryServiceImpl();
@@ -19,6 +19,11 @@ public class AnalyseDomainServiceImpl implements AnalyseDomainService{
 	
 	public void clearModel(){
 		creationService.clearModel();
+	}
+	
+	@Override
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename){
+		return queryService.getModuleForUniqueName(uniquename);
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 public class ColorTableModel extends AbstractTableModel {
+	
 	private static final long serialVersionUID = 2492345975488386436L;
 	
 	private Vector dataVector = new Vector();

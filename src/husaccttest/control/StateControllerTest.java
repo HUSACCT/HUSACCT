@@ -19,7 +19,7 @@ public class StateControllerTest {
 	
 	@Before
 	public void setup(){
-		MainController mainController = new MainController(new String[]{"nogui"});
+		MainController mainController = new MainController();
 		stateController = mainController.getStateController();
 	}
 	

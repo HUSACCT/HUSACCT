@@ -46,11 +46,4 @@ public class FigureConnectorStrategy {
 	public void setConnectionPrototype(ConnectionFigure newPrototype) {
 		prototype = newPrototype;
 	}
-
-	// This code adds decorations to lines. Not needed at the moment
-	// ArrowTip arrowTip = new ArrowTip(1.0, 12, 12, true, true, true);
-	// connection.set(AttributeKeys.START_DECORATION, arrowTip);
-	// arrowTip = new ArrowTip(0.5, 12, 3.0);
-	// connection.set(AttributeKeys.END_DECORATION, arrowTip);
-
 }
