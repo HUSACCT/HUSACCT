@@ -106,11 +106,17 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
-		String firstCurrentPaths = getCurrentPaths()[0];
-		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(firstCurrentPaths);
-		if (null != parentDTO) {
-			getAndDrawModulesIn(parentDTO.uniqueName);
-		} else {
+		if (getCurrentPaths().length > 0) {
+			String firstCurrentPaths = getCurrentPaths()[0];
+			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(firstCurrentPaths);
+			if (null != parentDTO) {
+				getAndDrawModulesIn(parentDTO.uniqueName);
+			} else {
+				logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+				logger.debug("Reverting to the root of the application.");
+				drawArchitecture(getCurrentDrawingDetail());
+			}
+		}else{
 			logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());

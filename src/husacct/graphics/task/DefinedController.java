@@ -44,7 +44,7 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void refreshDrawing() {
 		super.notifyServiceListeners();
-		 getAndDrawModulesIn(getCurrentPaths());
+		getAndDrawModulesIn(getCurrentPaths());
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
-		super.notifyServiceListeners();		
+		super.notifyServiceListeners();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -75,14 +75,14 @@ public class DefinedController extends DrawingController {
 					parentNames.add(parentDTO.logicalPath);
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.warn("Could not zoom on this object: " + figure.getName() +". Expected a different DTO type.");
+					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				}
-			}else{
-				logger.warn("Could not zoom on this object: " + figure.getName() +". Not a module to zoom on.");
+			} else {
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 			}
 		}
-		
-		if(parentNames.size()>0){
+
+		if (parentNames.size() > 0) {
 			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
 	}
@@ -90,10 +90,16 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
-		String firstCurrentPaths = getCurrentPaths()[0];
-		String parentPath = defineService.getParentFromModule(firstCurrentPaths);
-		if (null != parentPath) {
-			getAndDrawModulesIn(parentPath);
+		if (getCurrentPaths().length > 0) {
+			String firstCurrentPaths = getCurrentPaths()[0];
+			String parentPath = defineService.getParentFromModule(firstCurrentPaths);
+			if (null != parentPath) {
+				getAndDrawModulesIn(parentPath);
+			} else {
+				logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+				logger.debug("Reverting to the root of the application.");
+				drawArchitecture(getCurrentDrawingDetail());
+			}
 		} else {
 			logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
