@@ -110,6 +110,7 @@ public class ValidateMenu extends JMenu{
 		});
 	}
 	
+<<<<<<< HEAD
 	public JMenuItem getConfigureItem(){
 		return configureItem;
 	}
@@ -120,11 +121,11 @@ public class ValidateMenu extends JMenu{
 
 	public JMenuItem getExportViolationReportItem(){
 		return exportViolationReportItem;
-	}
-	
+=======
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = controlService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
+>>>>>>> 49b016b03592234c9792ded90dfbddff8f2140d2
 	}
 }

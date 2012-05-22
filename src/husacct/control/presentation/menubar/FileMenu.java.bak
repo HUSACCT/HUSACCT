@@ -103,6 +103,7 @@ public class FileMenu extends JMenu {
 		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
+				System.out.println("Filemenu listener");
 				createWorkspaceItem.setEnabled(false);
 				openWorkspaceItem.setEnabled(false);
 				saveWorkspaceItem.setEnabled(false);
@@ -144,6 +145,7 @@ public class FileMenu extends JMenu {
 		});
 	}
 	
+<<<<<<< HEAD
 	public JMenuItem getCreateWorkspaceItem(){
 		return createWorkspaceItem;
 	}
@@ -163,10 +165,12 @@ public class FileMenu extends JMenu {
 	public JMenuItem getExitItem(){
 		return exitItem;
 	}
-	
+
+=======
 	private int getMnemonicKeycode(String translatedString) {
 		String mnemonicString = controlService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}
+>>>>>>> 49b016b03592234c9792ded90dfbddff8f2140d2
 }
