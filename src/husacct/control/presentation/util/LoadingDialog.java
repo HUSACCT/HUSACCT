@@ -5,7 +5,6 @@ import husacct.control.ControlServiceImpl;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
