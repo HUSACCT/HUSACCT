@@ -17,8 +17,8 @@ public class ParentFigure extends BaseFigure {
 	private RectangleFigure body;
 	private TextFigure text;
 
-	protected int minWidth = 300;
-	protected int minHeight = 300;
+	protected int minWidth = 400;
+	protected int minHeight = 400;
 	
 	private ArrayList<Figure> childrenOwnImpl;
 	private double currentPositionX, currentPositionY;
@@ -95,7 +95,6 @@ public class ParentFigure extends BaseFigure {
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;
-		textAnchor.y += plusY;
 		text.setBounds(textAnchor, null);
 
 		invalidate();
