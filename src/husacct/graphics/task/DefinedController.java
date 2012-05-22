@@ -75,9 +75,10 @@ public class DefinedController extends DrawingController {
 					parentNames.add(parentDTO.logicalPath);
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.warn("Could not zoom on this object: " + figure);
-					logger.debug("Possible type cast failure.");
+					logger.warn("Could not zoom on this object: " + figure.getName() +". Expected a different DTO type.");
 				}
+			}else{
+				logger.warn("Could not zoom on this object: " + figure.getName() +". Not a module to zoom on.");
 			}
 		}
 		
