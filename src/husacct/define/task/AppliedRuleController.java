@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.Observer;
 
+import javax.swing.JOptionPane;
+
 public class AppliedRuleController extends PopUpController {
 
 	private AppliedRuleJDialog jframeAppliedRule;
@@ -190,7 +192,7 @@ public class AppliedRuleController extends PopUpController {
 	/*
 	 * Saving
 	 */
-	public void save(HashMap<String, Object> ruleDetails){
+	public boolean save(HashMap<String, Object> ruleDetails){
 		
 		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
 		Object from = ruleDetails.get("moduleFromId");
@@ -203,17 +205,21 @@ public class AppliedRuleController extends PopUpController {
 		Module moduleFrom = getCorrectModule(from);
 		Module moduleTo = getCorrectModule(to);
 		
-		try {
-			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
-				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
-			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+		if(this.checkRuleConventions(moduleFrom, moduleTo, ruleTypeKey)) {
+			try {
+				if (this.getAction().equals(PopUpController.ACTION_NEW)) {
+					this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+				} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
+					this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+				}
+				this.saveAllExceptionRules();
+				DefinitionController.getInstance().notifyObservers(this.currentModuleId);
+				return true;
+			} catch (Exception e) {
+				UiDialogs.errorDialog(jframeAppliedRule, e.getMessage(), "Error");
 			}
-			this.saveAllExceptionRules();
-			DefinitionController.getInstance().notifyObservers(this.currentModuleId);
-		} catch (Exception e) {
-			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage(), "Error");
 		}
+		return false;
 	}
 	
 	private Module getCorrectModule(Object o){
@@ -238,6 +244,17 @@ public class AppliedRuleController extends PopUpController {
 		module.addSUDefinition(su);
 		module.setType("Physical");
 		return module;
+	}
+	
+	private boolean checkRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
+		RuleConventionsChecker conventionsChecker = new RuleConventionsChecker(moduleFrom, moduleTo, ruleTypeKey);
+		if(!conventionsChecker.checkRuleConventions()) {
+			String errorMessage = DefineTranslator.translate(conventionsChecker.getErrorKey());
+			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, DefineTranslator.translate("ConventionError"), JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public void saveAllExceptionRules(){
