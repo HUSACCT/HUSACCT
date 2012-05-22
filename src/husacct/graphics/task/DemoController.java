@@ -171,6 +171,11 @@ public class DemoController extends DrawingController {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 6));
 		}
 		
+		if (figureFrom.getName().equals("infrastructure") && figureTo.getName().equals("domain")) {
+			dependencies.add(new DependencyDTO("task", "domain", "wa", 1));
+			dependencies.add(new DependencyDTO("task", "domain", "wa", 2));
+		}
+		
 		if (figureFrom.getName().equals("domain") && figureTo.getName().equals("domain_two")) {
 			dependencies.add(new DependencyDTO("domain_two", "domain", "wa", 1));
 		}
@@ -217,6 +222,14 @@ public class DemoController extends DrawingController {
 		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse", "IsNotAllowedToUseDescription", new ViolationTypeDTO[] { constructorCall, extendingAbstractClass, implementationOfInterface, extendClass }, new RuleTypeDTO[] {});
 
 		if (figureFrom.getName().equals("domain") && figureTo.getName().equals("task")) {
+			violations = new ViolationDTO[2];
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 1", 1, Color.red, "", "", 3);
+			violations[0] = taskLayerErr1;
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 2", 1, Color.red, "", "", 3);
+			violations[1] = taskLayerErr2;
+		}
+		
+		if (figureFrom.getName().equals("task") && figureTo.getName().equals("domain")) {
 			violations = new ViolationDTO[2];
 			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 1", 1, Color.red, "", "", 3);
 			violations[0] = taskLayerErr1;

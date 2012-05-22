@@ -32,7 +32,7 @@ public final class FigureFactory {
 			}
 		}
 
-		if (highestColor == null) {
+		if (null == highestColor) {
 			throw new RuntimeException("No violation severity color found");
 		}
 

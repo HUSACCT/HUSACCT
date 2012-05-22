@@ -24,7 +24,7 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
-	public final int RELATIONS_DISTANCE = 30;
+	public final int RELATIONS_DISTANCE = 50;
 	FileManager filemanager = new FileManager();
 	File selectedFile = filemanager.getFile();
 

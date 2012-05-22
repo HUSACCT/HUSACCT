@@ -58,6 +58,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	private void initializeComponents() {
+		notifyServiceListeners();
 		drawing = new Drawing();
 		view = new DrawingView(drawing);
 		view.addListener(this);
@@ -199,6 +200,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	@Override
 	public void toggleViolations() {
+		notifyServiceListeners();
 		if (areViolationsShown()) {
 			hideViolations();
 		} else {
@@ -279,5 +281,9 @@ public abstract class DrawingController implements UserInputListener {
 	@Override
 	public void exportToImage() {
 		drawing.showExportToImagePanel();
+	}
+	
+	public void notifyServiceListeners(){
+		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
 }

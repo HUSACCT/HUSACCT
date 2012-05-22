@@ -14,8 +14,8 @@ public class LayerFigure extends BaseFigure {
 	private RectangleFigure body;
 	private TextFigure text;
 
-	protected int minWidth = 300;
-	protected int minHeight = 50;
+	public static final int MIN_WIDTH = 300;
+	public static final int MIN_HEIGHT = 50;
 
 	public LayerFigure(String name) {
 		super(name);
@@ -31,11 +31,11 @@ public class LayerFigure extends BaseFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < minWidth) {
-			lead.x = anchor.x + minWidth;
+		if ((lead.x - anchor.x) < MIN_WIDTH) {
+			lead.x = anchor.x + MIN_WIDTH;
 		}
-		if ((lead.y - anchor.y) < minHeight) {
-			lead.y = anchor.y + minHeight;
+		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+			lead.y = anchor.y + MIN_HEIGHT;
 		}
 
 		body.setBounds(anchor, lead);
