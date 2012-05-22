@@ -46,23 +46,23 @@ public class FileMenu extends JMenu {
 	
 	private void addComponents(){
 		createWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CreateWorkspace"));
-		createWorkspaceItem.setMnemonic('c');
+		createWorkspaceItem.setMnemonic(getMnemonicKeycode("CreateWorkspaceMnemonic"));
 		createWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('N', KeyEvent.CTRL_DOWN_MASK));
 				
 		openWorkspaceItem = new JMenuItem(controlService.getTranslatedString("OpenWorkspace"));
-		openWorkspaceItem.setMnemonic('o');
+		openWorkspaceItem.setMnemonic(getMnemonicKeycode("OpenWorkspaceMnemonic"));
 		openWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
 				
 		saveWorkspaceItem = new JMenuItem(controlService.getTranslatedString("SaveWorkspace"));
-		saveWorkspaceItem.setMnemonic('s');
+		saveWorkspaceItem.setMnemonic(getMnemonicKeycode("SaveWorkspaceMnemonic"));
 		saveWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
 				
 		closeWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CloseWorkspace"));
-		closeWorkspaceItem.setMnemonic('l');
+		closeWorkspaceItem.setMnemonic(getMnemonicKeycode("CloseWorkspaceMnemonic"));
 				
 		JSeparator separator = new JSeparator();		
 		exitItem = new JMenuItem(controlService.getTranslatedString("Exit"));
-		exitItem.setMnemonic('x');
+		exitItem.setMnemonic(getMnemonicKeycode("ExitMnemonic"));
 		
 		this.add(createWorkspaceItem);
 		this.add(openWorkspaceItem);
@@ -137,7 +137,18 @@ public class FileMenu extends JMenu {
 				saveWorkspaceItem.setText(controlService.getTranslatedString("SaveWorkspace"));
 				closeWorkspaceItem.setText(controlService.getTranslatedString("CloseWorkspace"));
 				exitItem.setText(controlService.getTranslatedString("Exit"));
+				createWorkspaceItem.setMnemonic(getMnemonicKeycode("CreateWorkspaceMnemonic"));
+				openWorkspaceItem.setMnemonic(getMnemonicKeycode("OpenWorkspaceMnemonic"));
+				saveWorkspaceItem.setMnemonic(getMnemonicKeycode("SaveWorkspaceMnemonic"));
+				closeWorkspaceItem.setMnemonic(getMnemonicKeycode("CloseWorkspaceMnemonic"));
+				exitItem.setMnemonic(getMnemonicKeycode("ExitMnemonic"));
 			}
 		});
+	}
+	
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
 	}
 }

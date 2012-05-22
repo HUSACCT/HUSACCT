@@ -1,4 +1,7 @@
 package husacct.control.presentation;
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.control.ILocaleChangeListener;
 import husacct.control.presentation.menubar.AnalyseMenu;
 import husacct.control.presentation.menubar.DefineMenu;
 import husacct.control.presentation.menubar.FileMenu;
@@ -20,12 +23,14 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Locale;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -47,6 +52,14 @@ public class MainGui extends JFrame{
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
 	private ToolBar toolBar;
+	private FileMenu fileMenu;
+	private DefineMenu defineMenu;
+	private AnalyseMenu analyseMenu;
+	private ValidateMenu validateMenu;
+	private LanguageMenu languageMenu;
+	private HelpMenu helpMenu;
+	
+	IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public MainGui(MainController controller) {
 		this.mainController = controller;
@@ -116,24 +129,35 @@ public class MainGui extends JFrame{
 				return false;
 			}
 		});
+		
+		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			public void update(Locale newLocale) {
+				fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
+				defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
+				analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
+				validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
+				languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
+				helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
+			}
+		});
 	}
 	
 	private void createMenuBar() {
 		this.menuBar = new JMenuBar();
 		
-		FileMenu fileMenu = new FileMenu(mainController);
-		DefineMenu defineMenu = new DefineMenu(mainController);
-		AnalyseMenu analyseMenu = new AnalyseMenu(mainController);
-		ValidateMenu validateMenu = new ValidateMenu(mainController);
-		LanguageMenu languageMenu = new LanguageMenu(mainController);
-		HelpMenu helpMenu = new HelpMenu(mainController);
+		fileMenu = new FileMenu(mainController);
+		defineMenu = new DefineMenu(mainController);
+		analyseMenu = new AnalyseMenu(mainController);
+		validateMenu = new ValidateMenu(mainController);
+		languageMenu = new LanguageMenu(mainController);
+		helpMenu = new HelpMenu(mainController);
 
-		fileMenu.setMnemonic('F');
-		defineMenu.setMnemonic('D');
-		analyseMenu.setMnemonic('A');
-		validateMenu.setMnemonic('V');
-		languageMenu.setMnemonic('L');
-		helpMenu.setMnemonic('H');
+		fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
+		defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
+		analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
+		validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
+		languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
+		helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
 		
 		menuBar.add(fileMenu);
 		menuBar.add(defineMenu);
@@ -166,4 +190,10 @@ public class MainGui extends JFrame{
 		setTitle("");
 	}
 
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
+	}
+	
 }
