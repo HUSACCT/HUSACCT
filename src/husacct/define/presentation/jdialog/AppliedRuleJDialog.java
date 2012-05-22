@@ -300,15 +300,9 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 		
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
-		long moduleFromId = (Long) ruleDetails.get("moduleFromId");
-		long moduleToId = (Long) ruleDetails.get("moduleToId");
-		boolean isEnabled = (Boolean) ruleDetails.get("enabled");
-		String description = (String) ruleDetails.get("description");
-		String regex = (String) ruleDetails.get("regex");
-		//TODO dependencies
-		String[] dependencies = new String[]{};
+		ruleDetails.put("ruleTypeKey", ruleTypeKey);
 		
-		this.appliedRuleController.save(ruleTypeKey, description,dependencies, regex, moduleFromId, moduleToId, isEnabled);
+		this.appliedRuleController.save(ruleDetails);
 		this.dispose();
 	}
 	
