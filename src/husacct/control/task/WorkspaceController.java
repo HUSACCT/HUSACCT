@@ -2,10 +2,11 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
+import husacct.control.IControlService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.workspace.CreateWorkspaceDialog;
-import husacct.control.presentation.workspace.OpenWorkspaceFrame;
-import husacct.control.presentation.workspace.SaveWorkspaceFrame;
+import husacct.control.presentation.workspace.OpenWorkspaceDialog;
+import husacct.control.presentation.workspace.SaveWorkspaceDialog;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -20,12 +21,13 @@ import org.jdom2.Element;
 public class WorkspaceController {
 
 	private Logger logger = Logger.getLogger(WorkspaceController.class);
-	private static Workspace currentWorkspace;
+	private Workspace currentWorkspace;
 
-	private static MainController mainController;
+	private MainController mainController;
 	
 	public WorkspaceController(MainController mainController){
-		WorkspaceController.mainController = mainController;
+		this.mainController = mainController;
+		currentWorkspace = null;
 	}
 
 	public void showCreateWorkspaceGui() {
@@ -33,35 +35,40 @@ public class WorkspaceController {
 	}
 	
 	public void showOpenWorkspaceGui() {
-		new OpenWorkspaceFrame(mainController);
+		new OpenWorkspaceDialog(mainController);
 	}
 	
-	public SaveWorkspaceFrame showSaveWorkspaceGui() {
-		return new SaveWorkspaceFrame(mainController);
+	public SaveWorkspaceDialog showSaveWorkspaceGui() {
+		return new SaveWorkspaceDialog(mainController);
 	}
 	
 	public void createWorkspace(String name){
+		logger.debug("New workspace: " + name);
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
-		WorkspaceController.currentWorkspace = workspace;
+		currentWorkspace = workspace;
 		if(mainController.guiEnabled) mainController.getMainGui().setTitle(name);
 	}
 	
 	public void closeWorkspace() {
-		WorkspaceController.currentWorkspace = null;
-		if(mainController.guiEnabled) mainController.getMainGui().setTitle("");
+		currentWorkspace = null;
+		if(mainController.guiEnabled) {
+			mainController.getMainGui().setTitle("");
+			mainController.getViewController().closeAll();
+		}
+		ServiceProvider.getInstance().resetServices();
 	}
 	
-	public void saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
+	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
-		workspaceResource.save(document, dataValues);
+		return workspaceResource.save(document, dataValues);
 	}
 	
-	public void loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
+	public boolean loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document doc = workspaceResource.load(dataValues);
-		loadWorkspace(doc);
+		return loadWorkspace(doc);
 	}
 	
 	public Document getWorkspaceData(){
@@ -84,19 +91,27 @@ public class WorkspaceController {
 		return doc;
 	}
 
-	public void loadWorkspace(Document document){
-		List<ISaveable> savableServices = getSaveableServices();
-		if(document.hasRootElement()){
-			Element rootElement = document.getRootElement();
-			for(ISaveable service : savableServices){
-				String serviceName = service.getClass().getName();
-				List<Element> elementQuery = rootElement.getChildren(serviceName);
-				for(Element serviceDataContainer : elementQuery){
-					Element serviceData = serviceDataContainer.getChildren().get(0); 
-					service.loadWorkspaceData(serviceData);
+	public boolean loadWorkspace(Document document){
+		try {
+			List<ISaveable> savableServices = getSaveableServices();
+			if(document.hasRootElement()){
+				Element rootElement = document.getRootElement();
+				for(ISaveable service : savableServices){
+					String serviceName = service.getClass().getName();
+					List<Element> elementQuery = rootElement.getChildren(serviceName);
+					for(Element serviceDataContainer : elementQuery){
+						Element serviceData = serviceDataContainer.getChildren().get(0); 
+						service.loadWorkspaceData(serviceData);
+					}
 				}
 			}
+			return true;
+		} catch (Exception exception){
+			String message = "Unable to load workspacedata\n" + exception.getMessage();
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			controlService.showErrorMessage(message);
 		}
+		return false;
 	}
 	
 	private List<ISaveable> getSaveableServices() {
@@ -124,19 +139,19 @@ public class WorkspaceController {
 		return saveableServices;
 	}
 	
-	public static boolean isOpenWorkspace(){
-		if(WorkspaceController.currentWorkspace != null){
+	public boolean isOpenWorkspace(){
+		if(currentWorkspace != null){
 			return true;
 		}
 		return false;
 	}
 	
-	public static Workspace getCurrentWorkspace(){
-		return WorkspaceController.currentWorkspace;
+	public Workspace getCurrentWorkspace(){
+		return currentWorkspace;
 	}
 
-	public static void setWorkspace(Workspace workspace) {
-		WorkspaceController.currentWorkspace = workspace;
+	public void setWorkspace(Workspace workspace) {
+		currentWorkspace = workspace;
 		if(mainController != null && mainController.guiEnabled) {
 			mainController.getMainGui().setTitle(workspace.getName());
 		}

@@ -1,14 +1,21 @@
 package husacct.graphics.task;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.control.IControlService;
+import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.LayeredLayoutStrategy;
+import husacct.graphics.task.layout.LayoutStrategy;
+
+import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 
@@ -16,27 +23,35 @@ import org.apache.log4j.Logger;
 
 public abstract class DrawingController implements UserInputListener {
 
-	public final int ITEMS_PER_ROW = 3;
-
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
 	protected String currentPath = "";
 	private boolean isViolationsShown = false;
 
+	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
 
 	protected FigureFactory figureFactory;
 	protected FigureConnectorStrategy connectionStrategy;
-	protected BasicLayoutStrategy layoutStrategy;
+	protected LayoutStrategy layoutStrategy;
 
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
-		
+
 		initializeComponents();
+
+		controlService = ServiceProvider.getInstance().getControlService();
+		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			@Override
+			public void update(Locale newLocale) {
+				refreshFrame();
+				refreshDrawing();
+			}
+		});
 	}
 
 	private void initializeComponents() {
@@ -47,7 +62,8 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 
-		layoutStrategy = new BasicLayoutStrategy(drawing);
+		layoutStrategy = new LayeredLayoutStrategy(drawing);
+//		layoutStrategy = new BasicLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
@@ -82,11 +98,13 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void hideViolations() {
 		isViolationsShown = false;
+		drawTarget.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	public void showViolations() {
 		isViolationsShown = true;
+		drawTarget.turnOnViolations();
 	}
 
 	protected DrawingDetail getCurrentDrawingDetail() {
@@ -117,20 +135,45 @@ public abstract class DrawingController implements UserInputListener {
 			drawTarget.hidePropertiesPane();
 		}
 	}
-	
+
 	public abstract void drawArchitecture(DrawingDetail detail);
 
-	protected void drawModules(AbstractDTO[] modules) {
+	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
+		
+		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.updateGUI();
+		
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-		drawTarget.setCurrentPathAndUpdateGUI(getCurrentPath());
-		layoutStrategy.doLayout(ITEMS_PER_ROW);
+		
+		// ATTN: The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
+		// are done specifically in that order for a reason!
+		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
+		// after updating the layout of the drawing. 
+		// To solve this we first draw the entire drawing, update the layout and then 
+		// remove all the lines and re-add them to the drawing. 
+		// As it's currently unknown what causes the bug or how to solve it and the
+		// deadline for Construction II is approaching, we have decided to go with a 
+		// work around. However, this bug should be fixed as soon as possible. 
+		drawLinesBasedOnSetting();
+		
+		updateLayout();
+		
+		drawLinesBasedOnSetting();
 	}
 
+	protected void updateLayout() {
+		int width = drawTarget.getWidth();
+		int height = drawTarget.getHeight();
+
+		layoutStrategy.doLayout(width, height);
+	}
+
+	@Override
 	public void toggleViolations() {
 		if (areViolationsShown()) {
 			hideViolations();
@@ -140,18 +183,13 @@ public abstract class DrawingController implements UserInputListener {
 		drawLinesBasedOnSetting();
 	}
 
-	@Override
-	public void exportToImage() {
-		drawing.showExportToImagePanel();
-	}
-
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
 		drawDependenciesForShownModules();
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		drawing.resizeRelationFigures();
+		drawing.updateLineFigureToContext();
 	}
 
 	public void drawDependenciesForShownModules() {
@@ -191,7 +229,7 @@ public abstract class DrawingController implements UserInputListener {
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
 		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureFrom);
 		if (violations.length > 0) {
-			figureFrom.setViolated(true);
+			figureFrom.addDecorator(figureFactory.createViolationsDecorator(violations));
 			figureMap.linkViolatedModule(figureFrom, violations);
 		}
 	}
@@ -207,4 +245,15 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	protected abstract ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo);
+
+	public abstract void refreshDrawing();
+
+	public void refreshFrame() {
+		drawTarget.refreshFrame();
+	}
+
+	@Override
+	public void exportToImage() {
+		drawing.showExportToImagePanel();
+	}
 }

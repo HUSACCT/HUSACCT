@@ -7,14 +7,18 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ImportViolations {
+	private Logger logger = Logger.getLogger(ImportViolations.class);
+	
 	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
 		List<Violation> violations = new ArrayList<Violation>();
 		for(Element violationElement : violationsElement.getChildren()) {
@@ -34,12 +38,29 @@ public class ImportViolations {
 			violation.setLogicalModules(getLogicalModules(violationElement.getChild("logicalModules")));
 			violation.setMessage(getMessage(violationElement.getChild("message")));
 			violation.setIndirect(Boolean.parseBoolean(violationElement.getChildText("isIndirect")));
-			violation.setOccured(DatatypeFactory.newInstance().newXMLGregorianCalendar(violationElement.getChildText("occured")).toGregorianCalendar());
+			
+			final String stringCalendar = violationElement.getChildText("occured");
+			violation.setOccured(getCalendar(stringCalendar));
+			
 			violations.add(violation);
 		}
-		
 		return violations;
 	}
+
+	private Calendar getCalendar(String stringCalendar){
+		Calendar calendar = Calendar.getInstance();
+		try{
+			calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(stringCalendar).toGregorianCalendar();
+		}
+		catch(IllegalArgumentException e){
+			logger.error(String.format("%s is not a valid datetime, switching back to current datetime", stringCalendar));
+		} catch (DatatypeConfigurationException e) {
+			logger.error(e.getMessage());
+		}
+		return calendar;
+	}
+
+
 	private LogicalModules getLogicalModules(Element logicalModulesElement) {
 		Element logicalModuleFromElement = logicalModulesElement.getChild("logicalModuleFrom");
 		Element logicalModuleToElement = logicalModulesElement.getChild("logicalModuleTo");
@@ -49,7 +70,7 @@ public class ImportViolations {
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 		return logicalModules;
 	}
-	
+
 	private Message getMessage(Element messageElement) {
 		Element logicalModulesElement = messageElement.getChild("logicalModules");
 		LogicalModules logicalModules = getLogicalModules(logicalModulesElement);
@@ -69,5 +90,5 @@ public class ImportViolations {
 		Message message = new Message(logicalModules, ruleKey, violationTypeKeysList, exceptionMessages);
 		return message;
 	}
-	
+
 }

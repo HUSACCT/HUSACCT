@@ -3,7 +3,7 @@ package husacct.validate.domain.factory.ruletype;
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.RuleInstantionException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
 import husacct.validate.domain.exception.SeverityNotFoundException;
@@ -44,7 +44,7 @@ public class RuleTypesFactory {
 		this.mainRuleTypes = ruletypegenerator.generateRules(RuleTypes.mainRuleTypes);
 	}
 
-	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){	
+	public HashMap<String, List<RuleType>> getRuleTypes(String programmingLanguage){
 		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
 		return extractCategoriesFromRuleType(ruleTypes);
 	}

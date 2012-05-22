@@ -2,8 +2,9 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.JFrameSoftwareUnit;
+import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -33,7 +34,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements ActionListener, Observer, ILocaleChangeListener {
+public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JTableSoftwareUnits softwareUnitsTable;
@@ -110,8 +111,8 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		if (DefinitionController.getInstance().isAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
-				JFrameSoftwareUnit softwareUnitFrame = new JFrameSoftwareUnit(moduleId);
-				softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
+				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
+				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(this, DefineTranslator.translate("ModuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
@@ -138,18 +139,15 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	
 	public void updateSoftwareUnitTable() {
 		try {
+			JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
+			atm.getDataVector().removeAllElements();
+			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all components from the service
 				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule();
-
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) softwareUnitsTable.getModel();
-
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
 				
 				if (softwareUnitNames != null) {
 					for (String softwareUnitName : softwareUnitNames) {

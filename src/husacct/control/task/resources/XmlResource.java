@@ -27,7 +27,7 @@ public class XmlResource implements IResource{
 		return doc;
 	}
 	
-	public void save(Document doc, HashMap<String, Object> dataValues) {
+	public boolean save(Document doc, HashMap<String, Object> dataValues) {
 		
 		File file = (File) dataValues.get("file");
 		try {
@@ -35,10 +35,12 @@ public class XmlResource implements IResource{
 			XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
 			xout.output(doc, outputStream);
 			outputStream.close();
+			return true;
 		} catch (Exception e){
 			logger.error(e.getMessage());
 			new RuntimeException(e);
 		}
+		return false;
 	}
 
 }

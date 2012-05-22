@@ -6,17 +6,12 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
-
-import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
 public class AnalysedController extends DrawingController {
-	private IControlService controlService;
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
 	private Logger logger = Logger.getLogger(AnalysedController.class);
@@ -24,54 +19,42 @@ public class AnalysedController extends DrawingController {
 	public AnalysedController() {
 		super();
 		initializeServices();
-		
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			@Override
-			public void update(Locale newLocale) {
-				refreshDrawing();
-			}
-		});		
 	}
-	
+
 	private void initializeServices() {
-		controlService = ServiceProvider.getInstance().getControlService();
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 	}
-	
+
 	@Override
 	public void refreshDrawing() {
 		getAndDrawModulesIn(getCurrentPath());
 	}
-	
-	public void showViolations(){
+
+	@Override
+	public void showViolations() {
 		super.showViolations();
-		try{
-			validateService.checkConformance();
-		}catch(NullPointerException e){
-			logger.warn("NullPointerException, I think the validate service isn't started.");
-		}
+		validateService.checkConformance();
 	}
 
+	@Override
 	public void drawArchitecture(DrawingDetail detail) {
 		AbstractDTO[] modules = analyseService.getRootModules();
 		resetCurrentPath();
-		drawModules(modules);
-
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			showViolations();
 		}
-		drawLinesBasedOnSetting();
+		drawModulesAndLines(modules);
 	}
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
 		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
-		if(!dtoFrom.uniqueName.equals(dtoTo.uniqueName)){
+		if (!figureFrom.equals(figureTo)) {
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
-		return new DependencyDTO[]{};
+		return new DependencyDTO[] {};
 	}
 
 	@Override
@@ -91,7 +74,7 @@ public class AnalysedController extends DrawingController {
 				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
 				getAndDrawModulesIn(parentDTO.uniqueName);
 			} catch (Exception e) {
-				logger.debug("Could not zoom on this object: " + figure);
+				logger.warn("Could not zoom on this object: " + figure);
 				logger.debug("Possible type cast failure.");
 			}
 		}
@@ -103,24 +86,30 @@ public class AnalysedController extends DrawingController {
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
 		} else {
-			logger.debug("Tried to zoom out from " + getCurrentPath() + ", but it has no parent.");
+			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		setCurrentPath(parentName);
 		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
-		if (children.length > 0) {
-			drawModules(children);
-			drawLinesBasedOnSetting();
+		if (parentName.equals("")) {
+			drawArchitecture(getCurrentDrawingDetail());
+		} else if (children.length > 0) {
+			setCurrentPath(parentName);
+			drawModulesAndLines(children);
 		} else {
-			logger.debug("Tried to draw modules for " + parentName + ", but it has no children.");
+			logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
 		}
 	}
 
+	@Override
 	public void moduleOpen(String path) {
-		getAndDrawModulesIn(path);
+		if(path.isEmpty()){
+			drawArchitecture(getCurrentDrawingDetail());
+		}else{
+			getAndDrawModulesIn(path);
+		}
 	}
 }

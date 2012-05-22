@@ -9,7 +9,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ClassFigure extends NamedFigure {
+public class ClassFigure extends BaseFigure {
 
 	private static final long serialVersionUID = -468596930534802557L;
 	protected RectangleFigure top, middle, bottom;
@@ -19,7 +19,7 @@ public class ClassFigure extends NamedFigure {
 	public static final int MIN_HEIGHT = 80;
 
 	public ClassFigure(String name) {
-		super(name, false);
+		super(name);
 
 		top = new RectangleFigure();
 		middle = new RectangleFigure();
@@ -31,11 +31,11 @@ public class ClassFigure extends NamedFigure {
 		children.add(middle);
 		children.add(classNameText);
 		children.add(bottom);
-		
+
 		set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 	}
-	
+
 	public TextFigure getClassNameText() {
 		return this.classNameText;
 	}
@@ -56,10 +56,8 @@ public class ClassFigure extends NamedFigure {
 		double topHeight = totalHeight - middleHeight - bottomHeight;
 
 		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y + topHeight));
-		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight), new Point2D.Double(anchor.x + width,
-				anchor.y + topHeight + middleHeight));
-		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight + middleHeight), new Point2D.Double(anchor.x
-				+ width, anchor.y + topHeight + middleHeight + bottomHeight));
+		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight));
+		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight + middleHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight + bottomHeight));
 
 		// textbox centralising
 		double plusX = ((top.getBounds().width - this.classNameText.getBounds().width) / 2);

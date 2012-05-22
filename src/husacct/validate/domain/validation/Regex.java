@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	public String makeRegexString(String regexpath){
+	public static String makeRegexString(String regexpath){
 		if(regexpath.endsWith("**")){
 			return "^" + regexpath.replaceAll("\\.", "\\\\.").replaceAll("\\*\\*", ".*") + "$";
 		} else if(regexpath.endsWith("*")){
@@ -27,7 +27,7 @@ public class Regex {
 		}
 	}
 
-	public Boolean matchRegex(String regex, String value){
+	public static boolean matchRegex(String regex, String value){
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(value);
 		while (matcher.find()) {

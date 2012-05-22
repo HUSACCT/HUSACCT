@@ -19,14 +19,18 @@ public class ImportActiveViolationTypes {
 			for(Element ruleTypeElement : activeViolationTypeElement.getChildren()) {				
 				final String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
 				ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey);
-				
+				activeRuleTypes.add(activeRuleType);
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
-				for(Element violationTypeElement : ruleTypeElement.getChildren()) {
-					final String violationTypeKey = violationTypeElement.getChildText("type");
-					final boolean enabled = Boolean.parseBoolean(violationTypeElement.getChildText("enabled"));
-					ActiveViolationType activeViolationType = new ActiveViolationType(violationTypeKey, enabled);
-					activeViolationTypes.add(activeViolationType);
+				Element violationTypesElement = ruleTypeElement.getChild("violationTypes");
+				if(violationTypesElement != null){
+					for(Element violationTypeElement : violationTypesElement.getChildren("violationType")){
+						final String violationTypeKey = violationTypeElement.getChildText("violationKey");
+						final boolean enabled = Boolean.parseBoolean(violationTypeElement.getChildText("enabled"));
+						ActiveViolationType activeViolationType = new ActiveViolationType(violationTypeKey, enabled);
+						activeViolationTypes.add(activeViolationType);
+					}
 				}
+
 				activeRuleType.setViolationTypes(activeViolationTypes);
 			}
 			activeRuleTypesMap.put(activeViolationTypeElement.getAttributeValue("language"), activeRuleTypes);

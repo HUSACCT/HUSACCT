@@ -5,13 +5,14 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.ConfigurationServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
@@ -30,7 +31,8 @@ public abstract class RuleType {
 	protected AbstractViolationType violationtypefactory;
 	protected List<Violation> violations;
 	protected Mappings mappings;
-	
+	protected List<Mapping> physicalClasspathsFrom;
+		
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
@@ -78,11 +80,11 @@ public abstract class RuleType {
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
 
 	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
-		return new Violation(dependency.lineNumber, severity, ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
+			return new Violation(dependency.lineNumber, severity.clone(), ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
 	}
 
-	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity){
-		return new Violation(0, severity, ruleKey, "", from, "", inDirect, message, logicalModules);		
+	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity) {
+		return new Violation(0, severity.clone(), ruleKey, "", from, "", inDirect, message, logicalModules);		
 	}
 
 	protected Severity getViolationTypeSeverity(String violationTypeKey){

@@ -6,18 +6,21 @@ public enum CSharpViolationTypes implements IViolationType {
 	INVOC_METHOD("InvocMethod", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	INVOC_CONSTRUCTOR("InvocConstructor", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	ACCESS_PROPERTY_OR_FIELD("AccessPropertyOrField", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	EXTENDS_CONCRETE("ExtendsConcrete", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	EXTENDS_ABSTRACT("ExtendsAbstract", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+	EXTENDS("Extends", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
+	DELEGATE("Delegate", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	IMPLEMENTS("Implements", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	DECLARATION("Declaration", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	ANNOTATION("Annotation", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	IMPORT("Import", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	EXCEPTION("Exception", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
-	
+
 	PUBLIC("public", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	PROTECTED("protected", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.MEDIUM),
 	DEFAULT("default", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
-	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW);
+	PRIVATE("private", ViolationCategories.ACCESS_MODIFIERS, DefaultSeverities.LOW),
+
+	PACKAGE("package", ViolationCategories.PACKAGING, DefaultSeverities.LOW),
+	CLASS("class", ViolationCategories.PACKAGING, DefaultSeverities.LOW);
 
 	private final String key;
 	private final DefaultSeverities defaultSeverity;

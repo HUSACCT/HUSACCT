@@ -2,8 +2,9 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.AddModuleValuesJFrame;
+import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
@@ -26,7 +27,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
+public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 
@@ -140,10 +141,10 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == this.newModuleButton) {
 			this.newModule();
-		} else if (action.getSource() == this.moveModuleUpButton) {
-			this.moveLayerUp();
 		} else if (action.getSource() == this.removeModuleButton) {
 			this.removeModule();
+		} else if (action.getSource() == this.moveModuleUpButton) {
+			this.moveLayerUp();
 		} else if (action.getSource() == this.moveModuleDownButton) {
 			this.moveLayerDown();
 		}
@@ -151,8 +152,8 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	}
 	
 	private void newModule() {
-		AddModuleValuesJFrame addModuleFrame = new AddModuleValuesJFrame(this);
-		addModuleFrame.setLocationRelativeTo(addModuleFrame.getRootPane());
+		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
+		DialogUtils.alignCenter(addModuleFrame);
 		addModuleFrame.initUI();
 	}
 	
@@ -166,7 +167,6 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 			if (confirm) {
 				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);
-				this.updateModuleTree();
 			}
 		}
 	}

@@ -1,31 +1,35 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
-import husacct.define.domain.AppliedRule;
+import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.abstraction.language.DefineTranslator;
+import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
-import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jframe.JFrameAppliedRule;
+import husacct.define.presentation.jdialog.AppliedRuleJDialog;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.DefineComponentFactory;
+import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.Observer;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-
 public class AppliedRuleController extends PopUpController {
 
-	private JFrameAppliedRule jframeAppliedRule;
+	private AppliedRuleJDialog jframeAppliedRule;
 	private long currentAppliedRuleId;
 	private String selectedRuleTypeKey;
 	private ArrayList<HashMap<String, Object>> exceptionRules = new ArrayList<HashMap<String, Object>>();
@@ -33,6 +37,8 @@ public class AppliedRuleController extends PopUpController {
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
 	private AppliedRuleExceptionDomainService appliedRuleExceptionService;
+	
+	private Long moduleToId;
 
 	public AppliedRuleController(long moduleId, long appliedRuleId) {
 		super();
@@ -93,16 +99,14 @@ public class AppliedRuleController extends PopUpController {
 			//Get currently selected RuleType
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
 				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
+					if (ruleTypeDTO.exceptionRuleTypes.length == 0){ throw new RuntimeException("No exception keys found for ruletype: " + selectedRuleTypeKey);}
+					
 					//Fill combobox with exceptionruletypes of that rule
 					ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 					ArrayList<String> ruleTypeValues = new ArrayList<String>();
 					
 					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
 						ruleTypeKeys.add(ruleDTO.key);
-					}
-							
-					//Get the correct display value for each ruletypekey from the resourcebundle
-					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
 						String value = DefineTranslator.translate(ruleDTO.key);
 						ruleTypeValues.add(value);
 					}
@@ -112,44 +116,38 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 	
-	public ComboBoxModel loadModulesToCombobox() {
-		ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
-		// loading of all layers
-		ArrayList<Long> moduleIds = this.moduleService.getRootModulesIds();
-
-		if (moduleIds != null) {
-			// Remove the current layer from the list
-			moduleIds.remove(getModuleId());
-
-			ArrayList<DataHelper> layernames = new ArrayList<DataHelper>();
-			for (long moduleId : moduleIds) {
+	public ArrayList<DataHelper> getSiblingModules(long moduleId){
+		ArrayList<Long> moduleIds = new ArrayList<Long>();
+		for (Long modId : this.moduleService.getSiblingModuleIds(moduleId)){
+			moduleIds.addAll(this.moduleService.getSubModuleIds(modId));
+		}
+		
+		ArrayList<DataHelper> moduleNames = new ArrayList<DataHelper>();
+		for (long modId : moduleIds) {
+			if (modId != getCurrentModuleId()){
+				DataHelper datahelper = new DataHelper();
+				datahelper.setId(modId);
+				datahelper.setValue("" + this.moduleService.getModuleNameById(modId));
+				moduleNames.add(datahelper);
+			}
+		}
+		return moduleNames;
+	}
+	
+	public ArrayList<DataHelper> getChildModules(long parentModuleId){
+		ArrayList<Long> moduleIds = this.moduleService.getSubModuleIds(parentModuleId);
+		ArrayList<DataHelper> moduleNames = new ArrayList<DataHelper>();
+		for (long moduleId : moduleIds) {
+			if (moduleId != getCurrentModuleId()){
 				DataHelper datahelper = new DataHelper();
 				datahelper.setId(moduleId);
 				datahelper.setValue("" + this.moduleService.getModuleNameById(moduleId));
-				layernames.add(datahelper);
+				moduleNames.add(datahelper);
 			}
-
-			comboBoxModel = new DefaultComboBoxModel(layernames.toArray());
 		}
-		return comboBoxModel;
+		return moduleNames;
 	}
 	
-	public ComboBoxModel loadsubModulesToCombobox(Long parentModuleId) {
-		ComboBoxModel comboBoxModel = new DefaultComboBoxModel();
-		// loading of all layers
-		ArrayList<Long> moduleIds = this.moduleService.getSubModuleIds(parentModuleId);
-
-		ArrayList<DataHelper> layernames = new ArrayList<DataHelper>();
-		for (long moduleId : moduleIds) {
-			DataHelper datahelper = new DataHelper();
-			datahelper.setId(moduleId);
-			datahelper.setValue("" + this.moduleService.getModuleNameById(moduleId));
-			layernames.add(datahelper);
-		}
-
-		comboBoxModel = new DefaultComboBoxModel(layernames.toArray());
-		return comboBoxModel;
-	}
 	/*
 	 * Getters & Setters
 	 */
@@ -174,11 +172,57 @@ public class AppliedRuleController extends PopUpController {
 		long currentModuleId = getModuleId();
 		return currentModuleId;
 	}
+	
+	public Long getModuleToId(){
+		return moduleToId;
+	}
+	
+	public void setModuleToId(Long moduleToId){
+		this.moduleToId = moduleToId;
+	}
 
+	public ArrayList<ViolationTypeDTO> getViolationTypesByRuleType(String ruleTypeKey){
+		ArrayList<ViolationTypeDTO> violationTypeDtoList = new ArrayList<ViolationTypeDTO>();
+		
+		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
+		
+		for (CategoryDTO categorie : categories){
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			//Get currently selected RuleType
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				if (ruleTypeDTO.key.equals(ruleTypeKey)){
+					for (ViolationTypeDTO vt : ruleTypeDTO.violationTypes){
+						violationTypeDtoList.add(vt);
+					}
+//						violationTypeDtoList = (ArrayList<ViolationTypeDTO>) Arrays.asList(ruleTypeDTO.violationTypes);
+				}
+			}
+		}
+		return violationTypeDtoList;
+	}
 	/*
 	 * Saving
 	 */
 	public void save(String ruleTypeKey, String description, String[] dependencies, String regex,long moduleFromId, long moduleToId, boolean isEnabled) {
+		//SUPER HOTFIX
+		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
+		
+		for (CategoryDTO categorie : categories){
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			//Get currently selected RuleType
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
+					ArrayList<String> tmpList = new ArrayList<String>();
+					
+					for (ViolationTypeDTO vt : ruleTypeDTO.violationTypes){
+						tmpList.add(vt.key.toString());
+					}	
+					dependencies = tmpList.toArray(new String[tmpList.size()]);
+				}
+			}
+		}
+		
+		
 		try {
 			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
 				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFromId, moduleToId, isEnabled);
@@ -220,7 +264,7 @@ public class AppliedRuleController extends PopUpController {
 	}
 	
 	/**
-	 * This function will load notify all to update their data
+	 * This function will notify all observers to update their data
 	 */
 	public void notifyObservers(long currentAppliedRuleId){
 		for (Observer o : this.observers){
@@ -243,34 +287,54 @@ public class AppliedRuleController extends PopUpController {
 		return ruleDetails;
 	}
 	
-//		logger.info("Removing software unit " + softwareUnitName);
-//		try {
-//			long moduleId = getSelectedModuleId();
-//
-//			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
-//				// Ask the user if he is sure to remove the software unit
-//				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, "Are you sure you want to remove software unit: \"" + softwareUnitName + "\"", "Remove?");
-//				if (confirm) {
-//					// Remove the software unit
-//					JPanelStatus.getInstance("Removing software unit").start();
-//					DefineDomainService.getInstance().removeSoftwareUnit(moduleId, softwareUnitName);
-//					// Update the software unit table
-//					this.notifyObservers();
-//				}
-//			}
-//		} catch (Exception e) {
-//			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
-//			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-//		} finally {
-//			JPanelStatus.getInstance().stop();
-//		}
-
-	
 	public ArrayList<HashMap<String, Object>> getExceptionRules(){
 		return exceptionRules;
 	}
 
 	public String getModuleName(Long moduleIdFrom) {
 		return this.moduleService.getModuleNameById(moduleIdFrom);
+	}
+	
+	public AbstractCombinedComponent getModuleTreeComponents() {
+		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
+		ArrayList<Module> modules = this.moduleService.getSortedModules();
+		for (Module module : modules) {
+			this.addDefineModuleChildComponents(rootComponent, module);
+		}
+		//TODO HERE
+		for(AnalysedModuleDTO moduleDTO : this.getAnalyzedModules()) {
+			this.addAnalyzedModuleChildComponents(rootComponent, moduleDTO);
+		}
+		return rootComponent;
+	}
+	
+	private void addDefineModuleChildComponents(AbstractCombinedComponent parentComponent, Module module) {
+		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
+		for(Module subModule : module.getSubModules()) {
+			this.addDefineModuleChildComponents(childComponent, subModule);
+		}
+		parentComponent.addChild(childComponent);
+	}
+	
+	private AnalysedModuleDTO[] getAnalyzedModules() {
+		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
+		return modules;
+	}
+	
+	private void addAnalyzedModuleChildComponents(AbstractCombinedComponent parentComponent, AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		for(AnalysedModuleDTO subModule : children) {
+			this.addAnalyzedModuleChildComponents(childComponent, subModule);
+		}
+		parentComponent.addChild(childComponent);
+	}
+
+	public boolean isAnalysed() {
+		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
+	}
+
+	public void clearRuleExceptions() {
+		this.exceptionRules.clear();
 	}
 }

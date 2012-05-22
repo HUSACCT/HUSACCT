@@ -2,8 +2,9 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
-import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.CheckConformanceUtilSeverity;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
@@ -31,14 +32,14 @@ public class MustUseRule extends RuleType{
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtil.filter(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		int counter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), currentRule.violationTypeKeys);
 				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
@@ -47,7 +48,7 @@ public class MustUseRule extends RuleType{
 
 				LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-				Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, null);
+				Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, null);
 				Violation violation = createViolation(super.key, classPathFrom.getPhysicalPath(), false, message, logicalModules, severity);
 				violations.add(violation);
 			}

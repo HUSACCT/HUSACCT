@@ -23,216 +23,202 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends NamedFigure 
-		implements ConnectionFigure, FigureListener
-{
+public class RelationFigure extends BaseFigure implements ConnectionFigure, FigureListener {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
+	private RoundedLiner lineType;
 	private TextFigure amountFigure;
 
-	public RelationFigure(String name, boolean violated, int amount)
-	{		
-		super(name, violated);
-		
-		this.line = new LineConnectionFigure();
-		this.add(this.line);
+	public RelationFigure(String name, boolean violated, int amount, double distance) {
+		super(name);
 
-		this.amountFigure = new TextFigure(Integer.toString(amount));
-		this.add(this.amountFigure);
-		
+		lineType = new RoundedLiner(distance);
+		line = new LineConnectionFigure();
+		line.setLiner(lineType);
+		add(line);
+
+		amountFigure = new TextFigure(Integer.toString(amount));
+		add(amountFigure);
+
 		line.addFigureListener(this);
 	}
-	
-	
+
+	public RelationFigure(String name, boolean violated, int amount) {
+		this(name, violated, amount, 0);
+	}
+
+	public void setDistance(double distance) {
+		willChange();
+		lineType.setDistance(distance);
+		changed();
+	}
+
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
 		line.updateConnection();
-		this.relayout();
+		relayout();
 	}
 
-	private void relayout() {		
-		double midX = line.getBounds().x + line.getBounds().width/2;
-		double midY = line.getBounds().y + line.getBounds().height/2;
-		
-		this.amountFigure.willChange();
-		this.amountFigure.setBounds(new Point2D.Double(midX, midY), null);
-		this.amountFigure.changed();
+	private void relayout() {
+		double midX = line.getBounds().x + line.getBounds().width / 2;
+		double midY = line.getBounds().y + line.getBounds().height / 2;
+
+		amountFigure.willChange();
+		amountFigure.setBounds(new Point2D.Double(midX, midY), null);
+		amountFigure.changed();
 	}
-	
-	public void transform(AffineTransform tx) {		
+
+	public void transform(AffineTransform tx) {
 		line.updateConnection();
-		this.relayout();
+		relayout();
 	}
-	
+
 	public void setLineColor(Color newColor) {
 		set(AttributeKeys.STROKE_COLOR, newColor);
-		this.amountFigure.set(AttributeKeys.TEXT_COLOR, newColor);
+		amountFigure.set(AttributeKeys.TEXT_COLOR, newColor);
 	}
-	
+
 	public void setLineThickness(double thickness) {
 		set(AttributeKeys.STROKE_WIDTH, thickness);
 	}
-	
+
 	@Override
 	public void draw(Graphics2D graphics) {
-		if(this.isViolated()) {
-			this.amountFigure.set(AttributeKeys.TEXT_COLOR, this.getViolatedColor());
-		}
-		
 		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
-		this.set(AttributeKeys.END_DECORATION, arrowTip);
-		
-		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH); 
+		set(AttributeKeys.END_DECORATION, arrowTip);
+
+		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
 		set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });
-		
+
 		super.draw(graphics);
 	}
-	
-    @Override
-    public Collection<Handle> createHandles(int detailLevel) {
-        ArrayList<Handle> handles = new ArrayList<Handle>(getNodeCount());
-        switch (detailLevel) {
-            case -1: // Mouse hover handles
-                handles.add(new BezierOutlineHandle(this.line, true));
-                break;
-            case 0:
-                handles.add(new BezierOutlineHandle(this.line));
-                if (getLiner() == null) {
-                    for (int i = 1, n = getNodeCount() - 1; i < n; i++) {
-                        handles.add(new BezierNodeHandle(this.line, i));
-                    }
-                }
-                break;
-        }
-        return handles;
-    }
-	
+
+	@Override
+	public Collection<Handle> createHandles(int detailLevel) {
+		ArrayList<Handle> handles = new ArrayList<Handle>(getNodeCount());
+		switch (detailLevel) {
+		case -1:
+			handles.add(new BezierOutlineHandle(line, true));
+			break;
+		case 0:
+			handles.add(new BezierOutlineHandle(line));
+			if (getLiner() == null) {
+				for (int i = 1, n = getNodeCount() - 1; i < n; i++) {
+					handles.add(new BezierNodeHandle(line, i));
+				}
+			}
+			break;
+		}
+		return handles;
+	}
+
 	@Override
 	public RelationFigure clone() {
 		RelationFigure other = (RelationFigure) super.clone();
 		other.children = new ArrayList<Figure>();
-		other.line = this.line.clone();
+		other.line = line.clone();
 		other.children.add(other.line);
-		other.amountFigure = this.amountFigure.clone();
+		other.amountFigure = amountFigure.clone();
 		other.children.add(other.amountFigure);
-		
-		return other; 
+
+		return other;
 	}
 
 	@Override
-	public void setStartConnector(Connector start)
-	{
-		this.line.setStartConnector(start);
+	public void setStartConnector(Connector start) {
+		line.setStartConnector(start);
 	}
 
 	@Override
-	public Connector getStartConnector()
-	{
-		return this.line.getStartConnector();
+	public Connector getStartConnector() {
+		return line.getStartConnector();
 	}
 
 	@Override
-	public void setEndConnector(Connector end)
-	{
-		this.line.setEndConnector(end);
+	public void setEndConnector(Connector end) {
+		line.setEndConnector(end);
 	}
 
 	@Override
-	public Connector getEndConnector()
-	{
-		return this.line.getEndConnector();
+	public Connector getEndConnector() {
+		return line.getEndConnector();
 	}
 
 	@Override
-	public void updateConnection()
-	{
-		this.line.updateConnection();
+	public void updateConnection() {
+		line.updateConnection();
 	}
 
 	@Override
-	public boolean canConnect(Connector start, Connector end)
-	{
-		return this.line.canConnect(start, end);
+	public boolean canConnect(Connector start, Connector end) {
+		return line.canConnect(start, end);
 	}
 
 	@Override
-	public boolean canConnect(Connector start)
-	{
-		return this.line.canConnect(start);
+	public boolean canConnect(Connector start) {
+		return line.canConnect(start);
 	}
 
 	@Override
-	public void setStartPoint(Double p)
-	{
-		this.line.setStartPoint(p);
+	public void setStartPoint(Double p) {
+		line.setStartPoint(p);
 	}
 
 	@Override
-	public void setEndPoint(Double p)
-	{
-		this.line.setEndPoint(p);
+	public void setEndPoint(Double p) {
+		line.setEndPoint(p);
 	}
 
 	@Override
-	public void setPoint(int index, Double p)
-	{
-		this.line.setPoint(index, p);
+	public void setPoint(int index, Double p) {
+		line.setPoint(index, p);
 	}
 
 	@Override
-	public int getNodeCount()
-	{
-		return this.line.getNodeCount();
+	public int getNodeCount() {
+		return line.getNodeCount();
 	}
 
 	@Override
-	public Double getPoint(int index)
-	{
-		return this.line.getPoint(index);
+	public Double getPoint(int index) {
+		return line.getPoint(index);
 	}
 
 	@Override
-	public Node getNode(int index)
-	{
-		return this.line.getNode(index);
+	public Node getNode(int index) {
+		return line.getNode(index);
 	}
 
 	@Override
-	public void setNode(int index, Node node)
-	{
-		this.line.setNode(index, node);
+	public void setNode(int index, Node node) {
+		line.setNode(index, node);
 	}
 
 	@Override
-	public Figure getStartFigure()
-	{
-		return this.line.getStartFigure();
+	public Figure getStartFigure() {
+		return line.getStartFigure();
 	}
 
 	@Override
-	public Figure getEndFigure()
-	{
-		return this.line.getEndFigure();
+	public Figure getEndFigure() {
+		return line.getEndFigure();
 	}
 
 	@Override
-	public Liner getLiner()
-	{
-		return this.line.getLiner();
+	public Liner getLiner() {
+		return line.getLiner();
 	}
 
 	@Override
-	public void setLiner(Liner newValue)
-	{
-		this.line.setLiner(newValue);
+	public void setLiner(Liner newValue) {
+		line.setLiner(newValue);
 	}
 
 	@Override
-	public void lineout()
-	{
-		this.line.lineout();
+	public void lineout() {
+		line.lineout();
 	}
-	
+
 	@Override
 	public boolean isModule() {
 		return false;
@@ -242,16 +228,26 @@ public class RelationFigure extends NamedFigure
 	public boolean isLine() {
 		return true;
 	}
-	
-	public int getAmount(){
-		return Integer.parseInt(this.amountFigure.getText());
-	}
 
-	// these methods listen to line events
+	public int getAmount() {
+		return Integer.parseInt(amountFigure.getText());
+	}
+	
+	@Override 
+	public void willChange() {
+		line.willChange();
+		super.willChange();
+	}
+	
+	@Override
+	public void changed() {
+		line.changed();
+		super.changed();
+	}	
 
 	@Override
 	public void areaInvalidated(FigureEvent e) {
-		this.relayout();
+		relayout();
 	}
 
 	@Override
@@ -265,13 +261,13 @@ public class RelationFigure extends NamedFigure
 	@Override
 	public void figureChanged(FigureEvent e) {
 	}
-	
+
 	@Override
 	public void figureAdded(FigureEvent e) {
 	}
 
 	@Override
-	public void figureRemoved(FigureEvent e) {		
+	public void figureRemoved(FigureEvent e) {
 	}
 
 	@Override

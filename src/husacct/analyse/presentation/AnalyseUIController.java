@@ -2,46 +2,25 @@ package husacct.analyse.presentation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import javax.swing.JInternalFrame;
+
 import husacct.ServiceProvider;
-import husacct.analyse.task.AnalyseControlService;
+import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.control.ILocaleChangeListener;
+import husacct.control.IControlService;
 
 public class AnalyseUIController {
 
-	private AnalyseControlService analyseTaskService = new AnalyseControlerServiceImpl();
-	private AnalyseInternalFrame analyseGUI;
+	private IControlService husacctControlService = ServiceProvider.getInstance().getControlService();
+	private IAnalyseControlService analyseTaskService = new AnalyseControlerServiceImpl();
 	
 	public AnalyseUIController(){
 		this.analyseTaskService = new AnalyseControlerServiceImpl();
-		listenToLocaleListener();
 	}
 	
-	private void listenToLocaleListener(){
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(
-			new ILocaleChangeListener() {
-				@Override
-				public void update(Locale newLocale) {
-					initializeScreen();
-					analyseGUI.reloadText();
-				}
-			}
-		);
-	}
-	
-	public JInternalFrame getAnalysedCodeFrame(){
-		initializeScreen();
-		return analyseGUI;
-	}
-	
-	private void initializeScreen(){
-		if(analyseGUI == null) {
-			analyseGUI = new AnalyseInternalFrame();
-		}
+	public String translate(String key){
+		return husacctControlService.getTranslatedString(key);
 	}
 		
 	public List<AnalysedModuleDTO> getRootModules(){

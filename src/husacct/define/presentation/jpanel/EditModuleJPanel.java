@@ -15,16 +15,12 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
-public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyListener, Observer{
+public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private JLabel nameLabel;
@@ -96,6 +92,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 
 	@Override
 	public void update(Observable o, Object arg) {
+		resetGUI();
 		Long moduleId = Long.parseLong(arg.toString());
 		if (moduleId != -1){
 			HashMap<String, Object> moduleDetails = DefinitionController.getInstance().getModuleDetails(moduleId);
@@ -105,6 +102,11 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 		this.repaint();
 	}
 	
+	private void resetGUI() {
+		this.nameTextfield.setText("");
+		this.descriptionTextArea.setText("");
+	}
+
 	private void updateModule() {
 		String moduleName = nameTextfield.getText();
 		String moduleDescription = descriptionTextArea.getText();
@@ -113,8 +115,7 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//Ignore, this method is not needed.
 	}
 
 	@Override
@@ -124,7 +125,6 @@ public class EditModuleJPanel extends AbstractDefinitionJPanel implements KeyLis
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//Ignore, this method is not needed.
 	}
 }

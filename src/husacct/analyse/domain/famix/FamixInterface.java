@@ -16,7 +16,7 @@ public class FamixInterface extends FamixEntity {
 		s += "UniqueName: " + uniqueName;
 		s += "\nName: " + name;
 		s += "\nBelongs to package; " + belongsToPackage;
+		s += "\n\n";
 		return s;
 	}
-	
 }

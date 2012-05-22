@@ -2,8 +2,9 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.ConfigurationServiceImpl;
-import husacct.validate.domain.check.CheckConformanceUtil;
+import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.CheckConformanceUtilSeverity;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
@@ -31,14 +32,14 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtil.filter(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo ){
 				DependencyDTO[] dependencies = analyseService.getDependenciesTo(classPathTo.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath());
+				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath(), currentRule.violationTypeKeys);
 				for(DependencyDTO dependency: dependencies){
 					if(allowedDependencies.length != 0){
 						for(DependencyDTO allowedDependency: allowedDependencies){
@@ -50,7 +51,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 								LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 	
 								final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-								Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);						
+								Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);						
 								Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 								violations.add(violation);
 							}
@@ -64,7 +65,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
 						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-						Severity severity = CheckConformanceUtil.getSeverity(configuration, super.severity, violationTypeSeverity);						
+						Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);						
 						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
 						violations.add(violation);
 						

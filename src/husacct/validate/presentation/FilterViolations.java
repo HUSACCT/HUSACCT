@@ -1,6 +1,6 @@
 package husacct.validate.presentation;
 
-import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.ServiceProvider;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
@@ -27,7 +27,7 @@ public final class FilterViolations extends JDialog  {
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
-	private Calendar violationDate = null;
+	private Calendar violationDate = Calendar.getInstance();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
 		this.vilterViolationsObserver = filterViolationsObserver;
@@ -56,7 +56,6 @@ public final class FilterViolations extends JDialog  {
 		hideFilteredValues = new JRadioButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setAlwaysOnTop(true);
 		setResizable(false);
 		setModal(true);
 
@@ -70,21 +69,7 @@ public final class FilterViolations extends JDialog  {
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
 		violationtypePanel.setViewportView(violationtypeTable);
-
-		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
-		filterViolationPanel.setLayout(filterViolationPanelLayout);
-		filterViolationPanelLayout.setHorizontalGroup(
-				filterViolationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(filterViolationPanelLayout.createSequentialGroup()
-						.addComponent(ruletypepanel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(violationtypePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
-				);
-		filterViolationPanelLayout.setVerticalGroup(
-				filterViolationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(ruletypepanel, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-				.addComponent(violationtypePanel)
-				);
-
+		
 		pathFilterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
 		pathFilterTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 		pathFilterScrollPane.setViewportView(pathFilterTable);
@@ -102,29 +87,6 @@ public final class FilterViolations extends JDialog  {
 				removePathActionPerformed();
 			}
 		});
-
-		GroupLayout pathFilterPanelLayout = new GroupLayout(pathFilterPanel);
-		pathFilterPanel.setLayout(pathFilterPanelLayout);
-		pathFilterPanelLayout.setHorizontalGroup(
-				pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(pathFilterPanelLayout.createSequentialGroup()
-						.addComponent(pathFilterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(removePath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(addPath, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addContainerGap())
-				);
-		pathFilterPanelLayout.setVerticalGroup(
-				pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(pathFilterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pathFilterPanelLayout.createSequentialGroup()
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(addPath)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(removePath)
-						.addContainerGap())
-				);
 
 		save.addActionListener(new ActionListener() {
 			@Override
@@ -145,36 +107,94 @@ public final class FilterViolations extends JDialog  {
 		filtergroup.add(hideFilteredValues);
 		hideFilteredValues.setSelected(true);
 
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(TabbedPane)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(hideFilteredValues)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(showFilteredValues)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(save)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(cancel)
-						.addContainerGap())
-				);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(TabbedPane)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(save)
-										.addComponent(cancel))
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(hideFilteredValues)
-												.addComponent(showFilteredValues))))
-				);
-
+		createFilterViolationPanelLayout();
+		createPathFilterPanelLayout();
+		createBaseLayout();
 		setSize(800, 600);
+	}
+	
+	private void createFilterViolationPanelLayout(){
+		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
+		
+		GroupLayout.SequentialGroup horizontalFilterViolationGroup = filterViolationPanelLayout.createSequentialGroup();
+		horizontalFilterViolationGroup.addComponent(ruletypepanel);
+		horizontalFilterViolationGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalFilterViolationGroup.addComponent(violationtypePanel);
+		
+		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
+		
+		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		verticalFilterViolationGroup.addComponent(ruletypepanel);
+		verticalFilterViolationGroup.addComponent(violationtypePanel);
+		
+		filterViolationPanelLayout.setVerticalGroup(verticalFilterViolationGroup);
+		filterViolationPanel.setLayout(filterViolationPanelLayout);
+	}
+	
+	private void createPathFilterPanelLayout(){
+		GroupLayout pathFilterPanelLayout = new GroupLayout(pathFilterPanel);
+		
+		GroupLayout.ParallelGroup horizontalButtonPathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		horizontalButtonPathGroup.addComponent(removePath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonPathGroup.addComponent(addPath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
+		GroupLayout.SequentialGroup horizontalPanePathGroup = pathFilterPanelLayout.createSequentialGroup();
+		horizontalPanePathGroup.addComponent(pathFilterScrollPane);
+		horizontalPanePathGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPanePathGroup.addGroup(horizontalButtonPathGroup);
+		horizontalPanePathGroup.addContainerGap();
+		
+		pathFilterPanelLayout.setHorizontalGroup(horizontalPanePathGroup);
+		
+		GroupLayout.SequentialGroup verticalButtonPathGroup = pathFilterPanelLayout.createSequentialGroup();
+		verticalButtonPathGroup.addComponent(addPath);
+		verticalButtonPathGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		verticalButtonPathGroup.addComponent(removePath);
+		verticalButtonPathGroup.addContainerGap();
+		
+		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		verticalPanePathGroup.addComponent(pathFilterScrollPane);
+		verticalPanePathGroup.addGroup(verticalButtonPathGroup);
+		
+		pathFilterPanelLayout.setVerticalGroup(verticalPanePathGroup);
+		pathFilterPanel.setLayout(pathFilterPanelLayout);
+	}
+	
+	private void createBaseLayout(){
+		GroupLayout layout = new GroupLayout(getContentPane());
+		
+		GroupLayout.SequentialGroup horizontalButtonGroup = layout.createSequentialGroup();
+		horizontalButtonGroup.addComponent(hideFilteredValues);
+		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addComponent(showFilteredValues);
+		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addComponent(save);
+		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addComponent(cancel);
+		horizontalButtonGroup.addContainerGap();
+		
+		GroupLayout.ParallelGroup horizontalPaneGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		horizontalPaneGroup.addComponent(TabbedPane);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(horizontalPaneGroup);
+		
+		GroupLayout.ParallelGroup verticalRadioButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalRadioButtonGroup.addComponent(hideFilteredValues);
+		verticalRadioButtonGroup.addComponent(showFilteredValues);
+		
+		GroupLayout.ParallelGroup verticalButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalButtonGroup.addComponent(save);
+		verticalButtonGroup.addComponent(cancel);
+		verticalButtonGroup.addGroup(verticalRadioButtonGroup);
+		
+		GroupLayout.SequentialGroup verticalPaneGroup = layout.createSequentialGroup();
+		verticalPaneGroup.addComponent(TabbedPane);
+		verticalPaneGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
+		
+		layout.setVerticalGroup(verticalPaneGroup);
 	}
 	
 	public void setViolationDate(Calendar date){
@@ -182,26 +202,26 @@ public final class FilterViolations extends JDialog  {
 	}
 	
 	public void loadGUIText(){
-		setTitle(ValidateTranslator.getValue("TotalViolations"));
-		TabbedPane.addTab(ValidateTranslator.getValue("FilterViolations"), filterViolationPanel);
-		addPath.setText(ValidateTranslator.getValue("Add"));
-		removePath.setText(ValidateTranslator.getValue("Remove"));
-		TabbedPane.addTab(ValidateTranslator.getValue("FilterPaths"), pathFilterPanel);
-		save.setText(ValidateTranslator.getValue("Save"));
-		cancel.setText(ValidateTranslator.getValue("Cancel"));
-		showFilteredValues.setText(ValidateTranslator.getValue("ShowSelectedValues"));
-		hideFilteredValues.setText(ValidateTranslator.getValue("HideSelectedValues"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterViolations"), filterViolationPanel);
+		addPath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
+		removePath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterPaths"), pathFilterPanel);
+		save.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Save"));
+		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
+		showFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShowSelectedValues"));
+		hideFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("HideSelectedValues"));
 		
 		loadModels();
 	}
 	
 	public void loadModels(){
-		String[] columnNamesRuletype = {"", ValidateTranslator.getValue("Ruletypes")};
-		String[] columnNamesViolationtype = {"", ValidateTranslator.getValue("Violationtypes")};
-		String[] columnNamesPath = {" ", ValidateTranslator.getValue("Path")};
+		String[] columnNamesRuletype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtypes")};
+		String[] columnNamesPath = {" ", ServiceProvider.getInstance().getControlService().getTranslatedString("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
-
+			private static final long serialVersionUID = -7173080075671054375L;
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -217,7 +237,7 @@ public final class FilterViolations extends JDialog  {
 		};
 
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
-
+			private static final long serialVersionUID = -9191282154177444964L;
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, false};
 
@@ -233,7 +253,7 @@ public final class FilterViolations extends JDialog  {
 		};
 
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
-
+			private static final long serialVersionUID = 1832644249597223838L;
 			Class<?>[] types = new Class[]{Boolean.class, String.class};
 			boolean[] canEdit = new boolean[]{true, true};
 
@@ -252,8 +272,7 @@ public final class FilterViolations extends JDialog  {
 		violationtypeTable.setModel(violationtypeModelFilter);
 		pathFilterTable.setModel(pathFilterModel);
 		
-		loadRuletypes();
-		loadViolationtypes();
+		loadFilterValues();
 	}
 
 	private void cancelActionPerformed() {

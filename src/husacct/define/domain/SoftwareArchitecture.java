@@ -1,9 +1,9 @@
 package husacct.define.domain;
 
-import java.util.ArrayList;
-
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 public class SoftwareArchitecture {
 	
@@ -39,9 +39,9 @@ public class SoftwareArchitecture {
 		setAppliedRules(rules);
 	}
 	
-	//GETTERS & SETTERS
-	//GETTERS & SETTERS
-	//GETTERS & SETTERS
+	/*
+	 * Getters and Setters
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -74,9 +74,9 @@ public class SoftwareArchitecture {
 		return appliedRules;
 	}
 
-	//APPLIEDRULES
-	//APPLIEDRULES
-	//APPLIEDRULES
+	/*
+	 * Applied Rules
+	 */
 	public ArrayList<Long> getAppliedRulesIdsByModule(long moduleId) {
 		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
 		for (AppliedRule rule : appliedRules){
@@ -138,10 +138,20 @@ public class SoftwareArchitecture {
 		}
 		return appliedRule;
 	}
+	
+	public ArrayList<AppliedRule> getEnabledAppliedRules() {
+		ArrayList<AppliedRule> enabledRuleList =  new ArrayList<AppliedRule>();
+		for (AppliedRule ar : appliedRules){
+			if (ar.isEnabled()){
+				enabledRuleList.add(ar);
+			}
+		}
+		return enabledRuleList;
+	}
 
-	//SoftwareUnitDefinitions
-	//SoftwareUnitDefinitions
-	//SoftwareUnitDefinitions
+	/*
+	 * SoftwareUnitDefinitions
+	 */
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName) {
 		SoftwareUnitDefinition softwareUnit = null;
 		for (Module mod : modules){
@@ -154,28 +164,26 @@ public class SoftwareArchitecture {
 		return softwareUnit;
 	}
 	
-	//MODULES
-	//MODULES
-	//MODULES
+	/*
+	 * MODULES
+	 */
 	public Module getModuleById(long moduleId) {
 		Module currentModule = null;
-		for(Module module : modules) 
-		{
-			if (module.getId() == moduleId ||
-					module.hasSubModule(moduleId)){
-
+		for(Module module : modules){
+			
+			if (module.getId() == moduleId || module.hasSubModule(moduleId)){
 				currentModule = module;
 				while (currentModule.getId() != moduleId){
 					for (Module subModule : currentModule.getSubModules()){
-						if (subModule.getId() == moduleId ||
-								subModule.hasSubModule(moduleId)){
+						if (subModule.getId() == moduleId || subModule.hasSubModule(moduleId)){
 							currentModule = subModule;
 						}
 					}
 				}
 				break;
 			}
-		}		
+			
+		}
 		if (currentModule == null){throw new RuntimeException("This module does not exist!");}
 		return currentModule;
 	}
@@ -231,21 +239,22 @@ public class SoftwareArchitecture {
 	
 	private void removeRelatedRules(Module module) {
 		//Copy all currentValues into another list to prevent ConcurrentModificationExceptions 
+		@SuppressWarnings("unchecked")
 		ArrayList<AppliedRule> tmpList = (ArrayList<AppliedRule>) appliedRules.clone();
-			for (AppliedRule rule : appliedRules){
-				if (rule.getModuleFrom().equals(module) || 
-						rule.getModuleTo().equals(module)){
-					tmpList.remove(rule);
-				}	
-				
-				for (AppliedRule exceptionRule : rule.getExceptions()){
-					if (exceptionRule.getModuleFrom().equals(module) || 
-							exceptionRule.getModuleTo().equals(module)){
-						rule.getExceptions().remove(exceptionRule);
-					}		
-				}
+		for (AppliedRule rule : appliedRules){
+			if (rule.getModuleFrom().equals(module) || 
+					rule.getModuleTo().equals(module)){
+				tmpList.remove(rule);
+			}	
+			
+			for (AppliedRule exceptionRule : rule.getExceptions()){
+				if (exceptionRule.getModuleFrom().equals(module) || 
+						exceptionRule.getModuleTo().equals(module)){
+					rule.getExceptions().remove(exceptionRule);
+				}		
 			}
-			appliedRules = tmpList;	
+		}
+		appliedRules = tmpList;	
 	}
 
 	private boolean hasModule(String name) 
@@ -312,22 +321,42 @@ public class SoftwareArchitecture {
 		return logicalPath;
 	}
 	
-	//LAYERS
-	//LAYERS
-	//LAYERS
+	public long getParentModuleIdByChildId(long childModuleId) {
+		long parentModuleId = -1L;
+		for(Module module : modules) {
+			if (module.getId() != childModuleId && module.hasSubModule(childModuleId)) {
+				Module currentModule = module;
+				while(parentModuleId == -1L) {
+					for (Module subModule : currentModule.getSubModules()) {
+						if (subModule.getId() == childModuleId) {
+							parentModuleId = currentModule.getId();
+							break;
+						} else if(subModule.hasSubModule(childModuleId)) {
+							currentModule = subModule;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+		return parentModuleId;
+	}
 	
-	
-	public void moveUpDown(long layerId) {
-		Layer layer = (Layer)getModuleById(layerId);
-		Layer layerAboveLayer = getTheFirstLayerAbove(layer.getHierarchicalLevel());
+	/*
+	 * Layers
+	 */
+	public void moveLayerUp(long layerId) {
+		Layer layer = (Layer) getModuleById(layerId);
+		Layer layerAboveLayer = getTheFirstLayerAbove(layer.getHierarchicalLevel(), getParentModuleIdByChildId(layerId));
 		if (layerAboveLayer != null){
 			switchHierarchicalLayerLevels(layer, layerAboveLayer);
 		}
 	}
 	
-	private Layer getTheFirstLayerAbove(int currentHierarchicalLevel){
+	private Layer getTheFirstLayerAbove(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
-		for (Module mod : modules){
+		for (Module mod : getModulesForLayerSorting(parentModuleId)){
 			if (mod instanceof Layer) {
 				Layer l = (Layer)mod;
 				if (l.getHierarchicalLevel() < currentHierarchicalLevel &&
@@ -341,15 +370,15 @@ public class SoftwareArchitecture {
 
 	public void moveLayerDown(long layerId) {
 		Layer layer = (Layer)getModuleById(layerId);
-		Layer layerBelowLayer = getTheFirstLayerBelow(layer.getHierarchicalLevel());
+		Layer layerBelowLayer = getTheFirstLayerBelow(layer.getHierarchicalLevel(), getParentModuleIdByChildId(layerId));
 		if (layerBelowLayer != null){
 			switchHierarchicalLayerLevels(layer, layerBelowLayer);
 		}
 	}
 	
-	private Layer getTheFirstLayerBelow(int currentHierarchicalLevel){
+	private Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
-		for (Module mod : modules){
+		for (Module mod : getModulesForLayerSorting(parentModuleId)){
 			if (mod instanceof Layer) {
 				Layer l = (Layer)mod;
 				if (l.getHierarchicalLevel() > currentHierarchicalLevel &&
@@ -359,6 +388,15 @@ public class SoftwareArchitecture {
 			}
 		}
 		return layer;
+	}
+	
+	private ArrayList<Module> getModulesForLayerSorting(long parentModuleId) {
+		ArrayList<Module> modulesToCheck = modules;
+		if(parentModuleId != -1L) {
+			Module parentModule = getModuleById(parentModuleId);
+			modulesToCheck = parentModule.getSubModules();
+		}
+		return modulesToCheck;
 	}
 	
 	private void switchHierarchicalLayerLevels(Layer layerOne, Layer layerTwo){

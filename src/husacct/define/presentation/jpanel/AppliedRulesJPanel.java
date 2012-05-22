@@ -1,12 +1,13 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.define.presentation.helper.DataHelper;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jframe.JFrameAppliedRule;
+import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
+import husacct.define.presentation.utils.DataHelper;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
@@ -30,16 +31,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
 
-/**
- * 
- * @author Henk ter Harmsel
- *
- */
-public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements ActionListener, Observer, ILocaleChangeListener {
+public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
-	
-	
 	
 	private JTableAppliedRule appliedRulesTable;
 	private JScrollPane appliedRulesPane;
@@ -59,7 +53,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AppliedRules")));
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
@@ -121,8 +115,8 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	private void addRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
-			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, -1L);
-			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
+			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			//TODO Test popup
@@ -134,8 +128,8 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		long selectedAppliedRuleId = getSelectedAppliedRuleId();
 		if (selectedAppliedRuleId != -1){
-			JFrameAppliedRule appliedRuleFrame = new JFrameAppliedRule(moduleId, selectedAppliedRuleId);
-			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
+			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, selectedAppliedRuleId);
+			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
@@ -174,20 +168,18 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		setButtonEnableState();
 	}
 
-	public void updateAppliedRuleTable() {
+	public void updateAppliedRuleTable() {		
 		try {
+			JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
+			atm.getDataVector().removeAllElements();
+			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
 				ArrayList<Long> appliedRulesIds = DefinitionController.getInstance().getAppliedRuleIdsBySelectedModule();
-				
-				// Get the tablemodel from the table
-				JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
 
-				// Remove all items in the table
-				atm.getDataVector().removeAllElements();
 				if (appliedRulesIds != null) {
 					for (long appliedRuleId : appliedRulesIds) {
 						

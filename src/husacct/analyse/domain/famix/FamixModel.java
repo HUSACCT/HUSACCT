@@ -68,11 +68,11 @@ class FamixModel extends FamixObject{
 			}
 			else if (e instanceof FamixInterface){
 				interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
-			}
+			} 
 		}
 		else if (e instanceof FamixAssociation){
 			associations.add((FamixAssociation) e);
-		}
+		}			
 		else{
 			throw new InvalidAttributesException("Wrongtype (not of type entity or association) ");
 		}
@@ -109,6 +109,32 @@ class FamixModel extends FamixObject{
 		return result;
 	}
 	
+	public ArrayList<FamixFormalParameter> getParametersForClass(String uniqueClassName){
+		ArrayList<FamixFormalParameter> result = new ArrayList<FamixFormalParameter>();
+		for (FamixStructuralEntity entity: structuralEntities.values()){
+			if (entity instanceof FamixFormalParameter){
+				FamixFormalParameter parameter = (FamixFormalParameter)entity;
+				if(parameter.belongsToClass.equals(uniqueClassName)){
+					result.add(parameter);
+				}
+			}
+		}
+		return result;
+	}
+	
+	public ArrayList<FamixLocalVariable> getLocalVariablesForClass(String declareClass) {
+		ArrayList<FamixLocalVariable> localVariables = new ArrayList<FamixLocalVariable>();
+		for (FamixStructuralEntity entity: structuralEntities.values()){
+			if (entity instanceof FamixLocalVariable){
+				FamixLocalVariable variable = (FamixLocalVariable) entity;
+				if (variable.belongsToClass.equals(declareClass)){
+					localVariables.add(variable);
+				}
+			}
+		}
+		return localVariables;
+	}
+	
 	public List<FamixImport> getImportsInClass(String uniqueClassName){
 		List<FamixImport> imports = new ArrayList<FamixImport>();
 		for(FamixAssociation association: associations){
@@ -141,8 +167,8 @@ class FamixModel extends FamixObject{
 				+ "\n ------------Interfaces------------\n" + interfaces
 				+ "\n -----------Assocations:-------------- \n" + associations
 				+ "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
-				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities;
-//				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
+				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities
+				+ "\n -----------Invocations-------------- \n" + associations + "num invocs " + associations.size();
 
 	}
 	
@@ -156,4 +182,6 @@ class FamixModel extends FamixObject{
 		currentInstance.structuralEntities.clear();
 		currentInstance.behaviouralEntities.clear();
 	}
+
+
 }

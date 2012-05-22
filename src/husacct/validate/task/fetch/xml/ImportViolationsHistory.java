@@ -13,61 +13,77 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ImportViolationsHistory {
+	private Logger logger = Logger.getLogger(ImportViolationsHistory.class);
 
 	public List<ViolationHistory> importViolationsHistory(Element violationHistoriesElement) {
 
-		List<ViolationHistory> violationHistories = new ArrayList<ViolationHistory>();
-		try {
-			for(Element violationHistoryElement : violationHistoriesElement.getChildren()) {
-				List<Severity> severities = new ArrayList<Severity>();
-				List<Violation> violations = new ArrayList<Violation>();
-				//severities
 
-				for(Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {
+		List<ViolationHistory> violationHistories = new ArrayList<ViolationHistory>();
+		for(Element violationHistoryElement : violationHistoriesElement.getChildren()) {
+			List<Severity> severities = new ArrayList<Severity>();
+			List<Violation> violations = new ArrayList<Violation>();
+			//severities
+
+			for(Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {
+				String stringUUID = severityElement.getChildText("id");
+				if(isValidUUID(stringUUID)){
 					Severity severity = new Severity(UUID.fromString(severityElement.getChildText("id")), severityElement.getChildText("defaultName"), severityElement.getChildText("userName"), new Color(Integer.parseInt(severityElement.getChildText("color"))));
 					severities.add(severity);
 				}
+				else{
+					logger.error(String.format("%s is not a valid UUID severity will be ignored", stringUUID));
+				}
+			}
 
-				//date
-				Calendar date = DatatypeFactory.newInstance().newXMLGregorianCalendar(violationHistoryElement.getAttributeValue("date")).toGregorianCalendar();
+			//date
+			final String validationDate = violationHistoryElement.getAttributeValue("date");
+			Calendar date = getCalendar(validationDate);
 
-				//description 
-				final String description = violationHistoryElement.getChildText("description");
+			//description 
+			final String description = violationHistoryElement.getChildText("description");
 
-				//violations
-				for(Element violationElement : violationHistoryElement.getChild("violations").getChildren()) {
-					Violation violation = new Violation();
-					violations.add(violation);
-					violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
+			//violations
+			for(Element violationElement : violationHistoryElement.getChild("violations").getChildren()) {
+				Violation violation = new Violation();					
+				violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
 
-					//search the appropiate severity of the violation by the uuid.
-					for(Severity severity : severities) {
-						UUID id = UUID.fromString(violationElement.getChildText("severityId"));
+				//search the appropiate severity of the violation by the uuid.
+				for(Severity severity : severities) {
+					final String stringUUID = violationElement.getChildText("severityId");
+					if(isValidUUID(stringUUID)){
+						UUID id = UUID.fromString(stringUUID);
 						if(id.equals(severity.getId())) {
 							violation.setSeverity(severity);
+							violations.add(violation);
 							break;
-						}
+						}							
+					} else{
+						logger.error(String.format("%s is not a valid severity UUID, violation will not be added", stringUUID));
+						break;
 					}
+					logger.error("Severity for the violation " + violation.getLinenumber() + "was not found (UUID: "+ stringUUID);
+				}
 
-					violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));
-					violation.setViolationtypeKey(violationElement.getChildText("violationtypeKey"));
-					violation.setClassPathFrom(violationElement.getChildText("classPathFrom"));
-					violation.setClassPathTo(violationElement.getChildText("classPathTo"));
-					violation.setLogicalModules(getLogicalModules(violationElement.getChild("logicalModules")));
-					violation.setMessage(getMessage(violationElement.getChild("message")));
-					violation.setIndirect(Boolean.parseBoolean(violationElement.getChildText("isIndirect")));
-					violation.setOccured(DatatypeFactory.newInstance().newXMLGregorianCalendar(violationElement.getChildText("occured")).toGregorianCalendar());
-				}				
-				violationHistories.add(new ViolationHistory(violations, severities, date, description));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));
+				violation.setViolationtypeKey(violationElement.getChildText("violationtypeKey"));
+				violation.setClassPathFrom(violationElement.getChildText("classPathFrom"));
+				violation.setClassPathTo(violationElement.getChildText("classPathTo"));
+				violation.setLogicalModules(getLogicalModules(violationElement.getChild("logicalModules")));
+				violation.setMessage(getMessage(violationElement.getChild("message")));
+				violation.setIndirect(Boolean.parseBoolean(violationElement.getChildText("isIndirect")));
+				
+				final String stringCalendar = violationElement.getChildText("occured");
+				violation.setOccured(getCalendar(stringCalendar));
+			}				
+			violationHistories.add(new ViolationHistory(violations, severities, date, description));
+		}	
 		return violationHistories;
 	}
 
@@ -99,5 +115,27 @@ public class ImportViolationsHistory {
 		}
 		Message message = new Message(logicalModules,ruleKey, violationTypeKeysList, exceptionMessages);
 		return message;
+	}
+
+	private Calendar getCalendar(String stringCalendar){
+		Calendar calendar = Calendar.getInstance();
+		try{
+			calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(stringCalendar).toGregorianCalendar();
+		}
+		catch(IllegalArgumentException e){
+			logger.error(String.format("%s is not a valid datetime, switching back to current datetime", stringCalendar));
+		} catch (DatatypeConfigurationException e) {
+			logger.error(e.getMessage());
+		}
+		return calendar;
+	}
+
+	private boolean isValidUUID(String stringUUID){
+		try{
+			UUID.fromString(stringUUID);
+		}catch(IllegalArgumentException e){
+			return false;
+		}
+		return true;
 	}
 }

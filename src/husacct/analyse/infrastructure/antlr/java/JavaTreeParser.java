@@ -5107,7 +5107,7 @@ public class JavaTreeParser extends TreeParser {
                     int LA82_0 = input.LA(1);
 
                     if ( (LA82_0==CASE) ) {
-                        int LA82_2 = input.LA(2);
+                        input.LA(2);
 
                         if ( (synpred125_JavaTreeParser()) ) {
                             alt82=1;
@@ -5355,10 +5355,11 @@ public class JavaTreeParser extends TreeParser {
                         {
                         alt88=2;
                         }
+                        
                         break;
                     case UP:
                         {
-                        int LA88_3 = input.LA(2);
+                        input.LA(2);
 
                         if ( (synpred132_JavaTreeParser()) ) {
                             alt88=2;
