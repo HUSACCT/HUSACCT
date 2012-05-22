@@ -38,7 +38,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 	public void testGetDependenciesFromAndToPackages(){
 		String fromPath = "domain.locationbased.latitude";
 		String toPath = "infrastructure.socialmedia.locationbased.latitude";
-		int totalDependenciesExpected = 6;
+		int totalDependenciesExpected = 7;
 		
 		DependencyDTO[] dependencies = service.getDependencies(fromPath, toPath);
 		assertEquals(totalDependenciesExpected, dependencies.length);
@@ -76,7 +76,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 	public void testGetDependenciesFromPackageToClass(){
 		String fromPath = "domain.locationbased.latitude";
 		String toPath = "infrastructure.socialmedia.locationbased.latitude.IMap";
-		int totalDependenciesExpected = 2;
+		int totalDependenciesExpected = 3;
 		
 		DependencyDTO[] dependencies = service.getDependencies(fromPath, toPath);
 		assertEquals(totalDependenciesExpected, dependencies.length);
@@ -157,7 +157,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 	
 	public void testGetDependenciesToPackage(){
 		String toPath = "infrastructure.socialmedia.locationbased.latitude";
-		int totalDependenciesExpected = 6;
+		int totalDependenciesExpected = 7;
 				
 		DependencyDTO[] dependencies = service.getDependenciesTo(toPath);
 		assertEquals(totalDependenciesExpected, dependencies.length);
@@ -200,7 +200,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 	
 	public void testGetAllDependenciesOfPackage(){
 		String fromPath = "domain.locationbased.latitude";
-		int totalDependencies = 6;		
+		int totalDependencies = 7;		
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom(fromPath);
 		assertEquals(totalDependencies, dependencies.length);

@@ -186,7 +186,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 	public void testGetDependenciesToClassTypeImplements(){
 		String to = "infrastructure.socialmedia.locationbased.latitude.IMap";
 		String[] dependencyFilter = {super.IMPLEMENTS};
-		int dependenciesExpected = 1;
+		int dependenciesExpected = 2;
 		
 		DependencyDTO[] dependencies = service.getDependenciesTo(to, dependencyFilter);
 		assertEquals(dependenciesExpected, dependencies.length);
