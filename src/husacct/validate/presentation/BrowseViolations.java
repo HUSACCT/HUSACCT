@@ -74,15 +74,15 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private JPanel informationPanel;
 	private JButton buttonLatestViolations;
 	private JButton buttonSaveInHistory;
-	private JLabel totalViolation;
+	private JLabel totalViolationLabel;
 	private JLabel totalViolationNumber;
-	private JLabel shownViolations;
+	private JLabel shownViolationsLabel;
 	private JLabel shownViolationsNumber;
 	private final Logger logger;
 	private JRadioButton rdbtnDirect;
 	private JRadioButton rdbtnIndirect;
 	private JRadioButton rdbtnAll;
-	private List<Violation> currentViolations;
+	private List<Violation> shownViolations;
 
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
 		this.logger = Logger.getLogger(BrowseViolations.class);
@@ -134,7 +134,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			public void valueChanged(ListSelectionEvent arg0) {
 				if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 					int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
-					Violation violation = currentViolations.get(row);
+					Violation violation = shownViolations.get(row);
 					detailLineNumberLabelValue.setText("" + violation.getLinenumber());
 					detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 					String message = new Messagebuilder().createMessage(violation.getMessage());
@@ -170,14 +170,15 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		chooseViolationHistoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				LoadingDialog loadingDialog = new LoadingDialog("Loading");
-				loadingDialog.run();
 				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
+					LoadingDialog loadingDialog = new LoadingDialog("Loading");
+					loadingDialog.run();
 					int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
 					selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
 					fillViolationsTable(selectedViolationHistory.getViolations());
 					loadInformationPanel();
-					loadingDialog.setVisible(false);
+					loadingDialog.dispose();
+					applyFilter.setSelected(false);
 				}
 			}
 		});
@@ -192,7 +193,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 	private void fillViolationsTable(List<Violation> violations) {
 		violationsTable.clearSelection();
-		currentViolations = violations;
+		shownViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + getDirectKey(violation.isIndirect()), violation.getClassPathTo(), violation.getSeverity().toString()});
@@ -251,8 +252,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	
 	public String getDirectKey(boolean b) {
 		if(b)
-			return "direct";
-		return "indirect";
+			return "indirect";
+		return "direct";
 	}
 
 	public void internalAfterViolationsChanged(){
@@ -398,16 +399,16 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		informationPanel.setBorder(new TitledBorder(null, "Information panel", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 
-		totalViolation = new JLabel();
-		totalViolation.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations") + ":");
-		informationPanel.add(totalViolation);
+		totalViolationLabel = new JLabel();
+		totalViolationLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations") + ":");
+		informationPanel.add(totalViolationLabel);
 
 		totalViolationNumber = new JLabel();
 		informationPanel.add(totalViolationNumber);
 
-		shownViolations = new JLabel();
-		shownViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShownViolations") + ":");
-		informationPanel.add(shownViolations);
+		shownViolationsLabel = new JLabel();
+		shownViolationsLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShownViolations") + ":");
+		informationPanel.add(shownViolationsLabel);
 
 		shownViolationsNumber = new JLabel();
 		informationPanel.add(shownViolationsNumber);
@@ -566,6 +567,15 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			totalViolationNumber.setText("" + taskServiceImpl.getAllViolations().getValue().size());
 		else 
 			totalViolationNumber.setText("" + selectedViolationHistory.getViolations().size());
+		
+		shownViolationsNumber.setText("" + shownViolations.size());
+		
+		informationPanel.add(totalViolationLabel);
+		informationPanel.add(totalViolationNumber);
+		
+		informationPanel.add(shownViolationsLabel);
+		informationPanel.add(shownViolationsNumber);
+		
 		for(Entry<Severity, Integer> violationPerSeverity: taskServiceImpl.getViolationsPerSeverity(selectedViolationHistory, applyFilter.isSelected()).entrySet()) {
 			informationPanel.add(new JLabel(violationPerSeverity.getKey().toString()));
 			informationPanel.add(new JLabel("" + violationPerSeverity.getValue()));
@@ -577,14 +587,15 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private void currentViolationsActionPerformed(ActionEvent e) {
 		fillViolationsTable(taskServiceImpl.getAllViolations().getValue());
 		chooseViolationHistoryTable.clearSelection();
-		loadInformationPanel();
 		selectedViolationHistory = null;
+		loadInformationPanel();
 	}
 
 	private void saveInHistoryActionPerformed(ActionEvent e) {
 		String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistoryDialog"));
 		if(input != null && !input.equals("")) {
 			taskServiceImpl.createHistoryPoint(input);
+			buttonSaveInHistory.setEnabled(false);
 		}
 	}
 

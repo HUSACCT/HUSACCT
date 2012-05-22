@@ -152,7 +152,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		verticalButtonGroup.addComponent(apply);
 		verticalButtonGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPaneGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		GroupLayout.ParallelGroup verticalPaneGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
 		verticalPaneGroup.addComponent(ruletypeScrollpane);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
 		verticalPaneGroup.addComponent(categoryScrollpane);
