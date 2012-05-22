@@ -243,6 +243,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	@Override
 	public void update(Locale newLocale) {
 		this.setButtonTexts();
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();
 	}
 	

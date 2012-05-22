@@ -1,6 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
 import husacct.control.presentation.util.DialogUtils;
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
@@ -64,7 +65,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	
 	private void initViolationTypes() {
 		if (!isException){
-			configureViolationTypesJButton = new JButton("Configure filter");
+			configureViolationTypesJButton = new JButton(DefineTranslator.translate("ConfigureFilter"));
 			configureViolationTypesJButton.addActionListener(this);
 			violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
 			
@@ -73,10 +74,10 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 			
 			if (appliedRuleController.isAnalysed()){
 				configureViolationTypesJButton.setEnabled(true);
-				configureViolationTypesJButton.setToolTipText("You can configure each rule to only validate on specific dependencies.");
+				configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("ValidateOnSpecificDependencies"));
 			} else {
 				configureViolationTypesJButton.setEnabled(false);
-				configureViolationTypesJButton.setToolTipText("You need to analyse an application first");
+				configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("NeedToAnalyseFirst"));
 			}
 		}
 	}

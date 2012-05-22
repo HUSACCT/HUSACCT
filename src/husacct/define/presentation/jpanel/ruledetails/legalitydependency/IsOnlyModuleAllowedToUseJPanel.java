@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.utils.DataHelper;
 import husacct.define.task.AppliedRuleController;
@@ -66,7 +67,7 @@ public class IsOnlyModuleAllowedToUseJPanel extends AbstractDetailsJPanel{
 	}
 
 	private void addFromModuleComponents(GridBagConstraints gridBagConstraints) {
-		this.moduleFromLabel = new JLabel("From Module");
+		this.moduleFromLabel = new JLabel(DefineTranslator.translate("FromModule"));
 		this.add(this.moduleFromLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -95,7 +96,7 @@ public class IsOnlyModuleAllowedToUseJPanel extends AbstractDetailsJPanel{
 	}
 	
 	private void addToModuleComponents(GridBagConstraints gridBagConstraints) {
-		this.moduleToLabel = new JLabel("To Module");
+		this.moduleToLabel = new JLabel(DefineTranslator.translate("ToModule"));
 		this.add(this.moduleToLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -116,7 +117,7 @@ public class IsOnlyModuleAllowedToUseJPanel extends AbstractDetailsJPanel{
 	}
 	
 	private void addEnabledComponents(GridBagConstraints gridBagConstraints){
-		this.ruleEnabledLabel = new JLabel("Enabled");
+		this.ruleEnabledLabel = new JLabel(DefineTranslator.translate("Enabled"));
 		this.add(this.ruleEnabledLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		this.ruleEnabledCheckBox = new JCheckBox();
@@ -125,7 +126,7 @@ public class IsOnlyModuleAllowedToUseJPanel extends AbstractDetailsJPanel{
 	}
 	
 	private void addDescriptionComponents(GridBagConstraints gridBagConstraints){
-		this.descriptionLabel = new JLabel("Description");
+		this.descriptionLabel = new JLabel(DefineTranslator.translate("Description"));
 		this.add(this.descriptionLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;

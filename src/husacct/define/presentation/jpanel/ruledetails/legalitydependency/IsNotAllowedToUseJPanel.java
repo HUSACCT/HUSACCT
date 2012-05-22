@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.moduletree.CombinedModuleTree;
 import husacct.define.presentation.utils.DataHelper;
@@ -71,7 +72,7 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel implements Tr
 	}
 
 	private void addFromModuleComponents(GridBagConstraints gridBagConstraints) {
-		this.moduleFromLabel = new JLabel("From Module");
+		this.moduleFromLabel = new JLabel(DefineTranslator.translate("FromModule"));
 		this.add(this.moduleFromLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -115,7 +116,7 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel implements Tr
 	
 	
 	private void addToModuleComponents(GridBagConstraints gridBagConstraints) {
-		this.moduleToLabel = new JLabel("To Module");
+		this.moduleToLabel = new JLabel(DefineTranslator.translate("ToModule"));
 		this.add(this.moduleToLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -150,7 +151,7 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel implements Tr
 	}
 	
 	private void addEnabledComponents(GridBagConstraints gridBagConstraints){
-		this.ruleEnabledLabel = new JLabel("Enabled");
+		this.ruleEnabledLabel = new JLabel(DefineTranslator.translate("Enabled"));
 		this.add(this.ruleEnabledLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		this.ruleEnabledCheckBox = new JCheckBox();
@@ -159,7 +160,7 @@ public class IsNotAllowedToUseJPanel extends AbstractDetailsJPanel implements Tr
 	}
 	
 	private void addDescriptionComponents(GridBagConstraints gridBagConstraints){
-		this.descriptionLabel = new JLabel("Description");
+		this.descriptionLabel = new JLabel(DefineTranslator.translate("Description"));
 		this.add(this.descriptionLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;

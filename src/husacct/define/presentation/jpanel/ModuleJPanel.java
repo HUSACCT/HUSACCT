@@ -56,7 +56,6 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		JPanel innerModulePanel = new JPanel();
 		BorderLayout innerModulePanelLayout = new BorderLayout();
 		innerModulePanel.setLayout(innerModulePanelLayout);
-		//TODO Does this need translating too?
 		innerModulePanel.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModuleHierachy")));
 		innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
