@@ -5,6 +5,8 @@ import org.jdom2.Element;
 
 public class FamixPersistencyServiceImpl implements IPersistencyService{
 
+	FamixModel theModel = FamixModel.getInstance();
+	
 	@Override
 	public Element exportAnalysedApplication() {
 		//TODO Analyse Java Team: Implement XML Export & Import

@@ -19,5 +19,5 @@ public interface IAnalyseDomainService {
 	public AnalysedModuleDTO[] getChildModulesInModule(String from); 
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
 	public AnalysedModuleDTO getParentModuleForModule(String child);
-	
+		
 }

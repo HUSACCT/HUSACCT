@@ -26,6 +26,7 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	@Override
 	public void analyseApplication() {
 		service.analyseApplication();
+		this.analyseInternalFrame = new AnalyseInternalFrame();
 		this.isAnalysed = true;
 	}
 	
