@@ -79,7 +79,8 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
-		result.addAll(this.findIndirectDependencies(result));
+		//TODO Analyse General - Fix Indirect Dependencies
+//		result.addAll(this.findIndirectDependencies(result));
 		return result;
 	}
 	
