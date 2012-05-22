@@ -105,21 +105,17 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 	
 	private boolean connectsBoth(FamixAssociation association, String from, String to){
-		boolean result = true;
-		result = result && (from.equals("") || association.from.equals(from) || association.from.startsWith(from + "."));
-		result = result && (to.equals("") || association.to.equals(to) || association.to.startsWith(to + "."));
-		result = result && !association.to.equals(association.from);
-		return result;
+		return isFrom(association, from) && isTo(association, to);
 	}
 	
 	private boolean isFrom(FamixAssociation association, String from){
-		boolean result =  from.equals("") || association.from.equals(from) || association.from.startsWith(from + ".");
-		result = result && !association.to.equals(association.from);
+		boolean result =  from.equals("") || association.from.equals(from) || association.from.startsWith(from);
+		result = result && !association.from.equals(association.to);
 		return result;
 	}
 	
 	private boolean isTo(FamixAssociation association, String to){
-		boolean result = to.equals("") || association.to.equals(to) || association.to.startsWith(to + ".");
+		boolean result = to.equals("") || association.to.equals(to) || association.to.startsWith(to);
 		result = result && !association.to.equals(association.from);
 		return result;
 	}
@@ -143,8 +139,15 @@ class FamixDependencyFinder extends FamixFinder{
 		return type;
 	}
 	
+	@SuppressWarnings("unused")
+	private String getNameForUniqueName(String uniqueModuleName){
+		String[] splittedByPoint = uniqueModuleName.split("\\.");
+		
+		if(splittedByPoint.length <= 0) { System.out.println(uniqueModuleName); return uniqueModuleName;}
+		else {System.out.println(splittedByPoint[splittedByPoint.length - 1]); return splittedByPoint[splittedByPoint.length - 1];}
+	}
+	
 	private FamixClass getClassForUniqueName(String uniqueName){
 		return theModel.classes.get(uniqueName);
-	}
-
+	} 
 }
