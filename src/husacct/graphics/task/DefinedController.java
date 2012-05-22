@@ -3,7 +3,6 @@ package husacct.graphics.task;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
@@ -81,7 +80,10 @@ public class DefinedController extends DrawingController {
 				}
 			}
 		}
-		getAndDrawModulesIn(parentNames.toArray(new String[] {}));
+		
+		if(parentNames.size()>0){
+			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
+		}
 	}
 
 	@Override

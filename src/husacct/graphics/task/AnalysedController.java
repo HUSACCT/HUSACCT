@@ -96,7 +96,10 @@ public class AnalysedController extends DrawingController {
 				}
 			}
 		}
-		getAndDrawModulesIn(parentNames.toArray(new String[] {}));
+		
+		if(parentNames.size()>0){
+			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
+		}
 	}
 
 	@Override
