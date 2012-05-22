@@ -109,9 +109,9 @@ class FamixDependencyFinder extends FamixFinder{
 		
 		boolean result = from.equals("") || association.from.equals(from) || association.from.startsWith(from);
 		
-		if(association.from.length() > from.length()){
-			result = result && association.from.charAt(from.length()) == '.';
-		}
+//		if(association.from.length() > from.length()){
+//			result = result && association.from.charAt(from.length()) == '.';
+//		}
 		
 		result = result && !association.from.equals(association.to);
 		return result;
@@ -123,9 +123,9 @@ class FamixDependencyFinder extends FamixFinder{
 
 	private boolean isTo(FamixAssociation association, String to){
 		boolean result = to.equals("") || association.to.equals(to) || association.to.startsWith(to);
-		if(association.to.length() > to.length()){
-			result = result && association.to.charAt(to.length()) == '.';
-		}
+//		if(association.to.length() > to.length()){
+//			result = result && association.to.charAt(to.length()) == '.';
+//		}
 		result = result && !association.to.equals(association.from);
 		return result;
 	}
