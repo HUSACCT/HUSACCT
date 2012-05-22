@@ -248,8 +248,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	
 	public String getDirectKey(boolean b) {
 		if(b)
-			return "direct";
-		return "indirect";
+			return "indirect";
+		return "direct";
 	}
 
 	public void internalAfterViolationsChanged(){
