@@ -91,7 +91,6 @@ public class ParentFigure extends BaseFigure {
 
 		// textbox centralising
 		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;

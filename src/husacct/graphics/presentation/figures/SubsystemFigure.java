@@ -36,21 +36,21 @@ public class SubsystemFigure extends BaseFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < this.MIN_WIDTH) {
-			lead.x = anchor.x + this.MIN_WIDTH;
+		if ((lead.x - anchor.x) < MIN_WIDTH) {
+			lead.x = anchor.x + MIN_WIDTH;
 		}
-		if ((lead.y - anchor.y) < this.MIN_HEIGHT) {
-			lead.y = anchor.y + this.MIN_HEIGHT;
+		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+			lead.y = anchor.y + MIN_HEIGHT;
 		}
 
 		body.setBounds(anchor, lead);
 		
 		// get text sizes
-		double maxTextWidth = this.moduleText.getBounds().width;
-		if(this.text.getBounds().width > maxTextWidth) {
-			maxTextWidth = this.text.getBounds().width;
+		double maxTextWidth = moduleText.getBounds().width;
+		if(text.getBounds().width > maxTextWidth) {
+			maxTextWidth = text.getBounds().width;
 		}
-		double totalTextHeight = this.text.getBounds().height + this.moduleText.getBounds().height;
+		double totalTextHeight = text.getBounds().height + moduleText.getBounds().height;
 
 		// textbox centralising
 		double plusX = (((lead.x - anchor.x) - maxTextWidth) / 2);
@@ -66,7 +66,7 @@ public class SubsystemFigure extends BaseFigure {
 		textAnchor.y += plusY + moduleText.getBounds().height;
 		text.setBounds(textAnchor, null);
 
-		this.invalidate();
+		invalidate();
 	}
 
 	@Override
