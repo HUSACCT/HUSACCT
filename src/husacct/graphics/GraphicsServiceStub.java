@@ -1,6 +1,7 @@
 package husacct.graphics;
 
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.DrawingDetail;
@@ -9,7 +10,7 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public class GraphicsServiceStub implements IGraphicsService, ISaveable {
+public class GraphicsServiceStub extends ObservableService implements IGraphicsService, ISaveable {
 	private AnalysedController analysedController;
 	private DefinedController definedController;
 
