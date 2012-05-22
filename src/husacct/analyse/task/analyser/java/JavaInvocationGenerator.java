@@ -34,16 +34,23 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	private void createConstructorInvocationDetails(Tree tree) {
 		//expects: '.'
 		if (tree != null) {
-			CommonTree firstChildClassConstructorCall = (CommonTree) tree;
-			
-			if(tree.getType() != JavaParser.CLASS_CONSTRUCTOR_CALL){
-				firstChildClassConstructorCall =  getFirstChildThrougTree(tree, JavaParser.CLASS_CONSTRUCTOR_CALL);
-			}
-			if (firstChildClassConstructorCall != null){
-				createConstructorInvocationDetailsWhenFoundClassConstructorCall(firstChildClassConstructorCall);
+			if (tree.getType() == JavaParser.METHOD_CALL){
+				if (tree.getChild(0).getType() == JavaParser.DOT){
+					createConstructorInvocationDetails(tree.getChild(0));
+				}
 			}
 			else{
-				logger.warn("Couldn't handle Constructor Call Invocation Element");
+				CommonTree firstChildClassConstructorCall = (CommonTree) tree;
+				
+				if(tree.getType() != JavaParser.CLASS_CONSTRUCTOR_CALL){
+					firstChildClassConstructorCall =  getFirstChildThrougTree(tree, JavaParser.CLASS_CONSTRUCTOR_CALL);
+				}
+				if (firstChildClassConstructorCall != null){
+					createConstructorInvocationDetailsWhenFoundClassConstructorCall(firstChildClassConstructorCall);
+				}
+				else{
+					logger.warn("Couldn't handle Constructor Call Invocation Element in class: " + to);
+				}
 			}
 			
 		}
