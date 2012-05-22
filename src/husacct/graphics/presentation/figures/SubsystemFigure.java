@@ -15,8 +15,8 @@ public class SubsystemFigure extends BaseFigure {
 	private TextFigure moduleText;
 	private TextFigure text;
 
-	protected int minWidth = 100;
-	protected int minHeight = 100;
+	public static final int MIN_WIDTH = 100;
+	public static final int MIN_HEIGHT = 100;
 
 	public SubsystemFigure(String name) {
 		super(name);
@@ -36,11 +36,11 @@ public class SubsystemFigure extends BaseFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < this.minWidth) {
-			lead.x = anchor.x + this.minWidth;
+		if ((lead.x - anchor.x) < this.MIN_WIDTH) {
+			lead.x = anchor.x + this.MIN_WIDTH;
 		}
-		if ((lead.y - anchor.y) < this.minHeight) {
-			lead.y = anchor.y + this.minHeight;
+		if ((lead.y - anchor.y) < this.MIN_HEIGHT) {
+			lead.y = anchor.y + this.MIN_HEIGHT;
 		}
 
 		body.setBounds(anchor, lead);
