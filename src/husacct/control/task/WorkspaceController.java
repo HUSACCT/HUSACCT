@@ -47,7 +47,13 @@ public class WorkspaceController {
 		Workspace workspace = new Workspace();
 		workspace.setName(name);
 		currentWorkspace = workspace;
-		if(mainController.guiEnabled) mainController.getMainGui().setTitle(name);
+		
+		if(mainController.guiEnabled){
+			mainController.getMainGui().setTitle(name);
+			mainController.getViewController().closeAll();
+		}
+		
+		ServiceProvider.getInstance().resetServices();
 	}
 	
 	public void closeWorkspace() {
@@ -93,6 +99,7 @@ public class WorkspaceController {
 
 	public boolean loadWorkspace(Document document){
 		try {
+			ServiceProvider.getInstance().resetServices();
 			List<ISaveable> savableServices = getSaveableServices();
 			if(document.hasRootElement()){
 				Element rootElement = document.getRootElement();
