@@ -7,6 +7,7 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -301,10 +302,10 @@ public class AppliedRuleController extends PopUpController {
 		for (Module module : modules) {
 			this.addDefineModuleChildComponents(rootComponent, module);
 		}
-		//TODO HERE
-		for(AnalysedModuleDTO moduleDTO : this.getAnalyzedModules()) {
-			this.addAnalyzedModuleChildComponents(rootComponent, moduleDTO);
-		}
+//		//TODO HERE
+//		for(AnalysedModuleDTO moduleDTO : this.getAnalyzedModules()) {
+//			this.addAnalyzedModuleChildComponents(rootComponent, moduleDTO);
+//		}
 		return rootComponent;
 	}
 	
@@ -313,14 +314,23 @@ public class AppliedRuleController extends PopUpController {
 		for(Module subModule : module.getSubModules()) {
 			this.addDefineModuleChildComponents(childComponent, subModule);
 		}
+		
+		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
+		for(SoftwareUnitDefinition softwareUnit : softwareUnits) {
+			AnalyzedModuleComponent analysedComponent = new AnalyzedModuleComponent(softwareUnit.getName(), softwareUnit.getName(), softwareUnit.getType().toString(), "public");
+			childComponent.addChild(analysedComponent);
+		}
+		
 		parentComponent.addChild(childComponent);
 	}
 	
+	@Deprecated
 	private AnalysedModuleDTO[] getAnalyzedModules() {
 		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
 		return modules;
 	}
 	
+	@Deprecated
 	private void addAnalyzedModuleChildComponents(AbstractCombinedComponent parentComponent, AnalysedModuleDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
 		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);

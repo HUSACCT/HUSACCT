@@ -11,6 +11,7 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,23 +49,27 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 
 	@Override
 	public void initDetails() {
-		this.addFromModuleComponents(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.addToModuleComponents(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(4, 0, 0, 0), 0, 0));
-		this.addEnabledComponents(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.addDescriptionComponents(new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 4, 0), 0, 0));
+		this.addFromModuleComponents(new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.addToModuleComponents(new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(4, 0, 0, 0), 0, 0));
+		this.addEnabledComponents(new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.addDescriptionComponents(new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 4, 0), 0, 0));
 //		this.setSize(400, 335);
 	}
 	
-//	@Override
-//	protected GridBagLayout createRuleDetailsLayout() {
-//		GridBagLayout ruleDetailsLayout = new GridBagLayout();
-//		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
-//		// max total height = 290
-//		ruleDetailsLayout.rowHeights = new int[] { 5, 5, 5, 5, 5 };
-//		ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.0 };
-//		ruleDetailsLayout.columnWidths = new int[] { 130, 660 };
-//		return ruleDetailsLayout;
-//	}
+	@Override
+	protected GridBagLayout createRuleDetailsLayout() {
+		GridBagLayout ruleDetailsLayout = new GridBagLayout();
+		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
+		// max total height = 290
+		if (!isException){ 
+			ruleDetailsLayout.rowHeights = new int[] { 30, 150, 30, 90 };
+		} else {
+			ruleDetailsLayout.rowHeights = new int[] { 150, 150, 30, 90 };
+		}
+		ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.0 };
+		ruleDetailsLayout.columnWidths = new int[] { 130, 660 };
+		return ruleDetailsLayout;
+	}
 
 	@Override
 	public HashMap<String, Object> saveToHashMap() {
@@ -81,7 +86,7 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 	}
 
 	private void saveModuleTreeToHashMap(HashMap<String, Object> ruleDetails) {
-		if (true){//!isException){ 
+		if (false){//!isException){ 
 			DataHelper datahelper = (DataHelper) this.moduleToJComboBox.getSelectedItem();
 			ruleDetails.put("moduleToId", datahelper.getId());
 		} else {
@@ -114,8 +119,8 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 		this.moduleFromLabel = new JLabel("From Module");
 		this.add(this.moduleFromLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		if (true){//!isException){
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		if (!isException){
 			this.createFromModuleJComboBox();
 			this.add(this.moduleFromJComboBox, gridBagConstraints);
 		} else {
@@ -148,7 +153,7 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
 		this.moduleFromTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
 		this.moduleFromTree.addTreeSelectionListener(this);
-		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleToTree);
+		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleFromTree);
 		return moduleTreeScrollPane;
 	}
 	
@@ -157,7 +162,7 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 		this.add(this.moduleToLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		if (true){//!isException){
+		if (false){//!isException){
 			this.createToModuleJComboBox();
 			this.add(this.moduleToJComboBox, gridBagConstraints);
 		} else {
@@ -181,7 +186,6 @@ public class IsAllowedToUseJPanel extends AbstractDetailsJPanel implements TreeS
 		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
 		this.moduleToTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
 		this.moduleToTree.addTreeSelectionListener(this);
-		this.moduleToTree.setSize(150, 660);
 		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleToTree);
 		return moduleTreeScrollPane;
 	}
