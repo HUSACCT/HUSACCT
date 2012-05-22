@@ -4,6 +4,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class DrawingView extends DefaultDrawingView {
 		initializeSelectionListener();
 
 		// FIXME: Keyboard listeners contain bugs. Fix before re-enabling
-		// initializeKeyboardListener();
+		initializeKeyboardListener();
 	}
 
 	private void initializeSelectionTool() {
@@ -158,22 +159,22 @@ public class DrawingView extends DefaultDrawingView {
 	// TODO: DO NOT REMOVE THIS FUNCTION. IT IS DISABLED BECAUSE IT CONTAINS
 	// BUGS
 	// NOT BECAUSE IT IS UNWANTED CODE
-	// private void initializeKeyboardListener() {
-	// addKeyListener(new KeyListener() {
-	// @Override
-	// public void keyPressed(KeyEvent e) {
-	// onKeyPressed(e);
-	// }
-	//
-	// @Override
-	// public void keyReleased(KeyEvent e) {
-	// }
-	//
-	// @Override
-	// public void keyTyped(KeyEvent e) {
-	// }
-	// });
-	// }
+	private void initializeKeyboardListener() {
+		addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				onKeyPressed(e);
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+		});
+	}
 
 	protected void onKeyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
