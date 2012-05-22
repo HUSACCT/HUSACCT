@@ -213,7 +213,15 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	// return connectors.getFirst();
 	// }
 
-	public abstract boolean isModule();
+	public boolean isParent(){
+		return false;
+	}
+	
+	public boolean isModule(){
+		return false;
+	}
 
-	public abstract boolean isLine();
+	public boolean isLine(){
+		return false;
+	}
 }

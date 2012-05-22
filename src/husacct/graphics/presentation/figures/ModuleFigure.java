@@ -89,8 +89,4 @@ public class ModuleFigure extends BaseFigure {
 		return true;
 	}
 
-	@Override
-	public boolean isLine() {
-		return false;
-	}
 }

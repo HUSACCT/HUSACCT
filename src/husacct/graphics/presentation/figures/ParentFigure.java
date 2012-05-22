@@ -20,7 +20,7 @@ public class ParentFigure extends BaseFigure {
 	protected int minHeight = 300;
 	
 	private ArrayList<Figure> childrenOwnImpl;
-	private double x, y;
+	private double currentPositionX, currentPositionY;
 
 	public ParentFigure(String name) {
 		super(name);
@@ -33,6 +33,8 @@ public class ParentFigure extends BaseFigure {
 		children.add(text);
 
 		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		
+		setSizeable(true);
 		
 		addFigureListener(new FigureListener() {
 			@Override
@@ -47,8 +49,8 @@ public class ParentFigure extends BaseFigure {
 
 			@Override
 			public void figureChanged(FigureEvent e){
-				double oldX = x;
-				double oldY = y;
+				double oldX = currentPositionX;
+				double oldY = currentPositionY;
 				double newX = ((BaseFigure)e.getFigure()).getBounds().getX();
 				double newY = ((BaseFigure)e.getFigure()).getBounds().getY();
 				double difX = newX - oldX;
@@ -56,8 +58,8 @@ public class ParentFigure extends BaseFigure {
 				for(Figure fig : childrenOwnImpl){
 					((BaseFigure)fig).updateLocation(fig.getBounds().getX()+difX, fig.getBounds().getY()+difY);
 				}
-				x = newX;
-				y = newY;
+				currentPositionX = newX;
+				currentPositionY = newY;
 			}
 
 			@Override
@@ -107,6 +109,10 @@ public class ParentFigure extends BaseFigure {
 		other.children.add(other.text);
 
 		return other;
+	}
+	
+	public Figure[] getChildFigures(){
+		return childrenOwnImpl.toArray(new Figure[]{});
 	}
 	
 	public void addChildFigure(Figure figure) {
@@ -181,12 +187,7 @@ public class ParentFigure extends BaseFigure {
 	}
 
 	@Override
-	public boolean isModule() {
-		return false;
-	}
-
-	@Override
-	public boolean isLine() {
-		return false;
+	public boolean isParent() {
+		return true;
 	}
 }

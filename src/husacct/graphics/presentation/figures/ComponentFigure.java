@@ -110,9 +110,4 @@ public class ComponentFigure extends BaseFigure {
 	public boolean isModule() {
 		return true;
 	}
-
-	@Override
-	public boolean isLine() {
-		return false;
-	}
 }

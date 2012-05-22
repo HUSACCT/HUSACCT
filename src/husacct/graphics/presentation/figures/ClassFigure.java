@@ -93,9 +93,4 @@ public class ClassFigure extends BaseFigure {
 	public boolean isModule() {
 		return true;
 	}
-
-	@Override
-	public boolean isLine() {
-		return false;
-	}
 }

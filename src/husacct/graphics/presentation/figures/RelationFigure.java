@@ -220,11 +220,6 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	}
 
 	@Override
-	public boolean isModule() {
-		return false;
-	}
-
-	@Override
 	public boolean isLine() {
 		return true;
 	}

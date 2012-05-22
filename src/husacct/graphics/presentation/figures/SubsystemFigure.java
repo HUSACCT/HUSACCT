@@ -89,9 +89,4 @@ public class SubsystemFigure extends BaseFigure {
 	public boolean isModule() {
 		return true;
 	}
-
-	@Override
-	public boolean isLine() {
-		return false;
-	}
 }
