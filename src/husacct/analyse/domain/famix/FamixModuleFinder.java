@@ -157,9 +157,9 @@ class FamixModuleFinder extends FamixFinder{
 	
 	private boolean moduleExists(String uniqueName){
 		boolean result = true;
-		result = result && (theModel.classes.get(uniqueName) != null);
-		result = result && (theModel.packages.get(uniqueName) != null);
-		result = result && (theModel.interfaces.get(uniqueName) != null);
+		if(theModel.classes.get(uniqueName) != null) return true;
+		if(theModel.packages.get(uniqueName) != null) return true;
+		if(theModel.interfaces.get(uniqueName) != null) return true;
 		return result;
 	}
 	
