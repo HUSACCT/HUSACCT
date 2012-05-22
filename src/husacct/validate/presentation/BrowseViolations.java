@@ -170,11 +170,14 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		chooseViolationHistoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				LoadingDialog loadingDialog = new LoadingDialog("Loading");
+				loadingDialog.run();
 				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
 					int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
 					selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
 					fillViolationsTable(selectedViolationHistory.getViolations());
 					loadInformationPanel();
+					loadingDialog.setVisible(false);
 				}
 			}
 		});
