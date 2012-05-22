@@ -2,6 +2,8 @@ package husacct.define.task;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -50,28 +52,37 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkVisibilityConvention() {
-		boolean visibilityConventionError = checkRuleTypeAlreadySet();
-		return visibilityConventionError;
+		boolean visibilityConventionSucces = checkRuleTypeAlreadySet();
+		return visibilityConventionSucces;
 	}
 	
 	private boolean checkVisibilityConventionException() {
-		boolean visibilityConventionError = checkRuleTypeAlreadySet();
-		return visibilityConventionError;
+		boolean visibilityConventionSucces = checkRuleTypeAlreadySet();
+		return visibilityConventionSucces;
 	}
 	
 	private boolean checkNamingConvention() {
-		boolean namingConventionError = checkRuleTypeAlreadySet();
-		return namingConventionError;
+		boolean namingConventionSucces = checkRuleTypeAlreadySet();
+		return namingConventionSucces;
 	}
 	
 	private boolean checkNamingConventionException() {
-		boolean namingConventionError = checkRuleTypeAlreadySet();
-		return namingConventionError;
+		boolean namingConventionSucces = checkRuleTypeAlreadySet();
+		return namingConventionSucces;
 	}
 	
 	private boolean checkIsNotAllowedToUse() {
-		boolean isNotAllowedToUseError = checkRuleTypeAlreadyFromToSelected("IsOnlyAllowedToUse");
-		return isNotAllowedToUseError;
+		boolean isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("IsOnlyAllowedToUse");
+		if(isNotAllowedToUseSucces) {
+			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("IsOnlyModuleAllowedToUse");
+		}
+		if(isNotAllowedToUseSucces) {
+			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("IsAllowedToUse");
+		}
+		if(isNotAllowedToUseSucces) {
+			isNotAllowedToUseSucces = checkRuleTypeAlreadyFromToSelected("MustUse");
+		}
+		return isNotAllowedToUseSucces;
 	}
 	
 	private boolean checkRuleTypeAlreadySet() {
@@ -86,6 +97,7 @@ public class RuleConventionsChecker {
 	
 	private boolean checkRuleTypeAlreadyFromToSelected(String ruleType) {
 		for(AppliedRule appliedRule : appliedRules) {
+			Logger.getLogger(this.getClass()).debug(appliedRule.getRuleType());
 			if(appliedRule.getRuleType().equals(ruleType) &&
 				appliedRule.getModuleFrom().getId() == moduleFrom.getId() &&
 				appliedRule.getModuleTo().getId() == moduleTo.getId()) {
