@@ -187,6 +187,7 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget.updateGUI();
 		drawLinesBasedOnSetting();
 		updateLayout();
+		drawLinesBasedOnSetting();
 	}
 
 	protected void updateLayout() {
