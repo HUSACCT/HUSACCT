@@ -1,6 +1,5 @@
 package husacct.analyse.task.analyser.csharp;
 
-import husacct.analyse.AnalyseMain;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpLexer;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.task.analyser.AbstractAnalyser;
@@ -38,10 +37,7 @@ public class CSharpAnalyser extends AbstractAnalyser{
 	}
 
 	private String convertAnyCharsetToUnicode(InputStreamReader inputStream) throws IOException{
-		long bufferedReader = System.nanoTime();
-		BufferedReader in = new BufferedReader(inputStream);
-		AnalyseMain.buffer += System.nanoTime() - bufferedReader;
-		
+		BufferedReader in = new BufferedReader(inputStream);		
 		String stringStream = "";
 		int firstChar = in.read();
 		final int ZEROWIDTHNOBREAKSPACE = 65279;

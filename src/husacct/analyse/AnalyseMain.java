@@ -6,17 +6,6 @@ import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;
 
 public class AnalyseMain {
-	public static long now = 0;
-	public static long antlr = 0;
-	public static long parserlexer = 0;
-	public static long generator = 0;
-	public static long convert = 0;
-	public static long stream = 0;
-	public static long stringStream = 0;
-	public static long charstream = 0;
-	public static long lexer;
-	public static long parser;
-	public static long buffer;
 	
 	public static void main(String[] args){
 		ServiceProvider provider = ServiceProvider.getInstance();
