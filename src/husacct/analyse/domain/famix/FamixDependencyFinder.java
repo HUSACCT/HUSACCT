@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class FamixDependencyFinder extends FamixFinder{
-
-	private static final String EXTENDS_ABSTRCT = "ExtendsAbstract";
-	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
-	private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
 	
 	private static enum FinderFunction{FROM, TO, BOTH};
 	private FinderFunction currentFunction;
@@ -52,7 +48,7 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 
 	public List<DependencyDTO> getDependenciesTo(String to, String[] dependencyFilter) {
-		performQuery(FinderFunction.TO, "", to);
+		performQuery(FinderFunction.TO, "", to, dependencyFilter);
 		return this.currentResult;
 	}
 	
@@ -123,31 +119,8 @@ class FamixDependencyFinder extends FamixFinder{
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){
 		String dependencyFrom = association.from;
 		String dependencyTo = association.to;
-		String dependencyType = determineType(association);
+		String dependencyType = association.type;
 		int dependencyLine = association.lineNumber;
 		return new DependencyDTO(dependencyFrom, dependencyTo, dependencyType, dependencyLine);
 	}
-	
-	private String determineType(FamixAssociation assocation){
-		String type = assocation.type;
-		if(type.equals("Extends")){
-			FamixClass theClass = getClassForUniqueName(assocation.to);
-			if(theClass == null) type = EXTENDS_LIBRARY;
-			else if(theClass.isAbstract) type = EXTENDS_ABSTRCT;
-			else type = EXTENDS_CONCRETE;
-		}
-		return type;
-	}
-	
-	@SuppressWarnings("unused")
-	private String getNameForUniqueName(String uniqueModuleName){
-		String[] splittedByPoint = uniqueModuleName.split("\\.");
-		
-		if(splittedByPoint.length <= 0) { System.out.println(uniqueModuleName); return uniqueModuleName;}
-		else {System.out.println(splittedByPoint[splittedByPoint.length - 1]); return splittedByPoint[splittedByPoint.length - 1];}
-	}
-	
-	private FamixClass getClassForUniqueName(String uniqueName){
-		return theModel.classes.get(uniqueName);
-	} 
 }

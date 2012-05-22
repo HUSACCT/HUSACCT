@@ -11,6 +11,11 @@ import org.apache.log4j.Logger;
 
 class FamixDependencyConnector {
 
+	private static final String EXTENDS = "Extends";
+	private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
+	private static final String EXTENDS_ABSTRACT = "ExtendsAbstract";
+	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
+	
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
@@ -88,6 +93,7 @@ class FamixDependencyConnector {
 					logger.info("Couldn't analyse dependency from " + association.from + ". Reason: External Libraries not implemented yet");
 //					logger.info("couldn't connect " + association.from + " to the right entity. Linenumber " + association.lineNumber + ".");
 				} else {
+					determineType(association);
 					addToModel(association);
 				}
 			} catch(Exception e){
@@ -95,8 +101,21 @@ class FamixDependencyConnector {
 			}
 		}		
 	}	
+		
+	private void determineType(FamixAssociation association){
+		String type = association.type;
+		if(type.equals(EXTENDS)){
+			FamixClass theClass = getClassForUniqueName(association.to);
+			if(theClass.isAbstract) type = EXTENDS_ABSTRACT;
+			else if(!theClass.isAbstract) type = EXTENDS_CONCRETE;
+			else type = EXTENDS_LIBRARY;
+		}
+		association.type = type;
+	}
 	
-
+	private FamixClass getClassForUniqueName(String uniqueName){
+		return theModel.classes.get(uniqueName);
+	} 
 
 	private String getClassForAttribute(String delcareClass, String attributeName){
 		for(FamixAttribute famixAttribute: theModel.getAttributes()){
@@ -141,20 +160,6 @@ class FamixDependencyConnector {
 	private boolean isInvocation(FamixAssociation association){
 		return association instanceof FamixInvocation;
 	}
-//	
-//
-//	private List<FamixInvocation> getAllInvocationsFromClass(String from, String invocationName) {
-//		List<FamixInvocation> foundInvocations = new ArrayList<FamixInvocation>();
-//		for (FamixAssociation assocation : theModel.associations){
-//			if(assocation instanceof FamixInvocation){
-//				FamixInvocation theInvocation = (FamixInvocation) assocation;
-//				if(theInvocation.belongsToMethod.equals(from) && theInvocation.nameOfInstance.equals(invocationName)){
-//					foundInvocations.add(theInvocation);
-//				}
-//			}
-//		}
-//		return foundInvocations;
-//	}
 
 	private String findClassInImports(String importingClass, String typeDeclaration){
 		List<FamixImport> imports = theModel.getImportsInClass(importingClass);
