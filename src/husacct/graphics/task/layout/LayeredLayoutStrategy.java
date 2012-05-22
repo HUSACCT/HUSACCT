@@ -1,7 +1,6 @@
 package husacct.graphics.task.layout;
 
 import husacct.common.ListUtils;
-import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.ClassFigure;
 import husacct.graphics.presentation.figures.ModuleFigure;
@@ -12,6 +11,7 @@ import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
+import org.jhotdraw.draw.AbstractCompositeFigure;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 import org.lambda.functions.implementations.F1;
@@ -24,11 +24,11 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final F1<Node, Boolean> rootLambda = new F1<Node, Boolean>(new Node(null, 0)){{ ret(a.getLevel() == 0);}};
 	private static final F1<Figure, Boolean> connectorLambda = new F1<Figure, Boolean>(null){{ ret(isConnector(a)); }};
 	
-	private Drawing drawing;
+	private AbstractCompositeFigure drawing;
 	private SortedNodeList nodes = new SortedNodeList();
 	List<Figure> connectors = null;
 
-	public LayeredLayoutStrategy(Drawing theDrawing) {
+	public LayeredLayoutStrategy(AbstractCompositeFigure theDrawing) {
 		drawing = theDrawing;
 	}
 
@@ -38,7 +38,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		calculateLayout();
 		//nodes.sort();
 		ListUtils.apply(nodes, new S1<Node>(new Node(new ClassFigure("dummy"))){{ System.out.println(String.format("%s : level %d", ((BaseFigure)a.getFigure()).getName(), a.getLevel()));}});
-		applyLayout();
+		applyLayout();	
 	}
 	
 	private void initLayout() {
