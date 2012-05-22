@@ -11,6 +11,8 @@ import javax.swing.UIManager;
 public class AnalyseMain {
 	public static void main(String[] args){
 		
+		//Test Comment voor presentatie build-server
+		
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		
