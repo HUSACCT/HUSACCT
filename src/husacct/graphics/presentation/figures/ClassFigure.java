@@ -88,9 +88,4 @@ public class ClassFigure extends BaseFigure {
 
 		return other;
 	}
-
-	@Override
-	public boolean isModule() {
-		return true;
-	}
 }
