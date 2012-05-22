@@ -2,8 +2,6 @@ package husacct.define.task;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
-
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Module;
@@ -49,6 +47,10 @@ public class RuleConventionsChecker {
 			conventionError = checkIsAllowedToUse();
 		} else if(ruleTypeKey.equals("MustUse")) {
 			conventionError = checkMustUse();
+		} else if(ruleTypeKey.equals("SkipCall")) {
+			conventionError = checkSkipCall();
+		} else if(ruleTypeKey.equals("BackCall")) {
+			conventionError = checkBackCall();
 		}
 		return conventionError;
 	}
@@ -155,6 +157,16 @@ public class RuleConventionsChecker {
 			mustUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
 		}
 		return mustUseSucces;
+	}
+	
+	private boolean checkSkipCall() {
+		// #TODO:: implement Skip Call Checks
+		return true;
+	}
+	
+	private boolean checkBackCall() {
+		// #TODO:: implement Back Call Checks
+		return true;
 	}
 	
 	private boolean checkRuleTypeAlreadySet() {
