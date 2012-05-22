@@ -251,7 +251,7 @@ public class DemoController extends DrawingController {
 	}
 
 	@Override
-	public void moduleOpen(String path) {
+	public void moduleOpen(String[] paths) {
 
 	}
 

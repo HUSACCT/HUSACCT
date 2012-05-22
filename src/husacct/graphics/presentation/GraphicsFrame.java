@@ -31,7 +31,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private DrawingView drawingView;
 	private GraphicsMenuBar menuBar;
 	private ZoomLocationBar locationBar;
-	private String currentPath;
+	private String[] currentPaths;
 	private JScrollPane drawingScrollPane, propertiesScrollPane;
 	private JSplitPane centerPane;
 	private String ROOT_LEVEL;
@@ -52,7 +52,7 @@ public class GraphicsFrame extends JInternalFrame {
 
 		controlService = ServiceProvider.getInstance().getControlService();
 		ROOT_LEVEL = controlService.getTranslatedString("Root");
-		resetCurrentPath();
+		resetCurrentPaths();
 
 		drawingView = givenDrawingView;
 		initializeComponents();
@@ -73,16 +73,16 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 	}
 	
-	public String getCurrentPath() {
-		return currentPath;
+	public String[] getCurrentPaths() {
+		return currentPaths;
 	}
 
-	public void resetCurrentPath() {
-		currentPath = "";
+	public void resetCurrentPaths() {
+		currentPaths = new String[]{};
 	}
 
-	public void setCurrentPath(String path) {
-		currentPath = path;
+	public void setCurrentPaths(String[] paths) {
+		currentPaths = paths;
 	}
 
 	private void initializeComponents() {
@@ -198,8 +198,8 @@ public class GraphicsFrame extends JInternalFrame {
 		locationBar = new ZoomLocationBar();
 		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
 			@Override
-			public void actionPerformed(String selectedPath) {
-				moduleOpen(selectedPath);
+			public void actionPerformed(String[] selectedPaths) {
+				moduleOpen(selectedPaths);
 			}
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -213,13 +213,13 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void updateGUI() {
-		locationBar.updateLocationBar(getCurrentPath());
+		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();
 	}
 
-	private void moduleOpen(String path) {
+	private void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
-			l.moduleOpen(path);
+			l.moduleOpen(paths);
 		}
 	}
 

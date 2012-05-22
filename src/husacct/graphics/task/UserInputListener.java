@@ -4,7 +4,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 
 public interface UserInputListener {
 	
-	public void moduleOpen(String path);
+	public void moduleOpen(String[] paths);
 
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure);
 

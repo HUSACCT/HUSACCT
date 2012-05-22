@@ -29,7 +29,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
-	protected String currentPath = "";
+	protected String[] currentPaths = new String[]{};
 	private boolean isViolationsShown = false;
 
 	protected IControlService controlService;
@@ -84,16 +84,16 @@ public abstract class DrawingController implements UserInputListener {
 		drawing.clearAllLines();
 	}
 
-	public String getCurrentPath() {
-		return currentPath;
+	public String[] getCurrentPaths() {
+		return currentPaths;
 	}
 
-	public void resetCurrentPath() {
-		currentPath = "";
+	public void resetCurrentPaths() {
+		currentPaths = new String[]{};
 	}
 
-	public void setCurrentPath(String path) {
-		currentPath = path;
+	public void setCurrentPaths(String[] paths) {
+		currentPaths = paths;
 	}
 
 	public boolean areViolationsShown() {
@@ -145,7 +145,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
 		
-		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
 		
 		for (AbstractDTO dto : modules) {
@@ -185,7 +185,7 @@ public abstract class DrawingController implements UserInputListener {
 				figureMap.linkModule(generatedFigure, dto);
 			}
 		}
-		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
 		drawLinesBasedOnSetting();
 		updateLayout();
