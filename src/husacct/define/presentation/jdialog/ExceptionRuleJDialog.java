@@ -1,7 +1,8 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.jpanel.ruledetails.RuleDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.PopUpController;
@@ -132,16 +133,6 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 		this.saveButton.addActionListener(this);
 		
 		return buttonPanel;
-	}
-	
-	private void setTextures() {
-		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			this.saveButton.setText("Create");
-			this.setTitle("New exception rule");
-		} else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
-			this.saveButton.setText("Save");
-			this.setTitle("Edit exception rule");
-		}
 	}
 	
 	/**

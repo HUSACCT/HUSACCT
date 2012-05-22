@@ -1,8 +1,9 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jpanel.ruledetails.RuleDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
+import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.KeyValueComboBox;
