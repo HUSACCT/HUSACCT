@@ -45,6 +45,10 @@ public class RuleConventionsChecker {
 			conventionError = checkIsOnlyAllowedToUse();
 		} else if(ruleTypeKey.equals("IsOnlyModuleAllowedToUse")) {
 			conventionError = checkIsOnlyModuleAllowedToUse();
+		} else if(ruleTypeKey.equals("IsAllowedToUse")) {
+			conventionError = checkIsAllowedToUse();
+		} else if(ruleTypeKey.equals("MustUse")) {
+			conventionError = checkMustUse();
 		}
 		return conventionError;
 	}
@@ -115,20 +119,42 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkIsOnlyModuleAllowedToUse() {
-		boolean isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse");
-		if(isOnlyAllowedToUseSucces) {
-			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse");
+		boolean isOnlyModuleAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse");
+		if(isOnlyModuleAllowedToUseSucces) {
+			isOnlyModuleAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse");
 		}
-		if(isOnlyAllowedToUseSucces) {
-			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
+		if(isOnlyModuleAllowedToUseSucces) {
+			isOnlyModuleAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
 		}
-		if(isOnlyAllowedToUseSucces) {
-			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsAllowedToUse");
+		if(isOnlyModuleAllowedToUseSucces) {
+			isOnlyModuleAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsAllowedToUse");
 		}
-		if(isOnlyAllowedToUseSucces) {
-			isOnlyAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("MustUse");
+		if(isOnlyModuleAllowedToUseSucces) {
+			isOnlyModuleAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("MustUse");
 		}
-		return isOnlyAllowedToUseSucces;
+		return isOnlyModuleAllowedToUseSucces;
+	}
+	
+	private boolean checkIsAllowedToUse() {
+		boolean isAllowedToUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse");
+		if(isAllowedToUseSucces) {
+			isAllowedToUseSucces = checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse");
+		}
+		if(isAllowedToUseSucces) {
+			isAllowedToUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
+		}
+		return isAllowedToUseSucces;
+	}
+	
+	private boolean checkMustUse() {
+		boolean mustUseSucces = checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse");
+		if(mustUseSucces) {
+			mustUseSucces = checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse");
+		}
+		if(mustUseSucces) {
+			mustUseSucces = checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse");
+		}
+		return mustUseSucces;
 	}
 	
 	private boolean checkRuleTypeAlreadySet() {
