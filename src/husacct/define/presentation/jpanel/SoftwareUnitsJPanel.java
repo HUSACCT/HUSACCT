@@ -53,7 +53,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 		this.setLayout(softwareUnitsPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Software Units Assigned"));
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AssignedSoftwareUnitsTitle")));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
@@ -114,10 +114,10 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 				softwareUnitFrame.setLocationRelativeTo(softwareUnitFrame.getRootPane());
 				softwareUnitFrame.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, DefineTranslator.translate("ModuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Please analyse an application first! \nYou can do this by filling in the application details", "Not yet analysed!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("NotAnalysedYet"), DefineTranslator.translate("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	private void removeSoftwareUnit(){
@@ -139,7 +139,7 @@ public class SoftwareUnitsJPanel extends AbstractDefinitionJPanel implements Act
 	public void updateSoftwareUnitTable() {
 		try {
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-			JPanelStatus.getInstance("Updating software unit table").start();
+			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all components from the service

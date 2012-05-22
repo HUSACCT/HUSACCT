@@ -1,5 +1,7 @@
 package husacct.define.presentation.utils;
 
+import husacct.define.abstraction.language.DefineTranslator;
+
 import java.awt.Component;
 
 import javax.swing.JFrame;
@@ -35,7 +37,7 @@ public class UiDialogs {
 					return inputValue;
 				} else {
 					logger.error("inputDialog() - no value entered");
-					errorDialog(component, "Please enter an value!", "Error");
+					errorDialog(component, DefineTranslator.translate("MissingValue"), DefineTranslator.translate("Error"));
 				}
 			}
 		}

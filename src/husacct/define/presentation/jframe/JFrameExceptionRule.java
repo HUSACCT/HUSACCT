@@ -1,5 +1,6 @@
 package husacct.define.presentation.jframe;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.RuleDetailsJPanel;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.task.AppliedRuleController;
@@ -57,11 +58,11 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	
 	private void setTextures() {
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			this.saveButton.setText("Create");
-			this.setTitle("New exception rule");
+			this.saveButton.setText(DefineTranslator.translate("CreateException"));
+			this.setTitle(DefineTranslator.translate("ExceptionRuleTitle"));
 		} else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
-			this.saveButton.setText("Save");
-			this.setTitle("Edit exception rule");
+			this.saveButton.setText(DefineTranslator.translate("Save"));
+			this.setTitle(DefineTranslator.translate("EditExceptionRuleTitle"));
 		}
 	}
 
@@ -71,7 +72,7 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle("New Exception Rule");
+			setTitle(DefineTranslator.translate("ExceptionRuleTitle"));
 			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/define/presentation/resources/jframeicon.jpg")).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
@@ -91,7 +92,7 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 		mainPanel.setLayout(this.createMainPanelLayout());
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
-		mainPanel.add(new JLabel("RuleType"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		mainPanel.add(new JLabel(DefineTranslator.translate("RuleType")), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.createAppliedRuleKeyValueComboBox();
 		mainPanel.add(this.exceptionRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		this.createRuleDetailPanel();
@@ -124,11 +125,11 @@ public class JFrameExceptionRule  extends JFrame implements KeyListener, ActionL
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
-		this.cancelButton = new JButton("Cancel");
+		this.cancelButton = new JButton(DefineTranslator.translate("Cancel"));
 		buttonPanel.add(this.cancelButton);
 		this.cancelButton.addActionListener(this);
 		
-		this.saveButton = new JButton("Add");
+		this.saveButton = new JButton(DefineTranslator.translate("Add"));
 		buttonPanel.add(this.saveButton);
 		this.saveButton.addActionListener(this);
 		

@@ -55,7 +55,8 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 		JPanel innerModulePanel = new JPanel();
 		BorderLayout innerModulePanelLayout = new BorderLayout();
 		innerModulePanel.setLayout(innerModulePanelLayout);
-		innerModulePanel.setBorder(BorderFactory.createTitledBorder("Module Hierarchy"));
+		//TODO Does this need translating too?
+		innerModulePanel.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModuleHierachy")));
 		innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
@@ -158,7 +159,10 @@ public class ModuleJPanel extends AbstractDefinitionJPanel implements ActionList
 	private void removeModule() {
 		long moduleId = getSelectedModuleId();
 		if (moduleId != -1){
-			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove the selected module?", "Remove?");
+			//TODO Delete this String after implementing in property file
+			//String temp = "Are you sure you want to remove the selected module?";
+			//String temp2 = "Remove?";
+			boolean confirm = UiDialogs.confirmDialog(this, DefineTranslator.translate("RemoveConfirm"), DefineTranslator.translate("RemovePopupTitle"));
 			if (confirm) {
 				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);

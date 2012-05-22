@@ -59,7 +59,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Applied Rules"));
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AppliedRules")));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
@@ -125,7 +125,8 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
 			appliedRuleFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			//TODO Test popup
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("ModuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -137,7 +138,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 			appliedRuleFrame.setLocationRelativeTo(appliedRuleFrame.getRootPane());
 			appliedRuleFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -160,7 +161,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 		if(selectedAppliedRuleId != -1) {
 			DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -176,7 +177,7 @@ public class AppliedRulesJPanel extends AbstractDefinitionJPanel  implements Act
 	public void updateAppliedRuleTable() {
 		try {
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-			JPanelStatus.getInstance("Updating rules applied table").start();
+			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
