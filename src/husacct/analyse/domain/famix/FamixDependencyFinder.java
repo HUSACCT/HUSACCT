@@ -105,13 +105,20 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 	
 	private boolean isFrom(FamixAssociation association, String from){
-		boolean result =  from.equals("") || association.from.equals(from) || association.from.startsWith(from);
-		result = result && !association.from.equals(association.to);
+		boolean result = from.equals("") || association.from.equals(from);
+		if(!result && association.from.length() > from.length()){
+			result = association.from.charAt(from.length()) == '.';
+		}
+		
+		result = result && !association.to.equals(association.from);
 		return result;
 	}
 	
 	private boolean isTo(FamixAssociation association, String to){
-		boolean result = to.equals("") || association.to.equals(to) || association.to.startsWith(to);
+		boolean result = to.equals("") || association.to.equals(to);
+		if(!result && association.to.length() > to.length()){
+			result = association.to.charAt(to.length()) == '.';
+		}
 		result = result && !association.to.equals(association.from);
 		return result;
 	}
