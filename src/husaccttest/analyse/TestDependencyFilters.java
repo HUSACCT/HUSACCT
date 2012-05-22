@@ -105,6 +105,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		int dependenciesExpected = 1;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from, dependencyFilter);
+		super.printDependencies(dependencies);
 		assertEquals(dependenciesExpected, dependencies.length);
 		
 		String fromExpected = from;
