@@ -16,51 +16,49 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.EmptyBorder;
 
-public class LoadingDialog extends JDialog implements Runnable{
+public class LoadingDialog extends JDialog implements Runnable {
 
 	private static final long serialVersionUID = 1L;
-	
 	private String progressInfoText;
-	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-	
-	public LoadingDialog(MainController mainController, String progressInfoText){
+
+	public LoadingDialog(MainController mainController, String progressInfoText) {
 		super(mainController.getMainGui(), true);
 		setTitle(controlService.getTranslatedString("Loading"));
 		this.progressInfoText = progressInfoText;
 		setup();
 		addComponents();
 	}
-	public LoadingDialog(String progressInfoText){
-		  ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-		  new LoadingDialog(controlService.getMainController(), progressInfoText);
-		 }
-	
-	private void setup(){
+
+	public LoadingDialog(String progressInfoText) {
+		this(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController(), progressInfoText);
+	}
+
+	private void setup() {
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setSize(new Dimension(400, 130));
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
-	
-	private void addComponents(){
+
+	private void addComponents() {
 		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel progressPanel = new JPanel(new GridLayout(1, 1));
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		
+
 		JLabel progressLabel = new JLabel(progressInfoText);
 		JProgressBar progressBar = new JProgressBar();
-		
+
 		progressPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		progressBar.setIndeterminate(true);
-		
+
 		JLabel waitLabel = new JLabel(controlService.getTranslatedString("Wait"));
-		
+
 		labelPanel.add(progressLabel);
 		progressPanel.add(progressBar);
 		buttonsPanel.add(waitLabel);
-		
+
 		add(labelPanel);
 		add(progressPanel);
 		add(buttonsPanel);
@@ -69,5 +67,5 @@ public class LoadingDialog extends JDialog implements Runnable{
 	@Override
 	public void run() {
 		this.setVisible(true);
-	}	
+	}
 }
