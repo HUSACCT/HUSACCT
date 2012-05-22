@@ -63,9 +63,8 @@ class FamixDependencyFinder extends FamixFinder{
 		this.from = argumentFrom;
 		this.to = argumentTo;
 		this.currentResult = findDependencies();
-		removeFilter();
+		this.removeFilter();
 	}
-	
 	private void removeFilter(){
 		this.filtered = false;
 		this.filter = new String[]{};
@@ -76,8 +75,24 @@ class FamixDependencyFinder extends FamixFinder{
 		List<FamixAssociation> allAssocations = theModel.associations;
 		for(FamixAssociation assocation: allAssocations){
 			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
-				DependencyDTO foundDependency = buildDependencyDTO(assocation);
+				DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
 				if (!result.contains(foundDependency)) result.add(foundDependency);
+			}
+		}
+		result.addAll(this.findIndirectDependencies(result));
+		return result;
+	}
+	
+	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> directDependencies){
+		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
+		for(DependencyDTO directDependency: directDependencies){
+			String startFrom = directDependency.from;
+			this.from = directDependency.to;
+			this.currentFunction = FinderFunction.FROM;
+			for(DependencyDTO indirectDependency: this.findDependencies()){
+				indirectDependency.isIndirect = true;
+				indirectDependency.from = startFrom;
+				result.add(indirectDependency);
 			}
 		}
 		return result;
@@ -119,12 +134,11 @@ class FamixDependencyFinder extends FamixFinder{
 		return result;
 	}
 	
-	
-	private DependencyDTO buildDependencyDTO(FamixAssociation association){
+	private DependencyDTO buildDependencyDTO(FamixAssociation association, boolean isIndirect){
 		String dependencyFrom = association.from;
 		String dependencyTo = association.to;
 		String dependencyType = association.type;
 		int dependencyLine = association.lineNumber;
-		return new DependencyDTO(dependencyFrom, dependencyTo, dependencyType, dependencyLine);
+		return new DependencyDTO(dependencyFrom, dependencyTo, dependencyType, isIndirect, dependencyLine);
 	}
 }
