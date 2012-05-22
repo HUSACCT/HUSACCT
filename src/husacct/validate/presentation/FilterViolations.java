@@ -123,7 +123,7 @@ public final class FilterViolations extends JDialog  {
 		
 		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
 		
-		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalFilterViolationGroup.addComponent(ruletypepanel);
 		verticalFilterViolationGroup.addComponent(violationtypePanel);
 		
@@ -152,7 +152,7 @@ public final class FilterViolations extends JDialog  {
 		verticalButtonPathGroup.addComponent(removePath);
 		verticalButtonPathGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalPanePathGroup.addComponent(pathFilterScrollPane);
 		verticalPanePathGroup.addGroup(verticalButtonPathGroup);
 		
