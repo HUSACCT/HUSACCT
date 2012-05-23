@@ -19,14 +19,14 @@ public class AnalyseMain {
 		//String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Army\\src";
 		//C:\Tools\Workspaces\School\TO Blok 3 Jaar 3\Copy of Java Recognition Test\src
 		//String path = "C:/Tools/Workspaces/School/TO Blok 3 Jaar 3/SimpleTestArmy/src";
-		String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Copy of Java Recognition Test\\src";
+		String path = "..\\benchmark_application\\src\\domain\\flickr";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
 		
-		System.out.println(new FamixCreationServiceImpl().represent());
+//		System.out.println(new FamixCreationServiceImpl().represent());
 		
 //		try {  
 //	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    

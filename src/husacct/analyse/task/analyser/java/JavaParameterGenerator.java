@@ -26,12 +26,14 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private boolean nameFound = false;
 	private boolean declareTypeFound = false;
 	
+	private ArrayList<String> currentTypes;
 	private ArrayList<Object> saveQueue;
 	
 	public String generateParameterObjects(Tree tree, String belongsToMethod, String belongsToClass){
 		//returns the signature, which MethodGenerator uses
 
 		this.saveQueue = new ArrayList<Object>();
+		this.currentTypes = new ArrayList<String>();
 		
 		this.belongsToMethod = belongsToMethod;
 		this.belongsToClass = belongsToClass;
@@ -87,6 +89,12 @@ public class JavaParameterGenerator extends JavaGenerator {
 			
 			switch(childTree.getType()){
 				case JavaParser.IDENT:
+					
+					if(declareType == null || declareType.equals("")){
+						declareType = childTree.getText();
+					} else {
+						currentTypes.add(childTree.getText());
+					}
 					attributeType += "." + childTree.getText();
 					if(childTree.getChildCount() > 0){
 						attributeType += getAttributeRecursive(childTree);
@@ -111,7 +119,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 			CommonTree currentChild = (CommonTree) tree.getChild(i);
 			
 			if(currentChild.getType() == JavaParser.QUALIFIED_TYPE_IDENT){
-				this.declareType = getAttributeType(currentChild);
+				getAttributeType(currentChild);
 				this.declareTypeFound = true;
 				this.signature += !this.signature.equals("") ? "," : "";
 				this.signature += this.declareType;
@@ -132,8 +140,12 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private void addToQueue(){
 		ArrayList<Object> myParam = new ArrayList<Object>();
 		myParam.add(this.declareType);
-		myParam.add(this.declareName);		
+		myParam.add(this.declareName);
+		myParam.add(this.currentTypes);
 		saveQueue.add(myParam);
+		this.declareType = null;
+		this.declareName = null;
+		this.currentTypes = new ArrayList<String>();
 	}
 	
 	private void writeParameterToDomain() {
@@ -141,9 +153,10 @@ public class JavaParameterGenerator extends JavaGenerator {
 			ArrayList<Object> currentParam = (ArrayList<Object>) object;
 			String type = (String) currentParam.get(0);
 			String name = (String) currentParam.get(1);
+			ArrayList<String> types = (ArrayList<String>) currentParam.get(2);
 			this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
 			String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")";
-			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, type);
+			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
 		}
 	}
 

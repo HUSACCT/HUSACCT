@@ -5,7 +5,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 public class TestNavigation extends BenchmarkExtended{
 	
 	public void testRootModules(){
-		String[] namesExpected = {"declarations", "domain", "exception", "extendsconcrete", "generics", "husacct", "infrastructure", "inpackage", "interfaces", "overpackages", "parentmoduletest", "presentation"};			
+		String[] namesExpected = {"domain", "infrastructure", "presentation"};			
 		AnalysedModuleDTO[] rootModules = service.getRootModules();
 		
 		assertEquals(namesExpected.length, rootModules.length);

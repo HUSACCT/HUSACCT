@@ -1,4 +1,4 @@
-package husaccttest.analyse.benchmarkLeo.extendsconcrete;
+package husaccttest.analyse.RecognationTest.extendsconcrete;
 
 import java.util.HashMap;
 
