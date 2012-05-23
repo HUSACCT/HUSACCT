@@ -84,10 +84,14 @@ public class XmlSavePanel extends SaverPanel{
 	
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
-		int returnVal = fileChooser.showDialog(this);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
+		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(fileChooser.getSelectedFile());
+			if(fileDialog.getSelectedFile().exists()){
+				setFile(fileDialog.getSelectedFile());
+			} else {
+				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			}
 		}
 	}
 	

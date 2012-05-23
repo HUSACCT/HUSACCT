@@ -65,9 +65,6 @@ public class SetApplicationDialog extends JDialog {
 					mainController.getApplicationController().setApplicationData(applicationData);
 					dispose();
 				}
-				else {
-					controlService.showErrorMessage(controlService.getTranslatedString("MustBeAlphaNumericError"));
-				}
 			}
 		});
 	}
