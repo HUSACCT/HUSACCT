@@ -1,5 +1,6 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -111,21 +112,22 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		boolean isAllowedToAdd = false;
 		boolean lastPosititionWasIdent = false;
 		for(CommonTree thisTree : tree){
-			if(thisTree.getType() == FORWARDBRACKET){
+			int type = thisTree.getType();
+			if(type == FORWARDBRACKET){
 				isAllowedToAdd = true;
 			}
 			
-			if(thisTree.getType() == BACKWARDCURLYBRACKET || thisTree.getType() == COLON){
+			if(type == BACKWARDCURLYBRACKET || type == COLON){
 				return signature;
 			}
 			
 			if(isAllowedToAdd){
-				if(thisTree.getType() == FORWARDBRACKET || thisTree.getType() == BACKWARDBRACKET || thisTree.getType() == COMMA){
+				if(type == FORWARDBRACKET || type == BACKWARDBRACKET || type == COMMA){
 					signature = signature + thisTree.getText();
 					lastPosititionWasIdent = false;
 				}
 				
-				if(thisTree.getType() == IDENTIFIER && lastPosititionWasIdent == false){
+				if(Arrays.binarySearch(typeCollection, type) > -1 && lastPosititionWasIdent == false){
 					signature = signature + thisTree.getText();
 					lastPosititionWasIdent = true;
 				}
