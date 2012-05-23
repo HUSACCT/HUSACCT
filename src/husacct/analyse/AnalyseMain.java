@@ -20,7 +20,7 @@ public class AnalyseMain {
 		analyser.analyseApplication();
 
 		FamixCreationServiceImpl impl = new FamixCreationServiceImpl();
-		System.out.println(impl.represent());
+		//System.out.println(impl.represent());
 		System.out.println((double)(System.nanoTime() - tijd) / 1000000000);
 		new AnalyseDebuggingFrame();
 		

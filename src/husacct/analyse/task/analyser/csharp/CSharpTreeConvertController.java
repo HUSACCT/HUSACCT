@@ -33,6 +33,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	private String currentMethodName = "";
 	private List<CSharpData> indentClassLevel;
 	private List<CSharpData> indentNamespaceLevel;
+	private List<CSharpInstanceData> instances;
 	private CSharpUsingConvertController usingConverter;
 
 	public CSharpTreeConvertController() {
@@ -40,6 +41,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		setIndentNamespaceLevel(new ArrayList<CSharpData>());
 		setNamespaceTrees(new ArrayList<List<CommonTree>>());
 		setClassTrees(new ArrayList<CommonTree>());
+		setInstanceList(new ArrayList<CSharpInstanceData>());
 	}
 
 	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser)	throws RecognitionException {
@@ -182,6 +184,10 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	public void setNamespaceTrees(final List<List<CommonTree>> namespaceTrees) {
 		this.namespaceTrees = namespaceTrees;
 	}
+	
+	public void setInstanceList(final List<CSharpInstanceData> instances){
+		this.instances = instances;
+	}
 
 	public String getCurrentClassName() {
 		return currentClassName;
@@ -237,5 +243,13 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 
 	public void setCurrentNamespaceIndent(int currentNamespaceIndent) {
 		this.currentNamespaceIndent = currentNamespaceIndent;
+	}
+
+	public void addInstance(CSharpInstanceData instance) {
+		instances.add(instance);
+	}
+	
+	public List<CSharpInstanceData> getInstances(){
+		return instances;
 	}
 }
