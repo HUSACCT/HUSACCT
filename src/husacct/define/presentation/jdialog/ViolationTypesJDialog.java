@@ -52,10 +52,8 @@ public class ViolationTypesJDialog extends JDialog{
 			this.setTitle("Violation Types");
 			this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
 			
+			this.getContentPane().removeAll();
 			getContentPane().add(this.createViolationPanel(), BorderLayout.CENTER);
-			if(getComponentCount() > 0) {
-				getRootPane().revalidate();
-			}
 			
 			this.setResizable(false);
 			this.pack();

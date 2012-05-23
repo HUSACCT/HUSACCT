@@ -3,21 +3,25 @@ package husacct.define.presentation.jdialog;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.ValueInputController;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddModuleValuesJDialog extends AbstractValuesJDialog {
+public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	private final String husacctIcon = "husacct/common/resources/husacct.png";
@@ -29,13 +33,18 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	private JTextField moduleDescriptionField;	
 	private JComboBox moduleTypeComboBox;
 	
+	private JButton cancelButton;
+	private JButton saveButton;
+	private ValueInputController inputController;
+	
 	public AddModuleValuesJDialog(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
+		this.inputController = new ValueInputController();
+		initGUI();
 	}
 	
-	@Override
-	public void initUI() {
+	private void initGUI() {
 		this.setTitle("New Module");
 		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 		
@@ -45,10 +54,10 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.createInnerPanel();
 		this.add(this.innerPanel);
 		
-		this.setResizable(false);
-		this.pack();
+		this.setResizable(true);
 		this.setSize(700, 190);
 		this.setVisible(true);
+		this.setModal(true);
 	}
 	
 	private GridLayout getGridLayout(int rows, int columns) {
@@ -109,7 +118,6 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.innerPanel.add(this.moduleTypeComboBox);
 	}
 	
-	@Override
 	protected void addButtons() {
 		this.cancelButton = new JButton();
 		this.innerPanel.add(this.cancelButton);
@@ -175,12 +183,10 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		
 	}
 
-	@Override
 	protected void cancelButtonAction() {
 		this.dispose();
 	}
 
-	@Override
 	protected void saveButtonAction() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
 		this.submitForModuleType(moduleType);
