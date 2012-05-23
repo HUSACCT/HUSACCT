@@ -18,6 +18,7 @@ class JavaExceptionGenerator extends JavaGenerator{
 	public void generateModel(CommonTree tree, String theClass){
 		this.lineNumber = tree.getLine();
 		this.fromClass = theClass;
+		
 		setExceptionClass(tree);
 		
 		if(isCatchedException(tree)){
@@ -73,10 +74,14 @@ class JavaExceptionGenerator extends JavaGenerator{
 	
 	private String packageClassPath(CommonTree tree){
 		String path = "";
-		int totalElementen = tree.getChildCount();		
-		for(int iterator = 0; iterator < totalElementen; iterator++){			
-			path += !path.equals("") ? "." : "";
-			path += tree.getChild(iterator);
+		int totalElementen = tree.getChildCount();
+		for(int iterator = 0; iterator < totalElementen; iterator++){
+			if(tree.getChild(iterator).getType() == JavaParser.DOT){
+				path += packageClassPath((CommonTree) tree.getChild(iterator));
+			} else {
+				path += !path.equals("") ? "." : "";
+				path += tree.getChild(iterator).getText();
+			}
 		}		
 		return path;
 	}
