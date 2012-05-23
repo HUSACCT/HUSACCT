@@ -1,13 +1,17 @@
 package husacct.analyse;
 
 import javax.swing.JInternalFrame;
+
+import org.jdom2.Element;
+
 import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.savechain.ISaveable;
 
-public class AnalyseServiceImpl implements IAnalyseService{
+public class AnalyseServiceImpl implements IAnalyseService, ISaveable{
 
 	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
@@ -95,5 +99,15 @@ public class AnalyseServiceImpl implements IAnalyseService{
 	@Override
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
 		return service.getDependenciesTo(to, dependencyFilter);
+	}
+
+	@Override
+	public Element getWorkspaceData() {
+		return service.saveModel();
+	}
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		service.loadModel(workspaceData);
 	}
 }
