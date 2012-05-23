@@ -30,7 +30,7 @@ public class Drawing extends QuadTreeDrawing {
 	public Drawing() {
 		super();
 	}
-	
+
 	public void showExportToImagePanel() {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
@@ -133,7 +133,8 @@ public class Drawing extends QuadTreeDrawing {
 				figures[1].setLineThickness(1);
 			}
 		} else if (figures.length >= 3) {
-			// 3 or more relations; small, big or  fat, according to scale max amounts of dependencies
+			// 3 or more relations; small, big or fat, according to scale max
+			// amounts of dependencies
 			int maxAmount = -1;
 			for (RelationFigure figure : figures) {
 				int length = figure.getAmount();
@@ -156,8 +157,7 @@ public class Drawing extends QuadTreeDrawing {
 		}
 	}
 
-	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, 
-			RelationFigure[] figures) {
+	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, RelationFigure[] figures) {
 		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
 
 		for (RelationFigure figure1 : figures) {
@@ -195,7 +195,7 @@ public class Drawing extends QuadTreeDrawing {
 			HashSet<RelationFigure> overlappingFigures = new HashSet<RelationFigure>();
 			overlappingFigures.add(keyFigure);
 			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
-			
+
 			strategy.separateLines(overlappingFigures);
 		}
 
