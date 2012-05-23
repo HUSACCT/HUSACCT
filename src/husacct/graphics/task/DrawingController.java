@@ -16,15 +16,18 @@ import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
 	public static final String ROOT = ""; 
+	protected static final boolean debugPrint = true;
 	
 	private boolean areViolationsShown = false;
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>(); 
@@ -154,21 +157,9 @@ public abstract class DrawingController implements UserInputListener {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 
-		// FIXME: TODO: Patrick:
-		// The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
-		// are done specifically in that order for a reason!
-		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
-		// after updating the layout of the drawing.
-		// To solve this we first draw the entire drawing, update the layout and then
-		// remove all the lines and re-add them to the drawing.
-		// As it's currently unknown what causes the bug or how to solve it and the
-		// deadline for Construction II is approaching, we have decided to go with a
-		// work around. However, this bug should be fixed as soon as possible.
 		drawLinesBasedOnSetting();
 
 		updateLayout();
-
-		drawLinesBasedOnSetting();
 	}
 
 	protected void updateLayout() {
@@ -176,7 +167,25 @@ public abstract class DrawingController implements UserInputListener {
 		int height = drawTarget.getHeight();
 
 		layoutStrategy.doLayout(width, height);
+		
+		//printFigures("doLayout(): layoutStrategy.doLayout();");
+		
 		restoreFigurePositions(getCurrentPath());
+		
+		printFigures("doLayout(): restoreFigurePositions()");
+		
+		// FIXME: TODO: Patrick:
+		// Calling drawLinesBasedOnSetting(); after updating the layout is done due to a bug.
+		// The bug is assumed to be in the RelationFigure because  the lines are drawing themselves 
+		// incorrectly after updating the layout of the drawing.
+		// To solve this we first draw the entire drawing, update the layout and then
+		// remove all the lines and re-add them to the drawing.
+		// As it's currently unknown what causes the bug or how to solve it and the
+		// deadline for Construction II is approaching, we have decided to go with a
+		// work around. However, this bug should be fixed as soon as possible.		
+		drawLinesBasedOnSetting();
+		
+		//printFigures("doLayout(): drawLinesBasedOnSetting()");
 	}
 
 	@Override
@@ -289,4 +298,20 @@ public abstract class DrawingController implements UserInputListener {
 	protected void resetFigurePositions(String path) {
 		storedStates.remove(path);
 	}
+	
+	protected void printFigures(String msg) {
+		if (!debugPrint)
+			return;
+		
+		System.out.println(msg);
+		
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			Rectangle2D.Double bounds = bf.getBounds();
+			
+			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y, bounds.width, bounds.height);
+			if (bf.getName().equals("Main"))
+				System.out.println(String.format("%s: %s", bf.getName(), rect));
+		}		
+	}	
 }

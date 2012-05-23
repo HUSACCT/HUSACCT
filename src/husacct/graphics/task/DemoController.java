@@ -9,14 +9,10 @@ import husacct.common.dto.ViolationTypeDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 import java.awt.Color;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Locale;
-
-import org.jhotdraw.draw.Figure;
 
 public class DemoController extends DrawingController {
-	
+
 	public DemoController() {
 		initializeDrawing();
 	}
@@ -28,17 +24,17 @@ public class DemoController extends DrawingController {
 		presentationLayer.type = "layer";
 		presentationLayer.logicalPath = "presentation";
 		modules.add(presentationLayer);
-		
+
 		ModuleDTO neuralInterfaceLayer = new ModuleDTO();
 		neuralInterfaceLayer.type = "layer";
 		neuralInterfaceLayer.logicalPath = "neural_interface";
-		modules.add(neuralInterfaceLayer);		
+		modules.add(neuralInterfaceLayer);
 
 		ModuleDTO taskLayer = new ModuleDTO();
 		taskLayer.type = "layer";
 		taskLayer.logicalPath = "task";
 		modules.add(taskLayer);
-		
+
 		ModuleDTO infrastructureLayer = new ModuleDTO();
 		infrastructureLayer.type = "layer";
 		infrastructureLayer.logicalPath = "infrastructure";
@@ -48,61 +44,43 @@ public class DemoController extends DrawingController {
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain";
 		modules.add(domainLayer);
-		
+
 		domainLayer = new ModuleDTO();
 		domainLayer.type = "layer";
 		domainLayer.logicalPath = "domain_two";
-		modules.add(domainLayer);		
+		modules.add(domainLayer);
 
 		ModuleDTO testLayer = new ModuleDTO();
 		testLayer.type = "layer";
 		testLayer.logicalPath = "floating";
 		modules.add(testLayer);
-//		
-//		ModuleDTO testClass = new ModuleDTO();
-//		testClass.type = "class";
-//		testClass.logicalPath = "*";
-//		//modules.add(testClass);
-//		
-//		ModuleDTO testModule = new ModuleDTO();
-//		testModule.type = "subsystem";
-//		testModule.logicalPath = "myModule";
-//		modules.add(testModule);
-//		
-//		ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
-//		unrecognizableModuleTypeDTO.type = "foobar";
-//		unrecognizableModuleTypeDTO.logicalPath = "tests";
-//		modules.add(unrecognizableModuleTypeDTO);
-//		
-//		ModuleDTO component = new ModuleDTO();
-//		component.type = "component";
-//		component.logicalPath = "uml2component";
-//		modules.add(component);
+		//
+		// ModuleDTO testClass = new ModuleDTO();
+		// testClass.type = "class";
+		// testClass.logicalPath = "*";
+		// //modules.add(testClass);
+		//
+		// ModuleDTO testModule = new ModuleDTO();
+		// testModule.type = "subsystem";
+		// testModule.logicalPath = "myModule";
+		// modules.add(testModule);
+		//
+		// ModuleDTO unrecognizableModuleTypeDTO = new ModuleDTO();
+		// unrecognizableModuleTypeDTO.type = "foobar";
+		// unrecognizableModuleTypeDTO.logicalPath = "tests";
+		// modules.add(unrecognizableModuleTypeDTO);
+		//
+		// ModuleDTO component = new ModuleDTO();
+		// component.type = "component";
+		// component.logicalPath = "uml2component";
+		// modules.add(component);
 
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
 		setPath(ROOT);
 		drawModulesAndLines(dtos);
-		
+
 		printFigures("Constructor");
-	}
-	
-	private boolean debugPrint = false;
-	
-	private void printFigures(String msg) {
-		if (!debugPrint)
-			return;
-		
-		System.out.println(msg);
-		
-		for (Figure f : drawing.getChildren()) {
-			BaseFigure bf = (BaseFigure) f;
-			Rectangle2D.Double bounds = bf.getBounds();
-			
-			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y, bounds.width, bounds.height);
-			if (bf.getName().equals("floating"))
-				System.out.println(String.format("%s: %s", bf.getName(), rect));
-		}		
 	}
 
 	@Override
@@ -163,13 +141,13 @@ public class DemoController extends DrawingController {
 		}
 		if (figureFrom.getName().equals("presentation") && figureTo.getName().equals("extra_task")) {
 			dependencies.add(new DependencyDTO("extra_task", "presentation", "wa", 1));
-		}		
+		}
 		if (figureFrom.getName().equals("presentation") && figureTo.getName().equals("task_two")) {
 			dependencies.add(new DependencyDTO("task_two", "presentation", "wa", 1));
-		}	
+		}
 		if (figureFrom.getName().equals("neural_interface") && figureTo.getName().equals("domain")) {
 			dependencies.add(new DependencyDTO("domain", "neural_interface", "wa", 1));
-		}		
+		}
 
 		if (figureFrom.getName().equals("task") && figureTo.getName().equals("domain")) {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 1));
@@ -185,12 +163,12 @@ public class DemoController extends DrawingController {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 5));
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 6));
 		}
-		
+
 		if (figureFrom.getName().equals("infrastructure") && figureTo.getName().equals("domain")) {
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 1));
 			dependencies.add(new DependencyDTO("task", "domain", "wa", 2));
 		}
-		
+
 		if (figureFrom.getName().equals("domain") && figureTo.getName().equals("domain_two")) {
 			dependencies.add(new DependencyDTO("domain_two", "domain", "wa", 1));
 		}
@@ -230,36 +208,51 @@ public class DemoController extends DrawingController {
 		ViolationDTO[] violations = new ViolationDTO[0];
 
 		// From ValidateServiceStub.java
-		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor", "InvocConstructorDescription", false);
+		ViolationTypeDTO constructorCall = new ViolationTypeDTO("InvocConstructor", "InvocConstructorDescription",
+				false);
 		ViolationTypeDTO extendingAbstractClass = new ViolationTypeDTO("Extends", "ExtendsDescription", false);
 		ViolationTypeDTO implementationOfInterface = new ViolationTypeDTO("Implements", "ImplementsDescription", false);
 		ViolationTypeDTO extendClass = new ViolationTypeDTO("Extends", "ExtendsDescription", false);
-		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse", "IsNotAllowedToUseDescription", new ViolationTypeDTO[] { constructorCall, extendingAbstractClass, implementationOfInterface, extendClass }, new RuleTypeDTO[] {});
+		RuleTypeDTO ruleType = new RuleTypeDTO("IsNotAllowedToUse", "IsNotAllowedToUseDescription",
+				new ViolationTypeDTO[] { constructorCall, extendingAbstractClass, implementationOfInterface,
+						extendClass }, new RuleTypeDTO[] {});
 
 		if (figureFrom.getName().equals("domain") && figureTo.getName().equals("task")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 1", 1, Color.red, "", "", 3);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
+					"error 1", 1, Color.red, "", "", 3);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 2", 1, Color.red, "", "", 3);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
+					"error 2", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
-		
+
 		if (figureFrom.getName().equals("task") && figureTo.getName().equals("domain")) {
 			violations = new ViolationDTO[2];
-			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 1", 1, Color.red, "", "", 3);
+			ViolationDTO taskLayerErr1 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
+					"error 1", 1, Color.red, "", "", 3);
 			violations[0] = taskLayerErr1;
-			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType, "error 2", 1, Color.red, "", "", 3);
+			ViolationDTO taskLayerErr2 = new ViolationDTO("domain", "task", "domain", "task", extendClass, ruleType,
+					"error 2", 1, Color.red, "", "", 3);
 			violations[1] = taskLayerErr2;
 		}
 
 		if (figureFrom.getName().equals("task") && figureTo.getName().equals("task")) {
-			return new ViolationDTO[] { new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 3", 1, Color.red, "", "", 3),
-					new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 4", 1, Color.red, "", "", 3), new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 5", 1, Color.PINK, "", "", 99) };
+			return new ViolationDTO[] {
+					new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 3", 1, Color.red,
+							"", "", 3),
+					new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 4", 1, Color.red,
+							"", "", 3),
+					new ViolationDTO("task", "task", "task", "task", extendClass, ruleType, "error 5", 1, Color.PINK,
+							"", "", 99) };
 		}
 
 		if (figureFrom.getName().equals("presentation") && figureTo.getName().equals("test")) {
-			violations = new ViolationDTO[] { new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType, "error 5", 1, Color.blue, "", "", 1),
-					new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType, "error 6", 1, Color.orange, "", "", 2) };
+			violations = new ViolationDTO[] {
+					new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType, "error 5",
+							1, Color.blue, "", "", 1),
+					new ViolationDTO("presentation", "test", "presentation", "test", extendClass, ruleType, "error 6",
+							1, Color.orange, "", "", 2) };
 		}
 
 		return violations;

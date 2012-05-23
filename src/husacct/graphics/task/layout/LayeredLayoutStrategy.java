@@ -9,7 +9,6 @@ import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AbstractCompositeFigure;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
@@ -19,7 +18,7 @@ import org.lambda.functions.implementations.S1;
 public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
 	private static final double HORZ_ITEM_SPACING = 35.0;
-	private static final Logger logger = Logger.getLogger(LayeredLayoutStrategy.class);
+	// private static final Logger logger = Logger.getLogger(LayeredLayoutStrategy.class);
 
 	private AbstractCompositeFigure drawing;
 	private SortedNodeList nodes = new SortedNodeList();
@@ -53,21 +52,21 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 
 	private void calculateLayout() {
-		//logger.info("Calculating layout");
+		// logger.info("Calculating layout");
 		for (Figure f : connectors) {
 			ConnectionFigure cf = (ConnectionFigure) f;
 
 			Node startNode = getNode(cf.getStartFigure());
 			Node endNode = getNode(cf.getEndFigure());
 
-			startNode.connectTo(endNode); 
+			startNode.connectTo(endNode);
 			boolean isCyclic = startNode.isCyclicChain(endNode);
 			if (!isCyclic || (isCyclic && startNode.getLevel() == Node.UNINITIALIZED)) {
 				updateNodes(startNode, endNode);
 			}
 		}
 
-		//logger.info("Adding unconnected figures to graph");
+		// logger.info("Adding unconnected figures to graph");
 		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = new S1<Figure>(null, compareList) {
 			{
@@ -77,11 +76,11 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
 	}
-	
+
 	private void updateNodes(Node startNode, Node endNode) {
 		int startLevel = startNode.getLevel();
 		int endLevel = endNode.getLevel();
-		
+
 		if (startLevel == Node.UNINITIALIZED) {
 			startLevel = 0;
 			endLevel = 1;
@@ -96,18 +95,17 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 				endLevel = startLevel + 1;
 			} else if (endLevel == 0) {
 				endLevel = startLevel + 1;
-			}
-			else if (startLevel == 0 && deltaLevel >= 2) {
+			} else if (startLevel == 0 && deltaLevel >= 2) {
 				startLevel = endLevel - 1;
 			}
 		}
-		
+
 		startNode.setLevel(startLevel);
 		endNode.setLevel(endLevel);
 	}
 
 	private void applyLayout() {
-		//logger.info("Applying layout to drawing.");
+		// logger.info("Applying layout to drawing.");
 		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
 
 		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);
@@ -177,8 +175,8 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 
-//		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure) figure).getName(), (int) anchor.x,
-//				(int) anchor.y));
+		// System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure) figure).getName(), (int) anchor.x,
+		// (int) anchor.y));
 	}
 
 	private Node getNode(Figure figure) {

@@ -77,6 +77,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
+		//printFigures("moduleZoom()");
 		saveFigurePositions(getCurrentPath());
 		zoom(figures);
 	}
@@ -99,6 +100,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
+		//printFigures("moduleZoomOut()");
 		saveFigurePositions(getCurrentPath());
 		
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
