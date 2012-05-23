@@ -43,7 +43,7 @@ public class CheckConformanceUtilFilter {
 		return classpaths;
 	}
 
-	public static Mappings filter(RuleDTO rule){
+	public static Mappings filterClasses(RuleDTO rule){
 		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
 		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
 		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
@@ -58,6 +58,16 @@ public class CheckConformanceUtilFilter {
 
 		return removeExceptionClasses(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
 	}
+	
+//	public static Mappings filterPackages(RuleDTO rule){
+//		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
+//		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
+//		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
+//	}
+//	
+//	private static Mappings getPackageFromModule(RuleDTO rule){
+//		
+//	}
 
 
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		

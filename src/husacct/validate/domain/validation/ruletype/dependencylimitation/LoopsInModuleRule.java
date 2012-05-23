@@ -31,7 +31,7 @@ public class LoopsInModuleRule extends RuleType{
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
 		
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){

@@ -30,7 +30,7 @@ public class SkipCallRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();		
 		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
