@@ -1,6 +1,6 @@
 package husacct.validate.task.report.writer;
 
-import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.ServiceProvider;
 import husacct.validate.domain.validation.report.Report;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
@@ -39,7 +39,7 @@ public abstract class ReportWriter {
 
 	protected String getDependencyKindValue(String violationtypeKey,
 			boolean indirect) {
-		String value = ValidateTranslator.getValue(violationtypeKey);
+		String value = ServiceProvider.getInstance().getControlService().getTranslatedString(violationtypeKey);
 		value += ", ";
 		if(indirect) {
 			value += "indirect";
