@@ -74,7 +74,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 	public String getAttributeType(CommonTree tree){
 		String attributeType = "";
 		attributeType = getAttributeRecursive(tree);
-		attributeType = attributeType.replace("<,", "<");
+		attributeType = attributeType.replace("<.", "<");
 		attributeType = attributeType.substring(1);
 		return attributeType;
 	}
