@@ -22,8 +22,8 @@ public class ComponentFigure extends BaseFigure {
 	private BufferedImage compIcon;
 	private ImageFigure compIconFig;
 
-	protected int minWidth = 130;
-	protected int minHeight = 90;
+	public static final int MIN_WIDTH = 130;
+	public static final int MIN_HEIGHT = 90;
 
 	public ComponentFigure(String figureName) {
 		super(figureName);
@@ -54,11 +54,11 @@ public class ComponentFigure extends BaseFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < minWidth) {
-			lead.x = anchor.x + minWidth;
+		if ((lead.x - anchor.x) < MIN_WIDTH) {
+			lead.x = anchor.x + MIN_WIDTH;
 		}
-		if ((lead.y - anchor.y) < minHeight) {
-			lead.y = anchor.y + minHeight;
+		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+			lead.y = anchor.y + MIN_HEIGHT;
 		}
 
 		// bigger than text

@@ -24,10 +24,18 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
+		// TODO: Uncomment wanneer analyse addServiceListener heeft geïmplementeerd!
+		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener(){
+		// @Override
+		// public void update() {
+		// refreshDrawing();
+		// }
+		// });
 	}
 
 	@Override
 	public void refreshDrawing() {
+		super.notifyServiceListeners();
 		getAndDrawModulesIn(getCurrentPath());
 	}
 
@@ -39,6 +47,7 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
+		super.notifyServiceListeners();
 		AbstractDTO[] modules = analyseService.getRootModules();
 		resetCurrentPath();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
@@ -66,6 +75,7 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
+		super.notifyServiceListeners();
 		// FIXME: Make this code function with the multiple selected figures
 		BaseFigure figure = figures[0];
 
@@ -82,11 +92,13 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleZoomOut() {
+		super.notifyServiceListeners();
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
+			logger.warn("Tried to zoom out from \"" + getCurrentPath()
+					+ "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -106,9 +118,10 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void moduleOpen(String path) {
-		if(path.isEmpty()){
+		super.notifyServiceListeners();
+		if (path.isEmpty()) {
 			drawArchitecture(getCurrentDrawingDetail());
-		}else{
+		} else {
 			getAndDrawModulesIn(path);
 		}
 	}

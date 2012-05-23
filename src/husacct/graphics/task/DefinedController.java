@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -26,10 +27,18 @@ public class DefinedController extends DrawingController {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
+		// TODO: Uncomment wanneer define addServiceListener heeft geïmplementeerd!
+		// ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener(){
+		// @Override
+		// public void update() {
+		// refreshDrawing();
+		// }
+		// });
 	}
 
 	@Override
 	public void refreshDrawing() {
+		super.notifyServiceListeners();
 		getAndDrawModulesIn(getCurrentPath());
 	}
 
@@ -41,6 +50,7 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
+		super.notifyServiceListeners();
 		AbstractDTO[] modules = defineService.getRootModules();
 		resetCurrentPath();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
@@ -51,6 +61,7 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
+		super.notifyServiceListeners();
 		// FIXME: Make this code function with the multiple selected figures
 		BaseFigure figure = figures[0];
 
@@ -67,11 +78,13 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleZoomOut() {
+		super.notifyServiceListeners();
 		String parentPath = defineService.getParentFromModule(getCurrentPath());
 		if (null != parentPath) {
 			getAndDrawModulesIn(parentPath);
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
+			logger.warn("Tried to zoom out from \"" + getCurrentPath()
+					+ "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -84,9 +97,10 @@ public class DefinedController extends DrawingController {
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 
 		if (!figureFrom.equals(figureTo)) {
-			for (String physicalFromPath : dtoFrom.physicalPaths) {
-				for (String physicalToPath : dtoTo.physicalPaths) {
-					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPath, physicalToPath);
+			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs) {
+				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
+					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path,
+							physicalToPath.path);
 					for (DependencyDTO tempDependency : foundDependencies) {
 						dependencies.add(tempDependency);
 					}
@@ -120,9 +134,10 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleOpen(String path) {
-		if(path.isEmpty()){
+		super.notifyServiceListeners();
+		if (path.isEmpty()) {
 			drawArchitecture(getCurrentDrawingDetail());
-		}else{
+		} else {
 			getAndDrawModulesIn(path);
 		}
 	}
