@@ -40,13 +40,13 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	public ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, Map<String, List<ViolationType>> violationtypes, String language) {
 		
 		CategoryModel = new DefaultListModel();
-		
 		this.taskServiceImpl = taskServiceImpl;
 		this.languageSeverityConfiguration = languageSeverityConfiguration;
 		this.language = language;
 		this.violationTypes = violationtypes;
 		
 		initComponents();
+		loadModel();
 		setText();
 	}
     
@@ -115,6 +115,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 		});
 
 		createLayout();
+		loadViolationTypeCategories();
     }
 	
 	private void createLayout(){
@@ -196,7 +197,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
 	private void vtsCategoryValueChanged() {
 		checkRestoreButtonEnabled();
-		loadViolationType((String) Category.getSelectedValue());
+		loadViolationType(((DataLanguageHelper) Category.getSelectedValue()).key);
 	}
 	
 	private void updateViolationtypeSeverities() {
@@ -213,8 +214,9 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
 	private void loadViolationTypeCategories() {
 		CategoryModel.clear();
+		System.out.println(violationTypes.keySet().size());
 		for (String categoryString : violationTypes.keySet()) {
-			CategoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
+			CategoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
 
 	}
