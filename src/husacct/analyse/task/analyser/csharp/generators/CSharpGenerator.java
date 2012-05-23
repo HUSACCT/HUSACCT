@@ -5,6 +5,7 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 public class CSharpGenerator {
 	protected static final int IDENTIFIER = 4;
+	protected static final int GREATERTHAN = 17;
 	protected static final int USING = 18;
 	protected static final int SEMICOLON = 25;
 	protected static final int BACKWARDBRACKET = 26;
@@ -23,6 +24,7 @@ public class CSharpGenerator {
 	protected static final int FORWARDBRACKET = 88;
 	protected static final int COMMA = 89;
 	protected static final int COLON = 90;
+	protected static final int LESSTHAN = 99;
 	protected static final int CLASS = 155;
 	protected static final int INT = 164;
 	protected static final int STRUCT = 169;
@@ -56,8 +58,5 @@ public class CSharpGenerator {
 	protected static final int[] typeCollection = new int[] {IDENTIFIER, SBYTE, BYTE, SHORT, USHORT, INT, UINT, LONG, ULONG, CHAR, VAR, BOOL, DECIMAL, DOUBLE, FLOAT, OBJECT, STRING};
 	protected static final int[] isAPartOfAttribute = new int[] {SEMICOLON, FORWARDCURLYBRACKET, BACKWARDCURLYBRACKET };
 	protected static final int[] listOfMethodTypes = new int[] { FINALLY, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /* synchronised */};
-	protected IModelCreationService modelService = new FamixCreationServiceImpl();
-
-
-	
+	protected IModelCreationService modelService = new FamixCreationServiceImpl();	
 }

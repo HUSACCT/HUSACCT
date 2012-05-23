@@ -80,7 +80,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceConverter.namespaceChecking(tree, isPartOfNamespace);
 			isPartOfClass = classConverter.classCheck(tree,	isPartOfClass);
-			isPartOfAttribute = attributeConverter.attributeCheck(tree,	isPartOfAttribute);
+			//isPartOfAttribute = attributeConverter.attributeCheck(tree,	isPartOfAttribute);
 			isPartOfUsing = usingConverter.usingCheck(tree,	isPartOfUsing);
 			isPartOfMethod = methodConverter.methodCheck(tree, isPartOfMethod);
 			isPartOfException = exceptionConverter.exceptionCheck(tree, isPartOfException);

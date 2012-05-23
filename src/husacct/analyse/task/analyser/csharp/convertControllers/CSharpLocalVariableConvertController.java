@@ -23,7 +23,7 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 		if(!isPartOfLocalVariable){
 			isPartOfLocalVariable = checkBeginning(isPartOfLocalVariable, type);
 		}		
-		if(type == SEMICOLON || type == IS){
+		if(type == SEMICOLON){
 			isPartOfLocalVariable = endLocalVariable(tree);
 		}		
 		if(isPartOfLocalVariable){
@@ -48,6 +48,7 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 			cleanVariableList();
 		}		
 		if(localVariableTrees.size() > 1){
+			System.out.println("treeconverter: "+localVariableTrees);
 			CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator();
 			localVariableGenerator.generateLocalVariable(localVariableTrees, treeConvertController.getCurrentMethodName(), uniqueClassName, lineNumber);
 		}
@@ -57,7 +58,7 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 
 	private void cleanVariableList() {
 		boolean isLocalVariable = true;
-		final int[] notAllowedTypes = new int[]{DOT, FORWARDCURLYBRACKET, FORWARDBRACKET};
+		final int[] notAllowedTypes = new int[]{FORWARDCURLYBRACKET, FORWARDBRACKET};
 		for(CommonTree node : localVariableTrees){
 			int type = node.getType();
 			for (int notAllowedtype : notAllowedTypes){
@@ -70,6 +71,4 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 			localVariableTrees.clear();
 		}
 	}
-
-
 }
