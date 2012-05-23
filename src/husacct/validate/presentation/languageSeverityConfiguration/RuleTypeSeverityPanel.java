@@ -1,7 +1,6 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.presentation.LanguageSeverityConfiguration;
@@ -177,7 +176,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void rtsRestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ValidateTranslator.getKey((String) ruletypeModel.getValueAt(RuletypeTable.getSelectedRow(), 0)));
+		taskServiceImpl.restoreToDefault(language, ServiceProvider.getInstance().getControlService().getStringIdentifiers((String) ruletypeModel.getValueAt(RuletypeTable.getSelectedRow(), 0)).get(0));
 		rtsCategoryValueChanged();
 	}
 
@@ -222,7 +221,8 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < ruletypeModel.getRowCount(); i++){
-			map.put(ValidateTranslator.getKey((String) ruletypeModel.getValueAt(i, 0)), (Severity) ruletypeModel.getValueAt(i, 1));
+			List<String> keys = ServiceProvider.getInstance().getControlService().getStringIdentifiers((String) ruletypeModel.getValueAt(i, 0));
+			map.put(keys.get(0), (Severity) ruletypeModel.getValueAt(i, 1));
 		}
 		
 		taskServiceImpl.updateSeverityPerType(map, language);

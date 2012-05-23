@@ -1,7 +1,6 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.presentation.LanguageSeverityConfiguration;
@@ -180,7 +179,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void vtsRestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ValidateTranslator.getKey((String) violationtypeModel.getValueAt(ViolationtypeTable.getSelectedRow(), 0)));
+		taskServiceImpl.restoreToDefault(language, ServiceProvider.getInstance().getControlService().getStringIdentifiers((String) violationtypeModel.getValueAt(ViolationtypeTable.getSelectedRow(), 0)).get(0));
 		vtsCategoryValueChanged();
 	}
 
@@ -203,7 +202,8 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
-			map.put(ValidateTranslator.getKey((String) violationtypeModel.getValueAt(i, 0)), (Severity) violationtypeModel.getValueAt(i, 1));
+			List<String> keys = ServiceProvider.getInstance().getControlService().getStringIdentifiers((String) violationtypeModel.getValueAt(i, 0));
+			map.put(keys.get(0), (Severity) violationtypeModel.getValueAt(i, 1));
 		}
 
 		taskServiceImpl.updateSeverityPerType(map, language);

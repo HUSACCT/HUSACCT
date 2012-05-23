@@ -1,7 +1,6 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ActiveViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -244,8 +243,8 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 
 	private void LoadRuletypes(String category) {
 		ruletypeModel.clear();
-
-		List<RuleType> rules = ruletypes.get(ValidateTranslator.getKey(category));
+		List<String> keys = ServiceProvider.getInstance().getControlService().getStringIdentifiers(category);
+		List<RuleType> rules = ruletypes.get(keys.get(0));
 		for(RuleType ruletype: rules){
 			ruletypeModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(ruletype.getKey()));
 		}
@@ -259,9 +258,9 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		while(violationtypeModel.getRowCount() > 0){
 			violationtypeModel.removeRow(0);
 		}
-
+		List<String> keys = ServiceProvider.getInstance().getControlService().getStringIdentifiers(ruletypekey);
 		for (ActiveRuleType ruletypeKey : activeRuletypes) {
-			if(ruletypeKey.getRuleType().equals(ValidateTranslator.getKey(ruletypekey))){
+			if(ruletypeKey.getRuleType().equals(keys.get(0))){
 				for(ActiveViolationType violationtype : ruletypeKey.getViolationTypes()){
 					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
 				}
