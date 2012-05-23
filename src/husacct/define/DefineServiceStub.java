@@ -4,12 +4,13 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.services.ObservableService;
 
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public class DefineServiceStub implements IDefineService{
+public class DefineServiceStub extends ObservableService implements IDefineService{
 
 	@Override
 	public void createApplication(String name, String[] paths, String language, String version) {
