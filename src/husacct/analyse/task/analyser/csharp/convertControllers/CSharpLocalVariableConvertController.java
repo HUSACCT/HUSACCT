@@ -44,7 +44,6 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 	private boolean endLocalVariable(CommonTree tree) {
 		int lineNumber = tree.getLine();
 		String uniqueClassName = treeConvertController.getUniqueClassName();
-	
 		if(localVariableTrees.size() > 0){
 			cleanVariableList();
 		}		
@@ -58,16 +57,17 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 
 	private void cleanVariableList() {
 		boolean isLocalVariable = true;
-		final int notAllowedType = FORWARDCURLYBRACKET;
+		final int[] notAllowedTypes = new int[]{FORWARDCURLYBRACKET, FORWARDBRACKET};
 		for(CommonTree node : localVariableTrees){
 			int type = node.getType();
-			if(type == notAllowedType){
-				isLocalVariable = false;
+			for (int notAllowedtype : notAllowedTypes){
+				if(type == notAllowedtype){
+					isLocalVariable = false;
+				}
 			}
 		}		
 		if(!(isLocalVariable)){
 			localVariableTrees.clear();
 		}
 	}
-
 }

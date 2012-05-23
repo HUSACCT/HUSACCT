@@ -11,7 +11,7 @@ public class AnalyseMain {
 		long tijd = System.nanoTime();
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
-		String path = "/home/thomas/benchmark";
+		String path = "c:/project/benchmark";
 		
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
@@ -20,7 +20,7 @@ public class AnalyseMain {
 		analyser.analyseApplication();
 
 		FamixCreationServiceImpl impl = new FamixCreationServiceImpl();
-		System.out.println(impl.represent());
+		//System.out.println(impl.represent());
 		System.out.println((double)(System.nanoTime() - tijd) / 1000000000);
 		new AnalyseDebuggingFrame();
 		
