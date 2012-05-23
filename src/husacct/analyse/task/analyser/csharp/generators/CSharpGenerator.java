@@ -11,6 +11,7 @@ public abstract class CSharpGenerator {
 		Arrays.sort(accessorCollection);
 	}
 	protected final int IDENTIFIER = 4;
+	protected final int GREATERTHAN = 17;
 	protected final int USING = 18;
 	protected final int SEMICOLON = 25;
 	protected final int BACKWARDBRACKET = 26;
@@ -29,6 +30,7 @@ public abstract class CSharpGenerator {
 	protected final int FORWARDBRACKET = 88;
 	protected final int COMMA = 89;
 	protected final int COLON = 90;
+	protected final int LESSTHAN = 99;
 	protected final int CLASS = 155;
 	protected final int INT = 164;
 	protected final int STRUCT = 169;
