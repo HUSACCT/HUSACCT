@@ -98,9 +98,9 @@ public class CreateWorkspaceDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if(setApplicationCheckbox.isSelected()){
 					if(setApplicationPanel.dataValidated() && workspaceNameValidated()) {
-						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-						mainController.getApplicationController().setApplicationData(applicationData);
 						createWorkspace();
+						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+						mainController.getApplicationController().setApplicationData(applicationData);				
 						dispose();	
 						mainController.getViewController().showDefineGui();
 					}
@@ -110,7 +110,7 @@ public class CreateWorkspaceDialog extends JDialog{
 						dispose();	
 						mainController.getViewController().showDefineGui();		
 					}
-				}
+				}	
 			}
 		});
 
