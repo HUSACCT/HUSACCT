@@ -29,13 +29,13 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 		this.belongsToClass = belongsToClass;
 		this.lineNumber = lineNumber;
 		 
-		boolean isInvocation = invocationGenerator.checkIfTreeisOnlyInvocation(tree);
+		boolean isOnlyInvocation = invocationGenerator.checkIfTreeisOnlyInvocation(tree);
 		
-		if(!(isInvocation)){
+		if(!(isOnlyInvocation)){
 			generateFamixObject(tree);
-		}else{
-			//invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
 		}
+		
+		//invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
 	}
 
 	private void generateFamixObject(List<CommonTree> tree){
@@ -80,7 +80,12 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 			if(usesLongName){
 				returnType = returnType + currentNode.getText();
 				namePosition = i+1;
-			}else if(i < 1){
+			}else if(i < 1 && currentType == NEW){
+				returnType = nextNode.getText();
+				namePosition = i+1;
+				return returnType;
+			}
+			else if(i < 1){
 				returnType = currentNode.getText();
 				namePosition = i+1;
 				return returnType;
@@ -91,7 +96,18 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 	}
 	
 	private String checkForName(List<CommonTree> tree, int namePosition) {
-		CommonTree node = tree.get(namePosition);
-		return node.getText();
+		String name = "";
+		CommonTree firstNode = tree.get(0);
+		int type = firstNode.getType();
+		if(type == NEW){
+			for(int i = 1; i < 4; i++){
+				CommonTree node = tree.get(i);
+				name = name + node.getText();
+			}
+		}else{
+			CommonTree node = tree.get(namePosition);
+			name = node.getText();
+		}
+		return name;
 	}
 }
