@@ -35,11 +35,12 @@ public class VisibilityConventionRule extends RuleType {
 		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
+		AnalysedModuleDTO analysedModule;
 		int violationCounter=0;
-		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
-			for(AnalysedModuleDTO analyzedModule : analyseService.getChildModulesInModule(physicalClasspathFrom.getPhysicalPath())){
+		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){	
+			analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 				for(String violationKey : currentRule.violationTypeKeys){
-					if(!analyzedModule.visibility.toLowerCase().equals(violationKey.toLowerCase())){
+					if(!analysedModule.visibility.toLowerCase().equals(violationKey.toLowerCase())){
 						violationCounter++;
 					}
 				}
@@ -54,7 +55,6 @@ public class VisibilityConventionRule extends RuleType {
 				}
 				violationCounter =0;
 			}
-		}
 
 		return violations;
 	}

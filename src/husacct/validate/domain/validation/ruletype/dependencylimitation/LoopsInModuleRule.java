@@ -15,6 +15,7 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 
 public class LoopsInModuleRule extends RuleType{
@@ -31,6 +32,8 @@ public class LoopsInModuleRule extends RuleType{
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
 		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		//FromModule physicalPaths array
+		//ToModule physicalPaths array
 		
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
@@ -42,21 +45,20 @@ public class LoopsInModuleRule extends RuleType{
 		}
 		
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
-			getClassPathsTo(physicalClassPathFrom.getPhysicalPath(),physicalClassPathFrom.getPhysicalPath(),violations);
+			getClassPathsTo(physicalClassPathFrom.getPhysicalPath(), new HashSet<String>());
 		}
 		return violations;
 	}
 
-	private List<Violation> getClassPathsTo(String physicalPath, String startPath, List<Violation> violations)	{
-		for(DependencyDTO dependency :analyseService.getDependenciesFrom(physicalPath)){
-			for (DependencyDTO dependencyTo :analyseService.getDependenciesFrom(dependency.to)){
-				if(dependency.to.equals(dependencyTo.from) || dependencyTo.from.equals(dependencyTo.to)){
-					System.out.println("violations!!");
-				}
+	private List<Violation> getClassPathsTo(String physicalPath, HashSet<String> history)	{
+		history.add(physicalPath);
+		DependencyDTO[] dep = analyseService.getDependenciesFrom(physicalPath);
+		for(DependencyDTO dependency : dep){
+			if(history.contains(dependency.to)){
+					System.out.println("violations!!");					
 			}
-			if(physicalPath.equals(dependency.from) && startPath.equals(dependency.to) || dependency.from.equals(dependency.to)){
-				System.out.println("violations2!!");
-			}
+			
+			violations.addAll(getClassPathsTo(dependency.to,history));
 		}
 		return violations;
 	}
