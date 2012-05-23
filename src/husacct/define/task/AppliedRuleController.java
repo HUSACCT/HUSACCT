@@ -216,7 +216,7 @@ public class AppliedRuleController extends PopUpController {
 				DefinitionController.getInstance().notifyObservers(this.currentModuleId);
 				return true;
 			} catch (Exception e) {
-				UiDialogs.errorDialog(jframeAppliedRule, e.getMessage(), "Error");
+				UiDialogs.errorDialog(jframeAppliedRule, e.getMessage());
 			}
 		}
 		return false;

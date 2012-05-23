@@ -83,7 +83,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newLayer);
 		} catch (Exception e) {
 			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -111,7 +111,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newModule);
 		} catch (Exception e) {
 			logger.error("addSubSystem(" + moduleName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -125,7 +125,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newComponent);
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -139,7 +139,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newComponent);
 		} catch (Exception e) {
 			logger.error("addExternalLibrary(" + libraryName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -167,7 +167,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.notifyObservers();
 		} catch (Exception e) {
 			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -183,7 +183,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("moveLayerUp() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -199,7 +199,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("moveLayerDown() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -226,7 +226,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -251,7 +251,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("removeRule() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -271,7 +271,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.notifyObservers();
 		} catch (Exception e) {
 			logger.error("updateModule() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -324,7 +324,7 @@ public class DefinitionController extends Observable implements Observer {
 				
 			} catch (Exception e) {
 				logger.error("getModuleDetails() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 			}
 		}
 		return moduleDetails;

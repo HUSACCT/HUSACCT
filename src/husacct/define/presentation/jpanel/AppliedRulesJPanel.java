@@ -206,7 +206,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 				atm.fireTableDataChanged();
 			}
 		} catch (Exception e) {
-			UiDialogs.errorDialog(this, e.getMessage(), "Error!");
+			UiDialogs.errorDialog(this, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}

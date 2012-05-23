@@ -77,7 +77,7 @@ public class SoftwareUnitController extends PopUpController {
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
-			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage(), "Error");
+			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 		}
 	}
 }
