@@ -48,7 +48,7 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 
 	private void addInstance() {
 		CSharpInstanceData instance = new CSharpInstanceData();
-		instance.setBelongsToClass(belongsToClass);
+		instance.setBelongsToClass(uniqueName);
 		instance.setTo(declareType);
 		instance.setInstanceName(name);
 		instance.setHasMethodScope(true);
