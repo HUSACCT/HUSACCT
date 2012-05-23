@@ -282,7 +282,8 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	}
 	
 	private void removeException() {
-//		appliedRuleController.removeException(exceptionRuleId);
+		appliedRuleController.removeException(jTableException.getSelectedRow());
+		updateExceptionTable();
 	}
 
 	@Override

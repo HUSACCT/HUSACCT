@@ -299,13 +299,8 @@ public class AppliedRuleController extends PopUpController {
 		exceptionRules.add(exceptionRule);
 	}
 	
-	public void removeException(Long exceptionRuleId){
-		for (HashMap<String, Object> exRule : exceptionRules){
-			Long exRuleId = (Long) exRule.get("id");
-			if (exRuleId == exceptionRuleId){
-				exceptionRules.remove(exRule);
-			}
-		}
+	public void removeException(int index){
+		exceptionRules.remove(index);
 	}
 	
 	/*
