@@ -16,7 +16,7 @@ public class ResourceFactory {
 	public static IResource get(String identifier){
 		if(isAvailable(identifier)){
 	        try {
-	            ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+	            ClassLoader myClassLoader = ResourceFactory.class.getClassLoader();
 	            String classNameToBeLoaded = "husacct.control.task.resources." + identifier + "Resource";
 	            Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
 	            Object instance = myClass.newInstance();

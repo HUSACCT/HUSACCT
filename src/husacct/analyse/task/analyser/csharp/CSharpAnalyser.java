@@ -37,32 +37,31 @@ public class CSharpAnalyser extends AbstractAnalyser{
 	}
 
 	private String convertAnyCharsetToUnicode(InputStreamReader inputStream) throws IOException{
-		BufferedReader in = new BufferedReader(inputStream);
+		BufferedReader in = new BufferedReader(inputStream);		
 		String stringStream = "";
 		int firstChar = in.read();
 		final int ZEROWIDTHNOBREAKSPACE = 65279;
 		if (firstChar != ZEROWIDTHNOBREAKSPACE) {
 			stringStream = Character.toString((char)firstChar);
 		}
-		String singleLine = "";
+		StringBuilder builder = new StringBuilder(stringStream);
+		String singleLine;
 		while((singleLine = in.readLine()) != null) {
-			stringStream += singleLine + System.getProperty("line.separator");
+			builder.append(singleLine + System.getProperty("line.separator"));
 		}
-		byte[] bytes = stringStream.getBytes("UTF-8");
+		byte[] bytes = builder.toString().getBytes("UTF-8");
 		return new String(bytes, "UTF-8");
 	}
 
 	@Override
 	public void generateModelFromSource(String sourceFilePath) {
-		CSharpParser cSharpParser;
-		CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController();
 		try {
-			cSharpParser = generateCSharpParser(sourceFilePath);
+			CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController();
+			CSharpParser cSharpParser = generateCSharpParser(sourceFilePath);
 			cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 	}
-
-}		
+}
 

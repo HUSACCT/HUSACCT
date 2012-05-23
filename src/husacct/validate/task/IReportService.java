@@ -1,12 +1,11 @@
 package husacct.validate.task;
 
-import husacct.validate.domain.validation.ViolationHistory;
+import java.io.File;
+import java.util.Calendar;
 
 public interface IReportService {
 	
 	public String[] getExportExtentions();
-	public void createReport(String fileType, String name, String path);
-	public void createReport(String fileType, String name, String path,
-			ViolationHistory violationHistory);
-
+	public void createReport(File file, String fileType, Calendar date);
+	public void createReport(File file, String fileType);
 }

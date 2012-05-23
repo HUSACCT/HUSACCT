@@ -1,6 +1,7 @@
 package husacct.graphics;
 
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.DrawingDetail;
@@ -10,14 +11,14 @@ import javax.swing.JInternalFrame;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
+public class GraphicsServiceImpl extends ObservableService implements IGraphicsService, ISaveable {
 
 	private AnalysedController analysedController;
 	private DefinedController definedController;
 	protected Logger logger = Logger.getLogger(GraphicsServiceImpl.class);
 
 	public GraphicsServiceImpl() {
-		
+
 	}
 
 	private void createControllers() {
@@ -64,7 +65,7 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 		createControllers();
 		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
-	
+
 	public static final String workspaceServiceName = "ArchitecureGraphicsService";
 	public static final String workspaceAnalysedControllerName = "analysedController";
 	public static final String workspaceDefinedControllerName = "analysedController";
@@ -76,13 +77,13 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 		Element data = new Element(workspaceServiceName);
 
 		Element analysedControllerElement = new Element(workspaceAnalysedControllerName);
-		analysedControllerElement.setAttribute(workspaceShowViolations, ""+analysedController.areViolationsShown());
+		analysedControllerElement.setAttribute(workspaceShowViolations, "" + analysedController.areViolationsShown());
 		data.addContent(analysedControllerElement);
-		
+
 		Element definedControllerElement = new Element(workspaceDefinedControllerName);
-		definedControllerElement.setAttribute(workspaceShowViolations, ""+definedController.areViolationsShown());
+		definedControllerElement.setAttribute(workspaceShowViolations, "" + definedController.areViolationsShown());
 		data.addContent(definedControllerElement);
-		
+
 		return data;
 	}
 
@@ -91,17 +92,19 @@ public class GraphicsServiceImpl implements IGraphicsService, ISaveable {
 		createControllers();
 		try {
 			Element analysedControllerElement = workspaceData.getChild(workspaceAnalysedControllerName);
-			System.out.println(Boolean.parseBoolean(analysedControllerElement.getAttribute(workspaceShowViolations).getValue()));
-			if(Boolean.parseBoolean(analysedControllerElement.getAttribute(workspaceShowViolations).getValue())){
+			System.out.println(Boolean.parseBoolean(analysedControllerElement.getAttribute(workspaceShowViolations)
+					.getValue()));
+			if (Boolean.parseBoolean(analysedControllerElement.getAttribute(workspaceShowViolations).getValue())) {
 				analysedController.showViolations();
-			}else{
+			} else {
 				analysedController.hideViolations();
 			}
 			Element definedControllerElement = workspaceData.getChild(workspaceDefinedControllerName);
-			System.out.println(Boolean.parseBoolean(definedControllerElement.getAttribute(workspaceShowViolations).getValue()));
-			if(Boolean.parseBoolean(definedControllerElement.getAttribute(workspaceShowViolations).getValue())){
+			System.out.println(Boolean.parseBoolean(definedControllerElement.getAttribute(workspaceShowViolations)
+					.getValue()));
+			if (Boolean.parseBoolean(definedControllerElement.getAttribute(workspaceShowViolations).getValue())) {
 				definedController.showViolations();
-			}else{
+			} else {
 				definedController.hideViolations();
 			}
 		} catch (Exception e) {

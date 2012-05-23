@@ -1,23 +1,36 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ActiveViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
+import husacct.validate.presentation.DataLanguageHelper;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
 import org.apache.log4j.Logger;
 
 public class ActiveViolationPanel extends javax.swing.JPanel {
 	
+	private static final long serialVersionUID = 3957004303176017057L;
+
 	private static Logger logger = Logger.getLogger(ActiveViolationPanel.class);
 	
 	private final DefaultListModel categoryModel;
@@ -49,27 +62,28 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		initComponents();
 		loadAfterChange();
 	}
-
+	
     private void initComponents() {
 
         categoryScrollpane = new JScrollPane();
 		categoryJList = new JList();
+		categoryJList.setModel(categoryModel);
 		ruletypeScrollpane = new JScrollPane();
 		violationtypeTable = new JTable();
 		violationtypeScrollpane = new JScrollPane();
 		ruletypeJList = new JList();
+		ruletypeJList.setModel(ruletypeModel);
 		selectAll = new JButton();
 		deselectAll = new JButton();
 		apply = new JButton();
-
-		categoryJList.setModel(categoryModel);
+		
 		categoryJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		categoryJList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
-				if(categoryJList.getSelectedIndex() > -1){
-					CategoryValueChanged();
+				if(categoryJList.getSelectedIndex() > -1 && ! evt.getValueIsAdjusting()){
+					categoryValueChanged();
 				}
 			}
 		});
@@ -80,7 +94,6 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		violationtypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ruletypeScrollpane.setViewportView(violationtypeTable);
 		
-		ruletypeJList.setModel(ruletypeModel);
 		
 		ruletypeJList.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
@@ -88,8 +101,8 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
-				if(ruletypeJList.getSelectedIndex() > -1){
-					RuletypeValueChanged();
+				if(ruletypeJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()){
+					ruletypeValueChanged();
 				}
 			}
 		});
@@ -150,7 +163,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		verticalButtonGroup.addComponent(apply);
 		verticalButtonGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPaneGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		GroupLayout.ParallelGroup verticalPaneGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
 		verticalPaneGroup.addComponent(ruletypeScrollpane);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
 		verticalPaneGroup.addComponent(categoryScrollpane);
@@ -175,11 +188,12 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
 	
-	private void loadModels(){
-		
+	private void loadModels(){		
 		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Active")};
 		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0){
-
+			
+			private static final long serialVersionUID = 3779670097825676765L;
+			
 			Class<?>[] types = new Class[]{String.class, Boolean.class};
 			boolean[] canEdit = new boolean[]{false, true};
 
@@ -201,7 +215,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 	private void loadRuleTypeCategories() {
 		categoryModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
-			categoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
+			categoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
 	}
 	
@@ -235,34 +249,38 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		taskServiceImpl.setActiveViolationTypes(language, activeRuletypes);
 	}
 
-	private void CategoryValueChanged() {
-		LoadRuletypes((String) categoryJList.getSelectedValue());
+	private void categoryValueChanged() {
+		loadRuletypes(((DataLanguageHelper) categoryJList.getSelectedValue()).key);
+		clearViolationTypesTable();
 	}
 
-	private void LoadRuletypes(String category) {
+	private void loadRuletypes(String category) {
 		ruletypeModel.clear();
-
-		List<RuleType> rules = ruletypes.get(ValidateTranslator.getKey(category));
+		List<RuleType> rules = ruletypes.get(category);
 		for(RuleType ruletype: rules){
-			ruletypeModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(ruletype.getKey()));
+			ruletypeModel.addElement(new DataLanguageHelper(ruletype.getKey()));
 		}
 	}
 	
-	private void RuletypeValueChanged() {
-		LoadViolationtypes((String) ruletypeJList.getSelectedValue());
+	private void ruletypeValueChanged() {
+		loadViolationtypes(((DataLanguageHelper) ruletypeJList.getSelectedValue()).key);
 	}
-
-	private void LoadViolationtypes(String ruletypekey) {
+	
+	private void clearViolationTypesTable() {
 		while(violationtypeModel.getRowCount() > 0){
 			violationtypeModel.removeRow(0);
 		}
+	}
 
-		for (ActiveRuleType ruletypeKey : activeRuletypes) {
-			if(ruletypeKey.getRuleType().equals(ValidateTranslator.getKey(ruletypekey))){
-				for(ActiveViolationType violationtype : ruletypeKey.getViolationTypes()){
+	private void loadViolationtypes(String ruletypekey) {
+		clearViolationTypesTable();
+		for (ActiveRuleType ruletype : activeRuletypes) {
+			if(ruletype.getRuleType().equals(ruletypekey)) {
+				for(ActiveViolationType violationtype : ruletype.getViolationTypes()){
 					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
 				}
-				activeViolationtypes = ruletypeKey.getViolationTypes();
+				activeViolationtypes = ruletype.getViolationTypes();
+				break;
 			}
 		}
 	}
