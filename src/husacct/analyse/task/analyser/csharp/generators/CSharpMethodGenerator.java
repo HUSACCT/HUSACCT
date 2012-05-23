@@ -1,5 +1,6 @@
-package husacct.analyse.task.analyser.csharp;
+package husacct.analyse.task.analyser.csharp.generators;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
@@ -16,13 +17,13 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 	private boolean isAbstract;
 	private boolean hasClassScope;
 	
-	public void generateMethod(List<CommonTree> tree, String namespace, String className) {
+	public void generateMethod(List<CommonTree> tree, String className, String uniqueClassName) {
 		name = getName(tree);	
 		accessControlQualifier = checkForAccessControlQualifier(tree.get(0));
 		isConstructor = checkForConstructor(tree, className);
 		isAbstract = checkForAbstract(tree);
 		declaredReturnType = checkForReturnType(tree);
-		belongsToClass = namespace + "." + className;
+		belongsToClass = uniqueClassName;
 		signature = createSignature(tree);
 		uniqueName = belongsToClass+"."+signature;
 		hasClassScope = checkForClassScope(tree);
@@ -30,15 +31,20 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
 //		boolean isPureAccessor = false; //todo
 	}
+	
+	public String getSignature(){
+		return signature;
+	}
 
 	private String getName(List<CommonTree> tree) {
 		String name = "";
-		for(CommonTree thisTree : tree){
-			if(thisTree.getType() == IDENTIFIER){
-				name = thisTree.getText();
+		for(CommonTree node : tree){
+			int type = node.getType();
+			if(type == IDENTIFIER){
+				name = node.getText();
 			}
 			
-			if(thisTree.getType() == FORWARDBRACKET){
+			if(type == FORWARDBRACKET){
 				return name;
 			}
 		}
@@ -47,8 +53,8 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 
 	private boolean checkForClassScope(List<CommonTree> tree) {
 		boolean hasClassScope = false;
-		for(CommonTree thisTree : tree){
-			if(thisTree.getType() == STATIC){
+		for(CommonTree node : tree){
+			if(node.getType() == STATIC){
 				hasClassScope = true;
 			}
 		}
@@ -57,8 +63,7 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 
 	private String checkForAccessControlQualifier(CommonTree commonTree) {
 		String acces = "";
-		int[] listOfAccesTypes = new int[]{PUBLIC, PROTECTED, PRIVATE};
-		for(int type : listOfAccesTypes){
+		for(int type : accessorCollection){
 			if(type == commonTree.getType()){
 				acces = commonTree.getText();
 			}
@@ -89,20 +94,15 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 
 	private String checkForReturnType(List<CommonTree> tree) {
 		String returnType = "";
-		int[] listOfPrimitiveTypes = new int[]{INT, BYTE, SBYTE, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, DECIMAL, VAR};
 		for(CommonTree thisTree : tree){
-			for(int type : listOfPrimitiveTypes){
+			for(int type : typeCollection){
 				if(type == thisTree.getType()){
 					return thisTree.getText();
 				}
 			}
 			if(isConstructor || thisTree.getType() == VOID){
 				return "";
-			}else{
-				if(thisTree.getType() == IDENTIFIER){
-					return thisTree.getText();
-				}
-			}	
+			}
 		}
 		return returnType;
 	}
@@ -112,21 +112,22 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		boolean isAllowedToAdd = false;
 		boolean lastPosititionWasIdent = false;
 		for(CommonTree thisTree : tree){
-			if(thisTree.getType() == FORWARDBRACKET){
+			int type = thisTree.getType();
+			if(type == FORWARDBRACKET){
 				isAllowedToAdd = true;
 			}
 			
-			if(thisTree.getType() == BACKWARDCURLYBRACKET || thisTree.getType() == COLON){
+			if(type == BACKWARDCURLYBRACKET || type == COLON){
 				return signature;
 			}
 			
 			if(isAllowedToAdd){
-				if(thisTree.getType() == FORWARDBRACKET || thisTree.getType() == BACKWARDBRACKET || thisTree.getType() == COMMA){
+				if(type == FORWARDBRACKET || type == BACKWARDBRACKET || type == COMMA){
 					signature = signature + thisTree.getText();
 					lastPosititionWasIdent = false;
 				}
 				
-				if(thisTree.getType() == IDENTIFIER && lastPosititionWasIdent == false){
+				if(Arrays.binarySearch(typeCollection, type) > -1 && lastPosititionWasIdent == false){
 					signature = signature + thisTree.getText();
 					lastPosititionWasIdent = true;
 				}
@@ -134,5 +135,4 @@ public class CSharpMethodGenerator extends CSharpGenerator {
 		}
 		return signature;
 	}
-
 }

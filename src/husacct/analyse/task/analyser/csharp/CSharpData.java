@@ -11,6 +11,9 @@ public class CSharpData {
 	private boolean hasParent;
 	private String belongsToPackage;
 	private boolean isAbstract;
+	private int lineNumber;
+	private String invocationName;
+	private String invocationTo;
 	private String inheritanceTo;
 	public String inheritanceFrom;
 	private ArrayList<String> moreInherit = new ArrayList<String>();
@@ -113,6 +116,30 @@ public class CSharpData {
 
 	public void setInheritanceTo(String inheritanceTo) {
 		this.inheritanceTo = inheritanceTo;
+	}
+
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
+	public String getInvocationName() {
+		return invocationName;
+	}
+
+	public void setInvocationName(String invocationName) {
+		this.invocationName = invocationName;
+	}
+
+	public String getInvocationTo() {
+		return invocationTo;
+	}
+
+	public void setInvocationTo(String invocationTo) {
+		this.invocationTo = invocationTo;
 	}
 	
 }
