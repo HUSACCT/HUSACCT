@@ -1,5 +1,6 @@
 package husacct.validate.domain.configuration;
 
+import husacct.validate.domain.exception.ViolationHistoryNotFoundException;
 import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.ArrayList;
@@ -45,6 +46,6 @@ class ViolationHistoryRepository extends Observable {
 				return violationHistory;
 			}
 		}
-		throw new NullPointerException("violationHistory not found");
+		throw new ViolationHistoryNotFoundException(date);
 	}
 }
