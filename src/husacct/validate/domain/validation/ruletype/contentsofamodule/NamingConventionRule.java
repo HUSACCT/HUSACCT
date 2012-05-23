@@ -29,18 +29,35 @@ public class NamingConventionRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
 		AnalysedModuleDTO analysedModule;
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
 
-			analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
+			analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
 			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name)){
 				Violation violation = createViolation(rootRule,physicalClasspathFrom,null,null,configuration);
 				violations.add(violation);
 			}
 		}
 		return violations;
+	}
+	
+//	private List<Violation> checkPackageConvention(){
+//		
+//	}
+//	
+//	private List<Violation> checkClassConvention(){
+//		
+//	}
+	
+	private boolean arrayContainsValue(String[] array, String value){
+		for(String arrayValue : array){
+			if(arrayValue.toLowerCase().equals(value.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
 	}
 }

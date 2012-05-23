@@ -28,7 +28,7 @@ public class VisibilityConventionRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
 		AnalysedModuleDTO analysedModule;
