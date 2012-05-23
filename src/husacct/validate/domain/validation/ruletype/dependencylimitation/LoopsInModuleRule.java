@@ -32,16 +32,16 @@ public class LoopsInModuleRule extends RuleType{
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
 		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
-		
+
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
 				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
 			}
-			
+
 		}else{
 			physicalClasspathsFrom = mappings.getMappingFrom();
 		}
-		
+
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
 			checkCircularDependencies(physicalClassPathFrom.getPhysicalPath(), new HashSet<String>(),configuration, rootRule,physicalClassPathFrom);
 		}
@@ -54,9 +54,9 @@ public class LoopsInModuleRule extends RuleType{
 		for(DependencyDTO dependency : dependencies){
 			if(history.contains(dependency.to)){
 				Violation violation = createViolation(rootRule, mappingFrom, null, dependency, configuration);
-					violations.add(violation);				
+				violations.add(violation);				
 			}
-			
+
 			violations.addAll(checkCircularDependencies(dependency.to,history,configuration,rootRule,mappingFrom));
 		}
 		return violations;

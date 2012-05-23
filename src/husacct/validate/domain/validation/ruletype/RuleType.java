@@ -34,7 +34,7 @@ public abstract class RuleType {
 	protected List<Violation> violations;
 	protected Mappings mappings;
 	protected List<Mapping> physicalClasspathsFrom;
-		
+
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
@@ -74,7 +74,7 @@ public abstract class RuleType {
 	public List<RuleType> getExceptionrules(){
 		return exceptionrules;
 	}
-	
+
 	public Severity getSeverity(){
 		return severity;
 	}
@@ -89,12 +89,13 @@ public abstract class RuleType {
 		}
 		return null;
 	}
+
 	protected Violation createViolation(RuleDTO rootRule,Mapping classPathFrom, Mapping classPathTo,DependencyDTO dependency, ConfigurationServiceImpl configuration){
 		Message message = new Message(rootRule);
 		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 		LogicalModules logicalModules;
 		Violation violation;
-		
+
 		if(classPathTo == null){
 			logicalModules = new LogicalModules(logicalModuleFrom);
 		}else{
@@ -112,6 +113,6 @@ public abstract class RuleType {
 			violation = new Violation(dependency.lineNumber, severity.clone(), this.key, dependency.type, dependency.from, dependency.to, false, message, logicalModules);
 		}
 		return violation;
-		
+
 	}
 }
