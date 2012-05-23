@@ -2,13 +2,10 @@ package husacct;
 
 import husacct.control.IControlService;
 
-import java.lang.management.RuntimeMXBean;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-
-import sun.management.ManagementFactory;
 
 public class Main {
 	
@@ -27,13 +24,13 @@ public class Main {
 	private void printSystemInfo(){
 		Logger logger = Logger.getLogger(Main.class);
 		Runtime runtime = Runtime.getRuntime();
-		RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
+		//RuntimeMXBean mxBean = ManagementFactory.getRuntimeMXBean();
 		
 		logger.debug("Available processors: " + runtime.availableProcessors());
 		logger.debug("Free memory: " + runtime.freeMemory());
 		logger.debug("Max memory: " + runtime.maxMemory());
 		logger.debug("Total memory: " + runtime.totalMemory());
-		logger.debug("Process: " + mxBean.getName());
+		//logger.debug("Process: " + mxBean.getName());
 		
 	}
 	
