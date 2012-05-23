@@ -6,7 +6,6 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
@@ -25,13 +24,13 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-//	    TODO: Uncomment wanneer analyse addServiceListener heeft geïmplementeerd!
-//	    ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener(){
-//	        @Override
-//			public void update() {
-//				refreshDrawing();				
-//			}
-//	    });
+		// TODO: Uncomment wanneer analyse addServiceListener heeft geïmplementeerd!
+		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener(){
+		// @Override
+		// public void update() {
+		// refreshDrawing();
+		// }
+		// });
 	}
 
 	@Override
@@ -98,7 +97,8 @@ public class AnalysedController extends DrawingController {
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
+			logger.warn("Tried to zoom out from \"" + getCurrentPath()
+					+ "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -119,9 +119,9 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleOpen(String path) {
 		super.notifyServiceListeners();
-		if(path.isEmpty()){
+		if (path.isEmpty()) {
 			drawArchitecture(getCurrentDrawingDetail());
-		}else{
+		} else {
 			getAndDrawModulesIn(path);
 		}
 	}

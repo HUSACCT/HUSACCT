@@ -7,7 +7,6 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
@@ -28,13 +27,13 @@ public class DefinedController extends DrawingController {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
-//	    TODO: Uncomment wanneer define addServiceListener heeft geïmplementeerd!
-//		ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener(){
-//	        @Override
-//			public void update() {
-//				refreshDrawing();				
-//			}
-//	    });
+		// TODO: Uncomment wanneer define addServiceListener heeft geïmplementeerd!
+		// ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener(){
+		// @Override
+		// public void update() {
+		// refreshDrawing();
+		// }
+		// });
 	}
 
 	@Override
@@ -84,7 +83,8 @@ public class DefinedController extends DrawingController {
 		if (null != parentPath) {
 			getAndDrawModulesIn(parentPath);
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
+			logger.warn("Tried to zoom out from \"" + getCurrentPath()
+					+ "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -99,7 +99,8 @@ public class DefinedController extends DrawingController {
 		if (!figureFrom.equals(figureTo)) {
 			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs) {
 				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
-					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
+					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path,
+							physicalToPath.path);
 					for (DependencyDTO tempDependency : foundDependencies) {
 						dependencies.add(tempDependency);
 					}
@@ -134,9 +135,9 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleOpen(String path) {
 		super.notifyServiceListeners();
-		if(path.isEmpty()){
+		if (path.isEmpty()) {
 			drawArchitecture(getCurrentDrawingDetail());
-		}else{
+		} else {
 			getAndDrawModulesIn(path);
 		}
 	}
