@@ -1,18 +1,9 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import java.util.Arrays;
-
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 
 public class CSharpGenerator {
-	public CSharpGenerator() {
-		Arrays.sort(typeCollection);
-		Arrays.sort(accessorCollection);
-		Arrays.sort(notPartOfAttribute);
-		Arrays.sort(isAPartOfAttribute);
-		Arrays.sort(listOfMethodTypes);
-	}
 	protected static final int IDENTIFIER = 4;
 	protected static final int USING = 18;
 	protected static final int SEMICOLON = 25;
@@ -60,10 +51,10 @@ public class CSharpGenerator {
 	protected static final int THROW = 190;
 	protected static final int CATCH = 192;
 	protected static final int finalLY = 193;
-	protected static final int[] typeCollection = new int[] {BYTE, SBYTE, INT, UINT, SHORT, USHORT, LONG, ULONG, FLOAT, DOUBLE, CHAR, BOOL, OBJECT, STRING, VAR, DECIMAL, IDENTIFIER};
-	protected static final int[] accessorCollection = new int[] {PRIVATE, PUBLIC, PROTECTED, INTERNAL};
-	protected static final int[] notPartOfAttribute = new int[] { FORWARDCURLYBRACKET, USING, NAMESPACE, CLASS, RETURN, SET, GET, DOT };
-	protected static final int[] isAPartOfAttribute = new int[] { FORWARDCURLYBRACKET, SEMICOLON, BACKWARDCURLYBRACKET };
+	protected static final int[] notPartOfAttribute = new int[] {DOT, USING, NAMESPACE, FORWARDCURLYBRACKET, RETURN, CLASS, GET, SET};
+	protected static final int[] accessorCollection = new int[] {PUBLIC, PROTECTED, PRIVATE, INTERNAL};
+	protected static final int[] typeCollection = new int[] {IDENTIFIER, SBYTE, BYTE, SHORT, USHORT, INT, UINT, LONG, ULONG, CHAR, VAR, BOOL, DECIMAL, DOUBLE, FLOAT, OBJECT, STRING};
+	protected static final int[] isAPartOfAttribute = new int[] {SEMICOLON, FORWARDCURLYBRACKET, BACKWARDCURLYBRACKET };
 	protected static final int[] listOfMethodTypes = new int[] { FINALLY, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, VOID /* synchronised */};
 	protected IModelCreationService modelService = new FamixCreationServiceImpl();
 

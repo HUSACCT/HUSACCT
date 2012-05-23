@@ -2,6 +2,7 @@ package husacct.analyse;
 
 import husacct.ServiceProvider;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.presentation.AnalyseDebuggingFrame;
 import husacct.define.IDefineService;
 
 public class AnalyseMain {
@@ -10,7 +11,7 @@ public class AnalyseMain {
 		long tijd = System.nanoTime();
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
-		String path = "/home/thomas/Documenten/testapp";
+		String path = "/home/thomas/benchmark";
 		
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
@@ -21,7 +22,7 @@ public class AnalyseMain {
 		FamixCreationServiceImpl impl = new FamixCreationServiceImpl();
 		System.out.println(impl.represent());
 		System.out.println((double)(System.nanoTime() - tijd) / 1000000000);
-		//new AnalyseDebuggingFrame();
+		new AnalyseDebuggingFrame();
 		
 	}
 }	
