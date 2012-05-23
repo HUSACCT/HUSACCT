@@ -48,6 +48,7 @@ public class CSharpNamespaceConvertController extends CSharpGenerator {
 		for (CommonTree tree : tempNamespaceTrees) {
 			if (tree.getType() != NAMESPACE) {
 				treeConverter.setCurrentNamespaceName(treeConverter.getCurrentNamespaceName() + tree.getText());
+				treeConverter.setCurrentNamespaceIndent(treeConverter.getIndentLevel());
 			}
 		}
 	}

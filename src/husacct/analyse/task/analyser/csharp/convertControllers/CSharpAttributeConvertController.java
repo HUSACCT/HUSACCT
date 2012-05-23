@@ -20,6 +20,9 @@ public class CSharpAttributeConvertController extends CSharpGenerator{
 	}
 	
 	public boolean attributeCheck(CommonTree tree, boolean isPartOfAttribute) {
+		if (treeController.getCurrentClassIndent() != treeController.getIndentLevel()) {
+			return false;
+		}
 		int type = tree.getType();
 		boolean biggerThanOne = attributeTrees.size() > 1;
 		if (isPartOfAttribute && type == SEMICOLON && biggerThanOne) {
