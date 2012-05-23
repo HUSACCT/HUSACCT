@@ -89,20 +89,6 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-//	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
-//		logger.info("Adding module " + moduleName);
-//		try {
-//			JPanelStatus.getInstance("Adding module").start();
-//			Module newModule = new Module(moduleName, moduleDescription);
-//			this.passModuleToService(selectedModuleId, newModule);
-//		} catch (Exception e) {
-//			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
-//			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-//		} finally {
-//			JPanelStatus.getInstance().stop();
-//		}
-//	}
-	
 	public void addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
 		logger.info("Adding subsystem " + moduleName);
 		try {
