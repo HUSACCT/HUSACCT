@@ -27,6 +27,8 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	private int currentMethodIndentLevel = -1;
 	private String currentNamespaceName;
 	private String currentClassName = "";
+	private int currentClassIndent = 0;
+	private int currentNamespaceIndent = 0;
 	private String currentMethodName = "";
 	private List<CSharpData> indentClassLevel;
 	private List<CSharpData> indentNamespaceLevel;
@@ -47,8 +49,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	}
 
 	private CommonTree getCompilationTree(final CSharpParser cSharpParser) throws RecognitionException {
-		final compilation_unit_return compilationUnit = cSharpParser
-				.compilation_unit();
+		final compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
 		return (CommonTree) compilationUnit.getTree();
 	}
 
@@ -135,7 +136,11 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	}
 
 	public String getUniqueClassName() {
-		return getCurrentNamespaceName() + "." + getCurrentClassName();
+		if (getCurrentNamespaceName() != null) {
+			return getCurrentNamespaceName() + "." + getCurrentClassName();
+		} else {
+			return getCurrentClassName();
+		}
 	}
 
 	public void createUsingGenerator() {
@@ -212,5 +217,21 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 
 	public void setMethodIndentLevel(final int methodIndentLevel) {
 		this.currentMethodIndentLevel = methodIndentLevel;
+	}
+
+	public int getCurrentClassIndent() {
+		return currentClassIndent;
+	}
+
+	public void setCurrentClassIndent(int currentClassIndent) {
+		this.currentClassIndent = currentClassIndent;
+	}
+
+	public int getCurrentNamespaceIndent() {
+		return currentNamespaceIndent;
+	}
+
+	public void setCurrentNamespaceIndent(int currentNamespaceIndent) {
+		this.currentNamespaceIndent = currentNamespaceIndent;
 	}
 }

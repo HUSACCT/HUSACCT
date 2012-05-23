@@ -41,6 +41,7 @@ public class CSharpClassConvertController extends CSharpGenerator {
 
 	private void setClassName(CommonTree tree) {
 		treeConverter.setCurrentClassName(tree.getText());
+		treeConverter.setCurrentClassIndent(treeConverter.getIndentLevel() + 1);
 		treeConverter.createUsingGenerator();
 		isClassName = false;
 	}
