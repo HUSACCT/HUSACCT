@@ -51,7 +51,7 @@ public class DomainParser {
 	}
 	
 	public ModuleDTO parseModule(Module module){
-		String logicalPath = getLogicalPath(module.getId());
+		String logicalPath = getLogicalPath(module);
 		String[] physicalPaths = module.getPhysicalPaths();
 		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(module.getUnits());
 		String type = module.getType();
@@ -72,7 +72,7 @@ public class DomainParser {
 	}
 	
 	public ModuleDTO parseRootModule(Module module){
-		String logicalPath = getLogicalPath(module.getId());
+		String logicalPath = getLogicalPath(module);
 		String[] physicalPaths = module.getPhysicalPaths();
 		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(module.getUnits());
 		
@@ -102,13 +102,13 @@ public class DomainParser {
 		PhysicalPathDTO physicalPathDTO = new PhysicalPathDTO(path, type);
 		return physicalPathDTO;
 	}
-	public String getLogicalPath(long moduleId){
+	
+	public String getLogicalPath(Module module){
 		String logicalPath = "";
-		try {
-			logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(moduleId);
-		} catch (Exception e){
-			//Try catch for when there is no moduleTo
-			//Since there is no moduleTo needed it is not added to the SoftwareArchitecture, therefor it has no logicalPath
+		//If the type is Module then its a placeholder for a non-existing module
+		//since you cannot add modules of the type module
+		if (!module.getType().equals("Module")) {
+			logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(module.getId());;
 		}
 		return logicalPath;
 	}
