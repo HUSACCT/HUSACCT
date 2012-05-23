@@ -63,12 +63,22 @@ public class RoundedLiner implements Liner {
         {
         	height = pointEnd.y - pointStart.y; 
         }
-        
+
         double diffX = width/(width+height);
         double diffY = height/(width+height);
-               
-        centerPoint.x += diffX*this.distance;
-        centerPoint.y += diffY*this.distance;
+        
+        double angle = RoundedLiner.getAngle(pointStart, pointEnd);
+        if(angle < 90 || (angle > 180 && angle < 270))
+        {
+            centerPoint.x += diffY*this.distance;
+            centerPoint.y -= diffX*this.distance;
+        }
+        else
+        {
+            centerPoint.x += diffY*this.distance;
+            centerPoint.y += diffX*this.distance;        	
+        }
+        
         Node centerNode = new Node(centerPoint);
         path.add(centerNode);
         
@@ -76,6 +86,23 @@ public class RoundedLiner implements Liner {
         
 
         path.invalidatePath();
+	}
+	
+	public static double getAngle(Point2D.Double point1, Point2D.Double point2)
+	{
+	    double dx = point1.x - point2.x;
+	    // Minus to correct for coord re-mapping
+	    double dy = -(point1.y - point2.y);
+
+	    double inRads = Math.atan2(dy,dx);
+
+	    // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
+	    if (inRads < 0)
+	        inRads = Math.abs(inRads);
+	    else
+	        inRads = 2*Math.PI - inRads;
+
+	    return Math.toDegrees(inRads);
 	}
 
 	@Override

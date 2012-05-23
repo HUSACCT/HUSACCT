@@ -28,10 +28,12 @@ public class LoadingDialog extends JDialog implements Runnable {
 		this.progressInfoText = progressInfoText;
 		setup();
 		addComponents();
-	}
 
-	public LoadingDialog(String progressInfoText) {
-		this(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController(), progressInfoText);
+	}
+	
+	public LoadingDialog(String progressInfoText){
+		ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		new LoadingDialog(controlService.getMainController(), progressInfoText);
 	}
 
 	private void setup() {

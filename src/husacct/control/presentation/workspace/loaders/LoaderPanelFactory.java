@@ -5,7 +5,7 @@ public class LoaderPanelFactory {
 
 	public static LoaderPanel get(String identifier){
         try {
-            ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+            ClassLoader myClassLoader = LoaderPanelFactory.class.getClassLoader();
             String classNameToBeLoaded = "husacct.control.presentation.workspace.loaders." + identifier + "LoadPanel";
 			Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
             Object instance = myClass.newInstance();

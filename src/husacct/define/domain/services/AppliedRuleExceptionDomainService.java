@@ -16,7 +16,10 @@ public class AppliedRuleExceptionDomainService {
 		} else {
 			moduleTo = new Module();
 		}
-
+		addExceptionToAppliedRule(parentRuleId, ruleType, description, moduleFrom, moduleTo);
+	}
+	
+	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, Module moduleFrom, Module moduleTo) {
 		AppliedRule exceptionRule = new AppliedRule(ruleType,description, moduleFrom, moduleTo);
 		
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
@@ -42,4 +45,5 @@ public class AppliedRuleExceptionDomainService {
 		}
 		return exceptionIds;
 	}
+
 }
