@@ -84,10 +84,13 @@ public class CreateWorkspaceDialog extends JDialog{
 	}
 
 	private void setListeners(){
-
+		
+		final CreateWorkspaceDialog createWorkspaceDialog = this;
+		
 		setApplicationCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				toggleSetApplicationPanel(setApplicationCheckbox.isSelected());
+				DialogUtils.alignCenter(createWorkspaceDialog);
 			}
 		});
 
