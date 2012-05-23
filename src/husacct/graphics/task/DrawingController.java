@@ -26,17 +26,16 @@ import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
-	public static final String ROOT = ""; 
+	public static final String ROOT = "";
 	protected static final boolean debugPrint = true;
-	
+
 	private boolean areViolationsShown = false;
-	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>(); 
-	
+	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
+
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
 	protected String currentPath = "";
-	
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -46,7 +45,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected LayoutStrategy layoutStrategy;
 
 	protected FigureMap figureMap = new FigureMap();
-	
+
 	public DrawingController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
@@ -82,7 +81,7 @@ public abstract class DrawingController implements UserInputListener {
 	public void clearDrawing() {
 		figureMap.clearAll();
 		drawing.clearAll();
-		
+
 		view.clearSelection();
 		view.invalidate();
 	}
@@ -167,25 +166,18 @@ public abstract class DrawingController implements UserInputListener {
 		int height = drawTarget.getHeight();
 
 		layoutStrategy.doLayout(width, height);
-		
-		//printFigures("doLayout(): layoutStrategy.doLayout();");
-		
 		restoreFigurePositions(getCurrentPath());
-		
-		printFigures("doLayout(): restoreFigurePositions()");
-		
+
 		// FIXME: TODO: Patrick:
 		// Calling drawLinesBasedOnSetting(); after updating the layout is done due to a bug.
-		// The bug is assumed to be in the RelationFigure because  the lines are drawing themselves 
+		// The bug is assumed to be in the RelationFigure because the lines are drawing themselves
 		// incorrectly after updating the layout of the drawing.
 		// To solve this we first draw the entire drawing, update the layout and then
 		// remove all the lines and re-add them to the drawing.
 		// As it's currently unknown what causes the bug or how to solve it and the
 		// deadline for Construction II is approaching, we have decided to go with a
-		// work around. However, this bug should be fixed as soon as possible.		
+		// work around. However, this bug should be fixed as soon as possible.
 		drawLinesBasedOnSetting();
-		
-		//printFigures("doLayout(): drawLinesBasedOnSetting()");
 	}
 
 	@Override
@@ -276,42 +268,43 @@ public abstract class DrawingController implements UserInputListener {
 	public void notifyServiceListeners() {
 		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
-	
+
 	protected void saveFigurePositions(String path) {
 		DrawingState state;
 		if (storedStates.containsKey(path))
 			state = storedStates.get(path);
 		else
 			state = new DrawingState(drawing);
-		
-		state.save(figureMap);	
+
+		state.save(figureMap);
 		storedStates.put(path, state);
 	}
-	
+
 	protected void restoreFigurePositions(String path) {
 		if (storedStates.containsKey(path)) {
 			DrawingState state = storedStates.get(path);
 			state.restore(figureMap);
 		}
 	}
-	
+
 	protected void resetFigurePositions(String path) {
 		storedStates.remove(path);
 	}
-	
+
 	protected void printFigures(String msg) {
 		if (!debugPrint)
 			return;
-		
+
 		System.out.println(msg);
-		
+
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 			Rectangle2D.Double bounds = bf.getBounds();
-			
-			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y, bounds.width, bounds.height);
+
+			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y,
+					bounds.width, bounds.height);
 			if (bf.getName().equals("Main"))
 				System.out.println(String.format("%s: %s", bf.getName(), rect));
-		}		
-	}	
+		}
+	}
 }
