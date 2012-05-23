@@ -11,7 +11,7 @@ public class AnalyseMain {
 		long tijd = System.nanoTime();
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
-		String path = "/home/thomas/benchmark";
+		String path = "c:/project/benchmark";
 		
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");

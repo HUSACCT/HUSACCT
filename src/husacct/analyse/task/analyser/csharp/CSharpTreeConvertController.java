@@ -8,6 +8,7 @@ import husacct.analyse.task.analyser.csharp.convertControllers.CSharpExceptionCo
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpLocalVariableConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpMethodConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpNamespaceConvertController;
+import husacct.analyse.task.analyser.csharp.convertControllers.CSharpParameterConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpUsingConvertController;
 import husacct.analyse.task.analyser.csharp.generators.CSharpClassGenerator;
 import husacct.analyse.task.analyser.csharp.generators.CSharpGenerator;
@@ -69,6 +70,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		boolean isPartOfMethod = false;
 		boolean isPartOfException = false;
 		boolean isPartOfLocalVariable = false;
+		boolean isPartOfParameter = false;
 		final CSharpNamespaceConvertController namespaceConverter = new CSharpNamespaceConvertController(this);
 		final CSharpClassConvertController classConverter = new CSharpClassConvertController(this);
 		final CSharpAttributeConvertController attributeConverter = new CSharpAttributeConvertController(this);
@@ -76,6 +78,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		final CSharpMethodConvertController methodConverter = new CSharpMethodConvertController(this);
 		usingConverter = new CSharpUsingConvertController(this);
 		final CSharpExceptionConvertController exceptionConverter = new CSharpExceptionConvertController(this);
+		final CSharpParameterConvertController parameterConverter = new CSharpParameterConvertController(this);
 		for (final CommonTree tree : children) {
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceConverter.namespaceChecking(tree, isPartOfNamespace);
@@ -84,6 +87,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 			isPartOfUsing = usingConverter.usingCheck(tree,	isPartOfUsing);
 			isPartOfMethod = methodConverter.methodCheck(tree, isPartOfMethod);
 			isPartOfException = exceptionConverter.exceptionCheck(tree, isPartOfException);
+			isPartOfParameter = parameterConverter.parameterCheck(tree, isPartOfParameter);
 			if ((getIndentLevel() > currentMethodIndentLevel) && (currentMethodIndentLevel != -1)) {
 				isPartOfLocalVariable = localVariableConverter.localVariableCheck(tree, isPartOfLocalVariable);
 			}
