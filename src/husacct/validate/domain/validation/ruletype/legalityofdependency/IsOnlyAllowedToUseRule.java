@@ -3,16 +3,12 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtilFilter;
-import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -44,29 +40,13 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 					if(allowedDependencies.length != 0){
 						for(DependencyDTO allowedDependency: allowedDependencies){
 							if(dependency != allowedDependency){
-								Message message = new Message(rootRule);
-	
-								LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-								LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
-								LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-	
-								final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-								Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);						
-								Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
+								Violation violation = createViolation(rootRule,classPathFrom,classPathTo,dependency,configuration);
 								violations.add(violation);
 							}
 						}
 					}
-					else{
-						Message message = new Message(rootRule);
-						
-						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-						LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
-						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-
-						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-						Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);						
-						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
+					else{						
+						Violation violation = createViolation(rootRule,classPathFrom,classPathTo,dependency,configuration);
 						violations.add(violation);
 						
 					}
