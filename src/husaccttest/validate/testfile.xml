@@ -51,11 +51,11 @@
 				</logicalModules>
 				<ruleKey>IsNotAllowedToUse</ruleKey>
 				<violationTypeKeys>
-					<violationTypeKey>Extend</violationTypeKey>
-					<violationTypeKey>key2</violationTypeKey>
-					<violationTypeKey>key3</violationTypeKey>
-					<violationTypeKey>key4</violationTypeKey>
-					<violationTypeKey>key5</violationTypeKey>
+					<violationTypeKey>ExtendsAbstract</violationTypeKey>
+					<violationTypeKey>Implements</violationTypeKey>
+					<violationTypeKey>Declaration</violationTypeKey>
+					<violationTypeKey>Annotation</violationTypeKey>
+					<violationTypeKey>AccessPropertyOrField</violationTypeKey>
 				</violationTypeKeys>
 				<exceptionMessages>
 					<message>
@@ -71,11 +71,11 @@
 						</logicalModules>
 						<ruleKey>rulekey</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsAbstract</violationTypeKey>
+							<violationTypeKey>Annotation</violationTypeKey>
+							<violationTypeKey>Declaration</violationTypeKey>
+							<violationTypeKey>Exception</violationTypeKey>
+							<violationTypeKey>ExtendsConcrete</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages>
 							<message>
@@ -91,11 +91,11 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsAbstract</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages />
 							</message>
@@ -114,11 +114,11 @@
 						</logicalModules>
 						<ruleKey>rulekey</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>InvocMethod</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages />
 					</message>
@@ -157,11 +157,10 @@
 				</logicalModules>
 				<ruleKey>IsNotAllowedToUse</ruleKey>
 				<violationTypeKeys>
-					<violationTypeKey>Extend</violationTypeKey>
-					<violationTypeKey>key2</violationTypeKey>
-					<violationTypeKey>key3</violationTypeKey>
-					<violationTypeKey>key4</violationTypeKey>
-					<violationTypeKey>key5</violationTypeKey>
+					<violationTypeKey>ExtendsLibrary</violationTypeKey>
+					<violationTypeKey>Implements</violationTypeKey>
+					<violationTypeKey>Import</violationTypeKey>
+					<violationTypeKey>InvocConstructor</violationTypeKey>
 				</violationTypeKeys>
 				<exceptionMessages>
 					<message>
@@ -177,11 +176,10 @@
 						</logicalModules>
 						<ruleKey>rulekey</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages>
 							<message>
@@ -197,11 +195,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages />
 							</message>
@@ -220,11 +217,10 @@
 						</logicalModules>
 						<ruleKey>rulekey</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages />
 					</message>
@@ -238,38 +234,38 @@
 		<severityPerTypePerProgrammingLanguage
 			language="C#">
 			<severityPerType>
-				<typeKey>type1</typeKey>
+				<typeKey>InvocMethod</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
 			</severityPerType>
 			<severityPerType>
-				<typeKey>type3</typeKey>
+				<typeKey>Implements</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
 			</severityPerType>
 			<severityPerType>
-				<typeKey>type2</typeKey>
+				<typeKey>Exception</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
 			</severityPerType>
 			<severityPerType>
-				<typeKey>type4</typeKey>
+				<typeKey>Annotation</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
 			</severityPerType>
 		</severityPerTypePerProgrammingLanguage>
 		<severityPerTypePerProgrammingLanguage
 			language="Java">
 			<severityPerType>
-				<typeKey>type1</typeKey>
+				<typeKey>Import</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
 			</severityPerType>
 			<severityPerType>
-				<typeKey>type3</typeKey>
+				<typeKey>ExtendsConcrete</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
 			</severityPerType>
 			<severityPerType>
-				<typeKey>type2</typeKey>
+				<typeKey>ExtendsAbstract</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
 			</severityPerType>
 			<severityPerType>
-				<typeKey>type4</typeKey>
+				<typeKey>Implements</typeKey>
 				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
 			</severityPerType>
 		</severityPerTypePerProgrammingLanguage>
@@ -328,11 +324,10 @@
 						</logicalModules>
 						<ruleKey>IsNotAllowedToUse</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages>
 							<message>
@@ -348,11 +343,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages>
 									<message>
@@ -368,11 +362,10 @@
 										</logicalModules>
 										<ruleKey>rulekey</ruleKey>
 										<violationTypeKeys>
-											<violationTypeKey>Extend</violationTypeKey>
-											<violationTypeKey>key2</violationTypeKey>
-											<violationTypeKey>key3</violationTypeKey>
-											<violationTypeKey>key4</violationTypeKey>
-											<violationTypeKey>key5</violationTypeKey>
+											<violationTypeKey>ExtendsLibrary</violationTypeKey>
+											<violationTypeKey>Implements</violationTypeKey>
+											<violationTypeKey>Import</violationTypeKey>
+											<violationTypeKey>InvocConstructor</violationTypeKey>
 										</violationTypeKeys>
 										<exceptionMessages />
 									</message>
@@ -389,13 +382,12 @@
 										<logicalModuleType>module type</logicalModuleType>
 									</logicalModuleTo>
 								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
+								<ruleKey>VisibilityConvention</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>public</violationTypeKey>
+									<violationTypeKey>protected</violationTypeKey>
+									<violationTypeKey>default</violationTypeKey>
+									<violationTypeKey>private</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages />
 							</message>
@@ -434,11 +426,10 @@
 						</logicalModules>
 						<ruleKey>IsNotAllowedToUse</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages>
 							<message>
@@ -454,11 +445,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages>
 									<message>
@@ -474,11 +464,10 @@
 										</logicalModules>
 										<ruleKey>rulekey</ruleKey>
 										<violationTypeKeys>
-											<violationTypeKey>Extend</violationTypeKey>
-											<violationTypeKey>key2</violationTypeKey>
-											<violationTypeKey>key3</violationTypeKey>
-											<violationTypeKey>key4</violationTypeKey>
-											<violationTypeKey>key5</violationTypeKey>
+											<violationTypeKey>ExtendsLibrary</violationTypeKey>
+											<violationTypeKey>Implements</violationTypeKey>
+											<violationTypeKey>Import</violationTypeKey>
+											<violationTypeKey>InvocConstructor</violationTypeKey>
 										</violationTypeKeys>
 										<exceptionMessages />
 									</message>
@@ -497,11 +486,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages />
 							</message>
@@ -565,11 +553,10 @@
 						</logicalModules>
 						<ruleKey>IsNotAllowedToUse</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages>
 							<message>
@@ -585,11 +572,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages>
 									<message>
@@ -605,11 +591,10 @@
 										</logicalModules>
 										<ruleKey>rulekey</ruleKey>
 										<violationTypeKeys>
-											<violationTypeKey>Extend</violationTypeKey>
-											<violationTypeKey>key2</violationTypeKey>
-											<violationTypeKey>key3</violationTypeKey>
-											<violationTypeKey>key4</violationTypeKey>
-											<violationTypeKey>key5</violationTypeKey>
+											<violationTypeKey>ExtendsLibrary</violationTypeKey>
+											<violationTypeKey>Implements</violationTypeKey>
+											<violationTypeKey>Import</violationTypeKey>
+											<violationTypeKey>InvocConstructor</violationTypeKey>
 										</violationTypeKeys>
 										<exceptionMessages />
 									</message>
@@ -628,11 +613,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages />
 							</message>
@@ -671,11 +655,10 @@
 						</logicalModules>
 						<ruleKey>IsNotAllowedToUse</ruleKey>
 						<violationTypeKeys>
-							<violationTypeKey>Extend</violationTypeKey>
-							<violationTypeKey>key2</violationTypeKey>
-							<violationTypeKey>key3</violationTypeKey>
-							<violationTypeKey>key4</violationTypeKey>
-							<violationTypeKey>key5</violationTypeKey>
+							<violationTypeKey>ExtendsLibrary</violationTypeKey>
+							<violationTypeKey>Implements</violationTypeKey>
+							<violationTypeKey>Import</violationTypeKey>
+							<violationTypeKey>InvocConstructor</violationTypeKey>
 						</violationTypeKeys>
 						<exceptionMessages>
 							<message>
@@ -711,11 +694,10 @@
 										</logicalModules>
 										<ruleKey>rulekey</ruleKey>
 										<violationTypeKeys>
-											<violationTypeKey>Extend</violationTypeKey>
-											<violationTypeKey>key2</violationTypeKey>
-											<violationTypeKey>key3</violationTypeKey>
-											<violationTypeKey>key4</violationTypeKey>
-											<violationTypeKey>key5</violationTypeKey>
+											<violationTypeKey>ExtendsLibrary</violationTypeKey>
+											<violationTypeKey>Implements</violationTypeKey>
+											<violationTypeKey>Import</violationTypeKey>
+											<violationTypeKey>InvocConstructor</violationTypeKey>
 										</violationTypeKeys>
 										<exceptionMessages />
 									</message>
@@ -734,11 +716,10 @@
 								</logicalModules>
 								<ruleKey>rulekey</ruleKey>
 								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
+									<violationTypeKey>ExtendsLibrary</violationTypeKey>
+									<violationTypeKey>Implements</violationTypeKey>
+									<violationTypeKey>Import</violationTypeKey>
+									<violationTypeKey>InvocConstructor</violationTypeKey>
 								</violationTypeKeys>
 								<exceptionMessages />
 							</message>
@@ -752,76 +733,76 @@
 	</violationHistories>
 	<activeViolationTypes>
 		<activeViolationType language="C#">
-			<ruleType type="activeruletype1">
+			<ruleType type="IsNotAllowedToUse">
 				<violationTypes>
 					<violationType>
-						<violationKey>Extend</violationKey>
+						<violationKey>Extends</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 					<violationType>
-						<violationKey>Implementrs</violationKey>
+						<violationKey>Implements</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 				</violationTypes>
 			</ruleType>
-			<ruleType type="activeruletype2">
+			<ruleType type="VisibilityConvention">
 				<violationTypes>
 					<violationType>
-						<violationKey>avt3</violationKey>
+						<violationKey>public</violationKey>
 						<enabled>true</enabled>
 					</violationType>
 					<violationType>
-						<violationKey>avt4</violationKey>
+						<violationKey>private</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 				</violationTypes>
 			</ruleType>
 		</activeViolationType>
 		<activeViolationType language="Java">
-			<ruleType type="activeruletype3">
+			<ruleType type="IsNotAllowedToUse">
 				<violationTypes>
 					<violationType>
-						<violationKey>Extend</violationKey>
+						<violationKey>ExtendsAbstract</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 					<violationType>
-						<violationKey>Implementrs</violationKey>
+						<violationKey>Implements</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 				</violationTypes>
 			</ruleType>
-			<ruleType type="activeruletype4">
+			<ruleType type="IsAllowedToUse">
 				<violationTypes>
 					<violationType>
-						<violationKey>avt7</violationKey>
+						<violationKey>ExtendsConcrete</violationKey>
 						<enabled>true</enabled>
 					</violationType>
 					<violationType>
-						<violationKey>avt8</violationKey>
+						<violationKey>Annotation</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 				</violationTypes>
 			</ruleType>
-			<ruleType type="activeruletype3">
+			<ruleType type="IsOnlyAllowedToUse">
 				<violationTypes>
 					<violationType>
-						<violationKey>Extend</violationKey>
+						<violationKey>Import</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 					<violationType>
-						<violationKey>Implementrs</violationKey>
+						<violationKey>Exception</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 				</violationTypes>
 			</ruleType>
-			<ruleType type="activeruletype4">
+			<ruleType type="MustUse">
 				<violationTypes>
 					<violationType>
-						<violationKey>avt7</violationKey>
+						<violationKey>AccessPropertyOrField</violationKey>
 						<enabled>true</enabled>
 					</violationType>
 					<violationType>
-						<violationKey>avt8</violationKey>
+						<violationKey>InvocMethod</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 				</violationTypes>

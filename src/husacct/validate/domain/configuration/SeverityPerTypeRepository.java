@@ -2,6 +2,7 @@ package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.validate.domain.exception.KeyNotFoundException;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -140,7 +141,7 @@ class SeverityPerTypeRepository implements Observer {
 						keySeverity.setValue(isValidSeverity(keySeverity.getValue()));
 					}
 					else{
-			//			throw new KeyNotFoundException(keySeverity.getKey());
+						throw new KeyNotFoundException(keySeverity.getKey());
 					}
 				}
 			}
