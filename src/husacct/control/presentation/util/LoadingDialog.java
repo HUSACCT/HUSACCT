@@ -36,10 +36,6 @@ public class LoadingDialog extends JDialog implements Runnable {
 		new LoadingDialog(controlService.getMainController(), progressInfoText);
 	}
 
-	public LoadingDialog(String progressInfoText) {
-		this(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController(), progressInfoText);
-	}
-
 	private void setup() {
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
