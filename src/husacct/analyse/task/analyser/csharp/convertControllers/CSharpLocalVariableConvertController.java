@@ -51,7 +51,6 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 			cleanVariableList();
 		}		
 		if(localVariableTrees.size() > 1){
-			System.out.println(localVariableTrees);
 			CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator(treeConvertController);
 			localVariableGenerator.generateLocalVariable(localVariableTrees, treeConvertController.getCurrentMethodName(), uniqueClassName, lineNumber);
 		}

@@ -8,7 +8,6 @@ import husacct.define.IDefineService;
 public class AnalyseMain {
 	
 	public static void main(String[] args){
-		long tijd = System.nanoTime();
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 		String path = "c:/project/benchmark";
@@ -21,7 +20,6 @@ public class AnalyseMain {
 
 		FamixCreationServiceImpl impl = new FamixCreationServiceImpl();
 		System.out.println(impl.represent());
-		System.out.println((double)(System.nanoTime() - tijd) / 1000000000);
 		new AnalyseDebuggingFrame();
 		
 	}
