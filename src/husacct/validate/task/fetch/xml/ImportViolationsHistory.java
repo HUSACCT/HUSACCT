@@ -87,7 +87,6 @@ public class ImportViolationsHistory {
                     logger.error("Severity for the violation " + violation.getLinenumber() + "was not found (UUID: "+ stringUUID);
                 } 
 			
-				violations.add(violation);
 			}				
 			violationHistories.add(new ViolationHistory(violations, severities, date, description));
 		}	

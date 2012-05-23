@@ -3,17 +3,13 @@ package husacct.validate.domain.validation.ruletype.contentsofamodule;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtilFilter;
-import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -41,12 +37,7 @@ public class NamingConventionRule extends RuleType {
 
 			analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name)){
-				Message message = new Message(rootRule);
-
-				LogicalModule logicalModuleFrom = new LogicalModule(physicalClasspathFrom);
-				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-				Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, null);
-				Violation violation = createViolation(super.key, physicalClasspathFrom.getPhysicalPath(), false, message, logicalModules, severity);
+				Violation violation = createViolation(rootRule,physicalClasspathFrom,null,null,configuration);
 				violations.add(violation);
 			}
 		}

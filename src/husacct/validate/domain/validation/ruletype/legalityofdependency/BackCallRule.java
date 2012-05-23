@@ -4,16 +4,12 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtilFilter;
-import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -40,18 +36,10 @@ public class BackCallRule extends RuleType {
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> moduleTo : modulesTo){
-				for(Mapping physicalClasspathsTo : moduleTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), physicalClasspathsTo.getPhysicalPath(), classPathFrom.getViolationTypes());	
+				for(Mapping classpathsTo : moduleTo ){
+					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classpathsTo.getPhysicalPath(), classPathFrom.getViolationTypes());	
 					for(DependencyDTO dependency: dependencies){
-						Message message = new Message(rootRule);
-
-						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-						LogicalModule logicalModuleTo = new LogicalModule(physicalClasspathsTo);
-						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-
-						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-						Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);
-						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
+						Violation violation = createViolation(rootRule,classPathFrom,classpathsTo,dependency,configuration);
 						violations.add(violation);
 					}
 				}					
