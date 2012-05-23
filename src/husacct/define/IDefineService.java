@@ -4,12 +4,13 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IObservableService;
 
 import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public interface IDefineService extends ISaveable{
+public interface IDefineService extends ISaveable, IObservableService {
 	
 	public RuleDTO[] getDefinedRules();
 	public ModuleDTO[] getRootModules();
