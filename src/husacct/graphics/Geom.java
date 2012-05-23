@@ -4,6 +4,9 @@ import java.awt.geom.Point2D;
 
 public class Geom {
 	
+	/**
+	 * http://stackoverflow.com/questions/2676719/calculating-the-angle-between-the-line-defined-by-two-points
+	 */
 	public static double getAngle(Point2D.Double point1, Point2D.Double point2)
 	{
 	    double dx = point1.x - point2.x;
