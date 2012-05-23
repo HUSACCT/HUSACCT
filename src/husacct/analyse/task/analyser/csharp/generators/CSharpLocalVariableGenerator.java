@@ -1,10 +1,14 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.task.analyser.csharp.CSharpInstanceData;
+import husacct.analyse.task.analyser.csharp.CSharpTreeConvertController;
+
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpLocalVariableGenerator extends CSharpGenerator {
+	private final CSharpTreeConvertController treeConvertController;
 	private String name;
 	private String uniqueName;
 	private String declareType;
@@ -12,35 +16,43 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 	private String belongsToClass;
 	private int lineNumber;
 	private int namePosition;
-	private int IsPosition;
+	CSharpInvocationGenerator invocationGenerator;
+	
+	public CSharpLocalVariableGenerator(CSharpTreeConvertController treeConvertController){
+		this.treeConvertController = treeConvertController;
+		invocationGenerator = new CSharpInvocationGenerator(this.treeConvertController);
+		
+	}
 	
 	public void generateLocalVariable(List<CommonTree> tree, String methodSignature, String belongsToClass, int lineNumber){
 		this.methodSignature = methodSignature;
 		this.belongsToClass = belongsToClass;
 		this.lineNumber = lineNumber;
-		IsPosition = setIsPosition(tree);
-		if(IsPosition == -1){
-			generateLocalVariableFamixObject(tree);
+		 
+		boolean isInvocation = invocationGenerator.checkIfTreeisOnlyInvocation(tree);
+		
+		if(!(isInvocation)){
+			generateFamixObject(tree);
+		}else{
+			invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
 		}
 	}
-	
-	private void generateLocalVariableFamixObject(List<CommonTree> tree){
+
+	private void generateFamixObject(List<CommonTree> tree){
 		declareType = checkForDeclareType(tree);
 		name = checkForName(tree, namePosition);
 		uniqueName = belongsToClass + "." + methodSignature + "." + name;	
 		modelService.createLocalVariable(belongsToClass, declareType, name, uniqueName, lineNumber, methodSignature);
+		addInstance();
 	}
 
-	private int setIsPosition(List<CommonTree> tree) {
-		int position = -1;
-		for(int i = 0; i < tree.size(); i++){
-			CommonTree currentNode = tree.get(i);
-			int currentType = currentNode.getType();
-			if(currentType == IS){
-				position = i;
-			}
-		}
-		return position;
+	private void addInstance() {
+		CSharpInstanceData instance = new CSharpInstanceData();
+		instance.setBelongsToClass(belongsToClass);
+		instance.setTo(declareType);
+		instance.setInstanceName(name);
+		instance.setHasMethodScope(true);
+		treeConvertController.addInstance(instance);
 	}
 
 	private String checkForDeclareType(List<CommonTree> tree) {
@@ -67,12 +79,11 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 			
 			if(usesLongName){
 				returnType = returnType + currentNode.getText();
+				namePosition = i+1;
 			}else if(i < 1){
 				returnType = currentNode.getText();
+				namePosition = i+1;
 			}
-			
-			namePosition = i;
-			
 		}
 		
 		return returnType;

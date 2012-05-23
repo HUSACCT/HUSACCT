@@ -44,12 +44,12 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 	private boolean endLocalVariable(CommonTree tree) {
 		int lineNumber = tree.getLine();
 		String uniqueClassName = treeConvertController.getUniqueClassName();
+	
 		if(localVariableTrees.size() > 0){
 			cleanVariableList();
 		}		
 		if(localVariableTrees.size() > 1){
-			System.out.println("treeconverter: "+localVariableTrees);
-			CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator();
+			CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator(treeConvertController);
 			localVariableGenerator.generateLocalVariable(localVariableTrees, treeConvertController.getCurrentMethodName(), uniqueClassName, lineNumber);
 		}
 		localVariableTrees.clear();
@@ -58,17 +58,16 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 
 	private void cleanVariableList() {
 		boolean isLocalVariable = true;
-		final int[] notAllowedTypes = new int[]{FORWARDCURLYBRACKET, FORWARDBRACKET};
+		final int notAllowedType = FORWARDCURLYBRACKET;
 		for(CommonTree node : localVariableTrees){
 			int type = node.getType();
-			for (int notAllowedtype : notAllowedTypes){
-				if(type == notAllowedtype){
-					isLocalVariable = false;
-				}
+			if(type == notAllowedType){
+				isLocalVariable = false;
 			}
 		}		
 		if(!(isLocalVariable)){
 			localVariableTrees.clear();
 		}
 	}
+
 }
