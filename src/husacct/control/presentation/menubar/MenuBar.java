@@ -33,12 +33,12 @@ public class MenuBar extends JMenuBar{
 		languageMenu = new LanguageMenu(mainController);
 		helpMenu = new HelpMenu(mainController);
 
-		fileMenu.setMnemonic('F');
-		defineMenu.setMnemonic('D');
-		analyseMenu.setMnemonic('A');
-		validateMenu.setMnemonic('V');
-		languageMenu.setMnemonic('L');
-		helpMenu.setMnemonic('H');
+		fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
+		defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
+		analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
+		validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
+		languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
+		helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
 		
 		add(fileMenu);
 		add(defineMenu);
