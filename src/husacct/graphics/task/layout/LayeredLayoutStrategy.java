@@ -18,7 +18,6 @@ import org.lambda.functions.implementations.S1;
 public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
 	private static final double HORZ_ITEM_SPACING = 35.0;
-	// private static final Logger logger = Logger.getLogger(LayeredLayoutStrategy.class);
 
 	private AbstractCompositeFigure drawing;
 	private SortedNodeList nodes = new SortedNodeList();
@@ -43,6 +42,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	public void doLayout(int screenWidth, int screenHeight) {
 		initLayout();
 		calculateLayout();
+		balanceLayout();
 		applyLayout();
 	}
 
@@ -52,7 +52,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 
 	private void calculateLayout() {
-		// logger.info("Calculating layout");
 		for (Figure f : connectors) {
 			ConnectionFigure cf = (ConnectionFigure) f;
 
@@ -61,12 +60,14 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 
 			startNode.connectTo(endNode);
 			boolean isCyclic = startNode.isCyclicChain(endNode);
-			if (!isCyclic || (isCyclic && startNode.getLevel() == Node.UNINITIALIZED)) {
+			if (!isCyclic) {
 				updateNodes(startNode, endNode);
+			} else if (isCyclic) {
+				if (startNode.getLevel() == Node.UNINITIALIZED || endNode.getLevel() == Node.UNINITIALIZED)
+					updateNodes(startNode, endNode);
 			}
 		}
 
-		// logger.info("Adding unconnected figures to graph");
 		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = new S1<Figure>(null, compareList) {
 			{
@@ -105,7 +106,6 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 
 	private void applyLayout() {
-		// logger.info("Applying layout to drawing.");
 		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
 
 		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);

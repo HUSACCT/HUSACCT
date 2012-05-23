@@ -1,5 +1,7 @@
 package husacct.graphics.task.layout;
 
+import husacct.graphics.presentation.figures.BaseFigure;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,14 +12,19 @@ import org.jhotdraw.draw.Figure;
 public class Node {
 	public static final int UNINITIALIZED = Integer.MIN_VALUE;
 	
+	private String name;
 	private Figure figure;
 	private int level = UNINITIALIZED;
 	private boolean positionUpdated = false;
+	private boolean chainStart = false;
 	private ArrayList<Node> connectedTo = new ArrayList<Node>();
 
 	public Node(Figure f, int l) {
 		figure = f;
 		level = l;
+		
+		if (f != null) 
+			name = ((BaseFigure)f).getName();
 	}
 
 	public Node(Figure f) {
@@ -105,5 +112,17 @@ public class Node {
 
 	public int getHeight() {
 		return (int) figure.getBounds().height;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setStartOfChain(boolean newValue) {
+		chainStart = newValue;
+	}
+	
+	public boolean isStartOfChain() {
+		return chainStart;
 	}
 }
