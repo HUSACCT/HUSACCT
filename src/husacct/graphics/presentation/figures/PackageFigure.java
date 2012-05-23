@@ -31,6 +31,7 @@ public class PackageFigure extends BaseFigure {
 		children.add(text);
 
 		top.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 	}
 
 	@Override

@@ -1,8 +1,10 @@
 package husacct.graphics;
 
+import husacct.common.services.IObservableService;
+
 import javax.swing.JInternalFrame;
 
-public interface IGraphicsService {
+public interface IGraphicsService extends IObservableService {
 
 	JInternalFrame getAnalysedArchitectureGUI();
 	JInternalFrame getDefinedArchitectureGUI();
