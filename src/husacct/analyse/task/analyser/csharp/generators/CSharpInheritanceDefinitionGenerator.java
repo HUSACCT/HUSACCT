@@ -1,4 +1,6 @@
-package husacct.analyse.task.analyser.csharp;
+package husacct.analyse.task.analyser.csharp.generators;
+
+import husacct.analyse.task.analyser.csharp.CSharpData;
 
 public class CSharpInheritanceDefinitionGenerator extends CSharpGenerator {
 
