@@ -1,6 +1,7 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -8,8 +9,10 @@ import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -225,7 +228,7 @@ public class AppliedRuleController extends PopUpController {
 	private Module getCorrectModule(Object o){
 		Module module;
 		if (o instanceof SoftwareUnitDefinition){
-			module = createPhysicalModule((SoftwareUnitDefinition) o);
+			module = createModuleForSoftwareUnit((SoftwareUnitDefinition) o);
 		} else if (o instanceof Long){
 			long moduleId = (Long) o;
 			if (moduleId != -1){
@@ -239,10 +242,28 @@ public class AppliedRuleController extends PopUpController {
 		return module;
 	}
 	
-	private Module createPhysicalModule(SoftwareUnitDefinition su) {
-		Module module = new Module();
+	private Module createModuleForSoftwareUnit(SoftwareUnitDefinition su) {
+		Module module = new SubSystem(su.getName(), "");
 		module.addSUDefinition(su);
-		module.setType("Physical");
+
+		SoftwareUnitDefinition parentSU;
+		AnalysedModuleDTO analysedModuleDTO = ServiceProvider.getInstance().getAnalyseService().getParentModuleForModule(su.getName());
+		if (!analysedModuleDTO.name.equals("")) { 
+			Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
+			parentSU = new SoftwareUnitDefinition(analysedModuleDTO.uniqueName, type);
+		} else {
+			logger.info("No parent found for softwareunit : " + su.getName());
+			logger.info("Using " + su.getName() + " instead");
+			parentSU = su;
+		}
+		
+		
+		try {
+			Module parentModule = moduleService.getModuleIdBySoftwareUnit(parentSU);
+			moduleService.addModuleToParent(parentModule.getId(), module);				
+		} catch (RuntimeException e){
+			moduleService.addModuleToRoot(module);			
+		}
 		return module;
 	}
 	

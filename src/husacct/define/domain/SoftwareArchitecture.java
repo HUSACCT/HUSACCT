@@ -198,6 +198,28 @@ public class SoftwareArchitecture {
 		return currentModule;
 	}
 	
+	public Module getModuleBySoftwareUnit(SoftwareUnitDefinition su) {
+		Module currentModule = null;
+		for(Module module : modules){
+			
+			if (module.hasSoftwareUnit(su.getName())){
+				currentModule = module;
+				while (!currentModule.hasSoftwareUnitDirectly(su.getName())){
+					for (Module subModule : currentModule.getSubModules()){
+						if (subModule.hasSoftwareUnit(su.getName())){
+							currentModule = subModule;
+						}
+					}
+				}
+				break;
+			}
+			
+		}
+		if (currentModule == null){throw new RuntimeException("This softwareunit is not mapped to a module!");}
+		return currentModule;
+	}
+	
+	
 	public long addModule(Module module)
 	{
 		long moduleId;
