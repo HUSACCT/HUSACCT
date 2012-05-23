@@ -77,10 +77,20 @@ public class SoftwareArchitecture {
 	/*
 	 * Applied Rules
 	 */
-	public ArrayList<Long> getAppliedRulesIdsByModule(long moduleId) {
+	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
 		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
 		for (AppliedRule rule : appliedRules){
 			if (rule.getModuleFrom().getId() == moduleId){
+				appliedRuleIds.add(rule.getId());
+			}
+		}
+		return appliedRuleIds;
+	}
+	
+	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
+		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
+		for (AppliedRule rule : appliedRules){
+			if (rule.getModuleTo().getId() == moduleId){
 				appliedRuleIds.add(rule.getId());
 			}
 		}
@@ -187,6 +197,28 @@ public class SoftwareArchitecture {
 		if (currentModule == null){throw new RuntimeException("This module does not exist!");}
 		return currentModule;
 	}
+	
+	public Module getModuleBySoftwareUnit(SoftwareUnitDefinition su) {
+		Module currentModule = null;
+		for(Module module : modules){
+			
+			if (module.hasSoftwareUnit(su.getName())){
+				currentModule = module;
+				while (!currentModule.hasSoftwareUnitDirectly(su.getName())){
+					for (Module subModule : currentModule.getSubModules()){
+						if (subModule.hasSoftwareUnit(su.getName())){
+							currentModule = subModule;
+						}
+					}
+				}
+				break;
+			}
+			
+		}
+		if (currentModule == null){throw new RuntimeException("This softwareunit is not mapped to a module!");}
+		return currentModule;
+	}
+	
 	
 	public long addModule(Module module)
 	{

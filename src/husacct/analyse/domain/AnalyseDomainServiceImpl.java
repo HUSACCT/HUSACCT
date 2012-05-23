@@ -2,7 +2,10 @@ package husacct.analyse.domain;
 
 import java.util.List;
 
+import org.jdom2.Element;
+
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -11,10 +14,12 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 
 	private IModelQueryService queryService;
 	private IModelCreationService creationService;
+	private IModelPersistencyService persistencyService;
 	
 	public AnalyseDomainServiceImpl(){
 		this.queryService = new FamixQueryServiceImpl();
 		this.creationService = new FamixCreationServiceImpl();
+		this.persistencyService = new FamixPersistencyServiceImpl();
 	}	
 	
 	public void clearModel(){
@@ -40,7 +45,7 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
 		List<AnalysedModuleDTO> childModules = queryService.getChildModulesInModule(from);
 		AnalysedModuleDTO[] childs = new AnalysedModuleDTO[childModules.size()];
-		for(int i=0; i<childModules.size(); i++){
+		for(int i = 0; i < childModules.size(); i++){
 			childs[i] = childModules.get(i);
 		}
 		return childs;
@@ -93,5 +98,15 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	@Override
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
 		return queryService.getDependenciesTo(to, dependencyFilter);
+	}
+
+	@Override
+	public Element saveModel() {
+		return persistencyService.saveModel();
+	}
+
+	@Override
+	public void loadModel(Element analyseElement) {
+		persistencyService.loadModel(analyseElement);
 	}	
 }

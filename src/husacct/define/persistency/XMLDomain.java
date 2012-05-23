@@ -223,8 +223,8 @@ public class XMLDomain {
 
 		if (SUDType.getValue().toUpperCase().equals("CLASS")) {
 			SoftwareUnitDefinitionType = Type.CLASS;
-		} else if (SUDType.getValue().toUpperCase().equals("METHOD")) {
-			SoftwareUnitDefinitionType = Type.METHOD;
+		} else if (SUDType.getValue().toUpperCase().equals("INTERFACE")) {
+			SoftwareUnitDefinitionType = Type.INTERFACE;
 		} else {
 			SoftwareUnitDefinitionType = Type.PACKAGE;
 		}

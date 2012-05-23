@@ -24,14 +24,13 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
-	public final int RELATIONS_DISTANCE = 30;
 	FileManager filemanager = new FileManager();
 	File selectedFile = filemanager.getFile();
 
 	public Drawing() {
 		super();
 	}
-	
+
 	public void showExportToImagePanel() {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
@@ -111,7 +110,7 @@ public class Drawing extends QuadTreeDrawing {
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
 		updateLineFigureThicknesses(figures);
-		seperateOverlappingLineFigures(figures);
+		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
 	}
 
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
@@ -134,7 +133,8 @@ public class Drawing extends QuadTreeDrawing {
 				figures[1].setLineThickness(1);
 			}
 		} else if (figures.length >= 3) {
-			// 3 or more relations; small, big or  fat, according to scale max amounts of dependencies
+			// 3 or more relations; small, big or fat, according to scale max
+			// amounts of dependencies
 			int maxAmount = -1;
 			for (RelationFigure figure : figures) {
 				int length = figure.getAmount();
@@ -157,7 +157,7 @@ public class Drawing extends QuadTreeDrawing {
 		}
 	}
 
-	private void seperateOverlappingLineFigures(RelationFigure[] figures) {
+	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, RelationFigure[] figures) {
 		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
 
 		for (RelationFigure figure1 : figures) {
@@ -196,12 +196,7 @@ public class Drawing extends QuadTreeDrawing {
 			overlappingFigures.add(keyFigure);
 			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
 
-			double start = (0 - ((overlappingFigures.size() / 2) * this.RELATIONS_DISTANCE)) / 2;
-
-			for (RelationFigure figure : overlappingFigures) {
-				figure.setDistance(start);
-				start += this.RELATIONS_DISTANCE;
-			}
+			strategy.separateLines(overlappingFigures);
 		}
 
 	}
