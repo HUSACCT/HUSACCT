@@ -1,19 +1,16 @@
 package husaccttest.define;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.DefineServiceImpl;
-import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
-import husacct.define.domain.services.SoftwareArchitectureDomainService;
 
 import org.junit.Before;
 import org.junit.Test;
