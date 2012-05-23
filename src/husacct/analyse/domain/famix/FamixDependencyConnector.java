@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -56,7 +57,7 @@ class FamixDependencyConnector {
 					String classFoundInImports = findClassInImports(theClass, association.to);
 					if(!classFoundInImports.equals("")){
 						association.to = classFoundInImports;
-						connected = true;
+						connected = true;				
 					} else {
 						String belongsToPackage = getPackageFromUniqueClassName(association.from);
 						String to = findClassInPackage(association.to, belongsToPackage);
@@ -64,7 +65,7 @@ class FamixDependencyConnector {
 							association.to = to;
 							connected = true;
 						}
-					}
+					}					
 					if(!connected){
 						if(isInvocation(association)){
 							FamixInvocation theInvocation = (FamixInvocation) association;
@@ -87,8 +88,7 @@ class FamixDependencyConnector {
 							}
 						}
 					}
-				}
-				
+				}				
 				if(association.to.equals("") || association.to == null){
 					logger.info("Couldn't analyse dependency from " + association.from + ". Reason: External Libraries not implemented yet");
 //					logger.info("couldn't connect " + association.from + " to the right entity. Linenumber " + association.lineNumber + ".");
@@ -106,15 +106,28 @@ class FamixDependencyConnector {
 		String type = association.type;
 		if(type.equals(EXTENDS)){
 			FamixClass theClass = getClassForUniqueName(association.to);
-			if(theClass.isAbstract) type = EXTENDS_ABSTRACT;
-			else if(!theClass.isAbstract) type = EXTENDS_CONCRETE;
-			else type = EXTENDS_LIBRARY;
+			if(theClass != null){
+				if(theClass.isAbstract) type = EXTENDS_ABSTRACT;
+				else if(!theClass.isAbstract) type = EXTENDS_CONCRETE;
+				else type = EXTENDS_LIBRARY;
+			} else {
+				FamixInterface theInterface = getInterfaceForUniqueName(association.to);
+				if(theInterface != null){
+					// Interface extends Interface
+					type = EXTENDS_CONCRETE;
+				}
+			}
+			
 		}
 		association.type = type;
 	}
 	
 	private FamixClass getClassForUniqueName(String uniqueName){
 		return theModel.classes.get(uniqueName);
+	}
+	
+	private FamixInterface getInterfaceForUniqueName(String uniqueName){
+		return theModel.interfaces.get(uniqueName);
 	} 
 
 	private String getClassForAttribute(String delcareClass, String attributeName){
@@ -190,13 +203,20 @@ class FamixDependencyConnector {
 		return "";
 	}
 			
-	private String getPackageFromUniqueClassName(String completeImportString) {
+	private String getPackageFromUniqueClassName(String completeImportString) {		
 		List<FamixClass> classes = theModel.getClasses();
 		for (FamixClass fclass : classes){
 			if (fclass.uniqueName.equals(completeImportString)){
 				return fclass.belongsToPackage;
 			}
 		}
+		
+		FamixInterface f = theModel.interfaces.get(completeImportString);
+		if(f != null){
+			return f.belongsToPackage;
+		}
+		
+		
 		return "";
 	}
 	
