@@ -23,9 +23,9 @@ public class Node {
 	}
 
 	public void connectTo(Node n) {
-		if (equals(n)) 
+		if (equals(n))
 			throw new IllegalArgumentException("Cannot connect a node to itself!");
-			
+
 		if (!connectedTo.contains(n))
 			connectedTo.add(n);
 	}
@@ -33,11 +33,11 @@ public class Node {
 	public boolean isConnectedTo(Node n) {
 		return connectedTo.contains(n);
 	}
-	
+
 	public List<Node> getConnections() {
 		return Collections.unmodifiableList(connectedTo);
 	}
-	
+
 	public int getConnectionCount() {
 		return connectedTo.size();
 	}
@@ -53,28 +53,34 @@ public class Node {
 	public Figure getFigure() {
 		return figure;
 	}
-	
+
 	public boolean isPositionUpdated() {
 		return positionUpdated;
 	}
-	
+
 	public void setPositionUpdated(boolean newValue) {
 		positionUpdated = newValue;
 	}
-	
+
 	public boolean isCyclicChain(Node n) {
-		Vector<Node> unprocessedNodes = new Vector<Node>();
-		unprocessedNodes.addAll(connectedTo);
-		
-		while (unprocessedNodes.size() > 0) {
-			Node nextNode = unprocessedNodes.get(0);
-			unprocessedNodes.removeElementAt(0);
+		Vector<Node> open = new Vector<Node>();
+		Vector<Node> closed = new Vector<Node>();
+		open.addAll(connectedTo);
+
+		while (open.size() > 0) {
+			Node nextNode = open.get(0);
+			open.removeElementAt(0);
+			closed.add(nextNode);
+
+			for (Node node : nextNode.connectedTo) {
+				if (!closed.contains(node))
+					open.add(node);
+			}
 			
-			unprocessedNodes.addAll(nextNode.connectedTo);
 			if (equals(nextNode))
 				return true;
 		}
-		
+
 		return false;
 	}
 
@@ -87,15 +93,15 @@ public class Node {
 			Figure f = (Figure) o;
 			return figure.equals(f);
 		}
-		
+
 		return false;
 	}
-	
+
 	public int getWidth() {
-		return (int)figure.getBounds().width;
+		return (int) figure.getBounds().width;
 	}
-	
+
 	public int getHeight() {
-		return (int)figure.getBounds().height;
+		return (int) figure.getBounds().height;
 	}
 }
