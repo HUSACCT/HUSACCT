@@ -12,6 +12,7 @@ import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 
 import org.junit.Before;
@@ -26,23 +27,23 @@ public class DefineServiceTests {
 	public void setUp(){
 		sA = new SoftwareArchitecture("Test architecture", "This architecture is used for testing purposes");
 		SoftwareArchitecture.setInstance(sA);
-		Module module1 = new Module("Module 1", "This is module 1");
-		Module module2 = new Module("Module 2", "This is module 2");
-		Module module3 = new Module("Module 3", "This is module 3");
+		Module module1 = new SubSystem("SubSystem 1", "This is subsystem 1");
+		Module module2 = new SubSystem("SubSystem 2", "This is subsystem 2");
+		Module module3 = new SubSystem("SubSystem 3", "This is subsystem 3");
 
 		Module layer1 = new Layer("Layer 1", "This is layer 1", 1);
 		Module layer2 = new Layer("Layer 2", "This is layer 2", 2);
 
-		Module subModule1 = new Module("Sub Module 1", "This is a submodule");
-		Module subModule11 = new Module("Sub Module 11", "This is a submodule");
-		Module subModule2 = new Module("Sub Module 2", "This is a submodule");		
-		Module subModule3 = new Module("Sub Module 3", "This is a submodule");		
+		Module subModule1 = new SubSystem("SubSystem 4", "This is a subsystem");
+		Module subModule11 = new SubSystem("SubSystem 5", "This is a subsystem");
+		Module subModule2 = new SubSystem("SubSystem 6", "This is a subsystem");		
+		Module subModule3 = new SubSystem("SubSystem 7", "This is a subsystem");		
 
 		AppliedRule rule1 = new AppliedRule("IsNotAllowedToUse", "Test", new String[]{},
-				"", module1, module2, true);
+				"", module2, module1, true);
 
 		AppliedRule exception1 = new AppliedRule("IsAllowedToUse", "Test", new String[]{},
-				"", subModule1,	subModule2, true);
+				"", subModule2, subModule1, true);
 		
 		//TODO: Test SoftwareUnitDefinitions
 		module1.addSubModule(subModule1);
@@ -77,22 +78,10 @@ public class DefineServiceTests {
 	}
 	
 	@Test
-	public void createApplication(){
+	public void createAndGetApplication(){
 		boolean testWorks = true;
-		SoftwareArchitectureDomainService domainService = new SoftwareArchitectureDomainService();
 		defineService.createApplication("Application1", new String[] {"c:/Application1/"}, "Java", "1.0");
-		Application app = domainService.getApplicationDetails();
 		
-		testWorks = testWorks && app.getName().equals("Application1");
-		testWorks = testWorks && areArraysEqual(app.getPaths(), new String[] {"c:/Application1/"});
-		testWorks = testWorks && app.getLanguage().equals("Java");
-		testWorks = testWorks && app.getVersion().equals("1.0");
-		assertTrue(testWorks);
-	}
-	
-	@Test
-	public void getApplication(){
-		boolean testWorks = true;
 		ApplicationDTO appDTO = defineService.getApplicationDetails();
 		
 		testWorks = testWorks && appDTO.name.equals("Application1");
@@ -118,8 +107,8 @@ public class DefineServiceTests {
 		testWorks = testWorks && areArraysEqual(rootModuleDTOs[1].physicalPathDTOs, new PhysicalPathDTO[] {});
 		testWorks = testWorks && rootModuleDTOs[1].subModules.length == 0;
 		
-		testWorks = testWorks && rootModuleDTOs[2].logicalPath.equals("Module 3");
-		testWorks = testWorks && rootModuleDTOs[2].type.equals("Module");
+		testWorks = testWorks && rootModuleDTOs[2].logicalPath.equals("SubSystem 3");
+		testWorks = testWorks && rootModuleDTOs[2].type.equals("SubSystem");
 		testWorks = testWorks && areArraysEqual(rootModuleDTOs[2].physicalPathDTOs, new PhysicalPathDTO[] {});
 		testWorks = testWorks && rootModuleDTOs[2].subModules.length == 0;
 		
@@ -135,24 +124,24 @@ public class DefineServiceTests {
 		//Rule1
 		testWorks = testWorks && ruleDTOs[0].ruleTypeKey.equals("IsNotAllowedToUse");
 		//Rule1 ModuleFrom
-		testWorks = testWorks && ruleDTOs[0].moduleFrom.logicalPath.equals("Layer 1.Module 1");
-		testWorks = testWorks && ruleDTOs[0].moduleFrom.type.equals("Module");
+		testWorks = testWorks && ruleDTOs[0].moduleFrom.logicalPath.equals("Layer 1.SubSystem 1");
+		testWorks = testWorks && ruleDTOs[0].moduleFrom.type.equals("SubSystem");
 		testWorks = testWorks && areArraysEqual(ruleDTOs[0].moduleFrom.physicalPathDTOs, new PhysicalPathDTO[] {});
 		//Rule1 ModuleTo
-		testWorks = testWorks && ruleDTOs[0].moduleTo.logicalPath.equals("Layer 2.Module 2");
-		testWorks = testWorks && ruleDTOs[0].moduleTo.type.equals("Module");
+		testWorks = testWorks && ruleDTOs[0].moduleTo.logicalPath.equals("Layer 2.SubSystem 2");
+		testWorks = testWorks && ruleDTOs[0].moduleTo.type.equals("SubSystem");
 		testWorks = testWorks && areArraysEqual(ruleDTOs[0].moduleTo.physicalPathDTOs, new PhysicalPathDTO[] {});
 		testWorks = testWorks && areArraysEqual(ruleDTOs[0].violationTypeKeys, new String[] {});
 		testWorks = testWorks && ruleDTOs[0].exceptionRules.length == 1;
 		//Rule1 Exception	
 		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].ruleTypeKey.equals("IsAllowedToUse");
 		//Rule1 ModuleFrom
-		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleFrom.logicalPath.equals("Layer 1.Module 1.Sub Module 1");
-		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleFrom.type.equals("Module");
+		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleFrom.logicalPath.equals("Layer 1.SubSystem 1.SubSystem 4");
+		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleFrom.type.equals("SubSystem");
 		testWorks = testWorks && areArraysEqual(ruleDTOs[0].exceptionRules[0].moduleFrom.physicalPathDTOs, new PhysicalPathDTO[] {});
 		//Rule1 ModuleTo
-		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleTo.logicalPath.equals("Layer 2.Module 2.Sub Module 2");
-		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleTo.type.equals("Module");
+		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleTo.logicalPath.equals("Layer 2.SubSystem 2.SubSystem 6");
+		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].moduleTo.type.equals("SubSystem");
 		testWorks = testWorks && areArraysEqual(ruleDTOs[0].exceptionRules[0].moduleTo.physicalPathDTOs, new PhysicalPathDTO[] {});
 		testWorks = testWorks && areArraysEqual(ruleDTOs[0].exceptionRules[0].violationTypeKeys, new String[] {});
 		testWorks = testWorks && ruleDTOs[0].exceptionRules[0].exceptionRules.length == 0;
@@ -166,10 +155,13 @@ public class DefineServiceTests {
 		ModuleDTO[] childModuleDTOs = defineService.getChildrenFromModule("Layer 1");
 		testWorks = testWorks && childModuleDTOs.length == 1;
 		
-		testWorks = testWorks && childModuleDTOs[0].logicalPath.equals("Layer 1.Module 1");
-		testWorks = testWorks && childModuleDTOs[0].type.equals("Module");
+		testWorks = testWorks && childModuleDTOs[0].logicalPath.equals("Layer 1.SubSystem 1");
+		testWorks = testWorks && childModuleDTOs[0].type.equals("SubSystem");
 		testWorks = testWorks && areArraysEqual(childModuleDTOs[0].physicalPathDTOs, new PhysicalPathDTO[] {});
-		testWorks = testWorks && childModuleDTOs[0].subModules.length == 1;
+		testWorks = testWorks && childModuleDTOs[0].subModules.length == 0;
+		
+		childModuleDTOs = defineService.getChildrenFromModule("Layer 1.SubSystem 1");
+		testWorks = testWorks && childModuleDTOs.length == 2;
 		
 		assertTrue(testWorks);
 	}
@@ -179,13 +171,13 @@ public class DefineServiceTests {
 		boolean testWorks = true;
 		String parentModuleName;
 		
-		parentModuleName = defineService.getParentFromModule("Layer 1.Module 1");
+		parentModuleName = defineService.getParentFromModule("Layer 1.SubSystem 1");
 		testWorks = testWorks && parentModuleName.equals("Layer 1");
 		parentModuleName = defineService.getParentFromModule("Layer 1");
 		testWorks = testWorks && parentModuleName.equals("**");
 		
-		parentModuleName = defineService.getParentFromModule("Layer 1.Module 1.Sub Module 1");
-		testWorks = testWorks && parentModuleName.equals("Layer 1.Module 1");
+		parentModuleName = defineService.getParentFromModule("Layer 1.SubSystem 1.SubSystem 4");
+		testWorks = testWorks && parentModuleName.equals("Layer 1.SubSystem 1");
 
 		assertTrue(testWorks);
 	}
