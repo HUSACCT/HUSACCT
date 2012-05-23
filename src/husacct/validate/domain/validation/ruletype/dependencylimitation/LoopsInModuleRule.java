@@ -32,8 +32,6 @@ public class LoopsInModuleRule extends RuleType{
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
 		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
-		//FromModule physicalPaths array
-		//ToModule physicalPaths array
 		
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
@@ -45,20 +43,21 @@ public class LoopsInModuleRule extends RuleType{
 		}
 		
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
-			getClassPathsTo(physicalClassPathFrom.getPhysicalPath(), new HashSet<String>());
+			checkCircularDependencies(physicalClassPathFrom.getPhysicalPath(), new HashSet<String>(),configuration, rootRule,physicalClassPathFrom);
 		}
 		return violations;
 	}
 
-	private List<Violation> getClassPathsTo(String physicalPath, HashSet<String> history)	{
+	private List<Violation> checkCircularDependencies(String physicalPath, HashSet<String> history, ConfigurationServiceImpl configuration, RuleDTO rootRule,Mapping mappingFrom)	{
 		history.add(physicalPath);
-		DependencyDTO[] dep = analyseService.getDependenciesFrom(physicalPath);
-		for(DependencyDTO dependency : dep){
+		DependencyDTO[] dependencies = analyseService.getDependenciesFrom(physicalPath);
+		for(DependencyDTO dependency : dependencies){
 			if(history.contains(dependency.to)){
-					System.out.println("violations!!");					
+				Violation violation = createViolation(rootRule, mappingFrom, null, dependency, configuration);
+					violations.add(violation);				
 			}
 			
-			violations.addAll(getClassPathsTo(dependency.to,history));
+			violations.addAll(checkCircularDependencies(dependency.to,history,configuration,rootRule,mappingFrom));
 		}
 		return violations;
 	}

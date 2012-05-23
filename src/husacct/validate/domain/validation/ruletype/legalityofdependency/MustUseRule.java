@@ -3,16 +3,12 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtilFilter;
-import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -44,12 +40,7 @@ public class MustUseRule extends RuleType{
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
 			if(noDependencyCounter == counter){
-				Message message = new Message(rootRule);
-
-				LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-				Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, null);
-				Violation violation = createViolation(super.key, classPathFrom.getPhysicalPath(), false, message, logicalModules, severity);
+				Violation violation = createViolation(rootRule,classPathFrom,null,null,configuration);
 				violations.add(violation);
 			}
 		}	
