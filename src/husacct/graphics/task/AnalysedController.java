@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 public class AnalysedController extends DrawingController {
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
+	
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
@@ -49,7 +50,7 @@ public class AnalysedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.notifyServiceListeners();
 		AbstractDTO[] modules = analyseService.getRootModules();
-		resetCurrentPath();
+		setPath(ROOT);
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			showViolations();
 		}
@@ -76,6 +77,11 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
+		saveFigurePositions(getCurrentPath());
+		zoom(figures);
+	}
+
+	private void zoom(BaseFigure[] figures) {
 		// FIXME: Make this code function with the multiple selected figures
 		BaseFigure figure = figures[0];
 
@@ -93,6 +99,8 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
+		saveFigurePositions(getCurrentPath());
+		
 		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
 		if (null != parentDTO) {
 			getAndDrawModulesIn(parentDTO.uniqueName);
@@ -109,7 +117,7 @@ public class AnalysedController extends DrawingController {
 		if (parentName.equals("")) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else if (children.length > 0) {
-			setCurrentPath(parentName);
+			setPath(parentName);
 			drawModulesAndLines(children);
 		} else {
 			logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");

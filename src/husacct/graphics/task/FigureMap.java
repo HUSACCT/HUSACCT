@@ -2,12 +2,14 @@ package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class FigureMap {
 	private HashMap<BaseFigure, AbstractDTO> moduleFigureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
@@ -88,5 +90,18 @@ public class FigureMap {
 
 	public boolean isViolatedFigure(BaseFigure figure) {
 		return violatedFigureDTOMap.containsKey(figure);
+	}
+	
+	public BaseFigure findModuleByPath(String path) {
+		for (Entry<BaseFigure, AbstractDTO> e : moduleFigureDTOMap.entrySet()) {
+			AbstractDTO dto = e.getValue();
+			if (dto instanceof ModuleDTO) {
+				ModuleDTO moduleDTO = (ModuleDTO)dto;
+				if (moduleDTO.logicalPath.equals(path))
+					return e.getKey();
+			}
+		}
+		
+		throw new RuntimeException("Module not found!");
 	}
 }

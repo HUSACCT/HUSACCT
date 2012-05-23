@@ -12,9 +12,11 @@ import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
@@ -22,12 +24,16 @@ import javax.swing.JInternalFrame;
 import org.apache.log4j.Logger;
 
 public abstract class DrawingController implements UserInputListener {
-
+	public static final String ROOT = ""; 
+	
+	private boolean areViolationsShown = false;
+	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>(); 
+	
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
 	protected String currentPath = "";
-	private boolean isViolationsShown = false;
+	
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -37,7 +43,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected LayoutStrategy layoutStrategy;
 
 	protected FigureMap figureMap = new FigureMap();
-
+	
 	public DrawingController() {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
@@ -73,7 +79,9 @@ public abstract class DrawingController implements UserInputListener {
 	public void clearDrawing() {
 		figureMap.clearAll();
 		drawing.clearAll();
+		
 		view.clearSelection();
+		view.invalidate();
 	}
 
 	public void clearLines() {
@@ -84,26 +92,22 @@ public abstract class DrawingController implements UserInputListener {
 		return currentPath;
 	}
 
-	public void resetCurrentPath() {
-		currentPath = "";
-	}
-
-	public void setCurrentPath(String path) {
+	public void setPath(String path) {
 		currentPath = path;
 	}
 
 	public boolean areViolationsShown() {
-		return isViolationsShown;
+		return areViolationsShown;
 	}
 
 	public void hideViolations() {
-		isViolationsShown = false;
+		areViolationsShown = false;
 		drawTarget.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	public void showViolations() {
-		isViolationsShown = true;
+		areViolationsShown = true;
 		drawTarget.turnOnViolations();
 	}
 
@@ -150,7 +154,8 @@ public abstract class DrawingController implements UserInputListener {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 
-		// ATTN: The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
+		// FIXME: TODO: Patrick:
+		// The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
 		// are done specifically in that order for a reason!
 		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
 		// after updating the layout of the drawing.
@@ -171,6 +176,7 @@ public abstract class DrawingController implements UserInputListener {
 		int height = drawTarget.getHeight();
 
 		layoutStrategy.doLayout(width, height);
+		restoreFigurePositions(getCurrentPath());
 	}
 
 	@Override
@@ -260,5 +266,27 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void notifyServiceListeners() {
 		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
+	}
+	
+	protected void saveFigurePositions(String path) {
+		DrawingState state;
+		if (storedStates.containsKey(path))
+			state = storedStates.get(path);
+		else
+			state = new DrawingState(drawing);
+		
+		state.save(figureMap);	
+		storedStates.put(path, state);
+	}
+	
+	protected void restoreFigurePositions(String path) {
+		if (storedStates.containsKey(path)) {
+			DrawingState state = storedStates.get(path);
+			state.restore(figureMap);
+		}
+	}
+	
+	protected void resetFigurePositions(String path) {
+		storedStates.remove(path);
 	}
 }

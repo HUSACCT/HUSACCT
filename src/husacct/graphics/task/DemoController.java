@@ -9,12 +9,14 @@ import husacct.common.dto.ViolationTypeDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 import java.awt.Color;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import org.jhotdraw.draw.Figure;
 
 public class DemoController extends DrawingController {
-
-	// private final int ITEMS_PER_ROW = 2;
-
+	
 	public DemoController() {
 		initializeDrawing();
 	}
@@ -79,7 +81,28 @@ public class DemoController extends DrawingController {
 
 		AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 		dtos = modules.toArray(dtos);
+		setPath(ROOT);
 		drawModulesAndLines(dtos);
+		
+		printFigures("Constructor");
+	}
+	
+	private boolean debugPrint = false;
+	
+	private void printFigures(String msg) {
+		if (!debugPrint)
+			return;
+		
+		System.out.println(msg);
+		
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			Rectangle2D.Double bounds = bf.getBounds();
+			
+			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y, bounds.width, bounds.height);
+			if (bf.getName().equals("floating"))
+				System.out.println(String.format("%s: %s", bf.getName(), rect));
+		}		
 	}
 
 	@Override
@@ -89,6 +112,8 @@ public class DemoController extends DrawingController {
 
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigures) {
+		printFigures("moduleZoom()");
+		saveFigurePositions(getCurrentPath());
 		BaseFigure zoomedFigure = zoomedModuleFigures[0];
 
 		if (zoomedFigure.getName().equals("floating")) {
@@ -111,7 +136,7 @@ public class DemoController extends DrawingController {
 
 			AbstractDTO[] dtos = new AbstractDTO[modules.size()];
 			dtos = modules.toArray(dtos);
-			setCurrentPath("tests");
+			setPath("tests");
 			this.drawModulesAndLines(dtos);
 		}
 	}
@@ -123,7 +148,10 @@ public class DemoController extends DrawingController {
 
 	@Override
 	public void moduleZoomOut() {
-		this.refreshDrawing();
+		printFigures("moduleZoomOut()");
+		saveFigurePositions(getCurrentPath());
+		setPath(ROOT);
+		refreshDrawing();
 	}
 
 	@Override

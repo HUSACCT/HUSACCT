@@ -53,7 +53,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 
 	private void calculateLayout() {
-		logger.info("Calculating layout");
+		//logger.info("Calculating layout");
 		for (Figure f : connectors) {
 			ConnectionFigure cf = (ConnectionFigure) f;
 
@@ -67,7 +67,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			}
 		}
 
-		logger.info("Adding unconnected figures to graph");
+		//logger.info("Adding unconnected figures to graph");
 		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = new S1<Figure>(null, compareList) {
 			{
@@ -107,7 +107,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 
 	private void applyLayout() {
-		logger.info("Applying layout to drawing.");
+		//logger.info("Applying layout to drawing.");
 		List<Node> rootNodes = ListUtils.select(nodes, rootLambda);
 
 		Point2D.Double startPoint = new Point2D.Double(HORZ_ITEM_SPACING, VERT_ITEM_SPACING);

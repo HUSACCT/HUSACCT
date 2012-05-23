@@ -52,7 +52,7 @@ public class DefinedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.notifyServiceListeners();
 		AbstractDTO[] modules = defineService.getRootModules();
-		resetCurrentPath();
+		setPath(ROOT);
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			showViolations();
 		}
@@ -123,7 +123,7 @@ public class DefinedController extends DrawingController {
 		} else {
 			ModuleDTO[] children = defineService.getChildrenFromModule(parentName);
 			if (children.length > 0) {
-				setCurrentPath(parentName);
+				setPath(parentName);
 				drawModulesAndLines(children);
 			} else {
 				logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
