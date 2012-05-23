@@ -34,7 +34,7 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 		if(!(isInvocation)){
 			generateFamixObject(tree);
 		}else{
-			invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
+			//invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
 		}
 	}
 
@@ -83,6 +83,7 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 			}else if(i < 1){
 				returnType = currentNode.getText();
 				namePosition = i+1;
+				return returnType;
 			}
 		}
 		
