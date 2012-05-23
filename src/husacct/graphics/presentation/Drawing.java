@@ -24,7 +24,6 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
-	public final int RELATIONS_DISTANCE = 50;
 	FileManager filemanager = new FileManager();
 	File selectedFile = filemanager.getFile();
 
@@ -111,7 +110,7 @@ public class Drawing extends QuadTreeDrawing {
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
 		updateLineFigureThicknesses(figures);
-		seperateOverlappingLineFigures(figures);
+		seperateOverlappingLineFigures(new ElbowLineSeparationStrategy(), figures);
 	}
 
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
@@ -157,7 +156,8 @@ public class Drawing extends QuadTreeDrawing {
 		}
 	}
 
-	private void seperateOverlappingLineFigures(RelationFigure[] figures) {
+	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, 
+			RelationFigure[] figures) {
 		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
 
 		for (RelationFigure figure1 : figures) {
@@ -195,13 +195,8 @@ public class Drawing extends QuadTreeDrawing {
 			HashSet<RelationFigure> overlappingFigures = new HashSet<RelationFigure>();
 			overlappingFigures.add(keyFigure);
 			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
-
-			double start = (0 - ((overlappingFigures.size() / 2) * this.RELATIONS_DISTANCE)) / 2;
-
-			for (RelationFigure figure : overlappingFigures) {
-				figure.setDistance(start);
-				start += this.RELATIONS_DISTANCE;
-			}
+			
+			strategy.separateLines(overlappingFigures);
 		}
 
 	}
