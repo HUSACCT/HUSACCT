@@ -60,21 +60,10 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			Node startNode = getNode(cf.getStartFigure());
 			Node endNode = getNode(cf.getEndFigure());
 
-			startNode.connectTo(endNode);
-			// FIXME: Cyclicly chained nodes will never be sorted and will thusly
-			// scathered out randomly / on the top layer. 
-			if (!startNode.isCyclicChain(endNode)) {
-				int startLevel = startNode.getLevel();
-				int endLevel = endNode.getLevel();
-				int deltaLevel = Math.abs(endLevel - startLevel);
-
-				// TODO: Expand this one for more 'special' cases
-				if (endLevel == startLevel)
-					endNode.setLevel(startLevel + 1);
-				else if (endLevel == 0)
-					endNode.setLevel(startLevel + 1);
-				else if (startLevel == 0 && deltaLevel >= 2)
-					startNode.setLevel(endLevel - 1);
+			startNode.connectTo(endNode); 
+			boolean isCyclic = startNode.isCyclicChain(endNode);
+			if (!isCyclic || (isCyclic && startNode.getLevel() == Node.UNINITIALIZED)) {
+				updateNodes(startNode, endNode);
 			}
 		}
 
@@ -87,6 +76,34 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			}
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
+	}
+	
+	private void updateNodes(Node startNode, Node endNode) {
+		int startLevel = startNode.getLevel();
+		int endLevel = endNode.getLevel();
+		
+		if (startLevel == Node.UNINITIALIZED) {
+			startLevel = 0;
+			endLevel = 1;
+		} else if (endLevel == Node.UNINITIALIZED) {
+			endLevel = startLevel + 1;
+		} else {
+			int deltaLevel = Math.abs(endLevel - startLevel);
+
+			// TODO: Expand this one for more 'special' cases
+			if (endLevel == startLevel) {
+				// NOTE: This keeps bumping down nodes in case they're on the same level. Do we want that?
+				endLevel = startLevel + 1;
+			} else if (endLevel == 0) {
+				endLevel = startLevel + 1;
+			}
+			else if (startLevel == 0 && deltaLevel >= 2) {
+				startLevel = endLevel - 1;
+			}
+		}
+		
+		startNode.setLevel(startLevel);
+		endNode.setLevel(endLevel);
 	}
 
 	private void applyLayout() {
@@ -160,16 +177,15 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		figure.setBounds(anchor, lead);
 		figure.changed();
 
-		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure) figure).getName(), (int) anchor.x,
-				(int) anchor.y));
-		;
+//		System.out.println(String.format("Moving %s to (%d, %d)", ((BaseFigure) figure).getName(), (int) anchor.x,
+//				(int) anchor.y));
 	}
 
 	private Node getNode(Figure figure) {
 		if (nodes.contains(figure)) {
 			return nodes.getByFigure(figure);
 		} else {
-			Node node = new Node(figure, 0);
+			Node node = new Node(figure);
 			nodes.add(node);
 
 			return node;

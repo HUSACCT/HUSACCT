@@ -8,8 +8,10 @@ import java.util.Vector;
 import org.jhotdraw.draw.Figure;
 
 public class Node {
+	public static final int UNINITIALIZED = Integer.MIN_VALUE;
+	
 	private Figure figure;
-	private int level = 0;
+	private int level = UNINITIALIZED;
 	private boolean positionUpdated = false;
 	private ArrayList<Node> connectedTo = new ArrayList<Node>();
 
@@ -19,7 +21,7 @@ public class Node {
 	}
 
 	public Node(Figure f) {
-		this(f, 0);
+		this(f, UNINITIALIZED);
 	}
 
 	public void connectTo(Node n) {
