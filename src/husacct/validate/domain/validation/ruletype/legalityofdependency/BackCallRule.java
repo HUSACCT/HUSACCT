@@ -3,7 +3,7 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
@@ -30,7 +30,7 @@ public class BackCallRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();			
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
@@ -64,7 +64,7 @@ public class BackCallRule extends RuleType {
 	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter, String[] violationTypeKeys){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(int i=0 ; i<counter ; i++){
-			returnList.add(CheckConformanceUtilFilter.getAllModulesFromLayer(allModules.get(i), violationTypeKeys));
+			returnList.add(CheckConformanceUtilClass.getAllModulesFromLayer(allModules.get(i), violationTypeKeys));
 		}		
 		return returnList;		
 	}

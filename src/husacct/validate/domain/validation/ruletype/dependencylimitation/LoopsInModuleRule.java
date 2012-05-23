@@ -3,7 +3,7 @@ package husacct.validate.domain.validation.ruletype.dependencylimitation;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
@@ -31,11 +31,11 @@ public class LoopsInModuleRule extends RuleType{
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
-		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
-				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
+				physicalClasspathsFrom.addAll(CheckConformanceUtilClass.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
 			}
 
 		}else{
