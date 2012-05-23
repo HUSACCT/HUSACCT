@@ -3,6 +3,7 @@ package husacct.validate.presentation.languageSeverityConfiguration;
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.presentation.DataLanguageHelper;
 import husacct.validate.presentation.LanguageSeverityConfiguration;
 import husacct.validate.presentation.tableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
@@ -179,7 +180,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void vtsRestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ServiceProvider.getInstance().getControlService().getStringIdentifiers((String) violationtypeModel.getValueAt(ViolationtypeTable.getSelectedRow(), 0)).get(0));
+		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) violationtypeModel.getValueAt(ViolationtypeTable.getSelectedRow(), 0)).key);
 		vtsCategoryValueChanged();
 	}
 
@@ -202,8 +203,9 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
-			List<String> keys = ServiceProvider.getInstance().getControlService().getStringIdentifiers((String) violationtypeModel.getValueAt(i, 0));
-			map.put(keys.get(0), (Severity) violationtypeModel.getValueAt(i, 1));
+			String key = ((DataLanguageHelper) violationtypeModel.getValueAt(i, 0)).key;
+			map.put(key, (Severity) violationtypeModel.getValueAt(i, 1));
+			
 		}
 
 		taskServiceImpl.updateSeverityPerType(map, language);
@@ -230,7 +232,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getViolationtypeKey()), severity});
+					violationtypeModel.addRow(new Object[]{new DataLanguageHelper(violationtype.getViolationtypeKey()), severity});
 				}
 			}
 
