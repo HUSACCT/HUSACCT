@@ -142,7 +142,7 @@ public class CreateWorkspaceDialog extends JDialog{
 			controlService.showErrorMessage(controlService.getTranslatedString("FieldEmptyError"));
 			return false;
 		}
-		else if(!Regex.matchRegex(Regex.filenameRegex, workspaceName)) {
+		else if(!Regex.matchRegex(Regex.nameRegex, workspaceName)) {
 			controlService.showErrorMessage(controlService.getTranslatedString("MustBeAlphaNumericError"));
 			return false;
 		}
