@@ -366,7 +366,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
 
 	public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
-		return this.appliedRuleService.getAppliedRulesIdsByModule(getSelectedModuleId());
+		return this.appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
 	}
 	
 	public HashMap<String, Object> getRuleDetailsByAppliedRuleId(long appliedRuleId){

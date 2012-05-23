@@ -249,7 +249,7 @@ public class AppliedRuleController extends PopUpController {
 	private boolean checkRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
 		RuleConventionsChecker conventionsChecker = new RuleConventionsChecker(moduleFrom, moduleTo, ruleTypeKey);
 		if(!conventionsChecker.checkRuleConventions()) {
-			String errorMessage = DefineTranslator.translate(conventionsChecker.getErrorKey());
+			String errorMessage = conventionsChecker.getErrorMessage();
 			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, DefineTranslator.translate("ConventionError"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		} else {
