@@ -75,7 +75,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		this.taskServiceImpl = taskServiceImpl;
 		this.configuration = configuration;
 		this.dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
-		this.filterViolations = new FilterViolations(taskServiceImpl, this, null);
+		this.filterViolations = new FilterViolations(taskServiceImpl, this);
 		init();
 		loadModels();
 		fillChooseViolationHistoryTable();
