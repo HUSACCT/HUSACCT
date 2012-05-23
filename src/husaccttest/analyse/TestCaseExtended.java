@@ -59,6 +59,19 @@ public abstract class TestCaseExtended extends TestCase{
 		return dependencyHashMap;
 	}
 	
+	public HashMap<String, Object> createDependencyHashmap(String from, String to, String type, int linenumber, boolean indirect){
+		HashMap<String, Object> dependencyHashMap = new HashMap<String, Object>();
+		
+		dependencyHashMap.put("from", from);
+		dependencyHashMap.put("to", to);
+		dependencyHashMap.put("type", type);
+		dependencyHashMap.put("lineNumber", linenumber);
+		dependencyHashMap.put("isIndirect", indirect);
+		
+		return dependencyHashMap;
+	}
+	
+	
 	public HashMap<String, Object> createModuleHashmap(String name, String uniqueName, int totalSubmodules, String type){
 		HashMap<String, Object> moduleHashMap = new HashMap<String, Object>();
 			
@@ -146,6 +159,11 @@ public abstract class TestCaseExtended extends TestCase{
 		famix.createPackage("infrastructure.socialmedia.locationbased.latitude", "infrastructure.socialmedia.locationbased", "latitude");
 		famix.createPackage("infrastructure.socialmedia.locationbased.foursquare", "infrastructure.socialmedia.locationbased", "foursquare");
 		
+		famix.createPackage("indirect", "", "indirect");
+		famix.createPackage("indirect.houses", "indirect", "houses");
+		famix.createPackage("indirect.houses.type", "indirect.houses", "type");
+		famix.createPackage("indirect.houses.attributes", "indirect.houses", "attributes");
+				
 		famix.createClass("domain.locationbased.foursquare.Account", "Account", "domain.locationbased.foursquare", false, false);
 		famix.createClass("domain.locationbased.foursquare.Friends", "Friends", "domain.locationbased.foursquare", false, false);
 		famix.createClass("domain.locationbased.foursquare.Map", "Map", "domain.locationbased.foursquare", false, false);
@@ -165,6 +183,13 @@ public abstract class TestCaseExtended extends TestCase{
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMap", "IMap", "infrastructure.socialmedia.locationbased.latitude", false, false);
 		famix.createClass("infrastructure.socialmedia.locationbased.latitude.IMapp", "IMapp", "infrastructure.socialmedia.locationbased.latitude", false, false);
 		
+		famix.createInterface("indirect.houses.type.IType", "IType", "indirect.houses.type");
+		famix.createInterface("indirect.houses.type.IGlobal", "IGlobal", "indirect.houses.type");
+		famix.createClass("indirect.houses.type.RowHouse", "RowHouse", "indirect.houses.type", false, false);
+		
+		famix.createInterface("indirect.houses.attributes.IAttribute", "IAttribute", "indirect.houses.attributes.Door");
+		famix.createClass("indirect.houses.attributes.Door", "Door", "indirect.houses.attributes", false, false);
+		
 		famix.createConstructorInvocation("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", 10, "Account", "AccountDAO()", "");
 		famix.createInheritanceDefinition("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", 10);
 		famix.createImplementsDefinition("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", 10);
@@ -182,12 +207,22 @@ public abstract class TestCaseExtended extends TestCase{
 		famix.createImport("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", 3, "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", false);
 		famix.createImport("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 3, "infrastructure.socialmedia.locationbased.latitude.IMap", false);
 		
+		famix.createImplementsDefinition("indirect.houses.type.RowHouse", "indirect.houses.type.IType", 3);
+		famix.createInheritanceDefinition("indirect.houses.type.IType", "indirect.houses.type.IGlobal", 3);
+		
+		famix.createImplementsDefinition("indirect.houses.attributes.Door", "indirect.houses.attributes.IAttribute", 3);
+		famix.createImport("indirect.houses.attributes.IAttribute", "indirect.houses.type.IType", 3, "indirect.houses.type.IType", false);
+		famix.createInheritanceDefinition("indirect.houses.attributes.IAttribute", "indirect.houses.type.IType", 5);
+		
+		
 		famix.connectDependencies();
 	}
 	
 	public void printDependencies(DependencyDTO[] dependencies){
 		for(DependencyDTO d : dependencies){
-			System.out.println(d.from + " -> " + d.to + " ( " + d.type + " | " + d.lineNumber + " )" );
+			String indirect = d.isIndirect ? "indirect" : "direct";
+			
+			System.out.println(d.from + " -> " + d.to + " ( " + d.type + " | " + d.lineNumber + " | " + indirect +" )" );
 		}
 	}
 	

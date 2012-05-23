@@ -8,7 +8,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 public class TestDomainModule extends TestCaseExtended{
 	
 	public void testGetRootModules(){
-		int totalModulesExpected = 2;
+		int totalModulesExpected = 3;
 		
 		AnalysedModuleDTO[] modules = service.getRootModules();
 		assertEquals(totalModulesExpected, modules.length);
@@ -23,16 +23,24 @@ public class TestDomainModule extends TestCaseExtended{
 		int infrastructureSubmoduleCount = 0;
 		String infrastructureTypeExpected = super.PACKAGE;
 		
+		String indirectNameExpected = "indirect";
+		String indirectUniqueNameExpected = "indirect";
+		int indirectSubmoduleCount = 0;
+		String indirectTypeExpected = super.PACKAGE;
+		
 		HashMap<String, Object> domainExpectedModule = createModuleHashmap(
 				domainNameExpected, domainUniqueNameExpected, domainSubmoduleCount, domainTypeExpected);
-		
 		HashMap<String, Object> infrastructureExpectedModule = createModuleHashmap(
 				infrastructureNameExpected, infrastructureUniqueNameExpected, infrastructureSubmoduleCount, infrastructureTypeExpected);
+		HashMap<String, Object> indirectExpectedModule = createModuleHashmap(
+				indirectNameExpected, indirectUniqueNameExpected, indirectSubmoduleCount, indirectTypeExpected);
 		
 		boolean domainFoundModule = compaireDTOWithValues(domainExpectedModule, modules);
 		boolean infrastructureFoundModule = compaireDTOWithValues(infrastructureExpectedModule, modules);
+		boolean indirectFoundModule = compaireDTOWithValues(indirectExpectedModule, modules);
 		assertEquals(true, domainFoundModule);
 		assertEquals(true, infrastructureFoundModule);
+		assertEquals(true, indirectFoundModule);
 	}
 	
 	public void testGetChildrenOfPackageModule(){

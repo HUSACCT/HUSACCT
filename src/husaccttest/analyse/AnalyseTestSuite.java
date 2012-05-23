@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
 	TestLanguage.class,
 	TestDependencyFilters.class,
 	TestDomainDependencies.class,
-	TestDomainModule.class
+	TestDomainModule.class,
+	TestIndirect.class
 })
 public class AnalyseTestSuite {
 
