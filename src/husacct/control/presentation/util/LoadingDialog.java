@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
@@ -29,6 +30,12 @@ public class LoadingDialog extends JDialog implements Runnable{
 		this.progressInfoText = progressInfoText;
 		setup();
 		addComponents();
+
+	}
+	
+	public LoadingDialog(String progressInfoText){
+		ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+		new LoadingDialog(controlService.getMainController(), progressInfoText);
 	}
 	
 	private void setup(){

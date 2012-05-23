@@ -5,6 +5,8 @@ import husacct.common.services.IObservableService;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.JDialog;
+
 public interface IControlService extends IObservableService{
 
 	public void startApplication();
@@ -15,5 +17,6 @@ public interface IControlService extends IObservableService{
 	public void showInfoMessage(String message);
 	public String getTranslatedString(String stringIdentifier);
 	public List<String> getStringIdentifiers(String translatedString);
+	public void centerDialog(JDialog dialog);
 
 }

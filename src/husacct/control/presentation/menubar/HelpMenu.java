@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
 public class HelpMenu extends JMenu {
@@ -30,7 +31,7 @@ public class HelpMenu extends JMenu {
 	
 	private void addComponents() {
 		aboutItem = new JMenuItem(controlService.getTranslatedString("About"));
-		aboutItem.setMnemonic('a');
+		aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
 		this.add(aboutItem);
 	}
 	
@@ -45,8 +46,15 @@ public class HelpMenu extends JMenu {
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			public void update(Locale newLocale) {
 				helpMenu.setText(controlService.getTranslatedString("Help"));
-				aboutItem.setText(controlService.getTranslatedString("About"));			
+				aboutItem.setText(controlService.getTranslatedString("About"));	
+				aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
 			}
 		});
+	}
+	
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
 	}
 }
