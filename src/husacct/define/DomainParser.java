@@ -103,7 +103,13 @@ public class DomainParser {
 		return physicalPathDTO;
 	}
 	public String getLogicalPath(long moduleId){
-		String logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(moduleId);
+		String logicalPath = "";
+		try {
+			logicalPath = SoftwareArchitecture.getInstance().getModulesLogicalPath(moduleId);
+		} catch (Exception e){
+			//Try catch for when there is no moduleTo
+			//Since there is no moduleTo needed it is not added to the SoftwareArchitecture, therefor it has no logicalPath
+		}
 		return logicalPath;
 	}
 	
