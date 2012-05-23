@@ -21,10 +21,11 @@ public class CSharpParameterGenerator  extends CSharpGenerator{
 					invocationParameter = text;
 				}
 			}
-			if (type == COMMA) {
+			if (type == COMMA || type == BACKWARDBRACKET) {
 				String uniqueClassName = cSharpTreeConvertController.getUniqueClassName();
-				String uniqueMethodName = cSharpTreeConvertController.getCurrentMethodName();
-				modelService.createParameter(invocationParameter, uniqueClassName + "." + uniqueMethodName + "." + invocationParameter, typeParameter, uniqueClassName, tree.getLine(), uniqueClassName + "." +uniqueMethodName, typeParameter);
+				String uniqueMethodName = uniqueClassName + "." + cSharpTreeConvertController.getCurrentMethodName();
+				String uniqueParameterName = uniqueMethodName + "." + invocationParameter;
+				modelService.createParameter(invocationParameter, uniqueParameterName, typeParameter, uniqueClassName, tree.getLine(), uniqueMethodName, typeParameter);
 				typeParameter = "";
 				invocationParameter = "";
 			}
