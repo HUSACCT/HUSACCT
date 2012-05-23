@@ -110,7 +110,7 @@ public class Drawing extends QuadTreeDrawing {
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
 		updateLineFigureThicknesses(figures);
-		seperateOverlappingLineFigures(new ElbowLineSeparationStrategy(), figures);
+		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
 	}
 
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
