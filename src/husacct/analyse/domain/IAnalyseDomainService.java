@@ -1,5 +1,7 @@
 package husacct.analyse.domain;
 
+import org.jdom2.Element;
+
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
@@ -20,4 +22,7 @@ public interface IAnalyseDomainService {
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
 	public AnalysedModuleDTO getParentModuleForModule(String child);
 	
+	public Element saveModel();
+	public void loadModel(Element analyseElement);
+		
 }

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class FamixDependencyFinder extends FamixFinder{
-
-	private static final String EXTENDS_ABSTRCT = "ExtendsAbstract";
-	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
-	private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
 	
 	private static enum FinderFunction{FROM, TO, BOTH};
 	private FinderFunction currentFunction;
@@ -52,7 +48,7 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 
 	public List<DependencyDTO> getDependenciesTo(String to, String[] dependencyFilter) {
-		performQuery(FinderFunction.TO, "", to);
+		performQuery(FinderFunction.TO, "", to, dependencyFilter);
 		return this.currentResult;
 	}
 	
@@ -67,9 +63,8 @@ class FamixDependencyFinder extends FamixFinder{
 		this.from = argumentFrom;
 		this.to = argumentTo;
 		this.currentResult = findDependencies();
-		removeFilter();
+		this.removeFilter();
 	}
-	
 	private void removeFilter(){
 		this.filtered = false;
 		this.filter = new String[]{};
@@ -80,8 +75,25 @@ class FamixDependencyFinder extends FamixFinder{
 		List<FamixAssociation> allAssocations = theModel.associations;
 		for(FamixAssociation assocation: allAssocations){
 			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
-				DependencyDTO foundDependency = buildDependencyDTO(assocation);
+				DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
 				if (!result.contains(foundDependency)) result.add(foundDependency);
+			}
+		}
+		//TODO Analyse General - Fix Indirect Dependencies
+//		result.addAll(this.findIndirectDependencies(result));
+		return result;
+	}
+	
+	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> directDependencies){
+		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
+		for(DependencyDTO directDependency: directDependencies){
+			String startFrom = directDependency.from;
+			this.from = directDependency.to;
+			this.currentFunction = FinderFunction.FROM;
+			for(DependencyDTO indirectDependency: this.findDependencies()){
+				indirectDependency.isIndirect = true;
+				indirectDependency.from = startFrom;
+				result.add(indirectDependency);
 			}
 		}
 		return result;
@@ -105,41 +117,29 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 	
 	private boolean connectsBoth(FamixAssociation association, String from, String to){
-		boolean result = true;
-		result = result && (from.equals("") || association.from.equals(from) || association.from.startsWith(from + "."));
-		result = result && (to.equals("") || association.to.equals(to) || association.to.startsWith(to + "."));
+		return isFrom(association, from) && isTo(association, to);
+	}
+	
+
+	private boolean isFrom(FamixAssociation association, String from){
+		boolean result = from.equals("") || association.from.equals(from);
+		result = result || association.from.startsWith(from + ".");
+		result = result && !association.from.equals(association.to);
+		return result;
+	}
+
+	private boolean isTo(FamixAssociation association, String to){
+		boolean result = to.equals("") || association.to.equals(to);
+		result = result || association.to.startsWith(to + ".");
+		result = result && !association.to.equals(association.from);
 		return result;
 	}
 	
-	private boolean isFrom(FamixAssociation association, String from){
-		return from.equals("") || association.from.equals(from) || association.from.startsWith(from + ".");
-	}
-	
-	private boolean isTo(FamixAssociation association, String to){
-		return to.equals("") || association.to.equals(to) || association.to.startsWith(to + ".");
-	}
-	
-	private DependencyDTO buildDependencyDTO(FamixAssociation association){
+	private DependencyDTO buildDependencyDTO(FamixAssociation association, boolean isIndirect){
 		String dependencyFrom = association.from;
 		String dependencyTo = association.to;
-		String dependencyType = determineType(association);
+		String dependencyType = association.type;
 		int dependencyLine = association.lineNumber;
-		return new DependencyDTO(dependencyFrom, dependencyTo, dependencyType, dependencyLine);
+		return new DependencyDTO(dependencyFrom, dependencyTo, dependencyType, isIndirect, dependencyLine);
 	}
-	
-	private String determineType(FamixAssociation assocation){
-		String type = assocation.type;
-		if(type.equals("Extends")){
-			FamixClass theClass = getClassForUniqueName(assocation.to);
-			if(theClass == null) type = EXTENDS_LIBRARY;
-			else if(theClass.isAbstract) type = EXTENDS_ABSTRCT;
-			else type = EXTENDS_CONCRETE;
-		}
-		return type;
-	}
-	
-	private FamixClass getClassForUniqueName(String uniqueName){
-		return theModel.classes.get(uniqueName);
-	}
-
 }
