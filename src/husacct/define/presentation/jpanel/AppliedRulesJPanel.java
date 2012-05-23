@@ -203,8 +203,8 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 						atm.addRow(rowdata);
 					}
 				}
-				atm.fireTableDataChanged();
 			}
+			atm.fireTableDataChanged();
 		} catch (Exception e) {
 			UiDialogs.errorDialog(this, e.getMessage());
 		} finally {
