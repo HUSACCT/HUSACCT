@@ -106,7 +106,7 @@ public class XmlSavePanel extends SaverPanel{
 	@Override
 	public boolean validateData() {
 		if(selectedFile == null){
-			ServiceProvider.getInstance().getControlService().showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}
 		return true;

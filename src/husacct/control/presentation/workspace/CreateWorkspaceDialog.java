@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.control.presentation.util.Regex;
 import husacct.control.presentation.util.SetApplicationPanel;
 import husacct.control.task.MainController;
 
@@ -67,9 +68,9 @@ public class CreateWorkspaceDialog extends JDialog{
 		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
 		workspaceNameText = new JTextField(20);
 		workspaceNameText.setText("myHusacctWorkspace"); 
-		
+
 		getRootPane().setDefaultButton(okButton);
-		
+
 		workspacePanel.add(workspaceNameLabel);
 		workspacePanel.add(workspaceNameText);
 		workspacePanel.add(setApplicationCheckbox);
@@ -93,12 +94,20 @@ public class CreateWorkspaceDialog extends JDialog{
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(setApplicationCheckbox.isSelected()){
-					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-					mainController.getApplicationController().setApplicationData(applicationData);
+					if(setApplicationPanel.dataValidated() && workspaceNameValidated()) {
+						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+						mainController.getApplicationController().setApplicationData(applicationData);
+						createWorkspace();
+						dispose();	
+						mainController.getViewController().showDefineGui();
+					}
+				} else {
+					if(workspaceNameValidated()) {
+						createWorkspace();			
+						dispose();	
+						mainController.getViewController().showDefineGui();		
+					}
 				}
-				createWorkspace();
-				dispose();
-				mainController.getViewController().showDefineGui();
 			}
 		});
 
@@ -119,10 +128,21 @@ public class CreateWorkspaceDialog extends JDialog{
 		}
 	}
 
-	private void createWorkspace(){
+	private void createWorkspace(){  		
 		String workspaceName = workspaceNameText.getText();
-		if ((workspaceName != null) && (workspaceName.length() > 0)) {
-			mainController.getWorkspaceController().createWorkspace(workspaceName);
-		}	
+		mainController.getWorkspaceController().createWorkspace(workspaceName);
+	}	
+
+	private boolean workspaceNameValidated() {
+		String workspaceName = workspaceNameText.getText();
+		if (workspaceName == null || workspaceName.length() < 1) {
+			controlService.showErrorMessage(controlService.getTranslatedString("FieldEmptyError"));
+			return false;
+		}
+		else if(!Regex.matchRegex(Regex.filenameRegex, workspaceName)) {
+			controlService.showErrorMessage(controlService.getTranslatedString("MustBeAlphaNumericError"));
+			return false;
+		}
+		return true;
 	}
 }

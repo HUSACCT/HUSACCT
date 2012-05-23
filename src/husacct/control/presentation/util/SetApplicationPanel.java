@@ -167,4 +167,18 @@ public class SetApplicationPanel extends JPanel{
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight){
 		return getConstraint(gridx, gridy, gridwidth, gridheight, 0, 0);
 	}
+	
+	public boolean dataValidated() {
+		String applicationName = applicationNameText.getText();
+		if(applicationName == null || applicationName.length() < 1){
+			controlService.showErrorMessage(controlService.getTranslatedString("FieldEmptyError"));
+			return false;
+		}
+		else if (!Regex.matchRegex(Regex.filenameRegex, applicationNameText.getText())) {
+			controlService.showErrorMessage(controlService.getTranslatedString("MustBeAlphaNumericError"));
+			return false;
+		}
+		return true;
+	}
+	
 }
