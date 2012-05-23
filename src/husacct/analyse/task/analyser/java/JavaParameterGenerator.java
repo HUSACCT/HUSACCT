@@ -38,22 +38,10 @@ public class JavaParameterGenerator extends JavaGenerator {
 		lineNumber = tree.getLine();
 		
 		DelegateParametersFromTree(tree);	
-//		correctBelongsToMethod();
+
 		writeParameterToDomain();
 		return signature;
 	}
-
-
-
-//	private void correctBelongsToMethod() {
-//		String method = this.belongsToMethod + "(";
-//		for (String declaredType : decalareTypes){
-//			method += declareType;
-//		}
-//		
-//	}
-
-
 
 	private void DelegateParametersFromTree(Tree tree) {
 		for(int i = 0; i < tree.getChildCount(); i++){
@@ -63,7 +51,6 @@ public class JavaParameterGenerator extends JavaGenerator {
 				getAttributeName(child);
 				getParameterAttributes(child, 1);
 				if(this.nameFound && this.declareTypeFound){
-//					writeParameterToDomain();
 					this.addToQueue();
 				}
 				deleteTreeChild(child);
@@ -87,7 +74,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 	public String getAttributeType(CommonTree tree){
 		String attributeType = "";
 		attributeType = getAttributeRecursive(tree);
-		attributeType = attributeType.replace("<,", "<");
+		attributeType = attributeType.replace("<.", "<");
 		attributeType = attributeType.substring(1);
 		return attributeType;
 	}
@@ -159,14 +146,5 @@ public class JavaParameterGenerator extends JavaGenerator {
 			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, type);
 		}
 	}
-//	
-//	private String getBelongsToMethodString(String completeName){
-//		System.err.println(completeName);
-//		String belongsToMethod = "";
-//		String[] parts = completeName.split(".");
-//		for(int i=0; i<parts.length-2; i++) {
-//			belongsToMethod += parts[i] + ".";
-//		}
-//		return belongsToMethod.substring(0, belongsToMethod.length() -1);
-//	}
+
 }

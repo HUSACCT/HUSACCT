@@ -3,54 +3,92 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
-public class JavaLoopGenerator {
+public class JavaLoopGenerator extends JavaGenerator{
 
-	private String currentClass;
+	private Logger logger = Logger.getLogger(JavaInvocationGenerator.class);
 	
-	public void generateModel(CommonTree loopTree, String currentClass){
-			this.currentClass = currentClass;
-			walkAST(loopTree);
+	private String belongsToClass;
+	private String belongsToMethod;
+	
+	JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
+	JavaInvocationGenerator javaInvocationGenerator;
+	JavaBlockScopeGenerator javaBlockScopeGenerator;
+	
+	public void generateModelFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod){
+			this.belongsToClass = belongsToClass;
+			this.belongsToMethod = belongsToMethod;
+			javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+			if(loopTree.getType() == JavaParser.FOR || loopTree.getType() == JavaParser.WHILE){
+				walkForAndWhileAST(loopTree);
+			}
+			else if(loopTree.getType() == JavaParser.FOR_EACH){
+				walkForEachAST(loopTree);
+			}
+			else {
+				logger.warn("Onbekend type loop gevonden tijdens analyseren");
+			}
+
 	}
 	
-	private void walkAST(CommonTree currentElement){
-		int currentElementChildCount = currentElement.getChildCount();
-		int currentElementType = currentElement.getType();
-		
-		switch(currentElementType){
-			case JavaParser.TYPE:
-//				System.out.println(currentElement.parent.toStringTree());
-					JavaAttributeAndLocalVariableGenerator attributeGenerator = new JavaAttributeAndLocalVariableGenerator();
-					//attributeGenerator.generateModel(currentElement.parent, currentClass);
+	private void walkForAndWhileAST(Tree tree) {
+		for(int i = 0; i < tree.getChildCount(); i++){
+			Tree child = tree.getChild(i);
+			int treeType = child.getType();
+			if (treeType == JavaParser.VAR_DECLARATION){
+				javaLocalVariableGenerator.generateLocalVariableModel(child, this.belongsToClass, this.belongsToMethod);
+				deleteTreeChild(child);
+			}
+			else if(treeType == JavaParser.METHOD_CALL){
+				javaInvocationGenerator.generateMethodInvocToModel((CommonTree) child, belongsToMethod);
+				deleteTreeChild(child);
+			}
+			else if(treeType == JavaParser.DOT){
+				CommonTree newTree = new CommonTree();
+				newTree.addChild(child);
+				javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) newTree, this.belongsToMethod);
+				deleteTreeChild(child);
+			}
+			else if(treeType == JavaParser.BLOCK_SCOPE){
+				JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
+				javaBlockScopeGenerator.walkThroughBlockScope((CommonTree)child, this.belongsToClass, this.belongsToMethod);
+				deleteTreeChild(child);
+			}
+			
+			walkForAndWhileAST(child);
 		}
-		
-		for(int currentE = 0; currentE < currentElementChildCount; currentE++){
-			walkAST((CommonTree) currentElement.getChild(currentE));
+	}
+	
+	private void walkForEachAST(Tree tree) {
+		for(int i = 0; i < tree.getChildCount(); i++){
+			Tree child = tree.getChild(i);
+			int treeType = child.getType();
+			if(treeType == JavaParser.TYPE){
+				javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(i + 1).getText(), tree.getChild(i + 1).getLine());
+			}
+			
+			else if(treeType == JavaParser.METHOD_CALL){
+				javaInvocationGenerator.generateMethodInvocToModel((CommonTree) child, belongsToMethod);
+				deleteTreeChild(child);
+			}
+			else if(treeType == JavaParser.DOT){
+				CommonTree newTree = new CommonTree();
+				newTree.addChild(child);
+				javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) newTree, this.belongsToMethod);
+				deleteTreeChild(child);
+			}
+			
+			walkForEachAST(child);
 		}
-		
-		
-//		for(int currentE = 0; currentE < currentElementChildCount; currentE++){
-//			CommonTree childElement = (CommonTree) currentElement.getChild(currentE);
-//			int childElementType = childElement.getType();
-//			
-//			System.out.println(currentElement.toStringTree());
-//			
-//			switch(childElementType){
-//				case JavaParser.LOCAL_MODIFIER_LIST:
-//					System.err.println(childElement.getChildCount());
-//					
-////					JavaAttributeGenerator attributeGenerator = new JavaAttributeGenerator();
-////					attributeGenerator.generateModel(childElement, currentClass);
-//				case JavaParser.BLOCK_SCOPE:
-//					System.err.println("BLOCK SCOPE");
-//				default:
-//					continue;
-//			}
-//			
-//			
-//		}
-		
 		
 	}
 	
+	private void deleteTreeChild(Tree treeNode){ 
+        for (int child = 0 ; child < treeNode.getChildCount();){ 
+            treeNode.deleteChild(treeNode.getChild(child).getChildIndex()); 
+        } 
+    } 
+
 }

@@ -1,5 +1,7 @@
 package husacct.analyse.task;
 
+import org.jdom2.Element;
+
 import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
@@ -82,5 +84,15 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 	@Override
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
 		return domainService.getDependenciesTo(to, dependencyFilter);
+	}
+
+	@Override
+	public Element saveModel() {
+		return domainService.saveModel();
+	}
+
+	@Override
+	public void loadModel(Element analyseElement) {
+		domainService.loadModel(analyseElement);
 	}
 }
