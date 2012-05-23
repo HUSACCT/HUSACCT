@@ -20,7 +20,7 @@ public enum RuleTypes {
 	LOOPS_IN_MODULE("LoopsInModule", DefaultSeverities.HIGH),
 	LOOPS_IN_MODULE_EXCEPTION("LoopsInModuleException", DefaultSeverities.MEDIUM);	
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, LOOPS_IN_MODULE);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, LOOPS_IN_MODULE);
 
 	private final String key;
 	private final DefaultSeverities defaultSeverity;

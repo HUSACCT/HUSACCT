@@ -3,17 +3,13 @@ package husacct.validate.domain.validation.ruletype.contentsofamodule;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtilFilter;
-import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -33,22 +29,56 @@ public class NamingConventionRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+		if(arrayContainsValue(currentRule.violationTypeKeys, "package")){
+			checkPackageConvention(currentRule, rootRule, configuration);
+		}
+
+		if(arrayContainsValue(currentRule.violationTypeKeys, "class")){
+			checkClassConvention(currentRule, rootRule, configuration);
+		}
+
+		return violations;
+	}
+
+	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration){
+		this.violations = new ArrayList<Violation>();
+
+		this.mappings = CheckConformanceUtilFilter.filterPackages(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		for(Mapping physicalClasspathFrom : physicalClasspathsFrom){
 
-		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
-			for(AnalysedModuleDTO analyzedModule : analyseService.getChildModulesInModule(physicalClasspathFrom.getPhysicalPath())){
-				if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analyzedModule.name)){
-					Message message = new Message(rootRule);
-
-					LogicalModule logicalModuleFrom = new LogicalModule(physicalClasspathFrom);
-					LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-					Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, null);
-					Violation violation = createViolation(super.key, physicalClasspathFrom.getPhysicalPath(), false, message, logicalModules, severity);
-					violations.add(violation);
-				}
+			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
+			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name) && analysedModule.type.toLowerCase().equals("package")){
+				Violation violation = createViolation(rootRule,physicalClasspathFrom,null,null,configuration);
+				violations.add(violation);
 			}
 		}
 		return violations;
+	}
+
+	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration){
+		this.violations = new ArrayList<Violation>();
+
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.physicalClasspathsFrom = mappings.getMappingFrom();
+
+		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
+
+			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
+			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name) && analysedModule.type.toLowerCase().equals("class")){
+				Violation violation = createViolation(rootRule, physicalClasspathFrom, null , null, configuration);
+				violations.add(violation);
+			}
+		}
+		return violations;
+	}
+
+	private boolean arrayContainsValue(String[] array, String value){
+		for(String arrayValue : array){
+			if(arrayValue.toLowerCase().equals(value.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
 	}
 }
