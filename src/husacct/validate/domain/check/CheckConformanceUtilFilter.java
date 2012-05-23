@@ -109,17 +109,22 @@ public class CheckConformanceUtilFilter {
 
 	private static HashSet<Mapping> getAllClasspathsFromModule(ModuleDTO module, HashSet<Mapping> classpaths, String[] violationTypeKeys){
 		for(ModuleDTO subModule : module.subModules){
+
 			for(PhysicalPathDTO classpath : subModule.physicalPathDTOs){
 				if(classpath.type.toLowerCase().equals("package")){
 					AnalysedModuleDTO[] analysedModules = analyse.getChildModulesInModule(classpath.path);
+
 					for(AnalysedModuleDTO analysedClass : analysedModules){
-						classpaths.add(new Mapping(subModule.logicalPath, subModule.type, analysedClass.uniqueName, violationTypeKeys));
-						//check for innerclasses
+						if(analysedClass.type.toLowerCase().equals("class")){
+							classpaths.add(new Mapping(subModule.logicalPath, subModule.type, analysedClass.uniqueName, violationTypeKeys));
+							classpaths.addAll(getInnerClasses(analysedClass, new ArrayList<Mapping>(), module, violationTypeKeys));
+						}
 					}
 				}
 				else{
 					classpaths.add(new Mapping(subModule.logicalPath, subModule.type, classpath.path, violationTypeKeys));
-					//class check innerclasses
+					AnalysedModuleDTO analysedModule = analyse.getModuleForUniqueName(classpath.path);
+					classpaths.addAll(getInnerClasses(analysedModule, new ArrayList<Mapping>(), module, violationTypeKeys));
 				}
 			}
 
@@ -127,6 +132,16 @@ public class CheckConformanceUtilFilter {
 		}
 		return classpaths;
 	}	
+
+	private static List<Mapping> getInnerClasses(AnalysedModuleDTO analysedClass, List<Mapping> innerClassPaths, ModuleDTO module, String[] violationTypeKeys){
+		for(AnalysedModuleDTO innerClass : analysedClass.subModules){
+			if(analysedClass.type.toLowerCase().equals("class")){
+				innerClassPaths.add(new Mapping(module.logicalPath, module.type, innerClass.uniqueName, violationTypeKeys));			
+			}
+			innerClassPaths.addAll(getInnerClasses(analysedClass, innerClassPaths, module, violationTypeKeys));
+		}		
+		return innerClassPaths;
+	}
 
 	private static Mappings removeExceptionClasses(Mappings mainClasspaths, List<Mapping> exceptionClasspathsFrom, List<Mapping> exceptionClasspathsTo){
 		List<Mapping> filteredFrom = removeExceptionClasses(mainClasspaths.getMappingFrom(), exceptionClasspathsFrom);
@@ -145,7 +160,7 @@ public class CheckConformanceUtilFilter {
 						}
 					}
 
-					//if there are no violationtypes attached to this class you can remove this class for better validate performance
+					//if there are no violationtypes attached to this class you can remove this class for better checkconformace performance
 					if(mainClasspaths.get(i).getViolationTypes().length == 0){
 						mainClasspaths.remove(i);
 						i--;

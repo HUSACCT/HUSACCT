@@ -36,18 +36,18 @@ public class NamingConventionRule extends RuleType {
 		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
+		AnalysedModuleDTO analysedModule;
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
-			for(AnalysedModuleDTO analyzedModule : analyseService.getChildModulesInModule(physicalClasspathFrom.getPhysicalPath())){
-				if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analyzedModule.name)){
 
-					Message message = new Message(rootRule);
+			analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
+			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name)){
+				Message message = new Message(rootRule);
 
-					LogicalModule logicalModuleFrom = new LogicalModule(physicalClasspathFrom);
-					LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-					Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, null);
-					Violation violation = createViolation(super.key, physicalClasspathFrom.getPhysicalPath(), false, message, logicalModules, severity);
-					violations.add(violation);
-				}
+				LogicalModule logicalModuleFrom = new LogicalModule(physicalClasspathFrom);
+				LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
+				Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, null);
+				Violation violation = createViolation(super.key, physicalClasspathFrom.getPhysicalPath(), false, message, logicalModules, severity);
+				violations.add(violation);
 			}
 		}
 		return violations;
