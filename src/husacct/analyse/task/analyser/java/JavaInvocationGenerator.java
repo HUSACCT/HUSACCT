@@ -165,9 +165,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		if (tree != null) {
 			for (int i = 0; i < tree.getChildCount(); i++) {
 				CommonTree treeNode = (CommonTree) tree.getChild(i);
-				if(treeNode.getType() == JavaParser.IDENT && i == 0){
-					//to = treeNode.getText();
-					setToAndNameOfInstance(to);
+				if(treeNode.getType() == JavaParser.IDENT && i == 0 && treeNode.getParent().getType() != JavaParser.VAR_DECLARATOR){
+					setToAndNameOfInstance(treeNode.getText());
 					//nameOfInstance = to;
 					
 				}
@@ -194,13 +193,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 
 
 	private void createMethodInvocationDomainObject() {
-		
-		if(from.startsWith("presentation.gui.observer.hyves.StartHyvesMediaGUI")){
-			System.out.println(from + " - " + to  + " " + lineNumber);
-		}
-		
 		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
-		
 	}
 
 	public void generatePropertyOrFieldInvocToModel(CommonTree treeNode, String belongsToMethod) {
