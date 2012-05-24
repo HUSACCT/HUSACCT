@@ -1,5 +1,6 @@
 package husacct.validate.domain.configuration;
 
+import husacct.ServiceProvider;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -48,6 +49,7 @@ public class ConfigurationServiceImpl extends Observable {
 		severityConfig.setSeverities(severities);
 		setChanged();
 		notifyObservers(oldSeverities);
+		notifyServiceListeners();
 	}
 
 	public Severity getSeverityByName(String severityName){
@@ -60,6 +62,7 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
+		notifyServiceListeners();
 	}
 
 	public HashMap<String, HashMap<String, Severity>> getAllSeveritiesPerTypesPerProgrammingLanguages() {
@@ -68,10 +71,12 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages) {
 		severityPerTypeRepository.setSeverityMap(severitiesPerTypesPerProgrammingLanguages);
+		notifyServiceListeners();
 	}
 
 	public void setSeveritiesPerTypesPerProgrammingLanguages(String language, HashMap<String, Severity> severitiesPerTypesPerProgrammingLanguages) {
 		severityPerTypeRepository.setSeverityMap(language, severitiesPerTypesPerProgrammingLanguages);
+		notifyServiceListeners();
 	}
 
 	public Severity getSeverityFromKey(String language, String key){
@@ -82,16 +87,19 @@ public class ConfigurationServiceImpl extends Observable {
 		severityPerTypeRepository.restoreAllToDefault(language);
 		setChanged();
 		notifyObservers();
+		notifyServiceListeners();
 	}
 
 	public void restoreToDefault(String language, String key){
 		severityPerTypeRepository.restoreDefaultSeverity(language, key);
 		setChanged();
 		notifyObservers();
+		notifyServiceListeners();
 	}
 
 	public void restoreSeveritiesToDefault(){
 		severityConfig.restoreToDefault();
+		notifyServiceListeners();
 	}
 
 	public RuleTypesFactory getRuleTypesFactory(){
@@ -148,7 +156,12 @@ public class ConfigurationServiceImpl extends Observable {
 			return true;
 		}
 	}
+	
 	public void attachViolationHistoryRepositoryObserver(Observer observer) {
 		violationHistoryRepository.addObserver(observer);
+	}
+	
+	private void notifyServiceListeners(){
+		ServiceProvider.getInstance().getValidateService().notifyServiceListeners();
 	}
 }
