@@ -1,5 +1,6 @@
 package husacct.analyse.domain.famix;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
@@ -169,6 +170,13 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
+	public void createParameter(String name, String uniqueName, String declareType, String belongsToClass, 
+			int lineNumber, String belongsToMethod) {
+		List<String> emptyList = new ArrayList<String>();
+		this.createParameter(name, uniqueName, declareType, belongsToClass, lineNumber, belongsToMethod, emptyList);
+	}
+	
+	@Override
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
 			String belongsToMethod, List<String> declareTypes) {
@@ -325,7 +333,5 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	
 	public String represent(){
 		return model.toString();
-	}
-
-
+	}	
 }
