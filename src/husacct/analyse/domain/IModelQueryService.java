@@ -20,5 +20,4 @@ public interface IModelQueryService {
 	public List<DependencyDTO> getDependenciesTo(String to);
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 	
-	
 }

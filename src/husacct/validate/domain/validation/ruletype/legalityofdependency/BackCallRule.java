@@ -4,16 +4,12 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.CheckConformanceUtilFilter;
-import husacct.validate.domain.check.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
-import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.logicalmodule.LogicalModule;
-import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -24,7 +20,7 @@ import java.util.List;
 
 public class BackCallRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
-	
+
 	public BackCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
@@ -33,25 +29,17 @@ public class BackCallRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
+
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();			
-		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
+		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> moduleTo : modulesTo){
-				for(Mapping physicalClasspathsTo : moduleTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), physicalClasspathsTo.getPhysicalPath(), currentRule.violationTypeKeys);	
+				for(Mapping classpathsTo : moduleTo ){
+					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classpathsTo.getPhysicalPath(), classPathFrom.getViolationTypes());	
 					for(DependencyDTO dependency: dependencies){
-						Message message = new Message(rootRule);
-	
-						LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
-						LogicalModule logicalModuleTo = new LogicalModule(physicalClasspathsTo);
-						LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-	
-						final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-						Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, super.severity, violationTypeSeverity);
-						Violation violation = createViolation(dependency, 1, this.key, logicalModules, false, message, severity);
+						Violation violation = createViolation(rootRule,classPathFrom,classpathsTo,dependency,configuration);
 						violations.add(violation);
 					}
 				}					
@@ -59,24 +47,24 @@ public class BackCallRule extends RuleType {
 		}		
 		return violations;
 	}
-	
-	private List<List<Mapping>> filerLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
+
+	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
 		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
 		int counter = -1;		
 		for (ModuleDTO module :allModules){
 			counter++;
 			if(module.type.toLowerCase().equals("layer")){
 				if(module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
-					returnModules = getModulesTo(allModules, counter);				
+					returnModules = getModulesTo(allModules, counter, currentRule.violationTypeKeys);				
 			}
 		}
 		return returnModules;	
 	}	
-	
-	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter){
+
+	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter, String[] violationTypeKeys){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(int i=0 ; i<counter ; i++){
-			returnList.add(CheckConformanceUtilFilter.getAllModulesFromLayer(allModules.get(i)));
+			returnList.add(CheckConformanceUtilFilter.getAllModulesFromLayer(allModules.get(i), violationTypeKeys));
 		}		
 		return returnList;		
 	}

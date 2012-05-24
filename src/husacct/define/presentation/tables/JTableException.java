@@ -1,5 +1,7 @@
 package husacct.define.presentation.tables;
 
+import husacct.define.abstraction.language.DefineTranslator;
+
 import javax.swing.table.TableColumn;
 
 
@@ -20,10 +22,10 @@ public class JTableException extends AbstractJTable {
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn("From module");
-		tablemodel.addColumn("To module");
-		tablemodel.addColumn("Description");
-		tablemodel.addColumn("Enabled");
+		tablemodel.addColumn(DefineTranslator.translate("FromModule"));
+		tablemodel.addColumn(DefineTranslator.translate("ToModule"));
+		tablemodel.addColumn(DefineTranslator.translate("Description"));
+		tablemodel.addColumn(DefineTranslator.translate("Enabled"));
 	}
 	
 	@Override

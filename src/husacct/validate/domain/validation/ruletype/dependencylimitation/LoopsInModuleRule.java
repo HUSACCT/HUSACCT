@@ -15,6 +15,7 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 
 public class LoopsInModuleRule extends RuleType{
@@ -30,33 +31,33 @@ public class LoopsInModuleRule extends RuleType{
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
-		this.mappings = CheckConformanceUtilFilter.filter(currentRule);
-		
+		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
-				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module));
+				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
 			}
-			
+
 		}else{
 			physicalClasspathsFrom = mappings.getMappingFrom();
 		}
-		
+
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
-			getClassPathsTo(physicalClassPathFrom.getPhysicalPath(),physicalClassPathFrom.getPhysicalPath(),violations);
+			checkCircularDependencies(physicalClassPathFrom.getPhysicalPath(), new HashSet<String>(),configuration, rootRule,physicalClassPathFrom);
 		}
 		return violations;
 	}
 
-	private List<Violation> getClassPathsTo(String physicalPath, String startPath, List<Violation> violations)	{
-		for(DependencyDTO dependency :analyseService.getDependenciesFrom(physicalPath)){
-			for (DependencyDTO dependencyTo :analyseService.getDependenciesFrom(dependency.to)){
-				if(dependency.to.equals(dependencyTo.from) || dependencyTo.from.equals(dependencyTo.to)){
-					System.out.println("violations!!");
-				}
+	private List<Violation> checkCircularDependencies(String physicalPath, HashSet<String> history, ConfigurationServiceImpl configuration, RuleDTO rootRule,Mapping mappingFrom)	{
+		history.add(physicalPath);
+		DependencyDTO[] dependencies = analyseService.getDependenciesFrom(physicalPath);
+		for(DependencyDTO dependency : dependencies){
+			if(history.contains(dependency.to)){
+				Violation violation = createViolation(rootRule, mappingFrom, null, dependency, configuration);
+				violations.add(violation);				
 			}
-			if(physicalPath.equals(dependency.from) && startPath.equals(dependency.to) || dependency.from.equals(dependency.to)){
-				System.out.println("violations2!!");
-			}
+
+			violations.addAll(checkCircularDependencies(dependency.to,history,configuration,rootRule,mappingFrom));
 		}
 		return violations;
 	}

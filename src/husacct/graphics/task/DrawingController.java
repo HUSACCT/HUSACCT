@@ -12,21 +12,19 @@ import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
-import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.LineConnectionFigure;
 
 public abstract class DrawingController implements UserInputListener {
 	public static final String ROOT = "";
@@ -74,7 +72,7 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 
-		layoutStrategy = new LayeredLayoutStrategy(drawing);
+		layoutStrategy = new BasicLayoutStrategy(drawing);
 	}
 
 	public JInternalFrame getGUI() {
