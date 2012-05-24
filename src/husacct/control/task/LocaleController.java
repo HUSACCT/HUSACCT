@@ -73,7 +73,7 @@ public class LocaleController {
 		try {
 			key = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){
-			logger.debug(missingResourceException.getMessage());
+			logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties", key, bundleLocation, resourceBundle.getLocale().getLanguage()));
 		}
 		return key;
 	}
