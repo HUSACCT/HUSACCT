@@ -248,6 +248,4 @@ class FamixDependencyConnector {
 			return false;
 		}
 	}
-	
-
 }
