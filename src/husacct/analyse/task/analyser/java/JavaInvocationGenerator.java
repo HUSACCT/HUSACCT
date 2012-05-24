@@ -92,7 +92,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 	}
 
-	public void generateMethodInvocToModel(CommonTree treeNode, String belongsToMethod) {
+	public void generateMethodInvocToModel(CommonTree treeNode, String belongsToMethod) {		
 		invocationNameFound = false;
 		type = "invocMethod";
 		this.belongsToMethod = belongsToMethod;
@@ -157,8 +157,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
 			for (int i = 0; i < tree.getChildCount(); i++) {
 				CommonTree treeNode = (CommonTree) tree.getChild(i);
 				if(treeNode.getType() == JavaParser.IDENT && i == 0){
-					to = treeNode.getText();
-					nameOfInstance = to;
+					//to = treeNode.getText();
+					setToAndNameOfInstance(to);
+					//nameOfInstance = to;
 					
 				}
 				if(treeNode.getType() == JavaParser.IDENT && i == 1 && invocationNameFound == false){
@@ -174,11 +175,21 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		}
 	}
 
-
+	private void setToAndNameOfInstance(String thisTo){
+		if(this.to == null || this.to.equals("")){
+			to = thisTo;
+			nameOfInstance = to;
+		}
+	}
 	
 
 
 	private void createMethodInvocationDomainObject() {
+		
+		if(from.startsWith("presentation.gui.observer.hyves.StartHyvesMediaGUI")){
+			System.out.println(from + " - " + to  + " " + lineNumber);
+		}
+		
 		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 		
 	}

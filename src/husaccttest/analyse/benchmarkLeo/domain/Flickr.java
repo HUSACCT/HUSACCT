@@ -2,6 +2,7 @@ package husaccttest.analyse.benchmarkLeo.domain;
 
 import java.util.HashMap;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -48,13 +49,13 @@ public class Flickr extends BenchmarkExtended{
 		assertEquals(true, foundtag);
 	}
 	
-	@Test
+	@Ignore ("Needed dependencies are not detected yet")
+	@Test 
 	public void testDomainFlickrFlickrPicture(){
 		String from = "domain.flickr.FlickrPicture";
 		int expectedDependencies = 8;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		super.printDependencies(dependencies);
 		assertEquals(expectedDependencies, dependencies.length);
 
 //		String fromImportExpected = from;
@@ -78,4 +79,36 @@ public class Flickr extends BenchmarkExtended{
 //		assertEquals(true, foundImportDependency);
 //		assertEquals(true, foundImplementsDependency);
 	}
+	
+	
+	@Test
+	public void testDomainFlickrTag(){
+		String from = "domain.flickr.Tag";
+		int expectedDependencies = 2;
+		
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		assertEquals(expectedDependencies, dependencies.length);
+		
+		String fromImportExpected = from;
+		String toImportExpected = "infrastructure.socialmedia.SocialNetwork";
+		String typeImportExpected = super.IMPORT;
+		int linenumberImportExpected = 3;
+		
+		String fromExtendsExpected = from;
+		String toExtendsExpected = "infrastructure.socialmedia.SocialNetwork";
+		String typeExtendsExpected = super.EXTENDSCONCRETE;
+		int linenumberExtendsExpected = 7;
+		
+		HashMap<String, Object> dependencyImportExpected = createDependencyHashmap(
+				fromImportExpected, toImportExpected, typeImportExpected, linenumberImportExpected);
+		HashMap<String, Object> dependencyExtendsExpected = createDependencyHashmap(
+				fromExtendsExpected, toExtendsExpected, typeExtendsExpected, linenumberExtendsExpected);
+		
+		boolean foundImportDependency = compaireDTOWithValues(dependencyImportExpected, dependencies);
+		boolean foundExtendsDependency = compaireDTOWithValues(dependencyExtendsExpected, dependencies);
+		assertEquals(true, foundImportDependency);
+		assertEquals(true, foundExtendsDependency);
+		
+	}
+	
 }
