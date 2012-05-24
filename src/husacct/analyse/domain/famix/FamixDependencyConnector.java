@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -16,6 +15,7 @@ class FamixDependencyConnector {
 	private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
 	private static final String EXTENDS_ABSTRACT = "ExtendsAbstract";
 	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
+	private static final String EXTENDS_INTERFACE = "ExtendsInterface";
 	
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
@@ -69,10 +69,9 @@ class FamixDependencyConnector {
 					if(!connected){
 						if(isInvocation(association)){
 							FamixInvocation theInvocation = (FamixInvocation) association;
-							
 							if (theInvocation.belongsToMethod.equals("")){
 								//Then it is an attribute
-								theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
+								theInvocation.to = getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
 							}
 							else{
 								//checking order now: 1) parameter, 2) localVariable, 3) attribute
@@ -83,7 +82,7 @@ class FamixDependencyConnector {
 								}
 								if(theInvocation.to.equals("")){
 									//now it is an attribute
-									theInvocation.to =getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
+									theInvocation.to = getClassForAttribute (theInvocation.from, theInvocation.nameOfInstance);
 								}
 							}
 						}
@@ -114,7 +113,7 @@ class FamixDependencyConnector {
 				FamixInterface theInterface = getInterfaceForUniqueName(association.to);
 				if(theInterface != null){
 					// Interface extends Interface
-					type = EXTENDS_CONCRETE;
+					type = EXTENDS_INTERFACE;
 				}
 			}
 			
