@@ -2,6 +2,7 @@ package husacct.define.presentation.jdialog;
 
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
+import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.tables.JTableException;
@@ -238,10 +239,12 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {	
 			String description = (String) exceptionRule.get("description");
-			Long moduleIdFrom = (Long) exceptionRule.get("moduleFromId");
-			String moduleFrom = appliedRuleController.getModuleName(moduleIdFrom);
-			Long moduleIdTo = (Long) exceptionRule.get("moduleToId");
-			String moduleTo = appliedRuleController.getModuleName(moduleIdTo);
+			
+			Object from = exceptionRule.get("moduleFromId");
+			String moduleFrom = getModuleDisplayValue(from);
+			
+			Object to = exceptionRule.get("moduleToId");
+			String moduleTo = getModuleDisplayValue(to);
 			
 			boolean appliedRuleIsEnabled = (Boolean) exceptionRule.get("enabled");
 			String enabled = DefineTranslator.translate("Off");
@@ -256,6 +259,17 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.repaint();
 	}
 
+	private String getModuleDisplayValue(Object o){
+		String displayValue = "";
+		if (o instanceof SoftwareUnitDefinition){
+			displayValue = "SoftwareUnit: " + ((SoftwareUnitDefinition) o).getName();
+		} else if (o instanceof Long){
+			long moduleId = (Long) o;
+			displayValue = appliedRuleController.getModuleName(moduleId);
+		}
+		return displayValue;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == this.jButtonSave) {
