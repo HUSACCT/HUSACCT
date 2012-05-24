@@ -2,7 +2,6 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
-import husacct.control.presentation.util.LoadingDialog;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Severity;
@@ -294,29 +293,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				final LoadingDialog loadingDialog = new LoadingDialog("Loading violations");
-				final Thread analyseThread = new Thread() { 
-					@Override 
-					public void run() {
-						ServiceProvider.getInstance().getValidateService().checkConformance();
-					}};
-					Thread loadingThread = new Thread(loadingDialog);
-
-					Thread monitorThread = new Thread(new Runnable() {
-						public void run() {
-							try {
-								analyseThread.join();
-								loadingDialog.dispose();
-								logger.debug("Monitor: analyse finished");
-							} catch (InterruptedException exception){
-								logger.debug("Monitor: analyse interrupted");
-							}
-
-						}
-					});
-					loadingThread.start();
-					analyseThread.start();
-					monitorThread.start();
+				//TODO: add LoadingDialog from next merge
+				ServiceProvider.getInstance().getValidateService().checkConformance();	
 			}
 		});
 
@@ -535,102 +513,39 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		rdbtnAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
-				final LoadingDialog loadingDialog = new LoadingDialog("Loading violations");
-				final Thread analyseThread = new Thread() { 
-					@Override 
-					public void run() {
-						updateViolationsTable();
-					}};
-					Thread loadingThread = new Thread(loadingDialog);
-
-					Thread monitorThread = new Thread(new Runnable() {
-						public void run() {
-							try {
-								analyseThread.join();
-								loadingDialog.dispose();
-								logger.debug("Monitor: analyse finished");
-							} catch (InterruptedException exception){
-								logger.debug("Monitor: analyse interrupted");
-							}
-
-						}
-					});
-					loadingThread.start();
-					analyseThread.start();
-					monitorThread.start();
+				//TODO: add LoadingDialog from next merge
+				updateViolationsTable();				
 			}
 		});
 		rdbtnDirect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-			final LoadingDialog loadingDialog = new LoadingDialog("Loading violations");
-			final Thread analyseThread = new Thread() { 
-				@Override 
-				public void run() {
-					List<Violation> violationsIndirect = new ArrayList<Violation>();
-					List<Violation> violations = getViolationsFilteredOrNormal();
-					for(Violation violation : violations) {
-						if(!violation.isIndirect()) {
-							violationsIndirect.add(violation);
-						}
-					}
-					fillViolationsTable(violationsIndirect);
-				}};
-				Thread loadingThread = new Thread(loadingDialog);
+				//TODO: add LoadingDialog from next merge
 
-				Thread monitorThread = new Thread(new Runnable() {
-					public void run() {
-						try {
-							analyseThread.join();
-							loadingDialog.dispose();
-							logger.debug("Monitor: analyse finished");
-						} catch (InterruptedException exception){
-							logger.debug("Monitor: analyse interrupted");
-						}
-
+				List<Violation> violationsIndirect = new ArrayList<Violation>();
+				List<Violation> violations = getViolationsFilteredOrNormal();
+				for(Violation violation : violations) {
+					if(!violation.isIndirect()) {
+						violationsIndirect.add(violation);
 					}
-				});
-				loadingThread.start();
-				analyseThread.start();
-				monitorThread.start();
-				
+				}
+				fillViolationsTable(violationsIndirect);		
+
 			}
 		});
 		rdbtnIndirect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				final LoadingDialog loadingDialog = new LoadingDialog("Loading violations");
-				final Thread analyseThread = new Thread() { 
-					@Override 
-					public void run() {
-						List<Violation> violationsIndirect = new ArrayList<Violation>();
-						List<Violation> violations = getViolationsFilteredOrNormal();
-						for(Violation violation : violations) {
-							if(violation.isIndirect()) {
-								violationsIndirect.add(violation);
-							}
-						}
-						fillViolationsTable(violationsIndirect);
-					}};
-					Thread loadingThread = new Thread(loadingDialog);
+				//TODO: add LoadingDialog from next merge
+				List<Violation> violationsIndirect = new ArrayList<Violation>();
+				List<Violation> violations = getViolationsFilteredOrNormal();
+				for(Violation violation : violations) {
+					if(violation.isIndirect()) {
+						violationsIndirect.add(violation);
+					}
+				}
+				fillViolationsTable(violationsIndirect);
 
-					Thread monitorThread = new Thread(new Runnable() {
-						public void run() {
-							try {
-								analyseThread.join();
-								loadingDialog.dispose();
-								logger.debug("Monitor: analyse finished");
-							} catch (InterruptedException exception){
-								logger.debug("Monitor: analyse interrupted");
-							}
-
-						}
-					});
-					loadingThread.start();
-					analyseThread.start();
-					monitorThread.start();
-				
 			}
 		});
 		configuration.attachViolationHistoryRepositoryObserver(this);
@@ -691,31 +606,10 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	private void applyFilterChanged(ActionEvent e) {
-		final LoadingDialog loadingDialog = new LoadingDialog("Loading violations");
-		final Thread analyseThread = new Thread() { 
-			@Override 
-			public void run() {
-				updateViolationsTable();
-				loadInformationPanel();
-			}};
-			Thread loadingThread = new Thread(loadingDialog);
+		//TODO: add LoadingDialog from next merge
+		updateViolationsTable();
+		loadInformationPanel();
 
-			Thread monitorThread = new Thread(new Runnable() {
-				public void run() {
-					try {
-						analyseThread.join();
-						loadingDialog.dispose();
-						logger.debug("Monitor: analyse finished");
-					} catch (InterruptedException exception){
-						logger.debug("Monitor: analyse interrupted");
-					}
-
-				}
-			});
-			loadingThread.start();
-			analyseThread.start();
-			monitorThread.start();
-		
 	}
 
 	@Override
@@ -745,26 +639,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	private void changeShownViolations() {
+		//TODO: add LoadingDialog from next merge
 		LoadViolationHistoryPointsTask loadViolationsHistoryTask = new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, thisScreen, taskServiceImpl, applyFilter);
-		final LoadingDialog loadingDialog = new LoadingDialog("Loading violations");
-		final Thread analyseThread = new Thread(loadViolationsHistoryTask);
-		Thread loadingThread = new Thread(loadingDialog);
-
-		Thread monitorThread = new Thread(new Runnable() {
-			public void run() {
-				try {
-					analyseThread.join();
-					loadingDialog.dispose();
-					logger.debug("Monitor: analyse finished");
-				} catch (InterruptedException exception){
-					logger.debug("Monitor: analyse interrupted");
-				}
-
-			}
-		});
-		loadingThread.start();
-		analyseThread.start();
-		monitorThread.start();
 	}
 
 	public void update(){
