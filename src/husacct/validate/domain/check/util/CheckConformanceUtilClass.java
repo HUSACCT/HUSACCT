@@ -90,17 +90,11 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	private static HashSet<Mapping> getClassFromPhysicalPathDTO(ModuleDTO module, String[] violationTypeKeys){
 		HashSet<Mapping> classpaths = new HashSet<Mapping>();
 		for(PhysicalPathDTO classpath : module.physicalPathDTOs){
-			if(classpath.type.toLowerCase().equals("package")){
-				AnalysedModuleDTO[] analysedModules = analyse.getChildModulesInModule(classpath.path);
-				for(AnalysedModuleDTO analysedClass : analysedModules){
-					classpaths.add(new Mapping(module.logicalPath, module.type, analysedClass.uniqueName, violationTypeKeys));
-					classpaths.addAll(getInnerClasses(analysedClass, new ArrayList<Mapping>(), module, violationTypeKeys));
-				}
-			}
-			else{
+			if(!classpath.type.toLowerCase().equals("package")){
 				classpaths.add(new Mapping(module.logicalPath, module.type, classpath.path, violationTypeKeys));
 				AnalysedModuleDTO analysedModule = analyse.getModuleForUniqueName(classpath.path);
 				classpaths.addAll(getInnerClasses(analysedModule, new ArrayList<Mapping>(), module, violationTypeKeys));
+
 			}
 		}
 		return classpaths;
