@@ -1,13 +1,10 @@
 package husaccttest.control;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
 import husacct.control.task.LocaleController;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -20,7 +17,6 @@ public class LocaleControllerTest {
 	
 	private String translatedString = "JUnitTestValue";
 	private String stringIdentifier = "ControlJUnitTestKey";
-	private String stringIdentifierCopy = "ControlJUnitTestKeyCopy";
 	
 	@Before
 	public void setup(){
@@ -55,20 +51,6 @@ public class LocaleControllerTest {
 		String nonExistingKey = UUID.randomUUID().toString();
 		String translatedString = service.getTranslatedString(nonExistingKey);
 		assertEquals(translatedString, nonExistingKey);
-	}
-	
-	@Test
-	public void testGetExistingStringIdentifiers(){
-		List<String> keys = service.getStringIdentifiers(translatedString);
-		assertTrue(keys.contains(stringIdentifier));
-		assertTrue(keys.contains(stringIdentifierCopy));
-	}
-	
-	@Test
-	public void testGetNonExistingStringIdentifiers(){
-		String nonExistingString = UUID.randomUUID().toString();
-		List<String> keys = service.getStringIdentifiers(nonExistingString);
-		assertFalse(keys.contains(nonExistingString));
 	}
 	
 }

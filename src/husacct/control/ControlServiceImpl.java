@@ -93,7 +93,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public List<String> getStringIdentifiers(String translatedString){
-		return localeController.getStringIdentifiers(translatedString);
+		return new ArrayList<String>();
 	}
 	
 	@Override

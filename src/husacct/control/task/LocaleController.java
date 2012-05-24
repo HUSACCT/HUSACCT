@@ -5,8 +5,6 @@ import husacct.control.IControlService;
 import husacct.control.ILocaleChangeListener;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -76,21 +74,6 @@ public class LocaleController {
 			logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties", key, bundleLocation, resourceBundle.getLocale().getLanguage()));
 		}
 		return key;
-	}
-	
-	public List<String> getStringIdentifiers(String translatedString){
-		Enumeration<String> keys = resourceBundle.getKeys();
-		
-		List<String> matches = new ArrayList<String>();
-		
-		while (keys.hasMoreElements()) {
-			String key = keys.nextElement();
-			if(translatedString.equals(getTranslatedString(key))){
-				matches.add(key);
-			}
-		}
-		
-		return matches;
 	}
 	
 	public void addLocaleChangeListener(ILocaleChangeListener listener){
