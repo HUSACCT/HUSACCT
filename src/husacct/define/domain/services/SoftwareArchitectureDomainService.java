@@ -1,5 +1,6 @@
 package husacct.define.domain.services;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
 
@@ -11,14 +12,15 @@ public class SoftwareArchitectureDomainService {
 	 */
 	public void createNewArchitectureDefinition(String name) {
 		SoftwareArchitecture.getInstance().setName(name);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	/**
 	 * Application
 	 */
 	public void createApplication(String name, String[] paths, String language, String version) {
-		    app = new Application(name, paths, language, version);
-//			Application.setInstance(app);	
+		app = new Application(name, paths, language, version);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();	
 	}
 	
 	public Application getApplicationDetails(){
