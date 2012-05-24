@@ -146,6 +146,16 @@ public abstract class DrawingController implements UserInputListener {
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
+		runDrawTask(modules);
+	}
+	
+	private void runDrawTask(AbstractDTO[] modules){
+		DrawingTask task = new DrawingTask(this,modules);
+		Thread drawThread = new Thread(task);
+		drawThread.start();
+	}
+	
+	public void actuallyDraw(AbstractDTO[] modules){
 		clearDrawing();
 
 		drawTarget.setCurrentPath(getCurrentPath());
@@ -276,6 +286,10 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void refreshFrame() {
 		drawTarget.refreshFrame();
+	}
+	
+	public void refreshFrameClean() {
+		drawTarget.refreshFrameClean();
 	}
 
 	@Override
