@@ -1,26 +1,46 @@
 package husacct.define;
 
-import javax.swing.JFrame;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
-import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.SoftwareArchitectureDomainService;
+import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.persistency.PersistentDomain;
+import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
 
+import java.util.ArrayList;
+
+import javax.swing.JInternalFrame;
+
+import org.jdom2.Element;
+
 public class DefineServiceImpl implements IDefineService {
-	private DefineDomainService defineDomainService = new DefineDomainService();
+	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
+	private ModuleDomainService moduleService = new ModuleDomainService();
+	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private DomainParser domainParser = new DomainParser();
 	
+	public DefineServiceImpl(){
+		super();
+		reset();
+	}
+
+	private void reset() {
+		//TODO this is just a hotfix
+		defineDomainService = new SoftwareArchitectureDomainService();
+		moduleService = new ModuleDomainService();
+		appliedRuleService = new AppliedRuleDomainService();
+		domainParser = new DomainParser();
+		
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
+	}
+
 	@Override
 	public void createApplication(String name, String[] paths, String language, String version) {
 		defineDomainService.createApplication(name, paths, language, version);
@@ -33,34 +53,31 @@ public class DefineServiceImpl implements IDefineService {
 		return appDTO;		
 	}
 	
-	@Override
+	@Override 
 	public ModuleDTO[] getRootModules() {	
-		ModuleDTO[] moduleDTOs = getModules();
-		for (ModuleDTO moduleDTO : moduleDTOs){
-			moduleDTO.subModules = new ModuleDTO[]{};
-		}
-		return moduleDTOs;
-	}
-	
-	private ModuleDTO[] getModules() {
-		Module[] modules = defineDomainService.getModules();
-		ModuleDTO[] moduleDTOs = domainParser.parseModules(modules);
+		Module[] modules = this.moduleService.getRootModules();
+		ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
 		return moduleDTOs;
 	}
 	
 	@Override
 	public RuleDTO[] getDefinedRules() {
-		AppliedRule[] rules = defineDomainService.getAppliedRules();
-		RuleDTO[] ruleDTOs = domainParser.parseRule(rules);
+		AppliedRule[] rules = this.appliedRuleService.getAppliedRules();
+		RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
 		return ruleDTOs;
 	}
 
 	@Override
-	public ModuleDTO[] getChildsFromModule(String logicalPath) {
-		Module module = defineDomainService.getModuleByLogicalPath(logicalPath);
+	public ModuleDTO[] getChildrenFromModule(String logicalPath) {
+		Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
 		ModuleDTO moduleDTO = domainParser.parseModule(module);
 		ModuleDTO[] childModuleDTOs = moduleDTO.subModules;
-		//TODO removes subModules from childModulesDTOs
+		
+		//Removing nested childs
+		for (ModuleDTO modDTO : childModuleDTOs){
+			modDTO.subModules = new ModuleDTO[]{};
+		}
+
 		return childModuleDTOs;
 	}
 
@@ -73,7 +90,7 @@ public class DefineServiceImpl implements IDefineService {
 			for (int i = 1;i<moduleNames.length-1;i++){
 				parentLogicalPath += "." + moduleNames[i];
 			}
-			//Check if exists, an exception with automaticly be thrown
+			//Check if exists, an exception will automaticly be thrown
 			SoftwareArchitecture.getInstance().getModuleByLogicalPath(parentLogicalPath);
 		}
 		else {
@@ -83,41 +100,56 @@ public class DefineServiceImpl implements IDefineService {
 	}
 	
 	
-	public JFrame getDefinedGUI(){
+	public JInternalFrame getDefinedGUI(){
 		ApplicationController applicationController = new ApplicationController();
 		applicationController.initUi();
-		return applicationController.getApplicationFrame();
+		JInternalFrame jinternalFrame = applicationController.getApplicationFrame();
+		jinternalFrame.setVisible(false);
+		return jinternalFrame;
 	}
 	
-	//TODO: Implement in Construction phase
-
-	public Document exportLogicalArchitecture() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+	public Element getLogicalArchitectureData(){
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		pd.setParseData(DomainElement.LOGICAL);
+		return pd.getWorkspaceData();
 	}
 
-	public void importLogicalArchitecture(Document doc){
-		//TODO	
+	public void loadLogicalArchitectureData(Element e){
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		pd.setParseData(DomainElement.LOGICAL);
+		pd.loadWorkspaceData(e);
 	}
-	
-	public Document exportPhysicalArchitecture() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		  //Get the DocumentBuilder
-		  DocumentBuilder parser = factory.newDocumentBuilder();
-		  //Create blank DOM Document
-		  Document doc = parser.newDocument();
-		  return doc;
+
+	@Override
+	public Element getWorkspaceData() {
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		return pd.getWorkspaceData();
 	}
-	
-	public void importPhysicalArchitecture(Document doc) {
-		//TODO
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		pd.loadWorkspaceData(workspaceData);
 	}
-	
 
+	@Override
+	public boolean isDefined() {
+		boolean isDefined = false;
+		if (SoftwareArchitecture.getInstance().getModules().size() > 0){
+			isDefined = true;
+		}
+		return isDefined;
+	}
 
-
+	@Override
+	public boolean isMapped() {
+		boolean isMapped = false;
+		ArrayList<Module> modules = SoftwareArchitecture.getInstance().getModules();
+		for (Module module : modules){	
+			if (module.isMapped()){
+				isMapped = true;
+			}
+		}
+		return isMapped;
+	}
 }

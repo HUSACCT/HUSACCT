@@ -1,5 +1,7 @@
 package husacct.define.presentation.tables;
 
+import husacct.define.abstraction.language.DefineTranslator;
+
 import javax.swing.table.TableColumn;
 
 public class JTableAppliedRule extends AbstractJTable {
@@ -8,17 +10,35 @@ public class JTableAppliedRule extends AbstractJTable {
 
 	public JTableAppliedRule() {
 		super();
-
-		tablemodel.addColumn("Rule name");
-		tablemodel.addColumn("To layer");
-		tablemodel.addColumn("Enabled");
-		tablemodel.addColumn("# Exceptions");
-
+	}
+	
+	@Override
+	protected void setDefaultTableSettings() {
+		
+	}
+	
+	@Override
+	protected void setColumnHeaders() {
+		tablemodel.addColumn(DefineTranslator.translate("RuleType"));
+		tablemodel.addColumn(DefineTranslator.translate("ToModule"));
+		tablemodel.addColumn(DefineTranslator.translate("Enabled"));
+		tablemodel.addColumn("# " + DefineTranslator.translate("Exceptions"));
+	}
+	
+	public void changeColumnHeaders() {
+		this.getTableHeader().getColumnModel().getColumn(0).setHeaderValue(DefineTranslator.translate("RuleType"));
+		this.getTableHeader().getColumnModel().getColumn(1).setHeaderValue(DefineTranslator.translate("ToModule"));
+		this.getTableHeader().getColumnModel().getColumn(2).setHeaderValue(DefineTranslator.translate("Enabled"));
+		this.getTableHeader().getColumnModel().getColumn(3).setHeaderValue(DefineTranslator.translate("Exceptions"));
+	}
+	
+	@Override
+	protected void setColumnWidths() {
 		TableColumn column = null;
 		for (int i = 0; i < getColumnCount(); i++) {
 			column = getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(75); // Component name
+				column.setPreferredWidth(75); // Rule Type
 			} else if (i == 1) {
 				column.setPreferredWidth(75); // To layer
 			} else if (i == 2) {
@@ -26,7 +46,12 @@ public class JTableAppliedRule extends AbstractJTable {
 			} else if (i == 3) {
 				column.setPreferredWidth(50); // Exceptions
 			}
+//			} else if (i == 4) {
+//				column.setPreferredWidth(50); // Exceptions
+//			}
 		}
 	}
-
+	public int getRuleTypeColumnIndex(){
+		return 0;
+	}
 }

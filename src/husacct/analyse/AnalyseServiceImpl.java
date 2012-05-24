@@ -1,27 +1,21 @@
 package husacct.analyse;
 
-import husacct.analyse.domain.famix.FamixModel;
-import husacct.analyse.domain.famix.FamixObject;
-import husacct.analyse.task.AnalyseControlService;
+import javax.swing.JInternalFrame;
+import husacct.analyse.presentation.AnalyseInternalFrame;
+import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.List;
-
-import javax.naming.directory.InvalidAttributesException;
-
 public class AnalyseServiceImpl implements IAnalyseService{
 
-	private AnalyseControlService service = new AnalyseControlerServiceImpl();
+	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
 	private AnalyseServiceStub stub;
-	private FamixModel famixModel;
-
+	private AnalyseInternalFrame analyseInternalFrame;
+	private boolean isAnalysed = false;
+	
 	public AnalyseServiceImpl(){
 		stub = new AnalyseServiceStub();
-		famixModel = new FamixModel();
 	}
 
 	@Override
@@ -31,44 +25,74 @@ public class AnalyseServiceImpl implements IAnalyseService{
 
 	@Override
 	public void analyseApplication() {
-		List<FamixObject> famixObjects = service.analyseApplication();
-		try {
-			for (FamixObject famixObject : famixObjects) {
-				famixModel.addObject(famixObject);
-			}
-		} catch (InvalidAttributesException e) {
-			e.printStackTrace();
-		}
-		System.out.println(famixModel);
+		service.analyseApplication();
+		this.isAnalysed = true;
 	}
-
+	
 	@Override
-	public DependencyDTO[] getDependency(String from, String to) {
-		return stub.getDependency(from, to);
+	public boolean isAnalysed() {
+		return this.isAnalysed;
 	}
-
+	
 	@Override
-	public DependencyDTO[] getDependency(String from) {
-		return stub.getDependency(from);
+	public JInternalFrame getJInternalFrame() {
+		if(analyseInternalFrame == null) analyseInternalFrame = new AnalyseInternalFrame();
+		return analyseInternalFrame;
 	}
-
+	
+	@Override
+	public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
+		return service.getModuleForUniqueName(uniquename);
+	}
+	
 	@Override
 	public AnalysedModuleDTO[] getRootModules() {
-		return stub.getRootModules();
+		return service.getRootModules();
 	}
+	
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		return stub.getChildModulesInModule(from);
+		return service.getChildModulesInModule(from);
 	}
 
 	@Override
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		return stub.getChildModulesInModule(from, depth);
+		return service.getChildModulesInModule(from, depth);
 	}
 
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		return stub.getParentModuleForModule(child);
+		return service.getParentModuleForModule(child);
+	}
+
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to) {
+		return service.getDependencies(from, to);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
+		return service.getDependencies(from, to, dependencyFilter);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from) {
+		return service.getDependenciesFrom(from);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
+		return service.getDependenciesFrom(from, dependencyFilter);
+	}
+	
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to){
+		return service.getDependenciesTo(to);
+	}
+
+	@Override
+	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
+		return service.getDependenciesTo(to, dependencyFilter);
 	}
 }

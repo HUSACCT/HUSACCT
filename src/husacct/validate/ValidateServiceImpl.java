@@ -1,88 +1,152 @@
 package husacct.validate;
 
-import com.itextpdf.text.DocumentException;
-import husacct.define.DefineServiceStub;
+import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.abstraction.export.ExportReportFactory;
-import husacct.validate.abstraction.fetch.UnknownStorageTypeException;
-import husacct.validate.domain.assembler.AssemblerController;
-import husacct.validate.domain.check.CheckConformanceController;
-import husacct.validate.domain.factory.RuletypesFactory;
-import husacct.validate.presentation.BrowseViolations;
-import husacct.validate.task.filter.LogicalPathsViolation;
-import java.io.IOException;
+import husacct.common.savechain.ISaveable;
+import husacct.define.IDefineService;
+import husacct.validate.domain.DomainServiceImpl;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.presentation.GuiController;
+import husacct.validate.task.ReportServiceImpl;
+import husacct.validate.task.TaskServiceImpl;
+
+import java.io.File;
+import java.util.Calendar;
+import java.util.List;
+
 import javax.swing.JInternalFrame;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
+import javax.xml.datatype.DatatypeConfigurationException;
 
-public class ValidateServiceImpl implements IValidateService {
-	private ValidateServiceStub stub = new ValidateServiceStub();
-	private CheckConformanceController checkConformance = new CheckConformanceController();
+import org.apache.log4j.Logger;
+import org.jdom2.Element;
 
-	public CategoryDTO[] getCategories(){
-		RuletypesFactory ruletypefactory = new RuletypesFactory();
-		return new AssemblerController().createCategoryDTO(ruletypefactory.getRuleTypes());
+public class ValidateServiceImpl implements IValidateService, ISaveable {		
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+
+	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
+	
+	private final GuiController gui;
+	private final ConfigurationServiceImpl configuration;
+	private final DomainServiceImpl domain;
+	private final ReportServiceImpl report;
+	private final TaskServiceImpl task;
+
+	private boolean validationExecuted;
+
+	public ValidateServiceImpl(){
+		this.configuration = new ConfigurationServiceImpl();
+		this.domain = new DomainServiceImpl(configuration);
+		this.task = new TaskServiceImpl(configuration, domain);
+		this.report = new ReportServiceImpl(task);
+		this.gui = new GuiController(task, configuration);
+		this.validationExecuted = false;
 	}
 
 	@Override
-	public ViolationDTO[] getViolations(String logicalpathFrom, String logicalpathTo) {
-		return new LogicalPathsViolation().getViolations(logicalpathFrom, logicalpathTo, checkConformance);
+	public CategoryDTO[] getCategories(){
+		return domain.getCategories();
+	}
+	
+	@Override
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {		
+		if(!validationExecuted){
+			logger.debug("warning, method: getViolationsByLogicalPath executed but no validation is executed");
+		}		
+		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
+	}
+	
+	@Override
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
+		if(!validationExecuted){
+			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
+		}	
+		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
 	@Override
 	public String[] getExportExtentions() {
-		return stub.getExportExtentions();
+		return report.getExportExtentions();
 	}
 
 	@Override
-	public void checkConformance() {
-		RuleDTO[] appliedRules = new RuleDTO[]{new DefineServiceStub().getDefinedRules()[0]};
-		System.out.println("check");
-		checkConformance.CheckConformance(appliedRules);
+	public void checkConformance() {		
+		RuleDTO[] appliedRules = defineService.getDefinedRules();
+		domain.checkConformance(appliedRules);		
+		this.validationExecuted = true;
+		gui.violationChanged();
 	}
 
 	@Override
 	//Export report
 	public void exportViolations(String name, String fileType, String path) {
-		System.out.println("export");
-		try {
-			new ExportReportFactory().exportReport(fileType, checkConformance.getViolations(), name+".pdf", path);
-		} catch (DOMException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (UnknownStorageTypeException e) {
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		report.createReport(fileType, name, path);
 	}
 
 	@Override
 	public JInternalFrame getBrowseViolationsGUI(){
-		return new BrowseViolations(checkConformance.getViolations());
+		return gui.getBrowseViolationsGUI();
 	}
 
-	public static void main(String[] args){
-		ValidateServiceImpl serviceImpl = new ValidateServiceImpl();
-		serviceImpl.checkConformance();
-		serviceImpl.exportViolations("elaborationViolations.pdf", "pdf", "C:\\reports");
+	@Override
+	public JInternalFrame getConfigurationGUI(){
+		return gui.getConfigurationGUI();
 	}
 
+	@Override
+	public Element getWorkspaceData() {
+		return task.exportValidationWorkspace();
+	}
+
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		try {
+			task.importValidationWorkspace(workspaceData);
+		} catch (DatatypeConfigurationException e) {
+			logger.error("Error exporting the workspace: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public boolean isValidated() {
+		return validationExecuted;
+	}
+	
+	//This method is only used for testing with the Testsuite
+	public ConfigurationServiceImpl getConfiguration() {
+		return configuration;
+	}
+	
+	//This method is only used for testing with the Testsuite
+	public void Validate(RuleDTO[] appliedRules){
+		domain.checkConformance(appliedRules);
+	}
+
+	@Override
+	public List<Violation> getViolationsByDate(Calendar date) {
+		return task.getViolationsByDate(date);
+	}
+	
+	@Override
+	public Calendar[] getViolationHistoryDates() {
+		return task.getViolationHistoryDates();
+	}
+
+	@Override
+	public void saveInHistory(String description) {
+		task.saveInHistory(description);		
+	}
+	
+	@Override 
+	public JInternalFrame getViolationHistoryGUI(){
+		//FIXME add ViolationHistoryGUI
+		return new JInternalFrame();
+	}
+
+	@Override
+	public void exportViolations(File file, String fileType, Calendar date) {
+		report.createReport(file, fileType, date);
+	}
 }

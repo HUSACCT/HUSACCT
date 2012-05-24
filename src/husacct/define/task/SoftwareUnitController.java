@@ -1,192 +1,83 @@
 package husacct.define.task;
 
-import husacct.analyse.AnalyseServiceStub;
+import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
-import husacct.define.domain.DefineDomainService;
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.presentation.helper.DataHelper;
-import husacct.define.presentation.jframe.JFrameSoftwareUnit;
-import husacct.define.presentation.tables.JTableException;
-import husacct.define.presentation.tables.JTableTableModel;
-import husacct.define.presentation.utils.Log;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
+import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AnalyzedModuleComponent;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 
-public class SoftwareUnitController extends PopUpController implements KeyListener {
 
-	private JFrameSoftwareUnit jframe;
-	private String softwareUnitName;
-	private static ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
+public class SoftwareUnitController extends PopUpController {
 
-	public SoftwareUnitController(long layerId, String softwareunit_id) {
-		Log.i(this, "constructor(" + layerId + ", " + softwareunit_id + ")");
-		setLayerID(layerId);
-		this.softwareUnitName = softwareunit_id;
-		this.fillSoftwareDefinitionUnits();
+	private SoftwareUnitJDialog softwareUnitFrame;
+	private Logger logger;
+	
+	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
+	
+	public SoftwareUnitController(long moduleId) {
+		logger = Logger.getLogger(SoftwareUnitController.class);
+		this.setModuleId(moduleId);
+		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
+	}
+	
+	public void fillSoftwareUnitsList(ArrayList<SoftwareUnitDefinition> softwareUnitList){
+		AnalysedModuleDTO[] modules = getAnalyzedModules();
+		for(AnalysedModuleDTO module : modules) {
+			SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(module.name, SoftwareUnitDefinition.Type.valueOf(module.type.toUpperCase()));
+			softwareUnitList.add(softwareUnit);
+		}
 		
-		if(softwareUnits.isEmpty()) {
-			this.fillSoftwareDefinitionUnits();
+		filterAddedSoftwareUnits(softwareUnitList);
+	}
+	
+	private void filterAddedSoftwareUnits(ArrayList<SoftwareUnitDefinition> softwareUnitList) {
+		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.softwareUnitDefinitionDomainService.getSoftwareUnit(currentModuleId);
+		for (SoftwareUnitDefinition addedUnit : addedsoftwareUnitList){
+			if (softwareUnitList.contains(addedUnit)) {
+				softwareUnitList.remove(addedUnit);
+			}
+			
 		}
 	}
 	
-	public void fillSoftwareDefinitionUnits() {
-		softwareUnits = new ArrayList<SoftwareUnitDefinition>();
+	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
+		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();
 		for(AnalysedModuleDTO module : modules) {
-			SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(module.name, SoftwareUnitDefinition.Type.PACKAGE);
-			softwareUnits.add(softwareUnit);
+			this.addChildComponents(rootComponent, module);
 		}
+
+		return rootComponent;
 	}
 	
-	public AnalysedModuleDTO[] getAnalyzedModules() {
-		AnalyseServiceStub analyzeService = new AnalyseServiceStub();
-		AnalysedModuleDTO[] modules = analyzeService.getRootModules();
+	private AnalysedModuleDTO[] getAnalyzedModules() {
+		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
 		return modules;
 	}
-
-	@Override
-	public void initUi() throws Exception {
-		Log.i(this, "initUi()");
-		
-		String[] softwareUnitStrings = new String[softwareUnits.size()];
-		int counter = 0;
-		for(SoftwareUnitDefinition softwareUnit : softwareUnits) {
-			softwareUnitStrings[counter] = softwareUnit.getName();
-			counter++;
+	
+	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		for(AnalysedModuleDTO subModule : children) {
+			this.addChildComponents(childComponent, subModule);
 		}
-		jframe = new JFrameSoftwareUnit(softwareUnitStrings);
-
-		// Change view of jframe conforms the action
-		if (getAction().equals(PopUpController.ACTION_NEW)) {
-			jframe.jButtonSave.setText("Save");
-			jframe.setTitle("Select software unit");
-		} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-			jframe.jButtonSave.setText("Save");
-			jframe.setTitle("Edit software unit");
-			if (softwareUnitName != "") {
-				// Load name & type
-				jframe.jComboBoxSoftwareUnit.setSelectedItem(softwareUnitName);	
-				// NIET NODIG IN MIJN OGEN
-				// Load table with exceptions
-//				JTableException table = jframe.jTableException;
-//				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
-//
-//				ArrayList<Long> exceptions = definitionService.getSoftwareUnitExceptions(getLayerID(), softwareunit_id);
-//				for (long exception_id : exceptions) {
-//					DataHelper datahelper = new DataHelper();
-//					datahelper.setId(exception_id);
-//					datahelper.setValue(definitionService.getSoftwareUnitExceptionName(getLayerID(), softwareunit_id, exception_id));
-//
-//					Object[] row = { datahelper, definitionService.getSoftwareUnitExceptionType(getLayerID(), softwareunit_id, exception_id) };
-//					tablemodel.addRow(row);
-//				}
-			}
-		}
-
-		//jframe.jButtonAddExceptionRow.addActionListener(this);
-		//jframe.jButtonRemoveExceptionRow.addActionListener(this);
-		jframe.jButtonSave.addActionListener(this);
-		jframe.jButtonCancel.addActionListener(this);
-		jframe.addKeyListener(this);
-
-		// Set the visibility of the jframe to true so the jframe is now visible
-		UiDialogs.showOnScreen(0, jframe);
-
-		jframe.setVisible(true);
-
+		parentComponent.addChild(childComponent);
 	}
-
-	@Override
-	public void save() {
+	
+	public void save(String softwareUnit, String type) {
+		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
-			if (getAction().equals(PopUpController.ACTION_NEW)) {
-				String softwareUnit = jframe.jComboBoxSoftwareUnit.getSelectedItem().toString();
-				long moduleId = getLayerID();
-				defineDomainService.addSoftwareUnit(moduleId, softwareUnit);
-				
-			}// else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-				
-				
-				// EDIT nog maken
-//				definitionService.setSoftwareUnitName(getLayerID(), softwareunit_id, jframe.jTextFieldSoftwareUnitName.getText());
-//				definitionService.setSoftwareUnitType(getLayerID(), softwareunit_id, jframe.jComboBoxSoftwareUnitType.getSelectedItem().toString());
-//
-//				definitionService.removeSoftwareUnitExceptions(getLayerID(), softwareunit_id);
-//
-//				JTableException table = jframe.jTableException;
-//				JTableTableModel tablemodel = (JTableTableModel) table.getModel();
-//
-//				int tablerows = tablemodel.getRowCount();
-//				for (int i = 0; i < tablerows; i++) {
-//					definitionService.newSoftwareUnitException(getLayerID(), softwareunit_id, tablemodel.getValueAt(i, 0).toString(), tablemodel.getValueAt(i, 1).toString());
-//				}
-			//}
-			jframe.dispose();
-			pokeObservers();
+			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
+			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
-			UiDialogs.errorDialog(jframe, e.getMessage(), "Error");
+			this.logger.error(e.getMessage());
+			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage(), "Error");
 		}
-	}
-//
-//	/**
-//	 * Add a new empty row to the exception table
-//	 */
-//	@Override
-//	public void addExceptionRow() {
-//		JTableException table = jframe.jTableException;
-//		JTableTableModel tablemodel = (JTableTableModel) table.getModel();
-//
-//		Object[] emptyrow = { "", "" };
-//		tablemodel.addRow(emptyrow);
-//	}
-//
-//	/**
-//	 * Remove the selected row from the exception table
-//	 */
-//	@Override
-//	public void removeExceptionRow() {
-//		JTableException table = jframe.jTableException;
-//		int selectedrow = table.getSelectedRow();
-//		if (selectedrow == -1) {
-//			UiDialogs.errorDialog(jframe, "Select a table row", "Error");
-//		} else {
-//			JTableTableModel tablemodel = (JTableTableModel) table.getModel();
-//			tablemodel.removeRow(selectedrow);
-//		}
-//	}
-
-	public void actionPerformed(ActionEvent action) {
-		Log.i(this, "actionPerformed()");
-		if (action.getSource() == jframe.jButtonSave) {
-			save();
-		} else if (action.getSource() == jframe.jButtonCancel) {
-			jframe.dispose();
-//		} else if (action.getSource() == jframe.jButtonAddExceptionRow) {
-//			addExceptionRow();
-//		} else if (action.getSource() == jframe.jButtonRemoveExceptionRow) {
-//			removeExceptionRow();
-		} else {
-			Log.i(this, "actionPerformed(" + action + ") - unknown button event");
-		}
-	}
-
-	public void keyPressed(KeyEvent arg0) {
-		// Ignore
-	}
-
-	public void keyReleased(KeyEvent arg0) {
-		Log.i(this, "keyreleased");
-		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			jframe.dispose();
-		}
-	}
-
-	public void keyTyped(KeyEvent arg0) {
-		// Ignore
 	}
 }

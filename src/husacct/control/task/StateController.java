@@ -1,23 +1,78 @@
 package husacct.control.task;
 
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
+import husacct.define.IDefineService;
+import husacct.validate.IValidateService;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class StateController {
 	
-	private static final int NONE = 0;
-	private static final int EMPTY = 1;
-	private static final int DEFINED = 2;
-	private static final int MAPPED = 3;
-	private static final int VALIDATED = 4;
+	private List<States> states = new ArrayList<States>();
 	
-	private int state = StateController.NONE;
+	ArrayList<IStateChangeListener> stateListeners = new ArrayList<IStateChangeListener>();
 	
-	private ArrayList<IStateChangeListener> listeners;
+	private WorkspaceController workspaceController;
 	
-	public StateController(){
-		listeners = new ArrayList<IStateChangeListener>();
-		// TODO: set/check state, changelisteners
+	public StateController(MainController mainController){
+		workspaceController = mainController.getWorkspaceController();
+		states.add(States.NONE);
 	}
 	
+	public void checkState(){
+		
+		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		
+		List<States> newStates = new ArrayList<States>();
+
+		if(validateService.isValidated()){
+			newStates.add(States.VALIDATED);
+		}
+		
+		if(defineService.isMapped()){
+			newStates.add(States.MAPPED);
+		}
+		
+		if(analyseService.isAnalysed()){
+			newStates.add(States.ANALYSED);
+		}
+		
+		if(defineService.isDefined()){
+			newStates.add(States.DEFINED);
+		}
+		
+		if(workspaceController.isOpenWorkspace()){
+			newStates.add(States.OPENED);
+		}
+		
+		if(newStates.isEmpty()){
+			newStates.add(States.NONE);
+		}
+		
+		
+		setState(newStates);
+	}
 	
+	public List<States> getState(){
+		return this.states;
+	}
+	
+	public void setState(List<States> states){
+		this.states = states;
+		notifyStateListeners(states);
+	}
+	
+	public void addStateChangeListener(IStateChangeListener listener) {
+		this.stateListeners.add(listener);
+	}
+	
+	public void notifyStateListeners(List<States> states){
+		for(IStateChangeListener listener : this.stateListeners){
+			listener.changeState(states);
+		}
+	}
 }

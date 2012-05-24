@@ -1,10 +1,8 @@
 package husacct.define.domain;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-
 import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 public class AppliedRule {
 	
@@ -12,43 +10,43 @@ public class AppliedRule {
 	private long id;
 	private String description;
 	private String[] dependencies;
-	private String prefix;
-	private String suffix;
-	private Module usedModule;
-	private Module restrictedModule;
+	private String regex;
+	private Module moduleTo;
+	private Module moduleFrom;
 	private String ruleType;
 	private boolean enabled;
 	private ArrayList<AppliedRule> exceptions;
 
 	
-	//CONSTRUCTORS
-	//CONSTRUCTORS
+	/**
+	 * Contructors
+	 */
 	public AppliedRule(String ruleType, String description, String[] dependencies,
-			String prefix, String suffix, Module usedModule,
-			Module restrictedModule) {
+			String regex, Module moduleTo,
+			Module moduleFrom, boolean enabled) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.ruleType = ruleType;
 		this.description = description;
 		this.dependencies = dependencies;
-		this.prefix = prefix;
-		this.suffix = suffix;
-		this.usedModule = usedModule;
-		this.restrictedModule = restrictedModule;
+		this.regex = regex;
+		this.moduleTo = moduleTo;
+		this.moduleFrom = moduleFrom;
 		this.exceptions = new ArrayList<AppliedRule>();
-		this.enabled = true;
+		this.enabled = enabled;
 	}
 	
 	public AppliedRule(String ruleType, String description, Module usedModule, Module restrictedModule){
-		this(ruleType, description, new String[0], "","",usedModule,restrictedModule);
+		this(ruleType, description, new String[0], "",usedModule,restrictedModule, true);
 	}
 
 	public AppliedRule() {
-		this("", "",new String[0], "","",null,null);
+		this("", "",new String[0], "",null,null, true);
 	}
 
-	//LOGIC
-	//LOGIC
+	/**
+	 * Logic
+	 */
 	public void addException(AppliedRule exception)
 	{
 		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
@@ -93,9 +91,9 @@ public class AppliedRule {
 	
 	public boolean usesModule(long moduleId) {
 		boolean usesModule = false;
-		if (usedModule.getId() == moduleId){
+		if (moduleTo.getId() == moduleId){
 			usesModule = true;
-		}else if( restrictedModule.getId() == moduleId){
+		}else if( moduleFrom.getId() == moduleId){
 			usesModule = true;
 		}else{			
 			for (AppliedRule ruleExceptions : exceptions){
@@ -107,9 +105,9 @@ public class AppliedRule {
 		return usesModule;
 	}
 	
-	//GETTER & SETTERS
-	//GETTER & SETTERS
-	//GETTER & SETTERS
+	/**
+	 * Getters & Setters
+	 */
 	public String getRuleType() {
 		return ruleType;
 	}
@@ -145,7 +143,6 @@ public class AppliedRule {
 		return id;
 	}
 
-
 	public void setExceptions(ArrayList<AppliedRule> exceptions) {
 		this.exceptions = exceptions;
 	}
@@ -153,25 +150,6 @@ public class AppliedRule {
 
 	public ArrayList<AppliedRule> getExceptions() {
 		return exceptions;
-	}
-
-	public void setUsedModule(Module usedModule) {
-		this.usedModule = usedModule;
-	}
-
-
-	public Module getUsedModule() {
-		return usedModule;
-	}
-
-
-	public void setRestrictedModule(Module restrictedModule) {
-		this.restrictedModule = restrictedModule;
-	}
-
-
-	public Module getRestrictedModule() {
-		return restrictedModule;
 	}
 
 	public void setDependencies(String[] dependencies) {
@@ -182,19 +160,28 @@ public class AppliedRule {
 		return dependencies;
 	}
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+	public void setRegex(String regex) {
+		this.regex = regex;
 	}
 
-	public String getPrefix() {
-		return prefix;
+	public String getRegex() {
+		return regex;
 	}
 
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
+	public Module getModuleTo() {
+		return moduleTo;
 	}
 
-	public String getSuffix() {
-		return suffix;
+	public void setModuleTo(Module moduleTo) {
+		this.moduleTo = moduleTo;
 	}
+
+	public Module getModuleFrom() {
+		return moduleFrom;
+	}
+
+	public void setModuleFrom(Module moduleFrom) {
+		this.moduleFrom = moduleFrom;
+	}
+
 }

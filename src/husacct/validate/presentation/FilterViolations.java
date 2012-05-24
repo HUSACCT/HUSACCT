@@ -1,17 +1,19 @@
 package husacct.validate.presentation;
 
-import husacct.validate.abstraction.language.ResourceBundles;
-import husacct.validate.task.BrowseViolationController;
+import husacct.ServiceProvider;
+import husacct.validate.presentation.tableModels.FilterViolationsObserver;
+import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class FilterViolations extends JFrame {
+public final class FilterViolations extends JDialog  {
+	private static final long serialVersionUID = -6295611607558238501L;
 
-	private BrowseViolationController bvc;
-	private BrowseViolations bv;
+	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane TabbedPane;
 	private JButton addPath, removePath, save, cancel;
@@ -20,66 +22,18 @@ public class FilterViolations extends JFrame {
 	private JRadioButton hideFilteredValues, showFilteredValues;
 	private JScrollPane pathFilterScrollPane, ruletypepanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
+	private FilterViolationsObserver vilterViolationsObserver;
 
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
+	private Calendar violationDate = Calendar.getInstance();
 
-	public FilterViolations(BrowseViolationController bvc, BrowseViolations bv) {
-		this.bvc = bvc;
-		this.bv = bv;
-		String[] columnNamesRuletype = {"", ResourceBundles.getValue("Ruletypes")};
-		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
-
-			Class[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, false};
-
-			@Override
-			public Class getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
-
-		String[] columnNamesViolationtype = {"", ResourceBundles.getValue("Violationtypes")};
-		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
-
-			Class[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, false};
-
-			@Override
-			public Class getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
-
-		String[] columnNamesPath = {" ", ResourceBundles.getValue("Path")};
-		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
-
-			Class[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, true};
-
-			@Override
-			public Class getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
-			}
-		};
+	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
+		this.vilterViolationsObserver = filterViolationsObserver;
+		this.taskServiceImpl = taskServiceImpl;
 		initComponents();
-		testData();
+		loadGUIText();
 	}
 
 	private void initComponents() {
@@ -102,157 +56,245 @@ public class FilterViolations extends JFrame {
 		hideFilteredValues = new JRadioButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle(ResourceBundles.getValue("TotalViolations"));
-		setAlwaysOnTop(true);
 		setResizable(false);
+		setModal(true);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
-		ruletypeTable.setModel(ruletypeModelFilter);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
 		ruletypeTable.setFillsViewportHeight(true);
 		ruletypeTable.getTableHeader().setResizingAllowed(false);
 		ruletypeTable.getTableHeader().setReorderingAllowed(false);
 		ruletypepanel.setViewportView(ruletypeTable);
-
-		violationtypeTable.setModel(violationtypeModelFilter);
+		
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
 		violationtypePanel.setViewportView(violationtypeTable);
-
-		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
-		filterViolationPanel.setLayout(filterViolationPanelLayout);
-		filterViolationPanelLayout.setHorizontalGroup(
-				filterViolationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(filterViolationPanelLayout.createSequentialGroup()
-						.addComponent(ruletypepanel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(violationtypePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
-				);
-		filterViolationPanelLayout.setVerticalGroup(
-				filterViolationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(ruletypepanel, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-				.addComponent(violationtypePanel)
-				);
-
-		TabbedPane.addTab(ResourceBundles.getValue("FilterViolations"), filterViolationPanel);
-
-		pathFilterTable.setModel(pathFilterModel);
+		
 		pathFilterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
 		pathFilterTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 		pathFilterScrollPane.setViewportView(pathFilterTable);
 
-		addPath.setText(ResourceBundles.getValue("Add"));
 		addPath.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				addPathActionPerformed(evt);
+				addPathActionPerformed();
 			}
 		});
 
-		removePath.setText(ResourceBundles.getValue("Remove"));
 		removePath.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				removePathActionPerformed(evt);
+				removePathActionPerformed();
 			}
 		});
 
-		GroupLayout pathFilterPanelLayout = new GroupLayout(pathFilterPanel);
-		pathFilterPanel.setLayout(pathFilterPanelLayout);
-		pathFilterPanelLayout.setHorizontalGroup(
-				pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(pathFilterPanelLayout.createSequentialGroup()
-						.addComponent(pathFilterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-								.addComponent(removePath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(addPath, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addContainerGap())
-				);
-		pathFilterPanelLayout.setVerticalGroup(
-				pathFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(pathFilterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pathFilterPanelLayout.createSequentialGroup()
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(addPath)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(removePath)
-						.addContainerGap())
-				);
-
-		TabbedPane.addTab(ResourceBundles.getValue("FilterPaths"), pathFilterPanel);
-
-		save.setText(ResourceBundles.getValue("Save"));
 		save.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				saveActionPerformed(evt);
+				saveActionPerformed();
 			}
 		});
 
-		cancel.setText(ResourceBundles.getValue("Cancel"));
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				cancelActionPerformed(evt);
+				cancelActionPerformed();
 			}
 		});
 
 		filtergroup.add(showFilteredValues);
-		showFilteredValues.setText(ResourceBundles.getValue("ShowSelectedValues"));
 
 		filtergroup.add(hideFilteredValues);
 		hideFilteredValues.setSelected(true);
-		hideFilteredValues.setText(ResourceBundles.getValue("HideSelectedValues"));
 
+		createFilterViolationPanelLayout();
+		createPathFilterPanelLayout();
+		createBaseLayout();
+		setSize(800, 600);
+	}
+	
+	private void createFilterViolationPanelLayout(){
+		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
+		
+		GroupLayout.SequentialGroup horizontalFilterViolationGroup = filterViolationPanelLayout.createSequentialGroup();
+		horizontalFilterViolationGroup.addComponent(ruletypepanel);
+		horizontalFilterViolationGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		horizontalFilterViolationGroup.addComponent(violationtypePanel);
+		
+		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
+		
+		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		verticalFilterViolationGroup.addComponent(ruletypepanel);
+		verticalFilterViolationGroup.addComponent(violationtypePanel);
+		
+		filterViolationPanelLayout.setVerticalGroup(verticalFilterViolationGroup);
+		filterViolationPanel.setLayout(filterViolationPanelLayout);
+	}
+	
+	private void createPathFilterPanelLayout(){
+		GroupLayout pathFilterPanelLayout = new GroupLayout(pathFilterPanel);
+		
+		GroupLayout.ParallelGroup horizontalButtonPathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
+		horizontalButtonPathGroup.addComponent(removePath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonPathGroup.addComponent(addPath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
+		GroupLayout.SequentialGroup horizontalPanePathGroup = pathFilterPanelLayout.createSequentialGroup();
+		horizontalPanePathGroup.addComponent(pathFilterScrollPane);
+		horizontalPanePathGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalPanePathGroup.addGroup(horizontalButtonPathGroup);
+		horizontalPanePathGroup.addContainerGap();
+		
+		pathFilterPanelLayout.setHorizontalGroup(horizontalPanePathGroup);
+		
+		GroupLayout.SequentialGroup verticalButtonPathGroup = pathFilterPanelLayout.createSequentialGroup();
+		verticalButtonPathGroup.addComponent(addPath);
+		verticalButtonPathGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		verticalButtonPathGroup.addComponent(removePath);
+		verticalButtonPathGroup.addContainerGap();
+		
+		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		verticalPanePathGroup.addComponent(pathFilterScrollPane);
+		verticalPanePathGroup.addGroup(verticalButtonPathGroup);
+		
+		pathFilterPanelLayout.setVerticalGroup(verticalPanePathGroup);
+		pathFilterPanel.setLayout(pathFilterPanelLayout);
+	}
+	
+	private void createBaseLayout(){
 		GroupLayout layout = new GroupLayout(getContentPane());
+		
+		GroupLayout.SequentialGroup horizontalButtonGroup = layout.createSequentialGroup();
+		horizontalButtonGroup.addComponent(hideFilteredValues);
+		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addComponent(showFilteredValues);
+		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addComponent(save);
+		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+		horizontalButtonGroup.addComponent(cancel);
+		horizontalButtonGroup.addContainerGap();
+		
+		GroupLayout.ParallelGroup horizontalPaneGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		horizontalPaneGroup.addComponent(TabbedPane);
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(TabbedPane)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(hideFilteredValues)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(showFilteredValues)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(save)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(cancel)
-						.addContainerGap())
-				);
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(TabbedPane)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(save)
-										.addComponent(cancel))
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(hideFilteredValues)
-												.addComponent(showFilteredValues))))
-				);
+		layout.setHorizontalGroup(horizontalPaneGroup);
+		
+		GroupLayout.ParallelGroup verticalRadioButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalRadioButtonGroup.addComponent(hideFilteredValues);
+		verticalRadioButtonGroup.addComponent(showFilteredValues);
+		
+		GroupLayout.ParallelGroup verticalButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
+		verticalButtonGroup.addComponent(save);
+		verticalButtonGroup.addComponent(cancel);
+		verticalButtonGroup.addGroup(verticalRadioButtonGroup);
+		
+		GroupLayout.SequentialGroup verticalPaneGroup = layout.createSequentialGroup();
+		verticalPaneGroup.addComponent(TabbedPane);
+		verticalPaneGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED);
+		verticalPaneGroup.addGroup(verticalButtonGroup);
+		
+		layout.setVerticalGroup(verticalPaneGroup);
+	}
+	
+	public void setViolationDate(Calendar date){
+		violationDate = date;
+	}
+	
+	public void loadGUIText(){
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterViolations"), filterViolationPanel);
+		addPath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
+		removePath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterPaths"), pathFilterPanel);
+		save.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Save"));
+		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
+		showFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShowSelectedValues"));
+		hideFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("HideSelectedValues"));
+		
+		loadModels();
+	}
+	
+	public void loadModels(){
+		String[] columnNamesRuletype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtypes")};
+		String[] columnNamesPath = {" ", ServiceProvider.getInstance().getControlService().getTranslatedString("Path")};
+		
+		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
+			private static final long serialVersionUID = -7173080075671054375L;
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
+			boolean[] canEdit = new boolean[]{true, false};
 
-		pack();
-	}// </editor-fold>
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
 
-	private void cancelActionPerformed(java.awt.event.ActionEvent evt) {
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+
+		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
+			private static final long serialVersionUID = -9191282154177444964L;
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
+			boolean[] canEdit = new boolean[]{true, false};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+
+		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
+			private static final long serialVersionUID = 1832644249597223838L;
+			Class<?>[] types = new Class[]{Boolean.class, String.class};
+			boolean[] canEdit = new boolean[]{true, true};
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return canEdit[columnIndex];
+			}
+		};
+		
+		ruletypeTable.setModel(ruletypeModelFilter);
+		violationtypeTable.setModel(violationtypeModelFilter);
+		pathFilterTable.setModel(pathFilterModel);
+		
+		loadFilterValues();
+	}
+
+	private void cancelActionPerformed() {
 		dispose();
 	}
 
-	private void saveActionPerformed(java.awt.event.ActionEvent evt) {
+	private void saveActionPerformed() {
 		ruletypesfilter = getRuletypesFilter();
 		violationtypesfilter = getViolationtypesFilter();
 		pathsfilter = getPathFilter();
-		bvc.lpv.setFilterValues(ruletypesfilter, violationtypesfilter,
-				pathsfilter, hideFilteredValues.isSelected());
-		bv.setViolations();
+		taskServiceImpl.setFilterValues(ruletypesfilter, violationtypesfilter,
+				pathsfilter, hideFilteredValues.isSelected(), violationDate);
+		vilterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
+	
 
-	private void addPathActionPerformed(java.awt.event.ActionEvent evt) {
+	private void addPathActionPerformed() {
 		pathFilterModel.addRow(new Object[]{true, ""});
 	}
 
-	private void removePathActionPerformed(java.awt.event.ActionEvent evt) {
+	private void removePathActionPerformed() {
 		if (pathFilterTable.getSelectedRow() > -1) {
 			pathFilterModel.removeRow(pathFilterTable.getSelectedRow());
 		}
@@ -293,13 +335,30 @@ public class FilterViolations extends JFrame {
 
 		return paths;
 	}
-
-	private void testData() {
-		ruletypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("IsAllowedToUse")});
-		ruletypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("IsNotAllowedToUse")});
-
-		violationtypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("Implements")});
-		violationtypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("Extends")});
-		violationtypeModelFilter.addRow(new Object[]{ false, ResourceBundles.getValue("InvocConstructor")});
+	
+	public void loadFilterValues(){
+		loadRuletypes();
+		loadViolationtypes();
 	}
+
+	private void loadRuletypes(){
+		while(ruletypeModelFilter.getRowCount() > 0){
+			ruletypeModelFilter.removeRow(0);
+		}
+		ArrayList<String> ruletypes = taskServiceImpl.loadRuletypesForFilter(violationDate);
+		for(String ruletype : ruletypes){
+			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
+		}
+	}
+
+	private void loadViolationtypes(){
+		while(violationtypeModelFilter.getRowCount() > 0){
+			violationtypeModelFilter.removeRow(0);
+		}
+		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
+		for(String violationtype : violationtypes){
+			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
+		}
+	}
+	
 }

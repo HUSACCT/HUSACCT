@@ -1,10 +1,10 @@
 package husacct.define.domain.module;
 
-import java.util.ArrayList;
-
 import husacct.define.domain.SoftwareUnitDefinition;
 
-public class Module {
+import java.util.ArrayList;
+
+public class Module implements Comparable<Module> {
 	
 	protected static long STATIC_ID;
 	protected long id;
@@ -58,6 +58,7 @@ public class Module {
 		return mappedSUunits;
 	}
 	
+	@Deprecated
 	public String[] getPhysicalPaths(){
 		ArrayList<String> pathsList = new ArrayList<String>();
 		for (SoftwareUnitDefinition unit : mappedSUunits){
@@ -83,12 +84,20 @@ public class Module {
 	//SoftwareUnitDefinition
 	public void addSUDefinition(SoftwareUnitDefinition unit)
 	{
-		mappedSUunits.add(unit);
+		if(!mappedSUunits.contains(unit) && !this.hasSUDefinition(unit.getName())) {
+			mappedSUunits.add(unit);
+		}else{
+			System.out.println("This software unit has already been added!");
+		}
 	}
 	
 	public void removeSUDefintion(SoftwareUnitDefinition unit)
 	{
-		mappedSUunits.remove(unit);
+		if(mappedSUunits.contains(unit) && this.hasSUDefinition(unit.getName())) {
+			mappedSUunits.remove(unit);
+		}else{
+			System.out.println("This software unit does not exist!");
+		}
 	}
 	
 	private boolean hasSUDefinition(String name) 
@@ -174,7 +183,7 @@ public class Module {
 		}
 		for (Module mod : subModules){
 			if (mod.hasSoftwareUnit(softwareUnitName)){
-				softwareUnit = getSoftwareUnitByName(softwareUnitName);
+				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
 		}
 		if (softwareUnit == null){ throw new RuntimeException("This Software Unit does not exist!");}
@@ -189,7 +198,7 @@ public class Module {
 	        return false;
 	    if (obj instanceof Module){
 	    	Module m = (Module)obj;
-	    	if (!m.name.equals(this.name)){
+	    	if (m.id != this.id){
 	    		return false;
 	    	}
 	    	return true;
@@ -199,6 +208,34 @@ public class Module {
 
 	public long getId() {
 		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public boolean isMapped() {
+		boolean isMapped = false;
+		if (mappedSUunits.size() > 0){
+			isMapped = true;
+		}
+		for (Module mod : subModules){
+			if (mod.isMapped()){
+				isMapped = true;
+			}
+		}
+		return isMapped;
+	}
+
+	@Override
+	public int compareTo(Module compareObject) {
+		int compareResult = 0;
+		if(compareObject instanceof Layer || this.getId() < compareObject.getId()) {
+			compareResult = -1;
+		} else if(this.getId() > compareObject.getId()) {
+			compareResult = 1;
+		}
+		return compareResult;
 	}
 
 }

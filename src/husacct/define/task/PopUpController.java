@@ -1,43 +1,51 @@
 package husacct.define.task;
 
-import husacct.define.domain.DefineDomainService;
-
-import java.awt.event.ActionListener;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
-import java.util.ResourceBundle;
+import java.util.Observer;
 
-public abstract class PopUpController extends Observable implements ActionListener {
+import org.apache.log4j.Logger;
+
+public abstract class PopUpController extends Observable{
 	public static final String ACTION_NEW = "NEW";
 	public static final String ACTION_EDIT = "EDIT";
-	public ResourceBundle resourceBundle = ResourceBundle.getBundle("husacct/define/presentation/gui", new Locale("en", "GB"));
-
-	protected DefineDomainService defineDomainService = DefineDomainService.getInstance();
+	
 	protected String action = PopUpController.ACTION_NEW;
-	protected long layer_id;
-
-	public abstract void initUi() throws Exception;
-
-	public abstract void save();
-
-//	public abstract void addExceptionRow();
-
-//	public abstract void removeExceptionRow();
-
-	/**
-	 * Use this function to notify the definitioncontroller that there is a change
-	 */
-	protected void pokeObservers() {
-		setChanged();
-		notifyObservers();
+	protected long currentModuleId;
+	protected Logger logger;
+	
+	protected List<Observer> observers;
+	
+	public void addObserver(Observer o){
+		if (!this.observers.contains(o)){
+			this.observers.add(o);
+		}
+	}
+	
+	public void removeObserver(Observer o){
+		if (this.observers.contains(o)){
+			this.observers.remove(o);
+		}
+	}
+	
+	public void notifyObservers(){
+		for (Observer o : this.observers){
+			o.update(this, o);
+		}
+	}
+	
+	public PopUpController(){
+		observers = new ArrayList<Observer>();
+		logger = Logger.getLogger(DefinitionController.class);
 	}
 
-	public void setLayerID(long layerId) {
-		this.layer_id = layerId;
+	public void setModuleId(long moduleId) {
+		this.currentModuleId = moduleId;
 	}
 
-	protected long getLayerID() {
-		return layer_id;
+	protected long getModuleId() {
+		return currentModuleId;
 	}
 
 	public void setAction(String action) {
@@ -46,8 +54,7 @@ public abstract class PopUpController extends Observable implements ActionListen
 		}
 	}
 
-	protected String getAction() {
+	public String getAction() {
 		return action;
 	}
-
 }

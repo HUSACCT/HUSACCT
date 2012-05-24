@@ -1,0 +1,264 @@
+package husacct.validate.domain.configuration;
+
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
+import husacct.validate.domain.exception.KeyNotFoundException;
+import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.domain.exception.SeverityNotFoundException;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.factory.violationtype.AbstractViolationType;
+import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
+import husacct.validate.domain.validation.Severity;
+import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.ruletype.RuleType;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
+
+import org.apache.log4j.Logger;
+
+class SeverityPerTypeRepository implements Observer {
+
+	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
+
+	private final IAnalyseService analsyseService = ServiceProvider.getInstance().getAnalyseService();
+	private final RuleTypesFactory ruletypefactory;
+	private final ConfigurationServiceImpl configuration;		
+
+	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
+	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
+	private AbstractViolationType violationtypefactory;	
+
+	SeverityPerTypeRepository(RuleTypesFactory ruletypefactory, ConfigurationServiceImpl configuration){
+		this.configuration = configuration;
+		this.ruletypefactory = ruletypefactory;
+
+		configuration.addObserver(this);		
+		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+	}
+
+	void initializeDefaultSeverities() {		
+		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
+			severitiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));
+			defaultSeveritiesPerTypePerProgrammingLanguage.putAll(initializeDefaultSeverityForLanguage(programmingLanguage));
+		}		
+	}
+
+	private HashMap<String, HashMap<String, Severity>> initializeDefaultSeverityForLanguage(String programmingLanguage){
+		HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
+
+		severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, new HashMap<String, Severity>());
+
+		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
+		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
+			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
+		}
+
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage ,configuration);
+		if(violationtypefactory != null){				
+			for(Entry<String, List<ViolationType>> violationTypeCategory : violationtypefactory.getAllViolationTypes().entrySet()){	
+				for(ViolationType violationType : violationTypeCategory.getValue()){
+					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
+				}				
+			}
+		}
+		else{
+			logger.debug("Warning no language specified in define component");
+		}
+		return severitiesPerTypePerProgrammingLanguage;
+	}
+
+
+	HashMap<String, HashMap<String, Severity>> getSeveritiesPerTypePerProgrammingLanguage() {
+		return severitiesPerTypePerProgrammingLanguage;
+	}
+
+	Severity getSeverity(String language, String key){
+		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(language);
+		if(severityPerType == null){
+			throw new SeverityNotFoundException();
+		}
+		else{
+			Severity severity = severityPerType.get(key);
+			if(severity == null){
+				throw new SeverityNotFoundException();
+			}
+			else{
+				return severity;
+			}
+		}
+	}
+
+	void restoreDefaultSeverity(String language, String key){
+		HashMap<String, Severity> severitiesPerType = severitiesPerTypePerProgrammingLanguage.get(language);
+
+		//if there is no value, autmatically the default severities will be applied
+		if(severitiesPerType!= null){
+			Severity oldSeverity = severitiesPerType.get(key);
+			if(oldSeverity != null){
+				Severity defaultSeverity = getDefaultRuleKey(language, key);
+				if(defaultSeverity != null){
+					severitiesPerType.remove(key);
+					severitiesPerType.put(key, defaultSeverity);
+				}
+			}
+		}
+	}
+
+	private Severity getDefaultRuleKey(String language, String key){
+		HashMap<String, Severity> severityPerType = defaultSeveritiesPerTypePerProgrammingLanguage.get(language);
+		if(severityPerType == null){
+			throw new SeverityNotFoundException();
+		}
+		else{
+			Severity severity = severityPerType.get(key);
+			if(severity == null){
+				throw new SeverityNotFoundException();
+			}
+			else{
+				return severity;
+			}
+		}
+	}
+
+	void restoreAllToDefault(String programmingLanguage){
+		initializeDefaultSeverityForLanguage(programmingLanguage);
+	}
+
+	void setSeverityMap(HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage){
+		for(String programmingLanguage : severitiesPerTypePerProgrammingLanguage.keySet()){
+			if(!programmingLanguageExists(programmingLanguage)){
+				throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+			}
+			else{
+				for(Entry<String, Severity> keySeverity  : severitiesPerTypePerProgrammingLanguage.get(programmingLanguage).entrySet()){
+					if(isValidKey(programmingLanguage, keySeverity.getKey())){
+						keySeverity.setValue(isValidSeverity(keySeverity.getValue()));
+					}
+					else{
+			//			throw new KeyNotFoundException(keySeverity.getKey());
+					}
+				}
+			}
+		}
+		this.severitiesPerTypePerProgrammingLanguage = severitiesPerTypePerProgrammingLanguage;
+	}
+
+	void setSeverityMap(String programmingLanguage, HashMap<String, Severity> severityMap) {
+		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
+		if(local != null && programmingLanguageExists(programmingLanguage)){
+			for(Entry<String, Severity> entry : severityMap.entrySet()){
+				if(isValidKey(programmingLanguage, entry.getKey())){
+					if(local.containsKey(entry.getKey())){
+						local.remove(entry.getKey());
+					}
+					Severity severity = isValidSeverity(entry.getValue());
+					local.put(entry.getKey(), severity);
+				}
+				else{
+					logger.warn(String.format("%s is not a valid key and will not be set in configuration for programminglanguage %s", entry.getValue(), programmingLanguage));
+				}
+			}
+			severitiesPerTypePerProgrammingLanguage.remove(programmingLanguage);
+			severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, local);
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+		}
+	}
+
+	private boolean isValidKey(String programmingLanguage, String key){
+		boolean foundKey = false;
+		if(programmingLanguageExists(programmingLanguage)){			
+			for(String defaultKey : defaultSeveritiesPerTypePerProgrammingLanguage.get(programmingLanguage).keySet()){
+				if(defaultKey.toLowerCase().equals(key.toLowerCase())){
+					foundKey = true;
+				}
+			}
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+		}
+		return foundKey;
+	}
+
+	private boolean programmingLanguageExists(String programmingLanguage){
+		HashMap<String, Severity> local = defaultSeveritiesPerTypePerProgrammingLanguage.get(programmingLanguage);
+		if(local != null){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	private Severity isValidSeverity(Severity severity){
+		for(Severity currentSeverity : configuration.getAllSeverities()){
+			if(severity == currentSeverity){
+				return severity;
+			}
+		}
+		Severity newSeverity = configuration.getSeverityByName(severity.toString());
+		if(newSeverity != null){
+			return newSeverity;			
+		}
+		throw new SeverityNotFoundException();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if(arg instanceof Severity[]){
+			checkForChangedSeverities((Severity[]) arg);
+		}
+	}
+
+	private void checkForChangedSeverities(Severity[] oldSeverities){
+		List<Severity> previousSeverities = Arrays.asList(oldSeverities);
+		List<Severity> currentSeverities = configuration.getAllSeverities();
+		for(Entry<String, HashMap<String, Severity>> severityPerProgramminglanguageSet : severitiesPerTypePerProgrammingLanguage.entrySet()){
+			for(Entry<String, Severity> severityPerTypeSet : severityPerProgramminglanguageSet.getValue().entrySet()){
+				getLowerSeverity(currentSeverities, previousSeverities, severityPerTypeSet.getValue());
+			}
+		}
+	}
+
+	private Severity getLowerSeverity(List<Severity> currentSeverities, List<Severity> previousSeverities, Severity currentSeverity){
+		try{
+			if(!previousSeverities.contains(currentSeverity) && currentSeverities.contains(currentSeverity)){
+				//just added, no need for further actions
+				return currentSeverity;
+			}
+			else if(previousSeverities.contains(currentSeverity) && !currentSeverities.contains(currentSeverity)){
+				if(currentSeverities.isEmpty()){
+					return getUnidentifiedSeverity();
+				}
+				else{
+					int index = getLowerSeverityIndex(currentSeverities, previousSeverities, currentSeverity);
+					return currentSeverities.get(index);				
+				}
+			}
+			else{
+				return getUnidentifiedSeverity();
+			}
+		}catch(IndexOutOfBoundsException e){
+			return getUnidentifiedSeverity();
+		}
+	}
+
+	private Severity getUnidentifiedSeverity(){
+		return configuration.getSeverityByName("Unidentified");
+	}
+
+	private int getLowerSeverityIndex(List<Severity> currentSeverities, List<Severity> previousSeverities, Severity currentSeverity){
+		int index = previousSeverities.indexOf(currentSeverity);
+		if(index > currentSeverities.size()-1){
+			index = currentSeverities.size()-1;
+		}
+		return index;
+	}
+}

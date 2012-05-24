@@ -6,27 +6,67 @@ import org.apache.log4j.Logger;
 
 public class MainController {
 	
-	ViewController viewController;
-	WorkspaceController workspaceController;
-	LocaleController localeController;
-	StateController stateController;
+	private ViewController viewController;
+	private WorkspaceController workspaceController;
+	private LocaleController localeController;
+	private StateController stateController;
+	private ApplicationController applicationController;
+	private ImportController importController;
+	private ExportController exportController;
+	
+	public MainGui mainGUI;
 	
 	private Logger logger = Logger.getLogger(MainController.class);
 	
+	public boolean guiEnabled = false; 
+	
 	public MainController(){
 		setControllers();
+		setAppleProperties();
+	}
+	
+	/**
+	 * @deprecated  As of 19 may, MainController is integrated within the ControlService.
+	 * To manually start the GUI, use ServiceProvider.getInstance().getControlService().startApplication() instead.
+	 */
+	@Deprecated
+	public MainController(String[] arguments){
+
+	}
+	
+	public void startGui(){
+		guiEnabled = true;
 		openMainGui();
 	}
-
+	
 	private void setControllers() {
-		this.workspaceController = new WorkspaceController();
-		this.viewController = new ViewController();
+		this.workspaceController = new WorkspaceController(this);
+		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
-		this.stateController = new StateController();
+		this.stateController = new StateController(this);
+		this.applicationController = new ApplicationController(this);
+		this.importController = new ImportController(this);
+		this.exportController = new ExportController(this);
 	}
-
+	
+	private void setAppleProperties(){
+		logger.debug("Setting apple specific properties");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Husacct");
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("apple.awt.fileDialogForDirectories", "true");
+	}
+	
+	public void readArguments(String[] consoleArguments){
+		logger.debug("Arguments:" + consoleArguments.toString());
+		for(String s : consoleArguments){
+			if(s.equals("nogui")){
+				guiEnabled = false;
+			}
+		}
+	}
+	
 	private void openMainGui() {
-		new MainGui(this);
+		this.mainGUI = new MainGui(this);
 	}
 	
 	public ViewController getViewController(){
@@ -45,9 +85,25 @@ public class MainController {
 		return this.stateController;
 	}
 	
+	public ApplicationController getApplicationController(){
+		return this.applicationController;
+	}
+	
+	public ImportController getImportController(){
+		return this.importController;
+	}
+	
+	public ExportController getExportController(){
+		return this.exportController;
+	}
+	
 	public void exit(){
 		// TODO: check saved 
 		logger.debug("Close HUSACCT");
 		System.exit(0);
+	}
+	
+	public MainGui getMainGui(){
+		return mainGUI;
 	}
 }

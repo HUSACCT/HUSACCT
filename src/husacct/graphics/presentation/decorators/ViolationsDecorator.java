@@ -3,29 +3,26 @@ package husacct.graphics.presentation.decorators;
 import java.awt.Color;
 
 import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.Figure;
 
-import husacct.common.dto.ViolationDTO;
+import husacct.graphics.presentation.figures.BaseFigure;
 
-public class ViolationsDecorator extends Decorator {
+public class ViolationsDecorator implements Decorator {
+	private Color oldStrokeColor;
+	private Color severityColor;
 
-	private static final long serialVersionUID = 4445235736740459408L;
-	private ViolationDTO[] violations;
-	
-	public ViolationsDecorator(ViolationDTO[] violations) {
-		this.violations = violations;
+	public ViolationsDecorator(Color severityColor) {
+		this.severityColor = severityColor;
 	}
-	
-	public ViolationDTO[] getViolations() {
-		return this.violations;
-	}	
-	
-	@Override 
-	public void setDecorator(Figure newDecorator) {
-		Figure oldDecorator = getDecorator();
-		oldDecorator.set(AttributeKeys.STROKE_COLOR, Color.BLACK);
-		
-		super.setDecorator(newDecorator);
-		getDecorator().set(AttributeKeys.STROKE_COLOR, Color.RED);
+
+	@Override
+	public void decorate(BaseFigure f) {
+		this.oldStrokeColor = f.get(AttributeKeys.STROKE_COLOR);
+		f.setStrokeColor(this.severityColor);
 	}
+
+	@Override
+	public void deDecorate(BaseFigure f) {
+		f.setStrokeColor(this.oldStrokeColor);
+	}
+
 }

@@ -1,5 +1,7 @@
 package husacct.control.task;
 
-public interface IStateChangeListener {
+import java.util.List;
 
+public interface IStateChangeListener {
+	public void changeState(List<States> states);
 }

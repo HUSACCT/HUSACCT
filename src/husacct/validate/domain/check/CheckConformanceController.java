@@ -1,42 +1,94 @@
 package husacct.validate.domain.check;
 
+import husacct.ServiceProvider;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.factory.RuletypesFactory;
-import husacct.validate.domain.ruletype.Rule;
-import husacct.validate.domain.violation.Violation;
+import husacct.define.IDefineService;
+import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.domain.exception.RuleInstantionException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
+import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
+import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ruletype.RuleType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckConformanceController {
-	private List<Violation> violations;
-	private RuletypesFactory ruleFactory;
-	private Map<String, Rule> ruleCache;
+import org.apache.log4j.Logger;
 
-	public CheckConformanceController(){
-		this.violations = new ArrayList<Violation>();
-		this.ruleCache = new HashMap<String, Rule>();
-		this.ruleFactory = new RuletypesFactory();
+public class CheckConformanceController {
+	private final ConfigurationServiceImpl configuration;
+
+	private Logger logger = Logger.getLogger(CheckConformanceController.class);
+	private RuleTypesFactory ruleFactory;
+	private Map<String, RuleType> ruleCache;
+	private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+
+	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory){
+		this.configuration = configuration;
+		this.configuration.clearViolations();
+		this.ruleCache = new HashMap<String, RuleType>();
+		this.ruleFactory = ruleFactory;
 	}
 
-	public void CheckConformance(RuleDTO[] appliedRules){
-		for(RuleDTO appliedRule : appliedRules){
-			Rule rule = getRuleType(appliedRule.ruleTypeKey);
-			if(rule != null){
-				List<Violation> newViolations = rule.check(appliedRule);
-				violations.addAll(newViolations);
+	public void checkConformance(RuleDTO[] appliedRules){
+		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
+		if(applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()){
+			configuration.clearViolations();
+			for(RuleDTO appliedRule : appliedRules){
+				try{
+					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
+					configuration.addViolations(newViolations);
+
+					if(appliedRule.exceptionRules != null){
+						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
+					}
+				}catch(RuleTypeNotFoundException e){
+					logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+				} catch (RuleInstantionException e) {
+					logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
+				}
 			}
-			else{
-				//rule(Key) does not exists, thus ignore appliedRule
+		}
+		else{
+			throw new ProgrammingLanguageNotFoundException();
+		}
+	}
+
+//TODO implement filtering of contradictory rules
+//	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
+//		return new RuleDTO[]{};
+//	}
+//
+//	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
+//		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
+//		for(RuleDTO rule : allCurrentRules){
+//			if(rule.equals(toValidateRule)){
+//				allCurrentRules.remove(rule);
+//			}
+//		}
+//		return allCurrentRules;
+//	}
+
+	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
+		for(RuleDTO appliedRule : exceptionRules){
+			try{
+				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+				List<Violation> newViolations = rule.check(configuration, parent, appliedRule);
+				configuration.addViolations(newViolations);
+			}catch(RuleTypeNotFoundException e){
+				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+			} catch (RuleInstantionException e) {
+				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 			}
 		}
 	}
 
-	private Rule getRuleType(String ruleKey){
-		Rule rule = ruleCache.get(ruleKey);
-
+	private RuleType getRuleType(String ruleKey) throws RuleInstantionException{
+		RuleType rule = ruleCache.get(ruleKey);
 		if(rule == null){
 			rule = ruleFactory.generateRuleType(ruleKey);
 		}
@@ -44,9 +96,5 @@ public class CheckConformanceController {
 			ruleCache.put(ruleKey, rule);
 		}
 		return rule;
-	}
-
-	public List<Violation> getViolations(){
-		return violations;
 	}
 }

@@ -1,108 +1,118 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.dto.ModuleDTO;
-
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import org.apache.log4j.Logger;
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ComponentFigure extends ModuleFigure
-{
-	private static final long serialVersionUID = -344477017055924400L;
+public class ComponentFigure extends BaseFigure {
+	private static final long serialVersionUID = -3019979543942866990L;
+	private RectangleFigure body;
+	private TextFigure text;
+	private BufferedImage compIcon;
+	private ImageFigure compIconFig;
 
-	public static final int SPACE_LEFT = 34;
-	public static final int COMP_HEIGHT = 24;
-	public static final int COMP_DISTANCE = 8;
+	protected int minWidth = 130;
+	protected int minHeight = 90;
 
-	private RectangleFigure mainBox;
-	private RectangleFigure box1;
-	private RectangleFigure box2;
-	private TextFigure textBox;
+	public ComponentFigure(String figureName) {
+		super(figureName);
 
-	public ComponentFigure(ModuleDTO moduleDTO)
-	{
-		super(moduleDTO);
-		
-		this.mainBox = new RectangleFigure();
-		this.box1 = new RectangleFigure();
-		this.box2 = new RectangleFigure();
-		this.textBox = new TextFigure(this.getName());
+		body = new RectangleFigure();
+		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		children.add(body);
 
-		this.children.add(mainBox);
-		this.children.add(box1);
-		this.children.add(box2);
-		this.children.add(textBox);
-	}
+		text = new TextFigure(figureName);
+		text.set(AttributeKeys.FONT_BOLD, true);
+		children.add(text);
 
-	private void sizeChildBoxes(Point2D.Double anchor, Point2D.Double lead)
-	{
-		if ((lead.x - anchor.x) < getMinimumWidth()) {
-			lead.x = anchor.x + getMinimumWidth();
+		compIconFig = new ImageFigure();
+		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+
+		try {
+			URL componentImageURL = getClass().getResource("/husacct/common/resources/graphics/component_icon.png");
+			compIcon = ImageIO.read(componentImageURL);
+			compIconFig.setImage(null, compIcon);
+			children.add(compIconFig);
+		} catch (Exception e) {
+			compIconFig = null;
+			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
 		}
 
-		if ((lead.y - anchor.y) < getMinimumHeight()) {
-			lead.y = anchor.y + getMinimumHeight();
-		}
-
-		Point2D.Double newMainBoxAnchor = (Point2D.Double) anchor.clone();
-		newMainBoxAnchor.x += SPACE_LEFT;
-		this.mainBox.setBounds(newMainBoxAnchor, lead);
-
-		Point2D.Double newBox1Anchor = (Point2D.Double) anchor.clone();
-		newBox1Anchor.y += COMP_DISTANCE;
-		Point2D.Double newBox1Lead = new Point2D.Double(newBox1Anchor.x
-				+ SPACE_LEFT * 2, newBox1Anchor.y + COMP_HEIGHT);
-		this.box1.setBounds(newBox1Anchor, newBox1Lead);
-
-		Point2D.Double newBox2Anchor = (Point2D.Double) newBox1Anchor.clone();
-		newBox2Anchor.y += COMP_HEIGHT + COMP_DISTANCE;
-		Point2D.Double newBox2Lead = new Point2D.Double(newBox2Anchor.x
-				+ SPACE_LEFT * 2, newBox2Anchor.y + COMP_HEIGHT);
-		this.box2.setBounds(newBox2Anchor, newBox2Lead);
-
-		Point2D.Double textBoxOrigin = (Point2D.Double) newBox1Anchor.clone();
-		textBoxOrigin.x += SPACE_LEFT * 2 + 8;
-		this.textBox.setBounds(textBoxOrigin, null);
-	}
-
-	public static int getMinimumHeight()
-	{
-		return COMP_DISTANCE + COMP_HEIGHT + COMP_DISTANCE + COMP_HEIGHT
-				+ COMP_DISTANCE;
-	}
-
-	public static int getMinimumWidth()
-	{
-		return SPACE_LEFT * 4;
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
-	{
-		this.sizeChildBoxes(anchor, lead);
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if ((lead.x - anchor.x) < minWidth) {
+			lead.x = anchor.x + minWidth;
+		}
+		if ((lead.y - anchor.y) < minHeight) {
+			lead.y = anchor.y + minHeight;
+		}
 
-		invalidate();
+		// bigger than text
+		double requestTextWidth = text.getBounds().width + 10;
+		if ((lead.x - anchor.x) < requestTextWidth) {
+			lead.x = anchor.x + requestTextWidth;
+		}
+
+		body.setBounds(anchor, lead);
+
+		// textbox centralising
+		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
+
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
+
+		if (compIconFig != null) {
+			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
+			double iconAnchorY = anchor.y + 6;
+			double iconLeadX = iconAnchorX + compIcon.getWidth();
+			double iconLeadY = iconAnchorY + compIcon.getHeight();
+			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
+
+		this.invalidate();
 	}
 
 	@Override
-	public ComponentFigure clone()
-	{
-		ComponentFigure that = (ComponentFigure) super.clone();
-		
-		that.mainBox = this.mainBox.clone();
-		that.box1 = this.box1.clone();
-		that.box2 = this.box2.clone();
-		that.textBox = this.textBox.clone();
-		
-		that.children = new ArrayList<Figure>();
-		that.children.add(that.mainBox);
-		that.children.add(that.box1);
-		that.children.add(that.box2);
-		that.children.add(that.textBox);
-		
-		return that;
+	public ComponentFigure clone() {
+		ComponentFigure other = (ComponentFigure) super.clone();
+		other.body = body.clone();
+		other.text = text.clone();
+		other.compIconFig = compIconFig.clone();
+
+		other.children = new ArrayList<Figure>();
+		other.children.add(other.body);
+		other.children.add(other.text);
+		if (compIconFig != null) {
+			other.children.add(other.compIconFig);
+		}
+
+		return other;
+	}
+
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
 	}
 }

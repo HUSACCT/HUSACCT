@@ -1,68 +1,32 @@
 package husacct.analyse.domain.famix;
 
-/**
- * The Class FormalParameter. A FormalParameter represents the definition in
- * source code of a formal parameter, i.e. the declaration of what a behavioural
- * entity expects as an argument. What exactly constitutes such a definition is
- * a language dependent issue. FormalParameter is a concrete class inheriting
- * from StructuralEntity . Besides inherited attributes, it has the following
- * attributes:
- */
-public class FamixFormalParameter extends FamixStructuralEntity
-{
+import java.util.ArrayList;
+import java.util.List;
 
-	/**
-	 * The belongs to behaviour. s a name referring to the BehaviouralEntity
-	 * owning the variable. It uses the uniqueName of this entity as a
-	 * reference.
-	 */
-	private String belongsToBehaviour;
+class FamixFormalParameter extends FamixStructuralEntity{
 
-	/**
-	 * The position. The position of the parameter in the list of parameters.
-	 * Language plug-ins should specify what the position of a parameter is and
-	 * this should be consistent the position attribute of Argument (see page
-	 * 25).
-	 */
-	private int position;
+	public String belongsToMethod;
+	//extra attribute: declaredTypes
+	//the return type of a parameter could simply be a String, int, double etc
+	//but it can also be a list containing other declareTypes such as arrayLists and Hashmaps
+	//In that case, all of the items from that list can be stored in declaredTypes
+	//i.e. if this is a parameter: HashMap<User, HomeAddress> then the returntype is still a HashMap, 
+	//but now the declaredTypes have 2 properties: a User and a HomeAddress object.
+	public List<String> declaredTypes = new ArrayList<String>(); 
+	//public int position;
 
-	/**
-	 * Gets the belongs to behaviour.
-	 * 
-	 * @return the belongs to behaviour
-	 */
-	public String getBelongsToBehaviour()
-	{
-		return belongsToBehaviour;
+	public String toString(){
+		String importRepresentation = "";
+		importRepresentation += "\nname: " + super.name;
+		importRepresentation += "\nuniquename: " + super.uniqueName;
+		importRepresentation += "\nbelongsToClass: " + super.belongsToClass;
+		importRepresentation += "\nbelongsToMethod: " + this.belongsToMethod;
+		importRepresentation += "\ndeclareType: " + super.declareType;
+		importRepresentation += "\ndeclaredTypes: " + this.declaredTypes.toString();
+		importRepresentation += "\nlineNumber: " + super.lineNumber;
+		importRepresentation += "\n";
+		importRepresentation += "\n";
+		return importRepresentation;
 	}
-
-	/**
-	 * Sets the belongs to behaviour.
-	 * 
-	 * @param belongsToBehaviour the new belongs to behaviour
-	 */
-	public void setBelongsToBehaviour(String belongsToBehaviour)
-	{
-		this.belongsToBehaviour = belongsToBehaviour;
-	}
-
-	/**
-	 * Gets the position.
-	 * 
-	 * @return the position
-	 */
-	public int getPosition()
-	{
-		return position;
-	}
-
-	/**
-	 * Sets the position.
-	 * 
-	 * @param position the new position
-	 */
-	public void setPosition(int position)
-	{
-		this.position = position;
-	}
+	
 }

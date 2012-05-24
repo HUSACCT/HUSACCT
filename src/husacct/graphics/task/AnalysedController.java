@@ -1,51 +1,115 @@
 package husacct.graphics.task;
 
-import husacct.analyse.AnalyseServiceStub;
+import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.validate.IValidateService;
 
-public class AnalysedController extends BaseController {
+import org.apache.log4j.Logger;
 
-	private IAnalyseService analyseService;
+public class AnalysedController extends DrawingController {
+	protected IAnalyseService analyseService;
+	protected IValidateService validateService;
+	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
 		super();
-
-		analyseService = new AnalyseServiceStub();
+		initializeServices();
 	}
 
+	private void initializeServices() {
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		validateService = ServiceProvider.getInstance().getValidateService();
+	}
+
+	@Override
+	public void refreshDrawing() {
+		getAndDrawModulesIn(getCurrentPath());
+	}
+
+	@Override
+	public void showViolations() {
+		super.showViolations();
+		validateService.checkConformance();
+	}
+
+	@Override
 	public void drawArchitecture(DrawingDetail detail) {
-
 		AbstractDTO[] modules = analyseService.getRootModules();
-		drawModules(modules);
+		resetCurrentPath();
+		if (DrawingDetail.WITH_VIOLATIONS == detail) {
+			showViolations();
+		}
+		drawModulesAndLines(modules);
 	}
 
-	private void drawModules(AbstractDTO[] modules) {
-		AnalysedModuleDTO[] castedModules = (AnalysedModuleDTO[]) modules;
+	@Override
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
+		if (!figureFrom.equals(figureTo)) {
+			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
+		}
+		return new DependencyDTO[] {};
+	}
 
-		for (AnalysedModuleDTO dto : castedModules) {
-			BaseFigure packageFigure = figureFactory.createFigure(dto);
-			drawing.add(packageFigure);
+	@Override
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
+		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
+	}
+
+	@Override
+	public void moduleZoom(BaseFigure[] figures) {
+		// FIXME: Make this code function with the multiple selected figures
+		BaseFigure figure = figures[0];
+
+		if (figure.isModule()) {
+			try {
+				AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
+				getAndDrawModulesIn(parentDTO.uniqueName);
+			} catch (Exception e) {
+				logger.warn("Could not zoom on this object: " + figure);
+				logger.debug("Possible type cast failure.");
+			}
 		}
 	}
 
 	@Override
-	public void moduleZoom(AbstractDTO zoomedModuleDTO) {
-		System.out.println("child " + zoomedModuleDTO.getClass());
-		
-		if (zoomedModuleDTO instanceof AnalysedModuleDTO) {
-			// TODO clear drawing
+	public void moduleZoomOut() {
+		AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(getCurrentPath());
+		if (null != parentDTO) {
+			getAndDrawModulesIn(parentDTO.uniqueName);
+		} else {
+			logger.warn("Tried to zoom out from \"" + getCurrentPath() + "\", but it has no parent (could be root if it's an empty string).");
+			logger.debug("Reverting to the root of the application.");
+			drawArchitecture(getCurrentDrawingDetail());
+		}
+	}
 
-			AnalysedModuleDTO analysedModuleDTO = (AnalysedModuleDTO) zoomedModuleDTO;
+	private void getAndDrawModulesIn(String parentName) {
+		AnalysedModuleDTO[] children = analyseService.getChildModulesInModule(parentName);
+		if (parentName.equals("")) {
+			drawArchitecture(getCurrentDrawingDetail());
+		} else if (children.length > 0) {
+			setCurrentPath(parentName);
+			drawModulesAndLines(children);
+		} else {
+			logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
+		}
+	}
 
-			AnalysedModuleDTO[] childModules = this.analyseService
-					.getChildModulesInModule(analysedModuleDTO.uniqueName);
-
-			for (AnalysedModuleDTO childModule : childModules) {
-				System.out.println("child " + childModule.name);
-			}
+	@Override
+	public void moduleOpen(String path) {
+		if(path.isEmpty()){
+			drawArchitecture(getCurrentDrawingDetail());
+		}else{
+			getAndDrawModulesIn(path);
 		}
 	}
 }

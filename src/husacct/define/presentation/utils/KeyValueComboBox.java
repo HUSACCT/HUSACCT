@@ -10,11 +10,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 public class KeyValueComboBox extends JComboBox{
-	private HashMap<String, String> keyValuePair = new HashMap<String,String>();
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2870095258058479405L;
+
+	private HashMap<String, String> keyValuePair = new HashMap<String,String>();
 
 	public KeyValueComboBox() {
 		super();
@@ -39,10 +37,22 @@ public class KeyValueComboBox extends JComboBox{
 	}
 	
 	public String getSelectedItemKey(){
-		String selectedItemValue = super.getSelectedItem().toString();
+		String selectedItemValue = "";
+		if (super.getSelectedItem() != null) {
+			selectedItemValue = super.getSelectedItem().toString();
+		}
 		return getHaskMapKeyFromValue(selectedItemValue);
 	}
 	
+	public String getItemKeyAt(int i){
+		String selectedItemValue = "";
+		if (getItemAt(i) != null) {
+			selectedItemValue = super.getItemAt(i).toString();
+		}
+		return getHaskMapKeyFromValue(selectedItemValue);
+	}
+	
+	@SuppressWarnings("rawtypes")
 	private String getHaskMapKeyFromValue(String value){
 		String key = "";
 		for (Iterator iterator = keyValuePair.entrySet().iterator(); iterator.hasNext();) {

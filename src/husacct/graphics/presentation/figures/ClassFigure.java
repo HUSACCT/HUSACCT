@@ -1,73 +1,101 @@
 package husacct.graphics.presentation.figures;
 
-import husacct.common.dto.AbstractDTO;
-
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
-public class ClassFigure extends ModuleFigure {
+public class ClassFigure extends BaseFigure {
 
 	private static final long serialVersionUID = -468596930534802557L;
-	private RectangleFigure top, middle, bottom;
-	private TextFigure text;
+	protected RectangleFigure top, middle, bottom;
+	protected TextFigure classNameText;
 
-	public ClassFigure(AbstractDTO moduleDTO)
-	{
-		super(moduleDTO);
-		
+	public static final int MIN_WIDTH = 100;
+	public static final int MIN_HEIGHT = 80;
+
+	public ClassFigure(String name) {
+		super(name);
+
 		top = new RectangleFigure();
 		middle = new RectangleFigure();
 		bottom = new RectangleFigure();
-		text = new TextFigure(getName());
+		classNameText = new TextFigure(getName());
+		classNameText.set(AttributeKeys.FONT_BOLD, true);
 
 		children.add(top);
 		children.add(middle);
-		children.add(text);
+		children.add(classNameText);
 		children.add(bottom);
+
+		set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
+	}
+
+	public TextFigure getClassNameText() {
+		return this.classNameText;
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead)
-	{
-		Point2D.Double topLeft = anchor;
-		Point2D.Double bottomRight = new Point2D.Double(anchor.x + getWidth(),
-				anchor.y + getHeight() * 0.2);
-		top.setBounds(topLeft, bottomRight);
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if ((lead.x - anchor.x) < MIN_WIDTH) {
+			lead.x = anchor.x + MIN_WIDTH;
+		}
+		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+			lead.y = anchor.y + MIN_HEIGHT;
+		}
 
-		Point2D.Double topLeft1 = new Point2D.Double(anchor.x, anchor.y + getHeight() * 0.2);
-		Point2D.Double bottomRight1 = new Point2D.Double(anchor.x + getWidth(), anchor.y
-				+ getHeight() * 0.6);
-		middle.setBounds(topLeft1, bottomRight1);
-		text.setBounds(topLeft1, bottomRight1);
+		double width = lead.x - anchor.x;
+		double totalHeight = lead.y - anchor.y;
+		double middleHeight = Math.floor(totalHeight / 3);
+		double bottomHeight = Math.floor(totalHeight / 3);
+		double topHeight = totalHeight - middleHeight - bottomHeight;
 
-		Point2D.Double topLeft2 = new Point2D.Double(anchor.x, anchor.y + getHeight() * 0.6);
-		Point2D.Double bottomRight2 = new Point2D.Double(anchor.x + getWidth(), anchor.y
-				+ getHeight());
-		bottom.setBounds(topLeft2, bottomRight2);
-		
+		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y + topHeight));
+		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight));
+		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight + middleHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight + bottomHeight));
+
+		// textbox centralising
+		double plusX = ((top.getBounds().width - this.classNameText.getBounds().width) / 2);
+		double plusY = ((top.getBounds().height - this.classNameText.getBounds().height) / 2);
+
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		classNameText.setBounds(textAnchor, null);
+
 		this.invalidate();
 	}
-	
+
 	@Override
-	public ClassFigure clone()
-	{
-		ClassFigure other = (ClassFigure)super.clone();
-		
+	public ClassFigure clone() {
+		ClassFigure other = (ClassFigure) super.clone();
+
 		other.top = top.clone();
 		other.middle = middle.clone();
-		other.text = text.clone();
+		other.classNameText = classNameText.clone();
 		other.bottom = bottom.clone();
-		
+
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.top);
 		other.children.add(other.middle);
-		other.children.add(other.text);
+		other.children.add(other.classNameText);
 		other.children.add(other.bottom);
-		
+
 		return other;
+	}
+
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
+	public boolean isLine() {
+		return false;
 	}
 }
