@@ -17,10 +17,10 @@ public enum RuleTypes {
 	NAMING_CONVENTION_EXCEPTION("NamingConventionException", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION("VisibilityConvention", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION_EXCEPTION("VisibilityConventionException", DefaultSeverities.MEDIUM),
-	LOOPS_IN_MODULE("LoopsInModule", DefaultSeverities.HIGH),
-	LOOPS_IN_MODULE_EXCEPTION("LoopsInModuleException", DefaultSeverities.MEDIUM);	
+	CYCLES_BETWEEN_MODULES("CyclesBetweenModules", DefaultSeverities.HIGH),
+	CYCLES_BETWEEN_MODULES_EXCEPTION("CyclesBetweenModulesException", DefaultSeverities.MEDIUM);	
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, LOOPS_IN_MODULE);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, CYCLES_BETWEEN_MODULES);
 
 	private final String key;
 	private final DefaultSeverities defaultSeverity;

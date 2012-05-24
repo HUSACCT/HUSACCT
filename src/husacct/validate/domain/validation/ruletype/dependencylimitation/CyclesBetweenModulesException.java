@@ -12,16 +12,15 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class LoopsInModuleExceptionRule extends RuleType {
+public class CyclesBetweenModulesException extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 	
-	public LoopsInModuleExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public CyclesBetweenModulesException(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		//TODO
 		return Collections.emptyList();
 	}
 }

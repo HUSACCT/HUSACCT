@@ -142,7 +142,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isLoopsInModule(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.LOOPS_IN_MODULE.toString())){
+		if(ruleTypeKey.equals(RuleTypes.CYCLES_BETWEEN_MODULES.toString())){
 			return true;
 		}
 		else{
