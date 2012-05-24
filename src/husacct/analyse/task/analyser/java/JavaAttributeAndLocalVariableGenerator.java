@@ -69,7 +69,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	}
 	
 
-	private void walkThroughAST(Tree tree) {
+	private void walkThroughAST(Tree tree) {		
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();			
@@ -114,11 +114,13 @@ class JavaAttributeAndLocalVariableGenerator {
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
 		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
+		declareType = "";
 	}
 	
 	private void createLocalVariableObject() {
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
 		modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+		declareType = "";
 	}
 
 	private void setAttributeName(Tree tree) {
