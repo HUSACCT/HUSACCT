@@ -146,8 +146,8 @@ public class InvocMethodTest extends RecognationExtended{
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
-				assertEquals(7, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
+				assertEquals(7, dependency.lineNumber);
 			}
 			else if(dependency.type.equals("InvocMethod")){
 				accessPropertyOrFieldFound = true;

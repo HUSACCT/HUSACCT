@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	AccessFieldTest.class,
-	InvocConstructorTest.class
+	InvocConstructorTest.class,
+	InvocMethodTest.class
 })
 public class RecognationTestSuite {
 

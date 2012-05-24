@@ -33,7 +33,13 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	
 	private void createConstructorInvocationDetails(Tree tree) {
 		//expects: '.'
+
 		if (tree != null) {
+			if (tree.getType() == JavaParser.ASSIGN){
+				if (tree.getChild(0).getType() == JavaParser.DOT){
+					createConstructorInvocationDetails(tree.getChild(0));
+				}
+			}
 			if (tree.getType() == JavaParser.METHOD_CALL){
 				if (tree.getChild(0).getType() == JavaParser.DOT){
 					createConstructorInvocationDetails(tree.getChild(0));
@@ -57,6 +63,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		
 	}
 	
+
+
 	private CommonTree getFirstChildThrougTree(Tree tree,int classConstructorCall) {
 		for (int i = 0; i < tree.getChildCount(); i++) {
 			if (tree.getChild(i).getType() == classConstructorCall){
@@ -68,7 +76,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 
 	private void createConstructorInvocationDetailsWhenFoundClassConstructorCall(CommonTree firstChildClassConstructorCall) {
-			Tree child = firstChildClassConstructorCall.getChild(0);			
+			Tree child = firstChildClassConstructorCall.getChild(0);	
+			this.to = "";
 			if(child.getType() != JavaParser.QUALIFIED_TYPE_IDENT){
 				this.to = child.getText();				
 			}else{
@@ -202,7 +211,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 		if(treeHasConstructorInvocation(treeNode)){
 			createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
 			createPropertyOrFieldInvocationDomainObject();
-			if(treeNode.getType() == JavaParser.EXPR){
+			if(treeNode.getType() == JavaParser.EXPR ){
 				generateConstructorInvocToModel((CommonTree) treeNode.getChild(0), belongsToMethod);
 			} 
 			else {

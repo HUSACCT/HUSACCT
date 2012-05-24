@@ -27,7 +27,7 @@ public class AnalyseMain {
 		path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Copy of Java Recognition Test\\src";
 
 		String[] paths = new String[]{path};
-		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
+		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
 		IAnalyseService analyser = provider.getAnalyseService();
 		analyser.analyseApplication();
