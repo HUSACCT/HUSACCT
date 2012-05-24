@@ -2,6 +2,8 @@ package husaccttest.analyse.benchmarkLeo.domain;
 
 import java.util.HashMap;
 
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -11,6 +13,7 @@ import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
 
 public class Flickr extends BenchmarkExtended{
 
+	@Test
 	public void testNavigation(){
 		String from = "domain.flickr";
 		
@@ -45,6 +48,7 @@ public class Flickr extends BenchmarkExtended{
 		assertEquals(true, foundtag);
 	}
 	
+	@Test
 	public void testDomainFlickrFlickrPicture(){
 		String from = "domain.flickr.FlickrPicture";
 		int expectedDependencies = 8;

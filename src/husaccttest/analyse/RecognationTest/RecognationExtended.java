@@ -26,7 +26,9 @@ public abstract class RecognationExtended extends TestCaseExtended{
 //		}
 		
 		try {
-			service.analyseApplication();
+			if(!service.isAnalysed()){
+				service.analyseApplication();
+			}
 
 		} catch (Exception e){
 			System.out.println("We're sorry. You need to have a java project 'benchmark_application' with inside the benchmark_application. Or you have the wrong version of the benchmark_application.");

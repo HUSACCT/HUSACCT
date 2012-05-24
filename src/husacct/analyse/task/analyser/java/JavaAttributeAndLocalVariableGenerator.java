@@ -16,7 +16,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	private String AccesControlQualifier;
 	private String belongsToClass; 
 	private String declareClass; //example: package.package.class
-	private String declareType = "";  //int, string, CustomClass etc
+	private String declareType;  //int, string, CustomClass etc
 	private int lineNumber;
 	private String belongsToMethod = ""; //alleen voor local variables
 	
