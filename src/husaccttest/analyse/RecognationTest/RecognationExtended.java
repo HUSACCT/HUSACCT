@@ -1,11 +1,11 @@
-package husaccttest.analyse.benchmarkLeo;
+package husaccttest.analyse.RecognationTest;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.define.IDefineService;
 import husaccttest.analyse.TestCaseExtended;
 
-public abstract class BenchmarkExtended extends TestCaseExtended{
+public abstract class RecognationExtended extends TestCaseExtended{
 
 	public IAnalyseService service;
 	
@@ -15,7 +15,7 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 
-		String path = "../benchmark_application/src";
+		String path = "../RecognationTest";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
@@ -32,7 +32,6 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 
 		} catch (Exception e){
 			System.out.println("We're sorry. You need to have a java project 'benchmark_application' with inside the benchmark_application. Or you have the wrong version of the benchmark_application.");
-			System.out.println("git://github.com/timmuller/benchmark_application.git");
 			System.exit(0);
 		}
 	}

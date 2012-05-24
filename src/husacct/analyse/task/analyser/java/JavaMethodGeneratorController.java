@@ -77,7 +77,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				accessControlQualifier = "protected";
 			}
 			if(treeType == JavaParser.TYPE){
-				declaredReturnType = getReturnType(child);
+				getReturnType(child);
 				deleteTreeChild(child);
 			}
 			if(treeType == JavaParser.IDENT){
@@ -124,15 +124,11 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	} 
 
 
-	private String getReturnType(Tree tree){
+	private void getReturnType(Tree tree){
 		//op dit moment worden arraylisten en hashmaps dusdanig gezet als 'hashmap' en 'arraylist' en niet als
 		//ArrayList<User> bijv. Dit is wellicht een TODO
-		if (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
-			return tree.getChild(0).getChild(0).getText();
-		}
-		else{
-			return tree.getChild(0).getText();
-		}
+		
+		declaredReturnType = javaLocalVariableGenerator.generateMethodReturnType(tree, belongsToClass);
 	}
 	
 
