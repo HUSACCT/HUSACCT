@@ -1,9 +1,13 @@
 package husaccttest.analyse.benchmarkLeo;
 
+import org.junit.Test;
+
 import husacct.common.dto.AnalysedModuleDTO;
+import static org.junit.Assert.*;
 
 public class TestNavigation extends BenchmarkExtended{
 	
+	@Test
 	public void testRootModules(){
 		String[] namesExpected = {"domain", "infrastructure", "presentation"};			
 		AnalysedModuleDTO[] rootModules = service.getRootModules();
@@ -12,6 +16,7 @@ public class TestNavigation extends BenchmarkExtended{
 		this.foundModulesNames(namesExpected, rootModules);
 	}
 	
+	@Test
 	public void testNavigation(){
 		String rootElement = "presentation";
 		

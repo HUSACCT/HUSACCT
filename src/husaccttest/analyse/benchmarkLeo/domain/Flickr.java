@@ -2,6 +2,7 @@ package husaccttest.analyse.benchmarkLeo.domain;
 
 import java.util.HashMap;
 
+import static org.junit.Assert.*;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;

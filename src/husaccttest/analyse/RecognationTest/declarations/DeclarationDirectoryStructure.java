@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
+import static org.junit.Assert.*;
+
 
 public class DeclarationDirectoryStructure extends BenchmarkExtended {
 
