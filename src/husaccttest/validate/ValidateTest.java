@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
-import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
@@ -36,12 +35,12 @@ public class ValidateTest {
 	{
 		assertArrayEquals(new String[]{"pdf","html","xml"}, validate.getExportExtentions());
 	}
+	
 	@Test
 	public void exportViolations()
 	{
 		//cant test void
 	}
-
 
 	@Test
 	public void getCategories()
@@ -136,41 +135,12 @@ public class ValidateTest {
 	@Test
 	public void getViolationsByLogicalPath()
 	{
-//		Can't test this now, need to find a way with define (and analyze) to test this method
-//		validate.checkConformance();
-//		assertTrue(listContainsFromValue(validate.getViolationsByLogicalPath("DomainLayer", "Infrastructure"),"domain.locationbased.foursquare.Account"));
-//		assertTrue(listContainsToValue(validate.getViolationsByLogicalPath("DomainLayer", "Infrastructure"),"infrastructure.socialmedia.locationbased.foursquare.AccountDAO"));
-//		assertTrue(listContainsKey(validate.getViolationsByLogicalPath("DomainLayer", "Infrastructure"),"InvocConstructor"));
+		// Can't test this now, need to find a way with define (and analyze) to test this method
 	}
 
 	@Test
 	public void getViolationsByPhysicalPath() {
-//		Can't test this now, need to find a way with define (and analyze) to test this method
-//		validate.checkConformance();
-//		assertTrue(listContainsFromValue(validate.getViolationsByPhysicalPath("domain.locationbased.foursquare", "infrastructure.socialmedia.locationbased.foursquare"),"domain.locationbased.foursquare.Account"));
-//		assertTrue(listContainsToValue(validate.getViolationsByLogicalPath("DomainLayer", "Infrastructure"), "infrastructure.socialmedia.locationbased.foursquare.AccountDAO"));
-//		assertTrue(listContainsKey(validate.getViolationsByLogicalPath("DomainLayer", "Infrastructure"),"InvocConstructor"));
-	}
-	private boolean listContainsFromValue(ViolationDTO[] violationDTOs, String value){
-		for(ViolationDTO v: violationDTOs){
-			if(v.fromClasspath.equals(value))
-				return true;
-		}
-		return false;
-	}
-	private boolean listContainsToValue(ViolationDTO[] violationDTOs, String value){
-		for(ViolationDTO v: violationDTOs){
-			if(v.toClasspath.equals(value))
-				return true;
-		}
-		return false;
-	}
-	private boolean listContainsKey(ViolationDTO[] violationDTOs, String value){
-		for(ViolationDTO v: violationDTOs){
-			if(v.violationType.getKey().equals(value))
-				return true;
-		}
-		return false;
+		// Can't test this now, need to find a way with define (and analyze) to test this method
 	}
 
 	@Test
