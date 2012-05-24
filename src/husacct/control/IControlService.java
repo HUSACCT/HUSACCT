@@ -16,7 +16,11 @@ public interface IControlService extends IObservableService{
 	public void showErrorMessage(String message);
 	public void showInfoMessage(String message);
 	public String getTranslatedString(String stringIdentifier);
-	public List<String> getStringIdentifiers(String translatedString);
+	/**
+	 * @deprecated: As of 23 may, this method is deprecated. There is no alternative, make sure the logic
+	 * does not require this. To ensure that this method is not used, it always returns an empty list.
+	 */
+	@Deprecated public List<String> getStringIdentifiers(String translatedString);
 	public void centerDialog(JDialog dialog);
 
 }
