@@ -64,7 +64,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		} else if(component instanceof LayerComponent) {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-layer.png"));
 		} else if(component instanceof SubSystemComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-module.png"));
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-subsystem.png"));
 		} else if(component instanceof SoftwareArchitectureComponent) {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-software_architecture.png"));
 		}
