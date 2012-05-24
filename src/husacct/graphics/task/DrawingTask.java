@@ -15,13 +15,10 @@ public class DrawingTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			System.out.println("start");
 			controller.actuallyDraw(toDrawModules);
 			Thread.sleep(10);
 			controller.refreshFrameClean();
-			System.out.println("stop");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

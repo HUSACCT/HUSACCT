@@ -146,6 +146,7 @@ public abstract class DrawingController implements UserInputListener {
 	public abstract void drawArchitecture(DrawingDetail detail);
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
+		clearDrawing();
 		runDrawTask(modules);
 	}
 	
@@ -156,11 +157,9 @@ public abstract class DrawingController implements UserInputListener {
 	}
 	
 	public void actuallyDraw(AbstractDTO[] modules){
-		clearDrawing();
 
 		drawTarget.setCurrentPath(getCurrentPath());
 		drawTarget.updateGUI();
-
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
