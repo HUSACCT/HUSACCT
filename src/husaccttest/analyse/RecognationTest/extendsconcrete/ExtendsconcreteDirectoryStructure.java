@@ -1,9 +1,11 @@
 package husaccttest.analyse.RecognationTest.extendsconcrete;
 
 import java.util.HashMap;
+import static org.junit.Assert.*;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
+import static org.junit.Assert.*;
 
 public class ExtendsconcreteDirectoryStructure extends BenchmarkExtended {
 

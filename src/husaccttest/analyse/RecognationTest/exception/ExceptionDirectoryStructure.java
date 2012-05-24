@@ -1,6 +1,7 @@
 package husaccttest.analyse.RecognationTest.exception;
 
 import java.util.HashMap;
+import static org.junit.Assert.*;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
