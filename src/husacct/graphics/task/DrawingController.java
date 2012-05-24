@@ -58,7 +58,6 @@ public abstract class DrawingController implements UserInputListener {
 			@Override
 			public void update(Locale newLocale) {
 				refreshFrame();
-				refreshDrawing();
 			}
 		});
 	}
