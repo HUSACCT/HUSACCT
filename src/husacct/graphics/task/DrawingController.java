@@ -24,6 +24,7 @@ import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.LineConnectionFigure;
 
 public abstract class DrawingController implements UserInputListener {
 	public static final String ROOT = "";
@@ -162,12 +163,19 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	protected void updateLayout() {
-		int width = drawTarget.getWidth();
-		int height = drawTarget.getHeight();
+		String currentPath = getCurrentPath();
+		
+		if (hasSavedFigureStates(currentPath)) {
+			restoreFigurePositions(currentPath);
+		} else {
+			int width = drawTarget.getWidth();
+			int height = drawTarget.getHeight();
 
-		layoutStrategy.doLayout(width, height);
-		restoreFigurePositions(getCurrentPath());
-
+			layoutStrategy.doLayout(width, height);
+		}
+		
+		updateLines();
+		
 		// FIXME: TODO: Patrick:
 		// Calling drawLinesBasedOnSetting(); after updating the layout is done due to a bug.
 		// The bug is assumed to be in the RelationFigure because the lines are drawing themselves
@@ -177,7 +185,17 @@ public abstract class DrawingController implements UserInputListener {
 		// As it's currently unknown what causes the bug or how to solve it and the
 		// deadline for Construction II is approaching, we have decided to go with a
 		// work around. However, this bug should be fixed as soon as possible.
-		drawLinesBasedOnSetting();
+		//drawLinesBasedOnSetting();
+	}
+	
+	private void updateLines() {
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			if (bf.isLine()) {
+				LineConnectionFigure cf = (LineConnectionFigure) f;
+				cf.updateConnection();
+			}
+		}
 	}
 
 	@Override
@@ -280,6 +298,10 @@ public abstract class DrawingController implements UserInputListener {
 		storedStates.put(path, state);
 	}
 
+	protected boolean hasSavedFigureStates(String path) {
+		return storedStates.containsKey(path);
+	}
+	
 	protected void restoreFigurePositions(String path) {
 		if (storedStates.containsKey(path)) {
 			DrawingState state = storedStates.get(path);

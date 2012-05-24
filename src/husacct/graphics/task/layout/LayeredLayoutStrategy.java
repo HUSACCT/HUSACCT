@@ -77,6 +77,10 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
 	}
+	
+	private void balanceLayout() {
+		
+	}
 
 	private void updateNodes(Node startNode, Node endNode) {
 		int startLevel = startNode.getLevel();
