@@ -2,6 +2,8 @@ package husaccttest.analyse.benchmarkLeo.domain;
 
 import java.util.HashMap;
 
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 import husacct.common.dto.AnalysedModuleDTO;
 import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
@@ -10,6 +12,7 @@ import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
 
 public class Facebook extends BenchmarkExtended{
 
+	@Test
 	public void testNavigation(){
 		String from = "domain.facebook";
 		

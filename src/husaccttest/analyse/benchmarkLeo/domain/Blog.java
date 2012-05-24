@@ -2,6 +2,8 @@ package husaccttest.analyse.benchmarkLeo.domain;
 
 import java.util.HashMap;
 
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
@@ -11,6 +13,7 @@ import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;
 
 public class Blog extends BenchmarkExtended{
 
+	@Test
 	public void testNavigation(){
 		String from = "domain.blog";
 		
@@ -58,6 +61,7 @@ public class Blog extends BenchmarkExtended{
 		assertEquals(true, foundmystory);
 	}
 	
+	@Test
 	public void testDomainBlogWordpressMyBlah(){
 		String from = "domain.blog.wordpress.MyBlah";
 		int expectedDependencies = 2;
@@ -88,6 +92,7 @@ public class Blog extends BenchmarkExtended{
 	}
 	
 
+	@Test
 	public void testDomainBlogWordpressMyBlog(){
 		String from = "domain.blog.wordpress.MyBlog";
 		int expectedDependencies = 4;
@@ -130,6 +135,7 @@ public class Blog extends BenchmarkExtended{
 		assertEquals(true, foundImplementsIlocationExpected);
 	}	
 	
+	@Test
 	public void testDomainBlogWordpressMyComment(){
 		String from = "domain.blog.wordpress.MyComment";
 		int expectedDependencies = 4;
@@ -172,6 +178,7 @@ public class Blog extends BenchmarkExtended{
 		assertEquals(true, foundImplementsIlocationExpected);
 	}	
 	
+	@Test
 	public void testDomainBlogWordpressMyStory(){
 		String from = "domain.blog.wordpress.MyStory";
 		int expectedDependencies = 4;
