@@ -4,7 +4,7 @@ import javax.swing.JInternalFrame;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
-public interface IAnalyseService {
+public interface IAnalyseService{
 	
 	public void analyseApplication();
 	public boolean isAnalysed();

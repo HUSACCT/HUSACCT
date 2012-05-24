@@ -25,7 +25,7 @@ public class CSharpParameterGenerator  extends CSharpGenerator{
 				String uniqueClassName = cSharpTreeConvertController.getUniqueClassName();
 				String uniqueMethodName = uniqueClassName + "." + cSharpTreeConvertController.getCurrentMethodName();
 				String uniqueParameterName = uniqueMethodName + "." + invocationParameter;
-				modelService.createParameter(invocationParameter, uniqueParameterName, typeParameter, uniqueClassName, tree.getLine(), uniqueMethodName, typeParameter);
+				modelService.createParameter(invocationParameter, uniqueParameterName, typeParameter, uniqueClassName, tree.getLine(), uniqueMethodName);
 				typeParameter = "";
 				invocationParameter = "";
 			}
