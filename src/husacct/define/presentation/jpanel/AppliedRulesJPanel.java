@@ -222,7 +222,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
-//		editRuleButton.setEnabled(true);
+		editRuleButton.setEnabled(true);
 		removeRuleButton.setEnabled(true);
 	}
 

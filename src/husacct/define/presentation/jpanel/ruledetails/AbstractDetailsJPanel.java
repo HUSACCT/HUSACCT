@@ -96,6 +96,10 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 		violationTypesJDialog.setVisible(true);
 	}
 
+	public void updateDetails(HashMap<String, Object> ruleDetails){
+		violationTypesJDialog.load(ruleDetails);
+	}
+	
 	public HashMap<String, Object> saveToHashMap(){
 		HashMap<String, Object> hashMap = saveDefaultDataToHashMap();
 		if (!isException){
@@ -121,8 +125,6 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 		ruleDetails.put("violationTypes", violationTypes);
 		return ruleDetails;
 	}
-	
-	public abstract void updateDetails(HashMap<String, Object> ruleDetails);
 	
 	public void setIsUsedAsException(boolean isException) {
 		this.isException = isException;

@@ -9,6 +9,7 @@ import husacct.define.presentation.tables.JTableException;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.KeyValueComboBox;
 import husacct.define.task.AppliedRuleController;
+import husacct.define.task.PopUpController;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -64,7 +65,11 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle(DefineTranslator.translate("AppliedRuleTitle"));
+			if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)){
+				setTitle(DefineTranslator.translate("NewAppliedRuleTitle"));
+			} else {
+				setTitle(DefineTranslator.translate("EditAppliedRuleTitle"));
+			}
 			setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
@@ -115,12 +120,18 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.appliedRuleKeyValueComboBox = new KeyValueComboBox();
 		this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
 		this.appliedRuleKeyValueComboBox.addItemListener(this);
+		
+		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)){
+			this.appliedRuleKeyValueComboBox.setEnabled(false);
+		}
 	}
 	
 	private void refreshRuleDetailsJPanel() {
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-		this.appliedRuleController.clearRuleExceptions();
+		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
+			this.appliedRuleController.clearRuleExceptions();
+		}
 		
 		this.mainPanel.remove(this.ruleDetailsJPanel);
 		
@@ -133,15 +144,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		}
 		
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		
-		//TODO /////////////////////////////////////
-		jButtonAddExceptionRow.setEnabled(true);
-		jButtonRemoveExceptionRow.setEnabled(true);
-		if (ruleTypeKey.equals("IsAllowedToUse")){
-			jButtonAddExceptionRow.setEnabled(false);
-			jButtonRemoveExceptionRow.setEnabled(false);
-		}
-		////////////////////////////////////////////
+
 		this.repaint();
 		this.update();
 	}
@@ -195,7 +198,11 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		buttonPanel.add(jButtonCancel);
 		jButtonCancel.addActionListener(this);
 		
-		jButtonSave = new JButton(DefineTranslator.translate("Add"));
+		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)){
+			jButtonSave = new JButton(DefineTranslator.translate("Add"));
+		} else {
+			jButtonSave = new JButton(DefineTranslator.translate("Update"));
+		}
 		buttonPanel.add(jButtonSave);
 		jButtonSave.addActionListener(this);
 		

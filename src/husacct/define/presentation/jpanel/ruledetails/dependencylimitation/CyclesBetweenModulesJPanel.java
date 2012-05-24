@@ -22,9 +22,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-public class LoopsInModuleExceptionJPanel extends AbstractDetailsJPanel implements TreeSelectionListener{
+public class CyclesBetweenModulesJPanel extends AbstractDetailsJPanel implements TreeSelectionListener{
 	private static final long serialVersionUID = 7498639445874148975L;
-	public static final String ruleTypeKey = "LoopsInModuleException";
+	public static final String ruleTypeKey = "CyclesBetweenModules";
 
 	private JLabel moduleFromLabel;
 	private JLabel ruleEnabledLabel;
@@ -37,9 +37,8 @@ public class LoopsInModuleExceptionJPanel extends AbstractDetailsJPanel implemen
 	public JCheckBox ruleEnabledCheckBox;
 	public JTextArea descriptionTextArea;
 	
-	public LoopsInModuleExceptionJPanel(AppliedRuleController appliedRuleController) {
+	public CyclesBetweenModulesJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
-		super.isException = true;
 	}
 
 	@Override
@@ -78,8 +77,14 @@ public class LoopsInModuleExceptionJPanel extends AbstractDetailsJPanel implemen
 
 	@Override
 	public void updateDetails(HashMap<String, Object> ruleDetails) {
-		// TODO Auto-generated method stub
+		super.updateDetails(ruleDetails);
 		
+		//FIXME
+//		moduleFromTree;; SET
+		currentModuleId = (Long) ruleDetails.get("moduleFromId");
+		
+		ruleEnabledCheckBox.setSelected((Boolean) ruleDetails.get("enabled"));
+		descriptionTextArea.setText((String) ruleDetails.get("description"));
 	}
 
 	private Object getTreeValue(TreePath path){

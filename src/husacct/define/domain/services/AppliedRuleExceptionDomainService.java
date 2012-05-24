@@ -49,5 +49,11 @@ public class AppliedRuleExceptionDomainService {
 		}
 		return exceptionIds;
 	}
+	
+	public ArrayList<AppliedRule> getExceptionsByAppliedRule(long parentRuleId) {
+		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
+		ArrayList<AppliedRule> exceptionRules = parentRule.getExceptions();
+		return exceptionRules;
+	}
 
 }

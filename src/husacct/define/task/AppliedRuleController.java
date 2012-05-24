@@ -55,6 +55,10 @@ public class AppliedRuleController extends PopUpController {
 		this.moduleService = new ModuleDomainService();
 		this.appliedRuleService = new AppliedRuleDomainService();
 		this.appliedRuleExceptionService = new AppliedRuleExceptionDomainService();
+		
+		if (getAction().equals(PopUpController.ACTION_EDIT)){
+			loadAllRuleExceptions();
+		}
 	}
 	
 	private void determineAction() {
@@ -208,21 +212,21 @@ public class AppliedRuleController extends PopUpController {
 		Module moduleFrom = getCorrectModule(from);
 		Module moduleTo = getCorrectModule(to);
 		
-		if(this.checkRuleConventions(moduleFrom, moduleTo, ruleTypeKey)) {
-			try {
-				if (this.getAction().equals(PopUpController.ACTION_NEW)) {
-					this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
-				} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-					this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
-				}
-				this.saveAllExceptionRules();
-				DefinitionController.getInstance().notifyObservers(this.currentModuleId);
-				return true;
-			} catch (Exception e) {
-				UiDialogs.errorDialog(jframeAppliedRule, e.getMessage());
+		try {
+			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
+				if (!this.checkRuleConventions(moduleFrom, moduleTo, ruleTypeKey)){ return false;}//Does not comply with ruleconventions
+				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
+				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+				this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 			}
+			this.saveAllExceptionRules();
+			DefinitionController.getInstance().notifyObservers(this.currentModuleId);
+			return true;
+		} catch (Exception e) {
+			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage());
+			return false;
 		}
-		return false;
 	}
 	
 	private Module getCorrectModule(Object o){
@@ -294,13 +298,33 @@ public class AppliedRuleController extends PopUpController {
 			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo);
 		}
 	}
+	private void loadAllRuleExceptions(){
+		ArrayList<AppliedRule> exceptions = this.appliedRuleExceptionService.getExceptionsByAppliedRule(this.currentAppliedRuleId);
+		for (AppliedRule exception : exceptions){
+			HashMap<String, Object> exceptionRule = new HashMap<String, Object>();
+			exceptionRule.put("id", exception.getId());
+			exceptionRule.put("ruleTypeKey", exception.getRuleType());
+			exceptionRule.put("moduleFromId", exception.getModuleFrom().getId());
+			exceptionRule.put("moduleToId", exception.getModuleTo().getId());
+			exceptionRule.put("dependencies", exception.getDependencies());
+			exceptionRule.put("enabled", exception.isEnabled());
+			exceptionRule.put("description", exception.getDescription());
+			exceptionRule.put("regex", exception.getRegex());
+			addException(exceptionRule);
+		}
+		notifyObservers();
+	}
 
 	public void addException(HashMap<String, Object> exceptionRule){
 		exceptionRules.add(exceptionRule);
 	}
 	
 	public void removeException(int index){
-		exceptionRules.remove(index);
+		if (index != -1){
+			try {
+				exceptionRules.remove(index);
+			} catch (Exception e){}
+		}
 	}
 	
 	/*

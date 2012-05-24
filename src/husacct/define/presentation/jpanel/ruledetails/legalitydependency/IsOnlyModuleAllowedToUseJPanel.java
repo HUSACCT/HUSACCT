@@ -112,8 +112,15 @@ public class IsOnlyModuleAllowedToUseJPanel extends AbstractDetailsJPanel implem
 
 	@Override
 	public void updateDetails(HashMap<String, Object> ruleDetails) {
-		// TODO Auto-generated method stub
+		super.updateDetails(ruleDetails);
 		
+		//FIXME
+//		moduleFromTree;; SET
+//		moduleToTree;; SET
+		currentModuleId = (Long) ruleDetails.get("moduleFromId");
+		
+		ruleEnabledCheckBox.setSelected((Boolean) ruleDetails.get("enabled"));
+		descriptionTextArea.setText((String) ruleDetails.get("description"));
 	}
 
 	private void addFromModuleComponents(GridBagConstraints gridBagConstraints) {
