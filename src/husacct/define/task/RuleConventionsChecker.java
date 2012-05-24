@@ -12,22 +12,19 @@ public class RuleConventionsChecker {
 	private Module moduleTo;
 	private String ruleTypeKey;
 	
-	private ArrayList<AppliedRule> fromAppliedRules;
-	private ArrayList<AppliedRule> toAppliedRules;
-	
 	private String errorMessage;
+	
+	private AppliedRuleDomainService appliedRuleService;
 	
 	public RuleConventionsChecker(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
 		this.setModuleFrom(moduleFrom);
 		this.setModuleTo(moduleTo);
 		this.setRuleTypeKey(ruleTypeKey);
-		this.fromAppliedRules = new ArrayList<AppliedRule>();
-		this.toAppliedRules = new ArrayList<AppliedRule>();
 		this.errorMessage = "";
+		this.appliedRuleService = new AppliedRuleDomainService();
 	}
 	
 	public boolean checkRuleConventions() {
-		fillAppliedRules();
 		boolean conventionError = true;
 		if(ruleTypeKey.equals("VisibilityConvention")) {
 			conventionError = checkVisibilityConvention();
@@ -53,20 +50,6 @@ public class RuleConventionsChecker {
 			conventionError = checkBackCall();
 		}
 		return conventionError;
-	}
-	
-	private void fillAppliedRules() {
-		AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
-		ArrayList<Long> fromAppliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleFromId(moduleFrom.getId());
-		for(Long appliedRuleId : fromAppliedRuleIds) {
-			AppliedRule appliedRule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-			this.fromAppliedRules.add(appliedRule);
-		}
-		ArrayList<Long> toAppliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleToId(moduleTo.getId());
-		for(Long appliedRuleId : toAppliedRuleIds) {
-			AppliedRule appliedRule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-			this.toAppliedRules.add(appliedRule);
-		}
 	}
 	
 	private boolean checkVisibilityConvention() {
@@ -170,7 +153,7 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkRuleTypeAlreadySet() {
-		for(AppliedRule appliedRule : fromAppliedRules) {
+		for(AppliedRule appliedRule : this.getFromModuleAppliedRules(moduleFrom)) {
 			if(appliedRule.getRuleType().equals(ruleTypeKey)) {
 				setErrorMessage(DefineTranslator.translate("RuleTypeAlreadySet"));
 				return false;
@@ -180,11 +163,25 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkRuleTypeAlreadyFromThisToSelected(String ruleType) {
-		for(AppliedRule appliedRule : fromAppliedRules) {
+		return this.checkRuleTypeAlreadyFromThisToSelected(ruleType, this.moduleFrom, this.moduleTo);
+	}
+	
+	private boolean checkRuleTypeAlreadyFromThisToSelected(String ruleType, Module fromModule, Module toModule) {
+		for(AppliedRule appliedRule : this.getFromModuleAppliedRules(fromModule)) {
 			if(appliedRule.getRuleType().equals(ruleType) &&
-				appliedRule.getModuleFrom().getId() == moduleFrom.getId() &&
-				appliedRule.getModuleTo().getId() == moduleTo.getId()) {
-				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromThisToSelected"));
+			   appliedRule.getModuleFrom().getId() == fromModule.getId() &&
+			   appliedRule.getModuleTo().getId() == toModule.getId()) {
+				setErrorMessage(DefineTranslator.translate(appliedRule.getRuleType() + "AlreadyFromThisToSelected"));
+				return false;
+			}
+		}
+		for(Module fromModuleChild : fromModule.getSubModules()) {
+			if(!this.checkRuleTypeAlreadyFromThisToSelected(ruleType, fromModuleChild, toModule)) {
+				return false;
+			}
+		}
+		for(Module toModuleChild : toModule.getSubModules()) {
+			if(!this.checkRuleTypeAlreadyFromThisToSelected(ruleType, fromModule, toModuleChild)) {
 				return false;
 			}
 		}
@@ -192,27 +189,63 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkRuleTypeAlreadyFromThisToOther(String ruleType) {
-		for(AppliedRule appliedRule : fromAppliedRules) {
+		return this.checkRuleTypeAlreadyFromThisToOther(ruleType, this.moduleFrom, this.moduleTo);
+	}
+	
+	private boolean checkRuleTypeAlreadyFromThisToOther(String ruleType, Module fromModule, Module toModule) {
+		for(AppliedRule appliedRule : this.getFromModuleAppliedRules(fromModule)) {
 			if(appliedRule.getRuleType().equals(ruleType) &&
-				appliedRule.getModuleFrom().getId() == moduleFrom.getId() &&
-				appliedRule.getModuleTo().getId() != moduleTo.getId()) {
+				appliedRule.getModuleFrom().getId() == fromModule.getId() &&
+				appliedRule.getModuleTo().getId() != toModule.getId()) {
 				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromThisToOther"));
+				return false;
+			}
+		}
+		for(Module fromModuleChild : fromModule.getSubModules()) {
+			if(!this.checkRuleTypeAlreadyFromThisToOther(ruleType, fromModuleChild, toModule)) {
+				return false;
+			}
+		}
+		for(Module toModuleChild : toModule.getSubModules()) {
+			if(!this.checkRuleTypeAlreadyFromThisToOther(ruleType, fromModule, toModuleChild)) {
+				return false;
+			}
+		}
+		return true;
+	}
+		
+	private ArrayList<AppliedRule> getFromModuleAppliedRules(Module fromModule) {
+		ArrayList<Long> appliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleFromId(fromModule.getId());
+		ArrayList<AppliedRule> appliedRules = new ArrayList<AppliedRule>();
+		for(Long appliedRuleId : appliedRuleIds) {
+			appliedRules.add(appliedRuleService.getAppliedRuleById(appliedRuleId));
+		}
+		return appliedRules;
+	}
+	
+	private boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType) {
+		return checkRuleTypeAlreadyFromOtherToSelected(ruleType, moduleFrom, moduleTo);
+	}
+	
+	private boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType, Module fromModule, Module toModule) {
+		for(AppliedRule appliedRule : getToModuleAppliedRules(toModule)) {
+			if(appliedRule.getRuleType().equals(ruleType) &&
+				appliedRule.getModuleFrom().getId() != fromModule.getId() &&
+				appliedRule.getModuleTo().getId() == toModule.getId()) {
+				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromOtherToSelected") + " \"" + appliedRule.getModuleFrom().getName() + "\"");
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	private boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType) {
-		for(AppliedRule appliedRule : toAppliedRules) {
-			if(appliedRule.getRuleType().equals(ruleType) &&
-				appliedRule.getModuleFrom().getId() != moduleFrom.getId() &&
-				appliedRule.getModuleTo().getId() == moduleTo.getId()) {
-				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromOtherToSelected") + " \"" + appliedRule.getModuleFrom().getName() + "\"");
-				return false;
-			}
+	private ArrayList<AppliedRule> getToModuleAppliedRules(Module toModule) {
+		ArrayList<Long> appliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleToId(toModule.getId());
+		ArrayList<AppliedRule> appliedRules = new ArrayList<AppliedRule>();
+		for(Long appliedRuleId : appliedRuleIds) {
+			appliedRules.add(appliedRuleService.getAppliedRuleById(appliedRuleId));
 		}
-		return true;
+		return appliedRules;
 	}
 	
 	public Module getModuleTo() {
