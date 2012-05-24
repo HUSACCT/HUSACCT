@@ -149,6 +149,24 @@ public abstract class AbstractViolationType {
 			return false;
 		}
 	}
+	
+	protected boolean isInterfaceConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	protected boolean isSubClassConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	private Severity createSeverity(String programmingLanguage, String violationKey){
 		try{

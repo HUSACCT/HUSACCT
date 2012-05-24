@@ -12,15 +12,17 @@ public enum RuleTypes {
 	MUST_USE("MustUse", DefaultSeverities.MEDIUM),
 	BACK_CALL("BackCall", DefaultSeverities.HIGH),
 	SKIP_CALL("SkipCall", DefaultSeverities.LOW),
-	
+
 	NAMING_CONVENTION("NamingConvention", DefaultSeverities.MEDIUM),
 	NAMING_CONVENTION_EXCEPTION("NamingConventionException", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION("VisibilityConvention", DefaultSeverities.MEDIUM),
 	VISIBILITY_CONVENTION_EXCEPTION("VisibilityConventionException", DefaultSeverities.MEDIUM),
+	INTERFACE_CONVENTION("InterfaceConvention", DefaultSeverities.LOW),
+	SUBCLASS_CONVENTION("SubClassConvention", DefaultSeverities.MEDIUM),
 	CYCLES_BETWEEN_MODULES("CyclesBetweenModules", DefaultSeverities.HIGH),
 	CYCLES_BETWEEN_MODULES_EXCEPTION("CyclesBetweenModulesException", DefaultSeverities.MEDIUM);	
 
-	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(IS_NOT_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, CYCLES_BETWEEN_MODULES);
+	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(SUBCLASS_CONVENTION ,INTERFACE_CONVENTION ,IS_NOT_ALLOWED, IS_ONLY_ALLOWED, IS_ONLY_MODULE_ALLOWED, MUST_USE, BACK_CALL, SKIP_CALL, NAMING_CONVENTION, VISIBILITY_CONVENTION, CYCLES_BETWEEN_MODULES);
 
 	private final String key;
 	private final DefaultSeverities defaultSeverity;
