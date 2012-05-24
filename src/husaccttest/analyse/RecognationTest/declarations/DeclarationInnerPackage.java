@@ -1,6 +1,7 @@
-package husaccttest.analyse.benchmarkLeo.declarations;
+package husaccttest.analyse.RecognationTest.declarations;
 
 import java.util.HashMap;
+import static org.junit.Assert.*;
 
 import husacct.common.dto.DependencyDTO;
 import husaccttest.analyse.benchmarkLeo.BenchmarkExtended;

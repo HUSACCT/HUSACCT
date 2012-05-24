@@ -2,15 +2,12 @@ package husaccttest.analyse.benchmarkLeo;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.analyse.domain.famix.FamixCreationServiceImpl;
-import husacct.common.dto.DependencyDTO;
 import husacct.define.IDefineService;
 import husaccttest.analyse.TestCaseExtended;
 
 public abstract class BenchmarkExtended extends TestCaseExtended{
 
 	public IAnalyseService service;
-	private FamixCreationServiceImpl famix;
 	
 	@Override
 	public void setUp(){
@@ -23,7 +20,6 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
 		service = provider.getAnalyseService();
-		famix = new FamixCreationServiceImpl();
 		
 //		if(service.isAnalysed()){
 //			return;
@@ -41,6 +37,7 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 	
 	@Override
 	public void tearDown(){
-		//service.analyseApplication();
-	}	
+		
+	}
+	
 }

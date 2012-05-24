@@ -1,4 +1,4 @@
-package husaccttest.analyse.benchmarkLeo.exception;
+package husaccttest.analyse.RecognationTest.exception;
 
 import java.util.HashMap;
 

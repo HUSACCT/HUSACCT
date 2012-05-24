@@ -1,5 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.ArrayList;
+
 import husacct.analyse.domain.IModelCreationService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
@@ -18,6 +20,9 @@ class JavaAttributeAndLocalVariableGenerator {
 	private int lineNumber;
 	private String belongsToMethod = ""; //alleen voor local variables
 	
+	private ArrayList<String> declareTypes = new ArrayList<String>();
+	
+	
 	private IModelCreationService modelService = new FamixCreationServiceImpl();
 
 	private String name;
@@ -31,6 +36,17 @@ class JavaAttributeAndLocalVariableGenerator {
 		this.belongsToMethod = belongsToMethod;
 		startFiltering(attributeTree, belongsToClass);
 		createLocalVariableObject();
+	}
+	
+	public String generateMethodReturnType(Tree returnTypeTree, String belongsToClass){
+		this.belongsToClass = belongsToClass;
+		
+		if(returnTypeTree.getType() == JavaParser.TYPE){
+			setDeclareType(returnTypeTree);
+		}
+		
+		walkThroughAST(returnTypeTree);		
+		return this.declareType;
 	}
 
 	private void startFiltering(Tree attributeTree, String belongsToClass){
@@ -56,7 +72,7 @@ class JavaAttributeAndLocalVariableGenerator {
 	private void walkThroughAST(Tree tree) {
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
-			int treeType = child.getType();
+			int treeType = child.getType();			
 			if(treeType == JavaParser.MODIFIER_LIST){
 				setAccesControllQualifier(tree);
 				setClassScope(child);
@@ -97,12 +113,12 @@ class JavaAttributeAndLocalVariableGenerator {
 
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber);
+		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
 	}
 	
 	private void createLocalVariableObject() {
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod);
+		modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
 	}
 
 	private void setAttributeName(Tree tree) {
@@ -119,18 +135,24 @@ class JavaAttributeAndLocalVariableGenerator {
 	}
 
 	private void setDeclareType(Tree typeTree) {
-		
 		Tree child = typeTree.getChild(0);
 		Tree declaretype = child.getChild(0);
+		String foundType = "";
 		if(child.getType() != JavaParser.QUALIFIED_TYPE_IDENT){
-			declareType = child.getText();
+			foundType = child.getText();
 		}else{
 			if(child.getChildCount() > 1){
 				for(int i=0; i<child.getChildCount(); i++){
-					this.declareType += child.getChild(i).toString() + ".";
+					foundType += child.getChild(i).toString() + ".";
 				}
 			}
-			else declareType = declaretype.getText();
+			else foundType = declaretype.getText();
+		}
+		
+		if(this.declareType == null || this.declareType.equals("")){
+			this.declareType = foundType;
+		} else {
+			declareTypes.add(foundType);
 		}
 	}
 

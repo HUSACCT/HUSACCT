@@ -1,5 +1,7 @@
 package husacct.analyse.domain.famix;
 
+import java.util.List;
+
 import javax.naming.directory.InvalidAttributesException;
 import husacct.analyse.domain.IModelCreationService;
 
@@ -95,6 +97,21 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
+	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int line, List<String> declareTypes) {
+		this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line);
+		
+		for(String type : declareTypes){
+			FamixAssociation fAssocation = new FamixAssociation();
+			fAssocation.from = belongsToClass;
+			fAssocation.to = type;
+			fAssocation.type = "Declaration Generic";
+			fAssocation.lineNumber = line;
+			model.waitingAssociations.add(fAssocation);
+		}
+		
+	}
+	
+	@Override
 	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int line) {
 		FamixAttribute famixAttribute = new FamixAttribute();
 		famixAttribute.hasClassScope = classScope;
@@ -112,6 +129,21 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		fAssocation.type = "Declaration";
 		fAssocation.lineNumber = line;
 		model.waitingAssociations.add(fAssocation);
+	}
+	
+	@Override
+	public void createLocalVariable( String belongsToClass, String declareType, String name, 
+			String uniqueName, int lineNumber, String belongsToMethodString, List<String> declareTypes) {
+		this.createLocalVariable(belongsToClass, declareType, name, uniqueName, lineNumber, belongsToMethodString);
+		
+		for(String type : declareTypes){
+			FamixAssociation fAssocation = new FamixAssociation();
+			fAssocation.from = belongsToClass;
+			fAssocation.to = type;
+			fAssocation.type = "Declaration Generic";
+			fAssocation.lineNumber = lineNumber;
+			model.waitingAssociations.add(fAssocation);
+		}
 	}
 	
 	@Override
@@ -139,7 +171,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	@Override
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
-			String belongsToMethod, String declareTypes) {
+			String belongsToMethod, List<String> declareTypes) {
 		
 		FamixFormalParameter famixParameter = new FamixFormalParameter();
 		famixParameter.belongsToClass = belongsToClass;
@@ -148,14 +180,25 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		famixParameter.lineNumber = lineNumber;
 		famixParameter.name = name;
 		famixParameter.uniqueName = uniqueName;
+		famixParameter.declaredTypes = declareTypes;
 		addToModel(famixParameter);
 		model.waitingStructuralEntitys.add(famixParameter);
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
 		fAssocation.to = declareType;
-		fAssocation.type = "Declaration";
+		fAssocation.type = "Declaration Parameter";
 		fAssocation.lineNumber = lineNumber;
-		model.waitingAssociations.add(fAssocation);
+		model.waitingAssociations.add(fAssocation);	
+		
+		for(String type : declareTypes){
+			FamixAssociation fParamAssocation = new FamixAssociation();
+			fParamAssocation.from = belongsToClass;
+			fParamAssocation.to = type;
+			fParamAssocation.type = "Parameter Generic Type";
+			fParamAssocation.lineNumber = lineNumber;
+			model.waitingAssociations.add(fParamAssocation);
+		}
+		
 	}
 	
 	@Override
