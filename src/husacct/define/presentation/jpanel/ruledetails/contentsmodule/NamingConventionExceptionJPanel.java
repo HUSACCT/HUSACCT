@@ -76,4 +76,14 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 		
 		return ruleDetails;
 	}
+	
+	@Override
+	public boolean hasValidData() {
+		boolean hasValidData =  true;
+		hasValidData = hasValidData && moduleFromPanelComponent.hasValidData();
+		hasValidData = hasValidData && regexPanelComponent.hasValidData();
+		hasValidData = hasValidData && enabledPanelComponent.hasValidData();
+		hasValidData = hasValidData && descriptionPanelComponent.hasValidData();
+		return hasValidData;
+	}
 }

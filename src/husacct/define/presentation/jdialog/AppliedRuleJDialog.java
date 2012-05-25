@@ -293,17 +293,16 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	}
 
 	private void addException() {
-		//TODO move this code to an event method
-		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-		long selectedModuleToId = (Long) ruleDetails.get("moduleToId");
-		this.appliedRuleController.setModuleToId(selectedModuleToId);
-//		if (ruleDetailsJPanel.hasValidData()) {
+		if (ruleDetailsJPanel.hasValidData()) {
+			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+			long selectedModuleToId = (Long) ruleDetails.get("moduleToId");
+			this.appliedRuleController.setModuleToId(selectedModuleToId);
 			ExceptionRuleJDialog exceptionFrame = new ExceptionRuleJDialog(this.appliedRuleController, this);
 			DialogUtils.alignCenter(exceptionFrame);
 			exceptionFrame.setVisible(true);
-//		} else {
-//			UiDialogs.errorDialog(this, DefineTranslator.translate("ModuleToSelectionError"));
-//		}
+		} else {
+			UiDialogs.errorDialog(this, DefineTranslator.translate("CorrectDataError"));
+		}
 	}
 	
 	private void removeException() {
@@ -323,15 +322,19 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	}
 
 	private void save() {	
-		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-		
-		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
-		ruleDetails.put("ruleTypeKey", ruleTypeKey);
-		
-		if(this.appliedRuleController.save(ruleDetails)) {
-			this.dispose();
+		if (ruleDetailsJPanel.hasValidData()) {
+			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+			
+			String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
+			ruleDetails.put("ruleTypeKey", ruleTypeKey);
+			
+			if(this.appliedRuleController.save(ruleDetails)) {
+				this.dispose();
+			} else {
+				UiDialogs.errorDialog(this, DefineTranslator.translate("CantSaveRule"));
+			}
 		} else {
-			UiDialogs.errorDialog(this, DefineTranslator.translate("CantSaveRule"));
+			UiDialogs.errorDialog(this, DefineTranslator.translate("CorrectDataError"));
 		}
 	}
 	

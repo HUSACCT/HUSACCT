@@ -137,5 +137,5 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 		componentCount++;
 	}
 	
-	
+	public abstract boolean hasValidData();
 }

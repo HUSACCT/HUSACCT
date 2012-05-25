@@ -43,8 +43,8 @@ public class RegexPanelComponent extends AbstractPanelComponent{
 	@Override
 	public boolean hasValidData(){
 		boolean hasValidData = true;
-		
-//		hasValidData = hasValidData && regexTextField.getText().matches("^!?\\*?[A-Za-z]+\\*?$");
+		String regex = regexTextField.getText();
+		hasValidData = hasValidData && (regex.matches("^!?\\*?[A-Za-z]+\\*?$"));
 		
 		return hasValidData;
 	}
