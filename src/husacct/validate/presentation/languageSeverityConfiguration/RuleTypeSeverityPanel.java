@@ -2,9 +2,9 @@ package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
+import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationRuleTypeDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.presentation.DataLanguageHelper;
-import husacct.validate.presentation.LanguageSeverityConfiguration;
 import husacct.validate.presentation.tableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
@@ -19,27 +19,26 @@ import javax.swing.table.TableColumnModel;
 public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 5947125752371446966L;
-
-	private ComboBoxTableModel ruletypeModel;
 	
 	private final DefaultListModel rtsCategoryModel;
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;
-	private final LanguageSeverityConfiguration languageSeverityConfiguration;
 	
+	private List<Severity> severities;
 	private TaskServiceImpl taskServiceImpl;
-	private JButton Apply, Restore, RestoreAll;
-	private JList Category;
-	private JScrollPane CategoryScrollpane, RuletypeScrollpane;
-	private JTable RuletypeTable;
+	private ComboBoxTableModel ruletypeModel;
+	private JButton apply, restore, restoreAll;
+	private JList category;
+	private JScrollPane categoryScrollpane, ruletypeScrollpane;
+	private JTable ruletypeTable;
 	
-	public RuleTypeSeverityPanel(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, HashMap<String, List<RuleType>> ruletypes, String language) {
+	public RuleTypeSeverityPanel(TaskServiceImpl taskServiceImpl, ConfigurationRuleTypeDTO configurationSubPanelDTO) {
 		rtsCategoryModel = new DefaultListModel();
 		
 		this.taskServiceImpl = taskServiceImpl;
-		this.languageSeverityConfiguration = languageSeverityConfiguration;
-		this.language = language;
-		this.ruletypes = ruletypes;
+		this.severities = configurationSubPanelDTO.getSeverities();
+		this.language = configurationSubPanelDTO.getLanguage();
+		this.ruletypes = configurationSubPanelDTO.getRuletypes();
 		
 		initComponents();
 		loadAfterChange();
@@ -47,37 +46,37 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 
     private void initComponents() {
 		
-		CategoryScrollpane = new JScrollPane();
-		Category = new JList();
-		RuletypeScrollpane = new JScrollPane();
-		RuletypeTable = new JTable();
-		Apply = new JButton();
-		Restore = new JButton();
-		RestoreAll = new JButton();
+		categoryScrollpane = new JScrollPane();
+		category = new JList();
+		ruletypeScrollpane = new JScrollPane();
+		ruletypeTable = new JTable();
+		apply = new JButton();
+		restore = new JButton();
+		restoreAll = new JButton();
 		
-		Category.setModel(rtsCategoryModel);
-		Category.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		CategoryScrollpane.setViewportView(Category);
+		category.setModel(rtsCategoryModel);
+		category.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		categoryScrollpane.setViewportView(category);
 
-		RuletypeTable.setFillsViewportHeight(true);
-		RuletypeTable.getTableHeader().setReorderingAllowed(false);
-		RuletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		RuletypeScrollpane.setViewportView(RuletypeTable);
+		ruletypeTable.setFillsViewportHeight(true);
+		ruletypeTable.getTableHeader().setReorderingAllowed(false);
+		ruletypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ruletypeScrollpane.setViewportView(ruletypeTable);
 		
-		Restore.setEnabled(false);
+		restore.setEnabled(false);
 		
-		Category.addListSelectionListener(new ListSelectionListener() {
+		category.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
 				 if (evt.getValueIsAdjusting()) {
 					 return;
 				 } 
-				rtsCategoryValueChanged();
+				CategoryValueChanged();
 			}
 		});
 		
-		RuletypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		ruletypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -88,27 +87,31 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 			}
 		});
 		
-		Apply.addActionListener(new ActionListener() {
+		apply.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				rtsApplyActionPerformed();
+				if(ruletypeTable.getSelectedRow() > -1){
+					ApplyActionPerformed();
+				} else{
+					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("RowNotSelected")));
+				}
 			}
 		});
 		
-		Restore.addActionListener(new ActionListener() {
+		restore.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				rtsRestoreActionPerformed();
+				RestoreActionPerformed();
 			}
 		});
 		
-		RestoreAll.addActionListener(new ActionListener() {
+		restoreAll.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				rtsRestoreAllActionPerformed();
+				RestoreAllActionPerformed();
 			}
 		});
 
@@ -119,14 +122,14 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		GroupLayout ruletypeSeverityLayout = new GroupLayout(this);
 		
 		GroupLayout.ParallelGroup horizontalButtonGroup = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
-		horizontalButtonGroup.addComponent(Restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonGroup.addComponent(RestoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonGroup.addComponent(Apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(restoreAll, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		horizontalButtonGroup.addComponent(apply, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		
 		GroupLayout.SequentialGroup horizontalPaneGroup = ruletypeSeverityLayout.createSequentialGroup();
-		horizontalPaneGroup.addComponent(CategoryScrollpane);
+		horizontalPaneGroup.addComponent(categoryScrollpane);
 		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
-		horizontalPaneGroup.addComponent(RuletypeScrollpane);
+		horizontalPaneGroup.addComponent(ruletypeScrollpane);
 		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
 		horizontalPaneGroup.addGroup(horizontalButtonGroup);
 		horizontalPaneGroup.addContainerGap();
@@ -134,16 +137,16 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		
 		GroupLayout.SequentialGroup verticalButtonGroup = ruletypeSeverityLayout.createSequentialGroup();
 		verticalButtonGroup.addContainerGap();
-		verticalButtonGroup.addComponent(Restore);
+		verticalButtonGroup.addComponent(restore);
 		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonGroup.addComponent(RestoreAll);
+		verticalButtonGroup.addComponent(restoreAll);
 		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonGroup.addComponent(Apply);
+		verticalButtonGroup.addComponent(apply);
 		verticalButtonGroup.addContainerGap();
 		
 		GroupLayout.ParallelGroup verticalPaneGroup = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.TRAILING);
-		verticalPaneGroup.addComponent(CategoryScrollpane);
-		verticalPaneGroup.addComponent(RuletypeScrollpane);
+		verticalPaneGroup.addComponent(categoryScrollpane);
+		verticalPaneGroup.addComponent(ruletypeScrollpane);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
 		
 		ruletypeSeverityLayout.setVerticalGroup(verticalPaneGroup);
@@ -158,42 +161,46 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void setText(){
-		Category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
-		Apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
-		Restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
-		RestoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
+		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
+		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
+		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
+		restoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
+	}
+	
+	public void setSeverities(List<Severity> severities){
+		this.severities = severities;
 	}
 	
 	private void loadModel(){
 		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
-		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, languageSeverityConfiguration.getSeverityNames());
+		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities);
 		ruletypeModel.setTypes(new Class[]{DataLanguageHelper.class, Severity.class});
 		ruletypeModel.setCanEdit(new Boolean[]{false, true});
 		
-		RuletypeTable.setModel(ruletypeModel);
+		ruletypeTable.setModel(ruletypeModel);
 		
-		TableColumnModel tcm = RuletypeTable.getColumnModel();
+		TableColumnModel tcm = ruletypeTable.getColumnModel();
 		tcm.getColumn(1).setCellEditor(ruletypeModel.getEditor());
 	}
 	
-	private void rtsRestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) ruletypeModel.getValueAt(RuletypeTable.getSelectedRow(), 0)).key);
-		rtsCategoryValueChanged();
+	private void RestoreActionPerformed() {		
+		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) ruletypeModel.getValueAt(ruletypeTable.getSelectedRow(), 0)).key);
+		CategoryValueChanged();
 	}
 
-	private void rtsRestoreAllActionPerformed() {
+	private void RestoreAllActionPerformed() {
 		taskServiceImpl.restoreAllToDefault(language);
-		rtsCategoryValueChanged();
+		CategoryValueChanged();
 	}
 
-	private void rtsApplyActionPerformed() {
+	private void ApplyActionPerformed() {
 		checkRestoreButtonEnabled();
 		updateRuletypeSeverities();
 	}
 	
 	
-	private void rtsCategoryValueChanged() {
-		loadRuleTypes(((DataLanguageHelper) Category.getSelectedValue()).key);
+	private void CategoryValueChanged() {
+		loadRuleTypes(((DataLanguageHelper) category.getSelectedValue()).key);
 	}
 	
 	private void loadRuleTypeCategories() {
@@ -230,10 +237,10 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void checkRestoreButtonEnabled(){
-		if(RuletypeTable.getSelectedRow() > -1){
-			Restore.setEnabled(true);
+		if(ruletypeTable.getSelectedRow() > -1){
+			restore.setEnabled(true);
 		} else{
-			Restore.setEnabled(false);
+			restore.setEnabled(false);
 		}
 	}
 }
