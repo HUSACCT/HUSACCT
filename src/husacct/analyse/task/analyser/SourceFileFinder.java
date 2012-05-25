@@ -21,7 +21,6 @@ class SourceFileFinder {
 		}
 		List<MetaFile> filePaths = new ArrayList<MetaFile>();
 		for (File file : listFiles) {
-			System.out.println(file.getAbsolutePath());
 			checkIfFileOrDirectory(file,filePaths);
 		}
 		return filePaths;
