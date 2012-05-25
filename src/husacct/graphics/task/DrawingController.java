@@ -23,7 +23,6 @@ import husacct.graphics.util.DrawingLayoutStrategy;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
@@ -33,10 +32,11 @@ import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
 	protected static final boolean debugPrint = true;
-	protected boolean savePoints;
+	protected boolean contextUpdates;
+	private boolean areDependenciesShown;
+	private boolean areViolationsShown;
 	protected DrawingLayoutStrategy layoutStrategyOption;
 
-	private boolean areViolationsShown = false;
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
 
 	protected Drawing drawing;
@@ -54,7 +54,6 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
-		savePoints = false;
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 		
 		figureFactory = new FigureFactory();
@@ -81,6 +80,10 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 		drawTarget.setSelectedLayout(layoutStrategyOption);
+		
+		showDependencies();
+		hideViolations();
+		deactivateContextUpdates();
 	}
 	
 	private void switchLayoutStrategy(){
@@ -100,8 +103,47 @@ public abstract class DrawingController implements UserInputListener {
 	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
 		layoutStrategyOption = selectedStrategyEnum;
 		switchLayoutStrategy();
-//		refreshDrawing();
 		updateLayout();
+	}
+	
+	public void toggleDependencies(){
+		notifyServiceListeners();
+		if(areDependenciesShown){
+			hideDependencies();
+		}else{
+			showDependencies();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	public void showDependencies(){
+		areDependenciesShown = true;
+		drawTarget.turnOnDependencies();
+	}
+	
+	public void hideDependencies(){
+		areDependenciesShown = false;
+		drawTarget.turnOffDependencies();
+	}
+	
+	public void toggleContextUpdates(){
+		notifyServiceListeners();
+		if(contextUpdates){
+			deactivateContextUpdates();
+		}else{
+			activateContextUpdates();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	private void deactivateContextUpdates(){
+		contextUpdates = false;
+		drawTarget.turnOffContextUpdates();
+	}
+	
+	private void activateContextUpdates(){
+		contextUpdates = true;
+		drawTarget.turnOnContextUpdates();
 	}
 
 	public JInternalFrame getGUI() {
@@ -258,11 +300,15 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
-		drawDependenciesForShownModules();
+		if(areDependenciesShown){
+			drawDependenciesForShownModules();
+		}
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		drawing.updateLineFigureToContext();
+		if(contextUpdates){
+			drawing.updateLineFigureToContext();
+		}
 	}
 
 	public void drawDependenciesForShownModules() {

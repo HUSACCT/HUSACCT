@@ -62,7 +62,6 @@ public class GraphicsFrame extends JInternalFrame {
 
 		drawingView = givenDrawingView;
 		initializeComponents();
-		setSize(500, 500);
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override
 			public void ancestorMoved(HierarchyEvent arg0) {
@@ -121,7 +120,9 @@ public class GraphicsFrame extends JInternalFrame {
 		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
 		menuBarLocale.put("LevelUp", controlService.getTranslatedString("LevelUp"));
 		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
+		menuBarLocale.put("ShowDependencies", controlService.getTranslatedString("ShowDependencies"));
 		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
+		menuBarLocale.put("LineContextUpdates", controlService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
 		menuBar.setLocale(menuBarLocale);
 		
@@ -194,10 +195,22 @@ public class GraphicsFrame extends JInternalFrame {
 				refreshDrawing();
 			}
 		});
+		menuBar.setToggleDependenciesAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleDependencies();
+			}
+		});
 		menuBar.setToggleViolationsAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleViolations();
+			}
+		});
+		menuBar.setToggleContextUpdatesAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleContextUpdates();
 			}
 		});
 		menuBar.setExportToImageAction(new ActionListener() {
@@ -272,10 +285,22 @@ public class GraphicsFrame extends JInternalFrame {
 			l.exportToImage();
 		}
 	}
+	
+	protected void toggleDependencies() {
+		for (UserInputListener l : listeners) {
+			l.toggleDependencies();
+		}
+	}
 
 	private void toggleViolations() {
 		for (UserInputListener l : listeners) {
 			l.toggleViolations();
+		}
+	}
+
+	protected void toggleContextUpdates() {
+		for (UserInputListener l : listeners) {
+			l.toggleContextUpdates();
 		}
 	}
 
@@ -379,5 +404,21 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void turnOffViolations() {
 		menuBar.setViolationToggle(false);
+	}
+
+	public void turnOnContextUpdates() {
+		menuBar.setContextUpdatesToggle(true);
+	}
+	
+	public void turnOffContextUpdates() {
+		menuBar.setContextUpdatesToggle(false);
+	}
+
+	public void turnOnDependencies() {
+		menuBar.setContextDependencyToggle(true);
+	}
+
+	public void turnOffDependencies() {
+		menuBar.setContextDependencyToggle(false);
 	}
 }

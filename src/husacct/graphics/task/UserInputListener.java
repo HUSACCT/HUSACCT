@@ -22,4 +22,8 @@ public interface UserInputListener {
 	public void refreshDrawing();
 
 	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum);
+
+	public void toggleDependencies();
+
+	public void toggleContextUpdates();
 }
