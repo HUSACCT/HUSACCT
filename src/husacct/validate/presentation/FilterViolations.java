@@ -3,13 +3,25 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import javax.swing.*;
+
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
 public final class FilterViolations extends JDialog  {
@@ -290,8 +302,9 @@ public final class FilterViolations extends JDialog  {
 		if(!checkPathsNames()){
 			return;
 		}
-		taskServiceImpl.setFilterValues(ruletypesfilter, violationtypesfilter,
-				pathsfilter, hideFilteredValues.isSelected(), violationDate);
+		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter,
+				pathsfilter);
+		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
 		vilterViolationsObserver.updateViolationsTable();
 		dispose();
 	}

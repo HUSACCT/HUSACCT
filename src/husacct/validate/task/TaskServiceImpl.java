@@ -6,19 +6,27 @@ import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.exception.ViolationsNotFoundAtDateException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;
 import husacct.validate.task.filter.FilterController;
+
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Observer;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+
 import org.jdom2.Element;
 
 public class TaskServiceImpl{
@@ -46,8 +54,8 @@ public class TaskServiceImpl{
 		return filterController.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
-	public void setFilterValues(ArrayList<String> ruletypesKeys, ArrayList<String> violationtypesKeys, ArrayList<String> paths, boolean hideFilter, Calendar date) {
-		filterController.setFilterValues(ruletypesKeys, violationtypesKeys, paths, hideFilter, getHistoryViolations(date));
+	public void setFilterValues(PathDTO dto, boolean hideFilter, Calendar date) {
+		filterController.setFilterValues(dto, hideFilter, getHistoryViolations(date));
 	}
 
 	public ArrayList<Violation> applyFilterViolations(List<Violation> violations) {

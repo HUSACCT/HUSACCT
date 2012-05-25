@@ -9,6 +9,7 @@ import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
@@ -31,17 +32,17 @@ public class FilterController {
 		this.configuration = configuration;
 	}
 
-	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter, List<Violation> violations) {
+	public void setFilterValues(PathDTO dto, boolean hideFilter, List<Violation> violations) {
 		ArrayList<String> modulesFilter = new ArrayList<String>();
 		for(Violation violation : violations){
-			for(String path : paths){
+			for(String path : dto.getPaths()){
 				if(!modulesFilter.contains(violation.getClassPathFrom()) && Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())){
 					modulesFilter.add(violation.getClassPathFrom());
 				}
 			}
 		}
-		this.ruletypes = ruletypes;
-		this.violationtypes = violationtypes;
+		this.ruletypes = dto.getRuletypes();
+		this.violationtypes = dto.getViolationtypes();
 		this.paths = modulesFilter;
 		this.hidefilter = hideFilter;
 	}
