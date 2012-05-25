@@ -7,8 +7,8 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
-import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.task.UserInputListener;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
@@ -237,10 +236,7 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.setZoomChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
-			    JSlider source = (JSlider)ce.getSource();
-				    if (!source.getValueIsAdjusting()) {
-				    	zoomChanged();
-				    }
+		    		zoomChanged();
 				}
 		});
 		add(menuBar, java.awt.BorderLayout.NORTH);

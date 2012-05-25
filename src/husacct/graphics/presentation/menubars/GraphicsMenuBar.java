@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -34,13 +35,23 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	private void initializeComponents() {
+		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
 		goToParentMenu = new JButton();
+		goToParentMenu.setIcon(icon);
 		goToParentMenu.setSize(50, menuItemMaxHeight);
 		add(goToParentMenu);
 
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-refresh.png"));
 		refreshMenu = new JButton();
 		refreshMenu.setSize(50, menuItemMaxHeight);
+		refreshMenu.setIcon(icon);
 		add(refreshMenu);
+		
+		icon  = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-save.png"));
+		exportToImageMenu = new JButton();
+		exportToImageMenu.setIcon(icon);
+		exportToImageMenu.setSize(50, menuItemMaxHeight);
+		add(exportToImageMenu);		
 
 		showDependenciesOptionMenu = new JCheckBox();
 		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
@@ -56,10 +67,6 @@ public class GraphicsMenuBar extends JPanel {
 
 		layoutStrategyOptions = new JComboBox<String>();
 		add(layoutStrategyOptions);
-
-		exportToImageMenu = new JButton();
-		exportToImageMenu.setSize(50, menuItemMaxHeight);
-		add(exportToImageMenu);
 		
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
@@ -100,12 +107,9 @@ public class GraphicsMenuBar extends JPanel {
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
-			goToParentMenu.setText(menuBarLocale.get("LevelUp"));
-			refreshMenu.setText(menuBarLocale.get("Refresh"));
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
 			contextUpdatesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
-			exportToImageMenu.setText(menuBarLocale.get("ExportToImage"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale for GraphicsMenuBar is not set properly.");
 		}
