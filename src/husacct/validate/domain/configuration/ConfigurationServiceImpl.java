@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ConfigurationServiceImpl extends Observable {
+public final class ConfigurationServiceImpl extends Observable {
 
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
@@ -62,6 +62,8 @@ public class ConfigurationServiceImpl extends Observable {
 
 	public void addViolations(List<Violation> violations) {
 		violationRepository.addViolation(violations);
+		setChanged();
+		notifyObservers();
 		notifyServiceListeners();
 	}
 
