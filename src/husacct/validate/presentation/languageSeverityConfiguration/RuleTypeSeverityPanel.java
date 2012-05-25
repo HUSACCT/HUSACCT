@@ -42,6 +42,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		
 		initComponents();
 		loadAfterChange();
+		loadRuleTypeCategories();
 	}
 
     private void initComponents() {
@@ -157,7 +158,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	public final void loadAfterChange(){
 		setText();
 		loadModel();
-		loadRuleTypeCategories();
+//		loadRuleTypeCategories();
 	}
 	
 	private void setText(){
@@ -183,7 +184,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		tcm.getColumn(1).setCellEditor(ruletypeModel.getEditor());
 	}
 	
-	private void RestoreActionPerformed() {		
+	private void RestoreActionPerformed() {
 		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) ruletypeModel.getValueAt(ruletypeTable.getSelectedRow(), 0)).key);
 		CategoryValueChanged();
 	}

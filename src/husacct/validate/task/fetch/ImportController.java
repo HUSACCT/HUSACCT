@@ -28,9 +28,9 @@ public class ImportController {
 
 	public void importWorkspace(Element element) throws DatatypeConfigurationException{
 		importSeverties(element.getChild("severities"));
-		//importViolations(element.getChild("violations"));
+		importViolations(element.getChild("violations"));
 		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
-		//importViolationHistory(element.getChild("violationHistories"));
+		importViolationHistory(element.getChild("violationHistories"));
 		importActiveViolationTypes(element.getChild("activeViolationTypes"));
 	}
 
