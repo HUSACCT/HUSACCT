@@ -189,12 +189,12 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void restoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) violationtypeModel.getValueAt(violationtypeTable.getSelectedRow(), 0)).key);
+		taskServiceImpl.restoreKeyToDefaultSeverity(language, ((DataLanguageHelper) violationtypeModel.getValueAt(violationtypeTable.getSelectedRow(), 0)).key);
 		categoryValueChanged();
 	}
 
 	private void restoreAllActionPerformed() {
-		taskServiceImpl.restoreAllToDefault(language);
+		taskServiceImpl.restoreAllKeysToDefaultSeverities(language);
 		categoryValueChanged();
 		ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("AllRestored")));
 	}

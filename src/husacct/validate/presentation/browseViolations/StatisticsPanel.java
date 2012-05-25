@@ -20,6 +20,8 @@ public class StatisticsPanel extends JPanel{
 	
 	private final TaskServiceImpl taskServiceImpl;
 
+	private static final long serialVersionUID = -7741400148880504572L;
+
 	private JLabel totalViolationLabel, totalViolationNumber, shownViolationsLabel, shownViolationsNumber;
 
 	public StatisticsPanel(TaskServiceImpl taskServiceImpl) {

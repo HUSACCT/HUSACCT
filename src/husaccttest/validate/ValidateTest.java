@@ -4,6 +4,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
@@ -14,6 +16,8 @@ import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JInternalFrame;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -30,6 +34,23 @@ public class ValidateTest {
 		this.define = ServiceProvider.getInstance().getDefineService();
 		this.validate = ServiceProvider.getInstance().getValidateService();
 	}
+	
+	@Test
+	public void getBrowseViolationsGUI(){
+		Object screen = validate.getBrowseViolationsGUI();
+		assertNotNull(screen);
+		assertTrue(screen instanceof javax.swing.JInternalFrame);
+		assertFalse(((JInternalFrame)screen).isVisible());
+	}
+	
+	@Test
+	public void getConfigurationGUI(){
+		Object screen = validate.getConfigurationGUI();
+		assertNotNull(screen);
+		assertTrue(screen instanceof javax.swing.JInternalFrame);
+		assertFalse(((JInternalFrame)screen).isVisible());
+	}
+	
 	@Test
 	public void getExportExtentions()
 	{
@@ -52,7 +73,7 @@ public class ValidateTest {
 	@Test
 	public void getRuleTypes(){
 		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"NamingConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall", "LoopsInModule"};
+		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall", "CyclesBetweenModules"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
@@ -60,8 +81,8 @@ public class ValidateTest {
 	public void getViolationTypesJavaLanguage(){
 		define.createApplication("", new String[]{}, "Java", "");
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(11, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
-		assertEquals(11, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
+		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
+		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
 		assertEquals(4, getViolationTypesStringArray(dtos, "VisibilityConvention").length);
 	}
 

@@ -285,7 +285,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	}
 	
 	public void setText(){
-		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("Configuration"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidateConfigurationTitle"));
 		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
 		remove.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
 		up.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Up"));

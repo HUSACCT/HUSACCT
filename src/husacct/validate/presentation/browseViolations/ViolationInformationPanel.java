@@ -17,6 +17,8 @@ import javax.swing.event.ListSelectionEvent;
 
 public class ViolationInformationPanel extends JPanel {
 
+	private static final long serialVersionUID = 8505333261388149299L;
+
 	private JLabel detailLogicalModuleLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
 	detailsLogicalModuleLabel, detailsLineNumberLabel, detailsMessageLabel;
 
@@ -47,7 +49,7 @@ public class ViolationInformationPanel extends JPanel {
 												.addComponent(detailLineNumberLabelValue)
 												.addComponent(detailMessageLabelValue))))
 												.addContainerGap(397, Short.MAX_VALUE))
-				);
+		);
 		gl_violationDetailPane.setVerticalGroup(
 				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_violationDetailPane.createSequentialGroup()
@@ -64,7 +66,7 @@ public class ViolationInformationPanel extends JPanel {
 												.addComponent(detailsMessageLabel)
 												.addComponent(detailMessageLabelValue))
 												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				);
+		);
 		setLayout(gl_violationDetailPane);
 	}
 

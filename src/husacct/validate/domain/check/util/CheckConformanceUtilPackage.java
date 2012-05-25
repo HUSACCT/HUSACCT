@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CheckConformanceUtilPackage extends CheckConformanceUtil{
+	
 	public static Mappings filterPackages(RuleDTO rule){
 		Mappings mainClasspaths = getAllPackagepathsFromModule(rule);
 		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
