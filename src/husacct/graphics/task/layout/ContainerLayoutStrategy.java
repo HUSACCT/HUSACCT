@@ -40,9 +40,7 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 				Point2D.Double anchor = new Point2D.Double(parentBounds.x + location.x, parentBounds.y + location.y);
 				Point2D.Double lead = new Point2D.Double(parentBounds.x + location.x + bounds.width, parentBounds.y + location.y + bounds.height);
 				
-				//figure.willChange();
 				figure.setBounds(anchor, lead);
-				//figure.changed();
 						
 				location.x += bounds.width + HORZ_SPACING;
 				itemsOnRow++;
