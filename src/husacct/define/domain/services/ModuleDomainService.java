@@ -136,7 +136,7 @@ public class ModuleDomainService {
 	}
 
 	public Module getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {
-		Module module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su);
+		Module module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su.getName());
 		return module;
 	}
 

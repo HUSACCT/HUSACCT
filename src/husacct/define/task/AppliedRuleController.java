@@ -182,9 +182,24 @@ public class AppliedRuleController extends PopUpController {
 		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
 		for(SoftwareUnitDefinition softwareUnit : softwareUnits) {
 			AnalyzedModuleComponent analysedComponent = new AnalyzedModuleComponent(softwareUnit.getName(), softwareUnit.getName(), softwareUnit.getType().toString(), "public");
+
+			AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(softwareUnit.getName());
+			for(AnalysedModuleDTO subModule : children) {
+				this.addChildComponents(analysedComponent, subModule);
+			}
+			
 			childComponent.addChild(analysedComponent);
 		}
 		
+		parentComponent.addChild(childComponent);
+	}
+	
+	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		for(AnalysedModuleDTO subModule : children) {
+			this.addChildComponents(childComponent, subModule);
+		}
 		parentComponent.addChild(childComponent);
 	}
 
