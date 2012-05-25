@@ -82,7 +82,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				if(severityNameTable.getSelectedRow() > -1){
 					removeActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
 				}
 			}
 		});
@@ -94,7 +94,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				if(severityNameTable.getSelectedRow() > -1){
 					upActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
 				}
 			}
 		});
