@@ -178,7 +178,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		shownViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + getDirectKey(violation.isIndirect()), violation.getClassPathTo(), violation.getSeverity().toString()});
+			String violationtypeString = "";
+			if(!violation.getViolationtypeKey().isEmpty()){
+				violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + getDirectKey(violation.isIndirect());
+			}
+			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
 
 		} 
 	}
