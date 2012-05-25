@@ -1,5 +1,6 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,7 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener {
+public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener, ILocaleChangeListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	private final String husacctIcon = "husacct/common/resources/husacct.png";
@@ -45,7 +47,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void initGUI() {
-		this.setTitle("New Module");
+		this.setTitle(DefineTranslator.translate("NewModule"));
 		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 		
 		this.innerPanel = new JPanel();
@@ -268,6 +270,11 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	
 	private void throwError(String errorMessage) {
 		JOptionPane.showMessageDialog(this, errorMessage, DefineTranslator.translate("WrongInputTitle"), JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.setTitle(DefineTranslator.translate("NewModule"));
 	}
 	
 
