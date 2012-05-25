@@ -1,15 +1,13 @@
 package husacct.graphics.presentation.figures;
 
-import java.awt.Color;
 import husacct.graphics.task.layout.ContainerLayoutStrategy;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
@@ -20,12 +18,14 @@ import org.jhotdraw.draw.event.FigureListener;
 
 public class ParentFigure extends BaseFigure {
 	private static final long serialVersionUID = 101138923385231941L;
+	private static final Color defaultContainerColor = new Color(204, 204, 255);
 	private RectangleFigure body;
 	private TextFigure text;
 
 	protected int minWidth = 400;
 	protected int minHeight = 400;
-	
+	protected int minChildPadding = 30;
+
 	private ArrayList<Figure> childrenOwnImpl;
 	private double currentPositionX, currentPositionY;
 
@@ -39,34 +39,36 @@ public class ParentFigure extends BaseFigure {
 		children.add(body);
 		children.add(text);
 
-		body.set(AttributeKeys.FILL_COLOR, new Color(204,204,255));
-		
+		body.set(AttributeKeys.FILL_COLOR, defaultContainerColor);
+
 		baseZIndex = -2;
 		resetLayer();
-		
+
 		setSizeable(true);
-		
+
 		addFigureListener(new FigureListener() {
 			@Override
 			public void areaInvalidated(FigureEvent e) {
 			}
+
 			@Override
 			public void attributeChanged(FigureEvent e) {
 			}
+
 			@Override
 			public void figureHandlesChanged(FigureEvent e) {
 			}
 
 			@Override
-			public void figureChanged(FigureEvent e){
+			public void figureChanged(FigureEvent e) {
 				double oldX = currentPositionX;
 				double oldY = currentPositionY;
-				double newX = ((BaseFigure)e.getFigure()).getBounds().getX();
-				double newY = ((BaseFigure)e.getFigure()).getBounds().getY();
+				double newX = ((BaseFigure) e.getFigure()).getBounds().getX();
+				double newY = ((BaseFigure) e.getFigure()).getBounds().getY();
 				double difX = newX - oldX;
 				double difY = newY - oldY;
-				for(Figure fig : childrenOwnImpl){
-					((BaseFigure)fig).updateLocation(fig.getBounds().getX()+difX, fig.getBounds().getY()+difY);
+				for (Figure fig : childrenOwnImpl) {
+					((BaseFigure) fig).updateLocation(fig.getBounds().getX() + difX, fig.getBounds().getY() + difY);
 				}
 				currentPositionX = newX;
 				currentPositionY = newY;
@@ -75,9 +77,11 @@ public class ParentFigure extends BaseFigure {
 			@Override
 			public void figureAdded(FigureEvent e) {
 			}
+
 			@Override
 			public void figureRemoved(FigureEvent e) {
 			}
+
 			@Override
 			public void figureRequestRemove(FigureEvent e) {
 			}
@@ -117,46 +121,47 @@ public class ParentFigure extends BaseFigure {
 
 		return other;
 	}
-	
-	public BaseFigure[] getChildFigures(){
-		return childrenOwnImpl.toArray(new BaseFigure[]{});
+
+	public BaseFigure[] getChildFigures() {
+		return childrenOwnImpl.toArray(new BaseFigure[] {});
 	}
-	
-	@Override
-	public List<Figure> getChildren() {
-		return Collections.unmodifiableList(childrenOwnImpl);
-	}
-	
+
 	public void updateLayout() {
-		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this);
+		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this, minChildPadding, minChildPadding);
 		cls.doLayout(0, 0);
-		
+
 		Rectangle newSize = new Rectangle();
 		for (Figure f : childrenOwnImpl) {
 			Rectangle2D.Double bounds = f.getBounds();
-			
+
 			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height));
 		}
-		
+		minWidth = newSize.width + minChildPadding;
+		minHeight = newSize.height + minChildPadding;
+
 		Rectangle2D.Double bounds = getBounds();
 		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-		Point2D.Double lead = new Point2D.Double(anchor.x + newSize.width, anchor.y + newSize.height);
-		
+		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10, anchor.y + minHeight + 10);
+
 		willChange();
 		setBounds(anchor, lead);
 		changed();
 	}
-	
-	@Override
+
 	public boolean add(Figure figure) {
+		BaseFigure bf = (BaseFigure) figure;
+		bf.setInContainer(true);
+
 		childrenOwnImpl.add(figure);
 		figure.addFigureListener(new FigureListener() {
 			@Override
 			public void areaInvalidated(FigureEvent e) {
 			}
+
 			@Override
 			public void attributeChanged(FigureEvent e) {
 			}
+
 			@Override
 			public void figureHandlesChanged(FigureEvent e) {
 			}
@@ -205,13 +210,15 @@ public class ParentFigure extends BaseFigure {
 			@Override
 			public void figureAdded(FigureEvent e) {
 			}
+
 			@Override
 			public void figureRemoved(FigureEvent e) {
 			}
+
 			@Override
 			public void figureRequestRemove(FigureEvent e) {
 			}
-		});		
+		});
 		return true;
 	}
 
@@ -219,19 +226,19 @@ public class ParentFigure extends BaseFigure {
 	public boolean isParent() {
 		return true;
 	}
-	
+
 	@Override
-	public void raiseLayer(){
-		zIndex = raiseZIndex-1;
-		for(BaseFigure childFigure : getChildFigures()){
+	public void raiseLayer() {
+		// zIndex = raiseZIndex-1;
+		for (BaseFigure childFigure : getChildFigures()) {
 			childFigure.raiseLayer();
 		}
 	}
-	
+
 	@Override
-	public void resetLayer(){
+	public void resetLayer() {
 		super.resetLayer();
-		for(BaseFigure childFigure : getChildFigures()){
+		for (BaseFigure childFigure : getChildFigures()) {
 			childFigure.resetLayer();
 		}
 	}

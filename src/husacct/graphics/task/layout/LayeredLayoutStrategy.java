@@ -1,10 +1,10 @@
 package husacct.graphics.task.layout;
 
-import husacct.graphics.ListUtils;
 import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.InterfaceFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.util.ListUtils;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -74,8 +74,9 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = new S1<Figure>(null, compareList) {
 			{
-				if (a != null && !isConnector(a) && !compareList.contains(a))
+				if (a != null && !isConnector(a) && !compareList.contains(a) && !inContainer(a)) {
 					getNode(a);
+				}
 			}
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
@@ -288,6 +289,10 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		}
 
 		return false;
+	}
+	
+	private static boolean inContainer(Figure a) {
+		return ((BaseFigure) a).isInContainer();
 	}
 
 	private static boolean isInterface(Figure figure) {

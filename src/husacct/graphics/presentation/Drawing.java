@@ -4,6 +4,8 @@ import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.presentation.linelayoutstrategies.ConnectorLineSeparationStrategy;
+import husacct.graphics.presentation.linelayoutstrategies.ILineSeparationStrategy;
 
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -75,10 +77,10 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	@Override
-	public boolean add(Figure f) {
+	public boolean add(Figure figure) {
 		// this triggers at least the minimum sizes
-		f.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
-		return super.add(f);
+		figure.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
+		return super.add(figure);
 	}
 
 	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList) {

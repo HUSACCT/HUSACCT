@@ -1,4 +1,4 @@
-package husacct.graphics;
+package husacct.graphics.util;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -42,7 +42,7 @@ public class DrawingState {
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
 
-			if (bf.isModule()) {
+			if (!bf.isLine()) {
 				String fullPath = getFullPath(bf);
 				Rectangle2D.Double bounds = bf.getBounds();
 				savedPositions.put(fullPath, bounds);

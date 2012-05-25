@@ -7,6 +7,7 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
+import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.BorderLayout;
@@ -24,14 +25,17 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
+import org.apache.log4j.Logger;
+
 public class GraphicsFrame extends JInternalFrame {
-	protected IControlService controlService;
 	private static final long serialVersionUID = -4683140198375851034L;
+	protected IControlService controlService;
+	protected Logger logger = Logger.getLogger(GraphicsFrame.class);
 
 	private DrawingView drawingView;
 	private GraphicsMenuBar menuBar;
 	private ZoomLocationBar locationBar;
-	private String currentPath;
+	private String[] currentPaths;
 	private JScrollPane drawingScrollPane, propertiesScrollPane;
 	private JSplitPane centerPane;
 	private String ROOT_LEVEL;
@@ -43,6 +47,8 @@ public class GraphicsFrame extends JInternalFrame {
 	private String[] dependencyColumnKeysArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
+	private ArrayList<String> layoutStrategyItems; 
+	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
@@ -52,11 +58,10 @@ public class GraphicsFrame extends JInternalFrame {
 
 		controlService = ServiceProvider.getInstance().getControlService();
 		ROOT_LEVEL = controlService.getTranslatedString("Root");
-		resetCurrentPath();
+		resetCurrentPaths();
 
 		drawingView = givenDrawingView;
 		initializeComponents();
-		setSize(500, 500);
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override
 			public void ancestorMoved(HierarchyEvent arg0) {
@@ -73,16 +78,16 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 	}
 	
-	public String getCurrentPath() {
-		return currentPath;
+	public String[] getCurrentPaths() {
+		return currentPaths;
 	}
 
-	public void resetCurrentPath() {
-		currentPath = "";
+	public void resetCurrentPaths() {
+		currentPaths = new String[]{};
 	}
 
-	public void setCurrentPath(String path) {
-		currentPath = path;
+	public void setCurrentPaths(String[] paths) {
+		currentPaths = paths;
 	}
 
 	private void initializeComponents() {
@@ -115,9 +120,20 @@ public class GraphicsFrame extends JInternalFrame {
 		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
 		menuBarLocale.put("LevelUp", controlService.getTranslatedString("LevelUp"));
 		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
+		menuBarLocale.put("ShowDependencies", controlService.getTranslatedString("ShowDependencies"));
 		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
+		menuBarLocale.put("LineContextUpdates", controlService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
 		menuBar.setLocale(menuBarLocale);
+		
+		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
+		layoutStrategyItems = new ArrayList<String>();
+		for(DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()){
+			String translation = controlService.getTranslatedString(strategy.toString());
+			layoutStrategiesTranslations.put(translation, strategy);
+			layoutStrategyItems.add(translation);
+		}
+		menuBar.setLayoutStrategyItems(layoutStrategyItems);
 		
 		dependencyColumnNames = new ArrayList<String>();
 		for (String key : dependencyColumnKeysArray) {
@@ -179,16 +195,40 @@ public class GraphicsFrame extends JInternalFrame {
 				refreshDrawing();
 			}
 		});
+		menuBar.setToggleDependenciesAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleDependencies();
+			}
+		});
 		menuBar.setToggleViolationsAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleViolations();
 			}
 		});
+		menuBar.setToggleContextUpdatesAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleContextUpdates();
+			}
+		});
 		menuBar.setExportToImageAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				exportToImage();
+			}
+		});
+		menuBar.setLayoutStrategyAction(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DrawingLayoutStrategy selectedStrategy = null;
+				try{
+					selectedStrategy = layoutStrategiesTranslations.get(menuBar.getSelectedLayoutStrategyItem());
+					changeLayoutStrategy(selectedStrategy);
+				}catch(Exception ex){
+					logger.debug("Could not find the selected layout strategy \""+selectedStrategy.toString()+"\".");
+				}
 			}
 		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
@@ -198,8 +238,8 @@ public class GraphicsFrame extends JInternalFrame {
 		locationBar = new ZoomLocationBar();
 		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
 			@Override
-			public void actionPerformed(String selectedPath) {
-				moduleOpen(selectedPath);
+			public void actionPerformed(String[] selectedPaths) {
+				moduleOpen(selectedPaths);
 			}
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -213,13 +253,24 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void updateGUI() {
-		locationBar.updateLocationBar(getCurrentPath());
+		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();
 	}
+	
+	public void setSelectedLayout(DrawingLayoutStrategy layoutStrategyOption) {
+		int i = 0;
+		for(DrawingLayoutStrategy strategy : layoutStrategiesTranslations.values()){
+			if(strategy.equals(layoutStrategyOption)){
+				continue;
+			}
+			i++;
+		}
+		menuBar.setSelectedLayoutStrategyItem(i);
+	}
 
-	private void moduleOpen(String path) {
+	private void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
-			l.moduleOpen(path);
+			l.moduleOpen(paths);
 		}
 	}
 
@@ -234,6 +285,12 @@ public class GraphicsFrame extends JInternalFrame {
 			l.exportToImage();
 		}
 	}
+	
+	protected void toggleDependencies() {
+		for (UserInputListener l : listeners) {
+			l.toggleDependencies();
+		}
+	}
 
 	private void toggleViolations() {
 		for (UserInputListener l : listeners) {
@@ -241,9 +298,21 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 
+	protected void toggleContextUpdates() {
+		for (UserInputListener l : listeners) {
+			l.toggleContextUpdates();
+		}
+	}
+
 	private void refreshDrawing() {
 		for (UserInputListener l : listeners) {
 			l.refreshDrawing();
+		}
+	}
+
+	private void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+		for (UserInputListener l : listeners) {
+			l.changeLayoutStrategy(selectedStrategyEnum);
 		}
 	}
 
@@ -335,5 +404,21 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void turnOffViolations() {
 		menuBar.setViolationToggle(false);
+	}
+
+	public void turnOnContextUpdates() {
+		menuBar.setContextUpdatesToggle(true);
+	}
+	
+	public void turnOffContextUpdates() {
+		menuBar.setContextUpdatesToggle(false);
+	}
+
+	public void turnOnDependencies() {
+		menuBar.setContextDependencyToggle(true);
+	}
+
+	public void turnOffDependencies() {
+		menuBar.setContextDependencyToggle(false);
 	}
 }

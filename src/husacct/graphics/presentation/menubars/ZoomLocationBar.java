@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,11 +16,12 @@ public class ZoomLocationBar extends JMenuBar {
 	private static final long serialVersionUID = 1025962225565217061L;
 	private String rootLocale;
 	private JButton rootLocationButton;
+	private final String LOCATION_COMBINER = "+";
 	private final String LOCATION_SEPERATOR = ".";
 
 	private int menuItemMaxHeight = 45;
 
-	private HashMap<JButton, String> buttonPaths = new HashMap<JButton, String>();
+	private HashMap<JButton, String[]> buttonPaths = new HashMap<JButton, String[]>();
 	private ArrayList<LocationButtonActionListener> locationButtonPressListener;
 
 	public ZoomLocationBar() {
@@ -29,39 +32,72 @@ public class ZoomLocationBar extends JMenuBar {
 		rootLocale = rootString;
 	}
 
-	public void updateLocationBar(String currentPath) {
+	public void updateLocationBar(String[] currentPaths) {
 		removeAll();
 		createAndAddRootLocationButton();
 
-		String pathUntilNow = "";
-		String[] pathParts = new String[] {};
-		if (!currentPath.equals("")) {
-			pathParts = currentPath.split("\\" + LOCATION_SEPERATOR);
+		HashMap<Integer, HashMap<Integer, String>> multiLevelPath = new HashMap<Integer, HashMap<Integer, String>>();
+		if (currentPaths.length > 0) {
+			for (int pathID = 0; pathID < currentPaths.length; pathID++) {
+				String selectedPath = currentPaths[pathID];
+				String[] pathParts = selectedPath.split("\\" + LOCATION_SEPERATOR);
+				for (int pathLevel = 0; pathLevel < pathParts.length; pathLevel++) {
+					if (null == multiLevelPath.get(pathLevel)) {
+						multiLevelPath.put(pathLevel, new HashMap<Integer, String>());
+					}
+					HashMap<Integer, String> tmpAdderHashMap = multiLevelPath.get(pathLevel);
+					tmpAdderHashMap.put(pathID, pathParts[pathLevel]);
+					multiLevelPath.put(pathLevel, tmpAdderHashMap);
+				}
+			}
 		}
-		if (pathParts.length > 0) {
-			addLocationSeperator();
-			for (String part : pathParts) {
-				pathUntilNow = pathUntilNow + part;
-				createAndAddLocationButton(part, pathUntilNow);
 
-				if (!pathParts[pathParts.length - 1].equals(part)) {
+		if (multiLevelPath.size() > 0) {
+			addLocationSeperator();
+			Integer[] levelKeySet = multiLevelPath.keySet().toArray(new Integer[] {});
+			HashMap<Integer, String> currentPath = new HashMap<Integer, String>();
+			for (Integer level : levelKeySet) {
+				String visiblePath = "";
+				HashMap<Integer, String> levelPath = multiLevelPath.get(level);
+				Set<Integer> keySet = levelPath.keySet();
+				ArrayList<String> capturedLevels = new ArrayList<String>();
+				for (Integer pathID : keySet) {
+					if(!capturedLevels.contains(levelPath.get(pathID))){
+						visiblePath += " " + LOCATION_COMBINER + " "+levelPath.get(pathID);
+					}
+					String currentValuePath = currentPath.get(pathID);
+					if (null == currentValuePath) {
+						currentValuePath = "";
+						currentPath.put(pathID, currentValuePath);
+					} else {
+						currentValuePath = currentPath.get(pathID) + LOCATION_SEPERATOR;
+					}
+					currentPath.put(pathID, currentValuePath + levelPath.get(pathID));
+					capturedLevels.add(levelPath.get(pathID));
+				}
+				ArrayList<String> entrySetTranformToArray = new ArrayList<String>();
+				for (Entry<Integer, String> p : currentPath.entrySet()) {
+					entrySetTranformToArray.add(p.getValue());
+				}
+				createAndAddLocationButton(visiblePath.replaceFirst("\\" + LOCATION_COMBINER, "").trim(), entrySetTranformToArray.toArray(new String[] {}));
+
+				if (!levelKeySet[levelKeySet.length - 1].equals(level)) {
 					addLocationSeperator();
-					pathUntilNow = pathUntilNow + LOCATION_SEPERATOR;
 				}
 			}
 		}
 	}
 
 	private void createAndAddRootLocationButton() {
-		rootLocationButton = createLocationButton(rootLocale, "");
+		rootLocationButton = createLocationButton(rootLocale, new String[] {});
 		add(rootLocationButton);
 	}
 
-	private void createAndAddLocationButton(String levelName, String fullPath) {
+	private void createAndAddLocationButton(String levelName, String[] fullPath) {
 		add(createLocationButton(levelName, fullPath));
 	}
 
-	private JButton createLocationButton(String levelName, String fullPath) {
+	private JButton createLocationButton(String levelName, String[] fullPath) {
 		JButton locationStringButton = new JButton(levelName);
 		locationStringButton.setSize(10, menuItemMaxHeight);
 		locationStringButton.setMargin(new Insets(0, 0, 0, 0));
