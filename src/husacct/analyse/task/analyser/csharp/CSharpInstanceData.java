@@ -4,7 +4,7 @@ public class CSharpInstanceData {
 	private String instanceName;
 	private String belongsToClass;
 	private String to;
-	private boolean hasMethodScope;
+	private boolean hasClassScope;
 	
 	public void setInstanceName(String instanceName){
 		this.instanceName = instanceName;
@@ -30,15 +30,15 @@ public class CSharpInstanceData {
 		return to;
 	}
 	
-	public void setHasMethodScope(boolean hasMethodScope){
-		this.hasMethodScope = hasMethodScope;
+	public void setClassScope(boolean hasClassScope){
+		this.hasClassScope = hasClassScope;
 	}
 	
-	public boolean getHasMethodScope(){
-		return hasMethodScope;
+	public boolean getHasClassScope(){
+		return hasClassScope;
 	}
 	
-	public boolean instanceNameEquals(String instanceName){
+	public boolean instanceEquals(String instanceName){
 		if(this.instanceName.equals(instanceName)){
 			return true;
 		}
