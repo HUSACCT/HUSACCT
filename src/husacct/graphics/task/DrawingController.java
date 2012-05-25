@@ -269,9 +269,7 @@ public abstract class DrawingController implements UserInputListener {
 		if (hasSavedFigureStates(currentPaths)) {
 			restoreFigurePositions(currentPaths);
 		} else {
-			int width = drawTarget.getWidth();
-			int height = drawTarget.getHeight();
-			layoutStrategy.doLayout(width, height);
+			layoutStrategy.doLayout();
 		}
 
 		updateLines();

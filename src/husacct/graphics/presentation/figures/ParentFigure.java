@@ -128,7 +128,7 @@ public class ParentFigure extends BaseFigure {
 
 	public void updateLayout() {
 		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this, minChildPadding, minChildPadding);
-		cls.doLayout(0, 0);
+		cls.doLayout();
 
 		Rectangle newSize = new Rectangle();
 		for (Figure f : childrenOwnImpl) {

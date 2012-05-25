@@ -24,7 +24,7 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 	}
 
 	@Override
-	public void doLayout(int screenWidth, int screenHeight) {
+	public void doLayout() {
 		BaseFigure[] figures = container.getChildFigures();
 		Rectangle2D.Double parentBounds = container.getBounds();
 
