@@ -35,7 +35,7 @@ public class CyclesBetweenModulesRule extends RuleType{
 
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
-				physicalClasspathsFrom.addAll(CheckConformanceUtilClass.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
+				physicalClasspathsFrom.addAll(CheckConformanceUtilClass.getAllClassesFromLayer(module, currentRule.violationTypeKeys));
 			}
 
 		}else{
@@ -49,6 +49,7 @@ public class CyclesBetweenModulesRule extends RuleType{
 	}
 
 	private List<Violation> checkCircularDependencies(String physicalPath, HashSet<String> history, ConfigurationServiceImpl configuration, RuleDTO rootRule,Mapping mappingFrom)	{
+		//TODO: if all classes in loop have the same mapping.logicalpath, NO violation!
 		history.add(physicalPath);
 		DependencyDTO[] dependencies = analyseService.getDependenciesFrom(physicalPath);
 		for(DependencyDTO dependency : dependencies){

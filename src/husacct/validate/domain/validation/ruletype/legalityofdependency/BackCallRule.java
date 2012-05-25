@@ -64,7 +64,7 @@ public class BackCallRule extends RuleType {
 	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int counter, String[] violationTypeKeys){
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(int i=0 ; i<counter ; i++){
-			returnList.add(CheckConformanceUtilClass.getAllModulesFromLayer(allModules.get(i), violationTypeKeys));
+			returnList.add(CheckConformanceUtilClass.getAllClassesFromLayer(allModules.get(i), violationTypeKeys));
 		}		
 		return returnList;		
 	}
