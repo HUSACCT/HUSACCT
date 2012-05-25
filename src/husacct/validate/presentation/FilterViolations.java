@@ -1,6 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.event.ActionEvent;
@@ -58,6 +59,7 @@ public final class FilterViolations extends JDialog  {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setModal(true);
+		DialogUtils.alignCenter(this);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -123,7 +125,7 @@ public final class FilterViolations extends JDialog  {
 		
 		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
 		
-		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalFilterViolationGroup.addComponent(ruletypepanel);
 		verticalFilterViolationGroup.addComponent(violationtypePanel);
 		
@@ -152,7 +154,7 @@ public final class FilterViolations extends JDialog  {
 		verticalButtonPathGroup.addComponent(removePath);
 		verticalButtonPathGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalPanePathGroup.addComponent(pathFilterScrollPane);
 		verticalPanePathGroup.addGroup(verticalButtonPathGroup);
 		

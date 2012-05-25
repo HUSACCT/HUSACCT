@@ -85,7 +85,11 @@ public class ExportArchitectureDialog extends JDialog {
 		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filter);
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(fileDialog.getSelectedFile());
+			if(fileDialog.getSelectedFile().exists()){
+				setFile(fileDialog.getSelectedFile());
+			} else {
+				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			}
 		}
 	}
 

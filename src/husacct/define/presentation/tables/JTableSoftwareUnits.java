@@ -1,5 +1,7 @@
 package husacct.define.presentation.tables;
 
+import husacct.define.abstraction.language.DefineTranslator;
+
 import javax.swing.table.TableColumn;
 
 public class JTableSoftwareUnits extends AbstractJTable {
@@ -17,8 +19,8 @@ public class JTableSoftwareUnits extends AbstractJTable {
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn("Software unit name");
-		tablemodel.addColumn("Type");
+		tablemodel.addColumn(DefineTranslator.translate("SoftwareUnitName"));
+		tablemodel.addColumn(DefineTranslator.translate("Type"));
 	}
 	
 	@Override

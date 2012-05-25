@@ -30,15 +30,12 @@ public class DefinedController extends DrawingController {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
-		// TODO: Uncomment wanneer define addServiceListener heeft
-		// geïmplementeerd!
-		// ServiceProvider.getInstance().getDefineService().addServiceListener(new
-		// IServiceListener(){
-		// @Override
-		// public void update() {
-		// refreshDrawing();
-		// }
-		// });
+		ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				refreshDrawing();
+			}
+		});
 	}
 
 	@Override

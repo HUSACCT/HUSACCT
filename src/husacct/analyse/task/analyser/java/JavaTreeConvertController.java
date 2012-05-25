@@ -105,9 +105,6 @@ class JavaTreeConvertController {
 						delegateMethod(treeNode);
 						deleteTreeChild(treeNode); 
 					}
-					if(nodeType == JavaParser.FOR_EACH || nodeType == JavaParser.FOR){
-						delegateLoop(treeNode);
-					}
 				}
 
 				walkAST((CommonTree) tree.getChild(i));
@@ -171,11 +168,6 @@ class JavaTreeConvertController {
 		JavaMethodGeneratorController methodGenerator = new JavaMethodGeneratorController(); 
 		methodGenerator.delegateMethodBlock((CommonTree)methodTree, this.currentClass); 
 	} 
-
-	private void delegateLoop(Tree loopTree){
-		JavaLoopGenerator loopGenerator = new JavaLoopGenerator();
-		loopGenerator.generateModel((CommonTree) loopTree, this.currentClass);
-	}
 
 	private boolean hasPackageElement(CommonTree tree){ 
 		return tree.getFirstChildWithType(JavaParser.PACKAGE) != null; 

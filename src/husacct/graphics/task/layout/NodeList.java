@@ -2,12 +2,14 @@ package husacct.graphics.task.layout;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.jhotdraw.draw.Figure;
 
 public class NodeList implements Collection<Node>, Iterable<Node> {
-	private ArrayList<Node> nodes;
+	protected ArrayList<Node> nodes;
 	
 	public NodeList() {
 		nodes = new ArrayList<Node>();
@@ -91,6 +93,10 @@ public class NodeList implements Collection<Node>, Iterable<Node> {
 	@Override
 	public <T> T[] toArray(T[] arg0) {
 		return nodes.toArray(arg0);
+	}
+
+	public List<Node> readOnlyCopy() {
+		return Collections.unmodifiableList(nodes);
 	}
 	
 }

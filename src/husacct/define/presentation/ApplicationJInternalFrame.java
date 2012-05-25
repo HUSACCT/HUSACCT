@@ -1,5 +1,6 @@
 package husacct.define.presentation;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 
@@ -13,7 +14,7 @@ import javax.swing.WindowConstants;
 public class ApplicationJInternalFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 6858870868564931134L;
-	private String defaultTitle = "HUSACCT";
+	private String defaultTitle = DefineTranslator.translate("DefaultTitle");
 	private JPanel overviewPanel;
 
 	public ApplicationJInternalFrame() {
@@ -38,7 +39,7 @@ public class ApplicationJInternalFrame extends JInternalFrame {
 	}
 	
 	private void setLayoutSettings() {
-		this.setTitle(" - Define Architecture");
+		this.setTitle(DefineTranslator.translate("ApplicationTitle"));
 	}
 	
 	private void addDefinitionPanel() {

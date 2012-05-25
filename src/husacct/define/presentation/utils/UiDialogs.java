@@ -1,5 +1,8 @@
 package husacct.define.presentation.utils;
 
+import husacct.ServiceProvider;
+import husacct.define.abstraction.language.DefineTranslator;
+
 import java.awt.Component;
 
 import javax.swing.JOptionPane;
@@ -23,9 +26,10 @@ public class UiDialogs {
 	public static String inputDialog(Component component, String message, String title, int type) {
 		Logger logger = Logger.getLogger(UiDialogs.class);
 		logger.info("inputDialog(" + component + "," + message + "," + title + "," + type + ")");
-
 		String inputValue = "";
 		while (inputValue.trim().equals("")) {
+
+//			ServiceProvider.getInstance().getControlService().showInfoMessage(message)(message);
 			inputValue = JOptionPane.showInputDialog(component, message, title, type);
 			if (inputValue == null) {
 				return null;
@@ -34,7 +38,7 @@ public class UiDialogs {
 					return inputValue;
 				} else {
 					logger.error("inputDialog() - no value entered");
-					errorDialog(component, "Please enter an value!", "Error");
+					errorDialog(component, DefineTranslator.translate("MissingValue"));
 				}
 			}
 		}
@@ -48,10 +52,11 @@ public class UiDialogs {
 	 * @param message The message
 	 * @param title The title of the dialog
 	 */
-	public static void errorDialog(Component component, String message, String title) {
+	public static void errorDialog(Component component, String message) {
 		Logger logger = Logger.getLogger(UiDialogs.class);
-		logger.info("errorDialog(" + component + "," + message + "," + title + ")");
-		JOptionPane.showMessageDialog(component, message, title, JOptionPane.ERROR_MESSAGE);
+		logger.info("errorDialog(" + component + "," + message + ")");
+		
+		ServiceProvider.getInstance().getControlService().showErrorMessage(message);
 	}
 
 	/**
@@ -77,6 +82,8 @@ public class UiDialogs {
 	public static boolean confirmDialog(Component component, String message, String title) {
 		Logger logger = Logger.getLogger(UiDialogs.class);
 		logger.info("confirmDialog(" + component + "," + message + "," + title + ")");
+		
+		
 		int result = JOptionPane.showConfirmDialog(component, message, title, JOptionPane.OK_CANCEL_OPTION);
 
 		return result == JOptionPane.OK_OPTION;

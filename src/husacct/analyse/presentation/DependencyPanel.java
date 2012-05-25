@@ -152,13 +152,17 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		if(e.getSource() == fromModuleTree){
 			DefaultMutableTreeNode selected = (DefaultMutableTreeNode)fromModuleTree.getLastSelectedPathComponent();
 			AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
-			fromSelected.clear();
-			fromSelected.add(selectedModule);
+			if(selectedModule != null){
+				fromSelected.clear();
+				fromSelected.add(selectedModule);
+			}
 		}else if(e.getSource() == toModuleTree){
 			DefaultMutableTreeNode selected = (DefaultMutableTreeNode)toModuleTree.getLastSelectedPathComponent();
 			AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
-			toSelected.clear();
-			toSelected.add(selectedModule);
+			if(selectedModule != null){
+				toSelected.clear();
+				toSelected.add(selectedModule);
+			}
 		}
 		updateTableModel();
 	}

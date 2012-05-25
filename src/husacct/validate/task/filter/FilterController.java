@@ -1,7 +1,7 @@
 package husacct.validate.task.filter;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -32,11 +32,10 @@ public class FilterController {
 	}
 
 	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter, List<Violation> violations) {
-		Regex regex = new Regex();
 		ArrayList<String> modulesFilter = new ArrayList<String>();
 		for(Violation violation : violations){
 			for(String path : paths){
-				if(!modulesFilter.contains(violation.getClassPathFrom()) && regex.matchRegex(regex.makeRegexString(path), violation.getClassPathFrom())){
+				if(!modulesFilter.contains(violation.getClassPathFrom()) && Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())){
 					modulesFilter.add(violation.getClassPathFrom());
 				}
 			}
@@ -50,9 +49,9 @@ public class FilterController {
 	public ArrayList<Violation> filterViolations(List<Violation> violations) {
 		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
 		for (Violation violation : violations) {
-			if (hidefilter && ( !ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
+			if (hidefilter && ( !ruletypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
-			} else if ((!hidefilter) && (ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) || violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
+			} else if ((!hidefilter) && (ruletypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
 			}
 		}
@@ -63,8 +62,8 @@ public class FilterController {
 		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-			if(!AppliedRuletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey()))){
-				AppliedRuletypes.add(ValidateTranslator.getValue(violation.getRuletypeKey()));
+			if(!AppliedRuletypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()))){
+				AppliedRuletypes.add(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()));
 			}
 		}
 
@@ -76,8 +75,8 @@ public class FilterController {
 
 		for (Violation violation : violations) {
 
-			if(!appliedViolationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey()))){
-				appliedViolationtypes.add(ValidateTranslator.getValue(violation.getViolationtypeKey()));
+			if(!appliedViolationtypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()))){
+				appliedViolationtypes.add(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()));
 			}
 		}
 		return appliedViolationtypes;

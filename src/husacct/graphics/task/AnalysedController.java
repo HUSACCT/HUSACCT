@@ -6,7 +6,6 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
@@ -19,6 +18,7 @@ import org.apache.log4j.Logger;
 public class AnalysedController extends DrawingController {
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
+	
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
@@ -29,10 +29,8 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		// TODO: Uncomment wanneer analyse addServiceListener heeft
-		// geïmplementeerd!
-		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new
-		// IServiceListener(){
+		// TODO: Uncomment wanneer analyse addServiceListener heeft geïmplementeerd!
+		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener(){
 		// @Override
 		// public void update() {
 		// refreshDrawing();
@@ -83,6 +81,12 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
+		//printFigures("moduleZoom()");
+		//saveFigurePositions(getCurrentPath());
+		zoom(figures);
+	}
+
+	private void zoom(BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -97,6 +101,7 @@ public class AnalysedController extends DrawingController {
 				logger.warn("Could not zoom on this object: " + figure.getName() +". Not a module to zoom on.");
 			}
 		}
+
 		
 		if(parentNames.size()>0){
 			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
@@ -121,6 +126,8 @@ public class AnalysedController extends DrawingController {
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
+		//printFigures("moduleZoomOut()");
+//		saveFigurePositions(getCurrentPaths());
 	}
 
 	private void getAndDrawModulesIn(String parentName) {

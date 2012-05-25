@@ -2,6 +2,7 @@ package husacct.graphics;
 
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
+import husacct.common.services.IServiceListener;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
 import husacct.graphics.task.DrawingDetail;
@@ -59,6 +60,18 @@ public class GraphicsServiceStub extends ObservableService implements IGraphicsS
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		//TODO: Set workspace data.
+	}
+
+	@Override
+	public void addServiceListener(IServiceListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceListeners() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

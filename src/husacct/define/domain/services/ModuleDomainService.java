@@ -1,6 +1,7 @@
 package husacct.define.domain.services;
 
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.ModuleComparator;
 
@@ -125,6 +126,11 @@ public class ModuleDomainService {
 	
 	public void moveLayerDown(long layerId){
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
+	}
+
+	public Module getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {
+		Module module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su);
+		return module;
 	}
 
 }

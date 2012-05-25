@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -11,6 +12,11 @@ import org.apache.log4j.Logger;
 
 class FamixDependencyConnector {
 
+	private static final String EXTENDS = "Extends";
+	private static final String EXTENDS_LIBRARY = "ExtendsLibrary";
+	private static final String EXTENDS_ABSTRACT = "ExtendsAbstract";
+	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
+	
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
@@ -51,7 +57,7 @@ class FamixDependencyConnector {
 					String classFoundInImports = findClassInImports(theClass, association.to);
 					if(!classFoundInImports.equals("")){
 						association.to = classFoundInImports;
-						connected = true;
+						connected = true;				
 					} else {
 						String belongsToPackage = getPackageFromUniqueClassName(association.from);
 						String to = findClassInPackage(association.to, belongsToPackage);
@@ -59,7 +65,7 @@ class FamixDependencyConnector {
 							association.to = to;
 							connected = true;
 						}
-					}
+					}					
 					if(!connected){
 						if(isInvocation(association)){
 							FamixInvocation theInvocation = (FamixInvocation) association;
@@ -82,12 +88,12 @@ class FamixDependencyConnector {
 							}
 						}
 					}
-				}
-				
+				}				
 				if(association.to.equals("") || association.to == null){
 					logger.info("Couldn't analyse dependency from " + association.from + ". Reason: External Libraries not implemented yet");
 //					logger.info("couldn't connect " + association.from + " to the right entity. Linenumber " + association.lineNumber + ".");
 				} else {
+					determineType(association);
 					addToModel(association);
 				}
 			} catch(Exception e){
@@ -95,8 +101,34 @@ class FamixDependencyConnector {
 			}
 		}		
 	}	
+		
+	private void determineType(FamixAssociation association){
+		String type = association.type;
+		if(type.equals(EXTENDS)){
+			FamixClass theClass = getClassForUniqueName(association.to);
+			if(theClass != null){
+				if(theClass.isAbstract) type = EXTENDS_ABSTRACT;
+				else if(!theClass.isAbstract) type = EXTENDS_CONCRETE;
+				else type = EXTENDS_LIBRARY;
+			} else {
+				FamixInterface theInterface = getInterfaceForUniqueName(association.to);
+				if(theInterface != null){
+					// Interface extends Interface
+					type = EXTENDS_CONCRETE;
+				}
+			}
+			
+		}
+		association.type = type;
+	}
 	
-
+	private FamixClass getClassForUniqueName(String uniqueName){
+		return theModel.classes.get(uniqueName);
+	}
+	
+	private FamixInterface getInterfaceForUniqueName(String uniqueName){
+		return theModel.interfaces.get(uniqueName);
+	} 
 
 	private String getClassForAttribute(String delcareClass, String attributeName){
 		for(FamixAttribute famixAttribute: theModel.getAttributes()){
@@ -141,20 +173,6 @@ class FamixDependencyConnector {
 	private boolean isInvocation(FamixAssociation association){
 		return association instanceof FamixInvocation;
 	}
-//	
-//
-//	private List<FamixInvocation> getAllInvocationsFromClass(String from, String invocationName) {
-//		List<FamixInvocation> foundInvocations = new ArrayList<FamixInvocation>();
-//		for (FamixAssociation assocation : theModel.associations){
-//			if(assocation instanceof FamixInvocation){
-//				FamixInvocation theInvocation = (FamixInvocation) assocation;
-//				if(theInvocation.belongsToMethod.equals(from) && theInvocation.nameOfInstance.equals(invocationName)){
-//					foundInvocations.add(theInvocation);
-//				}
-//			}
-//		}
-//		return foundInvocations;
-//	}
 
 	private String findClassInImports(String importingClass, String typeDeclaration){
 		List<FamixImport> imports = theModel.getImportsInClass(importingClass);
@@ -185,13 +203,20 @@ class FamixDependencyConnector {
 		return "";
 	}
 			
-	private String getPackageFromUniqueClassName(String completeImportString) {
+	private String getPackageFromUniqueClassName(String completeImportString) {		
 		List<FamixClass> classes = theModel.getClasses();
 		for (FamixClass fclass : classes){
 			if (fclass.uniqueName.equals(completeImportString)){
 				return fclass.belongsToPackage;
 			}
 		}
+		
+		FamixInterface f = theModel.interfaces.get(completeImportString);
+		if(f != null){
+			return f.belongsToPackage;
+		}
+		
+		
 		return "";
 	}
 	
