@@ -113,25 +113,20 @@ public class FilterController {
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, boolean applyFilter) {
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, List<Violation> shownViolations, boolean applyFilter) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
-		List<Violation> violations = null;
+		
 		List<Severity> severities = null;
 		if(violationHistory != null) {
-			violations = violationHistory.getViolations();
 			severities = violationHistory.getSeverities();
 		} else {
-			violations = taskServiceImpl.getAllViolations().getValue();
 			severities = taskServiceImpl.getAllSeverities();
-		}
-		if(applyFilter) {
-			violations = taskServiceImpl.applyFilterViolations(violations);
 		}
 
 		for(Severity severity : severities) {
 			int violationsCount = 0;
 
-			for(Violation violation : violations) {
+			for(Violation violation : shownViolations) {
 				if(violation.getSeverity() != null) {
 					if(violation.getSeverity().getId().equals(severity.getId())) {
 						violationsCount++;

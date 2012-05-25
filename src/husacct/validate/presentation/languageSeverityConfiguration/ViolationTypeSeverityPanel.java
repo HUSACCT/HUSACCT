@@ -224,7 +224,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	private void loadViolationType(String category) {
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			if (ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString).equals(category)){
+			if (categoryString.equals(category)){
 				List<ViolationType> violationtypes = violationTypes.get(categoryString);
 				for(ViolationType violationtype: violationtypes){
 					Severity severity;
