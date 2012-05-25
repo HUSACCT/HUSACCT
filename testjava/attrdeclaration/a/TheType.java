@@ -4,4 +4,7 @@ public class TheType {
 
 	public TheType(){}
 	
+	public Unit getUnit(){
+		return null;
+	}
 }
