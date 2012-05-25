@@ -32,19 +32,25 @@ public class InterfaceConventionRule extends RuleType {
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
-
-		int counter = 0, noDependencyCounter = 0;
+		
+		int interfaceCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), classPathFrom.getViolationTypes());
-				counter++;
-				if(dependencies.length == 0) noDependencyCounter++;			
-			}
-			if(noDependencyCounter == counter){
-				Violation violation = createViolation(rootRule, classPathFrom, null, null, configuration);
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath());
+				for(DependencyDTO dependency : dependencies){
+					if(analyseService.getModuleForUniqueName(dependency.to).type.toLowerCase().equals("interface")){
+						interfaceCounter++;
+					}
+				}
+			}	
+
+			if(interfaceCounter == 0){
+
+				Violation violation = createViolation(rootRule, classPathFrom, null, null , configuration);
 				violations.add(violation);
 			}
-		}	
+			interfaceCounter = 0;
+		}
 		return violations;
 	}
 }
