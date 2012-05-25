@@ -21,8 +21,11 @@ import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
@@ -231,6 +234,15 @@ public class GraphicsFrame extends JInternalFrame {
 				}
 			}
 		});
+		menuBar.setZoomChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+			    JSlider source = (JSlider)ce.getSource();
+				    if (!source.getValueIsAdjusting()) {
+				    	zoomChanged();
+				    }
+				}
+		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
 	}
 
@@ -285,6 +297,13 @@ public class GraphicsFrame extends JInternalFrame {
 			l.exportToImage();
 		}
 	}
+	
+	private void zoomChanged() {
+		double scaleFactor = menuBar.getScaleFactor();
+		for (UserInputListener l : listeners) {
+			l.drawingZoomChanged(scaleFactor);
+		}		
+	}	
 	
 	protected void toggleDependencies() {
 		for (UserInputListener l : listeners) {

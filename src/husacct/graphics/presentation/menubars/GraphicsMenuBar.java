@@ -9,15 +9,22 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
 public class GraphicsMenuBar extends JPanel {
 	private static final long serialVersionUID = -7419378432318031359L;
+	private static final double MIN_SCALEFACTOR = 0.25;
+	private static final double MAX_SCALEFACTOR = 1.75;
+			
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
+	
 	private JButton goToParentMenu, refreshMenu, exportToImageMenu;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
 	private JComboBox<String> layoutStrategyOptions;
+	private JSlider zoomSlider;
 
 	private int menuItemMaxHeight = 45;
 
@@ -53,34 +60,42 @@ public class GraphicsMenuBar extends JPanel {
 		exportToImageMenu = new JButton();
 		exportToImageMenu.setSize(50, menuItemMaxHeight);
 		add(exportToImageMenu);
+		
+		zoomSlider = new JSlider(25, 175, 100);
+		zoomSlider.setSize(50, menuItemMaxHeight);
+		add(zoomSlider);
 	}
 
-	public void setLevelUpAction(ActionListener action) {
-		goToParentMenu.addActionListener(action);
+	public void setLevelUpAction(ActionListener listener) {
+		goToParentMenu.addActionListener(listener);
 	}
 
-	public void setRefreshAction(ActionListener action) {
-		refreshMenu.addActionListener(action);
+	public void setRefreshAction(ActionListener listener) {
+		refreshMenu.addActionListener(listener);
 	}
 
-	public void setToggleDependenciesAction(ActionListener action) {
-		showDependenciesOptionMenu.addActionListener(action);
+	public void setToggleDependenciesAction(ActionListener listener) {
+		showDependenciesOptionMenu.addActionListener(listener);
 	}
 
-	public void setToggleViolationsAction(ActionListener action) {
-		showViolationsOptionMenu.addActionListener(action);
+	public void setToggleViolationsAction(ActionListener listener) {
+		showViolationsOptionMenu.addActionListener(listener);
 	}
 
-	public void setToggleContextUpdatesAction(ActionListener action) {
-		contextUpdatesOptionMenu.addActionListener(action);
+	public void setToggleContextUpdatesAction(ActionListener listener) {
+		contextUpdatesOptionMenu.addActionListener(listener);
 	}
 
-	public void setExportToImageAction(ActionListener action) {
-		exportToImageMenu.addActionListener(action);
+	public void setExportToImageAction(ActionListener listener) {
+		exportToImageMenu.addActionListener(listener);
 	}
 
-	public void setLayoutStrategyAction(ActionListener action) {
-		layoutStrategyOptions.addActionListener(action);
+	public void setLayoutStrategyAction(ActionListener listener) {
+		layoutStrategyOptions.addActionListener(listener);
+	}
+	
+	public void setZoomChangeListener(ChangeListener listener) {
+		zoomSlider.addChangeListener(listener);
 	}
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
@@ -126,6 +141,14 @@ public class GraphicsMenuBar extends JPanel {
 
 	public void setContextDependencyToggle(boolean setting) {
 		showDependenciesOptionMenu.setSelected(setting);
+	}
+
+	public double getScaleFactor() {
+		double scaleFactor = zoomSlider.getValue() / 100.0;
+		scaleFactor = Math.max(MIN_SCALEFACTOR, scaleFactor);
+		scaleFactor = Math.min(MAX_SCALEFACTOR, scaleFactor);
+		
+		return scaleFactor;
 	}
 
 }
