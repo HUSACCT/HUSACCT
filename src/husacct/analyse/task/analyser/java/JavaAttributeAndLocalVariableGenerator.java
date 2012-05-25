@@ -152,4 +152,13 @@ class JavaAttributeAndLocalVariableGenerator {
 			}
 		}
 	}
+
+	public void generateLocalLoopVariable(String belongsToClass, String belongsToMethod, String declareType, String name, int lineNumber) {
+		this.belongsToClass = belongsToClass;
+		this.belongsToMethod = belongsToClass + "." + belongsToMethod;
+		this.declareType = declareType;
+		this.name = name;
+		this.lineNumber = lineNumber;
+		createLocalVariableObject();
+	}
 }

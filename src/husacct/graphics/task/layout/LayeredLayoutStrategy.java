@@ -1,6 +1,6 @@
 package husacct.graphics.task.layout;
 
-import husacct.common.ListUtils;
+import husacct.graphics.ListUtils;
 import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.InterfaceFigure;

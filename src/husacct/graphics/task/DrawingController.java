@@ -17,13 +17,13 @@ import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayoutStrategy;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
@@ -164,7 +164,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void updateLayout() {
 		String currentPath = getCurrentPath();
-		
+
 		if (hasSavedFigureStates(currentPath)) {
 			restoreFigurePositions(currentPath);
 		} else {
@@ -173,26 +173,27 @@ public abstract class DrawingController implements UserInputListener {
 
 			layoutStrategy.doLayout(width, height);
 		}
-		
+
 		updateLines();
-		
-		// FIXME: TODO: Patrick:
-		// Calling drawLinesBasedOnSetting(); after updating the layout is done due to a bug.
-		// The bug is assumed to be in the RelationFigure because the lines are drawing themselves
-		// incorrectly after updating the layout of the drawing.
-		// To solve this we first draw the entire drawing, update the layout and then
-		// remove all the lines and re-add them to the drawing.
-		// As it's currently unknown what causes the bug or how to solve it and the
-		// deadline for Construction II is approaching, we have decided to go with a
-		// work around. However, this bug should be fixed as soon as possible.
-		//drawLinesBasedOnSetting();
+
+		// bring modulefigures to the front
+		ArrayList<Figure> moduleFigures = new ArrayList<Figure>();
+		for (Figure f : drawing.getChildren()) {
+			if (((BaseFigure) f).isModule()) {
+				moduleFigures.add(f);
+			}
+		}
+		for (Figure f : moduleFigures) {
+			drawing.bringToFront(f);
+		}
 	}
-	
+
 	private void updateLines() {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 			if (bf.isLine()) {
-				ConnectionFigure cf = (ConnectionFigure) f;
+				// ConnectionFigure cf = (ConnectionFigure) f;
+				RelationFigure cf = (RelationFigure) f;
 				cf.updateConnection();
 			}
 		}
@@ -301,7 +302,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected boolean hasSavedFigureStates(String path) {
 		return storedStates.containsKey(path);
 	}
-	
+
 	protected void restoreFigurePositions(String path) {
 		if (storedStates.containsKey(path)) {
 			DrawingState state = storedStates.get(path);

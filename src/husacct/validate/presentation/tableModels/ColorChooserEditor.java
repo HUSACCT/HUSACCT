@@ -1,6 +1,6 @@
 package husacct.validate.presentation.tableModels;
 
-import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.ServiceProvider;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -23,7 +23,7 @@ public class ColorChooserEditor extends AbstractCellEditor implements TableCellE
 	private JColorChooser colorChooser;
 	private JDialog dialog;
 	
-	protected static final String EDIT = ValidateTranslator.getValue("edit");
+	protected static final String EDIT = ServiceProvider.getInstance().getControlService().getTranslatedString("edit");
 
 	public ColorChooserEditor() {
 		//Set up the editor (from the table's point of view),
@@ -38,7 +38,7 @@ public class ColorChooserEditor extends AbstractCellEditor implements TableCellE
 		//Set up the dialog that the button brings up.
 		colorChooser = new JColorChooser();
 		dialog = JColorChooser.createDialog(button,
-				ValidateTranslator.getValue("PickAColor"),
+				ServiceProvider.getInstance().getControlService().getTranslatedString("PickAColor"),
 				true,  //modal
 				colorChooser,
 				this,  //OK button handler

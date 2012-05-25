@@ -1,22 +1,27 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.ValueInputController;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddModuleValuesJDialog extends AbstractValuesJDialog {
+public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
 	private final String husacctIcon = "husacct/common/resources/husacct.png";
@@ -28,13 +33,18 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	private JTextField moduleDescriptionField;	
 	private JComboBox moduleTypeComboBox;
 	
+	private JButton cancelButton;
+	private JButton saveButton;
+	private ValueInputController inputController;
+	
 	public AddModuleValuesJDialog(ModuleJPanel modulePanel) {
 		super();
 		this.modulePanel = modulePanel;
+		this.inputController = new ValueInputController();
+		initGUI();
 	}
 	
-	@Override
-	public void initUI() {
+	private void initGUI() {
 		this.setTitle("New Module");
 		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 		
@@ -44,10 +54,10 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.createInnerPanel();
 		this.add(this.innerPanel);
 		
-		this.setResizable(false);
-		this.pack();
+		this.setResizable(true);
 		this.setSize(700, 190);
 		this.setVisible(true);
+		this.setModal(true);
 	}
 	
 	private GridLayout getGridLayout(int rows, int columns) {
@@ -67,7 +77,7 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	}
 	
 	private void addParentModule() {
-		JLabel parentModuleLabel = new JLabel("Parent module");
+		JLabel parentModuleLabel = new JLabel(DefineTranslator.translate("ParentModule"));
 		this.innerPanel.add(parentModuleLabel);
 		
 		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
@@ -78,7 +88,7 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	}
 	
 	private void addModuleValues() {
-		JLabel moduleLabel = new JLabel("Module name");
+		JLabel moduleLabel = new JLabel(DefineTranslator.translate("ModuleName"));
 		this.innerPanel.add(moduleLabel);
 		
 		this.moduleNameField = new JTextField();
@@ -87,18 +97,20 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	}
 	
 	private void addModuleDescriptionTextArea() {
-		JLabel moduleLabel = new JLabel("Module Description");
+		JLabel moduleLabel = new JLabel(DefineTranslator.translate("ModuleDescription"));
 		this.innerPanel.add(moduleLabel);
 		
 		this.moduleDescriptionField = new JTextField();
+		this.moduleDescriptionField.addKeyListener(this);
+		
 		this.innerPanel.add(this.moduleDescriptionField);
 	}
 	
 	private void addModuleTypeComboBox() {
-		JLabel moduleTypeLabel = new JLabel("Module type");
+		JLabel moduleTypeLabel = new JLabel(DefineTranslator.translate("ModuleType"));
 		this.innerPanel.add(moduleTypeLabel);
 		
-		String[] moduleTypes = {"SubSystem", "Layer", "Component", "External Library"};
+		String[] moduleTypes = {DefineTranslator.translate("SubSystem"), DefineTranslator.translate("Layer"), DefineTranslator.translate("Component"), DefineTranslator.translate("ExternalLibrary")};
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
@@ -106,16 +118,15 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.innerPanel.add(this.moduleTypeComboBox);
 	}
 	
-	@Override
 	protected void addButtons() {
 		this.cancelButton = new JButton();
 		this.innerPanel.add(this.cancelButton);
-		this.cancelButton.setText("Cancel");
+		this.cancelButton.setText(DefineTranslator.translate("Cancel"));
 		this.cancelButton.addActionListener(this);
 		
 		this.saveButton = new JButton();
 		this.innerPanel.add(this.saveButton);
-		this.saveButton.setText("Save");
+		this.saveButton.setText(DefineTranslator.translate("Save"));
 		this.saveButton.addActionListener(this);
 	}
 
@@ -172,25 +183,23 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		
 	}
 
-	@Override
 	protected void cancelButtonAction() {
 		this.dispose();
 	}
 
-	@Override
 	protected void saveButtonAction() {
 		String moduleType = this.moduleTypeComboBox.getSelectedItem().toString();
 		this.submitForModuleType(moduleType);
 	}
 	
 	private void submitForModuleType(String moduleType) {
-		if(moduleType == "SubSystem") {
+		if(moduleType == DefineTranslator.translate("SubSystem")) {
 			this.submitSubSystem();
-		} else if(moduleType == "Layer") {
+		} else if(moduleType == DefineTranslator.translate("Layer")) {
 			this.submitLayer();
-		} else if(moduleType == "Component") {
+		} else if(moduleType == DefineTranslator.translate("Component")) {
 			this.submitComponent();
-		} else if(moduleType == "External Library") {
+		} else if(moduleType == DefineTranslator.translate("ExternalLibrary")) {
 			this.submitExternalLibrary();
 		}
 	}
@@ -258,7 +267,7 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 	}
 	
 	private void throwError(String errorMessage) {
-		JOptionPane.showMessageDialog(this, errorMessage, "Wrong input!", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, errorMessage, DefineTranslator.translate("WrongInputTitle"), JOptionPane.ERROR_MESSAGE);
 	}
 	
 

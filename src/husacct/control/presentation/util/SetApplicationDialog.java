@@ -23,9 +23,9 @@ public class SetApplicationDialog extends JDialog {
 	private JButton saveButton;
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
-	
+
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-	
+
 	public SetApplicationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
@@ -36,7 +36,7 @@ public class SetApplicationDialog extends JDialog {
 		setListeners();
 		this.setVisible(true);
 	}
-	
+
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
@@ -44,7 +44,7 @@ public class SetApplicationDialog extends JDialog {
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
-	
+
 	private void addComponents(){
 		JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
@@ -56,13 +56,15 @@ public class SetApplicationDialog extends JDialog {
 		mainPanel.add(savePanel);
 		add(mainPanel);
 	}
-	
+
 	private void setListeners(){
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-				mainController.getApplicationController().setApplicationData(applicationData);
-				dispose();
+				if (setApplicationPanel.dataValidated()) {
+					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+					mainController.getApplicationController().setApplicationData(applicationData);
+					dispose();
+				}
 			}
 		});
 	}

@@ -48,40 +48,7 @@ public class RuleTypesFactory {
 		List<RuleType> ruleTypes = generateRuleTypes(programmingLanguage);	
 		return extractCategoriesFromRuleType(ruleTypes);
 	}
-
-	private HashMap<String, List<RuleType>> extractCategoriesFromRuleType(List<RuleType> ruletypes){
-		HashMap<String, List<RuleType>> returnMap = new HashMap<String, List<RuleType>>();
-
-		for(RuleType ruletype : ruletypes){
-			final String categoryKey = ruletype.getCategoryKey();
-			List<RuleType> categoryRules = returnMap.get(categoryKey);
-			if(categoryRules != null){
-				categoryRules.add(ruletype);
-			}	
-			else{
-				List<RuleType> ruleList = new ArrayList<RuleType>();
-				ruleList.add(ruletype);
-				returnMap.put(categoryKey, ruleList);					
-			}
-		}	
-		return returnMap;
-	}
-
-	public List<RuleType> getRuleTypes(){
-		ApplicationDTO application = defineService.getApplicationDetails();
-		if(application != null){
-			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){				
-				return generateDefaultRuleTypes();
-			}
-			else{
-				return generateRuleTypes(application.programmingLanguage);
-			}
-		}
-		return Collections.emptyList();
-	}
-
-
-	//Depending on the language give instance of Rule + violationtypes
+	
 	private List<RuleType> generateRuleTypes(String language){
 		setViolationTypeFactory(language);
 
@@ -108,17 +75,88 @@ public class RuleTypesFactory {
 		return rules;
 	}
 
+	private HashMap<String, List<RuleType>> extractCategoriesFromRuleType(List<RuleType> ruletypes){
+		HashMap<String, List<RuleType>> returnMap = new HashMap<String, List<RuleType>>();
+
+		for(RuleType ruletype : ruletypes){
+			final String categoryKey = ruletype.getCategoryKey();
+			List<RuleType> categoryRules = returnMap.get(categoryKey);
+			if(categoryRules != null){
+				categoryRules.add(ruletype);
+			}	
+			else{
+				List<RuleType> ruleList = new ArrayList<RuleType>();
+				ruleList.add(ruletype);
+				returnMap.put(categoryKey, ruleList);					
+			}
+		}	
+		return returnMap;
+	}
+
+	public List<RuleType> getRuleTypes(){
+		ApplicationDTO application = defineService.getApplicationDetails();
+		if(application != null){
+			if(application.programmingLanguage == null || application.programmingLanguage.equals("")){				
+				return generateDefaultRuleTypes();
+			}
+			else{
+				return generateDefaultRuleTypes(application.programmingLanguage);
+			}
+		}
+		return Collections.emptyList();
+	}
+	
+	//Return all the default instances of Rule
+	private List<RuleType> generateDefaultRuleTypes(){
+		List<RuleType> rules = new ArrayList<RuleType>();
+		setViolationTypeFactory();
+		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
+			try{
+				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
+				String categoryKey = set.getValue().getCategoryKey();
+				if(ruletypeClass != null){				
+					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<ViolationType>());
+					rules.add(rule);				
+				}
+			}catch(RuleInstantionException e){
+				logger.error(e.getMessage(), e);
+			}
+		}
+		return rules;
+	}
+
+
+	//Depending on the language give instance of Rule + violationtypes
+	private List<RuleType> generateDefaultRuleTypes(String language){
+		setViolationTypeFactory(language);
+
+		List<RuleType> rules = new ArrayList<RuleType>();		
+
+		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
+			try{
+				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
+				String categoryKey = set.getValue().getCategoryKey();
+				if(ruletypeClass != null){
+					List<ViolationType> violationlist = Collections.emptyList();
+					if(violationtypefactory != null){
+						violationlist = violationtypefactory.createViolationTypesByRule(set.getKey());
+					}
+
+					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, violationlist);
+					rules.add(rule);
+
+				}
+			}catch(RuleInstantionException e){
+				logger.error(e.getMessage(), e);	
+			}
+		}		
+		return rules;
+	}
+	
 	private void setViolationTypeFactory(String language){
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(language, configuration);
 		if(violationtypefactory == null){
 			logger.debug("Warning language does not exists: " + language);
-		}
-	}
-
-	private void setViolationTypeFactory(){
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
-		if(violationtypefactory == null){
-			logger.debug("Warning no language specified in define component");
 		}
 	}
 
@@ -142,24 +180,12 @@ public class RuleTypesFactory {
 		}
 		throw new RuleTypeNotFoundException(ruleKey);
 	}
-
-	//Return all the default instances of Rule
-	private List<RuleType> generateDefaultRuleTypes(){
-		List<RuleType> rules = new ArrayList<RuleType>();
-		setViolationTypeFactory();
-		for(Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()){
-			try{
-				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
-				String categoryKey = set.getValue().getCategoryKey();
-				if(ruletypeClass != null){				
-					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<ViolationType>());
-					rules.add(rule);				
-				}
-			}catch(RuleInstantionException e){
-				logger.error(e.getMessage(), e);
-			}
+	
+	private void setViolationTypeFactory(){
+		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
+		if(violationtypefactory == null){
+			logger.debug("Warning no language specified in define component");
 		}
-		return rules;
 	}
 
 	private RuleType generateRuleObject(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException{

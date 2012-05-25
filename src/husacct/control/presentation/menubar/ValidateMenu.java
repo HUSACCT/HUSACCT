@@ -38,13 +38,13 @@ public class ValidateMenu extends JMenu{
 	private void addComponents() {
 		validateNowItem = new JMenuItem(controlService.getTranslatedString("ValidateNow"));
 		validateNowItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
-		validateNowItem.setMnemonic('v');
+		validateNowItem.setMnemonic(getMnemonicKeycode("ValidateNowMnemonic"));
 				
 		configureItem = new JMenuItem(controlService.getTranslatedString("Configuration"));
-		configureItem.setMnemonic('c');
+		configureItem.setMnemonic(getMnemonicKeycode("ConfigurationMnemonic"));
 				
 		exportViolationReportItem = new JMenuItem(controlService.getTranslatedString("ViolationReport"));
-		exportViolationReportItem.setMnemonic('i');
+		exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
 		
 		this.add(validateNowItem);
 		this.add(configureItem);
@@ -103,7 +103,28 @@ public class ValidateMenu extends JMenu{
 				configureItem.setText(controlService.getTranslatedString("Configuration"));
 				validateNowItem.setText(controlService.getTranslatedString("ValidateNow"));
 				exportViolationReportItem.setText(controlService.getTranslatedString("ViolationReport"));
+				validateNowItem.setMnemonic(getMnemonicKeycode("ValidateNowMnemonic"));
+				configureItem.setMnemonic(getMnemonicKeycode("ConfigurationMnemonic"));
+				exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
 			}
 		});
+	}
+	
+	public JMenuItem getConfigureItem(){
+		return configureItem;
+	}
+	
+	public JMenuItem getValidateNowItem(){
+		return validateNowItem;
+	}
+
+	public JMenuItem getExportViolationReportItem(){
+		return exportViolationReportItem;
+	}
+	
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
 	}
 }
