@@ -13,9 +13,9 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
-import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayoutStrategy;
+import husacct.graphics.task.layout.NoLayoutStrategy;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 
-		layoutStrategy = new BasicLayoutStrategy(drawing);
+		layoutStrategy = new NoLayoutStrategy();
 	}
 
 	public JInternalFrame getGUI() {

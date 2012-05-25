@@ -133,7 +133,7 @@ public class ParentFigure extends BaseFigure {
 		
 		Rectangle2D.Double bounds = getBounds();
 		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-		Point2D.Double lead = new Point2D.Double(anchor.x + newSize.width, anchor.y + newSize.height);
+		Point2D.Double lead = new Point2D.Double(anchor.x + newSize.width + 10, anchor.y + newSize.height + 10);
 		
 		willChange();
 		setBounds(anchor, lead);
@@ -141,69 +141,72 @@ public class ParentFigure extends BaseFigure {
 	}
 	
 	public boolean add(Figure figure) {
+		BaseFigure bf = (BaseFigure) figure;
+		bf.setInContainer(true);
+		
 		childrenOwnImpl.add(figure);
-		figure.addFigureListener(new FigureListener() {
-			@Override
-			public void areaInvalidated(FigureEvent e) {
-			}
-			@Override
-			public void attributeChanged(FigureEvent e) {
-			}
-			@Override
-			public void figureHandlesChanged(FigureEvent e) {
-			}
-
-			@Override
-			public void figureChanged(FigureEvent e) {
-				double parentFigureStartX = getBounds().getX();
-				double parentFigureWidth = getBounds().getWidth();
-				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
-				double parentFigureStartY = getBounds().getY();
-				double parentFigureHeight = getBounds().getHeight();
-				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
-
-				BaseFigure childFigure = ((BaseFigure) e.getFigure());
-				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
-				double childFigureX = figureBounds.getX();
-				double childFigureWidth = figureBounds.getWidth();
-				double childFigureY = figureBounds.getY();
-				double childFigureHeight = figureBounds.getHeight();
-
-				boolean outsideLeft = childFigureX < parentFigureStartX;
-				boolean outsideRight = (childFigureX + childFigureWidth) > parentFigureEndX;
-				if (outsideLeft || outsideRight) {
-					childFigure.willChange();
-					if (outsideLeft) {
-						childFigure.updateLocation(parentFigureStartX, childFigureY);
-					} else {
-						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
-					}
-					childFigure.changed();
-				}
-
-				boolean outsideTop = childFigureY < parentFigureStartY;
-				boolean outsideBottom = (childFigureY + childFigureHeight) > parentFigureEndY;
-				if (outsideTop || outsideBottom) {
-					childFigure.willChange();
-					if (outsideTop) {
-						childFigure.updateLocation(childFigureX, parentFigureStartY);
-					} else {
-						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
-					}
-					childFigure.changed();
-				}
-			}
-
-			@Override
-			public void figureAdded(FigureEvent e) {
-			}
-			@Override
-			public void figureRemoved(FigureEvent e) {
-			}
-			@Override
-			public void figureRequestRemove(FigureEvent e) {
-			}
-		});
+//		figure.addFigureListener(new FigureListener() {
+//			@Override
+//			public void areaInvalidated(FigureEvent e) {
+//			}
+//			@Override
+//			public void attributeChanged(FigureEvent e) {
+//			}
+//			@Override
+//			public void figureHandlesChanged(FigureEvent e) {
+//			}
+//
+//			@Override
+//			public void figureChanged(FigureEvent e) {
+//				double parentFigureStartX = getBounds().getX();
+//				double parentFigureWidth = getBounds().getWidth();
+//				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
+//				double parentFigureStartY = getBounds().getY();
+//				double parentFigureHeight = getBounds().getHeight();
+//				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
+//
+//				BaseFigure childFigure = ((BaseFigure) e.getFigure());
+//				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
+//				double childFigureX = figureBounds.getX();
+//				double childFigureWidth = figureBounds.getWidth();
+//				double childFigureY = figureBounds.getY();
+//				double childFigureHeight = figureBounds.getHeight();
+//
+//				boolean outsideLeft = childFigureX < parentFigureStartX;
+//				boolean outsideRight = (childFigureX + childFigureWidth) > parentFigureEndX;
+//				if (outsideLeft || outsideRight) {
+//					childFigure.willChange();
+//					if (outsideLeft) {
+//						childFigure.updateLocation(parentFigureStartX, childFigureY);
+//					} else {
+//						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
+//					}
+//					childFigure.changed();
+//				}
+//
+//				boolean outsideTop = childFigureY < parentFigureStartY;
+//				boolean outsideBottom = (childFigureY + childFigureHeight) > parentFigureEndY;
+//				if (outsideTop || outsideBottom) {
+//					childFigure.willChange();
+//					if (outsideTop) {
+//						childFigure.updateLocation(childFigureX, parentFigureStartY);
+//					} else {
+//						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
+//					}
+//					childFigure.changed();
+//				}
+//			}
+//
+//			@Override
+//			public void figureAdded(FigureEvent e) {
+//			}
+//			@Override
+//			public void figureRemoved(FigureEvent e) {
+//			}
+//			@Override
+//			public void figureRequestRemove(FigureEvent e) {
+//			}
+//		});
 		return true;
 	}
 

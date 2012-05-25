@@ -26,6 +26,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 	private boolean isSizeable = false;
+	private boolean isStoredInContainer = false;
 	private String name;
 	
 	public BaseFigure(String theName) {
@@ -234,5 +235,13 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public boolean isLine(){
 		return false;
+	}
+	
+	public void setInContainer(boolean value) {
+		this.isStoredInContainer = value;
+	}
+	
+	public boolean isInContainer() {
+		return isStoredInContainer;
 	}
 }

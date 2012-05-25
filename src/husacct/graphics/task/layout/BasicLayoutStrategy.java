@@ -32,7 +32,7 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		figures.addAll(drawing.getChildren());
 
 		for (Figure f : figures) {
-			if (!isConnector(f)) {
+			if (!isConnector(f) && !inContainer(f)) {
 				
 				Rectangle2D.Double bounds = f.getBounds();
 	
@@ -61,6 +61,11 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		}		
 	}
 	
+	private boolean inContainer(Figure f) {
+		BaseFigure bf = (BaseFigure) f;
+		return bf.isInContainer();
+	}
+
 	// TODO: Patrick: I'm not quite sure if this code should be here. We really
 	// need to discuss this kind of
 	// code. It's ugly and unneccessary I think.

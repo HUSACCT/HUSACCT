@@ -5,7 +5,6 @@ import husacct.graphics.presentation.figures.ParentFigure;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
 
 import org.jhotdraw.draw.Figure;
 
@@ -24,6 +23,7 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 	@Override
 	public void doLayout(int screenWidth, int screenHeight) {
 		BaseFigure[] figures = container.getChildFigures();
+		Rectangle2D.Double parentBounds = container.getBounds();
 		int maxItemsPerRow = MIN_FIGURES_PER_ROW;
 		int itemsOnRow = 0;
 		double heightOnRow = 0;
@@ -37,12 +37,12 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 			if (figure.isModule()) {
 				Rectangle2D.Double bounds = figure.getBounds();
 				
-				Point2D.Double anchor = new Point2D.Double(location.x, location.y);
-				Point2D.Double lead = new Point2D.Double(location.x + bounds.width, location.y + bounds.height);
+				Point2D.Double anchor = new Point2D.Double(parentBounds.x + location.x, parentBounds.y + location.y);
+				Point2D.Double lead = new Point2D.Double(parentBounds.x + location.x + bounds.width, parentBounds.y + location.y + bounds.height);
 				
-				figure.willChange();
+				//figure.willChange();
 				figure.setBounds(anchor, lead);
-				figure.changed();
+				//figure.changed();
 						
 				location.x += bounds.width + HORZ_SPACING;
 				itemsOnRow++;

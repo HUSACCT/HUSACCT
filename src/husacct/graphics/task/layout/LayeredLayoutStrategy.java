@@ -74,8 +74,9 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		final List<Node> compareList = nodes.readOnlyCopy();
 		S1<Figure> addUnconnectedFigures = new S1<Figure>(null, compareList) {
 			{
-				if (a != null && !isConnector(a) && !compareList.contains(a))
+				if (a != null && !isConnector(a) && !compareList.contains(a) && !inContainer(a)) {
 					getNode(a);
+				}
 			}
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
@@ -289,6 +290,10 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 
 		return false;
 	}
+	
+	private static boolean inContainer(Figure a) {
+		return ((BaseFigure) a).isInContainer();
+	}	
 
 	private static boolean isInterface(Figure figure) {
 		if (figure instanceof InterfaceFigure || figure instanceof AbstractClassFigure)
