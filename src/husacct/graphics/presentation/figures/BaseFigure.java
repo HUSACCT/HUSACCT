@@ -177,7 +177,9 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	public void updateLocation(double x, double y) {
 		willChange();
-		setBounds(new Point2D.Double(x, y), new Point2D.Double(x, y));
+		double widthX = x + getBounds().getWidth();
+		double heightY = y + getBounds().getHeight();
+		setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX, heightY));
 		changed();
 	}
 

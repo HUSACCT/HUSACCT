@@ -10,14 +10,17 @@ import org.jhotdraw.draw.Figure;
 
 public class ContainerLayoutStrategy implements LayoutStrategy {
 	private static final int MIN_FIGURES_PER_ROW = 3;
-	private static final int HORZ_SPACING = 10;
-	private static final int VERT_SPACING = 10;
+	private int HORZ_SPACING;
+	private int VERT_SPACING;
 	
 	private ParentFigure container = null;
-	private Point2D.Double location = new Point2D.Double(HORZ_SPACING, VERT_SPACING);
+	private Point2D.Double location;
 	
-	public ContainerLayoutStrategy(ParentFigure theParent) {
+	public ContainerLayoutStrategy(ParentFigure theParent, int minimumHorizontalPadding, int minimumVerticalPadding) {
 		container = theParent;
+		HORZ_SPACING = minimumHorizontalPadding;
+		VERT_SPACING = minimumVerticalPadding;
+		location = new Point2D.Double(HORZ_SPACING, VERT_SPACING);
 	}
 	
 	@Override
