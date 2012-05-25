@@ -33,12 +33,10 @@ public class InterfaceConventionRule extends RuleType {
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		String[] dependencyFilter = {"InterfaceConvention"};
-
 		int counter = 0, noDependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
-				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath(),dependencyFilter);
+				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), classPathFrom.getViolationTypes());
 				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
