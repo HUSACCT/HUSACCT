@@ -20,7 +20,7 @@ public class CSharpMethodConvertController extends CSharpGenerator {
 
 	public boolean methodCheck(CommonTree tree, boolean isPartOfMethod) {
 		int type = tree.getType();
-		for (int singleMethodType : listOfMethodTypes) {
+		for (int singleMethodType : listOfMethodAndPropertyTypes) {
 			if (type == singleMethodType) {
 				isPartOfMethod = true;
 			}

@@ -73,8 +73,10 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 				name = name + node.getText();
 			}
 		}else{
-			CommonTree node = tree.get(namePosition);
-			name = node.getText();
+			if (namePosition >= 0) {
+				CommonTree node = tree.get(namePosition);
+				name = node.getText();
+			}
 		}
 		return name;
 	}
@@ -154,7 +156,6 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 			}		
 		}
 		if(tempTree.size() > 0){
-			System.out.println("Controle: "+tempTree);
 			CSharpInvocationGenerator localVariableConverter = new CSharpInvocationGenerator(treeConvertController, belongsToClass);
 			localVariableConverter.generateInvocation(tempTree, lineNumber, methodSignature);
 		}
