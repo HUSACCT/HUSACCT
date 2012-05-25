@@ -139,5 +139,8 @@ public class ModuleDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su.getName());
 		return module;
 	}
-
+	
+	public Long getParentModuleIdByChildId(Long moduleId) {
+		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
+	}
 }

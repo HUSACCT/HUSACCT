@@ -25,6 +25,7 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
+import husacct.define.task.conventions_checker.RuleConventionsChecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -289,7 +290,7 @@ public class AppliedRuleController extends PopUpController {
 	private boolean checkRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
 		RuleConventionsChecker conventionsChecker = new RuleConventionsChecker(moduleFrom, moduleTo, ruleTypeKey);
 		if(!conventionsChecker.checkRuleConventions()) {
-			String errorMessage = DefineTranslator.translate("NotAllowedBecauseDefined") + ":\n\n " + conventionsChecker.getErrorMessage();
+			String errorMessage = conventionsChecker.getErrorMessage();
 			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, DefineTranslator.translate("ConventionError"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		} else {
