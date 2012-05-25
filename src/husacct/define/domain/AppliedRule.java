@@ -37,8 +37,8 @@ public class AppliedRule {
 		this.enabled = enabled;
 	}
 	
-	public AppliedRule(String ruleType, String description, Module usedModule, Module restrictedModule){
-		this(ruleType, description, new String[0], "",usedModule,restrictedModule, true);
+	public AppliedRule(String ruleType, String description, Module moduleTo, Module moduleFrom){
+		this(ruleType, description, new String[0], "",moduleTo,moduleFrom, true);
 	}
 
 	public AppliedRule() {

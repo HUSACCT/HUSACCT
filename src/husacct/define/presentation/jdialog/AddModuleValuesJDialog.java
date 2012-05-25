@@ -43,11 +43,17 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		super();
 		this.modulePanel = modulePanel;
 		this.inputController = new ValueInputController();
-		initGUI();
+
+		this.setSize(700, 190);
 	}
 	
+<<<<<<< HEAD
 	private void initGUI() {
 		this.setTitle(DefineTranslator.translate("NewModule"));
+=======
+	public void initGUI() {
+		this.setTitle("New Module");
+>>>>>>> 3c010dd056c1ba53d86096a9a5a099e6a49f5846
 		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 		
 		this.innerPanel = new JPanel();
@@ -58,8 +64,8 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		
 		this.setResizable(true);
 		this.setSize(700, 190);
-		this.setVisible(true);
 		this.setModal(true);
+		this.setVisible(true);
 	}
 	
 	private GridLayout getGridLayout(int rows, int columns) {

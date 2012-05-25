@@ -25,6 +25,7 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
+import husacct.define.task.conventions_checker.RuleConventionsChecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,9 +183,24 @@ public class AppliedRuleController extends PopUpController {
 		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
 		for(SoftwareUnitDefinition softwareUnit : softwareUnits) {
 			AnalyzedModuleComponent analysedComponent = new AnalyzedModuleComponent(softwareUnit.getName(), softwareUnit.getName(), softwareUnit.getType().toString(), "public");
+
+			AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(softwareUnit.getName());
+			for(AnalysedModuleDTO subModule : children) {
+				this.addChildComponents(analysedComponent, subModule);
+			}
+			
 			childComponent.addChild(analysedComponent);
 		}
 		
+		parentComponent.addChild(childComponent);
+	}
+	
+	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
+		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		for(AnalysedModuleDTO subModule : children) {
+			this.addChildComponents(childComponent, subModule);
+		}
 		parentComponent.addChild(childComponent);
 	}
 
@@ -209,8 +225,8 @@ public class AppliedRuleController extends PopUpController {
 		String regex = (String) ruleDetails.get("regex");
 		String[] dependencies = (String[]) ruleDetails.get("dependencies");
 		
-		Module moduleFrom = getCorrectModule(from);
-		Module moduleTo = getCorrectModule(to);
+		Module moduleFrom = assignToCorrectModule(from);
+		Module moduleTo = assignToCorrectModule(to);
 		
 		try {
 			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
@@ -229,10 +245,10 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 	
-	private Module getCorrectModule(Object o){
+	private Module assignToCorrectModule(Object o){
 		Module module;
 		if (o instanceof SoftwareUnitDefinition){
-			module = createModuleForSoftwareUnit((SoftwareUnitDefinition) o);
+			module = getModuleWhereSoftwareUnitNeedsToBeMapped((SoftwareUnitDefinition) o, (SoftwareUnitDefinition) o);
 		} else if (o instanceof Long){
 			long moduleId = (Long) o;
 			if (moduleId != -1){
@@ -246,29 +262,51 @@ public class AppliedRuleController extends PopUpController {
 		return module;
 	}
 	
-	private Module createModuleForSoftwareUnit(SoftwareUnitDefinition su) {
-		Module module = new SubSystem(su.getName(), "");
-		module.addSUDefinition(su);
-
-		SoftwareUnitDefinition parentSU;
-		AnalysedModuleDTO analysedModuleDTO = ServiceProvider.getInstance().getAnalyseService().getParentModuleForModule(su.getName());
-		if (!analysedModuleDTO.name.equals("")) { 
-			Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
-			parentSU = new SoftwareUnitDefinition(analysedModuleDTO.uniqueName, type);
-		} else {
-			logger.info("No parent found for softwareunit : " + su.getName());
-			logger.info("Using " + su.getName() + " instead");
-			parentSU = su;
-		}
-		
-		
+	private Module getModuleWhereSoftwareUnitNeedsToBeMapped(SoftwareUnitDefinition currentSoftwareUnit, final SoftwareUnitDefinition finalSoftwareUnit){
+		Module returnModule;
 		try {
-			Module parentModule = moduleService.getModuleIdBySoftwareUnit(parentSU);
-			moduleService.addModuleToParent(parentModule.getId(), module);				
+			//Search all module for the softwareunit definition we are trying to map
+			Module module = moduleService.getModuleIdBySoftwareUnit(currentSoftwareUnit);
+			//Current Softwareunit is now found, adding to current module or sub
+			returnModule = createOrAssignModule(module, finalSoftwareUnit);
 		} catch (RuntimeException e){
-			moduleService.addModuleToRoot(module);			
+			//Current softwareunit definition not found
+			//Go recursive and look if the parent of the softwareunit is mapped.
+			
+			AnalysedModuleDTO analysedModuleDTO = ServiceProvider.getInstance().getAnalyseService().getParentModuleForModule(currentSoftwareUnit.getName());
+			if (!analysedModuleDTO.name.equals("")) { 
+				Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
+				SoftwareUnitDefinition parentSU = new SoftwareUnitDefinition(analysedModuleDTO.uniqueName, type);
+				
+				returnModule = getModuleWhereSoftwareUnitNeedsToBeMapped(parentSU, finalSoftwareUnit);
+				
+			} else {//No higher parent of softwareUnit
+				//Conclusion: softwareunit is not mapped at all. now at to the root
+				logger.info("No parent found for softwareunit : " + currentSoftwareUnit.getName());
+				logger.info("Adding " + currentSoftwareUnit.getName() + " to a module in the root");
+				
+				Module subModule = new SubSystem(currentSoftwareUnit.getName(), "");
+				moduleService.addModuleToRoot(subModule);
+				returnModule = subModule;
+			}
 		}
-		return module;
+		return returnModule;
+	}
+	
+	private Module createOrAssignModule(Module module, SoftwareUnitDefinition su){
+		Module moduleToReturn;
+		ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits(); 
+		
+		String firstSUName = softwareUnits.get(0).getName();
+		if (module.getUnits().size() == 1 && firstSUName.equals(su.getName())){
+			moduleToReturn = module;
+		} else {
+			Module subModule = new SubSystem(su.getName(), "");
+			subModule.addSUDefinition(su);
+			moduleService.addModuleToParent(module.getId(), subModule);
+			moduleToReturn = subModule;
+		}
+		return moduleToReturn;
 	}
 	
 	private boolean checkRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
@@ -292,8 +330,8 @@ public class AppliedRuleController extends PopUpController {
 
 			Object from = exceptionRule.get("moduleFromId");
 			Object to = exceptionRule.get("moduleToId");
-			Module moduleFrom = getCorrectModule(from);
-			Module moduleTo = getCorrectModule(to);
+			Module moduleFrom = assignToCorrectModule(from);
+			Module moduleTo = assignToCorrectModule(to);
 			
 			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo);
 		}

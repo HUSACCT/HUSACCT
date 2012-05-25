@@ -199,15 +199,15 @@ public class SoftwareArchitecture {
 		return currentModule;
 	}
 	
-	public Module getModuleBySoftwareUnit(SoftwareUnitDefinition su) {
+	public Module getModuleBySoftwareUnit(String softwareUnitName) {
 		Module currentModule = null;
 		for(Module module : modules){
 			
-			if (module.hasSoftwareUnit(su.getName())){
+			if (module.hasSoftwareUnit(softwareUnitName)){
 				currentModule = module;
-				while (!currentModule.hasSoftwareUnitDirectly(su.getName())){
+				while (!currentModule.hasSoftwareUnitDirectly(softwareUnitName)){
 					for (Module subModule : currentModule.getSubModules()){
-						if (subModule.hasSoftwareUnit(su.getName())){
+						if (subModule.hasSoftwareUnit(softwareUnitName)){
 							currentModule = subModule;
 						}
 					}
@@ -280,12 +280,15 @@ public class SoftwareArchitecture {
 				tmpList.remove(rule);
 			}	
 			
+			@SuppressWarnings("unchecked")
+			ArrayList<AppliedRule> tmpExceptionList = (ArrayList<AppliedRule>) appliedRules.clone();
 			for (AppliedRule exceptionRule : rule.getExceptions()){
 				if (exceptionRule.getModuleFrom().equals(module) || 
 						exceptionRule.getModuleTo().equals(module)){
-					rule.getExceptions().remove(exceptionRule);
+					tmpExceptionList.remove(exceptionRule);
 				}		
 			}
+			rule.setExceptions(tmpExceptionList);
 		}
 		appliedRules = tmpList;	
 	}
