@@ -2,17 +2,15 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationRuleTypeDTO;
 import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationViolationTypeDTO;
-import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.presentation.languageSeverityConfiguration.ActiveViolationPanel;
 import husacct.validate.presentation.languageSeverityConfiguration.RuleTypeSeverityPanel;
 import husacct.validate.presentation.languageSeverityConfiguration.ViolationTypeSeverityPanel;
 import husacct.validate.task.TaskServiceImpl;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;

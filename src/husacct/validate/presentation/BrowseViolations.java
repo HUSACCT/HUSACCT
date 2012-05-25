@@ -2,6 +2,7 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
@@ -9,6 +10,8 @@ import husacct.validate.presentation.browseViolations.FilterPanel;
 import husacct.validate.presentation.browseViolations.StatisticsPanel;
 import husacct.validate.presentation.browseViolations.ViolationInformationPanel;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
+import husacct.validate.presentation.threadTasks.CheckConformanceTask;
+import husacct.validate.presentation.threadTasks.LoadViolationHistoryPointsTask;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.BorderLayout;
@@ -38,8 +41,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.log4j.Logger;
+
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
+	
 	private static final long serialVersionUID = 4912981274532255799L;
+	
+	private Logger logger = Logger.getLogger(BrowseViolations.class);
 	private JTable chooseViolationHistoryTable, violationsTable;
 	private DefaultTableModel chooseViolationHistoryTableModel, violationsTableModel;
 	private final TaskServiceImpl taskServiceImpl;
@@ -49,11 +57,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private FilterPanel filterPane;
 	private StatisticsPanel statisticsPanel;
 	private ViolationInformationPanel violationInformationPanel;
-	
+
 	private final FilterViolations filterViolations;
 	private JButton buttonSaveInHistory, buttonLatestViolations, buttonDeleteViolationHistoryPoint,
 	buttonValidate;
-	
+
 	private List<Violation> shownViolations;
 	private BrowseViolations thisScreen = this;
 
@@ -268,8 +276,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO: add LoadingDialog from next merge
-				ServiceProvider.getInstance().getValidateService().checkConformance();	
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Validating"), new CheckConformanceTask());
+				validateThread.run();				
 			}
 		});
 
@@ -335,7 +343,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 										.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
 										.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE))
 										.addGap(1))
-				);
+		);
 
 
 		rightSideGroupLayout.setVerticalGroup(
@@ -348,33 +356,26 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 								.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
 								.addGap(8)
 								.addComponent(violationInformationPanel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
-				);
+		);
 
 		statisticsPanel = new StatisticsPanel(taskServiceImpl);
 		scrollPane.setViewportView(statisticsPanel);
-		
-
-		
-		
-		
-		
 
 		violationsTable = new JTable();
 		violationsTableScrollPane.setViewportView(violationsTable);
 		rightSidePane.setLayout(rightSideGroupLayout);
 
-		
 		configuration.attachViolationHistoryRepositoryObserver(this);
 	}
 
-	protected void loadInformationPanel() {
+	public void loadInformationPanel() {
 		int violationsSize = 0;
 		if(selectedViolationHistory == null){
 			violationsSize = taskServiceImpl.getAllViolations().getValue().size();
 		} else{ 
 			violationsSize = selectedViolationHistory.getViolations().size();
 		}
-		
+
 		statisticsPanel.loadStatistics(taskServiceImpl.getViolationsPerSeverity(shownViolations), violationsSize, shownViolations.size());
 	}
 
@@ -411,10 +412,20 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	public void applyFilterChanged(ActionEvent e) {
-		//TODO: add LoadingDialog from next merge
-		updateViolationsTable();
-		loadInformationPanel();
-
+		final Thread updateThread = new Thread() { 
+			@Override 
+			public void run() {
+				try {
+					Thread.sleep(1);
+					updateViolationsTable();
+					loadInformationPanel();
+				} catch (InterruptedException e) {
+					logger.debug(e.getMessage());
+				}
+			}
+		};
+		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), updateThread);
+		loadingThread.run();
 	}
 
 	@Override
@@ -435,7 +446,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		}
 		return violations;
 	}
-	protected void setSelectedViolationHistory(ViolationHistory v) {
+	public void setSelectedViolationHistory(ViolationHistory v) {
 		selectedViolationHistory = v;
 	}
 
@@ -443,14 +454,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		return selectedViolationHistory;
 	}
 
-	private void changeShownViolations() {
-		//TODO: add LoadingDialog from next merge
-		LoadViolationHistoryPointsTask loadViolationsHistoryTask = new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, thisScreen, taskServiceImpl, filterPane.getApplyFilter());
-		Thread th = new Thread(loadViolationsHistoryTask);
-		th.start();
+	private void changeShownViolations() {		
+		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, thisScreen, taskServiceImpl, filterPane.getApplyFilter()));
+		loadingThread.run();
 	}
 
-	public void update(){
+	public void updateGuiWithViolationHistory(){
 		try{
 			int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
 			selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
