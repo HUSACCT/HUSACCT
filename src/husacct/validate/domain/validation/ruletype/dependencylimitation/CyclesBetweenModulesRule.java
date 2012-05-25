@@ -3,7 +3,7 @@ package husacct.validate.domain.validation.ruletype.dependencylimitation;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
@@ -18,10 +18,10 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 
-public class LoopsInModuleRule extends RuleType{
+public class CyclesBetweenModulesRule extends RuleType{
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 
-	public LoopsInModuleRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public CyclesBetweenModulesRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
@@ -31,11 +31,11 @@ public class LoopsInModuleRule extends RuleType{
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
-		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
-				physicalClasspathsFrom.addAll(CheckConformanceUtilFilter.getAllModulesFromLayer(module, currentRule.violationTypeKeys));
+				physicalClasspathsFrom.addAll(CheckConformanceUtilClass.getAllClassesFromLayer(module, currentRule.violationTypeKeys));
 			}
 
 		}else{
@@ -49,6 +49,7 @@ public class LoopsInModuleRule extends RuleType{
 	}
 
 	private List<Violation> checkCircularDependencies(String physicalPath, HashSet<String> history, ConfigurationServiceImpl configuration, RuleDTO rootRule,Mapping mappingFrom)	{
+		//TODO: if all classes in loop have the same mapping.logicalpath, NO violation!
 		history.add(physicalPath);
 		DependencyDTO[] dependencies = analyseService.getDependenciesFrom(physicalPath);
 		for(DependencyDTO dependency : dependencies){

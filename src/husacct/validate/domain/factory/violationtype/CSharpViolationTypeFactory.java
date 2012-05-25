@@ -4,7 +4,6 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.violationtype.CSharpViolationTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
-import husacct.validate.domain.validation.violationtype.JavaViolationTypes;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,10 +34,16 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 			return generateViolationTypes(ruleTypeKey, defaultAccess);
 		}
 		else if(isNamingConvention(ruleTypeKey)){
-			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(JavaViolationTypes.class));
+			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
 		}
 		else if(isLoopsInModule(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, defaultDependencies);
+		}
+		else if(isInterfaceConvention(ruleTypeKey)){
+			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
+		}
+		else if(isSubClassConvention(ruleTypeKey)){
+			return generateViolationTypes(ruleTypeKey, EnumSet.of(CSharpViolationTypes.EXTENDS));
 		}
 		else{
 			return Collections.emptyList();
