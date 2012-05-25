@@ -44,7 +44,7 @@ public interface IModelCreationService {
 
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
-			String belongsToMethod, String declareTypes);
+			String belongsToMethod);
 	
 	//Single debugging functionality, to check the completeness of the implementation
 		public String represent();
