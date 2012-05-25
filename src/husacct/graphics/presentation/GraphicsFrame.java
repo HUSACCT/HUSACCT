@@ -47,7 +47,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private String[] dependencyColumnKeysArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
-	private ArrayList<String> layoutStrategyItems; 
+	private String[] layoutStrategyItems; 
 	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
@@ -127,11 +127,13 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.setLocale(menuBarLocale);
 		
 		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
-		layoutStrategyItems = new ArrayList<String>();
+		int i = 0;
+		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
 		for(DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()){
 			String translation = controlService.getTranslatedString(strategy.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
-			layoutStrategyItems.add(translation);
+			layoutStrategyItems[i] = translation;
+			i++;
 		}
 		menuBar.setLayoutStrategyItems(layoutStrategyItems);
 		
@@ -258,14 +260,7 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 	
 	public void setSelectedLayout(DrawingLayoutStrategy layoutStrategyOption) {
-		int i = 0;
-		for(DrawingLayoutStrategy strategy : layoutStrategiesTranslations.values()){
-			if(strategy.equals(layoutStrategyOption)){
-				continue;
-			}
-			i++;
-		}
-		menuBar.setSelectedLayoutStrategyItem(i);
+		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
 	}
 
 	private void moduleOpen(String[] paths) {
