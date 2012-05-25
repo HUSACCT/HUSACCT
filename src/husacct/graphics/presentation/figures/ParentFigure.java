@@ -18,6 +18,7 @@ import org.jhotdraw.draw.event.FigureListener;
 
 public class ParentFigure extends BaseFigure {
 	private static final long serialVersionUID = 101138923385231941L;
+	private static final Color defaultContainerColor = new Color(204, 204, 255);
 	private RectangleFigure body;
 	private TextFigure text;
 
@@ -38,7 +39,7 @@ public class ParentFigure extends BaseFigure {
 		children.add(body);
 		children.add(text);
 
-		body.set(AttributeKeys.FILL_COLOR, new Color(204, 204, 255));
+		body.set(AttributeKeys.FILL_COLOR, defaultContainerColor);
 
 		baseZIndex = -2;
 		resetLayer();

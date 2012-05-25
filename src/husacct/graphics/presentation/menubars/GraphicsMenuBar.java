@@ -16,7 +16,7 @@ public class GraphicsMenuBar extends JPanel {
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 	private JButton goToParentMenu, refreshMenu, exportToImageMenu;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
-	private JComboBox layoutStrategyOptions;
+	private JComboBox<String> layoutStrategyOptions;
 
 	private int menuItemMaxHeight = 45;
 
@@ -46,7 +46,7 @@ public class GraphicsMenuBar extends JPanel {
 		contextUpdatesOptionMenu.setSize(40, menuItemMaxHeight);
 		add(contextUpdatesOptionMenu);
 
-		layoutStrategyOptions = new JComboBox();
+		layoutStrategyOptions = new JComboBox<String>();
 		add(layoutStrategyOptions);
 
 		exportToImageMenu = new JButton();
