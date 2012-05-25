@@ -184,12 +184,12 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void RestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) ruletypeModel.getValueAt(ruletypeTable.getSelectedRow(), 0)).key);
+		taskServiceImpl.restoreKeyToDefaultSeverity(language, ((DataLanguageHelper) ruletypeModel.getValueAt(ruletypeTable.getSelectedRow(), 0)).key);
 		CategoryValueChanged();
 	}
 
 	private void RestoreAllActionPerformed() {
-		taskServiceImpl.restoreAllToDefault(language);
+		taskServiceImpl.restoreAllKeysToDefaultSeverities(language);
 		CategoryValueChanged();
 	}
 

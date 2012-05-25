@@ -85,15 +85,15 @@ public final class ConfigurationServiceImpl extends Observable {
 		return severityPerTypeRepository.getSeverity(language, key);
 	}
 
-	public void restoreAllToDefault(String language){
-		severityPerTypeRepository.restoreAllToDefault(language);
+	public void restoreAllKeysToDefaultSeverities(String language){
+		severityPerTypeRepository.restoreAllKeysToDefaultSeverities(language);
 		setChanged();
 		notifyObservers();
 		notifyServiceListeners();
 	}
 
-	public void restoreToDefault(String language, String key){
-		severityPerTypeRepository.restoreDefaultSeverity(language, key);
+	public void restoreKeyToDefaultSeverity(String language, String key){
+		severityPerTypeRepository.restoreKeyToDefaultSeverity(language, key);
 		setChanged();
 		notifyObservers();
 		notifyServiceListeners();
