@@ -47,13 +47,8 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		this.setSize(700, 190);
 	}
 	
-<<<<<<< HEAD
-	private void initGUI() {
-		this.setTitle(DefineTranslator.translate("NewModule"));
-=======
 	public void initGUI() {
-		this.setTitle("New Module");
->>>>>>> 3c010dd056c1ba53d86096a9a5a099e6a49f5846
+		this.setTitle(DefineTranslator.translate("NewModule"));
 		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
 		
 		this.innerPanel = new JPanel();
