@@ -3,6 +3,7 @@ package husacct.control.presentation.workspace.savers;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
+import husacct.control.presentation.util.Regex;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -111,6 +112,10 @@ public class XmlSavePanel extends SaverPanel{
 	public boolean validateData() {
 		if(selectedFile == null){
 			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			return false;
+		}		
+		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
+			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
 			return false;
 		}
 		return true;

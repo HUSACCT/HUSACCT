@@ -39,5 +39,4 @@ public class FileDialog extends JFileChooser{
 	public int showDialog(Component parent){
 		return showDialog(parent, buttonText);
 	}
-	
 }

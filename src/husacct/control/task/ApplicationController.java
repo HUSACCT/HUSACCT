@@ -1,13 +1,11 @@
 package husacct.control.task;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.control.IControlService;
 import husacct.control.presentation.util.AboutDialog;
-import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
+import husacct.control.task.threading.ThreadWithLoader;
 
 import javax.swing.JOptionPane;
 
@@ -38,40 +36,9 @@ public class ApplicationController {
 	}
 	
 	private void analyseApplication(){
-		AnalyseTask analyseTask = new AnalyseTask();
-		
-		final LoadingDialog loadingDialog = new LoadingDialog(mainController, "Analysing application");
-		final Thread analyseThread = new Thread(analyseTask);
-		Thread loadingThread = new Thread(loadingDialog);
-		
-		// Use new thread to listen if analysethread is finished
-		Thread monitorThread = new Thread(new Runnable() {
-			public void run() {
-				try {
-					analyseThread.join();
-					loadingDialog.dispose();
-					logger.debug("analyse thread finished");
-				} catch (InterruptedException exception){
-					logger.debug("analyse thread interrupted");
-				}
-				
-			}
-		});
-		
-		loadingDialog.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent e) {
-				analyseThread.interrupt();
-			}
-		});
-		
-		loadingThread.setName("loading");
-		analyseThread.setName("analyse");
-		monitorThread.setName("monitor");
-		
-		loadingThread.start();
-		analyseThread.start();
-		monitorThread.start();
+		IControlService controlService = ServiceProvider.getInstance().getControlService();
+		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(controlService.getTranslatedString("AnalysingApplication"), new AnalyseTask());
+		analyseThread.run();
 	}
 	
 	public void showAboutHusacctGui(){

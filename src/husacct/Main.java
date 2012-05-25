@@ -10,11 +10,6 @@ import org.apache.log4j.PropertyConfigurator;
 public class Main {
 	
 	public Main(String[] consoleArguments){
-		
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Husacct");
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("apple.awt.fileDialogForDirectories", "true");
-		
 		setLog4jConfiguration();
 		printSystemInfo();
 		IControlService controlService = ServiceProvider.getInstance().getControlService();

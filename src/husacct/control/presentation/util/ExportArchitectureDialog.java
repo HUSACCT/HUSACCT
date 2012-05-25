@@ -74,8 +74,10 @@ public class ExportArchitectureDialog extends JDialog {
 		});
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(validateData()) {
 				mainController.getExportController().exportArchitecture(selectedFile);
 				dispose();
+				}
 			}
 		});
 	}
@@ -98,4 +100,16 @@ public class ExportArchitectureDialog extends JDialog {
 		pathText.setText(file.getAbsolutePath());
 		exportButton.setEnabled(true);
 	}
+	
+	public boolean validateData() {
+		if(selectedFile == null){
+			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			return false;
+		}		
+		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
+			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
+			return false;
+		}
+		return true;
+	}	
 }
