@@ -14,8 +14,8 @@ public class LayerFigure extends BaseFigure {
 	private RectangleFigure body;
 	private TextFigure text;
 
-	public static final int MIN_WIDTH = 300;
-	public static final int MIN_HEIGHT = 50;
+	public int MIN_WIDTH = 150;
+	public int MIN_HEIGHT = 30;
 
 	public LayerFigure(String name) {
 		super(name);

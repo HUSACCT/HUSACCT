@@ -15,8 +15,8 @@ public class ModuleFigure extends BaseFigure {
 	private TextFigure moduleText;
 	private TextFigure text;
 
-	public static final int MIN_WIDTH = 100;
-	public static final int MIN_HEIGHT = 100;
+	public static final int MIN_WIDTH = 50;
+	public static final int MIN_HEIGHT = 50;
 
 	public ModuleFigure(String name, String type) {
 		super(name);

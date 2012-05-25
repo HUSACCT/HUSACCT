@@ -22,8 +22,8 @@ public class ComponentFigure extends BaseFigure {
 	private BufferedImage compIcon;
 	private ImageFigure compIconFig;
 
-	public static final int MIN_WIDTH = 130;
-	public static final int MIN_HEIGHT = 90;
+	public int MIN_WIDTH = 60;
+	public int MIN_HEIGHT = 50;
 
 	public ComponentFigure(String figureName) {
 		super(figureName);

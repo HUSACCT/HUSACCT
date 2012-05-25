@@ -14,7 +14,7 @@ import org.jhotdraw.draw.Figure;
 public class BasicLayoutStrategy implements LayoutStrategy {
 
 	private static final double VERT_ITEM_SPACING = 40.0;
-	private static final double HORZ_ITEM_SPACING = 35.0;
+	private static final double HORZ_ITEM_SPACING = 50.0;
 
 	private AbstractCompositeFigure drawing = null;
 

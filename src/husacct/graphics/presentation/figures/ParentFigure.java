@@ -23,7 +23,7 @@ public class ParentFigure extends BaseFigure {
 
 	protected int minWidth = 400;
 	protected int minHeight = 400;
-	protected int minPadding = 20;
+	protected int minChildPadding = 20;
 	
 	private ArrayList<Figure> childrenOwnImpl;
 	private double currentPositionX, currentPositionY;
@@ -131,8 +131,8 @@ public class ParentFigure extends BaseFigure {
 			
 			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height));
 		}
-		minWidth = newSize.width + minPadding;
-		minHeight = newSize.height + minPadding;
+		minWidth = newSize.width + minChildPadding;
+		minHeight = newSize.height + minChildPadding;
 		
 		Rectangle2D.Double bounds = getBounds();
 		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
