@@ -1,4 +1,4 @@
-package husacct.graphics;
+package husacct.graphics.util;
 
 import java.awt.geom.Point2D;
 

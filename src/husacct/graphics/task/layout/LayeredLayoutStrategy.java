@@ -1,10 +1,10 @@
 package husacct.graphics.task.layout;
 
-import husacct.graphics.ListUtils;
 import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.InterfaceFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.util.ListUtils;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;

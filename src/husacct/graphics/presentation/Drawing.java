@@ -4,6 +4,8 @@ import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.presentation.linelayoutstrategies.ConnectorLineSeparationStrategy;
+import husacct.graphics.presentation.linelayoutstrategies.ILineSeparationStrategy;
 
 import java.awt.geom.Point2D;
 import java.io.File;
