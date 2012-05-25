@@ -58,6 +58,7 @@ public class CSharpMethodConvertController extends CSharpGenerator {
 		methodGenerator.generateMethod(methodTrees, treeConvertController.getCurrentClassName(), treeConvertController.getUniqueClassName());
 		treeConvertController.setCurrentMethodName(methodGenerator.getSignature());
 		treeConvertController.setMethodIndentLevel(treeConvertController.getIndentLevel() -1);
+		treeConvertController.cleanInstances();
 	}
 
 }

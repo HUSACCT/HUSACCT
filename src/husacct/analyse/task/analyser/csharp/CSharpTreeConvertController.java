@@ -252,4 +252,14 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	public List<CSharpInstanceData> getInstances(){
 		return instances;
 	}
+	
+	public void cleanInstances(){
+		for(int i = 0; i < instances.size(); i++){
+			CSharpInstanceData instance = instances.get(i);
+			if(instance.getHasClassScope() == false){
+				instances.remove(i);
+				cleanInstances();
+			}
+		}
+	}
 }

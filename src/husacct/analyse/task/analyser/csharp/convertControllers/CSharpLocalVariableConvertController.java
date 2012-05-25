@@ -44,20 +44,26 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 		return isPartOfLocalVariable;
 	}
 
-	private boolean endLocalVariable(CommonTree tree) {
-		int lineNumber = tree.getLine();
-		String uniqueClassName = treeConvertController.getUniqueClassName();
+	private boolean endLocalVariable(CommonTree node) {
+		int lineNumber = node.getLine();
 		if(localVariableTrees.size() > 0){
 			cleanVariableList();
-		}		
+		}
 		if(localVariableTrees.size() > 1){
 			System.out.println(localVariableTrees);
-			CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator(treeConvertController);
-			localVariableGenerator.generateLocalVariable(localVariableTrees, treeConvertController.getCurrentMethodName(), uniqueClassName, lineNumber);
+			createLocalVariableGenerator(lineNumber);
 		}
 		localVariableTrees.clear();
 		return false;
 	}
+	
+	private void createLocalVariableGenerator(int lineNr){
+		String uniqueClassName = treeConvertController.getUniqueClassName();
+		CSharpLocalVariableGenerator localVariableGenerator = new CSharpLocalVariableGenerator(treeConvertController);
+		localVariableGenerator.generateLocalVariable(localVariableTrees, treeConvertController.getCurrentMethodName(), uniqueClassName, lineNr);
+	}
+
+	
 
 	private void cleanVariableList() {
 		boolean isLocalVariable = true;
@@ -66,7 +72,14 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 			if(type == FORWARDCURLYBRACKET){
 				isLocalVariable = false;
 			}
-		}		
+		}
+		if(isLocalVariable){
+			CommonTree node = localVariableTrees.get(1);
+			int type = node.getType();
+			if(type == FORWARDBRACKET){
+				isLocalVariable = false;
+			}
+		}
 		if(!(isLocalVariable)){
 			localVariableTrees.clear();
 		}
