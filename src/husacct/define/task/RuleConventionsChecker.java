@@ -171,7 +171,7 @@ public class RuleConventionsChecker {
 			if(appliedRule.getRuleType().equals(ruleType) &&
 			   appliedRule.getModuleFrom().getId() == fromModule.getId() &&
 			   appliedRule.getModuleTo().getId() == toModule.getId()) {
-				setErrorMessage(DefineTranslator.translate(appliedRule.getRuleType() + "AlreadyFromThisToSelected"));
+				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + DefineTranslator.translate(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
 				return false;
 			}
 		}
@@ -197,7 +197,7 @@ public class RuleConventionsChecker {
 			if(appliedRule.getRuleType().equals(ruleType) &&
 				appliedRule.getModuleFrom().getId() == fromModule.getId() &&
 				appliedRule.getModuleTo().getId() != toModule.getId()) {
-				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromThisToOther"));
+				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + DefineTranslator.translate(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
 				return false;
 			}
 		}
@@ -230,10 +230,28 @@ public class RuleConventionsChecker {
 	private boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType, Module fromModule, Module toModule) {
 		for(AppliedRule appliedRule : getToModuleAppliedRules(toModule)) {
 			if(appliedRule.getRuleType().equals(ruleType) &&
-				appliedRule.getModuleFrom().getId() != fromModule.getId() &&
+				checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(appliedRule.getModuleFrom(), fromModule) &&
 				appliedRule.getModuleTo().getId() == toModule.getId()) {
-				setErrorMessage(DefineTranslator.translate(ruleType + "AlreadyFromOtherToSelected") + " \"" + appliedRule.getModuleFrom().getName() + "\"");
+				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + DefineTranslator.translate(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
 				return false;
+			}
+		}
+		for(Module toModuleChild : toModule.getSubModules()) {
+			if(!this.checkRuleTypeAlreadyFromOtherToSelected(ruleType, fromModule, toModuleChild)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(Module appliedRuleModule, Module fromModule) {
+		if(appliedRuleModule.getId() == fromModule.getId()) {
+			return false;
+		} else {
+			for(Module fromModuleChild : fromModule.getSubModules()) {
+				if(!checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(appliedRuleModule, fromModuleChild)) {
+					return false;
+				}
 			}
 		}
 		return true;
