@@ -67,7 +67,7 @@ public class DomainXML {
 			}
 			XMLArchitecture.addContent(SARules);
 		}
-
+		
 		return XMLArchitecture;
 	}
 
@@ -200,7 +200,7 @@ public class DomainXML {
 		return XMLAppliedRule;
 	}
 
-	public Element getApplicationInXML(Application App) {
+	public Element getApplicationInXML(Application App) {	
 		Element XMLApplication = new Element("Application");
 
 		Element applicationName = new Element("name");
@@ -214,6 +214,12 @@ public class DomainXML {
 		Element applicationVersion = new Element("version");
 		applicationVersion.addContent(App.getVersion());
 		XMLApplication.addContent(applicationVersion);
+		
+		Element applicationPaths = new Element("physicalPaths");
+		if (App.getPaths().length > 0) {
+			applicationPaths.addContent("heeeee");
+		}
+		XMLApplication.addContent(applicationPaths);
 
 		XMLApplication.addContent(this.getSoftwareArchitectureInXML());
 
