@@ -26,4 +26,6 @@ public interface UserInputListener {
 	public void toggleDependencies();
 
 	public void toggleContextUpdates();
+	
+	public void drawingZoomChanged(double zoomFactor);	
 }

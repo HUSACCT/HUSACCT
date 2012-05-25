@@ -7,8 +7,8 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
-import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.task.UserInputListener;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -23,6 +23,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
@@ -233,6 +235,12 @@ public class GraphicsFrame extends JInternalFrame {
 				}
 			}
 		});
+		menuBar.setZoomChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+		    		zoomChanged();
+				}
+		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
 	}
 
@@ -280,6 +288,13 @@ public class GraphicsFrame extends JInternalFrame {
 			l.exportToImage();
 		}
 	}
+	
+	private void zoomChanged() {
+		double scaleFactor = menuBar.getScaleFactor();
+		for (UserInputListener l : listeners) {
+			l.drawingZoomChanged(scaleFactor);
+		}		
+	}	
 	
 	protected void toggleDependencies() {
 		for (UserInputListener l : listeners) {

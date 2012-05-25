@@ -429,4 +429,9 @@ public abstract class DrawingController implements UserInputListener {
 				System.out.println(String.format("%s: %s", bf.getName(), rect));
 		}
 	}
+	
+	@Override
+	public void drawingZoomChanged(double zoomFactor) {
+		view.setScaleFactor(zoomFactor);
+	}	
 }
