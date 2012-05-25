@@ -2,10 +2,15 @@ package husaccttest.analyse;
 
 import java.util.HashMap;
 
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 import husacct.common.dto.DependencyDTO;
 
 public class TestDomainDependencies extends TestCaseExtended{
 	
+	@Test
 	public void testGetDependencyFromAndToClasses(){
 		String fromPath = "domain.locationbased.foursquare.History";
 		String toPath = "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO";
@@ -35,6 +40,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(true, foundImport);
 	}
 	
+	@Test
 	public void testGetDependenciesFromAndToPackages(){
 		String fromPath = "domain.locationbased.latitude";
 		String toPath = "infrastructure.socialmedia.locationbased.latitude";
@@ -73,6 +79,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(true, foundMapDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesFromPackageToClass(){
 		String fromPath = "domain.locationbased.latitude";
 		String toPath = "infrastructure.socialmedia.locationbased.latitude.IMap";
@@ -100,6 +107,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(true, foundImportDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesFromAndToWithoutRelation(){
 		String fromPath = "domain.locationbased.foursquare.History";
 		String toPath = "infrastructure.socialmedia.locationbased.latitude.IMap";
@@ -110,6 +118,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertNotNull(dependencies);
 	}
 	
+	@Test
 	public void testGetDependencyFromAndToNotExistingValus(){
 		String fromPath = "domain.notexisting";
 		String toPath = "infrastructure.notexisting";
@@ -120,6 +129,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertNotNull(dependencies);
 	}
 	
+	@Test
 	public void testGetAllDependenciesOfClass(){
 		String fromPath = "domain.locationbased.foursquare.Account";
 		int totalDependencies = 2;
@@ -137,6 +147,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(true, foundDependency); 
 	}
 	
+	@Test
 	public void testGetDependenciesToClass(){
 		String toPath = "infrastructure.socialmedia.locationbased.foursquare.AccountDAO";
 		int totalDependencies = 2;
@@ -155,6 +166,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(true, foundDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesToPackage(){
 		String toPath = "infrastructure.socialmedia.locationbased.latitude";
 		int totalDependenciesExpected = 7;
@@ -190,6 +202,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(true, foundMap);
 	}
 	
+	@Test
 	public void testGetDependencyToUnknown(){
 		String toPath = "infrastructure.unknown";
 		int totalExpected = 0;
@@ -198,6 +211,7 @@ public class TestDomainDependencies extends TestCaseExtended{
 		assertEquals(totalExpected, dependencies.length);
 	}
 	
+	@Test
 	public void testGetAllDependenciesOfPackage(){
 		String fromPath = "domain.locationbased.latitude";
 		int totalDependencies = 7;		

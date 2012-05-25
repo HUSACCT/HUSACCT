@@ -69,7 +69,6 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		toModuleTree.addTreeSelectionListener(this);
 		
 		List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();
-		
 		for(AnalysedModuleDTO module : rootModules){
 			DefaultMutableTreeNode toNode = new DefaultMutableTreeNode(module);
 			DefaultMutableTreeNode fromNode = new DefaultMutableTreeNode(module);
@@ -78,6 +77,8 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 			rootFrom.add(fromNode);
 			fillNode(fromNode);
 		}
+		this.expandLeaf(toModuleTree, 1);
+		this.expandLeaf(fromModuleTree, 1);
 		
 		fromModuleScrollPane.setBackground(UIManager.getColor("Panel.background"));
 		fromModuleScrollPane.setViewportView(fromModuleTree);
@@ -105,6 +106,12 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 				fillNode(childNode);
 			 	node.add(childNode); 
 			} 
+		}
+	}
+	
+	private void expandLeaf(JTree tree, int level) {
+		for (int i = 0; i < level; i++) {
+			tree.expandRow(i);
 		}
 	}
 	
