@@ -318,6 +318,12 @@ public abstract class DrawingController implements UserInputListener {
 	public void notifyServiceListeners() {
 		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
+	
+	public void saveSingleLevelFigurePositions(){
+		if(getCurrentPaths().length<2){
+			saveFigurePositions();
+		}
+	}
 
 	protected void saveFigurePositions() {
 		String paths = getCurrentPathsToString();

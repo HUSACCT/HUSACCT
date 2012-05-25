@@ -81,7 +81,6 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
-		saveFigurePositions();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -96,9 +95,9 @@ public class AnalysedController extends DrawingController {
 				logger.warn("Could not zoom on this object: " + figure.getName() +". Not a module to zoom on.");
 			}
 		}
-
 		
 		if(parentNames.size()>0){
+			saveSingleLevelFigurePositions();
 			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
 	}
@@ -107,6 +106,7 @@ public class AnalysedController extends DrawingController {
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
 		if (getCurrentPaths().length > 0) {
+			saveSingleLevelFigurePositions();
 			String firstCurrentPaths = getCurrentPaths()[0];
 			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(firstCurrentPaths);
 			if (null != parentDTO) {
@@ -121,7 +121,6 @@ public class AnalysedController extends DrawingController {
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
-		saveFigurePositions();
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
