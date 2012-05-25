@@ -16,7 +16,7 @@ public class Node {
 	private Figure figure;
 	private int level = UNINITIALIZED;
 	private boolean positionUpdated = false;
-	private boolean chainStart = false;
+	private ArrayList<Node> parents = new ArrayList<Node>();
 	private ArrayList<Node> connectedTo = new ArrayList<Node>();
 
 	public Node(Figure f, int l) {
@@ -29,6 +29,22 @@ public class Node {
 
 	public Node(Figure f) {
 		this(f, UNINITIALIZED);
+	}
+
+	public void addParent(Node n) {
+		parents.add(n);
+	}
+	
+	public void removeParent(Node n) {
+		parents.remove(n);
+	}
+	
+	public List<Node> getParents() {
+		return Collections.unmodifiableList(parents);
+	}	
+	
+	public void removeConnectionTo(Node n) {
+		connectedTo.remove(n);
 	}
 
 	public void connectTo(Node n) {
@@ -71,6 +87,7 @@ public class Node {
 		positionUpdated = newValue;
 	}
 
+	// TODO: Update to make use of the parent nodes
 	public boolean isCyclicChain(Node n) {
 		Vector<Node> open = new Vector<Node>();
 		Vector<Node> closed = new Vector<Node>();
@@ -117,12 +134,22 @@ public class Node {
 	public String getName() {
 		return name;
 	}
-	
-	public void setStartOfChain(boolean newValue) {
-		chainStart = newValue;
+
+	public boolean isParentOf(Node endNode) {
+		return connectedTo.contains(endNode) && endNode.getParents().contains(this);
 	}
 	
-	public boolean isStartOfChain() {
-		return chainStart;
+	public boolean isChildOf(Node n) {
+		return parents.contains(n) && n.isParentOf(this);
 	}
+	
+	
+	
+//	public void setStartOfChain(boolean newValue) {
+//		chainStart = newValue;
+//	}
+//	
+//	public boolean isStartOfChain() {
+//		return chainStart;
+//	}
 }

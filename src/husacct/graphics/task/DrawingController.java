@@ -163,7 +163,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void updateLayout() {
 		String currentPath = getCurrentPath();
-		
+
 		if (hasSavedFigureStates(currentPath)) {
 			restoreFigurePositions(currentPath);
 		} else {
@@ -172,25 +172,26 @@ public abstract class DrawingController implements UserInputListener {
 
 			layoutStrategy.doLayout(width, height);
 		}
-		
+
 		updateLines();
-		
+
 		// bring modulefigures to the front
 		ArrayList<Figure> moduleFigures = new ArrayList<Figure>();
 		for (Figure f : drawing.getChildren()) {
-			if(((BaseFigure)f).isModule()) {
+			if (((BaseFigure) f).isModule()) {
 				moduleFigures.add(f);
 			}
 		}
-		for(Figure f : moduleFigures) {
+		for (Figure f : moduleFigures) {
 			drawing.bringToFront(f);
 		}
 	}
-	
+
 	private void updateLines() {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 			if (bf.isLine()) {
+				// ConnectionFigure cf = (ConnectionFigure) f;
 				RelationFigure cf = (RelationFigure) f;
 				cf.updateConnection();
 			}
@@ -300,7 +301,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected boolean hasSavedFigureStates(String path) {
 		return storedStates.containsKey(path);
 	}
-	
+
 	protected void restoreFigurePositions(String path) {
 		if (storedStates.containsKey(path)) {
 			DrawingState state = storedStates.get(path);
