@@ -23,6 +23,7 @@ public class ParentFigure extends BaseFigure {
 
 	protected int minWidth = 400;
 	protected int minHeight = 400;
+	protected int minPadding = 20;
 	
 	private ArrayList<Figure> childrenOwnImpl;
 	private double currentPositionX, currentPositionY;
@@ -130,10 +131,13 @@ public class ParentFigure extends BaseFigure {
 			
 			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height));
 		}
+		minWidth = newSize.width + minPadding;
+		minHeight = newSize.height + minPadding;
 		
 		Rectangle2D.Double bounds = getBounds();
 		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-		Point2D.Double lead = new Point2D.Double(anchor.x + newSize.width + 10, anchor.y + newSize.height + 10);
+		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10, anchor.y + minHeight + 10);
+		
 		
 		willChange();
 		setBounds(anchor, lead);
@@ -145,68 +149,68 @@ public class ParentFigure extends BaseFigure {
 		bf.setInContainer(true);
 		
 		childrenOwnImpl.add(figure);
-//		figure.addFigureListener(new FigureListener() {
-//			@Override
-//			public void areaInvalidated(FigureEvent e) {
-//			}
-//			@Override
-//			public void attributeChanged(FigureEvent e) {
-//			}
-//			@Override
-//			public void figureHandlesChanged(FigureEvent e) {
-//			}
-//
-//			@Override
-//			public void figureChanged(FigureEvent e) {
-//				double parentFigureStartX = getBounds().getX();
-//				double parentFigureWidth = getBounds().getWidth();
-//				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
-//				double parentFigureStartY = getBounds().getY();
-//				double parentFigureHeight = getBounds().getHeight();
-//				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
-//
-//				BaseFigure childFigure = ((BaseFigure) e.getFigure());
-//				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
-//				double childFigureX = figureBounds.getX();
-//				double childFigureWidth = figureBounds.getWidth();
-//				double childFigureY = figureBounds.getY();
-//				double childFigureHeight = figureBounds.getHeight();
-//
-//				boolean outsideLeft = childFigureX < parentFigureStartX;
-//				boolean outsideRight = (childFigureX + childFigureWidth) > parentFigureEndX;
-//				if (outsideLeft || outsideRight) {
-//					childFigure.willChange();
-//					if (outsideLeft) {
-//						childFigure.updateLocation(parentFigureStartX, childFigureY);
-//					} else {
-//						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
-//					}
-//					childFigure.changed();
-//				}
-//
-//				boolean outsideTop = childFigureY < parentFigureStartY;
-//				boolean outsideBottom = (childFigureY + childFigureHeight) > parentFigureEndY;
-//				if (outsideTop || outsideBottom) {
-//					childFigure.willChange();
-//					if (outsideTop) {
-//						childFigure.updateLocation(childFigureX, parentFigureStartY);
-//					} else {
-//						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
-//					}
-//					childFigure.changed();
-//				}
-//			}
-//
-//			@Override
-//			public void figureAdded(FigureEvent e) {
-//			}
-//			@Override
-//			public void figureRemoved(FigureEvent e) {
-//			}
-//			@Override
-//			public void figureRequestRemove(FigureEvent e) {
-//			}
-//		});
+		figure.addFigureListener(new FigureListener() {
+			@Override
+			public void areaInvalidated(FigureEvent e) {
+			}
+			@Override
+			public void attributeChanged(FigureEvent e) {
+			}
+			@Override
+			public void figureHandlesChanged(FigureEvent e) {
+			}
+
+			@Override
+			public void figureChanged(FigureEvent e) {
+				double parentFigureStartX = getBounds().getX();
+				double parentFigureWidth = getBounds().getWidth();
+				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
+				double parentFigureStartY = getBounds().getY();
+				double parentFigureHeight = getBounds().getHeight();
+				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
+
+				BaseFigure childFigure = ((BaseFigure) e.getFigure());
+				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
+				double childFigureX = figureBounds.getX();
+				double childFigureWidth = figureBounds.getWidth();
+				double childFigureY = figureBounds.getY();
+				double childFigureHeight = figureBounds.getHeight();
+
+				boolean outsideLeft = childFigureX < parentFigureStartX;
+				boolean outsideRight = (childFigureX + childFigureWidth) > parentFigureEndX;
+				if (outsideLeft || outsideRight) {
+					childFigure.willChange();
+					if (outsideLeft) {
+						childFigure.updateLocation(parentFigureStartX, childFigureY);
+					} else {
+						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
+					}
+					childFigure.changed();
+				}
+
+				boolean outsideTop = childFigureY < parentFigureStartY;
+				boolean outsideBottom = (childFigureY + childFigureHeight) > parentFigureEndY;
+				if (outsideTop || outsideBottom) {
+					childFigure.willChange();
+					if (outsideTop) {
+						childFigure.updateLocation(childFigureX, parentFigureStartY);
+					} else {
+						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
+					}
+					childFigure.changed();
+				}
+			}
+
+			@Override
+			public void figureAdded(FigureEvent e) {
+			}
+			@Override
+			public void figureRemoved(FigureEvent e) {
+			}
+			@Override
+			public void figureRequestRemove(FigureEvent e) {
+			}
+		});
 		return true;
 	}
 
@@ -217,7 +221,7 @@ public class ParentFigure extends BaseFigure {
 	
 	@Override
 	public void raiseLayer(){
-		zIndex = raiseZIndex-1;
+//		zIndex = raiseZIndex-1;
 		for(BaseFigure childFigure : getChildFigures()){
 			childFigure.raiseLayer();
 		}

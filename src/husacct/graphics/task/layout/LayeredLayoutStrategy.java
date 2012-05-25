@@ -293,7 +293,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	
 	private static boolean inContainer(Figure a) {
 		return ((BaseFigure) a).isInContainer();
-	}	
+	}
 
 	private static boolean isInterface(Figure figure) {
 		if (figure instanceof InterfaceFigure || figure instanceof AbstractClassFigure)
