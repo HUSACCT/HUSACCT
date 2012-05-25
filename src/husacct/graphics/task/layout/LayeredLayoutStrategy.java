@@ -1,7 +1,9 @@
 package husacct.graphics.task.layout;
 
 import husacct.common.ListUtils;
+import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.InterfaceFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.awt.geom.Point2D;
@@ -18,6 +20,9 @@ import org.lambda.functions.implementations.S1;
 public class LayeredLayoutStrategy implements LayoutStrategy {
 	private static final double VERT_ITEM_SPACING = 40.0;
 	private static final double HORZ_ITEM_SPACING = 35.0;
+
+	private static final int INTERFACE_LEVEL = 0;
+	private static final int ROOT_LEVEL = 1;
 
 	private AbstractCompositeFigure drawing;
 	private SortedNodeList nodes = new SortedNodeList();
@@ -59,13 +64,16 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 			Node endNode = getNode(cf.getEndFigure());
 
 			startNode.connectTo(endNode);
-			boolean isCyclic = startNode.isCyclicChain(endNode);
-			if (!isCyclic) {
-				updateNodes(startNode, endNode);
-			} else if (isCyclic) {
-				if (startNode.getLevel() == Node.UNINITIALIZED || endNode.getLevel() == Node.UNINITIALIZED)
-					updateNodes(startNode, endNode);
-			}
+			endNode.addParent(startNode);
+
+			updateNodes(startNode, endNode);
+			// boolean isCyclic = startNode.isCyclicChain(endNode);
+			// if (!isCyclic) {
+			// updateNodes(startNode, endNode);
+			// } else if (isCyclic) {
+			// if (startNode.getLevel() == Node.UNINITIALIZED || endNode.getLevel() == Node.UNINITIALIZED)
+			// updateNodes(startNode, endNode);
+			// }
 		}
 
 		final List<Node> compareList = nodes.readOnlyCopy();
@@ -77,36 +85,105 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		};
 		ListUtils.apply(drawing.getChildren(), addUnconnectedFigures);
 	}
-	
+
 	private void balanceLayout() {
-		
+
 	}
 
 	private void updateNodes(Node startNode, Node endNode) {
 		int startLevel = startNode.getLevel();
 		int endLevel = endNode.getLevel();
 
-		if (startLevel == Node.UNINITIALIZED) {
-			startLevel = 0;
-			endLevel = 1;
-		} else if (endLevel == Node.UNINITIALIZED) {
-			endLevel = startLevel + 1;
-		} else {
-			int deltaLevel = Math.abs(endLevel - startLevel);
+		if (startLevel == Node.UNINITIALIZED || endLevel == Node.UNINITIALIZED) 
+			initializeNodes(startNode, endNode);
+		else 
+			rebalanceNodes(startNode, endNode);
+	}
 
-			// TODO: Expand this one for more 'special' cases
-			if (endLevel == startLevel) {
-				// NOTE: This keeps bumping down nodes in case they're on the same level. Do we want that?
-				endLevel = startLevel + 1;
-			} else if (endLevel == 0) {
-				endLevel = startLevel + 1;
-			} else if (startLevel == 0 && deltaLevel >= 2) {
-				startLevel = endLevel - 1;
-			}
+	private void rebalanceNodes(Node startNode, Node endNode) {
+		int startLevel = startNode.getLevel();
+		int endLevel = endNode.getLevel();
+		
+		if ((startNode.isParentOf(endNode) && endNode.isParentOf(startNode)) || endNode.isParentOf(startNode)) {
+
 		}
 
+		int deltaLevel = Math.abs(endLevel - startLevel);
+
+		if (endLevel == startLevel) {
+			updateNodesOnEqualLevel(startNode, endNode);
+
+			// FIXME: This is incredibly dirty.
+			startLevel = startNode.getLevel();
+			endLevel = endNode.getLevel();
+		} else if (endLevel == 0) {
+			endLevel = startLevel + 1;
+		} else if (startLevel == 0 && deltaLevel >= 2) {
+			startLevel = endLevel - 1;
+		}
+	}
+	}
+
+	private void initializeNodes(Node startNode, Node endNode) {
+		int startLevel = startNode.getLevel();
+		int endLevel = endNode.getLevel();
+
+		if (startLevel == Node.UNINITIALIZED && endLevel == Node.UNINITIALIZED) {
+			// Both levels are uninitialized, so make the nodes ROOT_LEVEL and ROOT_LEVEL + 1
+			if (isInterface(startNode))
+				startLevel = INTERFACE_LEVEL;
+			else
+				startLevel = ROOT_LEVEL;
+
+			endLevel = startLevel + 1;
+		} else if (startLevel != Node.UNINITIALIZED && endLevel == Node.UNINITIALIZED) {
+			// endLevel = startLevel + 1
+			if (isInterface(endNode))
+				endLevel = INTERFACE_LEVEL;
+			else
+				endLevel = startLevel + 1;
+		} else if (startLevel == Node.UNINITIALIZED && endLevel != Node.UNINITIALIZED) {
+
+			if ((startNode.isParentOf(endNode) && endNode.isParentOf(startNode)) || endNode.isParentOf(startNode)) {
+				startLevel = endLevel + 1;
+			} else {
+				if (endLevel > ROOT_LEVEL)
+					startLevel = endLevel - 1;
+				else
+					startLevel = endLevel;
+			}
+		}
+		
 		startNode.setLevel(startLevel);
-		endNode.setLevel(endLevel);
+		endNode.setLevel(endLevel);		
+	}
+
+	private int getLowestParentLevel(Node node) {
+		int level = ROOT_LEVEL;
+
+		for (Node parent : node.getParents()) {
+			if (parent.getLevel() != INTERFACE_LEVEL)
+				level = Math.max(level, parent.getLevel());
+		}
+
+		return level;
+	}
+
+	private void updateNodesOnEqualLevel(Node startNode, Node endNode) {
+		if (startNode.isParentOf(endNode) && endNode.isParentOf(startNode)) {
+			int start = getLowestParentLevel(startNode);
+			int end = getLowestParentLevel(endNode);
+
+			if (start > end) {
+				startNode.setLevel(start + 1);
+				endNode.setLevel(start + 2);
+			} else {
+				endNode.setLevel(end + 1);
+				startNode.setLevel(end + 2);
+			}
+		} else {
+			endNode.setLevel(startNode.getLevel() + 1);
+		}
 	}
 
 	private void applyLayout() {
@@ -207,5 +284,16 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 		}
 
 		return false;
+	}
+
+	private static boolean isInterface(Figure figure) {
+		if (figure instanceof InterfaceFigure || figure instanceof AbstractClassFigure)
+			return true;
+
+		return false;
+	}
+
+	private static boolean isInterface(Node node) {
+		return isInterface(node.getFigure());
 	}
 }

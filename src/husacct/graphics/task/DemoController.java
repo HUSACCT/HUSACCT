@@ -79,8 +79,6 @@ public class DemoController extends DrawingController {
 		dtos = modules.toArray(dtos);
 		setPath(ROOT);
 		drawModulesAndLines(dtos);
-
-		printFigures("Constructor");
 	}
 
 	@Override

@@ -23,8 +23,8 @@ import java.util.Locale;
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.LineConnectionFigure;
 
 public abstract class DrawingController implements UserInputListener {
 	public static final String ROOT = "";
@@ -192,7 +192,7 @@ public abstract class DrawingController implements UserInputListener {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 			if (bf.isLine()) {
-				LineConnectionFigure cf = (LineConnectionFigure) f;
+				ConnectionFigure cf = (ConnectionFigure) f;
 				cf.updateConnection();
 			}
 		}
