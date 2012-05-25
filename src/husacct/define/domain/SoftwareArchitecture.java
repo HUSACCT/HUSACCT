@@ -158,21 +158,6 @@ public class SoftwareArchitecture {
 		}
 		return enabledRuleList;
 	}
-
-	/*
-	 * SoftwareUnitDefinitions
-	 */
-	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName) {
-		SoftwareUnitDefinition softwareUnit = null;
-		for (Module mod : modules){
-			if (mod.hasSoftwareUnit(softwareUnitName)){
-				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
-				break;
-			}
-		}
-		if (softwareUnit == null){ throw new RuntimeException("This Software Unit does not exist!");}
-		return softwareUnit;
-	}
 	
 	/*
 	 * MODULES
@@ -198,15 +183,15 @@ public class SoftwareArchitecture {
 		return currentModule;
 	}
 	
-	public Module getModuleBySoftwareUnit(SoftwareUnitDefinition su) {
+	public Module getModuleBySoftwareUnit(String softwareUnitName) {
 		Module currentModule = null;
 		for(Module module : modules){
 			
-			if (module.hasSoftwareUnit(su.getName())){
+			if (module.hasSoftwareUnit(softwareUnitName)){
 				currentModule = module;
-				while (!currentModule.hasSoftwareUnitDirectly(su.getName())){
+				while (!currentModule.hasSoftwareUnitDirectly(softwareUnitName)){
 					for (Module subModule : currentModule.getSubModules()){
-						if (subModule.hasSoftwareUnit(su.getName())){
+						if (subModule.hasSoftwareUnit(softwareUnitName)){
 							currentModule = subModule;
 						}
 					}
