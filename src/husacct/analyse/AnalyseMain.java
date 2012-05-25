@@ -20,8 +20,12 @@ public class AnalyseMain {
 		
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
-		String path = "/home/thomas/benchmark";
+		String path = "c:/project/benchmark";
 		
+		//String path = "C:\\Tools\\Workspaces\\School\\TO Blok 3 Jaar 3\\Army\\src";
+		//C:\Tools\Workspaces\School\TO Blok 3 Jaar 3\Copy of Java Recognition Test\src
+		//String path = "C:/Tools/Workspaces/School/TO Blok 3 Jaar 3/SimpleTestArmy/src";
+		//String path = "/Users/Erik/Documents/Hogeschool Utrecht/Jaar 3/Specialisatie/ThemaOpdracht/HUSACCT Develop/Java Recognition Test";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "C#", "1.0");
 		
@@ -30,11 +34,11 @@ public class AnalyseMain {
 
 		FamixCreationServiceImpl impl = new FamixCreationServiceImpl();
 		System.out.println(impl.represent());
-		//new AnalyseDebuggingFrame();
+		new AnalyseDebuggingFrame();
 		
 //		System.out.println(new FamixCreationServiceImpl().represent());
 		
-		/*FamixPersistencyServiceImpl testPersistencyService = new FamixPersistencyServiceImpl();
+		FamixPersistencyServiceImpl testPersistencyService = new FamixPersistencyServiceImpl();
 		XMLOutputter xmlOutput = new XMLOutputter();
 		xmlOutput.setFormat(Format.getPrettyFormat());
 		try {
@@ -52,7 +56,7 @@ public class AnalyseMain {
 //		try {  
 //	     	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());    
 //	     } catch (Exception ex) { }
-//		*/
+//		
 //		new AnalyseDebuggingFrame();
 	}
 }	
