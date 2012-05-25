@@ -23,7 +23,7 @@ public class GraphicsMenuBar extends JPanel {
 	
 	private JButton goToParentMenu, refreshMenu, exportToImageMenu;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
-	private JComboBox<String> layoutStrategyOptions;
+	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 
 	private int menuItemMaxHeight = 45;
@@ -64,7 +64,7 @@ public class GraphicsMenuBar extends JPanel {
 		contextUpdatesOptionMenu.setSize(40, menuItemMaxHeight);
 		add(contextUpdatesOptionMenu);
 
-		layoutStrategyOptions = new JComboBox<String>();
+		layoutStrategyOptions = new JComboBox();
 		add(layoutStrategyOptions);
 		
 		zoomSlider = new JSlider(25, 175, 100);
