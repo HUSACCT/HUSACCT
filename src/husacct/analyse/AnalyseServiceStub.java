@@ -487,4 +487,16 @@ public class AnalyseServiceStub implements IAnalyseService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void addServiceListener(IServiceListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceListeners() {
+		// TODO Auto-generated method stub
+		
+	}
 }

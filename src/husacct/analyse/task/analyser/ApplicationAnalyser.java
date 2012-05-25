@@ -24,7 +24,6 @@ public class ApplicationAnalyser {
 		AbstractAnalyser analyser = builder.getAnalyser(language);
 		SourceFileFinder sourceFileFinder = new SourceFileFinder();
 		for(String workspacePath: appDto.paths){
-//			SourceFileFinder sourceFileFinder = new SourceFileFinder();
 			try{
 				String sourceFileExtension = getExtensionForLanguage(language);
 				List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);

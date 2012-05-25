@@ -7,7 +7,6 @@ import org.junit.Test;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husaccttest.analyse.benchmarkjava.BenchmarkExtended;
-import husaccttest.analyse.recognitiontest.RecognationExtended;
 
 public class TestTemp extends BenchmarkExtended{
 

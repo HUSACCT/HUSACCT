@@ -1,5 +1,7 @@
 package husacct;
 
+import husacct.analyse.IAnalyseService;
+import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 
 import java.net.URL;
@@ -19,6 +21,7 @@ public class Main {
 		printSystemInfo();
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		controlService.startApplication(consoleArguments);
+		
 	}
 	
 	private void setLog4jConfiguration(){
