@@ -47,7 +47,7 @@ public class CSharpAttributeConvertController extends CSharpGenerator{
 	
 	private boolean startNewAttributeGenerator() {
 		String uniqueClassName = treeController.getUniqueClassName();
-		CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, uniqueClassName);
+		CSharpAttributeGenerator attributeGenerator = new CSharpAttributeGenerator(attributeTrees, uniqueClassName, treeController);
 		attributeGenerator.scanTree();	
 		return clearAttributeTree();
 	}
