@@ -136,31 +136,35 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
-		HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
-		for (String parentName : parentNames) {
-			AbstractDTO[] children = analyseService.getChildModulesInModule(parentName);
-			if (parentName.equals("")) {
-				drawArchitecture(getCurrentDrawingDetail());
-				continue;
-			} else if (children.length > 0) {
-				ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
-				for (AbstractDTO child : children) {
-					knownChildren.add(child);
+		if(parentNames.length==0){
+			drawArchitecture(getCurrentDrawingDetail());
+		}else{
+			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
+			for (String parentName : parentNames) {
+				AbstractDTO[] children = analyseService.getChildModulesInModule(parentName);
+				if (parentName.equals("")) {
+					drawArchitecture(getCurrentDrawingDetail());
+					continue;
+				} else if (children.length > 0) {
+					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
+					for (AbstractDTO child : children) {
+						knownChildren.add(child);
+					}
+					allChildren.put(parentName, knownChildren);
+				} else {
+					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
-				allChildren.put(parentName, knownChildren);
-			} else {
-				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 			}
-		}
-		setCurrentPaths(parentNames);
-
-		Set<String> parentNamesKeySet = allChildren.keySet();
-		if (parentNamesKeySet.size() == 1) {
-			String onlyParentModule = parentNamesKeySet.iterator().next();
-			ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
-			drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
-		} else {
-			drawModulesAndLines(allChildren);
+			setCurrentPaths(parentNames);
+	
+			Set<String> parentNamesKeySet = allChildren.keySet();
+			if (parentNamesKeySet.size() == 1) {
+				String onlyParentModule = parentNamesKeySet.iterator().next();
+				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
+			} else {
+				drawModulesAndLines(allChildren);
+			}
 		}
 	}
 
