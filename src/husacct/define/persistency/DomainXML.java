@@ -217,12 +217,15 @@ public class DomainXML {
 		
 		Element applicationPaths = new Element("physicalPaths");
 		if (App.getPaths().length > 0) {
-			applicationPaths.addContent("heeeee");
+			for (int i = 0; i < App.getPaths().length; i++) {
+				Element appPath = new Element("path");
+				appPath.addContent(App.getPaths()[i].toString());
+				applicationPaths.addContent(appPath);
+			}
 		}
 		XMLApplication.addContent(applicationPaths);
-
 		XMLApplication.addContent(this.getSoftwareArchitectureInXML());
-
+		
 		return XMLApplication;
 	}
 }
