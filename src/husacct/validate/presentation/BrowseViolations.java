@@ -358,7 +358,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 								.addComponent(violationInformationPanel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
 		);
 
-		statisticsPanel = new StatisticsPanel(taskServiceImpl);
+		statisticsPanel = new StatisticsPanel();
 		scrollPane.setViewportView(statisticsPanel);
 
 		violationsTable = new JTable();

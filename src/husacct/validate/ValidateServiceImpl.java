@@ -146,10 +146,4 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
 	}
-
-	@Override
-	@Deprecated
-	public void exportViolations(String s1, String s2, String s3) {
-		
-	}
 }

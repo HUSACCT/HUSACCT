@@ -2,31 +2,22 @@ package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.GridLayout;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 public class StatisticsPanel extends JPanel{
-	
-	private final TaskServiceImpl taskServiceImpl;
 
 	private static final long serialVersionUID = -7741400148880504572L;
 
 	private JLabel totalViolationLabel, totalViolationNumber, shownViolationsLabel, shownViolationsNumber;
 
-	public StatisticsPanel(TaskServiceImpl taskServiceImpl) {
-		this.taskServiceImpl= taskServiceImpl;
-		
+	public StatisticsPanel() {
 		inintComponents();
 	}
 

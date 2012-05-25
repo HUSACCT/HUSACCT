@@ -158,11 +158,6 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public void exportViolations(String s1, String s2, String s3) {
-				
-	}
-
-	@Override
 	public void addServiceListener(IServiceListener listener) {
 		
 	}
