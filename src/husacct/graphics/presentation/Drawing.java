@@ -58,7 +58,7 @@ public class Drawing extends QuadTreeDrawing {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 		for (Figure jhotdrawfigure : getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (!figure.isLine()) {
+			if (!figure.isLine() && !figure.isParent()) {
 				moduleFigures.add(figure);
 			}
 		}
