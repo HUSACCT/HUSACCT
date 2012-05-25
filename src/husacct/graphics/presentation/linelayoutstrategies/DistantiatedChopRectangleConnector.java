@@ -1,4 +1,4 @@
-package husacct.graphics.presentation;
+package husacct.graphics.presentation.linelayoutstrategies;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -60,7 +60,7 @@ public class DistantiatedChopRectangleConnector extends ChopRectangleConnector {
 		Point2D.Double pointStart = connection.getStartPoint();
 		Point2D.Double pointEnd = connection.getEndPoint();
 
-		Point2D.Double movement = husacct.graphics.Geom.getPointMovementFromLineAngle(pointStart, pointEnd, distance);
+		Point2D.Double movement = husacct.graphics.util.Geom.getPointMovementFromLineAngle(pointStart, pointEnd, distance);
 
 		from.x += movement.x;
 		from.y += movement.y;
