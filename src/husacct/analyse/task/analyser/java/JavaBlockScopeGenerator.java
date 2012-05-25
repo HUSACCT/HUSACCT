@@ -35,7 +35,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             if(treeType == JavaParser.METHOD_CALL ){ 
                 if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
                 	delegateInvocation(child, "invocMethod");
-                	deleteTreeChild(child); 
+                	//deleteTreeChild(child); 
                 }
             } 
             if(treeType == JavaParser.THROW || treeType == JavaParser.CATCH || treeType == JavaParser.THROWS){
@@ -45,7 +45,7 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
             if(treeType == JavaParser.ASSIGN ){ //=
                 if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
                 	delegateInvocation(child, "accessPropertyOrField");
-                	deleteTreeChild(child); 
+                	//deleteTreeChild(child); //niet verwijderen!
                 }
             } 
             if(treeType == JavaParser.FOR_EACH || treeType == JavaParser.FOR || treeType == JavaParser.WHILE ){
