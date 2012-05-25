@@ -139,7 +139,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	@Override
 	public void createParameter(String name, String uniqueName,
 			String declareType, String belongsToClass, int lineNumber,
-			String belongsToMethod, String declareTypes) {
+			String belongsToMethod) {
 		
 		FamixFormalParameter famixParameter = new FamixFormalParameter();
 		famixParameter.belongsToClass = belongsToClass;
