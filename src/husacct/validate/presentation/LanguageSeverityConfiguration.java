@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class LanguageSeverityConfiguration extends JPanel {
+
+	private static final long serialVersionUID = 6607502138038915874L;
 	
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;

@@ -38,15 +38,15 @@ public class AnalyseMenu extends JMenu{
 	private void addComponents(){
 		setApplicationPropertiesItem = new JMenuItem(controlService.getTranslatedString("ApplicationProperties"));
 		setApplicationPropertiesItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
-		setApplicationPropertiesItem.setMnemonic('d');
+		setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 		
 		analysedApplicationOverviewItem = new JMenuItem(controlService.getTranslatedString("AnalysedApplicationOverview"));
 		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
-		analysedApplicationOverviewItem.setMnemonic('t');
+		analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 			
 		analysedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
-		analysedArchitectureDiagramItem.setMnemonic('g');
+		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
 		this.add(setApplicationPropertiesItem);
 		this.add(analysedApplicationOverviewItem);
@@ -107,9 +107,30 @@ public class AnalyseMenu extends JMenu{
 			public void update(Locale newLocale) {
 				analyseMenu.setText(controlService.getTranslatedString("Analyse"));
 				setApplicationPropertiesItem.setText(controlService.getTranslatedString("ApplicationProperties"));
-				analysedArchitectureDiagramItem.setText(controlService.getTranslatedString("AnalysedApplicationOverview"));
-				analysedApplicationOverviewItem.setText(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
+				analysedArchitectureDiagramItem.setText(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
+				analysedApplicationOverviewItem.setText(controlService.getTranslatedString("AnalysedApplicationOverview"));
+				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
+				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
+				analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 			}
 		});
+	}
+	
+	public JMenuItem getSetApplicationPropertiesItem(){
+		return setApplicationPropertiesItem;
+	}
+	
+	public JMenuItem getAnalysedArchitectureDiagramItem(){
+		return analysedArchitectureDiagramItem;
+	}
+	
+	public JMenuItem getAnalysedApplicationOverviewItem(){
+		return analysedApplicationOverviewItem;
+	}
+	
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
 	}
 }

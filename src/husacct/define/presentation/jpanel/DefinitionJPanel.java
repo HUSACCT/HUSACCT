@@ -29,7 +29,6 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 			
 			BorderLayout thisLayout = new BorderLayout();
 			this.setLayout(thisLayout);
-			this.setPreferredSize(new java.awt.Dimension(753, 476));
 			
 			JSplitPane mainSplitPane = new JSplitPane();
 			mainSplitPane.setDividerLocation(300);

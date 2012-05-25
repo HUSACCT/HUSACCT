@@ -5,8 +5,11 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
-	// MyTestClass1.class, 
-	// MyTestClass2.class,
+	TestLanguage.class,
+	TestDependencyFilters.class,
+	TestDomainDependencies.class,
+	TestDomainModule.class,
+	TestIndirect.class
 })
 public class AnalyseTestSuite {
 

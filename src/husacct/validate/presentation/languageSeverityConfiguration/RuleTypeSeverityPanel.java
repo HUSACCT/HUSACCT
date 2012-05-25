@@ -1,9 +1,9 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ruletype.RuleType;
+import husacct.validate.presentation.DataLanguageHelper;
 import husacct.validate.presentation.LanguageSeverityConfiguration;
 import husacct.validate.presentation.tableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
@@ -17,6 +17,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 
 public class RuleTypeSeverityPanel extends javax.swing.JPanel {
+
+	private static final long serialVersionUID = 5947125752371446966L;
 
 	private ComboBoxTableModel ruletypeModel;
 	
@@ -165,7 +167,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	private void loadModel(){
 		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, languageSeverityConfiguration.getSeverityNames());
-		ruletypeModel.setTypes(new Class[]{String.class, Severity.class});
+		ruletypeModel.setTypes(new Class[]{DataLanguageHelper.class, Severity.class});
 		ruletypeModel.setCanEdit(new Boolean[]{false, true});
 		
 		RuletypeTable.setModel(ruletypeModel);
@@ -175,7 +177,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void rtsRestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ValidateTranslator.getKey((String) ruletypeModel.getValueAt(RuletypeTable.getSelectedRow(), 0)));
+		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) ruletypeModel.getValueAt(RuletypeTable.getSelectedRow(), 0)).key);
 		rtsCategoryValueChanged();
 	}
 
@@ -191,13 +193,13 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	
 	
 	private void rtsCategoryValueChanged() {
-		loadRuleTypes((String) Category.getSelectedValue());
+		loadRuleTypes(((DataLanguageHelper) Category.getSelectedValue()).key);
 	}
 	
 	private void loadRuleTypeCategories() {
 		rtsCategoryModel.clear();
 		for (String categoryString : ruletypes.keySet()) {
-			rtsCategoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
+			rtsCategoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
 	}
 	
@@ -211,7 +213,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 			} catch (Exception e){
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
-			ruletypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(ruletype.getKey()), severity});
+			ruletypeModel.addRow(new Object[]{new DataLanguageHelper(ruletype.getKey()), severity});
 		}
 		ruletypeModel.checkValuesAreValid();	
 	}
@@ -220,7 +222,8 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < ruletypeModel.getRowCount(); i++){
-			map.put(ValidateTranslator.getKey((String) ruletypeModel.getValueAt(i, 0)), (Severity) ruletypeModel.getValueAt(i, 1));
+		String key =	((DataLanguageHelper) ruletypeModel.getValueAt(i, 0)).key;
+			map.put(key, (Severity) ruletypeModel.getValueAt(i, 1));
 		}
 		
 		taskServiceImpl.updateSeverityPerType(map, language);

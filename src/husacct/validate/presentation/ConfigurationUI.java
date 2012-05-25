@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends JInternalFrame implements Observer{
 
+	private static final long serialVersionUID = 7721461596323704063L;
+
 	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 	
 	private TaskServiceImpl taskServiceImpl;
@@ -148,11 +150,13 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		horizontalButtonGroup.addComponent(applySeverity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(down, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		
+		GroupLayout.ParallelGroup severityNameGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		severityNameGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
 		GroupLayout.SequentialGroup horizontalPaneGroup = severityNamePanelLayout.createSequentialGroup();
-		horizontalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE);
-		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		horizontalPaneGroup.addGroup(severityNameGroup);
 		horizontalPaneGroup.addContainerGap();
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
 		
 		severityNamePanelLayout.setHorizontalGroup(horizontalPaneGroup);
 		
@@ -171,8 +175,8 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		verticalButtonGroup.addComponent(applySeverity);
 		verticalButtonGroup.addContainerGap();
 		
-		GroupLayout.SequentialGroup verticalPaneGroup = severityNamePanelLayout.createSequentialGroup();
-		verticalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE);
+		GroupLayout.ParallelGroup verticalPaneGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		verticalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
 		
 		severityNamePanelLayout.setVerticalGroup(verticalPaneGroup);
@@ -182,11 +186,9 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private void createRootLayout(){		
 		GroupLayout baseLayout = new GroupLayout(getRootPane());
 		
-		GroupLayout.SequentialGroup horizontalGroup = baseLayout.createSequentialGroup();
-		horizontalGroup.addComponent(tabPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE);
-		horizontalGroup.addContainerGap();
+		GroupLayout.ParallelGroup horizontalGroup = baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		horizontalGroup.addComponent(tabPanel);
 		horizontalGroup.addComponent(cancel);
-		horizontalGroup.addContainerGap();
 		
 		baseLayout.setHorizontalGroup(horizontalGroup);
 		

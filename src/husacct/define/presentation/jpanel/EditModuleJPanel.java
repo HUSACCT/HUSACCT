@@ -1,5 +1,6 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
@@ -35,7 +36,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
-		this.setBorder(BorderFactory.createTitledBorder("Module Properties"));
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
 		
 		this.addModuleNameLabel();
@@ -57,7 +58,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	private void addModuleNameLabel() {
 		nameLabel = new JLabel();
 		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		nameLabel.setText("Module name");
+		nameLabel.setText(DefineTranslator.translate("ModuleName"));
 	}
 	
 	private void addModuleNameTextField() {
@@ -70,7 +71,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	private void addModuleDescriptionLabel() {
 		descriptionLabel = new JLabel();
 		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		descriptionLabel.setText("Description");
+		descriptionLabel.setText(DefineTranslator.translate("Description"));
 	}
 	
 	private void addModuleDescriptionScrollPane() {

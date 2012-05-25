@@ -3,6 +3,7 @@ package husacct.control;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
 import husacct.control.task.MainController;
@@ -11,6 +12,8 @@ import husacct.control.task.WorkspaceController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.swing.JDialog;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
@@ -91,6 +94,11 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public List<String> getStringIdentifiers(String translatedString){
 		return localeController.getStringIdentifiers(translatedString);
+	}
+	
+	@Override
+	public void centerDialog(JDialog dialog){
+		DialogUtils.alignCenter(dialog);
 	}
 	
 	public MainController getMainController(){

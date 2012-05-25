@@ -88,11 +88,15 @@ public class ExportViolationsReportDialog extends JDialog{
 			filters.add(new FileNameExtensionFilter(extension, extension));
 		}
 		
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filters);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filters);
 
-		int returnVal = fileChooser.showDialog(this);
+		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(new File(fileChooser.getSelectedFile().getAbsolutePath() + "." + fileChooser.getFileFilter().getDescription()));
+			if(fileDialog.getSelectedFile().exists()){
+				setFile(fileDialog.getSelectedFile());
+			} else {
+				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			}
 		}
 	}
 
