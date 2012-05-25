@@ -90,15 +90,10 @@ class JavaAttributeAndLocalVariableGenerator {
 			} else if(treeType == JavaParser.EXPR){
 				JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
 				if (child.getChild(0).getType() == JavaParser.METHOD_CALL){
-					javaInvocationGenerator.generateMethodInvocToModel((CommonTree) tree, belongsToMethod);
-				}
-				else if (child.getChild(0).getType() == JavaParser.EXPR){
-					javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) tree, belongsToMethod);
-					deleteTreeChild(child.getChild(0));
+					javaInvocationGenerator.generateMethodInvocToModel((CommonTree) child.getChild(0), belongsToMethod);
 				}
 				else if (child.getChild(0).getType() == JavaParser.DOT){
 					javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) child, belongsToMethod);
-					deleteTreeChild(child.getChild(0));
 				}
 			}
 			walkThroughAST(child);

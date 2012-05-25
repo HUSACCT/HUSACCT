@@ -10,7 +10,7 @@ public class InvocMethodTest extends RecognationExtended{
 
 	@Test
 	public void testSamePackageA(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageA");
 		for (DependencyDTO dependency : dependencies){
@@ -20,19 +20,19 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(7, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 	}
 	
 	@Test
 	public void testSamePackageB(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageB");
 		for (DependencyDTO dependency : dependencies){
@@ -42,19 +42,19 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(8, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 	}
 	
 	@Test
 	public void testSamePackageC(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageC");
 		for (DependencyDTO dependency : dependencies){
@@ -64,19 +64,228 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(8, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 	}
 	
 	@Test
+	public void testSamePackageD(){
+		boolean methodCallFound = false;
+		boolean invocConstructorTheTypeFound = false;
+		boolean invocConstructorGuiFound = false;
+		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageD");
+		for (DependencyDTO dependency : dependencies){
+			if(dependency.type.equals("InvocConstructor")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					invocConstructorTheTypeFound = true;
+					assertEquals(5, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					invocConstructorGuiFound = true;
+					assertEquals(8, dependency.lineNumber);
+				}
+			}
+			else if(dependency.type.equals("InvocMethod")){
+				methodCallFound = true;
+				assertEquals(8, dependency.lineNumber);
+				assertEquals("invocmethod.a.TheType", dependency.to);
+			}
+		}
+		
+		assertEquals(true, methodCallFound);
+		assertEquals(true, invocConstructorTheTypeFound);
+		assertEquals(true, invocConstructorGuiFound);
+		
+	}
+	
+	@Test
+	public void testSamePackageE(){
+		boolean methodCallFound = false;
+		boolean invocConstructorTheTypeFound = false;
+		boolean invocConstructorGuiFound = false;
+		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageE");
+		for (DependencyDTO dependency : dependencies){
+			if(dependency.type.equals("InvocConstructor")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					invocConstructorTheTypeFound = true;
+					assertEquals(5, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					invocConstructorGuiFound = true;
+					assertEquals(6, dependency.lineNumber);
+				}
+				
+				
+			}
+			else if(dependency.type.equals("InvocMethod")){
+				methodCallFound = true;
+				assertEquals(9, dependency.lineNumber);
+				assertEquals("invocmethod.a.TheType", dependency.to);
+			}
+		}
+		
+		assertEquals(true, methodCallFound);
+		assertEquals(true, invocConstructorTheTypeFound);
+		assertEquals(true, invocConstructorGuiFound);
+		
+	}
+	
+	@Test
+	public void testSamePackageF(){
+		boolean methodCallTheTypeFound = false;
+		boolean methodCallGuiFound = false;
+		
+		boolean invocConstructorTheTypeFound = false;
+		boolean invocConstructorGuiFound = false;
+		
+		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageF");
+		for (DependencyDTO dependency : dependencies){
+			if(dependency.type.equals("InvocConstructor")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					invocConstructorTheTypeFound = true;
+					assertEquals(5, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					invocConstructorGuiFound = true;
+					assertEquals(6, dependency.lineNumber);
+				}
+				
+				
+			}
+			else if(dependency.type.equals("InvocMethod")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					methodCallTheTypeFound = true;
+					assertEquals(9, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					methodCallGuiFound = true;
+					assertEquals(9, dependency.lineNumber);
+				}
+			}
+		}
+		
+		assertEquals(true, methodCallTheTypeFound);
+		assertEquals(true, methodCallGuiFound);
+		assertEquals(true, invocConstructorTheTypeFound);
+		assertEquals(true, invocConstructorGuiFound);
+		
+	}
+	
+	@Test
+	public void testSamePackageG(){
+		boolean methodCallTheTypeFound = false;
+		boolean methodCallGuiFound = false;
+		
+		boolean invocConstructorTheTypeFound = false;
+		boolean invocConstructorGuiFound = false;
+		
+		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageG");
+		for (DependencyDTO dependency : dependencies){
+			if(dependency.type.equals("InvocConstructor")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					invocConstructorTheTypeFound = true;
+					assertEquals(5, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					invocConstructorGuiFound = true;
+					assertEquals(8, dependency.lineNumber);
+				}
+			}
+			else if(dependency.type.equals("InvocMethod")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					methodCallTheTypeFound = true;
+					assertEquals(8, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					methodCallGuiFound = true;
+					assertEquals(8, dependency.lineNumber);
+				}
+			}
+		}
+		
+		assertEquals(true, methodCallTheTypeFound);
+		assertEquals(true, methodCallGuiFound);
+		assertEquals(true, invocConstructorTheTypeFound);
+		assertEquals(true, invocConstructorGuiFound);
+		
+	}
+	
+	
+	@Test
+	public void testSamePackageH(){
+		boolean methodCallTheTypeFound = false;
+		boolean methodCallGuiFound = false;
+		
+		boolean invocConstructorTheTypeFound = false;
+		boolean invocConstructorGuiFound = false;
+		
+		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageH");
+		for (DependencyDTO dependency : dependencies){
+			if(dependency.type.equals("InvocConstructor")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					invocConstructorTheTypeFound = true;
+					assertEquals(6, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					invocConstructorGuiFound = true;
+					assertEquals(6, dependency.lineNumber);
+				}
+			}
+			else if(dependency.type.equals("InvocMethod")){
+				if (dependency.to.equals("invocmethod.a.TheType")){
+					methodCallTheTypeFound = true;
+					assertEquals(6, dependency.lineNumber);
+				}
+				else if(dependency.to.equals("invocmethod.a.Gui")){
+					methodCallGuiFound = true;
+					assertEquals(6, dependency.lineNumber);
+				}
+			}
+		}
+		
+		assertEquals(true, methodCallTheTypeFound);
+		assertEquals(true, methodCallGuiFound);
+		assertEquals(true, invocConstructorTheTypeFound);
+		assertEquals(true, invocConstructorGuiFound);
+		
+	}
+	
+	
+	
+	@Test
+	public void testSamePackageI(){
+		boolean methodCallTheTypeFound = false;
+		
+		boolean invocConstructorTheTypeFound = false;
+		
+		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageI");
+		for (DependencyDTO dependency : dependencies){
+			if(dependency.type.equals("InvocConstructor")){
+				invocConstructorTheTypeFound = true;
+				assertEquals(5, dependency.lineNumber);
+				assertEquals("invocmethod.a.TheType", dependency.to);
+			}
+			else if(dependency.type.equals("InvocMethod")){
+				methodCallTheTypeFound = true;
+				assertEquals(8, dependency.lineNumber);
+				assertEquals("invocmethod.a.TheType", dependency.to);
+			}
+		}
+		
+		assertEquals(true, methodCallTheTypeFound);
+		assertEquals(true, invocConstructorTheTypeFound);
+		
+	}
+	
+	@Test
 	public void testOtherPackageA(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
@@ -89,7 +298,7 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(9, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
@@ -100,14 +309,14 @@ public class InvocMethodTest extends RecognationExtended{
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 		assertEquals(true, importFound);
 	}
 	
 	@Test
 	public void testOtherPackageB(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
@@ -120,7 +329,7 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(9, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
@@ -131,14 +340,14 @@ public class InvocMethodTest extends RecognationExtended{
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 		assertEquals(true, importFound);
 	}
 
 	@Test
 	public void testOtherPackageC(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageC");
@@ -150,20 +359,20 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals(7, dependency.lineNumber);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(7, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 		
 	}
 	
 	@Test
 	public void testOtherPackageD(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
@@ -176,7 +385,7 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(10, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
@@ -187,7 +396,7 @@ public class InvocMethodTest extends RecognationExtended{
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 		assertEquals(true, importFound);
 		
@@ -195,7 +404,7 @@ public class InvocMethodTest extends RecognationExtended{
 	
 	@Test
 	public void testOtherPackageE(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
@@ -208,7 +417,7 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(10, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
@@ -219,7 +428,7 @@ public class InvocMethodTest extends RecognationExtended{
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 		assertEquals(true, importFound);
 		
@@ -227,7 +436,7 @@ public class InvocMethodTest extends RecognationExtended{
 	
 	@Test
 	public void testOtherPackageF(){
-		boolean accessPropertyOrFieldFound = false;
+		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageF");
@@ -239,13 +448,13 @@ public class InvocMethodTest extends RecognationExtended{
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 			else if(dependency.type.equals("InvocMethod")){
-				accessPropertyOrFieldFound = true;
+				methodCallFound = true;
 				assertEquals(8, dependency.lineNumber);
 				assertEquals("invocmethod.a.TheType", dependency.to);
 			}
 		}
 		
-		assertEquals(true, accessPropertyOrFieldFound);
+		assertEquals(true, methodCallFound);
 		assertEquals(true, invocConstructorFound);
 		
 	}

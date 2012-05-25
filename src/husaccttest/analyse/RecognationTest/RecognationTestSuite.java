@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	AccessFieldTest.class,
 	InvocConstructorTest.class,
-	InvocMethodTest.class
+	InvocMethodTest.class,
+	AnnotationTest.class
 })
 public class RecognationTestSuite {
 

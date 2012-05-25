@@ -15,7 +15,11 @@ public abstract class RecognationExtended extends TestCaseExtended{
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 
+<<<<<<< HEAD
 		String path = "../Java Recognition Test";
+=======
+		String path = "RecognitionTestProject/";
+>>>>>>> f795f1683e7de9244ad7f634a0c3d510835c39c4
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
