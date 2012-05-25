@@ -24,7 +24,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
+public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);

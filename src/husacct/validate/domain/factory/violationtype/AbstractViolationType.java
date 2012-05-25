@@ -142,7 +142,25 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isLoopsInModule(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.LOOPS_IN_MODULE.toString())){
+		if(ruleTypeKey.equals(RuleTypes.CYCLES_BETWEEN_MODULES.toString())){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	protected boolean isInterfaceConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	protected boolean isSubClassConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)){
 			return true;
 		}
 		else{

@@ -1,4 +1,4 @@
-package husacct.validate.domain.check;
+package husacct.validate.domain.check.util;
 
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
