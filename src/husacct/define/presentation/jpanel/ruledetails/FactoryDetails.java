@@ -93,8 +93,8 @@ public class FactoryDetails {
 		}else {
 			Logger.getLogger(FactoryDetails.class).error("No known AbstractDetailsJPanel for key: " + ruleTypeKey);
 //			throw new RuntimeException("No known AbstractDetailsJPanel for key: " + ruleTypeKey);
-			loopsInModuleExceptionJPanel = new LoopsInModuleExceptionJPanel(appliedRuleController);
-			return loopsInModuleExceptionJPanel;
+			cyclesBetweenModules = new CyclesBetweenModulesJPanel(appliedRuleController);
+			return cyclesBetweenModules;
 		}
 	}
 	
