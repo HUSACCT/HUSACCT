@@ -34,7 +34,7 @@ public class ContainerLayoutStrategy implements LayoutStrategy {
 		for (Figure f : figures) {
 			BaseFigure figure = (BaseFigure)f;
 			
-			if (figure.isModule()) {
+			if (!figure.isLine()) {
 				Rectangle2D.Double bounds = figure.getBounds();
 				
 				Point2D.Double anchor = new Point2D.Double(parentBounds.x + location.x, parentBounds.y + location.y);

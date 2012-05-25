@@ -176,8 +176,6 @@ public abstract class DrawingController implements UserInputListener {
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
-			parentFigure.willChange();
-			parentFigure.changed();
 			drawing.add(parentFigure);
 			for (AbstractDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
