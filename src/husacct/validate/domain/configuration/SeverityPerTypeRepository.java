@@ -151,25 +151,30 @@ class SeverityPerTypeRepository implements Observer {
 
 	void setSeverityMap(String programmingLanguage, HashMap<String, Severity> severityMap) {
 		HashMap<String, Severity> local = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
-		if(local != null && programmingLanguageExists(programmingLanguage)){
-			for(Entry<String, Severity> entry : severityMap.entrySet()){
-				if(isValidKey(programmingLanguage, entry.getKey())){
-					if(local.containsKey(entry.getKey())){
-						local.remove(entry.getKey());
-					}
-					Severity severity = isValidSeverity(entry.getValue());
-					local.put(entry.getKey(), severity);
-				}
-				else{
-					logger.warn(String.format("%s is not a valid key and will not be set in configuration for programminglanguage %s", entry.getValue(), programmingLanguage));
-				}
+		
+		for(Entry<String, Severity> test : severityMap.entrySet()) {
+			local.remove(test.getKey());
+		}
+		local.putAll(severityMap);
+		
+		
+		
+		
+			for(Entry<String, Severity> test2 : severityMap.entrySet()) {
+				System.out.println(test2.getKey() + " | " + test2.getValue());
 			}
 			severitiesPerTypePerProgrammingLanguage.remove(programmingLanguage);
 			severitiesPerTypePerProgrammingLanguage.put(programmingLanguage, local);
-		}
-		else{
-			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
-		}
+			System.out.println("--------------------------------------------------------------------------");
+			for(Entry<String, HashMap<String, Severity>> test : severitiesPerTypePerProgrammingLanguage.entrySet()) {
+				for(Entry<String, Severity> test2 : test.getValue().entrySet()) {
+					System.out.println(test2.getKey() + " | " + test2.getValue());
+				}
+			}
+//		}
+//		else{
+//			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
+//		}
 	}
 
 	private boolean isValidKey(String programmingLanguage, String key){
