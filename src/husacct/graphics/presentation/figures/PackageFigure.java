@@ -16,8 +16,8 @@ public class PackageFigure extends BaseFigure {
 	private RectangleFigure body;
 	private TextFigure text;
 
-	private static final int MIN_WIDTH = 150;
-	private static final int MIN_HEIGHT = 120;
+	private int MIN_WIDTH = 100;
+	private int MIN_HEIGHT = 80;
 
 	public PackageFigure(String name) {
 		super(name);
@@ -81,10 +81,5 @@ public class PackageFigure extends BaseFigure {
 	@Override
 	public boolean isModule() {
 		return true;
-	}
-
-	@Override
-	public boolean isLine() {
-		return false;
 	}
 }

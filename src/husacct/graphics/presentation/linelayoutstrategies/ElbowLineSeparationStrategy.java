@@ -1,4 +1,4 @@
-package husacct.graphics.presentation;
+package husacct.graphics.presentation.linelayoutstrategies;
 
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.figures.ElbowLiner;
