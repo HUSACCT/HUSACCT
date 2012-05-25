@@ -50,21 +50,20 @@ public class LocaleController {
 		String[] files = null;
 		try {
 			files = getResourceListing("husacct/common/locale/");
+			String subStringStart = bundlePrefix + "_";
+			String subStringEnd = ".properties";
+
+			for(String file : files){
+				if(file.startsWith(subStringStart) && file.endsWith(subStringEnd)){
+					String locale = file.substring(subStringStart.length(), file.indexOf("."));
+					availableLocales.add(new Locale(locale, locale));
+				}
+			}
 		} catch (Exception e) {
 			logger.debug("Unable to find locales dynamically. falling back to EN and NL");
 			availableLocales.add(LocaleController.english);
 			availableLocales.add(LocaleController.dutch);
-		}
-
-		String subStringStart = bundlePrefix + "_";
-		String subStringEnd = ".properties";
-
-		for(String file : files){
-			if(file.startsWith(subStringStart) && file.endsWith(subStringEnd)){
-				String locale = file.substring(subStringStart.length(), file.indexOf("."));
-				availableLocales.add(new Locale(locale, locale));
-			}
-		}
+		}		
 	}
 
 	public void setLocale(Locale locale){
