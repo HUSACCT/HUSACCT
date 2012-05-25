@@ -18,10 +18,10 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 
-public class CyclesBetweenModules extends RuleType{
+public class CyclesBetweenModulesRule extends RuleType{
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 
-	public CyclesBetweenModules(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public CyclesBetweenModulesRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 

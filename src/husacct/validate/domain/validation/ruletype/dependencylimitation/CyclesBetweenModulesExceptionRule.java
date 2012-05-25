@@ -12,10 +12,10 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class CyclesBetweenModulesException extends RuleType {
+public class CyclesBetweenModulesExceptionRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 	
-	public CyclesBetweenModulesException(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public CyclesBetweenModulesExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
