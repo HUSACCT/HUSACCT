@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
-	public static final String ROOT = "";
 	protected static final boolean debugPrint = true;
 
 	private boolean areViolationsShown = false;
@@ -38,7 +37,6 @@ public abstract class DrawingController implements UserInputListener {
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
 	protected String[] currentPaths = new String[]{};
-	private boolean isViolationsShown = false;
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -94,6 +92,14 @@ public abstract class DrawingController implements UserInputListener {
 
 	public String[] getCurrentPaths() {
 		return currentPaths;
+	}
+	
+	public String getCurrentPathsToString() {
+		String stringPaths = "";
+		for(String path : getCurrentPaths()){
+			stringPaths += path + " + ";
+		}
+		return stringPaths;
 	}
 
 	public void resetCurrentPaths() {
@@ -188,10 +194,10 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	protected void updateLayout() {
-		String[] currentPath = getCurrentPaths();
+		String currentPaths = getCurrentPathsToString();
 		
-		if(1==2){// (hasSavedFigureStates(currentPath)) {
-//			restoreFigurePositions(currentPath);
+		if (hasSavedFigureStates(currentPaths)) {
+			restoreFigurePositions(currentPaths);
 		} else {
 			int width = drawTarget.getWidth();
 			int height = drawTarget.getHeight();
@@ -312,24 +318,25 @@ public abstract class DrawingController implements UserInputListener {
 		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
 
-	protected void saveFigurePositions(String path) {
+	protected void saveFigurePositions() {
+		String paths = getCurrentPathsToString();
 		DrawingState state;
-		if (storedStates.containsKey(path))
-			state = storedStates.get(path);
+		if (storedStates.containsKey(paths))
+			state = storedStates.get(paths);
 		else
 			state = new DrawingState(drawing);
 
 		state.save(figureMap);
-		storedStates.put(path, state);
+		storedStates.put(paths, state);
 	}
 
-	protected boolean hasSavedFigureStates(String path) {
-		return storedStates.containsKey(path);
+	protected boolean hasSavedFigureStates(String paths) {
+		return storedStates.containsKey(paths);
 	}
 	
-	protected void restoreFigurePositions(String path) {
-		if (storedStates.containsKey(path)) {
-			DrawingState state = storedStates.get(path);
+	protected void restoreFigurePositions(String paths) {
+		if (storedStates.containsKey(paths)) {
+			DrawingState state = storedStates.get(paths);
 			state.restore(figureMap);
 		}
 	}

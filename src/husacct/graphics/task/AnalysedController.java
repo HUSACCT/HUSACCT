@@ -82,11 +82,7 @@ public class AnalysedController extends DrawingController {
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
 		//printFigures("moduleZoom()");
-		//saveFigurePositions(getCurrentPath());
-		zoom(figures);
-	}
-
-	private void zoom(BaseFigure[] figures) {
+		saveFigurePositions();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -127,7 +123,7 @@ public class AnalysedController extends DrawingController {
 			drawArchitecture(getCurrentDrawingDetail());
 		}
 		//printFigures("moduleZoomOut()");
-//		saveFigurePositions(getCurrentPaths());
+		saveFigurePositions();
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
