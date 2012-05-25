@@ -63,6 +63,24 @@ public class ViolationTypesJDialog extends JDialog{
 			e.printStackTrace();
 		}
 	}
+	
+	public void load(HashMap<String, Object> ruleDetails) {
+		String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
+		ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
+		
+		String[] dependencies = (String[]) ruleDetails.get("dependencies");
+		
+		for (ViolationTypeDTO vt : violationTypeDtoList){
+			JCheckBox jCheckBox = new JCheckBox(DefineTranslator.translate(vt.key));
+			jCheckBox.setSelected(false);
+			for (String dependency : dependencies){
+				if (dependency.equals(vt.key)){
+					jCheckBox.setSelected(true);
+				}
+			}
+			violationCheckBoxHashMap.put(vt.key, jCheckBox);
+		}
+	}
 
 	private Component createViolationPanel() {
 		JPanel mainPanel = new JPanel();

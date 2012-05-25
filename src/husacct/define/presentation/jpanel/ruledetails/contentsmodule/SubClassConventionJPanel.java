@@ -1,4 +1,4 @@
-package husacct.define.presentation.jpanel.ruledetails.legalitydependency;
+package husacct.define.presentation.jpanel.ruledetails.contentsmodule;
 
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.components.DescriptionPanelComponent;
@@ -12,16 +12,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
 
-public class IsOnlyAllowedToUseJPanel extends AbstractDetailsJPanel {
-	private static final long serialVersionUID = -4221375143057790757L;
-	public static final String ruleTypeKey = "IsOnlyAllowedToUse";
+public class SubClassConventionJPanel extends AbstractDetailsJPanel {
+	private static final long serialVersionUID = 376037038601799822L;
+	public static final String ruleTypeKey = "SubClassConvention";
 	
 	public ModuleFromPanelComponent moduleFromPanelComponent;
 	public ModuleToPanelComponent moduleToPanelComponent;
 	public EnabledPanelComponent enabledPanelComponent;
 	public DescriptionPanelComponent descriptionPanelComponent;
 	
-	public IsOnlyAllowedToUseJPanel(AppliedRuleController appliedRuleController) {
+	public SubClassConventionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 	}
 

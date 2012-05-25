@@ -1,11 +1,13 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
+import husacct.define.presentation.jpanel.ruledetails.contentsmodule.InterfaceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionJPanel;
+import husacct.define.presentation.jpanel.ruledetails.contentsmodule.SubClassConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.VisibilityConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.VisibilityConventionJPanel;
-import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.LoopsInModuleExceptionJPanel;
-import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.LoopsInModuleJPanel;
+import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.CyclesBetweenModulesExceptionJPanel;
+import husacct.define.presentation.jpanel.ruledetails.dependencylimitation.CyclesBetweenModulesJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.BackCallJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsAllowedToUseJPanel;
 import husacct.define.presentation.jpanel.ruledetails.legalitydependency.IsNotAllowedToUseJPanel;
@@ -19,6 +21,8 @@ import org.apache.log4j.Logger;
 
 public class FactoryDetails {
 	//Rules on the Contents of a module
+	private InterfaceConventionJPanel interfaceConventionJPanel;
+	private SubClassConventionJPanel subClassConventionJPanel;
 	private VisibilityConventionJPanel visibilityConventionJPanel;
 	private VisibilityConventionExceptionJPanel visibilityConventionExceptionJPanel;
 	private NamingConventionJPanel namingConventionJPanel;
@@ -32,13 +36,19 @@ public class FactoryDetails {
 	private SkipCallJPanel skipCallJPanel;
 	private BackCallJPanel backCallJPanel;
 	//Rules on the Dependency Limitation
-	private LoopsInModuleJPanel loopsInModule;
-	private LoopsInModuleExceptionJPanel loopsInModuleExceptionJPanel;
+	private CyclesBetweenModulesJPanel cyclesBetweenModules;
+	private CyclesBetweenModulesExceptionJPanel cyclesBetweenModulesExceptionJPanel;
 	
 	
 	public AbstractDetailsJPanel create(AppliedRuleController appliedRuleController, String ruleTypeKey){
 	//Rules on the Contents of a module
-		if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)){
+		if (ruleTypeKey.equals(InterfaceConventionJPanel.ruleTypeKey)){
+			interfaceConventionJPanel = new InterfaceConventionJPanel(appliedRuleController);
+			return interfaceConventionJPanel;
+	    } else if (ruleTypeKey.equals(SubClassConventionJPanel.ruleTypeKey)){
+	    	subClassConventionJPanel = new SubClassConventionJPanel(appliedRuleController);
+			return subClassConventionJPanel;
+	    } else if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)){
 			visibilityConventionJPanel = new VisibilityConventionJPanel(appliedRuleController);
 			return visibilityConventionJPanel;
 		}else if (ruleTypeKey.equals(VisibilityConventionExceptionJPanel.ruleTypeKey)){
@@ -73,12 +83,12 @@ public class FactoryDetails {
 			backCallJPanel = new BackCallJPanel(appliedRuleController);
 			return backCallJPanel;
 	//Rules on the Dependency Limitation
-		}else if (ruleTypeKey.equals(LoopsInModuleJPanel.ruleTypeKey)){
-			loopsInModule = new LoopsInModuleJPanel(appliedRuleController);
-			return loopsInModule;
-		}else if (ruleTypeKey.equals(LoopsInModuleExceptionJPanel.ruleTypeKey)){
-			loopsInModuleExceptionJPanel = new LoopsInModuleExceptionJPanel(appliedRuleController);
-			return loopsInModuleExceptionJPanel;
+		}else if (ruleTypeKey.equals(CyclesBetweenModulesJPanel.ruleTypeKey)){
+			cyclesBetweenModules = new CyclesBetweenModulesJPanel(appliedRuleController);
+			return cyclesBetweenModules;
+		}else if (ruleTypeKey.equals(CyclesBetweenModulesExceptionJPanel.ruleTypeKey)){
+			cyclesBetweenModulesExceptionJPanel = new CyclesBetweenModulesExceptionJPanel(appliedRuleController);
+			return cyclesBetweenModulesExceptionJPanel;
 	//Not Known
 		}else {
 			Logger.getLogger(FactoryDetails.class).error("No known AbstractDetailsJPanel for key: " + ruleTypeKey);
@@ -94,8 +104,14 @@ public class FactoryDetails {
 	 */
 	public AbstractDetailsJPanel get(AppliedRuleController appliedRuleController, String ruleTypeKey){
 	//Rules on the Contents of a module
-		if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)){
-			if (visibilityConventionJPanel == null) {visibilityConventionJPanel = new VisibilityConventionJPanel(appliedRuleController);}
+		if (ruleTypeKey.equals(InterfaceConventionJPanel.ruleTypeKey)){
+			if (interfaceConventionJPanel == null) {interfaceConventionJPanel = new InterfaceConventionJPanel(appliedRuleController);}
+			return interfaceConventionJPanel;
+	    } else if (ruleTypeKey.equals(SubClassConventionJPanel.ruleTypeKey)){
+	    	if (subClassConventionJPanel == null) {subClassConventionJPanel = new SubClassConventionJPanel(appliedRuleController);}
+			return subClassConventionJPanel;
+	    } else if (ruleTypeKey.equals(VisibilityConventionJPanel.ruleTypeKey)){
+	    	if (visibilityConventionJPanel == null) {visibilityConventionJPanel = new VisibilityConventionJPanel(appliedRuleController);}
 			return visibilityConventionJPanel;
 		}else if (ruleTypeKey.equals(VisibilityConventionExceptionJPanel.ruleTypeKey)){
 			if (visibilityConventionExceptionJPanel == null) {visibilityConventionExceptionJPanel = new VisibilityConventionExceptionJPanel(appliedRuleController);}
@@ -129,12 +145,12 @@ public class FactoryDetails {
 			if (backCallJPanel == null) {backCallJPanel = new BackCallJPanel(appliedRuleController);}
 			return backCallJPanel;
 	//Rules on the Dependency Limitation
-		}else if (ruleTypeKey.equals(LoopsInModuleJPanel.ruleTypeKey)){
-			if (loopsInModule == null) {loopsInModule = new LoopsInModuleJPanel(appliedRuleController);}
-			return loopsInModule;
-		}else if (ruleTypeKey.equals(LoopsInModuleExceptionJPanel.ruleTypeKey)){
-			if (loopsInModuleExceptionJPanel == null) {loopsInModuleExceptionJPanel = new LoopsInModuleExceptionJPanel(appliedRuleController);}
-			return loopsInModuleExceptionJPanel;
+		}else if (ruleTypeKey.equals(CyclesBetweenModulesJPanel.ruleTypeKey)){
+			if (cyclesBetweenModules == null) {cyclesBetweenModules = new CyclesBetweenModulesJPanel(appliedRuleController);}
+			return cyclesBetweenModules;
+		}else if (ruleTypeKey.equals(CyclesBetweenModulesExceptionJPanel.ruleTypeKey)){
+			if (cyclesBetweenModulesExceptionJPanel == null) {cyclesBetweenModulesExceptionJPanel = new CyclesBetweenModulesExceptionJPanel(appliedRuleController);}
+			return cyclesBetweenModulesExceptionJPanel;
 	//Not Known
 		}else {
 			Logger.getLogger(FactoryDetails.class).error("No known AbstractDetailsJPanel for key: " + ruleTypeKey);
