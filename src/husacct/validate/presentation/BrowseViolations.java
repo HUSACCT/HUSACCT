@@ -187,8 +187,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			fillViolationsTable(selectedViolationHistory.getViolations());
 		}
 		violationInformationPanel.loadGuiText();
-		statisticsPanel.loadGuiText();
-		filterPane.loadGuiText();
+		statisticsPanel.loadAfterChange();
+		filterPane.loadAfterChange();
 		buttonDeleteViolationHistoryPoint.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
 		buttonLatestViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("CurrentViolations"));
 		buttonSaveInHistory.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistory"));
@@ -350,7 +350,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 								.addComponent(violationInformationPanel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
 				);
 
-		statisticsPanel = new StatisticsPanel();
+		statisticsPanel = new StatisticsPanel(taskServiceImpl);
 		scrollPane.setViewportView(statisticsPanel);
 		
 
@@ -368,8 +368,14 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	protected void loadInformationPanel() {
-		statisticsPanel.update(selectedViolationHistory, shownViolations, taskServiceImpl, filterPane.getApplyFilter());
-		statisticsPanel.updateUI();
+		int violationsSize = 0;
+		if(selectedViolationHistory == null){
+			violationsSize = taskServiceImpl.getAllViolations().getValue().size();
+		} else{ 
+			violationsSize = selectedViolationHistory.getViolations().size();
+		}
+		
+		statisticsPanel.loadStatistics(taskServiceImpl.getViolationsPerSeverity(shownViolations), violationsSize, shownViolations.size());
 	}
 
 

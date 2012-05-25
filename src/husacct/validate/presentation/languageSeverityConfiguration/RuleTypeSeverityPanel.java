@@ -42,6 +42,7 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 		
 		initComponents();
 		loadAfterChange();
+		loadRuleTypeCategories();
 	}
 
     private void initComponents() {
@@ -157,7 +158,6 @@ public class RuleTypeSeverityPanel extends javax.swing.JPanel {
 	public final void loadAfterChange(){
 		setText();
 		loadModel();
-		loadRuleTypeCategories();
 	}
 	
 	private void setText(){

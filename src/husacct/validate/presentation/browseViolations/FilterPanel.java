@@ -21,37 +21,24 @@ import javax.swing.border.TitledBorder;
 
 public class FilterPanel extends JPanel {
 	
+	private final BrowseViolations browseViolations;
+	
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private JRadioButton rdbtnIndirect, rdbtnAll, rdbtnDirect;
-	private final BrowseViolations browseViolations;
 	
 	public FilterPanel(BrowseViolations browseViolations) {
 		this.browseViolations = browseViolations;
-		createBaseLayout();
+		
+		initComponents();
+		loadAfterChange();
 	}
 	
-	public void createBaseLayout() {
+	private void initComponents(){
 		applyFilter = new JCheckBox("Apply Filter");
-		applyFilter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				browseViolations.applyFilterChanged(arg0);
-			}
-		});
-
 		buttonEditFilter = new JButton("Edit Filter");
-		buttonEditFilter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				browseViolations.editFilterActionPerformed(e);
-			}
-
-		});
-
 		rdbtnAll = new JRadioButton("All");
-
 		rdbtnDirect = new JRadioButton("Direct");
-
 		rdbtnIndirect = new JRadioButton("Indirect");
 		
 		ButtonGroup filterIndirectButtonGroup = new ButtonGroup();
@@ -60,6 +47,60 @@ public class FilterPanel extends JPanel {
 		filterIndirectButtonGroup.add(rdbtnIndirect);
 		rdbtnAll.setSelected(true);
 
+		createBaseLayout();
+		addListeners();
+	}
+	
+	private void createBaseLayout() {
+		GroupLayout filterPane = new GroupLayout(this);
+		
+		GroupLayout.SequentialGroup horizontalRadioButtonGroup = filterPane.createSequentialGroup();
+		horizontalRadioButtonGroup.addContainerGap();
+		horizontalRadioButtonGroup.addComponent(rdbtnAll);
+		horizontalRadioButtonGroup.addPreferredGap(ComponentPlacement.RELATED);
+		horizontalRadioButtonGroup.addComponent(rdbtnDirect);
+		horizontalRadioButtonGroup.addPreferredGap(ComponentPlacement.RELATED);
+		horizontalRadioButtonGroup.addComponent(rdbtnIndirect);
+		
+		GroupLayout.ParallelGroup horizontalGroup = filterPane.createParallelGroup(Alignment.LEADING);
+		horizontalGroup.addComponent(buttonEditFilter);
+		horizontalGroup.addComponent(applyFilter);
+		horizontalGroup.addGroup(horizontalRadioButtonGroup);
+		
+		filterPane.setHorizontalGroup(horizontalGroup);
+		
+		GroupLayout.ParallelGroup verticalRadioButtonGroup = filterPane.createParallelGroup(Alignment.LEADING, false);
+		verticalRadioButtonGroup.addComponent(rdbtnAll);
+		verticalRadioButtonGroup.addComponent(rdbtnDirect);
+		verticalRadioButtonGroup.addComponent(rdbtnIndirect);
+		
+		GroupLayout.SequentialGroup verticalGroup = filterPane.createSequentialGroup();
+		verticalGroup.addComponent(applyFilter);
+		verticalGroup.addPreferredGap(ComponentPlacement.RELATED);
+		verticalGroup.addComponent(buttonEditFilter);
+		verticalGroup.addPreferredGap(ComponentPlacement.RELATED);
+		verticalGroup.addGroup(verticalRadioButtonGroup);
+		
+		filterPane.setVerticalGroup(verticalGroup);
+						
+		setLayout(filterPane);
+
+	}
+	
+	private void addListeners(){
+		applyFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				browseViolations.applyFilterChanged(arg0);
+			}
+		});
+		buttonEditFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				browseViolations.editFilterActionPerformed(e);
+			}
+
+		});
 		rdbtnAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -98,47 +139,13 @@ public class FilterPanel extends JPanel {
 
 			}
 		});
-		
-		
-		
-		GroupLayout gl_filterPane = new GroupLayout(this);
-		gl_filterPane.setHorizontalGroup(
-				gl_filterPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_filterPane.createSequentialGroup()
-						.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_filterPane.createSequentialGroup()
-										.addGap(26)
-										.addGroup(gl_filterPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(buttonEditFilter)
-												.addComponent(applyFilter)))
-												.addGroup(gl_filterPane.createSequentialGroup()
-														.addContainerGap()
-														.addComponent(rdbtnAll)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(rdbtnDirect)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(rdbtnIndirect)))
-														.addContainerGap(15, Short.MAX_VALUE))
-				);
-		gl_filterPane.setVerticalGroup(
-				gl_filterPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_filterPane.createSequentialGroup()
-						.addGap(37)
-						.addComponent(applyFilter)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(buttonEditFilter)
-						.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-						.addGroup(gl_filterPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(rdbtnAll)
-								.addComponent(rdbtnDirect)
-								.addComponent(rdbtnIndirect))
-								.addContainerGap())
-				);
-		setLayout(gl_filterPane);
-
 	}
 	
-	public void loadGuiText() {
+	public void loadAfterChange() {
+		loadText();
+	}
+	
+	private void loadText() {
 		setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Filter")));
 		applyFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ApplyFilter"));
 		buttonEditFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("EditFilter"));
@@ -151,5 +158,4 @@ public class FilterPanel extends JPanel {
 	public JCheckBox getApplyFilter() {
 		return applyFilter;
 	}
-
 }
