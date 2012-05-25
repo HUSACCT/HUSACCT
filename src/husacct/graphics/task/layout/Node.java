@@ -136,7 +136,7 @@ public class Node {
 	}
 
 	public boolean isParentOf(Node endNode) {
-		return connectedTo.contains(endNode) && endNode.isParentOf(this);
+		return connectedTo.contains(endNode) && endNode.getParents().contains(this);
 	}
 	
 	public boolean isChildOf(Node n) {
