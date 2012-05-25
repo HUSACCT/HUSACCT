@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class InterfaceConventionRule extends RuleType {
+public class SubClassConventionRule extends RuleType {
 
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public SubClassConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
@@ -48,3 +48,4 @@ public class InterfaceConventionRule extends RuleType {
 		return violations;
 	}
 }
+
