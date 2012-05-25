@@ -1,8 +1,12 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.graphics.task.layout.ContainerLayoutStrategy;
+
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import org.jhotdraw.draw.AttributeKeys;
@@ -116,7 +120,27 @@ public class ParentFigure extends BaseFigure {
 		return childrenOwnImpl.toArray(new BaseFigure[]{});
 	}
 	
-	public void addChildFigure(Figure figure) {
+	public void updateLayout() {
+		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this);
+		cls.doLayout(0, 0);
+		
+		Rectangle newSize = new Rectangle();
+		for (Figure f : childrenOwnImpl) {
+			Rectangle2D.Double bounds = f.getBounds();
+			
+			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height));
+		}
+		
+		Rectangle2D.Double bounds = getBounds();
+		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
+		Point2D.Double lead = new Point2D.Double(anchor.x + newSize.width, anchor.y + newSize.height);
+		
+		willChange();
+		setBounds(anchor, lead);
+		changed();
+	}
+	
+	public boolean add(Figure figure) {
 		childrenOwnImpl.add(figure);
 		figure.addFigureListener(new FigureListener() {
 			@Override
@@ -180,6 +204,7 @@ public class ParentFigure extends BaseFigure {
 			public void figureRequestRemove(FigureEvent e) {
 			}
 		});
+		return true;
 	}
 
 	@Override

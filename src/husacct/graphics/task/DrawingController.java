@@ -181,14 +181,14 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(parentFigure);
 			for (AbstractDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
-				parentFigure.addChildFigure(generatedFigure);
+				parentFigure.add(generatedFigure);
 				drawing.add(generatedFigure);
 				figureMap.linkModule(generatedFigure, dto);
 			}
+			parentFigure.updateLayout();
 		}
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
-		drawLinesBasedOnSetting();
 		updateLayout();
 		drawLinesBasedOnSetting();
 	}
