@@ -1,5 +1,6 @@
 package husacct.define.domain;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.module.Module;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class AppliedRule {
 		this.enabled = enabled;
 	}
 	
-	public AppliedRule(String ruleType, String description, Module usedModule, Module restrictedModule){
-		this(ruleType, description, new String[0], "",usedModule,restrictedModule, true);
+	public AppliedRule(String ruleType, String description, Module moduleTo, Module moduleFrom){
+		this(ruleType, description, new String[0], "",moduleTo,moduleFrom, true);
 	}
 
 	public AppliedRule() {
@@ -52,7 +53,7 @@ public class AppliedRule {
 		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
 			exceptions.add(exception);
 		} else {
-			throw new RuntimeException("This exception has already been added!");
+			throw new RuntimeException(DefineTranslator.translate("ExceptionAlreadyAdded"));
 		}
 	}
 	
@@ -82,7 +83,7 @@ public class AppliedRule {
 				exceptions.remove(rule);
 			}
 		}
-		if (!exceptionFound){throw new RuntimeException("This exception does not exist!");}
+		if (!exceptionFound){throw new RuntimeException(DefineTranslator.translate("NoException"));}
 	}
 	
 	public void removeAllExceptions() {
