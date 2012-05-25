@@ -264,12 +264,15 @@ public class SoftwareArchitecture {
 				tmpList.remove(rule);
 			}	
 			
+			@SuppressWarnings("unchecked")
+			ArrayList<AppliedRule> tmpExceptionList = (ArrayList<AppliedRule>) appliedRules.clone();
 			for (AppliedRule exceptionRule : rule.getExceptions()){
 				if (exceptionRule.getModuleFrom().equals(module) || 
 						exceptionRule.getModuleTo().equals(module)){
-					rule.getExceptions().remove(exceptionRule);
+					tmpExceptionList.remove(exceptionRule);
 				}		
 			}
+			rule.setExceptions(tmpExceptionList);
 		}
 		appliedRules = tmpList;	
 	}
