@@ -64,6 +64,7 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
+		saveFigurePositions();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -87,6 +88,7 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
+		saveFigurePositions();
 		if (getCurrentPaths().length > 0) {
 			String firstCurrentPaths = getCurrentPaths()[0];
 			String parentPath = defineService.getParentFromModule(firstCurrentPaths);

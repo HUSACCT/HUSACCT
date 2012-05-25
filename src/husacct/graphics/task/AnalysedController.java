@@ -81,7 +81,6 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
-		//printFigures("moduleZoom()");
 		saveFigurePositions();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
@@ -122,7 +121,6 @@ public class AnalysedController extends DrawingController {
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
-		//printFigures("moduleZoomOut()");
 		saveFigurePositions();
 	}
 
