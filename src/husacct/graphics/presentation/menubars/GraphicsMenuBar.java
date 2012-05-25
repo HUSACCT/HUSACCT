@@ -2,7 +2,6 @@ package husacct.graphics.presentation.menubars;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -96,20 +95,15 @@ public class GraphicsMenuBar extends JPanel {
 		}
 	}
 
-	public void setLayoutStrategyItems(ArrayList<String> items) {
-		int selectedItem = layoutStrategyOptions.getSelectedIndex();
-		if (selectedItem < 0) {
-			selectedItem = 0;
-		}
+	public void setLayoutStrategyItems(String[] layoutStrategyItems) {
 		layoutStrategyOptions.removeAllItems();
-		for (String item : items) {
+		for (String item : layoutStrategyItems) {
 			layoutStrategyOptions.addItem(item);
 		}
-		layoutStrategyOptions.setSelectedIndex(selectedItem);
 	}
 
-	public void setSelectedLayoutStrategyItem(int selectedItem) {
-		layoutStrategyOptions.setSelectedItem(selectedItem);
+	public void setSelectedLayoutStrategyItem(String string) {
+		layoutStrategyOptions.setSelectedItem(string);
 	}
 
 	public String getSelectedLayoutStrategyItem() {
