@@ -43,6 +43,9 @@ class JavaTreeConvertController {
 		if(classTree == null){
 			classTree = completeTree.getFirstChildWithType(JavaParser.AT);
 		}
+		if(classTree == null){
+			classTree = completeTree.getFirstChildWithType(JavaParser.ENUM);
+		}
 
 		if(classTree != null){
 			switch(classTree.getType()){
@@ -54,6 +57,9 @@ class JavaTreeConvertController {
 				break;
 			case JavaParser.AT:
 				this.theClass = this.currentClass = delegateAnnotation(classTree);
+				break;
+			case JavaParser.ENUM:
+				this.theClass = this.currentClass = delegateClass(classTree, false);
 				break;
 			default:
 				logger.warn("Detected a not supported type");

@@ -14,6 +14,7 @@ public class Main {
 		printSystemInfo();
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		controlService.startApplication(consoleArguments);
+		
 	}
 	
 	private void setLog4jConfiguration(){

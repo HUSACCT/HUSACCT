@@ -9,9 +9,10 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.*;
+import static org.junit.Assert.*;
 
-public abstract class TestCaseExtended extends TestCase{
+public abstract class TestCaseExtended{
 	
 	public String DECLARATION = "Declaration";
 	public String EXTENDSCONCRETE = "ExtendsConcrete";
@@ -28,6 +29,7 @@ public abstract class TestCaseExtended extends TestCase{
 	protected AnalyseServiceImpl service;
 	private FamixCreationServiceImpl famix;
 	
+	@Before
 	public void setUp(){
 		service = new AnalyseServiceImpl();
 		famix = new FamixCreationServiceImpl();
@@ -35,6 +37,7 @@ public abstract class TestCaseExtended extends TestCase{
 		fillFamixAsStub();
 	}
 	
+	@After
 	public void tearDown(){
 		famix.clearModel();
 	}

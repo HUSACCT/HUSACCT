@@ -3,10 +3,15 @@ package husaccttest.analyse;
 import java.util.HashMap;
 import java.util.List;
 
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 import husacct.common.dto.AnalysedModuleDTO;
 
 public class TestDomainModule extends TestCaseExtended{
 	
+	@Test
 	public void testGetRootModules(){
 		int totalModulesExpected = 3;
 		
@@ -43,6 +48,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(true, indirectFoundModule);
 	}
 	
+	@Test
 	public void testGetChildrenOfPackageModule(){
 		int totalModulesExpected = 2;
 		String modulesFrom = "domain.locationbased";
@@ -71,6 +77,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(true, latitudeFoundModule);
 	}
 	
+	@Test
 	public void testGetChildrenOfClassModule(){
 		int totalModulesExpected = 0;
 		String modulesFrom = "domain.locationbased.foursquare.Account";
@@ -79,6 +86,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(totalModulesExpected, modules.length);
 	}
 	
+	@Test
 	public void testGetChildrenOfNotExistingModule(){
 		int totalModulesExpected = 0;
 		String modulesFrom = "domain.notExisting";
@@ -87,6 +95,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(totalModulesExpected, modules.length);
 	}
 	
+	@Test
 	public void testGetChilderenOfPackageWithDepthOne(){
 		int totalModulesExpected = 2;
 		String modulesFrom = "domain.locationbased";
@@ -117,6 +126,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(true, foundLatitude);
 	}
 	
+	@Test
 	public void testGetChildrenOfPackageWithDepthTwo(){
 		int totalModulesExpected = 2;
 		String modulesFrom = "domain.locationbased";
@@ -147,6 +157,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(true, foundLatitude);
 	}
 	
+	@Test
 	public void testGetChildrenOfPackageDepthZero(){
 		int totalModulesExpected = 1;
 		String modulesFrom = "domain";
@@ -181,6 +192,7 @@ public class TestDomainModule extends TestCaseExtended{
 */	
 	}
 	
+	@Test
 	public void testGetChildrenOfClassDepthOne(){
 		int totalModulesExpected = 0;
 		String modulesFrom = "domain.locationbased.latitude.Account";
@@ -190,6 +202,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(totalModulesExpected, modules.length);
 	}
 	
+	@Test
 	public void testGetChildrenOfClassDepthTwo(){
 		int totalModulesExpected = 0;
 		String modulesFrom = "domain.locationbased.latitude.Account";
@@ -199,6 +212,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(totalModulesExpected, modules.length);
 	}
 	
+	@Test
 	public void testGetChildrenOfClassDepthZero(){
 		int totalModulesExpected = 0;
 		String modulesFrom = "domain.locationbased.latitude.Account";
@@ -208,6 +222,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(totalModulesExpected, modules.length);
 	}
 	
+	@Test
 	public void testGetChildrenOfUnknownPackageDepthZero(){
 		int totalModulesExpected = 0;
 		String modulesFrom = "domain.unknown";
@@ -217,6 +232,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(totalModulesExpected, modules.length);
 	}
 	
+	@Test
 	public void testGetParentOfPackageLevelTwo(){
 		String parentFrom = "domain.locationbased";
 		AnalysedModuleDTO module = service.getParentModuleForModule(parentFrom);
@@ -245,6 +261,7 @@ public class TestDomainModule extends TestCaseExtended{
 */		
 	}
 	
+	@Test
 	public void testGetParentOfPackageLevelOne(){
 		String parentFrom = "domain";
 		AnalysedModuleDTO parentModule = service.getParentModuleForModule(parentFrom);
@@ -260,6 +277,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(typeExpected, parentModule.type);
 	}
 	
+	@Test
 	public void testGetParentOfClassLevelFour(){
 		String parentFrom = "domain.locationbased.foursquare.Account";
 		AnalysedModuleDTO parentModule = service.getParentModuleForModule(parentFrom);
@@ -275,6 +293,7 @@ public class TestDomainModule extends TestCaseExtended{
 		assertEquals(typeExpected, parentModule.type);
 	}
 	
+	@Test
 	public void testGetParentOfNotExistingPackageLevelTwo(){
 		String parentFrom = "domain.notExist";
 		AnalysedModuleDTO parentModule = service.getParentModuleForModule(parentFrom);
