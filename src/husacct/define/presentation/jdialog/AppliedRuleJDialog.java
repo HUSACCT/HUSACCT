@@ -69,9 +69,9 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
-			this.setResizable(false);
+//			this.setResizable(false);
 			this.pack();
-			this.setSize(880, 460);
+			this.setSize(820, 540);
 			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
@@ -104,7 +104,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private GridBagLayout createMainPanelLayout() {
 		GridBagLayout mainPanelLayout = new GridBagLayout();
 		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0 };
-		mainPanelLayout.rowHeights = new int[] { 30, 30, 30};//30 500 90
+		mainPanelLayout.rowHeights = new int[] { 30, 300, 90};//30 500 90
 		mainPanelLayout.columnWeights = new double[] { 0.0, 0.0 };
 		mainPanelLayout.columnWidths = new int[] { 130, 660 };
 		return mainPanelLayout;
@@ -300,15 +300,9 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 		
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
-		long moduleFromId = (Long) ruleDetails.get("moduleFromId");
-		long moduleToId = (Long) ruleDetails.get("moduleToId");
-		boolean isEnabled = (Boolean) ruleDetails.get("enabled");
-		String description = (String) ruleDetails.get("description");
-		String regex = (String) ruleDetails.get("regex");
-		//TODO dependencies
-		String[] dependencies = new String[]{};
+		ruleDetails.put("ruleTypeKey", ruleTypeKey);
 		
-		this.appliedRuleController.save(ruleTypeKey, description,dependencies, regex, moduleFromId, moduleToId, isEnabled);
+		this.appliedRuleController.save(ruleDetails);
 		this.dispose();
 	}
 	

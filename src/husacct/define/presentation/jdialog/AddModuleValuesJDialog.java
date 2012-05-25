@@ -92,6 +92,8 @@ public class AddModuleValuesJDialog extends AbstractValuesJDialog {
 		this.innerPanel.add(moduleLabel);
 		
 		this.moduleDescriptionField = new JTextField();
+		this.moduleDescriptionField.addKeyListener(this);
+		
 		this.innerPanel.add(this.moduleDescriptionField);
 	}
 	

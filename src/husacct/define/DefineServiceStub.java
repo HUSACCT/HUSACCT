@@ -2,6 +2,7 @@ package husacct.define;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 
 import javax.swing.JInternalFrame;
@@ -20,36 +21,42 @@ public class DefineServiceStub implements IDefineService{
 	public RuleDTO[] getDefinedRules() {
 		//Temporary architecture
 		String logicalPath = "InfrastructureLayer.locationbasedDAO";
-		String[] physicalPaths = new String[] {"infrastructure.socialmedia.locationbased.foursquare.AccountDAO",
-				"infrastructure.socialmedia.locationbased.foursquare.FriendsDAO",
-				"infrastructure.socialmedia.locationbased.foursquare.IMap",
-				"infrastructure.socialmedia.locationbased.foursquare.HistoryDAO"};
+		PhysicalPathDTO[] physicalPaths = new PhysicalPathDTO[]{
+				new PhysicalPathDTO("infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "PACKAGE"),
+				new PhysicalPathDTO("infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "PACKAGE"),
+				new PhysicalPathDTO("infrastructure.socialmedia.locationbased.foursquare.IMap", "PACKAGE"),
+				new PhysicalPathDTO("infrastructure.socialmedia.locationbased.foursquare.HistoryDAO", "PACKAGE")};
 		String type = "Module";
 		ModuleDTO[] subModules = new ModuleDTO[]{};
 		ModuleDTO lbDAOModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		logicalPath = "DomainLayer.locationbasedConnections.latitudeConnection";
-		physicalPaths = new String[] {"domain.locationbased.latitude.Account",
-				"domain.locationbased.latitude.Friends", "domain.locationbased.latitude.Map"};
+		physicalPaths = new PhysicalPathDTO[]{
+				new PhysicalPathDTO("domain.locationbased.latitude.Account", "PACKAGE"),
+				new PhysicalPathDTO("domain.locationbased.latitude.Friends", "PACKAGE"),
+				new PhysicalPathDTO("domain.locationbased.latitude.Map", "PACKAGE")};
 		type = "Module";
 		subModules = new ModuleDTO[]{};
 		ModuleDTO latitudeModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		logicalPath = "DomainLayer.locationbasedConnections.foursquareConnection";
-		physicalPaths = new String[] {"domain.locationbased.foursquare.Account",
-				"domain.locationbased.foursquare.Friends", "domain.locationbased.foursquare.Map"};
+		physicalPaths = new PhysicalPathDTO[]{
+				new PhysicalPathDTO("domain.locationbased.foursquare.Account", "PACKAGE"),
+				new PhysicalPathDTO("domain.locationbased.foursquare.Friends", "PACKAGE"),
+				new PhysicalPathDTO("domain.locationbased.foursquare.Map", "PACKAGE")};
 		type = "Module";
 		subModules = new ModuleDTO[]{};
 		ModuleDTO fqConnectionModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		logicalPath = "DomainLayer.locationbasedHistory";
-		physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
+		physicalPaths = new PhysicalPathDTO[]{
+				new PhysicalPathDTO("domain.locationbased.foursquare.History", "PACKAGE")};
 		type = "Module";
 		subModules = new ModuleDTO[]{};
 		ModuleDTO lbHistoryModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		logicalPath = "DomainLayer.locationbasedConnections";
-		physicalPaths = new String[] {};
+		physicalPaths = new PhysicalPathDTO[]{};
 		subModules = new ModuleDTO[]{fqConnectionModule, latitudeModule};
 		type = "Module";
 		ModuleDTO lbConnectionsModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
@@ -64,22 +71,18 @@ public class DefineServiceStub implements IDefineService{
 		subModules = new ModuleDTO[]{lbConnectionsModule, lbHistoryModule};
 		ModuleDTO domainLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
-		//ACTUAL RULES
-		//ACTUAL RULES
+		/*
+		 * Actual Rules
+		 */
 		String ruleTypeKey = "IsNotAllowedToUse";
-			//IGNORE FOR ELABORATION VERSION
 			String[] violationTypeKeys = new String[]{"InvocMethod", "InvocConstructor","ExtendsAbstract", "Implements"};
 		ModuleDTO moduleFrom = lbConnectionsModule;			
 		ModuleDTO moduleTo = lbDAOModule;
 		String regex = "";
 		RuleDTO[] exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleOne = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-		ruleTypeKey = "IsNotAllowedToUse";		
-			//IGNORE FOR ELABORATION VERSION
+
+		ruleTypeKey = "IsNotAllowedToUse";
 			violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
@@ -87,10 +90,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleTwo = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
-//		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo};
-		
-		ruleTypeKey = "IsAllowedToUse";		
-		//IGNORE FOR ELABORATION VERSION
+		ruleTypeKey = "IsAllowedToUse";	
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
@@ -98,8 +98,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleThree = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 	
-		ruleTypeKey = "IsOnlyAllowedToUse";		
-		//IGNORE FOR ELABORATION VERSION
+		ruleTypeKey = "IsOnlyAllowedToUse";
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
@@ -107,8 +106,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleFour = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 	
-		ruleTypeKey = "IsOnlyModuleAllowedToUse";		
-		//IGNORE FOR ELABORATION VERSION
+		ruleTypeKey = "IsOnlyModuleAllowedToUse";
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
@@ -116,8 +114,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleFive = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
-		ruleTypeKey = "MustUse";		
-		//IGNORE FOR ELABORATION VERSION
+		ruleTypeKey = "MustUse";
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = lbHistoryModule;
 		moduleTo = lbDAOModule;
@@ -125,8 +122,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleSix = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
-		ruleTypeKey = "BackCall";		
-		//IGNORE FOR ELABORATION VERSION
+		ruleTypeKey = "BackCall";
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = domainLayer;
 		moduleTo = new ModuleDTO();
@@ -134,8 +130,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleSeven = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex,  exceptionRules);
 		
-		ruleTypeKey = "SkipCall";		
-		//IGNORE FOR ELABORATION VERSION
+		ruleTypeKey = "SkipCall";
 		violationTypeKeys = new String[] {"ExtendsConcrete"};
 		moduleFrom = domainLayer;
 		moduleTo = new ModuleDTO();
@@ -143,6 +138,7 @@ public class DefineServiceStub implements IDefineService{
 		exceptionRules = new RuleDTO[]{};
 		RuleDTO ruleEight = new RuleDTO(ruleTypeKey,moduleFrom, moduleTo, violationTypeKeys, regex, exceptionRules);
 	
+		//Create a list of all rules
 		RuleDTO[] rules = new RuleDTO[]{ruleOne, ruleTwo, ruleThree, ruleFour, ruleFive, ruleSix, ruleSeven, ruleEight};
 
 		return rules;
@@ -153,13 +149,13 @@ public class DefineServiceStub implements IDefineService{
 		//Gets only the top level abstraction Modules
 		
 		String logicalPath = "InfrastructureLayer";
-		String[] physicalPaths = new String[]{};
+		PhysicalPathDTO[] physicalPaths = new PhysicalPathDTO[]{};
 		String type = "Layer";
 		ModuleDTO[] subModules = new ModuleDTO[]{};
 		ModuleDTO infrastructureLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		logicalPath = "DomainLayer";
-		physicalPaths = new String[]{};
+		physicalPaths = new PhysicalPathDTO[]{};
 		type = "Layer";
 		subModules = new ModuleDTO[]{};
 		ModuleDTO domainLayer = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
@@ -181,13 +177,14 @@ public class DefineServiceStub implements IDefineService{
 	@Override
 	public ModuleDTO[] getChildrenFromModule(String tmplogicalPath) {
 		String logicalPath = "DomainLayer.locationbasedHistory";
-		String[] physicalPaths = new String[] {"domain.locationbased.foursquare.History"};
+		PhysicalPathDTO[] physicalPaths = new PhysicalPathDTO[]{
+				new PhysicalPathDTO("domain.locationbased.foursquare.History", "PACKAGE")};
 		String type = "Module";
 		ModuleDTO[] subModules = new ModuleDTO[]{};
 		ModuleDTO lbHistoryModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
 		
 		logicalPath = "DomainLayer.locationbasedConnections";
-		physicalPaths = new String[] {};
+		physicalPaths = new PhysicalPathDTO[]{};
 		type = "Module";
 		subModules = new ModuleDTO[]{};
 		ModuleDTO lbConnectionsModule = new ModuleDTO(logicalPath,physicalPaths, type, subModules);
