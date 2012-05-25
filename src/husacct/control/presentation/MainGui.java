@@ -1,10 +1,7 @@
 package husacct.control.presentation;
-import husacct.control.presentation.menubar.AnalyseMenu;
-import husacct.control.presentation.menubar.DefineMenu;
-import husacct.control.presentation.menubar.FileMenu;
-import husacct.control.presentation.menubar.HelpMenu;
-import husacct.control.presentation.menubar.LanguageMenu;
-import husacct.control.presentation.menubar.ValidateMenu;
+import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
 import husacct.control.presentation.util.MoonWalkPanel;
@@ -24,7 +21,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -40,20 +36,23 @@ public class MainGui extends JFrame{
 	private Logger logger = Logger.getLogger(MainGui.class);
 	
 	private MainController mainController;
-	private JMenuBar menuBar;
+	private MenuBar menuBar;
 	private String titlePrefix = "HUSACCT";
 	private JDesktopPane desktopPane;
 	private TaskBar taskBar;
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
+	
 	private ToolBar toolBar;
+	
+	IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public MainGui(MainController controller) {
 		this.mainController = controller;
 		setup();
+		createMenuBar();
 		addComponents();
 		addListeners();
-		createMenuBar();
 		setVisible(true);
 	}
 
@@ -89,7 +88,7 @@ public class MainGui extends JFrame{
 		JPanel taskBarPane = new JPanel(new GridLayout());
 		moonwalkPanel = new MoonWalkPanel();
 		moonwalkThread = new Thread(moonwalkPanel);
-		toolBar = new ToolBar(mainController);
+		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
 		
 		taskBarPane.add(taskBar);
@@ -119,31 +118,8 @@ public class MainGui extends JFrame{
 	}
 	
 	private void createMenuBar() {
-		this.menuBar = new JMenuBar();
-		
-		FileMenu fileMenu = new FileMenu(mainController);
-		DefineMenu defineMenu = new DefineMenu(mainController);
-		AnalyseMenu analyseMenu = new AnalyseMenu(mainController);
-		ValidateMenu validateMenu = new ValidateMenu(mainController);
-		LanguageMenu languageMenu = new LanguageMenu(mainController);
-		HelpMenu helpMenu = new HelpMenu(mainController);
-
-		fileMenu.setMnemonic('F');
-		defineMenu.setMnemonic('D');
-		analyseMenu.setMnemonic('A');
-		validateMenu.setMnemonic('V');
-		languageMenu.setMnemonic('L');
-		helpMenu.setMnemonic('H');
-		
-		menuBar.add(fileMenu);
-		menuBar.add(defineMenu);
-		menuBar.add(analyseMenu);
-		menuBar.add(validateMenu);
-		menuBar.add(languageMenu);
-		menuBar.add(helpMenu);
-		
+		menuBar = new MenuBar(mainController);		
 		setJMenuBar(menuBar);
-
 	}
 	
 	public JDesktopPane getDesktopPane(){
@@ -152,6 +128,10 @@ public class MainGui extends JFrame{
 	
 	public TaskBar getTaskBar(){
 		return taskBar;
+	}
+	
+	public MenuBar getMenu(){
+		return menuBar;
 	}
 	
 	public void setTitle(String title){
@@ -165,5 +145,5 @@ public class MainGui extends JFrame{
 	private void setTitle(){
 		setTitle("");
 	}
-
+	
 }

@@ -1,5 +1,6 @@
 package husacct.define.domain.services;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
@@ -24,16 +25,19 @@ public class AppliedRuleExceptionDomainService {
 		
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
 		parentRule.addException(exceptionRule);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	public void removeAppliedRuleException(long parentRuleId, long exceptionRuleId) {
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
 		parentRule.removeExceptionById(exceptionRuleId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void removeAllAppliedRuleExceptions(long appliedRuleId) {
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
 		parentRule.removeAllExceptions();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public ArrayList<Long> getExceptionIdsByAppliedRule(long parentRuleId) {
@@ -44,6 +48,12 @@ public class AppliedRuleExceptionDomainService {
 			exceptionIds.add(exception.getId());
 		}
 		return exceptionIds;
+	}
+	
+	public ArrayList<AppliedRule> getExceptionsByAppliedRule(long parentRuleId) {
+		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
+		ArrayList<AppliedRule> exceptionRules = parentRule.getExceptions();
+		return exceptionRules;
 	}
 
 }

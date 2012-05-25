@@ -1,9 +1,9 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.presentation.DataLanguageHelper;
 import husacct.validate.presentation.LanguageSeverityConfiguration;
 import husacct.validate.presentation.tableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 
 public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
+	private static final long serialVersionUID = 1283848062887016417L;
+
 	private static Logger logger = Logger.getLogger(ViolationTypeSeverityPanel.class);
 	
 	private ComboBoxTableModel violationtypeModel;
@@ -38,13 +40,13 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	public ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, LanguageSeverityConfiguration languageSeverityConfiguration, Map<String, List<ViolationType>> violationtypes, String language) {
 		
 		CategoryModel = new DefaultListModel();
-		
 		this.taskServiceImpl = taskServiceImpl;
 		this.languageSeverityConfiguration = languageSeverityConfiguration;
 		this.language = language;
 		this.violationTypes = violationtypes;
 		
 		initComponents();
+		loadModel();
 		setText();
 	}
     
@@ -113,6 +115,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 		});
 
 		createLayout();
+		loadViolationTypeCategories();
     }
 	
 	private void createLayout(){
@@ -178,7 +181,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	}
 	
 	private void vtsRestoreActionPerformed() {		
-		taskServiceImpl.restoreToDefault(language, ValidateTranslator.getKey((String) violationtypeModel.getValueAt(ViolationtypeTable.getSelectedRow(), 0)));
+		taskServiceImpl.restoreToDefault(language, ((DataLanguageHelper) violationtypeModel.getValueAt(ViolationtypeTable.getSelectedRow(), 0)).key);
 		vtsCategoryValueChanged();
 	}
 
@@ -194,14 +197,16 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
 	private void vtsCategoryValueChanged() {
 		checkRestoreButtonEnabled();
-		loadViolationType((String) Category.getSelectedValue());
+		loadViolationType(((DataLanguageHelper) Category.getSelectedValue()).key);
 	}
 	
 	private void updateViolationtypeSeverities() {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
 		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
-			map.put(ValidateTranslator.getKey((String) violationtypeModel.getValueAt(i, 0)), (Severity) violationtypeModel.getValueAt(i, 1));
+			String key = ((DataLanguageHelper) violationtypeModel.getValueAt(i, 0)).key;
+			map.put(key, (Severity) violationtypeModel.getValueAt(i, 1));
+			
 		}
 
 		taskServiceImpl.updateSeverityPerType(map, language);
@@ -209,8 +214,9 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 	
 	private void loadViolationTypeCategories() {
 		CategoryModel.clear();
+		System.out.println(violationTypes.keySet().size());
 		for (String categoryString : violationTypes.keySet()) {
-			CategoryModel.addElement(ServiceProvider.getInstance().getControlService().getTranslatedString(categoryString));
+			CategoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
 
 	}
@@ -228,7 +234,7 @@ public class ViolationTypeSeverityPanel extends javax.swing.JPanel {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getViolationtypeKey()), severity});
+					violationtypeModel.addRow(new Object[]{new DataLanguageHelper(violationtype.getViolationtypeKey()), severity});
 				}
 			}
 

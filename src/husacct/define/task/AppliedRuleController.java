@@ -1,6 +1,7 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
@@ -8,8 +9,10 @@ import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -27,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.Observer;
+
+import javax.swing.JOptionPane;
 
 public class AppliedRuleController extends PopUpController {
 
@@ -50,6 +55,10 @@ public class AppliedRuleController extends PopUpController {
 		this.moduleService = new ModuleDomainService();
 		this.appliedRuleService = new AppliedRuleDomainService();
 		this.appliedRuleExceptionService = new AppliedRuleExceptionDomainService();
+		
+		if (getAction().equals(PopUpController.ACTION_EDIT)){
+			loadAllRuleExceptions();
+		}
 	}
 	
 	private void determineAction() {
@@ -190,7 +199,7 @@ public class AppliedRuleController extends PopUpController {
 	/*
 	 * Saving
 	 */
-	public void save(HashMap<String, Object> ruleDetails){
+	public boolean save(HashMap<String, Object> ruleDetails){
 		
 		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
 		Object from = ruleDetails.get("moduleFromId");
@@ -205,21 +214,25 @@ public class AppliedRuleController extends PopUpController {
 		
 		try {
 			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
+				if (!this.checkRuleConventions(moduleFrom, moduleTo, ruleTypeKey)){ return false;}//Does not comply with ruleconventions
 				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
 				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+				this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 			}
 			this.saveAllExceptionRules();
 			DefinitionController.getInstance().notifyObservers(this.currentModuleId);
+			return true;
 		} catch (Exception e) {
-			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage(), "Error");
+			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage());
+			return false;
 		}
 	}
 	
 	private Module getCorrectModule(Object o){
 		Module module;
 		if (o instanceof SoftwareUnitDefinition){
-			module = createPhysicalModule((SoftwareUnitDefinition) o);
+			module = createModuleForSoftwareUnit((SoftwareUnitDefinition) o);
 		} else if (o instanceof Long){
 			long moduleId = (Long) o;
 			if (moduleId != -1){
@@ -233,11 +246,40 @@ public class AppliedRuleController extends PopUpController {
 		return module;
 	}
 	
-	private Module createPhysicalModule(SoftwareUnitDefinition su) {
-		Module module = new Module();
+	private Module createModuleForSoftwareUnit(SoftwareUnitDefinition su) {
+		Module module = new SubSystem(su.getName(), "");
 		module.addSUDefinition(su);
-		module.setType("Physical");
+
+		SoftwareUnitDefinition parentSU;
+		AnalysedModuleDTO analysedModuleDTO = ServiceProvider.getInstance().getAnalyseService().getParentModuleForModule(su.getName());
+		if (!analysedModuleDTO.name.equals("")) { 
+			Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
+			parentSU = new SoftwareUnitDefinition(analysedModuleDTO.uniqueName, type);
+		} else {
+			logger.info("No parent found for softwareunit : " + su.getName());
+			logger.info("Using " + su.getName() + " instead");
+			parentSU = su;
+		}
+		
+		
+		try {
+			Module parentModule = moduleService.getModuleIdBySoftwareUnit(parentSU);
+			moduleService.addModuleToParent(parentModule.getId(), module);				
+		} catch (RuntimeException e){
+			moduleService.addModuleToRoot(module);			
+		}
 		return module;
+	}
+	
+	private boolean checkRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
+		RuleConventionsChecker conventionsChecker = new RuleConventionsChecker(moduleFrom, moduleTo, ruleTypeKey);
+		if(!conventionsChecker.checkRuleConventions()) {
+			String errorMessage = conventionsChecker.getErrorMessage();
+			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, DefineTranslator.translate("ConventionError"), JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public void saveAllExceptionRules(){
@@ -256,17 +298,32 @@ public class AppliedRuleController extends PopUpController {
 			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo);
 		}
 	}
+	private void loadAllRuleExceptions(){
+		ArrayList<AppliedRule> exceptions = this.appliedRuleExceptionService.getExceptionsByAppliedRule(this.currentAppliedRuleId);
+		for (AppliedRule exception : exceptions){
+			HashMap<String, Object> exceptionRule = new HashMap<String, Object>();
+			exceptionRule.put("id", exception.getId());
+			exceptionRule.put("ruleTypeKey", exception.getRuleType());
+			exceptionRule.put("moduleFromId", exception.getModuleFrom().getId());
+			exceptionRule.put("moduleToId", exception.getModuleTo().getId());
+			exceptionRule.put("dependencies", exception.getDependencies());
+			exceptionRule.put("enabled", exception.isEnabled());
+			exceptionRule.put("description", exception.getDescription());
+			exceptionRule.put("regex", exception.getRegex());
+			addException(exceptionRule);
+		}
+		notifyObservers();
+	}
 
 	public void addException(HashMap<String, Object> exceptionRule){
 		exceptionRules.add(exceptionRule);
 	}
 	
-	public void removeException(Long exceptionRuleId){
-		for (HashMap<String, Object> exRule : exceptionRules){
-			Long exRuleId = (Long) exRule.get("id");
-			if (exRuleId == exceptionRuleId){
-				exceptionRules.remove(exRule);
-			}
+	public void removeException(int index){
+		if (index != -1){
+			try {
+				exceptionRules.remove(index);
+			} catch (Exception e){}
 		}
 	}
 	

@@ -52,10 +52,8 @@ public class ViolationTypesJDialog extends JDialog{
 			this.setTitle("Violation Types");
 			this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
 			
+			this.getContentPane().removeAll();
 			getContentPane().add(this.createViolationPanel(), BorderLayout.CENTER);
-			if(getComponentCount() > 0) {
-				getRootPane().revalidate();
-			}
 			
 			this.setResizable(false);
 			this.pack();
@@ -63,6 +61,24 @@ public class ViolationTypesJDialog extends JDialog{
 			this.setModal(true);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void load(HashMap<String, Object> ruleDetails) {
+		String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
+		ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
+		
+		String[] dependencies = (String[]) ruleDetails.get("dependencies");
+		
+		for (ViolationTypeDTO vt : violationTypeDtoList){
+			JCheckBox jCheckBox = new JCheckBox(DefineTranslator.translate(vt.key));
+			jCheckBox.setSelected(false);
+			for (String dependency : dependencies){
+				if (dependency.equals(vt.key)){
+					jCheckBox.setSelected(true);
+				}
+			}
+			violationCheckBoxHashMap.put(vt.key, jCheckBox);
 		}
 	}
 
