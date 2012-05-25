@@ -1,10 +1,12 @@
 package husacct.graphics.presentation.menubars;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ public class GraphicsMenuBar extends JMenuBar {
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 	private JButton goToParentMenu, refreshMenu, exportToImageMenu;
 	private JCheckBox showViolationsOptionMenu;
+	private JComboBox layoutStrategyOptions;
 
 	private int menuItemMaxHeight = 45;
 
@@ -37,6 +40,10 @@ public class GraphicsMenuBar extends JMenuBar {
 		exportToImageMenu = new JButton();
 		exportToImageMenu.setSize(50, menuItemMaxHeight);
 		add(exportToImageMenu);
+		
+		layoutStrategyOptions = new JComboBox();
+		layoutStrategyOptions.setSize(50, menuItemMaxHeight);
+		add(layoutStrategyOptions);
 	}
 
 	public void setLevelUpAction(ActionListener action) {
@@ -54,6 +61,10 @@ public class GraphicsMenuBar extends JMenuBar {
 	public void setExportToImageAction(ActionListener action) {
 		exportToImageMenu.addActionListener(action);
 	}
+	
+	public void setLayoutStrategyAction(ActionListener action) {
+		layoutStrategyOptions.addActionListener(action);
+	}
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
@@ -64,6 +75,26 @@ public class GraphicsMenuBar extends JMenuBar {
 		} catch (NullPointerException e) {
 			logger.warn("Locale for GraphicsMenuBar is not set properly.");
 		}
+	}
+	
+	public void setLayoutStrategyItems(ArrayList<String> items){
+		int selectedItem = layoutStrategyOptions.getSelectedIndex();
+		if(selectedItem<0){
+			selectedItem = 0;
+		}
+		layoutStrategyOptions.removeAllItems();
+		for(String item : items){
+			layoutStrategyOptions.addItem(item);
+		}
+		layoutStrategyOptions.setSelectedIndex(selectedItem);
+	}
+	
+	public void setSelectedLayoutStrategyItem(int selectedItem){
+		layoutStrategyOptions.setSelectedItem(selectedItem);
+	}
+	
+	public String getSelectedLayoutStrategyItem(){
+		return (String)layoutStrategyOptions.getSelectedItem();
 	}
 
 	public void setViolationToggle(boolean setting) {

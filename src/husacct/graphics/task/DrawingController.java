@@ -15,11 +15,15 @@ import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
+import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
+import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
@@ -29,6 +33,8 @@ import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
 	protected static final boolean debugPrint = true;
+	protected boolean savePoints;
+	protected DrawingLayoutStrategy layoutStrategyOption;
 
 	private boolean areViolationsShown = false;
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
@@ -48,10 +54,14 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
+		savePoints = false;
+		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
+		
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
 		initializeComponents();
+		switchLayoutStrategy();
 
 		controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
@@ -70,8 +80,28 @@ public abstract class DrawingController implements UserInputListener {
 
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
-
-		layoutStrategy = new BasicLayoutStrategy(drawing);
+		drawTarget.setSelectedLayout(layoutStrategyOption);
+	}
+	
+	private void switchLayoutStrategy(){
+		switch(layoutStrategyOption){
+			case BASIC_LAYOUT:
+				layoutStrategy = new BasicLayoutStrategy(drawing);
+				break;
+			case LAYERED_LAYOUT:
+				layoutStrategy = new LayeredLayoutStrategy(drawing);
+				break;
+			default:
+				layoutStrategy = new NoLayoutStrategy();
+				break;
+		}
+	}
+	
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
+		layoutStrategyOption = selectedStrategyEnum;
+		switchLayoutStrategy();
+//		refreshDrawing();
+		updateLayout();
 	}
 
 	public JInternalFrame getGUI() {
@@ -199,29 +229,16 @@ public abstract class DrawingController implements UserInputListener {
 		} else {
 			int width = drawTarget.getWidth();
 			int height = drawTarget.getHeight();
-
 			layoutStrategy.doLayout(width, height);
 		}
 
 		updateLines();
-
-		// bring modulefigures to the front
-		ArrayList<Figure> moduleFigures = new ArrayList<Figure>();
-		for (Figure f : drawing.getChildren()) {
-			if (((BaseFigure) f).isModule()) {
-				moduleFigures.add(f);
-			}
-		}
-		for (Figure f : moduleFigures) {
-			drawing.bringToFront(f);
-		}
 	}
 
 	private void updateLines() {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 			if (bf.isLine()) {
-				// ConnectionFigure cf = (ConnectionFigure) f;
 				RelationFigure cf = (RelationFigure) f;
 				cf.updateConnection();
 			}
@@ -346,8 +363,8 @@ public abstract class DrawingController implements UserInputListener {
 		}
 	}
 
-	protected void resetFigurePositions(String path) {
-		storedStates.remove(path);
+	protected void resetAllFigurePositions() {
+		storedStates.clear();
 	}
 
 	protected void printFigures(String msg) {

@@ -1,6 +1,7 @@
 package husacct.graphics.task;
 
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 public interface UserInputListener {
 	
@@ -19,4 +20,6 @@ public interface UserInputListener {
 	public void toggleViolations();
 	
 	public void refreshDrawing();
+
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum);
 }

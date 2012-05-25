@@ -7,6 +7,7 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
+import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.BorderLayout;
@@ -24,9 +25,12 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
+import org.apache.log4j.Logger;
+
 public class GraphicsFrame extends JInternalFrame {
-	protected IControlService controlService;
 	private static final long serialVersionUID = -4683140198375851034L;
+	protected IControlService controlService;
+	protected Logger logger = Logger.getLogger(GraphicsFrame.class);
 
 	private DrawingView drawingView;
 	private GraphicsMenuBar menuBar;
@@ -43,6 +47,8 @@ public class GraphicsFrame extends JInternalFrame {
 	private String[] dependencyColumnKeysArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
+	private ArrayList<String> layoutStrategyItems; 
+	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
@@ -119,6 +125,15 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
 		menuBar.setLocale(menuBarLocale);
 		
+		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
+		layoutStrategyItems = new ArrayList<String>();
+		for(DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()){
+			String translation = controlService.getTranslatedString(strategy.toString());
+			layoutStrategiesTranslations.put(translation, strategy);
+			layoutStrategyItems.add(translation);
+		}
+		menuBar.setLayoutStrategyItems(layoutStrategyItems);
+		
 		dependencyColumnNames = new ArrayList<String>();
 		for (String key : dependencyColumnKeysArray) {
 			dependencyColumnNames.add(controlService.getTranslatedString(key));
@@ -191,6 +206,18 @@ public class GraphicsFrame extends JInternalFrame {
 				exportToImage();
 			}
 		});
+		menuBar.setLayoutStrategyAction(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DrawingLayoutStrategy selectedStrategy = null;
+				try{
+					selectedStrategy = layoutStrategiesTranslations.get(menuBar.getSelectedLayoutStrategyItem());
+					changeLayoutStrategy(selectedStrategy);
+				}catch(Exception ex){
+					logger.debug("Could not find the selected layout strategy \""+selectedStrategy.toString()+"\".");
+				}
+			}
+		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
 	}
 
@@ -215,6 +242,17 @@ public class GraphicsFrame extends JInternalFrame {
 	public void updateGUI() {
 		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();
+	}
+	
+	public void setSelectedLayout(DrawingLayoutStrategy layoutStrategyOption) {
+		int i = 0;
+		for(DrawingLayoutStrategy strategy : layoutStrategiesTranslations.values()){
+			if(strategy.equals(layoutStrategyOption)){
+				continue;
+			}
+			i++;
+		}
+		menuBar.setSelectedLayoutStrategyItem(i);
 	}
 
 	private void moduleOpen(String[] paths) {
@@ -244,6 +282,12 @@ public class GraphicsFrame extends JInternalFrame {
 	private void refreshDrawing() {
 		for (UserInputListener l : listeners) {
 			l.refreshDrawing();
+		}
+	}
+
+	private void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+		for (UserInputListener l : listeners) {
+			l.changeLayoutStrategy(selectedStrategyEnum);
 		}
 	}
 
