@@ -98,13 +98,17 @@ class FamixDependencyFinder extends FamixFinder{
 		String startFrom = fromDependency.from;
 		for(DependencyDTO indirectDependency : this.getDependenciesFrom(fromDependency.to)){
 			indirectDependency.isIndirect = true;
-			indirectDependency.from = startFrom;
-			if(!found.contains(indirectDependency)) found.add(indirectDependency);
+			indirectDependency.from = fromDependency.to;
+			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);
 			if(!indirectDependency.to.equals(startFrom)) {
 				found.addAll(findIndirectDependenciesFrom(indirectDependency));
 			}
 		}
 		return found;
+	}
+	
+	private boolean isPackage(String uniquename){
+		return theModel.packages.containsKey(uniquename);
 	}
 	
 	private boolean compliesWithFunction(FamixAssociation association){

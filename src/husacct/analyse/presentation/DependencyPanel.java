@@ -22,8 +22,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JCheckBox;
 import java.awt.ComponentOrientation;
 import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class DependencyPanel extends JPanel implements TreeSelectionListener{  
+class DependencyPanel extends JPanel implements TreeSelectionListener, ActionListener{  
 	
 	private static final long serialVersionUID = 1L;
 	private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
@@ -43,6 +46,8 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	
 	public DependencyPanel(){
 		dataControl = new AnalyseUIController();
+		this.indirectFilterBox = new JCheckBox(dataControl.translate("ShowIndirectDependencies"));
+		this.indirectFilterBox.addActionListener(this);
 		createLayout();
 		
 		dependencyTable = new JTable();
@@ -128,6 +133,8 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
 		
 		this.filterPanel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) filterPanel.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
 		filterPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
 		
@@ -137,8 +144,8 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 				.addGroup(theLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(theLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(filterPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
 						.addComponent(dependencyScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+						.addComponent(filterPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
 						.addGroup(theLayout.createSequentialGroup()
 							.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
 							.addGap(18)
@@ -151,15 +158,14 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 					.addContainerGap()
 					.addGroup(theLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(toModuleScrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-						.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+						.addComponent(fromModuleScrollPane, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-					.addGap(2)
-					.addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-					.addGap(2))
+					.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(dependencyScrollPane, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		
-		this.indirectFilterBox = new JCheckBox(dataControl.translate("ShowIndirectDependencies"));
 		indirectFilterBox.setSelected(true);
 		indirectFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
 		filterPanel.add(indirectFilterBox);
@@ -172,15 +178,15 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	public void valueChanged(TreeSelectionEvent e) {
 		if(e.getSource() == fromModuleTree){
 			DefaultMutableTreeNode selected = (DefaultMutableTreeNode)fromModuleTree.getLastSelectedPathComponent();
-			AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
-			if(selectedModule != null){
+			if(selected != null){
+				AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
 				fromSelected.clear();
 				fromSelected.add(selectedModule);
 			}
 		}else if(e.getSource() == toModuleTree){
 			DefaultMutableTreeNode selected = (DefaultMutableTreeNode)toModuleTree.getLastSelectedPathComponent();
-			AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
-			if(selectedModule != null){
+			if(selected != null){
+				AnalysedModuleDTO selectedModule = (AnalysedModuleDTO) selected.getUserObject();
 				toSelected.clear();
 				toSelected.add(selectedModule);
 			}
@@ -191,6 +197,28 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	private void updateTableModel(){
 		List<DependencyDTO> allFoundDependencies = dataControl.listDependencies(fromSelected, toSelected);
 		dependencyTable.setModel(new DependencyTableModel(allFoundDependencies, dataControl));
+		dependencyTable.repaint();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if(event.getSource() == this.indirectFilterBox){
+			if(this.indirectFilterBox.isSelected()) showIndirectDependencies();
+			else hideIndirectDependencies();
+		}
+	}
+	
+	private void showIndirectDependencies(){
+		updateTableModel();
+	}
+	
+	private void hideIndirectDependencies(){
+		List<DependencyDTO> filteredList = new ArrayList<DependencyDTO>();
+		List<DependencyDTO> allDependencies = dataControl.listDependencies(fromSelected, toSelected);
+		for(DependencyDTO dependency: allDependencies){
+			if(!dependency.isIndirect) filteredList.add(dependency);
+		}
+		dependencyTable.setModel(new DependencyTableModel(filteredList, dataControl));
 		dependencyTable.repaint();
 	}
 	

@@ -12,6 +12,11 @@ import java.awt.event.ActionListener;
 import java.util.Locale;
 
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import java.awt.Component;
+import java.awt.Rectangle;
+import javax.swing.JPanel;
+import java.awt.FlowLayout;
 
 public class AnalyseInternalFrame extends JInternalFrame implements ActionListener, ILocaleChangeListener{
 
@@ -19,8 +24,9 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	private ApplicationStructurePanel treePanel;
 	private DependencyPanel dependencyPanel;
 	private JTabbedPane tabPanel;
-	private JButton cancelButton;
 	private AnalyseUIController controller;
+	private JPanel cancelPanel;
+	private JButton cancelButton;
 
 	public AnalyseInternalFrame() {
 		this.controller = new AnalyseUIController();
@@ -41,10 +47,12 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		tabPanel.addTab(controller.translate("SourceOverview"), null, treePanel, null);
 		tabPanel.addTab(controller.translate("DependencyOverview"), null, dependencyPanel, null);
 		
-		cancelButton = new JButton("Cancel");
-		getContentPane().add(cancelButton, BorderLayout.SOUTH);
-		cancelButton.addActionListener(this);
-		cancelButton.setText(controller.translate("Cancel"));
+		cancelPanel = new JPanel();
+		getContentPane().add(cancelPanel, BorderLayout.SOUTH);
+		cancelPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		cancelButton = new JButton(controller.translate("Cancel"));
+		cancelPanel.add(cancelButton);
 		reloadText();
 	}
 	
@@ -54,9 +62,10 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	
 	public void reloadText(){
 		this.setTitle(controller.translate("AnalysedWindowTitle"));
-		cancelButton.setText(controller.translate("Cancel"));
 		tabPanel.setTitleAt(0, controller.translate("SourceOverview"));
 		tabPanel.setTitleAt(1, controller.translate("DependencyOverview"));
+		cancelButton.setText(controller.translate("Cancel"));
+		cancelButton.repaint();
 		dependencyPanel.reload();
 		treePanel.reload();
 		tabPanel.repaint();
