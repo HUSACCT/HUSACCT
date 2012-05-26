@@ -31,6 +31,7 @@ import java.util.Set;
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
@@ -63,9 +64,6 @@ public abstract class DrawingController implements UserInputListener {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
-		initializeComponents();
-		switchLayoutStrategy();
-
 		controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
@@ -73,6 +71,9 @@ public abstract class DrawingController implements UserInputListener {
 				refreshFrame();
 			}
 		});
+		
+		initializeComponents();
+		switchLayoutStrategy();
 	}
 
 	private void initializeComponents() {
@@ -85,7 +86,7 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget.addListener(this);
 		drawTarget.setSelectedLayout(layoutStrategyOption);
 		
-		contextMenu = new ContextMenu();
+		contextMenu = new ContextMenu(controlService);
 		contextMenu.addListener(this);
 		view.setContextMenu(contextMenu);
 		
@@ -444,10 +445,21 @@ public abstract class DrawingController implements UserInputListener {
 	@Override
 	public void hideModules() {
 		Set<Figure> selection = view.getSelectedFigures();
-		for (Figure f : selection) {
+		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
-			bf.setVisible(false);
+			
+			if (!bf.isLine()) {
+				if (selection.contains(bf)) {
+					bf.setEnabled(false);
+				}
+			} else if (bf.isLine()) {
+				ConnectionFigure cf = (ConnectionFigure) f;
+				if (selection.contains(cf.getStartFigure()) || selection.contains(cf.getEndFigure())) {
+					bf.setEnabled(false);
+				}
+			}
 		}
+
 	}
 	
 	@Override
@@ -455,8 +467,7 @@ public abstract class DrawingController implements UserInputListener {
 		List<Figure> selection = drawing.getChildren();
 		for (Figure f : selection) {
 			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isVisible())
-				bf.setVisible(true);
+			bf.setEnabled(true);
 		}		
 	}	
 }

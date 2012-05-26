@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.menubars;
 
+import husacct.control.IControlService;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.ActionEvent;
@@ -15,29 +16,25 @@ public class ContextMenu extends JPopupMenu {
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	
-//	private JMenuItem zoomIn;
 	private JMenuItem zoomOut;
 	private JMenuItem hide;
 	private JMenuItem restore;
 	
-	public ContextMenu() {
+	public ContextMenu(IControlService controlService) {
 		ImageIcon icon;
-//		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
-//		zoomIn = new JMenuItem("Zoom in", icon);
-//		add(zoomIn);
 		
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
-		zoomOut = new JMenuItem("Zoom out", icon);
+		zoomOut = new JMenuItem(controlService.getTranslatedString("ZoomOut"), icon);
 		add(zoomOut);
 		
 		addSeparator();
 		
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-hide.png"));
-		hide = new JMenuItem("Hide selected modules", icon);
+		hide = new JMenuItem(controlService.getTranslatedString("HideModules"), icon);
 		add(hide);
 		
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-restore.png"));
-		restore = new JMenuItem("Restore hidden modules", icon);
+		restore = new JMenuItem(controlService.getTranslatedString("RestoreHiddenModules"), icon);
 		add(restore);	
 		
 		hookupEventHandlers();
