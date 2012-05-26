@@ -29,7 +29,7 @@ public class ContextMenu extends JPopupMenu {
 	public ContextMenu(IControlService controlService) {
 		ImageIcon icon;
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/graphics/icon-zoom.png"));
 		zoomIn = new JMenuItem(controlService.getTranslatedString("ZoomIn"), icon);
 		add(zoomIn);
 		
@@ -39,11 +39,11 @@ public class ContextMenu extends JPopupMenu {
 		
 		addSeparator();
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-hide.png"));
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/graphics/icon-figures-hide.png"));
 		hide = new JMenuItem(controlService.getTranslatedString("HideModules"), icon);
 		add(hide);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-restore.png"));
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/graphics/icon-figures-show.png"));
 		restore = new JMenuItem(controlService.getTranslatedString("RestoreHiddenModules"), icon);
 		add(restore);	
 		

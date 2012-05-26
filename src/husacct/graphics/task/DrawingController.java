@@ -115,6 +115,7 @@ public abstract class DrawingController implements UserInputListener {
 		updateLayout();
 	}
 	
+	@Override
 	public void toggleDependencies(){
 		notifyServiceListeners();
 		if(areDependenciesShown){
@@ -133,6 +134,32 @@ public abstract class DrawingController implements UserInputListener {
 	public void hideDependencies(){
 		areDependenciesShown = false;
 		drawTarget.turnOffDependencies();
+	}
+
+	@Override
+	public void toggleViolations() {
+		notifyServiceListeners();
+		if (areViolationsShown()) {
+			hideViolations();
+		} else {
+			showViolations();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	public boolean areViolationsShown() {
+		return areViolationsShown;
+	}
+
+	public void showViolations() {
+		areViolationsShown = true;
+		drawTarget.turnOnViolations();
+	}
+	
+	public void hideViolations() {
+		areViolationsShown = false;
+		drawTarget.turnOffViolations();
+		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 	
 	public void toggleContextUpdates(){
@@ -189,21 +216,6 @@ public abstract class DrawingController implements UserInputListener {
 
 	public void setCurrentPaths(String[] paths) {
 		currentPaths = paths;
-	}
-
-	public boolean areViolationsShown() {
-		return areViolationsShown;
-	}
-
-	public void hideViolations() {
-		areViolationsShown = false;
-		drawTarget.turnOffViolations();
-		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
-	}
-
-	public void showViolations() {
-		areViolationsShown = true;
-		drawTarget.turnOnViolations();
 	}
 
 	protected DrawingDetail getCurrentDrawingDetail() {
@@ -295,17 +307,6 @@ public abstract class DrawingController implements UserInputListener {
 				cf.updateConnection();
 			}
 		}
-	}
-
-	@Override
-	public void toggleViolations() {
-		notifyServiceListeners();
-		if (areViolationsShown()) {
-			hideViolations();
-		} else {
-			showViolations();
-		}
-		drawLinesBasedOnSetting();
 	}
 
 	protected void drawLinesBasedOnSetting() {

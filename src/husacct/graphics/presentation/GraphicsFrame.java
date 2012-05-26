@@ -124,7 +124,9 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBarLocale.put("ZoomIn", controlService.getTranslatedString("ZoomIn"));
 		menuBarLocale.put("ZoomOut", controlService.getTranslatedString("ZoomOut"));
 		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
+		menuBarLocale.put("HideDependencies", controlService.getTranslatedString("HideDependencies"));
 		menuBarLocale.put("ShowDependencies", controlService.getTranslatedString("ShowDependencies"));
+		menuBarLocale.put("HideViolations", controlService.getTranslatedString("HideViolations"));
 		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
 		menuBarLocale.put("LineContextUpdates", controlService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
@@ -424,6 +426,14 @@ public class GraphicsFrame extends JInternalFrame {
 		layoutComponents();
 	}
 	
+	public void turnOnDependencies() {
+		menuBar.setDependencyToggle(true);
+	}
+	
+	public void turnOffDependencies() {
+		menuBar.setDependencyToggle(false);
+	}
+	
 	public void turnOnViolations() {
 		menuBar.setViolationToggle(true);
 	}
@@ -438,13 +448,5 @@ public class GraphicsFrame extends JInternalFrame {
 	
 	public void turnOffContextUpdates() {
 		menuBar.setContextUpdatesToggle(false);
-	}
-
-	public void turnOnDependencies() {
-		menuBar.setDependencyToggle(true);
-	}
-
-	public void turnOffDependencies() {
-		menuBar.setDependencyToggle(false);
 	}
 }

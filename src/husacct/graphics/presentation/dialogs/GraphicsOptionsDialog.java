@@ -191,12 +191,16 @@ public class GraphicsOptionsDialog extends JDialog {
 		return (String) layoutStrategyOptions.getSelectedItem();
 	}
 	
-	public void setViolationToggle(boolean setting) {
-		showViolationsOptionMenu.setSelected(setting);
-	}
-
 	public void setDependencyToggle(boolean setting) {
-		showDependenciesOptionMenu.setSelected(setting);
+		if(showDependenciesOptionMenu.isSelected()!=setting){
+			showDependenciesOptionMenu.setSelected(setting);
+		}
+	}
+	
+	public void setViolationToggle(boolean setting) {
+		if(showViolationsOptionMenu.isSelected()!=setting){
+			showViolationsOptionMenu.setSelected(setting);
+		}
 	}
 	
 }
