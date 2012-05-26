@@ -1,5 +1,6 @@
 package husacct.define.domain;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
@@ -103,7 +104,7 @@ public class SoftwareArchitecture {
 		{
 			appliedRules.add(rule);
 		}else{
-			throw new RuntimeException("This rule has already been added!");
+			throw new RuntimeException(DefineTranslator.translate("RuleAlreadyAdded"));
 		}
 	}
 	
@@ -114,7 +115,7 @@ public class SoftwareArchitecture {
 			AppliedRule rule = getAppliedRuleById(appliedRuleId);
 			appliedRules.remove(rule);	
 		}else{
-			throw new RuntimeException("This rule does not exist!");
+			throw new RuntimeException(DefineTranslator.translate("NoRule"));
 		}
 	}
 	
@@ -144,7 +145,7 @@ public class SoftwareArchitecture {
 				}
 			}		
 		}else{
-			throw new RuntimeException("This rule does not exist!");
+			throw new RuntimeException(DefineTranslator.translate("NoRule"));
 		}
 		return appliedRule;
 	}
@@ -170,7 +171,7 @@ public class SoftwareArchitecture {
 				break;
 			}
 		}
-		if (softwareUnit == null){ throw new RuntimeException("This Software Unit does not exist!");}
+		if (softwareUnit == null){ throw new RuntimeException(DefineTranslator.translate("NoSoftwareUnit"));}
 		return softwareUnit;
 	}
 	
@@ -194,19 +195,19 @@ public class SoftwareArchitecture {
 			}
 			
 		}
-		if (currentModule == null){throw new RuntimeException("This module does not exist!");}
+		if (currentModule == null){throw new RuntimeException(DefineTranslator.translate("NoModule"));}
 		return currentModule;
 	}
 	
-	public Module getModuleBySoftwareUnit(SoftwareUnitDefinition su) {
+	public Module getModuleBySoftwareUnit(String softwareUnitName) {
 		Module currentModule = null;
 		for(Module module : modules){
 			
-			if (module.hasSoftwareUnit(su.getName())){
+			if (module.hasSoftwareUnit(softwareUnitName)){
 				currentModule = module;
-				while (!currentModule.hasSoftwareUnitDirectly(su.getName())){
+				while (!currentModule.hasSoftwareUnitDirectly(softwareUnitName)){
 					for (Module subModule : currentModule.getSubModules()){
-						if (subModule.hasSoftwareUnit(su.getName())){
+						if (subModule.hasSoftwareUnit(softwareUnitName)){
 							currentModule = subModule;
 						}
 					}
@@ -228,10 +229,10 @@ public class SoftwareArchitecture {
 				modules.add(module);
 				moduleId = module.getId();
 			}else {
-				throw new RuntimeException("Cannot add module, since there already is a module with the same unique data!");
+				throw new RuntimeException(DefineTranslator.translate("SameDataModule"));
 			}
 		}else{
-			throw new RuntimeException("There is already a module with this name!");
+			throw new RuntimeException(DefineTranslator.translate("SameNameModule"));
 		}
 		return moduleId;
 	}
@@ -266,7 +267,7 @@ public class SoftwareArchitecture {
 				}
 			}
 		}
-		if (!moduleFound) {	throw new RuntimeException("This module does not exist!");}
+		if (!moduleFound) {	throw new RuntimeException(DefineTranslator.translate("NoModule"));}
 	}
 	
 	private void removeRelatedRules(Module module) {
@@ -279,12 +280,15 @@ public class SoftwareArchitecture {
 				tmpList.remove(rule);
 			}	
 			
+			@SuppressWarnings("unchecked")
+			ArrayList<AppliedRule> tmpExceptionList = (ArrayList<AppliedRule>) appliedRules.clone();
 			for (AppliedRule exceptionRule : rule.getExceptions()){
 				if (exceptionRule.getModuleFrom().equals(module) || 
 						exceptionRule.getModuleTo().equals(module)){
-					rule.getExceptions().remove(exceptionRule);
+					tmpExceptionList.remove(exceptionRule);
 				}		
 			}
+			rule.setExceptions(tmpExceptionList);
 		}
 		appliedRules = tmpList;	
 	}
@@ -322,7 +326,7 @@ public class SoftwareArchitecture {
 		}
 		if (currentModule == null || 
 				!currentModule.getName().equals(moduleNames[moduleNames.length-1])){ 
-			throw new RuntimeException("This module is not found!");
+			throw new RuntimeException(DefineTranslator.translate("ModuleNotFound"));
 		}
 		return currentModule;
 	}

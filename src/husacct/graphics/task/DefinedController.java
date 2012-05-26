@@ -7,11 +7,14 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class DefinedController extends DrawingController {
 	protected IAnalyseService analyseService;
@@ -27,19 +30,18 @@ public class DefinedController extends DrawingController {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
 		defineService = ServiceProvider.getInstance().getDefineService();
-		// TODO: Uncomment wanneer define addServiceListener heeft geïmplementeerd!
-		// ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener(){
-		// @Override
-		// public void update() {
-		// refreshDrawing();
-		// }
-		// });
+		ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				refreshDrawing();
+			}
+		});
 	}
 
 	@Override
 	public void refreshDrawing() {
 		super.notifyServiceListeners();
-		getAndDrawModulesIn(getCurrentPath());
+		getAndDrawModulesIn(getCurrentPaths());
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class DefinedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.notifyServiceListeners();
 		AbstractDTO[] modules = defineService.getRootModules();
-		resetCurrentPath();
+		resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			showViolations();
 		}
@@ -62,29 +64,43 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
-		// FIXME: Make this code function with the multiple selected figures
-		BaseFigure figure = figures[0];
-
-		if (figure.isModule()) {
-			try {
-				ModuleDTO parentDTO = (ModuleDTO) this.figureMap.getModuleDTO(figure);
-				getAndDrawModulesIn(parentDTO.logicalPath);
-			} catch (Exception e) {
-				logger.warn("Could not zoom on this object: " + figure);
-				logger.debug("Possible type cast failure.");
+		ArrayList<String> parentNames = new ArrayList<String>();
+		for (BaseFigure figure : figures) {
+			if (figure.isModule()) {
+				try {
+					ModuleDTO parentDTO = (ModuleDTO) this.figureMap.getModuleDTO(figure);
+					parentNames.add(parentDTO.logicalPath);
+				} catch (Exception e) {
+					e.printStackTrace();
+					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+				}
+			} else {
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 			}
+		}
+
+		if (parentNames.size() > 0) {
+			saveSingleLevelFigurePositions();
+			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
 	}
 
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
-		String parentPath = defineService.getParentFromModule(getCurrentPath());
-		if (null != parentPath) {
-			getAndDrawModulesIn(parentPath);
+		if (getCurrentPaths().length > 0) {
+			saveSingleLevelFigurePositions();
+			String firstCurrentPaths = getCurrentPaths()[0];
+			String parentPath = defineService.getParentFromModule(firstCurrentPaths);
+			if (null != parentPath) {
+				getAndDrawModulesIn(parentPath);
+			} else {
+				logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+				logger.debug("Reverting to the root of the application.");
+				drawArchitecture(getCurrentDrawingDetail());
+			}
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPath()
-					+ "\", but it has no parent (could be root if it's an empty string).");
+			logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -99,8 +115,7 @@ public class DefinedController extends DrawingController {
 		if (!figureFrom.equals(figureTo)) {
 			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs) {
 				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
-					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path,
-							physicalToPath.path);
+					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
 					for (DependencyDTO tempDependency : foundDependencies) {
 						dependencies.add(tempDependency);
 					}
@@ -123,22 +138,54 @@ public class DefinedController extends DrawingController {
 		} else {
 			ModuleDTO[] children = defineService.getChildrenFromModule(parentName);
 			if (children.length > 0) {
-				setCurrentPath(parentName);
+				setCurrentPaths(new String[] { parentName });
 				drawModulesAndLines(children);
 			} else {
-				logger.warn("Tried to draw modules for " + parentName + ", but it has no children.");
+				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 			}
 		}
+	}
 
+	private void getAndDrawModulesIn(String[] parentNames) {
+		if(parentNames.length==0){
+			drawArchitecture(getCurrentDrawingDetail());
+		}else{
+			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
+			for (String parentName : parentNames) {
+				AbstractDTO[] children = defineService.getChildrenFromModule(parentName);
+				if (parentName.equals("") || parentName.equals("**")) {
+					drawArchitecture(getCurrentDrawingDetail());
+					continue;
+				} else if (children.length > 0) {
+					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
+					for (AbstractDTO child : children) {
+						knownChildren.add(child);
+					}
+					allChildren.put(parentName, knownChildren);
+				} else {
+					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+				}
+			}
+			setCurrentPaths(parentNames);
+	
+			Set<String> parentNamesKeySet = allChildren.keySet();
+			if (parentNamesKeySet.size() == 1) {
+				String onlyParentModule = parentNamesKeySet.iterator().next();
+				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
+			} else {
+				drawModulesAndLines(allChildren);
+			}
+		}
 	}
 
 	@Override
-	public void moduleOpen(String path) {
+	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
-		if (path.isEmpty()) {
+		if (paths.length == 0) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else {
-			getAndDrawModulesIn(path);
+			getAndDrawModulesIn(paths);
 		}
 	}
 }

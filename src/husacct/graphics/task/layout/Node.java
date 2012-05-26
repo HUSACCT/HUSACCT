@@ -1,5 +1,7 @@
 package husacct.graphics.task.layout;
 
+import husacct.graphics.presentation.figures.BaseFigure;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,18 +12,39 @@ import org.jhotdraw.draw.Figure;
 public class Node {
 	public static final int UNINITIALIZED = Integer.MIN_VALUE;
 	
+	private String name;
 	private Figure figure;
 	private int level = UNINITIALIZED;
 	private boolean positionUpdated = false;
+	private ArrayList<Node> parents = new ArrayList<Node>();
 	private ArrayList<Node> connectedTo = new ArrayList<Node>();
 
 	public Node(Figure f, int l) {
 		figure = f;
 		level = l;
+		
+		if (f != null) 
+			name = ((BaseFigure)f).getName();
 	}
 
 	public Node(Figure f) {
 		this(f, UNINITIALIZED);
+	}
+
+	public void addParent(Node n) {
+		parents.add(n);
+	}
+	
+	public void removeParent(Node n) {
+		parents.remove(n);
+	}
+	
+	public List<Node> getParents() {
+		return Collections.unmodifiableList(parents);
+	}	
+	
+	public void removeConnectionTo(Node n) {
+		connectedTo.remove(n);
 	}
 
 	public void connectTo(Node n) {
@@ -64,6 +87,7 @@ public class Node {
 		positionUpdated = newValue;
 	}
 
+	// TODO: Update to make use of the parent nodes
 	public boolean isCyclicChain(Node n) {
 		Vector<Node> open = new Vector<Node>();
 		Vector<Node> closed = new Vector<Node>();
@@ -106,4 +130,26 @@ public class Node {
 	public int getHeight() {
 		return (int) figure.getBounds().height;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public boolean isParentOf(Node endNode) {
+		return connectedTo.contains(endNode) && endNode.getParents().contains(this);
+	}
+	
+	public boolean isChildOf(Node n) {
+		return parents.contains(n) && n.isParentOf(this);
+	}
+	
+	
+	
+//	public void setStartOfChain(boolean newValue) {
+//		chainStart = newValue;
+//	}
+//	
+//	public boolean isStartOfChain() {
+//		return chainStart;
+//	}
 }

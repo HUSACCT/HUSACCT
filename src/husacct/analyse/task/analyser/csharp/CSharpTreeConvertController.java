@@ -9,6 +9,7 @@ import husacct.analyse.task.analyser.csharp.convertControllers.CSharpLocalVariab
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpMethodConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpNamespaceConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpParameterConvertController;
+import husacct.analyse.task.analyser.csharp.convertControllers.CSharpPropertyConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpUsingConvertController;
 import husacct.analyse.task.analyser.csharp.generators.CSharpClassGenerator;
 import husacct.analyse.task.analyser.csharp.generators.CSharpGenerator;
@@ -26,6 +27,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	private List<CommonTree> classTrees;
 	private int currentIndentLevel = 0;
 	private int currentMethodIndentLevel = -1;
+	private int currentPropertyIndentLvel = -1;
 	private String currentNamespaceName;
 	private String currentClassName = "";
 	private int currentClassIndent = 0;
@@ -73,6 +75,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		boolean isPartOfException = false;
 		boolean isPartOfLocalVariable = false;
 		boolean isPartOfParameter = false;
+		boolean isPartOfProperty = false;
 		final CSharpNamespaceConvertController namespaceConverter = new CSharpNamespaceConvertController(this);
 		final CSharpClassConvertController classConverter = new CSharpClassConvertController(this);
 		final CSharpAttributeConvertController attributeConverter = new CSharpAttributeConvertController(this);
@@ -81,6 +84,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		usingConverter = new CSharpUsingConvertController(this);
 		final CSharpExceptionConvertController exceptionConverter = new CSharpExceptionConvertController(this);
 		final CSharpParameterConvertController parameterConverter = new CSharpParameterConvertController(this);
+		final CSharpPropertyConvertController propertyConverter = new CSharpPropertyConvertController(this);
 		for (final CommonTree tree : children) {
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceConverter.namespaceChecking(tree, isPartOfNamespace);
@@ -90,6 +94,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 			isPartOfMethod = methodConverter.methodCheck(tree, isPartOfMethod);
 			isPartOfException = exceptionConverter.exceptionCheck(tree, isPartOfException);
 			isPartOfParameter = parameterConverter.parameterCheck(tree, isPartOfParameter);
+			isPartOfProperty = propertyConverter.propertyCheck(tree, isPartOfProperty);
 			if ((getIndentLevel() > currentMethodIndentLevel) && (currentMethodIndentLevel != -1)) {
 				isPartOfLocalVariable = localVariableConverter.localVariableCheck(tree, isPartOfLocalVariable);
 			}
@@ -146,6 +151,16 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 			return getCurrentNamespaceName() + "." + getCurrentClassName();
 		} else {
 			return getCurrentClassName();
+		}
+	}
+	
+	public void cleanInstances(){
+		for(int i = 0; i < instances.size(); i++){
+			CSharpInstanceData instance = instances.get(i);
+			if(instance.getHasClassScope() == false){
+				instances.remove(i);
+				cleanInstances();
+			}
 		}
 	}
 
@@ -251,5 +266,13 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 	
 	public List<CSharpInstanceData> getInstances(){
 		return instances;
+	}
+
+	public int getCurrentPropertyIndentLvel() {
+		return currentPropertyIndentLvel;
+	}
+
+	public void setCurrentPropertyIndentLvel(int currentPropertyIndentLvel) {
+		this.currentPropertyIndentLvel = currentPropertyIndentLvel;
 	}
 }

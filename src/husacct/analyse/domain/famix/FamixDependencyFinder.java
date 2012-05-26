@@ -80,23 +80,31 @@ class FamixDependencyFinder extends FamixFinder{
 			}
 		}
 		//TODO Analyse General - Fix Indirect Dependencies
-//		result.addAll(this.findIndirectDependencies(result));
+		if(!this.from.equals("")) result.addAll(this.findIndirectDependencies(result));
 		return result;
 	}
 	
 	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> directDependencies){
+		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		for(DependencyDTO directDependency: directDependencies){
-			String startFrom = directDependency.from;
-			this.from = directDependency.to;
-			this.currentFunction = FinderFunction.FROM;
-			for(DependencyDTO indirectDependency: this.findDependencies()){
-				indirectDependency.isIndirect = true;
-				indirectDependency.from = startFrom;
-				result.add(indirectDependency);
-			}
+			result.addAll(findIndirectDependenciesFrom(directDependency));
 		}
 		return result;
+	}
+	
+	private List<DependencyDTO> findIndirectDependenciesFrom(DependencyDTO fromDependency){
+		List<DependencyDTO> found = new ArrayList<DependencyDTO>();
+		String startFrom = fromDependency.from;
+		for(DependencyDTO indirectDependency : this.getDependenciesFrom(fromDependency.to)){
+			indirectDependency.isIndirect = true;
+			indirectDependency.from = startFrom;
+			if(!found.contains(indirectDependency)) found.add(indirectDependency);
+			if(!indirectDependency.to.equals(startFrom)) {
+				found.addAll(findIndirectDependenciesFrom(indirectDependency));
+			}
+		}
+		return found;
 	}
 	
 	private boolean compliesWithFunction(FamixAssociation association){

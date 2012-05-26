@@ -179,7 +179,7 @@ public class SetApplicationPanel extends JPanel{
 			errorMessage = controlService.getTranslatedString("FieldEmptyError");
 			showError = true;
 		}
-		if (!Regex.matchRegex(Regex.filenameRegex, applicationNameText.getText())) {
+		if (!Regex.matchRegex(Regex.nameRegex, applicationNameText.getText())) {
 			errorMessage = controlService.getTranslatedString("MustBeAlphaNumericError");
 			showError = true;
 		}

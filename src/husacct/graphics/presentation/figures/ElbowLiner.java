@@ -44,7 +44,7 @@ public class ElbowLiner implements Liner {
         Point2D.Double pointStart = new Point2D.Double(startNode.x[0], startNode.y[0]);
         Point2D.Double pointEnd = new Point2D.Double(endNode.x[0], endNode.y[0]);
         
-        Point2D.Double movement = husacct.graphics.Geom.getPointMovementFromLineAngle(
+        Point2D.Double movement = husacct.graphics.util.Geom.getPointMovementFromLineAngle(
         		pointStart, pointEnd, distance);
         
         centerPoint.x += movement.x;

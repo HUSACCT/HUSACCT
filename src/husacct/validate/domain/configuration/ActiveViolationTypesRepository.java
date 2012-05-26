@@ -4,6 +4,8 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.domain.exception.RuleTypeNotFoundException;
+import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
@@ -23,6 +25,7 @@ class ActiveViolationTypesRepository {
 	private final RuleTypesFactory ruletypesfactory;
 	private final Map<String, List<ActiveRuleType>> startupViolationTypes;
 	private Map<String, List<ActiveRuleType>> currentActiveViolationTypes;
+
 	private Logger logger = Logger.getLogger(ActiveViolationTypesRepository.class);
 
 
@@ -38,7 +41,7 @@ class ActiveViolationTypesRepository {
 		for(String programmingLanguage : analsyseService.getAvailableLanguages()){
 			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
 			activeViolationTypes.put(programmingLanguage, activeRuleTypes);
-			
+
 			for(List<RuleType> ruleTypes : ruletypesfactory.getRuleTypes(programmingLanguage).values()){
 
 				for(RuleType ruleType : ruleTypes){
@@ -124,7 +127,7 @@ class ActiveViolationTypesRepository {
 				return true;
 			}
 		}
-		return false;
+		throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 	}
 
 	private List<ActiveRuleType> checkNewActiveViolationTypes(String programmingLanguage, List<ActiveRuleType> newActiveViolationTypes){
@@ -169,7 +172,7 @@ class ActiveViolationTypesRepository {
 		else{
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
-		return false;
+		throw new RuleTypeNotFoundException(ruleTypeKey);
 	}
 
 	private boolean violationTypeKeyExists(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
@@ -184,6 +187,6 @@ class ActiveViolationTypesRepository {
 				}
 			}
 		}
-		return false;
+		throw new ViolationTypeNotFoundException(violationTypeKey);
 	}
 }

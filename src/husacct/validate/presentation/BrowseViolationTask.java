@@ -1,8 +1,7 @@
 package husacct.validate.presentation;
 
-import husacct.ServiceProvider;
 import husacct.control.task.AnalyseTask;
-import javax.swing.event.ListSelectionListener;
+
 import org.apache.log4j.Logger;
 
 public class BrowseViolationTask implements Runnable{
