@@ -5,6 +5,8 @@ import husacct.graphics.util.DrawingLayoutStrategy;
 
 public interface UserInputListener {
 	
+	public void moduleZoom();
+	
 	public void moduleOpen(String[] paths);
 
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure);

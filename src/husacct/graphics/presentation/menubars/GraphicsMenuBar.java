@@ -21,7 +21,7 @@ public class GraphicsMenuBar extends JPanel {
 			
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 	
-	private JButton goToParentMenu, refreshMenu, exportToImageMenu;
+	private JButton zoomButton, backButton, refreshButton, exportToImageButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
@@ -34,23 +34,29 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	private void initializeComponents() {
-		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
-		goToParentMenu = new JButton();
-		goToParentMenu.setIcon(icon);
-		goToParentMenu.setSize(50, menuItemMaxHeight);
-		add(goToParentMenu);
+		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
+		zoomButton = new JButton();
+		zoomButton.setIcon(icon);
+		zoomButton.setSize(50, menuItemMaxHeight);
+		add(zoomButton);		
+		
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
+		backButton = new JButton();
+		backButton.setIcon(icon);
+		backButton.setSize(50, menuItemMaxHeight);
+		add(backButton);
 
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-refresh.png"));
-		refreshMenu = new JButton();
-		refreshMenu.setSize(50, menuItemMaxHeight);
-		refreshMenu.setIcon(icon);
-		add(refreshMenu);
+		refreshButton = new JButton();
+		refreshButton.setSize(50, menuItemMaxHeight);
+		refreshButton.setIcon(icon);
+		add(refreshButton);
 		
 		icon  = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-save.png"));
-		exportToImageMenu = new JButton();
-		exportToImageMenu.setIcon(icon);
-		exportToImageMenu.setSize(50, menuItemMaxHeight);
-		add(exportToImageMenu);		
+		exportToImageButton = new JButton();
+		exportToImageButton.setIcon(icon);
+		exportToImageButton.setSize(50, menuItemMaxHeight);
+		add(exportToImageButton);		
 
 		showDependenciesOptionMenu = new JCheckBox();
 		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
@@ -72,12 +78,16 @@ public class GraphicsMenuBar extends JPanel {
 		add(zoomSlider);
 	}
 
+	public void setZoomInAction(ActionListener listener) {
+		zoomButton.addActionListener(listener);
+	}
+	
 	public void setLevelUpAction(ActionListener listener) {
-		goToParentMenu.addActionListener(listener);
+		backButton.addActionListener(listener);
 	}
 
 	public void setRefreshAction(ActionListener listener) {
-		refreshMenu.addActionListener(listener);
+		refreshButton.addActionListener(listener);
 	}
 
 	public void setToggleDependenciesAction(ActionListener listener) {
@@ -93,7 +103,7 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	public void setExportToImageAction(ActionListener listener) {
-		exportToImageMenu.addActionListener(listener);
+		exportToImageButton.addActionListener(listener);
 	}
 
 	public void setLayoutStrategyAction(ActionListener listener) {

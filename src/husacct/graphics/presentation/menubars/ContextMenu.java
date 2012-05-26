@@ -3,6 +3,7 @@ package husacct.graphics.presentation.menubars;
 import husacct.control.IControlService;
 import husacct.graphics.task.UserInputListener;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,12 +17,21 @@ public class ContextMenu extends JPopupMenu {
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	
+	private JMenuItem zoomIn;
 	private JMenuItem zoomOut;
 	private JMenuItem hide;
 	private JMenuItem restore;
 	
+	private boolean hasSelection = false;
+	private boolean hasHiddenFigures = false;
+	private boolean canZoomout = false;
+	
 	public ContextMenu(IControlService controlService) {
 		ImageIcon icon;
+		
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
+		zoomIn = new JMenuItem(controlService.getTranslatedString("ZoomIn"), icon);
+		add(zoomIn);
 		
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
 		zoomOut = new JMenuItem(controlService.getTranslatedString("ZoomOut"), icon);
@@ -41,6 +51,13 @@ public class ContextMenu extends JPopupMenu {
 	}
 	
 	private void hookupEventHandlers() {
+		zoomIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				triggerZoomIn();
+			}
+		});
+		
 		zoomOut.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -60,10 +77,16 @@ public class ContextMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				triggerRestoreModules();
 			}
-		});
-		
+		});	
 	}
 	
+	
+	protected void triggerZoomIn() {
+		for (UserInputListener l : listeners) {
+			l.moduleZoom();
+		}
+	}
+
 	protected void triggerRestoreModules() {
 		for (UserInputListener l : listeners) {
 			l.restoreModules();
@@ -88,5 +111,30 @@ public class ContextMenu extends JPopupMenu {
 	
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
+	}
+	
+	public void setHasSelection(boolean newValue) {
+		hasSelection = newValue;
+	}
+	
+	public void setHasHiddenFigures(boolean newValue) {
+		hasHiddenFigures = newValue;
+	}
+	
+	public void setCanZoomout(boolean newValue) {
+		canZoomout = newValue;
+	}
+	
+	@Override
+	public void show(Component invoker, int x, int y) {
+		updateMenuItems();
+		super.show(invoker, x, y);
+	}
+
+	private void updateMenuItems() {
+		hide.setEnabled(hasSelection);
+		zoomIn.setEnabled(hasSelection);
+		restore.setEnabled(hasHiddenFigures);
+		zoomOut.setEnabled(canZoomout);
 	}
 }

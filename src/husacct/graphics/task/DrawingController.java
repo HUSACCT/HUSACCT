@@ -226,12 +226,15 @@ public abstract class DrawingController implements UserInputListener {
 		} else {
 			drawTarget.hidePropertiesPane();
 		}
+		
+		contextMenu.setHasSelection(figures.length > 0);
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
 		if (view.getSelectionCount() == 0) {
 			drawTarget.hidePropertiesPane();
+			contextMenu.setHasSelection(false);
 		}
 	}
 
@@ -459,7 +462,9 @@ public abstract class DrawingController implements UserInputListener {
 				}
 			}
 		}
-
+		
+		if (selection.size() > 0)
+			contextMenu.setHasHiddenFigures(true);
 	}
 	
 	@Override
@@ -468,6 +473,17 @@ public abstract class DrawingController implements UserInputListener {
 		for (Figure f : selection) {
 			BaseFigure bf = (BaseFigure) f;
 			bf.setEnabled(true);
-		}		
+		}
+		contextMenu.setHasHiddenFigures(false);
 	}	
+	
+	@Override
+	public void moduleZoom() {
+		Set<Figure> selection = view.getSelectedFigures();
+		if (selection.size() > 0) {
+			BaseFigure[] selectedFigures = selection.toArray(new BaseFigure[selection.size()]);
+	
+			moduleZoom(selectedFigures);
+		}
+	}
 }
