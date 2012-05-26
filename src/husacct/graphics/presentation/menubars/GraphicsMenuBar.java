@@ -203,6 +203,15 @@ public class GraphicsMenuBar extends JPanel {
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
+			zoomInButton.setToolTipText(menuBarLocale.get("ZoomIn"));
+			zoomOutButton.setToolTipText(menuBarLocale.get("ZoomOut"));
+			refreshButton.setToolTipText(menuBarLocale.get("Refresh"));
+			exportToImageButton.setToolTipText(menuBarLocale.get("ExportToImage"));
+			optionsDialogButton.setToolTipText(menuBarLocale.get("Options"));
+			
+			showDependenciesOptionMenu.setToolTipText(menuBarLocale.get("showDependencies"));
+			showViolationsOptionMenu.setToolTipText(menuBarLocale.get("showViolations"));
+			
 			optionsDialogButton.setText(menuBarLocale.get("Options"));
 			graphicsOptionsDialog.setLocale(menuBarLocale);
 			graphicsOptionsDialog.setIcons(icons);
