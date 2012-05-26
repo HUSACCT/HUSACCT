@@ -92,6 +92,8 @@ public class AnalysedController extends DrawingController {
 					e.printStackTrace();
 					logger.warn("Could not zoom on this object: " + figure.getName() +". Expected a different DTO type.");
 				}
+			}else if(!figure.isLine()){
+				figureMap.linkTempModule(figure);
 			}else{
 				logger.warn("Could not zoom on this object: " + figure.getName() +". Not a module to zoom on.");
 			}

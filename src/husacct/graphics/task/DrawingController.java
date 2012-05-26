@@ -272,6 +272,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
+		HashMap<BaseFigure, AbstractDTO> temp = figureMap.getTempModules();
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
@@ -283,6 +284,10 @@ public abstract class DrawingController implements UserInputListener {
 				figureMap.linkModule(generatedFigure, dto);
 			}
 			parentFigure.updateLayout();
+		}
+		for(BaseFigure figure : temp.keySet()){
+			drawing.add(figure);
+			figureMap.linkModule(figure, temp.get(figure));
 		}
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
