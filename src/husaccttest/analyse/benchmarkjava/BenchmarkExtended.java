@@ -2,12 +2,14 @@ package husaccttest.analyse.benchmarkjava;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.define.IDefineService;
 import husaccttest.analyse.TestCaseExtended;
 
 public abstract class BenchmarkExtended extends TestCaseExtended{
 
 	public IAnalyseService service;
+	private static boolean isanalysed = false;
 	
 	@Override
 	public void setUp(){
@@ -26,8 +28,11 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 //		}
 		
 		try {
-			if(!service.isAnalysed()){
+			if(!isanalysed){
+				FamixCreationServiceImpl famix = new FamixCreationServiceImpl();
+				famix.clearModel();
 				service.analyseApplication();
+				isanalysed = true;
 			}
 
 		} catch (Exception e){

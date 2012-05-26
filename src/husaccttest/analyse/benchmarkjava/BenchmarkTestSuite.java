@@ -1,11 +1,9 @@
 package husaccttest.analyse.benchmarkjava;
 
-import husaccttest.analyse.benchmarkjava.domain.Blog;
-import husaccttest.analyse.benchmarkjava.domain.Facebook;
-import husaccttest.analyse.benchmarkjava.domain.Flickr;
-import husaccttest.analyse.benchmarkjava.domain.FoursquarealternativeDependencies;
-import husaccttest.analyse.benchmarkjava.domain.FoursquarealternativeNavigation;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husaccttest.analyse.benchmarkjava.domain.*;
 
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -16,8 +14,17 @@ import org.junit.runners.Suite;
 	Facebook.class,
 	Flickr.class,
 	FoursquarealternativeNavigation.class,
-	FoursquarealternativeDependencies.class
+	FoursquarealternativeBrightkite.class,
+	FoursquarealternativeKilroy.class,
+	FoursquarealternativeWhrrl.class,
+	FoursquarealternativeYelp.class,
+	Google_plus.class,
+	Gowalla.class,
+	Hyves.class,
+	LanguageNavigation.class,
+	LanguageBabbel.class,
+	LanguageBusuu.class,
+	LastFM.class
 })
-public class BenchmarkTestSuite {
-
+public class BenchmarkTestSuite {	
 }

@@ -2,12 +2,10 @@ package husaccttest.analyse.benchmarkjava.domain;
 
 import java.util.HashMap;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.DependencyDTO;
 import husaccttest.analyse.benchmarkjava.BenchmarkExtended;
 
 
