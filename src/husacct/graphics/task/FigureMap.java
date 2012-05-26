@@ -17,7 +17,6 @@ public class FigureMap {
 	private HashMap<RelationFigure, DependencyDTO[]> dependencyLineDTOMap = new HashMap<RelationFigure, DependencyDTO[]>();
 	private HashMap<RelationFigure, ViolationDTO[]> violationLineDTOMap = new HashMap<RelationFigure, ViolationDTO[]>();
 	private HashMap<BaseFigure, ViolationDTO[]> violatedFigureDTOMap = new HashMap<BaseFigure, ViolationDTO[]>();
-	private HashMap<BaseFigure, AbstractDTO> tempFigureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
 
 	public FigureMap() {
 	}
@@ -28,7 +27,6 @@ public class FigureMap {
 		violationLineDTOMap.clear();
 		violatedFigureDTOMap.clear();
 		moduleFiguresByName.clear();
-		tempFigureDTOMap.clear();
 	}
 
 	public void clearAllViolations() {
@@ -113,13 +111,12 @@ public class FigureMap {
 	public BaseFigure findModuleByPath(String path) {
 		return moduleFiguresByName.get(path);
 	}
-	
-	public void linkTempModule(BaseFigure figure){
-		AbstractDTO dto = getModuleDTO(figure);
-		tempFigureDTOMap.put(figure, dto);
-	}
-	
-	public HashMap<BaseFigure, AbstractDTO> getTempModules(){
-		return (HashMap<BaseFigure, AbstractDTO>) tempFigureDTOMap.clone();
+
+	public HashMap<BaseFigure, AbstractDTO> getAllDTOsWithClonedFigures(ArrayList<BaseFigure> savedFigures) {
+		HashMap<BaseFigure, AbstractDTO> returnHashMap = new HashMap<BaseFigure, AbstractDTO>();
+		for(BaseFigure figure : savedFigures){
+			returnHashMap.put(figure.clone(), moduleFigureDTOMap.get(figure));
+		}
+		return returnHashMap;
 	}
 }
