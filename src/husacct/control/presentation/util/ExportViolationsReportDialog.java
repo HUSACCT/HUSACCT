@@ -74,8 +74,10 @@ public class ExportViolationsReportDialog extends JDialog{
 		});
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(validateData()) {
 				exportController.exportViolationsReport(selectedFile);
 				dispose();
+				}
 			}
 		});
 	}
@@ -104,5 +106,17 @@ public class ExportViolationsReportDialog extends JDialog{
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
 		exportButton.setEnabled(true);
+	}
+	
+	public boolean validateData() {
+		if(selectedFile == null){
+			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			return false;
+		}		
+		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
+			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
+			return false;
+		}
+		return true;
 	}
 }

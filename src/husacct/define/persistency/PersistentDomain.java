@@ -18,11 +18,7 @@ import husacct.define.domain.services.SoftwareArchitectureDomainService;
  *
  */
 public class PersistentDomain implements ISaveable {
-	public enum DomainElement {
-		APPLICATION,
-		LOGICAL,
-		PHYSICAL
-	}
+	public enum DomainElement { APPLICATION, LOGICAL, PHYSICAL }
 	
 	private SoftwareArchitectureDomainService domainService;
 	private ModuleDomainService moduleService;
@@ -53,6 +49,7 @@ public class PersistentDomain implements ISaveable {
 	@Override
 	public Element getWorkspaceData() {
 		this.domainParser = new DomainXML(SoftwareArchitecture.getInstance());
+			
 		switch (this.parseData){
 			case LOGICAL:
 				this.domainParser.setParseLogical(false);
@@ -72,9 +69,6 @@ public class PersistentDomain implements ISaveable {
 		ArrayList<AppliedRule> AppliedRules = this.XMLParser.getAppliedRules();
 		
 		switch (this.parseData) {
-			//case LOGICAL:	
-			//case APPLICATION:
-			//case PHYSICAL:
 			default:
 				this.domainService.createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
 				this.domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());

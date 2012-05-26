@@ -8,6 +8,7 @@ import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
 import husacct.control.task.MainController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,12 +94,18 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public List<String> getStringIdentifiers(String translatedString){
-		return localeController.getStringIdentifiers(translatedString);
+		return new ArrayList<String>();
 	}
 	
 	@Override
 	public void centerDialog(JDialog dialog){
 		DialogUtils.alignCenter(dialog);
+	}
+	
+	@Override
+	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask) {
+		ThreadWithLoader loader = new ThreadWithLoader(mainController, progressInfoText, threadTask);
+		return loader;
 	}
 	
 	public MainController getMainController(){

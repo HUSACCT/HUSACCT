@@ -110,16 +110,16 @@ public class TaskServiceImpl{
 		return exportController.exportAllData(configuration);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, List<Violation> shownViolations, boolean applyFilter){
-		return filterController.getViolationsPerSeverity(violationHistory, shownViolations, applyFilter);
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations){
+		return filterController.getViolationsPerSeverity(shownViolations);
 	}
 
-	public void restoreAllToDefault(String language){
-		configuration.restoreAllToDefault(language);
+	public void restoreAllKeysToDefaultSeverities(String language){
+		configuration.restoreAllKeysToDefaultSeverities(language);
 	}
 
-	public void restoreToDefault(String language, String key){
-		configuration.restoreToDefault(language, key);
+	public void restoreKeyToDefaultSeverity(String language, String key){
+		configuration.restoreKeyToDefaultSeverity(language, key);
 	}
 
 	public void restoreSeveritiesToDefault(){

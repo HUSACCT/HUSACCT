@@ -19,24 +19,24 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
 	private static IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
 
-	public static ArrayList<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, String [] violationTypeKeys){
+	public static ArrayList<Mapping> getAllClassesFromLayer(ModuleDTO layerModule, String [] violationTypeKeys){
 		HashSet<Mapping> classpathsFrom = new HashSet<Mapping>();
 		ModuleDTO[] childModules = define.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpathsFrom.addAll(getAllClasspathsFromModule(module, violationTypeKeys));
-				classpathsFrom.addAll(getAllModulesFromLayer(module,classpathsFrom, violationTypeKeys));
+				classpathsFrom.addAll(getAllClassessFromLayer(module,classpathsFrom, violationTypeKeys));
 			}			
 		}
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
 
-	private static Set<Mapping> getAllModulesFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths, String [] violationTypeKeys){
+	private static Set<Mapping> getAllClassessFromLayer(ModuleDTO layerModule, HashSet<Mapping> classpaths, String [] violationTypeKeys){
 		ModuleDTO[] childModules = define.getChildrenFromModule(layerModule.logicalPath);
 		if(childModules.length != 0){
 			for(ModuleDTO module : childModules){
 				classpaths.addAll(getAllClasspathsFromModule(module, violationTypeKeys));
-				return getAllModulesFromLayer(module, classpaths, violationTypeKeys);
+				return getAllClassessFromLayer(module, classpaths, violationTypeKeys);
 			}
 		}
 		return classpaths;

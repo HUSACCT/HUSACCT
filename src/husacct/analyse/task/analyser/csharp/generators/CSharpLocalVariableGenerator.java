@@ -16,26 +16,25 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 	private String belongsToClass;
 	private int lineNumber;
 	private int namePosition;
-	CSharpInvocationGenerator invocationGenerator;
+	private CSharpInvocationGenerator invocationGenerator;
 	
 	public CSharpLocalVariableGenerator(CSharpTreeConvertController treeConvertController){
 		this.treeConvertController = treeConvertController;
-		invocationGenerator = new CSharpInvocationGenerator(this.treeConvertController);
-		
 	}
 	
 	public void generateLocalVariable(List<CommonTree> tree, String methodSignature, String belongsToClass, int lineNumber){
 		this.methodSignature = methodSignature;
 		this.belongsToClass = belongsToClass;
 		this.lineNumber = lineNumber;
-		 
-		boolean isOnlyInvocation = invocationGenerator.checkIfTreeisOnlyInvocation(tree);
+		
+		invocationGenerator = new CSharpInvocationGenerator(this.treeConvertController, belongsToClass);
+		boolean isOnlyInvocation = invocationGenerator.checkIfTreeHasInvocation(tree);
 		
 		if(!(isOnlyInvocation)){
 			generateFamixObject(tree);
 		}
 		
-		//invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
+		invocationGenerator.generateInvocation(tree, lineNumber, methodSignature);
 	}
 
 	private void generateFamixObject(List<CommonTree> tree){
@@ -51,7 +50,7 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 		instance.setBelongsToClass(uniqueName);
 		instance.setTo(declareType);
 		instance.setInstanceName(name);
-		instance.setHasMethodScope(true);
+		instance.setClassScope(false);
 		treeConvertController.addInstance(instance);
 	}
 
@@ -68,24 +67,33 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 				nextNode = tree.get(i+1);
 				nextType = nextNode.getType();
 			}
+			usesLongName = false;
+			
+			if(i < 1 && currentType == NEW){
+				returnType = nextNode.getText();
+				namePosition = i+1;
+				return returnType;
+			}else if(currentType == FORWARDBRACKET && nextType == NEW){
+				CommonTree node = tree.get(i+2);
+				int type = node.getType();
+				returnType = node.getText();
+				namePosition = i+2;
+				return returnType;
+			}
 			
 			if(nextNode != null){
-				if(currentType == DOT || nextType == DOT || currentType == LESSTHAN || nextType == LESSTHAN || currentType == GREATERTHAN || nextType == GREATERTHAN){
+				if(currentType == DOT || nextType == DOT || currentType == LESSTHAN || nextType == LESSTHAN || currentType == GREATERTHAN || nextType == GREATERTHAN || nextType == IDENTIFIER){
 					usesLongName = true;
 				}
-			}else{
-				usesLongName = false;
+				else{
+					return returnType;
+				}
 			}
 			
 			if(usesLongName){
 				returnType = returnType + currentNode.getText();
 				namePosition = i+1;
-			}else if(i < 1 && currentType == NEW){
-				returnType = nextNode.getText();
-				namePosition = i+1;
-				return returnType;
-			}
-			else if(i < 1){
+			}else if(i < 1){
 				returnType = currentNode.getText();
 				namePosition = i+1;
 				return returnType;

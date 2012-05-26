@@ -49,8 +49,10 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-package.png"));
 		} else if(component.getType().equals("CLASS")) {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
-		} else if(component.getType().equals("METHOD")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-method.png"));
+		} else if(component.getType().equals("INTERFACE")) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface.png"));
+		} else if(component.getType().equals("ENUMERATION")) {
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-enumeration.png"));
 		}
 		return icon;
 	}
@@ -64,7 +66,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		} else if(component instanceof LayerComponent) {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-layer.png"));
 		} else if(component instanceof SubSystemComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-module.png"));
+			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-subsystem.png"));
 		} else if(component instanceof SoftwareArchitectureComponent) {
 			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-software_architecture.png"));
 		}

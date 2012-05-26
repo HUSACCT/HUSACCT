@@ -25,7 +25,7 @@ public class ImportFactory {
 	private final ImportViolationsHistory importViolationsHistory;
 	private final ImportActiveViolationTypes importActiveViolationTypes;
 	
-	public ImportFactory(){
+	ImportFactory(){
 		this.importSeverities = new ImportSeverities();
 		this.importViolations = new ImportViolations();
 		this.importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
@@ -33,25 +33,25 @@ public class ImportFactory {
 		this.importActiveViolationTypes = new ImportActiveViolationTypes();
 	}
 
-	public List<Severity> importSeverities(Element element) {
+	List<Severity> importSeverities(Element element) {
 		return	importSeverities.importSeverities(element);
 	}
 
-	public List<Violation> importViolations(Element element, List<Severity> severities) throws DatatypeConfigurationException {
+	List<Violation> importViolations(Element element, List<Severity> severities) throws DatatypeConfigurationException {
 		return importViolations.importViolations(element, severities);
 	}
 
-	public HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {
+	HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {
 		return importSeveritiesPerRuleTypesPerProgrammingLanguages.importSeveritiesPerTypesPerProgrammingLanguages(element, severities);
 	}
 
 
-	public List<ViolationHistory> importViolationHistory(
+	List<ViolationHistory> importViolationHistory(
 			Element violationHistoryElement) {
 		return importViolationsHistory.importViolationsHistory(violationHistoryElement);
 	}
 
-	public Map<String, List<ActiveRuleType>> importActiveViolationTypes(Element activeViolationTypes) {
+	Map<String, List<ActiveRuleType>> importActiveViolationTypes(Element activeViolationTypes) {
 		return importActiveViolationTypes.importActiveViolationTypes(activeViolationTypes);
 	}
 }

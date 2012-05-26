@@ -23,11 +23,11 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	private AnalyseUIController controller;
 
 	public AnalyseInternalFrame() {
+		this.controller = new AnalyseUIController();
+		registerLocaleChangeListener();
 		setResizable(true);
 		setBounds(200, 200, 550, 471);
 		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
-		registerLocaleChangeListener();
-		this.controller = new AnalyseUIController();
 		
 		tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel.setBackground(UIManager.getColor("Panel.background"));
@@ -45,6 +45,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		getContentPane().add(cancelButton, BorderLayout.SOUTH);
 		cancelButton.addActionListener(this);
 		cancelButton.setText(controller.translate("Cancel"));
+		reloadText();
 	}
 	
 	private void registerLocaleChangeListener(){
@@ -52,6 +53,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	}
 	
 	public void reloadText(){
+		this.setTitle(controller.translate("AnalysedWindowTitle"));
 		cancelButton.setText(controller.translate("Cancel"));
 		tabPanel.setTitleAt(0, controller.translate("SourceOverview"));
 		tabPanel.setTitleAt(1, controller.translate("DependencyOverview"));

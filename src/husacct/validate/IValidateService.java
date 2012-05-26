@@ -24,8 +24,6 @@ public interface IValidateService extends IObservableService
 	public String[] getExportExtentions();
 	public List<Violation> getHistoryViolationsByDate(Calendar date);
 	
-	@Deprecated
-	public void exportViolations(String s1, String s2, String s3);
 	public void exportViolations(File file, String fileType, Calendar date);	
 	public void exportViolations(File file, String fileType);
 

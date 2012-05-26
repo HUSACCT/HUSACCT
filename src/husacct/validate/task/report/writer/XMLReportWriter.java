@@ -13,6 +13,7 @@ import java.io.IOException;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 public class XMLReportWriter extends ReportWriter {
@@ -89,7 +90,7 @@ public class XMLReportWriter extends ReportWriter {
 
 			violations.addContent(xmlViolation);
 		}
-		XMLOutputter outputter = new XMLOutputter();
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		outputter.output(document, new FileWriter(getFileName()));
 	}
 }

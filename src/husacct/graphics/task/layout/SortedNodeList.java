@@ -1,6 +1,6 @@
 package husacct.graphics.task.layout;
 
-import husacct.graphics.ListUtils;
+import husacct.graphics.util.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;

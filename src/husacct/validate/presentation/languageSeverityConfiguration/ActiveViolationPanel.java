@@ -17,6 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle;
@@ -27,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-public class ActiveViolationPanel extends javax.swing.JPanel {
+class ActiveViolationPanel extends JPanel {
 
 	private static final long serialVersionUID = 3957004303176017057L;
 
@@ -49,7 +50,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 	violationtypeScrollpane;
 	private JTable violationtypeTable;
 
-	public ActiveViolationPanel(TaskServiceImpl taskServiceImpl, HashMap<String, List<RuleType>> ruletypes, String language) {
+	ActiveViolationPanel(TaskServiceImpl taskServiceImpl, HashMap<String, List<RuleType>> ruletypes, String language) {
 
 		categoryModel = new DefaultListModel();
 		ruletypeModel = new DefaultListModel();
@@ -175,7 +176,7 @@ public class ActiveViolationPanel extends javax.swing.JPanel {
 		setLayout(activeViolationtypeLayout);
 	}
 
-	public final void loadAfterChange(){
+	final void loadAfterChange(){
 		setText();
 		loadModels();
 		loadRuleTypeCategories();
