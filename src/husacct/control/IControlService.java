@@ -24,5 +24,6 @@ public interface IControlService extends IObservableService{
 	@Deprecated public List<String> getStringIdentifiers(String translatedString);
 	public void centerDialog(JDialog dialog);
 	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask);
+	public void setServiceListeners();
 
 }

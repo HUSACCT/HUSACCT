@@ -2,7 +2,9 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
+import husacct.graphics.IGraphicsService;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -19,6 +21,26 @@ public class StateController {
 	public StateController(MainController mainController){
 		workspaceController = mainController.getWorkspaceController();
 		states.add(States.NONE);
+	}
+	
+	public void setServiceListeners(){
+		IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
+		IGraphicsService graphicsService = ServiceProvider.getInstance().getGraphicsService();
+		
+		IServiceListener serviceListener = new IServiceListener() {
+			@Override
+			public void update() {
+				checkState();
+				
+			}
+		};
+		
+		defineService.addServiceListener(serviceListener);
+		analyseService.addServiceListener(serviceListener);
+		validateService.addServiceListener(serviceListener);
+		graphicsService.addServiceListener(serviceListener);
 	}
 	
 	public void checkState(){

@@ -16,7 +16,6 @@ import java.util.Locale;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class AnalyseMenu extends JMenu{
@@ -73,12 +72,6 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 		
-		this.addMenuListener(new MenuAdapter() {
-			public void menuSelected(MenuEvent e) {
-				mainController.getStateController().checkState();
-			}
-		});	
-		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				setApplicationPropertiesItem.setEnabled(false);
@@ -93,12 +86,6 @@ public class AnalyseMenu extends JMenu{
 					analysedArchitectureDiagramItem.setEnabled(true);
 					analysedApplicationOverviewItem.setEnabled(true);
 				}
-			}
-		});
-		
-		this.addMenuListener(new MenuAdapter() {
-			public void menuSelected(MenuEvent e) {
-				mainController.getStateController().checkState();
 			}
 		});
 		

@@ -16,7 +16,6 @@ import java.util.Locale;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
@@ -87,12 +86,6 @@ public class ValidateMenu extends JMenu{
 				if(states.contains(States.OPENED)){
 					configureItem.setEnabled(true);
 				}
-			}
-		});
-		
-		this.addMenuListener(new MenuAdapter() {
-			public void menuSelected(MenuEvent e) {
-				mainController.getStateController().checkState();		
 			}
 		});
 		

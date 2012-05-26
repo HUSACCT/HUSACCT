@@ -7,6 +7,7 @@ import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
 import husacct.control.task.MainController;
+import husacct.control.task.StateController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
@@ -29,6 +30,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private LocaleController localeController;
 	private WorkspaceController workspaceController;
 	private ApplicationController applicationController;
+	private StateController stateController;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -36,6 +38,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		localeController = mainController.getLocaleController();
 		workspaceController = mainController.getWorkspaceController();
 		applicationController = mainController.getApplicationController();
+		stateController = mainController.getStateController();
 	}
 	
 	@Override
@@ -45,6 +48,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public void startApplication(String[] consoleArguments) {
+		setServiceListeners();
 		mainController.readArguments(consoleArguments);
 		mainController.startGui();
 	}
@@ -108,7 +112,13 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		return loader;
 	}
 	
+	@Override
+	public void setServiceListeners(){
+		stateController.setServiceListeners();
+	}
+	
 	public MainController getMainController(){
 		return mainController;
 	}
+
 }
