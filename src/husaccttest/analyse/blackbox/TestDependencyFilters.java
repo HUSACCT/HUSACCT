@@ -1,4 +1,4 @@
-package husaccttest.analyse;
+package husaccttest.analyse.blackbox;
 
 import java.util.HashMap;
 
@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import husacct.common.dto.DependencyDTO;
+import husaccttest.analyse.TestCaseExtended;
 
 public class TestDependencyFilters extends TestCaseExtended{
 

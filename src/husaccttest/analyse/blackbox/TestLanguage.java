@@ -1,6 +1,7 @@
-package husaccttest.analyse;
+package husaccttest.analyse.blackbox;
 
 import static org.junit.Assert.*;
+import husaccttest.analyse.TestCaseExtended;
 
 import org.junit.Test;
 

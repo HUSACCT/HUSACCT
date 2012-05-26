@@ -1,4 +1,4 @@
-package husaccttest.analyse;
+package husaccttest.analyse.blackbox;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husaccttest.analyse.TestCaseExtended;
 
 public class TestDomainModule extends TestCaseExtended{
 	

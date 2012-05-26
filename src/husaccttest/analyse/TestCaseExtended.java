@@ -17,10 +17,13 @@ public abstract class TestCaseExtended{
 	public String DECLARATION = "Declaration";
 	public String EXTENDSCONCRETE = "ExtendsConcrete";
 	public String EXTENDSABSTRACT = "ExtendsAbstract";
+	public String EXTENDSINTERFACE = "ExtendsInterface";
 	public String IMPLEMENTS = "Implements";
 	public String IMPORT = "Import";
 	public String INVOCCONSTRUCTOR = "InvocConstructor";
+	public String INVOCMETHOD = "InvocMethod";
 	public String EXCEPTION = "Exception";
+	public String ANNOTATION = "Annotation";
 	
 	public String CLASS = "class";
 	public String INTERFACE = "interface";
@@ -50,6 +53,20 @@ public abstract class TestCaseExtended{
 		}
 		return false;
 	}
+	
+	
+	public HashMap<String, Object> createImportHashmap(String from, String to, int linenumber){
+		String fromImportExpected = from;
+		String toImportExpected = to;
+		String typeImportExpected = this.IMPORT;
+		int linenumberImportExpected = linenumber;
+		
+		HashMap<String, Object> dependencyImportExpected = createDependencyHashmap(
+				fromImportExpected, toImportExpected, typeImportExpected, linenumberImportExpected);
+		
+		return dependencyImportExpected;
+	}
+	
 	
 	public HashMap<String, Object> createDependencyHashmap(String from, String to, String type, int linenumber){
 		HashMap<String, Object> dependencyHashMap = new HashMap<String, Object>();
