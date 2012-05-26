@@ -7,6 +7,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;

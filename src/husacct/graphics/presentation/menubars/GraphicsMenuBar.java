@@ -1,15 +1,19 @@
 package husacct.graphics.presentation.menubars;
 
+import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
+
 import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
@@ -18,144 +22,268 @@ public class GraphicsMenuBar extends JPanel {
 	private static final long serialVersionUID = -7419378432318031359L;
 	private static final double MIN_SCALEFACTOR = 0.25;
 	private static final double MAX_SCALEFACTOR = 1.75;
-			
+
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
-	
-	private JButton zoomButton, backButton, refreshButton, exportToImageButton;
-	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
-	private JComboBox layoutStrategyOptions;
+
+	private HashMap<String, String> icons;
+
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton, showDependenciesButton, showViolationsButton;
+
 	private JSlider zoomSlider;
+	private GraphicsOptionsDialog graphicsOptionsDialog;
 
 	private int menuItemMaxHeight = 45;
+	private HashMap<String, String> menuBarLocale;
 
 	public GraphicsMenuBar() {
+		icons = new HashMap<String, String>();
+		icons.put("options", "/husacct/common/resources/graphics/icon-cog.png");
+		icons.put("zoomIn", "/husacct/common/resources/graphics/icon-zoom.png");
+		icons.put("zoomOut", "/husacct/common/resources/icon-back.png");
+		icons.put("refresh", "/husacct/common/resources/icon-refresh.png");
+		icons.put("save", "/husacct/common/resources/icon-save.png");
+		icons.put("dependenciesShow", "/husacct/common/resources/graphics/icon-link.png");
+		icons.put("dependenciesHide", "/husacct/common/resources/graphics/icon-unlink.png");
+		icons.put("violationsShow", "/husacct/common/resources/graphics/icon-errors-show.png");
+		icons.put("violationsHide", "/husacct/common/resources/graphics/icon-errors-hide.png");
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 	}
+	
+	private void setButtonIcon(JButton button, String iconKey){
+		try {
+			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get(iconKey)));
+			button.setIcon(icon);
+			button.setMargin(new Insets(1,5,1,5));
+		} catch (Exception e) {
+			logger.warn("Could not find icon for \""+iconKey+"\".");
+		}
+	}
 
 	private void initializeComponents() {
-		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
-		zoomButton = new JButton();
-		zoomButton.setIcon(icon);
-		zoomButton.setSize(50, menuItemMaxHeight);
-		add(zoomButton);		
-		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
-		backButton = new JButton();
-		backButton.setIcon(icon);
-		backButton.setSize(50, menuItemMaxHeight);
-		add(backButton);
+		zoomInButton = new JButton();
+		zoomInButton.setSize(50, menuItemMaxHeight);
+		add(zoomInButton);
+		setButtonIcon(zoomInButton, "zoomIn");
 
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-refresh.png"));
+		zoomOutButton = new JButton();
+		zoomOutButton.setSize(50, menuItemMaxHeight);
+		add(zoomOutButton);
+		setButtonIcon(zoomOutButton, "zoomOut");
+
 		refreshButton = new JButton();
 		refreshButton.setSize(50, menuItemMaxHeight);
-		refreshButton.setIcon(icon);
 		add(refreshButton);
+		setButtonIcon(refreshButton, "refresh");
+
+		showDependenciesButton = new JButton();
+		showDependenciesButton.setSize(40, menuItemMaxHeight);
+		add(showDependenciesButton);
+
+		showViolationsButton = new JButton();
+		showViolationsButton.setSize(40, menuItemMaxHeight);
+		add(showViolationsButton);
 		
-		icon  = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-save.png"));
 		exportToImageButton = new JButton();
-		exportToImageButton.setIcon(icon);
 		exportToImageButton.setSize(50, menuItemMaxHeight);
-		add(exportToImageButton);		
+		add(exportToImageButton);
+		setButtonIcon(exportToImageButton, "save");
 
-		showDependenciesOptionMenu = new JCheckBox();
-		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
-		add(showDependenciesOptionMenu);
+		graphicsOptionsDialog = new GraphicsOptionsDialog();
+		graphicsOptionsDialog.setIcons(icons);
+		optionsDialogButton = new JButton();
+		optionsDialogButton.setSize(40, menuItemMaxHeight);
+		optionsDialogButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				graphicsOptionsDialog.showDialog();
+			}
+		});
+		add(optionsDialogButton);
+		setButtonIcon(optionsDialogButton, "options");
 
-		showViolationsOptionMenu = new JCheckBox();
-		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
-		add(showViolationsOptionMenu);
-
-		contextUpdatesOptionMenu = new JCheckBox();
-		contextUpdatesOptionMenu.setSize(40, menuItemMaxHeight);
-		add(contextUpdatesOptionMenu);
-
-		layoutStrategyOptions = new JComboBox();
-		add(layoutStrategyOptions);
-		
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
 		add(zoomSlider);
 	}
 
 	public void setZoomInAction(ActionListener listener) {
-		zoomButton.addActionListener(listener);
+		zoomInButton.addActionListener(listener);
+		graphicsOptionsDialog.setZoomInAction(listener);
 	}
-	
-	public void setLevelUpAction(ActionListener listener) {
-		backButton.addActionListener(listener);
+
+	public void setZoomOutAction(ActionListener listener) {
+		zoomOutButton.addActionListener(listener);
+		graphicsOptionsDialog.setZoomOutAction(listener);
 	}
 
 	public void setRefreshAction(ActionListener listener) {
 		refreshButton.addActionListener(listener);
+		graphicsOptionsDialog.setRefreshAction(listener);
 	}
 
 	public void setToggleDependenciesAction(ActionListener listener) {
-		showDependenciesOptionMenu.addActionListener(listener);
+		showDependenciesButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JButton button = (JButton) event.getSource();
+				if (button.isSelected()) {
+					setDependecyIconToInactive();
+				} else {
+					setDependecyIconToActive();
+				}
+			}
+		});
+		showDependenciesButton.addActionListener(listener);
+		graphicsOptionsDialog.setToggleDependenciesAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JCheckBox checkbox = (JCheckBox) event.getSource();
+				if (checkbox.isSelected()) {
+					setDependecyIconToInactive();
+				} else {
+					setDependecyIconToActive();
+				}
+			}
+		});
+		graphicsOptionsDialog.setToggleDependenciesAction(listener);
+	}
+	
+	public void setDependecyIconToActive(){
+		setButtonIcon(showDependenciesButton, "dependenciesShow");
+		showDependenciesButton.setToolTipText(menuBarLocale.get("ShowDependencies"));
+	}
+	public void setDependecyIconToInactive(){
+		setButtonIcon(showDependenciesButton, "dependenciesHide");
+		showDependenciesButton.setToolTipText(menuBarLocale.get("HideDependencies"));
 	}
 
 	public void setToggleViolationsAction(ActionListener listener) {
-		showViolationsOptionMenu.addActionListener(listener);
+		showViolationsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JButton button = (JButton) event.getSource();
+				if (button.isSelected()) {
+					setViolationsButtonToInactive();
+				} else {
+					setViolationsButtonToActive();
+				}
+			}
+		});
+		showViolationsButton.addActionListener(listener);
+		graphicsOptionsDialog.setToggleViolationsAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JCheckBox checkbox = (JCheckBox) event.getSource();
+				if (checkbox.isSelected()) {
+					setViolationsButtonToInactive();
+				} else {
+					setViolationsButtonToActive();
+				}
+			}
+		});
+		graphicsOptionsDialog.setToggleViolationsAction(listener);
+	}
+	
+	public void setViolationsButtonToActive(){
+		setButtonIcon(showViolationsButton, "violationsShow");
+		showViolationsButton.setToolTipText(menuBarLocale.get("ShowViolations"));
+	}
+	public void setViolationsButtonToInactive(){
+		setButtonIcon(showViolationsButton, "violationsHide");
+		showViolationsButton.setToolTipText(menuBarLocale.get("HideViolations"));
 	}
 
 	public void setToggleContextUpdatesAction(ActionListener listener) {
-		contextUpdatesOptionMenu.addActionListener(listener);
+		graphicsOptionsDialog.setToggleContextUpdatesAction(listener);
+	}
+
+	public void setOptionsDialogAction(ActionListener listener) {
+		optionsDialogButton.addActionListener(listener);
 	}
 
 	public void setExportToImageAction(ActionListener listener) {
 		exportToImageButton.addActionListener(listener);
+		graphicsOptionsDialog.setExportToImageAction(listener);
 	}
 
 	public void setLayoutStrategyAction(ActionListener listener) {
-		layoutStrategyOptions.addActionListener(listener);
-	}
-	
-	public void setZoomChangeListener(ChangeListener listener) {
-		zoomSlider.addChangeListener(listener);
+		graphicsOptionsDialog.setLayoutStrategyAction(listener);
 	}
 
-	public void setLocale(HashMap<String, String> menuBarLocale) {
+	public void setZoomChangeListener(final ChangeListener listener) {
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				// TODO notify the other slider in the options dialog
+				listener.stateChanged(ce);
+			}
+		});
+		graphicsOptionsDialog.setZoomChangeListener(listener);
+	}
+
+	public void setLocale(HashMap<String, String> locale) {
+		menuBarLocale = locale;
 		try {
-			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
-			contextUpdatesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			zoomInButton.setToolTipText(menuBarLocale.get("ZoomIn"));
+			zoomOutButton.setToolTipText(menuBarLocale.get("ZoomOut"));
+			refreshButton.setToolTipText(menuBarLocale.get("Refresh"));
+			exportToImageButton.setToolTipText(menuBarLocale.get("ExportToImage"));
+			optionsDialogButton.setToolTipText(menuBarLocale.get("Options"));
+			
+			optionsDialogButton.setText(menuBarLocale.get("Options"));
+			graphicsOptionsDialog.setLocale(menuBarLocale);
+			graphicsOptionsDialog.setIcons(icons);
 		} catch (NullPointerException e) {
 			logger.warn("Locale for GraphicsMenuBar is not set properly.");
 		}
 	}
 
 	public void setLayoutStrategyItems(String[] layoutStrategyItems) {
-		layoutStrategyOptions.removeAllItems();
-		for (String item : layoutStrategyItems) {
-			layoutStrategyOptions.addItem(item);
-		}
+		graphicsOptionsDialog.setLayoutStrategyItems(layoutStrategyItems);
 	}
 
-	public void setSelectedLayoutStrategyItem(String string) {
-		layoutStrategyOptions.setSelectedItem(string);
+	public void setSelectedLayoutStrategyItem(String item) {
+		graphicsOptionsDialog.setSelectedLayoutStrategyItem(item);
 	}
 
 	public String getSelectedLayoutStrategyItem() {
-		return (String) layoutStrategyOptions.getSelectedItem();
+		return graphicsOptionsDialog.getSelectedLayoutStrategyItem();
+	}
+	
+	public void setDependencyToggle(boolean setting) {
+		if(showDependenciesButton.isSelected()!=setting){
+			showDependenciesButton.setSelected(setting);
+		}
+		if(setting){
+			setDependecyIconToInactive();
+		}else{
+			setDependecyIconToActive();
+		}
+		graphicsOptionsDialog.setDependencyToggle(setting);
 	}
 
 	public void setViolationToggle(boolean setting) {
-		showViolationsOptionMenu.setSelected(setting);
+		if(showViolationsButton.isSelected()!=setting){
+			showViolationsButton.setSelected(setting);
+		}
+		if(setting){
+			setViolationsButtonToInactive();
+		}else{
+			setViolationsButtonToActive();
+		}
+		graphicsOptionsDialog.setViolationToggle(setting);
 	}
 
 	public void setContextUpdatesToggle(boolean setting) {
-		contextUpdatesOptionMenu.setSelected(setting);
-	}
-
-	public void setContextDependencyToggle(boolean setting) {
-		showDependenciesOptionMenu.setSelected(setting);
+		graphicsOptionsDialog.setContextUpdatesToggle(setting);
 	}
 
 	public double getScaleFactor() {
 		double scaleFactor = zoomSlider.getValue() / 100.0;
 		scaleFactor = Math.max(MIN_SCALEFACTOR, scaleFactor);
 		scaleFactor = Math.min(MAX_SCALEFACTOR, scaleFactor);
-		
+
 		return scaleFactor;
 	}
 

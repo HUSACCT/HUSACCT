@@ -10,6 +10,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
-import husacct.graphics.task.UserInputListener;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -151,17 +151,11 @@ public class DrawingView extends DefaultDrawingView {
 
 	protected void onSelectionChanged(FigureSelectionEvent evt) {
 		handleDeselect();
-
 		if (hasSelection()) {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
-
-			// show the selected figures on top
 			for (BaseFigure selectedFig : selection) {
-				this.drawing.bringToFront(selectedFig);
-				// TODO also raise connection figures pointing to and from the
-				// selected figure(s)
+				drawing.bringToFront(selectedFig);
 			}
-
 			figureSelected(selection);
 		}
 	}

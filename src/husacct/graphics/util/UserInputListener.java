@@ -1,7 +1,6 @@
-package husacct.graphics.task;
+package husacct.graphics.util;
 
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.util.DrawingLayoutStrategy;
 
 public interface UserInputListener {
 	
