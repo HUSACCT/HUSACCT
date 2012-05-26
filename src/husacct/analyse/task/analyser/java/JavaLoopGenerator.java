@@ -66,7 +66,21 @@ public class JavaLoopGenerator extends JavaGenerator{
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
 			if(treeType == JavaParser.TYPE){
-				javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(i + 1).getText(), tree.getChild(i + 1).getLine());
+				CommonTree myLoopTree = (CommonTree) child;
+				CommonTree typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+				if(typeIdentTree != null){
+					
+					String type = "";
+					for(int count = 0; count < typeIdentTree.getChildCount(); count++){
+						type += !type.equals("") ? "." : "";
+						type += typeIdentTree.getChild(count).getText();
+					}
+					
+					int lineNumber = typeIdentTree.getFirstChildWithType(JavaParser.IDENT).getLine();
+					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, type , tree.getChild(i + 1).getText(), lineNumber);
+				} else {
+					logger.warn("Problemen with finding type. Please notice analyse");
+				}
 			}
 			
 			else if(treeType == JavaParser.METHOD_CALL){

@@ -77,7 +77,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			
 //			this.setResizable(false);
 			this.pack();
-			this.setSize(820, 540);
+			this.setSize(820, 620);
 			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here

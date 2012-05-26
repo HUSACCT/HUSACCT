@@ -3,6 +3,8 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationRuleTypeDTO;
+import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationViolationTypeDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.presentation.languageSeverityConfiguration.ActiveViolationPanel;
 import husacct.validate.presentation.languageSeverityConfiguration.RuleTypeSeverityPanel;
@@ -19,26 +21,20 @@ public class LanguageSeverityConfiguration extends JPanel {
 
 	private static final long serialVersionUID = 6607502138038915874L;
 	
-	private final String language;
-	private final HashMap<String, List<RuleType>> ruletypes;
-	private final Map<String, List<ViolationType>> violationTypes;
 	private final TaskServiceImpl taskServiceImpl;
-	
-	private List<Severity> severityNames;
+	private final ConfigurationRuleTypeDTO configurationSubPanelDTO;
+	private final ConfigurationViolationTypeDTO configurationViolationTypeDTO;
 
 	private ActiveViolationPanel activeViolationtype;
 	private RuleTypeSeverityPanel ruletypeSeverity;
 	private ViolationTypeSeverityPanel violationtypeSeverity;
 	private JTabbedPane tabbedPane;
 
-	public LanguageSeverityConfiguration(String language, Map<String, List<ViolationType>> violationTypes,
-			HashMap<String, List<RuleType>> ruletypes, TaskServiceImpl ts, List<Severity> severities) {
+	public LanguageSeverityConfiguration(ConfigurationRuleTypeDTO configurationRuleTypeDTO, ConfigurationViolationTypeDTO configurationViolationTypeDTO, TaskServiceImpl ts) {
 		
-		this.severityNames = severities;
-		this.language = language;
-		this.ruletypes = ruletypes;
+		this.configurationSubPanelDTO = configurationRuleTypeDTO;
+		this.configurationViolationTypeDTO = configurationViolationTypeDTO;
 		this.taskServiceImpl = ts;
-		this.violationTypes = violationTypes;
 
 		initComponents();
 	}
@@ -46,9 +42,9 @@ public class LanguageSeverityConfiguration extends JPanel {
 	private void initComponents() {		
 		tabbedPane = new JTabbedPane();
 		
-		ruletypeSeverity = new RuleTypeSeverityPanel(taskServiceImpl, this, ruletypes, language);
-		violationtypeSeverity = new ViolationTypeSeverityPanel(taskServiceImpl, this, violationTypes, language);
-		activeViolationtype = new ActiveViolationPanel(taskServiceImpl, ruletypes, language);
+		ruletypeSeverity = new RuleTypeSeverityPanel(taskServiceImpl, configurationSubPanelDTO);
+		violationtypeSeverity = new ViolationTypeSeverityPanel(taskServiceImpl, configurationViolationTypeDTO);
+		activeViolationtype = new ActiveViolationPanel(taskServiceImpl, configurationSubPanelDTO.getRuletypes(), configurationSubPanelDTO.getLanguage());
 		
 		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"), ruletypeSeverity);
 		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"), violationtypeSeverity);
@@ -73,11 +69,7 @@ public class LanguageSeverityConfiguration extends JPanel {
 	}
 	
 	public void setSeverityNames(List<Severity> severities){
-		severityNames = severities;
-	}
-	
-	public List<Severity> getSeverityNames(){
-		return severityNames;
+		violationtypeSeverity.setSeverities(severities);
 	}
 	
 	public void loadAfterChange(){

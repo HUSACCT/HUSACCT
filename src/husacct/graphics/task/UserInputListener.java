@@ -1,10 +1,11 @@
 package husacct.graphics.task;
 
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 public interface UserInputListener {
 	
-	public void moduleOpen(String path);
+	public void moduleOpen(String[] paths);
 
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure);
 
@@ -19,4 +20,12 @@ public interface UserInputListener {
 	public void toggleViolations();
 	
 	public void refreshDrawing();
+
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum);
+
+	public void toggleDependencies();
+
+	public void toggleContextUpdates();
+	
+	public void drawingZoomChanged(double zoomFactor);	
 }

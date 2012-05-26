@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ToolTipManager;
 import javax.swing.table.TableModel;
 
 public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
@@ -80,7 +81,9 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		editRuleButton = new JButton();
 		buttonPanel.add(editRuleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		editRuleButton.addActionListener(this);
-			
+		editRuleButton.setToolTipText("WARNING: known issue, you need to reselect the currentModules while editing");
+		ToolTipManager.sharedInstance().setInitialDelay(0);
+		
 		removeRuleButton = new JButton();
 		buttonPanel.add(removeRuleButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeRuleButton.addActionListener(this);
@@ -222,7 +225,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
-//		editRuleButton.setEnabled(true);
+		editRuleButton.setEnabled(true);
 		removeRuleButton.setEnabled(true);
 	}
 
@@ -243,6 +246,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	@Override
 	public void update(Locale newLocale) {
 		this.setButtonTexts();
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();
 	}
 	

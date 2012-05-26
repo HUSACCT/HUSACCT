@@ -1,10 +1,13 @@
 package husacct.define.presentation.tables;
 
+import java.util.Locale;
+
+import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
 
 import javax.swing.table.TableColumn;
 
-public class JTableAppliedRule extends AbstractJTable {
+public class JTableAppliedRule extends AbstractJTable implements ILocaleChangeListener {
 
 	private static final long serialVersionUID = 3535559394466714205L;
 
@@ -53,5 +56,11 @@ public class JTableAppliedRule extends AbstractJTable {
 	}
 	public int getRuleTypeColumnIndex(){
 		return 0;
+	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.changeColumnHeaders();
+		
 	}
 }

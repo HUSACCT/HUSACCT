@@ -2,11 +2,15 @@ package husaccttest.analyse;
 
 import java.util.HashMap;
 
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import husacct.common.dto.DependencyDTO;
 
 public class TestDependencyFilters extends TestCaseExtended{
 
 
+	@Test
 	public void testGetDependenciesBetweenClassTypeExtends(){
 		String from = "domain.locationbased.foursquare.History";
 		String to = "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO";
@@ -27,6 +31,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundDependency);	
 	}
 	
+	@Test
 	public void testGetDependenciesBetweenPackageTypeExtends(){
 		String from = "domain.locationbased.foursquare";
 		String to = "infrastructure.socialmedia.locationbased.foursquare";
@@ -47,6 +52,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundHistory);
 	}
 	
+	@Test
 	public void testGetDependenciesBetweenPackageTypeExtendsAndInvocConstructor(){
 		String from = "domain.locationbased.foursquare";
 		String to = "infrastructure.socialmedia.locationbased.foursquare";
@@ -79,6 +85,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundAccount);
 	}
 	
+	@Test
 	public void testGetDependenciesFilterWithoutResults(){
 		String from = "domain.locationbased.foursquare";
 		String to = "infrastructure.socialmedia.locationbased.foursquare";
@@ -89,6 +96,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(dependenciesExpected, dependencies.length);
 	}
 	
+	@Test
 	public void testGetDependenciesFilterWithNotExistingPackage(){
 		String from = "domain.notExisting";
 		String to = "infrastructure.socialmedia.locationbased.foursquare";
@@ -99,6 +107,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(dependenciesExpected, dependencies.length);
 	}
 	
+	@Test
 	public void testGetDependenciesFromClassTypeImplements(){
 		String from = "domain.locationbased.latitude.Map";
 		String[] dependencyFilter = {super.IMPLEMENTS};
@@ -118,6 +127,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesFromPackageTypeExtends(){
 		String from = "domain.locationbased.latitude";
 		String[] dependencyFilter = {super.EXTENDSABSTRACT};
@@ -137,6 +147,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesFromPackageTypesExtendsANDInvocConstructor(){
 		String from = "domain.locationbased.latitude";
 		String[] dependencyFilter = {super.EXTENDSABSTRACT, super.INVOCCONSTRUCTOR};
@@ -165,6 +176,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundAccount);
 	}
 	
+	@Test
 	public void testGetDependenciesFromNoResultsWithFilter(){
 		String from = "domain.locationbased.latitude";
 		String[] dependencyFilter = {super.EXCEPTION};
@@ -174,6 +186,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(dependenciesExpected, dependencies.length);
 	}
 	
+	@Test
 	public void testGetDependenciesFromNotExistingPackage(){
 		String from = "domain.notExisting";
 		String[] dependencyFilter = {super.EXCEPTION};
@@ -182,7 +195,8 @@ public class TestDependencyFilters extends TestCaseExtended{
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from, dependencyFilter);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
-		
+	
+	@Test
 	public void testGetDependenciesToClassTypeImplements(){
 		String to = "infrastructure.socialmedia.locationbased.latitude.IMap";
 		String[] dependencyFilter = {super.IMPLEMENTS};
@@ -202,6 +216,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesToPackageTypeExtends(){
 		String to = "infrastructure.socialmedia.locationbased.latitude";
 		String[] dependencyFilter = {super.EXTENDSABSTRACT};
@@ -221,6 +236,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundDependency);
 	}
 	
+	@Test
 	public void testGetDependenciesToPackageTypesExtendsANDInvocConstructor(){
 		String to = "infrastructure.socialmedia.locationbased.latitude";
 		String[] dependencyFilter = {super.EXTENDSABSTRACT, super.INVOCCONSTRUCTOR};
@@ -249,6 +265,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(true, foundAccount);
 	}
 	
+	@Test
 	public void testGetDependenciesToNoResultsWithFilter(){
 		String from = "domain.locationbased.latitude";
 		String[] dependencyFilter = {super.EXCEPTION};
@@ -258,6 +275,7 @@ public class TestDependencyFilters extends TestCaseExtended{
 		assertEquals(dependenciesExpected, dependencies.length);
 	}
 	
+	@Test
 	public void testGetDependenciesToNotExistingPackage(){
 		String from = "domain.notExisting";
 		String[] dependencyFilter = {super.EXCEPTION};

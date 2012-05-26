@@ -159,6 +159,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	private void newModule() {
 		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
 		DialogUtils.alignCenter(addModuleFrame);
+		addModuleFrame.initGUI();
 	}
 	
 	private void removeModule() {

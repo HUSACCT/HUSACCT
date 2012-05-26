@@ -19,18 +19,35 @@ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
+	private static final long serialVersionUID = 971276235252293165L;
 
 	public static final Color defaultBackgroundColor = new Color(252, 255, 182);
-	private static final long serialVersionUID = 971276235252293165L;
+	protected int baseZIndex, zIndex, raiseZIndex;
 	
 	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 	private boolean isSizeable = false;
+	private boolean isStoredInContainer = false;
 	private String name;
 	
 	public BaseFigure(String theName) {
 		super();
-		
 		name = theName;
+		baseZIndex = 0;
+		raiseZIndex = 5;
+		zIndex = baseZIndex;
+	}
+	
+	public void raiseLayer(){
+		zIndex = raiseZIndex;
+	}
+	
+	public void resetLayer(){
+		zIndex = baseZIndex;
+	}
+	
+	@Override
+	public int getLayer(){
+		return zIndex;
 	}
 
 	public String getName() {
@@ -122,7 +139,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		} else {
 			handles.addAll(createSelectionHandles(detailLevel));
 		}
-		return handles;
+		return handles;		
 	}
 
 	private Collection<Handle> createSizeableHandles(int detailLevel) {
@@ -156,6 +173,14 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public void setSizeable(boolean newValue) {
 		isSizeable = newValue;
+	}
+	
+	public void updateLocation(double x, double y) {
+		willChange();
+		double widthX = x + getBounds().getWidth();
+		double heightY = y + getBounds().getHeight();
+		setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX, heightY));
+		changed();
 	}
 
 	@Override
@@ -202,7 +227,23 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	// return connectors.getFirst();
 	// }
 
-	public abstract boolean isModule();
+	public boolean isParent(){
+		return false;
+	}
+	
+	public boolean isModule(){
+		return false;
+	}
 
-	public abstract boolean isLine();
+	public boolean isLine(){
+		return false;
+	}
+	
+	public void setInContainer(boolean value) {
+		this.isStoredInContainer = value;
+	}
+	
+	public boolean isInContainer() {
+		return isStoredInContainer;
+	}
 }

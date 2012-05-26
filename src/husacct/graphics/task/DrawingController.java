@@ -11,10 +11,14 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
+import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
+import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
+import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -27,16 +31,18 @@ import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
-	public static final String ROOT = "";
 	protected static final boolean debugPrint = true;
+	protected boolean contextUpdates;
+	private boolean areDependenciesShown;
+	private boolean areViolationsShown;
+	protected DrawingLayoutStrategy layoutStrategyOption;
 
-	private boolean areViolationsShown = false;
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
 
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
-	protected String currentPath = "";
+	protected String[] currentPaths = new String[]{};
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -48,17 +54,19 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
+		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
+		
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
 		initializeComponents();
+		switchLayoutStrategy();
 
 		controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
 			public void update(Locale newLocale) {
 				refreshFrame();
-				refreshDrawing();
 			}
 		});
 	}
@@ -71,8 +79,71 @@ public abstract class DrawingController implements UserInputListener {
 
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
-
-		layoutStrategy = new BasicLayoutStrategy(drawing);
+		drawTarget.setSelectedLayout(layoutStrategyOption);
+		
+		showDependencies();
+		hideViolations();
+		deactivateContextUpdates();
+	}
+	
+	private void switchLayoutStrategy(){
+		switch(layoutStrategyOption){
+			case BASIC_LAYOUT:
+				layoutStrategy = new BasicLayoutStrategy(drawing);
+				break;
+			case LAYERED_LAYOUT:
+				layoutStrategy = new LayeredLayoutStrategy(drawing);
+				break;
+			default:
+				layoutStrategy = new NoLayoutStrategy();
+				break;
+		}
+	}
+	
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
+		layoutStrategyOption = selectedStrategyEnum;
+		switchLayoutStrategy();
+		updateLayout();
+	}
+	
+	public void toggleDependencies(){
+		notifyServiceListeners();
+		if(areDependenciesShown){
+			hideDependencies();
+		}else{
+			showDependencies();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	public void showDependencies(){
+		areDependenciesShown = true;
+		drawTarget.turnOnDependencies();
+	}
+	
+	public void hideDependencies(){
+		areDependenciesShown = false;
+		drawTarget.turnOffDependencies();
+	}
+	
+	public void toggleContextUpdates(){
+		notifyServiceListeners();
+		if(contextUpdates){
+			deactivateContextUpdates();
+		}else{
+			activateContextUpdates();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	private void deactivateContextUpdates(){
+		contextUpdates = false;
+		drawTarget.turnOffContextUpdates();
+	}
+	
+	private void activateContextUpdates(){
+		contextUpdates = true;
+		drawTarget.turnOnContextUpdates();
 	}
 
 	public JInternalFrame getGUI() {
@@ -91,12 +162,24 @@ public abstract class DrawingController implements UserInputListener {
 		drawing.clearAllLines();
 	}
 
-	public String getCurrentPath() {
-		return currentPath;
+	public String[] getCurrentPaths() {
+		return currentPaths;
+	}
+	
+	public String getCurrentPathsToString() {
+		String stringPaths = "";
+		for(String path : getCurrentPaths()){
+			stringPaths += path + " + ";
+		}
+		return stringPaths;
 	}
 
-	public void setPath(String path) {
-		currentPath = path;
+	public void resetCurrentPaths() {
+		currentPaths = new String[]{};
+	}
+
+	public void setCurrentPaths(String[] paths) {
+		currentPaths = paths;
 	}
 
 	public boolean areViolationsShown() {
@@ -157,8 +240,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 	
 	public void actuallyDraw(AbstractDTO[] modules){
-
-		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
@@ -171,32 +253,37 @@ public abstract class DrawingController implements UserInputListener {
 		updateLayout();
 	}
 
-	protected void updateLayout() {
-		String currentPath = getCurrentPath();
-		
-		if (hasSavedFigureStates(currentPath)) {
-			restoreFigurePositions(currentPath);
-		} else {
-			int width = drawTarget.getWidth();
-			int height = drawTarget.getHeight();
-
-			layoutStrategy.doLayout(width, height);
-		}
-		
-		updateLines();
-		
-		// bring modulefigures to the front
-		ArrayList<Figure> moduleFigures = new ArrayList<Figure>();
-		for (Figure f : drawing.getChildren()) {
-			if(((BaseFigure)f).isModule()) {
-				moduleFigures.add(f);
+	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
+		clearDrawing();
+		for (String parentName : modules.keySet()) {
+			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
+			drawing.add(parentFigure);
+			for (AbstractDTO dto : modules.get(parentName)) {
+				BaseFigure generatedFigure = figureFactory.createFigure(dto);
+				parentFigure.add(generatedFigure);
+				drawing.add(generatedFigure);
+				figureMap.linkModule(generatedFigure, dto);
 			}
+			parentFigure.updateLayout();
 		}
-		for(Figure f : moduleFigures) {
-			drawing.bringToFront(f);
-		}
+		drawTarget.setCurrentPaths(getCurrentPaths());
+		drawTarget.updateGUI();
+		updateLayout();
+		drawLinesBasedOnSetting();
 	}
-	
+
+	protected void updateLayout() {
+		String currentPaths = getCurrentPathsToString();
+		
+		if (hasSavedFigureStates(currentPaths)) {
+			restoreFigurePositions(currentPaths);
+		} else {
+			layoutStrategy.doLayout();
+		}
+
+		updateLines();
+	}
+
 	private void updateLines() {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
@@ -220,11 +307,15 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
-		drawDependenciesForShownModules();
+		if(areDependenciesShown){
+			drawDependenciesForShownModules();
+		}
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		drawing.updateLineFigureToContext();
+		if(contextUpdates){
+			drawing.updateLineFigureToContext();
+		}
 	}
 
 	public void drawDependenciesForShownModules() {
@@ -299,31 +390,38 @@ public abstract class DrawingController implements UserInputListener {
 	public void notifyServiceListeners() {
 		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
+	
+	public void saveSingleLevelFigurePositions(){
+		if(getCurrentPaths().length<2){
+			saveFigurePositions();
+		}
+	}
 
-	protected void saveFigurePositions(String path) {
+	protected void saveFigurePositions() {
+		String paths = getCurrentPathsToString();
 		DrawingState state;
-		if (storedStates.containsKey(path))
-			state = storedStates.get(path);
+		if (storedStates.containsKey(paths))
+			state = storedStates.get(paths);
 		else
 			state = new DrawingState(drawing);
 
 		state.save(figureMap);
-		storedStates.put(path, state);
+		storedStates.put(paths, state);
 	}
 
-	protected boolean hasSavedFigureStates(String path) {
-		return storedStates.containsKey(path);
+	protected boolean hasSavedFigureStates(String paths) {
+		return storedStates.containsKey(paths);
 	}
-	
-	protected void restoreFigurePositions(String path) {
-		if (storedStates.containsKey(path)) {
-			DrawingState state = storedStates.get(path);
+
+	protected void restoreFigurePositions(String paths) {
+		if (storedStates.containsKey(paths)) {
+			DrawingState state = storedStates.get(paths);
 			state.restore(figureMap);
 		}
 	}
 
-	protected void resetFigurePositions(String path) {
-		storedStates.remove(path);
+	protected void resetAllFigurePositions() {
+		storedStates.clear();
 	}
 
 	protected void printFigures(String msg) {
@@ -342,4 +440,9 @@ public abstract class DrawingController implements UserInputListener {
 				System.out.println(String.format("%s: %s", bf.getName(), rect));
 		}
 	}
+	
+	@Override
+	public void drawingZoomChanged(double zoomFactor) {
+		view.setScaleFactor(zoomFactor);
+	}	
 }

@@ -2,7 +2,8 @@ package husacct.validate.domain.validation.ruletype.contentsofamodule;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.util.CheckConformanceUtilClass;
+import husacct.validate.domain.check.util.CheckConformanceUtilPackage;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Regex;
@@ -43,7 +44,7 @@ public class NamingConventionRule extends RuleType {
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration){
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilFilter.filterPackages(currentRule);
+		this.mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom){
 
@@ -59,7 +60,7 @@ public class NamingConventionRule extends RuleType {
 	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration){
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
