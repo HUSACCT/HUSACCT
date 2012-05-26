@@ -48,7 +48,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 	
 	public void showDialog(){
-//		setResizable(true);
+		setResizable(false);
 		setSize(width, height);
 		setModal(true);
 		setVisible(true);

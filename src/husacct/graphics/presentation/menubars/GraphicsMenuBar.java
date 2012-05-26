@@ -3,6 +3,7 @@ package husacct.graphics.presentation.menubars;
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
 
 import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -24,11 +25,11 @@ public class GraphicsMenuBar extends JPanel {
 
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 
-	private HashMap<String, String> icons; 
-	
+	private HashMap<String, String> icons;
+
 	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu;
-	
+
 	private JSlider zoomSlider;
 	private GraphicsOptionsDialog graphicsOptionsDialog;
 
@@ -36,48 +37,68 @@ public class GraphicsMenuBar extends JPanel {
 
 	public GraphicsMenuBar() {
 		icons = new HashMap<String, String>();
+		icons.put("options", "/husacct/common/resources/graphics/icon-cog.png");
 		icons.put("zoomIn", "/husacct/common/resources/icon-zoom.png");
 		icons.put("zoomOut", "/husacct/common/resources/icon-back.png");
 		icons.put("refresh", "/husacct/common/resources/icon-refresh.png");
 		icons.put("save", "/husacct/common/resources/icon-save.png");
-		icons.put("dependencies", "/husacct/common/resources/icon-back.png");
-		icons.put("violations", "/husacct/common/resources/icon-back.png");
+		icons.put("dependenciesShow", "/husacct/common/resources/graphics/icon-connect.png");
+		icons.put("dependenciesHide", "/husacct/common/resources/graphics/icon-disconnect.png");
+		icons.put("violationsShow", "/husacct/common/resources/graphics/icon-error.png");
+		icons.put("violationsHide", "/husacct/common/resources/graphics/icon-error_delete.png");
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 	}
+	
+	private void setButtonIcon(JButton button, String iconKey){
+		try {
+			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get(iconKey)));
+			button.setIcon(icon);
+			button.setMargin(new Insets(1,5,1,5));
+		} catch (Exception e) {
+			logger.warn("Could not find icon for \""+iconKey+"\".");
+		}
+	}
+	
+	private void setCheckBoxIcon(JCheckBox checkbox, String iconKey){
+		try {
+			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get(iconKey)));
+			checkbox.setIcon(icon);
+		} catch (Exception e) {
+			logger.warn("Could not find icon for \""+iconKey+"\".");
+		}
+	}
 
 	private void initializeComponents() {
-		ImageIcon icon = new ImageIcon(getClass().getResource(icons.get("zoomIn")));
 		zoomInButton = new JButton();
-		zoomInButton.setIcon(icon);
 		zoomInButton.setSize(50, menuItemMaxHeight);
-		add(zoomInButton);		
-		
-		icon = new ImageIcon(getClass().getResource(icons.get("zoomOut")));
+		add(zoomInButton);
+		setButtonIcon(zoomInButton, "zoomIn");
+
 		zoomOutButton = new JButton();
-		zoomOutButton.setIcon(icon);
 		zoomOutButton.setSize(50, menuItemMaxHeight);
 		add(zoomOutButton);
+		setButtonIcon(zoomOutButton, "zoomOut");
 
-		icon = new ImageIcon(getClass().getResource(icons.get("refresh")));
 		refreshButton = new JButton();
 		refreshButton.setSize(50, menuItemMaxHeight);
-		refreshButton.setIcon(icon);
 		add(refreshButton);
-		
-		icon  = new ImageIcon(getClass().getResource(icons.get("save")));
+		setButtonIcon(refreshButton, "refresh");
+
 		exportToImageButton = new JButton();
-		exportToImageButton.setIcon(icon);
 		exportToImageButton.setSize(50, menuItemMaxHeight);
 		add(exportToImageButton);
+		setButtonIcon(exportToImageButton, "save");
 
 		showDependenciesOptionMenu = new JCheckBox();
 		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
 		add(showDependenciesOptionMenu);
+		setCheckBoxIcon(showDependenciesOptionMenu, "dependenciesShow");
 
 		showViolationsOptionMenu = new JCheckBox();
 		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
 		add(showViolationsOptionMenu);
+		setCheckBoxIcon(showViolationsOptionMenu, "violationsHide");
 
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
 		graphicsOptionsDialog.setIcons(icons);
@@ -90,6 +111,7 @@ public class GraphicsMenuBar extends JPanel {
 			}
 		});
 		add(optionsDialogButton);
+		setButtonIcon(optionsDialogButton, "options");
 
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
@@ -100,7 +122,7 @@ public class GraphicsMenuBar extends JPanel {
 		zoomInButton.addActionListener(listener);
 		graphicsOptionsDialog.setZoomInAction(listener);
 	}
-	
+
 	public void setZoomOutAction(ActionListener listener) {
 		zoomOutButton.addActionListener(listener);
 		graphicsOptionsDialog.setZoomOutAction(listener);
@@ -111,14 +133,43 @@ public class GraphicsMenuBar extends JPanel {
 		graphicsOptionsDialog.setRefreshAction(listener);
 	}
 
-	
 	public void setToggleDependenciesAction(ActionListener listener) {
+		ActionListener action = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JCheckBox checkbox = (JCheckBox) event.getSource();
+				if (checkbox.isSelected()) {
+					setCheckBoxIcon(showDependenciesOptionMenu, "dependenciesShow");
+				} else {
+					setCheckBoxIcon(showDependenciesOptionMenu, "dependenciesHide");
+				}
+			}
+		};
+		showDependenciesOptionMenu.addActionListener(action);
 		showDependenciesOptionMenu.addActionListener(listener);
+		graphicsOptionsDialog.setToggleDependenciesAction(action);
 		graphicsOptionsDialog.setToggleDependenciesAction(listener);
 	}
 
 	public void setToggleViolationsAction(ActionListener listener) {
+		ActionListener action = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JCheckBox checkbox = (JCheckBox) event.getSource();
+				ImageIcon icon = null;
+				if (checkbox.isSelected()) {
+					icon = new ImageIcon(getClass().getResource(icons.get("violationsShow")));
+				} else {
+					icon = new ImageIcon(getClass().getResource(icons.get("violationsHide")));
+				}
+				if (icon != null) {
+					showViolationsOptionMenu.setIcon(icon);
+				}
+			}
+		};
+		showViolationsOptionMenu.addActionListener(action);
 		showViolationsOptionMenu.addActionListener(listener);
+		graphicsOptionsDialog.setToggleViolationsAction(action);
 		graphicsOptionsDialog.setToggleViolationsAction(listener);
 	}
 
@@ -140,11 +191,11 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	public void setZoomChangeListener(final ChangeListener listener) {
-		zoomSlider.addChangeListener(new ChangeListener(){
+		zoomSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
-				//TODO notify the other slider in the options dialog
-		    	listener.stateChanged(ce);
+				// TODO notify the other slider in the options dialog
+				listener.stateChanged(ce);
 			}
 		});
 		graphicsOptionsDialog.setZoomChangeListener(listener);
@@ -153,8 +204,6 @@ public class GraphicsMenuBar extends JPanel {
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
 			optionsDialogButton.setText(menuBarLocale.get("Options"));
-			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
 			graphicsOptionsDialog.setLocale(menuBarLocale);
 			graphicsOptionsDialog.setIcons(icons);
 		} catch (NullPointerException e) {
