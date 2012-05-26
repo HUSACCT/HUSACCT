@@ -24,6 +24,8 @@ public class GraphicsMenuBar extends JPanel {
 
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 
+	private HashMap<String, String> icons; 
+	
 	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu;
 	
@@ -33,30 +35,37 @@ public class GraphicsMenuBar extends JPanel {
 	private int menuItemMaxHeight = 45;
 
 	public GraphicsMenuBar() {
+		icons = new HashMap<String, String>();
+		icons.put("zoomIn", "/husacct/common/resources/icon-zoom.png");
+		icons.put("zoomOut", "/husacct/common/resources/icon-back.png");
+		icons.put("refresh", "/husacct/common/resources/icon-refresh.png");
+		icons.put("save", "/husacct/common/resources/icon-save.png");
+		icons.put("dependencies", "/husacct/common/resources/icon-back.png");
+		icons.put("violations", "/husacct/common/resources/icon-back.png");
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 	}
 
 	private void initializeComponents() {
-		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource(icons.get("zoomIn")));
 		zoomInButton = new JButton();
 		zoomInButton.setIcon(icon);
 		zoomInButton.setSize(50, menuItemMaxHeight);
 		add(zoomInButton);		
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
+		icon = new ImageIcon(getClass().getResource(icons.get("zoomOut")));
 		zoomOutButton = new JButton();
 		zoomOutButton.setIcon(icon);
 		zoomOutButton.setSize(50, menuItemMaxHeight);
 		add(zoomOutButton);
 
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-refresh.png"));
+		icon = new ImageIcon(getClass().getResource(icons.get("refresh")));
 		refreshButton = new JButton();
 		refreshButton.setSize(50, menuItemMaxHeight);
 		refreshButton.setIcon(icon);
 		add(refreshButton);
 		
-		icon  = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-save.png"));
+		icon  = new ImageIcon(getClass().getResource(icons.get("save")));
 		exportToImageButton = new JButton();
 		exportToImageButton.setIcon(icon);
 		exportToImageButton.setSize(50, menuItemMaxHeight);
@@ -71,6 +80,7 @@ public class GraphicsMenuBar extends JPanel {
 		add(showViolationsOptionMenu);
 
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
+		graphicsOptionsDialog.setIcons(icons);
 		optionsDialogButton = new JButton();
 		optionsDialogButton.setSize(40, menuItemMaxHeight);
 		optionsDialogButton.addActionListener(new ActionListener() {
@@ -88,11 +98,12 @@ public class GraphicsMenuBar extends JPanel {
 
 	public void setZoomInAction(ActionListener listener) {
 		zoomInButton.addActionListener(listener);
+		graphicsOptionsDialog.setZoomInAction(listener);
 	}
 	
 	public void setZoomOutAction(ActionListener listener) {
 		zoomOutButton.addActionListener(listener);
-		graphicsOptionsDialog.setLevelUpAction(listener);
+		graphicsOptionsDialog.setZoomOutAction(listener);
 	}
 
 	public void setRefreshAction(ActionListener listener) {
@@ -141,9 +152,11 @@ public class GraphicsMenuBar extends JPanel {
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
+			optionsDialogButton.setText(menuBarLocale.get("Options"));
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
 			graphicsOptionsDialog.setLocale(menuBarLocale);
+			graphicsOptionsDialog.setIcons(icons);
 		} catch (NullPointerException e) {
 			logger.warn("Locale for GraphicsMenuBar is not set properly.");
 		}

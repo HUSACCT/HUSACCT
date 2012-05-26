@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -108,7 +109,8 @@ public class GraphicsOptionsDialog extends JDialog {
 	
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
-			zoomOutButton.setText(menuBarLocale.get("LevelUp"));
+			zoomInButton.setText(menuBarLocale.get("ZoomIn"));
+			zoomOutButton.setText(menuBarLocale.get("ZoomOut"));
 			refreshButton.setText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
@@ -118,8 +120,27 @@ public class GraphicsOptionsDialog extends JDialog {
 			logger.warn("Locale is not set properly.");
 		}
 	}
+	
+	public void setIcons(HashMap<String, String> icons) {
+		try{
+			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get("zoomIn")));
+			zoomInButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("zoomOut")));
+			zoomOutButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("refresh")));
+			refreshButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("save")));
+			exportToImageButton.setIcon(icon);
+		} catch (NullPointerException e) {
+			logger.warn("Icons are not set properly.");
+		}
+	}
+	
+	public void setZoomInAction(ActionListener listener) {
+		zoomInButton.addActionListener(listener);
+	}
 
-	public void setLevelUpAction(ActionListener listener) {
+	public void setZoomOutAction(ActionListener listener) {
 		zoomOutButton.addActionListener(listener);
 	}
 

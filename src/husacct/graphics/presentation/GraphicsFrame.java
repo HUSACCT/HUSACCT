@@ -120,7 +120,9 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private void updateComponentsLocaleStrings() {
 		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
-		menuBarLocale.put("LevelUp", controlService.getTranslatedString("LevelUp"));
+		menuBarLocale.put("Options", controlService.getTranslatedString("Options"));
+		menuBarLocale.put("ZoomIn", controlService.getTranslatedString("ZoomIn"));
+		menuBarLocale.put("ZoomOut", controlService.getTranslatedString("ZoomOut"));
 		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
 		menuBarLocale.put("ShowDependencies", controlService.getTranslatedString("ShowDependencies"));
 		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
