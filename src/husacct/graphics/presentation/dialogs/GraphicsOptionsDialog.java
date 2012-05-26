@@ -3,11 +3,11 @@ package husacct.graphics.presentation.dialogs;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -26,8 +26,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
 	
-	private GridLayout layout = new GridLayout(0,2);
-	private JPanel settingsPanel, actionsPanel, zoomPanel;
+	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel;
 	
 	private int menuItemMaxHeight = 45;
 
@@ -44,6 +43,9 @@ public class GraphicsOptionsDialog extends JDialog {
 		height = 200;
 		
 		controlService = ServiceProvider.getInstance().getControlService();
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
+		add(mainPanel);
 		initGUI();
 	}
 	
@@ -57,54 +59,53 @@ public class GraphicsOptionsDialog extends JDialog {
 	
 	public void initGUI() {
 		actionsPanel = new JPanel();
+			zoomInButton = new JButton();
+			actionsPanel.add(zoomInButton);
+			
+			zoomOutButton = new JButton();
+			actionsPanel.add(zoomOutButton);
+			
+			refreshButton = new JButton();
+			actionsPanel.add(refreshButton);
+			
+			exportToImageButton = new JButton();
+			actionsPanel.add(exportToImageButton);
+			
+			mainPanel.add(actionsPanel);
+		
+		optionsPanel = new JPanel();
+		optionsPanel.setLayout(new GridLayout(3,1));
+		
+			showDependenciesOptionMenu = new JCheckBox();
+			showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
+			optionsPanel.add(showDependenciesOptionMenu);
+			
+			showViolationsOptionMenu = new JCheckBox();
+			showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
+			optionsPanel.add(showViolationsOptionMenu);
+			
+			contextUpdatesOptionMenu = new JCheckBox();
+			contextUpdatesOptionMenu.setSize(40, menuItemMaxHeight);
+			optionsPanel.add(contextUpdatesOptionMenu);
+		
+			mainPanel.add(optionsPanel);
+		
 		settingsPanel = new JPanel();
+		settingsPanel.setLayout(new GridLayout(1,2));
+			settingsPanel.add(new JLabel("Layout strategy"));
+			layoutStrategyOptions = new JComboBox();
+			settingsPanel.add(layoutStrategyOptions);
+			
+			mainPanel.add(settingsPanel);
+		
 		zoomPanel = new JPanel();
-		
-		zoomInButton = new JButton();
-		actionsPanel.add(zoomInButton);
-		
-		zoomOutButton = new JButton();
-		actionsPanel.add(zoomOutButton);
-		
-		refreshButton = new JButton();
-		actionsPanel.add(refreshButton);
-		
-		exportToImageButton = new JButton();
-		actionsPanel.add(exportToImageButton);
-		
-		add(actionsPanel, BorderLayout.NORTH);
-		
-		settingsPanel.setSize(width,height);
-		settingsPanel.setLayout(layout);
-		
-		settingsPanel.add(new JLabel("Show dependencies"));
-		showDependenciesOptionMenu = new JCheckBox();
-		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
-		settingsPanel.add(showDependenciesOptionMenu);
-		
-		settingsPanel.add(new JLabel("Show violations"));
-		showViolationsOptionMenu = new JCheckBox();
-		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
-		settingsPanel.add(showViolationsOptionMenu);
-		
-		settingsPanel.add(new JLabel("Line context updates"));
-		contextUpdatesOptionMenu = new JCheckBox();
-		contextUpdatesOptionMenu.setSize(40, menuItemMaxHeight);
-		settingsPanel.add(contextUpdatesOptionMenu);
-		
-		settingsPanel.add(new JLabel("Layout strategy"));
-		layoutStrategyOptions = new JComboBox();
-		settingsPanel.add(layoutStrategyOptions);
-		
-		layout.layoutContainer(settingsPanel);
-		add(settingsPanel, BorderLayout.CENTER);
-		
-		zoomPanel.add(new JLabel("Zoom"));
-		zoomSlider = new JSlider(25, 175, 100);
-		zoomSlider.setSize(50, width);
-		zoomPanel.add(zoomSlider);
-		
-		add(zoomPanel, BorderLayout.SOUTH);
+		zoomPanel.setLayout(new GridLayout(1,2));
+			zoomPanel.add(new JLabel("Zoom"));
+			zoomSlider = new JSlider(25, 175, 100);
+			zoomSlider.setSize(50, width);
+			zoomPanel.add(zoomSlider);
+			
+			mainPanel.add(zoomPanel);
 	}
 	
 	public void setLocale(HashMap<String, String> menuBarLocale) {
