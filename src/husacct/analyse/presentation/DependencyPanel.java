@@ -19,6 +19,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JCheckBox;
+import java.awt.ComponentOrientation;
+import javax.swing.SwingConstants;
 
 class DependencyPanel extends JPanel implements TreeSelectionListener{  
 	
@@ -29,6 +32,8 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 	private JScrollPane fromModuleScrollPane, toModuleScrollPane, dependencyScrollPane;
 	private JTree fromModuleTree, toModuleTree;
 	private JTable dependencyTable;
+	private JCheckBox indirectFilterBox;
+	private JPanel filterPanel;
 	private AbstractTableModel tableModel;
 	
 	private List<AnalysedModuleDTO> fromSelected = new ArrayList<AnalysedModuleDTO>(); 
@@ -45,13 +50,10 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		
 		dependencyTable.setModel(tableModel);
 		dependencyScrollPane.setViewportView(dependencyTable);
-		
-		toModuleScrollPane.setViewportView(toModuleTree);
-		fromModuleScrollPane.setViewportView(fromModuleTree);
+		dependencyTable.setBackground(UIManager.getColor("Panel.background"));
 		
 		initialiseTrees();
 		
-		dependencyTable.setBackground(UIManager.getColor("Panel.background"));
 		setLayout(theLayout);
 	}
 	
@@ -125,30 +127,42 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		dependencyScrollPane = new JScrollPane();
 		dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
 		
+		this.filterPanel = new JPanel();
+		filterPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
+		
 		theLayout = new GroupLayout(this);
 		theLayout.setHorizontalGroup(
 			theLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(theLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(theLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(dependencyScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+						.addComponent(filterPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+						.addComponent(dependencyScrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
 						.addGroup(theLayout.createSequentialGroup()
-							.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+							.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
 							.addGap(18)
-							.addComponent(toModuleScrollPane, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)))
+							.addComponent(toModuleScrollPane, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		theLayout.setVerticalGroup(
 			theLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(theLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(theLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(toModuleScrollPane, 0, 0, Short.MAX_VALUE)
-						.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
+					.addGroup(theLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(toModuleScrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+						.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+					.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+					.addGap(2)
+					.addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
 					.addGap(2))
 		);
+		
+		this.indirectFilterBox = new JCheckBox(dataControl.translate("ShowIndirectDependencies"));
+		indirectFilterBox.setSelected(true);
+		indirectFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
+		filterPanel.add(indirectFilterBox);
 		fromModuleScrollPane.setBackground(PANELBACKGROUND);
 		toModuleScrollPane.setBackground(PANELBACKGROUND);
 		dependencyScrollPane.setBackground(UIManager.getColor("Panel.background"));
@@ -185,9 +199,12 @@ class DependencyPanel extends JPanel implements TreeSelectionListener{
 		fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
 		toModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("ToModuleTreeTitle")));
 		dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
+		filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
+		this.indirectFilterBox.setText(dataControl.translate("ShowIndirectDependencies"));
 		toModuleScrollPane.repaint(); 
 		fromModuleScrollPane.repaint();
 		dependencyScrollPane.repaint();
+		filterPanel.repaint();
 		updateTableModel();
 		this.repaint();
 	}
