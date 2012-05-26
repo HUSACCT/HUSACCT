@@ -203,5 +203,9 @@ public class GraphicsOptionsDialog extends JDialog {
 			showViolationsOptionMenu.setSelected(setting);
 		}
 	}
+
+	public void setZoomValue(int value) {
+		zoomSlider.setValue(value);
+	}
 	
 }

@@ -43,16 +43,20 @@ public class DrawingState {
 			BaseFigure bf = (BaseFigure) f;
 
 			if (!bf.isLine()) {
-				String fullPath = getFullPath(bf);
-				Rectangle2D.Double bounds = bf.getBounds();
-				savedPositions.put(fullPath, bounds);
-
-				printFigure(bf, bounds);
+				try{
+					String fullPath = getFullPath(bf);
+					Rectangle2D.Double bounds = bf.getBounds();
+					savedPositions.put(fullPath, bounds);
+	
+					printFigure(bf, bounds);
+				}catch(NullPointerException e){
+					// Figure not found in drawing, because of mulitzoom
+				}
 			}
 		}
 	}
 
-	private String getFullPath(BaseFigure bf) {
+	private String getFullPath(BaseFigure bf) throws NullPointerException {
 		AbstractDTO dto = figureMap.getModuleDTO(bf);
 
 		if (dto instanceof ModuleDTO) {

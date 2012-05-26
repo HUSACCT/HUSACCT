@@ -111,4 +111,12 @@ public class FigureMap {
 	public BaseFigure findModuleByPath(String path) {
 		return moduleFiguresByName.get(path);
 	}
+
+	public HashMap<BaseFigure, AbstractDTO> getAllDTOsWithClonedFigures(ArrayList<BaseFigure> savedFigures) {
+		HashMap<BaseFigure, AbstractDTO> returnHashMap = new HashMap<BaseFigure, AbstractDTO>();
+		for(BaseFigure figure : savedFigures){
+			returnHashMap.put(figure.clone(), moduleFigureDTOMap.get(figure));
+		}
+		return returnHashMap;
+	}
 }
