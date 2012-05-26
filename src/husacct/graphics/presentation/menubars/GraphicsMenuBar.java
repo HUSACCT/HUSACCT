@@ -264,8 +264,6 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	public void setViolationToggle(boolean setting) {
-		System.out.println(showViolationsButton.isSelected()+"="+setting);
-		System.out.println(showViolationsButton.isSelected()!=setting);
 		if(showViolationsButton.isSelected()!=setting){
 			showViolationsButton.setSelected(setting);
 		}
