@@ -28,4 +28,8 @@ public interface UserInputListener {
 	public void toggleContextUpdates();
 	
 	public void drawingZoomChanged(double zoomFactor);	
+	
+	public void hideModules();
+	
+	public void restoreModules();
 }

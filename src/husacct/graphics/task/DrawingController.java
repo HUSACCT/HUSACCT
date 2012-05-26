@@ -13,6 +13,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
@@ -23,7 +24,9 @@ import husacct.graphics.util.DrawingLayoutStrategy;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.JInternalFrame;
 
@@ -42,6 +45,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
+	protected ContextMenu contextMenu;
 	protected String[] currentPaths = new String[]{};
 
 	protected IControlService controlService;
@@ -80,6 +84,10 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 		drawTarget.setSelectedLayout(layoutStrategyOption);
+		
+		contextMenu = new ContextMenu();
+		contextMenu.addListener(this);
+		view.setContextMenu(contextMenu);
 		
 		showDependencies();
 		hideViolations();
@@ -431,5 +439,24 @@ public abstract class DrawingController implements UserInputListener {
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
 		view.setScaleFactor(zoomFactor);
+	}	
+	
+	@Override
+	public void hideModules() {
+		Set<Figure> selection = view.getSelectedFigures();
+		for (Figure f : selection) {
+			BaseFigure bf = (BaseFigure) f;
+			bf.setVisible(false);
+		}
+	}
+	
+	@Override
+	public void restoreModules() {
+		List<Figure> selection = drawing.getChildren();
+		for (Figure f : selection) {
+			BaseFigure bf = (BaseFigure) f;
+			if (!bf.isVisible())
+				bf.setVisible(true);
+		}		
 	}	
 }
