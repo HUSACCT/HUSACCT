@@ -202,7 +202,12 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.setZoomOutAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moduleZoomOut();
+				String[] secondLastPath = locationBar.getSecondLastPath();
+				if(secondLastPath.length==0){
+					moduleZoomOut();
+				}else{
+					moduleOpen(secondLastPath);
+				}
 			}
 		});
 		menuBar.setRefreshAction(new ActionListener() {
