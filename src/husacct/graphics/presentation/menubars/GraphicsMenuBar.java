@@ -215,8 +215,15 @@ public class GraphicsMenuBar extends JPanel {
 		zoomSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
-				// TODO notify the other slider in the options dialog
-				listener.stateChanged(ce);
+				graphicsOptionsDialog.setZoomValue(((JSlider)ce.getSource()).getValue());
+			}
+		});
+		zoomSlider.addChangeListener(listener);
+		
+		graphicsOptionsDialog.setZoomChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				zoomSlider.setValue(((JSlider)ce.getSource()).getValue());
 			}
 		});
 		graphicsOptionsDialog.setZoomChangeListener(listener);
