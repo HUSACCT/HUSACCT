@@ -12,8 +12,11 @@ import husacct.graphics.util.DrawingLayoutStrategy;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private GraphicsMenuBar menuBar;
 	private ZoomLocationBar locationBar;
 	private String[] currentPaths;
-	private JScrollPane drawingScrollPane, propertiesScrollPane;
+	private JScrollPane drawingScrollPane, propertiesScrollPane, locationScrollPane;
 	private JSplitPane centerPane;
 	private String ROOT_LEVEL;
 	private boolean showingProperties = false;
@@ -106,9 +109,14 @@ public class GraphicsFrame extends JInternalFrame {
 		createMenuBar();
 		createLocationBar();
 
+		locationScrollPane = new JScrollPane(locationBar);
+		locationScrollPane.setPreferredSize(new Dimension(900, 35));
+		locationScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		locationScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
 		setLayout(new BorderLayout());
 		add(menuBar, BorderLayout.NORTH);
-		add(locationBar, BorderLayout.SOUTH);
+		add(locationScrollPane, BorderLayout.SOUTH);
 
 		dependencyColumnKeysArray = new String[] { "From", "To", "LineNumber", "DependencyType" };
 		violationColumnKeysArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
@@ -116,6 +124,40 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 
 		layoutComponents();
+		
+		
+		this.getRootPane().addComponentListener(new ComponentListener(){
+			@Override
+			public void componentResized(ComponentEvent e) {
+				positionLayoutComponents();
+				resizeLocationBar();
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// Do nothing
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// Do nothing
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				// Do nothing
+			}
+			
+		});
+	}
+	
+	private void resizeLocationBar(){
+		if(locationScrollPane.getHorizontalScrollBar().isShowing()){
+			locationScrollPane.setPreferredSize(new Dimension(900, 50));
+		}
+		else{
+			locationScrollPane.setPreferredSize(new Dimension(900, 35));
+		}
 	}
 
 	private void updateComponentsLocaleStrings() {
@@ -253,6 +295,7 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void createLocationBar() {
 		locationBar = new ZoomLocationBar();
+		
 		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
 			@Override
 			public void actionPerformed(String[] selectedPaths) {
@@ -262,11 +305,8 @@ public class GraphicsFrame extends JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		locationBar.setSize(frameTotalWidth, 20);
-
+		
 		updateGUI();
-
-		add(locationBar, java.awt.BorderLayout.SOUTH);
 	}
 
 	public void updateGUI() {

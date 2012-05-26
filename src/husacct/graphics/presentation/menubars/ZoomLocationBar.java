@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.menubars;
 
+import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,9 +11,9 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 
-public class ZoomLocationBar extends JMenuBar {
+public class ZoomLocationBar extends JPanel {
 	private static final long serialVersionUID = 1025962225565217061L;
 	private String rootLocale;
 	private JButton rootLocationButton;
@@ -25,6 +26,7 @@ public class ZoomLocationBar extends JMenuBar {
 	private ArrayList<LocationButtonActionListener> locationButtonPressListener;
 
 	public ZoomLocationBar() {
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 		locationButtonPressListener = new ArrayList<LocationButtonActionListener>();
 	}
 
