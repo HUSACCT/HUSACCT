@@ -12,7 +12,6 @@ import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JDialog;
@@ -94,11 +93,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public String getTranslatedString(String stringIdentifier){
 		return localeController.getTranslatedString(stringIdentifier);
-	}
-	
-	@Override
-	public List<String> getStringIdentifiers(String translatedString){
-		return new ArrayList<String>();
 	}
 	
 	@Override
