@@ -13,6 +13,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
@@ -23,11 +24,14 @@ import husacct.graphics.util.DrawingLayoutStrategy;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
@@ -42,6 +46,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
+	protected ContextMenu contextMenu;
 	protected String[] currentPaths = new String[]{};
 
 	protected IControlService controlService;
@@ -59,9 +64,6 @@ public abstract class DrawingController implements UserInputListener {
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
-		initializeComponents();
-		switchLayoutStrategy();
-
 		controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
@@ -69,6 +71,9 @@ public abstract class DrawingController implements UserInputListener {
 				refreshFrame();
 			}
 		});
+		
+		initializeComponents();
+		switchLayoutStrategy();
 	}
 
 	private void initializeComponents() {
@@ -80,6 +85,10 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 		drawTarget.setSelectedLayout(layoutStrategyOption);
+		
+		contextMenu = new ContextMenu(controlService);
+		contextMenu.addListener(this);
+		view.setContextMenu(contextMenu);
 		
 		showDependencies();
 		hideViolations();
@@ -217,12 +226,15 @@ public abstract class DrawingController implements UserInputListener {
 		} else {
 			drawTarget.hidePropertiesPane();
 		}
+		
+		contextMenu.setHasSelection(figures.length > 0);
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
 		if (view.getSelectionCount() == 0) {
 			drawTarget.hidePropertiesPane();
+			contextMenu.setHasSelection(false);
 		}
 	}
 
@@ -432,4 +444,46 @@ public abstract class DrawingController implements UserInputListener {
 	public void drawingZoomChanged(double zoomFactor) {
 		view.setScaleFactor(zoomFactor);
 	}	
+	
+	@Override
+	public void hideModules() {
+		Set<Figure> selection = view.getSelectedFigures();
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			
+			if (!bf.isLine()) {
+				if (selection.contains(bf)) {
+					bf.setEnabled(false);
+				}
+			} else if (bf.isLine()) {
+				ConnectionFigure cf = (ConnectionFigure) f;
+				if (selection.contains(cf.getStartFigure()) || selection.contains(cf.getEndFigure())) {
+					bf.setEnabled(false);
+				}
+			}
+		}
+		
+		if (selection.size() > 0)
+			contextMenu.setHasHiddenFigures(true);
+	}
+	
+	@Override
+	public void restoreModules() {
+		List<Figure> selection = drawing.getChildren();
+		for (Figure f : selection) {
+			BaseFigure bf = (BaseFigure) f;
+			bf.setEnabled(true);
+		}
+		contextMenu.setHasHiddenFigures(false);
+	}	
+	
+	@Override
+	public void moduleZoom() {
+		Set<Figure> selection = view.getSelectedFigures();
+		if (selection.size() > 0) {
+			BaseFigure[] selectedFigures = selection.toArray(new BaseFigure[selection.size()]);
+	
+			moduleZoom(selectedFigures);
+		}
+	}
 }

@@ -70,7 +70,7 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isInContainer())
+			if (!bf.isInContainer() && !bf.isLine())
 				count++;
 		}
 		

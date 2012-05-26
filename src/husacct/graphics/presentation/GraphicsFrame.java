@@ -187,6 +187,14 @@ public class GraphicsFrame extends JInternalFrame {
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
 		menuBar.setSize(frameTotalWidth, 20);
+
+		menuBar.setZoomInAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				moduleZoomIn();
+			}
+		});
+		
 		menuBar.setZoomOutAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -271,6 +279,12 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
 	}
 
+	private void moduleZoomIn() {
+		for (UserInputListener l : listeners) {
+			l.moduleZoom();
+		}
+	}
+	
 	private void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
 			l.moduleOpen(paths);

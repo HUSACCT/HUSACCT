@@ -1,6 +1,7 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.task.UserInputListener;
 
 import java.awt.event.MouseAdapter;
@@ -22,10 +23,12 @@ public class DrawingView extends DefaultDrawingView {
 
 	private static final long serialVersionUID = 7276696509798039409L;
 	private static final int LeftMouseButton = MouseEvent.BUTTON1;
+	private static final int RightMouseButton = MouseEvent.BUTTON3;
 	private static final int DoubleClick = 2;
 
 	private Drawing drawing;
 	private DefaultDrawingEditor editor;
+	private ContextMenu contextMenu;
 	private SelectionTool selectionTool;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
@@ -60,22 +63,22 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void onMouseClicked(MouseEvent e) {
+		int mouseButton = e.getButton();
+		int mouseClicks = e.getClickCount();
+
 		handleDeselect();
-		if (hasSelection()) {
-			int mouseButton = e.getButton();
-			int mouseClicks = e.getClickCount();
+		if (mouseButton == LeftMouseButton && hasSelection()) {
+			BaseFigure[] selection = toFigureArray(getSelectedFigures());
 
-			if (mouseButton == LeftMouseButton) {
-				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-
-				if (mouseClicks == DoubleClick) {
-					moduleZoom(selection);
-				}else{
-					for(BaseFigure figure : selection){
-						figure.raiseLayer();
-					}
+			if (mouseClicks == DoubleClick) {
+				moduleZoom(selection);
+			} else {
+				for (BaseFigure figure : selection) {
+					figure.raiseLayer();
 				}
 			}
+		} else if (mouseButton == RightMouseButton) {
+			contextMenu.show(this, e.getX(), e.getY());
 		}
 
 		previousSelection.clear();
@@ -89,7 +92,7 @@ public class DrawingView extends DefaultDrawingView {
 			deselection = deselectedFigures.toArray(deselection);
 
 			figureDeselected(deselection);
-			for(BaseFigure figure : deselection){
+			for (BaseFigure figure : deselection) {
 				figure.resetLayer();
 			}
 		}
@@ -212,5 +215,9 @@ public class DrawingView extends DefaultDrawingView {
 
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
+	}
+	
+	public void setContextMenu(ContextMenu menu) {
+		contextMenu = menu;
 	}
 }

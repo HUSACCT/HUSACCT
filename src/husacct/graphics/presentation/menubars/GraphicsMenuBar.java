@@ -24,8 +24,9 @@ public class GraphicsMenuBar extends JPanel {
 
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 
-	private JButton zoomInButton, refreshMenu, exportToImageMenu, optionsDialogMenu;
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu;
+	
 	private JSlider zoomSlider;
 	private GraphicsOptionsDialog graphicsOptionsDialog;
 
@@ -37,23 +38,29 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	private void initializeComponents() {
-		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-zoom.png"));
 		zoomInButton = new JButton();
 		zoomInButton.setIcon(icon);
 		zoomInButton.setSize(50, menuItemMaxHeight);
-		add(zoomInButton);
+		add(zoomInButton);		
+		
+		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
+		zoomOutButton = new JButton();
+		zoomOutButton.setIcon(icon);
+		zoomOutButton.setSize(50, menuItemMaxHeight);
+		add(zoomOutButton);
 
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-refresh.png"));
-		refreshMenu = new JButton();
-		refreshMenu.setSize(50, menuItemMaxHeight);
-		refreshMenu.setIcon(icon);
-		add(refreshMenu);
-
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-save.png"));
-		exportToImageMenu = new JButton();
-		exportToImageMenu.setIcon(icon);
-		exportToImageMenu.setSize(50, menuItemMaxHeight);
-		add(exportToImageMenu);
+		refreshButton = new JButton();
+		refreshButton.setSize(50, menuItemMaxHeight);
+		refreshButton.setIcon(icon);
+		add(refreshButton);
+		
+		icon  = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-save.png"));
+		exportToImageButton = new JButton();
+		exportToImageButton.setIcon(icon);
+		exportToImageButton.setSize(50, menuItemMaxHeight);
+		add(exportToImageButton);
 
 		showDependenciesOptionMenu = new JCheckBox();
 		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
@@ -64,31 +71,36 @@ public class GraphicsMenuBar extends JPanel {
 		add(showViolationsOptionMenu);
 
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
-		optionsDialogMenu = new JButton();
-		optionsDialogMenu.setSize(40, menuItemMaxHeight);
-		optionsDialogMenu.addActionListener(new ActionListener() {
+		optionsDialogButton = new JButton();
+		optionsDialogButton.setSize(40, menuItemMaxHeight);
+		optionsDialogButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				graphicsOptionsDialog.showDialog();
 			}
 		});
-		add(optionsDialogMenu);
+		add(optionsDialogButton);
 
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
 		add(zoomSlider);
 	}
 
-	public void setZoomOutAction(ActionListener listener) {
+	public void setZoomInAction(ActionListener listener) {
 		zoomInButton.addActionListener(listener);
+	}
+	
+	public void setZoomOutAction(ActionListener listener) {
+		zoomOutButton.addActionListener(listener);
 		graphicsOptionsDialog.setLevelUpAction(listener);
 	}
 
 	public void setRefreshAction(ActionListener listener) {
-		refreshMenu.addActionListener(listener);
+		refreshButton.addActionListener(listener);
 		graphicsOptionsDialog.setRefreshAction(listener);
 	}
 
+	
 	public void setToggleDependenciesAction(ActionListener listener) {
 		showDependenciesOptionMenu.addActionListener(listener);
 		graphicsOptionsDialog.setToggleDependenciesAction(listener);
@@ -104,11 +116,11 @@ public class GraphicsMenuBar extends JPanel {
 	}
 
 	public void setOptionsDialogAction(ActionListener listener) {
-		optionsDialogMenu.addActionListener(listener);
+		optionsDialogButton.addActionListener(listener);
 	}
 
 	public void setExportToImageAction(ActionListener listener) {
-		exportToImageMenu.addActionListener(listener);
+		exportToImageButton.addActionListener(listener);
 		graphicsOptionsDialog.setExportToImageAction(listener);
 	}
 
