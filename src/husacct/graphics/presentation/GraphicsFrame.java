@@ -187,7 +187,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
 		menuBar.setSize(frameTotalWidth, 20);
-		menuBar.setLevelUpAction(new ActionListener() {
+		menuBar.setZoomOutAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				moduleZoomOut();
@@ -231,15 +231,15 @@ public class GraphicsFrame extends JInternalFrame {
 					selectedStrategy = layoutStrategiesTranslations.get(menuBar.getSelectedLayoutStrategyItem());
 					changeLayoutStrategy(selectedStrategy);
 				}catch(Exception ex){
-					logger.debug("Could not find the selected layout strategy \""+selectedStrategy.toString()+"\".");
+					logger.debug("Could not find the selected layout strategy \""+(selectedStrategy==null ? "null" :selectedStrategy.toString())+"\".");
 				}
 			}
 		});
 		menuBar.setZoomChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
-		    		zoomChanged();
-				}
+		    	zoomChanged();
+			}
 		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
 	}
@@ -293,7 +293,7 @@ public class GraphicsFrame extends JInternalFrame {
 		double scaleFactor = menuBar.getScaleFactor();
 		for (UserInputListener l : listeners) {
 			l.drawingZoomChanged(scaleFactor);
-		}		
+		}
 	}	
 	
 	protected void toggleDependencies() {
@@ -425,10 +425,10 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void turnOnDependencies() {
-		menuBar.setContextDependencyToggle(true);
+		menuBar.setDependencyToggle(true);
 	}
 
 	public void turnOffDependencies() {
-		menuBar.setContextDependencyToggle(false);
+		menuBar.setDependencyToggle(false);
 	}
 }
