@@ -69,7 +69,8 @@ public class FigureMap {
 	public void linkModule(BaseFigure figure, AbstractDTO dto) {
 		moduleFigureDTOMap.put(figure, dto);
 
-		// TODO: Re-factor this into a more clean design. Perhaps turn into a dictionary?
+		// TODO: Re-factor this into a more clean design. Perhaps turn into a
+		// dictionary?
 		if (dto instanceof ModuleDTO) {
 			ModuleDTO md = (ModuleDTO) dto;
 			moduleFiguresByName.put(md.logicalPath, figure);
@@ -110,23 +111,4 @@ public class FigureMap {
 	public BaseFigure findModuleByPath(String path) {
 		return moduleFiguresByName.get(path);
 	}
-
-	// public BaseFigure findModuleByPath(String path) {
-	// for (Entry<BaseFigure, AbstractDTO> e : moduleFigureDTOMap.entrySet()) {
-	// AbstractDTO dto = e.getValue();
-	// if (dto instanceof ModuleDTO) {
-	// ModuleDTO moduleDTO = (ModuleDTO)dto;
-	// if (moduleDTO.logicalPath.equals(path))
-	// return e.getKey();
-	// } else if (dto instanceof AnalysedModuleDTO) {
-	// AnalysedModuleDTO analysedDTO = (AnalysedModuleDTO) dto;
-	// if (analysedDTO.uniqueName.equals(path))
-	// return e.getKey();
-	// }
-	// }
-	//
-	// // FIXME: Fix this by replace it with an exception and add an containsModule(String path)
-	// // function to allow searching within the DTOs
-	// return null;
-	// }
 }

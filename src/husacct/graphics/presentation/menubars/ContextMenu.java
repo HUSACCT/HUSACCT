@@ -1,7 +1,7 @@
 package husacct.graphics.presentation.menubars;
 
 import husacct.control.IControlService;
-import husacct.graphics.task.UserInputListener;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

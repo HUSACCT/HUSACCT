@@ -4,7 +4,7 @@ import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
-import husacct.graphics.task.DrawingDetail;
+import husacct.graphics.util.DrawingDetail;
 
 import javax.swing.JInternalFrame;
 

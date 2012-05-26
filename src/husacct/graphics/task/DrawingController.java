@@ -16,10 +16,13 @@ import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
+import husacct.graphics.task.layout.FigureConnectorStrategy;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;

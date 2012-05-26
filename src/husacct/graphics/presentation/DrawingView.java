@@ -2,7 +2,7 @@ package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
-import husacct.graphics.task.UserInputListener;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

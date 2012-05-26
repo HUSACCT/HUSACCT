@@ -7,8 +7,8 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
-import husacct.graphics.task.UserInputListener;
 import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
