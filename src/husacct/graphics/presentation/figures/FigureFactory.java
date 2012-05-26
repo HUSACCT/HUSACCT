@@ -60,7 +60,7 @@ public final class FigureFactory {
 		}
 
 		if (null == createdFigure) {
-			throw new RuntimeException("Unimplemented dto type '" + dto.getClass().getSimpleName() + "' passed to FigureFactory");
+			throw new RuntimeException("Unimplemented dto type '" + (null==dto ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
 		}
 		return createdFigure;
 	}

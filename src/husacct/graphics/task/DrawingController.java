@@ -294,15 +294,22 @@ public abstract class DrawingController implements UserInputListener {
 		clearSavedFiguresForZoom();
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
-			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
-			drawing.add(parentFigure);
+			ParentFigure parentFigure = null;
+			if(!parentName.isEmpty()){
+				parentFigure = figureFactory.createParentFigure(parentName);
+				drawing.add(parentFigure);
+			}
 			for (AbstractDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
-				parentFigure.add(generatedFigure);
+				if(!parentName.isEmpty()){
+					parentFigure.add(generatedFigure);
+				}
 				drawing.add(generatedFigure);
 				figureMap.linkModule(generatedFigure, dto);
 			}
-			parentFigure.updateLayout();
+			if(!parentName.isEmpty()){
+				parentFigure.updateLayout();
+			}
 		}
 		for(BaseFigure figure : savedFiguresToBeDrawn.keySet()){
 			drawing.add(figure);
