@@ -33,7 +33,7 @@ public class CSharpParameterConvertController extends CSharpGenerator {
 			if (type == FORWARDCURLYBRACKET && parameterTrees.size() > 2) {
 				if (Arrays.binarySearch(typeCollection, parameterTrees.get(1).getType()) > -1) {
 					if (parameterTrees.get(2).getType() == IDENTIFIER) {
-						new CSharpParameterGenerator(parameterTrees, cSharpTreeConvertController);
+						new CSharpParameterGenerator(parameterTrees, cSharpTreeConvertController, cSharpTreeConvertController);
 					}
 				}
 			}
