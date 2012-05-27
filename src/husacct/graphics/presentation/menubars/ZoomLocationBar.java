@@ -142,4 +142,16 @@ public class ZoomLocationBar extends JPanel {
 			return new String[]{};
 		}
 	}
+
+	public void turnOnBar() {
+		for(JButton button : buttons){
+			button.setEnabled(true);
+		}
+	}
+
+	public void turnOffBar() {
+		for(JButton button : buttons){
+			button.setEnabled(false);
+		}
+	}
 }

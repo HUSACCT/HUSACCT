@@ -272,6 +272,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
+		setDrawingViewNonVisible();
 		runDrawSingleLevelTask(modules);
 	}
 
@@ -282,8 +283,6 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
-		setDrawingViewNonVisible();
-		
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
 		for (AbstractDTO dto : modules) {
@@ -301,6 +300,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
 		clearDrawing();
+		setDrawingViewNonVisible();
 		runDrawMultiLevelTask(modules);
 	}
 	
@@ -311,8 +311,6 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		setDrawingViewNonVisible();
-		
 		HashMap<BaseFigure, AbstractDTO> savedFiguresToBeDrawn = getSavedFiguresForZoom();
 		clearSavedFiguresForZoom();
 		clearDrawing();
@@ -388,6 +386,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
+		setDrawingViewNonVisible();
 		runDrawLinesTask();
 	}
 
@@ -407,6 +406,7 @@ public abstract class DrawingController implements UserInputListener {
 		if(areSmartLinesOn()){
 			drawing.updateLineFigureToContext();
 		}
+		setDrawingViewVisible();
 	}
 
 	public void drawDependenciesForShownModules() {

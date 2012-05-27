@@ -5,6 +5,7 @@ import husacct.control.IControlService;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
@@ -12,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,6 +37,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
+	private ArrayList<JComponent> interfaceElements;
 	
 	private int width, height;
 
@@ -48,6 +51,17 @@ public class GraphicsOptionsDialog extends JDialog {
 		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
 		add(mainPanel);
 		initGUI();
+		
+		interfaceElements = new ArrayList<JComponent>();
+		interfaceElements.add(zoomInButton);
+		interfaceElements.add(zoomOutButton);
+		interfaceElements.add(refreshButton);
+		interfaceElements.add(exportToImageButton);
+		interfaceElements.add(showDependenciesOptionMenu);
+		interfaceElements.add(showViolationsOptionMenu);
+		interfaceElements.add(smartLinesOptionMenu);
+		interfaceElements.add(layoutStrategyOptions);
+		interfaceElements.add(zoomSlider);
 	}
 	
 	public void showDialog(){
@@ -211,6 +225,18 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void setZoomValue(int value) {
 		zoomSlider.setValue(value);
+	}
+
+	public void turnOn() {
+		for(JComponent element : interfaceElements){
+			element.setEnabled(true);
+		}
+	}
+
+	public void turnOff() {
+		for(JComponent element : interfaceElements){
+			element.setEnabled(false);
+		}
 	}
 	
 }

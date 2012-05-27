@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -292,6 +293,38 @@ public class GraphicsMenuBar extends JPanel {
 		scaleFactor = Math.min(MAX_SCALEFACTOR, scaleFactor);
 
 		return scaleFactor;
+	}
+	
+	public void turnOffBar() {
+		ArrayList<JButton> actions = new ArrayList<JButton>();
+		actions.add(zoomInButton);
+		actions.add(zoomOutButton);
+		actions.add(refreshButton);
+		actions.add(exportToImageButton);
+		actions.add(optionsDialogButton);
+		actions.add(showDependenciesButton);
+		actions.add(showViolationsButton);
+		for(JButton comp : actions){
+			comp.setEnabled(false);
+		}
+		zoomSlider.setEnabled(false);
+		graphicsOptionsDialog.turnOff();
+	}
+
+	public void turnOnBar(){
+		ArrayList<JButton> actions = new ArrayList<JButton>();
+		actions.add(zoomInButton);
+		actions.add(zoomOutButton);
+		actions.add(refreshButton);
+		actions.add(exportToImageButton);
+		actions.add(optionsDialogButton);
+		actions.add(showDependenciesButton);
+		actions.add(showViolationsButton);
+		for(JButton comp : actions){
+			comp.setEnabled(true);
+		}
+		zoomSlider.setEnabled(true);
+		graphicsOptionsDialog.turnOn();
 	}
 
 }

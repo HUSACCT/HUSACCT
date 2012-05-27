@@ -499,6 +499,8 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void showLoadingScreen() {
+		locationBar.turnOffBar();
+		menuBar.turnOffBar();
 		centerPane.removeAll();
 		centerPane.add(new JLabel("Loading.."));
 		add(centerPane, java.awt.BorderLayout.CENTER);
@@ -510,5 +512,11 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void hideLoadingScreen() {
 		layoutComponents();
+		locationBar.turnOnBar();
+		menuBar.turnOnBar();
+		
+		if (isVisible()) {
+			validate();
+		}
 	}
 }
