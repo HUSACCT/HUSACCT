@@ -45,7 +45,7 @@ public class JavaParameterGenerator extends JavaGenerator {
 		return signature;
 	}
 
-	private void DelegateParametersFromTree(Tree tree) {
+	private void DelegateParametersFromTree(Tree tree) {		
 		for(int i = 0; i < tree.getChildCount(); i++){
 			CommonTree child = (CommonTree) tree.getChild(i);
 			int treeType = child.getType();
@@ -83,35 +83,50 @@ public class JavaParameterGenerator extends JavaGenerator {
 	
 	public String getAttributeRecursive(CommonTree tree){
 		String attributeType = "";
-		int childCount = tree.getChildCount();
-		for(int i = 0; i < childCount; i++){
-			CommonTree childTree = (CommonTree) tree.getChild(i);
-			
-			switch(childTree.getType()){
-				case JavaParser.IDENT:
-					
-					if(declareType == null || declareType.equals("")){
-						declareType = childTree.getText();
-					} else {
-						currentTypes.add(childTree.getText());
-					}
-					attributeType += "." + childTree.getText();
-					if(childTree.getChildCount() > 0){
-						attributeType += getAttributeRecursive(childTree);
-					}
-					break;
-				case JavaParser.GENERIC_TYPE_ARG_LIST:
-					attributeType += "<";
-					attributeType += getAttributeRecursive(childTree);
-					attributeType += ">";
-					break;
-				default:
-					attributeType += getAttributeRecursive(childTree);
 				
+		switch(tree.getType()){
+			case JavaParser.QUALIFIED_TYPE_IDENT:
+				String type = getType(tree);
+				if(declareType == null || declareType.equals("")){
+					declareType = type;
+				} else {
+					currentTypes.add(type);
+				}
+				attributeType += "." + type;
+				int childcount = tree.getChildCount();
+				for(int currentChild = 0; currentChild < childcount; currentChild++){
+					CommonTree childNode = (CommonTree) tree.getChild(currentChild);
+					if(childNode.getChildCount() > 0){
+						attributeType += getAttributeRecursive((CommonTree) childNode.getFirstChildWithType(JavaParser.GENERIC_TYPE_ARG_LIST));
+					}
+				}
+				break;
+			case JavaParser.GENERIC_TYPE_ARG_LIST:
+				CommonTree typeNode = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
+				CommonTree qualifiedNode = (CommonTree) typeNode.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+				attributeType += "<";
+				attributeType += getAttributeRecursive(qualifiedNode);
+				attributeType += ">";
+				break;
+			default:
+				break;
+		}
+		return attributeType;
+	}
+	
+	public String getType(CommonTree tree){
+		String attributeType = "";
+		int childcount = tree.getChildCount();
+		for(int i = 0; i < childcount; i++){
+			Tree identTree = tree.getChild(i);
+			if(identTree.getType() == JavaParser.IDENT){
+				attributeType += attributeType.equals("") ? "" : ".";
+				attributeType += identTree.getText();
 			}
 		}
 		return attributeType;
 	}
+	
 
 	private String getParameterAttributes(Tree tree, int indent) {
 		int childrenCount = tree.getChildCount();

@@ -9,7 +9,10 @@ import org.junit.runners.Suite;
 	AccessFieldTest.class,
 	InvocConstructorTest.class,
 	InvocMethodTest.class,
-	AnnotationTest.class
+	AnnotationTest.class,
+	ImplementsTest.class,
+	ExtendsAbstractTest.class,
+	ExtendsConcreteTest.class
 })
 public class RecognationTestSuite {
 

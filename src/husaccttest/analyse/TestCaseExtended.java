@@ -6,6 +6,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,10 +18,13 @@ public abstract class TestCaseExtended{
 	public String DECLARATION = "Declaration";
 	public String EXTENDSCONCRETE = "ExtendsConcrete";
 	public String EXTENDSABSTRACT = "ExtendsAbstract";
+	public String EXTENDSINTERFACE = "ExtendsInterface";
 	public String IMPLEMENTS = "Implements";
 	public String IMPORT = "Import";
 	public String INVOCCONSTRUCTOR = "InvocConstructor";
+	public String INVOCMETHOD = "InvocMethod";
 	public String EXCEPTION = "Exception";
+	public String ANNOTATION = "Annotation";
 	
 	public String CLASS = "class";
 	public String INTERFACE = "interface";
@@ -50,6 +54,20 @@ public abstract class TestCaseExtended{
 		}
 		return false;
 	}
+	
+	
+	public HashMap<String, Object> createImportHashmap(String from, String to, int linenumber){
+		String fromImportExpected = from;
+		String toImportExpected = to;
+		String typeImportExpected = this.IMPORT;
+		int linenumberImportExpected = linenumber;
+		
+		HashMap<String, Object> dependencyImportExpected = createDependencyHashmap(
+				fromImportExpected, toImportExpected, typeImportExpected, linenumberImportExpected);
+		
+		return dependencyImportExpected;
+	}
+	
 	
 	public HashMap<String, Object> createDependencyHashmap(String from, String to, String type, int linenumber){
 		HashMap<String, Object> dependencyHashMap = new HashMap<String, Object>();
@@ -84,6 +102,32 @@ public abstract class TestCaseExtended{
 		moduleHashMap.put("type", type);
 		
 		return moduleHashMap;
+	}
+	
+	public DependencyDTO[] getOnlyDirectDependencies(DependencyDTO[] dependencies){
+		ArrayList<DependencyDTO> directDependencies = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : dependencies){
+			if(!d.isIndirect){
+				directDependencies.add(d);
+			}
+		}
+		
+		DependencyDTO[] direct = new DependencyDTO[directDependencies.size()];
+		int iterator = 0;
+		for(DependencyDTO d : directDependencies){
+			direct[iterator] = d;
+			iterator++;
+		}
+		
+		return direct;
+	}
+	
+	
+	public DependencyDTO[] getDependenciesFrom(String from){
+		service = new AnalyseServiceImpl();
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+			            dependencies = this.getOnlyDirectDependencies(dependencies);
+		return dependencies;
 	}
 	
 	public boolean compaireDTOWithValues(Object o, Object[] allDependencies){
