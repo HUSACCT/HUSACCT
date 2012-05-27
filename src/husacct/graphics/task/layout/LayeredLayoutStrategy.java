@@ -44,7 +44,7 @@ public class LayeredLayoutStrategy implements LayoutStrategy {
 	}
 
 	@Override
-	public void doLayout(int screenWidth, int screenHeight) {
+	public void doLayout() {
 		initLayout();
 		calculateLayout();
 		applyLayout();

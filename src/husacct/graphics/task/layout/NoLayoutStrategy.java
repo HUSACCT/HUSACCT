@@ -6,7 +6,7 @@ public class NoLayoutStrategy implements LayoutStrategy {
 	}
 
 	@Override
-	public void doLayout(int screenWidth, int screenHeight) {
+	public void doLayout() {
 		// Do nothing as this layout strategy is used when we want no
 		// automatic layouting done.
 	}

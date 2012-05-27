@@ -1,4 +1,4 @@
-package husacct.graphics.task;
+package husacct.graphics.task.layout;
 
 import husacct.graphics.presentation.figures.BaseFigure;
 
