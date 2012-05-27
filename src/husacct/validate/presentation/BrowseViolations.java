@@ -184,7 +184,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		chooseViolationHistoryTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {			
+				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
+					
 					loadAfterChange();
 				}
 			}
@@ -203,6 +204,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				if(input != null && !input.equals("")) {
 					taskServiceImpl.createHistoryPoint(input);
 					buttonSaveInHistory.setEnabled(false);
+					fillChooseViolationHistoryTable();
 				}
 			}
 		});
