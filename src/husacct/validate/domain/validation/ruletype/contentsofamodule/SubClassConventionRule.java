@@ -4,7 +4,6 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -27,7 +26,6 @@ public class SubClassConventionRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
@@ -42,7 +40,7 @@ public class SubClassConventionRule extends RuleType {
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
 			if(noDependencyCounter == counter && physicalClasspathsTo.size() != 0){
-				Violation violation = createViolation(rootRule,classPathFrom,null,null,configuration);
+				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}
 		}
