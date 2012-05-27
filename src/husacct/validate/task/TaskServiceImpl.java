@@ -110,8 +110,8 @@ public class TaskServiceImpl{
 		return exportController.exportAllData(configuration);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations){
-		return filterController.getViolationsPerSeverity(shownViolations);
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities){
+		return filterController.getViolationsPerSeverity(shownViolations, severities);
 	}
 
 	public void restoreAllKeysToDefaultSeverities(String language){
