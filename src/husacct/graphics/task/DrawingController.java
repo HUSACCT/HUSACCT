@@ -114,6 +114,10 @@ public abstract class DrawingController implements UserInputListener {
 		}
 	}
 	
+	public DrawingLayoutStrategy getLayoutStrategy(){
+		return layoutStrategyOption;
+	}
+	
 	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
 		layoutStrategyOption = selectedStrategyEnum;
 		switchLayoutStrategy();
@@ -123,12 +127,16 @@ public abstract class DrawingController implements UserInputListener {
 	@Override
 	public void toggleDependencies(){
 		notifyServiceListeners();
-		if(areDependenciesShown){
+		if(areDependenciesShown()){
 			hideDependencies();
 		}else{
 			showDependencies();
 		}
 		drawLinesBasedOnSetting();
+	}
+	
+	public boolean areDependenciesShown(){
+		return areDependenciesShown;
 	}
 	
 	public void showDependencies(){
@@ -169,7 +177,7 @@ public abstract class DrawingController implements UserInputListener {
 	
 	public void toggleContextUpdates(){
 		notifyServiceListeners();
-		if(contextUpdates){
+		if(contextUpdatesOn()){
 			deactivateContextUpdates();
 		}else{
 			activateContextUpdates();
@@ -177,12 +185,16 @@ public abstract class DrawingController implements UserInputListener {
 		drawLinesBasedOnSetting();
 	}
 	
-	private void deactivateContextUpdates(){
+	public boolean contextUpdatesOn(){
+		return contextUpdates;
+	}
+	
+	public void deactivateContextUpdates(){
 		contextUpdates = false;
 		drawTarget.turnOffContextUpdates();
 	}
 	
-	private void activateContextUpdates(){
+	public void activateContextUpdates(){
 		contextUpdates = true;
 		drawTarget.turnOnContextUpdates();
 	}
@@ -345,13 +357,13 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
-		if(areDependenciesShown){
+		if(areDependenciesShown()){
 			drawDependenciesForShownModules();
 		}
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		if(contextUpdates){
+		if(contextUpdatesOn()){
 			drawing.updateLineFigureToContext();
 		}
 	}
