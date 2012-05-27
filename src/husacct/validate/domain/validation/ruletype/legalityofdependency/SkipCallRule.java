@@ -62,7 +62,7 @@ public class SkipCallRule extends RuleType {
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for(ModuleDTO module : allModules){
 			if(allModules.indexOf(module) > moduleFromNumber+1)
-				returnList.add(CheckConformanceUtilClass.getAllClassesFromLayer(allModules.get(allModules.indexOf(module)), violationTypeKeys));
+				returnList.add(CheckConformanceUtilClass.getAllClasspathsFromModule(allModules.get(allModules.indexOf(module)), violationTypeKeys));
 		}		
 		return returnList;
 	}
