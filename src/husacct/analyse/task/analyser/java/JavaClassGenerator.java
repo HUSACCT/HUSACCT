@@ -19,7 +19,7 @@ class JavaClassGenerator extends JavaGenerator{
 		this.belongsToPackage = uniquePackageName;
 	}
 	
-	public String generateModel(CommonTree commonTree) {
+	public String generateToDomain(CommonTree commonTree) {
 		
 		this.name = commonTree.getChild(1).toString();
 		if(belongsToPackage.equals("")) {
@@ -40,7 +40,7 @@ class JavaClassGenerator extends JavaGenerator{
 		return uniqueName;
 	}
 	
-	public String generateModel(CommonTree commonTree, String parentClassName) {
+	public String generateToModel(CommonTree commonTree, String parentClassName) {
 		this.name = commonTree.getChild(1).toString();
 		this.isInnerClass = true;
 		this.isAbstract = isAbstract((CommonTree)commonTree);

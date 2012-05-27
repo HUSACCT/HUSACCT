@@ -13,7 +13,7 @@ class JavaAnnotationGenerator extends JavaGenerator{
 		this.belongsToPackage = uniquePackageName;
 	}
 	
-	public String generateModel(CommonTree commonTree) {
+	public String generateToDomain(CommonTree commonTree) {
 		setName(commonTree);
 		setUniquename();
 		modelService.createInterface(uniqueName, name, belongsToPackage);

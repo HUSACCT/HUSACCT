@@ -17,18 +17,17 @@ class JavaTreeConvertController {
 	private int classCount = 0; 
 	private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
 
-	public void delegateModelGenerators(JavaParser javaParser) throws RecognitionException { 
+	public void delegateASTToGenerators(JavaParser javaParser) throws RecognitionException { 
 		compilationUnit_return compilationUnit = javaParser.compilationUnit(); 
 		CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
-		createClassOrInterfaceInformation(compilationUnitTree); 
-
+		createClassInformation(compilationUnitTree); 
 
 		if(this.theClass != null){
-			walkAST(compilationUnitTree); 
+			delegateASTToGenerators(compilationUnitTree); 
 		}
 	} 
 
-	private void createClassOrInterfaceInformation(CommonTree completeTree){ 
+	private void createClassInformation(CommonTree completeTree){ 
 		Tree packageTree = completeTree.getFirstChildWithType(JavaParser.PACKAGE); 
 		if(hasPackageElement(completeTree)){ 
 			delegatePackage(packageTree); 
@@ -76,7 +75,7 @@ class JavaTreeConvertController {
 		}
 	} 
 
-	private void walkAST(CommonTree tree) { 
+	private void delegateASTToGenerators(CommonTree tree) { 
 		if (tree != null) { 
 			for (int i = 0; i < tree.getChildCount(); i++) { 
 				Tree treeNode = tree.getChild(i); 
@@ -86,7 +85,7 @@ class JavaTreeConvertController {
 						CommonTree innerClassTree = (CommonTree)treeNode; 
 						this.parentClass = currentClass; 
 						this.currentClass = delegateClass(innerClassTree, true); 
-						walkAST(innerClassTree); 
+						delegateASTToGenerators(innerClassTree); 
 					}else classCount++; 
 				}else{ 
 					if(nodeType == JavaParser.IMPORT){ 
@@ -113,7 +112,7 @@ class JavaTreeConvertController {
 					}
 				}
 
-				walkAST((CommonTree) tree.getChild(i));
+				delegateASTToGenerators((CommonTree) tree.getChild(i));
 
 			} 
 		} 
@@ -135,39 +134,39 @@ class JavaTreeConvertController {
 	private String delegateClass(Tree classTree, boolean isInnerClass){ 
 		JavaClassGenerator javaClassGenerator = new JavaClassGenerator(thePackage); 
 		String analysedClass; 
-		if(isInnerClass) analysedClass = javaClassGenerator.generateModel((CommonTree)classTree, parentClass); 
-		else analysedClass = javaClassGenerator.generateModel((CommonTree)classTree); 
+		if(isInnerClass) analysedClass = javaClassGenerator.generateToModel((CommonTree)classTree, parentClass); 
+		else analysedClass = javaClassGenerator.generateToDomain((CommonTree)classTree); 
 		return analysedClass; 
 	} 
 
 	private String delegateInterface(Tree interfaceTree){ 
 		JavaInterfaceGenerator javaInterfaceGenerator = new JavaInterfaceGenerator(thePackage); 
-		return javaInterfaceGenerator.generateModel((CommonTree)interfaceTree); 
+		return javaInterfaceGenerator.generateToDomain((CommonTree)interfaceTree); 
 	} 
 
 	private String delegateAnnotation(Tree annotationTree){
 		JavaAnnotationGenerator javaAnnotationGenerator = new JavaAnnotationGenerator(thePackage);
-		return javaAnnotationGenerator.generateModel((CommonTree) annotationTree);
+		return javaAnnotationGenerator.generateToDomain((CommonTree) annotationTree);
 	}
 
 	private void delegateImplementsDefinition(CommonTree treeNode) {
 		JavaImplementsDefinitionGenerator implementsGenerator = new JavaImplementsDefinitionGenerator();
-		implementsGenerator.generateModelObject(treeNode, this.theClass); 
+		implementsGenerator.generateToDomain(treeNode, this.theClass); 
 	} 
 
 	private void delegateInheritanceDefinition(CommonTree treeNode) {
 		JavaInheritanceDefinitionGenerator javaInheritanceDefinitionGenerator = new JavaInheritanceDefinitionGenerator();
-		javaInheritanceDefinitionGenerator.generateModelObject(treeNode, this.theClass);
+		javaInheritanceDefinitionGenerator.generateToDomain(treeNode, this.theClass);
 	} 
 
 	private void delegateImport(CommonTree importTree){ 
 		JavaImportGenerator javaImportGenerator = new JavaImportGenerator(); 
-		javaImportGenerator.generateFamixImport(importTree, this.currentClass); 
+		javaImportGenerator.generateToDomain(importTree, this.currentClass); 
 	} 
 
 	private void delegateAttribute(Tree attributeTree){ 
 		JavaAttributeAndLocalVariableGenerator javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator(); 
-		javaAttributeGenerator.generateAttributeModel(attributeTree, this.currentClass); 
+		javaAttributeGenerator.generateAttributeToDomain(attributeTree, this.currentClass); 
 	} 
 
 	private void delegateMethod(Tree methodTree){ 
