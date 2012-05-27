@@ -2,6 +2,7 @@ package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -10,6 +11,8 @@ import husacct.validate.presentation.browseViolations.FilterPanel;
 import husacct.validate.presentation.browseViolations.StatisticsPanel;
 import husacct.validate.presentation.browseViolations.ViolationInformationPanel;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
+import husacct.validate.presentation.threadTasks.CheckConformanceTask;
+import husacct.validate.presentation.threadTasks.LoadViolationHistoryPointsTask;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -28,11 +31,12 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import org.apache.log4j.Logger;
 
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
 	
 	private static final long serialVersionUID = 4912981274532255799L;
-	
+	private Logger logger = Logger.getLogger(BrowseViolations.class);
 	private final TaskServiceImpl taskServiceImpl;
 	public final SimpleDateFormat dateFormat;
 	
@@ -185,7 +189,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
-					
+					changeShownViolations();
 					loadAfterChange();
 				}
 			}
@@ -193,8 +197,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO: add LoadingDialog from next merge
-				ServiceProvider.getInstance().getValidateService().checkConformance();	
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Validating"), new CheckConformanceTask());
+				validateThread.run();
 			}
 		});
 		buttonSaveInHistory.addActionListener(new ActionListener() {
@@ -373,6 +377,28 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			violations = taskServiceImpl.applyFilterViolations(violations);
 		}
 		return violations;
+	}
+	
+	public void applyFilterChanged(ActionEvent e) {
+		final Thread updateThread = new Thread() { 
+			@Override 
+			public void run() {
+				try {
+					Thread.sleep(1);
+					updateViolationsTable();
+					loadInformationPanel();
+				} catch (InterruptedException e) {
+					logger.debug(e.getMessage());
+				}
+			}
+		};
+		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), updateThread);
+		loadingThread.run();
+	}
+	
+	private void changeShownViolations(){
+		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, this, taskServiceImpl, filterPane.getApplyFilter()));
+		loadingThread.run();
 	}
 	
 	private void clearChooseViolationHistoryTableModelRows() {

@@ -12,7 +12,8 @@ public class InvocMethodTest extends RecognationExtended{
 	public void testSamePackageA(){
 		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageA");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -34,7 +35,8 @@ public class InvocMethodTest extends RecognationExtended{
 	public void testSamePackageB(){
 		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageB");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -56,7 +58,8 @@ public class InvocMethodTest extends RecognationExtended{
 	public void testSamePackageC(){
 		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageC");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -79,7 +82,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean methodCallFound = false;
 		boolean invocConstructorTheTypeFound = false;
 		boolean invocConstructorGuiFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageD");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageD");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageD");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				if (dependency.to.equals("invocmethod.a.TheType")){
@@ -109,7 +113,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean methodCallFound = false;
 		boolean invocConstructorTheTypeFound = false;
 		boolean invocConstructorGuiFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageE");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageE");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageE");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				if (dependency.to.equals("invocmethod.a.TheType")){
@@ -144,7 +149,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean invocConstructorTheTypeFound = false;
 		boolean invocConstructorGuiFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageF");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageF");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageF");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				if (dependency.to.equals("invocmethod.a.TheType")){
@@ -184,8 +190,9 @@ public class InvocMethodTest extends RecognationExtended{
 		
 		boolean invocConstructorTheTypeFound = false;
 		boolean invocConstructorGuiFound = false;
-		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageG");
+
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageG");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageG");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				if (dependency.to.equals("invocmethod.a.TheType")){
@@ -225,7 +232,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean invocConstructorTheTypeFound = false;
 		boolean invocConstructorGuiFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageH");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageH");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageH");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				if (dependency.to.equals("invocmethod.a.TheType")){
@@ -264,7 +272,8 @@ public class InvocMethodTest extends RecognationExtended{
 		
 		boolean invocConstructorTheTypeFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageI");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.a.SamePackageI");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.a.SamePackageI");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorTheTypeFound = true;
@@ -289,7 +298,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.b.OtherPackageA");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -320,7 +330,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.b.OtherPackageB");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -350,7 +361,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.b.OtherPackageC");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -376,7 +388,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageD");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageD");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.b.OtherPackageD");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -408,7 +421,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageE");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageE");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.b.OtherPackageE");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -439,8 +453,8 @@ public class InvocMethodTest extends RecognationExtended{
 		boolean methodCallFound = false;
 		boolean invocConstructorFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageF");
-		
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocmethod.b.OtherPackageF");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocmethod.b.OtherPackageF");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -459,3 +473,4 @@ public class InvocMethodTest extends RecognationExtended{
 		
 	}
 }
+

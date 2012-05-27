@@ -25,15 +25,6 @@ public class MainController {
 		setAppleProperties();
 	}
 	
-	/**
-	 * @deprecated  As of 19 may, MainController is integrated within the ControlService.
-	 * To manually start the GUI, use ServiceProvider.getInstance().getControlService().startApplication() instead.
-	 */
-	@Deprecated
-	public MainController(String[] arguments){
-
-	}
-	
 	public void startGui(){
 		guiEnabled = true;
 		openMainGui();

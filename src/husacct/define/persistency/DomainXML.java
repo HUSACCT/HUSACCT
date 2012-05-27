@@ -60,7 +60,7 @@ public class DomainXML {
 			XMLArchitecture.addContent(SAModules);
 		}
 
-		if (this.DomainSoftwareArchitecture.getAppliedRules().size() > 0 && this.getParseLogical() == false) {
+		if (this.DomainSoftwareArchitecture.getAppliedRules().size() > 0) {
 			Element SARules = new Element("rules");
 			for (AppliedRule ar : this.DomainSoftwareArchitecture.getAppliedRules()) {
 				SARules.addContent(this.getAppliedRuleInXML(ar));

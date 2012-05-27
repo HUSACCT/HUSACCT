@@ -104,7 +104,11 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 
 	@Override
 	public void update(Object o) {
-		//FIXME
+		if (moduleFromTree != null){
+			if (o instanceof Long){
+				moduleFromTree.setSelectedRow((Long) o);
+			}
+		}
 	}
 
 	@Override

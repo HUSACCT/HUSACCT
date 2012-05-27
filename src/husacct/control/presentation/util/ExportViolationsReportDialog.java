@@ -35,7 +35,7 @@ public class ExportViolationsReportDialog extends JDialog{
 	public ExportViolationsReportDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.exportController = mainController.getExportController();
-		setTitle(controlService.getTranslatedString("ExportArchitecture"));
+		setTitle(controlService.getTranslatedString("ExportReport"));
 		setup();
 		addComponents();
 		setListeners();

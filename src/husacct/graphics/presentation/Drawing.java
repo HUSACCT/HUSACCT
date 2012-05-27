@@ -78,7 +78,7 @@ public class Drawing extends QuadTreeDrawing {
 
 	@Override
 	public boolean add(Figure figure) {
-		// this triggers at least the minimum sizes
+		// This triggers the minimum sizes
 		figure.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
 		return super.add(figure);
 	}

@@ -10,7 +10,8 @@ public class AnnotationTest extends RecognationExtended{
 	@Test
 	public void testSamePackage(){
 		boolean annotationFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.a.SamePackage");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.a.SamePackage");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("annotation.a.SamePackage");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Annotation")){
 				annotationFound = true;
@@ -25,7 +26,8 @@ public class AnnotationTest extends RecognationExtended{
 	public void testOtherPackageA(){
 		boolean annotationFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.b.OtherPackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.b.OtherPackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("annotation.b.OtherPackageA");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Annotation")){
@@ -47,7 +49,8 @@ public class AnnotationTest extends RecognationExtended{
 	public void testOtherPackageB(){
 		boolean annotationFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.b.OtherPackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.b.OtherPackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("annotation.b.OtherPackageB");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Annotation")){
@@ -69,7 +72,8 @@ public class AnnotationTest extends RecognationExtended{
 	public void testOtherPackageC(){
 		boolean annotationFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.b.OtherPackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("annotation.b.OtherPackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("annotation.b.OtherPackageC");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Annotation")){

@@ -165,6 +165,7 @@ class FamixModuleFinder extends FamixFinder{
 	private AnalysedModuleDTO createAnalysedModuleDTO(String type, FamixEntity theEntity, List<AnalysedModuleDTO> childs){
 		String name = theEntity.name;
 		String uniqueName = theEntity.uniqueName;
-		return new AnalysedModuleDTO(uniqueName, name, type, "public", childs);
+		if(theEntity instanceof FamixPackage) return new AnalysedModuleDTO(uniqueName, name, type, "public");
+		else return new AnalysedModuleDTO(uniqueName, name, type, theEntity.visibility);
 	}
 }

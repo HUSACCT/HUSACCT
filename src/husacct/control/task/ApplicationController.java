@@ -24,6 +24,11 @@ public class ApplicationController {
 		new SetApplicationDialog(mainController);
 	}
 	
+	public void setAndAnalyseApplicationData(ApplicationDTO applicationDTO){
+		setApplicationData(applicationDTO);
+		analyseApplication();
+	}
+	
 	public void setApplicationData(ApplicationDTO applicationDTO) {
 		ServiceProvider.getInstance().getDefineService().createApplication(
 				applicationDTO.name, 
@@ -31,11 +36,9 @@ public class ApplicationController {
 				applicationDTO.programmingLanguage, 
 				applicationDTO.version
 		);
-		
-		analyseApplication();
 	}
 	
-	private void analyseApplication(){
+	public void analyseApplication(){
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(controlService.getTranslatedString("AnalysingApplication"), new AnalyseTask());
 		analyseThread.run();

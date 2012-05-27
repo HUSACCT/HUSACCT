@@ -108,6 +108,8 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		service.loadModel(workspaceData);
+		//TODO Uncomment the following line to make the loading of work working. This was excluded
+		// in the first delivery, due to memory problems in combination with coming deadlines and demo's.
+//		service.loadModel(workspaceData);
 	}
 }

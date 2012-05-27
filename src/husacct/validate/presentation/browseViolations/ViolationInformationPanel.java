@@ -77,7 +77,9 @@ public class ViolationInformationPanel extends JPanel {
 		addComponentListener(new ComponentListener() {  
 			@Override
 				public void componentResized(ComponentEvent evt) {
-					update(arg0, violationsTable, shownViolations);
+					if(arg0 != null){
+						update(arg0, violationsTable, shownViolations);
+					}
 				}
 
 			@Override

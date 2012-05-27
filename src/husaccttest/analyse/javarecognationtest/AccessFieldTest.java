@@ -12,7 +12,8 @@ public class AccessFieldTest extends RecognationExtended{
 	public void testSamePackageA(){
 		boolean accessPropertyOrFieldFound = false;
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.a.SamePackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.a.SamePackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("accessfield.a.SamePackageA");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -34,7 +35,8 @@ public class AccessFieldTest extends RecognationExtended{
 	public void testSamePackageB(){
 		boolean accessPropertyOrFieldFound = false;
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.a.SamePackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.a.SamePackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("accessfield.a.SamePackageB");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -58,7 +60,8 @@ public class AccessFieldTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("accessfield.b.OtherPackageA");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -89,7 +92,8 @@ public class AccessFieldTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 		boolean importFound = false;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("accessfield.b.OtherPackageB");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -120,7 +124,8 @@ public class AccessFieldTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 	
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("accessfield.b.OtherPackageC");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
@@ -146,7 +151,8 @@ public class AccessFieldTest extends RecognationExtended{
 		boolean invocConstructorFound = false;
 	
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageD");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("accessfield.b.OtherPackageD");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("accessfield.b.OtherPackageD");
 		
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){

@@ -29,7 +29,7 @@ public class CreateWorkspaceDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
-	private JCheckBox setApplicationCheckbox;
+	private JCheckBox analyseApplicationCheckbox;
 	private JButton okButton, cancelButton;
 	private JTextField workspaceNameText;
 
@@ -63,7 +63,7 @@ public class CreateWorkspaceDialog extends JDialog{
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
 		JLabel workspaceNameLabel = new JLabel(controlService.getTranslatedString("WorkspaceNameLabel"));
-		setApplicationCheckbox = new JCheckBox(controlService.getTranslatedString("SetApplicationCheckbox"), false);
+		analyseApplicationCheckbox = new JCheckBox(controlService.getTranslatedString("AnalyseApplicationCheckBox"), false);
 		okButton = new JButton(controlService.getTranslatedString("OkButton"));
 		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
 		workspaceNameText = new JTextField(20);
@@ -73,7 +73,7 @@ public class CreateWorkspaceDialog extends JDialog{
 
 		workspacePanel.add(workspaceNameLabel);
 		workspacePanel.add(workspaceNameText);
-		workspacePanel.add(setApplicationCheckbox);
+		workspacePanel.add(analyseApplicationCheckbox);
 		workspacePanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
@@ -87,20 +87,20 @@ public class CreateWorkspaceDialog extends JDialog{
 		
 		final CreateWorkspaceDialog createWorkspaceDialog = this;
 		
-		setApplicationCheckbox.addActionListener(new ActionListener() {
+		analyseApplicationCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toggleSetApplicationPanel(setApplicationCheckbox.isSelected());
+				toggleSetApplicationPanel(analyseApplicationCheckbox.isSelected());
 				DialogUtils.alignCenter(createWorkspaceDialog);
 			}
 		});
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(setApplicationCheckbox.isSelected()){
+				if(analyseApplicationCheckbox.isSelected()){
 					if(setApplicationPanel.dataValidated() && workspaceNameValidated()) {
 						createWorkspace();
 						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-						mainController.getApplicationController().setApplicationData(applicationData);				
+						mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
 						dispose();	
 						mainController.getViewController().showDefineGui();
 					}

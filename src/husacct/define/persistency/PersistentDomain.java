@@ -2,6 +2,8 @@ package husacct.define.persistency;
 
 import java.util.ArrayList;
 import org.jdom2.Element;
+
+import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
@@ -70,7 +72,8 @@ public class PersistentDomain implements ISaveable {
 		
 		switch (this.parseData) {
 			default:
-				this.domainService.createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
+				//TODO hotfix for importing husacct
+				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
 				this.domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				// add modules
 				for (Module m : workspaceArchitecture.getModules()) {

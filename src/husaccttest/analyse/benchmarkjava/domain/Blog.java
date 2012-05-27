@@ -66,7 +66,8 @@ public class Blog extends BenchmarkExtended{
 		String from = "domain.blog.wordpress.MyBlah";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -97,7 +98,8 @@ public class Blog extends BenchmarkExtended{
 		String from = "domain.blog.wordpress.MyBlog";
 		int expectedDependencies = 4;
 
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = getOnlyDirectDependencies(service.getDependenciesFrom(from));
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		HashMap<String, Object> dependencyImportBlogExpected = createDependencyHashmap(
@@ -140,7 +142,8 @@ public class Blog extends BenchmarkExtended{
 		String from = "domain.blog.wordpress.MyComment";
 		int expectedDependencies = 4;
 
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		HashMap<String, Object> dependencyImportBlogExpected = createDependencyHashmap(
@@ -183,7 +186,8 @@ public class Blog extends BenchmarkExtended{
 		String from = "domain.blog.wordpress.MyStory";
 		int expectedDependencies = 4;
 
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		HashMap<String, Object> dependencyImportBlogExpected = createDependencyHashmap(
