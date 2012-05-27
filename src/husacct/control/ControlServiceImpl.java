@@ -7,11 +7,11 @@ import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.LocaleController;
 import husacct.control.task.MainController;
+import husacct.control.task.StateController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JDialog;
@@ -29,6 +29,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private LocaleController localeController;
 	private WorkspaceController workspaceController;
 	private ApplicationController applicationController;
+	private StateController stateController;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -36,6 +37,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		localeController = mainController.getLocaleController();
 		workspaceController = mainController.getWorkspaceController();
 		applicationController = mainController.getApplicationController();
+		stateController = mainController.getStateController();
 	}
 	
 	@Override
@@ -93,11 +95,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public List<String> getStringIdentifiers(String translatedString){
-		return new ArrayList<String>();
-	}
-	
-	@Override
 	public void centerDialog(JDialog dialog){
 		DialogUtils.alignCenter(dialog);
 	}
@@ -108,7 +105,13 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		return loader;
 	}
 	
+	@Override
+	public void setServiceListeners(){
+		stateController.setServiceListeners();
+	}
+	
 	public MainController getMainController(){
 		return mainController;
 	}
+
 }

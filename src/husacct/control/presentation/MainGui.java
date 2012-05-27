@@ -47,13 +47,14 @@ public class MainGui extends JFrame{
 	
 	IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
-	public MainGui(MainController controller) {
-		this.mainController = controller;
+	public MainGui(MainController mainController) {
+		this.mainController = mainController;
 		setup();
 		createMenuBar();
 		addComponents();
 		addListeners();
 		setVisible(true);
+		mainController.getStateController().checkState();
 	}
 
 	private void setup(){
