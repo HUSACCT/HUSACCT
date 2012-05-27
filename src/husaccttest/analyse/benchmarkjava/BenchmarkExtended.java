@@ -2,12 +2,14 @@ package husaccttest.analyse.benchmarkjava;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husacct.define.IDefineService;
 import husaccttest.analyse.TestCaseExtended;
 
 public abstract class BenchmarkExtended extends TestCaseExtended{
 
 	public IAnalyseService service;
+	private static boolean isanalysed = false;
 	
 	@Override
 	public void setUp(){
@@ -15,7 +17,7 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 
-		String path = "../benchmark_application/src";
+		String path = "testjavabenchmark/";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		
@@ -26,8 +28,11 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 //		}
 		
 		try {
-			if(!service.isAnalysed()){
+			if(!isanalysed){
+				FamixCreationServiceImpl famix = new FamixCreationServiceImpl();
+				famix.clearModel();
 				service.analyseApplication();
+				isanalysed = true;
 			}
 
 		} catch (Exception e){

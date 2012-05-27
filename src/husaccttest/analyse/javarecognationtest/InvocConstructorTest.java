@@ -11,7 +11,8 @@ public class InvocConstructorTest extends RecognationExtended{
 	@Test
 	public void testSamePackageA(){
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.a.SamePackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.a.SamePackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocconstructor.a.SamePackageA");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -29,7 +30,8 @@ public class InvocConstructorTest extends RecognationExtended{
 	public void testOtherPackageA(){
 		boolean invocConstructorFound = false;
 		boolean importFound = false;;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.b.OtherPackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.b.OtherPackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocconstructor.b.OtherPackageA");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -52,7 +54,8 @@ public class InvocConstructorTest extends RecognationExtended{
 	public void testOtherPackageB(){
 		boolean invocConstructorFound = false;
 		boolean importFound = false;;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.b.OtherPackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.b.OtherPackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocconstructor.b.OtherPackageB");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;
@@ -74,7 +77,8 @@ public class InvocConstructorTest extends RecognationExtended{
 	@Test
 	public void testOtherPackageC(){
 		boolean invocConstructorFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.b.OtherPackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("invocconstructor.b.OtherPackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("invocconstructor.b.OtherPackageC");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("InvocConstructor")){
 				invocConstructorFound = true;

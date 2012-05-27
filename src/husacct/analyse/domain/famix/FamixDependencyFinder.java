@@ -65,6 +65,7 @@ class FamixDependencyFinder extends FamixFinder{
 		this.currentResult = findDependencies();
 		this.removeFilter();
 	}
+	
 	private void removeFilter(){
 		this.filtered = false;
 		this.filter = new String[]{};
@@ -79,24 +80,43 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
-		//TODO Analyse General - Fix Indirect Dependencies
-//		result.addAll(this.findIndirectDependencies(result));
+		if(!this.from.equals("")){
+			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+				if(!result.contains(dependency)) result.add(dependency);
+			}
+		}
 		return result;
 	}
 	
 	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> directDependencies){
+		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		for(DependencyDTO directDependency: directDependencies){
-			String startFrom = directDependency.from;
-			this.from = directDependency.to;
-			this.currentFunction = FinderFunction.FROM;
-			for(DependencyDTO indirectDependency: this.findDependencies()){
-				indirectDependency.isIndirect = true;
-				indirectDependency.from = startFrom;
-				result.add(indirectDependency);
+			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
+				if(!result.contains(indirectDependency)) result.add(indirectDependency);
 			}
 		}
 		return result;
+	}
+	
+	private List<DependencyDTO> findIndirectDependenciesFrom(DependencyDTO fromDependency){
+		List<DependencyDTO> found = new ArrayList<DependencyDTO>();
+		String startFrom = fromDependency.from;
+		for(DependencyDTO indirectDependency : this.getDependenciesFrom(fromDependency.to)){
+			indirectDependency.isIndirect = true;
+			indirectDependency.from = startFrom;
+			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);
+			if(!indirectDependency.to.equals(startFrom)) {
+				for(DependencyDTO subIndirect : this.findIndirectDependenciesFrom(indirectDependency)){
+					if(!found.contains(subIndirect)) found.add(subIndirect);
+				}
+			}
+		}
+		return found;
+	}
+	
+	private boolean isPackage(String uniquename){
+		return theModel.packages.containsKey(uniquename);
 	}
 	
 	private boolean compliesWithFunction(FamixAssociation association){
