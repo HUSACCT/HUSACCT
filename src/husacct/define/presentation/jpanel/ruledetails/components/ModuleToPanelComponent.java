@@ -77,7 +77,11 @@ public class ModuleToPanelComponent extends AbstractPanelComponent implements Tr
 
 	@Override
 	public void update(Object o) {
-		//FIXME
+		if (moduleToTree != null) {
+			if (o instanceof Long){
+				moduleToTree.setSelectedRow((Long) o);
+			}
+		}
 	}
 
 	@Override
