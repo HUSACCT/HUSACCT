@@ -117,7 +117,7 @@ public class DefinedController extends DrawingController {
 		ModuleDTO dtoTo = (ModuleDTO) figureMap.getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 
-		if (!figureFrom.equals(figureTo)) {
+		if (!figureFrom.equals(figureTo) && null!=dtoFrom && null!=dtoTo) {
 			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs) {
 				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
 					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
