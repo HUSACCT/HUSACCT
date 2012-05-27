@@ -6,6 +6,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -30,15 +31,12 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		// TODO: Uncomment wanneer analyse addServiceListener heeft
-		// geïmplementeerd!
-		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new
-		// IServiceListener(){
-		// @Override
-		// public void update() {
-		// refreshDrawing();
-		// }
-		// });
+		ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				refreshDrawing();
+			}
+		});
 	}
 
 	@Override
