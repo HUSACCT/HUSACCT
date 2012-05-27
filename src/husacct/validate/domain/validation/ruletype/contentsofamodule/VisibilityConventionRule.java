@@ -4,7 +4,6 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -26,7 +25,6 @@ public class VisibilityConventionRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {		
 		this.violations = new ArrayList<Violation>();
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
@@ -41,7 +39,7 @@ public class VisibilityConventionRule extends RuleType {
 					}
 				}
 				if(violationCounter == currentRule.violationTypeKeys.length){
-					Violation violation = createViolation(rootRule, physicalClasspathFrom, null, null, configuration);
+					Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 					violations.add(violation);
 				}
 				violationCounter = 0;

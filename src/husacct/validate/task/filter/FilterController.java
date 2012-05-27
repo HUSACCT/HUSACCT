@@ -8,7 +8,6 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
 import husacct.validate.task.TaskServiceImpl;
 
@@ -82,6 +81,7 @@ public class FilterController {
 		}
 		return appliedViolationtypes;
 	}
+	
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		ViolationAssembler assembler = new ViolationAssembler(ruletypesfactory, configuration);
 		ArrayList<Violation> violations = new ArrayList<Violation>();

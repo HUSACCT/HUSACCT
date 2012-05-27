@@ -64,7 +64,7 @@ public abstract class AbstractViolationType {
 		return categoryViolations;
 	}
 
-	public ViolationType createViolationType(String violationTypeKey){
+	private ViolationType createViolationType(String violationTypeKey){
 		List<String> violationKeysToLower = new ArrayList<String>();
 		for(CategoryKeySeverityDTO violationtype : allViolationKeys){
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
