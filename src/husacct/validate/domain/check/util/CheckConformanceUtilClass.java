@@ -103,12 +103,13 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static boolean updateLogicalPaths(HashSet<Mapping> classpaths, ModuleDTO module, String physicalClassPath, String[] violationTypeKeys){
 		List<Mapping> duplicatedMappings = getClassPaths(classpaths, physicalClassPath, module.logicalPath);
+		boolean logicalPathUpdated = false;
 		for(Mapping duplicatedMapping : duplicatedMappings){	
 			classpaths.remove(duplicatedMapping);
 			classpaths.add(new Mapping(module.logicalPath, module.type, physicalClassPath, violationTypeKeys));
-			return true;
+			logicalPathUpdated = true;
 		}	
-		return false;
+		return logicalPathUpdated;
 	}
 
 	private static List<Mapping> getClassPaths(HashSet<Mapping> classpaths, String physicalClassPath, String logicalPath){
