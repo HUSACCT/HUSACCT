@@ -60,15 +60,6 @@ public abstract class ReportWriter {
 	}
 
 	public String getFileName() {
-		String s = "";
-		if(path.endsWith(""+File.separatorChar)) {
-			s = path + fileName;
-		} else {
-			s = path + File.separatorChar + fileName;
-		}
-		s = s.replaceAll("." + extensionType.getExtension(), "");
-		
-		s += "." + extensionType.getExtension();
-		return s;
+		return path + "\\" + fileName;
 	}
 }

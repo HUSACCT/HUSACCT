@@ -5,7 +5,6 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -28,7 +27,6 @@ public class SkipCallRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();		
@@ -39,7 +37,7 @@ public class SkipCallRule extends RuleType {
 				for(Mapping classPathTo : physicalClasspathsTo ){
 					DependencyDTO[] dependencies = analyseService.getDependencies(physicalClassPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), physicalClassPathFrom.getViolationTypes());	
 					for(DependencyDTO dependency: dependencies){
-						Violation violation = createViolation(rootRule,physicalClassPathFrom,classPathTo,dependency,configuration);
+						Violation violation = createViolation(rootRule, physicalClassPathFrom, classPathTo, dependency, configuration);
 						violations.add(violation);
 					}
 				}					

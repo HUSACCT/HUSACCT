@@ -33,7 +33,7 @@ public class GuiController {
 	}
 
 	private void reloadGUIText(){		
-		browseViolations.loadGUIText();
+		browseViolations.loadAfterChange();
 		filterViolations.loadGUIText();
 		configurationUI.loadAfterChange();
 	}
@@ -50,7 +50,7 @@ public class GuiController {
 
 	public void violationChanged(){
 		if(browseViolations != null){
-			browseViolations.loadAfterViolationsChanged();
+			browseViolations.loadAfterChange();
 		}
 	}
 
@@ -63,6 +63,7 @@ public class GuiController {
 	private void initializeBrowseViolations(){
 		if(browseViolations == null){
 			this.browseViolations = new BrowseViolations(task, configuration);
+			configuration.attachViolationHistoryRepositoryObserver(this.browseViolations);
 		}
 	}
 

@@ -3,8 +3,9 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationRuleTypeDTO;
-import husacct.validate.domain.validation.iternal_tranfer_objects.ConfigurationViolationTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationViolationTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.LanguageSeverityConfigurationPanel;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
@@ -32,10 +33,10 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
-	private List<LanguageSeverityConfiguration> tabs;
+	private List<LanguageSeverityConfigurationPanel> tabs;
 
 	public ConfigurationUI(TaskServiceImpl ts) {
-		tabs = new ArrayList<LanguageSeverityConfiguration>();
+		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
 		
 		taskServiceImpl = ts;
 		severities = taskServiceImpl.getAllSeverities();
@@ -322,7 +323,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			loadLanguageTabs();
 			return;
 		}
-		for (LanguageSeverityConfiguration panel : tabs){
+		for (LanguageSeverityConfigurationPanel panel : tabs){
 			panel.loadAfterChange();
 		}
 	}
@@ -332,7 +333,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			ConfigurationRuleTypeDTO configurationRuleTypeDTO = new ConfigurationRuleTypeDTO(language, severities, taskServiceImpl.getRuletypes(language));
 			ConfigurationViolationTypeDTO configurationViolationTypeDTO = new ConfigurationViolationTypeDTO(language, severities, taskServiceImpl.getViolationTypes(language));
 			
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(configurationRuleTypeDTO, configurationViolationTypeDTO, taskServiceImpl);
+			LanguageSeverityConfigurationPanel lcp = new LanguageSeverityConfigurationPanel(configurationRuleTypeDTO, configurationViolationTypeDTO, taskServiceImpl);
 			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);
 		}

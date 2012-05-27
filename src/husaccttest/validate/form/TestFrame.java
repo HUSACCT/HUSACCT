@@ -138,7 +138,7 @@ public class TestFrame extends javax.swing.JFrame {
 
 	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 		try {
-			impl.exportViolations("TestReport.html", "html", "C:\\reports");
+			//impl.exportViolations("TestReport.html", "html", "C:\\reports");
 			JOptionPane.showMessageDialog(rootPane, "Created at C:\\reports");
 		} catch (Exception ex) {
 			Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null, ex);

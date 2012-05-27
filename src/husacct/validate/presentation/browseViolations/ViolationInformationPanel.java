@@ -3,6 +3,8 @@ package husacct.validate.presentation.browseViolations;
 import husacct.ServiceProvider;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import java.util.List;
 
@@ -20,13 +22,16 @@ public class ViolationInformationPanel extends JPanel {
 	private static final long serialVersionUID = 8505333261388149299L;
 
 	private JLabel detailLogicalModuleLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
-	detailsLogicalModuleLabel, detailsLineNumberLabel, detailsMessageLabel;
+					detailsLogicalModuleLabel, detailsLineNumberLabel, detailsMessageLabel;
+	private JTable violationsTable;
+	private List<Violation> shownViolations;
+	private ListSelectionEvent arg0;
 
 	public ViolationInformationPanel() {
 		createBaseLayout();
 	}
 
-	public void createBaseLayout() {
+	private void createBaseLayout() {
 		detailsLineNumberLabel = new JLabel();
 		detailsLogicalModuleLabel = new JLabel();
 		detailsMessageLabel = new JLabel();
@@ -68,6 +73,28 @@ public class ViolationInformationPanel extends JPanel {
 												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		setLayout(gl_violationDetailPane);
+		
+		addComponentListener(new ComponentListener() {  
+			@Override
+				public void componentResized(ComponentEvent evt) {
+					if(arg0 != null){
+						update(arg0, violationsTable, shownViolations);
+					}
+				}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+			}
+		});
+
 	}
 
 	public void loadGuiText() {
@@ -78,13 +105,16 @@ public class ViolationInformationPanel extends JPanel {
 	}
 
 	public void update(ListSelectionEvent arg0, JTable violationsTable, List<Violation> shownViolations) {
+		this.arg0 = arg0;
+		this.violationsTable = violationsTable;
+		this.shownViolations = shownViolations;
 		if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
 			detailLineNumberLabelValue.setText("" + violation.getLinenumber());
-			detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+			detailLogicalModuleLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath() + "</body></html>");
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			detailMessageLabelValue.setText(message);
+			detailMessageLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + message + "</body></html>");
 		} else {
 			detailLineNumberLabelValue.setText("");
 			detailLogicalModuleLabelValue.setText("");
