@@ -1,13 +1,14 @@
-package husacct.graphics.task;
+package husacct.graphics.util;
 
 import husacct.common.dto.AbstractDTO;
+import husacct.graphics.task.DrawingController;
 
-public class DrawingTask implements Runnable {
+public class DrawingSingleLevelTask implements Runnable {
 	
 	private DrawingController controller;
 	private AbstractDTO[] toDrawModules;
 	
-	public DrawingTask(DrawingController theController, AbstractDTO[] modules){
+	public DrawingSingleLevelTask(DrawingController theController, AbstractDTO[] modules){
 		controller = theController;
 		toDrawModules = modules;
 	}
@@ -15,7 +16,7 @@ public class DrawingTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			controller.actuallyDraw(toDrawModules);
+			controller.drawSingleLevel(toDrawModules);
 			Thread.sleep(10);
 			controller.refreshFrameClean();
 		} catch (InterruptedException e) {

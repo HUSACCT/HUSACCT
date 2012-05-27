@@ -7,13 +7,16 @@ import husacct.control.IControlService;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
-import husacct.graphics.task.UserInputListener;
 import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class GraphicsFrame extends JInternalFrame {
 	private GraphicsMenuBar menuBar;
 	private ZoomLocationBar locationBar;
 	private String[] currentPaths;
-	private JScrollPane drawingScrollPane, propertiesScrollPane;
+	private JScrollPane drawingScrollPane, propertiesScrollPane, locationScrollPane;
 	private JSplitPane centerPane;
 	private String ROOT_LEVEL;
 	private boolean showingProperties = false;
@@ -110,9 +113,14 @@ public class GraphicsFrame extends JInternalFrame {
 		createMenuBar();
 		createLocationBar();
 
+		locationScrollPane = new JScrollPane(locationBar);
+		locationScrollPane.setPreferredSize(new Dimension(900, 35));
+		locationScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		locationScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
 		setLayout(new BorderLayout());
 		add(menuBar, BorderLayout.NORTH);
-		add(locationBar, BorderLayout.SOUTH);
+		add(locationScrollPane, BorderLayout.SOUTH);
 
 		dependencyColumnKeysArray = new String[] { "From", "To", "LineNumber", "DependencyType" };
 		violationColumnKeysArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
@@ -120,16 +128,56 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 
 		layoutComponents();
+		
+		
+		this.getRootPane().addComponentListener(new ComponentListener(){
+			@Override
+			public void componentResized(ComponentEvent e) {
+				positionLayoutComponents();
+				resizeLocationBar();
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// Do nothing
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// Do nothing
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				// Do nothing
+			}
+			
+		});
+	}
+	
+	private void resizeLocationBar(){
+		if(locationScrollPane.getHorizontalScrollBar().isShowing()){
+			locationScrollPane.setPreferredSize(new Dimension(900, 50));
+		}
+		else{
+			locationScrollPane.setPreferredSize(new Dimension(900, 35));
+		}
 	}
 
 	private void updateComponentsLocaleStrings() {
 		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
-		menuBarLocale.put("LevelUp", controlService.getTranslatedString("LevelUp"));
+		menuBarLocale.put("Options", controlService.getTranslatedString("Options"));
+		menuBarLocale.put("Zoom", controlService.getTranslatedString("Zoom"));
+		menuBarLocale.put("ZoomIn", controlService.getTranslatedString("ZoomIn"));
+		menuBarLocale.put("ZoomOut", controlService.getTranslatedString("ZoomOut"));
 		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
+		menuBarLocale.put("HideDependencies", controlService.getTranslatedString("HideDependencies"));
 		menuBarLocale.put("ShowDependencies", controlService.getTranslatedString("ShowDependencies"));
+		menuBarLocale.put("HideViolations", controlService.getTranslatedString("HideViolations"));
 		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
 		menuBarLocale.put("LineContextUpdates", controlService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
+		menuBarLocale.put("LayoutStrategy", controlService.getTranslatedString("LayoutStrategy"));
 		menuBar.setLocale(menuBarLocale);
 		
 		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
@@ -191,10 +239,23 @@ public class GraphicsFrame extends JInternalFrame {
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
 		menuBar.setSize(frameTotalWidth, 20);
-		menuBar.setLevelUpAction(new ActionListener() {
+
+		menuBar.setZoomInAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				moduleZoomIn();
+			}
+		});
+		
+		menuBar.setZoomOutAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moduleZoomOut();
+				String[] secondLastPath = locationBar.getSecondLastPath();
+				if(secondLastPath.length==0){
+					moduleZoomOut();
+				}else{
+					moduleOpen(secondLastPath);
+				}
 			}
 		});
 		menuBar.setRefreshAction(new ActionListener() {
@@ -235,21 +296,22 @@ public class GraphicsFrame extends JInternalFrame {
 					selectedStrategy = layoutStrategiesTranslations.get(menuBar.getSelectedLayoutStrategyItem());
 					changeLayoutStrategy(selectedStrategy);
 				}catch(Exception ex){
-					logger.debug("Could not find the selected layout strategy \""+selectedStrategy.toString()+"\".");
+					logger.debug("Could not find the selected layout strategy \""+(selectedStrategy==null ? "null" :selectedStrategy.toString())+"\".");
 				}
 			}
 		});
 		menuBar.setZoomChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
-		    		zoomChanged();
-				}
+		    	zoomChanged();
+			}
 		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
 	}
 
 	public void createLocationBar() {
 		locationBar = new ZoomLocationBar();
+		
 		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
 			@Override
 			public void actionPerformed(String[] selectedPaths) {
@@ -259,11 +321,8 @@ public class GraphicsFrame extends JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		locationBar.setSize(frameTotalWidth, 20);
-
+		
 		updateGUI();
-
-		add(locationBar, java.awt.BorderLayout.SOUTH);
 	}
 
 	public void updateGUI() {
@@ -275,6 +334,12 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
 	}
 
+	private void moduleZoomIn() {
+		for (UserInputListener l : listeners) {
+			l.moduleZoom();
+		}
+	}
+	
 	private void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
 			l.moduleOpen(paths);
@@ -297,7 +362,7 @@ public class GraphicsFrame extends JInternalFrame {
 		double scaleFactor = menuBar.getScaleFactor();
 		for (UserInputListener l : listeners) {
 			l.drawingZoomChanged(scaleFactor);
-		}		
+		}
 	}	
 	
 	protected void toggleDependencies() {
@@ -412,6 +477,14 @@ public class GraphicsFrame extends JInternalFrame {
 		layoutComponents();
 	}
 	
+	public void turnOnDependencies() {
+		menuBar.setDependencyToggle(true);
+	}
+	
+	public void turnOffDependencies() {
+		menuBar.setDependencyToggle(false);
+	}
+	
 	public void turnOnViolations() {
 		menuBar.setViolationToggle(true);
 	}
@@ -426,13 +499,5 @@ public class GraphicsFrame extends JInternalFrame {
 	
 	public void turnOffContextUpdates() {
 		menuBar.setContextUpdatesToggle(false);
-	}
-
-	public void turnOnDependencies() {
-		menuBar.setContextDependencyToggle(true);
-	}
-
-	public void turnOffDependencies() {
-		menuBar.setContextDependencyToggle(false);
 	}
 }

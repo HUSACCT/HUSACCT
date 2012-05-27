@@ -10,6 +10,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -60,16 +61,20 @@ public class DefinedController extends DrawingController {
 		}
 		drawModulesAndLines(modules);
 	}
+	
+	private HashMap<String, BaseFigure> definedFigures;
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
+		definedFigures = new HashMap<String, BaseFigure>();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
 				try {
 					ModuleDTO parentDTO = (ModuleDTO) this.figureMap.getModuleDTO(figure);
 					parentNames.add(parentDTO.logicalPath);
+					definedFigures.put(parentDTO.logicalPath, figure);
 				} catch (Exception e) {
 					e.printStackTrace();
 					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
@@ -163,13 +168,17 @@ public class DefinedController extends DrawingController {
 					}
 					allChildren.put(parentName, knownChildren);
 				} else {
+					AbstractDTO value = figureMap.getModuleDTO(definedFigures.get(parentName));
+					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
+					tmpList.add(value);
+					allChildren.put("", tmpList);
 					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
 			}
 			setCurrentPaths(parentNames);
 	
 			Set<String> parentNamesKeySet = allChildren.keySet();
-			if (parentNamesKeySet.size() == 1) {
+			if (parentNamesKeySet.size() == 1 && !areFiguresSavedForZoom()) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
 				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));

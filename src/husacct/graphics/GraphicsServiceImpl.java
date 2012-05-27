@@ -4,7 +4,9 @@ import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.graphics.task.AnalysedController;
 import husacct.graphics.task.DefinedController;
-import husacct.graphics.task.DrawingDetail;
+import husacct.graphics.task.DrawingController;
+import husacct.graphics.util.DrawingDetail;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
 import javax.swing.JInternalFrame;
 
@@ -68,21 +70,19 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 
 	public static final String workspaceServiceName = "ArchitecureGraphicsService";
 	public static final String workspaceAnalysedControllerName = "analysedController";
-	public static final String workspaceDefinedControllerName = "analysedController";
+	public static final String workspaceDefinedControllerName = "definedController";
+	public static final String workspaceShowDependencies = "showDependencies";
 	public static final String workspaceShowViolations = "showViolations";
+	public static final String workspaceContextUpdates = "contextUpdates";
+	public static final String workspaceLayoutStrategy = "layoutStrategy";
 
 	@Override
 	public Element getWorkspaceData() {
 		createControllers();
 		Element data = new Element(workspaceServiceName);
 
-		Element analysedControllerElement = new Element(workspaceAnalysedControllerName);
-		analysedControllerElement.setAttribute(workspaceShowViolations, "" + analysedController.areViolationsShown());
-		data.addContent(analysedControllerElement);
-
-		Element definedControllerElement = new Element(workspaceDefinedControllerName);
-		definedControllerElement.setAttribute(workspaceShowViolations, "" + definedController.areViolationsShown());
-		data.addContent(definedControllerElement);
+		data.addContent(getWorkspaceDataForController(workspaceAnalysedControllerName, analysedController));
+		data.addContent(getWorkspaceDataForController(workspaceDefinedControllerName, definedController));
 
 		return data;
 	}
@@ -92,23 +92,59 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		createControllers();
 		try {
 			Element analysedControllerElement = workspaceData.getChild(workspaceAnalysedControllerName);
-			System.out.println(Boolean.parseBoolean(analysedControllerElement.getAttribute(workspaceShowViolations)
-					.getValue()));
-			if (Boolean.parseBoolean(analysedControllerElement.getAttribute(workspaceShowViolations).getValue())) {
-				analysedController.showViolations();
-			} else {
-				analysedController.hideViolations();
-			}
-			Element definedControllerElement = workspaceData.getChild(workspaceDefinedControllerName);
-			System.out.println(Boolean.parseBoolean(definedControllerElement.getAttribute(workspaceShowViolations)
-					.getValue()));
-			if (Boolean.parseBoolean(definedControllerElement.getAttribute(workspaceShowViolations).getValue())) {
-				definedController.showViolations();
-			} else {
-				definedController.hideViolations();
-			}
+			loadWorkspaceDataForController(analysedController, analysedControllerElement);
 		} catch (Exception e) {
-			logger.error("Error exporting the workspace: " + e.getMessage(), e);
+			logger.error("Error importing the workspace for analyse.", e);
+		}
+		try {
+			Element definedControllerElement = workspaceData.getChild(workspaceDefinedControllerName);
+			loadWorkspaceDataForController(definedController, definedControllerElement);
+		} catch (Exception e) {
+			logger.error("Error importing the workspace for define.", e);
+		}
+	}
+
+	private Element getWorkspaceDataForController(String controllerName, DrawingController controller) {
+		Element controllerElement = new Element(controllerName);
+		controllerElement.setAttribute(workspaceShowDependencies, "" + controller.areDependenciesShown());
+		controllerElement.setAttribute(workspaceShowViolations, "" + controller.areViolationsShown());
+		controllerElement.setAttribute(workspaceContextUpdates, "" + controller.contextUpdatesOn());
+		controllerElement.setAttribute(workspaceContextUpdates, "" + controller.contextUpdatesOn());
+		controllerElement.setAttribute(workspaceLayoutStrategy, controller.getLayoutStrategy().toString());
+		return controllerElement;
+	}
+
+	private boolean isActive(Element controllerElement, String attribute) {
+		return Boolean.parseBoolean(controllerElement.getAttribute(attribute).getValue());
+	}
+
+	private void loadWorkspaceDataForController(DrawingController controller, Element data) {
+		if (isActive(data, workspaceShowDependencies)) {
+			controller.showDependencies();
+		} else {
+			controller.hideDependencies();
+		}
+
+		if (isActive(data, workspaceShowViolations)) {
+			controller.showViolations();
+		} else {
+			controller.hideViolations();
+		}
+
+		if (isActive(data, workspaceContextUpdates)) {
+			controller.activateContextUpdates();
+		} else {
+			controller.deactivateContextUpdates();
+		}
+
+		DrawingLayoutStrategy selectedStrategy = null;
+		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
+			if (strategy.toString().equals(data.getAttribute(workspaceLayoutStrategy).getValue())) {
+				selectedStrategy = strategy;
+			}
+		}
+		if (null != selectedStrategy) {
+			controller.changeLayoutStrategy(selectedStrategy);
 		}
 	}
 }
