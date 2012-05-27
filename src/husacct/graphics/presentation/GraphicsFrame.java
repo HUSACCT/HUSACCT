@@ -101,6 +101,8 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void initializeComponents() {
+		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		add(centerPane, java.awt.BorderLayout.CENTER);
 		drawingScrollPane = new JScrollPane();
 		drawingScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		drawingScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -127,7 +129,6 @@ public class GraphicsFrame extends JInternalFrame {
 		violationColumnKeysArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
 
 		updateComponentsLocaleStrings();
-
 		layoutComponents();
 		
 		
@@ -207,11 +208,7 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void layoutComponents() {
-		if (centerPane != null) {
-			remove(centerPane);
-		}
-
-		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		centerPane.removeAll();
 		if (!showingProperties) {
 			centerPane.add(drawingScrollPane);
 			centerPane.setDividerSize(0);
@@ -222,7 +219,6 @@ public class GraphicsFrame extends JInternalFrame {
 			centerPane.setOneTouchExpandable(true);
 			centerPane.setContinuousLayout(true);
 		}
-		add(centerPane, java.awt.BorderLayout.CENTER);
 
 		if (isVisible()) {
 			validate();
@@ -503,10 +499,7 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	public void showLoadingScreen() {
-		if (centerPane != null) {
-			remove(centerPane);
-		}
-		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		centerPane.removeAll();
 		centerPane.add(new JLabel("Loading.."));
 		add(centerPane, java.awt.BorderLayout.CENTER);
 
