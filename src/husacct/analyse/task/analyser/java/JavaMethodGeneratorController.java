@@ -25,8 +25,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
 
 	public void delegateMethodBlock(CommonTree methodTree, String className) {
-		this.belongsToClass = className;
-		checkMethodType(methodTree);
+		this.belongsToClass = className;		
+		checkMethodType(methodTree);		
 		WalkThroughMethod(methodTree);
 		createMethodObject();	
 	}
@@ -77,13 +77,13 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				accessControlQualifier = "protected";
 			}
 			if(treeType == JavaParser.TYPE){
-				declaredReturnType = getReturnType(child);
+				getReturnType(child);
 				deleteTreeChild(child);
 			}
 			if(treeType == JavaParser.IDENT){
 				name = child.getText();
 			}
-			if(treeType == JavaParser.THROW || treeType == JavaParser.THROWS){
+			if(treeType == JavaParser.THROW || treeType == JavaParser.THROWS_CLAUSE || treeType == JavaParser.THROWS){
 				delegateException(child); 
 				deleteTreeChild(child); 
 			} 
@@ -98,7 +98,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			
 			if(treeType == JavaParser.BLOCK_SCOPE){
 				setSignature();
-				loopThroughBlockMethod(child);
+				JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
+				javaBlockScopeGenerator.walkThroughBlockScope((CommonTree) child, this.belongsToClass, this.name + signature);
 				deleteTreeChild(child);
 			}
 
@@ -117,67 +118,22 @@ class JavaMethodGeneratorController extends JavaGenerator{
 
 
 
-	private void loopThroughBlockMethod(Tree tree) {		
-		for(int i = 0; i < tree.getChildCount(); i++){
-			Tree child = tree.getChild(i);
-			int treeType = child.getType();
-			if(treeType == JavaParser.VAR_DECLARATION){
-				javaLocalVariableGenerator.generateLocalVariableModel(child, belongsToClass, this.belongsToClass + "." + this.name + this.signature);
-				deleteTreeChild(child);
-			}
-			if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL ){ 
-                delegateInvocation(child, "invocConstructor"); 
-                //ik ben er nog niet uit of deze wel gedelete mag worden
-            } 
-            if(treeType == JavaParser.METHOD_CALL ){ 
-                if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
-                	delegateInvocation(child, "invocMethod");
-                	deleteTreeChild(child); 
-                }
-            } 
-            if(treeType == JavaParser.THROW || treeType == JavaParser.CATCH || treeType == JavaParser.THROWS){
-				delegateException(child); 
-				deleteTreeChild(child); 
-			} 
-            if(treeType == JavaParser.ASSIGN ){ //=
-                if (child.getChild(0).getType() == 15){ //getType omdat 15 een punt is
-                	delegateInvocation(child, "accessPropertyOrField");
-                	deleteTreeChild(child); 
-                }
-            } 
-			loopThroughBlockMethod(child);
-		}
-		
-	}
-
-	private String getReturnType(Tree tree){
-		//op dit moment worden arraylisten en hashmaps dusdanig gezet als 'hashmap' en 'arraylist' en niet als
-		//ArrayList<User> bijv. Dit is wellicht een TODO
-		if (tree.getChild(0).getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
-			return tree.getChild(0).getChild(0).getText();
-		}
-		else{
-			return tree.getChild(0).getText();
-		}
-	}
-	
 	private void delegateException(Tree exceptionTree){ 
 		JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator(); 
 		exceptionGenerator.generateModel((CommonTree)exceptionTree, this.belongsToClass); 
 	} 
-	
-	private void delegateInvocation(Tree treeNode, String type) {
-		JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(belongsToClass);
-		if (type.equals("invocConstructor")){
-			javaInvocationGenerator.generateConstructorInvocToModel((CommonTree) treeNode, belongsToClass + "." + this.name + signature);
-		}
-		else if (type.equals("invocMethod")){
-			javaInvocationGenerator.generateMethodInvocToModel((CommonTree) treeNode, belongsToClass + "." + this.name + signature);
-		}
-		else if (type.equals("accessPropertyOrField")){
-			javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) treeNode, belongsToClass + "." + this.name + signature);
-		}
+
+
+	private void getReturnType(Tree tree){
+		//op dit moment worden arraylisten en hashmaps dusdanig gezet als 'hashmap' en 'arraylist' en niet als
+		//ArrayList<User> bijv. Dit is wellicht een TODO
+		
+		declaredReturnType = javaLocalVariableGenerator.generateMethodReturnType(tree, belongsToClass);
 	}
+	
+
+	
+	
 
 	private void deleteTreeChild(Tree treeNode){ 
         for (int child = 0 ; child < treeNode.getChildCount();){ 

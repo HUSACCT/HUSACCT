@@ -83,11 +83,12 @@ public class ViolationAssembler {
 				final  String userDefinedName = severity.getUserName();
 				final String systemDefinedName = severity.getDefaultName();
 				final int severityValue = configuration.getSeverityValue(violation.getSeverity());
+				final boolean isIndirect = violation.isIndirect();
 
-				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, severityValue);
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, severityValue, isIndirect);
 			}
 			else{				
-				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", "", 0);
+				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", "", 0, false);
 			}
 		}catch(ViolationTypeNotFoundException e){
 			throw new ViolationTypeNotFoundException();

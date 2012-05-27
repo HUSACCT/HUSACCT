@@ -1,5 +1,8 @@
 package husacct.define.presentation.jpanel;
 
+import husacct.ServiceProvider;
+import husacct.control.ILocaleChangeListener;
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
@@ -9,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
+public class EditModuleJPanel extends JPanel implements KeyListener, Observer, ILocaleChangeListener{
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private JLabel nameLabel;
@@ -35,13 +39,14 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
-		this.setBorder(BorderFactory.createTitledBorder("Module Properties"));
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
 		
 		this.addModuleNameLabel();
 		this.addModuleNameTextField();
 		this.addModuleDescriptionLabel();
 		this.addModuleDescriptionScrollPane();
+		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
 		
 	}
 	
@@ -57,7 +62,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	private void addModuleNameLabel() {
 		nameLabel = new JLabel();
 		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		nameLabel.setText("Module name");
+		nameLabel.setText(DefineTranslator.translate("ModuleName"));
 	}
 	
 	private void addModuleNameTextField() {
@@ -70,7 +75,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	private void addModuleDescriptionLabel() {
 		descriptionLabel = new JLabel();
 		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		descriptionLabel.setText("Description");
+		descriptionLabel.setText(DefineTranslator.translate("Description"));
 	}
 	
 	private void addModuleDescriptionScrollPane() {
@@ -125,5 +130,12 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//Ignore, this method is not needed.
+	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
+		nameLabel.setText(DefineTranslator.translate("ModuleName"));
+		descriptionLabel.setText(DefineTranslator.translate("Description"));
 	}
 }

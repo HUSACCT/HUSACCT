@@ -1,6 +1,7 @@
 package husacct.analyse.presentation;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane; 
@@ -17,8 +18,9 @@ import javax.swing.UIManager;
 class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{  
 	
 	private static final long serialVersionUID = 1L;
+	private static final Color PANELBACKGROUND = UIManager.getColor("Panel.background");
 	
-	private JTree analyzedCodeTree;
+	private JTree analysedCodeTree;
 	private JScrollPane jScrollPaneTree;
 	private DefaultTreeCellRenderer renderer;
 	
@@ -34,18 +36,56 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 		
 		AnalysedModuleDTO rootModule = new AnalysedModuleDTO("", "", "", "");
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootModule);
+		this.analysedCodeTree = new JTree(root);
+		this.createTreeLayout(analysedCodeTree);
 		
 		List<AnalysedModuleDTO> rootModules = dataControl.getRootModules();
 		for(AnalysedModuleDTO module : rootModules){
 			DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(module);
-			root.add(rootNode);    
+			root.add(rootNode);
+			fillNode(rootNode);
 		}
+		this.expandLeaf(analysedCodeTree, 1);
      	
-    	analyzedCodeTree = new JTree(root);
-    	analyzedCodeTree.setBackground(UIManager.getColor("Panel.background"));
-		analyzedCodeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		analyzedCodeTree.addTreeSelectionListener(this);
-		jScrollPaneTree = new JScrollPane(analyzedCodeTree);
+		analysedCodeTree.setBackground(UIManager.getColor("Panel.background"));
+		analysedCodeTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		analysedCodeTree.addTreeSelectionListener(this);
+		jScrollPaneTree = new JScrollPane(analysedCodeTree);
+		
+		createLayout();
+		
+	} 
+	
+	private void expandLeaf(JTree tree, int level) {
+		for (int i = 0; i < level; i++) {
+			tree.expandRow(i);
+		}
+	}
+	
+	private void fillNode(DefaultMutableTreeNode node){
+		AnalysedModuleDTO module = (AnalysedModuleDTO)node.getUserObject();
+		List<AnalysedModuleDTO> children = dataControl.getModulesInModules(module.uniqueName);
+		if(!children.isEmpty()){
+			for(AnalysedModuleDTO child: children){
+				DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
+				fillNode(childNode);
+			 	node.add(childNode); 
+			} 
+		}
+	}
+	
+	private void createTreeLayout(JTree theTree){
+		DefaultTreeCellRenderer moduleNodeRenderer = new SoftwareTreeCellRenderer(dataControl);
+		moduleNodeRenderer.setBackground(UIManager.getColor("Panel.background"));
+		moduleNodeRenderer.setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
+		moduleNodeRenderer.setBackgroundSelectionColor(UIManager.getColor("Table.sortIconColor"));
+		moduleNodeRenderer.setTextNonSelectionColor(UIManager.getColor("Panel.background"));
+		moduleNodeRenderer.setTextSelectionColor(UIManager.getColor("Table.sortIconColor"));
+		theTree.setCellRenderer(moduleNodeRenderer);
+		theTree.setBackground(PANELBACKGROUND);
+	}
+	
+	private void createLayout(){
 		jScrollPaneTree.setBackground(UIManager.getColor("Panel.background"));
 		jScrollPaneTree.setBorder(null);
 		jScrollPaneTree.setBackground(getBackground());
@@ -66,26 +106,18 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener{
 					.addContainerGap())
 		);
 		
-		analyzedCodeTree.setCellRenderer(renderer);
+		analysedCodeTree.setCellRenderer(renderer);
 		setLayout(groupLayout);
-	} 
+	}
 	
 	@Override
 	public void valueChanged(TreeSelectionEvent eventTree) {
-		DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) analyzedCodeTree.getLastSelectedPathComponent();
-    	AnalysedModuleDTO selectedModule = (AnalysedModuleDTO)currentNode.getUserObject();
-		List<AnalysedModuleDTO> children = dataControl.getModulesInModules(selectedModule.uniqueName);
-		if(!children.isEmpty()){
-			for(AnalysedModuleDTO child: children){
-				DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
-			 	currentNode.add(childNode); 
-			} 
-		}
+		//Implement extra functionality here if needed in the future
 	}
 	
 	public void reload(){
 		renderer = new SoftwareTreeCellRenderer(dataControl);
-		analyzedCodeTree.setCellRenderer(renderer);
+		analysedCodeTree.setCellRenderer(renderer);
 		repaint();
 	}
  }

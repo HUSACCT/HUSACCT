@@ -3,7 +3,7 @@ package husacct.validate.domain.validation;
 import java.awt.Color;
 
 public enum DefaultSeverities {
-	LOW("Low", Color.GREEN),
+	LOW("Low", Color.YELLOW),
 	MEDIUM("Medium", Color.ORANGE),
 	HIGH("High", Color.RED),
 	UNIDENTIFIED("Unidentified", Color.BLACK);

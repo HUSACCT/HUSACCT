@@ -1,7 +1,7 @@
 package husacct.validate.task.filter;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ViolationDTO;
-import husacct.validate.abstraction.language.ValidateTranslator;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -9,6 +9,7 @@ import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
@@ -31,18 +32,17 @@ public class FilterController {
 		this.configuration = configuration;
 	}
 
-	public void setFilterValues(ArrayList<String> ruletypes, ArrayList<String> violationtypes, ArrayList<String> paths, Boolean hideFilter, List<Violation> violations) {
-		Regex regex = new Regex();
+	public void setFilterValues(PathDTO dto, boolean hideFilter, List<Violation> violations) {
 		ArrayList<String> modulesFilter = new ArrayList<String>();
 		for(Violation violation : violations){
-			for(String path : paths){
-				if(!modulesFilter.contains(violation.getClassPathFrom()) && regex.matchRegex(regex.makeRegexString(path), violation.getClassPathFrom())){
+			for(String path : dto.getPaths()){
+				if(!modulesFilter.contains(violation.getClassPathFrom()) && Regex.matchRegex(Regex.makeRegexString(path), violation.getClassPathFrom())){
 					modulesFilter.add(violation.getClassPathFrom());
 				}
 			}
 		}
-		this.ruletypes = ruletypes;
-		this.violationtypes = violationtypes;
+		this.ruletypes = dto.getRuletypes();
+		this.violationtypes = dto.getViolationtypes();
 		this.paths = modulesFilter;
 		this.hidefilter = hideFilter;
 	}
@@ -50,9 +50,9 @@ public class FilterController {
 	public ArrayList<Violation> filterViolations(List<Violation> violations) {
 		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
 		for (Violation violation : violations) {
-			if (hidefilter && ( !ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) && !violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
+			if (hidefilter && ( !ruletypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
-			} else if ((!hidefilter) && (ruletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey())) || violationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
+			} else if ((!hidefilter) && (ruletypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
 			}
 		}
@@ -63,8 +63,8 @@ public class FilterController {
 		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-			if(!AppliedRuletypes.contains(ValidateTranslator.getValue(violation.getRuletypeKey()))){
-				AppliedRuletypes.add(ValidateTranslator.getValue(violation.getRuletypeKey()));
+			if(!AppliedRuletypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()))){
+				AppliedRuletypes.add(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()));
 			}
 		}
 
@@ -76,8 +76,8 @@ public class FilterController {
 
 		for (Violation violation : violations) {
 
-			if(!appliedViolationtypes.contains(ValidateTranslator.getValue(violation.getViolationtypeKey()))){
-				appliedViolationtypes.add(ValidateTranslator.getValue(violation.getViolationtypeKey()));
+			if(!appliedViolationtypes.contains(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()))){
+				appliedViolationtypes.add(ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()));
 			}
 		}
 		return appliedViolationtypes;
@@ -114,33 +114,21 @@ public class FilterController {
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(ViolationHistory violationHistory, boolean applyFilter) {
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
-		List<Violation> violations = null;
-		List<Severity> severities = null;
-		if(violationHistory != null) {
-			violations = violationHistory.getViolations();
-			severities = violationHistory.getSeverities();
-		} else {
-			violations = taskServiceImpl.getAllViolations().getValue();
-			severities = taskServiceImpl.getAllSeverities();
-		}
-		if(applyFilter) {
-			violations = taskServiceImpl.applyFilterViolations(violations);
-		}
 
-		for(Severity severity : severities) {
-			int violationsCount = 0;
-
-			for(Violation violation : violations) {
-				if(violation.getSeverity() != null) {
-					if(violation.getSeverity().getId().equals(severity.getId())) {
-						violationsCount++;
-					}
+		for(Violation violation : shownViolations) {
+			if(violation.getSeverity() != null) {
+				int count = 0;
+				try{
+					count = violationsPerSeverity.get(violation.getSeverity());
+				} catch(Exception e){
+				} finally{
+					violationsPerSeverity.remove(violation.getSeverity());
+					violationsPerSeverity.put(violation.getSeverity(), count++);
 				}
+				
 			}
-
-			violationsPerSeverity.put(severity, violationsCount);
 		}
 		return violationsPerSeverity;
 	}

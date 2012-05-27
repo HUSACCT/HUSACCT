@@ -11,13 +11,15 @@ public class ViolationDTO extends AbstractDTO {
 	public final ViolationTypeDTO violationType;
 	public final String message;
 	public final int linenumber;
+	public final boolean indirect;
 	
 	public final Color severityColor;
 	public final String userDefinedName;
 	public final String systemDefinedName;
 	public final int severityValue;
 
-	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message , int linenumber, Color severityColor, String userDefinedName, String systemDefinedName, int severityValue) {
+	public ViolationDTO(String fromClasspath, String toClasspath, String logicalModuleFrom, String logicalModuleTo, ViolationTypeDTO violationType, RuleTypeDTO ruleType, String message , int linenumber, Color severityColor, String userDefinedName, String systemDefinedName, int severityValue, boolean isIndirect) {
+		this.indirect = isIndirect;
 		this.fromClasspath = fromClasspath;
 		this.toClasspath = toClasspath;
 		this.logicalModuleFrom = logicalModuleFrom;

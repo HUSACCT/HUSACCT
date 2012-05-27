@@ -5,6 +5,7 @@ import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -23,11 +24,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class ValidateServiceImpl implements IValidateService, ISaveable {		
+public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
-	
+
 	private final GuiController gui;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
@@ -49,7 +50,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 	public CategoryDTO[] getCategories(){
 		return domain.getCategories();
 	}
-	
+
 	@Override
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {		
 		if(!validationExecuted){
@@ -57,7 +58,7 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		}		
 		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
-	
+
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
 		if(!validationExecuted){
@@ -76,13 +77,8 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
 		domain.checkConformance(appliedRules);		
 		this.validationExecuted = true;
+		notifyServiceListeners();
 		gui.violationChanged();
-	}
-
-	@Override
-	//Export report
-	public void exportViolations(String name, String fileType, String path) {
-		report.createReport(fileType, name, path);
 	}
 
 	@Override
@@ -107,46 +103,53 @@ public class ValidateServiceImpl implements IValidateService, ISaveable {
 		} catch (DatatypeConfigurationException e) {
 			logger.error("Error exporting the workspace: " + e.getMessage(), e);
 		}
+		notifyServiceListeners();
 	}
 
 	@Override
 	public boolean isValidated() {
 		return validationExecuted;
 	}
-	
-	//This method is only used for testing with the Testsuite
-	public ConfigurationServiceImpl getConfiguration() {
-		return configuration;
-	}
-	
-	//This method is only used for testing with the Testsuite
-	public void Validate(RuleDTO[] appliedRules){
-		domain.checkConformance(appliedRules);
-	}
 
 	@Override
-	public List<Violation> getViolationsByDate(Calendar date) {
-		return task.getViolationsByDate(date);
+	public List<Violation> getHistoryViolationsByDate(Calendar date) {
+		return task.getHistoryViolations(date);
 	}
-	
+
 	@Override
 	public Calendar[] getViolationHistoryDates() {
 		return task.getViolationHistoryDates();
 	}
 
 	@Override
-	public void saveInHistory(String description) {
-		task.saveInHistory(description);		
-	}
-	
-	@Override 
-	public JInternalFrame getViolationHistoryGUI(){
-		//FIXME add ViolationHistoryGUI
-		return new JInternalFrame();
+	public void createHistoryPoint(String description) {
+		task.createHistoryPoint(description);	
+		notifyServiceListeners();
 	}
 
 	@Override
 	public void exportViolations(File file, String fileType, Calendar date) {
 		report.createReport(file, fileType, date);
+	}
+
+	@Override
+	public void exportViolations(File file, String fileType) {
+		report.createReport(file, fileType);
+	}	
+
+	//This method is only used for testing with the Testsuite
+	public ConfigurationServiceImpl getConfiguration() {
+		return configuration;
+	}
+
+	//This method is only used for testing with the Testsuite
+	public void Validate(RuleDTO[] appliedRules){
+		domain.checkConformance(appliedRules);
+	}
+
+	@Override
+	@Deprecated
+	public void exportViolations(String s1, String s2, String s3) {
+		
 	}
 }

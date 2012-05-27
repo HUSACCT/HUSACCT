@@ -43,6 +43,9 @@ class JavaTreeConvertController {
 		if(classTree == null){
 			classTree = completeTree.getFirstChildWithType(JavaParser.AT);
 		}
+		if(classTree == null){
+			classTree = completeTree.getFirstChildWithType(JavaParser.ENUM);
+		}
 
 		if(classTree != null){
 			switch(classTree.getType()){
@@ -54,6 +57,9 @@ class JavaTreeConvertController {
 				break;
 			case JavaParser.AT:
 				this.theClass = this.currentClass = delegateAnnotation(classTree);
+				break;
+			case JavaParser.ENUM:
+				this.theClass = this.currentClass = delegateClass(classTree, false);
 				break;
 			default:
 				logger.warn("Detected a not supported type");
@@ -104,9 +110,6 @@ class JavaTreeConvertController {
 					if(nodeType == JavaParser.FUNCTION_METHOD_DECL || nodeType == JavaParser.CONSTRUCTOR_DECL || nodeType == JavaParser.VOID_METHOD_DECL){
 						delegateMethod(treeNode);
 						deleteTreeChild(treeNode); 
-					}
-					if(nodeType == JavaParser.FOR_EACH || nodeType == JavaParser.FOR){
-						delegateLoop(treeNode);
 					}
 				}
 
@@ -171,11 +174,6 @@ class JavaTreeConvertController {
 		JavaMethodGeneratorController methodGenerator = new JavaMethodGeneratorController(); 
 		methodGenerator.delegateMethodBlock((CommonTree)methodTree, this.currentClass); 
 	} 
-
-	private void delegateLoop(Tree loopTree){
-		JavaLoopGenerator loopGenerator = new JavaLoopGenerator();
-		loopGenerator.generateModel((CommonTree) loopTree, this.currentClass);
-	}
 
 	private boolean hasPackageElement(CommonTree tree){ 
 		return tree.getFirstChildWithType(JavaParser.PACKAGE) != null; 

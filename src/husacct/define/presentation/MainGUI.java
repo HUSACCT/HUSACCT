@@ -9,6 +9,7 @@ import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -42,6 +43,7 @@ public class MainGUI {
 		jframe.setVisible(true);
 		mainFrame.add(jframe);
 		mainFrame.repaint();
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		//StartupWay: Direct Frame
 //		ApplicationJFrame jframe = new ApplicationJFrame();

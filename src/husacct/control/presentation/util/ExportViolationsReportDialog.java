@@ -35,7 +35,7 @@ public class ExportViolationsReportDialog extends JDialog{
 	public ExportViolationsReportDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.exportController = mainController.getExportController();
-		setTitle(controlService.getTranslatedString("ExportArchitecture"));
+		setTitle(controlService.getTranslatedString("ExportReport"));
 		setup();
 		addComponents();
 		setListeners();
@@ -74,8 +74,10 @@ public class ExportViolationsReportDialog extends JDialog{
 		});
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(validateData()) {
 				exportController.exportViolationsReport(selectedFile);
 				dispose();
+				}
 			}
 		});
 	}
@@ -88,11 +90,15 @@ public class ExportViolationsReportDialog extends JDialog{
 			filters.add(new FileNameExtensionFilter(extension, extension));
 		}
 		
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filters);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filters);
 
-		int returnVal = fileChooser.showDialog(this);
+		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(new File(fileChooser.getSelectedFile().getAbsolutePath() + "." + fileChooser.getFileFilter().getDescription()));
+			if(fileDialog.getSelectedFile().exists()){
+				setFile(fileDialog.getSelectedFile());
+			} else {
+				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			}
 		}
 	}
 
@@ -100,5 +106,17 @@ public class ExportViolationsReportDialog extends JDialog{
 		selectedFile = file;
 		pathText.setText(file.getAbsolutePath());
 		exportButton.setEnabled(true);
+	}
+	
+	public boolean validateData() {
+		if(selectedFile == null){
+			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			return false;
+		}		
+		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
+			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
+			return false;
+		}
+		return true;
 	}
 }

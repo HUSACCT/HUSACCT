@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
+import husacct.validate.domain.check.util.CheckConformanceUtilSeverity;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
@@ -14,6 +15,7 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
+import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.util.EnumSet;
@@ -32,7 +34,7 @@ public abstract class RuleType {
 	protected List<Violation> violations;
 	protected Mappings mappings;
 	protected List<Mapping> physicalClasspathsFrom;
-		
+
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
@@ -72,20 +74,12 @@ public abstract class RuleType {
 	public List<RuleType> getExceptionrules(){
 		return exceptionrules;
 	}
-	
+
 	public Severity getSeverity(){
 		return severity;
 	}
 
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
-
-	protected Violation createViolation(DependencyDTO dependency, int severityValue, String ruleKey, LogicalModules logicalModules, boolean inDirect, Message message, Severity severity){
-			return new Violation(dependency.lineNumber, severity.clone(), ruleKey, dependency.type, dependency.from, dependency.to, inDirect, message, logicalModules);
-	}
-
-	protected Violation createViolation(String ruleKey, String from, boolean inDirect, Message message, LogicalModules logicalModules, Severity severity) {
-		return new Violation(0, severity.clone(), ruleKey, "", from, "", inDirect, message, logicalModules);		
-	}
 
 	protected Severity getViolationTypeSeverity(String violationTypeKey){
 		try{
@@ -94,5 +88,31 @@ public abstract class RuleType {
 
 		}
 		return null;
+	}
+
+	protected Violation createViolation(RuleDTO rootRule,Mapping classPathFrom, Mapping classPathTo,DependencyDTO dependency, ConfigurationServiceImpl configuration){
+		Message message = new Message(rootRule);
+		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
+		LogicalModules logicalModules;
+		Violation violation;
+
+		if(classPathTo == null){
+			logicalModules = new LogicalModules(logicalModuleFrom);
+		}else{
+			LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
+			logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+		}
+		if(dependency == null){
+
+			Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
+			violation = new Violation(0, severity.clone(), this.key, "", classPathFrom.getPhysicalPath(), "", false, message, logicalModules);
+		}else{
+
+			final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
+			Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);						
+			violation = new Violation(dependency.lineNumber, severity.clone(), this.key, dependency.type, dependency.from, dependency.to, false, message, logicalModules);
+		}
+		return violation;
+
 	}
 }

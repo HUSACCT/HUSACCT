@@ -32,7 +32,7 @@ public final class FigureFactory {
 			}
 		}
 
-		if (highestColor == null) {
+		if (null == highestColor) {
 			throw new RuntimeException("No violation severity color found");
 		}
 
@@ -102,5 +102,9 @@ public final class FigureFactory {
 		} else {
 			return new ModuleFigure(name, type);
 		}
+	}
+
+	public ParentFigure createParentFigure(String parentName) {
+		return new ParentFigure(parentName);
 	}
 }

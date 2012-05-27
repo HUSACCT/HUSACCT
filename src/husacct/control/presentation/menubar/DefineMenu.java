@@ -16,7 +16,6 @@ import java.util.Locale;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
@@ -98,12 +97,6 @@ public class DefineMenu extends JMenu{
 					exportArchitectureItem.setEnabled(true);
 					definedArchitectureDiagramItem.setEnabled(true);
 				}
-			}
-		});
-		
-		this.addMenuListener(new MenuAdapter() {
-			public void menuSelected(MenuEvent e) {
-				mainController.getStateController().checkState();
 			}
 		});
 		

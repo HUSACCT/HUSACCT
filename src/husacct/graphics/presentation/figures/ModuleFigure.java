@@ -15,8 +15,8 @@ public class ModuleFigure extends BaseFigure {
 	private TextFigure moduleText;
 	private TextFigure text;
 
-	protected int minWidth = 100;
-	protected int minHeight = 100;
+	public int MIN_WIDTH = 50;
+	public int MIN_HEIGHT = 50;
 
 	public ModuleFigure(String name, String type) {
 		super(name);
@@ -36,11 +36,11 @@ public class ModuleFigure extends BaseFigure {
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < minWidth) {
-			lead.x = anchor.x + minWidth;
+		if ((lead.x - anchor.x) < MIN_WIDTH) {
+			lead.x = anchor.x + MIN_WIDTH;
 		}
-		if ((lead.y - anchor.y) < minHeight) {
-			lead.y = anchor.y + minHeight;
+		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+			lead.y = anchor.y + MIN_HEIGHT;
 		}
 
 		body.setBounds(anchor, lead);
@@ -89,8 +89,4 @@ public class ModuleFigure extends BaseFigure {
 		return true;
 	}
 
-	@Override
-	public boolean isLine() {
-		return false;
-	}
 }

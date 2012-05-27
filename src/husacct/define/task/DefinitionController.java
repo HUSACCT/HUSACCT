@@ -83,25 +83,11 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newLayer);
 		} catch (Exception e) {
 			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
-//	public void addModule(long selectedModuleId, String moduleName, String moduleDescription){
-//		logger.info("Adding module " + moduleName);
-//		try {
-//			JPanelStatus.getInstance("Adding module").start();
-//			Module newModule = new Module(moduleName, moduleDescription);
-//			this.passModuleToService(selectedModuleId, newModule);
-//		} catch (Exception e) {
-//			logger.error("addModule(" + moduleName + ") - exception: " + e.getMessage());
-//			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
-//		} finally {
-//			JPanelStatus.getInstance().stop();
-//		}
-//	}
 	
 	public void addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
 		logger.info("Adding subsystem " + moduleName);
@@ -111,7 +97,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newModule);
 		} catch (Exception e) {
 			logger.error("addSubSystem(" + moduleName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -125,7 +111,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newComponent);
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -139,7 +125,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.passModuleToService(selectedModuleId, newComponent);
 		} catch (Exception e) {
 			logger.error("addExternalLibrary(" + libraryName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -167,7 +153,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.notifyObservers();
 		} catch (Exception e) {
 			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -183,7 +169,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("moveLayerUp() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -199,7 +185,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("moveLayerDown() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -226,7 +212,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -251,7 +237,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("removeRule() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -271,7 +257,7 @@ public class DefinitionController extends Observable implements Observer {
 			this.notifyObservers();
 		} catch (Exception e) {
 			logger.error("updateModule() - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -324,7 +310,7 @@ public class DefinitionController extends Observable implements Observer {
 				
 			} catch (Exception e) {
 				logger.error("getModuleDetails() - exception: " + e.getMessage());
-				UiDialogs.errorDialog(definitionJPanel, e.getMessage(), "Error");
+				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 			}
 		}
 		return moduleDetails;
@@ -366,7 +352,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
 
 	public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
-		return this.appliedRuleService.getAppliedRulesIdsByModule(getSelectedModuleId());
+		return this.appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
 	}
 	
 	public HashMap<String, Object> getRuleDetailsByAppliedRuleId(long appliedRuleId){
@@ -400,10 +386,10 @@ public class DefinitionController extends Observable implements Observer {
 	public void createTestData() {
 		try {
 			ServiceProvider.getInstance().getDefineService().createApplication("HUSACCT", new String[]{}, "Java", "1.0");
-			addSubSystem(-1, "Module 1", "This is test data");
-			addSubSystem(-1, "Module 2", "This is test data");
-			addSubSystem(0, "SubModule 1", "This is test data");
-			addSubSystem(2, "SubModule 2", "This is test data");
+			addLayer(-1, "Layer 1", "This is test data");
+			addLayer(-1, "Layer 2", "This is test data");
+			addSubSystem(0, "SubSystem 1", "This is test data");
+			addSubSystem(2, "SubSystem 2", "This is test data");
 			notifyObservers();
 			definitionJPanel.modulePanel.update(this, null);
 		} catch (Exception e){

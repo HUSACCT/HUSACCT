@@ -3,13 +3,14 @@ package husacct.define;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
-import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.persistency.PersistentDomain;
 import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
@@ -20,7 +21,7 @@ import javax.swing.JInternalFrame;
 
 import org.jdom2.Element;
 
-public class DefineServiceImpl implements IDefineService {
+public class DefineServiceImpl extends ObservableService implements IDefineService {
 	private SoftwareArchitectureDomainService defineDomainService = new SoftwareArchitectureDomainService();
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();

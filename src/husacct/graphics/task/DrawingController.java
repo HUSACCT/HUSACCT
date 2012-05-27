@@ -11,23 +11,38 @@ import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
+import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.task.layout.BasicLayoutStrategy;
+import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
+import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.util.DrawingLayoutStrategy;
 
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
+	protected static final boolean debugPrint = true;
+	protected boolean contextUpdates;
+	private boolean areDependenciesShown;
+	private boolean areViolationsShown;
+	protected DrawingLayoutStrategy layoutStrategyOption;
+
+	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
 
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
-	protected String currentPath = "";
-	private boolean isViolationsShown = false;
+	protected String[] currentPaths = new String[]{};
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -39,31 +54,96 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
+		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
+		
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
 		initializeComponents();
+		switchLayoutStrategy();
 
 		controlService = ServiceProvider.getInstance().getControlService();
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			@Override
 			public void update(Locale newLocale) {
 				refreshFrame();
-				refreshDrawing();
 			}
 		});
 	}
 
 	private void initializeComponents() {
+		notifyServiceListeners();
 		drawing = new Drawing();
 		view = new DrawingView(drawing);
 		view.addListener(this);
 
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
-
-		layoutStrategy = new LayeredLayoutStrategy(drawing);
-//		layoutStrategy = new BasicLayoutStrategy(drawing);
+		drawTarget.setSelectedLayout(layoutStrategyOption);
+		
+		showDependencies();
+		hideViolations();
+		deactivateContextUpdates();
+	}
+	
+	private void switchLayoutStrategy(){
+		switch(layoutStrategyOption){
+			case BASIC_LAYOUT:
+				layoutStrategy = new BasicLayoutStrategy(drawing);
+				break;
+			case LAYERED_LAYOUT:
+				layoutStrategy = new LayeredLayoutStrategy(drawing);
+				break;
+			default:
+				layoutStrategy = new NoLayoutStrategy();
+				break;
+		}
+	}
+	
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
+		layoutStrategyOption = selectedStrategyEnum;
+		switchLayoutStrategy();
+		updateLayout();
+	}
+	
+	public void toggleDependencies(){
+		notifyServiceListeners();
+		if(areDependenciesShown){
+			hideDependencies();
+		}else{
+			showDependencies();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	public void showDependencies(){
+		areDependenciesShown = true;
+		drawTarget.turnOnDependencies();
+	}
+	
+	public void hideDependencies(){
+		areDependenciesShown = false;
+		drawTarget.turnOffDependencies();
+	}
+	
+	public void toggleContextUpdates(){
+		notifyServiceListeners();
+		if(contextUpdates){
+			deactivateContextUpdates();
+		}else{
+			activateContextUpdates();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	private void deactivateContextUpdates(){
+		contextUpdates = false;
+		drawTarget.turnOffContextUpdates();
+	}
+	
+	private void activateContextUpdates(){
+		contextUpdates = true;
+		drawTarget.turnOnContextUpdates();
 	}
 
 	public JInternalFrame getGUI() {
@@ -73,37 +153,47 @@ public abstract class DrawingController implements UserInputListener {
 	public void clearDrawing() {
 		figureMap.clearAll();
 		drawing.clearAll();
+
 		view.clearSelection();
+		view.invalidate();
 	}
 
 	public void clearLines() {
 		drawing.clearAllLines();
 	}
 
-	public String getCurrentPath() {
-		return currentPath;
+	public String[] getCurrentPaths() {
+		return currentPaths;
+	}
+	
+	public String getCurrentPathsToString() {
+		String stringPaths = "";
+		for(String path : getCurrentPaths()){
+			stringPaths += path + " + ";
+		}
+		return stringPaths;
 	}
 
-	public void resetCurrentPath() {
-		currentPath = "";
+	public void resetCurrentPaths() {
+		currentPaths = new String[]{};
 	}
 
-	public void setCurrentPath(String path) {
-		currentPath = path;
+	public void setCurrentPaths(String[] paths) {
+		currentPaths = paths;
 	}
 
 	public boolean areViolationsShown() {
-		return isViolationsShown;
+		return areViolationsShown;
 	}
 
 	public void hideViolations() {
-		isViolationsShown = false;
+		areViolationsShown = false;
 		drawTarget.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	public void showViolations() {
-		isViolationsShown = true;
+		areViolationsShown = true;
 		drawTarget.turnOnViolations();
 	}
 
@@ -140,41 +230,66 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
-		
-		drawTarget.setCurrentPath(getCurrentPath());
+		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
-		
+
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-		
-		// ATTN: The calls to drawLinesBasedOnSetting(); updateLayout(); drawLinesBasedOnSetting();
-		// are done specifically in that order for a reason!
-		// Due to a bug in the RelationFigure the lines are drawing themselves incorrectly
-		// after updating the layout of the drawing. 
-		// To solve this we first draw the entire drawing, update the layout and then 
-		// remove all the lines and re-add them to the drawing. 
-		// As it's currently unknown what causes the bug or how to solve it and the
-		// deadline for Construction II is approaching, we have decided to go with a 
-		// work around. However, this bug should be fixed as soon as possible. 
+
 		drawLinesBasedOnSetting();
-		
+
 		updateLayout();
-		
+	}
+
+	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
+		clearDrawing();
+		for (String parentName : modules.keySet()) {
+			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
+			drawing.add(parentFigure);
+			for (AbstractDTO dto : modules.get(parentName)) {
+				BaseFigure generatedFigure = figureFactory.createFigure(dto);
+				parentFigure.add(generatedFigure);
+				drawing.add(generatedFigure);
+				figureMap.linkModule(generatedFigure, dto);
+			}
+			parentFigure.updateLayout();
+		}
+		drawTarget.setCurrentPaths(getCurrentPaths());
+		drawTarget.updateGUI();
+		updateLayout();
 		drawLinesBasedOnSetting();
 	}
 
 	protected void updateLayout() {
-		int width = drawTarget.getWidth();
-		int height = drawTarget.getHeight();
+		String currentPaths = getCurrentPathsToString();
+		
+		if (hasSavedFigureStates(currentPaths)) {
+			restoreFigurePositions(currentPaths);
+		} else {
+			int width = drawTarget.getWidth();
+			int height = drawTarget.getHeight();
+			layoutStrategy.doLayout(width, height);
+		}
 
-		layoutStrategy.doLayout(width, height);
+		updateLines();
+	}
+
+	private void updateLines() {
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			if (bf.isLine()) {
+				RelationFigure cf = (RelationFigure) f;
+				cf.updateConnection();
+			}
+		}
 	}
 
 	@Override
 	public void toggleViolations() {
+		notifyServiceListeners();
 		if (areViolationsShown()) {
 			hideViolations();
 		} else {
@@ -185,11 +300,15 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
-		drawDependenciesForShownModules();
+		if(areDependenciesShown){
+			drawDependenciesForShownModules();
+		}
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		drawing.updateLineFigureToContext();
+		if(contextUpdates){
+			drawing.updateLineFigureToContext();
+		}
 	}
 
 	public void drawDependenciesForShownModules() {
@@ -255,5 +374,59 @@ public abstract class DrawingController implements UserInputListener {
 	@Override
 	public void exportToImage() {
 		drawing.showExportToImagePanel();
+	}
+
+	public void notifyServiceListeners() {
+		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
+	}
+	
+	public void saveSingleLevelFigurePositions(){
+		if(getCurrentPaths().length<2){
+			saveFigurePositions();
+		}
+	}
+
+	protected void saveFigurePositions() {
+		String paths = getCurrentPathsToString();
+		DrawingState state;
+		if (storedStates.containsKey(paths))
+			state = storedStates.get(paths);
+		else
+			state = new DrawingState(drawing);
+
+		state.save(figureMap);
+		storedStates.put(paths, state);
+	}
+
+	protected boolean hasSavedFigureStates(String paths) {
+		return storedStates.containsKey(paths);
+	}
+
+	protected void restoreFigurePositions(String paths) {
+		if (storedStates.containsKey(paths)) {
+			DrawingState state = storedStates.get(paths);
+			state.restore(figureMap);
+		}
+	}
+
+	protected void resetAllFigurePositions() {
+		storedStates.clear();
+	}
+
+	protected void printFigures(String msg) {
+		if (!debugPrint)
+			return;
+
+		System.out.println(msg);
+
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			Rectangle2D.Double bounds = bf.getBounds();
+
+			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y,
+					bounds.width, bounds.height);
+			if (bf.getName().equals("Main"))
+				System.out.println(String.format("%s: %s", bf.getName(), rect));
+		}
 	}
 }

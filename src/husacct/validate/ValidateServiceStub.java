@@ -5,8 +5,8 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IServiceListener;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 
 import java.awt.Color;
 import java.io.File;
@@ -29,10 +29,10 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 
 	private CategoryDTO category = new CategoryDTO("Legality of Dependency", new RuleTypeDTO[] { ruleType });
 
-	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, "Module locationbasedConnections  is not allowed to use Module locationbasedDAO", 12, Color.GREEN, "", "Low", 1);
-	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 18, Color.ORANGE, "Custom", "", 2);
-	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 19, Color.RED, "", "High", 3);
-	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56, Color.RED, "Catastrophic", "", 4);
+	private ViolationDTO violation1 = new ViolationDTO("domain.locationbased.foursquare.Account", "infrastructure.socialmedia.locationbased.foursquare.AccountDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO" ,constructorCall, ruleType, "Module locationbasedConnections  is not allowed to use Module locationbasedDAO", 12, Color.GREEN, "", "Low", 1, false);
+	private ViolationDTO violation2 = new ViolationDTO("domain.locationbased.foursquare.Friends", "infrastructure.socialmedia.locationbased.foursquare.FriendsDAO", "Domain layer.locationbasedConnections.foursquareConnection", "Infrastructure layer.locationbasedDAO",extendingAbstractClass, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 18, Color.ORANGE, "Custom", "", 2, true);
+	private ViolationDTO violation3 = new ViolationDTO("domain.locationbased.foursquare.Map", "infrastructure.socialmedia.locationbased.foursquare.IMap", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",implementationOfInterface, ruleType, "Module locationbasedConnections is not allowed to use Module locationbasedDAO", 19, Color.RED, "", "High", 3, false);
+	private ViolationDTO violation4 = new ViolationDTO("domain.locationbased.foursquare.History", "infrastructure.socialmedia.locationbased.foursquare.HistoryDAO ", "Domain layer.locationbasedConnections.latitudeConnection", "Infrastructure layer.locationbasedDAO",extendClass, ruleType, "Module locationbasedHistory is not allowed to use Module locationbasedDAO", 56, Color.RED, "Catastrophic", "", 4, true);
 
 	private boolean validationExecuted;
 
@@ -40,22 +40,22 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 		this.validationExecuted = false;
 	}
 
+	@Override
 	public CategoryDTO[] getCategories() {
 		return new CategoryDTO[] { category };
 	}
 
+	@Override
 	public String[] getExportExtentions() {
 		return new String[] { "pdf", "xml", "html" };
 	}
 
+	@Override
 	public void checkConformance() {
 		validationExecuted = true;
 	}
 
-	public void exportViolations(String name, String fileType, String path) {
-
-	}
-
+	@Override
 	public JInternalFrame getBrowseViolationsGUI(){
 		return new JInternalFrame();
 	}
@@ -127,7 +127,7 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public List<Violation> getViolationsByDate(Calendar date) {
+	public List<Violation> getHistoryViolationsByDate(Calendar date) {
 		return null;
 	}
 
@@ -141,17 +141,34 @@ public class ValidateServiceStub implements IValidateService, ISaveable{
 	}
 
 	@Override
-	public void saveInHistory(String description) {
+	public void createHistoryPoint(String description) {
 	}
 
-	@Override
-	public JInternalFrame getViolationHistoryGUI() {
-		return new JInternalFrame();
-	}
-
+	
 	@Override
 	public void exportViolations(File file, String fileType, Calendar date) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void exportViolations(File file, String fileType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportViolations(String s1, String s2, String s3) {
+				
+	}
+
+	@Override
+	public void addServiceListener(IServiceListener listener) {
+		
+	}
+
+	@Override
+	public void notifyServiceListeners() {
+
 	}
 }

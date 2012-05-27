@@ -20,12 +20,12 @@ public class SetApplicationDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private JButton saveButton;
+	private JButton saveButton, analyseButton;
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
-	
+
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-	
+
 	public SetApplicationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
@@ -36,7 +36,7 @@ public class SetApplicationDialog extends JDialog {
 		setListeners();
 		this.setVisible(true);
 	}
-	
+
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
@@ -44,25 +44,39 @@ public class SetApplicationDialog extends JDialog {
 		this.setResizable(false);
 		DialogUtils.alignCenter(this);
 	}
-	
+
 	private void addComponents(){
 		JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
+		analyseButton = new JButton(controlService.getTranslatedString("SaveAndAnalyseButton"));
 		savePanel.add(saveButton);
-		getRootPane().setDefaultButton(saveButton);
+		savePanel.add(analyseButton);
+		getRootPane().setDefaultButton(analyseButton);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(setApplicationPanel);
 		mainPanel.add(savePanel);
 		add(mainPanel);
 	}
-	
+
 	private void setListeners(){
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-				mainController.getApplicationController().setApplicationData(applicationData);
-				dispose();
+				if (setApplicationPanel.dataValidated()) {
+					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+					mainController.getApplicationController().setApplicationData(applicationData);
+					dispose();
+				}
+			}
+		});
+		
+		analyseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (setApplicationPanel.dataValidated()) {
+					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+					mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
+					dispose();
+				}
 			}
 		});
 	}

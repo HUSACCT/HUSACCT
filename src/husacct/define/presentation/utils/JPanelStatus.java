@@ -1,6 +1,8 @@
 package husacct.define.presentation.utils;
 
 
+import husacct.define.abstraction.language.DefineTranslator;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,7 +16,7 @@ import javax.swing.JProgressBar;
 public class JPanelStatus extends JPanel {
 
 	private static final long serialVersionUID = -7360960342696885795L;
-	private String defaultMessage = "Idle";
+	private String defaultMessage = DefineTranslator.translate("IdleMessage");
 	private Stack<String> messages = new Stack<String>();
 	private JLabel jLabelStatus;
 	private JProgressBar jProgressBar;
