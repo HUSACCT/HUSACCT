@@ -10,7 +10,7 @@
 	<property name="reports.dir"	value="${build.dir}/reports" />
 	
 	<property name="main-class"  	value="husacct.Main"/>
-	<property name="wrapper-class"	value="husacct.build.BuildWrapper"/>
+	<property name="wrapper-class"	value="husacct.build.BuildLauncher"/>
 	 
 	<path id="classpath">
 		<pathelement location="${bin.dir}" />
@@ -18,7 +18,7 @@
 		<fileset dir="${lib.dir}" includes="*.jar" />
 	</path>
 	
-	<target name="main" depends="clean,compile,extractlib,jar,addresources,wrap,test"/>
+	<target name="main" depends="clean,compile,extractlib,jar,addresources,test"/>
 	
 	<!-- Cleanup working directory -->
 	<target name="clean">
@@ -44,7 +44,7 @@
 		</unzip>
 	</target>
 	
-	<!-- Create runnable Jar -->
+	<!-- Create runnable Jars -->
 	<target name="jar">
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" excludes="husaccttest/**">
@@ -52,7 +52,7 @@
 				<attribute name="Main-Class" value="${main-class}"/>
 			</manifest>
 		</jar>
-		<jar destfile="${jar.dir}/${ant.project.name}-wrapper.jar" basedir="${bin.dir}" includes="husacct/build/**">
+		<jar destfile="${jar.dir}/${ant.project.name}-launcher.jar" basedir="${bin.dir}" includes="husacct/build/**">
 			<manifest>
 				<attribute name="Main-Class" value="${wrapper-class}"/>
 			</manifest>
@@ -78,15 +78,6 @@
 			<fileset dir="${src.dir}" >
 				<include name="husacct/common/resources/**/*" />
 				<include name="husacct/common/locale/**/*" />
-			</fileset>
-		</jar>
-	</target>
-	
-	<!-- Wrap -->
-	<target name="wrap">
-		<jar jarfile="${jar.dir}/${ant.project.name}-wrapper.jar" update="true">
-			<fileset dir="${jar.dir}" >
-				<include name="${ant.project.name}.jar" />
 			</fileset>
 		</jar>
 	</target>
