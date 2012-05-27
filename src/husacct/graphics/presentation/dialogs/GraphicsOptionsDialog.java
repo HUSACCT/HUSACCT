@@ -34,9 +34,11 @@ public class GraphicsOptionsDialog extends JDialog {
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
+	private JLabel layoutStrategyLabel, zoomLabel;
 	
 	private int width, height;
-	
+
+
 	public GraphicsOptionsDialog(){
 		super();
 		width = 500;
@@ -92,7 +94,8 @@ public class GraphicsOptionsDialog extends JDialog {
 		
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(1,2));
-			settingsPanel.add(new JLabel("Layout strategy"));
+			layoutStrategyLabel = new JLabel();
+			settingsPanel.add(layoutStrategyLabel);
 			layoutStrategyOptions = new JComboBox();
 			settingsPanel.add(layoutStrategyOptions);
 			
@@ -100,7 +103,8 @@ public class GraphicsOptionsDialog extends JDialog {
 		
 		zoomPanel = new JPanel();
 		zoomPanel.setLayout(new GridLayout(1,2));
-			zoomPanel.add(new JLabel("Zoom"));
+			zoomLabel = new JLabel();
+			zoomPanel.add(zoomLabel);
 			zoomSlider = new JSlider(25, 175, 100);
 			zoomSlider.setSize(50, width);
 			zoomPanel.add(zoomSlider);
@@ -110,6 +114,8 @@ public class GraphicsOptionsDialog extends JDialog {
 	
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
+			zoomLabel.setText(menuBarLocale.get("Zoom"));
+			layoutStrategyLabel.setText(menuBarLocale.get("LayoutStrategy"));
 			zoomInButton.setText(menuBarLocale.get("ZoomIn"));
 			zoomOutButton.setText(menuBarLocale.get("ZoomOut"));
 			refreshButton.setText(menuBarLocale.get("Refresh"));
