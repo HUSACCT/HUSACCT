@@ -42,10 +42,8 @@ public class InterfaceConventionRule extends RuleType {
 						interfaceCounter++;
 					}
 				}
-			}	
-
-			if(interfaceCounter == 0){
-
+			}
+			if(interfaceCounter == 0 && physicalClasspathsTo.size() != 0){
 				Violation violation = createViolation(rootRule, classPathFrom, null, null , configuration);
 				violations.add(violation);
 			}

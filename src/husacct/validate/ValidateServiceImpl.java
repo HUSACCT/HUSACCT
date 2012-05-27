@@ -45,7 +45,12 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 	}
-
+	
+	/**
+	 * Gets all the Categories of all the available ruletypes
+	 * The RuleTypeDTO contains RuleTypeDTOs
+	 * The RuleTypeDTO contains ViolationTypeDTOs 
+	 */
 	@Override
 	public CategoryDTO[] getCategories(){
 		return domain.getCategories();

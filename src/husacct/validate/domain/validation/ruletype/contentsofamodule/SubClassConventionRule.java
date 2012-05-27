@@ -41,7 +41,7 @@ public class SubClassConventionRule extends RuleType {
 				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
-			if(noDependencyCounter == counter){
+			if(noDependencyCounter == counter && physicalClasspathsTo.size() != 0){
 				Violation violation = createViolation(rootRule,classPathFrom,null,null,configuration);
 				violations.add(violation);
 			}
