@@ -10,7 +10,7 @@ public abstract class AbstractJTable extends JTable {
 	public AbstractJTable() {
 		super();
 
-		setAutoCreateRowSorter(true);
+		setAutoCreateRowSorter(false);
 		setFillsViewportHeight(true);
 
 		setModel(tablemodel);
