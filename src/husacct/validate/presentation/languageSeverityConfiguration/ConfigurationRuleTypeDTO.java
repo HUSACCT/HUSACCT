@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.iternal_tranfer_objects;
+package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ruletype.RuleType;

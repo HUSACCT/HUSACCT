@@ -5,7 +5,6 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -28,7 +27,6 @@ public class CyclesBetweenModulesRule extends RuleType{
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		this.physicalClasspathsFrom = new ArrayList<Mapping>();
 
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
@@ -54,7 +52,7 @@ public class CyclesBetweenModulesRule extends RuleType{
 		DependencyDTO[] dependencies = analyseService.getDependenciesFrom(physicalPath);
 		for(DependencyDTO dependency : dependencies){
 			if(history.contains(dependency.to)){
-				Violation violation = createViolation(rootRule, mappingFrom, null, dependency, configuration);
+				Violation violation = createViolation(rootRule, mappingFrom, configuration);
 				violations.add(violation);				
 			}
 
