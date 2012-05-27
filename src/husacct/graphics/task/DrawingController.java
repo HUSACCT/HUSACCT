@@ -42,7 +42,7 @@ import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController implements UserInputListener {
 	protected static final boolean debugPrint = true;
-	protected boolean contextUpdates;
+	protected boolean areSmartLinesOn;
 	private boolean areDependenciesShown;
 	private boolean areViolationsShown;
 	protected DrawingLayoutStrategy layoutStrategyOption;
@@ -100,7 +100,7 @@ public abstract class DrawingController implements UserInputListener {
 
 		showDependencies();
 		hideViolations();
-		deactivateContextUpdates();
+		deactivateSmartLines();
 	}
 
 	private void switchLayoutStrategy() {
@@ -178,28 +178,28 @@ public abstract class DrawingController implements UserInputListener {
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
-	public void toggleContextUpdates(){
+	public void toggleSmartLines(){
 		notifyServiceListeners();
-		if(contextUpdatesOn()){
-			deactivateContextUpdates();
+		if(areSmartLinesOn()){
+			deactivateSmartLines();
 		} else {
-			activateContextUpdates();
+			activateSmartLines();
 		}
 		drawLinesBasedOnSetting();
 	}
 
-	public boolean contextUpdatesOn(){
-		return contextUpdates;
+	public boolean areSmartLinesOn(){
+		return areSmartLinesOn;
 	}
 	
-	public void deactivateContextUpdates() {
-		contextUpdates = false;
-		drawTarget.turnOffContextUpdates();
+	public void deactivateSmartLines() {
+		areSmartLinesOn = false;
+		drawTarget.turnOffSmartLines();
 	}
 
-	public void activateContextUpdates() {
-		contextUpdates = true;
-		drawTarget.turnOnContextUpdates();
+	public void activateSmartLines() {
+		areSmartLinesOn = true;
+		drawTarget.turnOnSmartLines();
 	}
 
 	public JInternalFrame getGUI() {
@@ -404,7 +404,7 @@ public abstract class DrawingController implements UserInputListener {
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		if(contextUpdatesOn()){
+		if(areSmartLinesOn()){
 			drawing.updateLineFigureToContext();
 		}
 	}

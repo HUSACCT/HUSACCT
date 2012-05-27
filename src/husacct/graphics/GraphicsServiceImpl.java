@@ -73,7 +73,7 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	public static final String workspaceDefinedControllerName = "definedController";
 	public static final String workspaceShowDependencies = "showDependencies";
 	public static final String workspaceShowViolations = "showViolations";
-	public static final String workspaceContextUpdates = "contextUpdates";
+	public static final String workspaceSmartLines = "smartLines";
 	public static final String workspaceLayoutStrategy = "layoutStrategy";
 
 	@Override
@@ -108,8 +108,8 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		Element controllerElement = new Element(controllerName);
 		controllerElement.setAttribute(workspaceShowDependencies, "" + controller.areDependenciesShown());
 		controllerElement.setAttribute(workspaceShowViolations, "" + controller.areViolationsShown());
-		controllerElement.setAttribute(workspaceContextUpdates, "" + controller.contextUpdatesOn());
-		controllerElement.setAttribute(workspaceContextUpdates, "" + controller.contextUpdatesOn());
+		controllerElement.setAttribute(workspaceSmartLines, "" + controller.areSmartLinesOn());
+		controllerElement.setAttribute(workspaceSmartLines, "" + controller.areSmartLinesOn());
 		controllerElement.setAttribute(workspaceLayoutStrategy, controller.getLayoutStrategy().toString());
 		return controllerElement;
 	}
@@ -131,10 +131,10 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 			controller.hideViolations();
 		}
 
-		if (isActive(data, workspaceContextUpdates)) {
-			controller.activateContextUpdates();
+		if (isActive(data, workspaceSmartLines)) {
+			controller.activateSmartLines();
 		} else {
-			controller.deactivateContextUpdates();
+			controller.deactivateSmartLines();
 		}
 
 		DrawingLayoutStrategy selectedStrategy = null;

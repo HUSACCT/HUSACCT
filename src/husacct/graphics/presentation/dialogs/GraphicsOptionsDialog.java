@@ -31,7 +31,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	private int menuItemMaxHeight = 45;
 
 	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton;
-	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, contextUpdatesOptionMenu;
+	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
@@ -86,9 +86,9 @@ public class GraphicsOptionsDialog extends JDialog {
 			showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
 			optionsPanel.add(showViolationsOptionMenu);
 			
-			contextUpdatesOptionMenu = new JCheckBox();
-			contextUpdatesOptionMenu.setSize(40, menuItemMaxHeight);
-			optionsPanel.add(contextUpdatesOptionMenu);
+			smartLinesOptionMenu = new JCheckBox();
+			smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
+			optionsPanel.add(smartLinesOptionMenu);
 		
 			mainPanel.add(optionsPanel);
 		
@@ -122,7 +122,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
-			contextUpdatesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
 		}
@@ -160,7 +160,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 
 	public void setToggleContextUpdatesAction(ActionListener listener) {
-		contextUpdatesOptionMenu.addActionListener(listener);
+		smartLinesOptionMenu.addActionListener(listener);
 	}
 	
 	public void setLayoutStrategyAction(ActionListener listener) {
@@ -168,7 +168,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 
 	public void setContextUpdatesToggle(boolean setting) {
-		contextUpdatesOptionMenu.setSelected(setting);
+		smartLinesOptionMenu.setSelected(setting);
 	}
 
 	public void setToggleDependenciesAction(ActionListener listener) {

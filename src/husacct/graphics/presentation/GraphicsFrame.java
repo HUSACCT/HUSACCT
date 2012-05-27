@@ -276,7 +276,7 @@ public class GraphicsFrame extends JInternalFrame {
 				toggleViolations();
 			}
 		});
-		menuBar.setToggleContextUpdatesAction(new ActionListener() {
+		menuBar.setToggleSmartLinesAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleContextUpdates();
@@ -379,7 +379,7 @@ public class GraphicsFrame extends JInternalFrame {
 
 	protected void toggleContextUpdates() {
 		for (UserInputListener l : listeners) {
-			l.toggleContextUpdates();
+			l.toggleSmartLines();
 		}
 	}
 
@@ -493,11 +493,11 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBar.setViolationToggle(false);
 	}
 
-	public void turnOnContextUpdates() {
+	public void turnOnSmartLines() {
 		menuBar.setContextUpdatesToggle(true);
 	}
 	
-	public void turnOffContextUpdates() {
+	public void turnOffSmartLines() {
 		menuBar.setContextUpdatesToggle(false);
 	}
 }

@@ -194,7 +194,7 @@ public class GraphicsMenuBar extends JPanel {
 		showViolationsButton.setToolTipText(menuBarLocale.get("HideViolations"));
 	}
 
-	public void setToggleContextUpdatesAction(ActionListener listener) {
+	public void setToggleSmartLinesAction(ActionListener listener) {
 		graphicsOptionsDialog.setToggleContextUpdatesAction(listener);
 	}
 

@@ -26,7 +26,7 @@ public interface UserInputListener {
 
 	public void toggleDependencies();
 
-	public void toggleContextUpdates();
+	public void toggleSmartLines();
 	
 	public void drawingZoomChanged(double zoomFactor);	
 	
