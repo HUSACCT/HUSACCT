@@ -584,10 +584,12 @@ public abstract class DrawingController implements UserInputListener {
 	}
 	
 	public void setDrawingViewVisible(){
+		drawTarget.hideLoadingScreen();
 		view.setVisible(true);
 	}
 	
 	public void setDrawingViewNonVisible(){
 		view.setVisible(false);
+		drawTarget.showLoadingScreen();
 	}
 }

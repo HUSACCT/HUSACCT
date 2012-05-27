@@ -38,7 +38,6 @@ public class GraphicsOptionsDialog extends JDialog {
 	
 	private int width, height;
 
-
 	public GraphicsOptionsDialog(){
 		super();
 		width = 500;

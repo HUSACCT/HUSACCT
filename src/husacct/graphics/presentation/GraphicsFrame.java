@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -499,5 +500,22 @@ public class GraphicsFrame extends JInternalFrame {
 	
 	public void turnOffSmartLines() {
 		menuBar.setContextUpdatesToggle(false);
+	}
+
+	public void showLoadingScreen() {
+		if (centerPane != null) {
+			remove(centerPane);
+		}
+		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		centerPane.add(new JLabel("Loading.."));
+		add(centerPane, java.awt.BorderLayout.CENTER);
+
+		if (isVisible()) {
+			validate();
+		}
+	}
+
+	public void hideLoadingScreen() {
+		layoutComponents();
 	}
 }
