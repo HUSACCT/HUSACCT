@@ -393,7 +393,7 @@ public class DefinitionController extends Observable implements Observer {
 			notifyObservers();
 			definitionJPanel.modulePanel.update(this, null);
 		} catch (Exception e){
-			
+			System.out.println(e.getMessage());
 		}
 	}
 }

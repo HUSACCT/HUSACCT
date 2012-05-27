@@ -46,6 +46,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	}
 
 	public void initGui() {
+		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -132,7 +133,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
 		
-		//FIXME need to get the reselect the node with the currently selectedmoduleid
+		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
 		
 		for (int i = 0; i < moduleTree.getRowCount(); i++) {
 			moduleTree.expandRow(i);
@@ -199,7 +200,9 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-        this.updateSelectedModule(selectedComponent.getModuleId());
+        if (selectedComponent.getModuleId() != DefinitionController.getInstance().getSelectedModuleId()){
+        	this.updateSelectedModule(selectedComponent.getModuleId());
+        }
         this.checkLayerComponentIsSelected();
 	}
 	

@@ -167,6 +167,8 @@ public class AppliedRuleController extends PopUpController {
 		ruleDetails.put("dependencies", rule.getDependencies());
 		ruleDetails.put("moduleFromName", rule.getModuleFrom().getName());
 		ruleDetails.put("moduleToName", rule.getModuleTo().getName());
+		ruleDetails.put("moduleFromId", rule.getModuleFrom().getId());
+		ruleDetails.put("moduleToId", rule.getModuleTo().getId());
 		ruleDetails.put("enabled", rule.isEnabled());
 		ruleDetails.put("regex", rule.getRegex());
 		ruleDetails.put("ruleTypeKey", rule.getRuleType());
