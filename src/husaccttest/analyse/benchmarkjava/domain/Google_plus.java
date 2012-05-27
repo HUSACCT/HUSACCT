@@ -55,7 +55,8 @@ public class Google_plus extends BenchmarkExtended{
 		String from = "domain.google_plus.Circle";
 		int expectedDependencies = 11;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -65,7 +66,8 @@ public class Google_plus extends BenchmarkExtended{
 		String from = "domain.google_plus.Contact";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromExtendsExpected = from;
@@ -95,8 +97,8 @@ public class Google_plus extends BenchmarkExtended{
 		String from = "domain.google_plus.Observable";
 		int expectedDependencies = 13;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		super.printDependencies(dependencies);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "java.util.ArrayList";

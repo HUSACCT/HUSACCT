@@ -18,7 +18,8 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.kilroy.CheckCastFrom";
 		int expectedDependencies = 6;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.SameExtend";
@@ -78,7 +79,8 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.kilroy.Comment";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.WhrrlComment";
@@ -107,7 +109,8 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.kilroy.Future";
 		int expectedDependencies = 3;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.WhrrlFuture";
@@ -144,9 +147,9 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	public void testDomainKilroyMap(){
 		String from = "domain.foursquarealternative.kilroy.Map";
 		int expectedDependencies = 3;
-		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		super.printDependencies(dependencies);
+	
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.WhrrlFuture";
@@ -183,7 +186,8 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.kilroy.Settings";
 		int expectedDependencies = 4;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.ISee";

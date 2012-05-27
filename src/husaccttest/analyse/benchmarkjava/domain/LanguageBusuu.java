@@ -19,7 +19,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnArabic";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -50,7 +51,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnChinese";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -80,7 +82,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnDutch";
 		int expectedDependencies = 3;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -120,7 +123,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnEnglish";
 		int expectedDependencies = 3;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -160,7 +164,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnFrench";
 		int expectedDependencies = 3;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -199,7 +204,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnGerman";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -229,7 +235,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnJapanese";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -259,7 +266,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnPolish";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -289,7 +297,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnRussian";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -319,7 +328,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnSpanish";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -349,7 +359,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnSwedish";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;
@@ -370,7 +381,8 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnTurkish";
 		int expectedDependencies = 4;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;

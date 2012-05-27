@@ -9,7 +9,8 @@ public class ImplementsTest extends RecognationExtended{
 	@Test
 	public void testSamePackage(){
 		boolean implementFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.a.SamePackage");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.a.SamePackage");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("implement.a.SamePackage");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Implements")){
 				implementFound = true;
@@ -24,7 +25,8 @@ public class ImplementsTest extends RecognationExtended{
 	public void testOtherPackageA(){
 		boolean implementFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.b.OtherPackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.b.OtherPackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("implement.b.OtherPackageA");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Implements")){
 				implementFound = true;
@@ -45,7 +47,8 @@ public class ImplementsTest extends RecognationExtended{
 	public void testOtherPackageB(){
 		boolean implementFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.b.OtherPackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.b.OtherPackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("implement.b.OtherPackageB");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Implements")){
 				implementFound = true;
@@ -65,7 +68,8 @@ public class ImplementsTest extends RecognationExtended{
 	@Test
 	public void testOtherPackageC(){
 		boolean implementFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.b.OtherPackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("implement.b.OtherPackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("implement.b.OtherPackageC");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("Implements")){
 				implementFound = true;

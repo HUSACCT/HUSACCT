@@ -55,7 +55,8 @@ public class LastFM extends BenchmarkExtended{
 		String from = "domain.lastfm.Album";
 		int expectedDependencies = 5;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}	
 	
@@ -65,7 +66,8 @@ public class LastFM extends BenchmarkExtended{
 		String from = "domain.lastfm.Artist";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}	
 	
@@ -75,7 +77,8 @@ public class LastFM extends BenchmarkExtended{
 		String from = "domain.lastfm.Song";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}	
 	

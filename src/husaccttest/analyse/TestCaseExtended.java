@@ -6,6 +6,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,6 +102,32 @@ public abstract class TestCaseExtended{
 		moduleHashMap.put("type", type);
 		
 		return moduleHashMap;
+	}
+	
+	public DependencyDTO[] getOnlyDirectDependencies(DependencyDTO[] dependencies){
+		ArrayList<DependencyDTO> directDependencies = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : dependencies){
+			if(!d.isIndirect){
+				directDependencies.add(d);
+			}
+		}
+		
+		DependencyDTO[] direct = new DependencyDTO[directDependencies.size()];
+		int iterator = 0;
+		for(DependencyDTO d : directDependencies){
+			direct[iterator] = d;
+			iterator++;
+		}
+		
+		return direct;
+	}
+	
+	
+	public DependencyDTO[] getDependenciesFrom(String from){
+		service = new AnalyseServiceImpl();
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+			            dependencies = this.getOnlyDirectDependencies(dependencies);
+		return dependencies;
 	}
 	
 	public boolean compaireDTOWithValues(Object o, Object[] allDependencies){

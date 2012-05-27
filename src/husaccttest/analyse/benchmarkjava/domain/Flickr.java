@@ -55,7 +55,8 @@ public class Flickr extends BenchmarkExtended{
 		String from = "domain.flickr.FlickrPicture";
 		int expectedDependencies = 8;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 //		String fromImportExpected = from;
@@ -86,7 +87,8 @@ public class Flickr extends BenchmarkExtended{
 		String from = "domain.flickr.Tag";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImportExpected = from;

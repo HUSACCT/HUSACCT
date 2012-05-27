@@ -39,8 +39,8 @@ public class Hyves extends BenchmarkExtended{
 		String from = "domain.hyves.Krabbel";
 		int expectedDependencies = 8;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		super.printDependencies(dependencies);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
 		String fromImportExpected = from;

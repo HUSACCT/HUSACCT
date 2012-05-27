@@ -17,7 +17,7 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService defService = provider.getDefineService();
 
-		String path = "../benchmark_application/src";
+		String path = "testjavabenchmark/";
 		String[] paths = new String[]{path};
 		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
 		

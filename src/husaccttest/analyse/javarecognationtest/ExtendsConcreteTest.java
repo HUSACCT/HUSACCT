@@ -9,7 +9,8 @@ public class ExtendsConcreteTest extends RecognationExtended{
 	@Test
 	public void testSamePackage(){
 		boolean implementFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.a.SamePackage");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.a.SamePackage");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("extendsconcrete.a.SamePackage");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("ExtendsConcrete")){
 				implementFound = true;
@@ -24,7 +25,8 @@ public class ExtendsConcreteTest extends RecognationExtended{
 	public void testOtherPackageA(){
 		boolean implementFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.b.OtherPackageA");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.b.OtherPackageA");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("extendsconcrete.b.OtherPackageA");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("ExtendsConcrete")){
 				implementFound = true;
@@ -45,7 +47,8 @@ public class ExtendsConcreteTest extends RecognationExtended{
 	public void testOtherPackageB(){
 		boolean implementFound = false;
 		boolean importFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.b.OtherPackageB");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.b.OtherPackageB");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("extendsconcrete.b.OtherPackageB");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("ExtendsConcrete")){
 				implementFound = true;
@@ -65,7 +68,8 @@ public class ExtendsConcreteTest extends RecognationExtended{
 	@Test
 	public void testOtherPackageC(){
 		boolean implementFound = false;
-		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.b.OtherPackageC");
+//		DependencyDTO[] dependencies = service.getDependenciesFrom("extendsconcrete.b.OtherPackageC");
+		DependencyDTO[] dependencies = super.getDependenciesFrom("extendsconcrete.b.OtherPackageC");
 		for (DependencyDTO dependency : dependencies){
 			if(dependency.type.equals("ExtendsConcrete")){
 				implementFound = true;

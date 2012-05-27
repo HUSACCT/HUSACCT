@@ -142,7 +142,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Action";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -151,7 +152,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Campaign";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -160,7 +162,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.CheckIn";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -169,7 +172,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Event";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromDeclarationExpected = from;
@@ -190,7 +194,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.GoWallaAnnotation";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -199,7 +204,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.GoWallaException";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromDeclarationExpected = from;
@@ -220,7 +226,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Guide";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromDeclarationExpected = from;
@@ -241,7 +248,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.ISpots";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -250,7 +258,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Settings";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -259,7 +268,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Special";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -268,7 +278,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Tip";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -277,7 +288,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Trips";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -286,7 +298,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.User";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	
@@ -295,7 +308,8 @@ public class Gowalla extends BenchmarkExtended{
 		String from = "domain.gowalla.Venue";
 		int expectedDependencies = 0;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 	

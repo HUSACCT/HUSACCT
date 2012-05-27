@@ -17,7 +17,8 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.yelp.CheckCastTo";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.SameExtend";
@@ -42,7 +43,8 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.yelp.IYelp";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.brightkite.IMap";
@@ -67,7 +69,8 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.yelp.MyFuture";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.brightkite.IFuture";
@@ -92,7 +95,8 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.yelp.ServiceOne";
 		int expectedDependencies = 6;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "java.util.Calendar";
@@ -156,7 +160,8 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.yelp.ServiceTwo";
 		int expectedDependencies = 5;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "java.util.Calendar";

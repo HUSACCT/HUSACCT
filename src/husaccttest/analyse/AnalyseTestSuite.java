@@ -19,7 +19,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	TestDomainDependencies.class,
 	TestDomainModule.class,
 	TestIndirect.class,
-	RecognationTestSuite.class
+	RecognationTestSuite.class,
+	BenchmarkTestSuite.class
 })
 public class AnalyseTestSuite {
 }

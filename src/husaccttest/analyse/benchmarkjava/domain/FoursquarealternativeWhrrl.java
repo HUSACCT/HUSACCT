@@ -18,7 +18,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.BackgroundService";
 		int expectedDependencies = 3;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.ServiceOne";
@@ -54,7 +55,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.CheckCastTo";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.SameExtend";
@@ -81,7 +83,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.FrontService";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.IYelp";
@@ -108,7 +111,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.IWhrrl";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.IPreferences";
@@ -135,7 +139,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.MapsService";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.POI";
@@ -163,7 +168,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.Profile";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.IPreferences";
@@ -181,7 +187,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.Tips";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.POI";
@@ -208,7 +215,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.Whrrl";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.IPreferences";
@@ -235,7 +243,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.WhrrlComment";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.YelpComment";
@@ -262,7 +271,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.WhrrlFuture";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.MyFuture";
@@ -278,7 +288,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.WhrrlHistory";
 		int expectedDependencies = 1;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.MyHistory";
@@ -294,7 +305,8 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.whrrl.WhrrlSettings";
 		int expectedDependencies = 2;
 		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.yelp.Yelp";
