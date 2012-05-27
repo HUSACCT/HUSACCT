@@ -22,10 +22,10 @@ import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
-import husacct.graphics.util.DrawingLinesTask;
-import husacct.graphics.util.DrawingMultiLevelTask;
-import husacct.graphics.util.DrawingSingleLevelTask;
 import husacct.graphics.util.UserInputListener;
+import husacct.graphics.util.threads.DrawingLinesThread;
+import husacct.graphics.util.threads.DrawingMultiLevelThread;
+import husacct.graphics.util.threads.DrawingSingleLevelThread;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -276,7 +276,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
-		DrawingSingleLevelTask task = new DrawingSingleLevelTask(this, modules);
+		DrawingSingleLevelThread task = new DrawingSingleLevelThread(this, modules);
 		Thread drawThread = new Thread(task);
 		drawThread.start();
 	}
@@ -305,7 +305,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 	
 	private void runDrawMultiLevelTask(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		DrawingMultiLevelTask task = new DrawingMultiLevelTask(this, modules);
+		DrawingMultiLevelThread task = new DrawingMultiLevelThread(this, modules);
 		Thread drawThread = new Thread(task);
 		drawThread.start();
 	}
@@ -392,7 +392,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	private void runDrawLinesTask(){
-		DrawingLinesTask task = new DrawingLinesTask(this);
+		DrawingLinesThread task = new DrawingLinesThread(this);
 		Thread drawThread = new Thread(task);
 		drawThread.start();
 	}

@@ -1,12 +1,12 @@
-package husacct.graphics.util;
+package husacct.graphics.util.threads;
 
 import husacct.graphics.task.DrawingController;
 
-public class DrawingLinesTask implements Runnable {
+public class DrawingLinesThread implements Runnable {
 	
 	private DrawingController controller;
 	
-	public DrawingLinesTask(DrawingController theController){
+	public DrawingLinesThread(DrawingController theController){
 		controller = theController;
 	}
 

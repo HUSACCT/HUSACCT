@@ -1,14 +1,14 @@
-package husacct.graphics.util;
+package husacct.graphics.util.threads;
 
 import husacct.common.dto.AbstractDTO;
 import husacct.graphics.task.DrawingController;
 
-public class DrawingSingleLevelTask implements Runnable {
+public class DrawingSingleLevelThread implements Runnable {
 	
 	private DrawingController controller;
 	private AbstractDTO[] toDrawModules;
 	
-	public DrawingSingleLevelTask(DrawingController theController, AbstractDTO[] modules){
+	public DrawingSingleLevelThread(DrawingController theController, AbstractDTO[] modules){
 		controller = theController;
 		toDrawModules = modules;
 	}

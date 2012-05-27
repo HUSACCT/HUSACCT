@@ -1,4 +1,4 @@
-package husacct.graphics.util;
+package husacct.graphics.util.threads;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,12 +6,12 @@ import java.util.HashMap;
 import husacct.common.dto.AbstractDTO;
 import husacct.graphics.task.DrawingController;
 
-public class DrawingMultiLevelTask implements Runnable {
+public class DrawingMultiLevelThread implements Runnable {
 	
 	private DrawingController controller;
 	private HashMap<String, ArrayList<AbstractDTO>> toDrawModules;
 	
-	public DrawingMultiLevelTask(DrawingController theController, HashMap<String, ArrayList<AbstractDTO>> modules){
+	public DrawingMultiLevelThread(DrawingController theController, HashMap<String, ArrayList<AbstractDTO>> modules){
 		controller = theController;
 		toDrawModules = modules;
 	}
