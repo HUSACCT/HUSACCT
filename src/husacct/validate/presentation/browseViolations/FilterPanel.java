@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
+import husacct.validate.presentation.ConfigurationUI;
 import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.TaskServiceImpl;
 
@@ -34,6 +35,8 @@ public class FilterPanel extends JPanel {
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private JRadioButton rdbtnIndirect, rdbtnAll, rdbtnDirect;
+	
+	private static Logger logger = Logger.getLogger(FilterPanel.class);
 	
 	public FilterPanel(BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl) {
 		this.browseViolations = browseViolations;

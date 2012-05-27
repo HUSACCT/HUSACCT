@@ -1,6 +1,7 @@
 package husacct.validate.presentation.threadTasks;
 
 import husacct.control.task.AnalyseTask;
+import husacct.validate.presentation.BrowseViolations;
 import org.apache.log4j.Logger;
 
 public class BrowseViolationsUpdateTask implements Runnable{

@@ -386,4 +386,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			violationsTableModel.removeRow(0);
 		}
 	}
+
+	public ViolationHistory getSelectedViolationHistory() {
+		return selectedViolationHistory;
+	}
 }
