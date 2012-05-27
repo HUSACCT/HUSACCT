@@ -22,6 +22,7 @@ import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.DrawingLinesTask;
 import husacct.graphics.util.DrawingMultiLevelTask;
 import husacct.graphics.util.DrawingSingleLevelTask;
 import husacct.graphics.util.UserInputListener;
@@ -281,7 +282,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
-		view.setVisible(false);
+		setDrawingViewNonVisible();
 		
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
@@ -291,11 +292,11 @@ public abstract class DrawingController implements UserInputListener {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 
-		drawLinesBasedOnSetting();
+		drawLines();
 
 		updateLayout();
 		
-		view.setVisible(true);
+		setDrawingViewVisible();
 	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -310,7 +311,7 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		view.setVisible(false);
+		setDrawingViewNonVisible();
 		
 		HashMap<BaseFigure, AbstractDTO> savedFiguresToBeDrawn = getSavedFiguresForZoom();
 		clearSavedFiguresForZoom();
@@ -340,9 +341,9 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
 		updateLayout();
-		drawLinesBasedOnSetting();
+		drawLines();
 		
-		view.setVisible(true);
+		setDrawingViewVisible();
 	}
 
 	protected void updateLayout() {
@@ -387,6 +388,16 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
+		runDrawLinesTask();
+	}
+
+	private void runDrawLinesTask(){
+		DrawingLinesTask task = new DrawingLinesTask(this);
+		Thread drawThread = new Thread(task);
+		drawThread.start();
+	}
+	
+	public void drawLines(){
 		if(areDependenciesShown()){
 			drawDependenciesForShownModules();
 		}
@@ -570,5 +581,13 @@ public abstract class DrawingController implements UserInputListener {
 
 			moduleZoom(selectedFigures);
 		}
+	}
+	
+	public void setDrawingViewVisible(){
+		view.setVisible(true);
+	}
+	
+	public void setDrawingViewNonVisible(){
+		view.setVisible(false);
 	}
 }
