@@ -114,9 +114,13 @@ public class FilterController {
 		return violationDTOs.toArray(new ViolationDTO[violationDTOs.size()]);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations) {
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
 		LinkedHashMap<Severity, Integer> violationsPerSeverity = new LinkedHashMap<Severity, Integer>();
 
+		for(Severity severity : severities){
+			violationsPerSeverity.put(severity, 0);
+		}
+		
 		for(Violation violation : shownViolations) {
 			if(violation.getSeverity() != null) {
 				int count = 0;
@@ -125,11 +129,19 @@ public class FilterController {
 				} catch(Exception e){
 				} finally{
 					violationsPerSeverity.remove(violation.getSeverity());
-					violationsPerSeverity.put(violation.getSeverity(), count++);
+					count = count + 1;
+					violationsPerSeverity.put(violation.getSeverity(), count);
 				}
 				
 			}
 		}
+
+		for(Severity severity : severities){
+			int amount = violationsPerSeverity.get(severity);
+			violationsPerSeverity.remove(severity);
+			violationsPerSeverity.put(severity, amount);
+		}
+		
 		return violationsPerSeverity;
 	}
 }

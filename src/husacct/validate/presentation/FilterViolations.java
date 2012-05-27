@@ -36,7 +36,7 @@ public final class FilterViolations extends JDialog  {
 	private JRadioButton hideFilteredValues, showFilteredValues;
 	private JScrollPane pathFilterScrollPane, ruletypepanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
-	private FilterViolationsObserver vilterViolationsObserver;
+	private FilterViolationsObserver filterViolationsObserver;
 
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
@@ -45,7 +45,7 @@ public final class FilterViolations extends JDialog  {
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
-		this.vilterViolationsObserver = filterViolationsObserver;
+		this.filterViolationsObserver = filterViolationsObserver;
 		this.taskServiceImpl = taskServiceImpl;
 		initComponents();
 		loadGUIText();
@@ -305,7 +305,7 @@ public final class FilterViolations extends JDialog  {
 		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter,
 				pathsfilter);
 		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
-		vilterViolationsObserver.updateViolationsTable();
+		filterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
 	

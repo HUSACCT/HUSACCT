@@ -2,11 +2,9 @@ package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
-
 import java.awt.GridLayout;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -18,14 +16,15 @@ public class StatisticsPanel extends JPanel{
 	private JLabel totalViolationLabel, totalViolationNumber, shownViolationsLabel, shownViolationsNumber;
 
 	public StatisticsPanel() {
+		
 		inintComponents();
 	}
 
 	private void inintComponents() {
 		totalViolationLabel = new JLabel();
-		totalViolationNumber = new JLabel();
+		totalViolationNumber = new JLabel("0");
 		shownViolationsLabel = new JLabel();
-		shownViolationsNumber = new JLabel();
+		shownViolationsNumber = new JLabel("0");
 
 		add(totalViolationLabel);
 		add(totalViolationNumber);
@@ -64,7 +63,7 @@ public class StatisticsPanel extends JPanel{
 
 		for(Entry<Severity, Integer> violationPerSeverity: violationHistory.entrySet()){
 			add(new JLabel(violationPerSeverity.getKey().toString()));
-			add(new JLabel("" + violationPerSeverity.getValue()));
+			add(new JLabel(violationPerSeverity.getValue().toString()));
 		}
 	}
 }

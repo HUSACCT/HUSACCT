@@ -4,6 +4,9 @@ import husacct.ServiceProvider;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
+import husacct.validate.presentation.ConfigurationUI;
+import husacct.validate.presentation.FilterViolations;
+import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,16 +30,17 @@ public class FilterPanel extends JPanel {
 	private static final long serialVersionUID = 8013809183676306609L;
 
 	private final BrowseViolations browseViolations;
-
+	private final FilterViolations filterViolations;
+	
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private JRadioButton rdbtnIndirect, rdbtnAll, rdbtnDirect;
 	
-	private Logger logger = Logger.getLogger(FilterPanel.class);
-
-	public FilterPanel(BrowseViolations browseViolations) {
+	private static Logger logger = Logger.getLogger(FilterPanel.class);
+	
+	public FilterPanel(BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl) {
 		this.browseViolations = browseViolations;
-
+		this.filterViolations = new FilterViolations(taskServiceImpl, browseViolations);
 		initComponents();
 		loadAfterChange();
 	}
@@ -98,13 +102,13 @@ public class FilterPanel extends JPanel {
 		applyFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				browseViolations.applyFilterChanged(arg0);
-			}
+				browseViolations.loadAfterChange();
+;			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				browseViolations.editFilterActionPerformed(e);
+				filterViolations.setVisible(true);
 			}
 
 		});
@@ -180,6 +184,7 @@ public class FilterPanel extends JPanel {
 
 	public void loadAfterChange() {
 		loadText();
+		filterViolations.loadFilterValues();
 	}
 
 	private void loadText() {

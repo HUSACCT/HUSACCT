@@ -30,9 +30,9 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 			Thread.sleep(1);
 
 			int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
-			browseViolations.setSelectedViolationHistory(taskServiceImpl.getViolationHistories().get(row));
+			browseViolations.fillViolationsTable(taskServiceImpl.getViolationHistories().get(row).getViolations());
 			browseViolations.fillViolationsTable(browseViolations.getSelectedViolationHistory().getViolations());
-			browseViolations.loadInformationPanel();
+			browseViolations.loadAfterChange();
 			applyFilter.setSelected(false);
 		}catch (InterruptedException e) {
 			logger.debug(e.getMessage());
