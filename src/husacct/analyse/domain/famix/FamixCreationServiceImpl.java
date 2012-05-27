@@ -31,17 +31,16 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	
 	@Override
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass) {
-		FamixClass fClass = new FamixClass();
-		fClass.uniqueName = uniqueName;
-		fClass.isAbstract = isAbstract;
-		fClass.belongsToPackage = belongsToPackage;
-		fClass.isInnerClass = isInnerClass;
-		fClass.name = name;
-		addToModel(fClass);
+		createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", "public");
 	}
 
 	@Override
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass) {
+		createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, "public");
+	}
+	
+	@Override
+	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility) {
 		FamixClass fClass = new FamixClass();
 		fClass.uniqueName = uniqueName;
 		fClass.isAbstract = isAbstract;
@@ -49,15 +48,23 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		fClass.isInnerClass = isInnerClass;
 		fClass.name = name;
 		fClass.belongsToClass = belongsToClass;
+		if(visibility.equals(""))fClass.visibility = "default";
+		else fClass.visibility = visibility;
 		addToModel(fClass);
 	}
 	
 	@Override
 	public void createInterface(String uniqueName, String name, String belongsToPackage) {
+		createInterface(uniqueName, name, belongsToPackage, "default");
+	}
+	
+	@Override
+	public void createInterface(String uniqueName, String name, String belongsToPackage, String visibility) {
 		FamixInterface fInterface = new FamixInterface();
 		fInterface.uniqueName = uniqueName;
 		fInterface.name = name;
 		fInterface.belongsToPackage = belongsToPackage;
+		fInterface.visibility = visibility;
 		addToModel(fInterface);
 	}
 

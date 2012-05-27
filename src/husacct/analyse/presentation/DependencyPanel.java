@@ -157,12 +157,12 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
 				.addGroup(theLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(theLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(toModuleScrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-						.addComponent(fromModuleScrollPane, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE))
+						.addComponent(fromModuleScrollPane, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+						.addComponent(toModuleScrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(filterPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(dependencyScrollPane, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+					.addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		

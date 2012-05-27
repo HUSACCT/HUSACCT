@@ -10,8 +10,10 @@ public interface IModelCreationService {
 	
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
+	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity);
 	
 	public void createInterface(String uniqueName, String name, String belongsToPackage);
+	public void createInterface(String uniqueName, String name, String belongsToPackage, String visibility);
 	
 	public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage);
 	

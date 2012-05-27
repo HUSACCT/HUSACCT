@@ -65,6 +65,7 @@ class FamixDependencyFinder extends FamixFinder{
 		this.currentResult = findDependencies();
 		this.removeFilter();
 	}
+	
 	private void removeFilter(){
 		this.filtered = false;
 		this.filter = new String[]{};
@@ -79,8 +80,11 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
-		//TODO Analyse General - Fix Indirect Dependencies
-		if(!this.from.equals("")) result.addAll(this.findIndirectDependencies(result));
+		if(!this.from.equals("")){
+			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+				if(!result.contains(dependency)) result.add(dependency);
+			}
+		}
 		return result;
 	}
 	
@@ -88,7 +92,9 @@ class FamixDependencyFinder extends FamixFinder{
 		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		for(DependencyDTO directDependency: directDependencies){
-			result.addAll(findIndirectDependenciesFrom(directDependency));
+			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
+				if(!result.contains(indirectDependency)) result.add(indirectDependency);
+			}
 		}
 		return result;
 	}
@@ -98,10 +104,12 @@ class FamixDependencyFinder extends FamixFinder{
 		String startFrom = fromDependency.from;
 		for(DependencyDTO indirectDependency : this.getDependenciesFrom(fromDependency.to)){
 			indirectDependency.isIndirect = true;
-			indirectDependency.from = fromDependency.to;
+			indirectDependency.from = startFrom;
 			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);
 			if(!indirectDependency.to.equals(startFrom)) {
-				found.addAll(findIndirectDependenciesFrom(indirectDependency));
+				for(DependencyDTO subIndirect : this.findIndirectDependenciesFrom(indirectDependency)){
+					if(!found.contains(subIndirect)) found.add(subIndirect);
+				}
 			}
 		}
 		return found;

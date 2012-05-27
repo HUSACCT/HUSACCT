@@ -32,7 +32,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		this.controller = new AnalyseUIController();
 		registerLocaleChangeListener();
 		setResizable(true);
-		setBounds(200, 200, 550, 471);
+		setBounds(200, 200, 550, 522);
 		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
 		
 		tabPanel = new JTabbedPane(JTabbedPane.TOP);
@@ -53,6 +53,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		
 		cancelButton = new JButton(controller.translate("Cancel"));
 		cancelPanel.add(cancelButton);
+		cancelButton.addActionListener(this);
 		reloadText();
 	}
 	
