@@ -11,27 +11,26 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public class DrawingState {
 	private Drawing drawing;
-	private HashMap<String, Rectangle2D.Double> savedPositions;
+	private HashMap<String, FigureState> savedPositions;
 	private FigureMap figureMap = null;
-
-	private boolean debugPrint = false;
-	private String nameFilter = "Main";
+	private boolean hasHiddenFigures = false;
 
 	public DrawingState(Drawing theDrawing) {
 		drawing = theDrawing;
-		savedPositions = new HashMap<String, Rectangle2D.Double>();
+		savedPositions = new HashMap<String, FigureState>();
 	}
 
 	public void clear() {
 		savedPositions.clear();
+		hasHiddenFigures = false;
 	}
 
 	public void save(FigureMap figureMap) {
@@ -42,21 +41,26 @@ public class DrawingState {
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
 
-			if (!bf.isLine()) {
-				try{
-					String fullPath = getFullPath(bf);
-					Rectangle2D.Double bounds = bf.getBounds();
-					savedPositions.put(fullPath, bounds);
-	
-					printFigure(bf, bounds);
-				}catch(NullPointerException e){
-					// Figure not found in drawing, because of mulitzoom
-				}
+			if (!bf.isLine() && shouldSaveState(bf)) {
+				FigureState state = saveFigureState(bf);
+				savedPositions.put(state.path, state);
+				
+				if (!state.enabled)
+					hasHiddenFigures = true;
 			}
 		}
 	}
 
-	private String getFullPath(BaseFigure bf) throws NullPointerException {
+	private FigureState saveFigureState(BaseFigure bf) {
+		FigureState retVal = new FigureState();
+		retVal.path = getFullPath(bf);
+		retVal.position = bf.getBounds();
+		retVal.enabled = bf.isEnabled();
+
+		return retVal;
+	}
+
+	private String getFullPath(BaseFigure bf) {
 		AbstractDTO dto = figureMap.getModuleDTO(bf);
 
 		if (dto instanceof ModuleDTO) {
@@ -67,28 +71,26 @@ public class DrawingState {
 			return analysedDto.uniqueName;
 		}
 	}
-
-	private void printFigure(BaseFigure bf, Rectangle2D.Double bounds) {
-		if (debugPrint) {
-			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y,
-					bounds.width, bounds.height);
-
-			if (nameFilter.isEmpty() || (!nameFilter.isEmpty() && nameFilter.equals(bf.getName())))
-				System.out.println(String.format("%s: %s", bf.getName(), rect));
-		}
-	}
+	
+	private boolean shouldSaveState(BaseFigure bf) {
+		return figureMap.getModuleDTO(bf) != null;
+	}	
 
 	public void restore(FigureMap figureMap) {
 		this.figureMap = figureMap;
 
-		Set<Entry<String, Rectangle2D.Double>> entries = savedPositions.entrySet();
-		for (Entry<String, Rectangle2D.Double> e : entries) {
-			String name = e.getKey();
-			Rectangle2D.Double bounds = e.getValue();
+		restoreFigures();
+		restoreLineStates();
+	}
+	
+	private void restoreFigures() {
+		Set<Entry<String, FigureState>> entries = savedPositions.entrySet();
+		for (Entry<String, FigureState> e : entries) {
+			FigureState savedState = e.getValue();
 
-			if (figureMap.containsModule(name)) {
-				BaseFigure bf = figureMap.findModuleByPath(name);
-				printFigure(bf, bounds);
+			if (figureMap.containsModule(savedState.path)) {
+				BaseFigure bf = figureMap.findModuleByPath(savedState.path);
+				Rectangle2D.Double bounds = savedState.position;
 
 				Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
 				Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);
@@ -96,7 +98,27 @@ public class DrawingState {
 				bf.willChange();
 				bf.setBounds(anchor, lead);
 				bf.changed();
+				if (!savedState.enabled)
+					bf.setEnabled(false);
 			}
-		}
+		}		
+	}
+	
+	private void restoreLineStates() {
+		for (Figure f : drawing.getChildren()) {
+			BaseFigure bf = (BaseFigure) f;
+			if (bf.isLine()) {
+				ConnectionFigure cf = (ConnectionFigure) f;
+				Figure start = cf.getStartFigure();
+				Figure end = cf.getEndFigure();
+				
+				if (!start.isVisible() || !end.isVisible())
+					bf.setEnabled(false);
+			}
+		}		
+	}
+	
+	public boolean hasHiddenFigures() {
+		return hasHiddenFigures;
 	}
 }

@@ -158,6 +158,8 @@ public class DrawingView extends DefaultDrawingView {
 			}
 			figureSelected(selection);
 		}
+		
+		contextMenu.setHasSelection(hasSelection());
 	}
 
 	// TODO: DO NOT REMOVE THIS FUNCTION. IT IS DISABLED BECAUSE IT CONTAINS

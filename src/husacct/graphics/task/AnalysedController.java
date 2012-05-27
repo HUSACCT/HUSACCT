@@ -118,7 +118,8 @@ public class AnalysedController extends DrawingController {
 			if (null != parentDTO) {
 				getAndDrawModulesIn(parentDTO.uniqueName);
 			} else {
-				logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+				logger.warn("Tried to zoom out from \"" + getCurrentPaths()
+						+ "\", but it has no parent (could be root if it's an empty string).");
 				logger.debug("Reverting to the root of the application.");
 				drawArchitecture(getCurrentDrawingDetail());
 			}

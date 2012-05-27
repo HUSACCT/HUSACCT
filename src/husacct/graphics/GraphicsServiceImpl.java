@@ -94,13 +94,13 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 			Element analysedControllerElement = workspaceData.getChild(workspaceAnalysedControllerName);
 			loadWorkspaceDataForController(analysedController, analysedControllerElement);
 		} catch (Exception e) {
-			logger.error("Error importing the workspace for analyse: " + e.getMessage(), e);
+			logger.error("Error importing the workspace for analyse.", e);
 		}
 		try {
 			Element definedControllerElement = workspaceData.getChild(workspaceDefinedControllerName);
 			loadWorkspaceDataForController(definedController, definedControllerElement);
 		} catch (Exception e) {
-			logger.error("Error importing the workspace for define: " + e.getMessage(), e);
+			logger.error("Error importing the workspace for define.", e);
 		}
 	}
 
