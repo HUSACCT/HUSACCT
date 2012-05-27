@@ -41,7 +41,7 @@ public class DrawingState {
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
 
-			if (!bf.isLine()) {
+			if (!bf.isLine() && shouldSaveState(bf)) {
 				FigureState state = saveFigureState(bf);
 				savedPositions.put(state.path, state);
 				
@@ -71,6 +71,10 @@ public class DrawingState {
 			return analysedDto.uniqueName;
 		}
 	}
+	
+	private boolean shouldSaveState(BaseFigure bf) {
+		return figureMap.getModuleDTO(bf) != null;
+	}	
 
 	public void restore(FigureMap figureMap) {
 		this.figureMap = figureMap;
