@@ -16,10 +16,13 @@ import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
+import husacct.graphics.task.layout.FigureConnectorStrategy;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected DrawingLayoutStrategy layoutStrategyOption;
 
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
+	private ArrayList<BaseFigure> savedFiguresForZoom;
 
 	protected Drawing drawing;
 	protected DrawingView view;
@@ -59,6 +63,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
+		savedFiguresForZoom = new ArrayList<BaseFigure>();
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 
 		figureFactory = new FigureFactory();
@@ -114,8 +119,9 @@ public abstract class DrawingController implements UserInputListener {
 		switchLayoutStrategy();
 		updateLayout();
 	}
-
-	public void toggleDependencies() {
+	
+	@Override
+	public void toggleDependencies(){
 		notifyServiceListeners();
 		if (areDependenciesShown) {
 			hideDependencies();
@@ -135,7 +141,33 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget.turnOffDependencies();
 	}
 
-	public void toggleContextUpdates() {
+	@Override
+	public void toggleViolations() {
+		notifyServiceListeners();
+		if (areViolationsShown()) {
+			hideViolations();
+		} else {
+			showViolations();
+		}
+		drawLinesBasedOnSetting();
+	}
+	
+	public boolean areViolationsShown() {
+		return areViolationsShown;
+	}
+
+	public void showViolations() {
+		areViolationsShown = true;
+		drawTarget.turnOnViolations();
+	}
+	
+	public void hideViolations() {
+		areViolationsShown = false;
+		drawTarget.turnOffViolations();
+		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
+	}
+	
+	public void toggleContextUpdates(){
 		notifyServiceListeners();
 		if (contextUpdates) {
 			deactivateContextUpdates();
@@ -192,21 +224,6 @@ public abstract class DrawingController implements UserInputListener {
 		contextMenu.setCanZoomout((paths.length == 0));
 	}
 
-	public boolean areViolationsShown() {
-		return areViolationsShown;
-	}
-
-	public void hideViolations() {
-		areViolationsShown = false;
-		drawTarget.turnOffViolations();
-		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
-	}
-
-	public void showViolations() {
-		areViolationsShown = true;
-		drawTarget.turnOnViolations();
-	}
-
 	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
 		if (areViolationsShown()) {
@@ -253,19 +270,48 @@ public abstract class DrawingController implements UserInputListener {
 
 		updateLayout();
 	}
+	
+	protected void clearSavedFiguresForZoom(){
+		savedFiguresForZoom.clear();
+	}
+	
+	protected boolean areFiguresSavedForZoom(){
+		return savedFiguresForZoom.size() > 0;
+	}
+	
+	protected void addSavedFiguresForZoom(BaseFigure savedFigure){
+		savedFiguresForZoom.add(savedFigure);
+	}
+	
+	protected HashMap<BaseFigure, AbstractDTO> getSavedFiguresForZoom(){
+		return figureMap.getAllDTOsWithClonedFigures(savedFiguresForZoom);
+	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
+		HashMap<BaseFigure, AbstractDTO> savedFiguresToBeDrawn = getSavedFiguresForZoom();
+		clearSavedFiguresForZoom();
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
-			ParentFigure parentFigure = figureFactory.createParentFigure(parentName);
-			drawing.add(parentFigure);
+			ParentFigure parentFigure = null;
+			if(!parentName.isEmpty()){
+				parentFigure = figureFactory.createParentFigure(parentName);
+				drawing.add(parentFigure);
+			}
 			for (AbstractDTO dto : modules.get(parentName)) {
 				BaseFigure generatedFigure = figureFactory.createFigure(dto);
-				parentFigure.add(generatedFigure);
+				if(!parentName.isEmpty()){
+					parentFigure.add(generatedFigure);
+				}
 				drawing.add(generatedFigure);
 				figureMap.linkModule(generatedFigure, dto);
 			}
-			parentFigure.updateLayout();
+			if(!parentName.isEmpty()){
+				parentFigure.updateLayout();
+			}
+		}
+		for(BaseFigure figure : savedFiguresToBeDrawn.keySet()){
+			drawing.add(figure);
+			figureMap.linkModule(figure, savedFiguresToBeDrawn.get(figure));
 		}
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
@@ -295,17 +341,6 @@ public abstract class DrawingController implements UserInputListener {
 				cf.updateConnection();
 			}
 		}
-	}
-
-	@Override
-	public void toggleViolations() {
-		notifyServiceListeners();
-		if (areViolationsShown()) {
-			hideViolations();
-		} else {
-			showViolations();
-		}
-		drawLinesBasedOnSetting();
 	}
 
 	protected void drawLinesBasedOnSetting() {

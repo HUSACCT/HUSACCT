@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.menubars;
 
+import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,9 +11,9 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 
-public class ZoomLocationBar extends JMenuBar {
+public class ZoomLocationBar extends JPanel {
 	private static final long serialVersionUID = 1025962225565217061L;
 	private String rootLocale;
 	private JButton rootLocationButton;
@@ -21,10 +22,12 @@ public class ZoomLocationBar extends JMenuBar {
 
 	private int menuItemMaxHeight = 45;
 
+	private ArrayList<JButton> buttons;
 	private HashMap<JButton, String[]> buttonPaths = new HashMap<JButton, String[]>();
 	private ArrayList<LocationButtonActionListener> locationButtonPressListener;
 
 	public ZoomLocationBar() {
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 		locationButtonPressListener = new ArrayList<LocationButtonActionListener>();
 	}
 
@@ -34,6 +37,7 @@ public class ZoomLocationBar extends JMenuBar {
 
 	public void updateLocationBar(String[] currentPaths) {
 		removeAll();
+		buttons = new ArrayList<JButton>();
 		createAndAddRootLocationButton();
 
 		HashMap<Integer, HashMap<Integer, String>> multiLevelPath = new HashMap<Integer, HashMap<Integer, String>>();
@@ -102,6 +106,7 @@ public class ZoomLocationBar extends JMenuBar {
 		locationStringButton.setSize(10, menuItemMaxHeight);
 		locationStringButton.setMargin(new Insets(0, 0, 0, 0));
 		buttonPaths.put(locationStringButton, fullPath);
+		buttons.add(locationStringButton);
 		locationStringButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				pressLocationButton(event);
@@ -126,5 +131,15 @@ public class ZoomLocationBar extends JMenuBar {
 
 	public void removeLocationButtonPressListener(LocationButtonActionListener actionListener) {
 		locationButtonPressListener.remove(actionListener);
+	}
+	
+	public String[] getSecondLastPath(){
+		try{
+			int secondLastIndex = buttons.size()-2;
+			JButton secondLastButton = buttons.get(secondLastIndex);
+			return buttonPaths.get(secondLastButton);
+		}catch(Exception e){
+			return new String[]{};
+		}
 	}
 }

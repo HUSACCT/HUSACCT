@@ -7,6 +7,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
 import java.util.ArrayList;
@@ -29,8 +30,10 @@ public class AnalysedController extends DrawingController {
 	private void initializeServices() {
 		analyseService = ServiceProvider.getInstance().getAnalyseService();
 		validateService = ServiceProvider.getInstance().getValidateService();
-		// TODO: Uncomment wanneer analyse addServiceListener heeft geïmplementeerd!
-		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener(){
+		// TODO: Uncomment wanneer analyse addServiceListener heeft
+		// geïmplementeerd!
+		// ServiceProvider.getInstance().getAnalyseService().addServiceListener(new
+		// IServiceListener(){
 		// @Override
 		// public void update() {
 		// refreshDrawing();
@@ -85,13 +88,15 @@ public class AnalysedController extends DrawingController {
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
 				try {
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.figureMap.getModuleDTO(figure);
+					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) figureMap.getModuleDTO(figure);
 					parentNames.add(parentDTO.uniqueName);
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.warn("Could not zoom on this object: " + figure.getName()
-							+ ". Expected a different DTO type.");
+					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				}
+			} else if (!figure.isLine()) {
+				addSavedFiguresForZoom(figure);
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on. Figure is accepted as context for multizoom.");
 			} else {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 			}
@@ -119,8 +124,7 @@ public class AnalysedController extends DrawingController {
 				drawArchitecture(getCurrentDrawingDetail());
 			}
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPaths()
-					+ "\", but it has no parent (could be root if it's an empty string).");
+			logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -161,11 +165,12 @@ public class AnalysedController extends DrawingController {
 			setCurrentPaths(parentNames);
 
 			Set<String> parentNamesKeySet = allChildren.keySet();
-			if (parentNamesKeySet.size() == 1) {
+			if (parentNamesKeySet.size() == 1 && !areFiguresSavedForZoom()) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
 				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else {
+				
 				drawModulesAndLines(allChildren);
 			}
 		}
