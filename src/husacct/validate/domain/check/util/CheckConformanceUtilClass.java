@@ -124,7 +124,7 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static List<Mapping> getInnerClasses(AnalysedModuleDTO analysedClass, List<Mapping> innerClassPaths, ModuleDTO module, String[] violationTypeKeys){
 		for(AnalysedModuleDTO innerClass : analysedClass.subModules){
-			if(analysedClass.type.toLowerCase().equals("class")){
+			if(!analysedClass.type.toLowerCase().equals("package")){
 				innerClassPaths.add(new Mapping(module.logicalPath, module.type, innerClass.uniqueName, violationTypeKeys));			
 			}
 			innerClassPaths.addAll(getInnerClasses(analysedClass, innerClassPaths, module, violationTypeKeys));
