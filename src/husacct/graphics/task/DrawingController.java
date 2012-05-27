@@ -42,7 +42,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected Drawing drawing;
 	protected DrawingView view;
 	protected GraphicsFrame drawTarget;
-	protected String[] currentPaths = new String[]{};
+	protected String[] currentPaths = new String[] {};
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -55,7 +55,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	public DrawingController() {
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
-		
+
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
@@ -80,68 +80,68 @@ public abstract class DrawingController implements UserInputListener {
 		drawTarget = new GraphicsFrame(view);
 		drawTarget.addListener(this);
 		drawTarget.setSelectedLayout(layoutStrategyOption);
-		
+
 		showDependencies();
 		hideViolations();
 		deactivateContextUpdates();
 	}
-	
-	private void switchLayoutStrategy(){
-		switch(layoutStrategyOption){
-			case BASIC_LAYOUT:
-				layoutStrategy = new BasicLayoutStrategy(drawing);
-				break;
-			case LAYERED_LAYOUT:
-				layoutStrategy = new LayeredLayoutStrategy(drawing);
-				break;
-			default:
-				layoutStrategy = new NoLayoutStrategy();
-				break;
+
+	private void switchLayoutStrategy() {
+		switch (layoutStrategyOption) {
+		case BASIC_LAYOUT:
+			layoutStrategy = new BasicLayoutStrategy(drawing);
+			break;
+		case LAYERED_LAYOUT:
+			layoutStrategy = new LayeredLayoutStrategy(drawing);
+			break;
+		default:
+			layoutStrategy = new NoLayoutStrategy();
+			break;
 		}
 	}
-	
-	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
+
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
 		layoutStrategyOption = selectedStrategyEnum;
 		switchLayoutStrategy();
 		updateLayout();
 	}
-	
-	public void toggleDependencies(){
+
+	public void toggleDependencies() {
 		notifyServiceListeners();
-		if(areDependenciesShown){
+		if (areDependenciesShown) {
 			hideDependencies();
-		}else{
+		} else {
 			showDependencies();
 		}
 		drawLinesBasedOnSetting();
 	}
-	
-	public void showDependencies(){
+
+	public void showDependencies() {
 		areDependenciesShown = true;
 		drawTarget.turnOnDependencies();
 	}
-	
-	public void hideDependencies(){
+
+	public void hideDependencies() {
 		areDependenciesShown = false;
 		drawTarget.turnOffDependencies();
 	}
-	
-	public void toggleContextUpdates(){
+
+	public void toggleContextUpdates() {
 		notifyServiceListeners();
-		if(contextUpdates){
+		if (contextUpdates) {
 			deactivateContextUpdates();
-		}else{
+		} else {
 			activateContextUpdates();
 		}
 		drawLinesBasedOnSetting();
 	}
-	
-	private void deactivateContextUpdates(){
+
+	private void deactivateContextUpdates() {
 		contextUpdates = false;
 		drawTarget.turnOffContextUpdates();
 	}
-	
-	private void activateContextUpdates(){
+
+	private void activateContextUpdates() {
 		contextUpdates = true;
 		drawTarget.turnOnContextUpdates();
 	}
@@ -165,17 +165,17 @@ public abstract class DrawingController implements UserInputListener {
 	public String[] getCurrentPaths() {
 		return currentPaths;
 	}
-	
+
 	public String getCurrentPathsToString() {
 		String stringPaths = "";
-		for(String path : getCurrentPaths()){
+		for (String path : getCurrentPaths()) {
 			stringPaths += path + " + ";
 		}
 		return stringPaths;
 	}
 
 	public void resetCurrentPaths() {
-		currentPaths = new String[]{};
+		currentPaths = new String[] {};
 	}
 
 	public void setCurrentPaths(String[] paths) {
@@ -232,14 +232,16 @@ public abstract class DrawingController implements UserInputListener {
 		clearDrawing();
 		runDrawTask(modules);
 	}
-	
-	private void runDrawTask(AbstractDTO[] modules){
-		DrawingTask task = new DrawingTask(this,modules);
+
+	private void runDrawTask(AbstractDTO[] modules) {
+		DrawingTask task = new DrawingTask(this, modules);
 		Thread drawThread = new Thread(task);
 		drawThread.start();
 	}
-	
-	public void actuallyDraw(AbstractDTO[] modules){
+
+	public void actuallyDraw(AbstractDTO[] modules) {
+		view.setVisible(false);
+		
 		drawTarget.setCurrentPaths(getCurrentPaths());
 		drawTarget.updateGUI();
 		for (AbstractDTO dto : modules) {
@@ -251,6 +253,8 @@ public abstract class DrawingController implements UserInputListener {
 		drawLinesBasedOnSetting();
 
 		updateLayout();
+		
+		view.setVisible(true);
 	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -274,7 +278,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void updateLayout() {
 		String currentPaths = getCurrentPathsToString();
-		
+
 		if (hasSavedFigureStates(currentPaths)) {
 			restoreFigurePositions(currentPaths);
 		} else {
@@ -307,13 +311,13 @@ public abstract class DrawingController implements UserInputListener {
 
 	protected void drawLinesBasedOnSetting() {
 		clearLines();
-		if(areDependenciesShown){
+		if (areDependenciesShown) {
 			drawDependenciesForShownModules();
 		}
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		if(contextUpdates){
+		if (contextUpdates) {
 			drawing.updateLineFigureToContext();
 		}
 	}
@@ -377,7 +381,7 @@ public abstract class DrawingController implements UserInputListener {
 	public void refreshFrame() {
 		drawTarget.refreshFrame();
 	}
-	
+
 	public void refreshFrameClean() {
 		drawTarget.refreshFrameClean();
 	}
@@ -390,9 +394,9 @@ public abstract class DrawingController implements UserInputListener {
 	public void notifyServiceListeners() {
 		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
-	
-	public void saveSingleLevelFigurePositions(){
-		if(getCurrentPaths().length<2){
+
+	public void saveSingleLevelFigurePositions() {
+		if (getCurrentPaths().length < 2) {
 			saveFigurePositions();
 		}
 	}
@@ -440,9 +444,9 @@ public abstract class DrawingController implements UserInputListener {
 				System.out.println(String.format("%s: %s", bf.getName(), rect));
 		}
 	}
-	
+
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
 		view.setScaleFactor(zoomFactor);
-	}	
+	}
 }
