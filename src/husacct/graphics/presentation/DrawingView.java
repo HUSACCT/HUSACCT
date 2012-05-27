@@ -157,13 +157,15 @@ public class DrawingView extends DefaultDrawingView {
 
 			// show the selected figures on top
 			for (BaseFigure selectedFig : selection) {
-				this.drawing.bringToFront(selectedFig);
+				drawing.bringToFront(selectedFig);
 				// TODO also raise connection figures pointing to and from the
 				// selected figure(s)
 			}
 
 			figureSelected(selection);
 		}
+		
+		contextMenu.setHasSelection(hasSelection());
 	}
 
 	// TODO: DO NOT REMOVE THIS FUNCTION. IT IS DISABLED BECAUSE IT CONTAINS

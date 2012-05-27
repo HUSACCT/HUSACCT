@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public class AnalysedController extends DrawingController {
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
-	
+
 	private Logger logger = Logger.getLogger(AnalysedController.class);
 
 	public AnalysedController() {
@@ -89,14 +89,15 @@ public class AnalysedController extends DrawingController {
 					parentNames.add(parentDTO.uniqueName);
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.warn("Could not zoom on this object: " + figure.getName() +". Expected a different DTO type.");
+					logger.warn("Could not zoom on this object: " + figure.getName()
+							+ ". Expected a different DTO type.");
 				}
-			}else{
-				logger.warn("Could not zoom on this object: " + figure.getName() +". Not a module to zoom on.");
+			} else {
+				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
 			}
 		}
-		
-		if(parentNames.size()>0){
+
+		if (parentNames.size() > 0) {
 			saveSingleLevelFigurePositions();
 			getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
@@ -112,12 +113,14 @@ public class AnalysedController extends DrawingController {
 			if (null != parentDTO) {
 				getAndDrawModulesIn(parentDTO.uniqueName);
 			} else {
-				logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+				logger.warn("Tried to zoom out from \"" + getCurrentPaths()
+						+ "\", but it has no parent (could be root if it's an empty string).");
 				logger.debug("Reverting to the root of the application.");
 				drawArchitecture(getCurrentDrawingDetail());
 			}
-		}else{
-			logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+		} else {
+			logger.warn("Tried to zoom out from \"" + getCurrentPaths()
+					+ "\", but it has no parent (could be root if it's an empty string).");
 			logger.debug("Reverting to the root of the application.");
 			drawArchitecture(getCurrentDrawingDetail());
 		}
@@ -136,9 +139,9 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if(parentNames.length==0){
+		if (parentNames.length == 0) {
 			drawArchitecture(getCurrentDrawingDetail());
-		}else{
+		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
 				AbstractDTO[] children = analyseService.getChildModulesInModule(parentName);
@@ -156,7 +159,7 @@ public class AnalysedController extends DrawingController {
 				}
 			}
 			setCurrentPaths(parentNames);
-	
+
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
@@ -171,7 +174,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
-		if (paths.length==0) {
+		if (paths.length == 0) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else {
 			getAndDrawModulesIn(paths);
