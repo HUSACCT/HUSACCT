@@ -30,7 +30,6 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
 			}
 		}
-
 		return removeExceptionPaths(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
 	}
 
@@ -56,7 +55,7 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 		}
 		return new ArrayList<Mapping>(classpathsFrom);
 	}
-	
+
 	private static HashSet<Mapping> getAllClassPaths(String[] violationTypeKeys){
 		HashSet<Mapping> allClasses = new HashSet<Mapping>();
 		ModuleDTO[] rootModules = define.getRootModules();
@@ -66,9 +65,9 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 		}
 		return allClasses;
 	}
-	
+
 	private static HashSet<Mapping> getAllClasspathsFromAllModules(ModuleDTO module, HashSet<Mapping> classpaths, String[] violationTypeKeys){
-		for(ModuleDTO subModule : module.subModules){
+		for(ModuleDTO subModule : define.getChildrenFromModule(module.logicalPath)){
 
 			classpaths.addAll(getClassFromPhysicalPathDTO(subModule, violationTypeKeys, classpaths));
 
