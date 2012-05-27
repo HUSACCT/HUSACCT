@@ -3,6 +3,8 @@ package husacct.validate.presentation.browseViolations;
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
+import husacct.validate.presentation.FilterViolations;
+import husacct.validate.task.TaskServiceImpl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,14 +24,15 @@ import javax.swing.border.TitledBorder;
 public class FilterPanel extends JPanel {
 	
 	private final BrowseViolations browseViolations;
+	private final FilterViolations filterViolations;
 	
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private JRadioButton rdbtnIndirect, rdbtnAll, rdbtnDirect;
 	
-	public FilterPanel(BrowseViolations browseViolations) {
+	public FilterPanel(BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl) {
 		this.browseViolations = browseViolations;
-		
+		this.filterViolations = new FilterViolations(taskServiceImpl, browseViolations);
 		initComponents();
 		loadAfterChange();
 	}
@@ -91,13 +94,13 @@ public class FilterPanel extends JPanel {
 		applyFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				browseViolations.applyFilterChanged(arg0);
-			}
+				browseViolations.loadAfterChange();
+;			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				browseViolations.editFilterActionPerformed(e);
+				filterViolations.setVisible(true);
 			}
 
 		});
@@ -105,7 +108,7 @@ public class FilterPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO: add LoadingDialog from next merge
-				browseViolations.updateViolationsTable();				
+				browseViolations.loadAfterChange();				
 			}
 		});
 		rdbtnDirect.addActionListener(new ActionListener() {
@@ -120,8 +123,8 @@ public class FilterPanel extends JPanel {
 						violationsIndirect.add(violation);
 					}
 				}
-				browseViolations.fillViolationsTable(violationsIndirect);		
-
+				browseViolations.fillViolationsTable(violationsIndirect);
+				browseViolations.loadInformationPanel();
 			}
 		});
 		rdbtnIndirect.addActionListener(new ActionListener() {
@@ -136,13 +139,14 @@ public class FilterPanel extends JPanel {
 					}
 				}
 				browseViolations.fillViolationsTable(violationsIndirect);
-
+				browseViolations.loadInformationPanel();
 			}
 		});
 	}
 	
 	public void loadAfterChange() {
 		loadText();
+		filterViolations.loadFilterValues();
 	}
 	
 	private void loadText() {

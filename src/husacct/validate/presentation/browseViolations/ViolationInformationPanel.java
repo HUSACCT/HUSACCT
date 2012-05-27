@@ -26,7 +26,7 @@ public class ViolationInformationPanel extends JPanel {
 		createBaseLayout();
 	}
 
-	public void createBaseLayout() {
+	private void createBaseLayout() {
 		detailsLineNumberLabel = new JLabel();
 		detailsLogicalModuleLabel = new JLabel();
 		detailsMessageLabel = new JLabel();
@@ -82,9 +82,11 @@ public class ViolationInformationPanel extends JPanel {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
 			detailLineNumberLabelValue.setText("" + violation.getLinenumber());
-			detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+			detailLogicalModuleLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath() + "</body></html>");
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			detailMessageLabelValue.setText(message);
+			System.out.println((int) getSize().getWidth());
+			System.out.println(getSize().getWidth());
+			detailMessageLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + message + "</body></html>");
 		} else {
 			detailLineNumberLabelValue.setText("");
 			detailLogicalModuleLabelValue.setText("");

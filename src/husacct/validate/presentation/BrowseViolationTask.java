@@ -1,7 +1,6 @@
 package husacct.validate.presentation;
 
 import husacct.control.task.AnalyseTask;
-
 import org.apache.log4j.Logger;
 
 public class BrowseViolationTask implements Runnable{
@@ -19,9 +18,9 @@ public class BrowseViolationTask implements Runnable{
 		// Therefor this thread can never be interrupted.
 		try {
 			Thread.sleep(1);
-			browseViolations.update();
+			browseViolations.updateViolationsTable();
 		} catch (InterruptedException exception){
-			logger.debug("Analyse interupted");
+			logger.debug("Validate interupted");
 		}
 	}
 }
