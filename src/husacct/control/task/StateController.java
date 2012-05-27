@@ -2,6 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.IGraphicsService;
@@ -65,6 +66,11 @@ public class StateController {
 		
 		if(defineService.isDefined()){
 			newStates.add(States.DEFINED);
+		}
+		
+		ApplicationDTO applicationData = defineService.getApplicationDetails();
+		if(applicationData.paths.length > 0){
+			newStates.add(States.APPSET);
 		}
 		
 		if(workspaceController.isOpenWorkspace()){

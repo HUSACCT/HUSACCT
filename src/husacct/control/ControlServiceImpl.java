@@ -47,7 +47,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	@Override
 	public void startApplication(String[] consoleArguments) {
-		setServiceListeners();
 		mainController.readArguments(consoleArguments);
 		mainController.startGui();
 	}

@@ -21,6 +21,7 @@ import javax.swing.KeyStroke;
 public class AnalyseMenu extends JMenu{
 	private MainController mainController;
 	private JMenuItem setApplicationPropertiesItem;
+	private JMenuItem analyseNowItem;
 	private JMenuItem analysedArchitectureDiagramItem;
 	private JMenuItem analysedApplicationOverviewItem;
 	
@@ -39,15 +40,19 @@ public class AnalyseMenu extends JMenu{
 		setApplicationPropertiesItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
 		setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 		
+		analyseNowItem = new JMenuItem(controlService.getTranslatedString("AnalyseNow"));
+		analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
+		
 		analysedApplicationOverviewItem = new JMenuItem(controlService.getTranslatedString("AnalysedApplicationOverview"));
 		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
 		analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
-			
+		
 		analysedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
 		this.add(setApplicationPropertiesItem);
+		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
 		
@@ -57,6 +62,12 @@ public class AnalyseMenu extends JMenu{
 		setApplicationPropertiesItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().showApplicationDetailsGui();
+			}
+		});
+		
+		analyseNowItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getApplicationController().analyseApplication();
 			}
 		});
 		
@@ -75,13 +86,16 @@ public class AnalyseMenu extends JMenu{
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				setApplicationPropertiesItem.setEnabled(false);
+				analyseNowItem.setEnabled(false);
 				analysedArchitectureDiagramItem.setEnabled(false);
 				analysedApplicationOverviewItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
 					setApplicationPropertiesItem.setEnabled(true);
 				}
-				
+				if(states.contains(States.APPSET)){
+					analyseNowItem.setEnabled(true);
+				}
 				if(states.contains(States.ANALYSED)){
 					analysedArchitectureDiagramItem.setEnabled(true);
 					analysedApplicationOverviewItem.setEnabled(true);
@@ -94,9 +108,11 @@ public class AnalyseMenu extends JMenu{
 			public void update(Locale newLocale) {
 				analyseMenu.setText(controlService.getTranslatedString("Analyse"));
 				setApplicationPropertiesItem.setText(controlService.getTranslatedString("ApplicationProperties"));
+				analyseNowItem.setText(controlService.getTranslatedString("AnalyseNow"));
 				analysedArchitectureDiagramItem.setText(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
 				analysedApplicationOverviewItem.setText(controlService.getTranslatedString("AnalysedApplicationOverview"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
+				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 				analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 			}

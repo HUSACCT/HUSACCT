@@ -20,7 +20,7 @@ public class SetApplicationDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private JButton saveButton;
+	private JButton saveButton, analyseButton;
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
 
@@ -48,8 +48,10 @@ public class SetApplicationDialog extends JDialog {
 	private void addComponents(){
 		JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
+		analyseButton = new JButton(controlService.getTranslatedString("SaveAndAnalyseButton"));
 		savePanel.add(saveButton);
-		getRootPane().setDefaultButton(saveButton);
+		savePanel.add(analyseButton);
+		getRootPane().setDefaultButton(analyseButton);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(setApplicationPanel);
@@ -63,6 +65,16 @@ public class SetApplicationDialog extends JDialog {
 				if (setApplicationPanel.dataValidated()) {
 					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
 					mainController.getApplicationController().setApplicationData(applicationData);
+					dispose();
+				}
+			}
+		});
+		
+		analyseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (setApplicationPanel.dataValidated()) {
+					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+					mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
 					dispose();
 				}
 			}
