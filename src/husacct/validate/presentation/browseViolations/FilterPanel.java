@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
-import husacct.validate.presentation.ConfigurationUI;
 import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.TaskServiceImpl;
 
