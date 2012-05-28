@@ -18,7 +18,7 @@ public class DrawingSingleLevelThread implements Runnable {
 		try {
 			controller.drawSingleLevel(toDrawModules);
 			Thread.sleep(10);
-			controller.refreshFrameClean();
+			controller.setDrawingViewVisible();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

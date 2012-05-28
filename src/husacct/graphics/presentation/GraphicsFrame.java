@@ -84,10 +84,6 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 	}
 	
-	public void refreshFrameClean() {
-		layoutComponents();
-	}
-	
 	public String[] getCurrentPaths() {
 		return currentPaths;
 	}

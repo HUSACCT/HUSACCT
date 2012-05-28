@@ -249,7 +249,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 		drawLinesBasedOnSetting();
 		updateLayout();
-		setDrawingViewVisible();
 	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -294,8 +293,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.updateGUI();
 		updateLayout();
 		drawLinesBasedOnSetting();
-		
-		setDrawingViewVisible();
 	}
 
 	protected void updateLayout() {
@@ -411,10 +408,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public void refreshFrame() {
 		graphicsFrame.refreshFrame();
-	}
-
-	public void refreshFrameClean() {
-		graphicsFrame.refreshFrameClean();
 	}
 
 	@Override
