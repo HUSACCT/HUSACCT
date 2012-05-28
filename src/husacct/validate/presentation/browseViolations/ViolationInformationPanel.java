@@ -112,9 +112,9 @@ public class ViolationInformationPanel extends JPanel {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
 			detailLineNumberLabelValue.setText("" + violation.getLinenumber());
-			detailLogicalModuleLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath() + "</body></html>");
+			detailLogicalModuleLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			detailMessageLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + message + "</body></html>");
+			detailMessageLabelValue.setText(message);
 		} else {
 			detailLineNumberLabelValue.setText("");
 			detailLogicalModuleLabelValue.setText("");
