@@ -127,7 +127,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		} else {
 			showDependencies();
 		}
-		drawLinesBasedOnSetting();
+		drawLinesBasedOnSettingInTask();
 	}
 
 	public void showDependencies(){
@@ -148,7 +148,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		} else {
 			showViolations();
 		}
-		drawLinesBasedOnSetting();
+		drawLinesBasedOnSettingInTask();
 	}
 
 	public void showViolations() {
@@ -169,7 +169,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		} else {
 			activateSmartLines();
 		}
-		drawLinesBasedOnSetting();
+		drawLinesBasedOnSettingInTask();
 	}
 	
 	public void deactivateSmartLines() {
@@ -247,7 +247,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			figureMap.linkModule(generatedFigure, dto);
 		}
 
-		drawLines();
+		drawLinesBasedOnSetting();
 		updateLayout();
 		setDrawingViewVisible();
 	}
@@ -293,7 +293,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.setCurrentPaths(getCurrentPaths());
 		graphicsFrame.updateGUI();
 		updateLayout();
-		drawLines();
+		drawLinesBasedOnSetting();
 		
 		setDrawingViewVisible();
 	}
@@ -328,7 +328,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		return figureMap.getAllDTOsWithClonedFigures(savedFiguresForZoom);
 	}
 
-	protected void drawLinesBasedOnSetting() {
+	protected void drawLinesBasedOnSettingInTask() {
 		clearLines();
 		setDrawingViewNonVisible();
 		runDrawLinesTask();
@@ -340,7 +340,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawThread.start();
 	}
 	
-	public void drawLines(){
+	public void drawLinesBasedOnSetting(){
 		if(areDependenciesShown()){
 			drawDependenciesForShownModules();
 		}

@@ -14,7 +14,7 @@ public class DrawingLinesThread implements Runnable {
 	public void run() {
 		try {
 			controller.setDrawingViewNonVisible();
-			controller.drawLines();
+			controller.drawLinesBasedOnSetting();
 			controller.setDrawingViewVisible();
 			Thread.sleep(10);
 			controller.refreshFrameClean();
