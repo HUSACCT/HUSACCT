@@ -58,21 +58,6 @@ public class CheckConformanceController {
 		}
 	}
 
-//TODO implement filtering of contradictory rules
-//	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
-//		return new RuleDTO[]{};
-//	}
-//
-//	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
-//		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
-//		for(RuleDTO rule : allCurrentRules){
-//			if(rule.equals(toValidateRule)){
-//				allCurrentRules.remove(rule);
-//			}
-//		}
-//		return allCurrentRules;
-//	}
-
 	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
 		for(RuleDTO appliedRule : exceptionRules){
 			try{

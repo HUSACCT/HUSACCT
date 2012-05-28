@@ -40,8 +40,8 @@ public class Messagebuilder {
 		final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 		final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
 
-		final String left = appendStrings(logicalModuleFromPath, logicalModuleFromType);
-		final String right = appendStrings(logicalModuleToPath, logicalModuleToType);
+		final String left = appendStrings(logicalModuleFromType, logicalModuleFromPath);
+		final String right = appendStrings(logicalModuleToType, logicalModuleToPath);
 
 		final String textFormat = getTextFormat(message.getRuleKey());
 
