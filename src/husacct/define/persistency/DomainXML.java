@@ -11,12 +11,12 @@ import org.jdom2.Element;
 
 public class DomainXML {
 
-	private SoftwareArchitecture DomainSoftwareArchitecture;
+	private SoftwareArchitecture domainSoftwareArchitecture;
 	
 	private Boolean parseLogical = true;
 	
 	public DomainXML(SoftwareArchitecture sa){
-		this.DomainSoftwareArchitecture = sa;
+		this.domainSoftwareArchitecture = sa;
 	}
 	
 	public Boolean getParseLogical() {
@@ -45,24 +45,24 @@ public class DomainXML {
 		Element XMLArchitecture = new Element("Architecture");
 
 		Element SAName = new Element("name");
-		SAName.addContent(this.DomainSoftwareArchitecture.getName());
+		SAName.addContent(this.domainSoftwareArchitecture.getName());
 		XMLArchitecture.addContent(SAName);
 
 		Element SADescription = new Element("description");
-		SADescription.addContent(this.DomainSoftwareArchitecture.getDescription());
+		SADescription.addContent(this.domainSoftwareArchitecture.getDescription());
 		XMLArchitecture.addContent(SADescription);
 
-		if (this.DomainSoftwareArchitecture.getModules().size() > 0) {
+		if (this.domainSoftwareArchitecture.getModules().size() > 0) {
 			Element SAModules = new Element("modules");
-			for (Module m : this.DomainSoftwareArchitecture.getModules()) {
+			for (Module m : this.domainSoftwareArchitecture.getModules()) {
 				SAModules.addContent(this.getModuleInXML(m));
 			}
 			XMLArchitecture.addContent(SAModules);
 		}
 
-		if (this.DomainSoftwareArchitecture.getAppliedRules().size() > 0) {
+		if (this.domainSoftwareArchitecture.getAppliedRules().size() > 0) {
 			Element SARules = new Element("rules");
-			for (AppliedRule ar : this.DomainSoftwareArchitecture.getAppliedRules()) {
+			for (AppliedRule ar : this.domainSoftwareArchitecture.getAppliedRules()) {
 				SARules.addContent(this.getAppliedRuleInXML(ar));
 			}
 			XMLArchitecture.addContent(SARules);
