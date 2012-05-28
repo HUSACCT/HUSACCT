@@ -238,7 +238,9 @@ public class AppliedRuleController extends PopUpController {
 				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
 				this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 			}
-			this.saveAllExceptionRules();
+			
+			//HOTFIX depencencies
+			this.saveAllExceptionRules(dependencies);
 			DefinitionController.getInstance().notifyObservers(this.currentModuleId);
 			return true;
 		} catch (Exception e) {
@@ -322,7 +324,7 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 
-	public void saveAllExceptionRules(){
+	public void saveAllExceptionRules(String[] dependencies){
 		this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 		
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {
@@ -335,7 +337,7 @@ public class AppliedRuleController extends PopUpController {
 			Module moduleFrom = assignToCorrectModule(from);
 			Module moduleTo = assignToCorrectModule(to);
 			
-			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo);
+			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo, dependencies);
 		}
 	}
 	private void loadAllRuleExceptions(){

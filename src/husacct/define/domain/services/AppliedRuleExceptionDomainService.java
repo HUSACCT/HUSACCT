@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class AppliedRuleExceptionDomainService {
 	
-	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, long moduleFromId, long moduleToId) {
+	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, long moduleFromId, long moduleToId, String[] dependencies) {
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
 		Module moduleTo;
 		if (moduleToId != -1){
@@ -17,11 +17,12 @@ public class AppliedRuleExceptionDomainService {
 		} else {
 			moduleTo = new Module();
 		}
-		addExceptionToAppliedRule(parentRuleId, ruleType, description, moduleFrom, moduleTo);
+		addExceptionToAppliedRule(parentRuleId, ruleType, description, moduleFrom, moduleTo, dependencies);
 	}
 	
-	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, Module moduleFrom, Module moduleTo) {
+	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, Module moduleFrom, Module moduleTo, String[] dependencies) {
 		AppliedRule exceptionRule = new AppliedRule(ruleType,description, moduleTo, moduleFrom);
+		exceptionRule.setDependencies(dependencies);
 		
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
 		parentRule.addException(exceptionRule);
