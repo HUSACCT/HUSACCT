@@ -33,7 +33,7 @@ public class CyclesBetweenModulesRule extends RuleType{
 
 		if(mappings.getMappingFrom().isEmpty()){
 			for(ModuleDTO module : defineService.getRootModules()){
-				physicalClasspathsFrom.addAll(CheckConformanceUtilClass.getAllClassesFromLayer(module, currentRule.violationTypeKeys));
+				physicalClasspathsFrom.addAll(CheckConformanceUtilClass.getAllClasspathsFromModule(module, currentRule.violationTypeKeys));
 			}
 
 		}else{
