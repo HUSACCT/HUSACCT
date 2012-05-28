@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 public class DomainServiceImpl {
 	private Logger logger = Logger.getLogger(DomainServiceImpl.class);
-	
+
 	private RuleTypesFactory ruletypefactory;
 	private ViolationTypeFactory violationtypefactory;
 	private final CheckConformanceController checkConformanceController;
@@ -35,10 +35,15 @@ public class DomainServiceImpl {
 	public HashMap<String, List<RuleType>> getAllRuleTypes(String programmingLanguage){
 		return ruletypefactory.getRuleTypes(programmingLanguage);
 	}
-	
+
+	/**
+	 * Gets all the possible violationtypes of the given programmingLanguage
+	 * Gives always the defaultSeverity back, despite what there is configured in the configuration,
+	 * this is because a violationtype is configurable per ruletype
+	 */
 	public Map<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage){
 		initializeViolationtypeFactory();
-		
+
 		AbstractViolationType violationtypefactory = this.violationtypefactory.getViolationTypeFactory(programmingLanguage, configuration);
 		if(violationtypefactory != null){
 			return violationtypefactory.getAllViolationTypes();
@@ -48,7 +53,7 @@ public class DomainServiceImpl {
 			return Collections.emptyMap();
 		}
 	}
-	
+
 	private void initializeViolationtypeFactory(){
 		if(violationtypefactory == null){
 			this.violationtypefactory = new ViolationTypeFactory();
@@ -58,12 +63,12 @@ public class DomainServiceImpl {
 	public void checkConformance(RuleDTO[] appliedRules){
 		checkConformanceController.checkConformance(appliedRules);
 	}
-	
+
 	public CategoryDTO[] getCategories(){
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
 		return new AssemblerController().createCategoryDTO(ruleTypes);
 	}
-	
+
 	public RuleTypesFactory getRuleTypesFactory(){
 		return ruletypefactory;
 	}

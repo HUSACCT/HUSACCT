@@ -26,6 +26,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
 	private boolean isSizeable = false;
+	private boolean isEnabled = true;
 	private boolean isStoredInContainer = false;
 	private String name;
 	
@@ -188,45 +189,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		return new ChopRectangleConnector(this);
 	}
 
-	// TODO: Patrick: Re-enabled this code! Requires that the AbsoluteLocator
-	// works so that
-	// the location of connectors is properly determined.
-	// @Override
-	// public Collection<Connector> getConnectors(ConnectionFigure prototype) {
-	// return (List<Connector>) Collections.unmodifiableList(connectors);
-	// }
-	//
-
-	// LocatorConnector
-	// // Point2D.Double bounds = this.getStartPoint();
-	// //
-	// // if (bounds.y < p.y) {
-	// // // This figure is BELOW the other figure
-	// // } else {
-	// // // This figure is on the same level or below the other figure
-	// // }
-	// //
-	// // LocatorConnector lc = new LocatorConnector(this,
-	// RelativeLocator.north());
-	// // connectors.add(lc);
-	// //
-	// // return lc;
-	// }
-
-	// @Override
-	// public Connector findCompatibleConnector(Connector c, boolean isStart) {
-	// if (c instanceof LocatorConnector) {
-	// LocatorConnector lc = (LocatorConnector) c;
-	// for (Connector cc : connectors) {
-	// LocatorConnector lcc = (LocatorConnector) cc;
-	// if (lcc.getLocator().equals(lc.getLocator())) {
-	// return lcc;
-	// }
-	// }
-	// }
-	// return connectors.getFirst();
-	// }
-
 	public boolean isParent(){
 		return false;
 	}
@@ -245,5 +207,15 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	
 	public boolean isInContainer() {
 		return isStoredInContainer;
+	}
+	
+	public void setEnabled(boolean newValue) {
+		isEnabled = newValue;
+		setVisible(newValue);
+		setSelectable(newValue);
+	}
+	
+	public boolean isEnabled() {
+		return isEnabled;
 	}
 }

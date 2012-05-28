@@ -91,14 +91,14 @@ public class Google_plus extends BenchmarkExtended{
 		assertEquals(true, foundDeclarationDependency);
 	}
 	
-	@Ignore ("test(package.package.test a){} = Dependencies pacakge|package|test|a (4)")
+	@Ignore ("Block of loop is not recognized")
 	@Test
 	public void testDomainGooglePlusObservable(){
 		String from = "domain.google_plus.Observable";
 		int expectedDependencies = 13;
 		
-//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		super.printDependencies(dependencies);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "java.util.ArrayList";

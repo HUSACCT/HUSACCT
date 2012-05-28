@@ -6,6 +6,7 @@ import husacct.graphics.presentation.figures.RelationFigure;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jhotdraw.draw.AbstractCompositeFigure;
 import org.jhotdraw.draw.ConnectionFigure;
@@ -22,7 +23,7 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		drawing = theDrawing;
 	}
 
-	public void doLayout(int screenWidth, int screenHeight) {
+	public void doLayout() {
 		double x = HORZ_ITEM_SPACING, y = VERT_ITEM_SPACING;
 		double maxHeightOnLine = 0.0;
 		int figuresOnLine = 0;
@@ -31,12 +32,15 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		ArrayList<Figure> connectors = new ArrayList<Figure>();
 		figures.addAll(drawing.getChildren());
 
+		int itemsToPosition = countItemsToPosition(figures);
+		int maxFiguresOnRow = (int)Math.ceil(Math.sqrt(itemsToPosition));
+		
 		for (Figure f : figures) {
 			if (!isConnector(f) && !inContainer(f)) {
 				
 				Rectangle2D.Double bounds = f.getBounds();
 	
-				if (x + bounds.width > screenWidth && figuresOnLine > 0) {
+				if (figuresOnLine >= maxFiguresOnRow) {
 					x = HORZ_ITEM_SPACING;
 					y += maxHeightOnLine + VERT_ITEM_SPACING;
 					figuresOnLine = 0;
@@ -59,6 +63,18 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 				connectors.add(f);
 			}
 		}		
+	}
+	
+	private int countItemsToPosition(List<Figure> figures) {
+		int count = 0;
+		
+		for (Figure f : figures) {
+			BaseFigure bf = (BaseFigure) f;
+			if (!bf.isInContainer() && !bf.isLine())
+				count++;
+		}
+		
+		return count;
 	}
 	
 	private boolean inContainer(Figure f) {

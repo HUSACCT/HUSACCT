@@ -18,9 +18,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ToolTipManager;
 import javax.swing.table.TableModel;
 
 public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
@@ -81,8 +80,6 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		editRuleButton = new JButton();
 		buttonPanel.add(editRuleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		editRuleButton.addActionListener(this);
-		editRuleButton.setToolTipText("WARNING: known issue, you need to reselect the currentModules while editing");
-		ToolTipManager.sharedInstance().setInitialDelay(0);
 		
 		removeRuleButton = new JButton();
 		buttonPanel.add(removeRuleButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));

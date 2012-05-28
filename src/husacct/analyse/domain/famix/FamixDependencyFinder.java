@@ -14,6 +14,8 @@ class FamixDependencyFinder extends FamixFinder{
 	private String from = "", to = "";
 	private List<DependencyDTO> currentResult;
 	
+	private DependencyDTO currentDirectDependencySearched;
+	
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
 		this.currentResult = new ArrayList<DependencyDTO>();
@@ -62,9 +64,11 @@ class FamixDependencyFinder extends FamixFinder{
 		this.currentFunction = function;
 		this.from = argumentFrom;
 		this.to = argumentTo;
+		this.filtered = false;
 		this.currentResult = findDependencies();
 		this.removeFilter();
 	}
+	
 	private void removeFilter(){
 		this.filtered = false;
 		this.filter = new String[]{};
@@ -79,8 +83,11 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
-		//TODO Analyse General - Fix Indirect Dependencies
-		if(!this.from.equals("")) result.addAll(this.findIndirectDependencies(result));
+//		if(!this.from.equals("")){
+//			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+//				if(!result.contains(dependency)) result.add(dependency);
+//			}
+//		}
 		return result;
 	}
 	
@@ -88,20 +95,24 @@ class FamixDependencyFinder extends FamixFinder{
 		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		for(DependencyDTO directDependency: directDependencies){
-			result.addAll(findIndirectDependenciesFrom(directDependency));
+			this.currentDirectDependencySearched = directDependency;
+			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
+				if(!result.contains(indirectDependency)) result.add(indirectDependency);
+			}
 		}
 		return result;
 	}
 	
 	private List<DependencyDTO> findIndirectDependenciesFrom(DependencyDTO fromDependency){
 		List<DependencyDTO> found = new ArrayList<DependencyDTO>();
-		String startFrom = fromDependency.from;
-		for(DependencyDTO indirectDependency : this.getDependenciesFrom(fromDependency.to)){
+		this.from = fromDependency.to;
+		for(DependencyDTO indirectDependency : findDependencies()){
 			indirectDependency.isIndirect = true;
-			indirectDependency.from = fromDependency.to;
 			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);
-			if(!indirectDependency.to.equals(startFrom)) {
-				found.addAll(findIndirectDependenciesFrom(indirectDependency));
+			if(!indirectDependency.to.equals(fromDependency.from)) {
+				for(DependencyDTO subIndirect : this.findIndirectDependenciesFrom(indirectDependency)){
+					if(!found.contains(subIndirect)) found.add(subIndirect);
+				}
 			}
 		}
 		return found;
