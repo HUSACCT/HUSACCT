@@ -1,7 +1,6 @@
 package husacct.graphics.presentation.dialogs;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -24,8 +23,6 @@ import org.apache.log4j.Logger;
 
 public class GraphicsOptionsDialog extends JDialog {
 	private static final long serialVersionUID = 4794939901459687332L;
-
-	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
 	
 	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel;
@@ -46,7 +43,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		width = 500;
 		height = 200;
 		
-		controlService = ServiceProvider.getInstance().getControlService();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
 		add(mainPanel);

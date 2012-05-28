@@ -85,14 +85,14 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawingView = new DrawingView(drawing);
 		drawingView.addListener(this);
 
-		graphicsFrame = new GraphicsFrame(drawingView);
-		graphicsFrame.addListener(this);
-		graphicsFrame.setSelectedLayout(layoutStrategyOption);
-
 		// TODO move context menu to drawing
 		contextMenu = new ContextMenu(controlService);
 		contextMenu.addListener(this);
 		drawingView.setContextMenu(contextMenu);
+
+		graphicsFrame = new GraphicsFrame(drawingView);
+		graphicsFrame.addListener(this);
+		graphicsFrame.setSelectedLayout(layoutStrategyOption);
 	}
 
 	private void switchLayoutStrategy() {
