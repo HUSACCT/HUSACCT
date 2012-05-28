@@ -22,7 +22,7 @@ import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
-import husacct.graphics.util.UserInputListener;
+import husacct.graphics.util.FigureMap;
 import husacct.graphics.util.threads.DrawingLinesThread;
 import husacct.graphics.util.threads.DrawingMultiLevelThread;
 import husacct.graphics.util.threads.DrawingSingleLevelThread;
@@ -40,21 +40,17 @@ import org.apache.log4j.Logger;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
-public abstract class DrawingController implements UserInputListener {
+public abstract class DrawingController extends DrawingSettingsController {
 	protected static final boolean debugPrint = true;
-	protected boolean areSmartLinesOn;
-	private boolean areDependenciesShown;
-	private boolean areViolationsShown;
 	protected DrawingLayoutStrategy layoutStrategyOption;
 
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
 	private ArrayList<BaseFigure> savedFiguresForZoom;
 
 	protected Drawing drawing;
-	protected DrawingView view;
-	protected GraphicsFrame drawTarget;
+	protected DrawingView drawingView;
+	protected GraphicsFrame graphicsFrame;
 	protected ContextMenu contextMenu;
-	protected String[] currentPaths = new String[] {};
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -66,6 +62,7 @@ public abstract class DrawingController implements UserInputListener {
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
+		super();
 		savedFiguresForZoom = new ArrayList<BaseFigure>();
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 
@@ -85,22 +82,18 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	private void initializeComponents() {
-		notifyServiceListeners();
 		drawing = new Drawing();
-		view = new DrawingView(drawing);
-		view.addListener(this);
+		drawingView = new DrawingView(drawing);
+		drawingView.addListener(this);
 
-		drawTarget = new GraphicsFrame(view);
-		drawTarget.addListener(this);
-		drawTarget.setSelectedLayout(layoutStrategyOption);
+		graphicsFrame = new GraphicsFrame(drawingView);
+		graphicsFrame.addListener(this);
+		graphicsFrame.setSelectedLayout(layoutStrategyOption);
 
+		// TODO move context menu to drawing
 		contextMenu = new ContextMenu(controlService);
 		contextMenu.addListener(this);
-		view.setContextMenu(contextMenu);
-
-		showDependencies();
-		hideViolations();
-		deactivateSmartLines();
+		drawingView.setContextMenu(contextMenu);
 	}
 
 	private void switchLayoutStrategy() {
@@ -138,18 +131,14 @@ public abstract class DrawingController implements UserInputListener {
 		drawLinesBasedOnSetting();
 	}
 
-	public boolean areDependenciesShown(){
-		return areDependenciesShown;
-	}
-	
 	public void showDependencies(){
-		areDependenciesShown = true;
-		drawTarget.turnOnDependencies();
+		super.showDependencies();
+		graphicsFrame.turnOnDependencies();
 	}
 
 	public void hideDependencies() {
-		areDependenciesShown = false;
-		drawTarget.turnOffDependencies();
+		super.hideDependencies();
+		graphicsFrame.turnOffDependencies();
 	}
 
 	@Override
@@ -162,19 +151,15 @@ public abstract class DrawingController implements UserInputListener {
 		}
 		drawLinesBasedOnSetting();
 	}
-	
-	public boolean areViolationsShown() {
-		return areViolationsShown;
-	}
 
 	public void showViolations() {
-		areViolationsShown = true;
-		drawTarget.turnOnViolations();
+		super.showViolations();
+		graphicsFrame.turnOnViolations();
 	}
 	
 	public void hideViolations() {
-		areViolationsShown = false;
-		drawTarget.turnOffViolations();
+		super.hideViolations();
+		graphicsFrame.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
@@ -187,84 +172,56 @@ public abstract class DrawingController implements UserInputListener {
 		}
 		drawLinesBasedOnSetting();
 	}
-
-	public boolean areSmartLinesOn(){
-		return areSmartLinesOn;
-	}
 	
 	public void deactivateSmartLines() {
-		areSmartLinesOn = false;
-		drawTarget.turnOffSmartLines();
+		super.deactivateSmartLines();
+		graphicsFrame.turnOffSmartLines();
 	}
 
 	public void activateSmartLines() {
-		areSmartLinesOn = true;
-		drawTarget.turnOnSmartLines();
+		super.activateSmartLines();
+		graphicsFrame.turnOnSmartLines();
 	}
 
 	public JInternalFrame getGUI() {
-		return drawTarget;
+		return graphicsFrame;
 	}
 
 	public void clearDrawing() {
 		figureMap.clearAll();
 		drawing.clearAll();
 
-		view.clearSelection();
-		view.invalidate();
+		drawingView.clearSelection();
+		drawingView.invalidate();
 	}
 
 	public void clearLines() {
 		drawing.clearAllLines();
 	}
 
-	public String[] getCurrentPaths() {
-		return currentPaths;
-	}
-
-	public String getCurrentPathsToString() {
-		String stringPaths = "";
-		for (String path : getCurrentPaths()) {
-			stringPaths += path + " + ";
-		}
-		return stringPaths;
-	}
-
-	public void resetCurrentPaths() {
-		currentPaths = new String[] {};
-	}
-
 	public void setCurrentPaths(String[] paths) {
-		currentPaths = paths;
+		super.setCurrentPaths(paths);
 		contextMenu.setCanZoomout((paths.length == 0));
-	}
-
-	protected DrawingDetail getCurrentDrawingDetail() {
-		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (areViolationsShown()) {
-			detail = DrawingDetail.WITH_VIOLATIONS;
-		}
-		return detail;
 	}
 
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
 		if (figureMap.isViolatedFigure(selectedFigure)) {
-			drawTarget.showViolationsProperties(figureMap.getViolatedDTOs(selectedFigure));
+			graphicsFrame.showViolationsProperties(figureMap.getViolatedDTOs(selectedFigure));
 		} else if (figureMap.isViolationLine(selectedFigure)) {
-			drawTarget.showViolationsProperties(figureMap.getViolationDTOs(selectedFigure));
+			graphicsFrame.showViolationsProperties(figureMap.getViolationDTOs(selectedFigure));
 		} else if (figureMap.isDependencyLine(selectedFigure)) {
-			drawTarget.showDependenciesProperties(figureMap.getDependencyDTOs(selectedFigure));
+			graphicsFrame.showDependenciesProperties(figureMap.getDependencyDTOs(selectedFigure));
 		} else {
-			drawTarget.hidePropertiesPane();
+			graphicsFrame.hidePropertiesPane();
 		}
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
-		if (view.getSelectionCount() == 0) {
-			drawTarget.hidePropertiesPane();
+		if (drawingView.getSelectionCount() == 0) {
+			graphicsFrame.hidePropertiesPane();
 		}
 	}
 
@@ -283,8 +240,8 @@ public abstract class DrawingController implements UserInputListener {
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
-		drawTarget.setCurrentPaths(getCurrentPaths());
-		drawTarget.updateGUI();
+		graphicsFrame.setCurrentPaths(getCurrentPaths());
+		graphicsFrame.updateGUI();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
@@ -292,9 +249,7 @@ public abstract class DrawingController implements UserInputListener {
 		}
 
 		drawLines();
-
 		updateLayout();
-		
 		setDrawingViewVisible();
 	}
 
@@ -336,8 +291,8 @@ public abstract class DrawingController implements UserInputListener {
 			drawing.add(figure);
 			figureMap.linkModule(figure, savedFiguresToBeDrawn.get(figure));
 		}
-		drawTarget.setCurrentPaths(getCurrentPaths());
-		drawTarget.updateGUI();
+		graphicsFrame.setCurrentPaths(getCurrentPaths());
+		graphicsFrame.updateGUI();
 		updateLayout();
 		drawLines();
 		
@@ -358,6 +313,7 @@ public abstract class DrawingController implements UserInputListener {
 		updateLines();
 	}
 
+	// TODO To drawing.java
 	private void updateLines() {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
@@ -466,20 +422,16 @@ public abstract class DrawingController implements UserInputListener {
 	public abstract void refreshDrawing();
 
 	public void refreshFrame() {
-		drawTarget.refreshFrame();
+		graphicsFrame.refreshFrame();
 	}
 
 	public void refreshFrameClean() {
-		drawTarget.refreshFrameClean();
+		graphicsFrame.refreshFrameClean();
 	}
 
 	@Override
 	public void exportToImage() {
 		drawing.showExportToImagePanel();
-	}
-
-	public void notifyServiceListeners() {
-		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
 	}
 
 	public void saveSingleLevelFigurePositions() {
@@ -537,12 +489,12 @@ public abstract class DrawingController implements UserInputListener {
 
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
-		view.setScaleFactor(zoomFactor);
+		drawingView.setScaleFactor(zoomFactor);
 	}
 
 	@Override
 	public void hideModules() {
-		Set<Figure> selection = view.getSelectedFigures();
+		Set<Figure> selection = drawingView.getSelectedFigures();
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 
@@ -559,7 +511,7 @@ public abstract class DrawingController implements UserInputListener {
 		}
 
 		contextMenu.setHasHiddenFigures(selection.size() > 0);
-		view.clearSelection();
+		drawingView.clearSelection();
 	}
 
 	@Override
@@ -575,7 +527,7 @@ public abstract class DrawingController implements UserInputListener {
 
 	@Override
 	public void moduleZoom() {
-		Set<Figure> selection = view.getSelectedFigures();
+		Set<Figure> selection = drawingView.getSelectedFigures();
 		if (selection.size() > 0) {
 			BaseFigure[] selectedFigures = selection.toArray(new BaseFigure[selection.size()]);
 
@@ -584,12 +536,12 @@ public abstract class DrawingController implements UserInputListener {
 	}
 	
 	public void setDrawingViewVisible(){
-		drawTarget.hideLoadingScreen();
-		view.setVisible(true);
+		graphicsFrame.hideLoadingScreen();
+		drawingView.setVisible(true);
 	}
 	
 	public void setDrawingViewNonVisible(){
-		view.setVisible(false);
-		drawTarget.showLoadingScreen();
+		drawingView.setVisible(false);
+		graphicsFrame.showLoadingScreen();
 	}
 }
