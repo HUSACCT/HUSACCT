@@ -126,7 +126,7 @@ public class FilterPanel extends JPanel {
 						}
 					}
 				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), filterThread);
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
 				validateThread.run();	
 							
 			}
@@ -145,7 +145,7 @@ public class FilterPanel extends JPanel {
 						}
 					}
 				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), filterThread);
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
 				validateThread.run();	
 
 			}
@@ -164,7 +164,7 @@ public class FilterPanel extends JPanel {
 						}
 					}
 				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("Filtering"), filterThread);
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
 				validateThread.run();	
 				
 			}
