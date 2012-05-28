@@ -80,9 +80,12 @@ public class AnalysedController extends DrawingController {
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 
+	private ArrayList<BaseFigure> analysedFigures;
+
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
+		analysedFigures = new ArrayList<BaseFigure>();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -94,7 +97,7 @@ public class AnalysedController extends DrawingController {
 					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				}
 			} else if (!figure.isLine()) {
-				addSavedFiguresForZoom(figure);
+				analysedFigures.add(figure);
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on. Figure is accepted as context for multizoom.");
 			} else {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
@@ -160,15 +163,22 @@ public class AnalysedController extends DrawingController {
 					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
 			}
+			if (analysedFigures.size() > 0) {
+				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
+				for (BaseFigure figure : analysedFigures) {
+					AbstractDTO dto = figureMap.getModuleDTO(figure);
+					tmp.add(dto);
+				}
+				allChildren.put("", tmp);
+			}
 			setCurrentPaths(parentNames);
 
 			Set<String> parentNamesKeySet = allChildren.keySet();
-			if (parentNamesKeySet.size() == 1 && !areFiguresSavedForZoom()) {
+			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
 				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else {
-
 				drawModulesAndLines(allChildren);
 			}
 		}

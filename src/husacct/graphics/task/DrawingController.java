@@ -42,7 +42,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected DrawingLayoutStrategy layoutStrategyOption;
 
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
-	private ArrayList<BaseFigure> savedFiguresForZoom;
 
 	protected Drawing drawing;
 	protected DrawingView drawingView;
@@ -59,7 +58,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public DrawingController() {
 		super();
-		savedFiguresForZoom = new ArrayList<BaseFigure>();
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 
 		figureFactory = new FigureFactory();
@@ -266,8 +264,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		HashMap<BaseFigure, AbstractDTO> savedFiguresToBeDrawn = getSavedFiguresForZoom();
-		clearSavedFiguresForZoom();
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
@@ -291,10 +287,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 				parentFigure.updateLayout();
 			}
 		}
-		for (BaseFigure figure : savedFiguresToBeDrawn.keySet()) {
-			drawing.add(figure);
-			figureMap.linkModule(figure, savedFiguresToBeDrawn.get(figure));
-		}
 		updateLayout();
 		drawLinesBasedOnSetting();
 		graphicsFrame.setCurrentPaths(getCurrentPaths());
@@ -312,22 +304,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 
 		drawing.updateLines();
-	}
-
-	protected void clearSavedFiguresForZoom() {
-		savedFiguresForZoom.clear();
-	}
-
-	protected boolean areFiguresSavedForZoom() {
-		return savedFiguresForZoom.size() > 0;
-	}
-
-	protected void addSavedFiguresForZoom(BaseFigure savedFigure) {
-		savedFiguresForZoom.add(savedFigure);
-	}
-
-	protected HashMap<BaseFigure, AbstractDTO> getSavedFiguresForZoom() {
-		return figureMap.getAllDTOsWithClonedFigures(savedFiguresForZoom);
 	}
 
 	protected void drawLinesBasedOnSettingInTask() {
