@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
+	private final String whiteSpace = " ";
 
 	public String createMessage(Violation violation){
 		return generateMessage(violation.getMessage());
@@ -73,8 +74,13 @@ public class Messagebuilder {
 	}
 
 	private String generateFirstExceptionMessage(Message message){
+		StringBuilder sb = new StringBuilder();		
 		try{
-			final String exceptionKey = ServiceProvider.getInstance().getControlService().getTranslatedString("ExceptionMessage");
+			sb.append(whiteSpace);
+			sb.append(ServiceProvider.getInstance().getControlService().getTranslatedString("ExceptionMessage"));
+			sb.append(whiteSpace);
+			
+			final String exceptionKey =  sb.toString();
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
@@ -83,8 +89,13 @@ public class Messagebuilder {
 	}
 
 	private String generateRestExceptionMessage(Message message){
-		try{
-			final String exceptionKey = ServiceProvider.getInstance().getControlService().getTranslatedString("EnumerationMessage");
+		StringBuilder sb = new StringBuilder();
+		try{			
+			sb.append(whiteSpace);
+			sb.append(ServiceProvider.getInstance().getControlService().getTranslatedString("EnumerationMessage"));
+			sb.append(whiteSpace);			
+			
+			final String exceptionKey = sb.toString();
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
