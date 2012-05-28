@@ -18,10 +18,11 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 public class AnalysedController extends DrawingController {
+	private Logger logger = Logger.getLogger(AnalysedController.class);
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
 
-	private Logger logger = Logger.getLogger(AnalysedController.class);
+	private ArrayList<BaseFigure> analysedContextFigures;	
 
 	public AnalysedController() {
 		super();
@@ -79,13 +80,15 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
-
-	private ArrayList<BaseFigure> analysedFigures;
+	
+	private void resetContextFigures(){
+		analysedContextFigures = new ArrayList<BaseFigure>();
+	}
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
-		analysedFigures = new ArrayList<BaseFigure>();
+		resetContextFigures();
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
@@ -97,7 +100,7 @@ public class AnalysedController extends DrawingController {
 					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
 				}
 			} else if (!figure.isLine()) {
-				analysedFigures.add(figure);
+				analysedContextFigures.add(figure);
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on. Figure is accepted as context for multizoom.");
 			} else {
 				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
@@ -115,6 +118,7 @@ public class AnalysedController extends DrawingController {
 		super.notifyServiceListeners();
 		if (getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
+			resetContextFigures();
 			String firstCurrentPaths = getCurrentPaths()[0];
 			AnalysedModuleDTO parentDTO = analyseService.getParentModuleForModule(firstCurrentPaths);
 			if (null != parentDTO) {
@@ -163,12 +167,16 @@ public class AnalysedController extends DrawingController {
 					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 				}
 			}
-			if (analysedFigures.size() > 0) {
+			if (analysedContextFigures.size() > 0) {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
-				for (BaseFigure figure : analysedFigures) {
-					AbstractDTO dto = figureMap.getModuleDTO(figure);
-					if (null != dto) {
-						tmp.add(dto);
+				for (BaseFigure figure : analysedContextFigures) {
+					if (!figure.isLine() && !figure.isParent()) {
+						AbstractDTO dto = figureMap.getModuleDTO(figure);
+						if (null != dto) {
+							tmp.add(dto);
+						}else{
+							logger.debug(figure.getName()+" -> "+figure);
+						}
 					}
 				}
 				if (tmp.size() > 0) {
@@ -191,6 +199,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
+		resetContextFigures();
 		if (paths.length == 0) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else {
