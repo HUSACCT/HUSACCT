@@ -1,15 +1,18 @@
 package husacct.validate.domain.factory.message;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 
 import java.util.IllegalFormatException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
+	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private final String whiteSpace = " ";
 
 	public String createMessage(Violation violation){
@@ -35,18 +38,59 @@ public class Messagebuilder {
 	}
 
 	private String generateSingleMessage(Message message){
-		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
-		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
-
-		final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
-		final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
-
-		final String left = appendStrings(logicalModuleFromType, logicalModuleFromPath);
-		final String right = appendStrings(logicalModuleToType, logicalModuleToPath);
+		final String left = generateLeftMessage(message);		
+		final String right = generateRightMessage(message);
 
 		final String textFormat = getTextFormat(message.getRuleKey());
 
 		return generateMessage(textFormat, left, right);
+	}
+
+	private String generateLeftMessage(Message message){
+		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
+		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
+
+		return appendStrings(logicalModuleFromType, logicalModuleFromPath);
+	}
+
+	private String generateRightMessage(Message message){
+		if(message.getRuleKey().toLowerCase().equals("namingconvention")){
+			return generateNamingConventionMessage(message);
+		}
+		else if(message.getRuleKey().toLowerCase().equals("visibilityconvention")){
+			return generateInterfaceConventionMessage(message);
+		}
+		else{
+			final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
+			final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
+			return appendStrings(logicalModuleToType, logicalModuleToPath);
+		}
+	}
+
+	private String generateNamingConventionMessage(Message message){
+		return message.getRegex();
+	}
+
+	private String generateInterfaceConventionMessage(Message message){
+		List<String> violationTypeKeys = message.getViolationTypeKeys();
+
+		StringBuilder sb = new StringBuilder();
+		String seperationCharacter = ", ";
+		for(int iterator = 0; iterator < violationTypeKeys.size(); iterator++){	
+
+			sb.append(violationTypeKeys.get(iterator));
+			if(iterator != violationTypeKeys.size()-1){				
+				if(iterator == violationTypeKeys.size()-2){
+					sb.append(whiteSpace);
+					sb.append(controlService.getTranslatedString("OrMessage"));
+					sb.append("whiteSpace");
+				}
+				else{
+					sb.append(seperationCharacter);
+				}
+			}			
+		}
+		return sb.toString();
 	}
 
 	private String appendStrings(String left, String right){
@@ -56,7 +100,7 @@ public class Messagebuilder {
 	private String getTextFormat(String ruleTypeKey){
 		try{
 			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
-			return ServiceProvider.getInstance().getControlService().getTranslatedString(ruleTextKey);		
+			return controlService.getTranslatedString(ruleTextKey);		
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
 		}
@@ -77,9 +121,9 @@ public class Messagebuilder {
 		StringBuilder sb = new StringBuilder();		
 		try{
 			sb.append(whiteSpace);
-			sb.append(ServiceProvider.getInstance().getControlService().getTranslatedString("ExceptionMessage"));
+			sb.append(controlService.getTranslatedString("ExceptionMessage"));
 			sb.append(whiteSpace);
-			
+
 			final String exceptionKey =  sb.toString();
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
@@ -92,9 +136,9 @@ public class Messagebuilder {
 		StringBuilder sb = new StringBuilder();
 		try{			
 			sb.append(whiteSpace);
-			sb.append(ServiceProvider.getInstance().getControlService().getTranslatedString("EnumerationMessage"));
+			sb.append(controlService.getTranslatedString("EnumerationMessage"));
 			sb.append(whiteSpace);			
-			
+
 			final String exceptionKey = sb.toString();
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
