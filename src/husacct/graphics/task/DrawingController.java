@@ -13,7 +13,6 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
-import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
 import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.FigureConnectorStrategy;
@@ -48,7 +47,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected Drawing drawing;
 	protected DrawingView drawingView;
 	protected GraphicsFrame graphicsFrame;
-	protected ContextMenu contextMenu;
 
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
@@ -84,11 +82,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawing = new Drawing();
 		drawingView = new DrawingView(drawing);
 		drawingView.addListener(this);
-
-		// TODO move context menu to drawing
-		contextMenu = new ContextMenu();
-		contextMenu.addListener(this);
-		drawingView.setContextMenu(contextMenu);
 
 		graphicsFrame = new GraphicsFrame(drawingView);
 		graphicsFrame.addListener(this);
@@ -200,7 +193,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public void setCurrentPaths(String[] paths) {
 		super.setCurrentPaths(paths);
-		contextMenu.setCanZoomout((paths.length == 0));
+		if(!getCurrentPaths()[0].isEmpty()){
+			drawingView.canZoomOut();
+		}else{
+			drawingView.cannotZoomOut();
+		}
 	}
 
 	@Override
@@ -224,7 +221,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 	}
 
-	public abstract void drawArchitecture(DrawingDetail detail);
+	public void drawArchitecture(DrawingDetail detail){
+		drawingView.cannotZoomOut();
+	}
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		clearDrawing();
@@ -301,8 +300,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			restoreFigurePositions(currentPaths);
 		} else {
 			layoutStrategy.doLayout();
-			contextMenu.setHasHiddenFigures(false);
-			contextMenu.setHasSelection(false);			
+			drawingView.setHasHiddenFigures(false);
 		}
 
 		drawing.updateLines();
@@ -439,9 +437,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		if (storedStates.containsKey(paths)) {
 			DrawingState state = storedStates.get(paths);
 			state.restore(figureMap);
-
-			contextMenu.setHasHiddenFigures(state.hasHiddenFigures());
-			contextMenu.setHasSelection(false);
+			drawingView.setHasHiddenFigures(state.hasHiddenFigures());
 		}
 	}
 

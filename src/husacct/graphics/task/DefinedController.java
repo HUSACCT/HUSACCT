@@ -53,6 +53,7 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
+		super.drawArchitecture(getCurrentDrawingDetail());
 		super.notifyServiceListeners();
 		AbstractDTO[] modules = defineService.getRootModules();
 		resetCurrentPaths();

@@ -40,6 +40,8 @@ public class DrawingView extends DefaultDrawingView {
 
 		editor = new DefaultDrawingEditor();
 		editor.add(this);
+		
+		contextMenu = new ContextMenu();
 
 		initializeSelectionTool();
 		initializeMouseListener();
@@ -61,7 +63,20 @@ public class DrawingView extends DefaultDrawingView {
 			}
 		});
 	}
-
+	
+	public void canZoomOut(){
+		contextMenu.setCanZoomout(true);
+	}
+	
+	public void cannotZoomOut(){
+		contextMenu.setCanZoomout(false);
+	}
+	
+	public void setHasHiddenFigures(boolean setting){
+		contextMenu.setHasHiddenFigures(setting);
+		contextMenu.setHasSelection(false);
+	}
+	
 	private void onMouseClicked(MouseEvent e) {
 		int mouseButton = e.getButton();
 		int mouseClicks = e.getClickCount();
@@ -217,13 +232,11 @@ public class DrawingView extends DefaultDrawingView {
 
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
+		contextMenu.addListener(listener);
 	}
 
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
-	}
-	
-	public void setContextMenu(ContextMenu menu) {
-		contextMenu = menu;
+		contextMenu.removeListener(listener);
 	}
 }
