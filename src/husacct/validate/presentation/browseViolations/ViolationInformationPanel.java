@@ -94,7 +94,6 @@ public class ViolationInformationPanel extends JPanel {
 			public void componentHidden(ComponentEvent e) {
 			}
 		});
-
 	}
 
 	public void loadGuiText() {

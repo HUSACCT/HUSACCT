@@ -149,7 +149,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		rightSideGroupLayout.setHorizontalGroup(
 				rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
-				.addComponent(informationScrollPane, GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+				.addComponent(informationScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGroup(rightSideGroupLayout.createSequentialGroup()
 						.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(Alignment.LEADING, rightSideGroupLayout.createSequentialGroup()
@@ -170,7 +170,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
 								.addGap(8)
-								.addComponent(informationScrollPane, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+								.addComponent(informationScrollPane, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
 				);
 		
 		
