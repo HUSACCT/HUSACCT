@@ -12,6 +12,9 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	protected String[] currentPaths = new String[] {};
 	
 	public DrawingSettingsController(){
+	}
+	
+	public void loadDefaultSettings(){
 		showDependencies();
 		hideViolations();
 		deactivateSmartLines();

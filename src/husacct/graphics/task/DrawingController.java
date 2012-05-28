@@ -30,14 +30,12 @@ import husacct.graphics.util.threads.DrawingSingleLevelThread;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.JInternalFrame;
 
 import org.apache.log4j.Logger;
-import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController extends DrawingSettingsController {
@@ -79,6 +77,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 		initializeComponents();
 		switchLayoutStrategy();
+		loadDefaultSettings();
 	}
 
 	private void initializeComponents() {
@@ -483,35 +482,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	@Override
 	public void hideModules() {
-		Set<Figure> selection = drawingView.getSelectedFigures();
-		for (Figure f : drawing.getChildren()) {
-			BaseFigure bf = (BaseFigure) f;
-
-			if (!bf.isLine()) {
-				if (selection.contains(bf)) {
-					bf.setEnabled(false);
-				}
-			} else if (bf.isLine()) {
-				ConnectionFigure cf = (ConnectionFigure) f;
-				if (selection.contains(cf.getStartFigure()) || selection.contains(cf.getEndFigure())) {
-					bf.setEnabled(false);
-				}
-			}
-		}
-
-		contextMenu.setHasHiddenFigures(selection.size() > 0);
-		drawingView.clearSelection();
+		drawingView.hideSelectedFigures();
 	}
 
 	@Override
 	public void restoreModules() {
-		List<Figure> selection = drawing.getChildren();
-		for (Figure f : selection) {
-			BaseFigure bf = (BaseFigure) f;
-			bf.setEnabled(true);
-		}
-
-		contextMenu.setHasHiddenFigures(false);
+		drawingView.restoreHiddenFigures();
 	}
 
 	@Override
