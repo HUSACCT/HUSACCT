@@ -39,7 +39,7 @@ public class VisibilityConventionRule extends RuleType {
 					}
 				}
 				if(violationCounter == currentRule.violationTypeKeys.length){
-					Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
+					Violation violation = createViolation(rootRule, physicalClasspathFrom, analysedModule.visibility, configuration);
 					violations.add(violation);
 				}
 				violationCounter = 0;
