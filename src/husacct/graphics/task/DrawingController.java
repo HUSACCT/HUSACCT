@@ -239,16 +239,15 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
-		graphicsFrame.setCurrentPaths(getCurrentPaths());
-		graphicsFrame.updateGUI();
 		for (AbstractDTO dto : modules) {
 			BaseFigure generatedFigure = figureFactory.createFigure(dto);
 			drawing.add(generatedFigure);
 			figureMap.linkModule(generatedFigure, dto);
 		}
-
-		drawLinesBasedOnSetting();
 		updateLayout();
+		drawLinesBasedOnSetting();
+		graphicsFrame.setCurrentPaths(getCurrentPaths());
+		graphicsFrame.updateGUI();
 	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -289,10 +288,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 			drawing.add(figure);
 			figureMap.linkModule(figure, savedFiguresToBeDrawn.get(figure));
 		}
-		graphicsFrame.setCurrentPaths(getCurrentPaths());
-		graphicsFrame.updateGUI();
 		updateLayout();
 		drawLinesBasedOnSetting();
+		graphicsFrame.setCurrentPaths(getCurrentPaths());
+		graphicsFrame.updateGUI();
 	}
 
 	protected void updateLayout() {
@@ -347,7 +346,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 		if(areSmartLinesOn()){
 			drawing.updateLineFigureToContext();
 		}
-		setDrawingViewVisible();
 	}
 
 	public void drawDependenciesForShownModules() {
