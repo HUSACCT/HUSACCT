@@ -86,7 +86,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawingView.addListener(this);
 
 		// TODO move context menu to drawing
-		contextMenu = new ContextMenu(controlService);
+		contextMenu = new ContextMenu();
 		contextMenu.addListener(this);
 		drawingView.setContextMenu(contextMenu);
 
