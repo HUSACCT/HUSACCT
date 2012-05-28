@@ -10,6 +10,7 @@ import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 
@@ -25,15 +26,21 @@ public class PersistentDomain implements ISaveable {
 	private SoftwareArchitectureDomainService domainService;
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService AppliedRuleService;
+	private AppliedRuleExceptionDomainService exceptionService;
 	
 	private DomainXML domainParser;
 	private XMLDomain XMLParser;
 	private DomainElement parseData = DomainElement.APPLICATION;
 	
-	public PersistentDomain(SoftwareArchitectureDomainService ds, ModuleDomainService ms, AppliedRuleDomainService ards) {
+	public PersistentDomain(SoftwareArchitectureDomainService ds, ModuleDomainService ms, AppliedRuleDomainService ards, AppliedRuleExceptionDomainService ared) {
 		this.domainService = ds;
 		this.moduleService = ms;
 		this.AppliedRuleService = ards;
+		this.exceptionService = ared;
+	}
+	
+	public void setExceptionService(AppliedRuleExceptionDomainService ARED) {
+		this.exceptionService = ARED;
 	}
 	
 	public void setDefineDomainService(SoftwareArchitectureDomainService ds) {
@@ -89,7 +96,13 @@ public class PersistentDomain implements ISaveable {
 					this.moduleService.addModuleToRoot(m);
 				}
 				for (AppliedRule ApplRule : AppliedRules) {
-					this.AppliedRuleService.addAppliedRule(ApplRule.getRuleType(), ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
+					long addedRule = this.AppliedRuleService.addAppliedRule(ApplRule.getRuleType(), ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
+					if (ApplRule.getExceptions().size() > 0) {
+						for (AppliedRule Ap : ApplRule.getExceptions()) {
+							//ApplRule.getId()
+							this.exceptionService.addExceptionToAppliedRule(addedRule, Ap.getRuleType(), Ap.getDescription(), Ap.getModuleFrom().getId(), Ap.getModuleTo().getId(), Ap.getDependencies());
+						}
+					}
 				}
 		}		
 	}
