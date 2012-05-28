@@ -167,9 +167,13 @@ public class AnalysedController extends DrawingController {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : analysedFigures) {
 					AbstractDTO dto = figureMap.getModuleDTO(figure);
-					tmp.add(dto);
+					if (null != dto) {
+						tmp.add(dto);
+					}
 				}
-				allChildren.put("", tmp);
+				if (tmp.size() > 0) {
+					allChildren.put("", tmp);
+				}
 			}
 			setCurrentPaths(parentNames);
 
