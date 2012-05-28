@@ -47,6 +47,14 @@ public class PersistentDomain implements ISaveable {
 	public void setParseData(DomainElement de) {
 		this.parseData = de;
 	}
+	
+	/**
+	 * Resets all workspace date prior to import.
+	 */
+	private void resetWorkspaceData() {	
+		this.AppliedRuleService.removeAppliedRules();
+		this.moduleService.removeAllModules();
+	}
 
 	@Override
 	public Element getWorkspaceData() {
@@ -65,6 +73,8 @@ public class PersistentDomain implements ISaveable {
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
+		this.resetWorkspaceData();
+		
 		this.XMLParser = new XMLDomain(workspaceData);	
 		Application workspaceApplication = this.XMLParser.getApplication();
 		SoftwareArchitecture workspaceArchitecture = this.XMLParser.getArchitecture();
@@ -72,7 +82,6 @@ public class PersistentDomain implements ISaveable {
 		
 		switch (this.parseData) {
 			default:
-				//TODO hotfix for importing husacct
 				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
 				this.domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				// add modules

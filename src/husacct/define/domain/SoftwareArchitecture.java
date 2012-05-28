@@ -108,6 +108,10 @@ public class SoftwareArchitecture {
 		}
 	}
 	
+	public void removeAppliedRules() {
+		appliedRules = new ArrayList<AppliedRule>();
+	}
+	
 	public void removeAppliedRule(long appliedRuleId)
 	{
 		if(this.hasAppliedRule(appliedRuleId))
@@ -235,6 +239,10 @@ public class SoftwareArchitecture {
 			throw new RuntimeException(DefineTranslator.translate("SameNameModule"));
 		}
 		return moduleId;
+	}
+	
+	public void removeAllModules() {
+		this.modules = new ArrayList<Module>();
 	}
 	
 	public void removeModule(Module moduleToRemove)
