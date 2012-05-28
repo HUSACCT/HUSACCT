@@ -22,7 +22,7 @@ public class ExportViolations {
 
 			violationElement.addContent(XMLUtils.createElementWithContent("lineNumber", "" + violation.getLinenumber()));
 			violationElement.addContent(XMLUtils.createElementWithContent("severityId", "" + violation.getSeverity().getId().toString()));
-			violationElement.addContent(XMLUtils.createElementWithContent("ruletypeKey", violation.getRuletypeKey()));
+			violationElement.addContent(XMLUtils.createElementWithContent("ruletypeKey", violation.getRuletypeKey()));			
 			violationElement.addContent(XMLUtils.createElementWithContent("violationtypeKey",violation.getViolationtypeKey()));
 			violationElement.addContent(XMLUtils.createElementWithContent("classPathFrom",violation.getClassPathFrom()));
 			violationElement.addContent(XMLUtils.createElementWithContent("classPathTo",violation.getClassPathTo()));

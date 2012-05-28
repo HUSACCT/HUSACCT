@@ -33,6 +33,7 @@ public class XMLUtils {
 		Element messageElement = new Element("message");
 		messageElement.addContent(createLogicalModulesElement(message.getLogicalModules()));
 		messageElement.addContent(createElementWithContent("ruleKey", message.getRuleKey()));
+		messageElement.addContent(createElementWithContent("regex", message.getRegex()));
 		Element violationTypeKeysElement = new Element("violationTypeKeys");
 		messageElement.addContent(violationTypeKeysElement);
 		for(String violationTypeKey : message.getViolationTypeKeys()) {

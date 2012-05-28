@@ -75,6 +75,7 @@ public class ImportViolations {
 		Element logicalModulesElement = messageElement.getChild("logicalModules");
 		LogicalModules logicalModules = getLogicalModules(logicalModulesElement);
 		String ruleKey = messageElement.getChildText("ruleKey");
+		String regex = messageElement.getChildText("regex");
 		Element violationTypeKeys = messageElement.getChild("violationTypeKeys");
 		List<String> violationTypeKeysList = new ArrayList<String>();
 		for(Element violationTypeKey : violationTypeKeys.getChildren()) {
@@ -87,7 +88,7 @@ public class ImportViolations {
 				exceptionMessages.add(getMessage(exceptionMessageElement));
 			}
 		}
-		Message message = new Message(logicalModules, ruleKey, violationTypeKeysList, exceptionMessages);
+		Message message = new Message(logicalModules, ruleKey, violationTypeKeysList, regex, exceptionMessages);
 		return message;
 	}
 
