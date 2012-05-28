@@ -25,15 +25,6 @@ public class MainController {
 		setAppleProperties();
 	}
 	
-	/**
-	 * @deprecated  As of 19 may, MainController is integrated within the ControlService.
-	 * To manually start the GUI, use ServiceProvider.getInstance().getControlService().startApplication() instead.
-	 */
-	@Deprecated
-	public MainController(String[] arguments){
-
-	}
-	
 	public void startGui(){
 		guiEnabled = true;
 		openMainGui();
@@ -50,19 +41,23 @@ public class MainController {
 	}
 	
 	private void setAppleProperties(){
-		logger.debug("Setting apple specific properties");
+		logger.debug("Setting Mac OS X specific properties");		
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Husacct");
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		System.setProperty("apple.awt.fileDialogForDirectories", "true");
 	}
 	
 	public void readArguments(String[] consoleArguments){
-		logger.debug("Arguments:" + consoleArguments.toString());
-		for(String s : consoleArguments){
-			if(s.equals("nogui")){
+		boolean argumentsFound = false;
+		String consoleArgumentsString = "";
+		for(String argument : consoleArguments){
+			argumentsFound = true;
+			consoleArgumentsString += argument; 
+			if(argument.equals("nogui")){
 				guiEnabled = false;
 			}
 		}
+		if(argumentsFound) logger.debug("Parsed console arguments: " + consoleArgumentsString);
 	}
 	
 	private void openMainGui() {

@@ -1,6 +1,8 @@
 package husacct.define.domain.services;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.ModuleComparator;
 
@@ -11,6 +13,7 @@ public class ModuleDomainService {
 	
 	public long addModuleToRoot(Module module){
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 	
@@ -18,6 +21,7 @@ public class ModuleDomainService {
 		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}	
 	
@@ -25,11 +29,13 @@ public class ModuleDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		module.setName(moduleName);
 		module.setDescription(moduleDescription);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public void removeModuleById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareArchitecture.getInstance().removeModule(module);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	public String getModuleNameById(long moduleId) {
@@ -121,10 +127,20 @@ public class ModuleDomainService {
 	
 	public void moveLayerUp(long layerId){
 		SoftwareArchitecture.getInstance().moveLayerUp(layerId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	public void moveLayerDown(long layerId){
 		SoftwareArchitecture.getInstance().moveLayerDown(layerId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
+	public Module getModuleIdBySoftwareUnit(SoftwareUnitDefinition su) {
+		Module module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(su.getName());
+		return module;
+	}
+	
+	public Long getParentModuleIdByChildId(Long moduleId) {
+		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
+	}
 }

@@ -18,9 +18,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -53,7 +53,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder("Rules"));
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
@@ -80,7 +80,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		editRuleButton = new JButton();
 		buttonPanel.add(editRuleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		editRuleButton.addActionListener(this);
-			
+		
 		removeRuleButton = new JButton();
 		buttonPanel.add(removeRuleButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeRuleButton.addActionListener(this);
@@ -119,7 +119,8 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a module", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			//TODO Test popup
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("ModuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -131,7 +132,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -154,7 +155,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		if(selectedAppliedRuleId != -1) {
 			DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
 		} else {
-			JOptionPane.showMessageDialog(this, "Please select a rule", "Wrong selection!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -173,7 +174,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			atm.getDataVector().removeAllElements();
 			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-			JPanelStatus.getInstance("Updating rules applied table").start();
+			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
@@ -202,10 +203,10 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 						atm.addRow(rowdata);
 					}
 				}
-				atm.fireTableDataChanged();
 			}
+			atm.fireTableDataChanged();
 		} catch (Exception e) {
-			UiDialogs.errorDialog(this, e.getMessage(), "Error!");
+			UiDialogs.errorDialog(this, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -221,7 +222,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
-//		editRuleButton.setEnabled(true);
+		editRuleButton.setEnabled(true);
 		removeRuleButton.setEnabled(true);
 	}
 
@@ -242,6 +243,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	@Override
 	public void update(Locale newLocale) {
 		this.setButtonTexts();
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();
 	}
 	

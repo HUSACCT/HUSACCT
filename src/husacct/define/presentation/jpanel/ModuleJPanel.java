@@ -15,6 +15,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
@@ -27,7 +29,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener {
+public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener, KeyListener {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 
@@ -44,6 +46,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	}
 
 	public void initGui() {
+		DefinitionController.getInstance().addObserver(this);
 		BorderLayout modulePanelLayout = new BorderLayout();
 		this.setLayout(modulePanelLayout);
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -56,7 +59,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		JPanel innerModulePanel = new JPanel();
 		BorderLayout innerModulePanelLayout = new BorderLayout();
 		innerModulePanel.setLayout(innerModulePanelLayout);
-		innerModulePanel.setBorder(BorderFactory.createTitledBorder("Module Hierarchy"));
+		innerModulePanel.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModuleHierachy")));
 		innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
@@ -85,18 +88,22 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.newModuleButton = new JButton();
 		buttonPanel.add(this.newModuleButton);
 		this.newModuleButton.addActionListener(this);
+		this.newModuleButton.addKeyListener(this);
 			
 		this.moveModuleUpButton = new JButton();
 		buttonPanel.add(this.moveModuleUpButton);
 		this.moveModuleUpButton.addActionListener(this);
+		this.moveModuleUpButton.addKeyListener(this);
 
 		this.removeModuleButton = new JButton();
 		buttonPanel.add(this.removeModuleButton);
 		this.removeModuleButton.addActionListener(this);
+		this.removeModuleButton.addKeyListener(this);
 
 		this.moveModuleDownButton = new JButton();
 		buttonPanel.add(this.moveModuleDownButton);
 		this.moveModuleDownButton.addActionListener(this);
+		this.moveModuleDownButton.addKeyListener(this);
 		
 		this.setButtonTexts();
 		return buttonPanel;
@@ -126,7 +133,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
 		
-		//FIXME need to get the reselect the node with the currently selectedmoduleid
+		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
 		
 		for (int i = 0; i < moduleTree.getRowCount(); i++) {
 			moduleTree.expandRow(i);
@@ -153,13 +160,13 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	private void newModule() {
 		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
 		DialogUtils.alignCenter(addModuleFrame);
-		addModuleFrame.initUI();
+		addModuleFrame.initGUI();
 	}
 	
 	private void removeModule() {
 		long moduleId = getSelectedModuleId();
 		if (moduleId != -1){
-			boolean confirm = UiDialogs.confirmDialog(this, "Are you sure you want to remove the selected module?", "Remove?");
+			boolean confirm = UiDialogs.confirmDialog(this, DefineTranslator.translate("RemoveConfirm"), DefineTranslator.translate("RemovePopupTitle"));
 			if (confirm) {
 				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);
@@ -193,7 +200,9 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-        this.updateSelectedModule(selectedComponent.getModuleId());
+        if (selectedComponent.getModuleId() != DefinitionController.getInstance().getSelectedModuleId()){
+        	this.updateSelectedModule(selectedComponent.getModuleId());
+        }
         this.checkLayerComponentIsSelected();
 	}
 	
@@ -231,5 +240,33 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.moveModuleUpButton.setText(DefineTranslator.translate("MoveUp"));
 		this.removeModuleButton.setText(DefineTranslator.translate("RemoveModule"));
 		this.moveModuleDownButton.setText(DefineTranslator.translate("MoveDown"));
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ENTER){
+			if (event.getSource() == this.newModuleButton) {
+				this.newModule();
+			} else if (event.getSource() == this.removeModuleButton) {
+				this.removeModule();
+			} else if (event.getSource() == this.moveModuleUpButton) {
+				this.moveLayerUp();
+			} else if (event.getSource() == this.moveModuleDownButton) {
+				this.moveLayerDown();
+			}
+			this.updateModuleTree();
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

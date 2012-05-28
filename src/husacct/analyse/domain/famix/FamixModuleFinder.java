@@ -144,6 +144,7 @@ class FamixModuleFinder extends FamixFinder{
 	}
 	
 	private boolean isParent(String parent, String child){
+		if(!moduleExists(child)) return false;
 		String name =  child.substring(child.lastIndexOf(".") + 1, child.length());
 		String currentChild = parent + "." + name;
 		return currentChild.equals(child);
@@ -154,9 +155,17 @@ class FamixModuleFinder extends FamixFinder{
 		return createAnalysedModuleDTO(type, theEntity, emptyList);
 	}
 	
+	private boolean moduleExists(String uniqueName){
+		if(theModel.classes.get(uniqueName) != null) return true;
+		if(theModel.packages.get(uniqueName) != null) return true;
+		if(theModel.interfaces.get(uniqueName) != null) return true;
+		return false;
+	}
+	
 	private AnalysedModuleDTO createAnalysedModuleDTO(String type, FamixEntity theEntity, List<AnalysedModuleDTO> childs){
 		String name = theEntity.name;
 		String uniqueName = theEntity.uniqueName;
-		return new AnalysedModuleDTO(uniqueName, name, type, "public", childs);
+		if(theEntity instanceof FamixPackage) return new AnalysedModuleDTO(uniqueName, name, type, "public");
+		else return new AnalysedModuleDTO(uniqueName, name, type, theEntity.visibility);
 	}
 }

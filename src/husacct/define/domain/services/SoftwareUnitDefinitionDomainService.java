@@ -1,5 +1,6 @@
 package husacct.define.domain.services;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
@@ -28,9 +29,15 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 	
 	public String getSoftwareUnitType(String softwareUnitName) {
-		SoftwareUnitDefinition unit = SoftwareArchitecture.getInstance().getSoftwareUnitByName(softwareUnitName);
+		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnitName);
 		String softwareUnitType = unit.getType().toString();
 		return softwareUnitType;
+	}
+	
+	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName){
+		Module module = SoftwareArchitecture.getInstance().getModuleBySoftwareUnit(softwareUnitName);
+		SoftwareUnitDefinition softwareUnit = module.getSoftwareUnitByName(softwareUnitName);
+		return softwareUnit;
 	}
 
 	public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
@@ -43,11 +50,13 @@ public class SoftwareUnitDefinitionDomainService {
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + t);
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
 		}
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		SoftwareUnitDefinition unit = SoftwareArchitecture.getInstance().getSoftwareUnitByName(softwareUnit);
+		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 }

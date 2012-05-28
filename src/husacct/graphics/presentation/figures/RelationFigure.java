@@ -26,31 +26,18 @@ import org.jhotdraw.geom.BezierPath.Node;
 public class RelationFigure extends BaseFigure implements ConnectionFigure, FigureListener {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
-	private RoundedLiner lineType;
 	private TextFigure amountFigure;
 
-	public RelationFigure(String name, boolean violated, int amount, double distance) {
+	public RelationFigure(String name, boolean violated, int amount) {
 		super(name);
 
-		lineType = new RoundedLiner(distance);
 		line = new LineConnectionFigure();
-		line.setLiner(lineType);
 		add(line);
 
 		amountFigure = new TextFigure(Integer.toString(amount));
 		add(amountFigure);
 
 		line.addFigureListener(this);
-	}
-
-	public RelationFigure(String name, boolean violated, int amount) {
-		this(name, violated, amount, 0);
-	}
-
-	public void setDistance(double distance) {
-		willChange();
-		lineType.setDistance(distance);
-		changed();
 	}
 
 	@Override
@@ -147,6 +134,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	@Override
 	public void updateConnection() {
 		line.updateConnection();
+		relayout();
 	}
 
 	@Override
@@ -211,17 +199,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 
 	@Override
 	public void setLiner(Liner newValue) {
+		this.willChange();
 		line.setLiner(newValue);
+		this.changed();
 	}
 
 	@Override
 	public void lineout() {
 		line.lineout();
-	}
-
-	@Override
-	public boolean isModule() {
-		return false;
 	}
 
 	@Override
@@ -236,12 +221,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	@Override 
 	public void willChange() {
 		line.willChange();
+		amountFigure.willChange();
 		super.willChange();
 	}
 	
 	@Override
 	public void changed() {
 		line.changed();
+		amountFigure.changed();
 		super.changed();
 	}	
 

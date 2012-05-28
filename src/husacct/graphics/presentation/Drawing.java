@@ -4,6 +4,8 @@ import husacct.graphics.abstraction.FileManager;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
+import husacct.graphics.presentation.linelayoutstrategies.ConnectorLineSeparationStrategy;
+import husacct.graphics.presentation.linelayoutstrategies.ILineSeparationStrategy;
 
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -24,14 +26,13 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
 	private Logger logger = Logger.getLogger(Drawing.class);
-	public final int RELATIONS_DISTANCE = 30;
 	FileManager filemanager = new FileManager();
 	File selectedFile = filemanager.getFile();
 
 	public Drawing() {
 		super();
 	}
-	
+
 	public void showExportToImagePanel() {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
@@ -57,7 +58,7 @@ public class Drawing extends QuadTreeDrawing {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
 		for (Figure jhotdrawfigure : getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (figure.isModule()) {
+			if (!figure.isLine() && !figure.isParent()) {
 				moduleFigures.add(figure);
 			}
 		}
@@ -76,10 +77,10 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	@Override
-	public boolean add(Figure f) {
-		// this triggers at least the minimum sizes
-		f.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
-		return super.add(f);
+	public boolean add(Figure figure) {
+		// This triggers the minimum sizes
+		figure.setBounds(new Point2D.Double(10, 10), new Point2D.Double(11, 11));
+		return super.add(figure);
 	}
 
 	public void setFiguresNotViolated(ArrayList<BaseFigure> arrayList) {
@@ -111,7 +112,7 @@ public class Drawing extends QuadTreeDrawing {
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
 		updateLineFigureThicknesses(figures);
-		seperateOverlappingLineFigures(figures);
+		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
 	}
 
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
@@ -134,7 +135,8 @@ public class Drawing extends QuadTreeDrawing {
 				figures[1].setLineThickness(1);
 			}
 		} else if (figures.length >= 3) {
-			// 3 or more relations; small, big or  fat, according to scale max amounts of dependencies
+			// 3 or more relations; small, big or fat, according to scale max
+			// amounts of dependencies
 			int maxAmount = -1;
 			for (RelationFigure figure : figures) {
 				int length = figure.getAmount();
@@ -157,7 +159,7 @@ public class Drawing extends QuadTreeDrawing {
 		}
 	}
 
-	private void seperateOverlappingLineFigures(RelationFigure[] figures) {
+	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, RelationFigure[] figures) {
 		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
 
 		for (RelationFigure figure1 : figures) {
@@ -196,12 +198,7 @@ public class Drawing extends QuadTreeDrawing {
 			overlappingFigures.add(keyFigure);
 			overlappingFigures.addAll(overlappingFigureSets.get(keyFigure));
 
-			double start = (0 - ((overlappingFigures.size() / 2) * this.RELATIONS_DISTANCE)) / 2;
-
-			for (RelationFigure figure : overlappingFigures) {
-				figure.setDistance(start);
-				start += this.RELATIONS_DISTANCE;
-			}
+			strategy.separateLines(overlappingFigures);
 		}
 
 	}

@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.control.presentation.util.Regex;
 import husacct.control.presentation.util.SetApplicationPanel;
 import husacct.control.task.MainController;
 
@@ -28,7 +29,7 @@ public class CreateWorkspaceDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
-	private JCheckBox setApplicationCheckbox;
+	private JCheckBox analyseApplicationCheckbox;
 	private JButton okButton, cancelButton;
 	private JTextField workspaceNameText;
 
@@ -62,17 +63,17 @@ public class CreateWorkspaceDialog extends JDialog{
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
 		JLabel workspaceNameLabel = new JLabel(controlService.getTranslatedString("WorkspaceNameLabel"));
-		setApplicationCheckbox = new JCheckBox(controlService.getTranslatedString("SetApplicationCheckbox"), false);
+		analyseApplicationCheckbox = new JCheckBox(controlService.getTranslatedString("AnalyseApplicationCheckBox"), false);
 		okButton = new JButton(controlService.getTranslatedString("OkButton"));
 		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
 		workspaceNameText = new JTextField(20);
 		workspaceNameText.setText("myHusacctWorkspace"); 
-		
+
 		getRootPane().setDefaultButton(okButton);
-		
+
 		workspacePanel.add(workspaceNameLabel);
 		workspacePanel.add(workspaceNameText);
-		workspacePanel.add(setApplicationCheckbox);
+		workspacePanel.add(analyseApplicationCheckbox);
 		workspacePanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
@@ -83,22 +84,33 @@ public class CreateWorkspaceDialog extends JDialog{
 	}
 
 	private void setListeners(){
-
-		setApplicationCheckbox.addActionListener(new ActionListener() {
+		
+		final CreateWorkspaceDialog createWorkspaceDialog = this;
+		
+		analyseApplicationCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toggleSetApplicationPanel(setApplicationCheckbox.isSelected());
+				toggleSetApplicationPanel(analyseApplicationCheckbox.isSelected());
+				DialogUtils.alignCenter(createWorkspaceDialog);
 			}
 		});
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(setApplicationCheckbox.isSelected()){
-					ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
-					mainController.getApplicationController().setApplicationData(applicationData);
-				}
-				createWorkspace();
-				dispose();
-				mainController.getViewController().showDefineGui();
+				if(analyseApplicationCheckbox.isSelected()){
+					if(setApplicationPanel.dataValidated() && workspaceNameValidated()) {
+						createWorkspace();
+						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
+						mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
+						dispose();	
+						mainController.getViewController().showDefineGui();
+					}
+				} else {
+					if(workspaceNameValidated()) {
+						createWorkspace();			
+						dispose();	
+						mainController.getViewController().showDefineGui();		
+					}
+				}	
 			}
 		});
 
@@ -119,10 +131,21 @@ public class CreateWorkspaceDialog extends JDialog{
 		}
 	}
 
-	private void createWorkspace(){
+	private void createWorkspace(){  		
 		String workspaceName = workspaceNameText.getText();
-		if ((workspaceName != null) && (workspaceName.length() > 0)) {
-			mainController.getWorkspaceController().createWorkspace(workspaceName);
-		}	
+		mainController.getWorkspaceController().createWorkspace(workspaceName);
+	}	
+
+	private boolean workspaceNameValidated() {
+		String workspaceName = workspaceNameText.getText();
+		if (workspaceName == null || workspaceName.length() < 1) {
+			controlService.showErrorMessage(controlService.getTranslatedString("FieldEmptyError"));
+			return false;
+		}
+		else if(!Regex.matchRegex(Regex.nameRegex, workspaceName)) {
+			controlService.showErrorMessage(controlService.getTranslatedString("MustBeAlphaNumericError"));
+			return false;
+		}
+		return true;
 	}
 }

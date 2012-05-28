@@ -38,18 +38,37 @@ public class XMLDomain {
 	    Element ApName = (Element)applicationProperties.get(0);
 	    Element ApLanguage = (Element)applicationProperties.get(1);
 	    Element ApVersion = (Element)applicationProperties.get(2);
+	    Element ApPathRoot = (Element)applicationProperties.get(3);
 	    
-	    Application XMLAp = new Application(ApName.getText(), ApLanguage.getText());
-	    XMLAp.setVersion(ApVersion.getText());
+	    ArrayList<String> ApplicationPaths = new ArrayList<String>();
+	    if (ApPathRoot != null) {
+	    	List<Element> ApPaths = ApPathRoot.getChildren("path");
+	    	if (ApPaths.size() > 0) {
+	    		@SuppressWarnings("rawtypes")
+				Iterator pathIterator = ApPaths.iterator();
+	    		while (pathIterator.hasNext()) {
+	    			Object o = pathIterator.next();
+	    			if (o instanceof Element) {
+	    				ApplicationPaths.add(this.getFilePath(((Element) o).getValue().toString()));
+	    			}
+	    		}
+	    	}
+	    }
+	    
+	    String[] strArray = new String[ApplicationPaths.size() - 1];
+	    Application XMLAp = new Application(ApName.getText(), ApplicationPaths.toArray(strArray), ApLanguage.getText(), ApVersion.getText());
 	    XMLAp.setArchitecture( this.getArchitecture() );
-	    
+    
 	    return XMLAp;
 	}
+	
+	private String getFilePath(String path) {
+		return path.replace("\"", "\\");
+	}
 
-	@SuppressWarnings("rawtypes")
 	public SoftwareArchitecture getArchitecture() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
-		Element ApArchitecture = (Element)applicationProperties.get(3);   	
+		Element ApArchitecture = (Element)applicationProperties.get(4);
     	Element ArchitectureName = (Element)ApArchitecture.getChild("name");
     	Element ArchitectureDescription = (Element)ApArchitecture.getChild("description");   	
     	SoftwareArchitecture XMLArchitecture = new SoftwareArchitecture(ArchitectureName.getText(), ArchitectureDescription.getText());    	
@@ -57,7 +76,8 @@ public class XMLDomain {
     	if (ArchitectureModuleRoot != null) {
 	    	List<Element> ArchitectureModules = ArchitectureModuleRoot.getChildren("Module");
 	    	if (ArchitectureModules.size() > 0) {
-	    		Iterator moduleIterator = ArchitectureModules.iterator();
+	    		@SuppressWarnings("rawtypes")
+				Iterator moduleIterator = ArchitectureModules.iterator();
 	    		while (moduleIterator.hasNext()){ 
 	    			Object o = moduleIterator.next();
 
@@ -76,7 +96,7 @@ public class XMLDomain {
 	
 	public ArrayList<AppliedRule> getAppliedRules() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
-		return this.getAppliedRules((Element)applicationProperties.get(3));
+		return this.getAppliedRules((Element)applicationProperties.get(4));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -223,8 +243,8 @@ public class XMLDomain {
 
 		if (SUDType.getValue().toUpperCase().equals("CLASS")) {
 			SoftwareUnitDefinitionType = Type.CLASS;
-		} else if (SUDType.getValue().toUpperCase().equals("METHOD")) {
-			SoftwareUnitDefinitionType = Type.METHOD;
+		} else if (SUDType.getValue().toUpperCase().equals("INTERFACE")) {
+			SoftwareUnitDefinitionType = Type.INTERFACE;
 		} else {
 			SoftwareUnitDefinitionType = Type.PACKAGE;
 		}

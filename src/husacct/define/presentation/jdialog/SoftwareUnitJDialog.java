@@ -1,5 +1,6 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
@@ -47,7 +48,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void initUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle("New Software Unit");
+			setTitle(DefineTranslator.translate("SoftwareUnitTitle"));
 			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
 			
 			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
@@ -67,7 +68,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		softwareUnitsPanel.setLayout(this.createSoftwareUnitsPanelLayout());
 		softwareUnitsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
-		JLabel softwareUnitsLabel = new JLabel("Select software definition");
+		JLabel softwareUnitsLabel = new JLabel(DefineTranslator.translate("SelectSoftwareDefinition"));
 		softwareUnitsPanel.add(softwareUnitsLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		softwareUnitsPanel.add(this.getSoftwareUnitScrollPane(), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 220));
 		return softwareUnitsPanel;
@@ -95,11 +96,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
-		cancelButton = new JButton("Cancel");
+		cancelButton = new JButton(DefineTranslator.translate("Cancel"));
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
 		
-		saveButton = new JButton("Add");
+		saveButton = new JButton(DefineTranslator.translate("Add"));
 		buttonPanel.add(saveButton);
 		saveButton.addActionListener(this);
 		

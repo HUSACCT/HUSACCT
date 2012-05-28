@@ -1,5 +1,6 @@
 package husacct.validate.domain.configuration;
 
+import husacct.validate.domain.exception.ViolationHistoryNotFoundException;
 import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ class ViolationHistoryRepository extends Observable {
 	void setViolationHistories(List<ViolationHistory> violationhistories){
 		this.violationHistories = violationhistories;
 	}
-	
+
 	void addViolationHistory(ViolationHistory violationHistory){
 		violationHistories.add(violationHistory);
 		setChanged();
@@ -29,22 +30,36 @@ class ViolationHistoryRepository extends Observable {
 	}
 
 	void removeViolationHistory(Calendar date) {
-		ViolationHistory recordToDelete = null;
-		for(ViolationHistory violationHistory : violationHistories) {
-			if(violationHistory.getDate().equals(date)) {
-				recordToDelete = violationHistory;
-				break;
+		if(dateExistsInRepository(date)){
+			ViolationHistory recordToDelete = null;
+			for(ViolationHistory violationHistory : violationHistories) {
+				if(violationHistory.getDate().equals(date)) {
+					recordToDelete = violationHistory;
+					break;
+				}
 			}
+			violationHistories.remove(recordToDelete);
 		}
-		violationHistories.remove(recordToDelete);
+		throw new ViolationHistoryNotFoundException(date);
 	}
 
 	ViolationHistory getViolationHistoryByDate(Calendar date) {
-		for(ViolationHistory violationHistory : violationHistories) {
-			if(violationHistory.getDate().equals(date)) {
-				return violationHistory;
+		if(dateExistsInRepository(date)){
+			for(ViolationHistory violationHistory : violationHistories) {
+				if(violationHistory.getDate().equals(date)) {
+					return violationHistory;
+				}
 			}
 		}
-		throw new NullPointerException("violationHistory not found");
+		throw new ViolationHistoryNotFoundException(date);
+	}
+
+	private boolean dateExistsInRepository(Calendar date){
+		for(ViolationHistory violationHistory : violationHistories){
+			if(violationHistory.getDate().equals(date)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

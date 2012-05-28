@@ -3,6 +3,7 @@ package husacct.control.presentation.workspace.savers;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
+import husacct.control.presentation.util.Regex;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -84,10 +85,14 @@ public class HusacctSavePanel extends SaverPanel{
 	
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("hu", "hu");
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
-		int returnVal = fileChooser.showDialog(this);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
+		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			setFile(fileChooser.getSelectedFile());
+			if(fileDialog.getSelectedFile().exists()){
+				setFile(fileDialog.getSelectedFile());
+			} else {
+				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			}
 		}
 	}
 	
@@ -107,6 +112,10 @@ public class HusacctSavePanel extends SaverPanel{
 	public boolean validateData() {
 		if(selectedFile == null){
 			ServiceProvider.getInstance().getControlService().showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			return false;
+		}
+		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
+			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
 			return false;
 		}
 		return true;

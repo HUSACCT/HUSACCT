@@ -2,6 +2,8 @@ package husacct.define.persistency;
 
 import java.util.ArrayList;
 import org.jdom2.Element;
+
+import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
@@ -18,11 +20,7 @@ import husacct.define.domain.services.SoftwareArchitectureDomainService;
  *
  */
 public class PersistentDomain implements ISaveable {
-	public enum DomainElement {
-		APPLICATION,
-		LOGICAL,
-		PHYSICAL
-	}
+	public enum DomainElement { APPLICATION, LOGICAL, PHYSICAL }
 	
 	private SoftwareArchitectureDomainService domainService;
 	private ModuleDomainService moduleService;
@@ -53,6 +51,7 @@ public class PersistentDomain implements ISaveable {
 	@Override
 	public Element getWorkspaceData() {
 		this.domainParser = new DomainXML(SoftwareArchitecture.getInstance());
+			
 		switch (this.parseData){
 			case LOGICAL:
 				this.domainParser.setParseLogical(false);
@@ -72,11 +71,9 @@ public class PersistentDomain implements ISaveable {
 		ArrayList<AppliedRule> AppliedRules = this.XMLParser.getAppliedRules();
 		
 		switch (this.parseData) {
-			//case LOGICAL:	
-			//case APPLICATION:
-			//case PHYSICAL:
 			default:
-				this.domainService.createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
+				//TODO hotfix for importing husacct
+				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
 				this.domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				// add modules
 				for (Module m : workspaceArchitecture.getModules()) {

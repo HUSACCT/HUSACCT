@@ -1,9 +1,14 @@
 package husacct.define.presentation.tables;
 
+import java.util.Locale;
+
+import husacct.control.ILocaleChangeListener;
+import husacct.define.abstraction.language.DefineTranslator;
+
 import javax.swing.table.TableColumn;
 
 
-public class JTableException extends AbstractJTable {
+public class JTableException extends AbstractJTable implements ILocaleChangeListener {
 
 	private static final long serialVersionUID = 3535559394466714205L;
 
@@ -20,10 +25,10 @@ public class JTableException extends AbstractJTable {
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn("From module");
-		tablemodel.addColumn("To module");
-		tablemodel.addColumn("Description");
-		tablemodel.addColumn("Enabled");
+		tablemodel.addColumn(DefineTranslator.translate("FromModule"));
+		tablemodel.addColumn(DefineTranslator.translate("ToModule"));
+		tablemodel.addColumn(DefineTranslator.translate("Description"));
+		tablemodel.addColumn(DefineTranslator.translate("Enabled"));
 	}
 	
 	@Override
@@ -41,6 +46,12 @@ public class JTableException extends AbstractJTable {
 				column.setPreferredWidth(25); // Enabled
 			}
 		}
+	}
+
+	@Override
+	public void update(Locale newLocale) {
+		this.setColumnHeaders();
+		
 	}
 	
 //	@Deprecated

@@ -1,9 +1,9 @@
 package husacct.graphics.presentation;
 
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.task.UserInputListener;
+import husacct.graphics.presentation.menubars.ContextMenu;
+import husacct.graphics.util.UserInputListener;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,11 +22,13 @@ import org.jhotdraw.draw.tool.SelectionTool;
 public class DrawingView extends DefaultDrawingView {
 
 	private static final long serialVersionUID = 7276696509798039409L;
-	// private static final int SingleClick = 1;
+	private static final int LeftMouseButton = MouseEvent.BUTTON1;
+	private static final int RightMouseButton = MouseEvent.BUTTON3;
 	private static final int DoubleClick = 2;
 
 	private Drawing drawing;
 	private DefaultDrawingEditor editor;
+	private ContextMenu contextMenu;
 	private SelectionTool selectionTool;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
@@ -61,18 +63,22 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void onMouseClicked(MouseEvent e) {
+		int mouseButton = e.getButton();
+		int mouseClicks = e.getClickCount();
+
 		handleDeselect();
-		if (hasSelection()) {
-			int mouseButton = e.getButton();
-			int mouseClicks = e.getClickCount();
+		if (mouseButton == LeftMouseButton && hasSelection()) {
+			BaseFigure[] selection = toFigureArray(getSelectedFigures());
 
-			if (mouseButton == MouseEvent.BUTTON1) {
-				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-
-				if (mouseClicks == DoubleClick) {
-					moduleZoom(selection);
+			if (mouseClicks == DoubleClick) {
+				moduleZoom(selection);
+			} else {
+				for (BaseFigure figure : selection) {
+					figure.raiseLayer();
 				}
 			}
+		} else if (mouseButton == RightMouseButton) {
+			contextMenu.show(this, e.getX(), e.getY());
 		}
 
 		previousSelection.clear();
@@ -86,6 +92,9 @@ public class DrawingView extends DefaultDrawingView {
 			deselection = deselectedFigures.toArray(deselection);
 
 			figureDeselected(deselection);
+			for (BaseFigure figure : deselection) {
+				figure.resetLayer();
+			}
 		}
 	}
 
@@ -127,6 +136,8 @@ public class DrawingView extends DefaultDrawingView {
 		for (UserInputListener l : listeners) {
 			l.moduleZoom(fig);
 		}
+
+		requestFocus();
 	}
 
 	private void initializeSelectionListener() {
@@ -140,24 +151,19 @@ public class DrawingView extends DefaultDrawingView {
 
 	protected void onSelectionChanged(FigureSelectionEvent evt) {
 		handleDeselect();
-
 		if (hasSelection()) {
 			BaseFigure[] selection = toFigureArray(getSelectedFigures());
-
-			// show the selected figures on top
 			for (BaseFigure selectedFig : selection) {
-				this.drawing.bringToFront(selectedFig);
-				// TODO also raise connection figures pointing to and from the
-				// selected figure(s)
+				drawing.bringToFront(selectedFig);
 			}
-
 			figureSelected(selection);
 		}
+		
+		contextMenu.setHasSelection(hasSelection());
 	}
 
 	// TODO: DO NOT REMOVE THIS FUNCTION. IT IS DISABLED BECAUSE IT CONTAINS
-	// BUGS
-	// NOT BECAUSE IT IS UNWANTED CODE
+	// BUGS NOT BECAUSE IT IS UNWANTED CODE
 	// private void initializeKeyboardListener() {
 	// addKeyListener(new KeyListener() {
 	// @Override
@@ -174,26 +180,30 @@ public class DrawingView extends DefaultDrawingView {
 	// }
 	// });
 	// }
+	//
+	// protected void onKeyPressed(KeyEvent e) {
+	// int key = e.getKeyCode();
+	//
+	// if (key == KeyEvent.VK_BACK_SPACE) {
+	// System.out.println("Backspace pressed");
+	// moduleZoomOut();
+	// } else if (key == KeyEvent.VK_ENTER) {
+	// System.out.println("Enter pressed");
+	// if (hasSelection()) {
+	// BaseFigure[] selection = toFigureArray(getSelectedFigures());
+	// moduleZoom(selection);
+	// }
+	// }
+	// e.consume();
+	//
+	// requestFocus();
+	// }
 
-	protected void onKeyPressed(KeyEvent e) {
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_BACK_SPACE) {
-			moduleZoomOut();
-		} else if (key == KeyEvent.VK_ENTER) {
-			if (hasSelection()) {
-				BaseFigure[] selection = toFigureArray(getSelectedFigures());
-				moduleZoom(selection);
-			}
-		}
-		e.consume();
-	}
-
-	private void moduleZoomOut() {
-		for (UserInputListener l : listeners) {
-			l.moduleZoomOut();
-		}
-	}
+	// private void moduleZoomOut() {
+	// for (UserInputListener l : listeners) {
+	// l.moduleZoomOut();
+	// }
+	// }
 
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
@@ -201,5 +211,9 @@ public class DrawingView extends DefaultDrawingView {
 
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
+	}
+	
+	public void setContextMenu(ContextMenu menu) {
+		contextMenu = menu;
 	}
 }

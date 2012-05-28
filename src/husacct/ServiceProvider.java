@@ -50,6 +50,7 @@ public final class ServiceProvider {
 		this.defineService = new DefineServiceImpl();
 		this.validateService = new ValidateServiceImpl();
 		this.graphicsService = new GraphicsServiceImpl();
+		this.controlService.setServiceListeners();
 	}
 	
 	public IControlService getControlService() {

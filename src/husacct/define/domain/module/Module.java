@@ -1,5 +1,6 @@
 package husacct.define.domain.module;
 
+import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class Module implements Comparable<Module> {
 	//SoftwareUnitDefinition
 	public void addSUDefinition(SoftwareUnitDefinition unit)
 	{
-		if(!mappedSUunits.contains(unit) && !this.hasSUDefinition(unit.getName())) {
+		if(!mappedSUunits.contains(unit) && !this.hasSoftwareUnitDirectly(unit.getName())) {
 			mappedSUunits.add(unit);
 		}else{
 			System.out.println("This software unit has already been added!");
@@ -93,24 +94,11 @@ public class Module implements Comparable<Module> {
 	
 	public void removeSUDefintion(SoftwareUnitDefinition unit)
 	{
-		if(mappedSUunits.contains(unit) && this.hasSUDefinition(unit.getName())) {
+		if(mappedSUunits.contains(unit) && this.hasSoftwareUnitDirectly(unit.getName())) {
 			mappedSUunits.remove(unit);
 		}else{
 			System.out.println("This software unit does not exist!");
 		}
-	}
-	
-	private boolean hasSUDefinition(String name) 
-	{
-		for(SoftwareUnitDefinition unit : mappedSUunits) 
-		{
-			if(unit.getName().equals(name))
-			{
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	
 	//Module
@@ -158,7 +146,17 @@ public class Module implements Comparable<Module> {
 		return hasSubModule;
 	}
 	
+	public boolean hasSoftwareUnitDirectly(String softwareUnitName) 
+	{
+		return hasSoftwareUnit(softwareUnitName, true);
+	}
+	
 	public boolean hasSoftwareUnit(String softwareUnitName) 
+	{
+		return hasSoftwareUnit(softwareUnitName, false);
+	}
+	
+	private boolean hasSoftwareUnit(String softwareUnitName, boolean directly) 
 	{
 		boolean hasSoftwareUnit = false;
 		for (SoftwareUnitDefinition unit : mappedSUunits){
@@ -166,9 +164,11 @@ public class Module implements Comparable<Module> {
 				hasSoftwareUnit = true;
 			}
 		}
-		for (Module mod : subModules){
-			if (mod.hasSoftwareUnit(softwareUnitName)){
-				hasSoftwareUnit = true;
+		if (!directly) {
+			for (Module mod : subModules){
+				if (mod.hasSoftwareUnit(softwareUnitName, directly)){
+					hasSoftwareUnit = true;
+				}
 			}
 		}
 		return hasSoftwareUnit;
@@ -182,11 +182,11 @@ public class Module implements Comparable<Module> {
 			}
 		}
 		for (Module mod : subModules){
-			if (mod.hasSoftwareUnit(softwareUnitName)){
+			if (mod.hasSoftwareUnit(softwareUnitName, true)){
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
 		}
-		if (softwareUnit == null){ throw new RuntimeException("This Software Unit does not exist!");}
+		if (softwareUnit == null){ throw new RuntimeException(DefineTranslator.translate("NoSoftwareUnit"));}
 		return softwareUnit;
 	}
 	

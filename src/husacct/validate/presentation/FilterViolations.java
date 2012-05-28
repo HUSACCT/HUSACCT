@@ -1,13 +1,27 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
+import husacct.control.presentation.util.DialogUtils;
+import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import javax.swing.*;
+
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
 public final class FilterViolations extends JDialog  {
@@ -22,7 +36,7 @@ public final class FilterViolations extends JDialog  {
 	private JRadioButton hideFilteredValues, showFilteredValues;
 	private JScrollPane pathFilterScrollPane, ruletypepanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
-	private FilterViolationsObserver vilterViolationsObserver;
+	private FilterViolationsObserver filterViolationsObserver;
 
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
@@ -30,7 +44,8 @@ public final class FilterViolations extends JDialog  {
 	private Calendar violationDate = Calendar.getInstance();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
-		this.vilterViolationsObserver = filterViolationsObserver;
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+		this.filterViolationsObserver = filterViolationsObserver;
 		this.taskServiceImpl = taskServiceImpl;
 		initComponents();
 		loadGUIText();
@@ -58,6 +73,7 @@ public final class FilterViolations extends JDialog  {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setModal(true);
+		DialogUtils.alignCenter(this);
 
 		ruletypeTable.setAutoCreateRowSorter(true);
 		ruletypeTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -123,7 +139,7 @@ public final class FilterViolations extends JDialog  {
 		
 		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
 		
-		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalFilterViolationGroup.addComponent(ruletypepanel);
 		verticalFilterViolationGroup.addComponent(violationtypePanel);
 		
@@ -152,7 +168,7 @@ public final class FilterViolations extends JDialog  {
 		verticalButtonPathGroup.addComponent(removePath);
 		verticalButtonPathGroup.addContainerGap();
 		
-		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
+		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalPanePathGroup.addComponent(pathFilterScrollPane);
 		verticalPanePathGroup.addGroup(verticalButtonPathGroup);
 		
@@ -283,9 +299,13 @@ public final class FilterViolations extends JDialog  {
 		ruletypesfilter = getRuletypesFilter();
 		violationtypesfilter = getViolationtypesFilter();
 		pathsfilter = getPathFilter();
-		taskServiceImpl.setFilterValues(ruletypesfilter, violationtypesfilter,
-				pathsfilter, hideFilteredValues.isSelected(), violationDate);
-		vilterViolationsObserver.updateViolationsTable();
+		if(!checkPathsNames()){
+			return;
+		}
+		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter,
+				pathsfilter);
+		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
+		filterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
 	
@@ -357,8 +377,25 @@ public final class FilterViolations extends JDialog  {
 		}
 		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
 		for(String violationtype : violationtypes){
-			violationtypeModelFilter.addRow(new Object[]{false, violationtype});
+			if(!violationtype.isEmpty()){
+				violationtypeModelFilter.addRow(new Object[]{false, violationtype});
+			}
 		}
 	}
-	
+
+	private boolean checkPathsNames() {
+		if(pathsfilter.isEmpty()){
+			return true;
+		}
+		boolean returnValue = true;
+		for(String path : pathsfilter){
+			if(path.isEmpty()){
+				returnValue = false;
+			}
+		}
+		if(!returnValue){
+			ServiceProvider.getInstance().getControlService().showInfoMessage(String.format(ServiceProvider.getInstance().getControlService().getTranslatedString("EmptyField"), ServiceProvider.getInstance().getControlService().getTranslatedString("Path")));
+		}
+		return returnValue;
+	}
 }

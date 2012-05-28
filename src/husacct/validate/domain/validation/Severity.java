@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation;
 
-import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.ServiceProvider;
 
 import java.awt.Color;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class Severity implements Cloneable {
 		if (userName != null && !userName.isEmpty()) {
 			return userName;
 		} else{
-			return ValidateTranslator.getValue(defaultName);
+			return ServiceProvider.getInstance().getControlService().getTranslatedString(defaultName);
 		}
 	}
 

@@ -16,7 +16,6 @@ import java.util.Locale;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class ValidateMenu extends JMenu{
@@ -38,13 +37,13 @@ public class ValidateMenu extends JMenu{
 	private void addComponents() {
 		validateNowItem = new JMenuItem(controlService.getTranslatedString("ValidateNow"));
 		validateNowItem.setAccelerator(KeyStroke.getKeyStroke('V', KeyEvent.CTRL_DOWN_MASK));
-		validateNowItem.setMnemonic('v');
+		validateNowItem.setMnemonic(getMnemonicKeycode("ValidateNowMnemonic"));
 				
 		configureItem = new JMenuItem(controlService.getTranslatedString("Configuration"));
-		configureItem.setMnemonic('c');
+		configureItem.setMnemonic(getMnemonicKeycode("ConfigurationMnemonic"));
 				
 		exportViolationReportItem = new JMenuItem(controlService.getTranslatedString("ViolationReport"));
-		exportViolationReportItem.setMnemonic('i');
+		exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
 		
 		this.add(validateNowItem);
 		this.add(configureItem);
@@ -90,12 +89,6 @@ public class ValidateMenu extends JMenu{
 			}
 		});
 		
-		this.addMenuListener(new MenuAdapter() {
-			public void menuSelected(MenuEvent e) {
-				mainController.getStateController().checkState();		
-			}
-		});
-		
 		final ValidateMenu validateMenu = this;
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			public void update(Locale newLocale) {
@@ -103,7 +96,28 @@ public class ValidateMenu extends JMenu{
 				configureItem.setText(controlService.getTranslatedString("Configuration"));
 				validateNowItem.setText(controlService.getTranslatedString("ValidateNow"));
 				exportViolationReportItem.setText(controlService.getTranslatedString("ViolationReport"));
+				validateNowItem.setMnemonic(getMnemonicKeycode("ValidateNowMnemonic"));
+				configureItem.setMnemonic(getMnemonicKeycode("ConfigurationMnemonic"));
+				exportViolationReportItem.setMnemonic(getMnemonicKeycode("ViolationReportMnemonic"));
 			}
 		});
+	}
+	
+	public JMenuItem getConfigureItem(){
+		return configureItem;
+	}
+	
+	public JMenuItem getValidateNowItem(){
+		return validateNowItem;
+	}
+
+	public JMenuItem getExportViolationReportItem(){
+		return exportViolationReportItem;
+	}
+	
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
 	}
 }

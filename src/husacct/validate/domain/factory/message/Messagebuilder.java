@@ -1,6 +1,6 @@
 package husacct.validate.domain.factory.message;
 
-import husacct.validate.abstraction.language.ValidateTranslator;
+import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 
@@ -55,7 +55,7 @@ public class Messagebuilder {
 	private String getTextFormat(String ruleTypeKey){
 		try{
 			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
-			return ValidateTranslator.getValue(ruleTextKey);		
+			return ServiceProvider.getInstance().getControlService().getTranslatedString(ruleTextKey);		
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
 		}
@@ -74,7 +74,7 @@ public class Messagebuilder {
 
 	private String generateFirstExceptionMessage(Message message){
 		try{
-			final String exceptionKey = ValidateTranslator.getValue("ExceptionMessage");
+			final String exceptionKey = ServiceProvider.getInstance().getControlService().getTranslatedString("ExceptionMessage");
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
@@ -84,7 +84,7 @@ public class Messagebuilder {
 
 	private String generateRestExceptionMessage(Message message){
 		try{
-			final String exceptionKey = ValidateTranslator.getValue("EnumerationMessage");
+			final String exceptionKey = ServiceProvider.getInstance().getControlService().getTranslatedString("EnumerationMessage");
 			return exceptionKey + generateSingleMessage(message);
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);

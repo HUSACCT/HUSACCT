@@ -60,51 +60,51 @@ public class DomainXML {
 			XMLArchitecture.addContent(SAModules);
 		}
 
-		if (this.DomainSoftwareArchitecture.getAppliedRules().size() > 0 && this.getParseLogical() == false) {
+		if (this.DomainSoftwareArchitecture.getAppliedRules().size() > 0) {
 			Element SARules = new Element("rules");
 			for (AppliedRule ar : this.DomainSoftwareArchitecture.getAppliedRules()) {
 				SARules.addContent(this.getAppliedRuleInXML(ar));
 			}
 			XMLArchitecture.addContent(SARules);
 		}
-
+		
 		return XMLArchitecture;
 	}
 
-	public Element getModuleInXML(Module M) {
+	public Element getModuleInXML(Module module) {
 		Element xmlModule = new Element("Module");
 
 		Element moduleType = new Element("type");
-		moduleType.addContent(M.getClass().getSimpleName());
+		moduleType.addContent(module.getClass().getSimpleName());
 		xmlModule.addContent(moduleType);
 
 		Element moduleDescription = new Element("description");
-		moduleDescription.addContent(M.getDescription());
+		moduleDescription.addContent(module.getDescription());
 		xmlModule.addContent(moduleDescription);
 
 		Element moduleId = new Element("id");
-		moduleId.addContent(Long.toString(M.getId()));
+		moduleId.addContent(Long.toString(module.getId()));
 		xmlModule.addContent(moduleId);
 
 		Element moduleName = new Element("name");
-		moduleName.addContent(M.getName());
+		moduleName.addContent(module.getName());
 		xmlModule.addContent(moduleName);
 
 		/**
 		 * build extra elements based on type (Module is generic)
 		 */
-		if (M.getClass().getSimpleName().toLowerCase().equals("layer")) {
+		if (module.getClass().getSimpleName().toLowerCase().equals("layer")) {
 			Element moduleLevel = new Element("HierarchicalLevel");
-			moduleLevel.addContent("" + ((Layer)M).getHierarchicalLevel());
+			moduleLevel.addContent("" + ((Layer)module).getHierarchicalLevel());
 			xmlModule.addContent(moduleLevel);
 		}
 
 		/**
 		 * Check for units and add them to the XML root of this element
 		 */
-		if (M.getUnits().size() > 0) {
+		if (module.getUnits().size() > 0) {
 			Element units = new Element("SoftwareUnitDefinitions");
-			for (SoftwareUnitDefinition SUD : M.getUnits()) {
+			for (SoftwareUnitDefinition SUD : module.getUnits()) {
 				units.addContent(this.getSoftwareUnitDefinitionInXML(SUD));
 			}
 			xmlModule.addContent(units);
@@ -113,18 +113,19 @@ public class DomainXML {
 		/**
 		 * Check for submodules and add them to the root of the parent (recursive call)
 		 */
-		if (M.getSubModules().size() > 0) {
+		if (module.getSubModules().size() > 0) {
 			Element subModule = new Element("SubModules");
-			for (Module m : M.getSubModules()) {
+			for (Module m : module.getSubModules()) {
 				subModule.addContent(this.getModuleInXML(m));	
 			}
 			xmlModule.addContent(subModule);
 		}
 
-		if (M.getPhysicalPaths().length > 0) {
+		if (module.getUnits().size() > 0) {
 			Element physicalPaths = new Element("PhysicalPaths");
-			for(int i=0; i < M.getPhysicalPaths().length; i++) {
-				physicalPaths.addContent(this.getPhysicalPathInXML(M.getPhysicalPaths()[i].toString()));
+			
+			for (SoftwareUnitDefinition su : module.getUnits()){
+				physicalPaths.addContent(this.getPhysicalPathInXML(su.getName()));
 			}
 
 			xmlModule.addContent(physicalPaths);
@@ -199,7 +200,7 @@ public class DomainXML {
 		return XMLAppliedRule;
 	}
 
-	public Element getApplicationInXML(Application App) {
+	public Element getApplicationInXML(Application App) {	
 		Element XMLApplication = new Element("Application");
 
 		Element applicationName = new Element("name");
@@ -213,9 +214,18 @@ public class DomainXML {
 		Element applicationVersion = new Element("version");
 		applicationVersion.addContent(App.getVersion());
 		XMLApplication.addContent(applicationVersion);
-
+		
+		Element applicationPaths = new Element("physicalPaths");
+		if (App.getPaths().length > 0) {
+			for (int i = 0; i < App.getPaths().length; i++) {
+				Element appPath = new Element("path");
+				appPath.addContent(App.getPaths()[i].toString());
+				applicationPaths.addContent(appPath);
+			}
+		}
+		XMLApplication.addContent(applicationPaths);
 		XMLApplication.addContent(this.getSoftwareArchitectureInXML());
-
+		
 		return XMLApplication;
 	}
 }

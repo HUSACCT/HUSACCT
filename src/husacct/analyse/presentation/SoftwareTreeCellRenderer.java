@@ -41,9 +41,17 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
         	}else if(moduleSelected.type.equals("package")){
         		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-package.png"));
         	}else if(moduleSelected.type.equals("class")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
+        		if(moduleSelected.visibility.equals("public")){
+        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
+        		}else{
+        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class-private.png"));
+        		}
         	}else if(moduleSelected.type.equals("interface")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface.png"));
+        		if(moduleSelected.visibility.equals("public")){
+        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface.png"));
+        		}else{
+        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface-private.png"));
+        		}
         	}else if(moduleSelected.type.equals("enumeration")){
         		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-enumeration.png"));
         	}else{

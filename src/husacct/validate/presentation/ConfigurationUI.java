@@ -3,6 +3,9 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.validate.domain.validation.Severity;
+import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationViolationTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.LanguageSeverityConfigurationPanel;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
@@ -17,6 +20,8 @@ import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends JInternalFrame implements Observer{
 
+	private static final long serialVersionUID = 7721461596323704063L;
+
 	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
 	
 	private TaskServiceImpl taskServiceImpl;
@@ -28,10 +33,10 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
-	private List<LanguageSeverityConfiguration> tabs;
+	private List<LanguageSeverityConfigurationPanel> tabs;
 
 	public ConfigurationUI(TaskServiceImpl ts) {
-		tabs = new ArrayList<LanguageSeverityConfiguration>();
+		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
 		
 		taskServiceImpl = ts;
 		severities = taskServiceImpl.getAllSeverities();
@@ -80,7 +85,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				if(severityNameTable.getSelectedRow() > -1){
 					removeActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
 				}
 			}
 		});
@@ -92,7 +97,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				if(severityNameTable.getSelectedRow() > -1){
 					upActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
 				}
 			}
 		});
@@ -148,11 +153,13 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		horizontalButtonGroup.addComponent(applySeverity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(down, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		
+		GroupLayout.ParallelGroup severityNameGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		severityNameGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+		
 		GroupLayout.SequentialGroup horizontalPaneGroup = severityNamePanelLayout.createSequentialGroup();
-		horizontalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE);
-		horizontalPaneGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		horizontalPaneGroup.addGroup(horizontalButtonGroup);
+		horizontalPaneGroup.addGroup(severityNameGroup);
 		horizontalPaneGroup.addContainerGap();
+		horizontalPaneGroup.addGroup(horizontalButtonGroup);
 		
 		severityNamePanelLayout.setHorizontalGroup(horizontalPaneGroup);
 		
@@ -171,8 +178,8 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		verticalButtonGroup.addComponent(applySeverity);
 		verticalButtonGroup.addContainerGap();
 		
-		GroupLayout.SequentialGroup verticalPaneGroup = severityNamePanelLayout.createSequentialGroup();
-		verticalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE);
+		GroupLayout.ParallelGroup verticalPaneGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		verticalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
 		
 		severityNamePanelLayout.setVerticalGroup(verticalPaneGroup);
@@ -182,11 +189,9 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private void createRootLayout(){		
 		GroupLayout baseLayout = new GroupLayout(getRootPane());
 		
-		GroupLayout.SequentialGroup horizontalGroup = baseLayout.createSequentialGroup();
-		horizontalGroup.addComponent(tabPanel, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE);
-		horizontalGroup.addContainerGap();
+		GroupLayout.ParallelGroup horizontalGroup = baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+		horizontalGroup.addComponent(tabPanel);
 		horizontalGroup.addComponent(cancel);
-		horizontalGroup.addContainerGap();
 		
 		baseLayout.setHorizontalGroup(horizontalGroup);
 		
@@ -281,7 +286,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	}
 	
 	public void setText(){
-		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("Configuration"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidateConfigurationTitle"));
 		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
 		remove.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
 		up.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Up"));
@@ -318,14 +323,17 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			loadLanguageTabs();
 			return;
 		}
-		for (LanguageSeverityConfiguration panel : tabs){
+		for (LanguageSeverityConfigurationPanel panel : tabs){
 			panel.loadAfterChange();
 		}
 	}
 	
 	private void loadLanguageTabs() {
 		for (String language : taskServiceImpl.getAvailableLanguages()) {
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl, severities);
+			ConfigurationRuleTypeDTO configurationRuleTypeDTO = new ConfigurationRuleTypeDTO(language, severities, taskServiceImpl.getRuletypes(language));
+			ConfigurationViolationTypeDTO configurationViolationTypeDTO = new ConfigurationViolationTypeDTO(language, severities, taskServiceImpl.getViolationTypes(language));
+			
+			LanguageSeverityConfigurationPanel lcp = new LanguageSeverityConfigurationPanel(configurationRuleTypeDTO, configurationViolationTypeDTO, taskServiceImpl);
 			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);
 		}

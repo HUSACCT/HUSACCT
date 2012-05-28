@@ -46,9 +46,9 @@ public class ExportController {
 	}
 	
 	public void exportViolationsReport(File file){
-		Filename filename = new Filename(file, File.separatorChar, '.');		
+		Filename filename = new Filename(file, File.separatorChar, '.');
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
-		validateService.exportViolations(filename.getFilenameWithoutExtension(), filename.getExtension(), filename.getPath());
+		validateService.exportViolations(file, filename.getExtension());
 	}
 	
 	public String[] getExportExtensions(){

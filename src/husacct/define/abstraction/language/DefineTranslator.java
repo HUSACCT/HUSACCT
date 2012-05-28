@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 public class DefineTranslator {
-	private static final String bundleLocation = "husacct.common.locale.defineLang";
+	private static final String bundleLocation = "husacct.common.locale.husacct";
 	private static Logger logger = Logger.getLogger(DefineTranslator.class);
 
 	public static String translate(String key){	

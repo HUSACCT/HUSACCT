@@ -28,10 +28,13 @@ public class ImportController {
 
 	public void importWorkspace(Element element) throws DatatypeConfigurationException{
 		importSeverties(element.getChild("severities"));
-		importViolations(element.getChild("violations"));
+		
 		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
-		importViolationHistory(element.getChild("violationHistories"));
 		importActiveViolationTypes(element.getChild("activeViolationTypes"));
+		
+		//Not used because of memory issues
+		//importViolations(element.getChild("violations"));
+		//importViolationHistory(element.getChild("violationHistories"));		
 	}
 
 	private void importSeverties(Element element) {
@@ -39,6 +42,9 @@ public class ImportController {
 		configuration.setSeverities(severities);
 	}
 
+	/**
+	 * @deprecated Not used because of memory issues
+	 */
 	private void importViolations(Element element) throws DatatypeConfigurationException{
 		List<Violation> violations = importFactory.importViolations(element, severities);
 		configuration.addViolations(violations);
@@ -49,6 +55,9 @@ public class ImportController {
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
 	}
 
+	/**
+	 * @deprecated Not used because of memory issues
+	 */
 	private void importViolationHistory(Element element) {
 		List<ViolationHistory> violationHistory = importFactory.importViolationHistory(element);
 		configuration.setViolationHistory(violationHistory);

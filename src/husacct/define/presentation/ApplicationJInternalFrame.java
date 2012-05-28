@@ -1,19 +1,20 @@
 package husacct.define.presentation;
 
+import husacct.control.ILocaleChangeListener;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 
 import java.awt.BorderLayout;
+import java.util.Locale;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-public class ApplicationJInternalFrame extends JInternalFrame {
+public class ApplicationJInternalFrame extends JInternalFrame implements ILocaleChangeListener {
 
 	private static final long serialVersionUID = 6858870868564931134L;
-	private String defaultTitle = "HUSACCT";
 	private JPanel overviewPanel;
 
 	public ApplicationJInternalFrame() {
@@ -25,7 +26,6 @@ public class ApplicationJInternalFrame extends JInternalFrame {
 		try {
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 			
-			this.setLayoutSettings();
 			this.addDefinitionPanel();
 			this.addToolBar();
 			
@@ -35,10 +35,6 @@ public class ApplicationJInternalFrame extends JInternalFrame {
 			// add your error handling code here
 			e.printStackTrace();
 		}
-	}
-	
-	private void setLayoutSettings() {
-		this.setTitle(" - Define Architecture");
 	}
 	
 	private void addDefinitionPanel() {
@@ -63,11 +59,7 @@ public class ApplicationJInternalFrame extends JInternalFrame {
 	}
 
 	@Override
-	public void setTitle(String configuration) {
-		if (configuration.trim().equals("")) {
-			super.setTitle(defaultTitle);
-		} else {
-			super.setTitle(defaultTitle + " - " + configuration);
-		}
+	public void update(Locale newLocale) {
+	
 	}
 }

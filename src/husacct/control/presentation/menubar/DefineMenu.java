@@ -16,7 +16,6 @@ import java.util.Locale;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
 
 @SuppressWarnings("serial")
 public class DefineMenu extends JMenu{
@@ -39,17 +38,17 @@ public class DefineMenu extends JMenu{
 	private void addComponents() {
 		defineArchitectureItem = new JMenuItem(controlService.getTranslatedString("DefineArchitecture"));
 		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
-		defineArchitectureItem.setMnemonic('d');
+		defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				
 		definedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("DefinedArchitectureDiagram"));
 		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
-		definedArchitectureDiagramItem.setMnemonic('s');
+		definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 				
 		importArchitectureItem = new JMenuItem(controlService.getTranslatedString("ImportArchitecture"));
-		importArchitectureItem.setMnemonic('i');
+		importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
 				
 		exportArchitectureItem = new JMenuItem(controlService.getTranslatedString("ExportArchitecture"));
-		exportArchitectureItem.setMnemonic('e');		
+		exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));		
 		
 		this.add(defineArchitectureItem);
 		this.add(definedArchitectureDiagramItem);
@@ -101,12 +100,6 @@ public class DefineMenu extends JMenu{
 			}
 		});
 		
-		this.addMenuListener(new MenuAdapter() {
-			public void menuSelected(MenuEvent e) {
-				mainController.getStateController().checkState();
-			}
-		});
-		
 		final DefineMenu defineMenu = this;
 		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
 			public void update(Locale newLocale) {
@@ -115,7 +108,30 @@ public class DefineMenu extends JMenu{
 				definedArchitectureDiagramItem.setText(controlService.getTranslatedString("DefinedArchitectureDiagram"));
 				exportArchitectureItem.setText(controlService.getTranslatedString("ExportArchitecture"));
 				importArchitectureItem.setText(controlService.getTranslatedString("ImportArchitecture"));
+				defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
+				definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
+				importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
+				exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));	
 			}
 		});
+	}
+	
+	public JMenuItem getDefineArchitectureItem(){
+		return defineArchitectureItem;
+	}
+	public JMenuItem getDefinedArchitectureDiagramItem(){
+		return definedArchitectureDiagramItem;
+	}
+	public JMenuItem getExportArchitectureItem(){
+		return exportArchitectureItem;
+	}
+	public JMenuItem getIimportArchitectureItem(){
+		return importArchitectureItem;
+	}
+	
+	private int getMnemonicKeycode(String translatedString) {
+		String mnemonicString = controlService.getTranslatedString(translatedString);
+		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
+		return keyCode;
 	}
 }
