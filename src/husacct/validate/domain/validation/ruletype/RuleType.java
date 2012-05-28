@@ -128,7 +128,7 @@ public abstract class RuleType {
 	
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration){
 		if(violationtypefactory == null){
-			new ViolationTypeFactory().getViolationTypeFactory(configuration);
+			this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		}
 	}
 	
