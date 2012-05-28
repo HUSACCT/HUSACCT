@@ -127,29 +127,24 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 		layoutComponents();
 		
-		
 		this.getRootPane().addComponentListener(new ComponentListener(){
 			@Override
 			public void componentResized(ComponentEvent e) {
 				positionLayoutComponents();
 				resizeLocationBar();
 			}
-
 			@Override
 			public void componentShown(ComponentEvent e) {
 				// Do nothing
 			}
-
 			@Override
 			public void componentHidden(ComponentEvent e) {
 				// Do nothing
 			}
-
 			@Override
 			public void componentMoved(ComponentEvent e) {
 				// Do nothing
 			}
-			
 		});
 	}
 	

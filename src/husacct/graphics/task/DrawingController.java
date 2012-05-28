@@ -101,12 +101,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 			break;
 		}
 	}
-	
-	public DrawingLayoutStrategy getLayoutStrategy(){
+
+	public DrawingLayoutStrategy getLayoutStrategy() {
 		return layoutStrategyOption;
 	}
-	
-	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum){
+
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
 		layoutStrategyOption = selectedStrategyEnum;
 		switchLayoutStrategy();
 		updateLayout();
@@ -115,7 +115,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	@Override
 	public void toggleDependencies() {
 		notifyServiceListeners();
-		if(areDependenciesShown()){
+		if (areDependenciesShown()) {
 			hideDependencies();
 		} else {
 			showDependencies();
@@ -123,7 +123,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawLinesBasedOnSettingInTask();
 	}
 
-	public void showDependencies(){
+	public void showDependencies() {
 		super.showDependencies();
 		graphicsFrame.turnOnDependencies();
 	}
@@ -148,23 +148,23 @@ public abstract class DrawingController extends DrawingSettingsController {
 		super.showViolations();
 		graphicsFrame.turnOnViolations();
 	}
-	
+
 	public void hideViolations() {
 		super.hideViolations();
 		graphicsFrame.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
-	public void toggleSmartLines(){
+	public void toggleSmartLines() {
 		notifyServiceListeners();
-		if(areSmartLinesOn()){
+		if (areSmartLinesOn()) {
 			deactivateSmartLines();
 		} else {
 			activateSmartLines();
 		}
 		drawLinesBasedOnSettingInTask();
 	}
-	
+
 	public void deactivateSmartLines() {
 		super.deactivateSmartLines();
 		graphicsFrame.turnOffSmartLines();
@@ -193,9 +193,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public void setCurrentPaths(String[] paths) {
 		super.setCurrentPaths(paths);
-		if(!getCurrentPaths()[0].isEmpty()){
+		if (!getCurrentPaths()[0].isEmpty()) {
 			drawingView.canZoomOut();
-		}else{
+		} else {
 			drawingView.cannotZoomOut();
 		}
 	}
@@ -221,7 +221,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 	}
 
-	public void drawArchitecture(DrawingDetail detail){
+	public void drawArchitecture(DrawingDetail detail) {
 		drawingView.cannotZoomOut();
 	}
 
@@ -239,9 +239,13 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
 		for (AbstractDTO dto : modules) {
-			BaseFigure generatedFigure = figureFactory.createFigure(dto);
-			drawing.add(generatedFigure);
-			figureMap.linkModule(generatedFigure, dto);
+			try {
+				BaseFigure generatedFigure = figureFactory.createFigure(dto);
+				drawing.add(generatedFigure);
+				figureMap.linkModule(generatedFigure, dto);
+			} catch (Exception e) {
+				logger.error("Could not generate and display figure.", e);
+			}
 		}
 		updateLayout();
 		drawLinesBasedOnSetting();
@@ -254,7 +258,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		setDrawingViewNonVisible();
 		runDrawMultiLevelTask(modules);
 	}
-	
+
 	private void runDrawMultiLevelTask(HashMap<String, ArrayList<AbstractDTO>> modules) {
 		DrawingMultiLevelThread task = new DrawingMultiLevelThread(this, modules);
 		Thread drawThread = new Thread(task);
@@ -267,23 +271,27 @@ public abstract class DrawingController extends DrawingSettingsController {
 		clearDrawing();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
-			if(!parentName.isEmpty()){
+			if (!parentName.isEmpty()) {
 				parentFigure = figureFactory.createParentFigure(parentName);
 				drawing.add(parentFigure);
 			}
 			for (AbstractDTO dto : modules.get(parentName)) {
-				BaseFigure generatedFigure = figureFactory.createFigure(dto);
-				if(!parentName.isEmpty()){
-					parentFigure.add(generatedFigure);
+				try {
+					BaseFigure generatedFigure = figureFactory.createFigure(dto);
+					if (!parentName.isEmpty()) {
+						parentFigure.add(generatedFigure);
+					}
+					drawing.add(generatedFigure);
+					figureMap.linkModule(generatedFigure, dto);
+				} catch (Exception e) {
+					logger.error("Could not generate and display figure.", e);
 				}
-				drawing.add(generatedFigure);
-				figureMap.linkModule(generatedFigure, dto);
 			}
-			if(!parentName.isEmpty()){
+			if (!parentName.isEmpty()) {
 				parentFigure.updateLayout();
 			}
 		}
-		for(BaseFigure figure : savedFiguresToBeDrawn.keySet()){
+		for (BaseFigure figure : savedFiguresToBeDrawn.keySet()) {
 			drawing.add(figure);
 			figureMap.linkModule(figure, savedFiguresToBeDrawn.get(figure));
 		}
@@ -305,20 +313,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 		drawing.updateLines();
 	}
-	
-	protected void clearSavedFiguresForZoom(){
+
+	protected void clearSavedFiguresForZoom() {
 		savedFiguresForZoom.clear();
 	}
-	
-	protected boolean areFiguresSavedForZoom(){
+
+	protected boolean areFiguresSavedForZoom() {
 		return savedFiguresForZoom.size() > 0;
 	}
-	
-	protected void addSavedFiguresForZoom(BaseFigure savedFigure){
+
+	protected void addSavedFiguresForZoom(BaseFigure savedFigure) {
 		savedFiguresForZoom.add(savedFigure);
 	}
-	
-	protected HashMap<BaseFigure, AbstractDTO> getSavedFiguresForZoom(){
+
+	protected HashMap<BaseFigure, AbstractDTO> getSavedFiguresForZoom() {
 		return figureMap.getAllDTOsWithClonedFigures(savedFiguresForZoom);
 	}
 
@@ -328,20 +336,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 		runDrawLinesTask();
 	}
 
-	private void runDrawLinesTask(){
+	private void runDrawLinesTask() {
 		DrawingLinesThread task = new DrawingLinesThread(this);
 		Thread drawThread = new Thread(task);
 		drawThread.start();
 	}
-	
-	public void drawLinesBasedOnSetting(){
-		if(areDependenciesShown()){
+
+	public void drawLinesBasedOnSetting() {
+		if (areDependenciesShown()) {
 			drawDependenciesForShownModules();
 		}
 		if (areViolationsShown()) {
 			drawViolationsForShownModules();
 		}
-		if(areSmartLinesOn()){
+		if (areSmartLinesOn()) {
 			drawing.updateLineFigureToContext();
 		}
 	}
@@ -455,8 +463,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			BaseFigure bf = (BaseFigure) f;
 			Rectangle2D.Double bounds = bf.getBounds();
 
-			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y,
-					bounds.width, bounds.height);
+			String rect = String.format(Locale.US, "[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y, bounds.width, bounds.height);
 			if (bf.getName().equals("Main"))
 				System.out.println(String.format("%s: %s", bf.getName(), rect));
 		}
@@ -486,13 +493,13 @@ public abstract class DrawingController extends DrawingSettingsController {
 			moduleZoom(selectedFigures);
 		}
 	}
-	
-	public void setDrawingViewVisible(){
+
+	public void setDrawingViewVisible() {
 		graphicsFrame.hideLoadingScreen();
 		drawingView.setVisible(true);
 	}
-	
-	public void setDrawingViewNonVisible(){
+
+	public void setDrawingViewNonVisible() {
 		drawingView.setVisible(false);
 		graphicsFrame.showLoadingScreen();
 	}
