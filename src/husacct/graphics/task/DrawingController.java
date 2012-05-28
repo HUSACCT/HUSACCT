@@ -310,18 +310,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			contextMenu.setHasSelection(false);			
 		}
 
-		updateLines();
-	}
-
-	// TODO To drawing.java
-	private void updateLines() {
-		for (Figure f : drawing.getChildren()) {
-			BaseFigure bf = (BaseFigure) f;
-			if (bf.isLine()) {
-				RelationFigure cf = (RelationFigure) f;
-				cf.updateConnection();
-			}
-		}
+		drawing.updateLines();
 	}
 	
 	protected void clearSavedFiguresForZoom(){

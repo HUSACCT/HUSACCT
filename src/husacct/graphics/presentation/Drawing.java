@@ -108,6 +108,13 @@ public class Drawing extends QuadTreeDrawing {
 		invalidate();
 		changed();
 	}
+	
+	public void updateLines() {
+		RelationFigure[] lines = getShownLines();
+		for (RelationFigure line : lines) {
+			line.updateConnection();
+		}
+	}
 
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
