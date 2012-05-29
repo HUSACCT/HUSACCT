@@ -53,7 +53,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private ViolationInformationPanel violationInformationPanel;
 	private List<Violation> shownViolations;
 
-	@SuppressWarnings("LeakingThisInConstructor")
+	
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
 		
 		this.taskServiceImpl = taskServiceImpl;
@@ -199,6 +199,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			public void actionPerformed(ActionEvent arg0) {
 				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask());
 				validateThread.run();
+				buttonSaveInHistory.setEnabled(true);
 			}
 		});
 		buttonSaveInHistory.addActionListener(new ActionListener() {
@@ -415,5 +416,9 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	public ViolationHistory getSelectedViolationHistory() {
 		return selectedViolationHistory;
+	}
+
+	public void setSelectedViolationHistory(ViolationHistory selectedViolationHistory) {
+		this.selectedViolationHistory = selectedViolationHistory;
 	}
 }

@@ -1,5 +1,6 @@
 package husacct.validate.presentation.threadTasks;
 
+import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.task.TaskServiceImpl;
 
@@ -14,7 +15,7 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 	private final BrowseViolations browseViolations;
 	private final TaskServiceImpl taskServiceImpl;
 	private final JCheckBox applyFilter;
-	
+
 	private Logger logger = Logger.getLogger(LoadViolationHistoryPointsTask.class);
 
 	public LoadViolationHistoryPointsTask(JTable chooseViolationHistoryTable, BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl, JCheckBox applyFilter) {
@@ -30,9 +31,9 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 			Thread.sleep(1);
 
 			int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
-			browseViolations.fillViolationsTable(taskServiceImpl.getViolationHistories().get(row).getViolations());
-			browseViolations.fillViolationsTable(browseViolations.getSelectedViolationHistory().getViolations());
-			browseViolations.loadAfterChange();
+			ViolationHistory selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
+			browseViolations.setSelectedViolationHistory(selectedViolationHistory);
+			browseViolations.fillViolationsTable(selectedViolationHistory.getViolations());
 			applyFilter.setSelected(false);
 		}catch (InterruptedException e) {
 			logger.debug(e.getMessage());
