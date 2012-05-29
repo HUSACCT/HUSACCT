@@ -361,5 +361,14 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	
 	public String represent(){
 		return model.toString();
+	}
+
+	@SuppressWarnings("unused")
+	@Override
+	public void clearMemoryFromObjectsNotUsedAnymore() {
+		for (FamixStructuralEntity entity : model.structuralEntities.values()){
+			entity = null;
+		}
+		
 	}	
 }
