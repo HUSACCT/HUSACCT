@@ -48,7 +48,7 @@ public class StatisticsPanel extends JPanel{
 		shownViolationsLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShownViolations") + ":");
 	}
 	
-	public void loadStatistics(LinkedHashMap<Severity, Integer> violationHistory, int totalSize, int shownSize){
+	public void loadStatistics(LinkedHashMap<Severity, Integer> severitiesCountPerSeverity, int totalSize, int shownSize){
 		removeAll();
 		
 		totalViolationNumber.setText("" + totalSize);
@@ -61,7 +61,7 @@ public class StatisticsPanel extends JPanel{
 		add(shownViolationsLabel);
 		add(shownViolationsNumber);
 
-		for(Entry<Severity, Integer> violationPerSeverity: violationHistory.entrySet()){
+		for(Entry<Severity, Integer> violationPerSeverity: severitiesCountPerSeverity.entrySet()){
 			add(new JLabel(violationPerSeverity.getKey().toString()));
 			add(new JLabel(violationPerSeverity.getValue().toString()));
 		}

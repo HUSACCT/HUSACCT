@@ -1,19 +1,19 @@
-package husacct.validate.task;
+package husacct.validate.task.export.xml;
 
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import org.jdom2.Element;
 
-public class XMLUtils {
+public abstract class XmlExportUtils {
 
-	public static Element createElementWithContent(String name, String content) {
+	protected Element createElementWithContent(String name, String content) {
 		Element element = new Element(name);
 		element.addContent(content);
 		return element;
 	}
 	
-	public static Element createLogicalModulesElement(LogicalModules logicalModules) {
+	protected Element createLogicalModulesElement(LogicalModules logicalModules) {
 		Element logicalModulesElement = new Element("logicalModules");
 		Element logicalModuleFrom = new Element("logicalModuleFrom");
 		Element logicalModuleTo = new Element("logicalModuleTo");
@@ -21,15 +21,15 @@ public class XMLUtils {
 		logicalModulesElement.addContent(logicalModuleFrom);
 		logicalModulesElement.addContent(logicalModuleTo);
 
-		logicalModuleFrom.addContent(XMLUtils.createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleFrom().getLogicalModulePath()));
-		logicalModuleFrom.addContent(XMLUtils.createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleFrom().getLogicalModuleType()));
-		logicalModuleTo.addContent(XMLUtils.createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleTo().getLogicalModulePath()));
-		logicalModuleTo.addContent(XMLUtils.createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleTo().getLogicalModuleType()));
+		logicalModuleFrom.addContent(createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleFrom().getLogicalModulePath()));
+		logicalModuleFrom.addContent(createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleFrom().getLogicalModuleType()));
+		logicalModuleTo.addContent(createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleTo().getLogicalModulePath()));
+		logicalModuleTo.addContent(createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleTo().getLogicalModuleType()));
 		
 		return logicalModulesElement;
 	}
 
-	public static Element createMessageElementFromMessageObject(Message message) {
+	protected Element createMessageElementFromMessageObject(Message message) {
 		Element messageElement = new Element("message");
 		messageElement.addContent(createLogicalModulesElement(message.getLogicalModules()));
 		messageElement.addContent(createElementWithContent("ruleKey", message.getRuleKey()));
@@ -48,5 +48,4 @@ public class XMLUtils {
 		}
 		return messageElement;
 	}
-
 }
