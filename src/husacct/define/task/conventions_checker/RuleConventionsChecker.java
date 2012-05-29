@@ -28,6 +28,10 @@ public class RuleConventionsChecker {
 			conventionCheckSucces = checkNamingConvention();
 		} else if(ruleTypeKey.equals("NamingConventionException")) {
 			conventionCheckSucces = checkNamingConventionException();
+		} else if(ruleTypeKey.equals("SubClassConvention")) {
+			conventionCheckSucces = checkSubClassConvention();
+		} else if(ruleTypeKey.equals("InterfaceConvention")) {
+			conventionCheckSucces = checkInterfaceConvention();
 		} else if(ruleTypeKey.equals("IsNotAllowedToUse")) {
 			conventionCheckSucces = checkIsNotAllowedToUse();
 		} else if(ruleTypeKey.equals("IsOnlyAllowedToUse")) {
@@ -64,6 +68,16 @@ public class RuleConventionsChecker {
 	private boolean checkNamingConventionException() {
 		boolean namingConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
 		return namingConventionSucces;
+	}
+	
+	private boolean checkSubClassConvention() {
+		boolean subClassConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		return subClassConventionSucces;
+	}
+	
+	private boolean checkInterfaceConvention() {
+		boolean interfaceConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		return interfaceConventionSucces;
 	}
 	
 	private boolean checkIsNotAllowedToUse() {
