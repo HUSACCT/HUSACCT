@@ -370,6 +370,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		}		
 		
 		statisticsPanel.loadStatistics(taskServiceImpl.getViolationsPerSeverity(shownViolations, severities), violationsSize, shownViolations.size());
+		statisticsPanel.repaint();
 	}
 	
 	public List<Violation> getViolationsFilteredOrNormal() {
