@@ -30,20 +30,16 @@ public class MustUseRule extends RuleType{
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		int counter = 0, noDependencyCounter = 0;
+		int dependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){
 				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), classPathFrom.getViolationTypes());
-				counter++;
-				if(dependencies.length == 0) noDependencyCounter++;			
-			}
-			if(noDependencyCounter == counter && physicalClasspathsTo.size() != 0){
-				Violation violation = createViolation(rootRule, classPathFrom, configuration);
-				violations.add(violation);
+				if(dependencies.length > 0) dependencyCounter++;			
 			}
 		}	
-		if(noDependencyCounter != counter){
-			violations.clear();
+		if(dependencyCounter == 0 && physicalClasspathsTo.size() != 0){
+			Violation violation = createViolation(rootRule, configuration);
+			violations.add(violation);
 		}
 		return violations;
 	}
