@@ -27,7 +27,7 @@ public class CheckConformanceUtilSeverity {
 			return ruleTypeSeverity;
 		}
 		else if(ruleTypeValue != -1 && violationTypeValue != -1){
-			if(ruleTypeValue <= violationTypeValue){
+			if(ruleTypeValue >= violationTypeValue){
 				return ruleTypeSeverity;
 			}
 			else{
