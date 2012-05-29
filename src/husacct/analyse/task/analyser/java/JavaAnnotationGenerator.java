@@ -3,50 +3,51 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 
-class JavaAnnotationGenerator extends JavaGenerator{
+class JavaAnnotationGenerator extends JavaGenerator {
 	
 	private String name = "";
 	private String uniqueName = "";
 	private String belongsToPackage = "";
+	private int lineNumber = 0;
 	
 	public JavaAnnotationGenerator(String uniquePackageName){
 		this.belongsToPackage = uniquePackageName;
 	}
 	
 	public String generateToDomain(CommonTree commonTree) {
-		setName(commonTree);
-		setUniquename();
-		modelService.createInterface(uniqueName, name, belongsToPackage);
+		this.setName(commonTree);
+		this.setUniquename();
+		modelService.createInterface(this.uniqueName, this.name, this.belongsToPackage);
 		return this.uniqueName;
 	}
 	
 	public void generateMethod(CommonTree commonTree){
-		setName(commonTree);
-		setUniquename();
-		int linenumber = commonTree.getLine();
-		modelService.createAnnotation(this.belongsToPackage, this.name, this.name, this.uniqueName, linenumber);
+		this.setName(commonTree);
+		this.setUniquename();
+		this.setLinenumber(commonTree);
+		modelService.createAnnotation(this.belongsToPackage, this.name, this.name, this.uniqueName, this.lineNumber);
 	}
 
 	private void setName(CommonTree commonTree){
 		CommonTree IdentNode = (CommonTree) commonTree.getFirstChildWithType(JavaParser.IDENT);
-		if(IdentNode != null){
+		if(isTreeAvailable(IdentNode)){
 			this.name = IdentNode.getText();
 		} else {
 			CommonTree nameTree = (CommonTree)commonTree.getFirstChildWithType(JavaParser.DOT);
-			this.name = parseDottedNameToString(nameTree);
+			this.name = parseDottedTreeToName(nameTree);
 		}
 	}
 	
-	private String parseDottedNameToString(CommonTree nameTree){
+	private String parseDottedTreeToName(CommonTree nameTree){
 		String result = "";
 		
-		if(nameTree == null){
+		if(!isTreeAvailable(nameTree)){
 			return "";
 		}
 		
 		CommonTree dottedChild = (CommonTree) nameTree.getFirstChildWithType(JavaParser.DOT); 
-		if(dottedChild != null){
-			result += parseDottedNameToString(dottedChild);
+		if(isTreeAvailable(dottedChild)){
+			result += parseDottedTreeToName(dottedChild);
 		}
 		
 		int childCount = nameTree.getChildCount();
@@ -61,15 +62,26 @@ class JavaAnnotationGenerator extends JavaGenerator{
 	}
 	
 	private void setUniquename(){
-		this.uniqueName += this.belongsToPackage + getDotForUniquename();
+		this.uniqueName += this.belongsToPackage + getDotAfterUniquename();
 		this.uniqueName += this.name;
 	}
 	
-	private String getDotForUniquename(){
+	private void setLinenumber(CommonTree lineTree){
+		this.lineNumber = lineTree.getLine();
+	}
+	
+	private String getDotAfterUniquename(){
 		if(!this.belongsToPackage.equals("")){
 			return ".";
 		}
 		return "";
+	}
+	
+	private boolean isTreeAvailable(CommonTree tree){
+		if(tree != null){
+			return true;
+		}
+		return false;
 	}
 	
 	
