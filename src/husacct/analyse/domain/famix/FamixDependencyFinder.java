@@ -14,7 +14,7 @@ class FamixDependencyFinder extends FamixFinder{
 	private String from = "", to = "";
 	private List<DependencyDTO> currentResult;
 	
-	private DependencyDTO currentDirectDependencySearched;
+	private boolean indirectSearched = false;
 	
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
@@ -25,31 +25,37 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 	
 	public List<DependencyDTO> getDependencies(String from, String to) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.BOTH, from, to);
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependencies(String from, String to, String[] dependencyFilter) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.BOTH, from, to, dependencyFilter);
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependenciesFrom(String from, String[] dependencyFilter) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.FROM, from, "", dependencyFilter);
 		return this.currentResult;
 	}
 	
 	public List<DependencyDTO> getDependenciesFrom(String from) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.FROM, from, "");
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependenciesTo(String to) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.TO, "", to);
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependenciesTo(String to, String[] dependencyFilter) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.TO, "", to, dependencyFilter);
 		return this.currentResult;
 	}
@@ -64,9 +70,13 @@ class FamixDependencyFinder extends FamixFinder{
 		this.currentFunction = function;
 		this.from = argumentFrom;
 		this.to = argumentTo;
-		this.filtered = false;
 		this.currentResult = findDependencies();
+		this.reset();
+	}
+	
+	private void reset(){
 		this.removeFilter();
+		this.indirectSearched = false;
 	}
 	
 	private void removeFilter(){
@@ -83,11 +93,14 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
-//		if(!this.from.equals("")){
-//			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
-//				if(!result.contains(dependency)) result.add(dependency);
-//			}
-//		}
+		if(!this.from.equals("")){
+			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+//				if(!result.contains(dependency)){
+//					System.out.println(dependency.toString());
+					result.add(dependency);
+//				}
+			}
+		}
 		return result;
 	}
 	
@@ -95,7 +108,6 @@ class FamixDependencyFinder extends FamixFinder{
 		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		for(DependencyDTO directDependency: directDependencies){
-			this.currentDirectDependencySearched = directDependency;
 			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
 				if(!result.contains(indirectDependency)) result.add(indirectDependency);
 			}
@@ -106,6 +118,7 @@ class FamixDependencyFinder extends FamixFinder{
 	private List<DependencyDTO> findIndirectDependenciesFrom(DependencyDTO fromDependency){
 		List<DependencyDTO> found = new ArrayList<DependencyDTO>();
 		this.from = fromDependency.to;
+		this.to = fromDependency.to;
 		for(DependencyDTO indirectDependency : findDependencies()){
 			indirectDependency.isIndirect = true;
 			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);

@@ -1,5 +1,6 @@
 package husacct.analyse.domain;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -109,4 +110,8 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	public void loadModel(Element analyseElement) {
 		persistencyService.loadModel(analyseElement);
 	}	
+	
+	public HashMap<String, DependencyDTO> mapDependencies(){
+		return queryService.mapDependencies();
+	}
 }
