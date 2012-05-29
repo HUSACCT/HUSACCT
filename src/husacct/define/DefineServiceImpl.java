@@ -9,6 +9,7 @@ import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.persistency.PersistentDomain;
@@ -26,6 +27,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	private ModuleDomainService moduleService = new ModuleDomainService();
 	private AppliedRuleDomainService appliedRuleService = new AppliedRuleDomainService();
 	private DomainParser domainParser = new DomainParser();
+	private AppliedRuleExceptionDomainService exceptionService = new AppliedRuleExceptionDomainService();
 	
 	public DefineServiceImpl(){
 		super();
@@ -38,6 +40,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		moduleService = new ModuleDomainService();
 		appliedRuleService = new AppliedRuleDomainService();
 		domainParser = new DomainParser();
+		exceptionService = new AppliedRuleExceptionDomainService();
 		
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
 	}
@@ -110,26 +113,26 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 	
 	public Element getLogicalArchitectureData(){
-		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService, this.exceptionService);
 		pd.setParseData(DomainElement.LOGICAL);
 		return pd.getWorkspaceData();
 	}
 
 	public void loadLogicalArchitectureData(Element e){
-		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService, this.exceptionService);
 		pd.setParseData(DomainElement.LOGICAL);
 		pd.loadWorkspaceData(e);
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService, this.exceptionService);
 		return pd.getWorkspaceData();
 	}
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService);
+		PersistentDomain pd = new PersistentDomain(this.defineDomainService, this.moduleService, this.appliedRuleService, this.exceptionService);
 		pd.loadWorkspaceData(workspaceData);
 	}
 
