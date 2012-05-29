@@ -88,6 +88,9 @@ public final class FilterViolations extends JDialog  {
 		
 		pathFilterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
 		pathFilterTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+		pathFilterTable.setFillsViewportHeight(true);
+		pathFilterTable.getTableHeader().setResizingAllowed(false);
+		pathFilterTable.getTableHeader().setReorderingAllowed(false);
 		pathFilterScrollPane.setViewportView(pathFilterTable);
 
 		addPath.addActionListener(new ActionListener() {

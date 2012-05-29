@@ -31,6 +31,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
@@ -189,6 +190,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				if(!e.getValueIsAdjusting() && chooseViolationHistoryTable.getSelectedRow() > -1) {
 					changeShownViolations();
 					loadAfterChange();
+					filterPane.loadAfterChange();
 				}
 			}
 		});
@@ -197,6 +199,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			public void actionPerformed(ActionEvent arg0) {
 				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask());
 				validateThread.run();
+				loadAfterChange();
+				filterPane.loadAfterChange();
 				buttonSaveInHistory.setEnabled(true);
 			}
 		});
@@ -231,6 +235,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				chooseViolationHistoryTable.clearSelection();
 				selectedViolationHistory = null;
 				loadAfterChange();
+				filterPane.loadAfterChange();
 			}
 		});
 	}
@@ -238,24 +243,29 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	@Override
 	public void update(Observable o, Object arg) {
 		loadAfterChange();
+		filterPane.loadAfterChange();
 		buttonSaveInHistory.setEnabled(true);
 	}
 
 	@Override
 	public void update(Locale newLocale) {
 		loadAfterChange();
+		filterPane.loadAfterChange();
 	}
 	
 	@Override
 	public void updateViolationsTable() {
 		loadAfterChange();
-		filterPane.loadAfterChange();
 	}
 	
 	public void loadAfterChange(){
 		shownViolations = getViolationsFilteredOrNormal();
 		fillViolationsTable(shownViolations);
 		loadInformationPanel();
+	}
+	
+	public void updateFilterValues(){
+		filterPane.loadAfterChange();
 	}
 	
 	public void loadText(){
@@ -298,7 +308,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable.setFillsViewportHeight(true);
 		violationsTable.setModel(violationsTableModel);
 		violationsTable.setAutoCreateRowSorter(true);
-		violationsTable.getRowSorter().toggleSortOrder(2);
+		violationsTable.getTableHeader().setReorderingAllowed(false);
 		violationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
@@ -328,8 +338,9 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			chooseViolationHistoryTableModel.addRow(new Object[] {dateFormat.format(violationHistory.getDate().getTime()), violationHistory.getDescription()});
 		}
 	}
-	public final void fillViolationsTable(List<Violation> violations) {
-		violationsTable.setAutoCreateRowSorter(false);
+	public void fillViolationsTable(List<Violation> violations) {
+		RowSorter<? extends TableModel> rowsorter = violationsTable.getRowSorter();
+		violationsTable.setRowSorter(null);
 		violationsTable.clearSelection();
 		shownViolations = violations;
 		clearViolationsTableModelRows();
@@ -341,8 +352,10 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
 
 		}
-		violationsTable.setAutoCreateRowSorter(true);
-		violationsTable.getRowSorter().toggleSortOrder(2);
+		violationsTable.setRowSorter(rowsorter);
+		if(violationsTable.getRowCount() > 0){
+			violationsTable.getRowSorter().toggleSortOrder(2);
+		}
 		
 	}
 
