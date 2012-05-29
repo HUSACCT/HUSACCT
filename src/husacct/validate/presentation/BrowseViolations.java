@@ -268,7 +268,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		filterPane.loadAfterChange();
 	}
 	
-	public void loadText(){
+	public final void loadText(){
 		violationInformationPanel.loadGuiText();
 		statisticsPanel.loadAfterChange();
 		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("BrowseViolations"));
@@ -341,6 +341,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	public void fillViolationsTable(List<Violation> violations) {
 		RowSorter<? extends TableModel> rowsorter = violationsTable.getRowSorter();
 		violationsTable.setRowSorter(null);
+		violationsTable.setAutoCreateRowSorter(false);
 		violationsTable.clearSelection();
 		shownViolations = violations;
 		clearViolationsTableModelRows();
@@ -352,6 +353,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
 
 		}
+		violationsTable.setAutoCreateRowSorter(true);
 		violationsTable.setRowSorter(rowsorter);
 		if(violationsTable.getRowCount() > 0){
 			violationsTable.getRowSorter().toggleSortOrder(2);
