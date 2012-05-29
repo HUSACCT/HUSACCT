@@ -78,16 +78,16 @@ class FamixDependencyFinder extends FamixFinder{
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssocations = theModel.associations;
 		for(FamixAssociation assocation: allAssocations){
-//			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
-//				DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
-//				if (!result.contains(foundDependency)) result.add(foundDependency);
-//			}
-		}
-		if(!this.from.equals("")){
-			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
-				if(!result.contains(dependency)) result.add(dependency);
+			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
+				DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
+				if (!result.contains(foundDependency)) result.add(foundDependency);
 			}
 		}
+//		if(!this.from.equals("")){
+//			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+//				if(!result.contains(dependency)) result.add(dependency);
+//			}
+//		}
 		return result;
 	}
 	
