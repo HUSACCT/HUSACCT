@@ -3,12 +3,9 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.apache.log4j.Logger;
 
 public class JavaParameterGenerator extends JavaGenerator {
 
@@ -17,37 +14,38 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private int lineNumber;
 	
 	private String declareType;
-	private List<String> declareTypes = new ArrayList<String>();
 	private String declareName;
 	private String uniqueName;
 	
-	private Logger logger = Logger.getLogger(JavaParameterGenerator.class);
 	private String signature = "";
 	private boolean nameFound = false;
 	private boolean declareTypeFound = false;
 	
 	private ArrayList<String> currentTypes;
-	private ArrayList<Object> saveQueue;
+	private ArrayList<ArrayList<Object>> saveParameterQueue;
 	
-	public String generateParameterObjects(Tree tree, String belongsToMethod, String belongsToClass){
-		//returns the signature, which MethodGenerator uses
-
-		this.saveQueue = new ArrayList<Object>();
+	public String generateParameterObjects(Tree allParametersTree, String belongsToMethod, String belongsToClass){
+		this.saveParameterQueue = new ArrayList<ArrayList<Object>>();
 		this.currentTypes = new ArrayList<String>();
 		
 		this.belongsToMethod = belongsToMethod;
 		this.belongsToClass = belongsToClass;
-		lineNumber = tree.getLine();
+		setLineNumber(allParametersTree);
 		
-		DelegateParametersFromTree(tree);	
+		DelegateParametersFromTree(allParametersTree);	
 
 		writeParameterToDomain();
 		return signature;
 	}
 
-	private void DelegateParametersFromTree(Tree tree) {
-		for(int childCount = 0; childCount < tree.getChildCount(); childCount++){
-			CommonTree child = (CommonTree) tree.getChild(childCount);
+	private void setLineNumber(Tree linenumberTree){
+		this.lineNumber = linenumberTree.getLine();
+	}
+	
+	private void DelegateParametersFromTree(Tree allParametersTree) {
+		int totalParameters = allParametersTree.getChildCount();
+		for(int currentChild = 0; currentChild < totalParameters; currentChild++){
+			CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
 			int treeType = child.getType();
 			if(treeType == JavaParser.FORMAL_PARAM_STD_DECL ){
 				getAttributeName(child);
@@ -67,10 +65,10 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private void getAttributeName(Tree tree){
 		CommonTree attributeTree = (CommonTree) tree;
 		Tree attributeNameTree = attributeTree.getFirstChildWithType(JavaParser.IDENT);
-		try{
+		if(attributeNameTree != null){
 			this.declareName = attributeNameTree.getText();
-			this.nameFound = true;			
-		} catch (Exception e) { }		
+			this.nameFound = true;
+		}
 	}
 	
 	private String getParameterAttributes(Tree tree, int indent) {
@@ -139,15 +137,15 @@ public class JavaParameterGenerator extends JavaGenerator {
 		myParam.add(this.declareType);
 		myParam.add(this.declareName);
 		myParam.add(this.currentTypes);
-		saveQueue.add(myParam);
+		saveParameterQueue.add(myParam);
 		this.declareType = null;
 		this.declareName = null;
 		this.currentTypes = new ArrayList<String>();
 	}
 	
 	private void writeParameterToDomain() {
-		for(Object object : saveQueue){
-			ArrayList<Object> currentParam = (ArrayList<Object>) object;
+		for(ArrayList<Object> object : saveParameterQueue){
+			ArrayList<Object> currentParam = object;
 			String type = (String) currentParam.get(0);
 			String name = (String) currentParam.get(1);
 			ArrayList<String> types = (ArrayList<String>) currentParam.get(2);
