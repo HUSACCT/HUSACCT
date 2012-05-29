@@ -239,24 +239,30 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		loadAfterChange();	
-		filterPane.loadAfterChange();
+		loadAfterChange();
 		buttonSaveInHistory.setEnabled(true);
 	}
 
 	@Override
 	public void update(Locale newLocale) {
 		loadAfterChange();
-		filterPane.loadAfterChange();
 	}
 	
 	@Override
 	public void updateViolationsTable() {
-		loadAfterChange();
-		loadInformationPanel();
+		loadAfterFilter();
 	}
 	
 	public void loadAfterChange(){
+		shownViolations = getViolationsFilteredOrNormal();
+		loadText();
+		loadInformationPanel();
+		filterPane.loadAfterChange();
+		
+		fillViolationsTable(shownViolations);
+	}
+	
+	public void loadAfterFilter(){
 		shownViolations = getViolationsFilteredOrNormal();
 		loadText();
 		loadInformationPanel();
