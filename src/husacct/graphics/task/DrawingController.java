@@ -23,6 +23,7 @@ import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.FigureMap;
 import husacct.graphics.util.threads.DrawingLinesThread;
+import husacct.graphics.util.threads.DrawingMonitorThread;
 import husacct.graphics.util.threads.DrawingMultiLevelThread;
 import husacct.graphics.util.threads.DrawingSingleLevelThread;
 
@@ -231,8 +232,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
 		DrawingSingleLevelThread task = new DrawingSingleLevelThread(this, modules);
-		Thread drawThread = new Thread(task);
-		drawThread.start();
+		runInMonitorThread(task);
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
@@ -259,8 +259,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	private void runDrawMultiLevelTask(HashMap<String, ArrayList<AbstractDTO>> modules) {
 		DrawingMultiLevelThread task = new DrawingMultiLevelThread(this, modules);
-		Thread drawThread = new Thread(task);
-		drawThread.start();
+		runInMonitorThread(task);
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -314,8 +313,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	private void runDrawLinesTask() {
 		DrawingLinesThread task = new DrawingLinesThread(this);
-		Thread drawThread = new Thread(task);
-		drawThread.start();
+		runInMonitorThread(task);
 	}
 
 	public void drawLinesBasedOnSetting() {
@@ -478,5 +476,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void setDrawingViewNonVisible() {
 		drawingView.setVisible(false);
 		graphicsFrame.showLoadingScreen();
+	}
+	
+	public void runInMonitorThread(Runnable thread){
+		Thread drawThread = new Thread(thread);
+		DrawingMonitorThread monitorThread = new DrawingMonitorThread(this, drawThread);
+		monitorThread.start();
+		drawThread.start();
 	}
 }
