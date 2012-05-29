@@ -167,9 +167,7 @@ class SeverityPerTypeRepository implements Observer {
 					logger.error("Cannot severity cannot be null in SeverityPerTypeRepository");
 				}
 			}
-			HashMap<String, HashMap<String, Severity>> aapje = severitiesPerTypePerProgrammingLanguage;
-		}
-		
+		}		
 		else{
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
