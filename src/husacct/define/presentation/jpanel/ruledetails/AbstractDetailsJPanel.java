@@ -101,9 +101,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	
 	public HashMap<String, Object> saveToHashMap(){
 		HashMap<String, Object> hashMap = saveDefaultDataToHashMap();
-		if (!isException){
-			hashMap.put("dependencies", violationTypesJDialog.save());
-		}
+		hashMap.put("dependencies", violationTypesJDialog.save());
 		return hashMap;
 	}
 
