@@ -137,13 +137,23 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkSkipCall() {
-		boolean skipCallSucces = layerCheckerHelper.checkLayerSkippedTo(moduleFrom);
-		return skipCallSucces;
+		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkHasSkippedToLayer(moduleFrom)) {
+			Long layerSkippedToId = layerCheckerHelper.getLayerSkippedToId(moduleFrom.getId());
+			this.moduleTo = layerCheckerHelper.getLayerById(layerSkippedToId);
+			return checkIsAllowedToUse();
+		} else {
+			return false;
+		}
 	}
 	
 	private boolean checkBackCall() {
-		// #TODO:: implement Back Call Checks
-		return true;
+		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkHasLayerCalledBackTo(moduleFrom)) {
+			Long calledBackLayerId = layerCheckerHelper.getPreviousLayerId(moduleFrom.getId());
+			this.moduleTo = layerCheckerHelper.getLayerById(calledBackLayerId);
+			return checkIsAllowedToUse();
+		} else {
+			return false;
+		}
 	}
 	
 	public Module getModuleTo() {
