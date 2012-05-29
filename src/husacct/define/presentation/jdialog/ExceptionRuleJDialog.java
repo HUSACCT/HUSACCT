@@ -1,5 +1,7 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
@@ -44,7 +46,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	 * Constructor
 	 */
 	public ExceptionRuleJDialog(AppliedRuleController appliedRulesController, AppliedRuleJDialog appliedRuleFrame) {
-		super();
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.appliedRuleController = appliedRulesController;
 		this.appliedRuleFrame = appliedRuleFrame;
 		this.factoryDetails = new FactoryDetails();
@@ -78,7 +80,6 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 //			this.setResizable(false);
 			this.pack();
 			this.setSize(820, 620);
-			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
 			e.printStackTrace();

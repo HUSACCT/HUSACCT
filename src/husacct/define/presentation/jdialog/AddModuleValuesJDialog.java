@@ -1,5 +1,7 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ModuleJPanel;
@@ -40,7 +42,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	private ValueInputController inputController;
 	
 	public AddModuleValuesJDialog(ModuleJPanel modulePanel) {
-		super();
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.modulePanel = modulePanel;
 		this.inputController = new ValueInputController();
 
@@ -59,7 +61,6 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		
 		this.setResizable(true);
 		this.setSize(700, 190);
-		this.setModal(true);
 		this.setVisible(true);
 	}
 	
@@ -213,10 +214,12 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addSubSystem(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
-			//update tree view
-			this.modulePanel.updateModuleTree();
-			this.dispose();
+			boolean hasBeenAdded = definitionController.addSubSystem(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			if (hasBeenAdded){
+				//update tree view
+				this.modulePanel.updateModuleTree();
+				this.dispose();
+			}
 		}
 	}
 	
@@ -226,10 +229,12 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
-			//update tree view
-			this.modulePanel.updateModuleTree();
-			this.dispose();
+			boolean hasBeenAdded = definitionController.addLayer(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			if (hasBeenAdded){
+				//update tree view
+				this.modulePanel.updateModuleTree();
+				this.dispose();
+			}
 		}
 	}
 	
@@ -239,10 +244,12 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
-			//update tree view
-			this.modulePanel.updateModuleTree();
-			this.dispose();
+			boolean hasBeenAdded = definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			if (hasBeenAdded){
+				//update tree view
+				this.modulePanel.updateModuleTree();
+				this.dispose();
+			}
 		}
 	}
 	
@@ -252,10 +259,12 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			definitionController.addExternalLibrary(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
-			//update tree view
-			this.modulePanel.updateModuleTree();
-			this.dispose();
+			boolean hasBeenAdded = definitionController.addExternalLibrary(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			if (hasBeenAdded){
+				//update tree view
+				this.modulePanel.updateModuleTree();
+				this.dispose();
+			}
 		}
 	}
 	

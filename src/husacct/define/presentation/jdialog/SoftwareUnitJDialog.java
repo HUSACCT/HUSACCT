@@ -1,5 +1,7 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.PopUpController;
@@ -36,7 +38,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private SoftwareUnitController softwareUnitController;
 	
 	public SoftwareUnitJDialog(long moduleId) {
-		super();
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
 		initUI();
@@ -57,7 +59,6 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			this.setResizable(false);
 			this.pack();
 			this.setSize(650, 300);
-			this.setModal(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
