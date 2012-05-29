@@ -59,4 +59,5 @@ public interface IModelCreationService {
 	
 	//Single debugging functionality, to check the completeness of the implementation
 	public String represent();
+	public void clearMemoryFromObjectsNotUsedAnymore();
 }

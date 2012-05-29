@@ -30,17 +30,20 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass) {
+	public void createClass(String uniqueName, String name, String belongsToPackage, 
+			boolean isAbstract, boolean isInnerClass) {
 		createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", "public");
 	}
 
 	@Override
-	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass) {
+	public void createClass(String uniqueName, String name, String belongsToPackage, 
+			boolean isAbstract, boolean isInnerClass, String belongsToClass) {
 		createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, "public");
 	}
 	
 	@Override
-	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility) {
+	public void createClass(String uniqueName, String name, String belongsToPackage, 
+			boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibility) {
 		FamixClass fClass = new FamixClass();
 		fClass.uniqueName = uniqueName;
 		fClass.isAbstract = isAbstract;
@@ -69,7 +72,9 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 
 	@Override
-	public void createImport(String importingClass, String importedModule, int lineNumber, String completeImportString, boolean importsCompletePackage) {
+	public void createImport(String importingClass, String importedModule, int lineNumber, 
+			String completeImportString, boolean importsCompletePackage) {
+		
 		FamixImport fImport = new FamixImport();
 		fImport.from = importingClass;
 		fImport.to = importedModule;
@@ -82,7 +87,8 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature, boolean isPureAccessor, String declaredReturnType,
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, 
+			String signature, boolean isPureAccessor, String declaredReturnType,
 			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
 		
 		FamixMethod famixMethod = new FamixMethod();
@@ -100,12 +106,17 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName) {
+	public void createAttribute(Boolean classScope, String accesControlQualifier, 
+			String belongsToClass, String declareType, String name, String uniqueName) {
+		
 		this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, 0);
 	}
 	
 	@Override
-	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int line, List<String> declareTypes) {
+	public void createAttribute(Boolean classScope, String accesControlQualifier, 
+			String belongsToClass, String declareType, String name, String uniqueName, 
+			int line, List<String> declareTypes) {
+		
 		this.createAttribute(classScope, accesControlQualifier, belongsToClass, declareType, name, uniqueName, line);
 		
 		for(String type : declareTypes){
@@ -120,7 +131,9 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, String declareType, String name, String uniqueName, int line) {
+	public void createAttribute(Boolean classScope, String accesControlQualifier, String belongsToClass, 
+			String declareType, String name, String uniqueName, int line) {
+		
 		FamixAttribute famixAttribute = new FamixAttribute();
 		famixAttribute.hasClassScope = classScope;
 		famixAttribute.accessControlQualifier = accesControlQualifier;
@@ -217,7 +230,9 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createAnnotation(String belongsToClass, String declareType, String name, String uniqueName, int linenumber) {
+	public void createAnnotation(String belongsToClass, String declareType, String name, 
+			String uniqueName, int linenumber) {
+		
 		FamixAttribute famixAttribute = new FamixAttribute();
 		famixAttribute.hasClassScope = false;
 		famixAttribute.accessControlQualifier = "public";
@@ -285,7 +300,9 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createConstructorInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
+	public void createConstructorInvocation(String from, String to, int lineNumber, 
+			String invocationName, String belongsToMethod, String nameOfInstance) {
+		
 		FamixInvocation famixInvocation = new FamixInvocation();
 		famixInvocation.type = "InvocConstructor";
 		famixInvocation.from = from;
@@ -298,7 +315,9 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 	
 	@Override
-	public void createMethodInvocation( String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
+	public void createMethodInvocation( String from, String to, int lineNumber, 
+			String invocationName, String belongsToMethod, String nameOfInstance) {
+		
 		FamixInvocation famixInvocation = new FamixInvocation();
 		famixInvocation.type = "InvocMethod";
 		famixInvocation.from = from;
@@ -311,7 +330,9 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	}
 
 	@Override
-	public void createPropertyOrFieldInvocation(String from, String to, int lineNumber, String invocationName, String belongsToMethod, String nameOfInstance) {
+	public void createPropertyOrFieldInvocation(String from, String to, int lineNumber, 
+			String invocationName, String belongsToMethod, String nameOfInstance) {
+		
 		FamixInvocation famixInvocation = new FamixInvocation();
 		famixInvocation.type = "AccessPropertyOrField";
 		famixInvocation.from = from;
@@ -340,5 +361,14 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 	
 	public String represent(){
 		return model.toString();
+	}
+
+	@SuppressWarnings("unused")
+	@Override
+	public void clearMemoryFromObjectsNotUsedAnymore() {
+		for (FamixStructuralEntity entity : model.structuralEntities.values()){
+			entity = null;
+		}
+		
 	}	
 }
