@@ -35,7 +35,7 @@ public class VisibilityConventionExceptionJPanel extends AbstractDetailsJPanel{
 		this.add(enabledPanelComponent, new GridBagConstraints(0, 1, 2, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		
 		descriptionPanelComponent = new DescriptionPanelComponent();
-		this.add(descriptionPanelComponent, new GridBagConstraints(0, 3, 2, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.add(descriptionPanelComponent, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 	}
 	
 	@Override
@@ -44,9 +44,9 @@ public class VisibilityConventionExceptionJPanel extends AbstractDetailsJPanel{
 		ruleDetailsLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
 		// max total height = 290
 		if (!isException){ 
-			ruleDetailsLayout.rowHeights = new int[] { 30, 30, 30, 90 };
+			ruleDetailsLayout.rowHeights = new int[] { 30, 30, 90 };
 		} else {
-			ruleDetailsLayout.rowHeights = new int[] { 150, 30, 30, 90 };
+			ruleDetailsLayout.rowHeights = new int[] { 150, 30, 90 };
 		}
 		ruleDetailsLayout.columnWeights = new double[] { 0.0, 0.0 };
 		ruleDetailsLayout.columnWidths = new int[] { 130, 660 };
