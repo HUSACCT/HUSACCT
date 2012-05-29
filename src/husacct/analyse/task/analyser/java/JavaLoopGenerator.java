@@ -78,6 +78,9 @@ public class JavaLoopGenerator extends JavaGenerator{
 					
 					int lineNumber = typeIdentTree.getFirstChildWithType(JavaParser.IDENT).getLine();
 					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, type , tree.getChild(childCount + 1).getText(), lineNumber);
+				} else if (tree.getChild(childCount + 1).getType() == JavaParser.IDENT){
+					int lineNumber = tree.getChild(childCount + 1).getLine();
+					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(childCount + 1).getText(), lineNumber);
 				} else {
 					logger.warn("Problemen with finding type. Please notice analyse");
 				}
