@@ -6,5 +6,5 @@ public interface IModelPersistencyService{
 
 	public Element saveModel();
 	public void loadModel(Element analyseElement);
-	
+	public void exportToFile();
 }
