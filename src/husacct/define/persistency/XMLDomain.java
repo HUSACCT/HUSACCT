@@ -162,7 +162,7 @@ public class XMLDomain {
 			enabled = false;
 		}
 		
-		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), usedModule, restrictedModule, enabled);
+		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), restrictedModule, usedModule, enabled);
 		AppliedXMLRule.setId(Integer.parseInt(ruleId.getValue()));
 		
 		if (ruleExceptions != null) {
