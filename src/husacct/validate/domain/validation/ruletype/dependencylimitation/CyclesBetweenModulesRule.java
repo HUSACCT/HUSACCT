@@ -69,6 +69,7 @@ public class CyclesBetweenModulesRule extends RuleType{
 		}
 		return new HashSet<Violation>(violations);
 	}
+	
 	private boolean containsString(HashSet<String> set, String match){
 		for(String s : set){
 			if(s.equals(match)){
