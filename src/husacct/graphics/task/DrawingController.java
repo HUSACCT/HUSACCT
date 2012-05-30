@@ -23,9 +23,9 @@ import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.FigureMap;
 import husacct.graphics.util.threads.DrawingLinesThread;
-import husacct.graphics.util.threads.DrawingMonitorThread;
 import husacct.graphics.util.threads.DrawingMultiLevelThread;
 import husacct.graphics.util.threads.DrawingSingleLevelThread;
+import husacct.graphics.util.threads.ThreadMonitor;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -44,7 +44,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
 
-	private DrawingMonitorThread monitorThread;
 	protected Drawing drawing;
 	protected DrawingView drawingView;
 	protected GraphicsFrame graphicsFrame;
@@ -56,6 +55,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected FigureConnectorStrategy connectionStrategy;
 	protected LayoutStrategy layoutStrategy;
 
+	protected ThreadMonitor threadMonitor;
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
@@ -86,6 +86,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame = new GraphicsFrame(drawingView);
 		graphicsFrame.addListener(this);
 		graphicsFrame.setSelectedLayout(layoutStrategyOption);
+		
+		threadMonitor = new ThreadMonitor(this);		
 	}
 
 	private void switchLayoutStrategy() {
@@ -232,8 +234,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
-		DrawingSingleLevelThread task = new DrawingSingleLevelThread(this, modules);
-		runInMonitorThread(task);
+		threadMonitor.add(new DrawingSingleLevelThread(this, modules));
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
@@ -259,8 +260,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawMultiLevelTask(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		DrawingMultiLevelThread task = new DrawingMultiLevelThread(this, modules);
-		runInMonitorThread(task);
+		threadMonitor.add(new DrawingMultiLevelThread(this, modules));
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -313,8 +313,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawLinesTask() {
-		DrawingLinesThread task = new DrawingLinesThread(this);
-		runInMonitorThread(task);
+		threadMonitor.add(new DrawingLinesThread(this));
 	}
 
 	public void drawLinesBasedOnSetting() {
@@ -479,12 +478,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.showLoadingScreen();
 	}
 	
-	public void runInMonitorThread(Runnable thread){
-		if(!monitorThread.isAlive()){
-			Thread drawThread = new Thread(thread);
-			monitorThread = new DrawingMonitorThread(this, drawThread);
-			monitorThread.start();
-			drawThread.start();
-		}
-	}
+//	public void runInMonitorThread(Runnable thread){
+//		if(!monitorThread.isAlive()){
+//			Thread drawThread = new Thread(thread);
+//			monitorThread = new DrawingMonitorThread(this, drawThread);
+//			monitorThread.start();
+//			drawThread.start();
+//		}
+//	}
 }
