@@ -108,7 +108,8 @@ class ActiveViolationTypesRepository {
 		if(programmingLanguageExists(programmingLanguage)){
 			//TODO now only the current violationtypes are added, create possibility to also send only the changed violationtypes
 			//List<ActiveRuleType> checkedNewActiveViolationTypes = checkNewActiveViolationTypes(programmingLanguage, newActiveViolationTypes);
-
+			checkNewActiveViolationTypes(programmingLanguage, newActiveViolationTypes);
+			
 			if(currentActiveViolationTypes.containsKey(programmingLanguage)){
 				currentActiveViolationTypes.remove(programmingLanguage);
 				currentActiveViolationTypes.put(programmingLanguage, newActiveViolationTypes);
