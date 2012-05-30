@@ -49,7 +49,7 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 		if(localVariableTrees.size() > 0){
 			cleanVariableList();
 		}
-		if(localVariableTrees.size() > 1){
+		if(localVariableTrees.size() > 2){
 			createLocalVariableGenerator(lineNumber);
 		}
 		localVariableTrees.clear();
@@ -73,7 +73,7 @@ public class CSharpLocalVariableConvertController extends CSharpGenerator {
 			}
 		}
 		if(isLocalVariable){
-			if (localVariableTrees.size() > 1) {
+			if (localVariableTrees.size() > 2) {
 				CommonTree node = localVariableTrees.get(1);
 				int type = node.getType();
 				if(type == FORWARDBRACKET){
