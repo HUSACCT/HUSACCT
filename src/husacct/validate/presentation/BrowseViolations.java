@@ -357,7 +357,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			violationsTable.revalidate();
 		}
 		violationsTable.repaint();
-		violationsTable.setAutoCreateRowSorter(true) ;
+		violationsTable.setAutoCreateRowSorter(true);
 		violationsTable.setRowSorter(rowsorter);
 	}
 
