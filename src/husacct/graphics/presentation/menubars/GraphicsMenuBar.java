@@ -12,6 +12,7 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -27,6 +28,7 @@ public class GraphicsMenuBar extends JPanel {
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 
 	private HashMap<String, String> icons;
+	private ArrayList<JComponent> actions;
 
 	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton, showDependenciesButton, showViolationsButton;
 
@@ -49,6 +51,16 @@ public class GraphicsMenuBar extends JPanel {
 		icons.put("violationsHide", "/husacct/common/resources/graphics/icon-errors-hide.png");
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		actions = new ArrayList<JComponent>();
+		actions.add(zoomInButton);
+		actions.add(zoomOutButton);
+		actions.add(refreshButton);
+		actions.add(exportToImageButton);
+		actions.add(optionsDialogButton);
+		actions.add(showDependenciesButton);
+		actions.add(showViolationsButton);
+		actions.add(zoomSlider);
 	}
 	
 	private void setButtonIcon(JButton button, String iconKey){
@@ -296,34 +308,16 @@ public class GraphicsMenuBar extends JPanel {
 	}
 	
 	public void turnOffBar() {
-		ArrayList<JButton> actions = new ArrayList<JButton>();
-		actions.add(zoomInButton);
-		actions.add(zoomOutButton);
-		actions.add(refreshButton);
-		actions.add(exportToImageButton);
-		actions.add(optionsDialogButton);
-		actions.add(showDependenciesButton);
-		actions.add(showViolationsButton);
-		for(JButton comp : actions){
+		for(JComponent comp : actions){
 			comp.setEnabled(false);
 		}
-		zoomSlider.setEnabled(false);
 		graphicsOptionsDialog.turnOff();
 	}
 
 	public void turnOnBar(){
-		ArrayList<JButton> actions = new ArrayList<JButton>();
-		actions.add(zoomInButton);
-		actions.add(zoomOutButton);
-		actions.add(refreshButton);
-		actions.add(exportToImageButton);
-		actions.add(optionsDialogButton);
-		actions.add(showDependenciesButton);
-		actions.add(showViolationsButton);
-		for(JButton comp : actions){
+		for(JComponent comp : actions){
 			comp.setEnabled(true);
 		}
-		zoomSlider.setEnabled(true);
 		graphicsOptionsDialog.turnOn();
 	}
 

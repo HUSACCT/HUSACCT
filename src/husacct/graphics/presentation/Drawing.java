@@ -13,24 +13,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.QuadTreeDrawing;
 import org.jhotdraw.draw.io.ImageOutputFormat;
 
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
+	private ArrayList<BaseFigure> hiddenFigures;
 	private Logger logger = Logger.getLogger(Drawing.class);
-	FileManager filemanager = new FileManager();
-	File selectedFile = filemanager.getFile();
+	private FileManager filemanager = new FileManager();
+	private File selectedFile = filemanager.getFile();
 
 	public Drawing() {
 		super();
+		hiddenFigures = new ArrayList<BaseFigure>();
 	}
 
 	public void showExportToImagePanel() {
@@ -91,6 +95,35 @@ public class Drawing extends QuadTreeDrawing {
 		invalidate();
 		changed();
 	}
+	
+	public boolean hasHiddenFigures(){
+		return hiddenFigures.size() > 0;
+	}
+	
+	public void hideSelectedFigures(Set<Figure> selection) {
+		List<Figure> figures = getChildren();
+		for (Figure figure : figures) {
+			BaseFigure bf = (BaseFigure) figure;
+			if (!bf.isLine()) {
+				if (selection.contains(bf)) {
+					bf.setEnabled(false);
+					hiddenFigures.add(bf);
+				}
+			} else {
+				ConnectionFigure cf = (ConnectionFigure) figure;
+				if (selection.contains(cf.getStartFigure()) || selection.contains(cf.getEndFigure())) {
+					bf.setEnabled(false);
+					hiddenFigures.add(bf);
+				}
+			}
+		}
+	}
+	
+	public void restoreHiddenFigures(){
+		for (BaseFigure figure : hiddenFigures) {
+			figure.setEnabled(true);
+		}
+	}
 
 	public void clearAll() {
 		willChange();
@@ -107,6 +140,13 @@ public class Drawing extends QuadTreeDrawing {
 		}
 		invalidate();
 		changed();
+	}
+	
+	public void updateLines() {
+		RelationFigure[] lines = getShownLines();
+		for (RelationFigure line : lines) {
+			line.updateConnection();
+		}
 	}
 
 	public void updateLineFigureToContext() {

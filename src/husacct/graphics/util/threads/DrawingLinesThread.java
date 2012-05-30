@@ -12,15 +12,7 @@ public class DrawingLinesThread implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			controller.setDrawingViewNonVisible();
-			controller.drawLines();
-			controller.setDrawingViewVisible();
-			Thread.sleep(10);
-			controller.refreshFrameClean();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		controller.drawLinesBasedOnSetting();
 	}
 
 }

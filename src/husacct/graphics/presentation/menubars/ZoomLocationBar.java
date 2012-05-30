@@ -66,8 +66,8 @@ public class ZoomLocationBar extends JPanel {
 				Set<Integer> keySet = levelPath.keySet();
 				ArrayList<String> capturedLevels = new ArrayList<String>();
 				for (Integer pathID : keySet) {
-					if(!capturedLevels.contains(levelPath.get(pathID))){
-						visiblePath += " " + LOCATION_COMBINER + " "+levelPath.get(pathID);
+					if (!capturedLevels.contains(levelPath.get(pathID))) {
+						visiblePath += " " + LOCATION_COMBINER + " " + levelPath.get(pathID);
 					}
 					String currentValuePath = currentPath.get(pathID);
 					if (null == currentValuePath) {
@@ -132,25 +132,25 @@ public class ZoomLocationBar extends JPanel {
 	public void removeLocationButtonPressListener(LocationButtonActionListener actionListener) {
 		locationButtonPressListener.remove(actionListener);
 	}
-	
-	public String[] getSecondLastPath(){
-		try{
-			int secondLastIndex = buttons.size()-2;
+
+	public String[] getSecondLastPath() {
+		try {
+			int secondLastIndex = buttons.size() - 2;
 			JButton secondLastButton = buttons.get(secondLastIndex);
 			return buttonPaths.get(secondLastButton);
-		}catch(Exception e){
-			return new String[]{};
+		} catch (Exception e) {
+			return new String[] {};
 		}
 	}
 
 	public void turnOnBar() {
-		for(JButton button : buttons){
+		for (JButton button : buttons) {
 			button.setEnabled(true);
 		}
 	}
 
 	public void turnOffBar() {
-		for(JButton button : buttons){
+		for (JButton button : buttons) {
 			button.setEnabled(false);
 		}
 	}

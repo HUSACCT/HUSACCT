@@ -21,10 +21,8 @@ public class DrawingMultiLevelThread implements Runnable {
 		try {
 			controller.drawMultiLevel(toDrawModules);
 			Thread.sleep(10);
-			controller.refreshFrameClean();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

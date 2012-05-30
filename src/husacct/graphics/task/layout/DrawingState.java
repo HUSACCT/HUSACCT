@@ -5,7 +5,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.figures.BaseFigure;
-import husacct.graphics.task.FigureMap;
+import husacct.graphics.util.FigureMap;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
