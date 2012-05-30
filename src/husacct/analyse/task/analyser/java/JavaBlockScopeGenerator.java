@@ -31,11 +31,16 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
 			else if(treeType == JavaParser.CLASS_CONSTRUCTOR_CALL ){ 
                 delegateInvocation(child, "invocConstructor"); 
             } 
-			else if(treeType == JavaParser.METHOD_CALL ){ 
-                if (child.getChild(0).getType() == JavaParser.DOT){ 
-                	delegateInvocation(child, "invocMethod");
-                }
-            } 
+			else if(treeType == JavaParser.EXPR){
+				if (child.getChild(0).getType() == JavaParser.METHOD_CALL){
+					if (child.getChild(0).getType() == JavaParser.DOT){ 
+	                	delegateInvocation(child, "invocMethod");
+	                }
+				}
+				else if (child.getChild(0).getType() == JavaParser.DOT){
+					delegateInvocation(child, "accessPropertyOrField");
+				}
+			}
 			else if(treeType == JavaParser.THROW || treeType == JavaParser.CATCH || treeType == JavaParser.THROWS){
 				delegateException(child); 
 				deleteTreeChild(child); 
