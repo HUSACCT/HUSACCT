@@ -145,7 +145,7 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroyFuture(){
 		String from = "domain.foursquarealternative.kilroy.Future";
-		int expectedDependencies = 6;
+		int expectedDependencies = 7;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);

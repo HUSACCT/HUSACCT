@@ -20,12 +20,15 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	public String name;
 	public String uniqueName;
 	
+	private int lineNumber;
+	
 	private Logger logger = Logger.getLogger(JavaMethodGeneratorController.class);
 	
 	JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
 
 	public void delegateMethodBlock(CommonTree methodTree, String className) {
-		this.belongsToClass = className;		
+		this.belongsToClass = className;	
+		lineNumber = methodTree.getLine();
 		checkMethodType(methodTree);		
 		WalkThroughMethod(methodTree);
 		createMethodObject();	
@@ -129,6 +132,6 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	
 	private void createMethodObject(){
 		uniqueName = belongsToClass + "." + this.name + signature;
-		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
+		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
 	}	
 }

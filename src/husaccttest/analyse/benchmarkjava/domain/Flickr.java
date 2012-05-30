@@ -85,7 +85,7 @@ public class Flickr extends BenchmarkExtended{
 	@Test
 	public void testDomainFlickrTag(){
 		String from = "domain.flickr.Tag";
-		int expectedDependencies = 4;
+		int expectedDependencies = 5;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
