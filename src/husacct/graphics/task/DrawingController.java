@@ -44,6 +44,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	private HashMap<String, DrawingState> storedStates = new HashMap<String, DrawingState>();
 
+	private DrawingMonitorThread monitorThread;
 	protected Drawing drawing;
 	protected DrawingView drawingView;
 	protected GraphicsFrame graphicsFrame;
@@ -479,9 +480,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	public void runInMonitorThread(Runnable thread){
-		Thread drawThread = new Thread(thread);
-		DrawingMonitorThread monitorThread = new DrawingMonitorThread(this, drawThread);
-		monitorThread.start();
-		drawThread.start();
+		if(!monitorThread.isAlive()){
+			Thread drawThread = new Thread(thread);
+			monitorThread = new DrawingMonitorThread(this, drawThread);
+			monitorThread.start();
+			drawThread.start();
+		}
 	}
 }

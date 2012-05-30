@@ -2,7 +2,6 @@ package husacct.graphics.util.threads;
 
 import husacct.graphics.task.DrawingController;
 
-
 public class DrawingMonitorThread extends Thread implements Runnable {
 	
 	private Thread thread;
@@ -11,6 +10,12 @@ public class DrawingMonitorThread extends Thread implements Runnable {
 	public DrawingMonitorThread(DrawingController givenController, Thread toRunThread){
 		thread = toRunThread;
 		controller = givenController;
+		thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler(){
+			@Override
+			public void uncaughtException(Thread runningThread, Throwable exception) {
+				threadException(runningThread, exception);
+			}
+		});
 	}
 
 	@Override
@@ -26,4 +31,7 @@ public class DrawingMonitorThread extends Thread implements Runnable {
 		}
 	}
 
+	protected void threadException(Thread runningThread, Throwable exception) {
+//		controller.reset();
+	}
 }
