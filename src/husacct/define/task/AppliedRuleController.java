@@ -238,6 +238,7 @@ public class AppliedRuleController extends PopUpController {
 				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
 				this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
 			}
+			
 			this.saveAllExceptionRules();
 			DefinitionController.getInstance().notifyObservers(this.currentModuleId);
 			return true;
@@ -329,13 +330,14 @@ public class AppliedRuleController extends PopUpController {
 			long appliedRuleId = currentAppliedRuleId;
 			String ruleTypeKey = (String) exceptionRule.get("ruleTypeKey");
 			String description = (String) exceptionRule.get("description");
-
+			String[] dependencies = (String[]) exceptionRule.get("dependencies");
+			
 			Object from = exceptionRule.get("moduleFromId");
 			Object to = exceptionRule.get("moduleToId");
 			Module moduleFrom = assignToCorrectModule(from);
 			Module moduleTo = assignToCorrectModule(to);
 			
-			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo);
+			this.appliedRuleExceptionService.addExceptionToAppliedRule(appliedRuleId, ruleTypeKey, description, moduleFrom, moduleTo, dependencies);
 		}
 	}
 	private void loadAllRuleExceptions(){

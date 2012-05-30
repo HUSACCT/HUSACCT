@@ -1,5 +1,7 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.ServiceProvider;
+import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.domain.SoftwareUnitDefinition;
@@ -56,7 +58,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private JButton jButtonSave;
 	
 	public AppliedRuleJDialog(long moduleId, long appliedRuleId) {
-		super();
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.appliedRuleController = new AppliedRuleController(moduleId, appliedRuleId);
 		this.factoryDetails = new FactoryDetails();
 		initGUI();
@@ -79,7 +81,6 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 //			this.setResizable(false);
 			this.pack();
 			this.setSize(820, 590);
-			this.setModal(true);
 		} catch (Exception e) {
 			// add your error handling code here
 			e.printStackTrace();

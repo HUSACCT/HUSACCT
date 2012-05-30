@@ -31,6 +31,11 @@ public class ModuleDomainService {
 		module.setDescription(moduleDescription);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
+	
+	public void removeAllModules() {
+		SoftwareArchitecture.getInstance().removeAllModules();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+	}
 
 	public void removeModuleById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
