@@ -8,6 +8,8 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
+import husacct.validate.domain.validation.logicalmodule.LogicalModule;
+import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -38,7 +40,11 @@ public class MustUseRule extends RuleType{
 			}
 		}	
 		if(dependencyCounter == 0 && physicalClasspathsTo.size() != 0){
-			Violation violation = createViolation(rootRule, configuration);
+			LogicalModule logicalModuleFrom = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
+			LogicalModule logicalModuleTo = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
+			LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
+						
+			Violation violation = createViolation(rootRule, logicalModules, configuration);
 			violations.add(violation);
 		}
 		return violations;

@@ -97,12 +97,11 @@ public abstract class RuleType {
 		return new Violation(dependency.lineNumber, severity.clone(), this.key, dependency.type, dependency.from, dependency.to, dependency.isIndirect, message, logicalModules);
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, ConfigurationServiceImpl configuration){
+	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules,ConfigurationServiceImpl configuration){
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
-		LogicalModules logicalModules = new LogicalModules();
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
-		return new Violation(0, severity.clone(), this.key,"", "", "", false, message,logicalModules);
+		return new Violation(severity.clone(), this.key, false, message,logicalModules);
 
 	}
 
@@ -120,7 +119,7 @@ public abstract class RuleType {
 			isIndirect = true;
 		}
 
-		return new Violation(0, severity.clone(), this.key, "", classPathFrom.getPhysicalPath(), "", isIndirect, message, logicalModules);
+		return new Violation(severity.clone(), this.key, classPathFrom.getPhysicalPath(), isIndirect, message, logicalModules);
 	}
 
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration){
@@ -132,7 +131,7 @@ public abstract class RuleType {
 		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);	
 
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
-		return new Violation(0, severity.clone(), this.key, "", classPathFrom.getPhysicalPath(), "", false, message, logicalModules);
+		return new Violation(severity.clone(), this.key, violationTypeKey, classPathFrom.getPhysicalPath(), false, message, logicalModules);
 	}
 
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration){
