@@ -35,21 +35,26 @@ public abstract class ReportWriter {
 			return "indirect";
 		}
 	}
-	
+
 
 	protected String getDependencyKindValue(String violationtypeKey,
 			boolean indirect) {
-		String value = ServiceProvider.getInstance().getControlService().getTranslatedString(violationtypeKey);
-		value += ", ";
-		if(indirect) {
-			value += "indirect";
-		} else {
-			value += "direct";
+		if(!violationtypeKey.isEmpty()) {
+			String value = ServiceProvider.getInstance().getControlService().getTranslatedString(violationtypeKey);
+			value += ", ";
+			if(!violationtypeKey.equals("VisibilityConvention")) {
+				if(indirect) {
+					value += "indirect";
+				} else {
+					value += "direct";
+				}
+			}
+			return value;
 		}
-		return value;
+		return "";
 	}
 
-	
+
 	public String getCurrentDate(){
 		return new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
 	}

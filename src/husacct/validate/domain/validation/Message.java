@@ -14,30 +14,35 @@ public class Message {
 	private String ruleKey;
 	private List<String> violationTypeKeys;
 	private List<Message> exceptionMessage;
+	private String regex;
 	
 	public Message(RuleDTO appliedRule){				
 		this.ruleKey = appliedRule.ruleTypeKey;
 		this.violationTypeKeys = Arrays.asList(appliedRule.violationTypeKeys);
 		this.exceptionMessage = Collections.emptyList();
+		this.regex = appliedRule.regex;
 		this.logicalModules = createLogicalModules(appliedRule);
-		createExceptionMessage(appliedRule);
+		this.exceptionMessage = new ArrayList<Message>(0);
+		this.exceptionMessage.addAll(createExceptionMessage(appliedRule));
 	}	
 	
 	public Message(LogicalModules logicalModules, String ruleKey, List<String> violationTypeKeys){
 		this.logicalModules = logicalModules;
 		this.ruleKey = ruleKey;
+		this.regex = "";
 		this.violationTypeKeys = violationTypeKeys;
-		this.exceptionMessage = Collections.emptyList();
+		this.exceptionMessage = new ArrayList<Message>(0);
 	}
 
-	public Message(LogicalModules logicalModules, String ruleKey, List<String> violationTypeKeys, List<Message> exceptionMessage){
+	public Message(LogicalModules logicalModules, String ruleKey, List<String> violationTypeKeys, String regex, List<Message> exceptionMessage){
 		this.logicalModules = logicalModules;
 		this.ruleKey = ruleKey;
+		this.regex = regex;
 		this.violationTypeKeys = violationTypeKeys;
 		this.exceptionMessage = exceptionMessage;
 	}
 	
-	private void createExceptionMessage(RuleDTO appliedRule) {
+	private List<Message> createExceptionMessage(RuleDTO appliedRule) {
 		List<Message> exceptionMessages = new ArrayList<Message>();
 		for(RuleDTO exceptionRule : appliedRule.exceptionRules){
 			final LogicalModules logicalModules = createLogicalModules(exceptionRule);
@@ -47,11 +52,16 @@ public class Message {
 			Message exceptionMessage = new Message(logicalModules, ruleKey, violationTypeKeys);
 			
 			exceptionMessages.add(exceptionMessage);
-		}		
+		}
+		return exceptionMessages;
 	}
 
 	public String getRuleKey() {
 		return ruleKey;
+	}
+	
+	public String getRegex(){
+		return regex;
 	}
 
 	public List<String> getViolationTypeKeys() {

@@ -219,6 +219,9 @@ class ActiveViolationPanel extends JPanel {
 		for (String categoryString : ruletypes.keySet()) {
 			categoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
+		if(!categoryModel.isEmpty()){
+			categoryJList.setSelectedIndex(0);
+		}
 	}
 
 	private void SelectAllActionPerformed() {
@@ -268,7 +271,12 @@ class ActiveViolationPanel extends JPanel {
 		ruletypeModel.clear();
 		List<RuleType> rules = ruletypes.get(category);
 		for(RuleType ruletype: rules){
-			ruletypeModel.addElement(new DataLanguageHelper(ruletype.getKey()));
+			if(!ruletype.getViolationTypes().isEmpty()){
+				ruletypeModel.addElement(new DataLanguageHelper(ruletype.getKey()));
+			}
+		}
+		if(!ruletypeModel.isEmpty()){
+			ruletypeJList.setSelectedIndex(0);
 		}
 	}
 

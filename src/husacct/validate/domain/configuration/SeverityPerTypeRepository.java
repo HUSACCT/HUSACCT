@@ -167,27 +167,24 @@ class SeverityPerTypeRepository implements Observer {
 					logger.error("Cannot severity cannot be null in SeverityPerTypeRepository");
 				}
 			}
-			HashMap<String, HashMap<String, Severity>> aapje = severitiesPerTypePerProgrammingLanguage;
-		}
-		
+		}		
 		else{
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
 	}
 
 	private boolean isValidKey(String programmingLanguage, String key){
-		boolean foundKey = false;
 		if(programmingLanguageExists(programmingLanguage)){			
 			for(String defaultKey : defaultSeveritiesPerTypePerProgrammingLanguage.get(programmingLanguage).keySet()){
 				if(defaultKey.toLowerCase().equals(key.toLowerCase())){
-					foundKey = true;
+					return true;
 				}
 			}
 		}
 		else{
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
-		return foundKey;
+		return false;
 	}
 
 	private boolean programmingLanguageExists(String programmingLanguage){
@@ -264,104 +261,4 @@ class SeverityPerTypeRepository implements Observer {
 		}
 		return index;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

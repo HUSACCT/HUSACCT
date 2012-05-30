@@ -30,14 +30,14 @@ public abstract class RuleType {
 	protected final List<ViolationType> violationtypes;	
 	protected List<RuleType> exceptionrules;
 	protected final Severity severity;
-	
+
 	protected List<Violation> violations;
 	protected Mappings mappings;
 	protected List<Mapping> physicalClasspathsFrom;
 
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-	
+
 	private AbstractViolationType violationtypefactory;
 
 	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
@@ -82,56 +82,64 @@ public abstract class RuleType {
 	}
 
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
-	
+
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, DependencyDTO dependency, ConfigurationServiceImpl configuration){
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
-		
+
 		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 		LogicalModule logicalModuleTo = new LogicalModule(classPathTo);
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-		
+
 		final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);	
 
 		return new Violation(dependency.lineNumber, severity.clone(), this.key, dependency.type, dependency.from, dependency.to, dependency.isIndirect, message, logicalModules);
 	}
-	
+
+	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules,ConfigurationServiceImpl configuration){
+		initializeViolationTypeFactory(configuration);
+		Message message = new Message(rootRule);
+		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
+		return new Violation(severity.clone(), this.key, false, message,logicalModules);
+
+	}
+
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, ConfigurationServiceImpl configuration){
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
-		
+
 		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-		
+
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
-		
+
 		boolean isIndirect = false;
 		if(key.equals(RuleTypes.CYCLES_BETWEEN_MODULES)){
 			isIndirect = true;
 		}
-		
-		return new Violation(0, severity.clone(), this.key, "", classPathFrom.getPhysicalPath(), "", isIndirect, message, logicalModules);
+
+		return new Violation(severity.clone(), this.key, classPathFrom.getPhysicalPath(), isIndirect, message, logicalModules);
 	}
-	
+
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration){
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
-		
+
 		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);	
-		
+
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
-		return new Violation(0, severity.clone(), this.key, "", classPathFrom.getPhysicalPath(), "", false, message, logicalModules);
+		return new Violation(severity.clone(), this.key, violationTypeKey, classPathFrom.getPhysicalPath(), false, message, logicalModules);
 	}
-	
+
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration){
 		if(violationtypefactory == null){
 			this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		}
 	}
-	
+
 	private Severity getViolationTypeSeverity(String violationTypeKey){
 		try{
 			return violationtypefactory.createViolationType(this.key, violationTypeKey).getSeverity();

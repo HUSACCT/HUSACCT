@@ -3,8 +3,6 @@ package husacct.validate.presentation.browseViolations;
 import husacct.ServiceProvider;
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import java.util.List;
 
@@ -21,11 +19,8 @@ public class ViolationInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 8505333261388149299L;
 
-	private JLabel detailLogicalModuleLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
-					detailsLogicalModuleLabel, detailsLineNumberLabel, detailsMessageLabel;
-	private JTable violationsTable;
-	private List<Violation> shownViolations;
-	private ListSelectionEvent arg0;
+	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
+					detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 
 	public ViolationInformationPanel() {
 		createBaseLayout();
@@ -33,24 +28,29 @@ public class ViolationInformationPanel extends JPanel {
 
 	private void createBaseLayout() {
 		detailsLineNumberLabel = new JLabel();
-		detailsLogicalModuleLabel = new JLabel();
+		detailsLogicalModuleFromLabel = new JLabel();
 		detailsMessageLabel = new JLabel();
 		detailLineNumberLabelValue = new JLabel();
-		detailLogicalModuleLabelValue = new JLabel();
+		detailLogicalModuleFromLabelValue = new JLabel();
 		detailMessageLabelValue = new JLabel();
+		detailLogicalModuleToLabel = new JLabel();
+		detailLogicalModuleToValue = new JLabel();
+		
 		GroupLayout gl_violationDetailPane = new GroupLayout(this);
 		gl_violationDetailPane.setHorizontalGroup(
 				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_violationDetailPane.createSequentialGroup()
 						.addContainerGap()
 						.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(detailsLogicalModuleLabel)
+								.addComponent(detailsLogicalModuleFromLabel)
+								.addComponent(detailLogicalModuleToLabel)
 								.addComponent(detailsMessageLabel)
 								.addGroup(gl_violationDetailPane.createSequentialGroup()
 										.addComponent(detailsLineNumberLabel)
 										.addGap(53)
 										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(detailLogicalModuleLabelValue)
+												.addComponent(detailLogicalModuleFromLabelValue)
+												.addComponent(detailLogicalModuleToValue)
 												.addComponent(detailLineNumberLabelValue)
 												.addComponent(detailMessageLabelValue))))
 												.addContainerGap(397, Short.MAX_VALUE))
@@ -64,62 +64,47 @@ public class ViolationInformationPanel extends JPanel {
 								.addComponent(detailLineNumberLabelValue))
 								.addPreferredGap(ComponentPlacement.UNRELATED)
 								.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(detailsLogicalModuleLabel)
-										.addComponent(detailLogicalModuleLabelValue))
+										.addComponent(detailsLogicalModuleFromLabel)
+										.addComponent(detailLogicalModuleFromLabelValue))
 										.addPreferredGap(ComponentPlacement.UNRELATED)
 										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(detailsMessageLabel)
-												.addComponent(detailMessageLabelValue))
-												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+											.addComponent(detailLogicalModuleToLabel)
+											.addComponent(detailLogicalModuleToValue))
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
+													.addComponent(detailsMessageLabel)
+													.addComponent(detailMessageLabelValue))
+													.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		setLayout(gl_violationDetailPane);
 		
-		addComponentListener(new ComponentListener() {  
-			@Override
-				public void componentResized(ComponentEvent evt) {
-					if(arg0 != null){
-						update(arg0, violationsTable, shownViolations);
-					}
-				}
-
-			@Override
-			public void componentMoved(ComponentEvent e) {
-			}
-
-			@Override
-			public void componentShown(ComponentEvent e) {
-			}
-
-			@Override
-			public void componentHidden(ComponentEvent e) {
-			}
-		});
-
+		
 	}
 
 	public void loadGuiText() {
 		setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Details")));
 		detailsLineNumberLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LineNumber"));
-		detailsLogicalModuleLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LogicalModule"));
+		detailsLogicalModuleFromLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LogicalModuleFrom"));
 		detailsMessageLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Message"));
+		detailLogicalModuleToLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LogicalModuleTo"));
 	}
 
 	public void update(ListSelectionEvent arg0, JTable violationsTable, List<Violation> shownViolations) {
-		this.arg0 = arg0;
-		this.violationsTable = violationsTable;
-		this.shownViolations = shownViolations;
 		if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
 			detailLineNumberLabelValue.setText("" + violation.getLinenumber());
-			detailLogicalModuleLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath() + "</body></html>");
+			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
+			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
 			String message = new Messagebuilder().createMessage(violation.getMessage());
-			detailMessageLabelValue.setText("<html><body style='width: " + (((int) getSize().getWidth()) - 200) + "px;'>" + message + "</body></html>");
+			detailMessageLabelValue.setText(message);
 		} else {
 			detailLineNumberLabelValue.setText("");
-			detailLogicalModuleLabelValue.setText("");
+			detailLogicalModuleFromLabelValue.setText("");
+			detailLogicalModuleToValue.setText("");
 			detailMessageLabelValue.setText("");
 		}
+		updateUI();
 	}
 
 }

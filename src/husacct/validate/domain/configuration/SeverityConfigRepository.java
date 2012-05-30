@@ -150,10 +150,7 @@ class SeverityConfigRepository {
 		boolean foundError = false;
 		for(Severity defaultSeverity : defaultSeverities){
 			for(Severity newSeverity : newSeverities){
-				if(newSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED.toString()) || defaultSeverity.getId().equals(newSeverity.getId())){
-					foundError = true;					
-				}
-				if(newSeverity.getDefaultName().toLowerCase().equals(DefaultSeverities.UNIDENTIFIED.toString().toLowerCase())){				
+				if(newSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED.toString()) || (defaultSeverity.getId().equals(newSeverity.getId()) && defaultSeverity.getDefaultName().equals(DefaultSeverities.UNIDENTIFIED))){
 					foundError = true;					
 				}
 				if(foundError){
