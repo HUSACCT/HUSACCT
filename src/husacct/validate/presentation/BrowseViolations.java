@@ -356,9 +356,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
 			violationsTable.revalidate();
 		}
-		violationsTable.repaint();
 		violationsTable.setAutoCreateRowSorter(true);
-		violationsTable.setRowSorter(rowsorter);
 	}
 
 	public void loadInformationPanel() {
