@@ -1,11 +1,13 @@
 package husacct.validate.task;
 
+import husacct.validate.domain.exception.FileNotAccessibleException;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.task.extensiontypes.ExtensionTypes;
 import husacct.validate.task.report.ExportReportFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.List;
@@ -26,12 +28,29 @@ public class ReportServiceImpl implements IReportService{
 
 	@Override
 	public void createReport(File file, String fileType){
-		reportFactory.exportReport(fileType, taskServiceImpl.getAllViolations(), file.getName(), file.getParent(), taskServiceImpl.getAllSeverities());
+		try {
+			if(file.createNewFile()) {
+				reportFactory.exportReport(fileType, taskServiceImpl.getAllViolations(), file.getName(), file.getParent(), taskServiceImpl.getAllSeverities());
+				return;
+			} 
+		} catch (IOException e) {
+			throw new FileNotAccessibleException(file);
+		}
+		throw new FileNotAccessibleException(file);
 	}
 
 	@Override
 	public void createReport(File file, String fileType, Calendar date) {
-		ViolationHistory violationHistory = taskServiceImpl.getViolationHistoryByDate(date);
-		reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), file.getName(), file.getParent(), violationHistory.getSeverities());
+		try {
+			if(file.createNewFile()) {
+				ViolationHistory violationHistory = taskServiceImpl.getViolationHistoryByDate(date);
+				reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), file.getName(), file.getParent(), violationHistory.getSeverities());
+				return;
+			} 
+		} catch (IOException e) {
+			throw new FileNotAccessibleException(file);
+		}
+		throw new FileNotAccessibleException(file);
+		
 	}
 }
