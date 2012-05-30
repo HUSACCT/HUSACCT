@@ -42,6 +42,7 @@ public class ViolationInformationPanel extends JPanel {
 						.addContainerGap()
 						.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(detailsLogicalModuleFromLabel)
+								.addGap(53)
 								.addComponent(detailLogicalModuleToLabel)
 								.addComponent(detailsMessageLabel)
 								.addGroup(gl_violationDetailPane.createSequentialGroup()
@@ -101,6 +102,7 @@ public class ViolationInformationPanel extends JPanel {
 			detailLogicalModuleToValue.setText("");
 			detailMessageLabelValue.setText("");
 		}
+		updateUI();
 	}
 
 }
