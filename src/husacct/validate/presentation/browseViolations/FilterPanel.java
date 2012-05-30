@@ -6,6 +6,8 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.TaskServiceImpl;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,16 +29,13 @@ import org.apache.log4j.Logger;
 public class FilterPanel extends JPanel {
 
 	private static final long serialVersionUID = 8013809183676306609L;
-
 	private final BrowseViolations browseViolations;
 	private final FilterViolations filterViolations;
-	
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
 	private JRadioButton rdbtnIndirect, rdbtnAll, rdbtnDirect;
-	
 	private static Logger logger = Logger.getLogger(FilterPanel.class);
-	
+
 	public FilterPanel(BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl) {
 		this.browseViolations = browseViolations;
 		this.filterViolations = new FilterViolations(taskServiceImpl, browseViolations);
@@ -44,7 +43,7 @@ public class FilterPanel extends JPanel {
 		loadAfterChange();
 	}
 
-	private void initComponents(){
+	private void initComponents() {
 		applyFilter = new JCheckBox("Apply Filter");
 		buttonEditFilter = new JButton("Edit Filter");
 		rdbtnAll = new JRadioButton("All");
@@ -97,25 +96,35 @@ public class FilterPanel extends JPanel {
 
 	}
 
-	private void addListeners(){
+	private void addListeners() {
 		applyFilter.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				browseViolations.loadAfterChange();
-;			}
+				;
+			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				final Toolkit toolkit = Toolkit.getDefaultToolkit();
+				final Dimension screenSize = toolkit.getScreenSize();
+				final int x = (screenSize.width - filterViolations.getWidth()) / 2;
+				final int y = (screenSize.height - filterViolations.getHeight()) / 2;
+				filterViolations.setLocation(x, y);
+
 				filterViolations.setVisible(true);
 			}
-
 		});
 		rdbtnAll.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				final Thread filterThread = new Thread() { 
-					@Override 
+				final Thread filterThread = new Thread() {
+
+					@Override
 					public void run() {
 						try {
 							Thread.sleep(1);
@@ -126,34 +135,38 @@ public class FilterPanel extends JPanel {
 					}
 				};
 				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
-				validateThread.run();	
-							
+				validateThread.run();
+
 			}
 		});
 		rdbtnDirect.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				final Thread filterThread = new Thread() { 
-					@Override 
+				final Thread filterThread = new Thread() {
+
+					@Override
 					public void run() {
 						try {
 							Thread.sleep(1);
-							fillViolationsTable(false);	
+							fillViolationsTable(false);
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
 				};
 				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
-				validateThread.run();	
+				validateThread.run();
 
 			}
 		});
 		rdbtnIndirect.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				final Thread filterThread = new Thread() { 
-					@Override 
+				final Thread filterThread = new Thread() {
+
+					@Override
 					public void run() {
 						try {
 							Thread.sleep(1);
@@ -164,21 +177,23 @@ public class FilterPanel extends JPanel {
 					}
 				};
 				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
-				validateThread.run();	
-				
+				validateThread.run();
+
 			}
 		});
 	}
 
-	private void fillViolationsTable(boolean isIndirect){
-		List<Violation> violationsIndirect = new ArrayList<Violation>();
-		List<Violation> violations = browseViolations.getViolationsFilteredOrNormal();
-		for(Violation violation : violations) {
-			if(violation.isIndirect() == isIndirect) {
-				violationsIndirect.add(violation);
+	private void fillViolationsTable(boolean isIndirect) {
+		if (applyFilter.isSelected()) {
+			List<Violation> violationsIndirect = new ArrayList<Violation>();
+			List<Violation> violations = browseViolations.getViolationsFilteredOrNormal();
+			for (Violation violation : violations) {
+				if (violation.isIndirect() == isIndirect) {
+					violationsIndirect.add(violation);
+				}
 			}
+			browseViolations.fillViolationsTable(violationsIndirect);
 		}
-		browseViolations.fillViolationsTable(violationsIndirect);
 	}
 
 	public void loadAfterChange() {

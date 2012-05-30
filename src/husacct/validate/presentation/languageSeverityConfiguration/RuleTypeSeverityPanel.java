@@ -207,6 +207,9 @@ class RuleTypeSeverityPanel extends JPanel {
 		for (String categoryString : ruletypes.keySet()) {
 			rtsCategoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
+		if(!rtsCategoryModel.isEmpty()){
+			category.setSelectedIndex(0);
+		}
 	}
 
 	private void loadRuleTypes(String category) {
