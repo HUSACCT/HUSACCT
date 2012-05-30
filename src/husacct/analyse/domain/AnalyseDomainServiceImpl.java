@@ -63,10 +63,10 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
-		List<DependencyDTO> depdencyList = queryService.getDependencies(from, to);
-		DependencyDTO[] dependencies = new DependencyDTO[depdencyList.size()];
+		List<DependencyDTO> dependencyList = queryService.getDependencies(from, to);
+		DependencyDTO[] dependencies = new DependencyDTO[dependencyList.size()];
 		int count = 0;
-		for(DependencyDTO dependency: depdencyList){
+		for(DependencyDTO dependency: dependencyList){
 			dependencies[count] = dependency;
 			count++;
 		}

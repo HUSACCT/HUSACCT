@@ -10,11 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
-
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.Rectangle;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
 
@@ -27,6 +23,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	private AnalyseUIController controller;
 	private JPanel cancelPanel;
 	private JButton cancelButton;
+	private JButton exportDependenciesButton;
 
 	public AnalyseInternalFrame() {
 		this.controller = new AnalyseUIController();
@@ -50,6 +47,9 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		cancelPanel = new JPanel();
 		getContentPane().add(cancelPanel, BorderLayout.SOUTH);
 		cancelPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		exportDependenciesButton = new JButton("Export to excel");
+		cancelPanel.add(exportDependenciesButton);
 		
 		cancelButton = new JButton(controller.translate("Cancel"));
 		cancelPanel.add(cancelButton);

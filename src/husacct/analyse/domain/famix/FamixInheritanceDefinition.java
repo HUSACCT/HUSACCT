@@ -5,9 +5,8 @@ class FamixInheritanceDefinition extends FamixAssociation{
 	public FamixInheritanceDefinition(){
 		super.type = "Extends";
 	}
-	//public String accessControlQualifier;
-	public int index;  //index??
-	
+
+	public int index;  
 
 	public String toString(){
 		String inheritRepesentation = "";

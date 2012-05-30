@@ -42,6 +42,7 @@ public class CSharpUsingConvertController extends CSharpGenerator {
 	}
 
 	private void setIndentLevel() {
+		usageTrees.add(tempUsingTrees);
 		int indentLevel = treeConvertController.getIndentLevel();
 		CSharpData data = new CSharpData(tempUsingName,indentLevel);
 		indentUsingsLevel.add(data);
@@ -53,7 +54,6 @@ public class CSharpUsingConvertController extends CSharpGenerator {
 	}
 
 	private boolean startUsing() {
-		usageTrees.add(tempUsingTrees);
 		tempUsingTrees = new ArrayList<CommonTree>();
 		tempUsingName = "";
 		return true;

@@ -2,6 +2,7 @@ package husacct.analyse.task.analyser.csharp;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
+import husacct.analyse.task.analyser.csharp.convertControllers.CSharpAnnotationConverter;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpAttributeConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpClassConvertController;
 import husacct.analyse.task.analyser.csharp.convertControllers.CSharpExceptionConvertController;
@@ -76,6 +77,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		boolean isPartOfLocalVariable = false;
 		boolean isPartOfParameter = false;
 		boolean isPartOfProperty = false;
+		boolean isPartOfAnnotation = false;
 		final CSharpNamespaceConvertController namespaceConverter = new CSharpNamespaceConvertController(this);
 		final CSharpClassConvertController classConverter = new CSharpClassConvertController(this);
 		final CSharpAttributeConvertController attributeConverter = new CSharpAttributeConvertController(this);
@@ -85,6 +87,8 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 		final CSharpExceptionConvertController exceptionConverter = new CSharpExceptionConvertController(this);
 		final CSharpParameterConvertController parameterConverter = new CSharpParameterConvertController(this);
 		final CSharpPropertyConvertController propertyConverter = new CSharpPropertyConvertController(this);
+		final CSharpAnnotationConverter annotationConverter = new CSharpAnnotationConverter(this);
+		
 		for (final CommonTree tree : children) {
 			setIndentLevel(tree);
 			isPartOfNamespace = namespaceConverter.namespaceChecking(tree, isPartOfNamespace);
@@ -95,6 +99,7 @@ public class CSharpTreeConvertController extends CSharpGenerator {
 			isPartOfException = exceptionConverter.exceptionCheck(tree, isPartOfException);
 			isPartOfParameter = parameterConverter.parameterCheck(tree, isPartOfParameter);
 			isPartOfProperty = propertyConverter.propertyCheck(tree, isPartOfProperty);
+			isPartOfAnnotation = annotationConverter.annotationCheck(tree, isPartOfAnnotation);
 			if ((getIndentLevel() > currentMethodIndentLevel) && (currentMethodIndentLevel != -1)) {
 				isPartOfLocalVariable = localVariableConverter.localVariableCheck(tree, isPartOfLocalVariable);
 			}

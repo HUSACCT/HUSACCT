@@ -1,4 +1,4 @@
-package husacct;
+	package husacct;
 
 import husacct.control.IControlService;
 
@@ -22,6 +22,7 @@ public class Main {
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	
+    
 	private void printSystemInfo(){
 		Logger logger = Logger.getLogger(Main.class);
 		Runtime runtime = Runtime.getRuntime();

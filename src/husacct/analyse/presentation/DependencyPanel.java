@@ -56,7 +56,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
 		dependencyTable.setModel(tableModel);
 		dependencyScrollPane.setViewportView(dependencyTable);
 		dependencyTable.setBackground(UIManager.getColor("Panel.background"));
-		
+		dependencyTable.setAutoCreateRowSorter(true);
 		initialiseTrees();
 		
 		setLayout(theLayout);
