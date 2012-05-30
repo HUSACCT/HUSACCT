@@ -10,6 +10,7 @@ import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareArchitectureDomainService;
 
@@ -24,63 +25,87 @@ public class PersistentDomain implements ISaveable {
 	
 	private SoftwareArchitectureDomainService domainService;
 	private ModuleDomainService moduleService;
-	private AppliedRuleDomainService AppliedRuleService;
+	private AppliedRuleDomainService appliedRuleService;
+	private AppliedRuleExceptionDomainService exceptionService;
 	
 	private DomainXML domainParser;
 	private XMLDomain XMLParser;
 	private DomainElement parseData = DomainElement.APPLICATION;
 	
-	public PersistentDomain(SoftwareArchitectureDomainService ds, ModuleDomainService ms, AppliedRuleDomainService ards) {
-		this.domainService = ds;
-		this.moduleService = ms;
-		this.AppliedRuleService = ards;
+	public PersistentDomain(SoftwareArchitectureDomainService ds, ModuleDomainService ms, AppliedRuleDomainService ards, AppliedRuleExceptionDomainService ared) {
+		domainService = ds;
+		moduleService = ms;
+		appliedRuleService = ards;
+		exceptionService = ared;
+	}
+	
+	public void setExceptionService(AppliedRuleExceptionDomainService ARED) {
+		exceptionService = ARED;
 	}
 	
 	public void setDefineDomainService(SoftwareArchitectureDomainService ds) {
-		this.domainService = ds;
+		domainService = ds;
 	}
 	
 	public void setXMLDomain(XMLDomain xd) {
-		this.XMLParser = xd;
+		XMLParser = xd;
 	}
 
 	public void setParseData(DomainElement de) {
-		this.parseData = de;
+		parseData = de;
+	}
+	
+	/**
+	 * Resets all workspace date prior to import.
+	 */
+	private void resetWorkspaceData() {	
+		appliedRuleService.removeAppliedRules();
+		moduleService.removeAllModules();
 	}
 
 	@Override
 	public Element getWorkspaceData() {
-		this.domainParser = new DomainXML(SoftwareArchitecture.getInstance());
+		domainParser = new DomainXML(SoftwareArchitecture.getInstance());
 			
-		switch (this.parseData){
+		switch (parseData){
 			case LOGICAL:
-				this.domainParser.setParseLogical(false);
-				return this.domainParser.getApplicationInXML( this.domainService.getApplicationDetails() );
+				domainParser.setParseLogical(false);
+				return domainParser.getApplicationInXML( domainService.getApplicationDetails() );
 			case APPLICATION:
 			case PHYSICAL:
 			default:
-				return this.domainParser.getApplicationInXML( this.domainService.getApplicationDetails() );
+				return domainParser.getApplicationInXML( domainService.getApplicationDetails() );
 		}
 	}
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		this.XMLParser = new XMLDomain(workspaceData);	
-		Application workspaceApplication = this.XMLParser.getApplication();
-		SoftwareArchitecture workspaceArchitecture = this.XMLParser.getArchitecture();
-		ArrayList<AppliedRule> AppliedRules = this.XMLParser.getAppliedRules();
+		resetWorkspaceData();
 		
-		switch (this.parseData) {
+		XMLParser = new XMLDomain(workspaceData);	
+		Application workspaceApplication = XMLParser.getApplication();
+		SoftwareArchitecture workspaceArchitecture = XMLParser.getArchitecture();
+		ArrayList<AppliedRule> AppliedRules = XMLParser.getAppliedRules();
+		
+		switch (parseData) {
 			default:
-				//TODO hotfix for importing husacct
 				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
-				this.domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
-				// add modules
+				domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				for (Module m : workspaceArchitecture.getModules()) {
-					this.moduleService.addModuleToRoot(m);
+					long rootModule = moduleService.addModuleToRoot(m);
+					if (m.getSubModules().size() > 0) {
+						for (Module subModule : m.getSubModules()) {
+							moduleService.addModuleToParent(rootModule, subModule);
+						}
+					}
 				}
 				for (AppliedRule ApplRule : AppliedRules) {
-					this.AppliedRuleService.addAppliedRule(ApplRule.getRuleType(), ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
+					long addedRule = appliedRuleService.addAppliedRule(ApplRule.getRuleType(), ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
+					if (ApplRule.getExceptions().size() > 0) {
+						for (AppliedRule Ap : ApplRule.getExceptions()) {
+							exceptionService.addExceptionToAppliedRule(addedRule, Ap.getRuleType(), Ap.getDescription(), Ap.getModuleFrom().getId(), Ap.getModuleTo().getId(), Ap.getDependencies());
+						}
+					}
 				}
 		}		
 	}

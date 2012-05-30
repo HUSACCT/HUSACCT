@@ -1,5 +1,8 @@
 package husacct.define.task.conventions_checker;
 
+import java.util.ArrayList;
+
+import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
 public class RuleConventionsChecker {
@@ -22,12 +25,12 @@ public class RuleConventionsChecker {
 		boolean conventionCheckSucces = true;
 		if(ruleTypeKey.equals("VisibilityConvention")) {
 			conventionCheckSucces = checkVisibilityConvention();
-		} else if(ruleTypeKey.equals("VisibilityConventionException")) {
-			conventionCheckSucces = checkVisibilityConventionException();
 		} else if(ruleTypeKey.equals("NamingConvention")) {
 			conventionCheckSucces = checkNamingConvention();
-		} else if(ruleTypeKey.equals("NamingConventionException")) {
-			conventionCheckSucces = checkNamingConventionException();
+		} else if(ruleTypeKey.equals("SubClassConvention")) {
+			conventionCheckSucces = checkSubClassConvention();
+		} else if(ruleTypeKey.equals("InterfaceConvention")) {
+			conventionCheckSucces = checkInterfaceConvention();
 		} else if(ruleTypeKey.equals("IsNotAllowedToUse")) {
 			conventionCheckSucces = checkIsNotAllowedToUse();
 		} else if(ruleTypeKey.equals("IsOnlyAllowedToUse")) {
@@ -51,19 +54,31 @@ public class RuleConventionsChecker {
 		return visibilityConventionSucces;
 	}
 	
-	private boolean checkVisibilityConventionException() {
-		boolean visibilityConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
-		return visibilityConventionSucces;
-	}
-	
 	private boolean checkNamingConvention() {
 		boolean namingConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
 		return namingConventionSucces;
 	}
 	
-	private boolean checkNamingConventionException() {
-		boolean namingConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
-		return namingConventionSucces;
+	/**
+	 * checks are the same as MustUse
+	 */
+	private boolean checkSubClassConvention() {
+		boolean subClassConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		if(subClassConventionSucces) {
+			subClassConventionSucces = checkMustUse();
+		}
+		return subClassConventionSucces;
+	}
+	
+	/**
+	 * checks are the same as MustUse
+	 */
+	private boolean checkInterfaceConvention() {
+		boolean interfaceConventionSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		if(interfaceConventionSucces) {
+			interfaceConventionSucces = checkMustUse();
+		}
+		return interfaceConventionSucces;
 	}
 	
 	private boolean checkIsNotAllowedToUse() {
@@ -137,13 +152,39 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkSkipCall() {
-		boolean skipCallSucces = layerCheckerHelper.checkLayerSkippedTo(moduleFrom);
+		boolean skipCallSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		if(skipCallSucces) {
+			skipCallSucces = layerCheckerHelper.checkTypeIsLayer(moduleFrom);
+		}
+		if(skipCallSucces) {
+			ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
+			for(Layer skipCallLayer : skipCallLayers) {
+				this.moduleTo = skipCallLayer;
+				if(!this.checkIsNotAllowedToUse()) {
+					skipCallSucces = false;
+					break;
+				}
+			}
+		}
 		return skipCallSucces;
 	}
 	
 	private boolean checkBackCall() {
-		// #TODO:: implement Back Call Checks
-		return true;
+		boolean backCallSucces = moduleCheckerHelper.checkRuleTypeAlreadySet(ruleTypeKey, moduleFrom);
+		if(backCallSucces) {
+			backCallSucces = layerCheckerHelper.checkTypeIsLayer(moduleFrom);
+		}
+		if(backCallSucces) {
+			ArrayList<Layer> backCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
+			for(Layer backCallLayer : backCallLayers) {
+				this.moduleTo = backCallLayer;
+				if(!this.checkIsNotAllowedToUse()) {
+					backCallSucces = false;
+					break;
+				}
+			}
+		}
+		return backCallSucces;
 	}
 	
 	public Module getModuleTo() {

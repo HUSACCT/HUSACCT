@@ -68,6 +68,10 @@ public class AppliedRuleDomainService {
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
+	public void removeAppliedRules() {
+		SoftwareArchitecture.getInstance().removeAppliedRules();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+	}
 	
 	public void removeAppliedRule(long appliedrule_id) {
 		SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
