@@ -27,7 +27,6 @@ public class CheckConformanceTask implements Runnable {
 		try {
 			Thread.sleep(1);
 			ServiceProvider.getInstance().getValidateService().checkConformance();
-			browseViolations.loadAfterChange();
 			filterPanel.loadAfterChange();
 			buttonSaveInHistory.setEnabled(true);
 		} catch (InterruptedException e) {
