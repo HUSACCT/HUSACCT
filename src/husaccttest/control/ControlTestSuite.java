@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 	ServiceProviderTest.class,
 	StateControllerTest.class,
 	ImportExportControllerTest.class,
-	WorkspaceControllerTest.class
+	WorkspaceControllerTest.class,
+	ObservableServiceTest.class
 })
 public class ControlTestSuite {
 
