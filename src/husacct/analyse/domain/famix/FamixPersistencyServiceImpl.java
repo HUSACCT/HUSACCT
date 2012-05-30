@@ -1,9 +1,14 @@
 package husacct.analyse.domain.famix;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
 import javax.naming.directory.InvalidAttributesException;
 import husacct.analyse.domain.IModelPersistencyService;
+import husacct.common.dto.DependencyDTO;
+
 import org.jdom2.Element;
 
 public class FamixPersistencyServiceImpl implements IModelPersistencyService{

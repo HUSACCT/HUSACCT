@@ -1,5 +1,6 @@
 package husacct.analyse.domain;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -63,10 +64,10 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
-		List<DependencyDTO> depdencyList = queryService.getDependencies(from, to);
-		DependencyDTO[] dependencies = new DependencyDTO[depdencyList.size()];
+		List<DependencyDTO> dependencyList = queryService.getDependencies(from, to);
+		DependencyDTO[] dependencies = new DependencyDTO[dependencyList.size()];
 		int count = 0;
-		for(DependencyDTO dependency: depdencyList){
+		for(DependencyDTO dependency: dependencyList){
 			dependencies[count] = dependency;
 			count++;
 		}
@@ -109,4 +110,8 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	public void loadModel(Element analyseElement) {
 		persistencyService.loadModel(analyseElement);
 	}	
+	
+	public HashMap<String, DependencyDTO> mapDependencies(){
+		return queryService.mapDependencies();
+	}
 }

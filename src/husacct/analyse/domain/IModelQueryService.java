@@ -3,6 +3,7 @@ package husacct.analyse.domain;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface IModelQueryService {
@@ -20,4 +21,5 @@ public interface IModelQueryService {
 	public List<DependencyDTO> getDependenciesTo(String to);
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 	
+	public HashMap<String, DependencyDTO> mapDependencies();
 }

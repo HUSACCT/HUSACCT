@@ -2,15 +2,9 @@ package husacct.analyse.domain.famix;
 
 class FamixInvocation extends FamixAssociation{
 
-//	public String invokedBy;
-//	public String invokes;
-//	public String base;
-//	invocConstructor, accessPropertyOrField of invocMethod
-	
 	public String nameOfInstance;
 	public String inovcationName;
 	public String belongsToMethod;
-//	public String sourceFilePath;
 	
 	public String toString(){
 		String string = "";

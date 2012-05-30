@@ -1,5 +1,7 @@
 package husacct.analyse.domain;
 
+import java.util.HashMap;
+
 import org.jdom2.Element;
 
 import husacct.common.dto.AnalysedModuleDTO;
@@ -24,5 +26,6 @@ public interface IAnalyseDomainService {
 	
 	public Element saveModel();
 	public void loadModel(Element analyseElement);
-		
+	
+	public HashMap<String, DependencyDTO> mapDependencies();
 }

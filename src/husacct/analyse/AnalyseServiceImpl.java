@@ -13,13 +13,9 @@ import husacct.common.services.ObservableService;
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable{
 
 	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
-	private AnalyseServiceStub stub;
 	private AnalyseInternalFrame analyseInternalFrame;
 	private boolean isAnalysed = false;
-	
-	public AnalyseServiceImpl(){
-		stub = new AnalyseServiceStub();
-	}
+
 
 	@Override
 	public String[] getAvailableLanguages() {

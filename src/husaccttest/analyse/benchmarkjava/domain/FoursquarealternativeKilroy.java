@@ -16,10 +16,9 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroyCheckCastFrom(){
 		String from = "domain.foursquarealternative.kilroy.CheckCastFrom";
-		int expectedDependencies = 6;
+		int expectedDependencies = 8;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.SameExtend";
@@ -72,15 +71,35 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		assertEquals(true, foundDeclaration2Dependency);
 		assertEquals(true, foundDeclaration1Dependency);
 		assertEquals(true, foundInvocConstructorDependency);
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.SameExtend",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.SameExtend",
+				super.EXTENDSCONCRETE,
+				8,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
+		
+		
 	}
 	
 	@Test
 	public void testDomainKilroyComment(){
 		String from = "domain.foursquarealternative.kilroy.Comment";
-		int expectedDependencies = 2;
+		int expectedDependencies = 4;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.WhrrlComment";
@@ -102,15 +121,33 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		
 		assertEquals(true, foundImport1Dependency);
 		assertEquals(true, foundExtendsDependency);
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.YelpComment",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.YelpComment",
+				super.EXTENDSABSTRACT,
+				7,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
 	}
 	
 	@Test
 	public void testDomainKilroyFuture(){
 		String from = "domain.foursquarealternative.kilroy.Future";
-		int expectedDependencies = 3;
+		int expectedDependencies = 7;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.WhrrlFuture";
@@ -140,6 +177,39 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		assertEquals(true, foundImport1Dependency);
 		assertEquals(true, foundInvocConstructorDependency);
 		assertEquals(true, foundInvocMethodDependency);
+		
+		
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.MyFuture",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImport2Expected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.brightkite.IFuture",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.brightkite.IFuture",
+				super.IMPLEMENTS,
+				7,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImport2 = compaireDTOWithValues(indirectImport2Expected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImport2);
+		assertEquals(true, foundindirectImplements);
+		
+		
+		
 	}
 	
 	@Ignore ("InvocMethod on an accesField not recognized")
@@ -149,7 +219,7 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		int expectedDependencies = 3;
 	
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.WhrrlFuture";
@@ -184,10 +254,9 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroySettings(){
 		String from = "domain.foursquarealternative.kilroy.Settings";
-		int expectedDependencies = 4;
+		int expectedDependencies = 6;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String toImport1Expected = "domain.foursquarealternative.whrrl.ISee";
@@ -223,6 +292,29 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		assertEquals(true, foundImport2Dependency);
 		assertEquals(true, foundInvocConstructorDependency);
 		assertEquals(true, foundImplementsDependency);
+		
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.Yelp",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.Yelp",
+				super.EXTENDSABSTRACT,
+				7,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
+		
+		
+		
 	}
 	
 }
