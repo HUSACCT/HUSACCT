@@ -46,11 +46,12 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		if(instance != null){
 			from = instance.getBelongsToClass();
 			to = instance.getTo();	
-		}else{
-			CommonTree node = tree.get(0);
-			from = belongsToClass+"."+methodSignature+"."+instanceName;
-			to = node.getText();
 		}
+//		}else{
+//			CommonTree node = tree.get(0);
+//			from = belongsToClass+"."+methodSignature+"."+instanceName;
+//			to = node.getText();
+//		}
 	}
 
 	private void setInstance(String name) {

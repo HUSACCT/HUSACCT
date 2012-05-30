@@ -75,14 +75,14 @@ public class CSharpLocalVariableGenerator extends CSharpGenerator {
 				return returnType;
 			}else if(currentType == FORWARDBRACKET && nextType == NEW){
 				CommonTree node = tree.get(i+2);
-				int type = node.getType();
+				//int type = node.getType();
 				returnType = node.getText();
 				namePosition = i+2;
 				return returnType;
 			}
 			
 			if(nextNode != null){
-				if(currentType == DOT || nextType == DOT || currentType == LESSTHAN || nextType == LESSTHAN || currentType == GREATERTHAN || nextType == GREATERTHAN || nextType == IDENTIFIER){
+				if(currentType == DOT /*|| nextType == DOT || currentType == LESSTHAN ||*/ /*nextType == LESSTHAN || currentType == GREATERTHAN*/ /*|| nextType == GREATERTHAN */|| nextType == IDENTIFIER){
 					usesLongName = true;
 				}
 				else{
