@@ -90,8 +90,8 @@ public class ValidateTest {
 	public void getViolationTypesCSharpLanguage(){
 		define.createApplication("", new String[]{}, "C#", "");
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(10, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
-		assertEquals(10, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
+		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
+		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
 		assertEquals(4, getViolationTypesStringArray(dtos, "VisibilityConvention").length);
 	}
 

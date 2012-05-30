@@ -1,7 +1,6 @@
 package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
-import husacct.define.presentation.jpanel.ruledetails.contentsmodule.VisibilityConventionExceptionJPanel;
 import husacct.validate.domain.validation.report.Report;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
