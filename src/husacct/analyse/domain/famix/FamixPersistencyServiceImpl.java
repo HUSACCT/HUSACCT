@@ -30,10 +30,14 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 		initiateNodes();
 		loadObjects();
 		Element totalNode = createXml();
-		reset();
 		return totalNode;
 	}
-
+	
+	
+	//Note - Reset was called in saveModel. Change the reset before implementing it, because the
+	//in-memory Famix-domain objects are all deleted now. The objects used in this class are not
+	//copies, but the real reference to the data in the memory, thus the complete model will be cleared
+	//when calling this function. Please fix this.
 	private void reset(){
 		this.packagesList.clear(); this.packagesList = null;
 		this.classList.clear(); this.classList = null;
