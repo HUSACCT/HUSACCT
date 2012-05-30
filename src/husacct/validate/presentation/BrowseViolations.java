@@ -31,7 +31,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 public class BrowseViolations extends JInternalFrame implements ILocaleChangeListener, FilterViolationsObserver, Observer {
@@ -39,12 +38,14 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private static final long serialVersionUID = 4912981274532255799L;
 	private Logger logger = Logger.getLogger(BrowseViolations.class);
 	private final TaskServiceImpl taskServiceImpl;
-	public final SimpleDateFormat dateFormat;
+	private final SimpleDateFormat dateFormat;
 
-	private JButton buttonSaveInHistory, buttonLatestViolations, buttonDeleteViolationHistoryPoint,
-	buttonValidate;
+	private JButton buttonSaveInHistory;
+	private JButton buttonLatestViolations;
+	private JButton buttonDeleteViolationHistoryPoint;
+	private JButton buttonValidate;
 	private JTable chooseViolationHistoryTable, violationsTable;
-	private JScrollPane scrollPane, violationsTableScrollPane, chooseViolationHistoryTableScrollPane, informationScrollPane;
+	private JScrollPane statisticsScrollPane, violationsTableScrollPane, chooseViolationHistoryTableScrollPane, informationScrollPane;
 	private JPanel rightSidePane, leftSidePane;
 	private JSplitPane splitPane;
 	private DefaultTableModel chooseViolationHistoryTableModel, violationsTableModel;
@@ -53,6 +54,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private StatisticsPanel statisticsPanel;
 	private ViolationInformationPanel violationInformationPanel;
 	private List<Violation> shownViolations;
+	private BrowseViolations browseViolations = this;
 
 
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
@@ -86,7 +88,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTableScrollPane = new JScrollPane();
 		violationInformationPanel = new ViolationInformationPanel();
 		informationScrollPane = new JScrollPane(violationInformationPanel);
-		scrollPane = new JScrollPane();
+		statisticsScrollPane = new JScrollPane();
 		statisticsPanel = new StatisticsPanel();
 		violationsTable = new JTable();
 
@@ -95,8 +97,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		splitPane.setLeftComponent(leftSidePane);
 		chooseViolationHistoryTableScrollPane.setViewportView(chooseViolationHistoryTable);
 		splitPane.setRightComponent(rightSidePane);
-		scrollPane.setBorder(null);
-		scrollPane.setViewportView(statisticsPanel);
+		statisticsScrollPane.setBorder(null);
+		statisticsScrollPane.setViewportView(statisticsPanel);
 		violationsTableScrollPane.setViewportView(violationsTable);
 
 		createBaseLayout();
@@ -148,28 +150,27 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 		rightSideGroupLayout.setHorizontalGroup(
 				rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
-				.addComponent(informationScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(informationScrollPane)
 				.addGroup(rightSideGroupLayout.createSequentialGroup()
-						.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, rightSideGroupLayout.createSequentialGroup()
-										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
-										.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE))
-										.addGap(1))
+					.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, rightSideGroupLayout.createSequentialGroup()
+							.addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
+						.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE))
+					.addGap(1))
 				);
 
 
 		rightSideGroupLayout.setVerticalGroup(
 				rightSideGroupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(rightSideGroupLayout.createSequentialGroup()
-						.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+						.addGroup(rightSideGroupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
 								.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-								.addGap(8)
-								.addComponent(informationScrollPane, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
+								.addComponent(informationScrollPane, GroupLayout.DEFAULT_SIZE, 175, GroupLayout.PREFERRED_SIZE))
 				);
 
 
@@ -197,11 +198,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask());
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask(browseViolations, filterPane, buttonSaveInHistory));
 				validateThread.run();
-				loadAfterChange();
-				filterPane.loadAfterChange();
-				buttonSaveInHistory.setEnabled(true);
 			}
 		});
 		buttonSaveInHistory.addActionListener(new ActionListener() {
@@ -338,12 +336,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			chooseViolationHistoryTableModel.addRow(new Object[] {dateFormat.format(violationHistory.getDate().getTime()), violationHistory.getDescription()});
 		}
 	}
+	
 	public void fillViolationsTable(List<Violation> violations) {
-		RowSorter<? extends TableModel> rowsorter = violationsTable.getRowSorter();
 		violationsTable.setRowSorter(null);
 		violationsTable.setAutoCreateRowSorter(false);
 		violationsTable.clearSelection();
-		shownViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
 			String violationtypeString = "";
@@ -351,17 +348,13 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				if(!violation.getViolationtypeKey().equals("VisibilityConvention")) {
 					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + (violation.isIndirect() ? "Indirect" : "Direct");
 				} else {
-					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey());;
+					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey());
 				}
 			}
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
-
+			violationsTable.revalidate();
 		}
 		violationsTable.setAutoCreateRowSorter(true);
-		violationsTable.setRowSorter(rowsorter);
-		if(violationsTable.getRowCount() > 0){
-			violationsTable.getRowSorter().toggleSortOrder(2);
-		}
 	}
 
 	public void loadInformationPanel() {
@@ -423,6 +416,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private void clearViolationsTableModelRows() {
 		while (violationsTableModel.getRowCount() > 0) {
 			violationsTableModel.removeRow(0);
+			violationsTable.revalidate();
 		}
 	}
 

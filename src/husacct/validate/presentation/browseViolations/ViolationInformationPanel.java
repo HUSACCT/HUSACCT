@@ -35,6 +35,7 @@ public class ViolationInformationPanel extends JPanel {
 		detailMessageLabelValue = new JLabel();
 		detailLogicalModuleToLabel = new JLabel();
 		detailLogicalModuleToValue = new JLabel();
+		
 		GroupLayout gl_violationDetailPane = new GroupLayout(this);
 		gl_violationDetailPane.setHorizontalGroup(
 				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
@@ -65,13 +66,15 @@ public class ViolationInformationPanel extends JPanel {
 								.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
 										.addComponent(detailsLogicalModuleFromLabel)
 										.addComponent(detailLogicalModuleFromLabelValue))
-										.addComponent(detailLogicalModuleToLabel)
-										.addComponent(detailLogicalModuleToValue)
 										.addPreferredGap(ComponentPlacement.UNRELATED)
 										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(detailsMessageLabel)
-												.addComponent(detailMessageLabelValue))
-												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+											.addComponent(detailLogicalModuleToLabel)
+											.addComponent(detailLogicalModuleToValue))
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
+													.addComponent(detailsMessageLabel)
+													.addComponent(detailMessageLabelValue))
+													.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		setLayout(gl_violationDetailPane);
 		
@@ -101,6 +104,7 @@ public class ViolationInformationPanel extends JPanel {
 			detailLogicalModuleToValue.setText("");
 			detailMessageLabelValue.setText("");
 		}
+		updateUI();
 	}
 
 }
