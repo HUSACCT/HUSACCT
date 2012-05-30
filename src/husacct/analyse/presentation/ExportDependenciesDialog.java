@@ -2,10 +2,7 @@ package husacct.analyse.presentation;
 
 
 //TODO Due to time issues this was done here. THis class needs to move to the control service..
-import husacct.control.presentation.util.FileDialog;
-import husacct.control.presentation.util.Regex;
 import husacct.control.task.threading.ThreadWithLoader;
-
 import husacct.ServiceProvider;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
