@@ -36,6 +36,4 @@ public class LocationbasedFoursquare extends BenchmarkExtended{
 		assertEquals(true, AccessPropertyOrFieldFound);
 		
 	}
-	
-
 }

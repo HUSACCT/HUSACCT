@@ -91,6 +91,15 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 			String signature, boolean isPureAccessor, String declaredReturnType,
 			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope) {
 		
+		createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, 
+				belongsToClass, isConstructor, isAbstract, hasClassScope, 0);
+	}
+	
+	@Override
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, 
+			String signature, boolean isPureAccessor, String declaredReturnType,
+			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
+		
 		FamixMethod famixMethod = new FamixMethod();
 		famixMethod.name = name;
 		famixMethod.uniqueName = uniqueName;
@@ -103,6 +112,15 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		famixMethod.isAbstract = isAbstract;
 		famixMethod.hasClassScope = hasClassScope;
 		addToModel(famixMethod);
+		
+		if (declaredReturnType != "" && declaredReturnType != null){
+			FamixAssociation fAssocation = new FamixAssociation();
+			fAssocation.from = belongsToClass;
+			fAssocation.to = declaredReturnType;
+			fAssocation.type = "Declaration";
+			fAssocation.lineNumber = lineNumber;
+			model.waitingAssociations.add(fAssocation);
+		}
 	}
 	
 	@Override
@@ -372,3 +390,54 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		
 	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

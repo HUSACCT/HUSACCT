@@ -16,7 +16,7 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 	@Test
 	public void testDomainWhrrlBackgroundService(){
 		String from = "domain.foursquarealternative.whrrl.BackgroundService";
-		int expectedDependencies = 3;
+		int expectedDependencies = 5;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -269,7 +269,7 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 	@Test
 	public void testDomainWhrrlWhrrlFuture(){
 		String from = "domain.foursquarealternative.whrrl.WhrrlFuture";
-		int expectedDependencies = 1;
+		int expectedDependencies = 2;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -286,7 +286,7 @@ public class FoursquarealternativeWhrrl extends BenchmarkExtended{
 	@Test
 	public void testDomainWhrrlWhrrlHistory(){
 		String from = "domain.foursquarealternative.whrrl.WhrrlHistory";
-		int expectedDependencies = 1;
+		int expectedDependencies = 2;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
