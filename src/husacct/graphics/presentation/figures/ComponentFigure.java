@@ -22,8 +22,8 @@ public class ComponentFigure extends BaseFigure {
 	private BufferedImage compIcon;
 	private ImageFigure compIconFig;
 
-	public static final int MIN_WIDTH = 130;
-	public static final int MIN_HEIGHT = 90;
+	public int MIN_WIDTH = 60;
+	public int MIN_HEIGHT = 50;
 
 	public ComponentFigure(String figureName) {
 		super(figureName);
@@ -41,7 +41,7 @@ public class ComponentFigure extends BaseFigure {
 		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 
 		try {
-			URL componentImageURL = getClass().getResource("/husacct/common/resources/graphics/component_icon.png");
+			URL componentImageURL = getClass().getResource("/husacct/common/resources/graphics/icon-component.png");
 			compIcon = ImageIO.read(componentImageURL);
 			compIconFig.setImage(null, compIcon);
 			children.add(compIconFig);
@@ -109,10 +109,5 @@ public class ComponentFigure extends BaseFigure {
 	@Override
 	public boolean isModule() {
 		return true;
-	}
-
-	@Override
-	public boolean isLine() {
-		return false;
 	}
 }

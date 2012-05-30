@@ -1,7 +1,9 @@
 package husacct.graphics.task;
 
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FigureMap {
+	private HashMap<String, BaseFigure> moduleFiguresByName = new HashMap<String, BaseFigure>();
 	private HashMap<BaseFigure, AbstractDTO> moduleFigureDTOMap = new HashMap<BaseFigure, AbstractDTO>();
 	private HashMap<RelationFigure, DependencyDTO[]> dependencyLineDTOMap = new HashMap<RelationFigure, DependencyDTO[]>();
 	private HashMap<RelationFigure, ViolationDTO[]> violationLineDTOMap = new HashMap<RelationFigure, ViolationDTO[]>();
@@ -23,6 +26,7 @@ public class FigureMap {
 		dependencyLineDTOMap.clear();
 		violationLineDTOMap.clear();
 		violatedFigureDTOMap.clear();
+		moduleFiguresByName.clear();
 	}
 
 	public void clearAllViolations() {
@@ -64,6 +68,16 @@ public class FigureMap {
 
 	public void linkModule(BaseFigure figure, AbstractDTO dto) {
 		moduleFigureDTOMap.put(figure, dto);
+
+		// TODO: Re-factor this into a more clean design. Perhaps turn into a
+		// dictionary?
+		if (dto instanceof ModuleDTO) {
+			ModuleDTO md = (ModuleDTO) dto;
+			moduleFiguresByName.put(md.logicalPath, figure);
+		} else if (dto instanceof AnalysedModuleDTO) {
+			AnalysedModuleDTO md = (AnalysedModuleDTO) dto;
+			moduleFiguresByName.put(md.uniqueName, figure);
+		}
 	}
 
 	public void linkViolatedModule(BaseFigure figure, ViolationDTO[] dtos) {
@@ -88,5 +102,21 @@ public class FigureMap {
 
 	public boolean isViolatedFigure(BaseFigure figure) {
 		return violatedFigureDTOMap.containsKey(figure);
+	}
+
+	public boolean containsModule(String path) {
+		return moduleFiguresByName.containsKey(path);
+	}
+
+	public BaseFigure findModuleByPath(String path) {
+		return moduleFiguresByName.get(path);
+	}
+
+	public HashMap<BaseFigure, AbstractDTO> getAllDTOsWithClonedFigures(ArrayList<BaseFigure> savedFigures) {
+		HashMap<BaseFigure, AbstractDTO> returnHashMap = new HashMap<BaseFigure, AbstractDTO>();
+		for(BaseFigure figure : savedFigures){
+			returnHashMap.put(figure.clone(), moduleFigureDTOMap.get(figure));
+		}
+		return returnHashMap;
 	}
 }

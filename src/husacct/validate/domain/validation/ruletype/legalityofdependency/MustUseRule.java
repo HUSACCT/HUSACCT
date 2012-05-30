@@ -2,9 +2,8 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -26,9 +25,8 @@ public class MustUseRule extends RuleType{
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {	
 		this.violations = new ArrayList<Violation>();
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -39,8 +37,8 @@ public class MustUseRule extends RuleType{
 				counter++;
 				if(dependencies.length == 0) noDependencyCounter++;			
 			}
-			if(noDependencyCounter == counter){
-				Violation violation = createViolation(rootRule,classPathFrom,null,null,configuration);
+			if(noDependencyCounter == counter && physicalClasspathsTo.size() != 0){
+				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}
 		}	

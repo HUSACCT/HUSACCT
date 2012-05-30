@@ -64,7 +64,7 @@ public abstract class AbstractViolationType {
 		return categoryViolations;
 	}
 
-	public ViolationType createViolationType(String violationTypeKey){
+	private ViolationType createViolationType(String violationTypeKey){
 		List<String> violationKeysToLower = new ArrayList<String>();
 		for(CategoryKeySeverityDTO violationtype : allViolationKeys){
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
@@ -142,7 +142,25 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isLoopsInModule(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.LOOPS_IN_MODULE.toString())){
+		if(ruleTypeKey.equals(RuleTypes.CYCLES_BETWEEN_MODULES.toString())){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	protected boolean isInterfaceConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	protected boolean isSubClassConvention(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)){
 			return true;
 		}
 		else{

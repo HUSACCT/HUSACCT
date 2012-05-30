@@ -2,6 +2,8 @@ package husacct.analyse;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.services.IServiceListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -485,5 +487,16 @@ public class AnalyseServiceStub implements IAnalyseService{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	@Override
+	public void addServiceListener(IServiceListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceListeners() {
+		// TODO Auto-generated method stub
+		
+	}
 }

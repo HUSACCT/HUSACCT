@@ -24,7 +24,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
+public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
@@ -45,7 +45,12 @@ public class ValidateServiceImpl extends ObservableService implements IValidateS
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 	}
-
+	
+	/**
+	 * Gets all the Categories of all the available ruletypes
+	 * The RuleTypeDTO contains RuleTypeDTOs
+	 * The RuleTypeDTO contains ViolationTypeDTOs 
+	 */
 	@Override
 	public CategoryDTO[] getCategories(){
 		return domain.getCategories();
@@ -145,11 +150,5 @@ public class ValidateServiceImpl extends ObservableService implements IValidateS
 	//This method is only used for testing with the Testsuite
 	public void Validate(RuleDTO[] appliedRules){
 		domain.checkConformance(appliedRules);
-	}
-
-	@Override
-	@Deprecated
-	public void exportViolations(String s1, String s2, String s3) {
-		
 	}
 }

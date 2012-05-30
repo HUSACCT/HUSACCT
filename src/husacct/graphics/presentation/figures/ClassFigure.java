@@ -15,8 +15,8 @@ public class ClassFigure extends BaseFigure {
 	protected RectangleFigure top, middle, bottom;
 	protected TextFigure classNameText;
 
-	public static final int MIN_WIDTH = 100;
-	public static final int MIN_HEIGHT = 80;
+	public int MIN_WIDTH = 60;
+	public int MIN_HEIGHT = 50;
 
 	public ClassFigure(String name) {
 		super(name);
@@ -87,15 +87,5 @@ public class ClassFigure extends BaseFigure {
 		other.children.add(other.bottom);
 
 		return other;
-	}
-
-	@Override
-	public boolean isModule() {
-		return true;
-	}
-
-	@Override
-	public boolean isLine() {
-		return false;
 	}
 }

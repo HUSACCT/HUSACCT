@@ -2,9 +2,8 @@ package husacct.validate.domain.validation.ruletype.legalityofdependency;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
-import husacct.validate.domain.check.CheckConformanceUtilFilter;
+import husacct.validate.domain.check.util.CheckConformanceUtilClass;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
@@ -26,9 +25,8 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
-		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 
-		this.mappings = CheckConformanceUtilFilter.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -40,17 +38,15 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 					if(allowedDependencies.length != 0){
 						for(DependencyDTO allowedDependency: allowedDependencies){
 							if(dependency != allowedDependency){
-								Violation violation = createViolation(rootRule,classPathFrom,classPathTo,dependency,configuration);
+								Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
 								violations.add(violation);
 							}
 						}
 					}
 					else{					
-						Violation violation = createViolation(rootRule,classPathFrom,classPathTo,dependency,configuration);
-						violations.add(violation);
-						
+						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+						violations.add(violation);						
 					}
-
 				}
 			}
 		}

@@ -19,6 +19,9 @@ public abstract class AbstractAnalyser {
 		modelCreationService.connectDependencies();
 	}
 	
+	public void clearMemoryFromObjectsNotUsedAnymore(){
+		modelCreationService.clearMemoryFromObjectsNotUsedAnymore();
+	}
 	public abstract void generateModelFromSource(String sourceFilePath);
 	public abstract String getProgrammingLanguage();
 	public abstract String getFileExtension();

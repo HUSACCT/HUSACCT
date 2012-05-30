@@ -259,4 +259,9 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 			}
 		}
 	}
+
+	@Override
+	public void exportToFile() {
+		
+	}
 }

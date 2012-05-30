@@ -1,26 +1,21 @@
 package husacct.analyse;
 
 import javax.swing.JInternalFrame;
-
 import org.jdom2.Element;
-
 import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.ObservableService;
 
-public class AnalyseServiceImpl implements IAnalyseService, ISaveable{
+public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable{
 
 	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
-	private AnalyseServiceStub stub;
 	private AnalyseInternalFrame analyseInternalFrame;
 	private boolean isAnalysed = false;
-	
-	public AnalyseServiceImpl(){
-		stub = new AnalyseServiceStub();
-	}
+
 
 	@Override
 	public String[] getAvailableLanguages() {
@@ -32,6 +27,7 @@ public class AnalyseServiceImpl implements IAnalyseService, ISaveable{
 		service.analyseApplication();
 		this.analyseInternalFrame = new AnalyseInternalFrame();
 		this.isAnalysed = true;
+		super.notifyServiceListeners();
 	}
 	
 	@Override
@@ -108,6 +104,8 @@ public class AnalyseServiceImpl implements IAnalyseService, ISaveable{
 
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
-		service.loadModel(workspaceData);
+		//TODO Uncomment the following line to make the loading of work working. This was excluded
+		// in the first delivery, due to memory problems in combination with coming deadlines and demo's.
+//		service.loadModel(workspaceData);
 	}
 }

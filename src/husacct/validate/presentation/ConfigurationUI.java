@@ -3,6 +3,9 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.validate.domain.validation.Severity;
+import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationViolationTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.LanguageSeverityConfigurationPanel;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
 import java.awt.Color;
@@ -30,10 +33,10 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
-	private List<LanguageSeverityConfiguration> tabs;
+	private List<LanguageSeverityConfigurationPanel> tabs;
 
 	public ConfigurationUI(TaskServiceImpl ts) {
-		tabs = new ArrayList<LanguageSeverityConfiguration>();
+		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
 		
 		taskServiceImpl = ts;
 		severities = taskServiceImpl.getAllSeverities();
@@ -82,7 +85,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				if(severityNameTable.getSelectedRow() > -1){
 					removeActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
 				}
 			}
 		});
@@ -94,7 +97,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				if(severityNameTable.getSelectedRow() > -1){
 					upActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
+					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
 				}
 			}
 		});
@@ -283,7 +286,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	}
 	
 	public void setText(){
-		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("Configuration"));
+		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidateConfigurationTitle"));
 		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
 		remove.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
 		up.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Up"));
@@ -320,14 +323,17 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			loadLanguageTabs();
 			return;
 		}
-		for (LanguageSeverityConfiguration panel : tabs){
+		for (LanguageSeverityConfigurationPanel panel : tabs){
 			panel.loadAfterChange();
 		}
 	}
 	
 	private void loadLanguageTabs() {
 		for (String language : taskServiceImpl.getAvailableLanguages()) {
-			LanguageSeverityConfiguration lcp = new LanguageSeverityConfiguration(language, taskServiceImpl.getViolationTypes(language), taskServiceImpl.getRuletypes(language), taskServiceImpl, severities);
+			ConfigurationRuleTypeDTO configurationRuleTypeDTO = new ConfigurationRuleTypeDTO(language, severities, taskServiceImpl.getRuletypes(language));
+			ConfigurationViolationTypeDTO configurationViolationTypeDTO = new ConfigurationViolationTypeDTO(language, severities, taskServiceImpl.getViolationTypes(language));
+			
+			LanguageSeverityConfigurationPanel lcp = new LanguageSeverityConfigurationPanel(configurationRuleTypeDTO, configurationViolationTypeDTO, taskServiceImpl);
 			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);
 		}

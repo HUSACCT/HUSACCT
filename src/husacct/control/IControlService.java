@@ -1,8 +1,8 @@
 package husacct.control;
 
 import husacct.common.services.IObservableService;
+import husacct.control.task.threading.ThreadWithLoader;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JDialog;
@@ -16,7 +16,8 @@ public interface IControlService extends IObservableService{
 	public void showErrorMessage(String message);
 	public void showInfoMessage(String message);
 	public String getTranslatedString(String stringIdentifier);
-	public List<String> getStringIdentifiers(String translatedString);
 	public void centerDialog(JDialog dialog);
+	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask);
+	public void setServiceListeners();
 
 }

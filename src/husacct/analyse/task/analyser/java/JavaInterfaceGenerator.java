@@ -12,7 +12,7 @@ class JavaInterfaceGenerator extends JavaGenerator{
 		this.belongsToPackage = uniquePackageName;
 	}
 	
-	public String generateModel(CommonTree commonTree) {
+	public String generateToDomain(CommonTree commonTree) {
 		this.name = commonTree.getChild(1).toString();
 		if(belongsToPackage.equals("")) {
 			this.uniqueName = commonTree.getChild(1).toString();

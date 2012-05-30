@@ -134,6 +134,7 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	@Override
 	public void updateConnection() {
 		line.updateConnection();
+		relayout();
 	}
 
 	@Override
@@ -209,11 +210,6 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	}
 
 	@Override
-	public boolean isModule() {
-		return false;
-	}
-
-	@Override
 	public boolean isLine() {
 		return true;
 	}
@@ -225,12 +221,14 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	@Override 
 	public void willChange() {
 		line.willChange();
+		amountFigure.willChange();
 		super.willChange();
 	}
 	
 	@Override
 	public void changed() {
 		line.changed();
+		amountFigure.changed();
 		super.changed();
 	}	
 

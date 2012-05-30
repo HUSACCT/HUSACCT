@@ -10,6 +10,7 @@ public enum JavaViolationTypes implements IViolationType{
 	EXTENDS_CONCRETE("ExtendsConcrete", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	EXTENDS_ABSTRACT("ExtendsAbstract", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	EXTENDS_LIBRARY("ExtendsLibrary", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
+	EXTENDS_INTERFACE("ExtendsInterface", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	IMPLEMENTS("Implements", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),
 	IMPORT("Import", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.LOW),
 	INVOC_CONSTRUCTOR("InvocConstructor", ViolationCategories.DEPENDENCY_RECOGNITION, DefaultSeverities.MEDIUM),

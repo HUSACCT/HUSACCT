@@ -18,9 +18,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -80,7 +80,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		editRuleButton = new JButton();
 		buttonPanel.add(editRuleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		editRuleButton.addActionListener(this);
-			
+		
 		removeRuleButton = new JButton();
 		buttonPanel.add(removeRuleButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeRuleButton.addActionListener(this);
@@ -222,7 +222,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
-//		editRuleButton.setEnabled(true);
+		editRuleButton.setEnabled(true);
 		removeRuleButton.setEnabled(true);
 	}
 
@@ -243,6 +243,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	@Override
 	public void update(Locale newLocale) {
 		this.setButtonTexts();
+		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();
 	}
 	

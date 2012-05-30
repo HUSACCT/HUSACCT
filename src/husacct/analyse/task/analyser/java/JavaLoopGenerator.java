@@ -17,7 +17,7 @@ public class JavaLoopGenerator extends JavaGenerator{
 	JavaInvocationGenerator javaInvocationGenerator;
 	JavaBlockScopeGenerator javaBlockScopeGenerator;
 	
-	public void generateModelFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod){
+	public void generateToDomainFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod){
 			this.belongsToClass = belongsToClass;
 			this.belongsToMethod = belongsToMethod;
 			javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
@@ -38,17 +38,17 @@ public class JavaLoopGenerator extends JavaGenerator{
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();
 			if (treeType == JavaParser.VAR_DECLARATION){
-				javaLocalVariableGenerator.generateLocalVariableModel(child, this.belongsToClass, this.belongsToMethod);
+				javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
 				deleteTreeChild(child);
 			}
 			else if(treeType == JavaParser.METHOD_CALL){
-				javaInvocationGenerator.generateMethodInvocToModel((CommonTree) child, belongsToMethod);
+				javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
 				deleteTreeChild(child);
 			}
 			else if(treeType == JavaParser.DOT){
 				CommonTree newTree = new CommonTree();
 				newTree.addChild(child);
-				javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) newTree, this.belongsToMethod);
+				javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
 				deleteTreeChild(child);
 			}
 			else if(treeType == JavaParser.BLOCK_SCOPE){
@@ -62,21 +62,38 @@ public class JavaLoopGenerator extends JavaGenerator{
 	}
 	
 	private void walkForEachAST(Tree tree) {
-		for(int i = 0; i < tree.getChildCount(); i++){
-			Tree child = tree.getChild(i);
+		for(int childCount = 0; childCount < tree.getChildCount(); childCount++){
+			Tree child = tree.getChild(childCount);
 			int treeType = child.getType();
 			if(treeType == JavaParser.TYPE){
-				javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(i + 1).getText(), tree.getChild(i + 1).getLine());
+				CommonTree myLoopTree = (CommonTree) child;
+				CommonTree typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+				if(typeIdentTree != null){
+					
+					String type = "";
+					for(int count = 0; count < typeIdentTree.getChildCount(); count++){
+						type += !type.equals("") ? "." : "";
+						type += typeIdentTree.getChild(count).getText();
+					}
+					
+					int lineNumber = typeIdentTree.getFirstChildWithType(JavaParser.IDENT).getLine();
+					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, type , tree.getChild(childCount + 1).getText(), lineNumber);
+				} else if (tree.getChild(childCount + 1).getType() == JavaParser.IDENT){
+					int lineNumber = tree.getChild(childCount + 1).getLine();
+					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(childCount + 1).getText(), lineNumber);
+				} else {
+					logger.warn("Problemen with finding type. Please notice analyse");
+				}
 			}
 			
 			else if(treeType == JavaParser.METHOD_CALL){
-				javaInvocationGenerator.generateMethodInvocToModel((CommonTree) child, belongsToMethod);
+				javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
 				deleteTreeChild(child);
 			}
 			else if(treeType == JavaParser.DOT){
 				CommonTree newTree = new CommonTree();
 				newTree.addChild(child);
-				javaInvocationGenerator.generatePropertyOrFieldInvocToModel((CommonTree) newTree, this.belongsToMethod);
+				javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
 				deleteTreeChild(child);
 			}
 			
