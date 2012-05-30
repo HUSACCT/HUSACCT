@@ -343,7 +343,6 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable.setRowSorter(null);
 		violationsTable.setAutoCreateRowSorter(false);
 		violationsTable.clearSelection();
-		shownViolations = violations;
 		clearViolationsTableModelRows();
 		for(Violation violation : violations) {
 			String violationtypeString = "";
@@ -351,17 +350,15 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				if(!violation.getViolationtypeKey().equals("VisibilityConvention")) {
 					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + (violation.isIndirect() ? "Indirect" : "Direct");
 				} else {
-					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey());;
+					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey());
 				}
 			}
 			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
-
+			violationsTable.revalidate();
 		}
+		violationsTable.repaint();
 		violationsTable.setAutoCreateRowSorter(true);
 		violationsTable.setRowSorter(rowsorter);
-		if(violationsTable.getRowCount() > 0){
-			violationsTable.getRowSorter().toggleSortOrder(2);
-		}
 	}
 
 	public void loadInformationPanel() {
@@ -423,6 +420,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private void clearViolationsTableModelRows() {
 		while (violationsTableModel.getRowCount() > 0) {
 			violationsTableModel.removeRow(0);
+			violationsTable.revalidate();
 		}
 	}
 
