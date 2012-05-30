@@ -12,11 +12,13 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 
 	private ApplicationAnalyser analyserService; 
 	private IAnalyseDomainService domainService;
+	private DependencyExportController exportController;
 	private boolean isAnalysed = false;
 	
 	public AnalyseControlerServiceImpl(){
 		this.domainService = new AnalyseDomainServiceImpl();
 		this.analyserService = new ApplicationAnalyser();
+		this.exportController = new DependencyExportController();
 	}
 	
 	@Override
@@ -94,5 +96,10 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 	@Override
 	public void loadModel(Element analyseElement) {
 		domainService.loadModel(analyseElement);
+	}
+	
+	@Override
+	public void exportDependencies(String path){
+		exportController.export(path);
 	}
 }

@@ -150,7 +150,7 @@ public class Gowalla extends BenchmarkExtended{
 	@Test
 	public void testDomainGowallaCampaign(){
 		String from = "domain.gowalla.Campaign";
-		int expectedDependencies = 0;
+		int expectedDependencies = 1;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -160,7 +160,7 @@ public class Gowalla extends BenchmarkExtended{
 	@Test
 	public void testDomainGowallaCheckIn(){
 		String from = "domain.gowalla.CheckIn";
-		int expectedDependencies = 0;
+		int expectedDependencies = 1;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);

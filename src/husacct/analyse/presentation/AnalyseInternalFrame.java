@@ -10,11 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
-
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.Rectangle;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
 
@@ -27,6 +23,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	private AnalyseUIController controller;
 	private JPanel cancelPanel;
 	private JButton cancelButton;
+	private JButton exportDependenciesButton;
 
 	public AnalyseInternalFrame() {
 		this.controller = new AnalyseUIController();
@@ -51,6 +48,10 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		getContentPane().add(cancelPanel, BorderLayout.SOUTH);
 		cancelPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
+		exportDependenciesButton = new JButton(controller.translate("ExportDependencies"));
+		exportDependenciesButton.addActionListener(this);
+		cancelPanel.add(exportDependenciesButton);
+		
 		cancelButton = new JButton(controller.translate("Cancel"));
 		cancelPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
@@ -66,6 +67,8 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		tabPanel.setTitleAt(0, controller.translate("SourceOverview"));
 		tabPanel.setTitleAt(1, controller.translate("DependencyOverview"));
 		cancelButton.setText(controller.translate("Cancel"));
+		exportDependenciesButton.setText(controller.translate("ExportDependencies"));
+		exportDependenciesButton.repaint();
 		cancelButton.repaint();
 		dependencyPanel.reload();
 		treePanel.reload();
@@ -79,6 +82,9 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	public void actionPerformed(ActionEvent clickEvent) {
 		if(clickEvent.getSource() == cancelButton){
 			this.dispose();
+		}
+		else if(clickEvent.getSource() == exportDependenciesButton){
+			new ExportDependenciesDialog(controller);
 		}
 	}
 

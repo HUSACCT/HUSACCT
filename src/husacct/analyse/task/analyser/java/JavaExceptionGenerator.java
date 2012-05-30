@@ -6,7 +6,6 @@ import org.antlr.runtime.tree.CommonTree;
 class JavaExceptionGenerator extends JavaGenerator{
 	
 	private static final int catchNode = JavaParser.CATCH;
-	private static final int throwsNode = JavaParser.THROWS;
 	private static final int throwNewNode = JavaParser.THROW;
 	private static final int typeIdentifierNode = JavaParser.QUALIFIED_TYPE_IDENT;
 	
@@ -15,7 +14,7 @@ class JavaExceptionGenerator extends JavaGenerator{
 	private String exceptionClass;
 	private int lineNumber;
 	
-	public void generateModel(CommonTree tree, String theClass){
+	public void generateToDomain(CommonTree tree, String theClass){
 		this.lineNumber = tree.getLine();
 		this.fromClass = theClass;
 		
@@ -32,14 +31,6 @@ class JavaExceptionGenerator extends JavaGenerator{
 		modelService.createException(fromClass, exceptionClass, lineNumber, exceptionType);
 	}
 	
-	private boolean isCatchedException(CommonTree tree){
-		return tree.getType() == catchNode;
-	}
-	
-	private boolean isThrowedException(CommonTree tree){
-		return tree.getType() == throwNewNode;
-	}
-	
 	private void setExceptionClass(CommonTree tree){
 		if(tree != null){
 			for(int index = 0; index < tree.getChildCount(); index++){
@@ -54,7 +45,6 @@ class JavaExceptionGenerator extends JavaGenerator{
 			}
 		}
 	}
-	
 	
 	private String parserUniquename(CommonTree tree){		
 		String path = "";		
@@ -74,8 +64,8 @@ class JavaExceptionGenerator extends JavaGenerator{
 	
 	private String packageClassPath(CommonTree tree){
 		String path = "";
-		int totalElementen = tree.getChildCount();
-		for(int iterator = 0; iterator < totalElementen; iterator++){
+		int totalElements = tree.getChildCount();
+		for(int iterator = 0; iterator < totalElements; iterator++){
 			if(tree.getChild(iterator).getType() == JavaParser.DOT){
 				path += packageClassPath((CommonTree) tree.getChild(iterator));
 			} else {
@@ -86,5 +76,11 @@ class JavaExceptionGenerator extends JavaGenerator{
 		return path;
 	}
 	
+	private boolean isCatchedException(CommonTree tree){
+		return tree.getType() == catchNode;
+	}
 	
+	private boolean isThrowedException(CommonTree tree){
+		return tree.getType() == throwNewNode;
+	}
 }

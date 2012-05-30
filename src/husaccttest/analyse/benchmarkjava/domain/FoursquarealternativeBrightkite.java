@@ -16,10 +16,9 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightkiteAccount1(){
 		String from = "domain.foursquarealternative.brightkite.Account1";
-		int expectedDependencies = 2;
+		int expectedDependencies = 4;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImportExpected = from;
@@ -41,15 +40,36 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		boolean foundExtendsDependency = compaireDTOWithValues(dependencyExtendsExpected, dependencies);
 		assertEquals(true, foundImportDependency);
 		assertEquals(true, foundExtendsDependency);
+		
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.IPreferences",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.IPreferences",
+				super.IMPLEMENTS,
+				8,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
+		
 	}
 	
 	@Test
 	public void testDomainBrightKiteAccount2(){
 		String from = "domain.foursquarealternative.brightkite.Account2";
-		int expectedDependencies = 2;
+		int expectedDependencies = 4;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImportExpected = from;
@@ -71,15 +91,36 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		boolean foundExtendsDependency = compaireDTOWithValues(dependencyExtendsExpected, dependencies);
 		assertEquals(true, foundImportDependency);
 		assertEquals(true, foundExtendsDependency);
+		
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.IPreferences",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.IPreferences",
+				super.EXTENDSINTERFACE,
+				8,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
+		
 	}
 	
 	@Test
 	public void testDomainBrightKiteCheckCastFrom(){
 		String from = "domain.foursquarealternative.brightkite.CheckCastFrom";
-		int expectedDependencies = 6;
+		int expectedDependencies = 8;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -140,6 +181,28 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		assertEquals(true, foundDeclarationDependency);
 		assertEquals(true, foundInvocConstructorDependency);
 		assertEquals(true, foundDeclaration2Dependency);
+		
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.SameExtend",
+				super.IMPORT,
+				3,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.SameExtend",
+				super.EXTENDSCONCRETE,
+				8,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
+		
+		
 	}
 	
 	@Ignore( "Problem with detecting expected Dependency. (Indirect Invocation by AccessProperty)" )
@@ -149,7 +212,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -210,7 +273,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -271,7 +334,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -331,7 +394,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -391,7 +454,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -451,7 +514,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -511,7 +574,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 3;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -553,7 +616,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -613,7 +676,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 3;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -655,7 +718,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -715,7 +778,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -775,7 +838,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -835,7 +898,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 5;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -894,8 +957,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		String from = "domain.foursquarealternative.brightkite.CheckInIndirectInvocation6";
 		int expectedDependencies = 5;
 		
-//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImport1Expected = from;
@@ -951,10 +1013,9 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightkiteCheckOut(){
 		String from = "domain.foursquarealternative.brightkite.CheckOut";
-		int expectedDependencies = 2;
+		int expectedDependencies = 4;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImportExpected = from;
@@ -976,6 +1037,27 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		boolean foundExtendsDependency = compaireDTOWithValues(dependencyExtendsExpected, dependencies);
 		assertEquals(true, foundImportDependency);
 		assertEquals(true, foundExtendsDependency);
+		
+		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.POI",
+				super.IMPORT,
+				2,
+				true);
+		
+		HashMap<String, Object> indirectImplementsExpected = createDependencyHashmap(
+				from,
+				"domain.foursquarealternative.yelp.POI",
+				super.EXTENDSABSTRACT,
+				6,
+				true);
+		
+		boolean foundindirectImport = compaireDTOWithValues(indirectImportExpected, dependencies);
+		boolean foundindirectImplements = compaireDTOWithValues(indirectImplementsExpected, dependencies);
+		assertEquals(true, foundindirectImport);
+		assertEquals(true, foundindirectImplements);
+		
+		
 	}
 	
 	@Test
@@ -984,7 +1066,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		int expectedDependencies = 0;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 	}
 }
