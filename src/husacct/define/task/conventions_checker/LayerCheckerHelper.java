@@ -32,13 +32,10 @@ public class LayerCheckerHelper {
 		Long parentId = moduleService.getParentModuleIdByChildId(moduleFrom.getId());
 		if(parentId != -1) {
 			Module parentModule = moduleService.getModuleById(parentId);
+			moduleService.sortModuleChildren(parentModule);
 			return parentModule.getSubModules();
 		} else {
-			ArrayList<Module> currentModules = new ArrayList<Module>();
-			for(Module module : moduleService.getRootModules()) {
-				currentModules.add(module);
-			}
-			return currentModules;
+			return moduleService.getSortedModules();
 		}
 	}
 	
@@ -51,27 +48,36 @@ public class LayerCheckerHelper {
 		}
 	}
 	
-	public boolean checkHasSkippedToLayer(Module moduleFrom) {
-		Long skippedLayerId = getLayerSkippedToId(moduleFrom.getId());
-		if(skippedLayerId != -1L) {
-			return true;
-		} else {
-			this.setErrorMessage(DefineTranslator.translate("SkipLayerNotExists"));
-			return false;
+	public ArrayList<Layer> getSkipCallLayers(Long moduleFromId) {
+		ArrayList<Layer> skipCallLayers = new ArrayList<Layer>();
+		Long firstSkipCallLayerId = getFirstSkipCallLayer(moduleFromId);
+		boolean getLayers = false;
+		for(Layer layer : layers) {
+			if(layer.getId() == firstSkipCallLayerId) {
+				getLayers = true;
+			}
+			if(getLayers) {
+				skipCallLayers.add(layer);
+			}
 		}
+		return skipCallLayers;
 	}
 	
-	public boolean checkHasLayerCalledBackTo(Module moduleFrom) {
-		Long calledBackLayerId = getPreviousLayerId(moduleFrom.getId());
-		if(calledBackLayerId != -1L) {
-			return true;
-		} else {
-			this.setErrorMessage(DefineTranslator.translate("CallbackLayerNotExists"));
-			return false;
+	public ArrayList<Layer> getBackCallLayers(Long moduleFromId) {
+		ArrayList<Layer> backCallLayers = new ArrayList<Layer>();
+		Long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
+		if(firstBackCallLayerId != -1L) {
+			for(Layer layer : layers) {
+				backCallLayers.add(layer);
+				if(layer.getId() == firstBackCallLayerId) {
+					break;
+				}
+			}
 		}
+		return backCallLayers;
 	}
 	
-	public Long getLayerSkippedToId(Long moduleFromId) {
+	public Long getFirstSkipCallLayer(Long moduleFromId) {
 		Long nextLayerId = getNextLayerId(moduleFromId);
 		Long layerSkipperToId = getNextLayerId(nextLayerId);
 		return layerSkipperToId;

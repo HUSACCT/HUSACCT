@@ -396,6 +396,8 @@ public class DefinitionController extends Observable implements Observer {
 			ServiceProvider.getInstance().getDefineService().createApplication("HUSACCT", new String[]{}, "Java", "1.0");
 			addLayer(-1, "Layer 1", "This is test data");
 			addLayer(-1, "Layer 2", "This is test data");
+			addLayer(-1, "Layer 3", "This is test data");
+			addLayer(-1, "Layer 4", "This is test data");
 			addSubSystem(0, "SubSystem 1", "This is test data");
 			addSubSystem(2, "SubSystem 2", "This is test data");
 			notifyObservers();

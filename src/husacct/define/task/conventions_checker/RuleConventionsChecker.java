@@ -1,5 +1,8 @@
 package husacct.define.task.conventions_checker;
 
+import java.util.ArrayList;
+
+import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
 public class RuleConventionsChecker {
@@ -151,20 +154,30 @@ public class RuleConventionsChecker {
 	}
 	
 	private boolean checkSkipCall() {
-		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkHasSkippedToLayer(moduleFrom)) {
-			Long layerSkippedToId = layerCheckerHelper.getLayerSkippedToId(moduleFrom.getId());
-			this.moduleTo = layerCheckerHelper.getLayerById(layerSkippedToId);
-			return checkIsAllowedToUse();
+		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom)) {
+			ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
+			for(Layer skipCallLayer : skipCallLayers) {
+				this.moduleTo = skipCallLayer;
+				if(!this.checkIsNotAllowedToUse()) {
+					return false;
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}
 	}
 	
 	private boolean checkBackCall() {
-		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkHasLayerCalledBackTo(moduleFrom)) {
-			Long calledBackLayerId = layerCheckerHelper.getPreviousLayerId(moduleFrom.getId());
-			this.moduleTo = layerCheckerHelper.getLayerById(calledBackLayerId);
-			return checkIsAllowedToUse();
+		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom)) {
+			ArrayList<Layer> backCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
+			for(Layer backCallLayer : backCallLayers) {
+				this.moduleTo = backCallLayer;
+				if(!this.checkIsNotAllowedToUse()) {
+					return false;
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}
