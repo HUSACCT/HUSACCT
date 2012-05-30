@@ -37,6 +37,7 @@ public class CheckConformanceController {
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
 		if(applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()){
 			configuration.clearViolations();
+			ruleCache.clear();
 			for(RuleDTO appliedRule : appliedRules){
 				try{
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
@@ -57,21 +58,6 @@ public class CheckConformanceController {
 			throw new ProgrammingLanguageNotFoundException();
 		}
 	}
-
-//TODO implement filtering of contradictory rules
-//	private RuleDTO[] getContradictoryRules(RuleDTO[] allRules, RuleDTO toValidateRule){
-//		return new RuleDTO[]{};
-//	}
-//
-//	private List<RuleDTO> filterCurrentRule(RuleDTO[] allRules, RuleDTO toValidateRule){
-//		List<RuleDTO> allCurrentRules = Arrays.asList(allRules.clone());
-//		for(RuleDTO rule : allCurrentRules){
-//			if(rule.equals(toValidateRule)){
-//				allCurrentRules.remove(rule);
-//			}
-//		}
-//		return allCurrentRules;
-//	}
 
 	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
 		for(RuleDTO appliedRule : exceptionRules){

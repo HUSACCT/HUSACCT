@@ -3,7 +3,6 @@ package husacct.validate.domain.check.util;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class CheckConformanceUtil {
@@ -19,7 +18,7 @@ public abstract class CheckConformanceUtil {
 				if(mainClasspaths.get(iterator).getPhysicalPath().equals(exceptionMapping.getPhysicalPath())){
 
 					for(String violationTypeKey : mainClasspaths.get(iterator).getViolationTypes()){
-						if(Arrays.asList(exceptionMapping.getViolationTypes()).contains(violationTypeKey)){
+						if(containsValueInArray(exceptionMapping.getViolationTypes(), violationTypeKey)){
 							mainClasspaths.get(iterator).removeViolationType(violationTypeKey);
 						}
 					}
@@ -33,5 +32,14 @@ public abstract class CheckConformanceUtil {
 			}
 		}
 		return mainClasspaths;
+	}
+	
+	private static boolean containsValueInArray(String[] keys, String key){
+		for(String loopKey : keys){
+			if(loopKey.toLowerCase().equals(key.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
 	}
 }

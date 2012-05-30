@@ -1,7 +1,6 @@
 package husacct.validate.task.export.xml;
 
 import husacct.validate.domain.validation.ViolationHistory;
-import husacct.validate.task.XMLUtils;
 
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -13,9 +12,12 @@ import org.apache.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
-public class ExportViolationsHistory {
+public class ExportViolationsHistory extends XmlExportUtils {
 
 	public Element exportViolationsHistory(List<ViolationHistory> violationHistories) {
+		final ExportSeverities exportSeverities = new ExportSeverities();
+		final ExportViolations exportViolations = new ExportViolations();
+		
 		Element violationHistoriesElement = new Element("violationHistories");
 		
 			for(ViolationHistory violationHistory : violationHistories) {
@@ -30,16 +32,15 @@ public class ExportViolationsHistory {
 				}
 				
 				//description
-				violationHistoryElement.addContent(XMLUtils.createElementWithContent("description", violationHistory.getDescription()));
+				violationHistoryElement.addContent(createElementWithContent("description", violationHistory.getDescription()));
 
 				//severities
-				violationHistoryElement.addContent(new ExportSeverities().exportSeverities(violationHistory.getSeverities()));
+				violationHistoryElement.addContent(exportSeverities.exportSeverities(violationHistory.getSeverities()));
 				
 				//violations
-				violationHistoryElement.addContent(new ExportViolations().exportViolations(violationHistory.getViolations()));
+				violationHistoryElement.addContent(exportViolations.exportViolations(violationHistory.getViolations()));
 			}
 		
 		return violationHistoriesElement;
 	}
-
 }
