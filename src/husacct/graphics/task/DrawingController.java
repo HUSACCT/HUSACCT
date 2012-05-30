@@ -477,13 +477,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		drawingView.setVisible(false);
 		graphicsFrame.showLoadingScreen();
 	}
-	
-//	public void runInMonitorThread(Runnable thread){
-//		if(!monitorThread.isAlive()){
-//			Thread drawThread = new Thread(thread);
-//			monitorThread = new DrawingMonitorThread(this, drawThread);
-//			monitorThread.start();
-//			drawThread.start();
-//		}
-//	}
+
+	public boolean isDrawingVisible() {
+		return drawingView.isVisible();
+	}
 }

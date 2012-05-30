@@ -41,7 +41,8 @@ public class ThreadMonitor implements ThreadListener {
 				Runnable target = ListUtils.pop(pooledThreads);
 				ObservableThread t = new ObservableThread(target);
 
-				controller.setDrawingViewNonVisible();
+				if (controller.isDrawingVisible())
+					controller.setDrawingViewNonVisible();
 
 				t.addThreadListener(this);
 				t.start();
@@ -55,7 +56,7 @@ public class ThreadMonitor implements ThreadListener {
 
 	private void updateRunningTasks() {
 		synchronized (runningThreads) {
-			if (runningThreads.isEmpty())
+			if (runningThreads.isEmpty() && !controller.isDrawingVisible())
 				controller.setDrawingViewVisible();
 		}
 	}
