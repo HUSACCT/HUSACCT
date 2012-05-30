@@ -39,10 +39,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private static final long serialVersionUID = 4912981274532255799L;
 	private Logger logger = Logger.getLogger(BrowseViolations.class);
 	private final TaskServiceImpl taskServiceImpl;
-	public final SimpleDateFormat dateFormat;
+	private final SimpleDateFormat dateFormat;
 
-	private JButton buttonSaveInHistory, buttonLatestViolations, buttonDeleteViolationHistoryPoint,
-	buttonValidate;
+	private JButton buttonSaveInHistory;
+	private JButton buttonLatestViolations;
+	private JButton buttonDeleteViolationHistoryPoint;
+	private JButton buttonValidate;
 	private JTable chooseViolationHistoryTable, violationsTable;
 	private JScrollPane scrollPane, violationsTableScrollPane, chooseViolationHistoryTableScrollPane, informationScrollPane;
 	private JPanel rightSidePane, leftSidePane;
@@ -53,6 +55,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private StatisticsPanel statisticsPanel;
 	private ViolationInformationPanel violationInformationPanel;
 	private List<Violation> shownViolations;
+	private BrowseViolations browseViolations = this;
 
 
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
@@ -197,11 +200,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask());
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask(browseViolations, filterPane, buttonSaveInHistory));
 				validateThread.run();
-				loadAfterChange();
-				filterPane.loadAfterChange();
-				buttonSaveInHistory.setEnabled(true);
 			}
 		});
 		buttonSaveInHistory.addActionListener(new ActionListener() {
