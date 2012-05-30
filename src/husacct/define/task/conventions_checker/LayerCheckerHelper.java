@@ -12,13 +12,10 @@ public class LayerCheckerHelper {
 	private ArrayList<Layer> layers;
 	private String errorMessage;
 	
-	private ModuleCheckerHelper moduleCheckerHelper;
-	
 	public LayerCheckerHelper(Module moduleFrom) {
 		this.layers = new ArrayList<Layer>();
 		this.fillLayerList(moduleFrom);
 		this.setErrorMessage("");
-		this.moduleCheckerHelper = new ModuleCheckerHelper();
 	}
 	
 	public void fillLayerList(Module moduleFrom) {
@@ -27,29 +24,6 @@ public class LayerCheckerHelper {
 			if(module instanceof Layer) {
 				layers.add((Layer) module);
 			}
-		}
-	}
-	
-	public boolean checkLayerSkippedTo(Module moduleFrom) {
-		if(checkTypeIsLayer(moduleFrom)) {
-			Long skippedLayerId = getLayerSkippedToId(moduleFrom.getId());
-			if(skippedLayerId != -1L) {
-				return moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse", moduleFrom, getLayerById(skippedLayerId));
-			} else {
-				this.setErrorMessage(DefineTranslator.translate("SkipLayerNotExists"));
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean checkTypeIsLayer(Module module) {
-		if(module.getType() == "Layer") {
-			return true;
-		} else {
-			this.setErrorMessage(DefineTranslator.translate("RuleOnlyForLayers"));
-			return false;
 		}
 	}
 	
@@ -68,10 +42,39 @@ public class LayerCheckerHelper {
 		}
 	}
 	
+	public boolean checkTypeIsLayer(Module module) {
+		if(module.getType() == "Layer") {
+			return true;
+		} else {
+			this.setErrorMessage(DefineTranslator.translate("RuleOnlyForLayers"));
+			return false;
+		}
+	}
+	
+	public boolean checkHasSkippedToLayer(Module moduleFrom) {
+		Long skippedLayerId = getLayerSkippedToId(moduleFrom.getId());
+		if(skippedLayerId != -1L) {
+			return true;
+		} else {
+			this.setErrorMessage(DefineTranslator.translate("SkipLayerNotExists"));
+			return false;
+		}
+	}
+	
+	public boolean checkHasLayerCalledBackTo(Module moduleFrom) {
+		Long calledBackLayerId = getPreviousLayerId(moduleFrom.getId());
+		if(calledBackLayerId != -1L) {
+			return true;
+		} else {
+			this.setErrorMessage(DefineTranslator.translate("CallbackLayerNotExists"));
+			return false;
+		}
+	}
+	
 	public Long getLayerSkippedToId(Long moduleFromId) {
 		Long nextLayerId = getNextLayerId(moduleFromId);
-		Long LayerSkipperToId = getNextLayerId(nextLayerId);
-		return LayerSkipperToId;
+		Long layerSkipperToId = getNextLayerId(nextLayerId);
+		return layerSkipperToId;
 	}
 	
 	public Long getNextLayerId(Long currentLayerId) {
@@ -109,9 +112,6 @@ public class LayerCheckerHelper {
 	}
 
 	public String getErrorMessage() {
-		if(this.errorMessage == "") {
-			return moduleCheckerHelper.getErrorMessage();
-		}
 		return errorMessage;
 	}
 

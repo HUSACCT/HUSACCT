@@ -20,7 +20,7 @@ public class ModuleCheckerHelper {
 	public boolean checkRuleTypeAlreadySet(String ruleTypeKey, Module moduleFrom) {
 		for(AppliedRule appliedRule : this.getFromModuleAppliedRules(moduleFrom)) {
 			if(appliedRule.getRuleType().equals(ruleTypeKey)) {
-				setErrorMessage(DefineTranslator.translate("RuleTypeAlreadySet"));
+				setErrorMessage("'"+ DefineTranslator.translate(ruleTypeKey) + "'");
 				return false;
 			}
 		}
