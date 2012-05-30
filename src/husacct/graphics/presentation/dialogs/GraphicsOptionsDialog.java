@@ -21,9 +21,6 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
-// XXX: This class generates warnings on the JDK 1.7. Both rawtypes and unchecked exceptions
-// are disabled.
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class GraphicsOptionsDialog extends JDialog {
 	private static final long serialVersionUID = 4794939901459687332L;
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
