@@ -14,8 +14,6 @@ class FamixDependencyFinder extends FamixFinder{
 	private String from = "", to = "";
 	private List<DependencyDTO> currentResult;
 	
-	private boolean indirectSearched = false;
-	
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
 		this.currentResult = new ArrayList<DependencyDTO>();
@@ -76,7 +74,6 @@ class FamixDependencyFinder extends FamixFinder{
 	
 	private void reset(){
 		this.removeFilter();
-		this.indirectSearched = false;
 	}
 	
 	private void removeFilter(){
