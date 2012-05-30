@@ -65,5 +65,7 @@ public class StatisticsPanel extends JPanel{
 			add(new JLabel(violationPerSeverity.getKey().toString()));
 			add(new JLabel(violationPerSeverity.getValue().toString()));
 		}
+		
+		updateUI();
 	}
 }
