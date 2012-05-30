@@ -90,18 +90,14 @@ class FamixDependencyFinder extends FamixFinder{
 		for(FamixAssociation assocation: allAssocations){
 			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
 				DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
-//				if (!result.contains(foundDependency)) result.add(foundDependency);
 				if (!containsDependency(foundDependency, result)) result.add(foundDependency);
 			}
 		}
 		if(!this.from.equals("")){
 			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
-//				if(!result.contains(dependency)){
-//					System.out.println(dependency.toString());
-					if(!containsDependency(dependency, result)){
-						result.add(dependency);
-					}
-//				}
+				if(!containsDependency(dependency, result)){
+					result.add(dependency);
+				}
 			}
 		}
 		return result;
@@ -112,11 +108,6 @@ class FamixDependencyFinder extends FamixFinder{
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		for(DependencyDTO directDependency: directDependencies){		
 			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
-//				if (!result.contains(indirectDependency)) result.add(indirectDependency);
-//				if (!result.contains(indirectDependency)){
-//					indirectDependency.from = directDependency.from;
-//					result.add(indirectDependency);
-//				}
 				if(!containsDependency(indirectDependency, result)){
 					indirectDependency.from = directDependency.from;
 					result.add(indirectDependency);
@@ -145,7 +136,6 @@ class FamixDependencyFinder extends FamixFinder{
 			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);
 			if(!indirectDependency.to.equals(fromDependency.from)) {
 				for(DependencyDTO subIndirect : this.findIndirectDependenciesFrom(indirectDependency)){
-//					if(!found.contains(subIndirect)) found.add(subIndirect);
 					if(!containsDependency(subIndirect, found)) found.add(subIndirect);
 				}
 			}
