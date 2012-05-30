@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.menubars;
 
+import husacct.ServiceProvider;
 import husacct.control.IControlService;
 import husacct.graphics.util.UserInputListener;
 
@@ -14,6 +15,7 @@ import javax.swing.JPopupMenu;
 
 public class ContextMenu extends JPopupMenu {
 	private static final long serialVersionUID = -6033808567664371902L;
+	protected IControlService controlService;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	
@@ -26,7 +28,8 @@ public class ContextMenu extends JPopupMenu {
 	private boolean hasHiddenFigures = false;
 	private boolean canZoomout = false;
 	
-	public ContextMenu(IControlService controlService) {
+	public ContextMenu() {
+		controlService = ServiceProvider.getInstance().getControlService();
 		ImageIcon icon;
 		
 		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/graphics/icon-zoom.png"));

@@ -34,12 +34,14 @@ public class DrawingView extends DefaultDrawingView {
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	private HashSet<Figure> previousSelection = new HashSet<Figure>();
 
-	public DrawingView(Drawing drawing) {
-		this.drawing = drawing;
-		setDrawing(this.drawing);
+	public DrawingView(Drawing givenDrawing) {
+		drawing = givenDrawing;
+		setDrawing(drawing);
 
 		editor = new DefaultDrawingEditor();
 		editor.add(this);
+		
+		contextMenu = new ContextMenu();
 
 		initializeSelectionTool();
 		initializeMouseListener();
@@ -61,7 +63,20 @@ public class DrawingView extends DefaultDrawingView {
 			}
 		});
 	}
-
+	
+	public void canZoomOut(){
+		contextMenu.setCanZoomout(true);
+	}
+	
+	public void cannotZoomOut(){
+		contextMenu.setCanZoomout(false);
+	}
+	
+	public void setHasHiddenFigures(boolean setting){
+		contextMenu.setHasHiddenFigures(setting);
+		contextMenu.setHasSelection(false);
+	}
+	
 	private void onMouseClicked(MouseEvent e) {
 		int mouseButton = e.getButton();
 		int mouseClicks = e.getClickCount();
@@ -136,8 +151,19 @@ public class DrawingView extends DefaultDrawingView {
 		for (UserInputListener l : listeners) {
 			l.moduleZoom(fig);
 		}
-
 		requestFocus();
+	}
+	
+	public void hideSelectedFigures() {
+		Set<Figure> selection = getSelectedFigures();
+		drawing.hideSelectedFigures(selection);
+		clearSelection();
+		contextMenu.setHasHiddenFigures(drawing.hasHiddenFigures());
+	}
+	
+	public void restoreHiddenFigures(){
+		drawing.restoreHiddenFigures();
+		contextMenu.setHasHiddenFigures(false);
 	}
 
 	private void initializeSelectionListener() {
@@ -158,7 +184,6 @@ public class DrawingView extends DefaultDrawingView {
 			}
 			figureSelected(selection);
 		}
-		
 		contextMenu.setHasSelection(hasSelection());
 	}
 
@@ -207,13 +232,11 @@ public class DrawingView extends DefaultDrawingView {
 
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
+		contextMenu.addListener(listener);
 	}
 
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
-	}
-	
-	public void setContextMenu(ContextMenu menu) {
-		contextMenu = menu;
+		contextMenu.removeListener(listener);
 	}
 }

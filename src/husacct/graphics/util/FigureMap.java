@@ -1,4 +1,4 @@
-package husacct.graphics.task;
+package husacct.graphics.util;
 
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;

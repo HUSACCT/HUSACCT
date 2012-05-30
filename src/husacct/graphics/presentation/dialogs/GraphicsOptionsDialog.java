@@ -1,7 +1,6 @@
 package husacct.graphics.presentation.dialogs;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -24,12 +23,10 @@ import org.apache.log4j.Logger;
 
 public class GraphicsOptionsDialog extends JDialog {
 	private static final long serialVersionUID = 4794939901459687332L;
-
-	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
-	
+
 	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel;
-	
+
 	private int menuItemMaxHeight = 45;
 
 	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton;
@@ -38,20 +35,19 @@ public class GraphicsOptionsDialog extends JDialog {
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
 	private ArrayList<JComponent> interfaceElements;
-	
+
 	private int width, height;
 
-	public GraphicsOptionsDialog(){
+	public GraphicsOptionsDialog() {
 		super();
 		width = 500;
 		height = 200;
-		
-		controlService = ServiceProvider.getInstance().getControlService();
+
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel,BoxLayout.Y_AXIS));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		add(mainPanel);
 		initGUI();
-		
+
 		interfaceElements = new ArrayList<JComponent>();
 		interfaceElements.add(zoomInButton);
 		interfaceElements.add(zoomOutButton);
@@ -63,68 +59,68 @@ public class GraphicsOptionsDialog extends JDialog {
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
 	}
-	
-	public void showDialog(){
+
+	public void showDialog() {
 		setResizable(false);
 		setSize(width, height);
 		setModal(true);
 		setVisible(true);
 		ServiceProvider.getInstance().getControlService().centerDialog(this);
 	}
-	
+
 	public void initGUI() {
 		actionsPanel = new JPanel();
-			zoomInButton = new JButton();
-			actionsPanel.add(zoomInButton);
-			
-			zoomOutButton = new JButton();
-			actionsPanel.add(zoomOutButton);
-			
-			refreshButton = new JButton();
-			actionsPanel.add(refreshButton);
-			
-			exportToImageButton = new JButton();
-			actionsPanel.add(exportToImageButton);
-			
-			mainPanel.add(actionsPanel);
-		
+		zoomInButton = new JButton();
+		actionsPanel.add(zoomInButton);
+
+		zoomOutButton = new JButton();
+		actionsPanel.add(zoomOutButton);
+
+		refreshButton = new JButton();
+		actionsPanel.add(refreshButton);
+
+		exportToImageButton = new JButton();
+		actionsPanel.add(exportToImageButton);
+
+		mainPanel.add(actionsPanel);
+
 		optionsPanel = new JPanel();
-		optionsPanel.setLayout(new GridLayout(3,1));
-		
-			showDependenciesOptionMenu = new JCheckBox();
-			showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
-			optionsPanel.add(showDependenciesOptionMenu);
-			
-			showViolationsOptionMenu = new JCheckBox();
-			showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
-			optionsPanel.add(showViolationsOptionMenu);
-			
-			smartLinesOptionMenu = new JCheckBox();
-			smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
-			optionsPanel.add(smartLinesOptionMenu);
-		
-			mainPanel.add(optionsPanel);
-		
+		optionsPanel.setLayout(new GridLayout(3, 1));
+
+		showDependenciesOptionMenu = new JCheckBox();
+		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
+		optionsPanel.add(showDependenciesOptionMenu);
+
+		showViolationsOptionMenu = new JCheckBox();
+		showViolationsOptionMenu.setSize(40, menuItemMaxHeight);
+		optionsPanel.add(showViolationsOptionMenu);
+
+		smartLinesOptionMenu = new JCheckBox();
+		smartLinesOptionMenu.setSize(40, menuItemMaxHeight);
+		optionsPanel.add(smartLinesOptionMenu);
+
+		mainPanel.add(optionsPanel);
+
 		settingsPanel = new JPanel();
-		settingsPanel.setLayout(new GridLayout(1,2));
-			layoutStrategyLabel = new JLabel();
-			settingsPanel.add(layoutStrategyLabel);
-			layoutStrategyOptions = new JComboBox();
-			settingsPanel.add(layoutStrategyOptions);
-			
-			mainPanel.add(settingsPanel);
-		
+		settingsPanel.setLayout(new GridLayout(1, 2));
+		layoutStrategyLabel = new JLabel();
+		settingsPanel.add(layoutStrategyLabel);
+		layoutStrategyOptions = new JComboBox();
+		settingsPanel.add(layoutStrategyOptions);
+
+		mainPanel.add(settingsPanel);
+
 		zoomPanel = new JPanel();
-		zoomPanel.setLayout(new GridLayout(1,2));
-			zoomLabel = new JLabel();
-			zoomPanel.add(zoomLabel);
-			zoomSlider = new JSlider(25, 175, 100);
-			zoomSlider.setSize(50, width);
-			zoomPanel.add(zoomSlider);
-			
-			mainPanel.add(zoomPanel);
+		zoomPanel.setLayout(new GridLayout(1, 2));
+		zoomLabel = new JLabel();
+		zoomPanel.add(zoomLabel);
+		zoomSlider = new JSlider(25, 175, 100);
+		zoomSlider.setSize(50, width);
+		zoomPanel.add(zoomSlider);
+
+		mainPanel.add(zoomPanel);
 	}
-	
+
 	public void setLocale(HashMap<String, String> menuBarLocale) {
 		try {
 			zoomLabel.setText(menuBarLocale.get("Zoom"));
@@ -140,9 +136,9 @@ public class GraphicsOptionsDialog extends JDialog {
 			logger.warn("Locale is not set properly.");
 		}
 	}
-	
+
 	public void setIcons(HashMap<String, String> icons) {
-		try{
+		try {
 			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get("zoomIn")));
 			zoomInButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(icons.get("zoomOut")));
@@ -155,7 +151,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			logger.warn("Icons are not set properly.");
 		}
 	}
-	
+
 	public void setZoomInAction(ActionListener listener) {
 		zoomInButton.addActionListener(listener);
 	}
@@ -175,7 +171,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void setToggleContextUpdatesAction(ActionListener listener) {
 		smartLinesOptionMenu.addActionListener(listener);
 	}
-	
+
 	public void setLayoutStrategyAction(ActionListener listener) {
 		layoutStrategyOptions.addActionListener(listener);
 	}
@@ -206,19 +202,19 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void setSelectedLayoutStrategyItem(String item) {
 		layoutStrategyOptions.setSelectedItem(item);
 	}
-	
+
 	public String getSelectedLayoutStrategyItem() {
 		return (String) layoutStrategyOptions.getSelectedItem();
 	}
-	
+
 	public void setDependencyToggle(boolean setting) {
-		if(showDependenciesOptionMenu.isSelected()!=setting){
+		if (showDependenciesOptionMenu.isSelected() != setting) {
 			showDependenciesOptionMenu.setSelected(setting);
 		}
 	}
-	
+
 	public void setViolationToggle(boolean setting) {
-		if(showViolationsOptionMenu.isSelected()!=setting){
+		if (showViolationsOptionMenu.isSelected() != setting) {
 			showViolationsOptionMenu.setSelected(setting);
 		}
 	}
@@ -228,15 +224,15 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 
 	public void turnOn() {
-		for(JComponent element : interfaceElements){
+		for (JComponent element : interfaceElements) {
 			element.setEnabled(true);
 		}
 	}
 
 	public void turnOff() {
-		for(JComponent element : interfaceElements){
+		for (JComponent element : interfaceElements) {
 			element.setEnabled(false);
 		}
 	}
-	
+
 }
