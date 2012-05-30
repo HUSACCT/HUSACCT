@@ -85,10 +85,9 @@ public class Flickr extends BenchmarkExtended{
 	@Test
 	public void testDomainFlickrTag(){
 		String from = "domain.flickr.Tag";
-		int expectedDependencies = 2;
+		int expectedDependencies = 4;
 		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
+		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 		
 		String fromImportExpected = from;
@@ -100,7 +99,7 @@ public class Flickr extends BenchmarkExtended{
 		String toExtendsExpected = "infrastructure.socialmedia.SocialNetwork";
 		String typeExtendsExpected = super.EXTENDSCONCRETE;
 		int linenumberExtendsExpected = 7;
-		
+			
 		HashMap<String, Object> dependencyImportExpected = createDependencyHashmap(
 				fromImportExpected, toImportExpected, typeImportExpected, linenumberImportExpected);
 		HashMap<String, Object> dependencyExtendsExpected = createDependencyHashmap(
@@ -110,6 +109,28 @@ public class Flickr extends BenchmarkExtended{
 		boolean foundExtendsDependency = compaireDTOWithValues(dependencyExtendsExpected, dependencies);
 		assertEquals(true, foundImportDependency);
 		assertEquals(true, foundExtendsDependency);
+		
+		
+		HashMap<String, Object> indirectStringExpected = createDependencyHashmap(
+				from,
+				"String",
+				super.DECLARATION,
+				4,
+				true);
+		
+		HashMap<String, Object> indirectObjectExpected = createDependencyHashmap(
+				from,
+				"String",
+				super.DECLARATION,
+				4,
+				true);
+		
+		boolean foundindirectString = compaireDTOWithValues(indirectStringExpected, dependencies);
+		boolean foundindirectObject = compaireDTOWithValues(indirectObjectExpected, dependencies);
+		assertEquals(true, foundindirectString);
+		assertEquals(true, foundindirectObject);
+		
+		
 		
 	}
 	

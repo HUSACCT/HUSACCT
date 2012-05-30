@@ -164,7 +164,6 @@ public class LanguageBusuu extends BenchmarkExtended{
 		String from = "domain.language.busuu.LearnFrench";
 		int expectedDependencies = 3;
 		
-//		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
 
