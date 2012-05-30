@@ -1,8 +1,10 @@
 package husacct.validate.task.fetch.xml;
 
+import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
+import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -37,27 +39,25 @@ public class ImportViolationsHistory extends XmlImportUtils {
 			}
 
 			//date
-			final String validationDate = violationHistoryElement.getAttributeValue("date");
-			Calendar date = getCalendar(validationDate);
+			final String validationDateString = violationHistoryElement.getAttributeValue("date");
+			Calendar validationDate = getCalendar(validationDateString);
 
 			//description 
 			final String description = violationHistoryElement.getChildText("description");
 
 			//violations
 			for(Element violationElement : violationHistoryElement.getChild("violations").getChildren()) {
-				Violation violation = new Violation();					
-				violation.setLinenumber(Integer.parseInt(violationElement.getChildText("lineNumber")));
-				violation.setRuletypeKey(violationElement.getChildText("ruletypeKey"));
-				violation.setViolationtypeKey(violationElement.getChildText("violationtypeKey"));
-				violation.setClassPathFrom(violationElement.getChildText("classPathFrom"));
-				violation.setClassPathTo(violationElement.getChildText("classPathTo"));
-				violation.setLogicalModules(getLogicalModules(violationElement.getChild("logicalModules")));
-				violation.setMessage(getMessage(violationElement.getChild("message")));
-				violation.setIndirect(Boolean.parseBoolean(violationElement.getChildText("isIndirect")));
-
+				final int lineNumber = Integer.parseInt(violationElement.getChildText("lineNumber"));
+				final String ruleTypeKey = violationElement.getChildText("ruletypeKey");
+				final String violationTypeKey = violationElement.getChildText("violationtypeKey");
+				final String classPathFrom = violationElement.getChildText("classPathFrom");
+				final String classPathTo = violationElement.getChildText("classPathTo");
+				final LogicalModules logicalModules = getLogicalModules(violationElement.getChild("logicalModules"));
+				final Message message = getMessage(violationElement.getChild("message"));
+				final boolean isIndirect = Boolean.parseBoolean(violationElement.getChildText("isIndirect"));
 				final String stringCalendar = violationElement.getChildText("occured");
-				violation.setOccured(getCalendar(stringCalendar));
-
+				final Calendar date = getCalendar(stringCalendar);
+				
 				//search the appropiate severity of the violation by the uuid.
 				final String stringUUID = violationElement.getChildText("severityId");
 				boolean found = false;
@@ -66,7 +66,8 @@ public class ImportViolationsHistory extends XmlImportUtils {
 					if(isValidUUID(stringUUID)){
 						UUID id = UUID.fromString(stringUUID);
 						if(id.equals(severity.getId())) {
-							violation.setSeverity(severity);
+							
+							Violation violation = new Violation(date, lineNumber, severity.clone(), ruleTypeKey, violationTypeKey, classPathFrom, classPathTo, isIndirect, message, logicalModules);
 							violations.add(violation);
 							found = true;
 							break;
@@ -78,11 +79,11 @@ public class ImportViolationsHistory extends XmlImportUtils {
 
 				} 
 				if(!found) {
-					logger.error("Severity for the violation " + violation.getLinenumber() + "was not found (UUID: "+ stringUUID);
+					logger.error("Severity for the violation was not found (UUID: "+ stringUUID);
 				} 
 
 			}				
-			violationHistories.add(new ViolationHistory(violations, severities, date, description));
+			violationHistories.add(new ViolationHistory(violations, severities, validationDate, description));
 		}	
 		return violationHistories;
 	}
