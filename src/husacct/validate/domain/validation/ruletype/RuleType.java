@@ -113,13 +113,7 @@ public abstract class RuleType {
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
 
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
-
-		boolean isIndirect = false;
-		if(key.equals(RuleTypes.CYCLES_BETWEEN_MODULES)){
-			isIndirect = true;
-		}
-
-		return new Violation(severity.clone(), this.key, classPathFrom.getPhysicalPath(), isIndirect, message, logicalModules);
+		return new Violation(severity.clone(), this.key, classPathFrom.getPhysicalPath(), false, message, logicalModules);
 	}
 
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration){
