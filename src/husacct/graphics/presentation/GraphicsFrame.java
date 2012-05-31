@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -59,6 +60,9 @@ public class GraphicsFrame extends JInternalFrame {
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
 	public GraphicsFrame(DrawingView givenDrawingView) {
+		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		add(centerPane, BorderLayout.CENTER);
+		
 		setVisible(false);
 		frameTotalWidth = getWidth();
 
@@ -84,10 +88,6 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 	}
 	
-	public void refreshFrameClean() {
-		layoutComponents();
-	}
-	
 	public String[] getCurrentPaths() {
 		return currentPaths;
 	}
@@ -101,8 +101,6 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 
 	private void initializeComponents() {
-		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		add(centerPane, java.awt.BorderLayout.CENTER);
 		drawingScrollPane = new JScrollPane();
 		drawingScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		drawingScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -131,29 +129,24 @@ public class GraphicsFrame extends JInternalFrame {
 		updateComponentsLocaleStrings();
 		layoutComponents();
 		
-		
 		this.getRootPane().addComponentListener(new ComponentListener(){
 			@Override
 			public void componentResized(ComponentEvent e) {
 				positionLayoutComponents();
 				resizeLocationBar();
 			}
-
 			@Override
 			public void componentShown(ComponentEvent e) {
 				// Do nothing
 			}
-
 			@Override
 			public void componentHidden(ComponentEvent e) {
 				// Do nothing
 			}
-
 			@Override
 			public void componentMoved(ComponentEvent e) {
 				// Do nothing
 			}
-			
 		});
 	}
 	
@@ -502,7 +495,19 @@ public class GraphicsFrame extends JInternalFrame {
 		locationBar.turnOffBar();
 		menuBar.turnOffBar();
 		centerPane.removeAll();
-		centerPane.add(new JLabel("Loading.."));
+		
+		JPanel loadingContainerPanel = new JPanel();
+		JPanel progressPanel = new JPanel();
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setIndeterminate(true);
+		
+		progressPanel.add(progressBar);
+		loadingContainerPanel.add(progressPanel);
+		
+		centerPane.add(loadingContainerPanel);
+		centerPane.setDividerSize(0);
+		
 		add(centerPane, java.awt.BorderLayout.CENTER);
 
 		if (isVisible()) {

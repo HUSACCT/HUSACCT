@@ -53,6 +53,7 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
+		super.drawArchitecture(getCurrentDrawingDetail());
 		super.notifyServiceListeners();
 		AbstractDTO[] modules = defineService.getRootModules();
 		resetCurrentPaths();
@@ -178,7 +179,7 @@ public class DefinedController extends DrawingController {
 			setCurrentPaths(parentNames);
 	
 			Set<String> parentNamesKeySet = allChildren.keySet();
-			if (parentNamesKeySet.size() == 1 && !areFiguresSavedForZoom()) {
+			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
 				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
 				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
