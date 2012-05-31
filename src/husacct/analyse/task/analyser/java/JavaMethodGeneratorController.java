@@ -11,28 +11,29 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	private boolean isAbstract = false;
 	private boolean isConstructor;
 	private String belongsToClass;
-
 	private String accessControlQualifier = "package-private";
 
-	private boolean isPureAccessor;  //TODO Fille isPureAccessor
+	private boolean isPureAccessor;
 	private String declaredReturnType;
 
 	private String signature = "";
 	public String name;
 	public String uniqueName;
+	
+	private int lineNumber;
+	
 	private Logger logger = Logger.getLogger(JavaMethodGeneratorController.class);
 	
 	JavaAttributeAndLocalVariableGenerator javaLocalVariableGenerator = new JavaAttributeAndLocalVariableGenerator();
 
 	public void delegateMethodBlock(CommonTree methodTree, String className) {
-		this.belongsToClass = className;		
+		this.belongsToClass = className;	
+		lineNumber = methodTree.getLine();
 		checkMethodType(methodTree);		
 		WalkThroughMethod(methodTree);
 		createMethodObject();	
 	}
 	
-	
-
 	private void checkMethodType(CommonTree methodTree) {
 		if (methodTree.getType() == JavaParser.CONSTRUCTOR_DECL){ 
 			declaredReturnType = "";
@@ -48,7 +49,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 			isConstructor = false;
 		}
 		else {
-			logger.warn("MethodGenerator aangeroepen maar geen herkenbaar type methode");
+			logger.warn("MethodGenerator couldn't find a valid function type");
 		}
 	}
 	
@@ -58,8 +59,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	}
 
 	private void WalkThroughMethod(Tree tree) {
-		for(int i = 0; i < tree.getChildCount(); i++){
-			Tree child = tree.getChild(i);
+		for(int childCount = 0; childCount < tree.getChildCount(); childCount++){
+			Tree child = tree.getChild(childCount);
 			int treeType = child.getType();
 			if(treeType == JavaParser.ABSTRACT){
 				isAbstract = true;
@@ -91,7 +92,6 @@ class JavaMethodGeneratorController extends JavaGenerator{
 				if (child.getChildCount() > 0){
 					JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();
 					signature = "(" + javaParameterGenerator.generateParameterObjects(child, name, belongsToClass) + ")";
-					// = this.name + "(" +  + ")";
 					deleteTreeChild(child);
 				}
 			}
@@ -107,32 +107,21 @@ class JavaMethodGeneratorController extends JavaGenerator{
 		}
 	}
 
-	
-
 	private void setSignature() {
 		if (signature.equals("")){
 			signature = "()";
 		}
-		
 	}
-
-
 
 	private void delegateException(Tree exceptionTree){ 
 		JavaExceptionGenerator exceptionGenerator = new JavaExceptionGenerator(); 
-		exceptionGenerator.generateModel((CommonTree)exceptionTree, this.belongsToClass); 
+		exceptionGenerator.generateToDomain((CommonTree)exceptionTree, this.belongsToClass); 
 	} 
 
 
-	private void getReturnType(Tree tree){
-		//op dit moment worden arraylisten en hashmaps dusdanig gezet als 'hashmap' en 'arraylist' en niet als
-		//ArrayList<User> bijv. Dit is wellicht een TODO
-		
+	private void getReturnType(Tree tree){		
 		declaredReturnType = javaLocalVariableGenerator.generateMethodReturnType(tree, belongsToClass);
 	}
-	
-
-	
 	
 
 	private void deleteTreeChild(Tree treeNode){ 
@@ -142,8 +131,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
     } 
 	
 	private void createMethodObject(){
-
 		uniqueName = belongsToClass + "." + this.name + signature;
-		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope);
+		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
 	}	
 }

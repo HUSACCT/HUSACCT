@@ -3,51 +3,49 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.apache.log4j.Logger;
 
 public class JavaParameterGenerator extends JavaGenerator {
 
-	private String belongsToMethod; //dit moet de unique name van de method worden dus met signature
+	private String belongsToMethod; //this includes the signature of the method (uniqueName)
 	private String belongsToClass;
 	private int lineNumber;
 	
 	private String declareType;
-	private List<String> declareTypes = new ArrayList<String>();
 	private String declareName;
 	private String uniqueName;
 	
-	private Logger logger = Logger.getLogger(JavaParameterGenerator.class);
 	private String signature = "";
 	private boolean nameFound = false;
 	private boolean declareTypeFound = false;
 	
 	private ArrayList<String> currentTypes;
-	private ArrayList<Object> saveQueue;
+	private ArrayList<ArrayList<Object>> saveParameterQueue;
 	
-	public String generateParameterObjects(Tree tree, String belongsToMethod, String belongsToClass){
-		//returns the signature, which MethodGenerator uses
-
-		this.saveQueue = new ArrayList<Object>();
+	public String generateParameterObjects(Tree allParametersTree, String belongsToMethod, String belongsToClass){
+		this.saveParameterQueue = new ArrayList<ArrayList<Object>>();
 		this.currentTypes = new ArrayList<String>();
 		
 		this.belongsToMethod = belongsToMethod;
 		this.belongsToClass = belongsToClass;
-		lineNumber = tree.getLine();
+		setLineNumber(allParametersTree);
 		
-		DelegateParametersFromTree(tree);	
+		DelegateParametersFromTree(allParametersTree);	
 
 		writeParameterToDomain();
 		return signature;
 	}
 
-	private void DelegateParametersFromTree(Tree tree) {		
-		for(int i = 0; i < tree.getChildCount(); i++){
-			CommonTree child = (CommonTree) tree.getChild(i);
+	private void setLineNumber(Tree linenumberTree){
+		this.lineNumber = linenumberTree.getLine();
+	}
+	
+	private void DelegateParametersFromTree(Tree allParametersTree) {
+		int totalParameters = allParametersTree.getChildCount();
+		for(int currentChild = 0; currentChild < totalParameters; currentChild++){
+			CommonTree child = (CommonTree) allParametersTree.getChild(currentChild);
 			int treeType = child.getType();
 			if(treeType == JavaParser.FORMAL_PARAM_STD_DECL ){
 				getAttributeName(child);
@@ -67,67 +65,12 @@ public class JavaParameterGenerator extends JavaGenerator {
 	private void getAttributeName(Tree tree){
 		CommonTree attributeTree = (CommonTree) tree;
 		Tree attributeNameTree = attributeTree.getFirstChildWithType(JavaParser.IDENT);
-		try{
+		if(attributeNameTree != null){
 			this.declareName = attributeNameTree.getText();
-			this.nameFound = true;			
-		} catch (Exception e) { }		
-	}
-	
-	public String getAttributeType(CommonTree tree){
-		String attributeType = "";
-		attributeType = getAttributeRecursive(tree);
-		attributeType = attributeType.replace("<.", "<");
-		attributeType = attributeType.substring(1);
-		return attributeType;
-	}
-	
-	public String getAttributeRecursive(CommonTree tree){
-		String attributeType = "";
-				
-		switch(tree.getType()){
-			case JavaParser.QUALIFIED_TYPE_IDENT:
-				String type = getType(tree);
-				if(declareType == null || declareType.equals("")){
-					declareType = type;
-				} else {
-					currentTypes.add(type);
-				}
-				attributeType += "." + type;
-				int childcount = tree.getChildCount();
-				for(int currentChild = 0; currentChild < childcount; currentChild++){
-					CommonTree childNode = (CommonTree) tree.getChild(currentChild);
-					if(childNode.getChildCount() > 0){
-						attributeType += getAttributeRecursive((CommonTree) childNode.getFirstChildWithType(JavaParser.GENERIC_TYPE_ARG_LIST));
-					}
-				}
-				break;
-			case JavaParser.GENERIC_TYPE_ARG_LIST:
-				CommonTree typeNode = (CommonTree) tree.getFirstChildWithType(JavaParser.TYPE);
-				CommonTree qualifiedNode = (CommonTree) typeNode.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
-				attributeType += "<";
-				attributeType += getAttributeRecursive(qualifiedNode);
-				attributeType += ">";
-				break;
-			default:
-				break;
+			this.nameFound = true;
 		}
-		return attributeType;
 	}
 	
-	public String getType(CommonTree tree){
-		String attributeType = "";
-		int childcount = tree.getChildCount();
-		for(int i = 0; i < childcount; i++){
-			Tree identTree = tree.getChild(i);
-			if(identTree.getType() == JavaParser.IDENT){
-				attributeType += attributeType.equals("") ? "" : ".";
-				attributeType += identTree.getText();
-			}
-		}
-		return attributeType;
-	}
-	
-
 	private String getParameterAttributes(Tree tree, int indent) {
 		int childrenCount = tree.getChildCount();
 		for(int i = 0; i < childrenCount; i++){
@@ -145,6 +88,43 @@ public class JavaParameterGenerator extends JavaGenerator {
 		return "";
 	}
 	
+	public String getAttributeType(CommonTree tree){
+		String attributeType = "";
+		attributeType = getAttributeRecursive(tree);
+		attributeType = attributeType.replace("<.", "<");
+		attributeType = attributeType.substring(1);
+		return attributeType;
+	}
+	
+	public String getAttributeRecursive(CommonTree tree){
+		String attributeType = "";
+		int childs = tree.getChildCount();
+		for(int childCount = 0; childCount < childs; childCount++){
+			CommonTree childTree = (CommonTree) tree.getChild(childCount);
+			switch(childTree.getType()){
+				case JavaParser.IDENT:
+					if(declareType == null || declareType.equals("")){
+						declareType = childTree.getText();
+					} else {
+						currentTypes.add(childTree.getText());
+					}
+					attributeType += "." + childTree.getText();
+					if(childTree.getChildCount() > 0){
+						attributeType += getAttributeRecursive(childTree);
+					}
+					break;
+				case JavaParser.GENERIC_TYPE_ARG_LIST:
+					attributeType += "<";
+					attributeType += getAttributeRecursive(childTree);
+					attributeType += ">";
+					break;
+				default:
+					attributeType += getAttributeRecursive(childTree);
+				
+			}
+		}
+		return attributeType;
+	}
 	
 	private void deleteTreeChild(Tree treeNode){ 
         for (int child = 0 ; child < treeNode.getChildCount();){ 
@@ -157,15 +137,15 @@ public class JavaParameterGenerator extends JavaGenerator {
 		myParam.add(this.declareType);
 		myParam.add(this.declareName);
 		myParam.add(this.currentTypes);
-		saveQueue.add(myParam);
+		saveParameterQueue.add(myParam);
 		this.declareType = null;
 		this.declareName = null;
 		this.currentTypes = new ArrayList<String>();
 	}
 	
 	private void writeParameterToDomain() {
-		for(Object object : saveQueue){
-			ArrayList<Object> currentParam = (ArrayList<Object>) object;
+		for(ArrayList<Object> object : saveParameterQueue){
+			ArrayList<Object> currentParam = object;
 			String type = (String) currentParam.get(0);
 			String name = (String) currentParam.get(1);
 			ArrayList<String> types = (ArrayList<String>) currentParam.get(2);

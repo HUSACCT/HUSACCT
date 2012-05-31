@@ -9,6 +9,7 @@ import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -162,7 +163,7 @@ public class XMLDomain {
 			enabled = false;
 		}
 		
-		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), usedModule, restrictedModule, enabled);
+		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), restrictedModule, usedModule, enabled);
 		AppliedXMLRule.setId(Integer.parseInt(ruleId.getValue()));
 		
 		if (ruleExceptions != null) {
@@ -201,6 +202,8 @@ public class XMLDomain {
 			xmlModule = new Component(moduleName, moduleDescription);
 		} else if (ModuleTypeText.equals("layer")) {
 			xmlModule = new Layer(moduleName, moduleDescription, Integer.parseInt(e.getChild("HierarchicalLevel").getValue()));
+		} else if (ModuleTypeText.equals("subsystem")) {
+			xmlModule = new SubSystem(moduleName, moduleDescription);
 		} else {
 			xmlModule = new Module(moduleName, moduleDescription);
 		}

@@ -16,7 +16,7 @@ class JavaImportGenerator extends JavaGenerator{
 	private boolean isCompletePackageImport;
 	private int lineNumber;
 	
-	public void generateFamixImport(CommonTree importTree, String className){
+	public void generateToDomain(CommonTree importTree, String className){
 		this.importingClass = className;
 		fillImportObject(importTree);
 		modelService.createImport(importingClass, importedModule, lineNumber, completeImportDeclaration, isCompletePackageImport);

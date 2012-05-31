@@ -91,6 +91,8 @@ public class XMLReportWriter extends ReportWriter {
 			violations.addContent(xmlViolation);
 		}
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		outputter.output(document, new FileWriter(getFileName()));
+		FileWriter fileWriter = new FileWriter(getFileName());
+		outputter.output(document, fileWriter);
+		fileWriter.close();		
 	}
 }

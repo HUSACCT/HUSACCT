@@ -1,5 +1,6 @@
 package husacct.analyse.domain.famix;
 
+import java.util.HashMap;
 import java.util.List;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysedModuleDTO;
@@ -77,5 +78,18 @@ public class FamixQueryServiceImpl implements IModelQueryService{
 		List<DependencyDTO> result = dependencyFinder.getDependenciesTo(to, dependencyFilter);
 		DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]); 
 		return allDependencies;
+	}
+	
+	@Override
+	public HashMap<String, DependencyDTO> mapDependencies(){
+		List<DependencyDTO> cache = this.getDependencies("", "");
+		HashMap<String, DependencyDTO> dependencyMap = new HashMap<String, DependencyDTO>();
+		//TODO Analyse Persistency to file - Do Sorting of the list here!
+		int counter = 0;
+		for(DependencyDTO dependency: cache){
+			dependencyMap.put("" + counter, dependency);
+			counter++;
+		}
+		return dependencyMap;
 	}
 }

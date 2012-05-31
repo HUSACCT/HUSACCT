@@ -2,7 +2,6 @@ package husacct.validate.task.export.xml;
 
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ActiveViolationType;
-import husacct.validate.task.XMLUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,7 @@ import java.util.Map.Entry;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
-public class ExportActiveViolationTypes {
+public class ExportActiveViolationTypes extends XmlExportUtils {
 
 	public Element exportActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
 		Element activeViolationTypesElement = new Element("activeViolationTypes");
@@ -37,8 +36,8 @@ public class ExportActiveViolationTypes {
 		ruleTypeElement.addContent(violationTypesElement);
 		for(ActiveViolationType violationType : activeRuleType.getViolationTypes()) {
 			Element violationTypeElement = new Element("violationType");
-			violationTypeElement.addContent(XMLUtils.createElementWithContent("violationKey", violationType.getType()));
-			violationTypeElement.addContent(XMLUtils.createElementWithContent("enabled", "" +  violationType.isEnabled()));
+			violationTypeElement.addContent(createElementWithContent("violationKey", violationType.getType()));
+			violationTypeElement.addContent(createElementWithContent("enabled", "" +  violationType.isEnabled()));
 			violationTypesElement.addContent(violationTypeElement);
 		}
 		return ruleTypeElement;

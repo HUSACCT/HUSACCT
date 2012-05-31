@@ -14,8 +14,6 @@ class FamixDependencyFinder extends FamixFinder{
 	private String from = "", to = "";
 	private List<DependencyDTO> currentResult;
 	
-	private DependencyDTO currentDirectDependencySearched;
-	
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
 		this.currentResult = new ArrayList<DependencyDTO>();
@@ -25,31 +23,37 @@ class FamixDependencyFinder extends FamixFinder{
 	}
 	
 	public List<DependencyDTO> getDependencies(String from, String to) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.BOTH, from, to);
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependencies(String from, String to, String[] dependencyFilter) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.BOTH, from, to, dependencyFilter);
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependenciesFrom(String from, String[] dependencyFilter) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.FROM, from, "", dependencyFilter);
 		return this.currentResult;
 	}
 	
 	public List<DependencyDTO> getDependenciesFrom(String from) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.FROM, from, "");
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependenciesTo(String to) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.TO, "", to);
 		return this.currentResult;
 	}
 
 	public List<DependencyDTO> getDependenciesTo(String to, String[] dependencyFilter) {
+		this.currentResult.clear();
 		performQuery(FinderFunction.TO, "", to, dependencyFilter);
 		return this.currentResult;
 	}
@@ -64,8 +68,11 @@ class FamixDependencyFinder extends FamixFinder{
 		this.currentFunction = function;
 		this.from = argumentFrom;
 		this.to = argumentTo;
-		this.filtered = false;
 		this.currentResult = findDependencies();
+		this.reset();
+	}
+	
+	private void reset(){
 		this.removeFilter();
 	}
 	
@@ -80,38 +87,53 @@ class FamixDependencyFinder extends FamixFinder{
 		for(FamixAssociation assocation: allAssocations){
 			if(compliesWithFunction(assocation) && compliesWithFilter(assocation)){
 				DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
-				if (!result.contains(foundDependency)) result.add(foundDependency);
+				if (!containsDependency(foundDependency, result)) result.add(foundDependency);
 			}
 		}
-//		if(!this.from.equals("")){
-//			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
-//				if(!result.contains(dependency)) result.add(dependency);
-//			}
-//		}
+		if(!this.from.equals("")){
+			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+				if(!containsDependency(dependency, result)){
+					result.add(dependency);
+				}
+			}
+		}
 		return result;
 	}
 	
 	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> directDependencies){
 		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
-		for(DependencyDTO directDependency: directDependencies){
-			this.currentDirectDependencySearched = directDependency;
+		for(DependencyDTO directDependency: directDependencies){		
 			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
-				if(!result.contains(indirectDependency)) result.add(indirectDependency);
-			}
+				if(!containsDependency(indirectDependency, result)){
+					indirectDependency.from = directDependency.from;
+					result.add(indirectDependency);
+				}
+			}			
 		}
 		return result;
+	}
+	
+	private boolean containsDependency(DependencyDTO find, List<DependencyDTO> dependencies){
+		for(DependencyDTO d : dependencies){
+			if(find.equals(d)){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	private List<DependencyDTO> findIndirectDependenciesFrom(DependencyDTO fromDependency){
 		List<DependencyDTO> found = new ArrayList<DependencyDTO>();
 		this.from = fromDependency.to;
+		this.to = fromDependency.to;
 		for(DependencyDTO indirectDependency : findDependencies()){
 			indirectDependency.isIndirect = true;
 			if(!found.contains(indirectDependency) && !isPackage(indirectDependency.from)) found.add(indirectDependency);
 			if(!indirectDependency.to.equals(fromDependency.from)) {
 				for(DependencyDTO subIndirect : this.findIndirectDependenciesFrom(indirectDependency)){
-					if(!found.contains(subIndirect)) found.add(subIndirect);
+					if(!containsDependency(subIndirect, found)) found.add(subIndirect);
 				}
 			}
 		}

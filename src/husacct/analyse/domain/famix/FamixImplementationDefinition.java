@@ -5,9 +5,9 @@ class FamixImplementationDefinition extends FamixAssociation{
 	public FamixImplementationDefinition(){
 		super.type = "Implements";
 	}
-	//public String accessControlQualifier;
-	public int index;  //index??
 
+	public int index;  
+	
 	public String toString(){
 		String inheritRepesentation = "";
 		inheritRepesentation += "\ntype: " + super.type;

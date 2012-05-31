@@ -295,7 +295,7 @@ public class LanguageBabbel extends BenchmarkExtended{
 	@Test
 	public void testDomainLanguageLearnRussian(){
 		String from = "domain.language.babbel.LearnRussian";
-		int expectedDependencies = 2;
+		int expectedDependencies = 3;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -379,7 +379,7 @@ public class LanguageBabbel extends BenchmarkExtended{
 	@Test
 	public void testDomainLanguageLearnTurkish(){
 		String from = "domain.language.babbel.LearnTurkish";
-		int expectedDependencies = 4;
+		int expectedDependencies = 5;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);

@@ -1,6 +1,8 @@
 package husacct.define.presentation.jdialog;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ViolationTypeDTO;
+import husacct.control.ControlServiceImpl;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.task.AppliedRuleController;
 
@@ -25,10 +27,9 @@ public class ViolationTypesJDialog extends JDialog{
 	private static final long serialVersionUID = 6413960215557327449L;
 	private HashMap<String, JCheckBox> violationCheckBoxHashMap;
 	protected AppliedRuleController appliedRuleController;
-//	private JPanel mainPanel;
 	
 	public ViolationTypesJDialog(AppliedRuleController appliedRuleController) {
-		super();
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.appliedRuleController = appliedRuleController;
 		violationCheckBoxHashMap = new HashMap<String, JCheckBox>();
 		initDetails();
@@ -58,7 +59,6 @@ public class ViolationTypesJDialog extends JDialog{
 			this.setResizable(false);
 			this.pack();
 			this.setSize(300, 300);
-			this.setModal(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

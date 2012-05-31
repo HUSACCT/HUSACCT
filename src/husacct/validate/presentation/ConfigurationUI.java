@@ -23,7 +23,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	private static final long serialVersionUID = 7721461596323704063L;
 
 	private static Logger logger = Logger.getLogger(ConfigurationUI.class);
-	
+
 	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
 	private List<Severity> severities;
@@ -37,11 +37,11 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
-		
+
 		taskServiceImpl = ts;
 		severities = taskServiceImpl.getAllSeverities();
 		taskServiceImpl.subscribe(this);
-		
+
 		initComponents();
 		loadAfterChange();
 	}
@@ -129,7 +129,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				restore();
 			}
 		});
-		
+
 		cancel.addActionListener(new ActionListener() {
 
 			@Override
@@ -141,10 +141,10 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		createSeverityPanelLayout();
 		createRootLayout();
 	}
-	
+
 	private void createSeverityPanelLayout(){
 		GroupLayout severityNamePanelLayout = new GroupLayout(severityNamePanel);
-		
+
 		GroupLayout.ParallelGroup horizontalButtonGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
 		horizontalButtonGroup.addComponent(remove, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(add, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
@@ -152,17 +152,17 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		horizontalButtonGroup.addComponent(restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(applySeverity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(down, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		
+
 		GroupLayout.ParallelGroup severityNameGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		severityNameGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		
+
 		GroupLayout.SequentialGroup horizontalPaneGroup = severityNamePanelLayout.createSequentialGroup();
 		horizontalPaneGroup.addGroup(severityNameGroup);
 		horizontalPaneGroup.addContainerGap();
 		horizontalPaneGroup.addGroup(horizontalButtonGroup);
-		
+
 		severityNamePanelLayout.setHorizontalGroup(horizontalPaneGroup);
-		
+
 		GroupLayout.SequentialGroup verticalButtonGroup = severityNamePanelLayout.createSequentialGroup();
 		verticalButtonGroup.addContainerGap();
 		verticalButtonGroup.addComponent(add);
@@ -177,40 +177,40 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
 		verticalButtonGroup.addComponent(applySeverity);
 		verticalButtonGroup.addContainerGap();
-		
+
 		GroupLayout.ParallelGroup verticalPaneGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalPaneGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
-		
+
 		severityNamePanelLayout.setVerticalGroup(verticalPaneGroup);
 		severityNamePanel.setLayout(severityNamePanelLayout);
 	}
-	
+
 	private void createRootLayout(){		
 		GroupLayout baseLayout = new GroupLayout(getRootPane());
-		
+
 		GroupLayout.ParallelGroup horizontalGroup = baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		horizontalGroup.addComponent(tabPanel);
 		horizontalGroup.addComponent(cancel);
-		
+
 		baseLayout.setHorizontalGroup(horizontalGroup);
-		
+
 		GroupLayout.SequentialGroup verticalGroup = baseLayout.createSequentialGroup();
 		verticalGroup.addComponent(tabPanel);
 		verticalGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
 		verticalGroup.addComponent(cancel);
 		verticalGroup.addGap(16, 16, 16);
-		
+
 		baseLayout.setVerticalGroup(verticalGroup);
-		
+
 		getRootPane().setLayout(baseLayout);
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
 		loadAfterChange();
 	}
-	
+
 	public void loadAfterChange(){
 		setText();
 		loadModels();
@@ -224,7 +224,13 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			severityNameTable.changeSelection(severityNameTable.getSelectedRow() + 1, 0, false, false);
 			Severity severity = severities.get(severityNameTable.getSelectedRow());
 			severities.remove(severityNameTable.getSelectedRow());
-			severities.add(severityNameTable.getSelectedRow() + 1, severity);
+			
+			if(severityNameTable.getSelectedRow() != severities.size()){
+				severities.add(severityNameTable.getSelectedRow() + 1, severity);	
+			}
+			else{
+				severities.add(severity);	
+			}
 		}
 	}
 
@@ -253,7 +259,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 	}
 
 	private void applySeverityActionPerformed() {
-		
+
 		for (int i = 0; i < severityModel.getRowCount(); i++) {
 			if(severityModel.getValueAt(i, 0).toString().isEmpty()){
 				IControlService controlServiceImpl = ServiceProvider.getInstance().getControlService();
@@ -271,7 +277,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 				severities.add(new Severity((String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)));
 			}
 		}
-		
+
 		taskServiceImpl.addSeverities(severities);
 		loadSeverity();
 	}
@@ -284,7 +290,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		taskServiceImpl.restoreSeveritiesToDefault();
 		loadSeverity();
 	}
-	
+
 	public void setText(){
 		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidateConfigurationTitle"));
 		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
@@ -296,7 +302,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
 		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
 	}
-	
+
 	private void loadModels(){
 		severityModel = new ColorTableModel();
 		severityNameTable.setModel(severityModel);
@@ -317,7 +323,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			model.removeRow(0);
 		}
 	}
-	
+
 	private void setLanguageTabsLanguage(){
 		if(tabPanel.getTabCount() == 1){
 			loadLanguageTabs();
@@ -327,12 +333,12 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 			panel.loadAfterChange();
 		}
 	}
-	
+
 	private void loadLanguageTabs() {
 		for (String language : taskServiceImpl.getAvailableLanguages()) {
 			ConfigurationRuleTypeDTO configurationRuleTypeDTO = new ConfigurationRuleTypeDTO(language, severities, taskServiceImpl.getRuletypes(language));
 			ConfigurationViolationTypeDTO configurationViolationTypeDTO = new ConfigurationViolationTypeDTO(language, severities, taskServiceImpl.getViolationTypes(language));
-			
+
 			LanguageSeverityConfigurationPanel lcp = new LanguageSeverityConfigurationPanel(configurationRuleTypeDTO, configurationViolationTypeDTO, taskServiceImpl);
 			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);

@@ -5,7 +5,7 @@ import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 import java.util.Calendar;
 
 public class Violation {
-	
+
 	private int linenumber;
 	private Severity severity;
 	private String ruletypeKey;
@@ -16,10 +16,20 @@ public class Violation {
 	private Message message; 
 	private boolean inDirect;
 	private Calendar occured;
-	
-	public Violation(){
-		
+
+	public Violation(Calendar occured, int linenumber, Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, String classPathTo, boolean inDirect, Message message, LogicalModules logicalModules){
+		this.linenumber = linenumber;
+		this.setSeverity(severity);
+		this.ruletypeKey = ruletypeKey;
+		this.violationtypeKey = violationtypeKey;
+		this.classPathFrom = classPathFrom;
+		this.classPathTo = classPathTo;
+		this.inDirect = inDirect;
+		this.occured = occured;
+		this.logicalModules = logicalModules;
+		this.message = message;
 	}
+	
 	
 	public Violation(int linenumber, Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, String classPathTo, boolean inDirect, Message message, LogicalModules logicalModules){
 		this.linenumber = linenumber;
@@ -28,6 +38,45 @@ public class Violation {
 		this.violationtypeKey = violationtypeKey;
 		this.classPathFrom = classPathFrom;
 		this.classPathTo = classPathTo;
+		this.inDirect = inDirect;
+		this.occured = Calendar.getInstance();
+		this.logicalModules = logicalModules;
+		this.message = message;
+	}
+
+	public Violation(Severity severity, String ruletypeKey, boolean inDirect, Message message, LogicalModules logicalModules){
+		this.linenumber = 0;
+		this.setSeverity(severity);
+		this.ruletypeKey = ruletypeKey;
+		this.violationtypeKey = "";
+		this.classPathFrom = "";
+		this.classPathTo = "";
+		this.inDirect = inDirect;
+		this.occured = Calendar.getInstance();
+		this.logicalModules = logicalModules;
+		this.message = message;
+	}
+
+	public Violation(Severity severity, String ruletypeKey, String classPathFrom, boolean inDirect, Message message, LogicalModules logicalModules){
+		this.linenumber = 0;
+		this.setSeverity(severity);
+		this.ruletypeKey = ruletypeKey;
+		this.violationtypeKey = "";
+		this.classPathFrom = classPathFrom;
+		this.classPathTo = "";
+		this.inDirect = inDirect;
+		this.occured = Calendar.getInstance();
+		this.logicalModules = logicalModules;
+		this.message = message;
+	}
+
+	public Violation(Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, boolean inDirect, Message message, LogicalModules logicalModules){
+		this.linenumber = 0;
+		this.setSeverity(severity);
+		this.ruletypeKey = ruletypeKey;
+		this.violationtypeKey = violationtypeKey;
+		this.classPathFrom = classPathFrom;
+		this.classPathTo = "";
 		this.inDirect = inDirect;
 		this.occured = Calendar.getInstance();
 		this.logicalModules = logicalModules;

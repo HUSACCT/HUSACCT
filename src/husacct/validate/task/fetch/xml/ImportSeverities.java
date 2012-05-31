@@ -16,10 +16,7 @@ public class ImportSeverities {
 
 	public List<Severity> importSeverities(Element element) {
 		List<Severity> severities = new ArrayList<Severity>();
-		
-		
-		//for(int iterator = element.getChildren().size()-1; iterator >= 0; iterator--){
-			//Element severityElement = element.getChildren().get(iterator);
+
 		for (Element severityElement : element.getChildren()) {
 			UUID id = UUID.fromString(severityElement.getChildText("id"));
 

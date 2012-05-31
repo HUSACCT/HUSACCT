@@ -42,10 +42,8 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
 		
-		this.addModuleNameLabel();
-		this.addModuleNameTextField();
-		this.addModuleDescriptionLabel();
-		this.addModuleDescriptionScrollPane();
+		addModuleNameComponent();
+		addModuleDescriptionComponent();
 		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
 		
 	}
@@ -59,32 +57,28 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 		this.setLayout(jPanel4Layout);
 	}
 	
-	private void addModuleNameLabel() {
+	private void addModuleNameComponent() {
 		nameLabel = new JLabel();
 		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		nameLabel.setText(DefineTranslator.translate("ModuleName"));
-	}
-	
-	private void addModuleNameTextField() {
+		
 		nameTextfield = new JTextField();
 		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
 		this.add(nameTextfield, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		nameTextfield.addKeyListener(this);
 	}
 	
-	private void addModuleDescriptionLabel() {
+	private void addModuleDescriptionComponent() {
 		descriptionLabel = new JLabel();
 		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		descriptionLabel.setText(DefineTranslator.translate("Description"));
-	}
-	
-	private void addModuleDescriptionScrollPane() {
+		
 		descriptionScrollPane = new JScrollPane();
 		this.add(descriptionScrollPane, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		descriptionScrollPane.setPreferredSize(new java.awt.Dimension(142, 26));
 		descriptionScrollPane.setViewportView(this.createModuleDescriptionTextArea());
 	}
-
+	
 	private JTextArea createModuleDescriptionTextArea() {
 		descriptionTextArea = new JTextArea();
 		descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));

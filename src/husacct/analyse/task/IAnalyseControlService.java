@@ -26,4 +26,5 @@ public interface IAnalyseControlService {
 	
 	public Element saveModel();
 	public void loadModel(Element analyseElement);
+	public void exportDependencies(String path);
 }

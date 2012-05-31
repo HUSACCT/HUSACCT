@@ -13,6 +13,8 @@ public class CSharpGenerator {
 	protected static final int NAMESPACE = 61;
 	protected static final int FORWARDCURLYBRACKET = 62;
 	protected static final int BACKWARDCURLYBRACKET = 63;
+	protected static final int FORWARDSQUAREBRACKET = 86;
+	protected static final int BACKWARDSQUAREBRACKET = 87;
 	protected static final int IS = 66;
 	protected static final int NEW	= 68;
 	protected static final int PUBLIC = 69;

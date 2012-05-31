@@ -119,7 +119,6 @@ class ViolationTypeSeverityPanel extends JPanel {
 		});
 
 		createLayout();
-		loadViolationTypeCategories();
 	}
 
 	private void createLayout(){
@@ -225,10 +224,14 @@ class ViolationTypeSeverityPanel extends JPanel {
 		for (String categoryString : violationTypes.keySet()) {
 			categoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
-
+		if(!categoryModel.isEmpty()){
+			category.setSelectedIndex(0);
+		}
 	}
 
 	private void loadViolationType(String category) {
+		if(violationtypeModel != null){
+		}
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
 			if (categoryString.equals(category)){

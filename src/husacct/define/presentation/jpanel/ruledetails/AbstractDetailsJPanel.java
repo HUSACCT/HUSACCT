@@ -64,21 +64,19 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	public abstract void initDetails();
 	
 	private void initViolationTypes() {
-		if (!isException){
-			configureViolationTypesJButton = new JButton(DefineTranslator.translate("ConfigureFilter"));
-			configureViolationTypesJButton.addActionListener(this);
-			violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
-			
-			GridBagConstraints gbc = new GridBagConstraints(1, componentCount++, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
-			this.add(configureViolationTypesJButton, gbc);
-			
-			if (appliedRuleController.isAnalysed()){
-				configureViolationTypesJButton.setEnabled(true);
-				configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("ValidateOnSpecificDependencies"));
-			} else {
-				configureViolationTypesJButton.setEnabled(false);
-				configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("NeedToAnalyseFirst"));
-			}
+		configureViolationTypesJButton = new JButton(DefineTranslator.translate("ConfigureFilter"));
+		configureViolationTypesJButton.addActionListener(this);
+		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
+		
+		GridBagConstraints gbc = new GridBagConstraints(1, componentCount++, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
+		this.add(configureViolationTypesJButton, gbc);
+		
+		if (appliedRuleController.isAnalysed()){
+			configureViolationTypesJButton.setEnabled(true);
+			configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("ValidateOnSpecificDependencies"));
+		} else {
+			configureViolationTypesJButton.setEnabled(false);
+			configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("NeedToAnalyseFirst"));
 		}
 	}
 	
@@ -103,9 +101,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	
 	public HashMap<String, Object> saveToHashMap(){
 		HashMap<String, Object> hashMap = saveDefaultDataToHashMap();
-		if (!isException){
-			hashMap.put("dependencies", violationTypesJDialog.save());
-		}
+		hashMap.put("dependencies", violationTypesJDialog.save());
 		return hashMap;
 	}
 
