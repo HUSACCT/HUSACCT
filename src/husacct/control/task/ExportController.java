@@ -1,6 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
 import husacct.control.presentation.util.ExportArchitectureDialog;
 import husacct.control.presentation.util.ExportViolationsReportDialog;
 import husacct.control.presentation.util.Filename;
@@ -48,7 +49,12 @@ public class ExportController {
 	public void exportViolationsReport(File file){
 		Filename filename = new Filename(file, File.separatorChar, '.');
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
-		validateService.exportViolations(file, filename.getExtension());
+		try {
+			validateService.exportViolations(file, filename.getExtension());
+		} catch (Exception exception){
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			controlService.showErrorMessage(exception.getMessage());
+		}
 	}
 	
 	public String[] getExportExtensions(){

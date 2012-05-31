@@ -39,6 +39,7 @@ class ViolationHistoryRepository extends Observable {
 				}
 			}
 			violationHistories.remove(recordToDelete);
+			return;
 		}
 		throw new ViolationHistoryNotFoundException(date);
 	}

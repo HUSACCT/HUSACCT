@@ -11,7 +11,7 @@ public class JavaAnalyser extends AbstractAnalyser{
 		JavaParser javaParser;
 		try {
 			javaParser = javaTreeParserBuilder.buildTreeParser(sourceFilePath);
-			javaTreeParserDelegater.delegateModelGenerators(javaParser);
+			javaTreeParserDelegater.delegateASTToGenerators(javaParser);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

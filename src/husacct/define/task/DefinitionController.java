@@ -75,57 +75,65 @@ public class DefinitionController extends Observable implements Observer {
 		return selectedModuleId;
 	}
 	
-	public void addLayer(long selectedModuleId, String layerName, String layerDescription){
+	public boolean addLayer(long selectedModuleId, String layerName, String layerDescription){
 		logger.info("Adding layer " + layerName);
 		try {
 			JPanelStatus.getInstance("Adding Layer").start();
 			Layer newLayer = new Layer(layerName, layerDescription);
 			this.passModuleToService(selectedModuleId, newLayer);
+			return true;
 		} catch (Exception e) {
 			logger.error("addLayer(" + layerName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			return false;
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
 	
-	public void addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
+	public boolean addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
 		logger.info("Adding subsystem " + moduleName);
 		try {
 			JPanelStatus.getInstance("Adding subsystem").start();
 			SubSystem newModule = new SubSystem(moduleName, moduleDescription);
 			this.passModuleToService(selectedModuleId, newModule);
+			return true;
 		} catch (Exception e) {
 			logger.error("addSubSystem(" + moduleName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			return false;
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
 	
-	public void addComponent(long selectedModuleId, String componentName, String componentDescription){
+	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription){
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
 			Component newComponent = new Component(componentName, componentDescription);
 			this.passModuleToService(selectedModuleId, newComponent);
+			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			return false;
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
 	}
 	
-	public void addExternalLibrary(long selectedModuleId, String libraryName, String libraryDescription){
+	public boolean addExternalLibrary(long selectedModuleId, String libraryName, String libraryDescription){
 		logger.info("Adding external library " + libraryName);
 		try {
 			JPanelStatus.getInstance("Adding external library").start();
 			ExternalLibrary newComponent = new ExternalLibrary(libraryName, libraryDescription);
 			this.passModuleToService(selectedModuleId, newComponent);
+			return true;
 		} catch (Exception e) {
 			logger.error("addExternalLibrary(" + libraryName + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			return false;
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -388,6 +396,8 @@ public class DefinitionController extends Observable implements Observer {
 			ServiceProvider.getInstance().getDefineService().createApplication("HUSACCT", new String[]{}, "Java", "1.0");
 			addLayer(-1, "Layer 1", "This is test data");
 			addLayer(-1, "Layer 2", "This is test data");
+			addLayer(-1, "Layer 3", "This is test data");
+			addLayer(-1, "Layer 4", "This is test data");
 			addSubSystem(0, "SubSystem 1", "This is test data");
 			addSubSystem(2, "SubSystem 2", "This is test data");
 			notifyObservers();

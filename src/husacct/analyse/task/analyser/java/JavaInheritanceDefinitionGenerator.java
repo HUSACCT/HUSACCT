@@ -10,7 +10,7 @@ public class JavaInheritanceDefinitionGenerator extends JavaGenerator{
 	private String to = "";
 	private int lineNumber;
 
-	public void generateModelObject(CommonTree tree, String belongsToClass) {
+	public void generateToDomain(CommonTree tree, String belongsToClass) {
 		from = belongsToClass;
 		createInheritanceDefinitionDetails(tree);
 		createDomainObject();

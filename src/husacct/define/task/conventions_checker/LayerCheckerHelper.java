@@ -12,13 +12,10 @@ public class LayerCheckerHelper {
 	private ArrayList<Layer> layers;
 	private String errorMessage;
 	
-	private ModuleCheckerHelper moduleCheckerHelper;
-	
 	public LayerCheckerHelper(Module moduleFrom) {
 		this.layers = new ArrayList<Layer>();
 		this.fillLayerList(moduleFrom);
 		this.setErrorMessage("");
-		this.moduleCheckerHelper = new ModuleCheckerHelper();
 	}
 	
 	public void fillLayerList(Module moduleFrom) {
@@ -30,21 +27,19 @@ public class LayerCheckerHelper {
 		}
 	}
 	
-	public boolean checkLayerSkippedTo(Module moduleFrom) {
-		if(checkTypeIsLayer(moduleFrom)) {
-			Long skippedLayerId = getLayerSkippedToId(moduleFrom.getId());
-			if(skippedLayerId != -1L) {
-				return moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse", moduleFrom, getLayerById(skippedLayerId));
-			} else {
-				this.setErrorMessage(DefineTranslator.translate("SkipLayerNotExists"));
-				return false;
-			}
+	private ArrayList<Module> getCurrentModules(Module moduleFrom) {
+		ModuleDomainService moduleService = new ModuleDomainService();
+		Long parentId = moduleService.getParentModuleIdByChildId(moduleFrom.getId());
+		if(parentId != -1) {
+			Module parentModule = moduleService.getModuleById(parentId);
+			moduleService.sortModuleChildren(parentModule);
+			return parentModule.getSubModules();
 		} else {
-			return false;
+			return moduleService.getSortedModules();
 		}
 	}
 	
-	private boolean checkTypeIsLayer(Module module) {
+	public boolean checkTypeIsLayer(Module module) {
 		if(module.getType() == "Layer") {
 			return true;
 		} else {
@@ -53,25 +48,39 @@ public class LayerCheckerHelper {
 		}
 	}
 	
-	private ArrayList<Module> getCurrentModules(Module moduleFrom) {
-		ModuleDomainService moduleService = new ModuleDomainService();
-		Long parentId = moduleService.getParentModuleIdByChildId(moduleFrom.getId());
-		if(parentId != -1) {
-			Module parentModule = moduleService.getModuleById(parentId);
-			return parentModule.getSubModules();
-		} else {
-			ArrayList<Module> currentModules = new ArrayList<Module>();
-			for(Module module : moduleService.getRootModules()) {
-				currentModules.add(module);
+	public ArrayList<Layer> getSkipCallLayers(Long moduleFromId) {
+		ArrayList<Layer> skipCallLayers = new ArrayList<Layer>();
+		Long firstSkipCallLayerId = getFirstSkipCallLayer(moduleFromId);
+		boolean getLayers = false;
+		for(Layer layer : layers) {
+			if(layer.getId() == firstSkipCallLayerId) {
+				getLayers = true;
 			}
-			return currentModules;
+			if(getLayers) {
+				skipCallLayers.add(layer);
+			}
 		}
+		return skipCallLayers;
 	}
 	
-	public Long getLayerSkippedToId(Long moduleFromId) {
+	public ArrayList<Layer> getBackCallLayers(Long moduleFromId) {
+		ArrayList<Layer> backCallLayers = new ArrayList<Layer>();
+		Long firstBackCallLayerId = getPreviousLayerId(moduleFromId);
+		if(firstBackCallLayerId != -1L) {
+			for(Layer layer : layers) {
+				backCallLayers.add(layer);
+				if(layer.getId() == firstBackCallLayerId) {
+					break;
+				}
+			}
+		}
+		return backCallLayers;
+	}
+	
+	public Long getFirstSkipCallLayer(Long moduleFromId) {
 		Long nextLayerId = getNextLayerId(moduleFromId);
-		Long LayerSkipperToId = getNextLayerId(nextLayerId);
-		return LayerSkipperToId;
+		Long layerSkipperToId = getNextLayerId(nextLayerId);
+		return layerSkipperToId;
 	}
 	
 	public Long getNextLayerId(Long currentLayerId) {
@@ -109,9 +118,6 @@ public class LayerCheckerHelper {
 	}
 
 	public String getErrorMessage() {
-		if(this.errorMessage == "") {
-			return moduleCheckerHelper.getErrorMessage();
-		}
 		return errorMessage;
 	}
 

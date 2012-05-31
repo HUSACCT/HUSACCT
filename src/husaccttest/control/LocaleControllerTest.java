@@ -52,5 +52,22 @@ public class LocaleControllerTest {
 		String translatedString = service.getTranslatedString(nonExistingKey);
 		assertEquals(translatedString, nonExistingKey);
 	}
-	
+
+	@Test
+	public void testConcurrentModification(){
+		service.addLocaleChangeListener(new ILocaleChangeListener() {
+			@Override
+			public void update(Locale newLocale) {
+				
+				// Adding another listener while being notified should not raise a ConcurrentModificatinException
+				service.addLocaleChangeListener(new ILocaleChangeListener() {
+					@Override
+					public void update(Locale newLocale) {
+					}
+				});
+			}
+		});
+		LocaleController localeController = service.getMainController().getLocaleController();
+		localeController.setLocale(LocaleController.dutch);
+	}
 }

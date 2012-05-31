@@ -72,4 +72,8 @@ public class AnalyseUIController {
 		}
 		return dependencies;
 	}
+	
+	public void exportDependencies(String path){
+		analyseTaskService.exportDependencies(path);
+	}
 }

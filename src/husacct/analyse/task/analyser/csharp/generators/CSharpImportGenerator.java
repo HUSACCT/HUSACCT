@@ -17,7 +17,7 @@ public class CSharpImportGenerator extends CSharpGenerator {
 	}
 
 	private void createFamixObject(String usage, int lineNumber, String className) {
-		modelService.createImport(className, usage, lineNumber, usage, true);
+		modelService.createImport(className, usage, lineNumber, usage + ".*", true);
 	}
 
 	private String mergeTree(List<CommonTree> usageTrees) {

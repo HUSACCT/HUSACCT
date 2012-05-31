@@ -25,6 +25,7 @@ import husacct.graphics.util.FigureMap;
 import husacct.graphics.util.threads.DrawingLinesThread;
 import husacct.graphics.util.threads.DrawingMultiLevelThread;
 import husacct.graphics.util.threads.DrawingSingleLevelThread;
+import husacct.graphics.util.threads.ThreadMonitor;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected FigureConnectorStrategy connectionStrategy;
 	protected LayoutStrategy layoutStrategy;
 
+	protected ThreadMonitor threadMonitor;
 	protected FigureMap figureMap = new FigureMap();
 
 	public DrawingController() {
@@ -84,6 +86,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame = new GraphicsFrame(drawingView);
 		graphicsFrame.addListener(this);
 		graphicsFrame.setSelectedLayout(layoutStrategyOption);
+		
+		threadMonitor = new ThreadMonitor(this);		
 	}
 
 	private void switchLayoutStrategy() {
@@ -230,9 +234,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
-		DrawingSingleLevelThread task = new DrawingSingleLevelThread(this, modules);
-		Thread drawThread = new Thread(task);
-		drawThread.start();
+		threadMonitor.add(new DrawingSingleLevelThread(this, modules));
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
@@ -258,9 +260,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawMultiLevelTask(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		DrawingMultiLevelThread task = new DrawingMultiLevelThread(this, modules);
-		Thread drawThread = new Thread(task);
-		drawThread.start();
+		threadMonitor.add(new DrawingMultiLevelThread(this, modules));
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -313,9 +313,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawLinesTask() {
-		DrawingLinesThread task = new DrawingLinesThread(this);
-		Thread drawThread = new Thread(task);
-		drawThread.start();
+		threadMonitor.add(new DrawingLinesThread(this));
 	}
 
 	public void drawLinesBasedOnSetting() {
@@ -478,5 +476,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void setDrawingViewNonVisible() {
 		drawingView.setVisible(false);
 		graphicsFrame.showLoadingScreen();
+	}
+
+	public boolean isDrawingVisible() {
+		return drawingView.isVisible();
 	}
 }

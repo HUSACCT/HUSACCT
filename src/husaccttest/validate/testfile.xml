@@ -736,7 +736,7 @@
 			<ruleType type="IsNotAllowedToUse">
 				<violationTypes>
 					<violationType>
-						<violationKey>Extends</violationKey>
+						<violationKey>ExtendsConcrete</violationKey>
 						<enabled>false</enabled>
 					</violationType>
 					<violationType>
