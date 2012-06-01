@@ -18,8 +18,7 @@ public class ImportActiveViolationTypes {
 			List<ActiveRuleType> activeRuleTypes = new ArrayList<ActiveRuleType>();
 			for(Element ruleTypeElement : activeViolationTypeElement.getChildren()) {				
 				final String ruleTypeKey = ruleTypeElement.getAttributeValue("type");
-				ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey);
-				activeRuleTypes.add(activeRuleType);
+
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
 				Element violationTypesElement = ruleTypeElement.getChild("violationTypes");
 				if(violationTypesElement != null){
@@ -30,8 +29,9 @@ public class ImportActiveViolationTypes {
 						activeViolationTypes.add(activeViolationType);
 					}
 				}
-
-				activeRuleType.setViolationTypes(activeViolationTypes);
+				
+				ActiveRuleType activeRuleType = new ActiveRuleType(ruleTypeKey, activeViolationTypes);
+				activeRuleTypes.add(activeRuleType);
 			}
 			activeRuleTypesMap.put(activeViolationTypeElement.getAttributeValue("language"), activeRuleTypes);
 		}

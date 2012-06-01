@@ -57,6 +57,12 @@ class SeverityPerTypeRepository implements Observer {
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
 			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
+			
+			for(RuleType exceptionRuleType : ruleType.getExceptionrules()){
+				if(severityPerType.get(exceptionRuleType.getKey()) == null){
+					severityPerType.put(exceptionRuleType.getKey(), exceptionRuleType.getSeverity());
+				}
+			}
 		}
 
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage ,configuration);
