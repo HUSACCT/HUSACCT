@@ -59,6 +59,11 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 	}
 	
 	@Override
+	public DependencyDTO[] getAllDependencies(){
+		return domainService.getAllDependencies();
+	}
+	
+	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
 		return domainService.getDependencies(from, to);
 	}
