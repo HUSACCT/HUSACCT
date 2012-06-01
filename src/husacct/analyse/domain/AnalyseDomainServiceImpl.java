@@ -62,6 +62,11 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 		return queryService.getParentModuleForModule(child);
 	}
 	
+	@Override 
+	public DependencyDTO[] getAllDependencies(){
+		return queryService.getAllDependencies();
+	}
+	
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
 		List<DependencyDTO> dependencyList = queryService.getDependencies(from, to);

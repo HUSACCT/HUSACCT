@@ -45,6 +45,13 @@ public class FamixQueryServiceImpl implements IModelQueryService{
 	}
 	
 	@Override
+	public DependencyDTO[] getAllDependencies(){
+		List<DependencyDTO> result = dependencyFinder.getAllDependencies();
+		DependencyDTO[] allDependencies = result.toArray(new DependencyDTO[result.size()]); 
+		return allDependencies; 
+	}
+	
+	@Override
 	public List<DependencyDTO> getDependencies(String from, String to) {
 		return dependencyFinder.getDependencies(from, to);
 	}
