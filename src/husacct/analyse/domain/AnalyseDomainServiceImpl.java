@@ -24,6 +24,7 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	}	
 	
 	public void clearModel(){
+		this.queryService = new FamixQueryServiceImpl();
 		creationService.clearModel();
 	}
 	
@@ -60,6 +61,11 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService{
 	@Override
 	public AnalysedModuleDTO getParentModuleForModule(String child) {
 		return queryService.getParentModuleForModule(child);
+	}
+	
+	@Override 
+	public DependencyDTO[] getAllDependencies(){
+		return queryService.getAllDependencies();
 	}
 	
 	@Override

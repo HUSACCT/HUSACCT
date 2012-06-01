@@ -493,6 +493,11 @@ public class AnalyseServiceStub implements IAnalyseService{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public DependencyDTO[] getAllDependencies(){
+		return this.getDependencies("", "");
+	}
 
 	@Override
 	public void notifyServiceListeners() {

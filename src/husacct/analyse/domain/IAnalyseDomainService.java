@@ -11,6 +11,7 @@ public interface IAnalyseDomainService {
 	
 	public void clearModel();
 	
+	public DependencyDTO[] getAllDependencies();
 	public DependencyDTO[] getDependencies(String from, String to);
 	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
 	public DependencyDTO[] getDependenciesFrom(String from);
