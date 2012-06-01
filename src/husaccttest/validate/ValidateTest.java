@@ -67,13 +67,13 @@ public class ValidateTest {
 	public void getCategories()
 	{
 		CategoryDTO[] dtos = validate.getCategories();		
-		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency", "dependencylimitation"}, getCategoryStringArray(dtos));	
+		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));	
 	}
 
 	@Test
 	public void getRuleTypes(){
 		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall", "CyclesBetweenModules"};
+		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
