@@ -256,9 +256,6 @@ class ActiveViolationPanel extends JPanel {
 		}
 		activeRuletype.setViolationTypes(activeViolationtypes);
 
-		activeRuletypes.remove(ruletypeJList.getSelectedIndex());
-		activeRuletypes.add(ruletypeJList.getSelectedIndex(), activeRuletype);
-
 		taskServiceImpl.setActiveViolationTypes(language, activeRuletypes);
 	}
 

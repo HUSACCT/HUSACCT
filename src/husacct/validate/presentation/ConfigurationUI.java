@@ -39,7 +39,6 @@ public final class ConfigurationUI extends JInternalFrame implements Observer{
 		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
 
 		taskServiceImpl = ts;
-		severities = taskServiceImpl.getAllSeverities();
 		taskServiceImpl.subscribe(this);
 
 		initComponents();
