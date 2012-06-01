@@ -234,8 +234,8 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void ApplyActionPerformed() {
-		ActiveRuleType activeRuletype = activeRuletypes.get(ruletypeJList.getSelectedIndex());
-		for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
+		activeRuletypes.get(ruletypeJList.getSelectedIndex());
+		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
 			boolean test = (Boolean) violationtypeModel.getValueAt(i, 1);
 			try {
 				activeViolationtypes.get(i).setEnabled(test);
@@ -243,8 +243,7 @@ class ActiveViolationPanel extends JPanel {
 				logger.error("Something went wrong. Active violationtypes can not be set.");
 			}
 		}
-		activeRuletype.setViolationTypes(activeViolationtypes);
-
+		
 		taskServiceImpl.setActiveViolationTypes(language, activeRuletypes);
 	}
 

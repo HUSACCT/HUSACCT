@@ -54,9 +54,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private StatisticsPanel statisticsPanel;
 	private ViolationInformationPanel violationInformationPanel;
 	private List<Violation> shownViolations;
-	private BrowseViolations browseViolations = this;
-
-
+	
 	public BrowseViolations(TaskServiceImpl taskServiceImpl, ConfigurationServiceImpl configuration) {
 
 		this.taskServiceImpl = taskServiceImpl;
@@ -198,7 +196,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask(browseViolations, filterPane, buttonSaveInHistory));
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
 				validateThread.run();
 			}
 		});
