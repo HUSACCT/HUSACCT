@@ -34,7 +34,7 @@ public class SkipCallRule extends RuleType {
 
 		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> physicalClasspathsTo : modulesTo){
-				for(Mapping classPathTo : physicalClasspathsTo ){
+				for(Mapping classPathTo : physicalClasspathsTo){					
 					DependencyDTO[] dependencies = analyseService.getDependencies(physicalClassPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), physicalClassPathFrom.getViolationTypes());	
 					for(DependencyDTO dependency: dependencies){
 						Violation violation = createViolation(rootRule, physicalClassPathFrom, classPathTo, dependency, configuration);
