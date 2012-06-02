@@ -30,15 +30,18 @@ public class SkipCallRule extends RuleType {
 
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();		
-		List<List<Mapping>> modulesTo = filerLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
+		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
 
-		for(Mapping physicalClassPathFrom : physicalClasspathsFrom){
+		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+
+		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> physicalClasspathsTo : modulesTo){
 				for(Mapping classPathTo : physicalClasspathsTo){					
-					DependencyDTO[] dependencies = analyseService.getDependencies(physicalClassPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), physicalClassPathFrom.getViolationTypes());	
 					for(DependencyDTO dependency: dependencies){
-						Violation violation = createViolation(rootRule, physicalClassPathFrom, classPathTo, dependency, configuration);
-						violations.add(violation);
+						if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath())){
+							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+							violations.add(violation);
+						}
 					}
 				}					
 			}				
@@ -46,7 +49,7 @@ public class SkipCallRule extends RuleType {
 		return violations;
 	}
 
-	private List<List<Mapping>> filerLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
+	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
 		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
 		for (ModuleDTO module :allModules){
 			if(module.type.toLowerCase().contains("layer"))
