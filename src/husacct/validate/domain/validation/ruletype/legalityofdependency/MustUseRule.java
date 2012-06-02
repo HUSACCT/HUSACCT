@@ -14,6 +14,7 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -33,13 +34,15 @@ public class MustUseRule extends RuleType{
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-		
+
 		int dependencyCounter = 0;
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){				
 				for(DependencyDTO dependency : dependencies){
 					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath())){
-						dependencyCounter++;
+						if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+							dependencyCounter++;
+						}
 					}
 				}				
 			}
@@ -48,7 +51,7 @@ public class MustUseRule extends RuleType{
 			LogicalModule logicalModuleFrom = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
 			LogicalModule logicalModuleTo = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
 			LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
-						
+
 			Violation violation = createViolation(rootRule, logicalModules, configuration);
 			violations.add(violation);
 		}

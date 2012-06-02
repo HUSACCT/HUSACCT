@@ -39,8 +39,10 @@ public class SkipCallRule extends RuleType {
 				for(Mapping classPathTo : physicalClasspathsTo){					
 					for(DependencyDTO dependency: dependencies){
 						if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath())){
-							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-							violations.add(violation);
+							if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+								Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+								violations.add(violation);
+							}
 						}
 					}
 				}					

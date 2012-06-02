@@ -11,6 +11,7 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,8 +36,10 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		
 		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
-		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
-
+		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();		
+		
+		Arrays.sort(rule.violationTypeKeys);
+		
 		mappingFrom = getAllClasspathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
 		mappingTo = getAllClasspathsFromModule(rule.moduleTo, rule.violationTypeKeys);
 

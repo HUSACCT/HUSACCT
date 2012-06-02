@@ -12,6 +12,7 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -36,10 +37,12 @@ public class IsNotAllowedToUseRule extends RuleType {
 			for(Mapping classPathTo : physicalClasspathsTo){
 				for(DependencyDTO dependency : dependencies){
 					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath())){
-						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-						violations.add(violation);
-					}
-				}				
+						if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+							violations.add(violation);
+						}
+					}			
+				}
 			}
 		}
 		return violations;
