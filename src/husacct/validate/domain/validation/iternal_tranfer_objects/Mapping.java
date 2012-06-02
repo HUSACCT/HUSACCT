@@ -1,7 +1,7 @@
 package husacct.validate.domain.validation.iternal_tranfer_objects;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Mapping {
 	private final String logicalPath;
@@ -33,7 +33,8 @@ public class Mapping {
 	}
 
 	public void removeViolationType(String violationType){
-		List<String> violationTypeList = Arrays.asList(violationTypes);
+		ArrayList<String> violationTypeList = new ArrayList<String>();
+		violationTypeList.addAll(Arrays.asList(violationTypes));
 		for(int i = 0; i < violationTypeList.size(); i++){
 			if(violationTypeList.get(i).toLowerCase().equals(violationType.toLowerCase())){
 				violationTypeList.remove(i);
