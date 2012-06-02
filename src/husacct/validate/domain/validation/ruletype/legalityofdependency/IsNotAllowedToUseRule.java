@@ -30,15 +30,17 @@ public class IsNotAllowedToUseRule extends RuleType {
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		// List l =  analyseService.getdependencylist
+
+		DependencyDTO[] dependencies = analyseService.getDependencies("", "");
+
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(Mapping classPathTo : physicalClasspathsTo){
-				// if (classPathFrom, classPathTo, violationType) in (l) then
-				DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), classPathFrom.getViolationTypes());
-				for(DependencyDTO dependency: dependencies){
-					Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-					violations.add(violation);
-				}
+				for(DependencyDTO dependency : dependencies){
+					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath())){
+						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+						violations.add(violation);
+					}
+				}				
 			}
 		}
 		return violations;
