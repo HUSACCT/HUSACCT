@@ -96,7 +96,7 @@ public class Blog extends BenchmarkExtended{
 	@Test
 	public void testDomainBlogWordpressMyBlog(){
 		String from = "domain.blog.wordpress.MyBlog";
-		int expectedDependencies = 5;
+		int expectedDependencies = 4;
 
 		//DependencyDTO[] dependencies = getOnlyDirectDependencies(service.getDependenciesFrom(from));
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
@@ -126,30 +126,22 @@ public class Blog extends BenchmarkExtended{
 				super.IMPLEMENTS,
 				11);
 		
-		HashMap<String, Object> indirectMyitemExpected = createDependencyHashmap(
-				from,
-				"infrastructure.blog.MyItem",
-				super.EXTENDSABSTRACT,
-				3,
-				true);
 		
 		boolean foundImportBlogExpected = compaireDTOWithValues(dependencyImportBlogExpected, dependencies);
 		boolean foundImportILocationExpected = compaireDTOWithValues(dependencyImportILocationExpected, dependencies);
 		boolean foundExtendsBlogExpected = compaireDTOWithValues(dependencyExtendsBlogExpected, dependencies);
 		boolean foundImplementsIlocationExpected = compaireDTOWithValues(dependencyImplementsIlocationExpected, dependencies);
-		boolean foundIndirectMyitemExpected = compaireDTOWithValues(indirectMyitemExpected, dependencies);
 		
 		assertEquals(true, foundImportBlogExpected);
 		assertEquals(true, foundImportILocationExpected);
 		assertEquals(true, foundExtendsBlogExpected);
 		assertEquals(true, foundImplementsIlocationExpected);
-		assertEquals(true, foundIndirectMyitemExpected);
 	}	
 	
 	@Test
 	public void testDomainBlogWordpressMyComment(){
 		String from = "domain.blog.wordpress.MyComment";
-		int expectedDependencies = 5;
+		int expectedDependencies = 4;
 
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
@@ -190,19 +182,17 @@ public class Blog extends BenchmarkExtended{
 		boolean foundImportILocationExpected = compaireDTOWithValues(dependencyImportILocationExpected, dependencies);
 		boolean foundExtendsBlogExpected = compaireDTOWithValues(dependencyExtendsBlogExpected, dependencies);
 		boolean foundImplementsIlocationExpected = compaireDTOWithValues(dependencyImplementsIlocationExpected, dependencies);
-		boolean foundIndirectMyitemExpected = compaireDTOWithValues(indirectMyitemExpected, dependencies);
 		
 		assertEquals(true, foundImportBlogExpected);
 		assertEquals(true, foundImportILocationExpected);
 		assertEquals(true, foundExtendsBlogExpected);
 		assertEquals(true, foundImplementsIlocationExpected);
-		assertEquals(true, foundIndirectMyitemExpected);
 	}	
 	
 	@Test
 	public void testDomainBlogWordpressMyStory(){
 		String from = "domain.blog.wordpress.MyStory";
-		int expectedDependencies = 5;
+		int expectedDependencies = 4;
 
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
@@ -249,7 +239,7 @@ public class Blog extends BenchmarkExtended{
 		assertEquals(true, foundImportILocationExpected);
 		assertEquals(true, foundExtendsBlogExpected);
 		assertEquals(true, foundImplementsIlocationExpected);
-		assertEquals(true, foundIndirectMyitemExpected);
+//		assertEquals(true, foundIndirectMyitemExpected);
 	}	
 	
 	
