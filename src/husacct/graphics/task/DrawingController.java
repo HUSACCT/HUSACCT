@@ -86,12 +86,13 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.addListener(this);
 		graphicsFrame.setSelectedLayout(layoutStrategyOption);
 		
-		threadMonitor = new ThreadMonitor(this);		
+		threadMonitor = new ThreadMonitor(this);	
 	}
 	
 	private void runThread(Runnable runnable){
 		if(!threadMonitor.add(runnable)){
 			logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
+			graphicsFrame.setOutOfDate();
 		}
 	}
 
@@ -249,6 +250,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
+		graphicsFrame.setUpToDate();
 		drawSingleLevelModules(modules);
 		updateLayout();
 		drawLinesBasedOnSetting();
@@ -286,6 +288,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 	
 	public void drawMultiLevelModules(HashMap<String, ArrayList<AbstractDTO>> modules){
+		graphicsFrame.setUpToDate();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
 			if (!parentName.isEmpty()) {
