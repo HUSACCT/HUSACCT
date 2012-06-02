@@ -111,4 +111,10 @@ public class AnalyseServiceStub implements IAnalyseService {
 		return null;
 	}
 
+	@Override
+	public DependencyDTO[] getAllDependencies() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
