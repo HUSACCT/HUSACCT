@@ -42,9 +42,6 @@ public final class FigureFactory {
 		return new ViolationsDecorator(highestColor);
 	}
 
-	// FIXME: Patrick: We've decided to NOT store DTOs inside decorators.
-	// The code below shows that DTOs are stored inside the decorator. Please
-	// fix the code and remove this comment.
 	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {
 		if (violationDTOs.length == 0) {
 			throw new RuntimeException("No violations received. Cannot create a violation figure.");
