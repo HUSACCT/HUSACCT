@@ -68,6 +68,11 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	}
 
 	@Override
+	public DependencyDTO[] getAllDependencies(){
+		return service.getAllDependencies();
+	}
+	
+	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
 		return service.getDependencies(from, to);
 	}

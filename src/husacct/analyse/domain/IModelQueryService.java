@@ -14,6 +14,7 @@ public interface IModelQueryService {
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
 	public AnalysedModuleDTO getParentModuleForModule(String child);
 	
+	public DependencyDTO[] getAllDependencies();
 	public List<DependencyDTO> getDependencies(String from, String to);
 	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter);
 	public List<DependencyDTO> getDependenciesFrom(String from);
