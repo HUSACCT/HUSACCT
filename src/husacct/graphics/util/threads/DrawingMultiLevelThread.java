@@ -19,6 +19,7 @@ public class DrawingMultiLevelThread implements Runnable {
 	@Override
 	public void run() {
 		try {
+			controller.clearDrawing();
 			controller.drawMultiLevel(toDrawModules);
 			Thread.sleep(10);
 		} catch (InterruptedException e) {

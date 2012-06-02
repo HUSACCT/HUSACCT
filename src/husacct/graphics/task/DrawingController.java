@@ -89,6 +89,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 		
 		threadMonitor = new ThreadMonitor(this);		
 	}
+	
+	private void runThread(Runnable runnable){
+		if(!threadMonitor.add(runnable)){
+			logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
+		}
+	}
 
 	private void switchLayoutStrategy() {
 		switch (layoutStrategyOption) {
@@ -228,13 +234,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
-		clearDrawing();
-		setDrawingViewNonVisible();
 		runDrawSingleLevelTask(modules);
 	}
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
-		threadMonitor.add(new DrawingSingleLevelThread(this, modules));
+		runThread(new DrawingSingleLevelThread(this, modules));
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
@@ -254,13 +258,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	protected void drawModulesAndLines(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		clearDrawing();
-		setDrawingViewNonVisible();
 		runDrawMultiLevelTask(modules);
 	}
 
 	private void runDrawMultiLevelTask(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		threadMonitor.add(new DrawingMultiLevelThread(this, modules));
+		runThread(new DrawingMultiLevelThread(this, modules));
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -313,7 +315,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	private void runDrawLinesTask() {
-		threadMonitor.add(new DrawingLinesThread(this));
+		runThread(new DrawingLinesThread(this));
 	}
 
 	public void drawLinesBasedOnSetting() {
