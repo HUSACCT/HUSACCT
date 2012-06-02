@@ -6,8 +6,10 @@ import java.util.List;
 
 class FamixDependencyFinder extends FamixFinder{
 	
-	private static enum FinderFunction{FROM, TO, BOTH};
+	private static enum FinderFunction{FROM, TO, BOTH, ALL};
 	private FinderFunction currentFunction;
+	
+	private List<DependencyDTO> dependencyCache;
 	
 	private boolean filtered;
 	private String[] filter;
@@ -20,6 +22,17 @@ class FamixDependencyFinder extends FamixFinder{
 		this.filter = new String[]{};
 		this.filtered = false;
 		this.currentFunction = FinderFunction.BOTH;
+		this.dependencyCache = null;
+	}
+	
+	public List<DependencyDTO> getAllDependencies(){
+		this.currentResult.clear();
+		performQuery(FinderFunction.ALL, "", "");
+		if(dependencyCache == null) {
+			dependencyCache = new ArrayList<DependencyDTO>();
+			this.dependencyCache.addAll(this.currentResult);
+		}
+		return this.dependencyCache;
 	}
 	
 	public List<DependencyDTO> getDependencies(String from, String to) {
@@ -90,13 +103,13 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!containsDependency(foundDependency, result)) result.add(foundDependency);
 			}
 		}
-		if(!this.from.equals("")){
-			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
-				if(!containsDependency(dependency, result)){
-					result.add(dependency);
-				}
-			}
-		}
+//		if(!this.from.equals("")){
+//			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+//				if(!containsDependency(dependency, result)){
+//					result.add(dependency);
+//				}
+//			}
+//		}
 		return result;
 	}
 	
@@ -120,7 +133,6 @@ class FamixDependencyFinder extends FamixFinder{
 				return true;
 			}
 		}
-		
 		return false;
 	}
 	
@@ -149,6 +161,7 @@ class FamixDependencyFinder extends FamixFinder{
 			case BOTH: return connectsBoth(association, from, to);
 			case FROM: return isFrom(association, from);
 			case TO: return isTo(association, to);
+			case ALL: return true;
 		}
 		return false;
 	}
