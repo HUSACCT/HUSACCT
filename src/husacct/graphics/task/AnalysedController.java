@@ -1,12 +1,12 @@
 package husacct.graphics.task;
 
-import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
+import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -24,15 +24,14 @@ public class AnalysedController extends DrawingController {
 
 	private ArrayList<BaseFigure> analysedContextFigures;	
 
-	public AnalysedController() {
-		super();
-		initializeServices();
-	}
-
-	private void initializeServices() {
-		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		validateService = ServiceProvider.getInstance().getValidateService();
-		ServiceProvider.getInstance().getAnalyseService().addServiceListener(new IServiceListener() {
+	public AnalysedController(IControlService controlService, IAnalyseService analyseService, 
+			IValidateService validateService) {
+		super(controlService);
+		
+		this.analyseService = analyseService;
+		this.validateService = validateService;
+		
+		this.analyseService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshDrawing();
@@ -66,8 +65,8 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) {
 			return analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
@@ -76,8 +75,8 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) figureMap.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) figureMap.getModuleDTO(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 	
@@ -93,7 +92,7 @@ public class AnalysedController extends DrawingController {
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
 				try {
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) figureMap.getModuleDTO(figure);
+					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figure);
 					parentNames.add(parentDTO.uniqueName);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -171,7 +170,7 @@ public class AnalysedController extends DrawingController {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : analysedContextFigures) {
 					if (!figure.isLine() && !figure.isParent()) {
-						AbstractDTO dto = figureMap.getModuleDTO(figure);
+						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
 						if (null != dto) {
 							tmp.add(dto);
 						}else{

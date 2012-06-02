@@ -1,6 +1,5 @@
 package husacct.graphics.task;
 
-import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
@@ -8,6 +7,7 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
+import husacct.control.IControlService;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
@@ -22,16 +22,15 @@ public class DefinedController extends DrawingController {
 	protected IDefineService defineService;
 	protected IValidateService validateService;
 
-	public DefinedController() {
-		super();
-		initializeServices();
-	}
-
-	private void initializeServices() {
-		analyseService = ServiceProvider.getInstance().getAnalyseService();
-		validateService = ServiceProvider.getInstance().getValidateService();
-		defineService = ServiceProvider.getInstance().getDefineService();
-		ServiceProvider.getInstance().getDefineService().addServiceListener(new IServiceListener() {
+	public DefinedController(IControlService controlService, IAnalyseService analyseService,
+			IDefineService defineService, IValidateService validateService) {
+		super(controlService);
+		
+		this.analyseService = analyseService;
+		this.defineService = defineService;
+		this.validateService = validateService;
+		
+		this.defineService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshDrawing();
@@ -73,7 +72,7 @@ public class DefinedController extends DrawingController {
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
 				try {
-					ModuleDTO parentDTO = (ModuleDTO) this.figureMap.getModuleDTO(figure);
+					ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(figure);
 					parentNames.add(parentDTO.logicalPath);
 					definedFigures.put(parentDTO.logicalPath, figure);
 				} catch (Exception e) {
@@ -114,8 +113,8 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		ModuleDTO dtoFrom = (ModuleDTO) figureMap.getModuleDTO(figureFrom);
-		ModuleDTO dtoTo = (ModuleDTO) figureMap.getModuleDTO(figureTo);
+		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 
 		if (!figureFrom.equals(figureTo) && null!=dtoFrom && null!=dtoTo) {
@@ -133,8 +132,8 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
-		ModuleDTO dtoFrom = (ModuleDTO) figureMap.getModuleDTO(figureFrom);
-		ModuleDTO dtoTo = (ModuleDTO) figureMap.getModuleDTO(figureTo);
+		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		return validateService.getViolationsByLogicalPath(dtoFrom.logicalPath, dtoTo.logicalPath);
 	}
 
@@ -169,7 +168,7 @@ public class DefinedController extends DrawingController {
 					}
 					allChildren.put(parentName, knownChildren);
 				} else {
-					AbstractDTO value = figureMap.getModuleDTO(definedFigures.get(parentName));
+					AbstractDTO value = getFigureMap().getModuleDTO(definedFigures.get(parentName));
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
