@@ -33,6 +33,7 @@ import org.jdom2.Element;
 import org.jdom2.input.DOMBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.xml.sax.SAXException;
 
 public class ImportExportTest {
@@ -53,16 +54,16 @@ public class ImportExportTest {
 		DOMBuilder domBuilder = new DOMBuilder();
 		Document document = domBuilder.build(dombuilder.parse(file));
 		validate.loadWorkspaceData(document.getRootElement());
-		
+
 		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration().getAllSeverities(), document.getRootElement().getChild("severities"));
 		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(), document.getRootElement().getChild("severitiesPerTypesPerProgrammingLanguages"));
-		
+
 		//Is not used in the application anymore
 		//checkViolationsTheSameAsViolationsElement(validate.getConfiguration().getAllViolations().getValue(), document.getRootElement().getChild("violations"));
 		//checkViolationHistoriesTheSameAsViolationHistoriesElement(validate.getConfiguration().getViolationHistories(), document.getRootElement().getChild("violationHistories"));
 		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate.getConfiguration().getActiveViolationTypes(), document.getRootElement().getChild("activeViolationTypes"));
 	}
-	
+
 	private void checkSeveritiesTheSameAsSeveritiesElement(List<Severity> severities, Element severitiesElement) {
 		assertEquals(severitiesElement.getChildren().size(), severities.size());
 		for(int i = 0; i < severitiesElement.getChildren().size(); i++) {
@@ -71,7 +72,7 @@ public class ImportExportTest {
 			checkSeverityTheSameAsSeverityElement(severity, severityElement);
 		}
 	}
-	
+
 	//TODO assert a programming language is found like findSeverityPerTypeElement();
 	private void checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages, Element severitiesPerTypesPerProgrammingLanguagesElement) {
 		assertEquals(severitiesPerTypesPerProgrammingLanguages.size(), severitiesPerTypesPerProgrammingLanguagesElement.getChildren().size());
@@ -89,20 +90,45 @@ public class ImportExportTest {
 		for(Entry<String, List<ActiveRuleType>> activeViolationType : activeViolationTypes.entrySet()) {
 			Element activeViolationTypeElement = child.getChildren().get(i);
 			assertEquals(activeViolationType.getKey(), activeViolationTypeElement.getAttributeValue("language"));
-			
-			for(int ruleTypeIndex = 0; ruleTypeIndex < activeViolationTypeElement.getChildren().size(); ruleTypeIndex++) {
-				ActiveRuleType activeRuleType = activeViolationType.getValue().get(ruleTypeIndex);
+
+			for(int ruleTypeIndex = 0; ruleTypeIndex < activeViolationTypeElement.getChildren().size(); ruleTypeIndex++) {				
 				Element activeRuleTypeElement = activeViolationTypeElement.getChildren().get(ruleTypeIndex);
+
+				assertNotNull(containsActiveRuleType(activeRuleTypeElement.getAttributeValue("type"), activeViolationType.getValue()));
+
+				ActiveRuleType activeRuleType = containsActiveRuleType(activeRuleTypeElement.getAttributeValue("type"), activeViolationType.getValue());
 				assertEquals(activeRuleType.getRuleType(), activeRuleTypeElement.getAttributeValue("type"));
-				for(int violationTypeIndex = 0; violationTypeIndex < 0; violationTypeIndex++) {
-					ActiveViolationType violationType = activeRuleType.getViolationTypes().get(violationTypeIndex);
-					Element violationTypeElement = activeRuleTypeElement.getChildren().get(violationTypeIndex);
-					assertEquals(violationType.getType(), violationTypeElement.getChildText("violationKey"));
-					assertEquals(violationType.isEnabled(), Boolean.parseBoolean(violationTypeElement.getChildText("enabled")));
+
+				for(Element violationTypesElement : activeRuleTypeElement.getChildren("violationTypes")){
+					for(int violationTypesRootIndex = 0; violationTypesRootIndex < violationTypesElement.getChildren().size(); violationTypesRootIndex++) {
+
+						assertNotNull(containsActiveViolationType(violationTypesElement.getChildren().get(violationTypesRootIndex).getChildText("violationKey"), activeRuleType.getViolationTypes()));
+						ActiveViolationType violationType = containsActiveViolationType(violationTypesElement.getChildren().get(violationTypesRootIndex).getChildText("violationKey"), activeRuleType.getViolationTypes());
+						assertEquals(violationType.getType(), violationTypesElement.getChildren().get(violationTypesRootIndex).getChildText("violationKey"));
+						assertEquals(violationType.isEnabled(), Boolean.parseBoolean(violationTypesElement.getChildren().get(violationTypesRootIndex).getChildText("enabled")));
+					}
 				}
 			}
 			i++;
 		}
+	}
+
+	private ActiveRuleType containsActiveRuleType(String key, List<ActiveRuleType> activeViolationTypes){
+		for(ActiveRuleType activeRuleType : activeViolationTypes){
+			if(activeRuleType.getRuleType().equals(key)){
+				return activeRuleType;
+			}
+		}		
+		return null;		
+	}
+
+	private ActiveViolationType containsActiveViolationType(String key, List<ActiveViolationType> activeViolationTypes){
+		for(ActiveViolationType activeViolationType : activeViolationTypes){
+			if(activeViolationType.getType().equals(key)){
+				return activeViolationType;
+			}
+		}
+		return null;
 	}
 
 	private void checkViolationHistoriesTheSameAsViolationHistoriesElement(List<ViolationHistory> violationHistories, Element child) throws DatatypeConfigurationException {
@@ -123,7 +149,7 @@ public class ImportExportTest {
 			checkViolationTheSameAsViolationElement(violationElement, violation);
 		}
 	}
-	
+
 	private void checkViolationTheSameAsViolationElement(Element violationElement, Violation violation) throws DatatypeConfigurationException {
 		assertEquals(violation.getLinenumber(), Integer.parseInt(violationElement.getChildText("lineNumber")));
 		assertEquals(violation.getSeverity().getId().toString(), violationElement.getChildText("severityId"));
