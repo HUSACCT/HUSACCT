@@ -40,11 +40,11 @@ public class XMLReportWriter extends ReportWriter {
 		Element totalViolations = new Element("totalViolations");
 		totalViolations.setText("" + report.getViolations().getValue().size());
 		reportElement.addContent(totalViolations);
-		
+
 		Element violationGeneratedOn = new Element("violationsGeneratedOn");
 		violationGeneratedOn.setText(report.getFormattedDate());
 		reportElement.addContent(violationGeneratedOn);
-		
+
 		Element violationsSeverities = new Element("violations");
 		violationsSeverities.setAttribute(new Attribute("totalViolations" , "" +  report.getViolations().getValue().size()));
 		for(ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
@@ -62,7 +62,7 @@ public class XMLReportWriter extends ReportWriter {
 
 			Element source = new Element("source");
 			Element target = new Element("target");
-			Element lineNr = new Element("lineNr.");
+			Element lineNr = new Element("lineNr");
 			Element severity = new Element("severity");
 			Element ruleType = new Element("ruleType");
 			Element dependencyKind = new Element("dependencyKind");

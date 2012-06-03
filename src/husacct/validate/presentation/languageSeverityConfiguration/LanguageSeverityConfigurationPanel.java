@@ -2,10 +2,12 @@ package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
+import husacct.validate.domain.validation.ViolationType;
+import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.TaskServiceImpl;
-
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -13,11 +15,9 @@ import javax.swing.JTabbedPane;
 public class LanguageSeverityConfigurationPanel extends JPanel {
 
 	private static final long serialVersionUID = 6607502138038915874L;
-
 	private final TaskServiceImpl taskServiceImpl;
 	private final ConfigurationRuleTypeDTO configurationSubPanelDTO;
 	private final ConfigurationViolationTypeDTO configurationViolationTypeDTO;
-
 	private ActiveViolationPanel activeViolationtype;
 	private RuleTypeSeverityPanel ruletypeSeverity;
 	private ViolationTypeSeverityPanel violationtypeSeverity;
@@ -32,7 +32,7 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 		initComponents();
 	}
 
-	private void initComponents() {		
+	private void initComponents() {
 		tabbedPane = new JTabbedPane();
 
 		ruletypeSeverity = new RuleTypeSeverityPanel(taskServiceImpl, configurationSubPanelDTO);
@@ -46,7 +46,7 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 		createLayout();
 	}
 
-	private void createLayout(){
+	private void createLayout() {
 		GroupLayout layout = new GroupLayout(this);
 
 		GroupLayout.SequentialGroup horizontalGroup = layout.createSequentialGroup();
@@ -61,11 +61,12 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 		this.setLayout(layout);
 	}
 
-	void setSeverityNames(List<Severity> severities){
+	void setSeverityNames(List<Severity> severities) {
+		ruletypeSeverity.setSeverities(severities);
 		violationtypeSeverity.setSeverities(severities);
 	}
 
-	public void loadAfterChange(){
+	public void loadAfterChange() {
 		setText();
 
 		ruletypeSeverity.loadAfterChange();
@@ -73,9 +74,26 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 		activeViolationtype.loadAfterChange();
 	}
 
-	private void setText(){
+	private void setText() {
 		tabbedPane.setTitleAt(0, ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"));
 		tabbedPane.setTitleAt(1, ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"));
 		tabbedPane.setTitleAt(2, ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationtypeActivePerRuletype"));
+	}
+
+	public void clearSelection() {
+		activeViolationtype.clearSelection();
+		ruletypeSeverity.clearSelection();
+		violationtypeSeverity.clearSelection();
+	}
+
+	public void selectFirstCategory() {
+		activeViolationtype.selectFirstIndexOfCategory();
+		ruletypeSeverity.selectFirstIndexOfCategory();
+		violationtypeSeverity.selectFirstIndexOfCategory();
+	}
+
+	public void reloadTableModel() {
+		ruletypeSeverity.loadModel();
+		violationtypeSeverity.loadModel();
 	}
 }

@@ -18,11 +18,9 @@ import javax.swing.table.TableColumnModel;
 class RuleTypeSeverityPanel extends JPanel {
 
 	private static final long serialVersionUID = 5947125752371446966L;
-
 	private final DefaultListModel rtsCategoryModel;
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;
-
 	private List<Severity> severities;
 	private TaskServiceImpl taskServiceImpl;
 	private ComboBoxTableModel ruletypeModel;
@@ -66,18 +64,16 @@ class RuleTypeSeverityPanel extends JPanel {
 		restore.setEnabled(false);
 
 		category.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
-				if (evt.getValueIsAdjusting()) {
+				if (evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
 					return;
-				} 
+				}
 				CategoryValueChanged();
 			}
 		});
 
 		ruletypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) {
@@ -88,19 +84,17 @@ class RuleTypeSeverityPanel extends JPanel {
 		});
 
 		apply.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				if(ruletypeTable.getSelectedRow() > -1){
+				if (ruletypeTable.getSelectedRow() > -1) {
 					ApplyActionPerformed();
-				} else{
+				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("RowNotSelected")));
 				}
 			}
 		});
 
 		restore.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				RestoreActionPerformed();
@@ -108,7 +102,6 @@ class RuleTypeSeverityPanel extends JPanel {
 		});
 
 		restoreAll.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				RestoreAllActionPerformed();
@@ -118,7 +111,7 @@ class RuleTypeSeverityPanel extends JPanel {
 		createLayout();
 	}
 
-	private void createLayout(){
+	private void createLayout() {
 		GroupLayout ruletypeSeverityLayout = new GroupLayout(this);
 
 		GroupLayout.ParallelGroup horizontalButtonGroup = ruletypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
@@ -154,23 +147,23 @@ class RuleTypeSeverityPanel extends JPanel {
 		setLayout(ruletypeSeverityLayout);
 	}
 
-	final void loadAfterChange(){
+	final void loadAfterChange() {
 		setText();
 		loadModel();
 	}
 
-	private void setText(){
+	private void setText() {
 		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
 		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
 		restoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
 	}
 
-	void setSeverities(List<Severity> severities){
+	void setSeverities(List<Severity> severities) {
 		this.severities = severities;
 	}
 
-	private void loadModel(){
+	void loadModel() {
 		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities);
 		ruletypeModel.setTypes(new Class[]{DataLanguageHelper.class, Severity.class});
@@ -182,7 +175,7 @@ class RuleTypeSeverityPanel extends JPanel {
 		tcm.getColumn(1).setCellEditor(ruletypeModel.getEditor());
 	}
 
-	private void RestoreActionPerformed() {		
+	private void RestoreActionPerformed() {
 		taskServiceImpl.restoreKeyToDefaultSeverity(language, ((DataLanguageHelper) ruletypeModel.getValueAt(ruletypeTable.getSelectedRow(), 0)).key);
 		CategoryValueChanged();
 	}
@@ -197,9 +190,10 @@ class RuleTypeSeverityPanel extends JPanel {
 		updateRuletypeSeverities();
 	}
 
-
 	private void CategoryValueChanged() {
-		loadRuleTypes(((DataLanguageHelper) category.getSelectedValue()).key);
+		if (category.getSelectedValue() != null) {
+			loadRuleTypes(((DataLanguageHelper) category.getSelectedValue()).key);
+		}
 	}
 
 	private void loadRuleTypeCategories() {
@@ -207,7 +201,7 @@ class RuleTypeSeverityPanel extends JPanel {
 		for (String categoryString : ruletypes.keySet()) {
 			rtsCategoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
-		if(!rtsCategoryModel.isEmpty()){
+		if (!rtsCategoryModel.isEmpty()) {
 			category.setSelectedIndex(0);
 		}
 	}
@@ -215,34 +209,43 @@ class RuleTypeSeverityPanel extends JPanel {
 	private void loadRuleTypes(String category) {
 		ruletypeModel.clear();
 		List<RuleType> rules = ruletypes.get(category);
-		for(RuleType ruletype: rules){
+		for (RuleType ruletype : rules) {
 			Severity severity;
-			try{
+			try {
 				severity = taskServiceImpl.getSeverityFromKey(language, ruletype.getKey());
-			} catch (Exception e){
+			} catch (Exception e) {
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
 			ruletypeModel.addRow(new Object[]{new DataLanguageHelper(ruletype.getKey()), severity});
 		}
-		ruletypeModel.checkValuesAreValid();	
+		ruletypeModel.checkValuesAreValid();
 	}
 
 	private void updateRuletypeSeverities() {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
-		for(int i = 0; i < ruletypeModel.getRowCount(); i++){
-			String key =	((DataLanguageHelper) ruletypeModel.getValueAt(i, 0)).key;
+		for (int i = 0; i < ruletypeModel.getRowCount(); i++) {
+			String key = ((DataLanguageHelper) ruletypeModel.getValueAt(i, 0)).key;
 			map.put(key, (Severity) ruletypeModel.getValueAt(i, 1));
 		}
 
 		taskServiceImpl.updateSeverityPerType(map, language);
 	}
 
-	private void checkRestoreButtonEnabled(){
-		if(ruletypeTable.getSelectedRow() > -1){
+	private void checkRestoreButtonEnabled() {
+		if (ruletypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		} else{
+		} else {
 			restore.setEnabled(false);
 		}
+	}
+
+	public void clearSelection() {
+		ruletypeTable.getSelectionModel().clearSelection();
+		category.getSelectionModel().clearSelection();
+	}
+
+	public void selectFirstIndexOfCategory() {
+		category.setSelectedIndex(0);
 	}
 }

@@ -3,9 +3,8 @@ package husaccttest.validate;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
-
+import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
@@ -20,7 +19,6 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ValidateTest {
@@ -67,13 +65,13 @@ public class ValidateTest {
 	public void getCategories()
 	{
 		CategoryDTO[] dtos = validate.getCategories();		
-		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency", "dependencylimitation"}, getCategoryStringArray(dtos));	
+		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));	
 	}
 
 	@Test
 	public void getRuleTypes(){
 		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall", "CyclesBetweenModules"};
+		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsOnlyModuleAllowedToUse", "MustUse", "SkipCall", "BackCall"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
@@ -178,34 +176,5 @@ public class ValidateTest {
 		if(!exceptionOccured){
 			assertTrue(validate.isValidated());
 		}
-	}
-
-	@Ignore
-	@Test
-	public void checkConformancePerformance(){
-		for(int i = 0; i < 10001; i++){
-			validate.checkConformance();
-		}
-	}
-
-	//This method was created to test specific rules with a hardcoded DefineStub.
-	@Ignore
-	@Test
-	public void testExceptionRule(){
-		//DefineServiceStubTest defineTest = new DefineServiceStubTest();
-		//validate.Validate(defineTest.getDefinedRulesWithException());
-	}
-	/*This method was created to test specific rules with a hardcoded DefineStub.
-	 * Need to change the CheckConformanceUtil getChildsFromModule to getSkipCallChildsFromModule or getBackCallChildsFromModule
-	 * depending on which scenario you wish to test.
-	 * getDefinedRules is scenario 1, which requires getSkipCallChildsFromModule.
-	 * getDefinedRulesSenarioTwo is scenario 2, which requires getBackCallChildsFromModule.
-	 */	
-	@Ignore 
-	@Test
-	public void specificRuleTest(){
-		//DefineServiceStubTest defineTest = new DefineServiceStubTest();
-		//validate.Validate(defineTest.getDefinedRulesScenarioOne());
-		//validate.Validate(defineTest.getDefinedRulesScenarioTwo());
 	}
 }

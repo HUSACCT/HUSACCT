@@ -12,8 +12,18 @@ public abstract class CheckConformanceUtil {
 		return new Mappings(filteredFrom, filteredTo);
 	}	
 
+	protected static Mappings removeExceptionPathsFrom(Mappings mainClasspaths, List<Mapping> exceptionClasspathsFrom, List<Mapping> exceptionClasspathsTo){
+		List<Mapping> filteredFrom = removeExceptionPaths(mainClasspaths.getMappingFrom(), exceptionClasspathsFrom);
+		return new Mappings(filteredFrom, mainClasspaths.getMappingTo());
+	}
+
+	protected static Mappings removeExceptionPathsTo(Mappings mainClasspaths, List<Mapping> exceptionClasspathsFrom, List<Mapping> exceptionClasspathsTo){
+		List<Mapping> filteredTo = removeExceptionPaths(mainClasspaths.getMappingTo(), exceptionClasspathsTo);
+		return new Mappings(mainClasspaths.getMappingFrom(), filteredTo);
+	}
+
 	private static List<Mapping> removeExceptionPaths(List<Mapping> mainClasspaths, List<Mapping> exceptionClasspaths){
-		for(int iterator = 0; iterator<mainClasspaths.size(); iterator++){
+		outerloop:for(int iterator = 0; iterator<mainClasspaths.size(); iterator++){
 			for(Mapping exceptionMapping : exceptionClasspaths){
 				if(mainClasspaths.get(iterator).getPhysicalPath().equals(exceptionMapping.getPhysicalPath())){
 
@@ -27,13 +37,19 @@ public abstract class CheckConformanceUtil {
 					if(mainClasspaths.get(iterator).getViolationTypes().length == 0){
 						mainClasspaths.remove(iterator);
 						iterator--;
+						if(iterator < 0){
+							iterator = 0;
+							if(mainClasspaths.size() == 0){
+								break outerloop;
+							}
+						}
 					}
 				}
 			}
 		}
-		return mainClasspaths;
+	return mainClasspaths;
 	}
-	
+
 	private static boolean containsValueInArray(String[] keys, String key){
 		for(String loopKey : keys){
 			if(loopKey.toLowerCase().equals(key.toLowerCase())){

@@ -31,9 +31,7 @@ import org.apache.log4j.Logger;
 class ActiveViolationPanel extends JPanel {
 
 	private static final long serialVersionUID = 3957004303176017057L;
-
 	private static Logger logger = Logger.getLogger(ActiveViolationPanel.class);
-
 	private final DefaultListModel categoryModel;
 	private final DefaultListModel ruletypeModel;
 	private final String language;
@@ -41,13 +39,11 @@ class ActiveViolationPanel extends JPanel {
 	private final HashMap<String, List<RuleType>> ruletypes;
 	private final List<ActiveRuleType> activeRuletypes;
 	private List<ActiveViolationType> activeViolationtypes;
-
 	private DefaultTableModel violationtypeModel;
-
 	private JButton apply, deselectAll, selectAll;
 	private JList categoryJList, ruletypeJList;
 	private JScrollPane categoryScrollpane, ruletypeScrollpane,
-	violationtypeScrollpane;
+			violationtypeScrollpane;
 	private JTable violationtypeTable;
 
 	ActiveViolationPanel(TaskServiceImpl taskServiceImpl, HashMap<String, List<RuleType>> ruletypes, String language) {
@@ -62,6 +58,7 @@ class ActiveViolationPanel extends JPanel {
 
 		initComponents();
 		loadAfterChange();
+		loadRuleTypeCategories();
 	}
 
 	private void initComponents() {
@@ -80,10 +77,9 @@ class ActiveViolationPanel extends JPanel {
 
 		categoryJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		categoryJList.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
-				if(categoryJList.getSelectedIndex() > -1 && ! evt.getValueIsAdjusting()){
+				if (categoryJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()) {
 					categoryValueChanged();
 				}
 			}
@@ -99,10 +95,9 @@ class ActiveViolationPanel extends JPanel {
 		ruletypeJList.setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 		ruletypeJList.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
-				if(ruletypeJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()){
+				if (ruletypeJList.getSelectedIndex() > -1 && !evt.getValueIsAdjusting()) {
 					ruletypeValueChanged();
 				}
 			}
@@ -110,7 +105,6 @@ class ActiveViolationPanel extends JPanel {
 		violationtypeScrollpane.setViewportView(ruletypeJList);
 
 		selectAll.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				SelectAllActionPerformed();
@@ -118,7 +112,6 @@ class ActiveViolationPanel extends JPanel {
 		});
 
 		deselectAll.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				DeselectAllActionPerformed();
@@ -126,7 +119,6 @@ class ActiveViolationPanel extends JPanel {
 		});
 
 		apply.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				ApplyActionPerformed();
@@ -137,7 +129,7 @@ class ActiveViolationPanel extends JPanel {
 		apply.setEnabled(false);
 	}
 
-	private void createLayout(){
+	private void createLayout() {
 		GroupLayout activeViolationtypeLayout = new GroupLayout(this);
 
 		GroupLayout.ParallelGroup horizontalButtonGroup = activeViolationtypeLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
@@ -176,13 +168,12 @@ class ActiveViolationPanel extends JPanel {
 		setLayout(activeViolationtypeLayout);
 	}
 
-	final void loadAfterChange(){
+	final void loadAfterChange() {
 		setText();
 		loadModels();
-		loadRuleTypeCategories();
 	}
 
-	private void setText(){
+	private void setText() {
 		categoryJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
 		ruletypeJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")));
 		selectAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SelectAll"));
@@ -190,12 +181,10 @@ class ActiveViolationPanel extends JPanel {
 		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
 
-	private void loadModels(){		
+	private void loadModels() {
 		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Active")};
-		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0){
-
+		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0) {
 			private static final long serialVersionUID = 3779670097825676765L;
-
 			Class<?>[] types = new Class[]{String.class, Boolean.class};
 			boolean[] canEdit = new boolean[]{false, true};
 
@@ -219,65 +208,61 @@ class ActiveViolationPanel extends JPanel {
 		for (String categoryString : ruletypes.keySet()) {
 			categoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
-		if(!categoryModel.isEmpty()){
+		if (!categoryModel.isEmpty()) {
 			categoryJList.setSelectedIndex(0);
 		}
 	}
 
 	private void SelectAllActionPerformed() {
-		if(!apply.isEnabled()) {
+		if (!apply.isEnabled()) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getControlService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
 		} else {
-			for(int i = 0; i < violationtypeModel.getRowCount(); i++){
+			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(true, i, 1);
 			}
 		}
 	}
 
 	private void DeselectAllActionPerformed() {
-		if(!apply.isEnabled()) {
+		if (!apply.isEnabled()) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getControlService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
 		} else {
-			for(int i = 0; i < violationtypeModel.getRowCount(); i++){
+			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(false, i, 1);
 			}
 		}
 	}
 
 	private void ApplyActionPerformed() {
-		ActiveRuleType activeRuletype = activeRuletypes.get(ruletypeJList.getSelectedIndex());
+		activeRuletypes.get(ruletypeJList.getSelectedIndex());
 		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
 			boolean test = (Boolean) violationtypeModel.getValueAt(i, 1);
-			try{
+			try {
 				activeViolationtypes.get(i).setEnabled(test);
-			} catch(IndexOutOfBoundsException outOfBoundsException) {
+			} catch (IndexOutOfBoundsException outOfBoundsException) {
 				logger.error("Something went wrong. Active violationtypes can not be set.");
 			}
 		}
-		activeRuletype.setViolationTypes(activeViolationtypes);
-
-		activeRuletypes.remove(ruletypeJList.getSelectedIndex());
-		activeRuletypes.add(ruletypeJList.getSelectedIndex(), activeRuletype);
-
+		
 		taskServiceImpl.setActiveViolationTypes(language, activeRuletypes);
 	}
 
 	private void categoryValueChanged() {
 		loadRuletypes(((DataLanguageHelper) categoryJList.getSelectedValue()).key);
-		clearViolationTypesTable();
 	}
 
 	private void loadRuletypes(String category) {
 		ruletypeModel.clear();
 		List<RuleType> rules = ruletypes.get(category);
-		for(RuleType ruletype: rules){
-			if(!ruletype.getViolationTypes().isEmpty()){
+		for (RuleType ruletype : rules) {
+			if (!ruletype.getViolationTypes().isEmpty()) {
 				ruletypeModel.addElement(new DataLanguageHelper(ruletype.getKey()));
 			}
 		}
-		if(!ruletypeModel.isEmpty()){
+		if (!ruletypeModel.isEmpty()) {
 			ruletypeJList.setSelectedIndex(0);
 		}
+		ruletypeValueChanged();
 	}
 
 	private void ruletypeValueChanged() {
@@ -285,7 +270,7 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void clearViolationTypesTable() {
-		while(violationtypeModel.getRowCount() > 0){
+		while (violationtypeModel.getRowCount() > 0) {
 			violationtypeModel.removeRow(0);
 		}
 	}
@@ -294,13 +279,23 @@ class ActiveViolationPanel extends JPanel {
 		apply.setEnabled(true);
 		clearViolationTypesTable();
 		for (ActiveRuleType ruletype : activeRuletypes) {
-			if(ruletype.getRuleType().equals(ruletypekey)) {
-				for(ActiveViolationType violationtype : ruletype.getViolationTypes()){
+			if (ruletype.getRuleType().equals(ruletypekey)) {
+				for (ActiveViolationType violationtype : ruletype.getViolationTypes()) {
 					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
 				}
 				activeViolationtypes = ruletype.getViolationTypes();
 				break;
 			}
 		}
+	}
+
+	public void clearSelection() {
+		violationtypeTable.getSelectionModel().clearSelection();
+		ruletypeJList.getSelectionModel().clearSelection();
+		categoryJList.getSelectionModel().clearSelection();
+	}
+
+	public void selectFirstIndexOfCategory() {
+		categoryJList.setSelectedIndex(0);
 	}
 }

@@ -8,10 +8,12 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
+import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -26,31 +28,37 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+
+		DependencyDTO[] dependencies = analyseService.getAllDependencies();	
 
 		for(Mapping classPathFrom : physicalClasspathsFrom){
-			for(Mapping classPathTo : physicalClasspathsTo ){
-				DependencyDTO[] dependencies = analyseService.getDependenciesFrom(classPathFrom.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classPathTo.getPhysicalPath(), classPathFrom.getViolationTypes());
-				for(DependencyDTO dependency: dependencies){
-					if(allowedDependencies.length != 0){
-						for(DependencyDTO allowedDependency: allowedDependencies){
-							if(dependency != allowedDependency){
-								Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-								violations.add(violation);
-							}
-						}
-					}
-					else{						
+			for(DependencyDTO dependency: dependencies){
+				if(classPathFrom.getPhysicalPath().equals(dependency.from) && !containsMapping(mappings, dependency.to)){	
+					if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+						Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
 						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-						violations.add(violation);
-						
+						violations.add(violation);				
 					}
-				}
+				}			
 			}
 		}
 		return violations;
+	}
+
+	private boolean containsMapping(Mappings mappings, String physicalPath){
+		for(Mapping mappingFrom : mappings.getMappingFrom()){
+			if(mappingFrom.getPhysicalPath().equals(physicalPath)){
+				return true;
+			}
+		}
+
+		for(Mapping mappingTo : mappings.getMappingTo()){
+			if(mappingTo.getPhysicalPath().equals(physicalPath)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

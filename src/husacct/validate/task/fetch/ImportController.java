@@ -32,6 +32,7 @@ public class ImportController {
 		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
 		importActiveViolationTypes(element.getChild("activeViolationTypes"));
 		
+		//TODO
 		//Not used because of memory issues
 		//importViolations(element.getChild("violations"));
 		//importViolationHistory(element.getChild("violationHistories"));		

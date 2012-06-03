@@ -59,14 +59,6 @@ class SeverityConfigRepository {
 		return currentSeverities;
 	}
 
-	List<Severity> getAllSeveritiesCloned(){
-		List<Severity> severities = new ArrayList<Severity>(currentSeverities.size());
-		for(Severity currentSeverity : currentSeverities){
-			severities.add(currentSeverity.clone());
-		}
-		return severities;
-	}
-
 	void setSeverities(List<Severity> severities){
 		checkSeverities(severities);
 		this.currentSeverities = matchNewWithCurrentSeverities(severities);

@@ -28,17 +28,22 @@ public class BackCallRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();			
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))),currentRule);
 
+		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+
 		for(Mapping classPathFrom : physicalClasspathsFrom){
 			for(List<Mapping> moduleTo : modulesTo){
-				for(Mapping classpathsTo : moduleTo ){
-					DependencyDTO[] dependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(), classpathsTo.getPhysicalPath(), classPathFrom.getViolationTypes());	
-					for(DependencyDTO dependency: dependencies){
-						Violation violation = createViolation(rootRule, classPathFrom, classpathsTo, dependency, configuration);
-						violations.add(violation);
+				for(Mapping classpathTo : moduleTo ){
+					for(DependencyDTO dependency : dependencies){
+						if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classpathTo.getPhysicalPath())){
+							if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+								Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
+								violations.add(violation);
+							}
+						}
 					}
 				}					
 			}				
