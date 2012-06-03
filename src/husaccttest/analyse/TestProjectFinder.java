@@ -10,7 +10,7 @@ import java.io.File;
 
 public class TestProjectFinder {
 	
-	private static final String testprojectFolder = "recognitiontests";
+	private static final String testprojectFolder = "testprojects";
 	
 	/**Function to find the current path, holding in account if the build is requesting the path or the normal 
 	 * JUnit tests. Build tests will run from a different location, thus the path will be different. */

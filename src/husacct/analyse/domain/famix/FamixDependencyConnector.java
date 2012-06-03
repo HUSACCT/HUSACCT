@@ -17,8 +17,6 @@ class FamixDependencyConnector {
 	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
 	private static final String EXTENDS_INTERFACE = "ExtendsInterface";
 	
-	private int tmpCount = 0;
-	
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
@@ -47,7 +45,6 @@ class FamixDependencyConnector {
 			catch(Exception e){
 				
 			}
-			tmpCount++;
 		}		
 	}
 
@@ -97,7 +94,6 @@ class FamixDependencyConnector {
 					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
 				} else {
 					determineType(association);
-					tmpCount++;
 					addToModel(association);
 				}
 			} catch(Exception e){
