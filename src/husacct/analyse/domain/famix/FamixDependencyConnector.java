@@ -17,8 +17,6 @@ class FamixDependencyConnector {
 	private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
 	private static final String EXTENDS_INTERFACE = "ExtendsInterface";
 	
-	private int tmpCount = 0;
-	
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
@@ -47,12 +45,13 @@ class FamixDependencyConnector {
 			catch(Exception e){
 				
 			}
-			tmpCount++;
 		}		
 	}
 
 	void connectAssociationDependencies() {
+		int count = 0;
 		for(FamixAssociation association : theModel.waitingAssociations){
+			count += 1;
 			try{
 				boolean connected = false;
 				String theClass = association.from;
@@ -92,10 +91,9 @@ class FamixDependencyConnector {
 					}
 				}				
 				if(association.to.equals("") || association.to == null){
-					logger.info("Couldn't analyse dependency from " + association.from + " to " + association.to);
+					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
 				} else {
 					determineType(association);
-					tmpCount++;
 					addToModel(association);
 				}
 			} catch(Exception e){
@@ -115,8 +113,9 @@ class FamixDependencyConnector {
 			} else {
 				FamixInterface theInterface = getInterfaceForUniqueName(association.to);
 				if(theInterface != null){
-					// Interface extends Interface
 					type = EXTENDS_INTERFACE;
+				}else{
+					type = EXTENDS_LIBRARY;
 				}
 			}
 			

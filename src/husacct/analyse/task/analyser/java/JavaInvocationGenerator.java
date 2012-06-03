@@ -117,7 +117,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 	
 	private void createMethodInvocationDomainObject() {
-		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		if (to != null && to != ""){
+			modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		}
 	}
 
 	private void createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(Tree tree) {
@@ -206,6 +208,8 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 
 	private void createPropertyOrFieldInvocationDomainObject() {	
-		modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		if (to != null && to != ""){
+			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		}
 	}
 }

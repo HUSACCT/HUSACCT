@@ -1,6 +1,5 @@
-package husaccttest.analyse;
+package husaccttest.analyse.java;
 
-import husaccttest.analyse.java.JavaTestSuite;
 import husaccttest.analyse.java.benchmark.BenchmarkTestSuite;
 import husaccttest.analyse.java.blackbox.TestDependencyFilters;
 import husaccttest.analyse.java.blackbox.TestDomainDependencies;
@@ -15,7 +14,16 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	JavaTestSuite.class
+	TestLanguage.class,
+	TestDependencyFilters.class,
+	TestDomainDependencies.class,
+	TestDomainModule.class,
+	TestIndirect.class,
+	RecognationTestSuite.class,
+	BenchmarkTestSuite.class
 })
-public class AnalyseTestSuite {
+
+public class JavaTestSuite {
+
+	
 }

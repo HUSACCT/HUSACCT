@@ -17,7 +17,6 @@ class JavaTreeConvertController {
 	private int classCount = 0; 
 	private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
 	
-	
 	private JavaPackageGenerator javaPackageGenerator;
 	private JavaClassGenerator javaClassGenerator;
 	private JavaInterfaceGenerator javaInterfaceGenerator;
@@ -116,6 +115,7 @@ class JavaTreeConvertController {
 							this.parentClass = currentClass; 
 							this.currentClass = delegateClass(innerClassTree, true); 
 							delegateASTToGenerators(innerClassTree); 
+							this.currentClass = parentClass;
 						} else { 
 							classCount++; 
 						}
@@ -207,9 +207,7 @@ class JavaTreeConvertController {
 	}
 	
 	private boolean isTreeAvailable(Tree tree){
-		if(tree != null){
-			return true;
-		}
+		if(tree != null) return true; 
 		return false;
 	}
 	

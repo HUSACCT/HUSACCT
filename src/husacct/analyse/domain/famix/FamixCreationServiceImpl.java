@@ -160,7 +160,6 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		famixAttribute.name = name;
 		famixAttribute.uniqueName = uniqueName;
 		famixAttribute.lineNumber = line;
-		addToModel(famixAttribute);
 		model.waitingStructuralEntitys.add(famixAttribute);
 		FamixAssociation fAssocation = new FamixAssociation();
 		fAssocation.from = belongsToClass;
@@ -168,6 +167,7 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		fAssocation.type = "Declaration";
 		fAssocation.lineNumber = line;
 		model.waitingAssociations.add(fAssocation);
+		addToModel(famixAttribute);
 	}
 	
 	@Override
