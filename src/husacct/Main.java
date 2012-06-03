@@ -22,7 +22,6 @@ public class Main {
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	
-    
 	private void printSystemInfo(){
 		Logger logger = Logger.getLogger(Main.class);
 		Runtime runtime = Runtime.getRuntime();
