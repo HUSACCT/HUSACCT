@@ -65,15 +65,19 @@ public class InterfaceConventionRule extends RuleType {
 			return false;
 		}
 		else{
-			boolean isInterface = analyseService.getModuleForUniqueName(classPath).type.toLowerCase().equals("interface");
-			if(isInterface){
-				interfaceCache.add(classPath);
-				return true;
-			}
-			else{
-				noInterfaceCache.add(classPath);
-				return false;
-			}
+			return addToCache(classPath);
+		}
+	}
+	
+	private boolean addToCache(String classPath){
+		boolean isInterface = analyseService.getModuleForUniqueName(classPath).type.toLowerCase().equals("interface");
+		if(isInterface){
+			interfaceCache.add(classPath);
+			return true;
+		}
+		else{
+			noInterfaceCache.add(classPath);
+			return false;
 		}
 	}
 }
