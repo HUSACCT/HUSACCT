@@ -105,7 +105,7 @@ class FamixDependencyConnector {
 	}	
 		
 	private void determineType(FamixAssociation association){
-		String type = association.type;
+		String type = EXTENDS_LIBRARY;
 		if(type.equals(EXTENDS)){
 			FamixClass theClass = getClassForUniqueName(association.to);
 			if(theClass != null){
@@ -115,7 +115,6 @@ class FamixDependencyConnector {
 			} else {
 				FamixInterface theInterface = getInterfaceForUniqueName(association.to);
 				if(theInterface != null){
-					// Interface extends Interface
 					type = EXTENDS_INTERFACE;
 				}
 			}
