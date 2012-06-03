@@ -28,7 +28,7 @@ public class SkipCallRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();		
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
 

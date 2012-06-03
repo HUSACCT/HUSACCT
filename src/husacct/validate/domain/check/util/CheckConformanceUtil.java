@@ -12,6 +12,16 @@ public abstract class CheckConformanceUtil {
 		return new Mappings(filteredFrom, filteredTo);
 	}	
 
+	protected static Mappings removeExceptionPathsFrom(Mappings mainClasspaths, List<Mapping> exceptionClasspathsFrom, List<Mapping> exceptionClasspathsTo){
+		List<Mapping> filteredFrom = removeExceptionPaths(mainClasspaths.getMappingFrom(), exceptionClasspathsFrom);
+		return new Mappings(filteredFrom, mainClasspaths.getMappingTo());
+	}
+
+	protected static Mappings removeExceptionPathsTo(Mappings mainClasspaths, List<Mapping> exceptionClasspathsFrom, List<Mapping> exceptionClasspathsTo){
+		List<Mapping> filteredTo = removeExceptionPaths(mainClasspaths.getMappingTo(), exceptionClasspathsTo);
+		return new Mappings(mainClasspaths.getMappingFrom(), filteredTo);
+	}
+
 	private static List<Mapping> removeExceptionPaths(List<Mapping> mainClasspaths, List<Mapping> exceptionClasspaths){
 		outerloop:for(int iterator = 0; iterator<mainClasspaths.size(); iterator++){
 			for(Mapping exceptionMapping : exceptionClasspaths){

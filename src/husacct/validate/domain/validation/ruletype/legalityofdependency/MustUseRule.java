@@ -29,7 +29,7 @@ public class MustUseRule extends RuleType{
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {	
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 

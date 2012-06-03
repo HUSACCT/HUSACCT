@@ -28,7 +28,7 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
+		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();	
