@@ -224,6 +224,9 @@ public class GraphicsFrame extends JInternalFrame {
 			centerPane.setSize(getWidth(), getHeight());
 			int smallerSize = centerPane.getSize().height / 5 * 3;
 			centerPane.setDividerLocation(smallerSize);
+			centerPane.setDividerSize(10);
+			centerPane.validate();
+			centerPane.updateUI();
 		}
 	}
 
