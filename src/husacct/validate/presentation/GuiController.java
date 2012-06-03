@@ -33,7 +33,7 @@ public class GuiController {
 	}
 
 	private void reloadGUIText(){		
-		browseViolations.loadAfterChange();
+		browseViolations.loadText();
 		filterViolations.loadGUIText();
 		configurationUI.loadAfterChange();
 	}

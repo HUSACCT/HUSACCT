@@ -9,6 +9,7 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class CheckConformanceUtilPackage extends CheckConformanceUtil{
 		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
 		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
 
+		Arrays.sort(rule.violationTypeKeys);		
 		mappingFrom = getAllPackagepathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
 		mappingTo = getAllPackagepathsFromModule(rule.moduleTo, rule.violationTypeKeys);
 

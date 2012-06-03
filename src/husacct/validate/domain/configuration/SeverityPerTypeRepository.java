@@ -12,16 +12,13 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
-class SeverityPerTypeRepository implements Observer {
+class SeverityPerTypeRepository {
 
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
 
@@ -37,7 +34,6 @@ class SeverityPerTypeRepository implements Observer {
 		this.configuration = configuration;
 		this.ruletypefactory = ruletypefactory;
 
-		configuration.addObserver(this);		
 		severitiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 		defaultSeveritiesPerTypePerProgrammingLanguage = new HashMap<String, HashMap<String, Severity>>();
 	}
@@ -57,6 +53,12 @@ class SeverityPerTypeRepository implements Observer {
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		for(RuleType ruleType : ruletypefactory.getRuleTypes()){			
 			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
+			
+			for(RuleType exceptionRuleType : ruleType.getExceptionrules()){
+				if(severityPerType.get(exceptionRuleType.getKey()) == null){
+					severityPerType.put(exceptionRuleType.getKey(), exceptionRuleType.getSeverity());
+				}
+			}
 		}
 
 		this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(programmingLanguage ,configuration);
@@ -208,57 +210,5 @@ class SeverityPerTypeRepository implements Observer {
 			return newSeverity;			
 		}
 		throw new SeverityNotFoundException();
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		if(arg instanceof Severity[]){
-			checkForChangedSeverities((Severity[]) arg);
-		}
-	}
-
-	private void checkForChangedSeverities(Severity[] oldSeverities){
-		List<Severity> previousSeverities = Arrays.asList(oldSeverities);
-		List<Severity> currentSeverities = configuration.getAllSeverities();
-		for(Entry<String, HashMap<String, Severity>> severityPerProgramminglanguageSet : severitiesPerTypePerProgrammingLanguage.entrySet()){
-			for(Entry<String, Severity> severityPerTypeSet : severityPerProgramminglanguageSet.getValue().entrySet()){
-				getLowerSeverity(currentSeverities, previousSeverities, severityPerTypeSet.getValue());
-			}
-		}
-	}
-
-	private Severity getLowerSeverity(List<Severity> currentSeverities, List<Severity> previousSeverities, Severity currentSeverity){
-		try{
-			if(!previousSeverities.contains(currentSeverity) && currentSeverities.contains(currentSeverity)){
-				//just added, no need for further actions
-				return currentSeverity;
-			}
-			else if(previousSeverities.contains(currentSeverity) && !currentSeverities.contains(currentSeverity)){
-				if(currentSeverities.isEmpty()){
-					return getUnidentifiedSeverity();
-				}
-				else{
-					int index = getLowerSeverityIndex(currentSeverities, previousSeverities, currentSeverity);
-					return currentSeverities.get(index);				
-				}
-			}
-			else{
-				return getUnidentifiedSeverity();
-			}
-		}catch(IndexOutOfBoundsException e){
-			return getUnidentifiedSeverity();
-		}
-	}
-
-	private Severity getUnidentifiedSeverity(){
-		return configuration.getSeverityByName("Unidentified");
-	}
-
-	private int getLowerSeverityIndex(List<Severity> currentSeverities, List<Severity> previousSeverities, Severity currentSeverity){
-		int index = previousSeverities.indexOf(currentSeverity);
-		if(index > currentSeverities.size()-1){
-			index = currentSeverities.size()-1;
-		}
-		return index;
 	}
 }

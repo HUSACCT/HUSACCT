@@ -20,17 +20,13 @@ import org.apache.log4j.Logger;
 class ViolationTypeSeverityPanel extends JPanel {
 
 	private static final long serialVersionUID = 1283848062887016417L;
-
 	private static Logger logger = Logger.getLogger(ViolationTypeSeverityPanel.class);
-
 	private ComboBoxTableModel violationtypeModel;
 	private TaskServiceImpl taskServiceImpl;
-
 	private JButton apply, restore, restoreAll;
 	private JList category;
 	private JScrollPane categoryScrollpane, violationtypeScrollpane;
 	private JTable violationtypeTable;
-
 	private final DefaultListModel categoryModel;
 	private final String language;
 	private final Map<String, List<ViolationType>> violationTypes;
@@ -63,10 +59,11 @@ class ViolationTypeSeverityPanel extends JPanel {
 		category.setModel(categoryModel);
 		category.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		category.addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
-				categoryValueChanged();
+				if (!evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
+					categoryValueChanged();
+				}
 			}
 		});
 		categoryScrollpane.setViewportView(category);
@@ -77,7 +74,6 @@ class ViolationTypeSeverityPanel extends JPanel {
 				ListSelectionModel.SINGLE_SELECTION);
 
 		violationtypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) {
@@ -91,19 +87,17 @@ class ViolationTypeSeverityPanel extends JPanel {
 
 		restore.setEnabled(false);
 		restore.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				if(violationtypeTable.getSelectedRow() > -1){
+				if (violationtypeTable.getSelectedRow() > -1) {
 					restoreActionPerformed();
-				} else{
+				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("RowNotSelected")));
 				}
 			}
 		});
 
 		restoreAll.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				restoreAllActionPerformed();
@@ -111,7 +105,6 @@ class ViolationTypeSeverityPanel extends JPanel {
 		});
 
 		apply.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				applyActionPerformed();
@@ -121,7 +114,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 		createLayout();
 	}
 
-	private void createLayout(){
+	private void createLayout() {
 		GroupLayout violationtypeSeverityLayout = new GroupLayout(this);
 
 		GroupLayout.ParallelGroup horizontalButtonGroup = violationtypeSeverityLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false);
@@ -158,23 +151,23 @@ class ViolationTypeSeverityPanel extends JPanel {
 		setLayout(violationtypeSeverityLayout);
 	}
 
-	void loadAfterChange(){
+	void loadAfterChange() {
 		setText();
 		loadModel();
 	}
 
-	private void setText(){
+	private void setText() {
 		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
 		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
 		restoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
 		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
 	}
 
-	void setSeverities(List<Severity> severities){
+	void setSeverities(List<Severity> severities) {
 		this.severities = severities;
 	}
 
-	private void loadModel(){
+	final void loadModel() {
 		String[] violationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severities);
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
@@ -186,7 +179,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 		tcm2.getColumn(1).setCellEditor(violationtypeModel.getEditor());
 	}
 
-	private void restoreActionPerformed() {		
+	private void restoreActionPerformed() {
 		taskServiceImpl.restoreKeyToDefaultSeverity(language, ((DataLanguageHelper) violationtypeModel.getValueAt(violationtypeTable.getSelectedRow(), 0)).key);
 		categoryValueChanged();
 	}
@@ -210,7 +203,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private void updateViolationtypeSeverities() {
 		HashMap<String, Severity> map = new HashMap<String, Severity>();
 
-		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
+		for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 			String key = ((DataLanguageHelper) violationtypeModel.getValueAt(i, 0)).key;
 			map.put(key, (Severity) violationtypeModel.getValueAt(i, 1));
 
@@ -224,23 +217,23 @@ class ViolationTypeSeverityPanel extends JPanel {
 		for (String categoryString : violationTypes.keySet()) {
 			categoryModel.addElement(new DataLanguageHelper(categoryString));
 		}
-		if(!categoryModel.isEmpty()){
+		if (!categoryModel.isEmpty()) {
 			category.setSelectedIndex(0);
 		}
 	}
 
 	private void loadViolationType(String category) {
-		if(violationtypeModel != null){
+		if (violationtypeModel != null) {
 		}
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
-			if (categoryString.equals(category)){
+			if (categoryString.equals(category)) {
 				List<ViolationType> violationtypes = violationTypes.get(categoryString);
-				for(ViolationType violationtype: violationtypes){
+				for (ViolationType violationtype : violationtypes) {
 					Severity severity;
-					try{
+					try {
 						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationtypeKey());
-					} catch (Exception e){
+					} catch (Exception e) {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
@@ -252,11 +245,21 @@ class ViolationTypeSeverityPanel extends JPanel {
 		violationtypeModel.checkValuesAreValid();
 	}
 
-	private void checkRestoreButtonEnabled(){
-		if(violationtypeTable.getSelectedRow() > -1){
+	private void checkRestoreButtonEnabled() {
+		if (violationtypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		} else{
+		} else {
 			restore.setEnabled(false);
 		}
+	}
+
+	public void clearSelection() {
+		violationtypeTable.getSelectionModel().clearSelection();
+		category.getSelectionModel().clearSelection();
+		selectFirstIndexOfCategory();
+	}
+
+	public void selectFirstIndexOfCategory() {
+		category.setSelectedIndex(0);
 	}
 }

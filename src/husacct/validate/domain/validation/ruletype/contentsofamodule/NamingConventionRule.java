@@ -65,7 +65,7 @@ public class NamingConventionRule extends RuleType {
 
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
 			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name) && analysedModule.type.toLowerCase().equals("class")){
-				Violation violation = createViolation(rootRule, physicalClasspathFrom, null , null, configuration);
+				Violation violation = createViolation(rootRule, physicalClasspathFrom , configuration);
 				violations.add(violation);
 			}
 		}

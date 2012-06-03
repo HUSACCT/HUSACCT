@@ -17,7 +17,7 @@ class ViolationRepository {
 	}	
 
 	void addViolation(List<Violation> newViolations){
-		this.violations.addAll(newViolations);
+		this.violations = newViolations;
 	}
 
 	void addViolation(Violation violation){

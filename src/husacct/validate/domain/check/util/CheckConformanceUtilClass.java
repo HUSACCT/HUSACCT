@@ -11,6 +11,7 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,22 +21,55 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	public static Mappings filterClasses(RuleDTO rule){
 		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
-		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
+		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
+		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
 
+		return removeExceptionPaths(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+	}
+
+	public static Mappings filterClassesFrom(RuleDTO rule){
+		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
+		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
+		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
+
+		return removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+	}
+
+	public static Mappings filterClassesTo(RuleDTO rule){
+		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
+		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
+		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
+
+		return removeExceptionPathsTo(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+	}
+
+	private static List<Mapping> getExceptionClassPathTo(RuleDTO rule){
+		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
+		if(rule.exceptionRules!= null){
+			for(RuleDTO exceptionRule : rule.exceptionRules){
+				Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
+				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
+			}
+		}
+		return exceptionClasspathTo;
+	}
+
+	private static List<Mapping> getExceptionClassPathFrom(RuleDTO rule){
+		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
 		if(rule.exceptionRules!= null){
 			for(RuleDTO exceptionRule : rule.exceptionRules){
 				Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
 				exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
-				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
 			}
 		}
-		return removeExceptionPaths(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		return exceptionClasspathFrom;
 	}
 
 	private static Mappings getAllClasspathsFromModule(RuleDTO rule){		
 		ArrayList<Mapping> mappingFrom = new ArrayList<Mapping>();
-		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();
+		ArrayList<Mapping> mappingTo = new ArrayList<Mapping>();		
+
+		Arrays.sort(rule.violationTypeKeys);
 
 		mappingFrom = getAllClasspathsFromModule(rule.moduleFrom, rule.violationTypeKeys);
 		mappingTo = getAllClasspathsFromModule(rule.moduleTo, rule.violationTypeKeys);

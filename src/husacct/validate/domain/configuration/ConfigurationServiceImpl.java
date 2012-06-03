@@ -45,10 +45,9 @@ public final class ConfigurationServiceImpl extends Observable {
 	}
 
 	public void setSeverities(List<Severity> severities) {
-		final Severity[] oldSeverities = severityConfig.getAllSeveritiesCloned().toArray(new Severity[]{});
 		severityConfig.setSeverities(severities);
 		setChanged();
-		notifyObservers(oldSeverities);
+		notifyObservers();
 		notifyServiceListeners();
 	}
 

@@ -12,6 +12,8 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +40,18 @@ public class CheckConformanceController {
 		if(applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()){
 			configuration.clearViolations();
 			ruleCache.clear();
+			
+			List<Violation> violationList = new ArrayList<Violation>();
+			
 			for(RuleDTO appliedRule : appliedRules){
 				try{
+					Calendar calendar1 = Calendar.getInstance();
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
-					configuration.addViolations(newViolations);
+					violationList.addAll(newViolations);
+					
+					Calendar calendar2 = Calendar.getInstance();
+					System.out.println(calendar2.getTime().getTime() - calendar1.getTime().getTime());
 
 					if(appliedRule.exceptionRules != null){
 						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
@@ -53,6 +62,7 @@ public class CheckConformanceController {
 					logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 				}
 			}
+			configuration.addViolations(violationList);
 		}
 		else{
 			throw new ProgrammingLanguageNotFoundException();

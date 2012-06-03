@@ -22,6 +22,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
@@ -149,7 +150,9 @@ public class FilterPanel extends JPanel {
 					public void run() {
 						try {
 							Thread.sleep(1);
-							fillViolationsTable(false);
+							SwingUtilities.invokeLater(new Runnable(){public void run(){
+								fillViolationsTable(false);
+							}});
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
@@ -170,7 +173,9 @@ public class FilterPanel extends JPanel {
 					public void run() {
 						try {
 							Thread.sleep(1);
-							fillViolationsTable(true);
+							SwingUtilities.invokeLater(new Runnable(){public void run(){
+								fillViolationsTable(true);
+							}});
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
