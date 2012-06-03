@@ -41,14 +41,18 @@ class JavaClassGenerator extends JavaGenerator{
 	}
 	
 	public String generateToModel(CommonTree commonTree, String parentClassName) {
-		this.name = commonTree.getChild(1).toString();
-		this.isInnerClass = true;
-		this.isAbstract = isAbstract((CommonTree)commonTree);
-		this.isInnerClass = true;
-		this.belongsToClass = parentClassName;
-		this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();
-		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass);
-		return uniqueName;
+		if (commonTree.getChild(1) != null){
+			this.name = commonTree.getChild(1).toString();
+			this.isInnerClass = true;
+			this.isAbstract = isAbstract((CommonTree)commonTree);
+			this.isInnerClass = true;
+			this.belongsToClass = parentClassName;
+			this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();
+			modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass);
+			return uniqueName;
+		}
+		//TODO: bad stuff. Inner classes are not recognized at all at this moment
+		return "";
 	}
 	
 	private boolean isAbstract(CommonTree tree){

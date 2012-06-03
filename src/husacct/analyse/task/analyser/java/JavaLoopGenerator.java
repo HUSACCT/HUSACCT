@@ -52,9 +52,7 @@ public class JavaLoopGenerator extends JavaGenerator{
 				deleteTreeChild(child);
 			}
 			else if(treeType == JavaParser.BLOCK_SCOPE){
-				JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
-				javaBlockScopeGenerator.walkThroughBlockScope((CommonTree)child, this.belongsToClass, this.belongsToMethod);
-				deleteTreeChild(child);
+				delegateBlockScope(child);
 			}
 			
 			walkForAndWhileAST(child);
@@ -66,24 +64,32 @@ public class JavaLoopGenerator extends JavaGenerator{
 			Tree child = tree.getChild(childCount);
 			int treeType = child.getType();
 			if(treeType == JavaParser.TYPE){
-				CommonTree myLoopTree = (CommonTree) child;
-				CommonTree typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
-				if(typeIdentTree != null){
-					
-					String type = "";
-					for(int count = 0; count < typeIdentTree.getChildCount(); count++){
-						type += !type.equals("") ? "." : "";
-						type += typeIdentTree.getChild(count).getText();
+				if (tree.getType() != JavaParser.CAST_EXPR){
+					CommonTree myLoopTree = (CommonTree) child;
+					CommonTree typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+					if(typeIdentTree != null){
+						
+						String type = "";
+						for(int count = 0; count < typeIdentTree.getChildCount(); count++){
+							type += !type.equals("") ? "." : "";
+							type += typeIdentTree.getChild(count).getText();
+						}
+						
+						int lineNumber = typeIdentTree.getFirstChildWithType(JavaParser.IDENT).getLine();
+						if (tree.getChild(childCount + 1) != null){
+							javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, type , tree.getChild(childCount + 1).getText(), lineNumber);
+						}
+					} else if (tree.getChild(childCount + 1).getType() == JavaParser.IDENT){
+						int lineNumber = tree.getChild(childCount + 1).getLine();
+						javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(childCount + 1).getText(), lineNumber);
+					} else {
+						logger.warn("Problemen with finding type. Please notice analyse");
 					}
-					
-					int lineNumber = typeIdentTree.getFirstChildWithType(JavaParser.IDENT).getLine();
-					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, type , tree.getChild(childCount + 1).getText(), lineNumber);
-				} else if (tree.getChild(childCount + 1).getType() == JavaParser.IDENT){
-					int lineNumber = tree.getChild(childCount + 1).getLine();
-					javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText() , tree.getChild(childCount + 1).getText(), lineNumber);
-				} else {
-					logger.warn("Problemen with finding type. Please notice analyse");
 				}
+			}
+			else if(treeType == JavaParser.CAST_EXPR){
+				//a cast can ruin our algorithm. We delete the cast part since we don't need to know it anyway
+				deleteTreeChild(child.getChild(0));
 			}
 			
 			else if(treeType == JavaParser.METHOD_CALL){
@@ -96,6 +102,9 @@ public class JavaLoopGenerator extends JavaGenerator{
 				javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
 				deleteTreeChild(child);
 			}
+			else if(treeType == JavaParser.BLOCK_SCOPE){
+				delegateBlockScope(child);
+			}
 			
 			walkForEachAST(child);
 		}
@@ -107,5 +116,11 @@ public class JavaLoopGenerator extends JavaGenerator{
             treeNode.deleteChild(treeNode.getChild(child).getChildIndex()); 
         } 
     } 
+	
+	private void delegateBlockScope(Tree child){
+		JavaBlockScopeGenerator javaBlockScopeGenerator = new JavaBlockScopeGenerator();
+		javaBlockScopeGenerator.walkThroughBlockScope((CommonTree)child, this.belongsToClass, this.belongsToMethod);
+		deleteTreeChild(child);
+	}
 
 }
