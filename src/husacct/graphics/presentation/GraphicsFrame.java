@@ -173,6 +173,7 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBarLocale.put("LineContextUpdates", controlService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
 		menuBarLocale.put("LayoutStrategy", controlService.getTranslatedString("LayoutStrategy"));
+		menuBarLocale.put("DrawingOutOfDate", controlService.getTranslatedString("DrawingOutOfDate"));
 		menuBar.setLocale(menuBarLocale);
 		
 		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
@@ -223,6 +224,9 @@ public class GraphicsFrame extends JInternalFrame {
 			centerPane.setSize(getWidth(), getHeight());
 			int smallerSize = centerPane.getSize().height / 5 * 3;
 			centerPane.setDividerLocation(smallerSize);
+			centerPane.setDividerSize(10);
+			centerPane.validate();
+			centerPane.updateUI();
 		}
 	}
 
@@ -294,6 +298,13 @@ public class GraphicsFrame extends JInternalFrame {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
 		    	zoomChanged();
+			}
+		});
+		menuBar.setOutOfDateAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setUpToDate();
+				refreshDrawing();
 			}
 		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
@@ -523,5 +534,13 @@ public class GraphicsFrame extends JInternalFrame {
 		if (isVisible()) {
 			validate();
 		}
+	}
+	
+	public void setUpToDate() {
+		menuBar.setUpToDate();
+	}
+
+	public void setOutOfDate() {
+		menuBar.setOutOfDate();
 	}
 }

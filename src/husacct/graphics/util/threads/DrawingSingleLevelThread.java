@@ -16,6 +16,7 @@ public class DrawingSingleLevelThread implements Runnable {
 	@Override
 	public void run() {
 		try {
+			controller.clearDrawing();
 			controller.drawSingleLevel(toDrawModules);
 			Thread.sleep(10);
 		} catch (InterruptedException e) {

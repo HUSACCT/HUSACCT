@@ -40,7 +40,7 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public GraphicsOptionsDialog() {
 		super();
-		width = 500;
+		width = 550;
 		height = 200;
 
 		mainPanel = new JPanel();
@@ -63,9 +63,8 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void showDialog() {
 		setResizable(false);
 		setSize(width, height);
-		setModal(true);
-		setVisible(true);
 		ServiceProvider.getInstance().getControlService().centerDialog(this);
+		setVisible(true);
 	}
 
 	public void initGUI() {

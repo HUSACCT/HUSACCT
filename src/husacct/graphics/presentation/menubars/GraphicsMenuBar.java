@@ -30,7 +30,7 @@ public class GraphicsMenuBar extends JPanel {
 	private HashMap<String, String> icons;
 	private ArrayList<JComponent> actions;
 
-	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton, showDependenciesButton, showViolationsButton;
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton, showDependenciesButton, showViolationsButton, outOfDateButton;
 
 	private JSlider zoomSlider;
 	private GraphicsOptionsDialog graphicsOptionsDialog;
@@ -49,6 +49,7 @@ public class GraphicsMenuBar extends JPanel {
 		icons.put("dependenciesHide", "/husacct/common/resources/graphics/icon-unlink.png");
 		icons.put("violationsShow", "/husacct/common/resources/graphics/icon-errors-show.png");
 		icons.put("violationsHide", "/husacct/common/resources/graphics/icon-errors-hide.png");
+		icons.put("outofdate", "/husacct/common/resources/graphics/icon-outofdate.png");
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
@@ -61,6 +62,7 @@ public class GraphicsMenuBar extends JPanel {
 		actions.add(showDependenciesButton);
 		actions.add(showViolationsButton);
 		actions.add(zoomSlider);
+		actions.add(outOfDateButton);
 	}
 	
 	private void setButtonIcon(JButton button, String iconKey){
@@ -118,6 +120,10 @@ public class GraphicsMenuBar extends JPanel {
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
 		add(zoomSlider);
+		
+		outOfDateButton = new JButton();
+		outOfDateButton.setSize(50, menuItemMaxHeight);
+		setButtonIcon(outOfDateButton, "outofdate");
 	}
 
 	public void setZoomInAction(ActionListener listener) {
@@ -241,6 +247,10 @@ public class GraphicsMenuBar extends JPanel {
 		});
 		graphicsOptionsDialog.setZoomChangeListener(listener);
 	}
+	
+	public void setOutOfDateAction(ActionListener listener) {
+		outOfDateButton.addActionListener(listener);
+	}
 
 	public void setLocale(HashMap<String, String> locale) {
 		menuBarLocale = locale;
@@ -250,6 +260,8 @@ public class GraphicsMenuBar extends JPanel {
 			refreshButton.setToolTipText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setToolTipText(menuBarLocale.get("ExportToImage"));
 			optionsDialogButton.setToolTipText(menuBarLocale.get("Options"));
+			outOfDateButton.setToolTipText(menuBarLocale.get("DrawingOutOfDate"));
+			outOfDateButton.setText(menuBarLocale.get("DrawingOutOfDate"));
 			
 			optionsDialogButton.setText(menuBarLocale.get("Options"));
 			graphicsOptionsDialog.setLocale(menuBarLocale);
@@ -298,7 +310,7 @@ public class GraphicsMenuBar extends JPanel {
 	public void setContextUpdatesToggle(boolean setting) {
 		graphicsOptionsDialog.setContextUpdatesToggle(setting);
 	}
-
+	
 	public double getScaleFactor() {
 		double scaleFactor = zoomSlider.getValue() / 100.0;
 		scaleFactor = Math.max(MIN_SCALEFACTOR, scaleFactor);
@@ -312,6 +324,8 @@ public class GraphicsMenuBar extends JPanel {
 			comp.setEnabled(false);
 		}
 		graphicsOptionsDialog.turnOff();
+		validate();
+		updateUI();
 	}
 
 	public void turnOnBar(){
@@ -319,6 +333,20 @@ public class GraphicsMenuBar extends JPanel {
 			comp.setEnabled(true);
 		}
 		graphicsOptionsDialog.turnOn();
+		validate();
+		updateUI();
+	}
+	
+	public void setUpToDate() {
+		remove(outOfDateButton);
+		validate();
+		updateUI();
+	}
+
+	public void setOutOfDate() {
+		add(outOfDateButton);
+		validate();
+		updateUI();
 	}
 
 }
