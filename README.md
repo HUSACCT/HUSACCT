@@ -1,5 +1,4 @@
 # HUSACCT project
-_(This README is not done.)_
 
 What does HUSACCT Stand for?
 
@@ -100,8 +99,7 @@ We are also working on making this an [Eclipse](http://www.eclipse.org/) plugin.
 
 ## Build team
 
-This project involves six teams from one class (Bachelor Computer Science Informatics 2011-2012); around 4 to 5 people a team. Each team is responsible for a different service (control, analyze (Java and .NET), define, validate and architecture graphics).  
-The three teachers involved are.. _(Not willing to put names here yet.)_
+This project involves six teams from one class (Bachelor Computer Science Informatics 2011-2012); around 4 to 5 people a team. Each team is responsible for a different service (control, analyze (Java and .NET), define, validate and architecture graphics).
 
 ## Conclusion
 

@@ -9,7 +9,10 @@ import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
 import java.awt.Color;
 
+import org.apache.log4j.Logger;
+
 public final class FigureFactory {
+	protected Logger logger = Logger.getLogger(FigureFactory.class);
 
 	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
 		if (dependencyDTOs.length <= 0) {
@@ -33,22 +36,19 @@ public final class FigureFactory {
 		}
 
 		if (null == highestColor) {
-			throw new RuntimeException("No violation severity color found");
+			logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
+			highestColor = Color.RED;
 		}
-
 		return new ViolationsDecorator(highestColor);
 	}
 
-	// FIXME: Patrick: We've decided to NOT store DTOs inside decorators.
-	// The code below shows that DTOs are stored inside the decorator. Please
-	// fix the code and remove this comment.
 	public RelationFigure createFigure(ViolationDTO[] violationDTOs) {
-		if (violationDTOs.length == 0)
+		if (violationDTOs.length == 0) {
 			throw new RuntimeException("No violations received. Cannot create a violation figure.");
+		}
 
 		RelationFigure violatedRelationFigure = new RelationFigure("Violated dependency from " + violationDTOs[0].fromClasspath + " to " + violationDTOs[0].toClasspath, true, violationDTOs.length);
-		violatedRelationFigure.addDecorator(this.createViolationsDecorator(violationDTOs));
-
+		violatedRelationFigure.addDecorator(createViolationsDecorator(violationDTOs));
 		return violatedRelationFigure;
 	}
 
@@ -60,13 +60,13 @@ public final class FigureFactory {
 		}
 
 		if (null == createdFigure) {
-			throw new RuntimeException("Unimplemented dto type '" + (null==dto ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
+			throw new RuntimeException("Unimplemented dto type '" + (null == dto ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
 		}
 		return createdFigure;
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto, ViolationDTO[] violationDTOs) {
-		BaseFigure createdFigure = this.createFigure(dto);
+		BaseFigure createdFigure = createFigure(dto);
 		return createdFigure;
 	}
 
@@ -81,7 +81,7 @@ public final class FigureFactory {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
 		} else {
-			throw new RuntimeException("dto type '" + dto.getClass().getSimpleName() + "' is not recognized as a module dto");
+			throw new RuntimeException("DTO type '" + dto.getClass().getSimpleName() + "' is not recognized as a module dto.");
 		}
 
 		// TODO check these values with the define team
@@ -100,6 +100,7 @@ public final class FigureFactory {
 		} else if (type.toLowerCase().equals("subsystem")) {
 			return new SubsystemFigure(name);
 		} else {
+			logger.debug("Type " + type.toLowerCase() + " is not supported. Created a ModuleFigure instead.");
 			return new ModuleFigure(name, type);
 		}
 	}
