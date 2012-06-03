@@ -15,6 +15,13 @@ public class Mapping {
 		this.logicalPathType = logicalPathType;
 		this.violationTypes = violationTypes;
 	}
+	
+	public Mapping(String physicalPath, String[] violationTypes){
+		this.logicalPath = "";
+		this.physicalPath = physicalPath;
+		this.logicalPathType = "";
+		this.violationTypes = violationTypes;
+	}
 
 	public String getLogicalPath() {
 		return logicalPath;

@@ -8,10 +8,12 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
+import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -30,20 +32,13 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){
-			for(Mapping classPathTo : physicalClasspathsTo ){
-				DependencyDTO[] dependencies = analyseService.getDependenciesTo(classPathTo.getPhysicalPath());
-				DependencyDTO[] allowedDependencies = analyseService.getDependencies(classPathFrom.getPhysicalPath(),classPathTo.getPhysicalPath(), classPathTo.getViolationTypes());
-				for(DependencyDTO dependency: dependencies){
-					if(allowedDependencies.length != 0){
-						for(DependencyDTO allowedDependency: allowedDependencies){
-							if(dependency != allowedDependency){
-								Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-								violations.add(violation);
-							}
-						}
-					}
-					else{					
+		DependencyDTO[] dependencies = analyseService.getAllDependencies();	
+
+		for(Mapping classPathTo : physicalClasspathsTo){
+			for(DependencyDTO dependency : dependencies){
+				if(dependency.to.equals(classPathTo.getPhysicalPath()) && !containsMapping(mappings, dependency.from)){
+					if(Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0){
+						Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
 						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
 						violations.add(violation);						
 					}
@@ -51,5 +46,20 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 			}
 		}
 		return violations;
+	}
+	
+	private boolean containsMapping(Mappings mappings, String physicalPath){
+		for(Mapping mappingFrom : mappings.getMappingFrom()){
+			if(mappingFrom.getPhysicalPath().equals(physicalPath)){
+				return true;
+			}
+		}
+
+		for(Mapping mappingTo : mappings.getMappingTo()){
+			if(mappingTo.getPhysicalPath().equals(physicalPath)){
+				return true;
+			}
+		}
+		return false;
 	}
 }
