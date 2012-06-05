@@ -102,6 +102,24 @@ public class AppliedRuleController extends PopUpController {
 		keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
 	}
 	
+	public boolean hasSelectedRuleTypeHaveExceptions(){
+		boolean hasException = false;
+		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
+		
+		for (CategoryDTO categorie : categories){
+			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
+			//Get currently selected RuleType
+			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				if (ruleTypeDTO.key.equals(selectedRuleTypeKey)){
+					if (ruleTypeDTO.exceptionRuleTypes.length > 0){
+						hasException = true;
+					}
+				}
+			}
+		}
+		return hasException;
+	}
+	
 	public void fillRuleTypeComboBoxWithExceptions(KeyValueComboBox keyValueComboBoxAppliedRule) {
 		CategoryDTO[] categories = ServiceProvider.getInstance().getValidateService().getCategories();
 		
