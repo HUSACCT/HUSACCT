@@ -13,14 +13,14 @@ import husacct.common.services.ObservableService;
 //TODO Add implement-clause  ISavable when the savechain is fixed
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService{
 
-	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
+	private IAnalyseControlService service;
 	private AnalyseInternalFrame analyseInternalFrame;
 	private boolean isAnalysed;
 	
 	public AnalyseServiceImpl(){
+		this.service = new AnalyseControlerServiceImpl();
 		this.analyseInternalFrame = null;
 		this.isAnalysed = false;
-		service.reset();
 	}
 
 	@Override

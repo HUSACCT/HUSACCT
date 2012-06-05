@@ -10,7 +10,7 @@ import husaccttest.analyse.TestCaseExtended;
 public abstract class BenchmarkExtended extends TestCaseExtended{
 
 	public IAnalyseService service;
-	private static boolean isanalysed = false;
+	private static boolean isAnalysed = false;
 	
 	@Override
 	public void setUp(){
@@ -20,16 +20,14 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 
 		String path = TestProjectFinder.lookupProject("java", "benchmark");
 		String[] paths = new String[]{path};
-		defService.createApplication("Boobies Sanders Application", paths, "Java", "1.0");
+		defService.createApplication("Java Benchmark", paths, "Java", "1.0");
 		
 		service = provider.getAnalyseService();
-				
+		
 		try {
-			if(!isanalysed){
-				FamixCreationServiceImpl famix = new FamixCreationServiceImpl();
-				famix.clearModel();
+			if(!isAnalysed){
 				service.analyseApplication();
-				isanalysed = true;
+				isAnalysed = true;
 			}
 
 		} catch (Exception e){
