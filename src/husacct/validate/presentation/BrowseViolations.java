@@ -412,10 +412,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	private void clearViolationsTableModelRows() {
-		while (violationsTableModel.getRowCount() > 0) {
-			violationsTableModel.removeRow(0);
-			violationsTable.revalidate();
-		}
+		violationsTableModel.getDataVector().removeAllElements();
+		violationsTable.revalidate();
 	}
 
 	public ViolationHistory getSelectedViolationHistory() {
