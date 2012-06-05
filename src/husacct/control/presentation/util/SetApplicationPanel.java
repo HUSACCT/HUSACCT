@@ -59,7 +59,7 @@ public class SetApplicationPanel extends JPanel{
 		addButton = new JButton(controlService.getTranslatedString("AddButton"));
 		removeButton = new JButton(controlService.getTranslatedString("RemoveButton"));
 		
-		applicationNameText = new JTextField(20);
+		applicationNameText = new JTextField("myApplication", 20);
 		languageSelect = new JComboBox(languages);
 		versionText = new JTextField(10);
 		
@@ -179,7 +179,7 @@ public class SetApplicationPanel extends JPanel{
 			errorMessage = controlService.getTranslatedString("FieldEmptyError");
 			showError = true;
 		}
-		if (!Regex.matchRegex(Regex.nameRegex, applicationNameText.getText())) {
+		if (!Regex.matchRegex(Regex.nameWithSpacesRegex, applicationNameText.getText())) {
 			errorMessage = controlService.getTranslatedString("MustBeAlphaNumericError");
 			showError = true;
 		}

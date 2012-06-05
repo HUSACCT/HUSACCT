@@ -7,6 +7,7 @@ public class Regex {
 	
 	
 	public static String nameRegex = "^[a-zA-Z0-9-_]*$";
+	public static String nameWithSpacesRegex = "^[a-zA-Z0-9-_ ]*$";
 	public static String filenameRegex = "^[a-zA-Z0-9-_]+\\.?[a-zA-Z0-9]+$";
 	
 	public static boolean matchRegex(String regex, String value){
