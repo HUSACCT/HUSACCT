@@ -151,7 +151,9 @@ public class JavaParameterGenerator extends JavaGenerator {
 			ArrayList<String> types = (ArrayList<String>) currentParam.get(2);
 			this.uniqueName = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")." + name;
 			String belongsToMethodToPassThrough = this.belongsToClass + "." + this.belongsToMethod + "(" + this.signature + ")";
-			modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
+			if(!SkippedTypes.isSkippable(type)){
+				modelService.createParameter(name, uniqueName, type, belongsToClass, lineNumber, belongsToMethodToPassThrough, types);
+			}
 		}
 	}
 
