@@ -21,6 +21,10 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 		this.exportController = new DependencyExportController();
 	}
 	
+	public void reset(){
+		domainService.clearModel();
+	}
+	
 	@Override
 	public void analyseApplication() {
 		if(isAnalysed) domainService.clearModel();

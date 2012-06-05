@@ -6,7 +6,9 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 
 public interface IAnalyseControlService {
-		
+	
+	public void reset();
+	
 	public void analyseApplication();
 	public String[] getAvailableLanguages();
 	
