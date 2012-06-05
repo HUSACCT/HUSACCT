@@ -9,6 +9,7 @@ import husaccttest.analyse.TestCaseExtended;
 public abstract class RecognationExtended extends TestCaseExtended{
 
 	public IAnalyseService service;
+	private static boolean isAnalysed = false;
 	
 	@Override
 	public void setUp(){
@@ -23,8 +24,9 @@ public abstract class RecognationExtended extends TestCaseExtended{
 		service = provider.getAnalyseService();
 				
 		try {
-			if(!service.isAnalysed()){
+			if(!isAnalysed){
 				service.analyseApplication();
+				isAnalysed = true;
 			}
 
 		} catch (Exception e){
