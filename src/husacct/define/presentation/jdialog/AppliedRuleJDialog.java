@@ -221,6 +221,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	public void update(Observable arg0, Object arg1) {
 		updateDetails();
 		updateExceptionTable();
+		setButtonEnableState();
 	}
 	
 	private void updateDetails() {
@@ -355,5 +356,25 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 
 	public void keyTyped(KeyEvent arg0) {
 		// Ignore
+	}
+	
+	public void setButtonEnableState() {
+		//TODO set keyListener to all fields
+//		if (ruleDetailsJPanel.hasValidData()){
+//			this.jButtonSave.setEnabled(true);
+//			this.jButtonCancel.setEnabled(true);
+			if (appliedRuleController.hasSelectedRuleTypeHaveExceptions()){
+				this.jButtonAddExceptionRow.setEnabled(true);
+				this.jButtonRemoveExceptionRow.setEnabled(true);
+			} else {
+				this.jButtonAddExceptionRow.setEnabled(false);
+				this.jButtonRemoveExceptionRow.setEnabled(false);
+			}
+//		} else {
+//			this.jButtonSave.setEnabled(false);
+//			this.jButtonCancel.setEnabled(false);
+//			this.jButtonAddExceptionRow.setEnabled(false);
+//			this.jButtonRemoveExceptionRow.setEnabled(false);
+//		}
 	}
 }
