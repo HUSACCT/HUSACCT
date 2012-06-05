@@ -132,6 +132,8 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	
 	private void createMethodObject(){
 		uniqueName = belongsToClass + "." + this.name + signature;
-		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		if(!SkippedTypes.isSkippable(declaredReturnType)){
+			modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		}
 	}	
 }

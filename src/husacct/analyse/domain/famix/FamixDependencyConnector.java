@@ -1,5 +1,7 @@
 package husacct.analyse.domain.famix;
 
+import husacct.common.dto.AnalysedModuleDTO;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,8 +22,11 @@ class FamixDependencyConnector {
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
+	private FamixModuleFinder moduleFinder;
+	
 	public FamixDependencyConnector(){
 		theModel = FamixModel.getInstance();
+		this.moduleFinder = new FamixModuleFinder(theModel);
 	}
 	
 	void connectStructuralDependecies() {
@@ -91,7 +96,7 @@ class FamixDependencyConnector {
 					}
 				}				
 				if(association.to.equals("") || association.to == null){
-					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
+//					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
 				} else {
 					determineType(association);
 					addToModel(association);
@@ -101,6 +106,10 @@ class FamixDependencyConnector {
 			}
 		}
 	}	
+	
+	private boolean isExternalModule(String uniqueName){
+		return getClassForUniqueName(uniqueName) != null || getInterfaceForUniqueName(uniqueName) != null;
+	}
 		
 	private void determineType(FamixAssociation association){
 		String type = association.type;

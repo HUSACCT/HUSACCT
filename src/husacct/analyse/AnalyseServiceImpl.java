@@ -10,12 +10,18 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 
-public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable{
+//TODO Add implement-clause  ISavable when the savechain is fixed
+public class AnalyseServiceImpl extends ObservableService implements IAnalyseService{
 
-	private IAnalyseControlService service = new AnalyseControlerServiceImpl();
+	private IAnalyseControlService service;
 	private AnalyseInternalFrame analyseInternalFrame;
-	private boolean isAnalysed = false;
-
+	private boolean isAnalysed;
+	
+	public AnalyseServiceImpl(){
+		this.service = new AnalyseControlerServiceImpl();
+		this.analyseInternalFrame = null;
+		this.isAnalysed = false;
+	}
 
 	@Override
 	public String[] getAvailableLanguages() {
@@ -102,15 +108,15 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return service.getDependenciesTo(to, dependencyFilter);
 	}
 
-	@Override
-	public Element getWorkspaceData() {
-		return service.saveModel();
-	}
-
-	@Override
-	public void loadWorkspaceData(Element workspaceData) {
-		//TODO Uncomment the following line to make the loading of work working. This was excluded
-		// in the first delivery, due to memory problems in combination with coming deadlines and demo's.
+//	@Override
+//	public Element getWorkspaceData() {
+//		return service.saveModel();
+//	}
+//
+//	@Override
+//	public void loadWorkspaceData(Element workspaceData) {
+//		//TODO Uncomment the following line to make the loading of work working. This was excluded
+//		// in the first delivery, due to memory problems in combination with coming deadlines and demo's.
 //		service.loadModel(workspaceData);
-	}
+//	}
 }
