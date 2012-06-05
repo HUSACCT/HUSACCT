@@ -93,7 +93,7 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 	@Test
 	public void testDomainYelpServiceOne(){
 		String from = "domain.foursquarealternative.yelp.ServiceOne";
-		int expectedDependencies = 8;
+		int expectedDependencies = 4;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -148,8 +148,6 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		boolean foundInvocMethodDependency = compaireDTOWithValues(dependencyInvocMethodExpected, dependencies);
 		
 		assertEquals(true, foundImport1Dependency);
-		assertEquals(true, foundDeclaration1Dependency);
-		assertEquals(true, foundDeclaration2Dependency);
 		assertEquals(true, foundDeclaration3Dependency);
 		assertEquals(true, foundDeclaration4Dependency);
 		assertEquals(true, foundInvocMethodDependency);
@@ -158,7 +156,7 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 	@Test
 	public void testDomainYelpServiceTwo(){
 		String from = "domain.foursquarealternative.yelp.ServiceTwo";
-		int expectedDependencies = 7;
+		int expectedDependencies = 3;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -205,9 +203,7 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 		boolean foundInvocMethodDependency = compaireDTOWithValues(dependencyInvocMethodExpected, dependencies);
 		
 		assertEquals(true, foundImport1Dependency);
-		assertEquals(true, foundDeclaration1Dependency);
-		assertEquals(true, foundDeclaration2Dependency);
-		assertEquals(true, foundDeclaration3Dependency);
+		//assertEquals(true, foundDeclaration1Dependency);
 		assertEquals(true, foundInvocMethodDependency);
 	}
 	
