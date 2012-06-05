@@ -69,12 +69,12 @@ We are trying to build support for the following **rule types**:
 - Subclass convention
 - Interface convention
 - Is allowed to use
-					- Is only allowed to use
-					- Is the only module allowed to use
-					- Must use
+	- Is only allowed to use
+	- Is the only module allowed to use
+	- Must use
 - Is not allowed to
-					- use modules in a higher layer
-					- use modules in a not directly lower layer
+	- use modules in a higher layer
+	- use modules in a not directly lower layer
 - Exceptions to all those rules
 
 Also we will try to support the following **violation types**:
@@ -93,9 +93,20 @@ Also we will try to support the following **violation types**:
 
 The architecture should allow for expansions to support more languages and rule types.
 
+## Plugins
+
 ### Eclipse IDE
 
-We are also working on making this an [Eclipse](http://www.eclipse.org/) plugin.
+We have also made this an [Eclipse](http://www.eclipse.org/) plugin. ([Eclipse plugin repository](https://github.com/HUSACCT/HUSACCT-Plugin))
+
+### Maven
+
+We have also made this a [Maven](http://maven.apache.org/) plugin. ([Maven plugin repository](https://github.com/HUSACCT/HUSACCT-Maven))
+
+## Testing
+
+There are JUnit tests available in this repository, but we also manually test this application.  
+For testing we use the [Java benchmark](https://github.com/HUSACCT/HUSACCT-BenchmarkApplication) application, the [C# benchmark](https://github.com/HUSACCT/HUSACCT-CsharpBenchmarkApplication) application, the [Recognition test repository](https://github.com/HUSACCT/HUSACCT-RecognitionTest) and this project itself.
 
 ## Build team
 
