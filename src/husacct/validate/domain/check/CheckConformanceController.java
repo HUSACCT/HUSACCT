@@ -13,7 +13,6 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +44,9 @@ public class CheckConformanceController {
 			
 			for(RuleDTO appliedRule : appliedRules){
 				try{
-					Calendar calendar1 = Calendar.getInstance();
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
 					violationList.addAll(newViolations);
-					
-					Calendar calendar2 = Calendar.getInstance();
-					System.out.println(calendar2.getTime().getTime() - calendar1.getTime().getTime());
 
 					if(appliedRule.exceptionRules != null){
 						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
