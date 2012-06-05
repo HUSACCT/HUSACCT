@@ -55,8 +55,8 @@ public class XMLDomain {
 	    		}
 	    	}
 	    }
-	    
-	    String[] strArray = new String[ApplicationPaths.size() - 1];
+	    int size = (ApplicationPaths.size() > 0) ? ApplicationPaths.size() - 1 : 0;
+	    String[] strArray = new String[size];
 	    Application XMLAp = new Application(ApName.getText(), ApplicationPaths.toArray(strArray), ApLanguage.getText(), ApVersion.getText());
 	    XMLAp.setArchitecture( this.getArchitecture() );
     
