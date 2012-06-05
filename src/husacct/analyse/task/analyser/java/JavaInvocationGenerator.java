@@ -61,7 +61,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 
 	private void createConstructorInvocationDomainObject(){
-		if(SkippedTypes.isSkippable(to)){
+		if(!SkippedTypes.isSkippable(to)){
 			modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 		}
 	}
