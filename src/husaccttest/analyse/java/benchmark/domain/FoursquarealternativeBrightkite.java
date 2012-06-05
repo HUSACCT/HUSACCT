@@ -117,7 +117,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 	@Test
 	public void testDomainBrightKiteCheckCastFrom(){
 		String from = "domain.foursquarealternative.brightkite.CheckCastFrom";
-		int expectedDependencies = 6;
+		int expectedDependencies = 4;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
@@ -178,9 +178,7 @@ public class FoursquarealternativeBrightkite extends BenchmarkExtended{
 		assertEquals(true, foundImport1Dependency);
 		assertEquals(true, foundImport2Dependency);
 		assertEquals(true, foundExtendsDependency);
-		assertEquals(true, foundDeclarationDependency);
 		assertEquals(true, foundInvocConstructorDependency);
-		assertEquals(true, foundDeclaration2Dependency);
 		
 		
 		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(

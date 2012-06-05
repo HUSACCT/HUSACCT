@@ -16,7 +16,7 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 	@Test
 	public void testDomainKilroyCheckCastFrom(){
 		String from = "domain.foursquarealternative.kilroy.CheckCastFrom";
-		int expectedDependencies = 6;
+		int expectedDependencies = 4;
 		
 		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		assertEquals(expectedDependencies, dependencies.length);
@@ -68,8 +68,6 @@ public class FoursquarealternativeKilroy extends BenchmarkExtended{
 		assertEquals(true, foundImport1Dependency);
 		assertEquals(true, foundImport2Dependency);
 		assertEquals(true, foundExtendsDependency);
-		assertEquals(true, foundDeclaration2Dependency);
-		assertEquals(true, foundDeclaration1Dependency);
 		assertEquals(true, foundInvocConstructorDependency);
 		
 		HashMap<String, Object> indirectImportExpected = createDependencyHashmap(
