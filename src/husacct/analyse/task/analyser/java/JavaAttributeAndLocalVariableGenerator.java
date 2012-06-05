@@ -77,13 +77,17 @@ class JavaAttributeAndLocalVariableGenerator {
 
 	private void createAttributeObject(){
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
+		if(!SkippedTypes.isSkippable(declareType)){
+			modelService.createAttribute(classScope, AccesControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
+		}
 		declareType = "";
 	}
 	
 	private void createLocalVariableObject() {
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1); //deleting the last point
-		modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+		if(!SkippedTypes.isSkippable(declareType)){
+			modelService.createLocalVariable(belongsToClass, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
+		}
 		declareType = "";
 	}
 

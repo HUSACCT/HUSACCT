@@ -13,7 +13,6 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator{
 	public void generateToDomain(CommonTree tree, String belongsToClass) {
 		from = belongsToClass;
 		createImplementsDetails(tree);
-		createDomainObject();
 	}
 
 	private void createImplementsDetails(Tree tree) {
@@ -24,14 +23,20 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator{
 				}
 				if(tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
 					to += tree.getChild(i).getText() + ".";
+					createDomainObject();
 				}
+				this.to = "";
 				createImplementsDetails(tree.getChild(i));
 			}
 		}
 	}
 	
 	private void createDomainObject() {
+		System.out.println("\n\nFrom " + from + " - To: " + to + ", Line: " + lineNumber);
 		to = to.substring(0, to.length() -1); //delete last point
-		modelService.createImplementsDefinition(from, to, lineNumber);
+		System.out.println("From " + from + " - To: " + to + ", Line: " + lineNumber);
+		if(!SkippedTypes.isSkippable(to)){
+			modelService.createImplementsDefinition(from, to, lineNumber);
+		}
 	}
 }
