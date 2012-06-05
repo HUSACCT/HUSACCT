@@ -8,7 +8,7 @@ public class BuildLauncher {
 	
 	private String initialHeapSize = "64m";
 	private String maxHeapSize = "256m";
-	private String jarFile = "build/jar/HUSACCT.jar";
+	private String jarFile = "HUSACCT.jar";
 	
 	private String outputString;
 	
