@@ -48,8 +48,9 @@ public class HTMLReportWriter extends ReportWriter {
 		
 		File jqueryJSOutput = new File(javascriptDir + "/jquery-1.7.2.min.js");
 		File dataTableJSOutput = new File(javascriptDir + "/jquery.dataTables.js");
-		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/validate/task/report/resources/jquery-1.7.2.min.js"), jqueryJSOutput);
-		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/validate/task/report/resources/jquery.dataTables.js"), dataTableJSOutput);
+		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/jquery-1.7.2.min.js"), jqueryJSOutput);
+		
+		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/jquery.dataTables.js"), dataTableJSOutput);
 
 		File imageold = new File(report.getImagePath());
 		FileInputStream fis = new FileInputStream(imageold);
@@ -60,7 +61,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File cssDir = new File(resourcesDir + "/css");
 		cssDir.mkdir();
-		InputStream cssResource = getClass().getClassLoader().getResourceAsStream("husacct/validate/task/report/resources/style.css");
+		InputStream cssResource = getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/style.css");
 		File cssDestination = new File(cssDir + "/style.css");
 		copyfile(cssResource, cssDestination);
 	}
