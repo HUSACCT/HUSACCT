@@ -13,7 +13,6 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 	private ApplicationAnalyser analyserService; 
 	private IAnalyseDomainService domainService;
 	private DependencyExportController exportController;
-	private boolean isAnalysed = false;
 	
 	public AnalyseControlerServiceImpl(){
 		this.domainService = new AnalyseDomainServiceImpl();
@@ -21,11 +20,14 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 		this.exportController = new DependencyExportController();
 	}
 	
+	public void reset(){
+		domainService.clearModel();
+	}
+	
 	@Override
 	public void analyseApplication() {
-		if(isAnalysed) domainService.clearModel();
+		domainService.clearModel();
 		analyserService.analyseApplication();
-		isAnalysed = true;
 	}
 	
 	@Override

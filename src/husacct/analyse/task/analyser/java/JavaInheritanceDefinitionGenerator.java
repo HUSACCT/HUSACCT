@@ -18,7 +18,9 @@ public class JavaInheritanceDefinitionGenerator extends JavaGenerator{
 
 	private void createDomainObject() {
 		to = to.substring(0, to.length() -1); //delete last point
-		modelService.createInheritanceDefinition(from, to, lineNumber);
+		if(!SkippedTypes.isSkippable(to)){
+			modelService.createInheritanceDefinition(from, to, lineNumber);
+		}
 	}
 
 	private void createInheritanceDefinitionDetails(Tree tree) {

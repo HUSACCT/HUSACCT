@@ -61,7 +61,9 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 
 	private void createConstructorInvocationDomainObject(){
-		modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		if(!SkippedTypes.isSkippable(to)){
+			modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+		}
 	}
 
 	public void generateMethodInvocToDomain(CommonTree treeNode, String belongsToMethod) {
@@ -117,7 +119,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 	
 	private void createMethodInvocationDomainObject() {
-		if (to != null && to != ""){
+		if (to != null && to != "" && !SkippedTypes.isSkippable(to)){
 			modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 		}
 	}
@@ -208,7 +210,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	}
 
 	private void createPropertyOrFieldInvocationDomainObject() {	
-		if (to != null && to != ""){
+		if (to != null && to != "" && !SkippedTypes.isSkippable(to)){
 			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 		}
 	}

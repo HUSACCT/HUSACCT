@@ -13,18 +13,25 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator{
 	public void generateToDomain(CommonTree tree, String belongsToClass) {
 		from = belongsToClass;
 		createImplementsDetails(tree);
-		createDomainObject();
 	}
 
 	private void createImplementsDetails(Tree tree) {
 		if (tree != null) {
 			for (int i = 0; i < tree.getChildCount(); i++) {
+				Tree child = tree.getChild(i);
+				int treeType = child.getType();	
 				if(tree.getType() == JavaParser.IMPLEMENTS_CLAUSE){
 					lineNumber = tree.getLine();
 				}
-				if(tree.getType() == JavaParser.QUALIFIED_TYPE_IDENT ){
-					to += tree.getChild(i).getText() + ".";
+				if(treeType == JavaParser.QUALIFIED_TYPE_IDENT ){
+					for (int childCount = 0; childCount <child.getChildCount(); childCount++){
+						to += child.getChild(childCount).getText() + ".";
+					}
+
+					createDomainObject();
+					deleteTreeChild(child);
 				}
+				this.to = "";
 				createImplementsDetails(tree.getChild(i));
 			}
 		}
@@ -32,6 +39,14 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator{
 	
 	private void createDomainObject() {
 		to = to.substring(0, to.length() -1); //delete last point
-		modelService.createImplementsDefinition(from, to, lineNumber);
+		if(!SkippedTypes.isSkippable(to)){
+			modelService.createImplementsDefinition(from, to, lineNumber);
+		}
 	}
+	
+	private void deleteTreeChild(Tree treeNode){ 
+		for (int child = 0 ; child < treeNode.getChildCount();){ 
+			treeNode.deleteChild(treeNode.getChild(child).getChildIndex()); 
+		} 
+	} 
 }
