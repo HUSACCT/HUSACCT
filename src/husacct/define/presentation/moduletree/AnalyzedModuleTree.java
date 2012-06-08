@@ -17,6 +17,6 @@ public class AnalyzedModuleTree extends JTree {
 	}
 	
 	public void setDefaultSettings() {
-		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		this.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 	}
 }
