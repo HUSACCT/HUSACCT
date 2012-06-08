@@ -42,8 +42,8 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File javascriptDir = new File(resourcesDir + "/js");
 		javascriptDir.mkdir();
-		File jqueryJSResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/jquery-1.7.2.min.js").toURI());
-		File dataTableJSResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/jquery.dataTables.js").toURI());
+		File jqueryJSResource = new File(getClass().getClassLoader().getResource("husacct/validate/task/report/resources/jquery-1.7.2.min.js").toURI());
+		File dataTableJSResource = new File(getClass().getClassLoader().getResource("husacct/validate/task/report/resources/jquery.dataTables.js").toURI());
 		File jqueryJSOutput = new File(javascriptDir + "/jquery-1.7.2.min.js");
 		File dataTableJSOutput = new File(javascriptDir + "/jquery.dataTables.js");
 		copyfile(jqueryJSResource, jqueryJSOutput);
@@ -56,7 +56,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File cssDir = new File(resourcesDir + "/css");
 		cssDir.mkdir();
-		File cssResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/style.css").toURI());
+		File cssResource = new File(getClass().getClassLoader().getResource("husacct/validate/task/report/resources/style.css").toURI());
 		File cssDestination = new File(cssDir + "/style.css");
 		copyfile(cssResource, cssDestination);
 	}
