@@ -3,7 +3,6 @@ package husacct.validate.task.report;
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.exception.ReportException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.report.Report;
@@ -18,6 +17,8 @@ import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.AbstractMap.SimpleEntry;
+
+import org.apache.log4j.Logger;
 
 import com.itextpdf.text.DocumentException;
 
@@ -54,6 +55,6 @@ public class ExportReportFactory {
 	}
 
 	private void createException(Exception exception){
-		throw new ReportException(exception.getMessage(), exception);
+		Logger.getLogger(ExportReportFactory.class).debug(exception);
 	}
 }
