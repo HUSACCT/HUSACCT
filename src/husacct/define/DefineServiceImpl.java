@@ -73,9 +73,14 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public ModuleDTO[] getChildrenFromModule(String logicalPath) {
-		Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
-		ModuleDTO moduleDTO = domainParser.parseModule(module);
-		ModuleDTO[] childModuleDTOs = moduleDTO.subModules;
+		ModuleDTO[] childModuleDTOs;
+		if (logicalPath.equals("**")){
+			childModuleDTOs = getRootModules();
+		} else {
+			Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
+			ModuleDTO moduleDTO = domainParser.parseModule(module);
+			childModuleDTOs = moduleDTO.subModules;			
+		}
 		
 		//Removing nested childs
 		for (ModuleDTO modDTO : childModuleDTOs){
