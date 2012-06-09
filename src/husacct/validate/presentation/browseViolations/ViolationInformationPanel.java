@@ -1,8 +1,8 @@
 package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
-import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.task.TaskServiceImpl;
 
 import java.util.List;
 
@@ -19,10 +19,12 @@ public class ViolationInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 8505333261388149299L;
 
+	private final TaskServiceImpl task;
 	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
 	detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 
-	public ViolationInformationPanel() {
+	public ViolationInformationPanel(TaskServiceImpl task) {
+		this.task = task;
 		createBaseLayout();
 	}
 
@@ -101,7 +103,7 @@ public class ViolationInformationPanel extends JPanel {
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
-			String message = new Messagebuilder().createMessage(violation.getMessage());
+			String message = task.getMessage(violation.getMessage());
 			detailMessageLabelValue.setText(message);
 		} else {
 			detailLineNumberLabelValue.setText("");
