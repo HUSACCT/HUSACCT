@@ -6,6 +6,7 @@ import husacct.validate.domain.validation.iternal_tranfer_objects.ViolationsPerS
 import husacct.validate.domain.validation.report.Report;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,7 +18,8 @@ import java.net.URISyntaxException;
 
 public class HTMLReportWriter extends ReportWriter {
 
-	private FileWriter html;
+	private FileWriter writer;
+	private BufferedWriter html;
 
 	public HTMLReportWriter(Report report, String path, String fileName) throws IOException {
 		super(report, path, fileName, ExtensionType.HTML);
@@ -27,7 +29,8 @@ public class HTMLReportWriter extends ReportWriter {
 	public void createReport() throws IOException, URISyntaxException  {
 		checkDirsExist();
 		createResources();
-		html = new FileWriter(getFileName());
+		writer = new FileWriter(getFileName());
+		html = new BufferedWriter(writer);
 		html.append("<html>");
 		createStatics();
 		createBody();
@@ -42,21 +45,23 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File javascriptDir = new File(resourcesDir + "/js");
 		javascriptDir.mkdir();
-		File jqueryJSResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/jquery-1.7.2.min.js").toURI());
-		File dataTableJSResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/jquery.dataTables.js").toURI());
+		
 		File jqueryJSOutput = new File(javascriptDir + "/jquery-1.7.2.min.js");
 		File dataTableJSOutput = new File(javascriptDir + "/jquery.dataTables.js");
-		copyfile(jqueryJSResource, jqueryJSOutput);
-		copyfile(dataTableJSResource, dataTableJSOutput);
+		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/jquery-1.7.2.min.js"), jqueryJSOutput);
+		
+		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/jquery.dataTables.js"), dataTableJSOutput);
 
 		File imageold = new File(report.getImagePath());
+		FileInputStream fis = new FileInputStream(imageold);
 		File imagenew = new File(resourcesDir + "/image.png");
-		copyfile(imageold, imagenew);
+		copyfile(fis, imagenew);
+		fis.close();
 		imageold.delete();
 
 		File cssDir = new File(resourcesDir + "/css");
 		cssDir.mkdir();
-		File cssResource = new File(ClassLoader.getSystemResource("husacct/validate/task/report/resources/style.css").toURI());
+		InputStream cssResource = getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/style.css");
 		File cssDestination = new File(cssDir + "/style.css");
 		copyfile(cssResource, cssDestination);
 	}
@@ -177,15 +182,14 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</td>");
 	}
 
-	private void copyfile(File source, File destination) throws IOException{
-		InputStream in = new FileInputStream(source);
+	private void copyfile(InputStream inputStream, File destination) throws IOException{
 		OutputStream out = new FileOutputStream(destination);
 		byte[] buf = new byte[1024];
 		int len;
-		while ((len = in.read(buf)) > 0){
+		while ((len = inputStream.read(buf)) > 0){
 			out.write(buf, 0, len);
 		}
-		in.close();
+		inputStream.close();
 		out.close();
 	}
 }
