@@ -2,12 +2,10 @@ package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.TaskServiceImpl;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;

@@ -23,7 +23,6 @@ public abstract class AbstractViolationType {
 	private Logger logger = Logger.getLogger(AbstractViolationType.class);
 	private final ConfigurationServiceImpl configuration;
 	protected List<CategoryKeySeverityDTO> allViolationKeys;
-	protected ViolationtypeGenerator generator;
 	protected String languageName;
 
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
@@ -33,7 +32,7 @@ public abstract class AbstractViolationType {
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName){
 		this.configuration = configuration;
 		this.languageName = languageName;
-		this.generator = new ViolationtypeGenerator();		
+		ViolationtypeGenerator generator = new ViolationtypeGenerator();		
 		this.allViolationKeys = generator.getAllViolationTypes(createViolationTypesMetaData());
 	}
 

@@ -9,14 +9,12 @@ import husacct.common.services.ObservableService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
-import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.GuiController;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.swing.JInternalFrame;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -117,19 +115,8 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	}
 
 	@Override
-	public List<Violation> getHistoryViolationsByDate(Calendar date) {
-		return task.getHistoryViolations(date);
-	}
-
-	@Override
 	public Calendar[] getViolationHistoryDates() {
 		return task.getViolationHistoryDates();
-	}
-
-	@Override
-	public void createHistoryPoint(String description) {
-		task.createHistoryPoint(description);	
-		notifyServiceListeners();
 	}
 
 	@Override

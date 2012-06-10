@@ -63,12 +63,6 @@ public class ValidateServiceStub implements IValidateService {
 	}
 
 	@Override
-	public List<Violation> getHistoryViolationsByDate(Calendar date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void exportViolations(File file, String fileType, Calendar date) {
 		// TODO Auto-generated method stub
 
@@ -97,11 +91,4 @@ public class ValidateServiceStub implements IValidateService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void createHistoryPoint(String description) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

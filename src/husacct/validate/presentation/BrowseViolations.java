@@ -84,7 +84,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		rightSidePane = new JPanel();
 		filterPane = new FilterPanel(this, taskServiceImpl);
 		violationsTableScrollPane = new JScrollPane();
-		violationInformationPanel = new ViolationInformationPanel();
+		violationInformationPanel = new ViolationInformationPanel(taskServiceImpl);
 		informationScrollPane = new JScrollPane(violationInformationPanel);
 		statisticsScrollPane = new JScrollPane();
 		statisticsPanel = new StatisticsPanel();

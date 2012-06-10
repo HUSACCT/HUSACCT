@@ -5,9 +5,11 @@ import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.assembler.AssemblerController;
 import husacct.validate.domain.check.CheckConformanceController;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
+import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
@@ -23,6 +25,7 @@ public class DomainServiceImpl {
 
 	private RuleTypesFactory ruletypefactory;
 	private ViolationTypeFactory violationtypefactory;
+	private final Messagebuilder messagebuilder;
 	private final CheckConformanceController checkConformanceController;
 	private final ConfigurationServiceImpl configuration;
 
@@ -30,6 +33,7 @@ public class DomainServiceImpl {
 		this.configuration = configuration;
 		this.ruletypefactory = configuration.getRuleTypesFactory();
 		this.checkConformanceController = new CheckConformanceController(configuration, ruletypefactory);
+		this.messagebuilder = new Messagebuilder();
 	}
 
 	public HashMap<String, List<RuleType>> getAllRuleTypes(String programmingLanguage){
@@ -71,5 +75,9 @@ public class DomainServiceImpl {
 
 	public RuleTypesFactory getRuleTypesFactory(){
 		return ruletypefactory;
+	}
+
+	public String getMessage(Message message) {
+		return messagebuilder.createMessage(message);
 	}
 }

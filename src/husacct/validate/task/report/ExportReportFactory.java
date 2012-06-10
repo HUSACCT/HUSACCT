@@ -15,9 +15,9 @@ import husacct.validate.task.report.writer.XMLReportWriter;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.List;
-import java.util.AbstractMap.SimpleEntry;
 
 import com.itextpdf.text.DocumentException;
 
