@@ -8,7 +8,6 @@ import husacct.validate.domain.validation.violationtype.IViolationType;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 
 class CSharpViolationTypeFactory extends AbstractViolationType {
@@ -16,7 +15,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	private final EnumSet<CSharpViolationTypes> defaultAccess;
 	private final EnumSet<CSharpViolationTypes> defaultPackaging;
 
-	public CSharpViolationTypeFactory(ConfigurationServiceImpl configuration){
+	CSharpViolationTypeFactory(ConfigurationServiceImpl configuration){
 		super(configuration, "C#");
 		this.defaultDependencies = EnumSet.allOf(CSharpViolationTypes.class);
 		this.defaultAccess = EnumSet.of(CSharpViolationTypes.PUBLIC, CSharpViolationTypes.PROTECTED, CSharpViolationTypes.DEFAULT, CSharpViolationTypes.PRIVATE);
@@ -50,10 +49,5 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	@Override
 	List<IViolationType> createViolationTypesMetaData(){
 		return Arrays.asList(EnumSet.allOf(CSharpViolationTypes.class).toArray(new IViolationType[]{}));
-	}
-
-	@Override
-	public HashMap<String, List<ViolationType>> getAllViolationTypes(){		
-		return getAllViolationTypes(allViolationKeys);
 	}
 }

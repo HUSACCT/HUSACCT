@@ -26,7 +26,6 @@ public abstract class AbstractViolationType {
 	protected String languageName;
 
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
-	public abstract HashMap<String, List<ViolationType>> getAllViolationTypes();
 	abstract List<IViolationType> createViolationTypesMetaData();
 
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName){
@@ -43,6 +42,10 @@ public abstract class AbstractViolationType {
 			violationtypes.add(violationtype);
 		}
 		return violationtypes;
+	}
+	
+	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
+		return getAllViolationTypes(allViolationKeys);
 	}
 
 	protected HashMap<String, List<ViolationType>> getAllViolationTypes(List<CategoryKeySeverityDTO> keyList){
