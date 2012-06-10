@@ -78,7 +78,6 @@ public class DomainServiceImpl {
 	}
 
 	public String getMessage(Message message) {
-		// TODO Auto-generated method stub
-		return null;
+		return messagebuilder.createMessage(message);
 	}
 }
