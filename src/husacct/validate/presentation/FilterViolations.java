@@ -3,7 +3,7 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.validate.domain.validation.iternal_tranfer_objects.PathDTO;
+import husacct.validate.domain.validation.iternal_transfer_objects.PathDTO;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 
