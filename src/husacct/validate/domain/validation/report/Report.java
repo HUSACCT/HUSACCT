@@ -96,6 +96,5 @@ public class Report {
 
 	public void setViolations(SimpleEntry<Calendar, List<Violation>> violations) {
 		this.violations = violations;
-	}
-	
+	}	
 }

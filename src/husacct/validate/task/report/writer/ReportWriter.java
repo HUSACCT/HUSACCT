@@ -36,7 +36,6 @@ public abstract class ReportWriter {
 		}
 	}
 
-
 	protected String getDependencyKindValue(String violationtypeKey,
 			boolean indirect) {
 		if(!violationtypeKey.isEmpty()) {
