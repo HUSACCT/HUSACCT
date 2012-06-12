@@ -39,8 +39,10 @@ public class MustUseRule extends RuleType{
 		for(Mapping classPathFrom : physicalClasspathsFrom){			
 			for(Mapping classPathTo : physicalClasspathsTo){				
 				for(DependencyDTO dependency : dependencies){
-					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
-						dependencyCounter++;
+					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath())){
+						if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+							dependencyCounter++;
+						}
 					}
 				}				
 			}
