@@ -9,7 +9,7 @@ import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
+import husacct.validate.domain.validation.iternal_transfer_objects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -44,10 +44,12 @@ public class NamingConventionRule extends RuleType {
 
 		this.mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		
+		final String regex = Regex.makeRegexString(currentRule.regex);
+		
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom){
-
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
-			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name) && analysedModule.type.toLowerCase().equals("package")){
+			if(!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")){
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
@@ -61,10 +63,11 @@ public class NamingConventionRule extends RuleType {
 		this.mappings = CheckConformanceUtilClass.filterClasses(currentRule);
 		this.physicalClasspathsFrom = mappings.getMappingFrom();
 
+		final String regex = Regex.makeRegexString(currentRule.regex);
+		
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
-
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
-			if(!Regex.matchRegex(Regex.makeRegexString(currentRule.regex),analysedModule.name) && analysedModule.type.toLowerCase().equals("class")){
+			if(!Regex.matchRegex(regex,analysedModule.name) && analysedModule.type.toLowerCase().equals("class")){
 				Violation violation = createViolation(rootRule, physicalClasspathFrom , configuration);
 				violations.add(violation);
 			}

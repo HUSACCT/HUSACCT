@@ -1,5 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
+import java.util.ArrayList;
+
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -14,7 +16,7 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	private String accessControlQualifier = "package-private";
 
 	private boolean isPureAccessor;
-	private String declaredReturnType;
+	private ArrayList<String> declaredReturnType;
 
 	private String signature = "";
 	public String name;
@@ -35,14 +37,15 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	}
 	
 	private void checkMethodType(CommonTree methodTree) {
+		declaredReturnType = new ArrayList<String>();
 		if (methodTree.getType() == JavaParser.CONSTRUCTOR_DECL){ 
-			declaredReturnType = "";
+			declaredReturnType.add("");
 			isConstructor = true;
 			name = getClassOfUniqueName(belongsToClass);
 			
 		}
 		else if(methodTree.getType() == JavaParser.VOID_METHOD_DECL){
-			declaredReturnType = "";
+			declaredReturnType.add("");
 			isConstructor = false;
 		}
 		else if(methodTree.getType() == JavaParser.FUNCTION_METHOD_DECL){
@@ -132,8 +135,16 @@ class JavaMethodGeneratorController extends JavaGenerator{
 	
 	private void createMethodObject(){
 		uniqueName = belongsToClass + "." + this.name + signature;
-		if(!SkippedTypes.isSkippable(declaredReturnType)){
-			modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnType, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		ArrayList<String> returnTypes = new ArrayList<String>();
+		for(String s : declaredReturnType){
+			if(!SkippedTypes.isSkippable(s)){
+				returnTypes.add(s);
+			}
 		}
+		
+			
+		//if(!SkippedTypes.isSkippable(declaredReturnType)){
+			modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+		//}
 	}	
 }

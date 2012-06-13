@@ -1,8 +1,8 @@
 package husacct.validate.presentation.browseViolations;
 
 import husacct.ServiceProvider;
-import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.task.TaskServiceImpl;
 
 import java.util.List;
 
@@ -19,10 +19,12 @@ public class ViolationInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 8505333261388149299L;
 
+	private final TaskServiceImpl task;
 	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
-					detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
+	detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 
-	public ViolationInformationPanel() {
+	public ViolationInformationPanel(TaskServiceImpl task) {
+		this.task = task;
 		createBaseLayout();
 	}
 
@@ -35,7 +37,7 @@ public class ViolationInformationPanel extends JPanel {
 		detailMessageLabelValue = new JLabel();
 		detailLogicalModuleToLabel = new JLabel();
 		detailLogicalModuleToValue = new JLabel();
-		
+
 		GroupLayout gl_violationDetailPane = new GroupLayout(this);
 		gl_violationDetailPane.setHorizontalGroup(
 				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
@@ -54,7 +56,7 @@ public class ViolationInformationPanel extends JPanel {
 												.addComponent(detailLineNumberLabelValue)
 												.addComponent(detailMessageLabelValue))))
 												.addContainerGap(397, Short.MAX_VALUE))
-		);
+				);
 		gl_violationDetailPane.setVerticalGroup(
 				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_violationDetailPane.createSequentialGroup()
@@ -68,17 +70,17 @@ public class ViolationInformationPanel extends JPanel {
 										.addComponent(detailLogicalModuleFromLabelValue))
 										.addPreferredGap(ComponentPlacement.UNRELATED)
 										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-											.addComponent(detailLogicalModuleToLabel)
-											.addComponent(detailLogicalModuleToValue))
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-													.addComponent(detailsMessageLabel)
-													.addComponent(detailMessageLabelValue))
-													.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+												.addComponent(detailLogicalModuleToLabel)
+												.addComponent(detailLogicalModuleToValue))
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
+														.addComponent(detailsMessageLabel)
+														.addComponent(detailMessageLabelValue))
+														.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				);
 		setLayout(gl_violationDetailPane);
-		
-		
+
+
 	}
 
 	public void loadGuiText() {
@@ -93,10 +95,15 @@ public class ViolationInformationPanel extends JPanel {
 		if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
-			detailLineNumberLabelValue.setText("" + violation.getLinenumber());
+			if(violation.getLinenumber() <= 0){
+				detailLineNumberLabelValue.setText("");
+			}
+			else{
+				detailLineNumberLabelValue.setText("" + violation.getLinenumber());
+			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
-			String message = new Messagebuilder().createMessage(violation.getMessage());
+			String message = task.getMessage(violation.getMessage());
 			detailMessageLabelValue.setText(message);
 		} else {
 			detailLineNumberLabelValue.setText("");

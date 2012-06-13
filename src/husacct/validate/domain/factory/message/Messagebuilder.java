@@ -14,14 +14,14 @@ public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private final String whiteSpace = " ";
-
+	
 	public String createMessage(Violation violation){
 		return generateMessage(violation.getMessage());
 	}
 
 	public String createMessage(Message message){
 		return generateMessage(message);
-	}
+	}	
 
 	private String generateMessage(Message message){
 		String messageText = generateSingleMessage(message);

@@ -1,7 +1,7 @@
 package husacct.validate.domain.check.util;
 
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
+import husacct.validate.domain.validation.iternal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.iternal_transfer_objects.Mappings;
 
 import java.util.List;
 

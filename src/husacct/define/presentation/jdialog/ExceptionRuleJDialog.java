@@ -6,6 +6,7 @@ import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.utils.KeyValueComboBox;
+import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.PopUpController;
 
@@ -164,13 +165,17 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 		this.dispose();
 	}
 
-	private void save() {	
-		HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-		String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
-		ruleDetails.put("ruleTypeKey", ruleTypeKey);	
-		this.appliedRuleController.addException(ruleDetails);
-		this.appliedRuleFrame.updateExceptionTable();
-		this.dispose();
+	private void save() {
+		if (ruleDetailsJPanel.hasValidData()) {
+			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
+			ruleDetails.put("ruleTypeKey", ruleTypeKey);	
+			this.appliedRuleController.addException(ruleDetails);
+			this.appliedRuleFrame.updateExceptionTable();
+			this.dispose();
+		} else {
+			UiDialogs.errorDialog(this, DefineTranslator.translate("CorrectDataError"));
+		}
 	}
 	
 	/**

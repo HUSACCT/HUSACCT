@@ -3,6 +3,9 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
+
+import com.itextpdf.text.log.SysoLogger;
 
 public class JavaInvocationGenerator extends JavaGenerator {
 
@@ -17,6 +20,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	private boolean constructorInMethodInvocationFound = false;
 	private boolean foundAllMethodInvocInfo = false;
 	private boolean allIdents = true;
+	private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
 	
 	public JavaInvocationGenerator(String uniqueClassName){
 		from = uniqueClassName;
@@ -183,7 +187,47 @@ public class JavaInvocationGenerator extends JavaGenerator {
 					invocationNameFound = true;
 					this.lineNumber = treeNode.getLine();
 				}
+				if(treeNode.getType() == JavaParser.EXPR){
+					this.parseExprToAssociation(treeNode);
+				}
 				createMethodOrPropertyFieldInvocationDetails(tree.getChild(childCount));
+			}
+		}
+	}
+	
+	private void parseExprToAssociation(CommonTree exprTree){
+		String to = "";
+		String invocationName = "";
+		CommonTree dotTree = (CommonTree) exprTree.getFirstChildWithType(JavaParser.DOT);
+		if(dotTree != null){
+			to = dotTree.getChild(0).getText();
+			invocationName = dotTree.getChild(dotTree.getChildCount()-1).getText();
+			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, to);
+		} else {
+			switch(exprTree.getType()){
+				case JavaParser.DECIMAL_LITERAL:
+				case JavaParser.STRING_LITERAL:
+				case JavaParser.TRUE:
+				case JavaParser.FALSE:
+					break;
+				case JavaParser.IDENT:
+					to = exprTree.getText();
+					modelService.createPropertyOrFieldInvocation(from, to, lineNumber, to, belongsToMethod, to);
+					break;
+				case JavaParser.METHOD_CALL:
+					JavaInvocationGenerator myInvocationGenerator = new JavaInvocationGenerator(this.from);
+					myInvocationGenerator.generateMethodInvocToDomain(exprTree, belongsToMethod);
+					break;
+				default:
+//					System.out.println(exprTree.getChildCount() + " - " + exprTree.toStringTree());
+//					System.out.println(from);
+					for(int i = 0; i < exprTree.getChildCount(); i++){
+//						if(from.startsWith("infrastructure.socialmedia.flickr.Backup")){
+//							System.out.println(exprTree.getChild(i).toStringTree());
+//						}
+						parseExprToAssociation((CommonTree) exprTree.getChild(i));
+					}
+//					System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.toStringTree() +") (" + exprTree.getType() + ")");		
 			}
 		}
 	}

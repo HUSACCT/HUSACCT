@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
@@ -143,10 +144,15 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
-		TreePath path = this.softwareDefinitionTree.getSelectionPath();
-		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());
+		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
+		for (TreePath path : paths.getSelectionPaths()){
+			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+			this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
+		}
 		this.dispose();
+		
+		
+//		TreePath path = this.softwareDefinitionTree.getSelectionPath();
 	}
 	
 	private void cancel() {

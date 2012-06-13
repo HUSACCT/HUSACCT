@@ -95,9 +95,19 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 				belongsToClass, isConstructor, isAbstract, hasClassScope, 0);
 	}
 	
-	@Override
 	public void createMethod(String name, String uniqueName, String accessControlQualifier, 
 			String signature, boolean isPureAccessor, String declaredReturnType,
+			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
+		
+		ArrayList<String> declaredReturnTypes = new ArrayList<String>();
+		declaredReturnTypes.add(declaredReturnType);
+		
+		createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, declaredReturnTypes,
+				belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+	}
+	@Override
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, 
+			String signature, boolean isPureAccessor, ArrayList<String> declaredReturnType,
 			String belongsToClass, boolean isConstructor, boolean isAbstract, boolean hasClassScope, int lineNumber) {
 		
 		FamixMethod famixMethod = new FamixMethod();
@@ -106,20 +116,24 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		famixMethod.accessControlQualifier = accessControlQualifier;
 		famixMethod.signature = signature;
 		famixMethod.isPureAccessor = isPureAccessor;
-		famixMethod.declaredReturnType = declaredReturnType;
+		famixMethod.declaredReturnType = declaredReturnType.size() == 0 ? "" : declaredReturnType.get(0);
 		famixMethod.belongsToClass = belongsToClass;
 		famixMethod.isConstructor = isConstructor;
 		famixMethod.isAbstract = isAbstract;
 		famixMethod.hasClassScope = hasClassScope;
 		addToModel(famixMethod);
 		
-		if (declaredReturnType != "" && declaredReturnType != null){
-			FamixAssociation fAssocation = new FamixAssociation();
-			fAssocation.from = belongsToClass;
-			fAssocation.to = declaredReturnType;
-			fAssocation.type = "Declaration";
-			fAssocation.lineNumber = lineNumber;
-			model.waitingAssociations.add(fAssocation);
+		for(String s : declaredReturnType){
+		//if (declaredReturnType != "" && declaredReturnType != null){
+			if(s != "" && s != null){
+				FamixAssociation fAssocation = new FamixAssociation();
+				fAssocation.from = belongsToClass;
+				fAssocation.to = s;
+				fAssocation.type = "Declaration";
+				fAssocation.lineNumber = lineNumber;
+				model.waitingAssociations.add(fAssocation);
+			}
+		//}
 		}
 	}
 	

@@ -15,6 +15,7 @@ import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.persistency.PersistentDomain;
 import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
+import husacct.define.task.DefinitionController;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,9 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		domainParser = new DomainParser();
 		exceptionService = new AppliedRuleExceptionDomainService();
 		
-		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
+		DefinitionController.setInstance(new DefinitionController());
+		ApplicationController.setInstance(new ApplicationController());
 	}
 
 	@Override
@@ -73,9 +76,14 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 
 	@Override
 	public ModuleDTO[] getChildrenFromModule(String logicalPath) {
-		Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
-		ModuleDTO moduleDTO = domainParser.parseModule(module);
-		ModuleDTO[] childModuleDTOs = moduleDTO.subModules;
+		ModuleDTO[] childModuleDTOs;
+		if (logicalPath.equals("**")){
+			childModuleDTOs = getRootModules();
+		} else {
+			Module module = this.moduleService.getModuleByLogicalPath(logicalPath);
+			ModuleDTO moduleDTO = domainParser.parseModule(module);
+			childModuleDTOs = moduleDTO.subModules;			
+		}
 		
 		//Removing nested childs
 		for (ModuleDTO modDTO : childModuleDTOs){

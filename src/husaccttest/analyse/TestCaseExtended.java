@@ -29,6 +29,12 @@ public abstract class TestCaseExtended{
 	public String CLASS = "class";
 	public String INTERFACE = "interface";
 	public String PACKAGE = "package";
+	
+	
+	private ArrayList<String> enabledDependencyTypes;
+	private boolean isIndirectEnabled;
+	
+	
 
 	protected AnalyseServiceImpl service;
 	private FamixCreationServiceImpl famix;
@@ -45,6 +51,99 @@ public abstract class TestCaseExtended{
 	public void tearDown(){
 		famix.clearModel();
 	}
+	
+	
+	
+	
+	
+	public void setConfig(){
+		enabledDependencyTypes = new ArrayList<String>();
+		enabledDependencyTypes.add(DECLARATION);
+		enabledDependencyTypes.add(EXTENDSABSTRACT);
+		enabledDependencyTypes.add(EXTENDSCONCRETE);
+		enabledDependencyTypes.add(EXTENDSINTERFACE);
+		enabledDependencyTypes.add(IMPLEMENTS);
+		enabledDependencyTypes.add(IMPORT);
+		enabledDependencyTypes.add(INVOCCONSTRUCTOR);
+		enabledDependencyTypes.add(INVOCMETHOD);
+		enabledDependencyTypes.add(EXCEPTION);
+		enabledDependencyTypes.add(ANNOTATION);
+		isIndirectEnabled = false;
+	}
+	
+	public boolean MayDependencyBeChecked(DependencyDTO d){
+		if(enabledDependencyTypes.contains(d.type)){
+			return true;
+		}
+		if((d.isIndirect == true) && this.isIndirectEnabled){
+			return true;
+		}
+		return false;		
+	}
+	
+	public ArrayList<DependencyDTO> getDirectDependencies(DependencyDTO[] dependencies){
+		ArrayList<DependencyDTO> directDependencies = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : dependencies){
+			if(isIndirectEnabled && d.isIndirect){
+				directDependencies.add(d);
+			} else {
+				directDependencies.add(d);
+			}
+		}
+		return directDependencies;
+	}
+	
+	
+	public ArrayList<DependencyDTO> getDependenciesByLinenumber(DependencyDTO currentDependency, ArrayList<DependencyDTO> filterTheseDependencies){
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : filterTheseDependencies){
+			if(d.lineNumber == currentDependency.lineNumber){
+				filtered.add(d);
+			}
+		}
+		return filtered;
+	}
+
+	public ArrayList<DependencyDTO> getDependenciesByType(DependencyDTO currentDependency, ArrayList<DependencyDTO> filterTheseDependencies){
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : filterTheseDependencies){
+			if(d.type.equals(currentDependency.type)){
+				filtered.add(d);
+			}
+		}
+		return filtered;
+	}
+	
+	public ArrayList<DependencyDTO> getDependenciesByTo(DependencyDTO currentDependency, ArrayList<DependencyDTO> filterTheseDependencies){
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : filterTheseDependencies){
+			if(d.to.equals(currentDependency.to)){
+				filtered.add(d);
+			}
+		}
+		return filtered;
+	}
+	
+	public ArrayList<DependencyDTO> getDependenciesByFrom(DependencyDTO currentDependency, ArrayList<DependencyDTO> filterTheseDependencies){
+		ArrayList<DependencyDTO> filtered = new ArrayList<DependencyDTO>();
+		for(DependencyDTO d : filterTheseDependencies){
+			if(d.from.equals(currentDependency.from)){
+				filtered.add(d);
+			}
+		}
+		return filtered;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public boolean itemExistInArray(Object value, Object[] items){
 		for(Object o : items){
