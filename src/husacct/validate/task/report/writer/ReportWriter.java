@@ -19,7 +19,7 @@ public abstract class ReportWriter {
 	protected String fileName;
 	protected ExtensionType extensionType;
 
-	public ReportWriter(Report report, String path, String fileName, ExtensionType extensionType) {
+	ReportWriter(Report report, String path, String fileName, ExtensionType extensionType) {
 		this.report = report;
 		this.path = path;
 		this.fileName = fileName;
@@ -28,14 +28,13 @@ public abstract class ReportWriter {
 
 	public abstract void createReport() throws IOException, URISyntaxException, DocumentException ;
 
-	public String convertIsIndirectBooleanToString(boolean isIndirect) {
+	protected String convertIsIndirectBooleanToString(boolean isIndirect) {
 		if(isIndirect) {
 			return "direct";
 		} else {
 			return "indirect";
 		}
 	}
-
 
 	protected String getDependencyKindValue(String violationtypeKey,
 			boolean indirect) {
@@ -55,16 +54,16 @@ public abstract class ReportWriter {
 	}
 
 
-	public String getCurrentDate(){
+	protected String getCurrentDate(){
 		return new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
 	}
 
-	public void checkDirsExist() {
+	protected void checkDirsExist() {
 		File file = new File(path);
 		file.mkdirs();
 	}
 
-	public String getFileName() {
+	protected String getFileName() {
 		return path + "\\" + fileName;
 	}
 }

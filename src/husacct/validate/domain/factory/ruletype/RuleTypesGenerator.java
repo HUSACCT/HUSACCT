@@ -3,7 +3,7 @@ package husacct.validate.domain.factory.ruletype;
 import husacct.validate.domain.exception.DefaultSeverityNotFoundException;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeyClassDTO;
+import husacct.validate.domain.validation.iternal_transfer_objects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 

@@ -8,7 +8,7 @@ import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeySeverityDTO;
+import husacct.validate.domain.validation.iternal_transfer_objects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 
@@ -26,7 +26,6 @@ public abstract class AbstractViolationType {
 	protected String languageName;
 
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
-	public abstract HashMap<String, List<ViolationType>> getAllViolationTypes();
 	abstract List<IViolationType> createViolationTypesMetaData();
 
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName){
@@ -43,6 +42,10 @@ public abstract class AbstractViolationType {
 			violationtypes.add(violationtype);
 		}
 		return violationtypes;
+	}
+	
+	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
+		return getAllViolationTypes(allViolationKeys);
 	}
 
 	protected HashMap<String, List<ViolationType>> getAllViolationTypes(List<CategoryKeySeverityDTO> keyList){
