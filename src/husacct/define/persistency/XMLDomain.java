@@ -138,10 +138,10 @@ public class XMLDomain {
 		Element ruleRegex = e.getChild("regex");
 		Element ruleId = e.getChild("id");
 		Element ruleType = e.getChild("type");
-		Element ruleUsedModule = e.getChild("usedmodule").getChild("Module");
-		Module usedModule = ruleUsedModule == null ? new Module() : this.getModuleFromXML(ruleUsedModule);
-		Element ruleRestrictedModule = e.getChild("restrictedmodule").getChild("Module");
-		Module restrictedModule = ruleRestrictedModule == null ? new Module() : this.getModuleFromXML(ruleRestrictedModule);
+		Element ruleModuleFrom = e.getChild("moduleFrom").getChild("Module");
+		Module moduleFrom = ruleModuleFrom == null ? new Module() : this.getModuleFromXML(ruleModuleFrom);
+		Element ruleModuleTo = e.getChild("moduleTo").getChild("Module");
+		Module moduleTo = ruleModuleTo == null ? new Module() : this.getModuleFromXML(ruleModuleTo);
 		Element ruleExceptions = e.getChild("exceptions");
 		Element ruleEnabled = e.getChild("enabled");
 		Element ruleDependencies = e.getChild("dependencies");
@@ -163,7 +163,7 @@ public class XMLDomain {
 			enabled = false;
 		}
 		
-		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), restrictedModule, usedModule, enabled);
+		AppliedRule AppliedXMLRule = new AppliedRule(ruleType.getValue(), ruleDescription.getValue(), dependencies.toArray(new String[dependencies.size()]), ruleRegex.getValue(), moduleFrom, moduleTo, enabled);
 		AppliedXMLRule.setId(Integer.parseInt(ruleId.getValue()));
 		
 		if (ruleExceptions != null) {

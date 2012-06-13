@@ -23,8 +23,8 @@ public class AppliedRule {
 	 * Contructors
 	 */
 	public AppliedRule(String ruleType, String description, String[] dependencies,
-			String regex, Module moduleTo,
-			Module moduleFrom, boolean enabled) {
+			String regex, Module moduleFrom,
+			Module moduleTo, boolean enabled) {
 		this.id = STATIC_ID++;
 		STATIC_ID++;
 		this.ruleType = ruleType;
@@ -37,8 +37,8 @@ public class AppliedRule {
 		this.enabled = enabled;
 	}
 	
-	public AppliedRule(String ruleType, String description, Module moduleTo, Module moduleFrom){
-		this(ruleType, description, new String[0], "",moduleTo,moduleFrom, true);
+	public AppliedRule(String ruleType, String description, Module moduleFrom, Module moduleTo){
+		this(ruleType, description, new String[0], "",moduleFrom,moduleTo, true);
 	}
 
 	public AppliedRule() {

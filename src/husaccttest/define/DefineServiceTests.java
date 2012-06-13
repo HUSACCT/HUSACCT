@@ -37,10 +37,10 @@ public class DefineServiceTests {
 		Module subModule3 = new SubSystem("SubSystem 7", "This is a subsystem");		
 
 		AppliedRule rule1 = new AppliedRule("IsNotAllowedToUse", "Test", new String[]{},
-				"", module2, module1, true);
+				"", module1, module2, true);
 
 		AppliedRule exception1 = new AppliedRule("IsAllowedToUse", "Test", new String[]{},
-				"", subModule2, subModule1, true);
+				"", subModule1, subModule2, true);
 		
 		//TODO: Test SoftwareUnitDefinitions
 		module1.addSubModule(subModule1);
