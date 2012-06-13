@@ -45,6 +45,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());
+		ApplicationController.setInstance(new ApplicationController());
 	}
 
 	@Override
