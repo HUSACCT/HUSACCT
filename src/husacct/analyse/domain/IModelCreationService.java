@@ -1,5 +1,6 @@
 package husacct.analyse.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IModelCreationService {
@@ -31,6 +32,10 @@ public interface IModelCreationService {
 			boolean hasClassScope);
 	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
 			boolean isPureAccessor, String declaredReturnType,
+			String belongsToClass, boolean isConstructor, boolean isAbstract,
+			boolean hasClassScope, int lineNumber);
+	public void createMethod(String name, String uniqueName, String accessControlQualifier, String signature,
+			boolean isPureAccessor, ArrayList<String> declaredReturnType,
 			String belongsToClass, boolean isConstructor, boolean isAbstract,
 			boolean hasClassScope, int lineNumber);
 	

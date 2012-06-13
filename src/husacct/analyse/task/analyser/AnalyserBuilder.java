@@ -15,7 +15,6 @@ class AnalyserBuilder{
 		}
 		else{
 			applicationAnalyser = null;
-			//TODO Erik Create Exception
 		}
 		return applicationAnalyser;
 	}

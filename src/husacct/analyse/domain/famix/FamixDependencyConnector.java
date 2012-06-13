@@ -56,6 +56,7 @@ class FamixDependencyConnector {
 	void connectAssociationDependencies() {
 		int count = 0;
 		for(FamixAssociation association : theModel.waitingAssociations){
+			String oldy = association.to;
 			count += 1;
 			try{
 				boolean connected = false;
@@ -97,6 +98,7 @@ class FamixDependencyConnector {
 				}				
 				if(association.to.equals("") || association.to == null){
 //					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
+//					System.out.println(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from + " | " + oldy);
 				} else {
 					determineType(association);
 					addToModel(association);
@@ -140,9 +142,9 @@ class FamixDependencyConnector {
 		return theModel.interfaces.get(uniqueName);
 	} 
 
-	private String getClassForAttribute(String delcareClass, String attributeName){
+	private String getClassForAttribute(String declareClass, String attributeName){
 		for(FamixAttribute famixAttribute: theModel.getAttributes()){
-			if(famixAttribute.belongsToClass.equals(delcareClass)){
+			if(famixAttribute.belongsToClass.equals(declareClass)){
 				if(famixAttribute.name.equals(attributeName)){
 					return famixAttribute.declareType;
 				}
@@ -152,13 +154,14 @@ class FamixDependencyConnector {
 	}
 	
 	private String getClassForParameter(String declareClass, String declareMethod, String attributeName){
+		String belongsToMethodFull = declareClass + "." + declareMethod;
 		for(FamixFormalParameter parameter: theModel.getParametersForClass(declareClass)){
-			if(parameter.belongsToMethod.equals(declareMethod)){
-					if(parameter.name.equals(attributeName)){
-						return parameter.declareType;
-					}
+			if(parameter.belongsToMethod.equals(belongsToMethodFull)){
+				if(parameter.name.equals(attributeName)){
+					return parameter.declareType;
 				}
-			}		
+			}
+		}		
 		return "";
 	}
 	

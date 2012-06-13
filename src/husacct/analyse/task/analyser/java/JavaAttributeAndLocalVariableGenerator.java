@@ -44,7 +44,7 @@ class JavaAttributeAndLocalVariableGenerator {
 		walkThroughAST(attributeTree);
 	}
 	
-	private void walkThroughAST(Tree tree) {		
+	private void walkThroughAST(Tree tree) {
 		for(int i = 0; i < tree.getChildCount(); i++){
 			Tree child = tree.getChild(i);
 			int treeType = child.getType();			
@@ -118,7 +118,7 @@ class JavaAttributeAndLocalVariableGenerator {
 			}
 			else foundType = declaretype.getText();
 		}
-		
+				
 		if(this.declareType == null || this.declareType.equals("")){
 			this.declareType = foundType;
 		} else {
@@ -154,14 +154,24 @@ class JavaAttributeAndLocalVariableGenerator {
 		createLocalVariableObject();
 	}
 	
-	public String generateMethodReturnType(Tree returnTypeTree, String belongsToClass){
+	public ArrayList<String> generateMethodReturnType(Tree returnTypeTree, String belongsToClass){
 		this.belongsToClass = belongsToClass;
 		
 		if(returnTypeTree.getType() == JavaParser.TYPE){
 			setDeclareType(returnTypeTree);
 		}
 		
-		walkThroughAST(returnTypeTree);		
-		return this.declareType;
+		walkThroughAST(returnTypeTree);
+		
+		ArrayList<String> returnDeclareTypes = new ArrayList<String>();
+		returnDeclareTypes.add(this.declareType);
+		for(String s : this.declareTypes){
+			returnDeclareTypes.add(s);
+		}
+		
+		return returnDeclareTypes;
 	}
+
+
+	
 }
