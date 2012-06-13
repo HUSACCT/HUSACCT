@@ -168,15 +168,15 @@ public class DomainXML {
 		XMLAppliedRule.addContent(ruleType);
 
 		if (AR.getModuleFrom() instanceof Module) {
-			Element restrictedModule = new Element("restrictedmodule");
-			restrictedModule.addContent(this.getModuleInXML(AR.getModuleFrom()));
-			XMLAppliedRule.addContent(restrictedModule);
+			Element moduleFrom = new Element("moduleFrom");
+			moduleFrom.addContent(this.getModuleInXML(AR.getModuleFrom()));
+			XMLAppliedRule.addContent(moduleFrom);
 		}
 
 		if (AR.getModuleTo() instanceof Module) {
-			Element usedModule = new Element("usedmodule");
-			usedModule.addContent(this.getModuleInXML(AR.getModuleTo()));
-			XMLAppliedRule.addContent(usedModule);
+			Element moduleTo = new Element("moduleTo");
+			moduleTo.addContent(this.getModuleInXML(AR.getModuleTo()));
+			XMLAppliedRule.addContent(moduleTo);
 		}
 
 		Element dependencies = new Element("dependencies");

@@ -34,13 +34,13 @@ public class AppliedRuleDomainService {
 			moduleTo = new Module();
 		}
 		
-		return addAppliedRule(ruleTypeKey,description,dependencies,regex, moduleTo, moduleFrom, enabled);
+		return addAppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom , moduleTo, enabled);
 	}
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
 
-		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex, moduleTo, moduleFrom, enabled);
+		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom, moduleTo, enabled);
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return rule.getId();
