@@ -15,6 +15,7 @@ import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.persistency.PersistentDomain;
 import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
+import husacct.define.task.DefinitionController;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,8 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		domainParser = new DomainParser();
 		exceptionService = new AppliedRuleExceptionDomainService();
 		
-		SoftwareArchitecture.setInstance(new SoftwareArchitecture());	
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
+		DefinitionController.setInstance(new DefinitionController());
 	}
 
 	@Override

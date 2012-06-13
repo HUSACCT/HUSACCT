@@ -42,6 +42,10 @@ public class DefinitionController extends Observable implements Observer {
 	public static DefinitionController getInstance() {
 		return instance == null ? (instance = new DefinitionController()) : instance;
 	}
+	
+	public static void setInstance(DefinitionController dC){
+		instance = dC;
+	}
 
 	public DefinitionController() {
 		this.observers = new ArrayList<Observer>();
