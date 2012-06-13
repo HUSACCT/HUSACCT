@@ -98,7 +98,7 @@ class FamixDependencyConnector {
 				}				
 				if(association.to.equals("") || association.to == null){
 //					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
-					System.out.println(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from + " | " + oldy);
+//					System.out.println(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from + " | " + oldy);
 				} else {
 					determineType(association);
 					addToModel(association);

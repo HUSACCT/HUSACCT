@@ -203,12 +203,26 @@ public class JavaInvocationGenerator extends JavaGenerator {
 			to = dotTree.getChild(0).getText();
 			invocationName = dotTree.getChild(dotTree.getChildCount()-1).getText();
 			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, to);
-		} else if(exprTree.getChild(0).getType() == JavaParser.IDENT){
-			to = exprTree.getChild(0).getText();
-			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, to, belongsToMethod, to);
 		} else {
-			logger.warn("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +")");
-//			System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +")");
+			CommonTree childTree = (CommonTree) exprTree.getChild(0);
+			switch(childTree.getType()){
+				case JavaParser.DECIMAL_LITERAL:
+				case JavaParser.STRING_LITERAL:
+				case JavaParser.TRUE:
+				case JavaParser.FALSE:
+					break;
+				case JavaParser.IDENT:
+					to = exprTree.getChild(0).getText();
+					modelService.createPropertyOrFieldInvocation(from, to, lineNumber, to, belongsToMethod, to);
+					break;
+				case JavaParser.METHOD_CALL:
+					JavaInvocationGenerator myInvocationGenerator = new JavaInvocationGenerator(this.from);
+					myInvocationGenerator.createMethodOrPropertyFieldInvocationDetails(childTree);
+					break;
+				default:
+//					logger.warn("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +")");
+//					System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +") (" + exprTree.getChild(0).getType() + ")");		
+			}
 		}
 	}
 
