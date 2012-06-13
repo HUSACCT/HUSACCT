@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.java;
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 public class JavaInvocationGenerator extends JavaGenerator {
 
@@ -17,6 +18,7 @@ public class JavaInvocationGenerator extends JavaGenerator {
 	private boolean constructorInMethodInvocationFound = false;
 	private boolean foundAllMethodInvocInfo = false;
 	private boolean allIdents = true;
+	private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
 	
 	public JavaInvocationGenerator(String uniqueClassName){
 		from = uniqueClassName;
@@ -183,8 +185,24 @@ public class JavaInvocationGenerator extends JavaGenerator {
 					invocationNameFound = true;
 					this.lineNumber = treeNode.getLine();
 				}
+				if(treeNode.getType() == JavaParser.EXPR){
+					this.parseExprToAssociation(treeNode);
+				}
 				createMethodOrPropertyFieldInvocationDetails(tree.getChild(childCount));
 			}
+		}
+	}
+	
+	private void parseExprToAssociation(CommonTree exprTree){
+		String to = "";
+		String invocationName = "";
+		CommonTree dotTree = (CommonTree) exprTree.getFirstChildWithType(JavaParser.DOT);
+		if(dotTree != null){
+			to = dotTree.getChild(0).getText();
+			invocationName = dotTree.getChild(dotTree.getChildCount()-1).getText();
+			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, to);
+		} else {
+			logger.warn("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM!");
 		}
 	}
 
