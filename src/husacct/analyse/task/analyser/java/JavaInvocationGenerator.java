@@ -204,24 +204,30 @@ public class JavaInvocationGenerator extends JavaGenerator {
 			invocationName = dotTree.getChild(dotTree.getChildCount()-1).getText();
 			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, to);
 		} else {
-			CommonTree childTree = (CommonTree) exprTree.getChild(0);
-			switch(childTree.getType()){
+			switch(exprTree.getType()){
 				case JavaParser.DECIMAL_LITERAL:
 				case JavaParser.STRING_LITERAL:
 				case JavaParser.TRUE:
 				case JavaParser.FALSE:
 					break;
 				case JavaParser.IDENT:
-					to = exprTree.getChild(0).getText();
+					to = exprTree.getText();
 					modelService.createPropertyOrFieldInvocation(from, to, lineNumber, to, belongsToMethod, to);
 					break;
 				case JavaParser.METHOD_CALL:
 					JavaInvocationGenerator myInvocationGenerator = new JavaInvocationGenerator(this.from);
-					myInvocationGenerator.createMethodOrPropertyFieldInvocationDetails(childTree);
+					myInvocationGenerator.generateMethodInvocToDomain(exprTree, belongsToMethod);
 					break;
 				default:
-//					logger.warn("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +")");
-//					System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +") (" + exprTree.getChild(0).getType() + ")");		
+//					System.out.println(exprTree.getChildCount() + " - " + exprTree.toStringTree());
+//					System.out.println(from);
+					for(int i = 0; i < exprTree.getChildCount(); i++){
+//						if(from.startsWith("infrastructure.socialmedia.flickr.Backup")){
+//							System.out.println(exprTree.getChild(i).toStringTree());
+//						}
+						parseExprToAssociation((CommonTree) exprTree.getChild(i));
+					}
+//					System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.toStringTree() +") (" + exprTree.getType() + ")");		
 			}
 		}
 	}
