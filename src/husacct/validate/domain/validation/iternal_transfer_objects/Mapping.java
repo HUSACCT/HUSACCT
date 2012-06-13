@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.iternal_tranfer_objects;
+package husacct.validate.domain.validation.iternal_transfer_objects;
 
 import java.util.ArrayList;
 import java.util.Arrays;

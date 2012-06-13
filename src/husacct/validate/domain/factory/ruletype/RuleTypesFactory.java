@@ -12,7 +12,7 @@ import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_tranfer_objects.CategoryKeyClassDTO;
+import husacct.validate.domain.validation.iternal_transfer_objects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 

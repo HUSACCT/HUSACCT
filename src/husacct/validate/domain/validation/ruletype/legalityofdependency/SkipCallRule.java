@@ -8,7 +8,7 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
+import husacct.validate.domain.validation.iternal_transfer_objects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -38,9 +38,13 @@ public class SkipCallRule extends RuleType {
 			for(List<Mapping> physicalClasspathsTo : modulesTo){
 				for(Mapping classPathTo : physicalClasspathsTo){					
 					for(DependencyDTO dependency: dependencies){
-						if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
-							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-							violations.add(violation);							
+						if(dependency.from.equals(classPathFrom.getPhysicalPath())){
+							if(dependency.to.equals(classPathTo.getPhysicalPath())){
+								if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+									Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+									violations.add(violation);							
+								}
+							}
 						}
 					}
 				}					

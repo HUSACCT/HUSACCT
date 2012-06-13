@@ -8,7 +8,6 @@ import husacct.validate.domain.validation.violationtype.JavaViolationTypes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 
 class JavaViolationTypeFactory extends AbstractViolationType {
@@ -16,7 +15,7 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 	private final EnumSet<JavaViolationTypes> defaultAccess;
 	private final EnumSet<JavaViolationTypes> defaultPackaging;
 
-	public JavaViolationTypeFactory(ConfigurationServiceImpl configuration){
+	JavaViolationTypeFactory(ConfigurationServiceImpl configuration){
 		super(configuration, "Java");
 		this.defaultDependencies = EnumSet.allOf(JavaViolationTypes.class);
 		this.defaultAccess = EnumSet.of(JavaViolationTypes.PUBLIC, JavaViolationTypes.PROTECTED, JavaViolationTypes.DEFAULT, JavaViolationTypes.PRIVATE);
@@ -50,10 +49,5 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 	@Override
 	List<IViolationType> createViolationTypesMetaData(){
 		return Arrays.asList(EnumSet.allOf(JavaViolationTypes.class).toArray(new IViolationType[]{}));
-	}
-
-	@Override
-	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
-		return getAllViolationTypes(allViolationKeys);
 	}
 }

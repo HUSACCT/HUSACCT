@@ -7,8 +7,8 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_tranfer_objects.Mappings;
+import husacct.validate.domain.validation.iternal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.iternal_transfer_objects.Mappings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,10 +122,8 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static HashSet<Mapping> getClassFromPhysicalPathDTO(ModuleDTO module, String[] violationTypeKeys, HashSet<Mapping> classpaths){
 		for(PhysicalPathDTO classpath : module.physicalPathDTOs){
-			if(!classpath.type.toLowerCase().equals("package")){
-				if(!updateLogicalPaths(classpaths, module, classpath.path, violationTypeKeys)){
-					classpaths.add(new Mapping(module.logicalPath, module.type, classpath.path, violationTypeKeys));
-				}
+			if(!updateLogicalPaths(classpaths, module, classpath.path, violationTypeKeys)){
+				classpaths.add(new Mapping(module.logicalPath, module.type, classpath.path, violationTypeKeys));
 
 				AnalysedModuleDTO analysedModule = analyse.getModuleForUniqueName(classpath.path);
 				classpaths.addAll(getInnerClasses(analysedModule, new ArrayList<Mapping>(), module, violationTypeKeys));
@@ -157,9 +155,7 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static List<Mapping> getInnerClasses(AnalysedModuleDTO analysedClass, List<Mapping> innerClassPaths, ModuleDTO module, String[] violationTypeKeys){
 		for(AnalysedModuleDTO innerClass : analysedClass.subModules){
-			if(!analysedClass.type.toLowerCase().equals("package")){
-				innerClassPaths.add(new Mapping(module.logicalPath, module.type, innerClass.uniqueName, violationTypeKeys));			
-			}
+			innerClassPaths.add(new Mapping(module.logicalPath, module.type, innerClass.uniqueName, violationTypeKeys));			
 			innerClassPaths.addAll(getInnerClasses(analysedClass, innerClassPaths, module, violationTypeKeys));
 		}		
 		return innerClassPaths;
