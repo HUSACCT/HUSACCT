@@ -38,10 +38,12 @@ public class BackCallRule extends RuleType {
 			for(List<Mapping> moduleTo : modulesTo){
 				for(Mapping classpathTo : moduleTo ){
 					for(DependencyDTO dependency : dependencies){
-						if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classpathTo.getPhysicalPath())){
-							if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
-								Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
-								violations.add(violation);
+						if(dependency.from.equals(classPathFrom.getPhysicalPath())){
+							if(dependency.to.equals(classpathTo.getPhysicalPath())){
+								if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+									Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
+									violations.add(violation);
+								}
 							}
 						}
 					}

@@ -36,11 +36,13 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType{
 
 		for(Mapping classPathTo : physicalClasspathsTo){
 			for(DependencyDTO dependency : dependencies){
-				if(dependency.to.equals(classPathTo.getPhysicalPath()) && !containsMapping(mappings, dependency.from)){
-					if(Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0){
-						Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
-						Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-						violations.add(violation);						
+				if(dependency.to.equals(classPathTo.getPhysicalPath())){
+					if(!containsMapping(mappings, dependency.from)){
+						if(Arrays.binarySearch(classPathTo.getViolationTypes(), dependency.type) >= 0){
+							Mapping classPathFrom = new Mapping(dependency.from, classPathTo.getViolationTypes());
+							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+							violations.add(violation);						
+						}
 					}
 				}
 			}

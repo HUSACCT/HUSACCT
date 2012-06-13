@@ -24,11 +24,12 @@ public class ExportController {
 		Element rootValidateElement = new Element("validate");
 		rootValidateElement.addContent(exportSeveritiesXML(configuration.getAllSeverities()));
 		rootValidateElement.addContent(exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
-		rootValidateElement.addContent(exportViolationHistory(configuration.getViolationHistory()));
-	
+		rootValidateElement.addContent(exportActiveViolationTypesPerRuleTypes(configuration.getActiveViolationTypes()));
+
+
 		//TODO
 		//Not used because of memory issues
-		//rootValidateElement.addContent(exportActiveViolationTypesPerRuleTypes(configuration.getActiveViolationTypes()));
+		//rootValidateElement.addContent(exportViolationHistory(configuration.getViolationHistory()));
 		//rootValidateElement.addContent(exportViolationsXML(configuration.getAllViolations().getValue()));
 		return rootValidateElement;
 	}
@@ -47,14 +48,14 @@ public class ExportController {
 	private Element exportSeveritiesPerTypesPerProgrammingLanguagesXML(HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
 		return exportFactory.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
 	}
-	
-	private Element exportViolationHistory(List<ViolationHistory> violationHistories) {
-		return exportFactory.exportViolationHistory(violationHistories);
-	}
-	
+
 	/**
 	 * @deprecated Not used because of memory issues
 	 */
+	private Element exportViolationHistory(List<ViolationHistory> violationHistories) {
+		return exportFactory.exportViolationHistory(violationHistories);
+	}
+
 	private Element exportActiveViolationTypesPerRuleTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
 		return exportFactory.exportActiveViolationTypes(activeViolationTypes);
 	}
