@@ -2,12 +2,12 @@ package husaccttest.analyse.java.benchmark.domain;
 
 import java.util.HashMap;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husaccttest.analyse.TestObject;
 import husaccttest.analyse.java.benchmark.BenchmarkExtended;
 
 
@@ -49,89 +49,36 @@ public class Flickr extends BenchmarkExtended{
 		assertEquals(true, foundtag);
 	}
 	
-	@Ignore ("Needed dependencies are not detected yet")
+	@Test 
+	public void testDomainFlickrFlickr(){
+		TestObject testobject = new TestObject("domain.flickr.Flickr");
+		boolean result = super.testDependencyObject(testobject);
+		assertTrue(testobject.getLastError(), result);
+	}
+	
 	@Test 
 	public void testDomainFlickrFlickrPicture(){
-		String from = "domain.flickr.FlickrPicture";
-		int expectedDependencies = 8;
-		
-		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
-		assertEquals(expectedDependencies, dependencies.length);
-
-//		String fromImportExpected = from;
-//		String toImportExpected = "infrastructure.blog.ILocation";
-//		String typeImportExpected = super.IMPORT;
-//		int linenumberImportExpected = 3;
-//		
-//		String fromImplementsExpected = from;
-//		String toImplementsExpected = "infrastructure.blog.ILocation";
-//		String typeImplementsExpected = super.IMPLEMENTS;
-//		int linenumberImplementsExpected = 10;
-//		
-//		HashMap<String, Object> dependencyImportExpected = createDependencyHashmap(
-//				fromImportExpected, toImportExpected, typeImportExpected, linenumberImportExpected);
-//		HashMap<String, Object> dependencyImplementsExpected = createDependencyHashmap(
-//				fromImplementsExpected, toImplementsExpected, typeImplementsExpected, linenumberImplementsExpected);
-//		
-//		boolean foundImportDependency = compaireDTOWithValues(dependencyImportExpected, dependencies);
-//		boolean foundImplementsDependency = compaireDTOWithValues(dependencyImplementsExpected, dependencies);
-//		
-//		assertEquals(true, foundImportDependency);
-//		assertEquals(true, foundImplementsDependency);
+		TestObject testobject = new TestObject("domain.flickr.FlickrPicture");
+		testobject.addDependency(new DependencyDTO("", "java.util.List", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "domain.flickr.Flickr", super.EXTENDSABSTRACT, 5));
+		testobject.addDependency(new DependencyDTO("", "java.util.List", super.DECLARATION, 7));
+		testobject.addDependency(new DependencyDTO("", "domain.flickr.Tag", super.DECLARATION, 7));
+		testobject.addDependency(new DependencyDTO("", "java.util.List", super.DECLARATION, 9));
+		testobject.addDependency(new DependencyDTO("", "domain.flickr.Tag", super.DECLARATION, 9));
+		testobject.addDependency(new DependencyDTO("", "java.util.List", super.DECLARATION, 13));
+		testobject.addDependency(new DependencyDTO("", "domain.flickr.Tag", super.DECLARATION, 13));
+		boolean result = super.testDependencyObject(testobject);
+		assertTrue(testobject.getLastError(), result);
 	}
 	
 	
 	@Test
 	public void testDomainFlickrTag(){
-		String from = "domain.flickr.Tag";
-		int expectedDependencies = 2;
-		
-		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
-		assertEquals(expectedDependencies, dependencies.length);
-		
-		String fromImportExpected = from;
-		String toImportExpected = "infrastructure.socialmedia.SocialNetwork";
-		String typeImportExpected = super.IMPORT;
-		int linenumberImportExpected = 3;
-		
-		String fromExtendsExpected = from;
-		String toExtendsExpected = "infrastructure.socialmedia.SocialNetwork";
-		String typeExtendsExpected = super.EXTENDSCONCRETE;
-		int linenumberExtendsExpected = 7;
-			
-		HashMap<String, Object> dependencyImportExpected = createDependencyHashmap(
-				fromImportExpected, toImportExpected, typeImportExpected, linenumberImportExpected);
-		HashMap<String, Object> dependencyExtendsExpected = createDependencyHashmap(
-				fromExtendsExpected, toExtendsExpected, typeExtendsExpected, linenumberExtendsExpected);
-		
-		boolean foundImportDependency = compaireDTOWithValues(dependencyImportExpected, dependencies);
-		boolean foundExtendsDependency = compaireDTOWithValues(dependencyExtendsExpected, dependencies);
-		assertEquals(true, foundImportDependency);
-		assertEquals(true, foundExtendsDependency);
-		
-		
-		HashMap<String, Object> indirectStringExpected = createDependencyHashmap(
-				from,
-				"String",
-				super.DECLARATION,
-				4,
-				true);
-		
-		HashMap<String, Object> indirectObjectExpected = createDependencyHashmap(
-				from,
-				"String",
-				super.DECLARATION,
-				4,
-				true);
-		
-		boolean foundindirectString = compaireDTOWithValues(indirectStringExpected, dependencies);
-		boolean foundindirectObject = compaireDTOWithValues(indirectObjectExpected, dependencies);
-//		assertEquals(true, foundindirectString);
-//		assertEquals(true, foundindirectObject);
-		
-		
-		
+		TestObject testobject = new TestObject("domain.flickr.Tag");
+		testobject.addDependency(new DependencyDTO("", "infrastructure.socialmedia.SocialNetwork", super.IMPORT, 3));
+		testobject.addDependency(new DependencyDTO("", "infrastructure.socialmedia.SocialNetwork", super.EXTENDSCONCRETE, 7));
+		boolean result = super.testDependencyObject(testobject);
+		assertTrue(testobject.getLastError(), result);
 	}
 	
 }

@@ -93,7 +93,7 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 	@Test
 	public void testDomainYelpServiceOne(){
 		String from = "domain.foursquarealternative.yelp.ServiceOne";
-		int expectedDependencies = 4;
+		int expectedDependencies = 5;
 		
 		//DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
@@ -156,7 +156,7 @@ public class FoursquarealternativeYelp extends BenchmarkExtended{
 	@Test
 	public void testDomainYelpServiceTwo(){
 		String from = "domain.foursquarealternative.yelp.ServiceTwo";
-		int expectedDependencies = 3;
+		int expectedDependencies = 4;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
