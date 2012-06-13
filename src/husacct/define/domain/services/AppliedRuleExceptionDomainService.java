@@ -21,7 +21,7 @@ public class AppliedRuleExceptionDomainService {
 	}
 	
 	public void addExceptionToAppliedRule(long parentRuleId, String ruleType, String description, Module moduleFrom, Module moduleTo, String[] dependencies) {
-		AppliedRule exceptionRule = new AppliedRule(ruleType,description, moduleTo, moduleFrom);
+		AppliedRule exceptionRule = new AppliedRule(ruleType,description,moduleFrom, moduleTo);
 		exceptionRule.setDependencies(dependencies);
 		
 		AppliedRule parentRule = SoftwareArchitecture.getInstance().getAppliedRuleById(parentRuleId);
