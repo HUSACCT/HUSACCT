@@ -5,6 +5,8 @@ import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
+import com.itextpdf.text.log.SysoLogger;
+
 public class JavaInvocationGenerator extends JavaGenerator {
 
 	private String from = "";
@@ -201,8 +203,12 @@ public class JavaInvocationGenerator extends JavaGenerator {
 			to = dotTree.getChild(0).getText();
 			invocationName = dotTree.getChild(dotTree.getChildCount()-1).getText();
 			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, to);
+		} else if(exprTree.getChild(0).getType() == JavaParser.IDENT){
+			to = exprTree.getChild(0).getText();
+			modelService.createPropertyOrFieldInvocation(from, to, lineNumber, to, belongsToMethod, to);
 		} else {
-			logger.warn("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM!");
+			logger.warn("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +")");
+//			System.out.println("(JavaInvocationGenerator) Couldn't be recognized! (added 13-06-2012, Tim). THIS IS NOT A BIG PROBLEM! ("+ this.from +")(" + exprTree.getChild(0).toStringTree() +")");
 		}
 	}
 
