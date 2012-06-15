@@ -117,7 +117,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.MUST_USE.toString())||ruleTypeKey.equals(RuleTypes.BACK_CALL.toString())||ruleTypeKey.equals(RuleTypes.SKIP_CALL.toString())){
+		if(ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.MUST_USE.toString())||ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString())||ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())){
 			return true;
 		}
 		else {
