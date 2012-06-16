@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class BackCallJPanel extends AbstractDetailsJPanel {
 	private static final long serialVersionUID = -1232184515665875176L;
-	public static final String ruleTypeKey = "BackCall";
+	public static final String ruleTypeKey = "IsNotAllowedToMakeBackCall";
 	
 	public ModuleFromPanelComponent moduleFromPanelComponent;
 	public EnabledPanelComponent enabledPanelComponent;

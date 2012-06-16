@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class SkipCallJPanel extends AbstractDetailsJPanel {
 	private static final long serialVersionUID = -8421430096140125495L;
-	public static final String ruleTypeKey = "SkipCall";
+	public static final String ruleTypeKey = "IsNotAllowedToMakeSkipCall";
 	
 	public ModuleFromPanelComponent moduleFromPanelComponent;
 	public EnabledPanelComponent enabledPanelComponent;

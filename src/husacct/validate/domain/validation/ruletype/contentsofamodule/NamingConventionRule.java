@@ -18,7 +18,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class NamingConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.NAMING_CONVENTION_EXCEPTION, RuleTypes.NAMING_CONVENTION);
 
 	public NamingConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
@@ -67,7 +67,7 @@ public class NamingConventionRule extends RuleType {
 		
 		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
-			if(!Regex.matchRegex(regex,analysedModule.name) && analysedModule.type.toLowerCase().equals("class")){
+			if(!Regex.matchRegex(regex,analysedModule.name) && !analysedModule.type.toLowerCase().equals("package")){
 				Violation violation = createViolation(rootRule, physicalClasspathFrom , configuration);
 				violations.add(violation);
 			}

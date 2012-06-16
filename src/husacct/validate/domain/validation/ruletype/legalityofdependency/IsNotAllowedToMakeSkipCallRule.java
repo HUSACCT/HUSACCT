@@ -17,10 +17,10 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-public class SkipCallRule extends RuleType {
+public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	public SkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public IsNotAllowedToMakeSkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
