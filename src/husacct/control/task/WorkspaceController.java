@@ -137,14 +137,15 @@ public class WorkspaceController {
 		if(ServiceProvider.getInstance().getAnalyseService() instanceof ISaveable){
 			saveableServices.add((ISaveable) ServiceProvider.getInstance().getAnalyseService());
 		}
-
-		if(ServiceProvider.getInstance().getGraphicsService() instanceof ISaveable){
-			saveableServices.add((ISaveable) ServiceProvider.getInstance().getGraphicsService());
-		}
 		
 		if(ServiceProvider.getInstance().getValidateService() instanceof ISaveable){
 			saveableServices.add((ISaveable) ServiceProvider.getInstance().getValidateService());
 		}
+		
+		if(ServiceProvider.getInstance().getGraphicsService() instanceof ISaveable){
+			saveableServices.add((ISaveable) ServiceProvider.getInstance().getGraphicsService());
+		}
+		
 		return saveableServices;
 	}
 	
