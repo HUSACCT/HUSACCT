@@ -55,8 +55,6 @@ public class DefinedController extends DrawingController {
 	public void showViolations() {
 		if (validateService.isValidated()) {
 			super.showViolations();
-		} else {
-			controlService.showErrorMessage("The application isn't validated yet.");
 		}
 	}
 
