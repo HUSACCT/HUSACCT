@@ -79,7 +79,7 @@ public class ValidateMenu extends JMenu{
 					exportViolationReportItem.setEnabled(true);
 				}
 				
-				if(states.contains(States.MAPPED) || states.contains(States.VALIDATED)){
+				if(states.contains(States.MAPPED) && states.contains(States.ANALYSED) || states.contains(States.VALIDATED)){
 					validateNowItem.setEnabled(true);
 				}
 				
