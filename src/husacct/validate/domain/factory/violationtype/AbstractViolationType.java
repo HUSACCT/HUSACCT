@@ -43,7 +43,7 @@ public abstract class AbstractViolationType {
 		}
 		return violationtypes;
 	}
-	
+
 	public HashMap<String, List<ViolationType>> getAllViolationTypes(){
 		return getAllViolationTypes(allViolationKeys);
 	}
@@ -117,7 +117,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.MUST_USE.toString())||ruleTypeKey.equals(RuleTypes.BACK_CALL.toString())||ruleTypeKey.equals(RuleTypes.SKIP_CALL.toString())){
+		if(ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.MUST_USE.toString())||ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString())||ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())){
 			return true;
 		}
 		else {
@@ -125,8 +125,8 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected boolean isVisibilityConvenctionRule(String ruleTypKey){
-		if(ruleTypKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString())){
+	protected boolean isVisibilityConvenctionRule(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString())|| ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION_EXCEPTION.toString())){
 			return true;
 		}
 		else{ 
@@ -135,7 +135,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isNamingConvention(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString())){
+		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION_EXCEPTION.toString())){
 			return true;
 		}
 		else{ 
@@ -151,7 +151,7 @@ public abstract class AbstractViolationType {
 			return false;
 		}
 	}
-	
+
 	protected boolean isSubClassConvention(String ruleTypeKey){
 		if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)){
 			return true;
