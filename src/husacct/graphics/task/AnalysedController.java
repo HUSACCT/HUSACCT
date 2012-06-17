@@ -22,19 +22,26 @@ public class AnalysedController extends DrawingController {
 	protected IAnalyseService analyseService;
 	protected IValidateService validateService;
 
-	private ArrayList<BaseFigure> analysedContextFigures;	
+	private ArrayList<BaseFigure> analysedContextFigures;
 
-	public AnalysedController(IControlService controlService, IAnalyseService analyseService, 
-			IValidateService validateService) {
+	public AnalysedController(IControlService controlService, IAnalyseService analyseService, IValidateService validateService) {
 		super(controlService);
-		
+
 		this.analyseService = analyseService;
 		this.validateService = validateService;
-		
+
 		this.analyseService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshDrawing();
+			}
+		});
+		this.validateService.addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				if (areViolationsShown()) {
+					refreshDrawing();
+				}
 			}
 		});
 	}
@@ -47,8 +54,9 @@ public class AnalysedController extends DrawingController {
 
 	@Override
 	public void showViolations() {
-		super.showViolations();
-		validateService.checkConformance();
+		if (validateService.isValidated()) {
+			super.showViolations();
+		}
 	}
 
 	@Override
@@ -79,8 +87,8 @@ public class AnalysedController extends DrawingController {
 		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
-	
-	private void resetContextFigures(){
+
+	private void resetContextFigures() {
 		analysedContextFigures = new ArrayList<BaseFigure>();
 	}
 
@@ -173,8 +181,8 @@ public class AnalysedController extends DrawingController {
 						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
 						if (null != dto) {
 							tmp.add(dto);
-						}else{
-							logger.debug(figure.getName()+" -> "+figure);
+						} else {
+							logger.debug(figure.getName() + " -> " + figure);
 						}
 					}
 				}

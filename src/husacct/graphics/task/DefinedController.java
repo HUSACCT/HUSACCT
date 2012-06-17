@@ -22,18 +22,25 @@ public class DefinedController extends DrawingController {
 	protected IDefineService defineService;
 	protected IValidateService validateService;
 
-	public DefinedController(IControlService controlService, IAnalyseService analyseService,
-			IDefineService defineService, IValidateService validateService) {
+	public DefinedController(IControlService controlService, IAnalyseService analyseService, IDefineService defineService, IValidateService validateService) {
 		super(controlService);
-		
+
 		this.analyseService = analyseService;
 		this.defineService = defineService;
 		this.validateService = validateService;
-		
+
 		this.defineService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshDrawing();
+			}
+		});
+		this.validateService.addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				if (areViolationsShown()) {
+					refreshDrawing();
+				}
 			}
 		});
 	}
@@ -46,8 +53,9 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void showViolations() {
-		super.showViolations();
-		validateService.checkConformance();
+		if (validateService.isValidated()) {
+			super.showViolations();
+		}
 	}
 
 	@Override
@@ -61,7 +69,7 @@ public class DefinedController extends DrawingController {
 		}
 		drawModulesAndLines(modules);
 	}
-	
+
 	private HashMap<String, BaseFigure> definedFigures;
 
 	@Override
@@ -117,7 +125,7 @@ public class DefinedController extends DrawingController {
 		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
 
-		if (!figureFrom.equals(figureTo) && null!=dtoFrom && null!=dtoTo) {
+		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) {
 			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs) {
 				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
 					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
@@ -152,9 +160,9 @@ public class DefinedController extends DrawingController {
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if(parentNames.length==0){
+		if (parentNames.length == 0) {
 			drawArchitecture(getCurrentDrawingDetail());
-		}else{
+		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
 				AbstractDTO[] children = defineService.getChildrenFromModule(parentName);
@@ -176,7 +184,7 @@ public class DefinedController extends DrawingController {
 				}
 			}
 			setCurrentPaths(parentNames);
-	
+
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();

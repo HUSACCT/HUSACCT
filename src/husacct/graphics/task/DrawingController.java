@@ -47,7 +47,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	private DrawingView drawingView;
 	private GraphicsFrame graphicsFrame;
 
-	private IControlService controlService;
+	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
 
 	private FigureFactory figureFactory;
