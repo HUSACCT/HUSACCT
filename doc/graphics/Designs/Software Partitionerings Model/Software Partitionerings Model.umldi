@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_HdPp8b0MEeG1P7SNsIuM5Q" activeDiagram="_HdStQL0MEeG1P7SNsIuM5Q">
+  <model href="Software%20Partitionerings%20Model.uml#idComponent"/>
+  <diagrams xmi:id="_HdStQL0MEeG1P7SNsIuM5Q" position="0,0" size="1000,1000" name="Software Partitionerings Model" viewport="131,0">
+    <property xmi:id="_HgUMEL0MEeG1P7SNsIuM5Q" key="pageFormatName" value="A3"/>
+    <property xmi:id="_HgUMEb0MEeG1P7SNsIuM5Q" key="diagramWidth" value="1188"/>
+    <property xmi:id="_HgUMEr0MEeG1P7SNsIuM5Q" key="diagramHeight" value="1680"/>
+    <property xmi:id="_HgUME70MEeG1P7SNsIuM5Q" key="pageMarginName" value="Small Margin"/>
+    <property xmi:id="_HgUzIL0MEeG1P7SNsIuM5Q" key="diagramTopMargin" value="20"/>
+    <property xmi:id="_HgUzIb0MEeG1P7SNsIuM5Q" key="diagramBottomMargin" value="20"/>
+    <property xmi:id="_HgUzIr0MEeG1P7SNsIuM5Q" key="diagramLeftMargin" value="20"/>
+    <property xmi:id="_HgUzI70MEeG1P7SNsIuM5Q" key="diagramRightMargin" value="20"/>
+    <property xmi:id="_HgUzJL0MEeG1P7SNsIuM5Q" key="orientation" value="portrait"/>
+    <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_HdTUUL0MEeG1P7SNsIuM5Q" presentation="org.topcased.modeler.uml.componentdiagram">
+      <element href="Software%20Partitionerings%20Model.uml#idComponent"/>
+    </semanticModel>
+    <contained xsi:type="di:GraphNode" xmi:id="_NINosL0MEeG1P7SNsIuM5Q" position="99,126" size="200,90">
+      <anchorage xmi:id="_6drmwL0MEeG1P7SNsIuM5Q" graphEdge="_6dsN0L0MEeG1P7SNsIuM5Q _7a0kcL0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_NINosb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_NI3I8L0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_TFjJ0L0MEeG1P7SNsIuM5Q" position="381,106" size="-1,-1">
+      <anchorage xmi:id="_1gBZ8L0MEeG1P7SNsIuM5Q" graphEdge="_1gCBAL0MEeG1P7SNsIuM5Q _6dsN0L0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_TFjJ0b0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_TFs60L0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_VnsWcL0MEeG1P7SNsIuM5Q" position="364,168" size="-1,-1">
+      <anchorage xmi:id="_6-PWIL0MEeG1P7SNsIuM5Q" graphEdge="_6-P9ML0MEeG1P7SNsIuM5Q _7a0kcL0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_VnsWcb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_Vnwn4L0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_b4qlQL0MEeG1P7SNsIuM5Q" position="593,131" size="200,90">
+      <anchorage xmi:id="_yBuHEL0MEeG1P7SNsIuM5Q" graphEdge="_yB6UUL0MEeG1P7SNsIuM5Q _0k-uAL0MEeG1P7SNsIuM5Q _1EXYsL0MEeG1P7SNsIuM5Q _1gCBAL0MEeG1P7SNsIuM5Q _6-P9ML0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_b4qlQb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_b4u2sL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_ekZywL0MEeG1P7SNsIuM5Q" position="185,338" size="200,90">
+      <anchorage xmi:id="_4_PS0L0MEeG1P7SNsIuM5Q" graphEdge="_4_Qg8L0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_ekZywb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_ekfSUL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_gATwEL0MEeG1P7SNsIuM5Q" position="490,344" size="200,90">
+      <anchorage xmi:id="_5bHWgL0MEeG1P7SNsIuM5Q" graphEdge="_5bH9kL0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_gATwEb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_gAZPoL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_hWKIsL0MEeG1P7SNsIuM5Q" position="825,349" size="200,90">
+      <anchorage xmi:id="_50b1cL0MEeG1P7SNsIuM5Q" graphEdge="_50dDkL0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_hWKIsb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_hWPoQL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_uOCaEL0MEeG1P7SNsIuM5Q" position="789,263" size="-1,-1">
+      <anchorage xmi:id="_yBuHEb0MEeG1P7SNsIuM5Q" graphEdge="_yB6UUL0MEeG1P7SNsIuM5Q _50dDkL0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_uOCaEb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_uOH5oL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_v6NoAL0MEeG1P7SNsIuM5Q" position="597,258" size="-1,-1">
+      <anchorage xmi:id="_0k9f4L0MEeG1P7SNsIuM5Q" graphEdge="_0k-uAL0MEeG1P7SNsIuM5Q _5bH9kL0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_v6NoAb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_v6U8wL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphNode" xmi:id="_w8EGkL0MEeG1P7SNsIuM5Q" position="443,254" size="-1,-1">
+      <anchorage xmi:id="_1EWxoL0MEeG1P7SNsIuM5Q" graphEdge="_1EXYsL0MEeG1P7SNsIuM5Q _4_Qg8L0MEeG1P7SNsIuM5Q"/>
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_w8EGkb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_w8KNML0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_yB6UUL0MEeG1P7SNsIuM5Q" anchor="_yBuHEL0MEeG1P7SNsIuM5Q _yBuHEb0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_yB6UUb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_yB_M0L0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_0k-uAL0MEeG1P7SNsIuM5Q" anchor="_yBuHEL0MEeG1P7SNsIuM5Q _0k9f4L0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_0k-uAb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_0lENkL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_1EXYsL0MEeG1P7SNsIuM5Q" anchor="_yBuHEL0MEeG1P7SNsIuM5Q _1EWxoL0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_1EXYsb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_1EdfUL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_1gCBAL0MEeG1P7SNsIuM5Q" anchor="_yBuHEL0MEeG1P7SNsIuM5Q _1gBZ8L0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_1gCBAb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_1gIHoL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_4_Qg8L0MEeG1P7SNsIuM5Q" anchor="_4_PS0L0MEeG1P7SNsIuM5Q _1EWxoL0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_4_Qg8b0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_4_WAgL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_5bH9kL0MEeG1P7SNsIuM5Q" anchor="_5bHWgL0MEeG1P7SNsIuM5Q _0k9f4L0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_5bH9kb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_5bOEML0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_50dDkL0MEeG1P7SNsIuM5Q" anchor="_50b1cL0MEeG1P7SNsIuM5Q _yBuHEb0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_50dDkb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_50ijIL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_6dsN0L0MEeG1P7SNsIuM5Q" anchor="_6drmwL0MEeG1P7SNsIuM5Q _1gBZ8L0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_6dsN0b0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_6dyUcL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_6-P9ML0MEeG1P7SNsIuM5Q" anchor="_yBuHEL0MEeG1P7SNsIuM5Q _6-PWIL0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_6-P9Mb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_6-WD0L0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+    <contained xsi:type="di:GraphEdge" xmi:id="_7a0kcL0MEeG1P7SNsIuM5Q" anchor="_6drmwL0MEeG1P7SNsIuM5Q _6-PWIL0MEeG1P7SNsIuM5Q">
+      <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_7a0kcb0MEeG1P7SNsIuM5Q" presentation="default">
+        <element href="Software%20Partitionerings%20Model.uml#_7a6rEL0MEeG1P7SNsIuM5Q"/>
+      </semanticModel>
+    </contained>
+  </diagrams>
+</diagrams:Diagrams>

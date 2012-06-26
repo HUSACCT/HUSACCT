@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="idModel" name="Software Partitionerings ModelModel">
+  <packagedElement xmi:type="uml:Package" xmi:id="idPackage" name="Software Partitionerings ModelPackage">
+    <packagedElement xmi:type="uml:Component" xmi:id="idComponent" name="Software Partitionerings ModelComponent">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_O5W2ML0MEeG1P7SNsIuM5Q" name="Port1" aggregation="composite"/>
+      <nestedClassifier xmi:type="uml:Component" xmi:id="_NI3I8L0MEeG1P7SNsIuM5Q" name="HUSACCTController" clientDependency="_6dyUcL0MEeG1P7SNsIuM5Q _7a6rEL0MEeG1P7SNsIuM5Q">
+        <interfaceRealization xmi:id="_6dyUcL0MEeG1P7SNsIuM5Q" name="InterfaceRealization1" supplier="_TFs60L0MEeG1P7SNsIuM5Q" client="_NI3I8L0MEeG1P7SNsIuM5Q" contract="_TFs60L0MEeG1P7SNsIuM5Q"/>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_7a6rEL0MEeG1P7SNsIuM5Q" name="Usage1" supplier="_Vnwn4L0MEeG1P7SNsIuM5Q" client="_NI3I8L0MEeG1P7SNsIuM5Q"/>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Interface" xmi:id="_TFs60L0MEeG1P7SNsIuM5Q" name="ControllService"/>
+      <nestedClassifier xmi:type="uml:Interface" xmi:id="_Vnwn4L0MEeG1P7SNsIuM5Q" name="ArchitectureGraphicsService"/>
+      <nestedClassifier xmi:type="uml:Component" xmi:id="_b4u2sL0MEeG1P7SNsIuM5Q" name="ArchitectureGraphics" clientDependency="_yB_M0L0MEeG1P7SNsIuM5Q _0lENkL0MEeG1P7SNsIuM5Q _1EdfUL0MEeG1P7SNsIuM5Q _1gIHoL0MEeG1P7SNsIuM5Q _6-WD0L0MEeG1P7SNsIuM5Q">
+        <interfaceRealization xmi:id="_6-WD0L0MEeG1P7SNsIuM5Q" name="InterfaceRealization1" supplier="_Vnwn4L0MEeG1P7SNsIuM5Q" client="_b4u2sL0MEeG1P7SNsIuM5Q" contract="_Vnwn4L0MEeG1P7SNsIuM5Q"/>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_yB_M0L0MEeG1P7SNsIuM5Q" name="Usage1" supplier="_uOH5oL0MEeG1P7SNsIuM5Q" client="_b4u2sL0MEeG1P7SNsIuM5Q"/>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_0lENkL0MEeG1P7SNsIuM5Q" name="Usage2" supplier="_v6U8wL0MEeG1P7SNsIuM5Q" client="_b4u2sL0MEeG1P7SNsIuM5Q"/>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_1EdfUL0MEeG1P7SNsIuM5Q" name="Usage3" supplier="_w8KNML0MEeG1P7SNsIuM5Q" client="_b4u2sL0MEeG1P7SNsIuM5Q"/>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_1gIHoL0MEeG1P7SNsIuM5Q" name="Usage4" supplier="_TFs60L0MEeG1P7SNsIuM5Q" client="_b4u2sL0MEeG1P7SNsIuM5Q"/>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Component" xmi:id="_ekfSUL0MEeG1P7SNsIuM5Q" name="DefineDomain" clientDependency="_3APPgL0MEeG1P7SNsIuM5Q _4_WAgL0MEeG1P7SNsIuM5Q">
+        <interfaceRealization xmi:id="_4_WAgL0MEeG1P7SNsIuM5Q" name="InterfaceRealization1" supplier="_w8KNML0MEeG1P7SNsIuM5Q" client="_ekfSUL0MEeG1P7SNsIuM5Q" contract="_w8KNML0MEeG1P7SNsIuM5Q"/>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Component" xmi:id="_gAZPoL0MEeG1P7SNsIuM5Q" name="AnalyseDomain" clientDependency="_5bOEML0MEeG1P7SNsIuM5Q">
+        <interfaceRealization xmi:id="_5bOEML0MEeG1P7SNsIuM5Q" name="InterfaceRealization1" supplier="_v6U8wL0MEeG1P7SNsIuM5Q" client="_gAZPoL0MEeG1P7SNsIuM5Q" contract="_v6U8wL0MEeG1P7SNsIuM5Q"/>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Component" xmi:id="_hWPoQL0MEeG1P7SNsIuM5Q" name="ValidateDomain" clientDependency="_50ijIL0MEeG1P7SNsIuM5Q">
+        <interfaceRealization xmi:id="_50ijIL0MEeG1P7SNsIuM5Q" name="InterfaceRealization1" supplier="_uOH5oL0MEeG1P7SNsIuM5Q" client="_hWPoQL0MEeG1P7SNsIuM5Q" contract="_uOH5oL0MEeG1P7SNsIuM5Q"/>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Interface" xmi:id="_uOH5oL0MEeG1P7SNsIuM5Q" name="ValidateService"/>
+      <nestedClassifier xmi:type="uml:Interface" xmi:id="_v6U8wL0MEeG1P7SNsIuM5Q" name="AnalyseService"/>
+      <nestedClassifier xmi:type="uml:Interface" xmi:id="_w8KNML0MEeG1P7SNsIuM5Q" name="DefineService"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_3APPgL0MEeG1P7SNsIuM5Q" name="Dependency1" supplier="_w8KNML0MEeG1P7SNsIuM5Q" client="_ekfSUL0MEeG1P7SNsIuM5Q"/>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
