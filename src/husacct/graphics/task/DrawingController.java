@@ -130,41 +130,35 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	@Override
 	public void showDependencies() {
-		notifyServiceListeners();
 		super.showDependencies();
 		graphicsFrame.turnOnDependencies();
 	}
 
 	@Override
 	public void hideDependencies() {
-		notifyServiceListeners();
 		super.hideDependencies();
 		graphicsFrame.turnOffDependencies();
 	}
 
 	@Override
 	public void showViolations() {
-		notifyServiceListeners();
 		super.showViolations();
 		graphicsFrame.turnOnViolations();
 	}
 
 	@Override
 	public void hideViolations() {
-		notifyServiceListeners();
 		super.hideViolations();
 		graphicsFrame.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	public void showSmartLines() {
-		notifyServiceListeners();
 		super.showSmartLines();
 		graphicsFrame.turnOnSmartLines();
 	}
-	
+
 	public void hideSmartLines() {
-		notifyServiceListeners();
 		super.hideSmartLines();
 		graphicsFrame.turnOffSmartLines();
 	}

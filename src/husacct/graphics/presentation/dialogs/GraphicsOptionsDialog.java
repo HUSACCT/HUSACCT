@@ -1,6 +1,8 @@
 package husacct.graphics.presentation.dialogs;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
 import java.awt.GridLayout;
@@ -41,15 +43,30 @@ public class GraphicsOptionsDialog extends JDialog {
 	private ArrayList<JComponent> interfaceElements;
 
 	private int width, height;
+	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
+	private String[] layoutStrategyItems;
+	private IControlService controlService;
 
 	public GraphicsOptionsDialog() {
 		super();
+		controlService = ServiceProvider.getInstance().getControlService();
 		width = 550;
 		height = 230;
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		add(mainPanel);
+
+		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
+		int i = 0;
+		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
+		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
+			String translation = controlService.getTranslatedString(strategy.toString());
+			layoutStrategiesTranslations.put(translation, strategy);
+			layoutStrategyItems[i] = translation;
+			i++;
+		}
+
 		initGUI();
 
 		interfaceElements = new ArrayList<JComponent>();
@@ -80,7 +97,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(UserInputListener listener : listeners){
+				for (UserInputListener listener : listeners) {
 					listener.moduleZoom();
 				}
 			}
@@ -91,7 +108,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		zoomOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(UserInputListener listener : listeners){
+				for (UserInputListener listener : listeners) {
 					listener.moduleZoomOut();
 				}
 			}
@@ -102,7 +119,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		refreshButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(UserInputListener listener : listeners){
+				for (UserInputListener listener : listeners) {
 					listener.refreshDrawing();
 				}
 			}
@@ -113,7 +130,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		exportToImageButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(UserInputListener listener : listeners){
+				for (UserInputListener listener : listeners) {
 					listener.exportToImage();
 				}
 			}
@@ -143,7 +160,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		settingsPanel.setLayout(new GridLayout(1, 2));
 		layoutStrategyLabel = new JLabel();
 		settingsPanel.add(layoutStrategyLabel);
-		layoutStrategyOptions = new JComboBox();
+		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
 		settingsPanel.add(layoutStrategyOptions);
 
 		mainPanel.add(settingsPanel);
@@ -157,8 +174,8 @@ public class GraphicsOptionsDialog extends JDialog {
 		zoomSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent ce) {
-				int scale = ((JSlider)ce.getSource()).getValue();
-				for(UserInputListener listener : listeners){
+				int scale = ((JSlider) ce.getSource()).getValue();
+				for (UserInputListener listener : listeners) {
 					listener.drawingZoomChanged(scale);
 				}
 			}
@@ -166,7 +183,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		zoomPanel.add(zoomSlider);
 
 		mainPanel.add(zoomPanel);
-		
+
 		JPanel confirmPanel = new JPanel();
 		okButton = new JButton();
 		okButton.addActionListener(new ActionListener() {
@@ -177,7 +194,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			}
 		});
 		confirmPanel.add(okButton);
-		
+
 		applyButton = new JButton();
 		applyButton.addActionListener(new ActionListener() {
 			@Override
@@ -186,19 +203,19 @@ public class GraphicsOptionsDialog extends JDialog {
 			}
 		});
 		confirmPanel.add(applyButton);
-		
+
 		cancelButton = new JButton();
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO: Reset changes
+				// TODO: Reset changes
 				setVisible(false);
 			}
 		});
 		confirmPanel.add(cancelButton);
 		mainPanel.add(confirmPanel);
 	}
-	
+
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
 	}
@@ -206,23 +223,27 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
 	}
-	
-	public void notifyListeners(){
-		for(UserInputListener listener : listeners){
-			if(showDependenciesOptionMenu.isSelected()){
+
+	public void notifyListeners() {
+		for (UserInputListener listener : listeners) {
+			if (showDependenciesOptionMenu.isSelected()) {
 				listener.showDependencies();
-			}else{
+			} else {
 				listener.hideDependencies();
 			}
-			if(showViolationsOptionMenu.isSelected()){
+			if (showViolationsOptionMenu.isSelected()) {
 				listener.showViolations();
-			}else{
+			} else {
 				listener.hideViolations();
 			}
-			if(smartLinesOptionMenu.isSelected()){
+			if (smartLinesOptionMenu.isSelected()) {
 				listener.showSmartLines();
-			}else{
+			} else {
 				listener.hideSmartLines();
+			}
+			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
+			if (null != selectedStrategy) {
+				listener.changeLayoutStrategy(selectedStrategy);
 			}
 			listener.refreshDrawing();
 		}
@@ -263,45 +284,42 @@ public class GraphicsOptionsDialog extends JDialog {
 		}
 	}
 
-	public void setLayoutStrategyAction(ActionListener listener) {
-		layoutStrategyOptions.addActionListener(listener);
-	}
-
-	public void setLayoutStrategyItems(String[] layoutStrategyItems) {
-		layoutStrategyOptions.removeAllItems();
-		for (String item : layoutStrategyItems) {
-			layoutStrategyOptions.addItem(item);
-		}
-	}
-
 	public void setSelectedLayoutStrategyItem(String item) {
 		layoutStrategyOptions.setSelectedItem(item);
 	}
 
-	public String getSelectedLayoutStrategyItem() {
-		return (String) layoutStrategyOptions.getSelectedItem();
+	public DrawingLayoutStrategy getSelectedLayoutStrategyItem() {
+		DrawingLayoutStrategy selectedStrategy = null;
+		String selectedItem = null;
+		try {
+			selectedItem = (String) layoutStrategyOptions.getSelectedItem();
+			selectedStrategy = layoutStrategiesTranslations.get(selectedItem);
+		} catch (Exception ex) {
+			logger.debug("Could not find the selected layout strategy \"" + (selectedItem == null ? "null" : selectedItem) + "\".");
+		}
+		return selectedStrategy;
 	}
 
 	public void setDependenciesUIToActive() {
 		showDependenciesOptionMenu.setSelected(true);
 	}
-	
+
 	public void setDependenciesUIToInactive() {
 		showDependenciesOptionMenu.setSelected(false);
 	}
-	
+
 	public void setViolationsUIToActive() {
 		showViolationsOptionMenu.setSelected(true);
 	}
-	
+
 	public void setViolationsUIToInactive() {
 		showViolationsOptionMenu.setSelected(false);
 	}
-	
+
 	public void setSmartLinesUIToActive() {
 		smartLinesOptionMenu.setSelected(true);
 	}
-	
+
 	public void setSmartLinesUIToInactive() {
 		smartLinesOptionMenu.setSelected(false);
 	}
