@@ -146,6 +146,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		
 		exportToImageButton = new JButton();
 		exportToImageButton.setSize(50, menuItemMaxHeight);
+		exportToImageButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportToImage();
+			}
+		});
 		add(exportToImageButton);
 		setButtonIcon(exportToImageButton, "save");
 
@@ -192,11 +198,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	
 	public void setOptionsDialogAction(ActionListener listener) {
 		optionsDialogButton.addActionListener(listener);
-	}
-
-	public void setExportToImageAction(ActionListener listener) {
-		exportToImageButton.addActionListener(listener);
-		graphicsOptionsDialog.setExportToImageAction(listener);
 	}
 
 	public void setLayoutStrategyAction(ActionListener listener) {
@@ -316,8 +317,9 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void exportToImage() {
-		// TODO Auto-generated method stub
-		
+		for(UserInputListener listener : listeners){
+			listener.exportToImage();
+		}
 	}
 
 	@Override

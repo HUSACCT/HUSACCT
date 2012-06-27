@@ -111,6 +111,14 @@ public class GraphicsOptionsDialog extends JDialog {
 		actionsPanel.add(refreshButton);
 
 		exportToImageButton = new JButton();
+		exportToImageButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(UserInputListener listener : listeners){
+					listener.exportToImage();
+				}
+			}
+		});
 		actionsPanel.add(exportToImageButton);
 
 		mainPanel.add(actionsPanel);
@@ -269,10 +277,6 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void setRefreshAction(ActionListener listener) {
 		refreshButton.addActionListener(listener);
-	}
-
-	public void setExportToImageAction(ActionListener listener) {
-		exportToImageButton.addActionListener(listener);
 	}
 
 	public void setLayoutStrategyAction(ActionListener listener) {

@@ -29,8 +29,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
@@ -246,12 +244,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 				refreshDrawing();
 			}
 		});
-		menuBar.setExportToImageAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exportToImage();
-			}
-		});
 		menuBar.setOutOfDateAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -299,12 +291,18 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
 	}
 
-	public void moduleOpen(String[] paths) {
+	@Override
+	public void moduleZoom() {
 		for (UserInputListener l : listeners) {
-			l.moduleOpen(paths);
+			l.moduleZoom();
 		}
 	}
 
+	@Override
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+		// TODO Auto-generated method stub
+	}
+	
 	public void moduleZoomOut() {
 		String[] secondLastPath = locationBar.getSecondLastPath();
 		if(secondLastPath.length==0){
@@ -315,13 +313,13 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 			moduleOpen(secondLastPath);
 		}
 	}
-
-	public void exportToImage() {
+	
+	public void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
-			l.exportToImage();
+			l.moduleOpen(paths);
 		}
 	}
-	
+
 	@Override
 	public void showDependencies() {
 		for (UserInputListener l : listeners) {
@@ -524,28 +522,10 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar.setOutOfDate();
 	}
 
-	@Override
-	public void moduleZoom() {
+	public void exportToImage() {
 		for (UserInputListener l : listeners) {
-			l.moduleZoom();
+			l.exportToImage();
 		}
-	}
-
-	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void figureSelected(BaseFigure[] figures) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void figureDeselected(BaseFigure[] figures) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -559,12 +539,18 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	@Override
 	public void hideModules() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void restoreModules() {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	@Override
+	public void figureSelected(BaseFigure[] figures) {
+	}
+	
+	@Override
+	public void figureDeselected(BaseFigure[] figures) {
 	}
 }
