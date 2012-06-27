@@ -145,20 +145,29 @@ public class GraphicsOptionsDialog extends JDialog {
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(UserInputListener listener : listeners){
-					if(showDependenciesOptionMenu.isSelected()){
-						listener.showDependencies();
-					}else{
-						listener.hideDependencies();
-					}
-				}
-				resetChangeBooleans();
+				notifyListeners();
+				setVisible(false);
 			}
 		});
 		confirmPanel.add(okButton);
+		
 		applyButton = new JButton();
+		applyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				notifyListeners();
+			}
+		});
 		confirmPanel.add(applyButton);
+		
 		cancelButton = new JButton();
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO: Reset changes
+				setVisible(false);
+			}
+		});
 		confirmPanel.add(cancelButton);
 		mainPanel.add(confirmPanel);
 	}
@@ -169,6 +178,17 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
+	}
+	
+	public void notifyListeners(){
+		for(UserInputListener listener : listeners){
+			if(showDependenciesOptionMenu.isSelected()){
+				listener.showDependencies();
+			}else{
+				listener.hideDependencies();
+			}
+		}
+		resetChangeBooleans();
 	}
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
