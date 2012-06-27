@@ -89,11 +89,23 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	private void initializeComponents() {
 		zoomInButton = new JButton();
 		zoomInButton.setSize(50, menuItemMaxHeight);
+		zoomInButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moduleZoom();
+			}
+		});
 		add(zoomInButton);
 		setButtonIcon(zoomInButton, "zoomIn");
 
 		zoomOutButton = new JButton();
 		zoomOutButton.setSize(50, menuItemMaxHeight);
+		zoomOutButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moduleZoomOut();
+			}
+		});
 		add(zoomOutButton);
 		setButtonIcon(zoomOutButton, "zoomOut");
 
@@ -166,11 +178,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		outOfDateButton = new JButton();
 		outOfDateButton.setSize(50, menuItemMaxHeight);
 		setButtonIcon(outOfDateButton, "outofdate");
-	}
-
-	public void setZoomInAction(ActionListener listener) {
-		zoomInButton.addActionListener(listener);
-		graphicsOptionsDialog.setZoomInAction(listener);
 	}
 
 	public void setZoomOutAction(ActionListener listener) {
@@ -271,8 +278,9 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void moduleZoom() {
-		// TODO Auto-generated method stub
-		
+		for(UserInputListener listener : listeners){
+			listener.moduleZoom();
+		}
 	}
 
 	@Override
@@ -289,8 +297,9 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void moduleZoomOut() {
-		// TODO Auto-generated method stub
-		
+		for(UserInputListener listener : listeners){
+			listener.moduleZoomOut();
+		}
 	}
 
 	@Override

@@ -86,9 +86,25 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void initGUI() {
 		actionsPanel = new JPanel();
 		zoomInButton = new JButton();
+		zoomInButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(UserInputListener listener : listeners){
+					listener.moduleZoom();
+				}
+			}
+		});
 		actionsPanel.add(zoomInButton);
 
 		zoomOutButton = new JButton();
+		zoomOutButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(UserInputListener listener : listeners){
+					listener.moduleZoomOut();
+				}
+			}
+		});
 		actionsPanel.add(zoomOutButton);
 
 		refreshButton = new JButton();
@@ -246,11 +262,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			logger.warn("Icons are not set properly.");
 		}
 	}
-
-	public void setZoomInAction(ActionListener listener) {
-		zoomInButton.addActionListener(listener);
-	}
-
+	
 	public void setZoomOutAction(ActionListener listener) {
 		zoomOutButton.addActionListener(listener);
 	}

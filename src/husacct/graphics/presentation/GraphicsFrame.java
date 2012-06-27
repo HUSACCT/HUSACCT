@@ -239,25 +239,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar = new GraphicsMenuBar();
 		menuBar.addListener(this);
 		menuBar.setSize(frameTotalWidth, 20);
-
-		menuBar.setZoomInAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				moduleZoomIn();
-			}
-		});
-		
-		menuBar.setZoomOutAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] secondLastPath = locationBar.getSecondLastPath();
-				if(secondLastPath.length==0){
-					moduleZoomOut();
-				}else{
-					moduleOpen(secondLastPath);
-				}
-			}
-		});
+	
 		menuBar.setRefreshAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -317,12 +299,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
 	}
 
-	private void moduleZoomIn() {
-		for (UserInputListener l : listeners) {
-			l.moduleZoom();
-		}
-	}
-	
 	public void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
 			l.moduleOpen(paths);
@@ -330,8 +306,13 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 
 	public void moduleZoomOut() {
-		for (UserInputListener l : listeners) {
-			l.moduleZoomOut();
+		String[] secondLastPath = locationBar.getSecondLastPath();
+		if(secondLastPath.length==0){
+			for (UserInputListener l : listeners) {
+				l.moduleZoomOut();
+			}
+		}else{
+			moduleOpen(secondLastPath);
 		}
 	}
 
@@ -545,14 +526,14 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	@Override
 	public void moduleZoom() {
-		// TODO Auto-generated method stub
-		
+		for (UserInputListener l : listeners) {
+			l.moduleZoom();
+		}
 	}
 
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
