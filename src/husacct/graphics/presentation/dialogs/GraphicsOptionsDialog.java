@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
@@ -136,6 +137,15 @@ public class GraphicsOptionsDialog extends JDialog {
 		zoomPanel.add(zoomLabel);
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, width);
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				int scale = ((JSlider)ce.getSource()).getValue();
+				for(UserInputListener listener : listeners){
+					listener.drawingZoomChanged(scale);
+				}
+			}
+		});
 		zoomPanel.add(zoomSlider);
 
 		mainPanel.add(zoomPanel);
@@ -257,14 +267,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		layoutStrategyOptions.addActionListener(listener);
 	}
 
-	public void setContextUpdatesToggle(boolean setting) {
-		smartLinesOptionMenu.setSelected(setting);
-	}
-
-	public void setZoomChangeListener(ChangeListener listener) {
-		zoomSlider.addChangeListener(listener);
-	}
-
 	public void setLayoutStrategyItems(String[] layoutStrategyItems) {
 		layoutStrategyOptions.removeAllItems();
 		for (String item : layoutStrategyItems) {
@@ -294,6 +296,14 @@ public class GraphicsOptionsDialog extends JDialog {
 	
 	public void setViolationsUIToInactive() {
 		showViolationsOptionMenu.setSelected(false);
+	}
+	
+	public void setSmartLinesUIToActive() {
+		smartLinesOptionMenu.setSelected(true);
+	}
+	
+	public void setSmartLinesUIToInactive() {
+		smartLinesOptionMenu.setSelected(false);
 	}
 
 	public void setZoomValue(int value) {

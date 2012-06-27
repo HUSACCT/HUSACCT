@@ -153,6 +153,14 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 		zoomSlider = new JSlider(25, 175, 100);
 		zoomSlider.setSize(50, menuItemMaxHeight);
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				int scale = ((JSlider)ce.getSource()).getValue();
+				graphicsOptionsDialog.setZoomValue(scale);
+				drawingZoomChanged(scale);
+			}
+		});
 		add(zoomSlider);
 		
 		outOfDateButton = new JButton();
@@ -188,24 +196,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		graphicsOptionsDialog.setLayoutStrategyAction(listener);
 	}
 
-	public void setZoomChangeListener(final ChangeListener listener) {
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				graphicsOptionsDialog.setZoomValue(((JSlider)ce.getSource()).getValue());
-			}
-		});
-		zoomSlider.addChangeListener(listener);
-		
-		graphicsOptionsDialog.setZoomChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				zoomSlider.setValue(((JSlider)ce.getSource()).getValue());
-			}
-		});
-		graphicsOptionsDialog.setZoomChangeListener(listener);
-	}
-	
 	public void setOutOfDateAction(ActionListener listener) {
 		outOfDateButton.addActionListener(listener);
 	}
@@ -239,10 +229,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	public String getSelectedLayoutStrategyItem() {
 		return graphicsOptionsDialog.getSelectedLayoutStrategyItem();
-	}
-
-	public void setContextUpdatesToggle(boolean setting) {
-		graphicsOptionsDialog.setContextUpdatesToggle(setting);
 	}
 	
 	public double getScaleFactor() {
@@ -403,11 +389,21 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			l.hideSmartLines();
 		}
 	}
+	
+	public void setSmartLinesUIToActive() {
+		graphicsOptionsDialog.setSmartLinesUIToActive();
+	}
+	
+	public void setSmartLinesUIToInactive() {
+		graphicsOptionsDialog.setSmartLinesUIToInactive();
+	}
 
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
-		// TODO Auto-generated method stub
-		
+		zoomSlider.setValue((int) zoomFactor);
+		for(UserInputListener listener : listeners){
+			listener.drawingZoomChanged(zoomFactor);
+		}
 	}
 
 	@Override

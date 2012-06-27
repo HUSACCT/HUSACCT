@@ -270,12 +270,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 				exportToImage();
 			}
 		});
-		menuBar.setZoomChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				zoomChanged();
-			}
-		});
 		menuBar.setOutOfDateAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -344,13 +338,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	public void exportToImage() {
 		for (UserInputListener l : listeners) {
 			l.exportToImage();
-		}
-	}
-	
-	private void zoomChanged() {
-		double scaleFactor = menuBar.getScaleFactor();
-		for (UserInputListener l : listeners) {
-			l.drawingZoomChanged(scaleFactor);
 		}
 	}
 	
@@ -507,11 +494,11 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 
 	public void turnOnSmartLines() {
-		menuBar.setContextUpdatesToggle(true);
+		menuBar.setSmartLinesUIToActive();
 	}
 	
 	public void turnOffSmartLines() {
-		menuBar.setContextUpdatesToggle(false);
+		menuBar.setSmartLinesUIToInactive();
 	}
 
 	public void showLoadingScreen() {
@@ -582,8 +569,10 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
-		// TODO Auto-generated method stub
-		
+		double scaleFactor = menuBar.getScaleFactor();
+		for (UserInputListener l : listeners) {
+			l.drawingZoomChanged(scaleFactor);
+		}
 	}
 
 	@Override
