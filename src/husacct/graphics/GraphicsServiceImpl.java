@@ -140,9 +140,9 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		}
 
 		if (isActive(data, workspaceSmartLines)) {
-			controller.activateSmartLines();
+			controller.showSmartLines();
 		} else {
-			controller.deactivateSmartLines();
+			controller.hideSmartLines();
 		}
 
 		DrawingLayoutStrategy selectedStrategy = null;

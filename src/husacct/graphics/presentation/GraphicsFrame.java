@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
+import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
@@ -28,13 +29,11 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsFrame extends JInternalFrame {
+public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	private static final long serialVersionUID = -4683140198375851034L;
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(GraphicsFrame.class);
@@ -49,20 +48,18 @@ public class GraphicsFrame extends JInternalFrame {
 	private boolean showingProperties = false;
 
 	private int frameTotalWidth;
-	
+
 	private String[] violationColumnKeysArray;
 	private String[] dependencyColumnKeysArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
-	private String[] layoutStrategyItems; 
-	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
 	public GraphicsFrame(DrawingView givenDrawingView) {
 		centerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		add(centerPane, BorderLayout.CENTER);
-		
+
 		setVisible(false);
 		frameTotalWidth = getWidth();
 
@@ -83,17 +80,17 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		});
 	}
-	
+
 	public void refreshFrame() {
 		updateComponentsLocaleStrings();
 	}
-	
+
 	public String[] getCurrentPaths() {
 		return currentPaths;
 	}
 
 	public void resetCurrentPaths() {
-		currentPaths = new String[]{};
+		currentPaths = new String[] {};
 	}
 
 	public void setCurrentPaths(String[] paths) {
@@ -128,33 +125,35 @@ public class GraphicsFrame extends JInternalFrame {
 
 		updateComponentsLocaleStrings();
 		layoutComponents();
-		
-		this.getRootPane().addComponentListener(new ComponentListener(){
+
+		this.getRootPane().addComponentListener(new ComponentListener() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				positionLayoutComponents();
 				resizeLocationBar();
 			}
+
 			@Override
 			public void componentShown(ComponentEvent e) {
 				// Do nothing
 			}
+
 			@Override
 			public void componentHidden(ComponentEvent e) {
 				// Do nothing
 			}
+
 			@Override
 			public void componentMoved(ComponentEvent e) {
 				// Do nothing
 			}
 		});
 	}
-	
-	private void resizeLocationBar(){
-		if(locationScrollPane.getHorizontalScrollBar().isShowing()){
+
+	private void resizeLocationBar() {
+		if (locationScrollPane.getHorizontalScrollBar().isShowing()) {
 			locationScrollPane.setPreferredSize(new Dimension(900, 50));
-		}
-		else{
+		} else {
 			locationScrollPane.setPreferredSize(new Dimension(900, 35));
 		}
 	}
@@ -163,6 +162,9 @@ public class GraphicsFrame extends JInternalFrame {
 		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
 		menuBarLocale.put("DiagramOptions", controlService.getTranslatedString("DiagramOptions"));
 		menuBarLocale.put("Options", controlService.getTranslatedString("Options"));
+		menuBarLocale.put("Ok", controlService.getTranslatedString("OkButton"));
+		menuBarLocale.put("Apply", controlService.getTranslatedString("Apply"));
+		menuBarLocale.put("Cancel", controlService.getTranslatedString("CancelButton"));
 		menuBarLocale.put("Zoom", controlService.getTranslatedString("Zoom"));
 		menuBarLocale.put("ZoomIn", controlService.getTranslatedString("ZoomIn"));
 		menuBarLocale.put("ZoomOut", controlService.getTranslatedString("ZoomOut"));
@@ -175,19 +177,10 @@ public class GraphicsFrame extends JInternalFrame {
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
 		menuBarLocale.put("LayoutStrategy", controlService.getTranslatedString("LayoutStrategy"));
 		menuBarLocale.put("DrawingOutOfDate", controlService.getTranslatedString("DrawingOutOfDate"));
+		menuBarLocale.put("HideModules", controlService.getTranslatedString("HideModules"));
+		menuBarLocale.put("RestoreHiddenModules", controlService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
-		
-		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
-		int i = 0;
-		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
-		for(DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()){
-			String translation = controlService.getTranslatedString(strategy.toString());
-			layoutStrategiesTranslations.put(translation, strategy);
-			layoutStrategyItems[i] = translation;
-			i++;
-		}
-		menuBar.setLayoutStrategyItems(layoutStrategyItems);
-		
+
 		dependencyColumnNames = new ArrayList<String>();
 		for (String key : dependencyColumnKeysArray) {
 			dependencyColumnNames.add(controlService.getTranslatedString(key));
@@ -233,74 +226,9 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
+		menuBar.addListener(this);
 		menuBar.setSize(frameTotalWidth, 20);
 
-		menuBar.setZoomInAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				moduleZoomIn();
-			}
-		});
-		
-		menuBar.setZoomOutAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] secondLastPath = locationBar.getSecondLastPath();
-				if(secondLastPath.length==0){
-					moduleZoomOut();
-				}else{
-					moduleOpen(secondLastPath);
-				}
-			}
-		});
-		menuBar.setRefreshAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshDrawing();
-			}
-		});
-		menuBar.setToggleDependenciesAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				toggleDependencies();
-			}
-		});
-		menuBar.setToggleViolationsAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				toggleViolations();
-			}
-		});
-		menuBar.setToggleSmartLinesAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				toggleContextUpdates();
-			}
-		});
-		menuBar.setExportToImageAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exportToImage();
-			}
-		});
-		menuBar.setLayoutStrategyAction(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DrawingLayoutStrategy selectedStrategy = null;
-				try{
-					selectedStrategy = layoutStrategiesTranslations.get(menuBar.getSelectedLayoutStrategyItem());
-					changeLayoutStrategy(selectedStrategy);
-				}catch(Exception ex){
-					logger.debug("Could not find the selected layout strategy \""+(selectedStrategy==null ? "null" :selectedStrategy.toString())+"\".");
-				}
-			}
-		});
-		menuBar.setZoomChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-		    	zoomChanged();
-			}
-		});
 		menuBar.setOutOfDateAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -313,17 +241,16 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void createLocationBar() {
 		locationBar = new ZoomLocationBar();
-		
 		locationBar.addLocationButtonPressListener(new LocationButtonActionListener() {
 			@Override
 			public void actionPerformed(String[] selectedPaths) {
 				moduleOpen(selectedPaths);
 			}
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		
 		updateGUI();
 	}
 
@@ -331,69 +258,86 @@ public class GraphicsFrame extends JInternalFrame {
 		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();
 	}
-	
+
 	public void setSelectedLayout(DrawingLayoutStrategy layoutStrategyOption) {
-		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
+		menuBar.setSelectedLayoutStrategyItem(layoutStrategyOption);
 	}
 
-	private void moduleZoomIn() {
+	@Override
+	public void moduleZoom() {
 		for (UserInputListener l : listeners) {
 			l.moduleZoom();
 		}
 	}
-	
-	private void moduleOpen(String[] paths) {
+
+	@Override
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+		// Not used through this GUI
+	}
+
+	public void moduleZoomOut() {
+		String[] secondLastPath = locationBar.getSecondLastPath();
+		if (secondLastPath.length == 0) {
+			for (UserInputListener l : listeners) {
+				l.moduleZoomOut();
+			}
+		} else {
+			moduleOpen(secondLastPath);
+		}
+	}
+
+	public void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
 			l.moduleOpen(paths);
 		}
 	}
 
-	private void moduleZoomOut() {
+	@Override
+	public void showDependencies() {
 		for (UserInputListener l : listeners) {
-			l.moduleZoomOut();
+			l.showDependencies();
 		}
 	}
 
-	private void exportToImage() {
+	@Override
+	public void hideDependencies() {
 		for (UserInputListener l : listeners) {
-			l.exportToImage();
-		}
-	}
-	
-	private void zoomChanged() {
-		double scaleFactor = menuBar.getScaleFactor();
-		for (UserInputListener l : listeners) {
-			l.drawingZoomChanged(scaleFactor);
-		}
-	}	
-	
-	protected void toggleDependencies() {
-		for (UserInputListener l : listeners) {
-			l.toggleDependencies();
+			l.hideDependencies();
 		}
 	}
 
-	private void toggleViolations() {
+	@Override
+	public void showViolations() {
 		for (UserInputListener l : listeners) {
-			l.toggleViolations();
+			l.showViolations();
 		}
 	}
 
-	protected void toggleContextUpdates() {
+	@Override
+	public void hideViolations() {
 		for (UserInputListener l : listeners) {
-			l.toggleSmartLines();
+			l.hideViolations();
 		}
 	}
 
-	private void refreshDrawing() {
+	@Override
+	public void showSmartLines() {
+		for (UserInputListener l : listeners) {
+			l.showSmartLines();
+		}
+	}
+
+	@Override
+	public void hideSmartLines() {
+		for (UserInputListener l : listeners) {
+			l.hideSmartLines();
+		}
+	}
+
+	@Override
+	public void refreshDrawing() {
 		for (UserInputListener l : listeners) {
 			l.refreshDrawing();
-		}
-	}
-
-	private void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
-		for (UserInputListener l : listeners) {
-			l.changeLayoutStrategy(selectedStrategyEnum);
 		}
 	}
 
@@ -454,8 +398,8 @@ public class GraphicsFrame extends JInternalFrame {
 		setColumnWidths(propertiesTable, dependencyColumnKeysArray);
 		return propertiesTable;
 	}
-	
-	private void setColumnWidths(JTable table, String[] columnNames){
+
+	private void setColumnWidths(JTable table, String[] columnNames) {
 		TableColumn column = null;
 		int lineNumberColumnWidth = 50;
 		int otherColumnWidth = (getWidth() / (table.getColumnCount())) - (lineNumberColumnWidth / table.getColumnCount());
@@ -468,58 +412,58 @@ public class GraphicsFrame extends JInternalFrame {
 			}
 		}
 	}
-	
-	public void showProperties(){
+
+	public void showProperties() {
 		showingProperties = true;
 		layoutComponents();
 	}
-	
-	public void hideProperties(){
+
+	public void hideProperties() {
 		showingProperties = false;
 		layoutComponents();
 	}
-	
+
 	public void turnOnDependencies() {
-		menuBar.setDependencyToggle(true);
+		menuBar.setDependeciesUIToActive();
 	}
-	
+
 	public void turnOffDependencies() {
-		menuBar.setDependencyToggle(false);
+		menuBar.setDependeciesUIToInactive();
 	}
-	
+
 	public void turnOnViolations() {
-		menuBar.setViolationToggle(true);
+		menuBar.setViolationsUIToActive();
 	}
 
 	public void turnOffViolations() {
-		menuBar.setViolationToggle(false);
+		menuBar.setViolationsUIToInactive();
 	}
 
 	public void turnOnSmartLines() {
-		menuBar.setContextUpdatesToggle(true);
+		menuBar.setSmartLinesUIToActive();
 	}
-	
+
 	public void turnOffSmartLines() {
-		menuBar.setContextUpdatesToggle(false);
+		menuBar.setSmartLinesUIToInactive();
 	}
 
 	public void showLoadingScreen() {
 		locationBar.turnOffBar();
 		menuBar.turnOffBar();
 		centerPane.removeAll();
-		
+
 		JPanel loadingContainerPanel = new JPanel();
 		JPanel progressPanel = new JPanel();
-		
+
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
-		
+
 		progressPanel.add(progressBar);
 		loadingContainerPanel.add(progressPanel);
-		
+
 		centerPane.add(loadingContainerPanel);
 		centerPane.setDividerSize(0);
-		
+
 		add(centerPane, java.awt.BorderLayout.CENTER);
 
 		if (isVisible()) {
@@ -531,17 +475,63 @@ public class GraphicsFrame extends JInternalFrame {
 		layoutComponents();
 		locationBar.turnOnBar();
 		menuBar.turnOnBar();
-		
+
 		if (isVisible()) {
 			validate();
 		}
 	}
-	
+
 	public void setUpToDate() {
 		menuBar.setUpToDate();
 	}
 
 	public void setOutOfDate() {
 		menuBar.setOutOfDate();
+	}
+
+	@Override
+	public void exportToImage() {
+		for (UserInputListener l : listeners) {
+			l.exportToImage();
+		}
+	}
+
+	@Override
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+		for (UserInputListener l : listeners) {
+			l.changeLayoutStrategy(selectedStrategyEnum);
+		}
+	}
+
+	@Override
+	public void drawingZoomChanged(double zoomFactor) {
+		double scaleFactor = menuBar.getScaleFactor();
+		for (UserInputListener l : listeners) {
+			l.drawingZoomChanged(scaleFactor);
+		}
+	}
+
+	@Override
+	public void hideModules() {
+		for (UserInputListener listener : listeners) {
+			listener.hideModules();
+		}
+	}
+
+	@Override
+	public void restoreModules() {
+		for (UserInputListener listener : listeners) {
+			listener.restoreModules();
+		}
+	}
+
+	@Override
+	public void figureSelected(BaseFigure[] figures) {
+		// Not used in this UI
+	}
+
+	@Override
+	public void figureDeselected(BaseFigure[] figures) {
+		// Not used in this UI
 	}
 }
