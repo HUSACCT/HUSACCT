@@ -129,24 +129,19 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	@Override
-	public void toggleDependencies() {
+	public void showDependencies() {
 		notifyServiceListeners();
-		if (areDependenciesShown()) {
-			hideDependencies();
-		} else {
-			showDependencies();
-		}
+		super.showDependencies();
+		graphicsFrame.turnOnDependencies();
 		drawLinesBasedOnSettingInTask();
 	}
 
-	public void showDependencies() {
-		super.showDependencies();
-		graphicsFrame.turnOnDependencies();
-	}
-
+	@Override
 	public void hideDependencies() {
+		notifyServiceListeners();
 		super.hideDependencies();
 		graphicsFrame.turnOffDependencies();
+		drawLinesBasedOnSettingInTask();
 	}
 
 	@Override

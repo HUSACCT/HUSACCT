@@ -24,7 +24,9 @@ public interface UserInputListener {
 
 	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum);
 
-	public void toggleDependencies();
+	public void showDependencies();
+	
+	public void hideDependencies();
 
 	public void toggleSmartLines();
 	

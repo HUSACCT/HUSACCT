@@ -1,6 +1,9 @@
 package husacct.graphics.presentation.menubars;
 
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
+import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.UserInputListener;
 
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -20,12 +23,13 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsMenuBar extends JPanel {
+public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	private static final long serialVersionUID = -7419378432318031359L;
 	private static final double MIN_SCALEFACTOR = 0.25;
 	private static final double MAX_SCALEFACTOR = 1.75;
 
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
+	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
 	private HashMap<String, String> icons;
 	private ArrayList<JComponent> actions;
@@ -65,6 +69,14 @@ public class GraphicsMenuBar extends JPanel {
 		actions.add(outOfDateButton);
 	}
 	
+	public void addListener(UserInputListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(UserInputListener listener) {
+		listeners.remove(listener);
+	}
+	
 	private void setButtonIcon(JButton button, String iconKey){
 		try {
 			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get(iconKey)));
@@ -93,6 +105,16 @@ public class GraphicsMenuBar extends JPanel {
 
 		showDependenciesButton = new JButton();
 		showDependenciesButton.setSize(40, menuItemMaxHeight);
+		showDependenciesButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(showDependenciesButton.getToolTipText().equals(menuBarLocale.get("HideDependencies"))){
+					hideDependencies();
+				}else{
+					showDependencies();
+				}
+			}
+		});
 		add(showDependenciesButton);
 
 		showViolationsButton = new JButton();
@@ -105,6 +127,7 @@ public class GraphicsMenuBar extends JPanel {
 		setButtonIcon(exportToImageButton, "save");
 
 		graphicsOptionsDialog = new GraphicsOptionsDialog();
+		graphicsOptionsDialog.addListener(this);
 		graphicsOptionsDialog.setIcons(icons);
 		optionsDialogButton = new JButton();
 		optionsDialogButton.setSize(40, menuItemMaxHeight);
@@ -141,43 +164,7 @@ public class GraphicsMenuBar extends JPanel {
 		graphicsOptionsDialog.setRefreshAction(listener);
 	}
 
-	public void setToggleDependenciesAction(ActionListener listener) {
-		showDependenciesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JButton button = (JButton) event.getSource();
-				if (button.isSelected()) {
-					setDependecyIconToInactive();
-				} else {
-					setDependecyIconToActive();
-				}
-			}
-		});
-		showDependenciesButton.addActionListener(listener);
-		graphicsOptionsDialog.setToggleDependenciesAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JCheckBox checkbox = (JCheckBox) event.getSource();
-				if (checkbox.isSelected()) {
-					setDependecyIconToInactive();
-				} else {
-					setDependecyIconToActive();
-				}
-			}
-		});
-		graphicsOptionsDialog.setToggleDependenciesAction(listener);
-	}
-	
-	public void setDependecyIconToActive(){
-		setButtonIcon(showDependenciesButton, "dependenciesShow");
-		showDependenciesButton.setToolTipText(menuBarLocale.get("ShowDependencies"));
-	}
-	public void setDependecyIconToInactive(){
-		setButtonIcon(showDependenciesButton, "dependenciesHide");
-		showDependenciesButton.setToolTipText(menuBarLocale.get("HideDependencies"));
-	}
-
-	public void setToggleViolationsAction(ActionListener listener) {
+	public void setViolationsToggle(ActionListener listener) {
 		showViolationsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -213,7 +200,7 @@ public class GraphicsMenuBar extends JPanel {
 		showViolationsButton.setToolTipText(menuBarLocale.get("HideViolations"));
 	}
 
-	public void setToggleSmartLinesAction(ActionListener listener) {
+	public void setSmartLinesToggle(ActionListener listener) {
 		graphicsOptionsDialog.setToggleContextUpdatesAction(listener);
 	}
 
@@ -282,18 +269,6 @@ public class GraphicsMenuBar extends JPanel {
 	public String getSelectedLayoutStrategyItem() {
 		return graphicsOptionsDialog.getSelectedLayoutStrategyItem();
 	}
-	
-	public void setDependencyToggle(boolean setting) {
-		if(showDependenciesButton.isSelected()!=setting){
-			showDependenciesButton.setSelected(setting);
-		}
-		if(setting){
-			setDependecyIconToInactive();
-		}else{
-			setDependecyIconToActive();
-		}
-		graphicsOptionsDialog.setDependencyToggle(setting);
-	}
 
 	public void setViolationToggle(boolean setting) {
 		if(showViolationsButton.isSelected()!=setting){
@@ -347,6 +322,116 @@ public class GraphicsMenuBar extends JPanel {
 		add(outOfDateButton);
 		validate();
 		updateUI();
+	}
+
+	@Override
+	public void moduleZoom() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moduleOpen(String[] paths) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moduleZoomOut() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void figureSelected(BaseFigure[] figures) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void figureDeselected(BaseFigure[] figures) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportToImage() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toggleViolations() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refreshDrawing() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showDependencies() {
+		for(UserInputListener listener : listeners){
+			listener.showDependencies();
+		}
+	}
+	
+	@Override
+	public void hideDependencies() {
+		for(UserInputListener listener : listeners){
+			listener.hideDependencies();
+		}
+	}
+	
+	public void setDependeciesUIToActive(){
+		setButtonIcon(showDependenciesButton, "dependenciesHide");
+		showDependenciesButton.setToolTipText(menuBarLocale.get("HideDependencies"));
+		graphicsOptionsDialog.setDependenciesUIToActive();
+	}
+	
+	public void setDependeciesUIToInactive(){
+		setButtonIcon(showDependenciesButton, "dependenciesShow");
+		showDependenciesButton.setToolTipText(menuBarLocale.get("ShowDependencies"));
+		graphicsOptionsDialog.setDependenciesUIToInactive();
+	}
+
+	@Override
+	public void toggleSmartLines() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawingZoomChanged(double zoomFactor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hideModules() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void restoreModules() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

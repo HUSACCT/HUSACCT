@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.control.IControlService;
+import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
@@ -34,7 +35,7 @@ import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
-public class GraphicsFrame extends JInternalFrame {
+public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	private static final long serialVersionUID = -4683140198375851034L;
 	protected IControlService controlService;
 	protected Logger logger = Logger.getLogger(GraphicsFrame.class);
@@ -236,6 +237,7 @@ public class GraphicsFrame extends JInternalFrame {
 
 	private void createMenuBar() {
 		menuBar = new GraphicsMenuBar();
+		menuBar.addListener(this);
 		menuBar.setSize(frameTotalWidth, 20);
 
 		menuBar.setZoomInAction(new ActionListener() {
@@ -262,28 +264,35 @@ public class GraphicsFrame extends JInternalFrame {
 				refreshDrawing();
 			}
 		});
-		menuBar.setToggleDependenciesAction(new ActionListener() {
+		menuBar.setExportToImageAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				toggleDependencies();
+				exportToImage();
 			}
 		});
-		menuBar.setToggleViolationsAction(new ActionListener() {
+		menuBar.setZoomChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				zoomChanged();
+			}
+		});
+		menuBar.setOutOfDateAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setUpToDate();
+				refreshDrawing();
+			}
+		});
+		menuBar.setViolationsToggle(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleViolations();
 			}
 		});
-		menuBar.setToggleSmartLinesAction(new ActionListener() {
+		menuBar.setSmartLinesToggle(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleContextUpdates();
-			}
-		});
-		menuBar.setExportToImageAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exportToImage();
 			}
 		});
 		menuBar.setLayoutStrategyAction(new ActionListener(){
@@ -296,19 +305,6 @@ public class GraphicsFrame extends JInternalFrame {
 				}catch(Exception ex){
 					logger.debug("Could not find the selected layout strategy \""+(selectedStrategy==null ? "null" :selectedStrategy.toString())+"\".");
 				}
-			}
-		});
-		menuBar.setZoomChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-		    	zoomChanged();
-			}
-		});
-		menuBar.setOutOfDateAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setUpToDate();
-				refreshDrawing();
 			}
 		});
 		add(menuBar, java.awt.BorderLayout.NORTH);
@@ -345,19 +341,19 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 	
-	private void moduleOpen(String[] paths) {
+	public void moduleOpen(String[] paths) {
 		for (UserInputListener l : listeners) {
 			l.moduleOpen(paths);
 		}
 	}
 
-	private void moduleZoomOut() {
+	public void moduleZoomOut() {
 		for (UserInputListener l : listeners) {
 			l.moduleZoomOut();
 		}
 	}
 
-	private void exportToImage() {
+	public void exportToImage() {
 		for (UserInputListener l : listeners) {
 			l.exportToImage();
 		}
@@ -368,15 +364,23 @@ public class GraphicsFrame extends JInternalFrame {
 		for (UserInputListener l : listeners) {
 			l.drawingZoomChanged(scaleFactor);
 		}
-	}	
+	}
 	
-	protected void toggleDependencies() {
+	@Override
+	public void showDependencies() {
 		for (UserInputListener l : listeners) {
-			l.toggleDependencies();
+			l.showDependencies();
+		}
+	}
+	
+	@Override
+	public void hideDependencies() {
+		for (UserInputListener l : listeners) {
+			l.hideDependencies();
 		}
 	}
 
-	private void toggleViolations() {
+	public void toggleViolations() {
 		for (UserInputListener l : listeners) {
 			l.toggleViolations();
 		}
@@ -388,13 +392,13 @@ public class GraphicsFrame extends JInternalFrame {
 		}
 	}
 
-	private void refreshDrawing() {
+	public void refreshDrawing() {
 		for (UserInputListener l : listeners) {
 			l.refreshDrawing();
 		}
 	}
 
-	private void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
 		for (UserInputListener l : listeners) {
 			l.changeLayoutStrategy(selectedStrategyEnum);
 		}
@@ -483,11 +487,11 @@ public class GraphicsFrame extends JInternalFrame {
 	}
 	
 	public void turnOnDependencies() {
-		menuBar.setDependencyToggle(true);
+		menuBar.setDependeciesUIToActive();
 	}
 	
 	public void turnOffDependencies() {
-		menuBar.setDependencyToggle(false);
+		menuBar.setDependeciesUIToInactive();
 	}
 	
 	public void turnOnViolations() {
@@ -546,5 +550,53 @@ public class GraphicsFrame extends JInternalFrame {
 
 	public void setOutOfDate() {
 		menuBar.setOutOfDate();
+	}
+
+	@Override
+	public void moduleZoom() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void figureSelected(BaseFigure[] figures) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void figureDeselected(BaseFigure[] figures) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toggleSmartLines() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawingZoomChanged(double zoomFactor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hideModules() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void restoreModules() {
+		// TODO Auto-generated method stub
+		
 	}
 }
