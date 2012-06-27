@@ -5,6 +5,8 @@ import husacct.control.IControlService;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -31,7 +34,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
-	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel;
+	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
 
 	private int menuItemMaxHeight = 45;
 
@@ -43,7 +46,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	private ArrayList<JComponent> interfaceElements;
 	private HashMap<String, Object> currentSettings;
 
-	private int width, height;
+	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
 	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 	private String[] layoutStrategyItems;
 	private IControlService controlService;
@@ -56,8 +59,12 @@ public class GraphicsOptionsDialog extends JDialog {
 		currentSettings.put("smartLines", false);
 		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
 		controlService = ServiceProvider.getInstance().getControlService();
-		width = 550;
-		height = 230;
+		totalWidth = 550;
+		totalHeight = 230;
+		paddingSize = 10;
+		labelWidth = 100;
+		elementHeight = 20;
+		elementWidth = totalWidth - labelWidth - (paddingSize * 2) - 20;
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -92,7 +99,7 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void showDialog() {
 		setResizable(false);
-		setSize(width, height);
+		setSize(totalWidth, totalHeight);
 		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		setVisible(true);
 	}
@@ -146,10 +153,12 @@ public class GraphicsOptionsDialog extends JDialog {
 		mainPanel.add(actionsPanel);
 
 		optionsPanel = new JPanel();
+		optionsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 		optionsPanel.setLayout(new GridLayout(3, 1));
 
 		showDependenciesOptionMenu = new JCheckBox();
-		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
+		showDependenciesOptionMenu.setPreferredSize(new Dimension(40, menuItemMaxHeight));
+		showDependenciesOptionMenu.setMaximumSize(new Dimension(40, menuItemMaxHeight));
 		optionsPanel.add(showDependenciesOptionMenu);
 
 		showViolationsOptionMenu = new JCheckBox();
@@ -163,34 +172,46 @@ public class GraphicsOptionsDialog extends JDialog {
 		mainPanel.add(optionsPanel);
 
 		settingsPanel = new JPanel();
-		settingsPanel.setLayout(new GridLayout(1, 2));
-		layoutStrategyLabel = new JLabel();
-		settingsPanel.add(layoutStrategyLabel);
-		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
-		settingsPanel.add(layoutStrategyOptions);
+		settingsPanel.setLayout(new GridLayout(2, 2));
+		settingsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
+		
+			layoutStrategyPanel = new JPanel();
+			layoutStrategyPanel.setSize(getWidth(), getHeight());
+			layoutStrategyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+				layoutStrategyLabel = new JLabel();
+				layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+				layoutStrategyPanel.add(layoutStrategyLabel);
+			
+				layoutStrategyOptions = new JComboBox(layoutStrategyItems);
+				layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
+				layoutStrategyPanel.add(layoutStrategyOptions);
+			settingsPanel.add(layoutStrategyPanel);
+			
+			zoomPanel = new JPanel();
+			zoomPanel.setSize(getWidth(), getHeight());
+			zoomPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+				zoomLabel = new JLabel();
+				zoomLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+				zoomPanel.add(zoomLabel);
 
+				zoomSlider = new JSlider(25, 175, 100);
+				zoomSlider.setPreferredSize(new Dimension(elementWidth, elementHeight));
+				zoomSlider.addChangeListener(new ChangeListener() {
+					@Override
+					public void stateChanged(ChangeEvent ce) {
+						int scale = ((JSlider) ce.getSource()).getValue();
+						for (UserInputListener listener : listeners) {
+							listener.drawingZoomChanged(scale);
+						}
+					}
+				});
+				zoomPanel.add(zoomSlider);
+			settingsPanel.add(zoomPanel);
+				
 		mainPanel.add(settingsPanel);
 
-		zoomPanel = new JPanel();
-		zoomPanel.setLayout(new GridLayout(1, 2));
-		zoomLabel = new JLabel();
-		zoomPanel.add(zoomLabel);
-		zoomSlider = new JSlider(25, 175, 100);
-		zoomSlider.setSize(50, width);
-		zoomSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent ce) {
-				int scale = ((JSlider) ce.getSource()).getValue();
-				for (UserInputListener listener : listeners) {
-					listener.drawingZoomChanged(scale);
-				}
-			}
-		});
-		zoomPanel.add(zoomSlider);
-
-		mainPanel.add(zoomPanel);
-
 		JPanel confirmPanel = new JPanel();
+		confirmPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		okButton = new JButton();
 		okButton.addActionListener(new ActionListener() {
 			@Override
