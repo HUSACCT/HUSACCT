@@ -32,7 +32,6 @@ public class GraphicsOptionsDialog extends JDialog {
 	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel;
 
 	private int menuItemMaxHeight = 45;
-	private boolean dependenciesToggleChanged, violationsToggleChanged, smartLinesToggleChanged, layoutStrategyChanged;
 
 	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu;
@@ -47,7 +46,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		super();
 		width = 550;
 		height = 230;
-		resetChangeBooleans();
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -67,13 +65,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		interfaceElements.add(okButton);
 		interfaceElements.add(applyButton);
 		interfaceElements.add(cancelButton);
-	}
-
-	private void resetChangeBooleans() {
-		dependenciesToggleChanged = false;
-		violationsToggleChanged = false;
-		smartLinesToggleChanged = false;
-		layoutStrategyChanged = false;
 	}
 
 	public void showDialog() {
@@ -128,12 +119,6 @@ public class GraphicsOptionsDialog extends JDialog {
 
 		showDependenciesOptionMenu = new JCheckBox();
 		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
-		showDependenciesOptionMenu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dependenciesToggleChanged = true; //TODO: additional check if this isn't the original value
-			}
-		});
 		optionsPanel.add(showDependenciesOptionMenu);
 
 		showViolationsOptionMenu = new JCheckBox();
@@ -233,7 +218,6 @@ public class GraphicsOptionsDialog extends JDialog {
 			}
 			listener.refreshDrawing();
 		}
-		resetChangeBooleans();
 	}
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
