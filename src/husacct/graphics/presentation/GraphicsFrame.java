@@ -258,7 +258,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 
 	public void setSelectedLayout(DrawingLayoutStrategy layoutStrategyOption) {
-		menuBar.setSelectedLayoutStrategyItem(controlService.getTranslatedString(layoutStrategyOption.toString()));
+		menuBar.setSelectedLayoutStrategyItem(layoutStrategyOption);
 	}
 
 	@Override
@@ -270,7 +270,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
-		// TODO Auto-generated method stub
+		// Not used through this GUI
 	}
 
 	public void moduleZoomOut() {

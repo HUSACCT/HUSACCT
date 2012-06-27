@@ -41,6 +41,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
 	private ArrayList<JComponent> interfaceElements;
+	private HashMap<String, Object> currentSettings;
 
 	private int width, height;
 	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
@@ -49,6 +50,11 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public GraphicsOptionsDialog() {
 		super();
+		currentSettings = new HashMap<String, Object>();
+		currentSettings.put("dependencies", true);
+		currentSettings.put("violations", false);
+		currentSettings.put("smartLines", false);
+		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
 		controlService = ServiceProvider.getInstance().getControlService();
 		width = 550;
 		height = 230;
@@ -208,12 +214,19 @@ public class GraphicsOptionsDialog extends JDialog {
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Reset changes
+				resetUIElementsToCurrentSettings();
 				setVisible(false);
 			}
 		});
 		confirmPanel.add(cancelButton);
 		mainPanel.add(confirmPanel);
+	}
+
+	private void resetUIElementsToCurrentSettings() {
+		showDependenciesOptionMenu.setSelected((Boolean) currentSettings.get("dependencies"));
+		showViolationsOptionMenu.setSelected((Boolean) currentSettings.get("violations"));
+		smartLinesOptionMenu.setSelected((Boolean) currentSettings.get("smartLines"));
+		layoutStrategyOptions.setSelectedItem(controlService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
 	}
 
 	public void addListener(UserInputListener listener) {
@@ -227,22 +240,29 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void notifyListeners() {
 		for (UserInputListener listener : listeners) {
 			if (showDependenciesOptionMenu.isSelected()) {
+				currentSettings.put("dependencies", true);
 				listener.showDependencies();
 			} else {
+				currentSettings.put("dependencies", false);
 				listener.hideDependencies();
 			}
 			if (showViolationsOptionMenu.isSelected()) {
+				currentSettings.put("violations", true);
 				listener.showViolations();
 			} else {
+				currentSettings.put("violations", true);
 				listener.hideViolations();
 			}
 			if (smartLinesOptionMenu.isSelected()) {
+				currentSettings.put("smartLines", true);
 				listener.showSmartLines();
 			} else {
+				currentSettings.put("smartLines", false);
 				listener.hideSmartLines();
 			}
 			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
 			if (null != selectedStrategy) {
+				currentSettings.put("layoutStrategy", selectedStrategy);
 				listener.changeLayoutStrategy(selectedStrategy);
 			}
 			listener.refreshDrawing();
@@ -284,8 +304,9 @@ public class GraphicsOptionsDialog extends JDialog {
 		}
 	}
 
-	public void setSelectedLayoutStrategyItem(String item) {
-		layoutStrategyOptions.setSelectedItem(item);
+	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
+		currentSettings.put("layoutStrategy", item);
+		layoutStrategyOptions.setSelectedItem(controlService.getTranslatedString(item.toString()));
 	}
 
 	public DrawingLayoutStrategy getSelectedLayoutStrategyItem() {
@@ -301,26 +322,32 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 
 	public void setDependenciesUIToActive() {
+		currentSettings.put("dependencies", true);
 		showDependenciesOptionMenu.setSelected(true);
 	}
 
 	public void setDependenciesUIToInactive() {
+		currentSettings.put("dependencies", false);
 		showDependenciesOptionMenu.setSelected(false);
 	}
 
 	public void setViolationsUIToActive() {
+		currentSettings.put("violations", true);
 		showViolationsOptionMenu.setSelected(true);
 	}
 
 	public void setViolationsUIToInactive() {
+		currentSettings.put("violations", false);
 		showViolationsOptionMenu.setSelected(false);
 	}
 
 	public void setSmartLinesUIToActive() {
+		currentSettings.put("smartLines", true);
 		smartLinesOptionMenu.setSelected(true);
 	}
 
 	public void setSmartLinesUIToInactive() {
+		currentSettings.put("smartLines", false);
 		smartLinesOptionMenu.setSelected(false);
 	}
 
@@ -339,5 +366,4 @@ public class GraphicsOptionsDialog extends JDialog {
 			element.setEnabled(false);
 		}
 	}
-
 }

@@ -219,7 +219,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		}
 	}
 
-	public void setSelectedLayoutStrategyItem(String item) {
+	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
 		graphicsOptionsDialog.setSelectedLayoutStrategyItem(item);
 	}
 
@@ -270,14 +270,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void moduleOpen(String[] paths) {
-		// TODO Auto-generated method stub
-
+		// Not used from this UI
 	}
 
 	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
-		// TODO Auto-generated method stub
-
+		// Not used from this UI
 	}
 
 	@Override
@@ -285,18 +283,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		for (UserInputListener listener : listeners) {
 			listener.moduleZoomOut();
 		}
-	}
-
-	@Override
-	public void figureSelected(BaseFigure[] figures) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void figureDeselected(BaseFigure[] figures) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -405,13 +391,19 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	@Override
 	public void hideModules() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void restoreModules() {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void figureSelected(BaseFigure[] figures) {
+	}
 
+	@Override
+	public void figureDeselected(BaseFigure[] figures) {
 	}
 
 }
