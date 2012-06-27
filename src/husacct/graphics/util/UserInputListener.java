@@ -18,8 +18,6 @@ public interface UserInputListener {
 
 	public void exportToImage();
 
-	public void toggleViolations();
-	
 	public void refreshDrawing();
 
 	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum);
@@ -28,6 +26,10 @@ public interface UserInputListener {
 	
 	public void hideDependencies();
 
+	public void showViolations();
+	
+	public void hideViolations();
+	
 	public void toggleSmartLines();
 	
 	public void drawingZoomChanged(double zoomFactor);	

@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -119,6 +118,16 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 		showViolationsButton = new JButton();
 		showViolationsButton.setSize(40, menuItemMaxHeight);
+		showViolationsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(showViolationsButton.getToolTipText().equals(menuBarLocale.get("HideViolations"))){
+					hideViolations();
+				}else{
+					showViolations();
+				}
+			}
+		});
 		add(showViolationsButton);
 		
 		exportToImageButton = new JButton();
@@ -162,42 +171,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	public void setRefreshAction(ActionListener listener) {
 		refreshButton.addActionListener(listener);
 		graphicsOptionsDialog.setRefreshAction(listener);
-	}
-
-	public void setViolationsToggle(ActionListener listener) {
-		showViolationsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JButton button = (JButton) event.getSource();
-				if (button.isSelected()) {
-					setViolationsButtonToInactive();
-				} else {
-					setViolationsButtonToActive();
-				}
-			}
-		});
-		showViolationsButton.addActionListener(listener);
-		graphicsOptionsDialog.setToggleViolationsAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JCheckBox checkbox = (JCheckBox) event.getSource();
-				if (checkbox.isSelected()) {
-					setViolationsButtonToInactive();
-				} else {
-					setViolationsButtonToActive();
-				}
-			}
-		});
-		graphicsOptionsDialog.setToggleViolationsAction(listener);
-	}
-	
-	public void setViolationsButtonToActive(){
-		setButtonIcon(showViolationsButton, "violationsShow");
-		showViolationsButton.setToolTipText(menuBarLocale.get("ShowViolations"));
-	}
-	public void setViolationsButtonToInactive(){
-		setButtonIcon(showViolationsButton, "violationsHide");
-		showViolationsButton.setToolTipText(menuBarLocale.get("HideViolations"));
 	}
 
 	public void setSmartLinesToggle(ActionListener listener) {
@@ -268,18 +241,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	public String getSelectedLayoutStrategyItem() {
 		return graphicsOptionsDialog.getSelectedLayoutStrategyItem();
-	}
-
-	public void setViolationToggle(boolean setting) {
-		if(showViolationsButton.isSelected()!=setting){
-			showViolationsButton.setSelected(setting);
-		}
-		if(setting){
-			setViolationsButtonToInactive();
-		}else{
-			setViolationsButtonToActive();
-		}
-		graphicsOptionsDialog.setViolationToggle(setting);
 	}
 
 	public void setContextUpdatesToggle(boolean setting) {
@@ -367,12 +328,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	}
 
 	@Override
-	public void toggleViolations() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void refreshDrawing() {
 		// TODO Auto-generated method stub
 		
@@ -410,6 +365,32 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		graphicsOptionsDialog.setDependenciesUIToInactive();
 	}
 
+	@Override
+	public void showViolations() {
+		for (UserInputListener l : listeners) {
+			l.showViolations();
+		}
+	}
+
+	@Override
+	public void hideViolations() {
+		for (UserInputListener l : listeners) {
+			l.hideViolations();
+		}
+	}
+	
+	public void setViolationsUIToActive(){
+		setButtonIcon(showViolationsButton, "violationsHide");
+		showViolationsButton.setToolTipText(menuBarLocale.get("HideViolations"));
+		graphicsOptionsDialog.setViolationsUIToActive();
+	}
+	
+	public void setViolationsUIToInactive(){
+		setButtonIcon(showViolationsButton, "violationsShow");
+		showViolationsButton.setToolTipText(menuBarLocale.get("ShowViolations"));
+		graphicsOptionsDialog.setViolationsUIToInactive();
+	}
+	
 	@Override
 	public void toggleSmartLines() {
 		// TODO Auto-generated method stub

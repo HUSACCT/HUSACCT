@@ -187,6 +187,11 @@ public class GraphicsOptionsDialog extends JDialog {
 			}else{
 				listener.hideDependencies();
 			}
+			if(showViolationsOptionMenu.isSelected()){
+				listener.showViolations();
+			}else{
+				listener.hideViolations();
+			}
 		}
 		resetChangeBooleans();
 	}
@@ -254,10 +259,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		smartLinesOptionMenu.setSelected(setting);
 	}
 
-	public void setToggleViolationsAction(ActionListener listener) {
-		showViolationsOptionMenu.addActionListener(listener);
-	}
-
 	public void setZoomChangeListener(ChangeListener listener) {
 		zoomSlider.addChangeListener(listener);
 	}
@@ -284,11 +285,13 @@ public class GraphicsOptionsDialog extends JDialog {
 	public void setDependenciesUIToInactive() {
 		showDependenciesOptionMenu.setSelected(false);
 	}
-
-	public void setViolationToggle(boolean setting) {
-		if (showViolationsOptionMenu.isSelected() != setting) {
-			showViolationsOptionMenu.setSelected(setting);
-		}
+	
+	public void setViolationsUIToActive() {
+		showViolationsOptionMenu.setSelected(true);
+	}
+	
+	public void setViolationsUIToInactive() {
+		showViolationsOptionMenu.setSelected(false);
 	}
 
 	public void setZoomValue(int value) {

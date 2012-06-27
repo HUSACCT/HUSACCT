@@ -145,25 +145,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	@Override
-	public void toggleViolations() {
+	public void showViolations() {
 		notifyServiceListeners();
-		if (areViolationsShown()) {
-			hideViolations();
-		} else {
-			showViolations();
-		}
+		super.showViolations();
+		graphicsFrame.turnOnViolations();
 		drawLinesBasedOnSettingInTask();
 	}
 
-	public void showViolations() {
-		super.showViolations();
-		graphicsFrame.turnOnViolations();
-	}
-
+	@Override
 	public void hideViolations() {
+		notifyServiceListeners();
 		super.hideViolations();
 		graphicsFrame.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
+		drawLinesBasedOnSettingInTask();
 	}
 
 	public void toggleSmartLines() {

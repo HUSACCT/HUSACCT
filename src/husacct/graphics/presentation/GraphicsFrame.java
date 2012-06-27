@@ -283,12 +283,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 				refreshDrawing();
 			}
 		});
-		menuBar.setViolationsToggle(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				toggleViolations();
-			}
-		});
 		menuBar.setSmartLinesToggle(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -379,10 +373,18 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 			l.hideDependencies();
 		}
 	}
-
-	public void toggleViolations() {
+	
+	@Override
+	public void showViolations() {
 		for (UserInputListener l : listeners) {
-			l.toggleViolations();
+			l.showViolations();
+		}
+	}
+
+	@Override
+	public void hideViolations() {
+		for (UserInputListener l : listeners) {
+			l.hideViolations();
 		}
 	}
 
@@ -495,11 +497,11 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 	
 	public void turnOnViolations() {
-		menuBar.setViolationToggle(true);
+		menuBar.setViolationsUIToActive();
 	}
 
 	public void turnOffViolations() {
-		menuBar.setViolationToggle(false);
+		menuBar.setViolationsUIToInactive();
 	}
 
 	public void turnOnSmartLines() {
