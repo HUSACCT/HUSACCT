@@ -192,6 +192,12 @@ public class GraphicsOptionsDialog extends JDialog {
 			}else{
 				listener.hideViolations();
 			}
+			if(smartLinesOptionMenu.isSelected()){
+				listener.showSmartLines();
+			}else{
+				listener.hideSmartLines();
+			}
+			listener.refreshDrawing();
 		}
 		resetChangeBooleans();
 	}
@@ -245,10 +251,6 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void setExportToImageAction(ActionListener listener) {
 		exportToImageButton.addActionListener(listener);
-	}
-
-	public void setToggleContextUpdatesAction(ActionListener listener) {
-		smartLinesOptionMenu.addActionListener(listener);
 	}
 
 	public void setLayoutStrategyAction(ActionListener listener) {

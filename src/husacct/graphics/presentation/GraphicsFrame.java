@@ -283,12 +283,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 				refreshDrawing();
 			}
 		});
-		menuBar.setSmartLinesToggle(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				toggleContextUpdates();
-			}
-		});
 		menuBar.setLayoutStrategyAction(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -387,10 +381,18 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 			l.hideViolations();
 		}
 	}
-
-	protected void toggleContextUpdates() {
+	
+	@Override
+	public void showSmartLines() {
 		for (UserInputListener l : listeners) {
-			l.toggleSmartLines();
+			l.showSmartLines();
+		}
+	}
+
+	@Override
+	public void hideSmartLines() {
+		for (UserInputListener l : listeners) {
+			l.hideSmartLines();
 		}
 	}
 
@@ -574,12 +576,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void toggleSmartLines() {
 		// TODO Auto-generated method stub
 		
 	}

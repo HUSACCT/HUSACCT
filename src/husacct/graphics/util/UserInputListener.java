@@ -30,7 +30,9 @@ public interface UserInputListener {
 	
 	public void hideViolations();
 	
-	public void toggleSmartLines();
+	public void showSmartLines();
+	
+	public void hideSmartLines();
 	
 	public void drawingZoomChanged(double zoomFactor);	
 	

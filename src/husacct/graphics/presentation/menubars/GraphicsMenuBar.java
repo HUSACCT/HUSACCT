@@ -112,6 +112,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 				}else{
 					showDependencies();
 				}
+				refreshDrawing();
 			}
 		});
 		add(showDependenciesButton);
@@ -126,6 +127,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 				}else{
 					showViolations();
 				}
+				refreshDrawing();
 			}
 		});
 		add(showViolationsButton);
@@ -172,11 +174,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		refreshButton.addActionListener(listener);
 		graphicsOptionsDialog.setRefreshAction(listener);
 	}
-
-	public void setSmartLinesToggle(ActionListener listener) {
-		graphicsOptionsDialog.setToggleContextUpdatesAction(listener);
-	}
-
+	
 	public void setOptionsDialogAction(ActionListener listener) {
 		optionsDialogButton.addActionListener(listener);
 	}
@@ -329,8 +327,9 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void refreshDrawing() {
-		// TODO Auto-generated method stub
-		
+		for(UserInputListener listener : listeners){
+			listener.refreshDrawing();
+		}
 	}
 
 	@Override
@@ -392,9 +391,17 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	}
 	
 	@Override
-	public void toggleSmartLines() {
-		// TODO Auto-generated method stub
-		
+	public void showSmartLines() {
+		for (UserInputListener l : listeners) {
+			l.showSmartLines();
+		}
+	}
+
+	@Override
+	public void hideSmartLines() {
+		for (UserInputListener l : listeners) {
+			l.hideSmartLines();
+		}
 	}
 
 	@Override
