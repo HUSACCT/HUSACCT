@@ -10,7 +10,6 @@
 	<property name="reports.dir"	value="${build.dir}/reports" />
 	
 	<property name="main-class"  	value="husacct.Main"/>
-	<property name="wrapper-class"	value="husacct.build.BuildLauncher"/>
 	 
 	<path id="classpath">
 		<pathelement location="${bin.dir}" />
@@ -50,11 +49,6 @@
 		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${bin.dir}" excludes="husaccttest/**">
 			<manifest>
 				<attribute name="Main-Class" value="${main-class}"/>
-			</manifest>
-		</jar>
-		<jar destfile="${jar.dir}/${ant.project.name}-launcher.jar" basedir="${bin.dir}" includes="husacct/build/**">
-			<manifest>
-				<attribute name="Main-Class" value="${wrapper-class}"/>
 			</manifest>
 		</jar>
 	</target>

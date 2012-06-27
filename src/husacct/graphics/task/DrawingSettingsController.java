@@ -17,7 +17,7 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void loadDefaultSettings(){
 		showDependencies();
 		hideViolations();
-		deactivateSmartLines();
+		hideSmartLines();
 	}
 	
 	protected DrawingDetail getCurrentDrawingDetail() {
@@ -60,11 +60,11 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		return areSmartLinesOn;
 	}
 	
-	public void deactivateSmartLines() {
+	public void hideSmartLines() {
 		areSmartLinesOn = false;
 	}
 
-	public void activateSmartLines() {
+	public void showSmartLines() {
 		areSmartLinesOn = true;
 	}
 	

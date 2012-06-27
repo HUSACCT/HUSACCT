@@ -145,8 +145,8 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void moduleZoom(BaseFigure[] fig) {
-		for (UserInputListener l : listeners) {
-			l.moduleZoom(fig);
+		for (UserInputListener listener : listeners) {
+			listener.moduleZoom(fig);
 		}
 		requestFocus();
 	}

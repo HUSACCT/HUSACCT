@@ -1,8 +1,14 @@
 package husacct.graphics.presentation.dialogs;
 
 import husacct.ServiceProvider;
+import husacct.control.IControlService;
+import husacct.graphics.util.DrawingLayoutStrategy;
+import husacct.graphics.util.UserInputListener;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +23,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
@@ -24,28 +32,54 @@ import org.apache.log4j.Logger;
 public class GraphicsOptionsDialog extends JDialog {
 	private static final long serialVersionUID = 4794939901459687332L;
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
+	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
-	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel;
+	private JPanel mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
 
 	private int menuItemMaxHeight = 45;
 
-	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton;
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, hideFiguresButton, showFiguresButton, okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
 	private ArrayList<JComponent> interfaceElements;
+	private HashMap<String, Object> currentSettings;
 
-	private int width, height;
+	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
+	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
+	private String[] layoutStrategyItems;
+	private IControlService controlService;
 
 	public GraphicsOptionsDialog() {
 		super();
-		width = 550;
-		height = 200;
+		currentSettings = new HashMap<String, Object>();
+		currentSettings.put("dependencies", true);
+		currentSettings.put("violations", false);
+		currentSettings.put("smartLines", false);
+		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
+		controlService = ServiceProvider.getInstance().getControlService();
+		totalWidth = 550;
+		totalHeight = 260;
+		paddingSize = 10;
+		labelWidth = 100;
+		elementHeight = 20;
+		elementWidth = totalWidth - labelWidth - (paddingSize * 2) - 20;
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		add(mainPanel);
+
+		layoutStrategiesTranslations = new HashMap<String, DrawingLayoutStrategy>();
+		int i = 0;
+		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
+		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
+			String translation = controlService.getTranslatedString(strategy.toString());
+			layoutStrategiesTranslations.put(translation, strategy);
+			layoutStrategyItems[i] = translation;
+			i++;
+		}
+
 		initGUI();
 
 		interfaceElements = new ArrayList<JComponent>();
@@ -58,36 +92,96 @@ public class GraphicsOptionsDialog extends JDialog {
 		interfaceElements.add(smartLinesOptionMenu);
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
+		interfaceElements.add(okButton);
+		interfaceElements.add(applyButton);
+		interfaceElements.add(cancelButton);
 	}
 
 	public void showDialog() {
 		setResizable(false);
-		setSize(width, height);
+		setSize(totalWidth, totalHeight);
 		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		setVisible(true);
 	}
 
 	public void initGUI() {
-		actionsPanel = new JPanel();
+		globalActionsPanel = new JPanel();
 		zoomInButton = new JButton();
-		actionsPanel.add(zoomInButton);
+		zoomInButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.moduleZoom();
+				}
+			}
+		});
+		globalActionsPanel.add(zoomInButton);
 
 		zoomOutButton = new JButton();
-		actionsPanel.add(zoomOutButton);
+		zoomOutButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.moduleZoomOut();
+				}
+			}
+		});
+		globalActionsPanel.add(zoomOutButton);
 
 		refreshButton = new JButton();
-		actionsPanel.add(refreshButton);
+		refreshButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.refreshDrawing();
+				}
+			}
+		});
+		globalActionsPanel.add(refreshButton);
 
 		exportToImageButton = new JButton();
-		actionsPanel.add(exportToImageButton);
+		exportToImageButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.exportToImage();
+				}
+			}
+		});
+		globalActionsPanel.add(exportToImageButton);
+		mainPanel.add(globalActionsPanel);
 
-		mainPanel.add(actionsPanel);
+		figuresActionsPanel = new JPanel();
+		hideFiguresButton = new JButton();
+		hideFiguresButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.hideModules();
+				}
+			}
+		});
+		figuresActionsPanel.add(hideFiguresButton);
+
+		showFiguresButton = new JButton();
+		showFiguresButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.restoreModules();
+				}
+			}
+		});
+		figuresActionsPanel.add(showFiguresButton);
+		mainPanel.add(figuresActionsPanel);
 
 		optionsPanel = new JPanel();
+		optionsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 		optionsPanel.setLayout(new GridLayout(3, 1));
 
 		showDependenciesOptionMenu = new JCheckBox();
-		showDependenciesOptionMenu.setSize(40, menuItemMaxHeight);
+		showDependenciesOptionMenu.setPreferredSize(new Dimension(40, menuItemMaxHeight));
+		showDependenciesOptionMenu.setMaximumSize(new Dimension(40, menuItemMaxHeight));
 		optionsPanel.add(showDependenciesOptionMenu);
 
 		showViolationsOptionMenu = new JCheckBox();
@@ -101,23 +195,122 @@ public class GraphicsOptionsDialog extends JDialog {
 		mainPanel.add(optionsPanel);
 
 		settingsPanel = new JPanel();
-		settingsPanel.setLayout(new GridLayout(1, 2));
+		settingsPanel.setLayout(new GridLayout(2, 2));
+		settingsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
+
+		layoutStrategyPanel = new JPanel();
+		layoutStrategyPanel.setSize(getWidth(), getHeight());
+		layoutStrategyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		layoutStrategyLabel = new JLabel();
-		settingsPanel.add(layoutStrategyLabel);
-		layoutStrategyOptions = new JComboBox();
-		settingsPanel.add(layoutStrategyOptions);
+		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+		layoutStrategyPanel.add(layoutStrategyLabel);
+
+		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
+		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
+		layoutStrategyPanel.add(layoutStrategyOptions);
+		settingsPanel.add(layoutStrategyPanel);
+
+		zoomPanel = new JPanel();
+		zoomPanel.setSize(getWidth(), getHeight());
+		zoomPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		zoomLabel = new JLabel();
+		zoomLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+		zoomPanel.add(zoomLabel);
+
+		zoomSlider = new JSlider(25, 175, 100);
+		zoomSlider.setPreferredSize(new Dimension(elementWidth, elementHeight));
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				int scale = ((JSlider) ce.getSource()).getValue();
+				for (UserInputListener listener : listeners) {
+					listener.drawingZoomChanged(scale);
+				}
+			}
+		});
+		zoomPanel.add(zoomSlider);
+		settingsPanel.add(zoomPanel);
 
 		mainPanel.add(settingsPanel);
 
-		zoomPanel = new JPanel();
-		zoomPanel.setLayout(new GridLayout(1, 2));
-		zoomLabel = new JLabel();
-		zoomPanel.add(zoomLabel);
-		zoomSlider = new JSlider(25, 175, 100);
-		zoomSlider.setSize(50, width);
-		zoomPanel.add(zoomSlider);
+		JPanel confirmPanel = new JPanel();
+		confirmPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		okButton = new JButton();
+		okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				notifyListeners();
+				setVisible(false);
+			}
+		});
+		confirmPanel.add(okButton);
 
-		mainPanel.add(zoomPanel);
+		applyButton = new JButton();
+		applyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				notifyListeners();
+			}
+		});
+		confirmPanel.add(applyButton);
+
+		cancelButton = new JButton();
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				resetUIElementsToCurrentSettings();
+				setVisible(false);
+			}
+		});
+		confirmPanel.add(cancelButton);
+		mainPanel.add(confirmPanel);
+	}
+
+	private void resetUIElementsToCurrentSettings() {
+		showDependenciesOptionMenu.setSelected((Boolean) currentSettings.get("dependencies"));
+		showViolationsOptionMenu.setSelected((Boolean) currentSettings.get("violations"));
+		smartLinesOptionMenu.setSelected((Boolean) currentSettings.get("smartLines"));
+		layoutStrategyOptions.setSelectedItem(controlService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
+	}
+
+	public void addListener(UserInputListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(UserInputListener listener) {
+		listeners.remove(listener);
+	}
+
+	public void notifyListeners() {
+		for (UserInputListener listener : listeners) {
+			if (showDependenciesOptionMenu.isSelected()) {
+				currentSettings.put("dependencies", true);
+				listener.showDependencies();
+			} else {
+				currentSettings.put("dependencies", false);
+				listener.hideDependencies();
+			}
+			if (showViolationsOptionMenu.isSelected()) {
+				currentSettings.put("violations", true);
+				listener.showViolations();
+			} else {
+				currentSettings.put("violations", true);
+				listener.hideViolations();
+			}
+			if (smartLinesOptionMenu.isSelected()) {
+				currentSettings.put("smartLines", true);
+				listener.showSmartLines();
+			} else {
+				currentSettings.put("smartLines", false);
+				listener.hideSmartLines();
+			}
+			DrawingLayoutStrategy selectedStrategy = getSelectedLayoutStrategyItem();
+			if (null != selectedStrategy) {
+				currentSettings.put("layoutStrategy", selectedStrategy);
+				listener.changeLayoutStrategy(selectedStrategy);
+			}
+			listener.refreshDrawing();
+		}
 	}
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
@@ -130,7 +323,12 @@ public class GraphicsOptionsDialog extends JDialog {
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
+			okButton.setText(menuBarLocale.get("Ok"));
+			applyButton.setText(menuBarLocale.get("Apply"));
+			cancelButton.setText(menuBarLocale.get("Cancel"));
 			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
+			showFiguresButton.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
@@ -147,76 +345,60 @@ public class GraphicsOptionsDialog extends JDialog {
 			refreshButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(icons.get("save")));
 			exportToImageButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("hideFigures")));
+			hideFiguresButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("showFigures")));
+			showFiguresButton.setIcon(icon);
 		} catch (NullPointerException e) {
 			logger.warn("Icons are not set properly.");
 		}
 	}
 
-	public void setZoomInAction(ActionListener listener) {
-		zoomInButton.addActionListener(listener);
+	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
+		currentSettings.put("layoutStrategy", item);
+		layoutStrategyOptions.setSelectedItem(controlService.getTranslatedString(item.toString()));
 	}
 
-	public void setZoomOutAction(ActionListener listener) {
-		zoomOutButton.addActionListener(listener);
-	}
-
-	public void setRefreshAction(ActionListener listener) {
-		refreshButton.addActionListener(listener);
-	}
-
-	public void setExportToImageAction(ActionListener listener) {
-		exportToImageButton.addActionListener(listener);
-	}
-
-	public void setToggleContextUpdatesAction(ActionListener listener) {
-		smartLinesOptionMenu.addActionListener(listener);
-	}
-
-	public void setLayoutStrategyAction(ActionListener listener) {
-		layoutStrategyOptions.addActionListener(listener);
-	}
-
-	public void setContextUpdatesToggle(boolean setting) {
-		smartLinesOptionMenu.setSelected(setting);
-	}
-
-	public void setToggleDependenciesAction(ActionListener listener) {
-		showDependenciesOptionMenu.addActionListener(listener);
-	}
-
-	public void setToggleViolationsAction(ActionListener listener) {
-		showViolationsOptionMenu.addActionListener(listener);
-	}
-
-	public void setZoomChangeListener(ChangeListener listener) {
-		zoomSlider.addChangeListener(listener);
-	}
-
-	public void setLayoutStrategyItems(String[] layoutStrategyItems) {
-		layoutStrategyOptions.removeAllItems();
-		for (String item : layoutStrategyItems) {
-			layoutStrategyOptions.addItem(item);
+	public DrawingLayoutStrategy getSelectedLayoutStrategyItem() {
+		DrawingLayoutStrategy selectedStrategy = null;
+		String selectedItem = null;
+		try {
+			selectedItem = (String) layoutStrategyOptions.getSelectedItem();
+			selectedStrategy = layoutStrategiesTranslations.get(selectedItem);
+		} catch (Exception ex) {
+			logger.debug("Could not find the selected layout strategy \"" + (selectedItem == null ? "null" : selectedItem) + "\".");
 		}
+		return selectedStrategy;
 	}
 
-	public void setSelectedLayoutStrategyItem(String item) {
-		layoutStrategyOptions.setSelectedItem(item);
+	public void setDependenciesUIToActive() {
+		currentSettings.put("dependencies", true);
+		showDependenciesOptionMenu.setSelected(true);
 	}
 
-	public String getSelectedLayoutStrategyItem() {
-		return (String) layoutStrategyOptions.getSelectedItem();
+	public void setDependenciesUIToInactive() {
+		currentSettings.put("dependencies", false);
+		showDependenciesOptionMenu.setSelected(false);
 	}
 
-	public void setDependencyToggle(boolean setting) {
-		if (showDependenciesOptionMenu.isSelected() != setting) {
-			showDependenciesOptionMenu.setSelected(setting);
-		}
+	public void setViolationsUIToActive() {
+		currentSettings.put("violations", true);
+		showViolationsOptionMenu.setSelected(true);
 	}
 
-	public void setViolationToggle(boolean setting) {
-		if (showViolationsOptionMenu.isSelected() != setting) {
-			showViolationsOptionMenu.setSelected(setting);
-		}
+	public void setViolationsUIToInactive() {
+		currentSettings.put("violations", false);
+		showViolationsOptionMenu.setSelected(false);
+	}
+
+	public void setSmartLinesUIToActive() {
+		currentSettings.put("smartLines", true);
+		smartLinesOptionMenu.setSelected(true);
+	}
+
+	public void setSmartLinesUIToInactive() {
+		currentSettings.put("smartLines", false);
+		smartLinesOptionMenu.setSelected(false);
 	}
 
 	public void setZoomValue(int value) {
@@ -234,5 +416,4 @@ public class GraphicsOptionsDialog extends JDialog {
 			element.setEnabled(false);
 		}
 	}
-
 }

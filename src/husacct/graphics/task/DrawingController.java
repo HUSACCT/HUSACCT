@@ -130,66 +130,38 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	@Override
-	public void toggleDependencies() {
-		notifyServiceListeners();
-		if (areDependenciesShown()) {
-			hideDependencies();
-		} else {
-			showDependencies();
-		}
-		drawLinesBasedOnSettingInTask();
-	}
-
 	public void showDependencies() {
 		super.showDependencies();
 		graphicsFrame.turnOnDependencies();
 	}
 
+	@Override
 	public void hideDependencies() {
 		super.hideDependencies();
 		graphicsFrame.turnOffDependencies();
 	}
 
 	@Override
-	public void toggleViolations() {
-		notifyServiceListeners();
-		if (areViolationsShown()) {
-			hideViolations();
-		} else {
-			showViolations();
-		}
-		drawLinesBasedOnSettingInTask();
-	}
-
 	public void showViolations() {
 		super.showViolations();
 		graphicsFrame.turnOnViolations();
 	}
 
+	@Override
 	public void hideViolations() {
 		super.hideViolations();
 		graphicsFrame.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
-	public void toggleSmartLines() {
-		notifyServiceListeners();
-		if (areSmartLinesOn()) {
-			deactivateSmartLines();
-		} else {
-			activateSmartLines();
-		}
-		drawLinesBasedOnSettingInTask();
-	}
-
-	public void deactivateSmartLines() {
-		super.deactivateSmartLines();
-		graphicsFrame.turnOffSmartLines();
-	}
-
-	public void activateSmartLines() {
-		super.activateSmartLines();
+	public void showSmartLines() {
+		super.showSmartLines();
 		graphicsFrame.turnOnSmartLines();
+	}
+
+	public void hideSmartLines() {
+		super.hideSmartLines();
+		graphicsFrame.turnOffSmartLines();
 	}
 
 	public JInternalFrame getGUI() {
