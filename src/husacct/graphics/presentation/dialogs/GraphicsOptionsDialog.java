@@ -34,11 +34,11 @@ public class GraphicsOptionsDialog extends JDialog {
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
-	private JPanel mainPanel, settingsPanel, actionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
+	private JPanel mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
 
 	private int menuItemMaxHeight = 45;
 
-	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, okButton, applyButton, cancelButton;
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, hideFiguresButton, showFiguresButton, okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
@@ -60,7 +60,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
 		controlService = ServiceProvider.getInstance().getControlService();
 		totalWidth = 550;
-		totalHeight = 230;
+		totalHeight = 260;
 		paddingSize = 10;
 		labelWidth = 100;
 		elementHeight = 20;
@@ -105,7 +105,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 
 	public void initGUI() {
-		actionsPanel = new JPanel();
+		globalActionsPanel = new JPanel();
 		zoomInButton = new JButton();
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
@@ -115,7 +115,7 @@ public class GraphicsOptionsDialog extends JDialog {
 				}
 			}
 		});
-		actionsPanel.add(zoomInButton);
+		globalActionsPanel.add(zoomInButton);
 
 		zoomOutButton = new JButton();
 		zoomOutButton.addActionListener(new ActionListener() {
@@ -126,7 +126,7 @@ public class GraphicsOptionsDialog extends JDialog {
 				}
 			}
 		});
-		actionsPanel.add(zoomOutButton);
+		globalActionsPanel.add(zoomOutButton);
 
 		refreshButton = new JButton();
 		refreshButton.addActionListener(new ActionListener() {
@@ -137,7 +137,7 @@ public class GraphicsOptionsDialog extends JDialog {
 				}
 			}
 		});
-		actionsPanel.add(refreshButton);
+		globalActionsPanel.add(refreshButton);
 
 		exportToImageButton = new JButton();
 		exportToImageButton.addActionListener(new ActionListener() {
@@ -148,9 +148,32 @@ public class GraphicsOptionsDialog extends JDialog {
 				}
 			}
 		});
-		actionsPanel.add(exportToImageButton);
+		globalActionsPanel.add(exportToImageButton);
+		mainPanel.add(globalActionsPanel);
 
-		mainPanel.add(actionsPanel);
+		figuresActionsPanel = new JPanel();
+		hideFiguresButton = new JButton();
+		hideFiguresButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.hideModules();
+				}
+			}
+		});
+		figuresActionsPanel.add(hideFiguresButton);
+
+		showFiguresButton = new JButton();
+		showFiguresButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (UserInputListener listener : listeners) {
+					listener.restoreModules();
+				}
+			}
+		});
+		figuresActionsPanel.add(showFiguresButton);
+		mainPanel.add(figuresActionsPanel);
 
 		optionsPanel = new JPanel();
 		optionsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
@@ -174,40 +197,40 @@ public class GraphicsOptionsDialog extends JDialog {
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(2, 2));
 		settingsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
-		
-			layoutStrategyPanel = new JPanel();
-			layoutStrategyPanel.setSize(getWidth(), getHeight());
-			layoutStrategyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-				layoutStrategyLabel = new JLabel();
-				layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
-				layoutStrategyPanel.add(layoutStrategyLabel);
-			
-				layoutStrategyOptions = new JComboBox(layoutStrategyItems);
-				layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
-				layoutStrategyPanel.add(layoutStrategyOptions);
-			settingsPanel.add(layoutStrategyPanel);
-			
-			zoomPanel = new JPanel();
-			zoomPanel.setSize(getWidth(), getHeight());
-			zoomPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-				zoomLabel = new JLabel();
-				zoomLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
-				zoomPanel.add(zoomLabel);
 
-				zoomSlider = new JSlider(25, 175, 100);
-				zoomSlider.setPreferredSize(new Dimension(elementWidth, elementHeight));
-				zoomSlider.addChangeListener(new ChangeListener() {
-					@Override
-					public void stateChanged(ChangeEvent ce) {
-						int scale = ((JSlider) ce.getSource()).getValue();
-						for (UserInputListener listener : listeners) {
-							listener.drawingZoomChanged(scale);
-						}
-					}
-				});
-				zoomPanel.add(zoomSlider);
-			settingsPanel.add(zoomPanel);
-				
+		layoutStrategyPanel = new JPanel();
+		layoutStrategyPanel.setSize(getWidth(), getHeight());
+		layoutStrategyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		layoutStrategyLabel = new JLabel();
+		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+		layoutStrategyPanel.add(layoutStrategyLabel);
+
+		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
+		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
+		layoutStrategyPanel.add(layoutStrategyOptions);
+		settingsPanel.add(layoutStrategyPanel);
+
+		zoomPanel = new JPanel();
+		zoomPanel.setSize(getWidth(), getHeight());
+		zoomPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		zoomLabel = new JLabel();
+		zoomLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+		zoomPanel.add(zoomLabel);
+
+		zoomSlider = new JSlider(25, 175, 100);
+		zoomSlider.setPreferredSize(new Dimension(elementWidth, elementHeight));
+		zoomSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent ce) {
+				int scale = ((JSlider) ce.getSource()).getValue();
+				for (UserInputListener listener : listeners) {
+					listener.drawingZoomChanged(scale);
+				}
+			}
+		});
+		zoomPanel.add(zoomSlider);
+		settingsPanel.add(zoomPanel);
+
 		mainPanel.add(settingsPanel);
 
 		JPanel confirmPanel = new JPanel();
@@ -304,6 +327,8 @@ public class GraphicsOptionsDialog extends JDialog {
 			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
 			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
+			showFiguresButton.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
@@ -320,6 +345,10 @@ public class GraphicsOptionsDialog extends JDialog {
 			refreshButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(icons.get("save")));
 			exportToImageButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("hideFigures")));
+			hideFiguresButton.setIcon(icon);
+			icon = new ImageIcon(getClass().getResource(icons.get("showFigures")));
+			showFiguresButton.setIcon(icon);
 		} catch (NullPointerException e) {
 			logger.warn("Icons are not set properly.");
 		}

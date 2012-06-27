@@ -177,6 +177,8 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
 		menuBarLocale.put("LayoutStrategy", controlService.getTranslatedString("LayoutStrategy"));
 		menuBarLocale.put("DrawingOutOfDate", controlService.getTranslatedString("DrawingOutOfDate"));
+		menuBarLocale.put("HideModules", controlService.getTranslatedString("HideModules"));
+		menuBarLocale.put("RestoreHiddenModules", controlService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
 
 		dependencyColumnNames = new ArrayList<String>();
@@ -511,19 +513,25 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	@Override
 	public void hideModules() {
-		// TODO Auto-generated method stub
+		for (UserInputListener listener : listeners) {
+			listener.hideModules();
+		}
 	}
 
 	@Override
 	public void restoreModules() {
-		// TODO Auto-generated method stub
+		for (UserInputListener listener : listeners) {
+			listener.restoreModules();
+		}
 	}
 
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
+		// Not used in this UI
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
+		// Not used in this UI
 	}
 }

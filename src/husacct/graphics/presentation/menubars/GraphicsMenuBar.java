@@ -53,6 +53,8 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		icons.put("violationsShow", "/husacct/common/resources/graphics/icon-errors-show.png");
 		icons.put("violationsHide", "/husacct/common/resources/graphics/icon-errors-hide.png");
 		icons.put("outofdate", "/husacct/common/resources/graphics/icon-outofdate.png");
+		icons.put("hideFigures", "/husacct/common/resources/graphics/icon-figures-hide.png");
+		icons.put("showFigures", "/husacct/common/resources/graphics/icon-figures-show.png");
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -390,12 +392,16 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void hideModules() {
-		// TODO Auto-generated method stub
+		for (UserInputListener listener : listeners) {
+			listener.hideModules();
+		}
 	}
 
 	@Override
 	public void restoreModules() {
-		// TODO Auto-generated method stub
+		for (UserInputListener listener : listeners) {
+			listener.restoreModules();
+		}
 	}
 	
 	@Override
