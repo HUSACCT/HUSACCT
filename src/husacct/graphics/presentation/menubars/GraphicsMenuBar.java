@@ -111,6 +111,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 		refreshButton = new JButton();
 		refreshButton.setSize(50, menuItemMaxHeight);
+		refreshButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				refreshDrawing();
+			}
+		});
 		add(refreshButton);
 		setButtonIcon(refreshButton, "refresh");
 
@@ -184,16 +190,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		outOfDateButton = new JButton();
 		outOfDateButton.setSize(50, menuItemMaxHeight);
 		setButtonIcon(outOfDateButton, "outofdate");
-	}
-
-	public void setZoomOutAction(ActionListener listener) {
-		zoomOutButton.addActionListener(listener);
-		graphicsOptionsDialog.setZoomOutAction(listener);
-	}
-
-	public void setRefreshAction(ActionListener listener) {
-		refreshButton.addActionListener(listener);
-		graphicsOptionsDialog.setRefreshAction(listener);
 	}
 	
 	public void setOptionsDialogAction(ActionListener listener) {

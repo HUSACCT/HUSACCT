@@ -237,13 +237,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar = new GraphicsMenuBar();
 		menuBar.addListener(this);
 		menuBar.setSize(frameTotalWidth, 20);
-	
-		menuBar.setRefreshAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshDrawing();
-			}
-		});
+		
 		menuBar.setOutOfDateAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -99,6 +99,14 @@ public class GraphicsOptionsDialog extends JDialog {
 		actionsPanel.add(zoomOutButton);
 
 		refreshButton = new JButton();
+		refreshButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(UserInputListener listener : listeners){
+					listener.refreshDrawing();
+				}
+			}
+		});
 		actionsPanel.add(refreshButton);
 
 		exportToImageButton = new JButton();
@@ -253,14 +261,6 @@ public class GraphicsOptionsDialog extends JDialog {
 		} catch (NullPointerException e) {
 			logger.warn("Icons are not set properly.");
 		}
-	}
-	
-	public void setZoomOutAction(ActionListener listener) {
-		zoomOutButton.addActionListener(listener);
-	}
-
-	public void setRefreshAction(ActionListener listener) {
-		refreshButton.addActionListener(listener);
 	}
 
 	public void setLayoutStrategyAction(ActionListener listener) {
