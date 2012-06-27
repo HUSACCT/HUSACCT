@@ -29,7 +29,7 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	private int menuItemMaxHeight = 45;
 
-	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton;
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, okButton, applyButton, cancelButton;
 	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
@@ -41,7 +41,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	public GraphicsOptionsDialog() {
 		super();
 		width = 550;
-		height = 200;
+		height = 230;
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -58,6 +58,9 @@ public class GraphicsOptionsDialog extends JDialog {
 		interfaceElements.add(smartLinesOptionMenu);
 		interfaceElements.add(layoutStrategyOptions);
 		interfaceElements.add(zoomSlider);
+		interfaceElements.add(okButton);
+		interfaceElements.add(applyButton);
+		interfaceElements.add(cancelButton);
 	}
 
 	public void showDialog() {
@@ -118,6 +121,15 @@ public class GraphicsOptionsDialog extends JDialog {
 		zoomPanel.add(zoomSlider);
 
 		mainPanel.add(zoomPanel);
+		
+		JPanel confirmPanel = new JPanel();
+		okButton = new JButton();
+		confirmPanel.add(okButton);
+		applyButton = new JButton();
+		confirmPanel.add(applyButton);
+		cancelButton = new JButton();
+		confirmPanel.add(cancelButton);
+		mainPanel.add(confirmPanel);
 	}
 
 	public void setLocale(HashMap<String, String> menuBarLocale) {
@@ -130,6 +142,9 @@ public class GraphicsOptionsDialog extends JDialog {
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
+			okButton.setText(menuBarLocale.get("Ok"));
+			applyButton.setText(menuBarLocale.get("Apply"));
+			cancelButton.setText(menuBarLocale.get("Cancel"));
 			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
