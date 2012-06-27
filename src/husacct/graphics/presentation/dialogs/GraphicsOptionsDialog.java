@@ -131,6 +131,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
 			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
 			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
 		}
