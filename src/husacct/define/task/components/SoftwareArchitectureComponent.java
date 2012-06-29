@@ -8,7 +8,7 @@ public class SoftwareArchitectureComponent extends AbstractDefineComponent {
 	
 	public SoftwareArchitectureComponent() {
 		super();
-		this.setName("SofwareArchitecture");
+		this.setName("SoftwareArchitecture");
 		this.setModuleId(-1);
 	}
 
