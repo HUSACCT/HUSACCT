@@ -71,9 +71,13 @@ public class SoftwareUnitController extends PopUpController {
 	}
 	
 	public void save(String softwareUnit, String type) {
+		save(this.getModuleId(), softwareUnit, type);
+	}
+	
+	public void save(Long moduleId, String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
-			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), softwareUnit, type);
+			this.softwareUnitDefinitionDomainService.addSoftwareUnit(moduleId, softwareUnit, type);
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
