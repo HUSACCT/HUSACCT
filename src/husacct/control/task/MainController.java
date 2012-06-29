@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 public class MainController {
 	
+	private CommandLineController commandLineController;
 	private ViewController viewController;
 	private WorkspaceController workspaceController;
 	private LocaleController localeController;
@@ -31,6 +32,7 @@ public class MainController {
 	}
 	
 	private void setControllers() {
+		this.commandLineController = new CommandLineController();
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
 		this.localeController = new LocaleController();
@@ -47,21 +49,16 @@ public class MainController {
 		System.setProperty("apple.awt.fileDialogForDirectories", "true");
 	}
 	
-	public void readArguments(String[] consoleArguments){
-		boolean argumentsFound = false;
-		String consoleArgumentsString = "";
-		for(String argument : consoleArguments){
-			argumentsFound = true;
-			consoleArgumentsString += argument; 
-			if(argument.equals("nogui")){
-				guiEnabled = false;
-			}
-		}
-		if(argumentsFound) logger.debug("Parsed console arguments: " + consoleArgumentsString);
-	}
-	
 	private void openMainGui() {
 		this.mainGUI = new MainGui(this);
+	}
+	
+	public void parseCommandLineArguments(String[] commandLineArguments){
+		this.commandLineController.parse(commandLineArguments);
+	}
+	
+	public CommandLineController getCommandLineController(){
+		return this.commandLineController;
 	}
 	
 	public ViewController getViewController(){

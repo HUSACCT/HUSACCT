@@ -5,6 +5,7 @@ import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.ApplicationController;
+import husacct.control.task.BootstrapHandler;
 import husacct.control.task.LocaleController;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
@@ -41,14 +42,17 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
-	public void startApplication(){
-		startApplication(new String[]{});
+	public void parseCommandLineArguments(String[] commandLineArguments){
+		mainController.parseCommandLineArguments(commandLineArguments);
 	}
 	
 	@Override
-	public void startApplication(String[] consoleArguments) {
-		mainController.readArguments(consoleArguments);
+	public void startApplication() {
 		mainController.startGui();
+
+		if(mainController.getCommandLineController().getResult().contains("bootstrap")){
+			new BootstrapHandler(mainController.getCommandLineController().getResult().getStringArray("bootstrap"));
+		}
 	}
 	
 	@Override

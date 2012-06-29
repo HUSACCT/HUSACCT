@@ -9,12 +9,12 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class Main {
 	
-	public Main(String[] consoleArguments){
+	public Main(String[] commandLineArguments){
 		setLog4jConfiguration();
 		printSystemInfo();
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
-		controlService.startApplication(consoleArguments);
-		
+		controlService.parseCommandLineArguments(commandLineArguments);
+		controlService.startApplication();
 	}
 	
 	private void setLog4jConfiguration(){
@@ -35,8 +35,8 @@ public class Main {
 		
 	}
 	
-	public static void main(String[] consoleArguments) {
-		new Main(consoleArguments);
+	public static void main(String[] commandlineArguments) {
+		new Main(commandlineArguments);
 	}
 	
 }

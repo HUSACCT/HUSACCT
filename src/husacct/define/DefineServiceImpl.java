@@ -15,7 +15,9 @@ import husacct.define.domain.services.SoftwareArchitectureDomainService;
 import husacct.define.persistency.PersistentDomain;
 import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
+import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.SoftwareUnitController;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,6 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 		
 		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
 		DefinitionController.setInstance(new DefinitionController());
-		ApplicationController.setInstance(new ApplicationController());
 	}
 
 	@Override
@@ -163,5 +164,17 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 			}
 		}
 		return isMapped;
+	}
+	
+	public DefinitionController getDefinitionController(){
+		return DefinitionController.getInstance();
+	}
+	
+	public AppliedRuleController getAppliedRuleController(){
+		return new AppliedRuleController(0, -1);
+	}
+	
+	public SoftwareUnitController getSoftwareUnitController(){
+		return new SoftwareUnitController(0);
 	}
 }
