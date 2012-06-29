@@ -30,12 +30,6 @@ public class ControlServiceStub implements IControlService {
 	}
 
 	@Override
-	public void startApplication(String[] userArguments) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void addLocaleChangeListener(ILocaleChangeListener listener) {
 		// TODO Auto-generated method stub
 
@@ -81,6 +75,12 @@ public class ControlServiceStub implements IControlService {
 	public void setServiceListeners() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void parseCommandLineArguments(String[] commandLineArguments) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
