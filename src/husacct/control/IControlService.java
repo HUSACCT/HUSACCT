@@ -9,8 +9,8 @@ import javax.swing.JDialog;
 
 public interface IControlService extends IObservableService{
 
+	public void parseCommandLineArguments(String[] commandLineArguments);
 	public void startApplication();
-	public void startApplication(String[] userArguments);
 	public void addLocaleChangeListener(ILocaleChangeListener listener);
 	public Locale getLocale();
 	public void showErrorMessage(String message);
