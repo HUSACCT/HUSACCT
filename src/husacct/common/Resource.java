@@ -19,7 +19,7 @@ public class Resource {
 	public static final String ICON_APPLICATION_OVERVIEW = ICONSET_PATH + "application-overview.png";
 	public static final String ICON_APPLICATION_PROPERTIES = ICONSET_PATH + "application-properties.png";
 	public static final String ICON_CLASS_PRIVATE = ICONSET_PATH + "class-private.png";
-	public static final String ICON_CLASS_PUBLIC = ICONSET_PATH + "class.png";
+	public static final String ICON_CLASS_PUBLIC = ICONSET_PATH + "class-public.png";
 	public static final String ICON_COMPONENT = ICONSET_PATH + "component.png";
 	public static final String ICON_DEFINE_ARCHITECTURE = ICONSET_PATH + "define-architecture.png";
 	public static final String ICON_DEFINE_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "defined-architecture-diagram.png";
@@ -29,7 +29,7 @@ public class Resource {
 	public static final String ICON_FIGURES_HIDE = ICONSET_PATH + "figures-hide.png";
 	public static final String ICON_FIGURES_SHOW = ICONSET_PATH + "figures-show.png";
 	public static final String ICON_INTERFACE_PRIVATE = ICONSET_PATH + "interface-private.png";
-	public static final String ICON_INTERFACE_PUBLIC = ICONSET_PATH + "interface.png";
+	public static final String ICON_INTERFACE_PUBLIC = ICONSET_PATH + "interface-public.png";
 	public static final String ICON_LAYER = ICONSET_PATH + "layer.png";
 	public static final String ICON_LIBRARY = ICONSET_PATH + "library.png";
 	public static final String ICON_MODULE = ICONSET_PATH + "module.png";
