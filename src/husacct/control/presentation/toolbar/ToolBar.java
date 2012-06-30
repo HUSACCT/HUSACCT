@@ -1,5 +1,6 @@
 package husacct.control.presentation.toolbar;
 
+import husacct.common.Resource;
 import husacct.control.presentation.menubar.AnalyseMenu;
 import husacct.control.presentation.menubar.DefineMenu;
 import husacct.control.presentation.menubar.FileMenu;
@@ -57,31 +58,31 @@ public class ToolBar extends JToolBar{
 		
 		ImageIcon icon;
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-newworkspace.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_NEW));
 		createWorkspace = new ToolBarItem("CreateWorkspace", icon, createWorkspaceItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-openworkspace.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_OPEN));
 		openWorkspace = new ToolBarItem("OpenWorkspace", icon, openWorkspaceItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-saveworkspace.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_SAVE));
 		saveWorkspace = new ToolBarItem("SaveWorkspace", icon, saveWorkspaceItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-definearchitecture.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE));
 		defineArchitecture = new ToolBarItem("DefineArchitecture", icon, defineArchitectureItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-definedarchitecturediagram.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE_DIAGRAM));
 		defineArchitectureDiagram = new ToolBarItem("DefinedArchitectureDiagram", icon, defineArchitectureDiagramItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-applicationproperties.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_APPLICATION_PROPERTIES));
 		applicationProperties = new ToolBarItem("ApplicationProperties", icon, setApplicationPropertiesItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-applicationoverview.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_APPLICATION_OVERVIEW));
 		analysedApplicationOverview = new ToolBarItem("AnalysedApplicationOverview", icon, analysedApplicationOverviewItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-analysedarchitecturediagram.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_ANALYSED_ARCHITECTURE_DIAGRAM));
 		analysedApplicationDiagram = new ToolBarItem("AnalysedArchitectureDiagram", icon, analysedApplicationDiagramItem, stateController);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-validate.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 		validateNow = new ToolBarItem("ValidateNow", icon, validateNowItem, stateController);
 		
 		createWorkspace.setEnabled(false);

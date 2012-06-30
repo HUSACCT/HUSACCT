@@ -1,6 +1,7 @@
 package husacct.graphics.presentation.menubars;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.IControlService;
 import husacct.graphics.util.UserInputListener;
 
@@ -36,7 +37,7 @@ public class ContextMenu extends JPopupMenu {
 		zoomIn = new JMenuItem(controlService.getTranslatedString("ZoomIn"), icon);
 		add(zoomIn);
 		
-		icon = new ImageIcon(getClass().getResource("/husacct/common/resources/icon-back.png"));
+		icon = new ImageIcon(Resource.get(Resource.ICON_BACK));
 		zoomOut = new JMenuItem(controlService.getTranslatedString("ZoomOut"), icon);
 		add(zoomOut);
 		

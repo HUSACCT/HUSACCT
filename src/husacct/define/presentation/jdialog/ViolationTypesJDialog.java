@@ -1,6 +1,7 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.control.ControlServiceImpl;
 import husacct.define.abstraction.language.DefineTranslator;
@@ -51,7 +52,7 @@ public class ViolationTypesJDialog extends JDialog{
 		try {
 			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			this.setTitle("Violation Types");
-			this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			this.setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			
 			this.getContentPane().removeAll();
 			getContentPane().add(this.createViolationPanel(), BorderLayout.CENTER);

@@ -1,6 +1,7 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
 import husacct.define.abstraction.language.DefineTranslator;
@@ -28,7 +29,6 @@ import javax.swing.JTextField;
 public class AddModuleValuesJDialog extends JDialog implements KeyListener, ActionListener, ILocaleChangeListener {
 
 	private static final long serialVersionUID = -1729066215610611394L;
-	private final String husacctIcon = "husacct/common/resources/husacct.png";
 	
 	private ModuleJPanel modulePanel;
 	private JPanel innerPanel;
@@ -51,7 +51,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	
 	public void initGUI() {
 		this.setTitle(DefineTranslator.translate("NewModule"));
-		this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
+		this.setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 		
 		this.innerPanel = new JPanel();
 		this.innerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));

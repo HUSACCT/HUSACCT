@@ -1,5 +1,7 @@
 package husacct.control.presentation.util;
 
+import husacct.common.Resource;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 
@@ -17,7 +19,7 @@ public class MoonWalkPanel extends JPanel implements Runnable{
 	public MoonWalkPanel(){
 		setVisible(false);
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
-		Icon icon = new ImageIcon(getClass().getResource("/husacct/common/resources/control/icon-blackcat.gif"));
+		Icon icon = new ImageIcon(Resource.get(Resource.BLACKCAT));
 		label = new JLabel(icon);
 		add(label);
 		setBackground(new Color(172, 181, 189));

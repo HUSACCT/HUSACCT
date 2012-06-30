@@ -1,6 +1,7 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
@@ -52,7 +53,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle(DefineTranslator.translate("SoftwareUnitTitle"));
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			
 			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);

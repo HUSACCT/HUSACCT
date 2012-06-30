@@ -1,6 +1,7 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
@@ -42,7 +43,6 @@ import javax.swing.WindowConstants;
 public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
-	private final String husacctIcon = "husacct/common/resources/husacct.png";
 	
 	private AppliedRuleController appliedRuleController;
 	private FactoryDetails factoryDetails;
@@ -73,7 +73,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			} else {
 				setTitle(DefineTranslator.translate("EditAppliedRuleTitle"));
 			}
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource(husacctIcon)).getImage());
+			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);

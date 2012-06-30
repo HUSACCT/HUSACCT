@@ -30,7 +30,6 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		registerLocaleChangeListener();
 		setResizable(true);
 		setBounds(200, 200, 550, 522);
-		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
 		
 		tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel.setBackground(UIManager.getColor("Panel.background"));

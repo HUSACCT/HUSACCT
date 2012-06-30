@@ -1,6 +1,7 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
@@ -73,7 +74,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			setTitle(DefineTranslator.translate("ExceptionRuleTitle"));
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);

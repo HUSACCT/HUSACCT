@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
@@ -55,7 +56,7 @@ public class AboutDialog extends JDialog {
 			textPanel = new JPanel();
 			textPanel.setLayout(new GridBagLayout());
 			
-			Image logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/husacct/common/resources/husacct.png"));
+			Image logo = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.HUSACCT_LOGO));
 			pictureLabel = new JLabel(new ImageIcon(logo));
 			husacctLabel = new JLabel("HUSACCT");
 			versionLabel = new JLabel(controlService.getTranslatedString("VersionLabel"));

@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.menubars;
 
+import husacct.common.Resource;
 import husacct.graphics.presentation.dialogs.GraphicsOptionsDialog;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingLayoutStrategy;
@@ -43,18 +44,18 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	public GraphicsMenuBar() {
 		icons = new HashMap<String, String>();
-		icons.put("options", "/husacct/common/resources/graphics/icon-cog.png");
-		icons.put("zoomIn", "/husacct/common/resources/graphics/icon-zoom.png");
-		icons.put("zoomOut", "/husacct/common/resources/icon-back.png");
-		icons.put("refresh", "/husacct/common/resources/icon-refresh.png");
-		icons.put("save", "/husacct/common/resources/icon-save.png");
-		icons.put("dependenciesShow", "/husacct/common/resources/graphics/icon-link.png");
-		icons.put("dependenciesHide", "/husacct/common/resources/graphics/icon-unlink.png");
-		icons.put("violationsShow", "/husacct/common/resources/graphics/icon-errors-show.png");
-		icons.put("violationsHide", "/husacct/common/resources/graphics/icon-errors-hide.png");
-		icons.put("outofdate", "/husacct/common/resources/graphics/icon-outofdate.png");
-		icons.put("hideFigures", "/husacct/common/resources/graphics/icon-figures-hide.png");
-		icons.put("showFigures", "/husacct/common/resources/graphics/icon-figures-show.png");
+		icons.put("options", Resource.ICON_OPTIONS);
+		icons.put("zoomIn", Resource.ICON_ZOOM);
+		icons.put("zoomOut", Resource.ICON_BACK);
+		icons.put("refresh", Resource.ICON_REFRESH);
+		icons.put("save", Resource.ICON_SAVE);
+		icons.put("dependenciesShow", Resource.ICON_DEPENDENCIES_ACTIVE);
+		icons.put("dependenciesHide", Resource.ICON_DEPENDENCIES_INACTIVE);
+		icons.put("violationsShow", Resource.ICON_VIOLATIONS_ACTIVE);
+		icons.put("violationsHide", Resource.ICON_VIOLATIONS_INACTIVE);
+		icons.put("outofdate", Resource.ICON_OUTOFDATE);
+		icons.put("showFigures", Resource.ICON_FIGURES_SHOW);
+		icons.put("hideFigures", Resource.ICON_FIGURES_HIDE);
 		initializeComponents();
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -80,7 +81,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	private void setButtonIcon(JButton button, String iconKey) {
 		try {
-			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get(iconKey)));
+			ImageIcon icon = new ImageIcon(Resource.get(icons.get(iconKey)));
 			button.setIcon(icon);
 			button.setMargin(new Insets(1, 5, 1, 5));
 		} catch (Exception e) {
