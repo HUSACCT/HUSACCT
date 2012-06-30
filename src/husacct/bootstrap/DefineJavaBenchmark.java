@@ -27,6 +27,10 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 		getDefineService().getDefinitionController().addLayer(-1, "Presentation Layer", "This is the presentation layer of the benchmark");
 		getDefineService().getDefinitionController().addLayer(-1, "Domain Layer", "This is the domain layer of the benchmark");
 		getDefineService().getDefinitionController().addLayer(-1, "Infrastructure Layer", "This is the presentation layer of the benchmark");
+		
+		getDefineService().getDefinitionController().addSubSystem(-1, "Subsystem 1", "Subsystem used within the system.");
+		getDefineService().getDefinitionController().addComponent(-1, "Component 1", "Component present in the system.");
+		getDefineService().getDefinitionController().addExternalLibrary(-1, "External library", "External library used by the system.");
 	}
 	
 	private void defineRules(){
