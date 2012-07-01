@@ -1,15 +1,9 @@
 package husacct.bootstrap;
 
-import husacct.common.dto.CategoryDTO;
-import husacct.common.dto.RuleTypeDTO;
-import husacct.common.dto.ViolationTypeDTO;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class DefineJavaBenchmark extends AbstractBootstrap{
-	private CategoryDTO[] categories = getValidateService().getCategories();
 
 	@Override
 	public void execute() {
@@ -27,10 +21,6 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 		getDefineService().getDefinitionController().addLayer(-1, "Presentation Layer", "This is the presentation layer of the benchmark");
 		getDefineService().getDefinitionController().addLayer(-1, "Domain Layer", "This is the domain layer of the benchmark");
 		getDefineService().getDefinitionController().addLayer(-1, "Infrastructure Layer", "This is the presentation layer of the benchmark");
-		
-		getDefineService().getDefinitionController().addSubSystem(-1, "Subsystem 1", "Subsystem used within the system.");
-		getDefineService().getDefinitionController().addComponent(-1, "Component 1", "Component present in the system.");
-		getDefineService().getDefinitionController().addExternalLibrary(-1, "External library", "External library used by the system.");
 	}
 	
 	private void defineRules(){
@@ -63,19 +53,20 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 	}
 	
 	private String[] getViolationTypeByRuleType(String ruleTypeKey){
-		String[] violationTypes = new String[]{};
-		for (CategoryDTO categorie : categories) {
-			for (RuleTypeDTO ruleTypeDTO : categorie.ruleTypes){
-				if (ruleTypeDTO.getKey().equals("ruleTypeKey")){
-					ViolationTypeDTO[] dtos = ruleTypeDTO.getViolationTypes();
-					ArrayList<String> violationTypeKeys = new ArrayList<String>();
-					for (ViolationTypeDTO dto : dtos){
-						violationTypeKeys.add(dto.key);
-					}
-					violationTypes = new String[violationTypeKeys.size()]; violationTypeKeys.toArray(violationTypes);
-				}
-			}
-		}
+		String[] violationTypes = new String[12];
+		violationTypes[0] = "InvocMethod";
+		violationTypes[1] = "Exception";
+		violationTypes[2] = "AccessPropertyOrField";
+		violationTypes[3] = "ExtendsInterface";
+		violationTypes[4] = "Import";
+		violationTypes[5] = "ExtendsConcrete";
+		violationTypes[6] = "Annotation";
+		violationTypes[7] = "Declaration";
+		violationTypes[8] = "InvocConstructor";
+		violationTypes[9] = "ExtendsLibrary";		
+		violationTypes[10] = "ExtendsAbstract";
+		violationTypes[11] = "Implements";
+
 		return violationTypes;
 	}
 
