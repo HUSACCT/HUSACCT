@@ -10,8 +10,8 @@ public class DataLanguageHelper {
 		this.key = key;
 	}
 	
+	@Override
 	public String toString() {
 		return ServiceProvider.getInstance().getControlService().getTranslatedString(key);
 	}
-
 }

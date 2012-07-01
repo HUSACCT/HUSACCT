@@ -26,9 +26,11 @@ public class StatisticsImage {
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
 		NumberAxis numberAxis = (NumberAxis)plot.getRangeAxis();
 		numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-		int index = 0;
+		int index = 0;		
 		for(ViolationsPerSeverity violationPerSeverity : list) {
-			dataset.addValue(violationPerSeverity.getAmount(), violationPerSeverity.getSeverity().getDefaultName(), violationPerSeverity.getSeverity().getDefaultName());
+			final String severityKey =violationPerSeverity.getSeverity().getSeverityKey();
+			dataset.addValue(violationPerSeverity.getAmount(), severityKey, severityKey);
+			
 			GradientPaint paint = new GradientPaint(
 					0.0f, 0.0f, violationPerSeverity.getSeverity().getColor(),
 					0.0f, 0.0f, new Color(0, 0, 20)
@@ -36,6 +38,7 @@ public class StatisticsImage {
 			renderer.setSeriesPaint(index, paint);
 			index++;
 		}		
+		
 		try {
 			ChartUtilities.saveChartAsPNG(new File(path), chart, 600, 200);
 		} catch (IOException e) {

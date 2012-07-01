@@ -91,7 +91,7 @@ public class PDFReportWriter extends ReportWriter {
 			document.add(Chunk.NEWLINE);
 		} else {
 			for(ViolationsPerSeverity violationPerSeverity : violationsPerSeverity) {
-				document.add(new Paragraph(violationPerSeverity.getSeverity().getDefaultName() + ": " + violationPerSeverity.getAmount()));
+				document.add(new Paragraph(violationPerSeverity.getSeverity().getSeverityName() + ": " + violationPerSeverity.getAmount()));
 			}
 			for(int i = violationsPerSeverity.size(); i < 4; i++) {
 				document.add(Chunk.NEWLINE);
@@ -151,7 +151,7 @@ public class PDFReportWriter extends ReportWriter {
 
 			//Severity
 			if(violation.getSeverity() != null) {
-				addCellToTable(pdfTable,"" + violation.getSeverity().toString(), BaseColor.WHITE, false);
+				addCellToTable(pdfTable,"" + violation.getSeverity().getSeverityName(), BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "" , BaseColor.WHITE, false);
 			}

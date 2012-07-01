@@ -20,13 +20,12 @@ public class ImportSeverities {
 		for (Element severityElement : element.getChildren()) {
 			UUID id = UUID.fromString(severityElement.getChildText("id"));
 
-			String defaultname = severityElement.getChildText("defaultName");
-			String username = severityElement.getChildText("userName");			
+			final String severityKey = severityElement.getChildText("severityKey");
 
 			final String rgbColor = severityElement.getChildText("color");
 			Color color = getColor(rgbColor);
 
-			Severity severity = new Severity(id, defaultname, username, color);
+			Severity severity = new Severity(id, severityKey, color);
 			severities.add(severity);
 		}
 		return severities;

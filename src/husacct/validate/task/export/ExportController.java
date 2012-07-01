@@ -3,8 +3,6 @@ package husacct.validate.task.export;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,19 +24,7 @@ public class ExportController {
 		rootValidateElement.addContent(exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
 		rootValidateElement.addContent(exportActiveViolationTypesPerRuleTypes(configuration.getActiveViolationTypes()));
 
-
-		//TODO
-		//Not used because of memory issues
-		//rootValidateElement.addContent(exportViolationHistory(configuration.getViolationHistory()));
-		//rootValidateElement.addContent(exportViolationsXML(configuration.getAllViolations().getValue()));
 		return rootValidateElement;
-	}
-
-	/**
-	 * @deprecated Not used because of memory issues
-	 */
-	private Element exportViolationsXML(List<Violation> violations) {
-		return exportFactory.exportViolations(violations);
 	}
 
 	private Element exportSeveritiesXML(List<Severity> severities) {
@@ -47,13 +33,6 @@ public class ExportController {
 
 	private Element exportSeveritiesPerTypesPerProgrammingLanguagesXML(HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
 		return exportFactory.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
-	}
-
-	/**
-	 * @deprecated Not used because of memory issues
-	 */
-	private Element exportViolationHistory(List<ViolationHistory> violationHistories) {
-		return exportFactory.exportViolationHistory(violationHistories);
 	}
 
 	private Element exportActiveViolationTypesPerRuleTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {

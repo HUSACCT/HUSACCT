@@ -45,11 +45,11 @@ public class HTMLReportWriter extends ReportWriter {
 
 		File javascriptDir = new File(resourcesDir + "/js");
 		javascriptDir.mkdir();
-		
+
 		File jqueryJSOutput = new File(javascriptDir + "/jquery-1.7.2.min.js");
 		File dataTableJSOutput = new File(javascriptDir + "/jquery.dataTables.js");
 		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/jquery-1.7.2.min.js"), jqueryJSOutput);
-		
+
 		copyfile(getClass().getClassLoader().getResourceAsStream("husacct/common/resources/validate/jquery.dataTables.js"), dataTableJSOutput);
 
 		File imageold = new File(report.getImagePath());
@@ -103,7 +103,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("<span class=\"stats\">Statistics</span><br/>");
 		html.append("Total violations: " + report.getViolations().getValue().size() + "<br />"+ "<br />");
 		for(ViolationsPerSeverity severityPerViolation : report.getViolationsPerSeverity()) {
-			html.append(severityPerViolation.getSeverity().getDefaultName() + ": " + severityPerViolation.getAmount() + "<br />");
+			html.append(severityPerViolation.getSeverity().getSeverityName() + ": " + severityPerViolation.getAmount() + "<br />");
 		}
 	}
 	private void createTable() throws IOException  {
@@ -131,7 +131,7 @@ public class HTMLReportWriter extends ReportWriter {
 			} else {
 				createColumn("");
 			}
-			
+
 			//Rule
 			if(violation.getMessage() != null) {
 				String message = new Messagebuilder().createMessage(violation.getMessage());
@@ -139,31 +139,31 @@ public class HTMLReportWriter extends ReportWriter {
 			} else {
 				createColumn("");
 			}
-			
+
 			//LineNumber
 			if(violation.getLinenumber() > 0) {
 				createColumn("" + violation.getLinenumber());
 			} else {
 				createColumn("");
 			}
-			
+
 			//Dependency Kind
 			if(violation.getViolationtypeKey() != null) {
 				createColumn(getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()));
 			} else {
 				createColumn("");
 			}
-			
+
 			//Target
 			if(violation.getClassPathTo() != null) {
 				createColumn(violation.getClassPathTo());	
 			} else {
 				createColumn("");
 			}
-			
+
 			//Severity
 			if(violation.getSeverity() != null) {
-				createColumn(violation.getSeverity().toString());
+				createColumn(violation.getSeverity().getSeverityName());
 			} else {
 				createColumn("");
 			}

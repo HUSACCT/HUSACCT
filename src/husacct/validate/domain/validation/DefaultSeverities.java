@@ -5,8 +5,7 @@ import java.awt.Color;
 public enum DefaultSeverities {
 	LOW("Low", Color.YELLOW),
 	MEDIUM("Medium", Color.ORANGE),
-	HIGH("High", Color.RED),
-	UNIDENTIFIED("Unidentified", Color.BLACK);
+	HIGH("High", Color.RED);
 		
 	private final String key;
 	private final Color color;

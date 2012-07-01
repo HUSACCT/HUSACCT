@@ -58,9 +58,6 @@ public class ImportExportTest {
 		checkSeveritiesTheSameAsSeveritiesElement(validate.getConfiguration().getAllSeverities(), document.getRootElement().getChild("severities"));
 		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(), document.getRootElement().getChild("severitiesPerTypesPerProgrammingLanguages"));
 
-		//Is not used in the application anymore
-		//checkViolationsTheSameAsViolationsElement(validate.getConfiguration().getAllViolations().getValue(), document.getRootElement().getChild("violations"));
-		//checkViolationHistoriesTheSameAsViolationHistoriesElement(validate.getConfiguration().getViolationHistories(), document.getRootElement().getChild("violationHistories"));
 		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate.getConfiguration().getActiveViolationTypes(), document.getRootElement().getChild("activeViolationTypes"));
 	}
 
@@ -131,41 +128,8 @@ public class ImportExportTest {
 		return null;
 	}
 
-	private void checkViolationHistoriesTheSameAsViolationHistoriesElement(List<ViolationHistory> violationHistories, Element child) throws DatatypeConfigurationException {
-		for(int i = 0; i < child.getChildren().size(); i++) {
-			Element violationHistoryElement = child.getChildren().get(i);
-			ViolationHistory violationHistory = violationHistories.get(i);
-			assertEquals(violationHistory.getDescription(), violationHistoryElement.getChildText("description"));
-			checkViolationsTheSameAsViolationsElement(violationHistory.getViolations(), violationHistoryElement.getChild("violations"));
-			checkSeveritiesTheSameAsSeveritiesElement(violationHistory.getSeverities(), violationHistoryElement.getChild("severities"));
-		}
-	}
-
-	private void checkViolationsTheSameAsViolationsElement(List<Violation> violations, Element violationsElement) throws DatatypeConfigurationException {
-		assertEquals(violations.size(), violationsElement.getChildren().size());
-		for(int i = 0; i < violationsElement.getChildren().size(); i++) {
-			Element violationElement = violationsElement.getChildren().get(i);
-			Violation violation = violations.get(i);
-			checkViolationTheSameAsViolationElement(violationElement, violation);
-		}
-	}
-
-	private void checkViolationTheSameAsViolationElement(Element violationElement, Violation violation) throws DatatypeConfigurationException {
-		assertEquals(violation.getLinenumber(), Integer.parseInt(violationElement.getChildText("lineNumber")));
-		assertEquals(violation.getSeverity().getId().toString(), violationElement.getChildText("severityId"));
-		assertEquals(violation.getRuletypeKey(), violationElement.getChildText("ruletypeKey"));
-		assertEquals(violation.getClassPathFrom(), violationElement.getChildText("classPathFrom"));
-		assertEquals(violation.getClassPathTo(), violationElement.getChildText("classPathTo"));
-		checkLogicalModulesTheSameAsLogicalModulesElement(violationElement.getChild("logicalModules"), violation.getLogicalModules());
-		checkMessageTheSameAsMessageElement(violationElement.getChild("message"), violation.getMessage());
-		assertEquals(violation.isIndirect(), Boolean.parseBoolean(violationElement.getChildText("isIndirect")));
-		assertEquals(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)violation.getOccured()), DatatypeFactory.newInstance().newXMLGregorianCalendar(violationElement.getChildText("occured")));
-	}
-
 	private void checkSeverityTheSameAsSeverityElement(Severity severity, Element severityElement) {
-		assertEquals(severity.getDefaultName(), severityElement.getChildText("defaultName"));
-		assertEquals(severity.getUserName(), severityElement.getChildText("userName"));
-		//assertEquals(severity.getId().toString(), severityElement.getChildText("id"));
+		assertEquals(severity.getSeverityKey(), severityElement.getChildText("severityKey"));
 		assertEquals(severity.getColor(), new Color(Integer.parseInt(severityElement.getChildText("color"))));
 	}
 
@@ -194,23 +158,5 @@ public class ImportExportTest {
 		checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(validate.getConfiguration().getAllSeveritiesPerTypesPerProgrammingLanguages(), validate.getWorkspaceData().getChild("severitiesPerTypesPerProgrammingLanguages"));
 		//checkViolationHistoriesTheSameAsViolationHistoriesElement(validate.getConfiguration().getViolationHistories(), validate.getWorkspaceData().getChild("violationHistories"));
 		checkActiveViolationTypesTheSameAsActiveViolationTypesElement(validate.getConfiguration().getActiveViolationTypes(), validate.getWorkspaceData().getChild("activeViolationTypes"));
-	}
-
-	private void checkLogicalModulesTheSameAsLogicalModulesElement(Element logicalModulesElement, LogicalModules logicalModiles) {
-		assertEquals(logicalModiles.getLogicalModuleFrom().getLogicalModulePath(), logicalModulesElement.getChild("logicalModuleFrom").getChildText("logicalModulePath"));
-		assertEquals(logicalModiles.getLogicalModuleFrom().getLogicalModuleType(), logicalModulesElement.getChild("logicalModuleFrom").getChildText("logicalModuleType"));
-		assertEquals(logicalModiles.getLogicalModuleTo().getLogicalModulePath(), logicalModulesElement.getChild("logicalModuleTo").getChildText("logicalModulePath"));
-		assertEquals(logicalModiles.getLogicalModuleTo().getLogicalModuleType(), logicalModulesElement.getChild("logicalModuleTo").getChildText("logicalModuleType"));
-	}
-
-	private void checkMessageTheSameAsMessageElement(Element messageElement, Message message) {
-		checkLogicalModulesTheSameAsLogicalModulesElement(messageElement.getChild("logicalModules"), message.getLogicalModules());
-		assertEquals(message.getRuleKey(), messageElement.getChildText("ruleKey"));
-		for(int i = 0; i < message.getViolationTypeKeys().size(); i++) {
-			assertEquals(message.getViolationTypeKeys().get(i), messageElement.getChild("violationTypeKeys").getChildren().get(i).getText());
-		}
-		for(int i = 0; i < message.getExceptionMessage().size(); i++){
-			checkMessageTheSameAsMessageElement(messageElement.getChild("exceptionMessages").getChildren().get(i), message.getExceptionMessage().get(i));
-		}
 	}
 }

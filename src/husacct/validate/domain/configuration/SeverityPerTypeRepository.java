@@ -163,7 +163,7 @@ class SeverityPerTypeRepository {
 					}
 				}
 				catch(SeverityNotFoundException e){
-					logger.warn(String.format("%s is not a know severity, %s will not be set in SeverityPerTypeRepository", entry.getValue().getDefaultName() + entry.getValue().getUserName(), entry.getKey()));
+					logger.warn(String.format("%s is not a know severity, %s will not be set in SeverityPerTypeRepository", entry.getValue().getSeverityKey(), entry.getKey()));
 				}
 				catch(NullPointerException e){
 					logger.error("Cannot severity cannot be null in SeverityPerTypeRepository");
@@ -205,7 +205,7 @@ class SeverityPerTypeRepository {
 				return severity;
 			}
 		}
-		Severity newSeverity = configuration.getSeverityByName(severity.toString());
+		Severity newSeverity = configuration.getSeverityByName(severity.getSeverityKey());
 		if(newSeverity != null){
 			return newSeverity;			
 		}
