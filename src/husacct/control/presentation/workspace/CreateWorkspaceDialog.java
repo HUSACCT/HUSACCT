@@ -102,13 +102,13 @@ public class CreateWorkspaceDialog extends JDialog{
 						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
 						mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
 						dispose();	
-						mainController.getViewController().showDefineGui();
+						mainController.getViewController().showDefineArchitecture();
 					}
 				} else {
 					if(workspaceNameValidated()) {
 						createWorkspace();			
 						dispose();	
-						mainController.getViewController().showDefineGui();		
+						mainController.getViewController().showDefineArchitecture();		
 					}
 				}	
 			}

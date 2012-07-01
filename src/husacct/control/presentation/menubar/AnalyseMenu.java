@@ -79,7 +79,7 @@ public class AnalyseMenu extends JMenu{
 		
 		analysedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showAnalysedArchitectureGui();
+				mainController.getViewController().showAnalysedArchitectureDiagram();
 			}
 		});
 		

@@ -53,7 +53,7 @@ public class ValidateMenu extends JMenu{
 	private void setListeners() {
 		validateNowItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showViolationsGui();
+				mainController.getViewController().showValidateGui();
 			}
 		});
 		

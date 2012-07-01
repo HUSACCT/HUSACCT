@@ -36,6 +36,8 @@ public class TaskBar extends JPanel{
 	public void registerInternalFrame(final JInternalFrame internalFrame){
 		final JToggleButton toggleButton = new JToggleButton(internalFrame.getTitle());
 		
+		toggleButton.setIcon(internalFrame.getFrameIcon());
+		
 		internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
 			@Override
 			public void internalFrameActivated(InternalFrameEvent e) {

@@ -59,13 +59,13 @@ public class DefineMenu extends JMenu{
 	private void setListeners() {
 		defineArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showDefineGui();
+				mainController.getViewController().showDefineArchitecture();
 			}
 		});
 		
 		definedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showDefinedArchitectureGui();
+				mainController.getViewController().showDefinedArchitectureDiagram();
 			}
 		});
 		
