@@ -8,6 +8,7 @@ public class Resource {
 	private static Logger logger = Logger.getLogger(Resource.class);
 
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
+	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
 	
