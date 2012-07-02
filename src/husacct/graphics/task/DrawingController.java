@@ -1,5 +1,6 @@
 package husacct.graphics.task;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
@@ -57,15 +58,15 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected ThreadMonitor threadMonitor;
 	private FigureMap figureMap = new FigureMap();
 
-	public DrawingController(ILocaleService localeService) {
+	public DrawingController() {
 		super();
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
-		this.localeService = localeService;
-		this.localeService.addServiceListener(new IServiceListener() {
+		localeService = ServiceProvider.getInstance().getLocaleService();
+		localeService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshFrame();

@@ -1,12 +1,12 @@
 package husacct.graphics.task;
 
+import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -22,20 +22,23 @@ public class DefinedController extends DrawingController {
 	protected IDefineService defineService;
 	protected IValidateService validateService;
 
-	public DefinedController(ILocaleService localeService, IAnalyseService analyseService, IDefineService defineService, IValidateService validateService) {
-		super(localeService);
+	public DefinedController() {
+		super();
+		initializeServices();
+	}
 
-		this.analyseService = analyseService;
-		this.defineService = defineService;
-		this.validateService = validateService;
+	private void initializeServices() {
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
 
-		this.defineService.addServiceListener(new IServiceListener() {
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshDrawing();
 			}
 		});
-		this.validateService.addServiceListener(new IServiceListener() {
+		validateService = ServiceProvider.getInstance().getValidateService();
+		validateService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				if (areViolationsShown()) {
