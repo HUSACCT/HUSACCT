@@ -37,9 +37,9 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 		violationtypeSeverity = new ViolationTypeSeverityPanel(taskServiceImpl, configurationViolationTypeDTO);
 		activeViolationtype = new ActiveViolationPanel(taskServiceImpl, configurationSubPanelDTO.getRuletypes(), configurationSubPanelDTO.getLanguage());
 
-		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"), ruletypeSeverity);
-		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"), violationtypeSeverity);
-		tabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationtypeActivePerRuletype"), activeViolationtype);
+		tabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SetRuletypeSeverity"), ruletypeSeverity);
+		tabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SetViolationSeverity"), violationtypeSeverity);
+		tabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SetViolationtypeActivePerRuletype"), activeViolationtype);
 
 		createLayout();
 	}
@@ -73,9 +73,9 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 	}
 
 	private void setText() {
-		tabbedPane.setTitleAt(0, ServiceProvider.getInstance().getControlService().getTranslatedString("SetRuletypeSeverity"));
-		tabbedPane.setTitleAt(1, ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationSeverity"));
-		tabbedPane.setTitleAt(2, ServiceProvider.getInstance().getControlService().getTranslatedString("SetViolationtypeActivePerRuletype"));
+		tabbedPane.setTitleAt(0, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SetRuletypeSeverity"));
+		tabbedPane.setTitleAt(1, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SetViolationSeverity"));
+		tabbedPane.setTitleAt(2, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SetViolationtypeActivePerRuletype"));
 	}
 
 	public void clearSelection() {

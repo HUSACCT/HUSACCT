@@ -89,7 +89,7 @@ class RuleTypeSeverityPanel extends JPanel {
 				if (ruletypeTable.getSelectedRow() > -1) {
 					ApplyActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("RowNotSelected")));
+					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
 			}
 		});
@@ -153,10 +153,10 @@ class RuleTypeSeverityPanel extends JPanel {
 	}
 
 	private void setText() {
-		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
-		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
-		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
-		restoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
+		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Category")));
+		apply.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Apply"));
+		restore.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreToDefault"));
+		restoreAll.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreAllToDefault"));
 	}
 
 	void setSeverities(List<Severity> severities) {
@@ -164,7 +164,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	}
 
 	void loadModel() {
-		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
+		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities);
 		ruletypeModel.setTypes(new Class[]{DataLanguageHelper.class, Severity.class});
 		ruletypeModel.setCanEdit(new Boolean[]{false, true});

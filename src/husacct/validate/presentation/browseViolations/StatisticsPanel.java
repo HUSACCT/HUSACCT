@@ -43,9 +43,9 @@ public class StatisticsPanel extends JPanel{
 	}
 	
 	private void loadText() {
-		setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Information")));
-		totalViolationLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations") + ":");
-		shownViolationsLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShownViolations") + ":");
+		setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Information")));
+		totalViolationLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("TotalViolations") + ":");
+		shownViolationsLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ShownViolations") + ":");
 	}
 	
 	public void loadStatistics(LinkedHashMap<Severity, Integer> severitiesCountPerSeverity, int totalSize, int shownSize){

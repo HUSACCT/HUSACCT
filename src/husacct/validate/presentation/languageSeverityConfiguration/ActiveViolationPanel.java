@@ -174,15 +174,15 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void setText() {
-		categoryJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
-		ruletypeJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")));
-		selectAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SelectAll"));
-		deselectAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("DeselectAll"));
-		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
+		categoryJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Category")));
+		ruletypeJList.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletypes")));
+		selectAll.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectAll"));
+		deselectAll.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("DeselectAll"));
+		apply.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Apply"));
 	}
 
 	private void loadModels() {
-		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Active")};
+		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Active")};
 		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0) {
 			private static final long serialVersionUID = 3779670097825676765L;
 			Class<?>[] types = new Class[]{String.class, Boolean.class};
@@ -215,7 +215,7 @@ class ActiveViolationPanel extends JPanel {
 
 	private void SelectAllActionPerformed() {
 		if (!apply.isEnabled()) {
-			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getControlService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
+			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
 		} else {
 			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(true, i, 1);
@@ -225,7 +225,7 @@ class ActiveViolationPanel extends JPanel {
 
 	private void DeselectAllActionPerformed() {
 		if (!apply.isEnabled()) {
-			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getControlService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
+			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
 		} else {
 			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(false, i, 1);
@@ -281,7 +281,7 @@ class ActiveViolationPanel extends JPanel {
 		for (ActiveRuleType ruletype : activeRuletypes) {
 			if (ruletype.getRuleType().equals(ruletypekey)) {
 				for (ActiveViolationType violationtype : ruletype.getViolationTypes()) {
-					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getControlService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
+					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
 				}
 				activeViolationtypes = ruletype.getViolationTypes();
 				break;

@@ -92,7 +92,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 				if (violationtypeTable.getSelectedRow() > -1) {
 					restoreActionPerformed();
 				} else {
-					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("RowNotSelected")));
+					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
 			}
 		});
@@ -157,10 +157,10 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	private void setText() {
-		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Category")));
-		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
-		restoreAll.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreAllToDefault"));
-		apply.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
+		category.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Category")));
+		restore.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreToDefault"));
+		restoreAll.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreAllToDefault"));
+		apply.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Apply"));
 	}
 
 	void setSeverities(List<Severity> severities) {
@@ -168,7 +168,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	final void loadModel() {
-		String[] violationtypeModelHeaders = {ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
+		String[] violationtypeModelHeaders = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severities);
 		violationtypeModel.setTypes(new Class[]{String.class, Severity.class});
 		violationtypeModel.setCanEdit(new Boolean[]{false, true});
@@ -187,7 +187,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private void restoreAllActionPerformed() {
 		taskServiceImpl.restoreAllKeysToDefaultSeverities(language);
 		categoryValueChanged();
-		ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getControlService().getTranslatedString("AllRestored")));
+		ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("AllRestored")));
 	}
 
 	private void applyActionPerformed() {
