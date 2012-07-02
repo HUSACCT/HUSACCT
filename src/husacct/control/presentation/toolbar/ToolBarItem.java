@@ -1,8 +1,8 @@
 package husacct.control.presentation.toolbar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.StateController;
 import husacct.control.task.States;
@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,7 +27,7 @@ class ToolBarItem extends JButton {
 	protected Border raisedBorder;
 	protected Border loweredBorder;
 	protected Border inactiveBorder;
-	private IControlService controlService;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private StateController stateController;
 	private String toolTipIdentifier;
 	private ImageIcon icon;
@@ -37,7 +36,7 @@ class ToolBarItem extends JButton {
 	
 	public ToolBarItem(String toolTipIdentifier, ImageIcon icon, JMenuItem menuItem, StateController stateController) {
 		super();
-		this.controlService = ServiceProvider.getInstance().getControlService();
+		this.localeService = ServiceProvider.getInstance().getLocaleService();
 		this.stateController = stateController;
 		this.raisedBorder = new BevelBorder(BevelBorder.RAISED);
 		this.loweredBorder = new BevelBorder(BevelBorder.LOWERED);
@@ -55,7 +54,7 @@ class ToolBarItem extends JButton {
 	private void setup(){
 		setBorder(inactiveBorder);
 		setMargin(new Insets(1, 1, 1, 1));
-		setToolTipText(controlService.getTranslatedString(toolTipIdentifier));
+		setToolTipText(localeService.getTranslatedString(toolTipIdentifier));
 	}
 	
 	private void addComponents(){
@@ -93,10 +92,10 @@ class ToolBarItem extends JButton {
 			}
 		});
 		
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+		localeService.addServiceListener(new IServiceListener() {
 			@Override
-			public void update(Locale newLocale) {
-				setToolTipText(controlService.getTranslatedString(toolTipIdentifier));
+			public void update() {
+				setToolTipText(localeService.getTranslatedString(toolTipIdentifier));
 			}
 		});
 		

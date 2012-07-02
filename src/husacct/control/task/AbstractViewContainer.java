@@ -66,7 +66,7 @@ abstract public class AbstractViewContainer {
 		}
 	}
 	private String getTitle(){
-		return ServiceProvider.getInstance().getControlService().getTranslatedString(stringIdentifier);
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString(stringIdentifier);
 	}
 	
 	private void registerInternalFrameToTaskBar(JInternalFrame internalFrame){

@@ -1,8 +1,8 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.States;
@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -25,29 +24,29 @@ public class AnalyseMenu extends JMenu{
 	private JMenuItem analysedArchitectureDiagramItem;
 	private JMenuItem analysedApplicationOverviewItem;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public AnalyseMenu(final MainController mainController){
 		super();
 		this.mainController = mainController;
-		setText(controlService.getTranslatedString("Analyse"));
+		setText(localeService.getTranslatedString("Analyse"));
 		addComponents();
 		setListeners();	
 	}
 	
 	private void addComponents(){
-		setApplicationPropertiesItem = new JMenuItem(controlService.getTranslatedString("ApplicationProperties"));
+		setApplicationPropertiesItem = new JMenuItem(localeService.getTranslatedString("ApplicationProperties"));
 		setApplicationPropertiesItem.setAccelerator(KeyStroke.getKeyStroke('P', KeyEvent.CTRL_DOWN_MASK));
 		setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 		
-		analyseNowItem = new JMenuItem(controlService.getTranslatedString("AnalyseNow"));
+		analyseNowItem = new JMenuItem(localeService.getTranslatedString("AnalyseNow"));
 		analyseNowItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 		
-		analysedApplicationOverviewItem = new JMenuItem(controlService.getTranslatedString("AnalysedApplicationOverview"));
+		analysedApplicationOverviewItem = new JMenuItem(localeService.getTranslatedString("AnalysedApplicationOverview"));
 		analysedApplicationOverviewItem.setAccelerator(KeyStroke.getKeyStroke('T', KeyEvent.CTRL_DOWN_MASK));
 		analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 		
-		analysedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
+		analysedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
@@ -104,13 +103,13 @@ public class AnalyseMenu extends JMenu{
 		});
 		
 		final AnalyseMenu analyseMenu = this;
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
-				analyseMenu.setText(controlService.getTranslatedString("Analyse"));
-				setApplicationPropertiesItem.setText(controlService.getTranslatedString("ApplicationProperties"));
-				analyseNowItem.setText(controlService.getTranslatedString("AnalyseNow"));
-				analysedArchitectureDiagramItem.setText(controlService.getTranslatedString("AnalysedArchitectureDiagram"));
-				analysedApplicationOverviewItem.setText(controlService.getTranslatedString("AnalysedApplicationOverview"));
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				analyseMenu.setText(localeService.getTranslatedString("Analyse"));
+				setApplicationPropertiesItem.setText(localeService.getTranslatedString("ApplicationProperties"));
+				analyseNowItem.setText(localeService.getTranslatedString("AnalyseNow"));
+				analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
+				analysedApplicationOverviewItem.setText(localeService.getTranslatedString("AnalysedApplicationOverview"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
@@ -132,7 +131,7 @@ public class AnalyseMenu extends JMenu{
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {
-		String mnemonicString = controlService.getTranslatedString(translatedString);
+		String mnemonicString = localeService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}

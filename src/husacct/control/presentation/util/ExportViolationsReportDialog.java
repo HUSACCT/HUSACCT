@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.ExportController;
 import husacct.control.task.MainController;
@@ -30,12 +31,13 @@ public class ExportViolationsReportDialog extends JDialog{
 	private File selectedFile;
 
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private ExportController exportController;
 	
 	public ExportViolationsReportDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.exportController = mainController.getExportController();
-		setTitle(controlService.getTranslatedString("ExportReport"));
+		setTitle(localeService.getTranslatedString("ExportReport"));
 		setup();
 		addComponents();
 		setListeners();
@@ -51,10 +53,10 @@ public class ExportViolationsReportDialog extends JDialog{
 	}
 
 	private void addComponents(){
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
-		exportButton = new JButton(controlService.getTranslatedString("ExportButton"));
+		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
+		exportButton = new JButton(localeService.getTranslatedString("ExportButton"));
 		exportButton.setEnabled(false);
 		pathText.setEnabled(false);
 		
@@ -90,7 +92,7 @@ public class ExportViolationsReportDialog extends JDialog{
 			filters.add(new FileNameExtensionFilter(extension, extension));
 		}
 		
-		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filters);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filters);
 
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -110,11 +112,11 @@ public class ExportViolationsReportDialog extends JDialog{
 	
 	public boolean validateData() {
 		if(selectedFile == null){
-			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}		
 		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
-			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("InvalidFilenameError"));
 			return false;
 		}
 		return true;

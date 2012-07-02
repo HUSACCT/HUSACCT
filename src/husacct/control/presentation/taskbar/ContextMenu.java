@@ -1,10 +1,9 @@
 package husacct.control.presentation.taskbar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.util.InternalFrameUtils;
 import husacct.control.task.AbstractViewContainer;
-import husacct.control.task.ViewController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,11 +34,11 @@ public class ContextMenu extends JPopupMenu{
 	}
 	
 	private void addComponents() {
-		IControlService controlService = ServiceProvider.getInstance().getControlService();
+		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 		
-		maximize = new JMenuItem(controlService.getTranslatedString("Maximize"));
-		restore = new JMenuItem(controlService.getTranslatedString("Restore"));
-		close = new JMenuItem(controlService.getTranslatedString("Close"));
+		maximize = new JMenuItem(localeService.getTranslatedString("Maximize"));
+		restore = new JMenuItem(localeService.getTranslatedString("Restore"));
+		close = new JMenuItem(localeService.getTranslatedString("Close"));
 		
 		add(maximize);
 		add(restore);

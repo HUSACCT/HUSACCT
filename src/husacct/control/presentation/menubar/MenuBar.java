@@ -1,11 +1,9 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.MainController;
-
-import java.util.Locale;
 
 import javax.swing.JMenuBar;
 import javax.swing.KeyStroke;
@@ -20,7 +18,7 @@ public class MenuBar extends JMenuBar{
 	private LanguageMenu languageMenu;
 	private HelpMenu helpMenu;
 
-	private IControlService controlService;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private MainController mainController;
 
 	public MenuBar(MainController mainController){
@@ -30,7 +28,6 @@ public class MenuBar extends JMenuBar{
 	}
 
 	private void addComponents() {
-		controlService = ServiceProvider.getInstance().getControlService();
 
 		fileMenu = new FileMenu(mainController);
 		defineMenu = new DefineMenu(mainController);
@@ -55,8 +52,8 @@ public class MenuBar extends JMenuBar{
 	}
 
 	private void addListeners(){
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
 				fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
 				defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
 				analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
@@ -68,7 +65,7 @@ public class MenuBar extends JMenuBar{
 	}
 
 	private int getMnemonicKeycode(String translatedString) {
-		String mnemonicString = controlService.getTranslatedString(translatedString);
+		String mnemonicString = localeService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}
