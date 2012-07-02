@@ -27,13 +27,13 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	private void createControllers() {
 		if (analysedController == null) {
 			analysedController = new AnalysedController(
-					ServiceProvider.getInstance().getControlService(),
+					ServiceProvider.getInstance().getLocaleService(),
 					ServiceProvider.getInstance().getAnalyseService(),
 					ServiceProvider.getInstance().getValidateService());
 		}
 		if (definedController == null) {
 			definedController = new DefinedController(
-					ServiceProvider.getInstance().getControlService(),
+					ServiceProvider.getInstance().getLocaleService(),
 					ServiceProvider.getInstance().getAnalyseService(),
 					ServiceProvider.getInstance().getDefineService(),
 					ServiceProvider.getInstance().getValidateService());

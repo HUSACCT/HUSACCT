@@ -5,8 +5,8 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -24,7 +24,7 @@ public class AnalysedController extends DrawingController {
 
 	private ArrayList<BaseFigure> analysedContextFigures;
 
-	public AnalysedController(IControlService controlService, IAnalyseService analyseService, IValidateService validateService) {
+	public AnalysedController(ILocaleService controlService, IAnalyseService analyseService, IValidateService validateService) {
 		super(controlService);
 
 		this.analyseService = analyseService;

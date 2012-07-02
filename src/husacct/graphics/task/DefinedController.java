@@ -6,8 +6,8 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
@@ -22,8 +22,8 @@ public class DefinedController extends DrawingController {
 	protected IDefineService defineService;
 	protected IValidateService validateService;
 
-	public DefinedController(IControlService controlService, IAnalyseService analyseService, IDefineService defineService, IValidateService validateService) {
-		super(controlService);
+	public DefinedController(ILocaleService localeService, IAnalyseService analyseService, IDefineService defineService, IValidateService validateService) {
+		super(localeService);
 
 		this.analyseService = analyseService;
 		this.defineService = defineService;

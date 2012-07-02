@@ -3,7 +3,7 @@ package husacct.graphics.presentation;
 import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
 
 public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	private static final long serialVersionUID = -4683140198375851034L;
-	protected IControlService controlService;
+	protected ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	protected Logger logger = Logger.getLogger(GraphicsFrame.class);
 
 	private DrawingView drawingView;
@@ -63,8 +63,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		setVisible(false);
 		frameTotalWidth = getWidth();
 
-		controlService = ServiceProvider.getInstance().getControlService();
-		ROOT_LEVEL = controlService.getTranslatedString("Root");
+		ROOT_LEVEL = localeService.getTranslatedString("Root");
 		resetCurrentPaths();
 
 		drawingView = givenDrawingView;
@@ -160,38 +159,38 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	private void updateComponentsLocaleStrings() {
 		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
-		menuBarLocale.put("DiagramOptions", controlService.getTranslatedString("DiagramOptions"));
-		menuBarLocale.put("Options", controlService.getTranslatedString("Options"));
-		menuBarLocale.put("Ok", controlService.getTranslatedString("OkButton"));
-		menuBarLocale.put("Apply", controlService.getTranslatedString("Apply"));
-		menuBarLocale.put("Cancel", controlService.getTranslatedString("CancelButton"));
-		menuBarLocale.put("Zoom", controlService.getTranslatedString("Zoom"));
-		menuBarLocale.put("ZoomIn", controlService.getTranslatedString("ZoomIn"));
-		menuBarLocale.put("ZoomOut", controlService.getTranslatedString("ZoomOut"));
-		menuBarLocale.put("Refresh", controlService.getTranslatedString("Refresh"));
-		menuBarLocale.put("HideDependencies", controlService.getTranslatedString("HideDependencies"));
-		menuBarLocale.put("ShowDependencies", controlService.getTranslatedString("ShowDependencies"));
-		menuBarLocale.put("HideViolations", controlService.getTranslatedString("HideViolations"));
-		menuBarLocale.put("ShowViolations", controlService.getTranslatedString("ShowViolations"));
-		menuBarLocale.put("LineContextUpdates", controlService.getTranslatedString("LineContextUpdates"));
-		menuBarLocale.put("ExportToImage", controlService.getTranslatedString("ExportToImage"));
-		menuBarLocale.put("LayoutStrategy", controlService.getTranslatedString("LayoutStrategy"));
-		menuBarLocale.put("DrawingOutOfDate", controlService.getTranslatedString("DrawingOutOfDate"));
-		menuBarLocale.put("HideModules", controlService.getTranslatedString("HideModules"));
-		menuBarLocale.put("RestoreHiddenModules", controlService.getTranslatedString("RestoreHiddenModules"));
+		menuBarLocale.put("DiagramOptions", localeService.getTranslatedString("DiagramOptions"));
+		menuBarLocale.put("Options", localeService.getTranslatedString("Options"));
+		menuBarLocale.put("Ok", localeService.getTranslatedString("OkButton"));
+		menuBarLocale.put("Apply", localeService.getTranslatedString("Apply"));
+		menuBarLocale.put("Cancel", localeService.getTranslatedString("CancelButton"));
+		menuBarLocale.put("Zoom", localeService.getTranslatedString("Zoom"));
+		menuBarLocale.put("ZoomIn", localeService.getTranslatedString("ZoomIn"));
+		menuBarLocale.put("ZoomOut", localeService.getTranslatedString("ZoomOut"));
+		menuBarLocale.put("Refresh", localeService.getTranslatedString("Refresh"));
+		menuBarLocale.put("HideDependencies", localeService.getTranslatedString("HideDependencies"));
+		menuBarLocale.put("ShowDependencies", localeService.getTranslatedString("ShowDependencies"));
+		menuBarLocale.put("HideViolations", localeService.getTranslatedString("HideViolations"));
+		menuBarLocale.put("ShowViolations", localeService.getTranslatedString("ShowViolations"));
+		menuBarLocale.put("LineContextUpdates", localeService.getTranslatedString("LineContextUpdates"));
+		menuBarLocale.put("ExportToImage", localeService.getTranslatedString("ExportToImage"));
+		menuBarLocale.put("LayoutStrategy", localeService.getTranslatedString("LayoutStrategy"));
+		menuBarLocale.put("DrawingOutOfDate", localeService.getTranslatedString("DrawingOutOfDate"));
+		menuBarLocale.put("HideModules", localeService.getTranslatedString("HideModules"));
+		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
 
 		dependencyColumnNames = new ArrayList<String>();
 		for (String key : dependencyColumnKeysArray) {
-			dependencyColumnNames.add(controlService.getTranslatedString(key));
+			dependencyColumnNames.add(localeService.getTranslatedString(key));
 		}
 
 		violationColumnNames = new ArrayList<String>();
 		for (String key : violationColumnKeysArray) {
-			violationColumnNames.add(controlService.getTranslatedString(key));
+			violationColumnNames.add(localeService.getTranslatedString(key));
 		}
 
-		ROOT_LEVEL = controlService.getTranslatedString("Root");
+		ROOT_LEVEL = localeService.getTranslatedString("Root");
 		locationBar.setLocale(ROOT_LEVEL);
 	}
 

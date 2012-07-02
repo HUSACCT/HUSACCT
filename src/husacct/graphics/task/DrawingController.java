@@ -3,8 +3,8 @@ package husacct.graphics.task;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.Drawing;
 import husacct.graphics.presentation.DrawingView;
 import husacct.graphics.presentation.GraphicsFrame;
@@ -47,7 +47,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	private DrawingView drawingView;
 	private GraphicsFrame graphicsFrame;
 
-	protected IControlService controlService;
+	protected ILocaleService localeService;
 	protected Logger logger = Logger.getLogger(DrawingController.class);
 
 	private FigureFactory figureFactory;
@@ -57,17 +57,17 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected ThreadMonitor threadMonitor;
 	private FigureMap figureMap = new FigureMap();
 
-	public DrawingController(IControlService controlService) {
+	public DrawingController(ILocaleService localeService) {
 		super();
 		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 
 		figureFactory = new FigureFactory();
 		connectionStrategy = new FigureConnectorStrategy();
 
-		this.controlService = controlService;
-		this.controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+		this.localeService = localeService;
+		this.localeService.addServiceListener(new IServiceListener() {
 			@Override
-			public void update(Locale newLocale) {
+			public void update() {
 				refreshFrame();
 			}
 		});

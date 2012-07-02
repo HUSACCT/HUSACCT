@@ -1,7 +1,7 @@
 package husacct.graphics.presentation.dialogs;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
@@ -49,7 +49,7 @@ public class GraphicsOptionsDialog extends JDialog {
 	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
 	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 	private String[] layoutStrategyItems;
-	private IControlService controlService;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public GraphicsOptionsDialog() {
 		super();
@@ -58,7 +58,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		currentSettings.put("violations", false);
 		currentSettings.put("smartLines", false);
 		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
-		controlService = ServiceProvider.getInstance().getControlService();
+		
 		totalWidth = 550;
 		totalHeight = 260;
 		paddingSize = 10;
@@ -74,7 +74,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		int i = 0;
 		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
-			String translation = controlService.getTranslatedString(strategy.toString());
+			String translation = localeService.getTranslatedString(strategy.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
 			i++;
@@ -270,7 +270,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		showDependenciesOptionMenu.setSelected((Boolean) currentSettings.get("dependencies"));
 		showViolationsOptionMenu.setSelected((Boolean) currentSettings.get("violations"));
 		smartLinesOptionMenu.setSelected((Boolean) currentSettings.get("smartLines"));
-		layoutStrategyOptions.setSelectedItem(controlService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
+		layoutStrategyOptions.setSelectedItem(localeService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
 	}
 
 	public void addListener(UserInputListener listener) {
@@ -356,7 +356,7 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
 		currentSettings.put("layoutStrategy", item);
-		layoutStrategyOptions.setSelectedItem(controlService.getTranslatedString(item.toString()));
+		layoutStrategyOptions.setSelectedItem(localeService.getTranslatedString(item.toString()));
 	}
 
 	public DrawingLayoutStrategy getSelectedLayoutStrategyItem() {
