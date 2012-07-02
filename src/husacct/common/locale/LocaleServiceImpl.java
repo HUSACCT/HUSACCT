@@ -82,8 +82,9 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 			logger.debug("Unable to reload resource bundle: " + e.getMessage());
 		}
 	}
-
-	private List<Locale> getAvailableLocales(){
+	
+	@Override
+	public List<Locale> getAvailableLocales(){
 		return availableLocales;
 	}
 	
