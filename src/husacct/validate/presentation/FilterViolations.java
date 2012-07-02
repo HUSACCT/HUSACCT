@@ -44,7 +44,7 @@ public final class FilterViolations extends JDialog  {
 	private Calendar violationDate = Calendar.getInstance();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
-		super(((ControlServiceImpl) ServiceProvider.getInstance().getLocaleService()).getMainController().getMainGui(), true);
+		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.filterViolationsObserver = filterViolationsObserver;
 		this.taskServiceImpl = taskServiceImpl;
 		initComponents();
