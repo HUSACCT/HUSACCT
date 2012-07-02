@@ -12,7 +12,6 @@ import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.swing.JDialog;
 

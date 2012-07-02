@@ -3,8 +3,6 @@ package husacct.control;
 import husacct.common.services.IObservableService;
 import husacct.control.task.threading.ThreadWithLoader;
 
-import java.util.Locale;
-
 import javax.swing.JDialog;
 
 public interface IControlService extends IObservableService{
