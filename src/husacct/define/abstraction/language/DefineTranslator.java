@@ -46,6 +46,6 @@ public class DefineTranslator {
 	}
 
 	private static Locale getLocale() {
-		return ServiceProvider.getInstance().getControlService().getLocale();
+		return ServiceProvider.getInstance().getLocaleService().getLocale();
 	}
 }

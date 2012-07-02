@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
@@ -17,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,7 +28,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, ILocaleChangeListener, KeyListener {
+public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, IServiceListener, KeyListener {
 
 	private static final long serialVersionUID = 6141711414139061921L;
 
@@ -52,7 +51,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		this.add(createInnerModulePanel(), BorderLayout.CENTER);
 		this.updateModuleTree();
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getControlService().addServiceListener(this);
 	}
 	
 	public JPanel createInnerModulePanel() {
@@ -231,7 +230,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		this.setButtonTexts();
 	}
 	

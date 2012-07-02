@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
@@ -12,7 +12,6 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EditModuleJPanel extends JPanel implements KeyListener, Observer, ILocaleChangeListener{
+public class EditModuleJPanel extends JPanel implements KeyListener, Observer, IServiceListener{
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private JLabel nameLabel;
@@ -44,7 +43,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 		
 		addModuleNameComponent();
 		addModuleDescriptionComponent();
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getControlService().addServiceListener(this);
 		
 	}
 	
@@ -127,7 +126,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
 		nameLabel.setText(DefineTranslator.translate("ModuleName"));
 		descriptionLabel.setText(DefineTranslator.translate("Description"));

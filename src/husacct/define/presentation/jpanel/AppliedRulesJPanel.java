@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
 
-public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
+public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, IServiceListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
 	
@@ -57,7 +56,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 	}
 	
 	private JScrollPane addAppliedRulesTable() {
@@ -241,7 +240,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		this.setButtonTexts();
 		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();

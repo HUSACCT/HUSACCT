@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
@@ -18,7 +18,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,7 +33,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, ILocaleChangeListener {
+public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, IServiceListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JTableSoftwareUnits softwareUnitsTable;
@@ -57,7 +56,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AssignedSoftwareUnitsTitle")));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 		setButtonEnableState();
 	}
 	
@@ -193,7 +192,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		this.setButtonTexts();
 		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AssignedSoftwareUnitsTitle")));
 		this.softwareUnitsTable.changeColumnHeaders();
