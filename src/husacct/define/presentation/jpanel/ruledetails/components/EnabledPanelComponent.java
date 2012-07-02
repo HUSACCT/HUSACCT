@@ -1,6 +1,8 @@
 package husacct.define.presentation.jpanel.ruledetails.components;
 
-import husacct.define.abstraction.language.DefineTranslator;
+
+
+import husacct.ServiceProvider;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -27,7 +29,7 @@ public class EnabledPanelComponent extends AbstractPanelComponent{
 	private void initDetails() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 		
-		this.ruleEnabledLabel = new JLabel(DefineTranslator.translate("Enabled"));
+		this.ruleEnabledLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Enabled"));
 		this.add(this.ruleEnabledLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		this.ruleEnabledCheckBox = new JCheckBox();

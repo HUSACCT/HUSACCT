@@ -1,6 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails.components;
 
-import husacct.define.abstraction.language.DefineTranslator;
+
+import husacct.ServiceProvider;
 import husacct.define.presentation.moduletree.CombinedModuleTree;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.components.AbstractCombinedComponent;
@@ -54,7 +55,7 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 	private void initDetails() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 		
-		moduleFromJLabel = new JLabel(DefineTranslator.translate("FromModule"));
+		moduleFromJLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FromModule"));
 		this.add(this.moduleFromJLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;

@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ModuleJPanel;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.ValueInputController;
@@ -50,7 +49,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	public void initGUI() {
-		this.setTitle(DefineTranslator.translate("NewModule"));
+		this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
 		this.setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 		
 		this.innerPanel = new JPanel();
@@ -81,7 +80,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void addParentModule() {
-		JLabel parentModuleLabel = new JLabel(DefineTranslator.translate("ParentModule"));
+		JLabel parentModuleLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ParentModule"));
 		this.innerPanel.add(parentModuleLabel);
 		
 		Long selectedModuleId = DefinitionController.getInstance().getSelectedModuleId();
@@ -92,7 +91,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void addModuleValues() {
-		JLabel moduleLabel = new JLabel(DefineTranslator.translate("ModuleName"));
+		JLabel moduleLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleName"));
 		this.innerPanel.add(moduleLabel);
 		
 		this.moduleNameField = new JTextField();
@@ -101,7 +100,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void addModuleDescriptionTextArea() {
-		JLabel moduleLabel = new JLabel(DefineTranslator.translate("ModuleDescription"));
+		JLabel moduleLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleDescription"));
 		this.innerPanel.add(moduleLabel);
 		
 		this.moduleDescriptionField = new JTextField();
@@ -111,10 +110,10 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void addModuleTypeComboBox() {
-		JLabel moduleTypeLabel = new JLabel(DefineTranslator.translate("ModuleType"));
+		JLabel moduleTypeLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleType"));
 		this.innerPanel.add(moduleTypeLabel);
 		
-		String[] moduleTypes = {DefineTranslator.translate("SubSystem"), DefineTranslator.translate("Layer"), DefineTranslator.translate("Component"), DefineTranslator.translate("ExternalLibrary")};
+		String[] moduleTypes = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")};
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
@@ -125,12 +124,12 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	protected void addButtons() {
 		this.cancelButton = new JButton();
 		this.innerPanel.add(this.cancelButton);
-		this.cancelButton.setText(DefineTranslator.translate("Cancel"));
+		this.cancelButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		this.cancelButton.addActionListener(this);
 		
 		this.saveButton = new JButton();
 		this.innerPanel.add(this.saveButton);
-		this.saveButton.setText(DefineTranslator.translate("Save"));
+		this.saveButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Save"));
 		this.saveButton.addActionListener(this);
 	}
 
@@ -197,13 +196,13 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void submitForModuleType(String moduleType) {
-		if(moduleType == DefineTranslator.translate("SubSystem")) {
+		if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem")) {
 			this.submitSubSystem();
-		} else if(moduleType == DefineTranslator.translate("Layer")) {
+		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer")) {
 			this.submitLayer();
-		} else if(moduleType == DefineTranslator.translate("Component")) {
+		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component")) {
 			this.submitComponent();
-		} else if(moduleType == DefineTranslator.translate("ExternalLibrary")) {
+		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")) {
 			this.submitExternalLibrary();
 		}
 	}
@@ -279,12 +278,12 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	}
 	
 	private void throwError(String errorMessage) {
-		JOptionPane.showMessageDialog(this, errorMessage, DefineTranslator.translate("WrongInputTitle"), JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, errorMessage, ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongInputTitle"), JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
 	public void update(Locale newLocale) {
-		this.setTitle(DefineTranslator.translate("NewModule"));
+		this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
 	}
 	
 

@@ -2,7 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
-import husacct.define.abstraction.language.DefineTranslator;
+
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
@@ -38,7 +38,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModulePropertiesTitle")));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
 		
 		addModuleNameComponent();
@@ -59,7 +59,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	private void addModuleNameComponent() {
 		nameLabel = new JLabel();
 		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		nameLabel.setText(DefineTranslator.translate("ModuleName"));
+		nameLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleName"));
 		
 		nameTextfield = new JTextField();
 		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
@@ -70,7 +70,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	private void addModuleDescriptionComponent() {
 		descriptionLabel = new JLabel();
 		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		descriptionLabel.setText(DefineTranslator.translate("Description"));
+		descriptionLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description"));
 		
 		descriptionScrollPane = new JScrollPane();
 		this.add(descriptionScrollPane, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -127,8 +127,8 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 
 	@Override
 	public void update() {
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
-		nameLabel.setText(DefineTranslator.translate("ModuleName"));
-		descriptionLabel.setText(DefineTranslator.translate("Description"));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModulePropertiesTitle")));
+		nameLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleName"));
+		descriptionLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description"));
 	}
 }

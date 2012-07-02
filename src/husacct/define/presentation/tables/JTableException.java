@@ -1,9 +1,9 @@
 package husacct.define.presentation.tables;
 
-import java.util.Locale;
-
+import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.abstraction.language.DefineTranslator;
+
+import java.util.Locale;
 
 import javax.swing.table.TableColumn;
 
@@ -25,10 +25,10 @@ public class JTableException extends AbstractJTable implements ILocaleChangeList
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn(DefineTranslator.translate("FromModule"));
-		tablemodel.addColumn(DefineTranslator.translate("ToModule"));
-		tablemodel.addColumn(DefineTranslator.translate("Description"));
-		tablemodel.addColumn(DefineTranslator.translate("Enabled"));
+		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FromModule"));
+		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ToModule"));
+		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description"));
+		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Enabled"));
 	}
 	
 	@Override

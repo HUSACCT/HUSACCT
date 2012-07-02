@@ -1,11 +1,11 @@
 package husacct.define.task.conventions_checker;
 
-import java.util.ArrayList;
-
-import husacct.define.abstraction.language.DefineTranslator;
-import husacct.define.domain.module.Module;
+import husacct.ServiceProvider;
 import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
 import husacct.define.domain.services.ModuleDomainService;
+
+import java.util.ArrayList;
 
 public class LayerCheckerHelper {
 	
@@ -43,7 +43,7 @@ public class LayerCheckerHelper {
 		if(module.getType() == "Layer") {
 			return true;
 		} else {
-			this.setErrorMessage(DefineTranslator.translate("RuleOnlyForLayers"));
+			this.setErrorMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleOnlyForLayers"));
 			return false;
 		}
 	}

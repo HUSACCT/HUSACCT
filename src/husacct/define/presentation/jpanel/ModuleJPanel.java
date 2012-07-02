@@ -3,7 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.abstraction.language.DefineTranslator;
+
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
@@ -58,7 +58,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		JPanel innerModulePanel = new JPanel();
 		BorderLayout innerModulePanelLayout = new BorderLayout();
 		innerModulePanel.setLayout(innerModulePanelLayout);
-		innerModulePanel.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModuleHierachy")));
+		innerModulePanel.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleHierachy")));
 		innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
@@ -165,7 +165,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	private void removeModule() {
 		long moduleId = getSelectedModuleId();
 		if (moduleId != -1){
-			boolean confirm = UiDialogs.confirmDialog(this, DefineTranslator.translate("RemoveConfirm"), DefineTranslator.translate("RemovePopupTitle"));
+			boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
 			if (confirm) {
 				this.moduleTree.clearSelection();
 				DefinitionController.getInstance().removeModuleById(moduleId);
@@ -235,10 +235,10 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	}
 	
 	private void setButtonTexts() {
-		this.newModuleButton.setText(DefineTranslator.translate("NewModule"));
-		this.moveModuleUpButton.setText(DefineTranslator.translate("MoveUp"));
-		this.removeModuleButton.setText(DefineTranslator.translate("RemoveModule"));
-		this.moveModuleDownButton.setText(DefineTranslator.translate("MoveDown"));
+		this.newModuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
+		this.moveModuleUpButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveUp"));
+		this.removeModuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveModule"));
+		this.moveModuleDownButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveDown"));
 	}
 
 	@Override

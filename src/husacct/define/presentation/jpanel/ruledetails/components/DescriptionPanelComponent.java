@@ -1,6 +1,8 @@
 package husacct.define.presentation.jpanel.ruledetails.components;
 
-import husacct.define.abstraction.language.DefineTranslator;
+
+
+import husacct.ServiceProvider;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -28,7 +30,7 @@ public class DescriptionPanelComponent extends AbstractPanelComponent{
 	private void initDetails() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 		
-		this.descriptionLabel = new JLabel(DefineTranslator.translate("Description"));
+		this.descriptionLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description"));
 		this.add(this.descriptionLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;

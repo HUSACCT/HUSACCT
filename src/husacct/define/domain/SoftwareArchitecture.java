@@ -1,6 +1,6 @@
 package husacct.define.domain;
 
-import husacct.define.abstraction.language.DefineTranslator;
+import husacct.ServiceProvider;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
@@ -104,7 +104,7 @@ public class SoftwareArchitecture {
 		{
 			appliedRules.add(rule);
 		}else{
-			throw new RuntimeException(DefineTranslator.translate("RuleAlreadyAdded"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleAlreadyAdded"));
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class SoftwareArchitecture {
 			AppliedRule rule = getAppliedRuleById(appliedRuleId);
 			appliedRules.remove(rule);	
 		}else{
-			throw new RuntimeException(DefineTranslator.translate("NoRule"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoRule"));
 		}
 	}
 	
@@ -149,7 +149,7 @@ public class SoftwareArchitecture {
 				}
 			}		
 		}else{
-			throw new RuntimeException(DefineTranslator.translate("NoRule"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoRule"));
 		}
 		return appliedRule;
 	}
@@ -175,7 +175,7 @@ public class SoftwareArchitecture {
 				break;
 			}
 		}
-		if (softwareUnit == null){ throw new RuntimeException(DefineTranslator.translate("NoSoftwareUnit"));}
+		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
 		return softwareUnit;
 	}
 	
@@ -199,7 +199,7 @@ public class SoftwareArchitecture {
 			}
 			
 		}
-		if (currentModule == null){throw new RuntimeException(DefineTranslator.translate("NoModule"));}
+		if (currentModule == null){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoModule"));}
 		return currentModule;
 	}
 	
@@ -233,10 +233,10 @@ public class SoftwareArchitecture {
 				modules.add(module);
 				moduleId = module.getId();
 			}else {
-				throw new RuntimeException(DefineTranslator.translate("SameDataModule"));
+				throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameDataModule"));
 			}
 		}else{
-			throw new RuntimeException(DefineTranslator.translate("SameNameModule"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"));
 		}
 		return moduleId;
 	}
@@ -275,7 +275,7 @@ public class SoftwareArchitecture {
 				}
 			}
 		}
-		if (!moduleFound) {	throw new RuntimeException(DefineTranslator.translate("NoModule"));}
+		if (!moduleFound) {	throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoModule"));}
 	}
 	
 	private void removeRelatedRules(Module module) {
@@ -334,7 +334,7 @@ public class SoftwareArchitecture {
 		}
 		if (currentModule == null || 
 				!currentModule.getName().equals(moduleNames[moduleNames.length-1])){ 
-			throw new RuntimeException(DefineTranslator.translate("ModuleNotFound"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleNotFound"));
 		}
 		return currentModule;
 	}
