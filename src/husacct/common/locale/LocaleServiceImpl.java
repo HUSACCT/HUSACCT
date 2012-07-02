@@ -51,7 +51,6 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 			for(String fileName : fileNames){
 				if(fileName.startsWith(bundlePrefix + "_") && fileName.endsWith(bundleSuffix)){
 					String locale = fileName.substring(bundlePrefix.length()+1, fileName.indexOf("."));
-					System.out.println(locale);
 					Locale detectedLocale = new Locale(locale, locale);
 					availableLocales.add(detectedLocale);
 				}
@@ -78,7 +77,6 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 			String path = bundleLocation.replace('/', '.').substring(1) + bundlePrefix;
 			resourceBundle = ResourceBundle.getBundle(path, getLocale());
 		} catch (Exception e){
-			System.out.println("Unable to reload resource bundle: " + e.getMessage());
 			logger.debug("Unable to reload resource bundle: " + e.getMessage());
 		}
 	}
@@ -91,7 +89,6 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 	private boolean isAvailableLocale(Locale locale){
 		String language = locale.getLanguage();
 		for(Locale availableLocale : getAvailableLocales()){
-			System.out.println(availableLocale.getLanguage());
 			String availableLanguage = availableLocale.getLanguage();
 			if(language.equals(availableLanguage)){
 				return true;
@@ -108,7 +105,6 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 	@Override
 	public String getTranslatedString(String key){
 		try {
-			
 			key = resourceBundle.getString(key);
 		} catch (MissingResourceException missingResourceException){
 			logger.debug(String.format("Unable to find translation for key %s in %s_%s.properties", key, bundleLocation, resourceBundle.getLocale().getLanguage()));
@@ -130,7 +126,6 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 	 */
 	private String[] getResourceListing(String path) throws URISyntaxException, IOException {
 		String strippedPath = path.substring(1);
-		System.out.println(strippedPath);
 		URL dirURL = getClass().getClassLoader().getResource(strippedPath);
 		if (dirURL != null && dirURL.getProtocol().equals("file")) {
 			/* A file path: easy enough */
