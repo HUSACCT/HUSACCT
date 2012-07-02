@@ -5,11 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import husacct.analyse.AnalyseServiceImpl;
+import husacct.analyse.AnalyseServiceStub;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
+import husacct.common.locale.LocaleServiceImpl;
 import husacct.graphics.presentation.figures.AbstractClassFigure;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.ClassFigure;
@@ -21,6 +24,7 @@ import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.figures.SubsystemFigure;
 import husacct.graphics.task.AnalysedController;
+import husacct.validate.ValidateServiceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,9 +42,9 @@ public class DrawingControllerTest {
 		AnalysedModuleDTO externalLibraryDTO = new AnalysedModuleDTO("test.externalLibrary", "analysedLibrary", "externallibrary", "public");
 		
 		AnalysedController controller = new AnalysedController(
-				new ControlServiceStub(), 
-				new AnalyseServiceStub(), 
-				new ValidateServiceStub());
+				new LocaleServiceImpl(), 
+				new AnalyseServiceImpl(), 
+				new ValidateServiceImpl());
 		
 		controller.drawSingleLevelModules(new AbstractDTO[]{
 				layerDTO, subsystemDTO, componentDTO, externalLibraryDTO
@@ -98,9 +102,9 @@ public class DrawingControllerTest {
 		multiLevelDTOs.put("parent", childModules);
 		
 		AnalysedController controller = new AnalysedController(
-				new ControlServiceStub(), 
-				new AnalyseServiceStub(), 
-				new ValidateServiceStub());
+				new LocaleServiceImpl(), 
+				new AnalyseServiceImpl(), 
+				new ValidateServiceImpl());
 		
 		controller.drawMultiLevelModules(multiLevelDTOs);
 		
@@ -154,9 +158,9 @@ public class DrawingControllerTest {
 		AnalysedModuleDTO dtoTo = new AnalysedModuleDTO("test.to", "to", "class", "public");
 
 		AnalysedController controller = new AnalysedController(
-				new ControlServiceStub(), 
-				new AnalyseServiceStub(), 
-				new ValidateServiceStub());
+				new LocaleServiceImpl(), 
+				new AnalyseServiceImpl(), 
+				new ValidateServiceImpl());
 		
 		controller.drawSingleLevelModules(new AbstractDTO[]{ dtoFrom, dtoTo });
 		
