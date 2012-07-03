@@ -71,7 +71,6 @@ public class DefinitionController extends Observable implements Observer {
 
 	public void setSelectedModuleId(long moduleId) {
 		this.selectedModuleId = moduleId;
-		logger.info("New Selected Module: " + moduleId);
 		notifyObservers(moduleId);
 	}
 
@@ -310,7 +309,6 @@ public class DefinitionController extends Observable implements Observer {
 	 */
 	public HashMap<String, Object> getModuleDetails(long moduleId) {
 		HashMap<String, Object> moduleDetails = new HashMap<String, Object>();
-		logger.info("loading Module Detail " + moduleId);
 
 		if (moduleId != -1) {
 			try {
