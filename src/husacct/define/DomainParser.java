@@ -1,9 +1,5 @@
 package husacct.define;
 
-import java.util.ArrayList;
-
-import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
@@ -12,8 +8,9 @@ import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Module;
+
+import java.util.ArrayList;
 
 public class DomainParser {
 
@@ -92,35 +89,35 @@ public class DomainParser {
 	private ArrayList<SoftwareUnitDefinition> getExpandedSoftwareUnits(ArrayList<SoftwareUnitDefinition> units) {
 		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
 		for (SoftwareUnitDefinition su : units){
-			if (su.getType() == Type.PACKAGE){
-				softwareUnits.addAll(getAllChildModules(su));
-			}
+//			if (su.getType() == Type.PACKAGE){
+//				softwareUnits.addAll(getAllChildModules(su));
+//			}
 			softwareUnits.add(su);
 		}
 		return softwareUnits;
 	}
 	
-	private ArrayList<SoftwareUnitDefinition> getAllChildModules(SoftwareUnitDefinition su) {
-		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
-		AnalysedModuleDTO[] analysedSubModuleDTOs = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(su.getName());
-		
-		for (AnalysedModuleDTO am : analysedSubModuleDTOs){
-			SoftwareUnitDefinition softwareUnit = parseAnalysedModuleDTO(am);
-			if (softwareUnit.getType() == Type.PACKAGE){
-				ArrayList<SoftwareUnitDefinition> subSoftwareUnits = getAllChildModules(softwareUnit);
-				softwareUnits.addAll(subSoftwareUnits);
-			}
-			softwareUnits.add(softwareUnit);
-		}
-		return softwareUnits;
-	}
-	
-	private SoftwareUnitDefinition parseAnalysedModuleDTO(AnalysedModuleDTO analysedModuleDTO){
-		String name = analysedModuleDTO.uniqueName;
-		Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
-		SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(name, type);
-		return softwareUnit;
-	}
+//	private ArrayList<SoftwareUnitDefinition> getAllChildModules(SoftwareUnitDefinition su) {
+//		ArrayList<SoftwareUnitDefinition> softwareUnits = new ArrayList<SoftwareUnitDefinition>();
+//		AnalysedModuleDTO[] analysedSubModuleDTOs = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(su.getName());
+//		
+//		for (AnalysedModuleDTO am : analysedSubModuleDTOs){
+//			SoftwareUnitDefinition softwareUnit = parseAnalysedModuleDTO(am);
+//			if (softwareUnit.getType() == Type.PACKAGE){
+//				ArrayList<SoftwareUnitDefinition> subSoftwareUnits = getAllChildModules(softwareUnit);
+//				softwareUnits.addAll(subSoftwareUnits);
+//			}
+//			softwareUnits.add(softwareUnit);
+//		}
+//		return softwareUnits;
+//	}
+//	
+//	private SoftwareUnitDefinition parseAnalysedModuleDTO(AnalysedModuleDTO analysedModuleDTO){
+//		String name = analysedModuleDTO.uniqueName;
+//		Type type = Type.valueOf(analysedModuleDTO.type.toUpperCase());
+//		SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(name, type);
+//		return softwareUnit;
+//	}
 	
 	/**
 	 * PhysicalPaths
