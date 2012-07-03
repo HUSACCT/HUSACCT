@@ -1,6 +1,7 @@
 package husacct.validate.domain.check.util;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
@@ -85,14 +86,37 @@ public class CheckConformanceUtilPackage extends CheckConformanceUtil{
 
 	private static HashSet<Mapping> getPackageFromPhysicalPathDTO(ModuleDTO module, String[] violationTypeKeys){
 		HashSet<Mapping> classpaths = new HashSet<Mapping>();
-		for(PhysicalPathDTO physicalClasspath : module.physicalPathDTOs){
-			if(physicalClasspath.type.toLowerCase().equals("package")){
-				if(!updateLogicalPaths(classpaths, module, physicalClasspath.path, violationTypeKeys)){
-					classpaths.add(new Mapping(module.logicalPath, module.type, physicalClasspath.path, violationTypeKeys));	
-				}
-			}
+		for(String classpath : getAllChildPackages(module)){			
+			if(!updateLogicalPaths(classpaths, module, classpath, violationTypeKeys)){
+				classpaths.add(new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys));	
+			}			
 		}
 		return classpaths;
+	}
+	
+	private static List<String> getAllChildPackages(ModuleDTO module){
+		List<String> paths = new ArrayList<String>();
+		
+		for(PhysicalPathDTO classpath : module.physicalPathDTOs){
+			if(classpath.type.toLowerCase().equals("package")){	
+				paths.add(classpath.path);
+				paths.addAll(getAllChildPackages(classpath.path));
+			}
+		}		
+		return paths;
+	}
+	
+	private static List<String> getAllChildPackages(String physicalPath){
+		List<String> paths = new ArrayList<String>();
+		AnalysedModuleDTO[] analysedSubModuleDTOs = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(physicalPath);
+		for (AnalysedModuleDTO am : analysedSubModuleDTOs){
+			if(am.type.toLowerCase().equals("package")){
+				List<String> subPaths = getAllChildPackages(am.uniqueName);
+				paths.add(am.uniqueName);
+				paths.addAll(subPaths);
+			}			
+		}
+		return paths;
 	}
 
 	private static boolean updateLogicalPaths(HashSet<Mapping> classpaths, ModuleDTO module, String physicalClassPath, String[] violationTypeKeys){
