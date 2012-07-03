@@ -1,5 +1,7 @@
 package husacct.validate.presentation.languageSeverityConfiguration;
 
+import husacct.validate.presentation.languageSeverityConfiguration.DTO.ConfigurationRuleTypeDTO;
+import husacct.validate.presentation.languageSeverityConfiguration.DTO.ConfigurationViolationTypeDTO;
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.task.TaskServiceImpl;
