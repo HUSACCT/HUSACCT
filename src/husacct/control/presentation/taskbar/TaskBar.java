@@ -1,8 +1,8 @@
 package husacct.control.presentation.taskbar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
-import java.util.Locale;
 
 import javax.swing.DesktopManager;
 import javax.swing.JInternalFrame;
@@ -75,10 +74,10 @@ public class TaskBar extends JPanel{
 		
 		toggleButton.addMouseListener(new ContextClickListener(internalFrame));
 		
-		IControlService controlService = ServiceProvider.getInstance().getControlService();
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+		localeService.addServiceListener(new IServiceListener() {
 			@Override
-			public void update(Locale newLocale) {
+			public void update() {
 				toggleButton.setText(internalFrame.getTitle());
 			}
 		});

@@ -1,6 +1,8 @@
 package husacct.define.presentation.jpanel.ruledetails.components;
 
-import husacct.define.abstraction.language.DefineTranslator;
+
+
+import husacct.ServiceProvider;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -27,7 +29,7 @@ public class RegexPanelComponent extends AbstractPanelComponent{
 	private void initDetails() {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 		
-		this.regexLabel = new JLabel(DefineTranslator.translate("Regex"));
+		this.regexLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Regex"));
 		this.add(this.regexLabel, gridBagConstraints);
 		gridBagConstraints.gridx++;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;

@@ -1,6 +1,7 @@
 package husacct.control.presentation.workspace.savers;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
 import husacct.control.presentation.util.Regex;
@@ -34,6 +35,7 @@ public class XmlSavePanel extends SaverPanel{
 	private GridBagConstraints constraints;
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public XmlSavePanel(){
 		super();
@@ -49,10 +51,10 @@ public class XmlSavePanel extends SaverPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel(controlService.getTranslatedString("SaveToXML"));
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
+		descriptionLabel = new JLabel(localeService.getTranslatedString("SaveToXML"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
+		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
 		
 		JPanel hiddenPanel = new JPanel();
@@ -85,7 +87,7 @@ public class XmlSavePanel extends SaverPanel{
 	
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
-		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("SaveButton"), filter);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("SaveButton"), filter);
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			if(fileDialog.getSelectedFile().exists()){
@@ -111,11 +113,11 @@ public class XmlSavePanel extends SaverPanel{
 	@Override
 	public boolean validateData() {
 		if(selectedFile == null){
-			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}		
 		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
-			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("InvalidFilenameError"));
 			return false;
 		}
 		return true;

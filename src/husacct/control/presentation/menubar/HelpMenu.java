@@ -1,13 +1,12 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -19,18 +18,18 @@ public class HelpMenu extends JMenu {
 	private MainController mainController;
 	private JMenuItem aboutItem;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public HelpMenu(final MainController mainController){
 		super();
 		this.mainController = mainController;
-		setText(controlService.getTranslatedString("Help"));
+		setText(localeService.getTranslatedString("Help"));
 		addComponents();
 		setListeners();
 	}
 	
 	private void addComponents() {
-		aboutItem = new JMenuItem(controlService.getTranslatedString("About"));
+		aboutItem = new JMenuItem(localeService.getTranslatedString("About"));
 		aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
 		this.add(aboutItem);
 	}
@@ -43,17 +42,17 @@ public class HelpMenu extends JMenu {
 		});
 		
 		final HelpMenu helpMenu = this;
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
-				helpMenu.setText(controlService.getTranslatedString("Help"));
-				aboutItem.setText(controlService.getTranslatedString("About"));	
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				helpMenu.setText(localeService.getTranslatedString("Help"));
+				aboutItem.setText(localeService.getTranslatedString("About"));	
 				aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
 			}
 		});
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {
-		String mnemonicString = controlService.getTranslatedString(translatedString);
+		String mnemonicString = localeService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}

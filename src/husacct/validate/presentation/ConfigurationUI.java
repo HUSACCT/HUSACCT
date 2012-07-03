@@ -67,7 +67,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		severityNameScrollPane.setViewportView(severityNameTable);
 		remove.setVisible(false);
 
-		tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
+		tabPanel.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
 
 		add.addActionListener(new ActionListener() {
 			@Override
@@ -298,14 +298,14 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 	}
 
 	public void setText() {
-		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidateConfigurationTitle"));
-		add.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
-		remove.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
-		up.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Up"));
-		down.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Down"));
-		applySeverity.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Apply"));
-		restore.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("RestoreToDefault"));
-		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
+		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ValidateConfigurationTitle"));
+		add.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		remove.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
+		up.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Up"));
+		down.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Down"));
+		applySeverity.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Apply"));
+		restore.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreToDefault"));
+		cancel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 	}
 
 	private void loadModels() {
@@ -350,7 +350,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		}
 		if (tabPanel.getTabCount() == 1) {
 			logger.error("No programming language set");
-			tabPanel.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
+			tabPanel.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 }

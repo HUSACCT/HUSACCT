@@ -1,13 +1,11 @@
 package husacct.validate.presentation;
 
-import java.util.Locale;
-
-import javax.swing.JInternalFrame;
-
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
+
+import javax.swing.JInternalFrame;
 
 public class GuiController {
 	private final TaskServiceImpl task;
@@ -23,9 +21,9 @@ public class GuiController {
 	}
 
 	private void subscribeToLocalChangeListener() {
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(new ILocaleChangeListener() {
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
 			@Override
-			public void update(Locale newLocale) {
+			public void update() {
 				initializeAllScreens();
 				reloadGUIText();
 			}

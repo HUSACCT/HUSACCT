@@ -1,9 +1,9 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.abstraction.language.DefineTranslator;
+
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -18,7 +18,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,7 +33,7 @@ import javax.swing.table.TableModel;
  * @author Henk ter Harmsel
  *
  */
-public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, ILocaleChangeListener {
+public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, IServiceListener {
 
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JTableSoftwareUnits softwareUnitsTable;
@@ -54,10 +53,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 		this.setLayout(softwareUnitsPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AssignedSoftwareUnitsTitle")));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("AssignedSoftwareUnitsTitle")));
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 		setButtonEnableState();
 	}
 	
@@ -115,10 +114,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(this, DefineTranslator.translate("ModuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, DefineTranslator.translate("NotAnalysedYet"), DefineTranslator.translate("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	private void removeSoftwareUnit(){
@@ -143,7 +142,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			atm.getDataVector().removeAllElements();
 			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
+			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all components from the service
@@ -193,15 +192,15 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		this.setButtonTexts();
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("AssignedSoftwareUnitsTitle")));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("AssignedSoftwareUnitsTitle")));
 		this.softwareUnitsTable.changeColumnHeaders();
 
 	}
 	
 	private void setButtonTexts() {
-		addSoftwareUnitButton.setText(DefineTranslator.translate("Add"));
-		removeSoftwareUnitButton.setText(DefineTranslator.translate("Remove"));
+		addSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		removeSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 	}
 }

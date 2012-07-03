@@ -1,8 +1,8 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
-import husacct.define.abstraction.language.DefineTranslator;
+import husacct.common.services.IServiceListener;
+
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
@@ -12,7 +12,6 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,7 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class EditModuleJPanel extends JPanel implements KeyListener, Observer, ILocaleChangeListener{
+public class EditModuleJPanel extends JPanel implements KeyListener, Observer, IServiceListener{
 
 	private static final long serialVersionUID = -9020336576931490389L;
 	private JLabel nameLabel;
@@ -39,12 +38,12 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	public void initGui() {
 		DefinitionController.getInstance().addObserver(this);
 		this.setDefaultGridLayout();
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModulePropertiesTitle")));
 		this.setPreferredSize(new java.awt.Dimension(442, 105));
 		
 		addModuleNameComponent();
 		addModuleDescriptionComponent();
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getControlService().addServiceListener(this);
 		
 	}
 	
@@ -60,7 +59,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	private void addModuleNameComponent() {
 		nameLabel = new JLabel();
 		this.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		nameLabel.setText(DefineTranslator.translate("ModuleName"));
+		nameLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleName"));
 		
 		nameTextfield = new JTextField();
 		nameTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
@@ -71,7 +70,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	private void addModuleDescriptionComponent() {
 		descriptionLabel = new JLabel();
 		this.add(descriptionLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		descriptionLabel.setText(DefineTranslator.translate("Description"));
+		descriptionLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description"));
 		
 		descriptionScrollPane = new JScrollPane();
 		this.add(descriptionScrollPane, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -127,9 +126,9 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer, I
 	}
 
 	@Override
-	public void update(Locale newLocale) {
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("ModulePropertiesTitle")));
-		nameLabel.setText(DefineTranslator.translate("ModuleName"));
-		descriptionLabel.setText(DefineTranslator.translate("Description"));
+	public void update() {
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModulePropertiesTitle")));
+		nameLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleName"));
+		descriptionLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description"));
 	}
 }

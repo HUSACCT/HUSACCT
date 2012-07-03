@@ -9,7 +9,6 @@ public class MainController {
 	private CommandLineController commandLineController;
 	private ViewController viewController;
 	private WorkspaceController workspaceController;
-	private LocaleController localeController;
 	private StateController stateController;
 	private ApplicationController applicationController;
 	private ImportController importController;
@@ -35,7 +34,6 @@ public class MainController {
 		this.commandLineController = new CommandLineController();
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
-		this.localeController = new LocaleController();
 		this.stateController = new StateController(this);
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
@@ -67,10 +65,6 @@ public class MainController {
 	
 	public WorkspaceController getWorkspaceController(){
 		return this.workspaceController;
-	}
-
-	public LocaleController getLocaleController() {
-		return this.localeController;
 	}
 	
 	public StateController getStateController(){

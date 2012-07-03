@@ -1,7 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -30,12 +30,12 @@ public class ImportArchitectureDialog extends JDialog {
 
 	private File selectedFile;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+	
 	public ImportArchitectureDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setTitle(controlService.getTranslatedString("ImportArchitecture"));
+		setTitle(localeService.getTranslatedString("ImportArchitecture"));
 		setup();
 		addComponents();
 		setListeners();
@@ -51,10 +51,10 @@ public class ImportArchitectureDialog extends JDialog {
 	}
 
 	private void addComponents(){
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
-		importButton = new JButton(controlService.getTranslatedString("ImportButton"));
+		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
+		importButton = new JButton(localeService.getTranslatedString("ImportButton"));
 		importButton.setEnabled(false);
 		pathText.setEnabled(false);
 
@@ -82,7 +82,7 @@ public class ImportArchitectureDialog extends JDialog {
 
 	private void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ImportButton"), filter);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ImportButton"), filter);
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			setFile(fileDialog.getSelectedFile());

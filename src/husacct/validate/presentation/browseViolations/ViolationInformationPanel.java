@@ -84,11 +84,11 @@ public class ViolationInformationPanel extends JPanel {
 	}
 
 	public void loadGuiText() {
-		setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Details")));
-		detailsLineNumberLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LineNumber"));
-		detailsLogicalModuleFromLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LogicalModuleFrom"));
-		detailsMessageLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Message"));
-		detailLogicalModuleToLabel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("LogicalModuleTo"));
+		setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Details")));
+		detailsLineNumberLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LineNumber"));
+		detailsLogicalModuleFromLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LogicalModuleFrom"));
+		detailsMessageLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Message"));
+		detailLogicalModuleToLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("LogicalModuleTo"));
 	}
 
 	public void update(ListSelectionEvent arg0, JTable violationsTable, List<Violation> shownViolations) {

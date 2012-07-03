@@ -26,7 +26,7 @@ public class BootstrapHandler {
 			AbstractBootstrap targetBootstrap = bootstrap.newInstance();
 			targetBootstrap.execute();
 		} catch (Exception exception) {
-			logger.debug("Unable to execute bootstrap " + bootstrap + ": " + exception.getMessage());
+			error(exception.getMessage());
 		}
 	}
 	
@@ -36,8 +36,17 @@ public class BootstrapHandler {
 			Class<? extends AbstractBootstrap> myClass = Class.forName(classNameToBeLoaded).asSubclass(AbstractBootstrap.class);
 			return myClass;
 		} catch (ClassNotFoundException exception) {
-			logger.debug("Bootstrap " + bootstrap + " does not exist");
+			error(exception.getMessage());
+			System.exit(0);
+		} catch (Error error){
+			error(error.getMessage());
+			
 		}
 		return null;
+	}
+	
+	private void error(String message){
+		logger.debug("Unable to launch bootstrap: " + message);
+		System.exit(0);
 	}
 }

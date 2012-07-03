@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.control.ControlServiceImpl;
-import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.BorderLayout;
@@ -42,7 +41,7 @@ public class ViolationTypesJDialog extends JDialog{
 		ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
 		
 		for (ViolationTypeDTO vt : violationTypeDtoList){
-			JCheckBox jCheckBox = new JCheckBox(DefineTranslator.translate(vt.key));
+			JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
 			jCheckBox.setSelected(vt.isDefault);
 			violationCheckBoxHashMap.put(vt.key, jCheckBox);
 		}
@@ -72,7 +71,7 @@ public class ViolationTypesJDialog extends JDialog{
 		String[] dependencies = (String[]) ruleDetails.get("dependencies");
 		
 		for (ViolationTypeDTO vt : violationTypeDtoList){
-			JCheckBox jCheckBox = new JCheckBox(DefineTranslator.translate(vt.key));
+			JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
 			jCheckBox.setSelected(false);
 			for (String dependency : dependencies){
 				if (dependency.equals(vt.key)){

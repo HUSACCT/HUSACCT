@@ -23,7 +23,7 @@ public class ColorChooserEditor extends AbstractCellEditor implements TableCellE
 	private JColorChooser colorChooser;
 	private JDialog dialog;
 	
-	protected static final String EDIT = ServiceProvider.getInstance().getControlService().getTranslatedString("edit");
+	protected static final String EDIT = ServiceProvider.getInstance().getLocaleService().getTranslatedString("edit");
 
 	public ColorChooserEditor() {
 		//Set up the editor (from the table's point of view),
@@ -38,7 +38,7 @@ public class ColorChooserEditor extends AbstractCellEditor implements TableCellE
 		//Set up the dialog that the button brings up.
 		colorChooser = new JColorChooser();
 		dialog = JColorChooser.createDialog(button,
-				ServiceProvider.getInstance().getControlService().getTranslatedString("PickAColor"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("PickAColor"),
 				true,  //modal
 				colorChooser,
 				this,  //OK button handler

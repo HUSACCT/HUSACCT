@@ -11,7 +11,7 @@ public class DataLanguageHelper {
 	}
 	
 	public String toString() {
-		return ServiceProvider.getInstance().getControlService().getTranslatedString(key);
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString(key);
 	}
 
 }

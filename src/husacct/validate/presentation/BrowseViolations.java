@@ -196,14 +196,14 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
 				validateThread.run();
 			}
 		});
 		buttonSaveInHistory.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistoryDialog"));
+				String input = JOptionPane.showInputDialog(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SaveInHistoryDialog"));
 				if(input != null && !input.equals("")) {
 					taskServiceImpl.createHistoryPoint(input);
 					buttonSaveInHistory.setEnabled(false);
@@ -267,11 +267,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	public final void loadText(){
 		violationInformationPanel.loadGuiText();
 		statisticsPanel.loadAfterChange();
-		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("BrowseViolations"));
-		buttonDeleteViolationHistoryPoint.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
-		buttonLatestViolations.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("CurrentViolations"));
-		buttonSaveInHistory.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("SaveInHistory"));
-		buttonValidate.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Validate"));
+		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("BrowseViolations"));
+		buttonDeleteViolationHistoryPoint.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
+		buttonLatestViolations.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("CurrentViolations"));
+		buttonSaveInHistory.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SaveInHistory"));
+		buttonValidate.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Validate"));
 	}
 
 	private void loadModels(){
@@ -282,11 +282,11 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	private void loadViolationsTableModel() {
 		String[] columnNames = {
-				ServiceProvider.getInstance().getControlService().getTranslatedString("Source"),
-				ServiceProvider.getInstance().getControlService().getTranslatedString("Rule"),
-				ServiceProvider.getInstance().getControlService().getTranslatedString("DependencyKind"),
-				ServiceProvider.getInstance().getControlService().getTranslatedString("Target"),
-				ServiceProvider.getInstance().getControlService().getTranslatedString("Severity")};
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Source"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rule"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("DependencyKind"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Target"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 
 		violationsTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 7993526243751581611L;
@@ -310,8 +310,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	private void loadChooseViolationHistoryTableModel() {
 		String[] columnNames = {
-				ServiceProvider.getInstance().getControlService().getTranslatedString("Date"),
-				ServiceProvider.getInstance().getControlService().getTranslatedString("Description")};
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Date"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Description")};
 		chooseViolationHistoryTableModel = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 5804122455086043586L;
 			@Override
@@ -344,12 +344,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			String violationtypeString = "";
 			if(!violation.getViolationtypeKey().isEmpty()){
 				if(!violation.getViolationtypeKey().equals("VisibilityConvention")) {
-					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey()) + ", " + (violation.isIndirect() ? "Indirect" : "Direct");
+					violationtypeString = ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getViolationtypeKey()) + ", " + (violation.isIndirect() ? "Indirect" : "Direct");
 				} else {
-					violationtypeString = ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getViolationtypeKey());
+					violationtypeString = ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getViolationtypeKey());
 				}
 			}
-			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getControlService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
+			violationsTableModel.addRow(new Object[] {violation.getClassPathFrom(), ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getRuletypeKey()), violationtypeString, violation.getClassPathTo(), violation.getSeverity().toString()});
 			violationsTable.revalidate();
 		}
 		violationsTable.setAutoCreateRowSorter(true);
@@ -396,12 +396,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 				}
 			}
 		};
-		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), updateThread);
+		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), updateThread);
 		loadingThread.run();
 	}
 
 	private void changeShownViolations(){
-		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, this, taskServiceImpl, filterPane.getApplyFilter()));
+		ThreadWithLoader loadingThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), new LoadViolationHistoryPointsTask(chooseViolationHistoryTable, this, taskServiceImpl, filterPane.getApplyFilter()));
 		loadingThread.run();
 	}
 

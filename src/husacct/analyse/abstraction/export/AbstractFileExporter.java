@@ -9,7 +9,7 @@ public abstract class AbstractFileExporter{
 	protected HashMap<String, DependencyDTO> data;
 		
 	protected String translate(String key){
-		return ServiceProvider.getInstance().getControlService().getTranslatedString(key);
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString(key);
 	}
 	
 	public AbstractFileExporter(HashMap<String, DependencyDTO> data){

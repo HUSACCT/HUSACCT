@@ -1,9 +1,9 @@
 package husacct.define.presentation.tables;
 
-import java.util.Locale;
-
+import husacct.ServiceProvider;
 import husacct.control.ILocaleChangeListener;
-import husacct.define.abstraction.language.DefineTranslator;
+
+import java.util.Locale;
 
 import javax.swing.table.TableColumn;
 
@@ -22,13 +22,13 @@ public class JTableSoftwareUnits extends AbstractJTable implements ILocaleChange
 	
 	@Override
 	protected void setColumnHeaders() {
-		tablemodel.addColumn(DefineTranslator.translate("SoftwareUnitName"));
-		tablemodel.addColumn(DefineTranslator.translate("Type"));
+		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitName"));
+		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Type"));
 	}
 	
 	public void changeColumnHeaders() {
-		this.getTableHeader().getColumnModel().getColumn(0).setHeaderValue(DefineTranslator.translate("SoftwareUnitName"));
-		this.getTableHeader().getColumnModel().getColumn(1).setHeaderValue(DefineTranslator.translate("Type"));
+		this.getTableHeader().getColumnModel().getColumn(0).setHeaderValue(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitName"));
+		this.getTableHeader().getColumnModel().getColumn(1).setHeaderValue(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Type"));
 	}
 	
 	@Override

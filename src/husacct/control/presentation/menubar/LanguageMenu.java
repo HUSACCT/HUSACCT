@@ -1,9 +1,8 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
-import husacct.control.task.LocaleController;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.MainController;
 
 import java.awt.event.ActionEvent;
@@ -19,24 +18,21 @@ import org.apache.log4j.Logger;
 public class LanguageMenu extends JMenu{
 	
 	private Logger logger = Logger.getLogger(LanguageMenu.class);
-	private LocaleController localeController;
-	private IControlService controlService;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public LanguageMenu(MainController mainController){
 		super();
-		controlService = ServiceProvider.getInstance().getControlService();
-		setText(controlService.getTranslatedString("Language"));
-		this.localeController = mainController.getLocaleController();
+		setText(localeService.getTranslatedString("Language"));
 		addComponents();
 		addListeners();
 	}
 	
 	private void addComponents(){
-		for(Locale locale : localeController.getAvailableLocales()){
+		for(Locale locale : localeService.getAvailableLocales()){
 			String language = locale.getLanguage();
 			final JCheckBoxMenuItem languageItem = new JCheckBoxMenuItem(language);
 			
-			if(language.equals(localeController.getLocale().getLanguage())){
+			if(language.equals(localeService.getLocale().getLanguage())){
 				languageItem.setSelected(true);
 			}
 			
@@ -46,10 +42,10 @@ public class LanguageMenu extends JMenu{
 				}
 			});
 			
-			controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+			localeService.addServiceListener(new IServiceListener() {
 				@Override
-				public void update(Locale newLocale) {
-					if(newLocale.getLanguage().equals(languageItem.getText())){
+				public void update() {
+					if(localeService.getLocale().getLanguage().equals(languageItem.getText())){
 						languageItem.setSelected(true);
 					} else {
 						languageItem.setSelected(false);
@@ -62,16 +58,16 @@ public class LanguageMenu extends JMenu{
 	}
 	
 	private void addListeners(){
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
+		localeService.addServiceListener(new IServiceListener() {
 			@Override
-			public void update(Locale newLocale) {
-				setText(controlService.getTranslatedString("Language"));
+			public void update() {
+				setText(localeService.getTranslatedString("Language"));
 			}
 		});
 	}
 	
 	private void setLocaleFromString(String locale){
 		logger.debug("User sets language to: " + locale);
-		localeController.setNewLocaleFromString(locale);
+		localeService.setLocale(new Locale(locale, locale));
 	}
 }

@@ -1,7 +1,7 @@
 package husacct.control.presentation.workspace;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.workspace.loaders.LoaderPanel;
 import husacct.control.presentation.workspace.loaders.LoaderPanelFactory;
 import husacct.control.task.MainController;
@@ -37,11 +37,11 @@ public class OpenWorkspaceDialog extends JDialog{
 	private JPanel openPanel;
 	private LoaderPanel selectedLoaderPanel;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public OpenWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
-		this.setTitle(controlService.getTranslatedString("OpenWorkspace"));
+		this.setTitle(localeService.getTranslatedString("OpenWorkspace"));
 		this.mainController = mainController;
 		this.setup();
 		this.setLoaders();
@@ -78,8 +78,8 @@ public class OpenWorkspaceDialog extends JDialog{
 		loaderPanelContainer.setPreferredSize(new Dimension(350, 300));
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
-		openButton = new JButton(controlService.getTranslatedString("OpenButton"));
-		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
+		openButton = new JButton(localeService.getTranslatedString("OpenButton"));
+		cancelButton = new JButton(localeService.getTranslatedString("CancelButton"));
 		
 		openButton.setEnabled(false);
 		getRootPane().setDefaultButton(openButton);

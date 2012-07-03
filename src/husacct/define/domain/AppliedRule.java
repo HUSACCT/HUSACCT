@@ -1,6 +1,6 @@
 package husacct.define.domain;
 
-import husacct.define.abstraction.language.DefineTranslator;
+import husacct.ServiceProvider;
 import husacct.define.domain.module.Module;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class AppliedRule {
 		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
 			exceptions.add(exception);
 		} else {
-			throw new RuntimeException(DefineTranslator.translate("ExceptionAlreadyAdded"));
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExceptionAlreadyAdded"));
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class AppliedRule {
 				exceptions.remove(rule);
 			}
 		}
-		if (!exceptionFound){throw new RuntimeException(DefineTranslator.translate("NoException"));}
+		if (!exceptionFound){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoException"));}
 	}
 	
 	public void removeAllExceptions() {

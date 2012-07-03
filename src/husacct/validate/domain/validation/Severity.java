@@ -64,7 +64,7 @@ public class Severity implements Cloneable {
 		if (userName != null && !userName.isEmpty()) {
 			return userName;
 		} else{
-			return ServiceProvider.getInstance().getControlService().getTranslatedString(defaultName);
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString(defaultName);
 		}
 	}
 

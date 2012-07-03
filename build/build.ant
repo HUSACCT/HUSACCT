@@ -57,7 +57,7 @@
 	<target name="addresources">
 		<taskdef classpath="${lib.dir}/rscbundlecheck-1.31-bin.jar" resource="task.properties"/>
 		<resourceCheck>
-			<fileset dir="${src.dir}/husacct/common/locale/">
+			<fileset dir="${src.dir}/husacct/common/resources/locale/">
 				<include name="husacct_*.properties"/>
 			</fileset>
 			<checks>
@@ -71,7 +71,6 @@
 		<jar jarfile="${jar.dir}/${ant.project.name}.jar" update="true">
 			<fileset dir="${src.dir}" >
 				<include name="husacct/common/resources/**/*" />
-				<include name="husacct/common/locale/**/*" />
 			</fileset>
 		</jar>
 	</target>

@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
+import husacct.ServiceProvider;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jdialog.ViolationTypesJDialog;
 import husacct.define.task.AppliedRuleController;
 
@@ -64,7 +64,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	public abstract void initDetails();
 	
 	private void initViolationTypes() {
-		configureViolationTypesJButton = new JButton(DefineTranslator.translate("ConfigureFilter"));
+		configureViolationTypesJButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigureFilter"));
 		configureViolationTypesJButton.addActionListener(this);
 		violationTypesJDialog = new ViolationTypesJDialog(appliedRuleController);
 		
@@ -73,10 +73,10 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 		
 		if (appliedRuleController.isAnalysed()){
 			configureViolationTypesJButton.setEnabled(true);
-			configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("ValidateOnSpecificDependencies"));
+			configureViolationTypesJButton.setToolTipText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ValidateOnSpecificDependencies"));
 		} else {
 			configureViolationTypesJButton.setEnabled(false);
-			configureViolationTypesJButton.setToolTipText(DefineTranslator.translate("NeedToAnalyseFirst"));
+			configureViolationTypesJButton.setToolTipText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NeedToAnalyseFirst"));
 		}
 	}
 	

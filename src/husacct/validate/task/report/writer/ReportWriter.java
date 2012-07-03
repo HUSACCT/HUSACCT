@@ -39,7 +39,7 @@ public abstract class ReportWriter {
 	protected String getDependencyKindValue(String violationtypeKey,
 			boolean indirect) {
 		if(!violationtypeKey.isEmpty()) {
-			String value = ServiceProvider.getInstance().getControlService().getTranslatedString(violationtypeKey);
+			String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtypeKey);
 			value += ", ";
 			if(!violationtypeKey.equals("VisibilityConvention")) {
 				if(indirect) {

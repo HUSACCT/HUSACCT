@@ -2,7 +2,7 @@ package husacct.graphics.presentation.menubars;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.graphics.util.UserInputListener;
 
 import java.awt.Component;
@@ -16,7 +16,7 @@ import javax.swing.JPopupMenu;
 
 public class ContextMenu extends JPopupMenu {
 	private static final long serialVersionUID = -6033808567664371902L;
-	protected IControlService controlService;
+	protected ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 	
@@ -30,25 +30,25 @@ public class ContextMenu extends JPopupMenu {
 	private boolean canZoomout = false;
 	
 	public ContextMenu() {
-		controlService = ServiceProvider.getInstance().getControlService();
+		
 		ImageIcon icon;
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_ZOOM));
-		zoomIn = new JMenuItem(controlService.getTranslatedString("ZoomIn"), icon);
+		zoomIn = new JMenuItem(localeService.getTranslatedString("ZoomIn"), icon);
 		add(zoomIn);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_BACK));
-		zoomOut = new JMenuItem(controlService.getTranslatedString("ZoomOut"), icon);
+		zoomOut = new JMenuItem(localeService.getTranslatedString("ZoomOut"), icon);
 		add(zoomOut);
 		
 		addSeparator();
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_FIGURES_HIDE));
-		hide = new JMenuItem(controlService.getTranslatedString("HideModules"), icon);
+		hide = new JMenuItem(localeService.getTranslatedString("HideModules"), icon);
 		add(hide);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_FIGURES_SHOW));
-		restore = new JMenuItem(controlService.getTranslatedString("RestoreHiddenModules"), icon);
+		restore = new JMenuItem(localeService.getTranslatedString("RestoreHiddenModules"), icon);
 		add(restore);	
 		
 		hookupEventHandlers();

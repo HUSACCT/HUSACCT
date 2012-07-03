@@ -221,23 +221,23 @@ public final class FilterViolations extends JDialog  {
 	}
 	
 	public void loadGUIText(){
-		setTitle(ServiceProvider.getInstance().getControlService().getTranslatedString("TotalViolations"));
-		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterViolations"), filterViolationPanel);
-		addPath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Add"));
-		removePath.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Remove"));
-		TabbedPane.addTab(ServiceProvider.getInstance().getControlService().getTranslatedString("FilterPaths"), pathFilterPanel);
-		save.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Save"));
-		cancel.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("Cancel"));
-		showFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ShowSelectedValues"));
-		hideFilteredValues.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("HideSelectedValues"));
+		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("TotalViolations"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilterViolations"), filterViolationPanel);
+		addPath.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		removePath.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
+		TabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilterPaths"), pathFilterPanel);
+		save.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Save"));
+		cancel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
+		showFilteredValues.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ShowSelectedValues"));
+		hideFilteredValues.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("HideSelectedValues"));
 		
 		loadModels();
 	}
 	
 	public void loadModels(){
-		String[] columnNamesRuletype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Ruletypes")};
-		String[] columnNamesViolationtype = {"", ServiceProvider.getInstance().getControlService().getTranslatedString("Violationtypes")};
-		String[] columnNamesPath = {" ", ServiceProvider.getInstance().getControlService().getTranslatedString("Path")};
+		String[] columnNamesRuletype = {"", ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletypes")};
+		String[] columnNamesViolationtype = {"", ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtypes")};
+		String[] columnNamesPath = {" ", ServiceProvider.getInstance().getLocaleService().getTranslatedString("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 			private static final long serialVersionUID = -7173080075671054375L;
@@ -397,7 +397,7 @@ public final class FilterViolations extends JDialog  {
 			}
 		}
 		if(!returnValue){
-			ServiceProvider.getInstance().getControlService().showInfoMessage(String.format(ServiceProvider.getInstance().getControlService().getTranslatedString("EmptyField"), ServiceProvider.getInstance().getControlService().getTranslatedString("Path")));
+			ServiceProvider.getInstance().getControlService().showInfoMessage(String.format(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EmptyField"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Path")));
 		}
 		return returnValue;
 	}

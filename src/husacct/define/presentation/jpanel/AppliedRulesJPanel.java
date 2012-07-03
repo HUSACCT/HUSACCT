@@ -1,9 +1,9 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.define.abstraction.language.DefineTranslator;
+
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableModel;
 
-public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, ILocaleChangeListener {
+public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, IServiceListener {
 	
 	private static final long serialVersionUID = -2052083182258803790L;
 	
@@ -53,11 +52,11 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		DefinitionController.getInstance().addObserver(this);
 		BorderLayout appliedRulesPanelLayout = new BorderLayout();
 		this.setLayout(appliedRulesPanelLayout);
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rules")));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		setButtonEnableState();
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 	}
 	
 	private JScrollPane addAppliedRulesTable() {
@@ -120,7 +119,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			appliedRuleFrame.setVisible(true);
 		} else {
 			//TODO Test popup
-			JOptionPane.showMessageDialog(this, DefineTranslator.translate("ModuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -132,7 +131,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -155,7 +154,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		if(selectedAppliedRuleId != -1) {
 			DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
 		} else {
-			JOptionPane.showMessageDialog(this, DefineTranslator.translate("RuleSelectionError"), DefineTranslator.translate("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -174,7 +173,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			atm.getDataVector().removeAllElements();
 			
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-			JPanelStatus.getInstance(DefineTranslator.translate("UpdatingRules")).start();
+			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
 
 				// Get all appliedRuleIds from the service
@@ -241,15 +240,15 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		this.setButtonTexts();
-		this.setBorder(BorderFactory.createTitledBorder(DefineTranslator.translate("Rules")));
+		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();
 	}
 	
 	private void setButtonTexts() {
-		addRuleButton.setText(DefineTranslator.translate("Add"));
-		editRuleButton.setText(DefineTranslator.translate("Edit"));
-		removeRuleButton.setText(DefineTranslator.translate("Remove"));
+		addRuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		editRuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
+		removeRuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 	}
 }

@@ -2,7 +2,7 @@ package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -24,13 +24,13 @@ public class SetApplicationDialog extends JDialog {
 	private MainController mainController;
 	private SetApplicationPanel setApplicationPanel;
 
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public SetApplicationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		setApplicationPanel = new SetApplicationPanel();
-		setTitle(controlService.getTranslatedString("ApplicationProperties"));
+		setTitle(localeService.getTranslatedString("ApplicationProperties"));
 		setup();
 		addComponents();
 		setListeners();
@@ -47,8 +47,8 @@ public class SetApplicationDialog extends JDialog {
 
 	private void addComponents(){
 		JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
-		analyseButton = new JButton(controlService.getTranslatedString("SaveAndAnalyseButton"));
+		saveButton = new JButton(localeService.getTranslatedString("SaveButton"));
+		analyseButton = new JButton(localeService.getTranslatedString("SaveAndAnalyseButton"));
 		savePanel.add(saveButton);
 		savePanel.add(analyseButton);
 		getRootPane().setDefaultButton(analyseButton);

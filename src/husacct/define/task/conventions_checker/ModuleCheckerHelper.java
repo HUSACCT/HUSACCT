@@ -1,6 +1,7 @@
 package husacct.define.task.conventions_checker;
 
-import husacct.define.abstraction.language.DefineTranslator;
+
+import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -20,7 +21,7 @@ public class ModuleCheckerHelper {
 	public boolean checkRuleTypeAlreadySet(String ruleTypeKey, Module moduleFrom) {
 		for(AppliedRule appliedRule : this.getFromModuleAppliedRules(moduleFrom)) {
 			if(appliedRule.getRuleType().equals(ruleTypeKey)) {
-				setErrorMessage("'"+ DefineTranslator.translate(ruleTypeKey) + "'");
+				setErrorMessage("'"+ ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleTypeKey) + "'");
 				return false;
 			}
 		}
@@ -32,7 +33,7 @@ public class ModuleCheckerHelper {
 			if(appliedRule.getRuleType().equals(ruleType) &&
 			   appliedRule.getModuleFrom().getId() == fromModule.getId() &&
 			   appliedRule.getModuleTo().getId() == toModule.getId()) {
-				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + DefineTranslator.translate(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
+				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
 				return false;
 			}
 		}
@@ -54,7 +55,7 @@ public class ModuleCheckerHelper {
 			if(appliedRule.getRuleType().equals(ruleType) &&
 				appliedRule.getModuleFrom().getId() == fromModule.getId() &&
 				appliedRule.getModuleTo().getId() != toModule.getId()) {
-				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + DefineTranslator.translate(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
+				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
 				return false;
 			}
 		}
@@ -85,7 +86,7 @@ public class ModuleCheckerHelper {
 			if(appliedRule.getRuleType().equals(ruleType) &&
 				checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(appliedRule.getModuleFrom(), fromModule) &&
 				appliedRule.getModuleTo().getId() == toModule.getId()) {
-				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + DefineTranslator.translate(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
+				setErrorMessage("'" + appliedRule.getModuleFrom().getName() + "' " + ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleType) + " '" + appliedRule.getModuleTo().getName() + "'");
 				return false;
 			}
 		}
@@ -125,7 +126,7 @@ public class ModuleCheckerHelper {
 
 	public void setErrorMessage(String message) {
 		if(message != "") {
-			this.errorMessage = DefineTranslator.translate("NotAllowedBecauseDefined") + ":\n\n " + message;
+			this.errorMessage = ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined") + ":\n\n " + message;
 		} else {
 			this.errorMessage = "";
 		}

@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
@@ -30,12 +31,13 @@ public class ExportArchitectureDialog extends JDialog {
 
 	private File selectedFile;
 
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	public ExportArchitectureDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setTitle(controlService.getTranslatedString("ExportArchitecture"));
+		setTitle(localeService.getTranslatedString("ExportArchitecture"));
 		setup();
 		addComponents();
 		setListeners();
@@ -51,10 +53,10 @@ public class ExportArchitectureDialog extends JDialog {
 	}
 
 	private void addComponents(){
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
-		exportButton = new JButton(controlService.getTranslatedString("ExportButton"));
+		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
+		exportButton = new JButton(localeService.getTranslatedString("ExportButton"));
 		exportButton.setEnabled(false);
 		pathText.setEnabled(false);
 		
@@ -84,7 +86,7 @@ public class ExportArchitectureDialog extends JDialog {
 
 	private void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML", "xml", "xml");
-		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("ExportButton"), filter);
+		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("ExportButton"), filter);
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			if(fileDialog.getSelectedFile().exists()){
@@ -103,11 +105,11 @@ public class ExportArchitectureDialog extends JDialog {
 	
 	public boolean validateData() {
 		if(selectedFile == null){
-			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}		
 		else if(!Regex.matchRegex(Regex.filenameRegex, selectedFile.getName())) {
-			controlService.showErrorMessage(controlService.getTranslatedString("InvalidFilenameError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("InvalidFilenameError"));
 			return false;
 		}
 		return true;
