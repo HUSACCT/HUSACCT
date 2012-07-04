@@ -21,7 +21,6 @@ import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.figures.SubsystemFigure;
 import husacct.graphics.task.AnalysedController;
-import husacct.validate.ValidateServiceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
