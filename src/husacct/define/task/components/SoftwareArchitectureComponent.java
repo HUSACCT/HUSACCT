@@ -1,5 +1,7 @@
 package husacct.define.task.components;
 
+import husacct.define.domain.SoftwareArchitecture;
+
 import java.util.ArrayList;
 
 public class SoftwareArchitectureComponent extends AbstractDefineComponent {
@@ -8,8 +10,8 @@ public class SoftwareArchitectureComponent extends AbstractDefineComponent {
 	
 	public SoftwareArchitectureComponent() {
 		super();
-		this.setName("SoftwareArchitecture");
-		this.setModuleId(-1);
+		this.setName(SoftwareArchitecture.getInstance().getName());
+		this.setModuleId(0);
 	}
 
 	@Override
