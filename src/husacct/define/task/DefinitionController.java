@@ -211,8 +211,7 @@ public class DefinitionController extends Observable implements Observer {
 			long moduleId = getSelectedModuleId();
 
 			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
-				// Ask the user if he is sure to remove the software unit
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, "Are you sure you want to remove software unit: \"" + softwareUnitName + "\"", "Remove?");
+				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
 				if (confirm) {
 					// Remove the software unit
 					JPanelStatus.getInstance("Removing software unit").start();
@@ -235,8 +234,7 @@ public class DefinitionController extends Observable implements Observer {
 			long moduleId = getSelectedModuleId();
 
 			if (moduleId != -1 && appliedRuleId != -1L) {
-				// Ask the user if he is sure to remove the software unit
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, "Are you sure you want to remove the applied rule: \"" + this.appliedRuleService.getRuleTypeByAppliedRule(appliedRuleId) + "\"", "Remove?");
+				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveAppliedRule"), "Remove?");
 				if (confirm) {
 					// Remove the software unit
 					JPanelStatus.getInstance("Removing applied rule").start();
