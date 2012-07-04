@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Module implements Comparable<Module> {
 	
-	protected static long STATIC_ID;
+	protected static long STATIC_ID = 1;
 	protected long id;
 	protected String name;
 	protected String description;
@@ -22,7 +22,7 @@ public class Module implements Comparable<Module> {
 
 	public Module(String name, String description)
 	{	
-		this.id = STATIC_ID++;
+		this.id = STATIC_ID;
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
@@ -58,17 +58,7 @@ public class Module implements Comparable<Module> {
 	public ArrayList<SoftwareUnitDefinition> getUnits() {
 		return mappedSUunits;
 	}
-	
-	@Deprecated
-	public String[] getPhysicalPaths(){
-		ArrayList<String> pathsList = new ArrayList<String>();
-		for (SoftwareUnitDefinition unit : mappedSUunits){
-			pathsList.add(unit.getName());
-		}
-		String[] paths = new String[pathsList.size()];
-		pathsList.toArray(paths);
-		return paths;
-	}
+
 
 	public void setUnits(ArrayList<SoftwareUnitDefinition> units) {
 		this.mappedSUunits = units;
@@ -182,7 +172,7 @@ public class Module implements Comparable<Module> {
 			}
 		}
 		for (Module mod : subModules){
-			if (mod.hasSoftwareUnit(softwareUnitName, true)){
+			if (mod.hasSoftwareUnit(softwareUnitName)){
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
 		}

@@ -7,6 +7,11 @@ public class SubSystem extends Module {
 		this("", "");
 	}
 	
+	public SubSystem(String name)
+	{
+		this(name, "");
+	}
+	
 	public SubSystem(String name, String description)
 	{
 		super(name, description);

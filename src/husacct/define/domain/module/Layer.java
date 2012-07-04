@@ -2,7 +2,7 @@ package husacct.define.domain.module;
 
 public class Layer extends Module {
 	
-	private static int STATIC_LEVEL;
+	private static int STATIC_LEVEL = 1;
 	private int hierarchicalLevel;
 	
 	public Layer()
@@ -20,7 +20,7 @@ public class Layer extends Module {
 	{
 		super(name, description);
 		super.type = "Layer";
-		this.hierarchicalLevel = STATIC_LEVEL++;
+		this.hierarchicalLevel = STATIC_LEVEL;
 		STATIC_LEVEL++;
 	}
 	
