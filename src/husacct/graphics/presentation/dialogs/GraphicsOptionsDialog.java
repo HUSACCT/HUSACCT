@@ -79,7 +79,7 @@ public class GraphicsOptionsDialog extends JDialog {
 			layoutStrategyItems[i] = translation;
 			i++;
 		}
-
+		
 		initGUI();
 
 		interfaceElements = new ArrayList<JComponent>();
@@ -99,6 +99,7 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void showDialog() {
 		setResizable(false);
+		setAlwaysOnTop(true);
 		setSize(totalWidth, totalHeight);
 		ServiceProvider.getInstance().getControlService().centerDialog(this);
 		setVisible(true);
