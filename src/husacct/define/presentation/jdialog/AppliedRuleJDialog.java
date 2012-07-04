@@ -197,17 +197,17 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
-		jButtonCancel = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
-		buttonPanel.add(jButtonCancel);
-		jButtonCancel.addActionListener(this);
-		
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)){
 			jButtonSave = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		} else {
-			jButtonSave = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Update"));
+			jButtonSave = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Save"));
 		}
 		buttonPanel.add(jButtonSave);
 		jButtonSave.addActionListener(this);
+		
+		jButtonCancel = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
+		buttonPanel.add(jButtonCancel);
+		jButtonCancel.addActionListener(this);
 		
 		return buttonPanel;
 	}

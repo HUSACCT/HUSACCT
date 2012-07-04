@@ -272,7 +272,7 @@ public class SoftwareArchitecture {
 			}	
 			
 			@SuppressWarnings("unchecked")
-			ArrayList<AppliedRule> tmpExceptionList = (ArrayList<AppliedRule>) appliedRules.clone();
+			ArrayList<AppliedRule> tmpExceptionList = (ArrayList<AppliedRule>) rule.getExceptions().clone();
 			for (AppliedRule exceptionRule : rule.getExceptions()){
 				if (exceptionRule.getModuleFrom().equals(module) || 
 						exceptionRule.getModuleTo().equals(module)){
