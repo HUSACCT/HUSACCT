@@ -1,7 +1,8 @@
 package husacct.bootstrap;
 
-import java.util.HashMap;
+import husacct.define.domain.SoftwareArchitecture;
 
+import java.util.HashMap;
 
 public class DefineJavaBenchmark extends AbstractBootstrap{
 
@@ -18,18 +19,19 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 	}
 	
 	private void defineLogicalModules(){
-		getDefineService().getDefinitionController().addLayer(-1, "Presentation Layer", "This is the presentation layer of the benchmark");
-		getDefineService().getDefinitionController().addLayer(-1, "Domain Layer", "This is the domain layer of the benchmark");
-		getDefineService().getDefinitionController().addLayer(-1, "Infrastructure Layer", "This is the presentation layer of the benchmark");
+		getDefineService().getDefinitionController().addLayer(0, "Presentation Layer", "This is the presentation layer of the benchmark");
+		getDefineService().getDefinitionController().addLayer(0, "Domain Layer", "This is the domain layer of the benchmark");
+		getDefineService().getDefinitionController().addLayer(0, "Infrastructure Layer", "This is the presentation layer of the benchmark");
 	}
 	
 	private void defineRules(){
-		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
 		
+		
+		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
 		//Presentation is not allowed to use Infrastructure
 		ruleDetails.put("ruleTypeKey", "IsNotAllowedToUse");
-		ruleDetails.put("moduleFromId", 0L);
-		ruleDetails.put("moduleToId", 4L);
+		ruleDetails.put("moduleFromId", SoftwareArchitecture.getInstance().getModules().get(0).getId());
+		ruleDetails.put("moduleToId", SoftwareArchitecture.getInstance().getModules().get(2).getId());
 		ruleDetails.put("enabled", true);
 		ruleDetails.put("description", "");
 		ruleDetails.put("regex", "");
@@ -37,18 +39,18 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 		getDefineService().getAppliedRuleController().save(ruleDetails);
 		
 		//Domain is not allowed to use Presentation
-		ruleDetails.put("moduleFromId", 2L);
-		ruleDetails.put("moduleToId", 0L);
+		ruleDetails.put("moduleFromId", SoftwareArchitecture.getInstance().getModules().get(1).getId());
+		ruleDetails.put("moduleToId", SoftwareArchitecture.getInstance().getModules().get(0).getId());
 		getDefineService().getAppliedRuleController().save(ruleDetails);
 		
 		//Infrastructure is not allowed to use Presentation
-		ruleDetails.put("moduleFromId", 4L);
-		ruleDetails.put("moduleToId", 0L);
+		ruleDetails.put("moduleFromId", SoftwareArchitecture.getInstance().getModules().get(2).getId());
+		ruleDetails.put("moduleToId", SoftwareArchitecture.getInstance().getModules().get(0).getId());
 		getDefineService().getAppliedRuleController().save(ruleDetails);
 		
 		//Infrastructure is not allowed to use Domain
-		ruleDetails.put("moduleFromId", 4L);
-		ruleDetails.put("moduleToId", 2L);
+		ruleDetails.put("moduleFromId", SoftwareArchitecture.getInstance().getModules().get(2).getId());
+		ruleDetails.put("moduleToId", SoftwareArchitecture.getInstance().getModules().get(1).getId());
 		getDefineService().getAppliedRuleController().save(ruleDetails);
 	}
 	
