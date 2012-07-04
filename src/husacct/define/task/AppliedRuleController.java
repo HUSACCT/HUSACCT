@@ -5,7 +5,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
-import husacct.define.abstraction.language.DefineTranslator;
+
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
@@ -89,7 +89,7 @@ public class AppliedRuleController extends PopUpController {
 					if(!(selectedModule instanceof Layer) && (ruleTypeDTO.key.equals("SkipCall") || ruleTypeDTO.key.equals("BackCall"))) {
 						continue;
 					} else {
-						String value = DefineTranslator.translate(ruleTypeDTO.key);
+						String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleTypeDTO.key);
 						ruleTypeKeys.add(ruleTypeDTO.key);
 						ruleTypeValues.add(value);
 					}
@@ -136,7 +136,7 @@ public class AppliedRuleController extends PopUpController {
 					
 					for (RuleTypeDTO ruleDTO : ruleTypeDTO.exceptionRuleTypes){
 						ruleTypeKeys.add(ruleDTO.key);
-						String value = DefineTranslator.translate(ruleDTO.key);
+						String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleDTO.key);
 						ruleTypeValues.add(value);
 					}
 					keyValueComboBoxAppliedRule.setModel(ruleTypeKeys.toArray(), ruleTypeValues.toArray());
@@ -334,7 +334,7 @@ public class AppliedRuleController extends PopUpController {
 		RuleConventionsChecker conventionsChecker = new RuleConventionsChecker(moduleFrom, moduleTo, ruleTypeKey);
 		if(!conventionsChecker.checkRuleConventions()) {
 			String errorMessage = conventionsChecker.getErrorMessage();
-			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, DefineTranslator.translate("ConventionError"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConventionError"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		} else {
 			return true;

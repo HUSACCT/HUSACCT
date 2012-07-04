@@ -1,5 +1,7 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.common.Resource;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
@@ -41,7 +43,7 @@ public class ComponentFigure extends BaseFigure {
 		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 
 		try {
-			URL componentImageURL = getClass().getResource("/husacct/common/resources/graphics/icon-component.png");
+			URL componentImageURL = Resource.get(Resource.ICON_COMPONENT);
 			compIcon = ImageIO.read(componentImageURL);
 			compIconFig.setImage(null, compIcon);
 			children.add(compIconFig);
@@ -49,7 +51,6 @@ public class ComponentFigure extends BaseFigure {
 			compIconFig = null;
 			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
 		}
-
 	}
 
 	@Override

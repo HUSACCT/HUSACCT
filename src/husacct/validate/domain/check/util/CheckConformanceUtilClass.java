@@ -45,22 +45,18 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static List<Mapping> getExceptionClassPathTo(RuleDTO rule){
 		List<Mapping> exceptionClasspathTo = new ArrayList<Mapping>();
-		if(rule.exceptionRules!= null){
 			for(RuleDTO exceptionRule : rule.exceptionRules){
 				Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
 				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
 			}
-		}
 		return exceptionClasspathTo;
 	}
 
 	private static List<Mapping> getExceptionClassPathFrom(RuleDTO rule){
 		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-		if(rule.exceptionRules!= null){
 			for(RuleDTO exceptionRule : rule.exceptionRules){
 				Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
 				exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
-			}
 		}
 		return exceptionClasspathFrom;
 	}
@@ -121,16 +117,41 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	}	
 
 	private static HashSet<Mapping> getClassFromPhysicalPathDTO(ModuleDTO module, String[] violationTypeKeys, HashSet<Mapping> classpaths){
-		for(PhysicalPathDTO classpath : module.physicalPathDTOs){
-			if(!updateLogicalPaths(classpaths, module, classpath.path, violationTypeKeys)){
-				classpaths.add(new Mapping(module.logicalPath, module.type, classpath.path, violationTypeKeys));
+		for(String classpath : getAllChildPhysicalPaths(module)){			
+			if(!updateLogicalPaths(classpaths, module, classpath, violationTypeKeys)){
+				classpaths.add(new Mapping(module.logicalPath, module.type, classpath, violationTypeKeys));
 
-				AnalysedModuleDTO analysedModule = analyse.getModuleForUniqueName(classpath.path);
+				AnalysedModuleDTO analysedModule = analyse.getModuleForUniqueName(classpath);
 				classpaths.addAll(getInnerClasses(analysedModule, new ArrayList<Mapping>(), module, violationTypeKeys));
 			}
 		}
 		return classpaths;
 	}	
+	
+	private static List<String> getAllChildPhysicalPaths(ModuleDTO module){
+		List<String> paths = new ArrayList<String>();
+		
+		for(PhysicalPathDTO classpath : module.physicalPathDTOs){
+			if(classpath.type.toLowerCase().equals("package")){	
+				paths.add(classpath.path);
+				paths.addAll(getAllChildPhysicalPaths(classpath.path));
+			}
+		}		
+		return paths;
+	}
+	
+	private static List<String> getAllChildPhysicalPaths(String physicalPath){
+		List<String> paths = new ArrayList<String>();
+		AnalysedModuleDTO[] analysedSubModuleDTOs = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(physicalPath);
+		for (AnalysedModuleDTO am : analysedSubModuleDTOs){
+			if(am.type.toLowerCase().equals("package")){
+				List<String> subPaths = getAllChildPhysicalPaths(am.uniqueName);
+				paths.addAll(subPaths);
+			}
+			paths.add(am.uniqueName);
+		}
+		return paths;
+	}
 
 	private static boolean updateLogicalPaths(HashSet<Mapping> classpaths, ModuleDTO module, String physicalClassPath, String[] violationTypeKeys){
 		List<Mapping> duplicatedMappings = getClassPaths(classpaths, physicalClassPath, module.logicalPath);

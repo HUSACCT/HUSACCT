@@ -1,7 +1,7 @@
 package husacct.validate.domain.factory.message;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
 
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private final String whiteSpace = " ";
 	
 	public String createMessage(Violation violation){
@@ -82,7 +82,7 @@ public class Messagebuilder {
 			if(iterator != violationTypeKeys.size()-1){				
 				if(iterator == violationTypeKeys.size()-2){
 					sb.append(whiteSpace);
-					sb.append(controlService.getTranslatedString("OrMessage"));
+					sb.append(localeService.getTranslatedString("OrMessage"));
 					sb.append("whiteSpace");
 				}
 				else{
@@ -100,7 +100,7 @@ public class Messagebuilder {
 	private String getTextFormat(String ruleTypeKey){
 		try{
 			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
-			return controlService.getTranslatedString(ruleTextKey);		
+			return localeService.getTranslatedString(ruleTextKey);		
 		}catch(IllegalFormatException e){
 			logger.error(e.getMessage(), e);
 		}
@@ -121,7 +121,7 @@ public class Messagebuilder {
 		StringBuilder sb = new StringBuilder();		
 		try{
 			sb.append(whiteSpace);
-			sb.append(controlService.getTranslatedString("ExceptionMessage"));
+			sb.append(localeService.getTranslatedString("ExceptionMessage"));
 			sb.append(whiteSpace);
 
 			final String exceptionKey =  sb.toString();
@@ -136,7 +136,7 @@ public class Messagebuilder {
 		StringBuilder sb = new StringBuilder();
 		try{			
 			sb.append(whiteSpace);
-			sb.append(controlService.getTranslatedString("EnumerationMessage"));
+			sb.append(localeService.getTranslatedString("EnumerationMessage"));
 			sb.append(whiteSpace);			
 
 			final String exceptionKey = sb.toString();

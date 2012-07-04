@@ -1,8 +1,8 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
-import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.utils.KeyValueComboBox;
@@ -58,11 +58,11 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	
 	private void setTextures() {
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
-			this.saveButton.setText(DefineTranslator.translate("CreateException"));
-			this.setTitle(DefineTranslator.translate("ExceptionRuleTitle"));
+			this.saveButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("CreateException"));
+			this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExceptionRuleTitle"));
 		} else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
-			this.saveButton.setText(DefineTranslator.translate("Save"));
-			this.setTitle(DefineTranslator.translate("EditExceptionRuleTitle"));
+			this.saveButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Save"));
+			this.setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EditExceptionRuleTitle"));
 		}
 	}
 
@@ -72,8 +72,8 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	private void initGUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle(DefineTranslator.translate("ExceptionRuleTitle"));
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExceptionRuleTitle"));
+			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
@@ -92,7 +92,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 		mainPanel.setLayout(this.createMainPanelLayout());
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
-		mainPanel.add(new JLabel(DefineTranslator.translate("RuleType")), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		mainPanel.add(new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleType")), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		this.createAppliedRuleKeyValueComboBox();
 		mainPanel.add(this.exceptionRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		this.createRuleDetailPanel();
@@ -126,11 +126,11 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
-		this.cancelButton = new JButton(DefineTranslator.translate("Cancel"));
+		this.cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(this.cancelButton);
 		this.cancelButton.addActionListener(this);
 		
-		this.saveButton = new JButton(DefineTranslator.translate("Add"));
+		this.saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		buttonPanel.add(this.saveButton);
 		this.saveButton.addActionListener(this);
 		
@@ -174,7 +174,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			this.appliedRuleFrame.updateExceptionTable();
 			this.dispose();
 		} else {
-			UiDialogs.errorDialog(this, DefineTranslator.translate("CorrectDataError"));
+			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
 		}
 	}
 	

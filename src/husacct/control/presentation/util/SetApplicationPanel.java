@@ -2,8 +2,9 @@ package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -12,7 +13,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Locale;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -41,6 +41,7 @@ public class SetApplicationPanel extends JPanel{
 	private GridBagConstraints constraint = new GridBagConstraints();
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public SetApplicationPanel(){
 		addComponents();
@@ -52,12 +53,12 @@ public class SetApplicationPanel extends JPanel{
 		this.setLayout(new GridBagLayout());
 		this.languages = ServiceProvider.getInstance().getAnalyseService().getAvailableLanguages();
 		
-		applicationNameLabel = new JLabel(controlService.getTranslatedString("ApplicationNameLabel"));
-		languageSelectLabel = new JLabel(controlService.getTranslatedString("LanguageSelectLabel"));
-		versionLabel = new JLabel(controlService.getTranslatedString("VersionLabel"));
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
-		addButton = new JButton(controlService.getTranslatedString("AddButton"));
-		removeButton = new JButton(controlService.getTranslatedString("RemoveButton"));
+		applicationNameLabel = new JLabel(localeService.getTranslatedString("ApplicationNameLabel"));
+		languageSelectLabel = new JLabel(localeService.getTranslatedString("LanguageSelectLabel"));
+		versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
+		addButton = new JButton(localeService.getTranslatedString("AddButton"));
+		removeButton = new JButton(localeService.getTranslatedString("RemoveButton"));
 		
 		applicationNameText = new JTextField("myApplication", 20);
 		languageSelect = new JComboBox(languages);
@@ -108,20 +109,20 @@ public class SetApplicationPanel extends JPanel{
 			}
 		});
 		
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
-				applicationNameLabel.setText(controlService.getTranslatedString("ApplicationNameLabel"));
-				languageSelectLabel.setText(controlService.getTranslatedString("LanguageSelectLabel"));
-				versionLabel.setText(controlService.getTranslatedString("VersionLabel"));
-				pathLabel.setText(controlService.getTranslatedString("PathLabel"));
-				addButton.setText(controlService.getTranslatedString("AddButton"));
-				removeButton.setText(controlService.getTranslatedString("RemoveButton"));
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				applicationNameLabel.setText(localeService.getTranslatedString("ApplicationNameLabel"));
+				languageSelectLabel.setText(localeService.getTranslatedString("LanguageSelectLabel"));
+				versionLabel.setText(localeService.getTranslatedString("VersionLabel"));
+				pathLabel.setText(localeService.getTranslatedString("PathLabel"));
+				addButton.setText(localeService.getTranslatedString("AddButton"));
+				removeButton.setText(localeService.getTranslatedString("RemoveButton"));
 			}
 		});
 	}
 	
 	private void showAddFileDialog() {
-		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, controlService.getTranslatedString("AddButton"));
+		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, localeService.getTranslatedString("AddButton"));
 		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
@@ -176,11 +177,11 @@ public class SetApplicationPanel extends JPanel{
 		
 		
 		if(applicationName == null || applicationName.length() < 1){
-			errorMessage = controlService.getTranslatedString("FieldEmptyError");
+			errorMessage = localeService.getTranslatedString("FieldEmptyError");
 			showError = true;
 		}
 		if (!Regex.matchRegex(Regex.nameWithSpacesRegex, applicationNameText.getText())) {
-			errorMessage = controlService.getTranslatedString("MustBeAlphaNumericError");
+			errorMessage = localeService.getTranslatedString("MustBeAlphaNumericError");
 			showError = true;
 		}
 		

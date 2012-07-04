@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 
 public class MainController {
 	
+	private CommandLineController commandLineController;
 	private ViewController viewController;
 	private WorkspaceController workspaceController;
-	private LocaleController localeController;
 	private StateController stateController;
 	private ApplicationController applicationController;
 	private ImportController importController;
@@ -31,9 +31,9 @@ public class MainController {
 	}
 	
 	private void setControllers() {
+		this.commandLineController = new CommandLineController();
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
-		this.localeController = new LocaleController();
 		this.stateController = new StateController(this);
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
@@ -47,21 +47,16 @@ public class MainController {
 		System.setProperty("apple.awt.fileDialogForDirectories", "true");
 	}
 	
-	public void readArguments(String[] consoleArguments){
-		boolean argumentsFound = false;
-		String consoleArgumentsString = "";
-		for(String argument : consoleArguments){
-			argumentsFound = true;
-			consoleArgumentsString += argument; 
-			if(argument.equals("nogui")){
-				guiEnabled = false;
-			}
-		}
-		if(argumentsFound) logger.debug("Parsed console arguments: " + consoleArgumentsString);
-	}
-	
 	private void openMainGui() {
 		this.mainGUI = new MainGui(this);
+	}
+	
+	public void parseCommandLineArguments(String[] commandLineArguments){
+		this.commandLineController.parse(commandLineArguments);
+	}
+	
+	public CommandLineController getCommandLineController(){
+		return this.commandLineController;
 	}
 	
 	public ViewController getViewController(){
@@ -70,10 +65,6 @@ public class MainController {
 	
 	public WorkspaceController getWorkspaceController(){
 		return this.workspaceController;
-	}
-
-	public LocaleController getLocaleController() {
-		return this.localeController;
 	}
 	
 	public StateController getStateController(){

@@ -1,8 +1,8 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.States;
@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -25,29 +24,29 @@ public class DefineMenu extends JMenu{
 	private JMenuItem exportArchitectureItem;
 	private JMenuItem importArchitectureItem;
 
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public DefineMenu(final MainController mainController){
 		super();
 		this.mainController = mainController;
-		setText(controlService.getTranslatedString("Define"));
+		setText(localeService.getTranslatedString("Define"));
 		addComponents();
 		setListeners();
 	}
 	
 	private void addComponents() {
-		defineArchitectureItem = new JMenuItem(controlService.getTranslatedString("DefineArchitecture"));
+		defineArchitectureItem = new JMenuItem(localeService.getTranslatedString("DefineArchitecture"));
 		defineArchitectureItem.setAccelerator(KeyStroke.getKeyStroke('D', KeyEvent.CTRL_DOWN_MASK));
 		defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				
-		definedArchitectureDiagramItem = new JMenuItem(controlService.getTranslatedString("DefinedArchitectureDiagram"));
+		definedArchitectureDiagramItem = new JMenuItem(localeService.getTranslatedString("DefinedArchitectureDiagram"));
 		definedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('L', KeyEvent.CTRL_DOWN_MASK));
 		definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 				
-		importArchitectureItem = new JMenuItem(controlService.getTranslatedString("ImportArchitecture"));
+		importArchitectureItem = new JMenuItem(localeService.getTranslatedString("ImportArchitecture"));
 		importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
 				
-		exportArchitectureItem = new JMenuItem(controlService.getTranslatedString("ExportArchitecture"));
+		exportArchitectureItem = new JMenuItem(localeService.getTranslatedString("ExportArchitecture"));
 		exportArchitectureItem.setMnemonic(getMnemonicKeycode("ExportArchitectureMnemonic"));		
 		
 		this.add(defineArchitectureItem);
@@ -59,13 +58,13 @@ public class DefineMenu extends JMenu{
 	private void setListeners() {
 		defineArchitectureItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showDefineGui();
+				mainController.getViewController().showDefineArchitecture();
 			}
 		});
 		
 		definedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainController.getViewController().showDefinedArchitectureGui();
+				mainController.getViewController().showDefinedArchitectureDiagram();
 			}
 		});
 		
@@ -101,13 +100,13 @@ public class DefineMenu extends JMenu{
 		});
 		
 		final DefineMenu defineMenu = this;
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
-				defineMenu.setText(controlService.getTranslatedString("Define"));
-				defineArchitectureItem.setText(controlService.getTranslatedString("DefineArchitecture"));
-				definedArchitectureDiagramItem.setText(controlService.getTranslatedString("DefinedArchitectureDiagram"));
-				exportArchitectureItem.setText(controlService.getTranslatedString("ExportArchitecture"));
-				importArchitectureItem.setText(controlService.getTranslatedString("ImportArchitecture"));
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				defineMenu.setText(localeService.getTranslatedString("Define"));
+				defineArchitectureItem.setText(localeService.getTranslatedString("DefineArchitecture"));
+				definedArchitectureDiagramItem.setText(localeService.getTranslatedString("DefinedArchitectureDiagram"));
+				exportArchitectureItem.setText(localeService.getTranslatedString("ExportArchitecture"));
+				importArchitectureItem.setText(localeService.getTranslatedString("ImportArchitecture"));
 				defineArchitectureItem.setMnemonic(getMnemonicKeycode("DefineArchitectureMnemonic"));
 				definedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("DefinedArchitectureDiagramMnemonic"));
 				importArchitectureItem.setMnemonic(getMnemonicKeycode("ImportArchitectureMnemonic"));
@@ -130,7 +129,7 @@ public class DefineMenu extends JMenu{
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {
-		String mnemonicString = controlService.getTranslatedString(translatedString);
+		String mnemonicString = localeService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}

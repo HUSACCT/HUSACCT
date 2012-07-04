@@ -1,5 +1,6 @@
 package husacct.control.presentation;
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.IControlService;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
@@ -59,7 +60,7 @@ public class MainGui extends JFrame{
 
 	private void setup(){
 		setTitle();
-		Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/husacct/common/resources/husacct.png"));
+		Image icon = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.HUSACCT_LOGO));
 		setIconImage(icon);
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		setExtendedState(Frame.MAXIMIZED_BOTH);

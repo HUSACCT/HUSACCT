@@ -1,20 +1,20 @@
 package husacct.analyse.presentation;
 
 import husacct.ServiceProvider;
-import husacct.control.ILocaleChangeListener;
-import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
+import husacct.common.services.IServiceListener;
+
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.FlowLayout;
 
-public class AnalyseInternalFrame extends JInternalFrame implements ActionListener, ILocaleChangeListener{
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+
+public class AnalyseInternalFrame extends JInternalFrame implements ActionListener, IServiceListener{
 
 	private static final long serialVersionUID = 1L;
 	private ApplicationStructurePanel treePanel;
@@ -30,7 +30,6 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 		registerLocaleChangeListener();
 		setResizable(true);
 		setBounds(200, 200, 550, 522);
-		setFrameIcon(new ImageIcon("husacct/analyse/presentation/resources/husacct.png"));
 		
 		tabPanel = new JTabbedPane(JTabbedPane.TOP);
 		tabPanel.setBackground(UIManager.getColor("Panel.background"));
@@ -59,7 +58,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	}
 	
 	private void registerLocaleChangeListener(){
-		ServiceProvider.getInstance().getControlService().addLocaleChangeListener(this);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 	}
 	
 	public void reloadText(){
@@ -89,7 +88,7 @@ public class AnalyseInternalFrame extends JInternalFrame implements ActionListen
 	}
 
 	@Override
-	public void update(Locale newLocale) {
+	public void update() {
 		reloadText();		
 	}
 }

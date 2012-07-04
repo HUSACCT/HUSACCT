@@ -1,8 +1,8 @@
 package husacct.control.presentation.menubar;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
-import husacct.control.ILocaleChangeListener;
+import husacct.common.locale.ILocaleService;
+import husacct.common.services.IServiceListener;
 import husacct.control.task.IStateChangeListener;
 import husacct.control.task.MainController;
 import husacct.control.task.States;
@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -30,35 +29,35 @@ public class FileMenu extends JMenu {
 	private JMenuItem closeWorkspaceItem;
 	private JMenuItem exitItem;
 
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public FileMenu(final MainController mainController){
 		super();
 		this.mainController = mainController;
 		this.workspaceController = mainController.getWorkspaceController();
-		setText(controlService.getTranslatedString("File"));
+		setText(localeService.getTranslatedString("File"));
 		addComponents();
 		setListeners();
 	}
 	
 	private void addComponents(){
-		createWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CreateWorkspace"));
+		createWorkspaceItem = new JMenuItem(localeService.getTranslatedString("CreateWorkspace"));
 		createWorkspaceItem.setMnemonic(getMnemonicKeycode("CreateWorkspaceMnemonic"));
 		createWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('N', KeyEvent.CTRL_DOWN_MASK));
 				
-		openWorkspaceItem = new JMenuItem(controlService.getTranslatedString("OpenWorkspace"));
+		openWorkspaceItem = new JMenuItem(localeService.getTranslatedString("OpenWorkspace"));
 		openWorkspaceItem.setMnemonic(getMnemonicKeycode("OpenWorkspaceMnemonic"));
 		openWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('O', KeyEvent.CTRL_DOWN_MASK));
 				
-		saveWorkspaceItem = new JMenuItem(controlService.getTranslatedString("SaveWorkspace"));
+		saveWorkspaceItem = new JMenuItem(localeService.getTranslatedString("SaveWorkspace"));
 		saveWorkspaceItem.setMnemonic(getMnemonicKeycode("SaveWorkspaceMnemonic"));
 		saveWorkspaceItem.setAccelerator(KeyStroke.getKeyStroke('S', KeyEvent.CTRL_DOWN_MASK));
 				
-		closeWorkspaceItem = new JMenuItem(controlService.getTranslatedString("CloseWorkspace"));
+		closeWorkspaceItem = new JMenuItem(localeService.getTranslatedString("CloseWorkspace"));
 		closeWorkspaceItem.setMnemonic(getMnemonicKeycode("CloseWorkspaceMnemonic"));
 				
 		JSeparator separator = new JSeparator();		
-		exitItem = new JMenuItem(controlService.getTranslatedString("Exit"));
+		exitItem = new JMenuItem(localeService.getTranslatedString("Exit"));
 		exitItem.setMnemonic(getMnemonicKeycode("ExitMnemonic"));
 		
 		this.add(createWorkspaceItem);
@@ -120,14 +119,14 @@ public class FileMenu extends JMenu {
 		});
 		
 		final FileMenu fileMenu = this;
-		controlService.addLocaleChangeListener(new ILocaleChangeListener() {
-			public void update(Locale newLocale) {
-				fileMenu.setText(controlService.getTranslatedString("File"));
-				createWorkspaceItem.setText(controlService.getTranslatedString("CreateWorkspace"));
-				openWorkspaceItem.setText(controlService.getTranslatedString("OpenWorkspace"));
-				saveWorkspaceItem.setText(controlService.getTranslatedString("SaveWorkspace"));
-				closeWorkspaceItem.setText(controlService.getTranslatedString("CloseWorkspace"));
-				exitItem.setText(controlService.getTranslatedString("Exit"));
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				fileMenu.setText(localeService.getTranslatedString("File"));
+				createWorkspaceItem.setText(localeService.getTranslatedString("CreateWorkspace"));
+				openWorkspaceItem.setText(localeService.getTranslatedString("OpenWorkspace"));
+				saveWorkspaceItem.setText(localeService.getTranslatedString("SaveWorkspace"));
+				closeWorkspaceItem.setText(localeService.getTranslatedString("CloseWorkspace"));
+				exitItem.setText(localeService.getTranslatedString("Exit"));
 				createWorkspaceItem.setMnemonic(getMnemonicKeycode("CreateWorkspaceMnemonic"));
 				openWorkspaceItem.setMnemonic(getMnemonicKeycode("OpenWorkspaceMnemonic"));
 				saveWorkspaceItem.setMnemonic(getMnemonicKeycode("SaveWorkspaceMnemonic"));
@@ -158,7 +157,7 @@ public class FileMenu extends JMenu {
 	}
 	
 	private int getMnemonicKeycode(String translatedString) {
-		String mnemonicString = controlService.getTranslatedString(translatedString);
+		String mnemonicString = localeService.getTranslatedString(translatedString);
 		int keyCode = KeyStroke.getKeyStroke(mnemonicString).getKeyCode();
 		return keyCode;
 	}

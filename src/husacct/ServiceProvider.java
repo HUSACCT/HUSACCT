@@ -2,6 +2,8 @@ package husacct;
 
 import husacct.analyse.AnalyseServiceImpl;
 import husacct.analyse.IAnalyseService;
+import husacct.common.locale.ILocaleService;
+import husacct.common.locale.LocaleServiceImpl;
 import husacct.control.ControlServiceImpl;
 import husacct.control.IControlService;
 import husacct.define.DefineServiceImpl;
@@ -19,11 +21,13 @@ public final class ServiceProvider {
 	
 	private static ServiceProvider _instance;
 
+	private ILocaleService localeService;
 	private IControlService controlService;
 	private IAnalyseService analyseService;
 	private IDefineService defineService;
 	private IValidateService validateService;
 	private IGraphicsService graphicsService;
+	
 
 	private ServiceProvider() {
 		try {
@@ -46,11 +50,16 @@ public final class ServiceProvider {
 	public void resetServices(){
 		logger.debug("Resetting services");
 		if(this.controlService == null) this.controlService = new ControlServiceImpl();
+		if(this.localeService == null) this.localeService = new LocaleServiceImpl();
 		this.analyseService = new AnalyseServiceImpl();
 		this.defineService = new DefineServiceImpl();
 		this.validateService = new ValidateServiceImpl();
 		this.graphicsService = new GraphicsServiceImpl();
 		this.controlService.setServiceListeners();
+	}
+	
+	public ILocaleService getLocaleService(){
+		return localeService;
 	}
 	
 	public IControlService getControlService() {

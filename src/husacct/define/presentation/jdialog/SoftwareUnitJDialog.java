@@ -1,8 +1,8 @@
 package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
-import husacct.define.abstraction.language.DefineTranslator;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
@@ -51,8 +51,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void initUI() {
 		try {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle(DefineTranslator.translate("SoftwareUnitTitle"));
-			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/husacct.png")).getImage());
+			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
+			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 			
 			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
@@ -70,7 +70,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		softwareUnitsPanel.setLayout(this.createSoftwareUnitsPanelLayout());
 		softwareUnitsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
-		JLabel softwareUnitsLabel = new JLabel(DefineTranslator.translate("SelectSoftwareDefinition"));
+		JLabel softwareUnitsLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectSoftwareDefinition"));
 		softwareUnitsPanel.add(softwareUnitsLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		softwareUnitsPanel.add(this.getSoftwareUnitScrollPane(), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 220));
 		return softwareUnitsPanel;
@@ -98,11 +98,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
-		cancelButton = new JButton(DefineTranslator.translate("Cancel"));
+		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
 		
-		saveButton = new JButton(DefineTranslator.translate("Add"));
+		saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		buttonPanel.add(saveButton);
 		saveButton.addActionListener(this);
 		

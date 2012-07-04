@@ -1,7 +1,7 @@
 package husacct.control.presentation.workspace;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.workspace.savers.SaverPanel;
 import husacct.control.presentation.workspace.savers.SaverPanelFactory;
 import husacct.control.task.MainController;
@@ -37,11 +37,11 @@ public class SaveWorkspaceDialog extends JDialog{
 	private JPanel savePanel;
 	private SaverPanel selectedSaverPanel;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public SaveWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
-		this.setTitle(controlService.getTranslatedString("SaveWorkspace"));
+		this.setTitle(localeService.getTranslatedString("SaveWorkspace"));
 		this.mainController = mainController;
 		this.setup();
 		this.setSavers();
@@ -78,8 +78,8 @@ public class SaveWorkspaceDialog extends JDialog{
 		saverPanelContainer.setPreferredSize(new Dimension(350, 300));
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
-		saveButton = new JButton(controlService.getTranslatedString("SaveButton"));
-		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
+		saveButton = new JButton(localeService.getTranslatedString("SaveButton"));
+		cancelButton = new JButton(localeService.getTranslatedString("CancelButton"));
 		
 		saveButton.setEnabled(false);
 		getRootPane().setDefaultButton(saveButton);

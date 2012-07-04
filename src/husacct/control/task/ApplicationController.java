@@ -2,6 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.AboutDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
@@ -40,7 +41,8 @@ public class ApplicationController {
 	
 	public void analyseApplication(){
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
-		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(controlService.getTranslatedString("AnalysingApplication"), new AnalyseTask());
+		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask());
 		analyseThread.run();
 	}
 	

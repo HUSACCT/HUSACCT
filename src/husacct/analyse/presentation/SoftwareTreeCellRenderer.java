@@ -1,5 +1,6 @@
 package husacct.analyse.presentation;
 
+import husacct.common.Resource;
 import husacct.common.dto.AnalysedModuleDTO;
 import java.awt.Color;
 import java.awt.Component;
@@ -31,31 +32,30 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(JTree tree,  Object value,  boolean selected, boolean expanded,
     												boolean leaf, int row, boolean hasFocus) {
-    	
     	try{
     		DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
         	AnalysedModuleDTO moduleSelected = (AnalysedModuleDTO)node.getUserObject();
         	ImageIcon icon;
         	if(moduleSelected.uniqueName.equals("")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-source.png"));
+        		icon = new ImageIcon(Resource.get(Resource.ICON_SOURCE));
         	}else if(moduleSelected.type.equals("package")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-package.png"));
+        		icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
         	}else if(moduleSelected.type.equals("class")){
         		if(moduleSelected.visibility.equals("public")){
-        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
+        			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
         		}else{
-        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class-private.png"));
+        			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PRIVATE));
         		}
         	}else if(moduleSelected.type.equals("interface")){
         		if(moduleSelected.visibility.equals("public")){
-        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface.png"));
+        			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
         		}else{
-        			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface-private.png"));
+        			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PRIVATE));
         		}
         	}else if(moduleSelected.type.equals("enumeration")){
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-enumeration.png"));
+        		icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
         	}else{
-        		icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-module.png"));
+        		icon = new ImageIcon(Resource.get(Resource.ICON_MODULE));
         	}
         	label.setIcon(icon);
             

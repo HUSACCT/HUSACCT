@@ -1,6 +1,7 @@
 package husacct.control.presentation.workspace.loaders;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
 
@@ -33,6 +34,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	private GridBagConstraints constraints;
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public XmlLoadPanel(){
 		super();
@@ -48,10 +50,10 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel(controlService.getTranslatedString("OpenFromXML"));
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
+		descriptionLabel = new JLabel(localeService.getTranslatedString("OpenFromXML"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
+		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
 		
 		JPanel hiddenPanel = new JPanel();
@@ -84,7 +86,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("OpenButton"), filter);
+		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("OpenButton"), filter);
 		int returnVal = fileChooser.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			setFile(fileChooser.getSelectedFile());
@@ -106,7 +108,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	@Override
 	public boolean validateData() {
 		if(selectedFile == null){
-			controlService.showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}
 		return true;

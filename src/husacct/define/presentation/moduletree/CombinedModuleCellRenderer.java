@@ -1,5 +1,6 @@
 package husacct.define.presentation.moduletree;
 
+import husacct.common.Resource;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -46,13 +47,13 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon determineAnalyzedModuleComponentIcon(AnalyzedModuleComponent component) {
 		ImageIcon icon = new ImageIcon();
 		if(component.getType().equals("PACKAGE")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-package.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
 		} else if(component.getType().equals("CLASS")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-class.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
 		} else if(component.getType().equals("INTERFACE")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-interface.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
 		} else if(component.getType().equals("ENUMERATION")) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-enumeration.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
 		}
 		return icon;
 	}
@@ -60,15 +61,15 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon determineAbstractDefineComponentIcon(AbstractDefineComponent component) {
 		ImageIcon icon = new ImageIcon();
 		if(component instanceof ComponentComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-component.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_COMPONENT));
 		} else if(component instanceof ExternalLibraryComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-library.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_LIBRARY));
 		} else if(component instanceof LayerComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-layer.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_LAYER));
 		} else if(component instanceof SubSystemComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-subsystem.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEM));
 		} else if(component instanceof SoftwareArchitectureComponent) {
-			icon = new ImageIcon(getClass().getClassLoader().getResource("husacct/common/resources/icon-software_architecture.png"));
+			icon = new ImageIcon(Resource.get(Resource.ICON_SOFTWARE_ARCHITECTURE));
 		}
 		return icon;
 	}

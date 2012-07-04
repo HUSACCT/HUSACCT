@@ -5,14 +5,13 @@ import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.ApplicationController;
-import husacct.control.task.LocaleController;
+import husacct.control.task.BootstrapHandler;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.swing.JDialog;
 
@@ -26,7 +25,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
 	
 	private MainController mainController; 
-	private LocaleController localeController;
 	private WorkspaceController workspaceController;
 	private ApplicationController applicationController;
 	private StateController stateController;
@@ -34,31 +32,23 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
 		mainController = new MainController();
-		localeController = mainController.getLocaleController();
 		workspaceController = mainController.getWorkspaceController();
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 	}
 	
 	@Override
-	public void startApplication(){
-		startApplication(new String[]{});
+	public void parseCommandLineArguments(String[] commandLineArguments){
+		mainController.parseCommandLineArguments(commandLineArguments);
 	}
 	
 	@Override
-	public void startApplication(String[] consoleArguments) {
-		mainController.readArguments(consoleArguments);
+	public void startApplication() {
 		mainController.startGui();
-	}
-	
-	@Override
-	public void addLocaleChangeListener(ILocaleChangeListener listener) {
-		localeController.addLocaleChangeListener(listener);
-	}
 
-	@Override
-	public Locale getLocale() {
-		return localeController.getLocale();
+		if(mainController.getCommandLineController().getResult().contains("bootstrap")){
+			new BootstrapHandler(mainController.getCommandLineController().getResult().getStringArray("bootstrap"));
+		}
 	}
 	
 	@Override
@@ -87,11 +77,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void showInfoMessage(String message){
 		applicationController.showInfoMessage(message);
-	}
-	
-	@Override
-	public String getTranslatedString(String stringIdentifier){
-		return localeController.getTranslatedString(stringIdentifier);
 	}
 	
 	@Override

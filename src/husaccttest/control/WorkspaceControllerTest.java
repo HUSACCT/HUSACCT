@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
+import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.control.domain.Workspace;
 import husacct.control.task.MainController;
@@ -38,7 +39,7 @@ public class WorkspaceControllerTest {
 		ControlServiceImpl controlService = (ControlServiceImpl) serviceProvider.getControlService();
 		MainController mainController = controlService.getMainController();
 		workspaceController = mainController.getWorkspaceController();
-		URL testFileURI = getClass().getResource("/husacct/common/resources/control/testworkspace.xml");
+		URL testFileURI = Resource.get(Resource.CONTROL_TEST_WORKSPACE);
 		try {
 			validTestFile = new File(testFileURI.toURI());
 		} catch (URISyntaxException e) {

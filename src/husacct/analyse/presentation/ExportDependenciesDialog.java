@@ -71,7 +71,7 @@ class ExportDependenciesDialog extends JDialog{
 				if(validateData()) {
 					dispose();
 					ThreadedDependencyExport dependencyExport = new ThreadedDependencyExport(uiController, selectedFile.getAbsolutePath());
-					ThreadWithLoader analyseExportThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("ExportingDependencies"), dependencyExport);
+					ThreadWithLoader analyseExportThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExportingDependencies"), dependencyExport);
 					analyseExportThread.run();
 				}
 			}

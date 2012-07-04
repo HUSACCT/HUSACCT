@@ -36,7 +36,7 @@ public class ExcelExporter extends AbstractFileExporter{
 		File file = new File(path);
 		this.outputFile = path;
 		WorkbookSettings documentSettings = new WorkbookSettings();
-		documentSettings.setLocale(ServiceProvider.getInstance().getControlService().getLocale());
+		documentSettings.setLocale(ServiceProvider.getInstance().getLocaleService().getLocale());
 		try{
 			WritableWorkbook workbook = Workbook.createWorkbook(file);
 			workbook.createSheet(super.translate("Dependencies"), 0);

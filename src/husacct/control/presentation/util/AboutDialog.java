@@ -1,7 +1,8 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.Resource;
+import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -31,11 +32,11 @@ public class AboutDialog extends JDialog {
 		
 		private GridBagConstraints constraint = new GridBagConstraints();
 		
-		private IControlService controlService = ServiceProvider.getInstance().getControlService();
+		private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 		
 		public AboutDialog(MainController mainController) {
 			super(mainController.getMainGui(), true);
-			setTitle(controlService.getTranslatedString("About"));
+			setTitle(localeService.getTranslatedString("About"));
 			setup();
 			addComponents();
 			setListeners();
@@ -55,12 +56,12 @@ public class AboutDialog extends JDialog {
 			textPanel = new JPanel();
 			textPanel.setLayout(new GridBagLayout());
 			
-			Image logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/husacct/common/resources/husacct.png"));
+			Image logo = Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.HUSACCT_LOGO));
 			pictureLabel = new JLabel(new ImageIcon(logo));
 			husacctLabel = new JLabel("HUSACCT");
-			versionLabel = new JLabel(controlService.getTranslatedString("VersionLabel"));
+			versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 			versionNumberLabel = new JLabel(versionNumber);
-			okButton = new JButton(controlService.getTranslatedString("OkButton"));
+			okButton = new JButton(localeService.getTranslatedString("OkButton"));
 			
 			getRootPane().setDefaultButton(okButton);
 			logoPanel.add(pictureLabel);

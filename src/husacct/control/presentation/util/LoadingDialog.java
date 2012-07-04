@@ -1,8 +1,8 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.ControlServiceImpl;
-import husacct.control.IControlService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
@@ -20,11 +20,11 @@ public class LoadingDialog extends JDialog implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	private String progressInfoText;
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public LoadingDialog(MainController mainController, String progressInfoText) {
 		super(mainController.getMainGui(), true);
-		setTitle(controlService.getTranslatedString("Loading"));
+		setTitle(localeService.getTranslatedString("Loading"));
 		this.progressInfoText = progressInfoText;
 		setup();
 		addComponents();
@@ -55,7 +55,7 @@ public class LoadingDialog extends JDialog implements Runnable {
 		progressPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		progressBar.setIndeterminate(true);
 
-		JLabel waitLabel = new JLabel(controlService.getTranslatedString("Wait"));
+		JLabel waitLabel = new JLabel(localeService.getTranslatedString("Wait"));
 
 		labelPanel.add(progressLabel);
 		progressPanel.add(progressBar);

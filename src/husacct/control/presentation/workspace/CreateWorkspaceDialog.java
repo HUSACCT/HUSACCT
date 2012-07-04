@@ -2,6 +2,7 @@ package husacct.control.presentation.workspace;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.control.presentation.util.Regex;
@@ -34,13 +35,14 @@ public class CreateWorkspaceDialog extends JDialog{
 	private JTextField workspaceNameText;
 
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+	
 	public CreateWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		setApplicationPanel = new SetApplicationPanel();
 		setApplicationPanel.setVisible(false);
-		this.setTitle(controlService.getTranslatedString("CreateWorkspaceTitle"));		
+		this.setTitle(localeService.getTranslatedString("CreateWorkspaceTitle"));		
 		setup();
 		addComponents();
 		setListeners();
@@ -62,10 +64,10 @@ public class CreateWorkspaceDialog extends JDialog{
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-		JLabel workspaceNameLabel = new JLabel(controlService.getTranslatedString("WorkspaceNameLabel"));
-		analyseApplicationCheckbox = new JCheckBox(controlService.getTranslatedString("AnalyseApplicationCheckBox"), false);
-		okButton = new JButton(controlService.getTranslatedString("OkButton"));
-		cancelButton = new JButton(controlService.getTranslatedString("CancelButton"));
+		JLabel workspaceNameLabel = new JLabel(localeService.getTranslatedString("WorkspaceNameLabel"));
+		analyseApplicationCheckbox = new JCheckBox(localeService.getTranslatedString("AnalyseApplicationCheckBox"), false);
+		okButton = new JButton(localeService.getTranslatedString("OkButton"));
+		cancelButton = new JButton(localeService.getTranslatedString("CancelButton"));
 		workspaceNameText = new JTextField(20);
 		workspaceNameText.setText("myHusacctWorkspace"); 
 
@@ -102,13 +104,13 @@ public class CreateWorkspaceDialog extends JDialog{
 						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
 						mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
 						dispose();	
-						mainController.getViewController().showDefineGui();
+						mainController.getViewController().showDefineArchitecture();
 					}
 				} else {
 					if(workspaceNameValidated()) {
 						createWorkspace();			
 						dispose();	
-						mainController.getViewController().showDefineGui();		
+						mainController.getViewController().showDefineArchitecture();		
 					}
 				}	
 			}
@@ -139,11 +141,11 @@ public class CreateWorkspaceDialog extends JDialog{
 	private boolean workspaceNameValidated() {
 		String workspaceName = workspaceNameText.getText();
 		if (workspaceName == null || workspaceName.length() < 1) {
-			controlService.showErrorMessage(controlService.getTranslatedString("FieldEmptyError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("FieldEmptyError"));
 			return false;
 		}
 		else if(!Regex.matchRegex(Regex.nameRegex, workspaceName)) {
-			controlService.showErrorMessage(controlService.getTranslatedString("MustBeAlphaNumericError"));
+			controlService.showErrorMessage(localeService.getTranslatedString("MustBeAlphaNumericError"));
 			return false;
 		}
 		return true;

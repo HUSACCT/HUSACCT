@@ -1,7 +1,7 @@
 package husacct.control.presentation.workspace.loaders;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
+import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.util.FileDialog;
 
 import java.awt.Dimension;
@@ -32,7 +32,7 @@ public class HusacctLoadPanel extends LoaderPanel{
 	
 	private GridBagConstraints constraints;
 	
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public HusacctLoadPanel(){
 		super();
@@ -48,10 +48,10 @@ public class HusacctLoadPanel extends LoaderPanel{
 	
 	private void addComponents(){
 		
-		descriptionLabel = new JLabel(controlService.getTranslatedString("OpenFromHusacct"));
-		pathLabel = new JLabel(controlService.getTranslatedString("PathLabel"));
+		descriptionLabel = new JLabel(localeService.getTranslatedString("OpenFromHusacct"));
+		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
 		pathText = new JTextField(20);
-		browseButton = new JButton(controlService.getTranslatedString("BrowseButton"));
+		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
 		
 		JPanel hiddenPanel = new JPanel();
@@ -84,7 +84,7 @@ public class HusacctLoadPanel extends LoaderPanel{
 	
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("hu", "hu");
-		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, controlService.getTranslatedString("OpenButton"), filter);
+		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("OpenButton"), filter);
 		int returnVal = fileChooser.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			setFile(fileChooser.getSelectedFile());
@@ -106,7 +106,7 @@ public class HusacctLoadPanel extends LoaderPanel{
 	@Override
 	public boolean validateData() {
 		if(selectedFile == null){
-			ServiceProvider.getInstance().getControlService().showErrorMessage(controlService.getTranslatedString("NoFileLocationError"));
+			ServiceProvider.getInstance().getControlService().showErrorMessage(localeService.getTranslatedString("NoFileLocationError"));
 			return false;
 		}
 		return true;

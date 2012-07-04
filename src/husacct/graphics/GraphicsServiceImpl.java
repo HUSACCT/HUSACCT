@@ -1,6 +1,5 @@
 package husacct.graphics;
 
-import husacct.ServiceProvider;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.graphics.task.AnalysedController;
@@ -26,17 +25,10 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 
 	private void createControllers() {
 		if (analysedController == null) {
-			analysedController = new AnalysedController(
-					ServiceProvider.getInstance().getControlService(),
-					ServiceProvider.getInstance().getAnalyseService(),
-					ServiceProvider.getInstance().getValidateService());
+			analysedController = new AnalysedController();
 		}
 		if (definedController == null) {
-			definedController = new DefinedController(
-					ServiceProvider.getInstance().getControlService(),
-					ServiceProvider.getInstance().getAnalyseService(),
-					ServiceProvider.getInstance().getDefineService(),
-					ServiceProvider.getInstance().getValidateService());
+			definedController = new DefinedController();
 		}
 	}
 

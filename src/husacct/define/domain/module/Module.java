@@ -1,6 +1,6 @@
 package husacct.define.domain.module;
 
-import husacct.define.abstraction.language.DefineTranslator;
+import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 
 import java.util.ArrayList;
@@ -186,7 +186,7 @@ public class Module implements Comparable<Module> {
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
 		}
-		if (softwareUnit == null){ throw new RuntimeException(DefineTranslator.translate("NoSoftwareUnit"));}
+		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
 		return softwareUnit;
 	}
 	

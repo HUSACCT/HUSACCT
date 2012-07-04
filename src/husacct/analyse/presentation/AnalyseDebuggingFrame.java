@@ -26,9 +26,6 @@ public class AnalyseDebuggingFrame extends JFrame {
 		desktop.setBackground(UIManager.getColor("Panel.background"));
 		setContentPane(desktop);
 		
-		Image icon = Toolkit.getDefaultToolkit().getImage("husacct/analyse/presentation/resources/husacct.png");
-		setIconImage(icon);	
-		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout(0, 0));
 		setTitle("Husacct - Analyse Application");

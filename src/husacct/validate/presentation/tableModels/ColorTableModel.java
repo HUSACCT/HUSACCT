@@ -19,7 +19,7 @@ public class ColorTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 2492345975488386436L;
 	
 	private Vector dataVector = new Vector();
-    private String columnNames[] = {ServiceProvider.getInstance().getControlService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getControlService().getTranslatedString("Color")};
+    private String columnNames[] = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color")};
     private Class<?>[] types = new Class[]{String.class, JButton.class};
     private boolean[] canEdit = new boolean[]{true, true};
     private List<Color> rowColours = new ArrayList<Color>();

@@ -1,12 +1,12 @@
 package husacct.graphics.task;
 
+import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -24,19 +24,21 @@ public class AnalysedController extends DrawingController {
 
 	private ArrayList<BaseFigure> analysedContextFigures;
 
-	public AnalysedController(IControlService controlService, IAnalyseService analyseService, IValidateService validateService) {
-		super(controlService);
-
-		this.analyseService = analyseService;
-		this.validateService = validateService;
-
-		this.analyseService.addServiceListener(new IServiceListener() {
+	public AnalysedController() {
+		super();
+		initializeServices();
+	}
+	
+	private void initializeServices() {
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		analyseService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				refreshDrawing();
 			}
 		});
-		this.validateService.addServiceListener(new IServiceListener() {
+		validateService = ServiceProvider.getInstance().getValidateService();
+		validateService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				if (areViolationsShown()) {

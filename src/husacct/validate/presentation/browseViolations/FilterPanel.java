@@ -135,7 +135,7 @@ public class FilterPanel extends JPanel {
 						}
 					}
 				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
 				validateThread.run();
 
 			}
@@ -158,7 +158,7 @@ public class FilterPanel extends JPanel {
 						}
 					}
 				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
 				validateThread.run();
 
 			}
@@ -181,7 +181,7 @@ public class FilterPanel extends JPanel {
 						}
 					}
 				};
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getControlService().getTranslatedString("FilteringLoading"), filterThread);
+				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilteringLoading"), filterThread);
 				validateThread.run();
 
 			}
@@ -207,9 +207,9 @@ public class FilterPanel extends JPanel {
 	}
 
 	private void loadText() {
-		setBorder(new TitledBorder(ServiceProvider.getInstance().getControlService().getTranslatedString("Filter")));
-		applyFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("ApplyFilter"));
-		buttonEditFilter.setText(ServiceProvider.getInstance().getControlService().getTranslatedString("EditFilter"));
+		setBorder(new TitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Filter")));
+		applyFilter.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ApplyFilter"));
+		buttonEditFilter.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EditFilter"));
 	}
 
 	public void setApplyFilter(JCheckBox applyFilter) {
