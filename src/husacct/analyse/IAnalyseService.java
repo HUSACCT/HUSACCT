@@ -32,4 +32,5 @@ public interface IAnalyseService extends IObservableService{
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
 	public AnalysedModuleDTO getParentModuleForModule(String child);
 	
+	public void exportDependencies(String fullPath);
 }

@@ -472,25 +472,21 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public boolean isAnalysed() {
-		// TODO Analyse-team implement stub if nessacery
 		return false;
 	}
 
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		// TODO Analyse-team implement stub if nessacery
 		return null;
 	}
 
 	@Override
 	public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void addServiceListener(IServiceListener listener) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -501,7 +497,11 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public void notifyServiceListeners() {
-		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportDependencies(String fullPath) {
 		
 	}
 }
