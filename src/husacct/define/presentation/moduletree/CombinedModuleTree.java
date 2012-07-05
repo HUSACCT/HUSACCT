@@ -74,9 +74,9 @@ public class CombinedModuleTree extends JTree {
 	}
 	
 	private void walk(Object o, Long moduleId, ArrayList<Object> pathParts){
-		int cc;
-		cc = this.getModel().getChildCount(o);
-		for( int i=0; i < cc; i++) {
+		int childCount;
+		childCount = this.getModel().getChildCount(o);
+		for( int i=0; i < childCount; i++) {
 			Component component = (Component) this.getModel().getChild(o, i );
 			
 			if (component instanceof AbstractDefineComponent){
