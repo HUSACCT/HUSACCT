@@ -164,7 +164,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	
 	private void removeModule() {
 		long moduleId = getSelectedModuleId();
-		if (moduleId != -1){
+		if (moduleId != -1 && moduleId != 0){
 			boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
 			if (confirm) {
 				this.moduleTree.clearSelection();
