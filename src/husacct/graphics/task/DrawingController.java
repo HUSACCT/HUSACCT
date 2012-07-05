@@ -199,14 +199,14 @@ public abstract class DrawingController extends DrawingSettingsController {
 		} else if (figureMap.isDependencyLine(selectedFigure)) {
 			graphicsFrame.showDependenciesProperties(figureMap.getDependencyDTOs(selectedFigure));
 		} else {
-			graphicsFrame.hidePropertiesPane();
+			graphicsFrame.hideProperties();
 		}
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
 		if (drawingView.getSelectionCount() == 0) {
-			graphicsFrame.hidePropertiesPane();
+			graphicsFrame.hideProperties();
 		}
 	}
 

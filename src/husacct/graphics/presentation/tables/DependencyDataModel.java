@@ -1,4 +1,4 @@
-package husacct.graphics.presentation.datamodels;
+package husacct.graphics.presentation.tables;
 
 import java.util.HashMap;
 

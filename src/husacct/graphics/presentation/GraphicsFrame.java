@@ -4,16 +4,16 @@ import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
-import husacct.graphics.presentation.datamodels.DependencyDataModel;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
 import husacct.graphics.presentation.menubars.ZoomLocationBar;
+import husacct.graphics.presentation.tables.DependencyTable;
+import husacct.graphics.presentation.tables.ViolationTable;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +30,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
 
@@ -51,8 +50,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	private int frameTotalWidth;
 
 	private String[] violationColumnKeysArray;
-	private ArrayList<String> violationColumnNames;
-	private ArrayList<String> dependencyColumnNames;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
@@ -119,8 +116,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		add(menuBar, BorderLayout.NORTH);
 		add(locationScrollPane, BorderLayout.SOUTH);
 
-		violationColumnKeysArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
-
 		updateComponentsLocaleStrings();
 		layoutComponents();
 
@@ -178,11 +173,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("HideModules", localeService.getTranslatedString("HideModules"));
 		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
-
-		violationColumnNames = new ArrayList<String>();
-		for (String key : violationColumnKeysArray) {
-			violationColumnNames.add(localeService.getTranslatedString(key));
-		}
 
 		ROOT_LEVEL = localeService.getTranslatedString("Root");
 		locationBar.setLocale(ROOT_LEVEL);
@@ -343,44 +333,15 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
-		propertiesScrollPane.setViewportView(createViolationsTable(violationDTOs));
 		showProperties();
-	}
-
-	// TODO: Sort violations based on severity value
-	private JTable createViolationsTable(ViolationDTO[] violationDTOs) {
-		ArrayList<String[]> rows = new ArrayList<String[]>();
-		for (ViolationDTO violation : violationDTOs) {
-			String message = violation.message;
-
-			String ruleTypeDescription = "none";
-			if (null != violation.ruleType) {
-				ruleTypeDescription = violation.ruleType.getDescriptionKey();
-			}
-
-			String violationTypeDescription = "none";
-			if (null != violation.violationType) {
-				violationTypeDescription = violation.violationType.getDescriptionKey();
-			}
-
-			String severity = "" + violation.severityValue;
-			String line = "" + violation.linenumber;
-			rows.add(new String[] { message, ruleTypeDescription, violationTypeDescription, severity, line });
-		}
-
-		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[] {}));
-		return propertiesTable;
-	}
-
-	public void hidePropertiesPane() {
-		hideProperties();
+		ViolationTable propertiesTable = new ViolationTable(violationDTOs);
+		propertiesScrollPane.setViewportView(propertiesTable);
 	}
 
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
-		JTable propertiesTable = new JTable();
-		propertiesTable.setModel(new DependencyDataModel(dependencyDTOs));
-		propertiesScrollPane.setViewportView(propertiesTable);
 		showProperties();
+		DependencyTable propertiesTable = new DependencyTable(dependencyDTOs);
+		propertiesScrollPane.setViewportView(propertiesTable);
 	}
 
 	public void showProperties() {
