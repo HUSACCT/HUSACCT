@@ -31,6 +31,12 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 	}
 	
 	@Override
+	public void analyseApplication(String[] paths, String programmingLanguage) {
+		domainService.clearModel();
+		analyserService.analyseApplication(paths, programmingLanguage);
+	}
+	
+	@Override
 	public String[] getAvailableLanguages() {
 		return analyserService.getAvailableLanguages();
 	}

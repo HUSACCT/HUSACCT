@@ -35,23 +35,20 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	private void addDependency(DependencyDTO dependency){
 		ArrayList<Object> getElement = analysed.get(dependency.from);
-
-		@SuppressWarnings("unchecked")
 		ArrayList<DependencyDTO> dependencies = (ArrayList<DependencyDTO>) getElement.get(1);
 		dependencies.add(dependency);
-
-
 	}
-
-
 
 	@Override
 	public void analyseApplication() {
-		// TODO Tim Implement stub if nessecary
+
+	}
+	
+	@Override
+	public void analyseApplication(String[] paths, String programmingLanguage) {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
 

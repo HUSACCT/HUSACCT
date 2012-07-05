@@ -36,6 +36,13 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		super.notifyServiceListeners();
 	}
 	
+	public void analyseApplication(String[] paths, String programmingLanguage){
+		service.analyseApplication(paths, programmingLanguage);
+		this.analyseInternalFrame = new AnalyseInternalFrame();
+		this.isAnalysed = true;
+		super.notifyServiceListeners();
+	}
+	
 	@Override
 	public boolean isAnalysed() {
 		return this.isAnalysed;

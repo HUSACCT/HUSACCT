@@ -11,6 +11,7 @@ public interface IAnalyseControlService {
 	
 	public void analyseApplication();
 	public String[] getAvailableLanguages();
+	public void analyseApplication(String[] paths, String programmingLanguage);
 	
 	public DependencyDTO[] getAllDependencies();
 	public DependencyDTO[] getDependencies(String from, String to);

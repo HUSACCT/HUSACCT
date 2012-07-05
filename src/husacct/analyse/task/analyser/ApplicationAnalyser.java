@@ -16,16 +16,22 @@ public class ApplicationAnalyser {
 		this.builder = new AnalyserBuilder();
 	}
 	
+	@Deprecated /*Will soon be removed due to an interface-change of the Analyse Component*/
 	public void analyseApplication() {				
 		ServiceProvider provider = ServiceProvider.getInstance();
 		IDefineService definitionService = provider.getDefineService();
 		ApplicationDTO appDto = definitionService.getApplicationDetails();
 		String language = appDto.programmingLanguage;
-		AbstractAnalyser analyser = builder.getAnalyser(language);
+		String[] paths = appDto.paths;
+		analyseApplication(paths, language);
+	}
+	
+	public void analyseApplication(String[] paths, String programmingLanguage) {				
+		AbstractAnalyser analyser = builder.getAnalyser(programmingLanguage);
 		SourceFileFinder sourceFileFinder = new SourceFileFinder();
-		for(String workspacePath: appDto.paths){
+		String sourceFileExtension = getExtensionForLanguage(programmingLanguage);
+		for(String workspacePath: paths){
 			try{
-				String sourceFileExtension = getExtensionForLanguage(language);
 				List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);
 				for(MetaFile fileInfo: fileData){
 					analyser.generateModelFromSource(fileInfo.getPath());
