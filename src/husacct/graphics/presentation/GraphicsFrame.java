@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
+import husacct.graphics.presentation.datamodels.DependencyDataModel;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
@@ -50,7 +51,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	private int frameTotalWidth;
 
 	private String[] violationColumnKeysArray;
-	private String[] dependencyColumnKeysArray;
 	private ArrayList<String> violationColumnNames;
 	private ArrayList<String> dependencyColumnNames;
 
@@ -119,13 +119,12 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		add(menuBar, BorderLayout.NORTH);
 		add(locationScrollPane, BorderLayout.SOUTH);
 
-		dependencyColumnKeysArray = new String[] { "From", "To", "LineNumber", "DependencyType" };
 		violationColumnKeysArray = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
 
 		updateComponentsLocaleStrings();
 		layoutComponents();
 
-		this.getRootPane().addComponentListener(new ComponentListener() {
+		getRootPane().addComponentListener(new ComponentListener() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				positionLayoutComponents();
@@ -179,11 +178,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("HideModules", localeService.getTranslatedString("HideModules"));
 		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
-
-		dependencyColumnNames = new ArrayList<String>();
-		for (String key : dependencyColumnKeysArray) {
-			dependencyColumnNames.add(localeService.getTranslatedString(key));
-		}
 
 		violationColumnNames = new ArrayList<String>();
 		for (String key : violationColumnKeysArray) {
@@ -375,7 +369,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		}
 
 		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), violationColumnNames.toArray(new String[] {}));
-		setColumnWidths(propertiesTable, violationColumnKeysArray);
 		return propertiesTable;
 	}
 
@@ -384,32 +377,10 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 
 	public void showDependenciesProperties(DependencyDTO[] dependencyDTOs) {
-		propertiesScrollPane.setViewportView(createDependencyTable(dependencyDTOs));
+		JTable propertiesTable = new JTable();
+		propertiesTable.setModel(new DependencyDataModel(dependencyDTOs));
+		propertiesScrollPane.setViewportView(propertiesTable);
 		showProperties();
-	}
-
-	private Component createDependencyTable(DependencyDTO[] dependencyDTOs) {
-		ArrayList<String[]> rows = new ArrayList<String[]>();
-		for (DependencyDTO dependency : dependencyDTOs) {
-			rows.add(new String[] { dependency.from, dependency.to, "" + dependency.lineNumber, dependency.type });
-		}
-		JTable propertiesTable = new JTable(rows.toArray(new String[][] {}), dependencyColumnNames.toArray(new String[] {}));
-		setColumnWidths(propertiesTable, dependencyColumnKeysArray);
-		return propertiesTable;
-	}
-
-	private void setColumnWidths(JTable table, String[] columnNames) {
-		TableColumn column = null;
-		int lineNumberColumnWidth = 50;
-		int otherColumnWidth = (getWidth() / (table.getColumnCount())) - (lineNumberColumnWidth / table.getColumnCount());
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			column = table.getColumnModel().getColumn(i);
-			if (columnNames[i] == "LineNumber") {
-				column.setPreferredWidth(lineNumberColumnWidth);
-			} else {
-				column.setPreferredWidth(otherColumnWidth);
-			}
-		}
 	}
 
 	public void showProperties() {
