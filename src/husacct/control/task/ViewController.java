@@ -76,6 +76,7 @@ public class ViewController {
 	}
 	
 	public void showDefinedArchitectureDiagram() {
+		ServiceProvider.getInstance().getGraphicsService().drawDefinedArchitecture();
 		definedArchitectureDiagramContainer.showView();
 	}
 	
@@ -84,6 +85,7 @@ public class ViewController {
 	}
 	
 	public void showAnalysedArchitectureDiagram() {	
+		ServiceProvider.getInstance().getGraphicsService().drawAnalysedArchitecture();
 		analysedArchitectureDiagramContainer.showView();
 	}
 	
