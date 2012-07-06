@@ -25,16 +25,14 @@ public final class FigureFactory {
 		if (violationDTOs.length <= 0) {
 			throw new RuntimeException("No violations received. Cannot create a violation figure.");
 		}
-
-		int highestSeverity = -1;
+		
 		Color highestColor = null;
-		for (ViolationDTO dto : violationDTOs) {
-			if (dto.severityValue > highestSeverity) {
-				highestSeverity = dto.severityValue;
-				highestColor = dto.severityColor;
-			}
+		try{
+			// The violations are sorted on severity order. Highest are first in the array.
+			highestColor = violationDTOs[0].severityColor;
+		}catch(Exception e){
+			// See if-statement below
 		}
-
 		if (null == highestColor) {
 			logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
 			highestColor = Color.RED;
