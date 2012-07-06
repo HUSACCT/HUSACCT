@@ -29,7 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
 
 import org.apache.log4j.Logger;
 
@@ -48,8 +47,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	private boolean showingProperties = false;
 
 	private int frameTotalWidth;
-
-	private String[] violationColumnKeysArray;
 
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
