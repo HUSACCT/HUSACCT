@@ -7,7 +7,14 @@ import husacct.common.services.IObservableService;
 
 public interface IAnalyseService extends IObservableService{
 	
+	@Deprecated 
+	/*This function will be removed when the 
+	 * Control-Service calls analyseApplication(String[] paths)
+	 * Please call analyseApplication(String[] paths)*/
 	public void analyseApplication();
+	public String[] getAvailableLanguages();
+	public void analyseApplication(String[] paths, String programmingLanguage);
+	
 	public boolean isAnalysed();
 	
 	public JInternalFrame getJInternalFrame();
@@ -24,12 +31,11 @@ public interface IAnalyseService extends IObservableService{
 	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter);
 	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter);
 	
-	public String[] getAvailableLanguages();
-	
 	public AnalysedModuleDTO getModuleForUniqueName(String uniquename);
 	public AnalysedModuleDTO[] getRootModules();
 	public AnalysedModuleDTO[] getChildModulesInModule(String from); 
 	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth);
 	public AnalysedModuleDTO getParentModuleForModule(String child);
 	
+	public void exportDependencies(String fullPath);
 }

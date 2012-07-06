@@ -35,23 +35,20 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	private void addDependency(DependencyDTO dependency){
 		ArrayList<Object> getElement = analysed.get(dependency.from);
-
-		@SuppressWarnings("unchecked")
 		ArrayList<DependencyDTO> dependencies = (ArrayList<DependencyDTO>) getElement.get(1);
 		dependencies.add(dependency);
-
-
 	}
-
-
 
 	@Override
 	public void analyseApplication() {
-		// TODO Tim Implement stub if nessecary
+
+	}
+	
+	@Override
+	public void analyseApplication(String[] paths, String programmingLanguage) {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {
 
@@ -472,25 +469,21 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public boolean isAnalysed() {
-		// TODO Analyse-team implement stub if nessacery
 		return false;
 	}
 
 	@Override
 	public JInternalFrame getJInternalFrame() {
-		// TODO Analyse-team implement stub if nessacery
 		return null;
 	}
 
 	@Override
 	public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void addServiceListener(IServiceListener listener) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -501,7 +494,11 @@ public class AnalyseServiceStub implements IAnalyseService{
 
 	@Override
 	public void notifyServiceListeners() {
-		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportDependencies(String fullPath) {
 		
 	}
 }

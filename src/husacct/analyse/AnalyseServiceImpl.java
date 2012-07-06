@@ -36,6 +36,13 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		super.notifyServiceListeners();
 	}
 	
+	public void analyseApplication(String[] paths, String programmingLanguage){
+		service.analyseApplication(paths, programmingLanguage);
+		this.analyseInternalFrame = new AnalyseInternalFrame();
+		this.isAnalysed = true;
+		super.notifyServiceListeners();
+	}
+	
 	@Override
 	public boolean isAnalysed() {
 		return this.isAnalysed;
@@ -108,15 +115,8 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return service.getDependenciesTo(to, dependencyFilter);
 	}
 
-//	@Override
-//	public Element getWorkspaceData() {
-//		return service.saveModel();
-//	}
-//
-//	@Override
-//	public void loadWorkspaceData(Element workspaceData) {
-//		//TODO Uncomment the following line to make the loading of work working. This was excluded
-//		// in the first delivery, due to memory problems in combination with coming deadlines and demo's.
-//		service.loadModel(workspaceData);
-//	}
+	@Override
+	public void exportDependencies(String fullPath) {
+		service.exportDependencies(fullPath);
+	}
 }
