@@ -17,15 +17,20 @@ public class FigureMap {
 	private HashMap<RelationFigure, DependencyDTO[]> dependencyLineDTOMap = new HashMap<RelationFigure, DependencyDTO[]>();
 	private HashMap<RelationFigure, ViolationDTO[]> violationLineDTOMap = new HashMap<RelationFigure, ViolationDTO[]>();
 	private HashMap<BaseFigure, ViolationDTO[]> violatedFigureDTOMap = new HashMap<BaseFigure, ViolationDTO[]>();
+	
+	private int maxDependencies, maxViolations, maxAll;
 
 	public FigureMap() {
+		clearAll();
 	}
 
 	public void clearAll() {
+		maxDependencies = 0;
+		maxViolations = 0;
+		maxAll = 0;
 		moduleFigureDTOMap.clear();
 		dependencyLineDTOMap.clear();
-		violationLineDTOMap.clear();
-		violatedFigureDTOMap.clear();
+		clearAllViolations();
 		moduleFiguresByName.clear();
 	}
 
@@ -86,10 +91,42 @@ public class FigureMap {
 
 	public void linkDependencies(RelationFigure figure, DependencyDTO[] dtos) {
 		dependencyLineDTOMap.put(figure, dtos);
+		setMaxDependencies(dtos.length);
+	}
+	
+	private void setMaxDependencies(int newMax){
+		if(newMax > maxDependencies){
+			maxDependencies = newMax;
+		}
+		if(newMax > maxAll){
+			maxAll = newMax;
+		}
+	}
+	
+	public int getMaxDependencies(){
+		return maxDependencies;
 	}
 
 	public void linkViolations(RelationFigure figure, ViolationDTO[] dtos) {
 		violationLineDTOMap.put(figure, dtos);
+		setMaxViolations(dtos.length);
+	}
+	
+	private void setMaxViolations(int newMax){
+		if(newMax > maxViolations){
+			maxViolations = newMax;
+		}
+		if(newMax > maxAll){
+			maxAll = newMax;
+		}
+	}
+	
+	public int getMaxViolations(){
+		return maxViolations;
+	}
+	
+	public int getMaxAll(){
+		return maxAll;
 	}
 
 	public boolean isDependencyLine(BaseFigure figure) {

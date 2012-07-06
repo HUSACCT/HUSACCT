@@ -6,6 +6,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.linelayoutstrategies.ConnectorLineSeparationStrategy;
 import husacct.graphics.presentation.linelayoutstrategies.ILineSeparationStrategy;
+import husacct.graphics.util.FigureMap;
 
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -31,10 +32,15 @@ public class Drawing extends QuadTreeDrawing {
 	private Logger logger = Logger.getLogger(Drawing.class);
 	private FileManager filemanager = new FileManager();
 	private File selectedFile = filemanager.getFile();
+	private FigureMap figureMap;
 
 	public Drawing() {
 		super();
 		hiddenFigures = new ArrayList<BaseFigure>();
+	}
+	
+	public void setFigureMap(FigureMap map) {
+		figureMap = map;
 	}
 
 	public void showExportToImagePanel() {
@@ -156,45 +162,17 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
-		if (1 == figures.length) {
-			// 1 relation, small
-			figures[0].setLineThickness(1);
-		} else if (figures.length == 2) {
-			// 2 relations; both small, or one slightly bigger
-			int length1 = figures[0].getAmount();
-			int length2 = figures[1].getAmount();
-
-			if (length1 == length2) {
-				figures[0].setLineThickness(1);
-				figures[1].setLineThickness(1);
-			} else if (length1 < length2) {
-				figures[0].setLineThickness(1);
-				figures[1].setLineThickness(2);
-			} else { // length1 > length2
-				figures[0].setLineThickness(2);
-				figures[1].setLineThickness(1);
-			}
-		} else if (figures.length >= 3) {
-			// 3 or more relations; small, big or fat, according to scale max
-			// amounts of dependencies
-			int maxAmount = -1;
-			for (RelationFigure figure : figures) {
-				int length = figure.getAmount();
-				if (maxAmount == -1 || maxAmount < length) {
-					maxAmount = length;
-				}
-			}
-
-			// set line thickness according to scale
-			for (RelationFigure figure : figures) {
-				double weight = (double) figure.getAmount() / maxAmount;
-				if (weight < 0.33) {
-					figure.setLineThickness(1);
-				} else if (weight < 0.66) {
-					figure.setLineThickness(3);
-				} else {
-					figure.setLineThickness(4);
-				}
+		int maxAmount = figureMap.getMaxAll();
+		for (RelationFigure figure : figures) {
+			double weight = (double) figure.getAmount() / maxAmount;
+			if (weight < 0.25) {
+				figure.setLineThickness(1);
+			} else if (weight < 0.50) {
+				figure.setLineThickness(2);
+			} else if (weight < 0.75) {
+				figure.setLineThickness(4);
+			} else {
+				figure.setLineThickness(5);
 			}
 		}
 	}
