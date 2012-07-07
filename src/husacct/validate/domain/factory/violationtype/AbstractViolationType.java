@@ -126,11 +126,20 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isVisibilityConvenctionRule(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString())|| ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION_EXCEPTION.toString())){
+		if(ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString())){
 			return true;
 		}
 		else{ 
 			return false;		
+		}
+	}
+	
+	protected boolean isVisibilityConventionException(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION_EXCEPTION.toString())){
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 
