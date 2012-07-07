@@ -2,6 +2,7 @@ package husacct.validate.task.fetch;
 
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.validation.Severity;
 
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ import java.util.Map;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ImportController {
+	private Logger logger = Logger.getLogger(ImportController.class);
 	private List<Severity> severities;
 	private final ImportFactory importFactory;
 	private final ConfigurationServiceImpl configuration;
@@ -33,8 +36,12 @@ public class ImportController {
 	}
 
 	private void importSeverties(Element element) {
+		try{
 		this.severities = importFactory.importSeverities(element);
 		configuration.setSeverities(severities);
+		}catch(SeverityChangedException e){
+			logger.error("Error during importing of severities, default severities will be used: " + e.getMessage());
+		}
 	}
 
 	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element){

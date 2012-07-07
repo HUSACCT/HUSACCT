@@ -1,5 +1,6 @@
 package husacct.validate.domain.configuration;
 
+import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
@@ -47,8 +48,25 @@ class SeverityConfigRepository {
 		return currentSeverities;
 	}
 
-	void setSeverities(List<Severity> severities){
-		this.currentSeverities = severities;
+	/** 
+	 * @throws SeverityChangedException
+	 */
+	void setSeverities(List<Severity> newSeverities){
+		isSeverityKeyOrOrderChanged(newSeverities);
+		this.currentSeverities = newSeverities;
+	}	
+
+	private void isSeverityKeyOrOrderChanged(List<Severity> newSeverities){
+		if(newSeverities.size() != defaultSeverities.size()){
+			for(int i = 0; i < newSeverities.size(); i++){
+				Severity defaulSeverity = defaultSeverities.get(i);
+				Severity newSeverity = newSeverities.get(i);
+
+				if(!defaulSeverity.getSeverityKey().toLowerCase().equals(newSeverity.getSeverityKey().toLowerCase())){
+					throw new SeverityChangedException(newSeverity.getSeverityKey());
+				}
+			}
+		}
 	}
 
 	private List<Severity> generateDefaultSeverities(){

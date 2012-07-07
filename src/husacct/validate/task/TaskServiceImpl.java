@@ -6,6 +6,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
+import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -83,6 +84,9 @@ public class TaskServiceImpl{
 		return analyseService.getAvailableLanguages();
 	}
 
+	/** 
+	 * @throws SeverityChangedException
+	 */
 	public void addSeverities(List<Severity> severities) {
 		configuration.setSeverities(severities);
 	}

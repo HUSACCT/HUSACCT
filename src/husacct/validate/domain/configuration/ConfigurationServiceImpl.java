@@ -1,6 +1,7 @@
 package husacct.validate.domain.configuration;
 
 import husacct.ServiceProvider;
+import husacct.validate.domain.exception.SeverityChangedException;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
@@ -44,10 +45,11 @@ public final class ConfigurationServiceImpl extends Observable {
 		return severityConfig.getAllSeverities();
 	}
 
+	/** 
+	 * @throws SeverityChangedException
+	 */
 	public void setSeverities(List<Severity> severities) {
 		severityConfig.setSeverities(severities);
-		setChanged();
-		notifyObservers();
 		notifyServiceListeners();
 	}
 
