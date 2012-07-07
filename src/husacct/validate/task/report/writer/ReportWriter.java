@@ -64,6 +64,6 @@ public abstract class ReportWriter {
 	}
 
 	protected String getFileName() {
-		return path + System.getProperty("file.separator") + fileName;
+		return path + File.separator + fileName;
 	}
 }
