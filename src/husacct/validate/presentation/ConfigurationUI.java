@@ -1,6 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationViolationTypeDTO;
@@ -41,6 +42,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 	private JScrollPane severityNameScrollPane;
 	private JTable severityNameTable;
 	private List<LanguageSeverityConfigurationPanel> tabs;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public ConfigurationUI(TaskServiceImpl ts) {
 		tabs = new ArrayList<LanguageSeverityConfigurationPanel>();
@@ -72,7 +74,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		severityNameTable.getTableHeader().setReorderingAllowed(false);
 		severityNameScrollPane.setViewportView(severityNameTable);
 
-		tabPanel.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
+		tabPanel.addTab(localeService.getTranslatedString("SeverityConfiguration"), severityNamePanel);
 
 		applySeverity.addActionListener(new ActionListener() {
 			@Override
@@ -203,10 +205,10 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 	}
 
 	public void setText() {
-		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ValidateConfigurationTitle"));
-		applySeverity.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Apply"));
-		restore.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreToDefault"));
-		cancel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
+		setTitle(localeService.getTranslatedString("ValidateConfigurationTitle"));
+		applySeverity.setText(localeService.getTranslatedString("Apply"));
+		restore.setText(localeService.getTranslatedString("RestoreToDefault"));
+		cancel.setText(localeService.getTranslatedString("Cancel"));
 	}
 
 	private void loadModels() {
@@ -251,7 +253,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		}
 		if (tabPanel.getTabCount() == 1) {
 			logger.error("No programming language set");
-			tabPanel.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
+			tabPanel.addTab(localeService.getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
 		}
 	}
 }

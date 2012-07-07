@@ -2,6 +2,7 @@ package husacct.validate.task.filter;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ViolationDTO;
+import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.assembler.ViolationAssembler;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
@@ -24,6 +25,8 @@ public class FilterController {
 	private ArrayList<String> violationtypes = new ArrayList<String>();
 	private ArrayList<String> paths = new ArrayList<String>();
 	private boolean hidefilter = true;
+	
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterController(TaskServiceImpl ts, RuleTypesFactory ruletypesfactory, ConfigurationServiceImpl configuration){
 		this.taskServiceImpl = ts;
@@ -49,9 +52,9 @@ public class FilterController {
 	public ArrayList<Violation> filterViolations(List<Violation> violations) {
 		ArrayList<Violation> filteredViolations = new ArrayList<Violation>();
 		for (Violation violation : violations) {
-			if (hidefilter && ( !ruletypes.contains(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
+			if (hidefilter && ( !ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
-			} else if ((!hidefilter) && (ruletypes.contains(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
+			} else if ((!hidefilter) && (ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()) ) ) {
 				filteredViolations.add(violation);
 			}
 		}
@@ -62,8 +65,8 @@ public class FilterController {
 		ArrayList<String> AppliedRuletypes = new ArrayList<String>();
 
 		for (Violation violation : violations) {
-			if(!AppliedRuletypes.contains(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getRuletypeKey()))){
-				AppliedRuletypes.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getRuletypeKey()));
+			if(!AppliedRuletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey()))){
+				AppliedRuletypes.add(localeService.getTranslatedString(violation.getRuletypeKey()));
 			}
 		}
 
@@ -75,8 +78,8 @@ public class FilterController {
 
 		for (Violation violation : violations) {
 
-			if(!appliedViolationtypes.contains(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getViolationtypeKey()))){
-				appliedViolationtypes.add(ServiceProvider.getInstance().getLocaleService().getTranslatedString(violation.getViolationtypeKey()));
+			if(!appliedViolationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey()))){
+				appliedViolationtypes.add(localeService.getTranslatedString(violation.getViolationtypeKey()));
 			}
 		}
 		return appliedViolationtypes;

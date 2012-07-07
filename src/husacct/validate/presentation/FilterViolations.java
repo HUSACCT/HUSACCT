@@ -1,6 +1,7 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.validate.domain.validation.internal_transfer_objects.PathDTO;
@@ -42,6 +43,8 @@ public final class FilterViolations extends JDialog  {
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
 	private Calendar violationDate = Calendar.getInstance();
+	
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
@@ -221,23 +224,23 @@ public final class FilterViolations extends JDialog  {
 	}
 	
 	public void loadGUIText(){
-		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("TotalViolations"));
-		TabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilterViolations"), filterViolationPanel);
-		addPath.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
-		removePath.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
-		TabbedPane.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("FilterPaths"), pathFilterPanel);
-		save.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Save"));
-		cancel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
-		showFilteredValues.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ShowSelectedValues"));
-		hideFilteredValues.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("HideSelectedValues"));
+		setTitle(localeService.getTranslatedString("TotalViolations"));
+		TabbedPane.addTab(localeService.getTranslatedString("FilterViolations"), filterViolationPanel);
+		addPath.setText(localeService.getTranslatedString("Add"));
+		removePath.setText(localeService.getTranslatedString("Remove"));
+		TabbedPane.addTab(localeService.getTranslatedString("FilterPaths"), pathFilterPanel);
+		save.setText(localeService.getTranslatedString("Save"));
+		cancel.setText(localeService.getTranslatedString("Cancel"));
+		showFilteredValues.setText(localeService.getTranslatedString("ShowSelectedValues"));
+		hideFilteredValues.setText(localeService.getTranslatedString("HideSelectedValues"));
 		
 		loadModels();
 	}
 	
 	public void loadModels(){
-		String[] columnNamesRuletype = {"", ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletypes")};
-		String[] columnNamesViolationtype = {"", ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtypes")};
-		String[] columnNamesPath = {" ", ServiceProvider.getInstance().getLocaleService().getTranslatedString("Path")};
+		String[] columnNamesRuletype = {"", localeService.getTranslatedString("Ruletypes")};
+		String[] columnNamesViolationtype = {"", localeService.getTranslatedString("Violationtypes")};
+		String[] columnNamesPath = {" ", localeService.getTranslatedString("Path")};
 		
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 			private static final long serialVersionUID = -7173080075671054375L;
@@ -397,7 +400,7 @@ public final class FilterViolations extends JDialog  {
 			}
 		}
 		if(!returnValue){
-			ServiceProvider.getInstance().getControlService().showInfoMessage(String.format(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EmptyField"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Path")));
+			ServiceProvider.getInstance().getControlService().showInfoMessage(String.format(localeService.getTranslatedString("EmptyField"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Path")));
 		}
 		return returnValue;
 	}

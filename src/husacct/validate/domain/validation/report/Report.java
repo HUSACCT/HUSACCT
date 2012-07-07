@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation.report;
 
 import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.internal_transfer_objects.ViolationsPerSeverity;
@@ -19,6 +20,7 @@ public class Report {
 	private String imagePath;
 	private SimpleEntry<Calendar, List<Violation>> violations; 
 	private final SimpleDateFormat dateFormat;
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public Report(String projectName, String version, SimpleEntry<Calendar, List<Violation>> violations, String path, List<Severity> severities) {
 		this.projectName = projectName;
@@ -50,12 +52,12 @@ public class Report {
 
 	public String[] getLocaleColumnHeaders() {
 		String[] headers = new String[] {
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Source"),
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rule"),
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("LineNumber"),
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("DependencyKind"),
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Target"),
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")
+				localeService.getTranslatedString("Source"),
+				localeService.getTranslatedString("Rule"),
+				localeService.getTranslatedString("LineNumber"),
+				localeService.getTranslatedString("DependencyKind"),
+				localeService.getTranslatedString("Target"),
+				localeService.getTranslatedString("Severity")
 		};
 		return headers;
 	}
