@@ -1,9 +1,6 @@
 package husaccttest.analyse.java.benchmark;
 
-import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 import husaccttest.analyse.java.benchmark.domain.*;
-
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

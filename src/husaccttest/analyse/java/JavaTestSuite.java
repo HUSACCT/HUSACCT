@@ -6,7 +6,7 @@ import husaccttest.analyse.java.blackbox.TestDomainDependencies;
 import husaccttest.analyse.java.blackbox.TestDomainModule;
 import husaccttest.analyse.java.blackbox.TestIndirect;
 import husaccttest.analyse.java.blackbox.TestLanguage;
-import husaccttest.analyse.java.recognation.RecognationTestSuite;
+import husaccttest.analyse.java.recognition.RecognationTestSuite;
 import husaccttest.analyse.java.visibillities.VisibillityTestSuite;
 
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package husaccttest.analyse.java.recognation;
+package husaccttest.analyse.java.recognition;
 
 
 import org.junit.runner.RunWith;

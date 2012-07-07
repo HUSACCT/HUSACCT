@@ -1,4 +1,4 @@
-package husaccttest.analyse.java.recognation;
+package husaccttest.analyse.java.recognition;
 
 import static org.junit.Assert.*;
 import husacct.common.dto.DependencyDTO;

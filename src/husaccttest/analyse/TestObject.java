@@ -1,8 +1,6 @@
 package husaccttest.analyse;
 
 import java.util.ArrayList;
-
-import husacct.analyse.infrastructure.antlr.java.JavaParser.instanceOfExpression_return;
 import husacct.common.dto.DependencyDTO;
 
 public class TestObject {

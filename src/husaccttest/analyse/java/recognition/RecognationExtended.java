@@ -1,4 +1,4 @@
-package husaccttest.analyse.java.recognation;
+package husaccttest.analyse.java.recognition;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
