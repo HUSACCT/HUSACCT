@@ -22,7 +22,6 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 	private boolean isException;
 	
 	private JLabel moduleFromJLabel;
-	private Long currentModuleId;
 	private CombinedModuleTree moduleFromTree;
 	
 	public ModuleFromPanelComponent(boolean isException, AppliedRuleController appliedRuleController) {
@@ -69,7 +68,6 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 	
 	private void createFromModuleJLabel() {
 		this.moduleFromJLabel = new JLabel();
-		currentModuleId = appliedRuleController.getCurrentModuleId();
 		String currentModuleName = appliedRuleController.getCurrentModuleName();		
 		this.moduleFromJLabel.setText(currentModuleName);
 	}
@@ -87,7 +85,7 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 	public Object getValue(){
 		Object returnObject;
 		if (!isException){ 
-			returnObject = currentModuleId;
+			returnObject = appliedRuleController.getCurrentModuleId();
 		} else {
 			returnObject = this.moduleFromTree.getSelectedTreeValue();
 		}

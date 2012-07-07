@@ -38,7 +38,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
-
 public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
@@ -102,7 +101,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.ruleDetailsJPanel.initGui();
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		
-		//do this after the initGUI of the reuleDetailsJPanel
+		//do this after the initGUI of the ruleDetailsJPanel
 		this.appliedRuleKeyValueComboBox.addItemListener(this);
 		
 		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(5, 0, 0, 0), 0, 0));

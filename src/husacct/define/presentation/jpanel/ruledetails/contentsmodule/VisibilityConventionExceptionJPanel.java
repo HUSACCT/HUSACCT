@@ -4,7 +4,6 @@ import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.components.DescriptionPanelComponent;
 import husacct.define.presentation.jpanel.ruledetails.components.EnabledPanelComponent;
 import husacct.define.presentation.jpanel.ruledetails.components.ModuleFromPanelComponent;
-import husacct.define.presentation.jpanel.ruledetails.components.RegexPanelComponent;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.GridBagConstraints;
@@ -19,7 +18,6 @@ public class VisibilityConventionExceptionJPanel extends AbstractDetailsJPanel{
 	public ModuleFromPanelComponent moduleFromPanelComponent;
 	public EnabledPanelComponent enabledPanelComponent;
 	public DescriptionPanelComponent descriptionPanelComponent;
-	public RegexPanelComponent regexPanelComponent;
 	
 	public VisibilityConventionExceptionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);

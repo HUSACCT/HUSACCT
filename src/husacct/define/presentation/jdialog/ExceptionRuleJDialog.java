@@ -35,14 +35,15 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	private static final long serialVersionUID = -3491664038962722000L;
 	
 	private AppliedRuleController appliedRuleController;
-	private AppliedRuleJDialog appliedRuleFrame;
 	private FactoryDetails factoryDetails;
 	public AbstractDetailsJPanel ruleDetailsJPanel;
 	public KeyValueComboBox exceptionRuleKeyValueComboBox;
-		
+	private JPanel mainPanel;
+	
 	public JButton cancelButton;
 	public JButton saveButton;
 
+	private AppliedRuleJDialog appliedRuleFrame;
 	/**
 	 * Constructor
 	 */
@@ -77,7 +78,6 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
-			
 //			this.setResizable(false);
 			this.pack();
 			this.setSize(820, 620);
@@ -88,7 +88,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	}
 	
 	private JPanel createMainPanel() {
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		mainPanel.setLayout(this.createMainPanelLayout());
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
@@ -156,8 +156,19 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 		if (e.getSource() == this.exceptionRuleKeyValueComboBox){
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
+			
+			this.mainPanel.remove(this.ruleDetailsJPanel);
+			
 			this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 			this.ruleDetailsJPanel.initGui(true);
+
+			// updating panel!
+			if(this.getComponentCount() > 0) {
+				this.getRootPane().revalidate();
+			}
+			this.getContentPane().repaint();
+			mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+
 		}
 	}
 
