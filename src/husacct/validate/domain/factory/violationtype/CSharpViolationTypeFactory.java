@@ -38,6 +38,9 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 		else if(isNamingConvention(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
 		}
+		else if(isNamingConventionException(ruleTypeKey)){
+			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
+		}
 		else if(isInterfaceConvention(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
 		}
