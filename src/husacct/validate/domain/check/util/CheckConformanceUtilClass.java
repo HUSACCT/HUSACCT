@@ -7,8 +7,8 @@ import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.IDefineService;
-import husacct.validate.domain.validation.iternal_transfer_objects.Mapping;
-import husacct.validate.domain.validation.iternal_transfer_objects.Mappings;
+import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.internal_transfer_objects.Mappings;
 
 import java.util.ArrayList;
 import java.util.Arrays;

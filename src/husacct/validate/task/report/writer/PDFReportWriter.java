@@ -2,7 +2,7 @@ package husacct.validate.task.report.writer;
 
 import husacct.validate.domain.factory.message.Messagebuilder;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.iternal_transfer_objects.ViolationsPerSeverity;
+import husacct.validate.domain.validation.internal_transfer_objects.ViolationsPerSeverity;
 import husacct.validate.domain.validation.report.Report;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 

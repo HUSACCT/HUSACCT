@@ -8,7 +8,7 @@ import husacct.validate.domain.exception.SeverityNotFoundException;
 import husacct.validate.domain.exception.ViolationTypeNotFoundException;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_transfer_objects.CategoryKeySeverityDTO;
+import husacct.validate.domain.validation.internal_transfer_objects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 

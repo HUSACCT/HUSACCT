@@ -11,7 +11,7 @@ import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationHistory;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.iternal_transfer_objects.PathDTO;
+import husacct.validate.domain.validation.internal_transfer_objects.PathDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.task.export.ExportController;
 import husacct.validate.task.fetch.ImportController;

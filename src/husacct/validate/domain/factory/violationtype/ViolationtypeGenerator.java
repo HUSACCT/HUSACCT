@@ -1,7 +1,7 @@
 package husacct.validate.domain.factory.violationtype;
 
 import husacct.validate.domain.validation.DefaultSeverities;
-import husacct.validate.domain.validation.iternal_transfer_objects.CategoryKeySeverityDTO;
+import husacct.validate.domain.validation.internal_transfer_objects.CategoryKeySeverityDTO;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 
 import java.lang.reflect.InvocationTargetException;

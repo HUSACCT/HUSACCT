@@ -3,7 +3,7 @@ package husacct.validate.domain.validation.report;
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.iternal_transfer_objects.ViolationsPerSeverity;
+import husacct.validate.domain.validation.internal_transfer_objects.ViolationsPerSeverity;
 
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap.SimpleEntry;
