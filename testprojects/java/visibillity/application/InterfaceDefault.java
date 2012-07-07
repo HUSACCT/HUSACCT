@@ -1,0 +1,6 @@
+package application;
+
+interface InterfaceDefault {
+	
+	
+}

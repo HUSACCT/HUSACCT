@@ -7,6 +7,7 @@ import husaccttest.analyse.java.blackbox.TestDomainModule;
 import husaccttest.analyse.java.blackbox.TestIndirect;
 import husaccttest.analyse.java.blackbox.TestLanguage;
 import husaccttest.analyse.java.recognation.RecognationTestSuite;
+import husaccttest.analyse.java.visibillities.VisibillityTestSuite;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -20,7 +21,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	TestDomainModule.class,
 	TestIndirect.class,
 	RecognationTestSuite.class,
-	BenchmarkTestSuite.class
+	BenchmarkTestSuite.class,
+	VisibillityTestSuite.class
 })
 
 public class JavaTestSuite {

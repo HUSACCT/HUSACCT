@@ -1,6 +1,8 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.task.analyser.VisibillitySet;
+
 import org.antlr.runtime.tree.CommonTree;
 
 class JavaClassGenerator extends JavaGenerator{
@@ -14,12 +16,15 @@ class JavaClassGenerator extends JavaGenerator{
 	
 	private boolean isInnerClass = false; 
 	private boolean isAbstract = false; 
+	private String visbillity;
 	
 	public JavaClassGenerator(String uniquePackageName){
 		this.belongsToPackage = uniquePackageName;
 	}
 	
 	public String generateToDomain(CommonTree commonTree) {
+		
+		this.visbillity = getVisibillityFromTree(commonTree);
 		
 		this.name = commonTree.getChild(1).toString();
 		if(belongsToPackage.equals("")) {
@@ -36,8 +41,22 @@ class JavaClassGenerator extends JavaGenerator{
 		}
 		
 		this.isAbstract = isAbstract(modifierListTree);
-		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass);
+		modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visbillity);
 		return uniqueName;
+	}
+	
+	private String getVisibillityFromTree(CommonTree tree){
+		CommonTree modifierList = (CommonTree)tree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
+		if(modifierList == null || modifierList.getChildCount() < 1){
+			return VisibillitySet.DEFAULT.toString();
+		}else{
+			String found = modifierList.getChild(0).toString();
+			if(VisibillitySet.isValidVisibillity(found)){
+				return found;
+			}else{
+				return VisibillitySet.DEFAULT.toString();
+			}
+		}
 	}
 	
 	public String generateToModel(CommonTree commonTree, String parentClassName) {
@@ -48,10 +67,10 @@ class JavaClassGenerator extends JavaGenerator{
 			this.isInnerClass = true;
 			this.belongsToClass = parentClassName;
 			this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();
-			modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass);
+			this.visbillity = getVisibillityFromTree(commonTree);
+			modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visbillity);
 			return uniqueName;
 		}
-		//TODO: bad stuff. Inner classes are not recognized at all at this moment
 		return "";
 	}
 	

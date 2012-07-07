@@ -1,0 +1,5 @@
+package application;
+
+class ClassDefault {
+		
+}

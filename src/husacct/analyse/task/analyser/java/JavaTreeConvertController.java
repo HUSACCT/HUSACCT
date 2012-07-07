@@ -113,7 +113,7 @@ class JavaTreeConvertController {
 						if(classCount > 0) { 
 							CommonTree innerClassTree = (CommonTree)treeNode; 
 							this.parentClass = currentClass; 
-							this.currentClass = delegateClass(innerClassTree, true); 
+							this.currentClass = delegateClass(innerClassTree, true);
 							delegateASTToGenerators(innerClassTree); 
 							this.currentClass = parentClass;
 						} else { 
