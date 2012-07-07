@@ -1,14 +1,10 @@
 package husacct.analyse.domain.famix;
 
-import husacct.common.dto.AnalysedModuleDTO;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-
 import javax.naming.directory.InvalidAttributesException;
-
 import org.apache.log4j.Logger;
 
 class FamixDependencyConnector {
@@ -191,12 +187,12 @@ class FamixDependencyConnector {
 		List<FamixImport> imports = theModel.getImportsInClass(importingClass);
 		for(FamixImport fImport: imports){
 			if(!fImport.importsCompletePackage){
-				if(fImport.to.endsWith(typeDeclaration)){
+				if(fImport.to.endsWith("." + typeDeclaration)){
 					return fImport.to;
 				}
 			}else{
 				for(String uniqueClassName: getModulesInPackage(fImport.to)){
-					if(uniqueClassName.endsWith(typeDeclaration)){
+					if(uniqueClassName.endsWith("." + typeDeclaration)){
 						return uniqueClassName;
 					}
 				}
@@ -211,7 +207,7 @@ class FamixDependencyConnector {
 	
 	private String findClassInPackage(String className, String uniquePackageName){
 		for(String uniqueName : getModulesInPackage(uniquePackageName)){
-			if(uniqueName.endsWith(className)) return uniqueName;
+			if(uniqueName.endsWith("." + className)) return uniqueName;
 		}
 		return "";
 	}

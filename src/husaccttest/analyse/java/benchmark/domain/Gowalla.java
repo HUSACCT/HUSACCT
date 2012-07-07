@@ -202,7 +202,7 @@ public class Gowalla extends BenchmarkExtended{
 	@Test
 	public void testDomainGowallaException(){
 		String from = "domain.gowalla.GoWallaException";
-		int expectedDependencies = 0;
+		int expectedDependencies = 1;
 		
 //		DependencyDTO[] dependencies = service.getDependenciesFrom(from);
 		DependencyDTO[] dependencies = super.getDependenciesFrom(from);
