@@ -38,6 +38,9 @@ class JavaViolationTypeFactory extends AbstractViolationType {
 		else if(isNamingConvention(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, defaultPackaging);
 		}
+		else if(isNamingConventionException(ruleTypeKey)){
+			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(JavaViolationTypes.class));
+		}
 		else if(isInterfaceConvention(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(JavaViolationTypes.class));
 		}

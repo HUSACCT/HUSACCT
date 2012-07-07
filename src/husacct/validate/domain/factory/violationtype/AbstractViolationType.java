@@ -144,10 +144,19 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isNamingConvention(String ruleTypeKey){
-		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION_EXCEPTION.toString())){
+		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString())){
 			return true;
 		}
 		else{ 
+			return false;
+		}
+	}
+	
+	protected boolean isNamingConventionException(String ruleTypeKey){
+		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION_EXCEPTION.toString())){
+			return true;
+		}
+		else{
 			return false;
 		}
 	}
