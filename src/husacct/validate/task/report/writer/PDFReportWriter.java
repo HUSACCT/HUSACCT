@@ -79,7 +79,6 @@ public class PDFReportWriter extends ReportWriter {
 		title.add("Statistics");
 		document.add(new Paragraph(title));
 
-
 		document.add(new Paragraph("Total violations: " + report.getViolations().getValue().size()));
 		document.add(new Paragraph("Violations generated on: " + report.getFormattedDate()));
 		document.add(new Paragraph(" "));
@@ -177,6 +176,4 @@ public class PDFReportWriter extends ReportWriter {
 		}
 		table.addCell(cell);
 	}
-
-
 }
