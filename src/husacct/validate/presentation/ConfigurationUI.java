@@ -1,13 +1,13 @@
 package husacct.validate.presentation;
 
 import husacct.ServiceProvider;
-import husacct.control.IControlService;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationViolationTypeDTO;
 import husacct.validate.presentation.languageSeverityConfiguration.LanguageSeverityConfigurationPanel;
 import husacct.validate.presentation.tableModels.ColorTableModel;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.*;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle;
+import javax.swing.ListSelectionModel;
+
 import org.apache.log4j.Logger;
 
 public final class ConfigurationUI extends JInternalFrame implements Observer {
@@ -25,7 +35,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
 	private List<Severity> severities;
-	private JButton add, remove, down, up, cancel, applySeverity, restore;
+	private JButton cancel, applySeverity, restore;
 	private JTabbedPane tabPanel;
 	private JPanel severityNamePanel;
 	private JScrollPane severityNameScrollPane;
@@ -49,10 +59,6 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		severityNameScrollPane = new JScrollPane();
 		severityNameTable = new JTable();
 		severityNameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		add = new JButton();
-		remove = new JButton();
-		up = new JButton();
-		down = new JButton();
 		applySeverity = new JButton();
 		restore = new JButton();
 		cancel = new JButton();
@@ -65,49 +71,8 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		severityNameTable.setFillsViewportHeight(true);
 		severityNameTable.getTableHeader().setReorderingAllowed(false);
 		severityNameScrollPane.setViewportView(severityNameTable);
-		remove.setVisible(false);
 
 		tabPanel.addTab(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityConfiguration"), severityNamePanel);
-
-		add.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				addActionPerformed();
-			}
-		});
-
-		remove.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				if (severityNameTable.getSelectedRow() > -1) {
-					removeActionPerformed();
-				} else {
-					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
-				}
-			}
-		});
-
-		up.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				if (severityNameTable.getSelectedRow() > -1) {
-					upActionPerformed();
-				} else {
-					ServiceProvider.getInstance().getControlService().showInfoMessage("SelectRowFirst");
-				}
-			}
-		});
-
-		down.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				if (severityNameTable.getSelectedRow() > -1) {
-					downActionPerformed();
-				} else {
-					ServiceProvider.getInstance().getControlService().showErrorMessage("SelectRowFirst");
-				}
-			}
-		});
 
 		applySeverity.addActionListener(new ActionListener() {
 			@Override
@@ -138,12 +103,8 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		GroupLayout severityNamePanelLayout = new GroupLayout(severityNamePanel);
 
 		GroupLayout.ParallelGroup horizontalButtonGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
-		horizontalButtonGroup.addComponent(remove, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonGroup.addComponent(add, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonGroup.addComponent(up, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonGroup.addComponent(applySeverity, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		horizontalButtonGroup.addComponent(down, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 
 		GroupLayout.ParallelGroup severityNameGroup = severityNamePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		severityNameGroup.addComponent(severityNameScrollPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
@@ -156,15 +117,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		severityNamePanelLayout.setHorizontalGroup(horizontalPaneGroup);
 
 		GroupLayout.SequentialGroup verticalButtonGroup = severityNamePanelLayout.createSequentialGroup();
-		verticalButtonGroup.addContainerGap();
-		verticalButtonGroup.addComponent(add);
-		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonGroup.addComponent(remove);
-		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonGroup.addComponent(up);
-		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
-		verticalButtonGroup.addComponent(down);
-		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
+		verticalButtonGroup.addContainerGap();		
 		verticalButtonGroup.addComponent(restore);
 		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
 		verticalButtonGroup.addComponent(applySeverity);
@@ -210,58 +163,10 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		setLanguageTabsLanguage();
 	}
 
-	private void downActionPerformed() {
-		if (severityNameTable.getSelectedRow() < severityNameTable.getRowCount() - 1) {
-			severityModel.moveRow(severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow() + 1);
-			severityNameTable.changeSelection(severityNameTable.getSelectedRow() + 1, 0, false, false);
-			Severity severity = severities.get(severityNameTable.getSelectedRow());
-			severities.remove(severityNameTable.getSelectedRow());
-
-			if (severityNameTable.getSelectedRow() != severities.size()) {
-				severities.add(severityNameTable.getSelectedRow() + 1, severity);
-			} else {
-				severities.add(severity);
-			}
-		}
-	}
-
-	private void upActionPerformed() {
-		if (severityNameTable.getSelectedRow() > 0) {
-			severityModel.moveRow(severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow(), severityNameTable.getSelectedRow() - 1);
-			severityNameTable.changeSelection(severityNameTable.getSelectedRow() - 1, 0, false, false);
-			Severity severity = severities.get(severityNameTable.getSelectedRow());
-			severities.remove(severityNameTable.getSelectedRow());
-			severities.add(severityNameTable.getSelectedRow() - 1, severity);
-		}
-	}
-
-	private void removeActionPerformed() {
-		if (severityNameTable.getRowCount() > 1 && severityNameTable.getSelectedRow() > -1) {
-			severities.remove(severityNameTable.getSelectedRow());
-			severityModel.removeRow(severityNameTable.getSelectedRow());
-		}
-	}
-
-	private void addActionPerformed() {
-		severityModel.insertRow(0, new Object[]{"", Color.BLACK});
-		severityNameTable.changeSelection(0, 0, false, false);
-		Severity severity = new Severity("", Color.black);
-		severities.add(0, severity);
-	}
-
 	private void applySeverityActionPerformed() {
-
 		for (int i = 0; i < severityModel.getRowCount(); i++) {
-			if (severityModel.getValueAt(i, 0).toString().isEmpty()) {
-				IControlService controlServiceImpl = ServiceProvider.getInstance().getControlService();
-				controlServiceImpl.showErrorMessage("SeverityNameNotSet, Change The name to save the severities");
-				return;
-			}
 			try {
 				Severity severity = severities.get(i);
-				if (!severity.getDefaultName().equals((String) severityModel.getValueAt(i, 0))) {
-					severity.setName((String) severityModel.getValueAt(i, 0));
-				}
 				severity.setColor((Color) severityModel.getValueAt(i, 1));
 				severities.set(i, severity);
 			} catch (IndexOutOfBoundsException e) {
@@ -299,10 +204,6 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 
 	public void setText() {
 		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ValidateConfigurationTitle"));
-		add.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
-		remove.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
-		up.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Up"));
-		down.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Down"));
 		applySeverity.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Apply"));
 		restore.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RestoreToDefault"));
 		cancel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
@@ -318,7 +219,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		clearModel(severityModel);
 		severities = taskServiceImpl.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.toString(), severity.getColor()});
+			severityModel.addRow(new Object[]{severity.getSeverityName(), severity.getColor()});
 		}
 
 	}

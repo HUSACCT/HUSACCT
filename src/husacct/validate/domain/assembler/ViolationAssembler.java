@@ -93,15 +93,14 @@ private ViolationDTO createViolationDTO(Violation violation) throws RuleInstanti
 		if(violation.getSeverity() != null){
 			final Severity severity = violation.getSeverity();
 			final Color color = severity.getColor();
-			final  String userDefinedName = severity.getUserName();
-			final String systemDefinedName = severity.getDefaultName();
+			final String severityName = severity.getSeverityName();
 			final int severityValue = configuration.getSeverityValue(violation.getSeverity());
 			final boolean isIndirect = violation.isIndirect();
 
-			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, userDefinedName, systemDefinedName, severityValue, isIndirect);
+			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, severityName, severityValue, isIndirect);
 		}
 		else{				
-			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", "", 0, false);
+			return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", 0, false);
 		}
 	}catch(ViolationTypeNotFoundException e){
 		throw new ViolationTypeNotFoundException();

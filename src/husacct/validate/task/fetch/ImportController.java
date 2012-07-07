@@ -3,8 +3,6 @@ package husacct.validate.task.fetch;
 import husacct.validate.domain.configuration.ActiveRuleType;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.ViolationHistory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +30,6 @@ public class ImportController {
 		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
 		importActiveViolationTypes(element.getChild("activeViolationTypes"));
 		
-		//TODO
-		//Not used because of memory issues
-		//importViolations(element.getChild("violations"));
-		//importViolationHistory(element.getChild("violationHistories"));		
 	}
 
 	private void importSeverties(Element element) {
@@ -43,25 +37,9 @@ public class ImportController {
 		configuration.setSeverities(severities);
 	}
 
-	/**
-	 * @deprecated Not used because of memory issues
-	 */
-	private void importViolations(Element element) throws DatatypeConfigurationException{
-		List<Violation> violations = importFactory.importViolations(element, severities);
-		configuration.addViolations(violations);
-	}
-
 	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element){
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(element, severities);
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
-	}
-
-	/**
-	 * @deprecated Not used because of memory issues
-	 */
-	private void importViolationHistory(Element element) {
-		List<ViolationHistory> violationHistory = importFactory.importViolationHistory(element);
-		configuration.setViolationHistory(violationHistory);
 	}
 
 	private void importActiveViolationTypes(Element element) {

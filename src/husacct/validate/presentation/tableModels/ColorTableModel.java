@@ -21,7 +21,7 @@ public class ColorTableModel extends AbstractTableModel {
 	private Vector dataVector = new Vector();
     private String columnNames[] = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color")};
     private Class<?>[] types = new Class[]{String.class, JButton.class};
-    private boolean[] canEdit = new boolean[]{true, true};
+    private boolean[] canEdit = new boolean[]{false, true};
     private List<Color> rowColours = new ArrayList<Color>();
 
     @Override

@@ -30,7 +30,7 @@ public class ImportViolationsHistory extends XmlImportUtils {
 			for(Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {
 				String stringUUID = severityElement.getChildText("id");
 				if(isValidUUID(stringUUID)){
-					Severity severity = new Severity(UUID.fromString(severityElement.getChildText("id")), severityElement.getChildText("defaultName"), severityElement.getChildText("userName"), new Color(Integer.parseInt(severityElement.getChildText("color"))));
+					Severity severity = new Severity(UUID.fromString(severityElement.getChildText("id")), severityElement.getChildText("severityKey"), new Color(Integer.parseInt(severityElement.getChildText("color"))));
 					severities.add(severity);
 				}
 				else{

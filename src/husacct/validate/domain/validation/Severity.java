@@ -1,3 +1,4 @@
+
 package husacct.validate.domain.validation;
 
 import husacct.ServiceProvider;
@@ -7,48 +8,27 @@ import java.util.UUID;
 
 public class Severity implements Cloneable {
 	private final UUID id;
-	private String defaultName;
-	private String userName;
+	private final String severityKey;
 	private Color color;
 
-	public Severity(String defaultName, String userName, Color color){
+	public Severity(String severityKey, Color color){
 		this.id = UUID.randomUUID();
-		this.defaultName = defaultName;
-		this.userName = userName;
+		this.severityKey = severityKey;
 		this.color = color;
 	}
 
-	public Severity(UUID id, String defaultName, String userName, Color color){
+	public Severity(UUID id, String severityKey, Color color){
 		this.id = id;
-		this.defaultName = defaultName;
-		this.userName = userName;
+		this.severityKey = severityKey;
 		this.color = color;
 	}
 
-	public Severity(String userName, Color color){
-		this.id = UUID.randomUUID();
-		this.defaultName = "";
-		this.userName = userName;
-		this.color = color;
+	public String getSeverityKey() {
+		return severityKey;
 	}
 
-	public Severity(UUID id, String userName, Color color){
-		this.id = id;
-		this.defaultName = "";
-		this.userName = userName;
-		this.color = color;
-	}
-
-	public String getDefaultName() {
-		return defaultName;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setName(String userName) {
-		this.userName = userName;
+	public String getSeverityName(){
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString(severityKey);
 	}
 
 	public Color getColor() {
@@ -59,17 +39,13 @@ public class Severity implements Cloneable {
 		this.color = color;
 	}
 
-	@Override
-	public String toString() {
-		if (userName != null && !userName.isEmpty()) {
-			return userName;
-		} else{
-			return ServiceProvider.getInstance().getLocaleService().getTranslatedString(defaultName);
-		}
-	}
-
 	public UUID getId() {
 		return id;
+	}
+	
+	@Override
+	public String toString(){
+		return getSeverityName();
 	}
 
 	@Override
@@ -81,12 +57,8 @@ public class Severity implements Cloneable {
 			return false;
 		}
 		final Severity other = (Severity) obj;
-		if ((this.defaultName == null) ? (other.defaultName != null)
-				: !this.defaultName.equals(other.defaultName)) {
-			return false;
-		}
-		if ((this.userName == null) ? (other.userName != null)
-				: !this.userName.equals(other.userName)) {
+		if ((this.severityKey == null) ? (other.severityKey != null)
+				: !this.severityKey.equals(other.severityKey)) {
 			return false;
 		}
 		if (this.color != other.color &&
@@ -112,8 +84,7 @@ public class Severity implements Cloneable {
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = 73 * hash + (this.defaultName != null ? this.defaultName.hashCode() : 0);
-		hash = 73 * hash + (this.userName != null ? this.userName.hashCode() : 0);
+		hash = 73 * hash + (this.severityKey != null ? this.severityKey.hashCode() : 0);
 		hash = 73 * hash + (this.color != null ? this.color.hashCode() : 0);
 		//hash = 73 * hash + (this.id != null ? this.id.hashCode() : 0);
 		return hash;
