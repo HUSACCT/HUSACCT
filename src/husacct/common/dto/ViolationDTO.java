@@ -14,8 +14,6 @@ public class ViolationDTO extends AbstractDTO {
 	public final boolean indirect;
 	
 	public final Color severityColor;
-	public final String userDefinedName;
-	public final String systemDefinedName;
 	public final String severityName;
 	public final int severityValue;
 
@@ -30,8 +28,6 @@ public class ViolationDTO extends AbstractDTO {
 		this.message = message;
 		this.linenumber = linenumber;
 		this.severityColor = severityColor;
-		this.userDefinedName = "";
-		this.systemDefinedName = "";
 		this.severityName = severityName;
 		this.severityValue = severityValue;
 	}
