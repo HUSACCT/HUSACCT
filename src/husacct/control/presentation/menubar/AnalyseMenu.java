@@ -23,6 +23,7 @@ public class AnalyseMenu extends JMenu{
 	private JMenuItem analyseNowItem;
 	private JMenuItem analysedArchitectureDiagramItem;
 	private JMenuItem analysedApplicationOverviewItem;
+	private JMenuItem exportDependenciesItem;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -50,10 +51,15 @@ public class AnalyseMenu extends JMenu{
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
+		exportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
+		exportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
+		exportDependenciesItem.setMnemonic(getMnemonicKeycode("ExportDependenciesMnemonic"));
+		
 		this.add(setApplicationPropertiesItem);
 		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
+		this.add(exportDependenciesItem);
 		
 	}
 	
@@ -82,12 +88,19 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 		
+		exportDependenciesItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getExportController().showExportDependenciesGui();
+			}
+		});
+		
 		mainController.getStateController().addStateChangeListener(new IStateChangeListener() {
 			public void changeState(List<States> states) {
 				setApplicationPropertiesItem.setEnabled(false);
 				analyseNowItem.setEnabled(false);
 				analysedArchitectureDiagramItem.setEnabled(false);
 				analysedApplicationOverviewItem.setEnabled(false);
+				exportDependenciesItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
 					setApplicationPropertiesItem.setEnabled(true);
@@ -98,6 +111,7 @@ public class AnalyseMenu extends JMenu{
 				if(states.contains(States.ANALYSED)){
 					analysedArchitectureDiagramItem.setEnabled(true);
 					analysedApplicationOverviewItem.setEnabled(true);
+					exportDependenciesItem.setEnabled(true);
 				}
 			}
 		});
@@ -110,10 +124,12 @@ public class AnalyseMenu extends JMenu{
 				analyseNowItem.setText(localeService.getTranslatedString("AnalyseNow"));
 				analysedArchitectureDiagramItem.setText(localeService.getTranslatedString("AnalysedArchitectureDiagram"));
 				analysedApplicationOverviewItem.setText(localeService.getTranslatedString("AnalysedApplicationOverview"));
+				exportDependenciesItem.setText(localeService.getTranslatedString("ExportDependencies"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("ApplicationPropertiesMnemonic"));
 				setApplicationPropertiesItem.setMnemonic(getMnemonicKeycode("AnalyseNowMnemonic"));
 				analysedApplicationOverviewItem.setMnemonic(getMnemonicKeycode("AnalysedApplicationOverviewMnemonic"));
 				analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
+				exportDependenciesItem.setMnemonic(getMnemonicKeycode("ExportDependenciesMnemonic"));
 			}
 		});
 	}

@@ -1,8 +1,10 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.ExportArchitectureDialog;
+import husacct.control.presentation.util.ExportDependenciesDialog;
 import husacct.control.presentation.util.ExportViolationsReportDialog;
 import husacct.control.presentation.util.Filename;
 import husacct.control.task.resources.IResource;
@@ -33,6 +35,10 @@ public class ExportController {
 		new ExportViolationsReportDialog(mainController);
 	}
 	
+	public void showExportDependenciesGui(){
+		new ExportDependenciesDialog(mainController);
+	}
+	
 	public void exportArchitecture(File file){
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", file);
@@ -51,6 +57,16 @@ public class ExportController {
 		IValidateService validateService = ServiceProvider.getInstance().getValidateService();
 		try {
 			validateService.exportViolations(file, filename.getExtension());
+		} catch (Exception exception){
+			IControlService controlService = ServiceProvider.getInstance().getControlService();
+			controlService.showErrorMessage(exception.getMessage());
+		}
+	}
+	
+	public void exportDependencies(File file){
+		IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
+		try {
+			analyseService.exportDependencies(file.getAbsolutePath());
 		} catch (Exception exception){
 			IControlService controlService = ServiceProvider.getInstance().getControlService();
 			controlService.showErrorMessage(exception.getMessage());
