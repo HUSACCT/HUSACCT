@@ -16,16 +16,6 @@ public class ApplicationAnalyser {
 		this.builder = new AnalyserBuilder();
 	}
 	
-	@Deprecated /*Will soon be removed due to an interface-change of the Analyse Component*/
-	public void analyseApplication() {				
-		ServiceProvider provider = ServiceProvider.getInstance();
-		IDefineService definitionService = provider.getDefineService();
-		ApplicationDTO appDto = definitionService.getApplicationDetails();
-		String language = appDto.programmingLanguage;
-		String[] paths = appDto.paths;
-		analyseApplication(paths, language);
-	}
-	
 	public void analyseApplication(String[] paths, String programmingLanguage) {				
 		AbstractAnalyser analyser = builder.getAnalyser(programmingLanguage);
 		SourceFileFinder sourceFileFinder = new SourceFileFinder();

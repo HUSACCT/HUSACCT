@@ -38,11 +38,6 @@ public class AnalyseServiceStub implements IAnalyseService{
 		ArrayList<DependencyDTO> dependencies = (ArrayList<DependencyDTO>) getElement.get(1);
 		dependencies.add(dependency);
 	}
-
-	@Override
-	public void analyseApplication() {
-
-	}
 	
 	@Override
 	public void analyseApplication(String[] paths, String programmingLanguage) {

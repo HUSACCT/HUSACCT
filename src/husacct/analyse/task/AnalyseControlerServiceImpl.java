@@ -25,12 +25,6 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService{
 	}
 	
 	@Override
-	public void analyseApplication() {
-		domainService.clearModel();
-		analyserService.analyseApplication();
-	}
-	
-	@Override
 	public void analyseApplication(String[] paths, String programmingLanguage) {
 		domainService.clearModel();
 		analyserService.analyseApplication(paths, programmingLanguage);

@@ -7,11 +7,6 @@ import husacct.common.services.IObservableService;
 
 public interface IAnalyseService extends IObservableService{
 	
-	@Deprecated 
-	/*This function will be removed when the 
-	 * Control-Service calls analyseApplication(String[] paths)
-	 * Please call analyseApplication(String[] paths)*/
-	public void analyseApplication();
 	public String[] getAvailableLanguages();
 	public void analyseApplication(String[] paths, String programmingLanguage);
 	

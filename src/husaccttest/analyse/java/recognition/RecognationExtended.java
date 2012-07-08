@@ -25,7 +25,7 @@ public abstract class RecognationExtended extends TestCaseExtended{
 				
 		try {
 			if(!isAnalysed){
-				service.analyseApplication();
+				service.analyseApplication(paths, "Java");
 				isAnalysed = true;
 			}
 

@@ -42,7 +42,8 @@ public class ApplicationController {
 	public void analyseApplication(){
 		IControlService controlService = ServiceProvider.getInstance().getControlService();
 		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask());
+		ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
+		ThreadWithLoader analyseThread = controlService.getThreadWithLoader(localeService.getTranslatedString("AnalysingApplication"), new AnalyseTask(applicationDTO));
 		analyseThread.run();
 	}
 	

@@ -1,14 +1,13 @@
 package husacct.analyse;
 
-import javax.swing.JInternalFrame;
-import org.jdom2.Element;
 import husacct.analyse.presentation.AnalyseInternalFrame;
-import husacct.analyse.task.IAnalyseControlService;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
+import husacct.analyse.task.IAnalyseControlService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
+
+import javax.swing.JInternalFrame;
 
 //TODO Add implement-clause  ISavable when the savechain is fixed
 public class AnalyseServiceImpl extends ObservableService implements IAnalyseService{
@@ -26,14 +25,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
 	public String[] getAvailableLanguages() {
 		return service.getAvailableLanguages();
-	}
-
-	@Override
-	public void analyseApplication() {
-		service.analyseApplication();
-		this.analyseInternalFrame = new AnalyseInternalFrame();
-		this.isAnalysed = true;
-		super.notifyServiceListeners();
 	}
 	
 	public void analyseApplication(String[] paths, String programmingLanguage){

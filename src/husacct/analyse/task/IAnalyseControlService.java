@@ -9,7 +9,6 @@ public interface IAnalyseControlService {
 	
 	public void reset();
 	
-	public void analyseApplication();
 	public String[] getAvailableLanguages();
 	public void analyseApplication(String[] paths, String programmingLanguage);
 	
