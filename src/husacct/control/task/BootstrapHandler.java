@@ -22,11 +22,13 @@ public class BootstrapHandler {
 	}
 	
 	public void executeBootstrap(Class<? extends AbstractBootstrap> bootstrap){
+		logger.info("Trying to execute bootstrapper " + bootstrap.getName());
 		try {
 			AbstractBootstrap targetBootstrap = bootstrap.newInstance();
 			targetBootstrap.execute();
 		} catch (Exception exception) {
-			error(exception.getMessage());
+			exception.printStackTrace();
+			error("Exception: " + exception.getMessage());
 		}
 	}
 	
@@ -36,10 +38,12 @@ public class BootstrapHandler {
 			Class<? extends AbstractBootstrap> myClass = Class.forName(classNameToBeLoaded).asSubclass(AbstractBootstrap.class);
 			return myClass;
 		} catch (ClassNotFoundException exception) {
-			error(exception.getMessage());
+			exception.printStackTrace();
+			error("ClassNotFoundException " + exception.getMessage());
 			System.exit(0);
 		} catch (Error error){
-			error(error.getMessage());
+			error.printStackTrace();
+			error("Error " + error.getMessage());
 			
 		}
 		return null;
