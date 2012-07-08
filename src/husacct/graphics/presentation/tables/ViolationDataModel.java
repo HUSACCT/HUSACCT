@@ -3,7 +3,6 @@ package husacct.graphics.presentation.tables;
 import husacct.ServiceProvider;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
-import husacct.graphics.GraphicsServiceImpl;
 
 import java.util.HashMap;
 
