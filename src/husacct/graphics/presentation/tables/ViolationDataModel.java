@@ -3,13 +3,17 @@ package husacct.graphics.presentation.tables;
 import husacct.ServiceProvider;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
+import husacct.graphics.GraphicsServiceImpl;
 
 import java.util.HashMap;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.log4j.Logger;
+
 public class ViolationDataModel extends AbstractTableModel {
 	private static final long serialVersionUID = 7140981906234538035L;
+	private Logger logger = Logger.getLogger(ViolationDataModel.class);
 
 	private ILocaleService localeService;
 	private ViolationDTO[] data;
@@ -19,7 +23,7 @@ public class ViolationDataModel extends AbstractTableModel {
 
 	public ViolationDataModel(ViolationDTO[] dtos) {
 		localeService = ServiceProvider.getInstance().getLocaleService();
-		columnKeys = new String[] { "ErrorMessage", "RuleType", "ViolationType", "Severity", "LineNumber" };
+		columnKeys = new String[] { "Source", "Rule", "DependencyKind", "Target", "Severity" };
 		columnNames = new HashMap<String, String>();
 		for (String key : columnKeys) {
 			columnNames.put(key, localeService.getTranslatedString(key));
@@ -44,19 +48,23 @@ public class ViolationDataModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		String value = null;
-		String columnKey = columnKeys[columnIndex];
-		ViolationDTO row = data[rowIndex];
-		if (columnKey.equals(columnKeys[0])) {
-			value = row.message;
-		} else if (columnKey.equals(columnKeys[1])) {
-			value = row.ruleType.getDescriptionKey();
-		} else if (columnKey.equals(columnKeys[2])) {
-			value = row.violationType.getDescriptionKey();
-		} else if (columnKey.equals(columnKeys[3])) {
-			value = "" + row.severityValue;
-		} else if (columnKey.equals(columnKeys[4])) {
-			value = "" + row.linenumber;
+		String value = "";
+		try {
+			String columnKey = columnKeys[columnIndex];
+			ViolationDTO row = data[rowIndex];
+			if (columnKey.equals(columnKeys[0])) {
+				value = row.fromClasspath;
+			} else if (columnKey.equals(columnKeys[1])) {
+				value = localeService.getTranslatedString(row.ruleType.getDescriptionKey());
+			} else if (columnKey.equals(columnKeys[2])) {
+				value = localeService.getTranslatedString(row.violationType.getDescriptionKey());
+			} else if (columnKey.equals(columnKeys[3])) {
+				value = "" + row.toClasspath;
+			} else if (columnKey.equals(columnKeys[4])) {
+				value = "" + row.severityName;
+			}
+		} catch (Exception e) {
+			logger.error("Could not fill column " + columnIndex + " at row " + rowIndex);
 		}
 		return value;
 	}
