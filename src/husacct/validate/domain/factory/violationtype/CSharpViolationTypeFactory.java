@@ -32,13 +32,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 		else if(isVisibilityConvenctionRule(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, defaultAccess);
 		}
-		else if(isVisibilityConventionException(ruleTypeKey)){
-			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
-		}
 		else if(isNamingConvention(ruleTypeKey)){
-			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
-		}
-		else if(isNamingConventionException(ruleTypeKey)){
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
 		}
 		else if(isInterfaceConvention(ruleTypeKey)){
