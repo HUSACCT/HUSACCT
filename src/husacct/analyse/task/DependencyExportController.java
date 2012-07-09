@@ -14,14 +14,15 @@ public class DependencyExportController {
 	private Logger husacctLogger = Logger.getLogger(DependencyExportController.class);
 	private IAnalyseDomainService analysedDomain;
 	private AbstractFileExporter fileExporter;
+	private HashMap<String, DependencyDTO> exportData;
 	
 	public DependencyExportController(){
 		this.analysedDomain = new AnalyseDomainServiceImpl();
-		HashMap<String, DependencyDTO> exportData = analysedDomain.mapDependencies();
-		fileExporter = new ExcelExporter(exportData);
 	}
 	
 	public void export(String path){
+		exportData = analysedDomain.mapDependencies();
+		fileExporter = new ExcelExporter(exportData);
 		try{
 			fileExporter.writeToFile(path);
 		}catch(NoDataException noDataException){
