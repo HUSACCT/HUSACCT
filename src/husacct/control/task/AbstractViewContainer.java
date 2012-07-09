@@ -1,6 +1,7 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.common.services.IServiceListener;
 import husacct.control.presentation.taskbar.TaskBar;
 
 import java.awt.Dimension;
@@ -28,6 +29,18 @@ abstract public class AbstractViewContainer {
 		this.mainController = mainController;
 		this.frameIcon = frameIcon;
 		this.stringIdentifier = stringIdentifier;
+	}
+	
+	public void setLocaleListener(){
+		System.out.println("setting localelistener for " + this.stringIdentifier);
+		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				if(internalFrame != null){
+					internalFrame.setTitle(getTitle());
+				}
+			}
+		});
 	}
 	
 	private void updateInternalFrame(){

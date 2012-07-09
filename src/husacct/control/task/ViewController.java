@@ -102,4 +102,10 @@ public class ViewController {
 			container.closeFrame();
 		}
 	}
+	
+	public void setLocaleListeners(){
+		for(AbstractViewContainer container : viewContainers){
+			container.setLocaleListener();
+		}
+	}
 }

@@ -8,6 +8,7 @@ import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
+import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
@@ -28,6 +29,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private WorkspaceController workspaceController;
 	private ApplicationController applicationController;
 	private StateController stateController;
+	private ViewController viewController;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -35,6 +37,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		workspaceController = mainController.getWorkspaceController();
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
+		viewController = mainController.getViewController();
 	}
 	
 	@Override
@@ -93,6 +96,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void setServiceListeners(){
 		stateController.setServiceListeners();
+		viewController.setLocaleListeners();
 	}
 	
 	public MainController getMainController(){
