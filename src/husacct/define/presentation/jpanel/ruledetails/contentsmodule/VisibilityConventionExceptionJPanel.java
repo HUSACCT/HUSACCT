@@ -22,6 +22,7 @@ public class VisibilityConventionExceptionJPanel extends AbstractDetailsJPanel{
 	public VisibilityConventionExceptionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 		super.isException = true;
+		super.showFilterConfigurationButton = false;
 	}
 
 	@Override

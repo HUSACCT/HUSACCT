@@ -27,6 +27,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 	protected int componentCount;
 	protected Logger logger;
 	protected boolean isException;
+	protected boolean showFilterConfigurationButton;
 
 	private JButton configureViolationTypesJButton;
 	
@@ -35,6 +36,7 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 		this.appliedRuleController = appliedRuleController;
 		this.logger = Logger.getLogger(AbstractDetailsJPanel.class);
 		isException = false;
+		showFilterConfigurationButton = true;
 	}
 	
 	public void initGui(){
@@ -78,6 +80,8 @@ public abstract class AbstractDetailsJPanel extends JPanel implements ActionList
 			configureViolationTypesJButton.setEnabled(false);
 			configureViolationTypesJButton.setToolTipText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NeedToAnalyseFirst"));
 		}
+		
+		configureViolationTypesJButton.setVisible(showFilterConfigurationButton);
 	}
 	
 	@Override

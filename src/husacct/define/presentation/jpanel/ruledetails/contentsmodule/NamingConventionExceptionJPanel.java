@@ -24,6 +24,7 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 	public NamingConventionExceptionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 		super.isException = true;
+		super.showFilterConfigurationButton = false;
 	}
 
 	@Override
