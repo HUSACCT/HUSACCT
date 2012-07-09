@@ -29,7 +29,7 @@ public class CheckConformanceUtilPackage extends CheckConformanceUtil{
 				exceptionClasspathTo.addAll(exceptionClasspaths.getMappingTo());
 			}
 		}
-		return removeExceptionPaths(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
+		return removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
 	}
 
 	private static Mappings getAllPackagepathsFromModule(RuleDTO rule){

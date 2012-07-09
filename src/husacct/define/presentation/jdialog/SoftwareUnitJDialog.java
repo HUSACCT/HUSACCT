@@ -98,13 +98,13 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
-		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
-		buttonPanel.add(cancelButton);
-		cancelButton.addActionListener(this);
-		
 		saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		buttonPanel.add(saveButton);
 		saveButton.addActionListener(this);
+		
+		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
+		buttonPanel.add(cancelButton);
+		cancelButton.addActionListener(this);
 		
 		return buttonPanel;
 	}

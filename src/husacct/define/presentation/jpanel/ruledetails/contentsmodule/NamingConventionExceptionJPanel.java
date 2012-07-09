@@ -4,7 +4,6 @@ import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.components.DescriptionPanelComponent;
 import husacct.define.presentation.jpanel.ruledetails.components.EnabledPanelComponent;
 import husacct.define.presentation.jpanel.ruledetails.components.ModuleFromPanelComponent;
-import husacct.define.presentation.jpanel.ruledetails.components.RegexPanelComponent;
 import husacct.define.task.AppliedRuleController;
 
 import java.awt.GridBagConstraints;
@@ -19,11 +18,10 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 	public ModuleFromPanelComponent moduleFromPanelComponent;
 	public EnabledPanelComponent enabledPanelComponent;
 	public DescriptionPanelComponent descriptionPanelComponent;
-	public RegexPanelComponent regexPanelComponent;
-
 	public NamingConventionExceptionJPanel(AppliedRuleController appliedRuleController) {
 		super(appliedRuleController);
 		super.isException = true;
+		super.showFilterConfigurationButton = false;
 	}
 
 	@Override
@@ -33,10 +31,7 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 		
 		enabledPanelComponent = new EnabledPanelComponent();
 		this.add(enabledPanelComponent, new GridBagConstraints(0, 1, 2, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		
-		regexPanelComponent = new RegexPanelComponent();
-		this.add(regexPanelComponent, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		
+
 		descriptionPanelComponent = new DescriptionPanelComponent();
 		this.add(descriptionPanelComponent, new GridBagConstraints(0, 3, 2, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 	}
@@ -62,7 +57,6 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 		moduleFromPanelComponent.update(ruleDetails.get("moduleFromId"));
 		enabledPanelComponent.update(ruleDetails.get("enabled"));
 		descriptionPanelComponent.update(ruleDetails.get("description"));
-		regexPanelComponent.update(ruleDetails.get("regex"));
 	}
 	
 	@Override
@@ -72,7 +66,6 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 		ruleDetails.put("moduleFromId", this.moduleFromPanelComponent.getValue());
 		ruleDetails.put("enabled", (Boolean) this.enabledPanelComponent.getValue());
 		ruleDetails.put("description", (String) this.descriptionPanelComponent.getValue());
-		ruleDetails.put("regex", (String) regexPanelComponent.getValue());
 		
 		return ruleDetails;
 	}
@@ -81,7 +74,6 @@ public class NamingConventionExceptionJPanel extends AbstractDetailsJPanel{
 	public boolean hasValidData() {
 		boolean hasValidData =  true;
 		hasValidData = hasValidData && moduleFromPanelComponent.hasValidData();
-		hasValidData = hasValidData && regexPanelComponent.hasValidData();
 		hasValidData = hasValidData && enabledPanelComponent.hasValidData();
 		hasValidData = hasValidData && descriptionPanelComponent.hasValidData();
 		return hasValidData;

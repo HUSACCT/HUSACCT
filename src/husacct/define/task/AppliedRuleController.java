@@ -276,6 +276,7 @@ public class AppliedRuleController extends PopUpController {
 				module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 			} else {
 				module = new Module();
+				module.setId(-1);
 			}
 		} else {
 			module = new Module();
@@ -460,6 +461,16 @@ public class AppliedRuleController extends PopUpController {
 						violationTypeDtoList.add(vt);
 					}
 				}
+				
+				//Check exceptions rules
+				for (RuleTypeDTO ruleTypeExceptionDTO : ruleTypeDTO.getExceptionRuleTypes()){
+					if (ruleTypeExceptionDTO.key.equals(ruleTypeKey)){
+						for (ViolationTypeDTO vt : ruleTypeExceptionDTO.violationTypes){
+							violationTypeDtoList.add(vt);
+						}
+					}
+				}
+				
 			}
 		}
 		return violationTypeDtoList;

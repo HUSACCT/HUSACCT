@@ -19,28 +19,12 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
 	private static IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
 
-	public static Mappings filterClasses(RuleDTO rule){
-		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
-		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
-		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
-
-		return removeExceptionPaths(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
-	}
-
 	public static Mappings filterClassesFrom(RuleDTO rule){
 		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
 		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
 		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
 
 		return removeExceptionPathsFrom(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
-	}
-
-	public static Mappings filterClassesTo(RuleDTO rule){
-		Mappings mainClasspaths = getAllClasspathsFromModule(rule);
-		List<Mapping> exceptionClasspathFrom = getExceptionClassPathFrom(rule);
-		List<Mapping> exceptionClasspathTo = getExceptionClassPathTo(rule);
-
-		return removeExceptionPathsTo(mainClasspaths, exceptionClasspathFrom, exceptionClasspathTo);
 	}
 
 	private static List<Mapping> getExceptionClassPathTo(RuleDTO rule){
@@ -54,7 +38,7 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 
 	private static List<Mapping> getExceptionClassPathFrom(RuleDTO rule){
 		List<Mapping> exceptionClasspathFrom = new ArrayList<Mapping>();
-			for(RuleDTO exceptionRule : rule.exceptionRules){
+			for(RuleDTO exceptionRule : rule.exceptionRules){			
 				Mappings exceptionClasspaths = getAllClasspathsFromModule(exceptionRule);
 				exceptionClasspathFrom.addAll(exceptionClasspaths.getMappingFrom());
 		}
@@ -132,10 +116,10 @@ public class CheckConformanceUtilClass extends CheckConformanceUtil {
 		List<String> paths = new ArrayList<String>();
 		
 		for(PhysicalPathDTO classpath : module.physicalPathDTOs){
-			if(classpath.type.toLowerCase().equals("package")){	
-				paths.add(classpath.path);
+			if(classpath.type.toLowerCase().equals("package")){				
 				paths.addAll(getAllChildPhysicalPaths(classpath.path));
 			}
+			paths.add(classpath.path);
 		}		
 		return paths;
 	}

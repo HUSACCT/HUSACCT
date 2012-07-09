@@ -126,13 +126,14 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		
+		this.saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		buttonPanel.add(this.saveButton);
+		this.saveButton.addActionListener(this);
+		
 		this.cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(this.cancelButton);
 		this.cancelButton.addActionListener(this);
 		
-		this.saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
-		buttonPanel.add(this.saveButton);
-		this.saveButton.addActionListener(this);
 		
 		return buttonPanel;
 	}

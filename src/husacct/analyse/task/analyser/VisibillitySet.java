@@ -6,7 +6,8 @@ public enum VisibillitySet {
 
 	PUBLIC("public"),
 	PRIVATE("private"),
-	DEFAULT("default");
+	DEFAULT("default"),
+	PROTECTED("protected");
 	
 	private final String visibillity;
 	
