@@ -41,7 +41,7 @@ public class Report {
 		for(Severity severity : severities) {
 			int violationsCount = 0;
 			for(Violation violation : violations.getValue()) {
-				if(violation.getSeverity().equals(severity)) {
+				if(violation.getSeverity().getSeverityKey().equals(severity.getSeverityKey())) {					
 					violationsCount++;
 				}
 			}
