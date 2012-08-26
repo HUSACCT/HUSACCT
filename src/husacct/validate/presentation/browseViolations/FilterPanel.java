@@ -129,7 +129,7 @@ public class FilterPanel extends JPanel {
 					public void run() {
 						try {
 							Thread.sleep(1);
-							browseViolations.updateViolationsTable();
+							browseViolations.loadAfterChange();
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
@@ -150,9 +150,12 @@ public class FilterPanel extends JPanel {
 					public void run() {
 						try {
 							Thread.sleep(1);
-							SwingUtilities.invokeLater(new Runnable(){public void run(){
-								fillViolationsTable(false);
-							}});
+							SwingUtilities.invokeLater(new Runnable() {
+
+								public void run() {
+									browseViolations.loadAfterChange();
+								}
+							});
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
@@ -173,9 +176,12 @@ public class FilterPanel extends JPanel {
 					public void run() {
 						try {
 							Thread.sleep(1);
-							SwingUtilities.invokeLater(new Runnable(){public void run(){
-								fillViolationsTable(true);
-							}});
+							SwingUtilities.invokeLater(new Runnable() {
+
+								public void run() {
+									browseViolations.loadAfterChange();
+								}
+							});
 						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
@@ -188,17 +194,21 @@ public class FilterPanel extends JPanel {
 		});
 	}
 
-	private void fillViolationsTable(boolean isIndirect) {
-		if (applyFilter.isSelected()) {
-			List<Violation> violationsIndirect = new ArrayList<Violation>();
-			List<Violation> violations = browseViolations.getViolationsFilteredOrNormal();
-			for (Violation violation : violations) {
-				if (violation.isIndirect() == isIndirect) {
-					violationsIndirect.add(violation);
-				}
-			}
-			browseViolations.fillViolationsTable(violationsIndirect);
+	public List<Violation> fillViolationsTable(List<Violation> violations) {
+		
+		List<Violation> violationsIndirect = new ArrayList<Violation>();
+
+		if(rdbtnAll.isSelected()){
+			return violations;
 		}
+		boolean isIndirect = rdbtnIndirect.isSelected();
+		for (Violation violation : violations) {
+			if (violation.isIndirect() == isIndirect) {
+				violationsIndirect.add(violation);
+			}
+		}
+		
+		return violationsIndirect;
 	}
 
 	public void loadAfterChange() {
