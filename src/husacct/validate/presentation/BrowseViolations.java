@@ -255,9 +255,9 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	public void updateViolationsTable() {
 		loadAfterChange();
 	}
-
+	
 	public void loadAfterChange(){
-		shownViolations = getViolationsFilteredOrNormal();
+		reloadViolations();
 		fillViolationsTable(shownViolations);
 		loadInformationPanel();
 	}
@@ -342,6 +342,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		violationsTable.setAutoCreateRowSorter(false);
 		violationsTable.clearSelection();
 		clearViolationsTableModelRows();
+                shownViolations = violations;
 		for(Violation violation : violations) {
 			String violationtypeString = "";
 			if(!violation.getViolationtypeKey().isEmpty()){
@@ -371,19 +372,9 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		statisticsPanel.loadStatistics(taskServiceImpl.getViolationsPerSeverity(shownViolations, severities), violationsSize, shownViolations.size());
 		statisticsPanel.repaint();
 	}
-
-	public List<Violation> getViolationsFilteredOrNormal() {
-		List<Violation> violations;
-		if(selectedViolationHistory != null) {
-			violations = selectedViolationHistory.getViolations();
-		} else {
-			violations = taskServiceImpl.getAllViolations().getValue();
-		}
-
-		if(filterPane.getApplyFilter().isSelected()) {
-			violations = taskServiceImpl.applyFilterViolations(violations);
-		}
-		return violations;
+	
+	public List<Violation> filterViolations(List<Violation> violations){
+		return taskServiceImpl.applyFilterViolations(violations);
 	}
 
 	public void applyFilterChanged(ActionEvent e) {
@@ -392,7 +383,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			public void run() {
 				try {
 					Thread.sleep(1);
-					updateViolationsTable();
+					fillViolationsTable(shownViolations);
+                                        loadInformationPanel();
 				} catch (InterruptedException e) {
 					logger.debug(e.getMessage());
 				}
@@ -424,5 +416,13 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 
 	public void setSelectedViolationHistory(ViolationHistory selectedViolationHistory) {
 		this.selectedViolationHistory = selectedViolationHistory;
+	}
+	
+	public void reloadViolations(){
+		shownViolations = taskServiceImpl.getAllViolations().getValue();
+		shownViolations = filterPane.fillViolationsTable(shownViolations);
+		if(filterPane.getApplyFilter().isSelected()){
+			shownViolations = filterViolations(shownViolations);
+		}
 	}
 }
