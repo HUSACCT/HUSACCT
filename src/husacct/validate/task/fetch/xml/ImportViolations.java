@@ -15,35 +15,35 @@ import org.jdom2.Element;
 
 public class ImportViolations extends XmlImportUtils {
 
-	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
-		List<Violation> violations = new ArrayList<Violation>();
-		for(Element violationElement : violationsElement.getChildren()) {
-			Severity violationSeverity = null;
+    public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
+        List<Violation> violations = new ArrayList<Violation>();
+        for (Element violationElement : violationsElement.getChildren()) {
+            Severity violationSeverity = null;
 
-			final String id = violationElement.getChildText("severityId");
-			for(Severity severity : severities) {
-				if(id.equals(severity.getId().toString())) {
-					violationSeverity = severity;
-					break;
-				}
-			}
+            final String id = violationElement.getChildText("severityId");
+            for (Severity severity : severities) {
+                if (id.equals(severity.getId().toString())) {
+                    violationSeverity = severity;
+                    break;
+                }
+            }
 
-			final int lineNumber = Integer.parseInt(violationElement.getChildText("lineNumber"));
-			final String ruleTypeKey = violationElement.getChildText("ruletypeKey");
-			final String violationTypeKey = violationElement.getChildText("violationtypeKey");
-			final String classPathFrom = violationElement.getChildText("classPathFrom");
-			final String classPathTo = violationElement.getChildText("classPathTo");
-			final LogicalModules logicalModules = getLogicalModules(violationElement.getChild("logicalModules"));
-			final Message message = getMessage(violationElement.getChild("message"));
-			final boolean isIndirect = Boolean.parseBoolean(violationElement.getChildText("isIndirect"));
+            final int lineNumber = Integer.parseInt(violationElement.getChildText("lineNumber"));
+            final String ruleTypeKey = violationElement.getChildText("ruletypeKey");
+            final String violationTypeKey = violationElement.getChildText("violationtypeKey");
+            final String classPathFrom = violationElement.getChildText("classPathFrom");
+            final String classPathTo = violationElement.getChildText("classPathTo");
+            final LogicalModules logicalModules = getLogicalModules(violationElement.getChild("logicalModules"));
+            final Message message = getMessage(violationElement.getChild("message"));
+            final boolean isIndirect = Boolean.parseBoolean(violationElement.getChildText("isIndirect"));
 
-			final String stringCalendar = violationElement.getChildText("occured");
-			final Calendar occured = getCalendar(stringCalendar);
+            final String stringCalendar = violationElement.getChildText("occured");
+            final Calendar occured = getCalendar(stringCalendar);
 
-			Violation violation = new Violation(occured, lineNumber, violationSeverity, ruleTypeKey, violationTypeKey, classPathFrom, classPathTo, isIndirect, message, logicalModules);
+            Violation violation = new Violation(occured, lineNumber, violationSeverity, ruleTypeKey, violationTypeKey, classPathFrom, classPathTo, isIndirect, message, logicalModules);
 
-			violations.add(violation);
-		}
-		return violations;
-	}
+            violations.add(violation);
+        }
+        return violations;
+    }
 }

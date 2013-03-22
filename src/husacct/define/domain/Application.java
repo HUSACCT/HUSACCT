@@ -1,74 +1,66 @@
 package husacct.define.domain;
 
 public class Application {
-	
-	private String name;
-	private String[] paths;
-	private String programmingLanguage;
-	private String version;
-	private SoftwareArchitecture architecture;
-	
-	public Application()
-	{
-		this("",new String[]{},"", "1.0");
-	}
-	
-	public Application(String name, String lang)
-	{
-		this(name,new String[]{},lang, "1.0");
-	}
-	
-	public Application(String name, String[] paths, String lang, String version)
-	{
-		this.setName(name);
-		this.setPaths(paths);
-		this.setLanguage(lang);
-		this.setVersion(version);
-		this.architecture = new SoftwareArchitecture();
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String name;
+    private String[] paths;
+    private String programmingLanguage;
+    private String version;
+    private SoftwareArchitecture architecture;
 
-	public String getName() {
-		return name;
-	}
+    public Application() {
+        this("", new String[]{}, "", "1.0");
+    }
 
-	public void setPaths(String[] paths) {
-		this.paths = paths;
-	}
+    public Application(String name, String lang) {
+        this(name, new String[]{}, lang, "1.0");
+    }
 
-	public String[] getPaths() {
-		return paths;
-	}
+    public Application(String name, String[] paths, String lang, String version) {
+        this.setName(name);
+        this.setPaths(paths);
+        this.setLanguage(lang);
+        this.setVersion(version);
+        this.architecture = new SoftwareArchitecture();
+    }
 
-	public void setLanguage(String language) {
-		this.programmingLanguage = language;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getLanguage() {
-		return programmingLanguage;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public SoftwareArchitecture getArchitecture() {
-		return architecture;
-	}
+    public void setPaths(String[] paths) {
+        this.paths = paths;
+    }
 
-	public void setArchitecture(SoftwareArchitecture architecture) {
-		this.architecture = architecture;
-	}
+    public String[] getPaths() {
+        return paths;
+    }
 
-	public String getVersion() {
-		return version;
-	}
+    public void setLanguage(String language) {
+        this.programmingLanguage = language;
+    }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
-	
-	
-	
-	
+    public String getLanguage() {
+        return programmingLanguage;
+    }
 
+    public SoftwareArchitecture getArchitecture() {
+        return architecture;
+    }
+
+    public void setArchitecture(SoftwareArchitecture architecture) {
+        this.architecture = architecture;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 }

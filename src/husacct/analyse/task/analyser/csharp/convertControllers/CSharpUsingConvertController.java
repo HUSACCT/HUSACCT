@@ -11,67 +11,68 @@ import java.util.List;
 import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpUsingConvertController extends CSharpGenerator {
-	private final CSharpTreeConvertController treeConvertController;
-	private List<List<CommonTree>> usageTrees;
-	private String tempUsingName = "";
-	private List<CommonTree> tempUsingTrees;
-	private List<CSharpData> indentUsingsLevel; 
 
-	public CSharpUsingConvertController(CSharpTreeConvertController treeConvertController) {
-		this.treeConvertController = treeConvertController;
-		usageTrees = new ArrayList<List<CommonTree>>();
-		tempUsingTrees = new ArrayList<CommonTree>();
-		indentUsingsLevel = new ArrayList<CSharpData>();
-	}
+    private final CSharpTreeConvertController treeConvertController;
+    private List<List<CommonTree>> usageTrees;
+    private String tempUsingName = "";
+    private List<CommonTree> tempUsingTrees;
+    private List<CSharpData> indentUsingsLevel;
 
-	public boolean usingCheck(CommonTree tree, boolean usage) {
-		int type = tree.getType();
-		if (type == USING) {
-			usage = startUsing();
-		}
-		if (usage && type != USING) {
-			aUsingPart(tree);
-		}
-		if (usage && type == SEMICOLON && !tempUsingName.equals("")) {
-			setIndentLevel();
-		}
-		if (usage && type == SEMICOLON) {
-			usage = false;
-		}
-		return usage;
-	}
+    public CSharpUsingConvertController(CSharpTreeConvertController treeConvertController) {
+        this.treeConvertController = treeConvertController;
+        usageTrees = new ArrayList<List<CommonTree>>();
+        tempUsingTrees = new ArrayList<CommonTree>();
+        indentUsingsLevel = new ArrayList<CSharpData>();
+    }
 
-	private void setIndentLevel() {
-		usageTrees.add(tempUsingTrees);
-		int indentLevel = treeConvertController.getIndentLevel();
-		CSharpData data = new CSharpData(tempUsingName,indentLevel);
-		indentUsingsLevel.add(data);
-	}
+    public boolean usingCheck(CommonTree tree, boolean usage) {
+        int type = tree.getType();
+        if (type == USING) {
+            usage = startUsing();
+        }
+        if (usage && type != USING) {
+            aUsingPart(tree);
+        }
+        if (usage && type == SEMICOLON && !tempUsingName.equals("")) {
+            setIndentLevel();
+        }
+        if (usage && type == SEMICOLON) {
+            usage = false;
+        }
+        return usage;
+    }
 
-	private void aUsingPart(CommonTree tree) {
-		tempUsingTrees.add(tree);
-		tempUsingName += tree.getText();
-	}
+    private void setIndentLevel() {
+        usageTrees.add(tempUsingTrees);
+        int indentLevel = treeConvertController.getIndentLevel();
+        CSharpData data = new CSharpData(tempUsingName, indentLevel);
+        indentUsingsLevel.add(data);
+    }
 
-	private boolean startUsing() {
-		tempUsingTrees = new ArrayList<CommonTree>();
-		tempUsingName = "";
-		return true;
-	}
+    private void aUsingPart(CommonTree tree) {
+        tempUsingTrees.add(tree);
+        tempUsingName += tree.getText();
+    }
 
-	public void createGenerators() {
-		for (List<CommonTree> trees : usageTrees) {
-			if (!trees.isEmpty() && !indentUsingsLevel.get(usageTrees.indexOf(trees)).getClosed()) {
-				new CSharpImportGenerator(trees, treeConvertController.getUniqueClassName());
-			}
-		}
-	}
+    private boolean startUsing() {
+        tempUsingTrees = new ArrayList<CommonTree>();
+        tempUsingName = "";
+        return true;
+    }
 
-	public void checkIfUsingsClosed(CommonTree tree) {
-		for (CSharpData classData : indentUsingsLevel) {
-			if (classData.getIntentLevel() == treeConvertController.getIndentLevel()) {
-				classData.setClosed(true);
-			}
-		}
-	}
+    public void createGenerators() {
+        for (List<CommonTree> trees : usageTrees) {
+            if (!trees.isEmpty() && !indentUsingsLevel.get(usageTrees.indexOf(trees)).getClosed()) {
+                new CSharpImportGenerator(trees, treeConvertController.getUniqueClassName());
+            }
+        }
+    }
+
+    public void checkIfUsingsClosed(CommonTree tree) {
+        for (CSharpData classData : indentUsingsLevel) {
+            if (classData.getIntentLevel() == treeConvertController.getIndentLevel()) {
+                classData.setClosed(true);
+            }
+        }
+    }
 }

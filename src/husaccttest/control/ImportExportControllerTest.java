@@ -17,43 +17,42 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ImportExportControllerTest {
-	
-	ImportController importController;
-	ExportController exportController;
-	
-	File testFile = new File("importExportTestFile.xml");
-	
-	@Before
-	public void setup(){
-		MainController mainController = new MainController();
-		importController = mainController.getImportController();
-		exportController = mainController.getExportController();
-	}
-	
-	@After
-	public void cleanUp(){
-		testFile.delete();
-	}
-	
-	@Test
-	public void testExport(){
-		exportController.exportArchitecture(testFile);
-		assertTrue(testFile.exists());
-	}
-	
-	@Test
-	public void testImport(){
-		exportController.exportArchitecture(testFile);
-		importController.importArchitecture(testFile);
-		SAXBuilder sax = new SAXBuilder();
-		Document testDoc = new Document();
-		try {
-			testDoc = sax.build(testFile);
-		} catch (Exception e) {
-		}
-		Element element = ServiceProvider.getInstance().getDefineService().getLogicalArchitectureData();
-		String originalRootElement = testDoc.getRootElement().toString();
-		String importedRootElement = element.toString();
-		assertEquals(originalRootElement, importedRootElement);
-	}
+
+    ImportController importController;
+    ExportController exportController;
+    File testFile = new File("importExportTestFile.xml");
+
+    @Before
+    public void setup() {
+        MainController mainController = new MainController();
+        importController = mainController.getImportController();
+        exportController = mainController.getExportController();
+    }
+
+    @After
+    public void cleanUp() {
+        testFile.delete();
+    }
+
+    @Test
+    public void testExport() {
+        exportController.exportArchitecture(testFile);
+        assertTrue(testFile.exists());
+    }
+
+    @Test
+    public void testImport() {
+        exportController.exportArchitecture(testFile);
+        importController.importArchitecture(testFile);
+        SAXBuilder sax = new SAXBuilder();
+        Document testDoc = new Document();
+        try {
+            testDoc = sax.build(testFile);
+        } catch (Exception e) {
+        }
+        Element element = ServiceProvider.getInstance().getDefineService().getLogicalArchitectureData();
+        String originalRootElement = testDoc.getRootElement().toString();
+        String importedRootElement = element.toString();
+        assertEquals(originalRootElement, importedRootElement);
+    }
 }

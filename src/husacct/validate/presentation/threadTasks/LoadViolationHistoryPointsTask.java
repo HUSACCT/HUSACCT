@@ -11,33 +11,32 @@ import org.apache.log4j.Logger;
 
 public class LoadViolationHistoryPointsTask implements Runnable {
 
-	private final JTable chooseViolationHistoryTable;
-	private final BrowseViolations browseViolations;
-	private final TaskServiceImpl taskServiceImpl;
-	private final JCheckBox applyFilter;
+    private final JTable chooseViolationHistoryTable;
+    private final BrowseViolations browseViolations;
+    private final TaskServiceImpl taskServiceImpl;
+    private final JCheckBox applyFilter;
+    private Logger logger = Logger.getLogger(LoadViolationHistoryPointsTask.class);
 
-	private Logger logger = Logger.getLogger(LoadViolationHistoryPointsTask.class);
+    public LoadViolationHistoryPointsTask(JTable chooseViolationHistoryTable, BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl, JCheckBox applyFilter) {
+        this.chooseViolationHistoryTable = chooseViolationHistoryTable;
+        this.browseViolations = browseViolations;
+        this.taskServiceImpl = taskServiceImpl;
+        this.applyFilter = applyFilter;
+    }
 
-	public LoadViolationHistoryPointsTask(JTable chooseViolationHistoryTable, BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl, JCheckBox applyFilter) {
-		this.chooseViolationHistoryTable = chooseViolationHistoryTable;
-		this.browseViolations = browseViolations;
-		this.taskServiceImpl = taskServiceImpl;
-		this.applyFilter = applyFilter;
-	}
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1);
 
-	@Override
-	public void run() {
-		try{
-			Thread.sleep(1);
-
-			int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
-			ViolationHistory selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
-			browseViolations.setSelectedViolationHistory(selectedViolationHistory);
-			browseViolations.loadAfterChange();
-			browseViolations.updateFilterValues();
-			applyFilter.setSelected(false);
-		}catch (InterruptedException e) {
-			logger.debug(e.getMessage());
-		}	
-	}
+            int row = chooseViolationHistoryTable.convertRowIndexToModel(chooseViolationHistoryTable.getSelectedRow());
+            ViolationHistory selectedViolationHistory = taskServiceImpl.getViolationHistories().get(row);
+            browseViolations.setSelectedViolationHistory(selectedViolationHistory);
+            browseViolations.loadAfterChange();
+            browseViolations.updateFilterValues();
+            applyFilter.setSelected(false);
+        } catch (InterruptedException e) {
+            logger.debug(e.getMessage());
+        }
+    }
 }

@@ -8,73 +8,74 @@ import husacct.validate.task.TaskServiceImpl;
 import javax.swing.JInternalFrame;
 
 public class GuiController {
-	private final TaskServiceImpl task;
-	private final ConfigurationServiceImpl configuration;
-	private BrowseViolations browseViolations;
-	private FilterViolations filterViolations;
-	private ConfigurationUI configurationUI;
 
-	public GuiController(TaskServiceImpl task, ConfigurationServiceImpl configuration){
-		this.task = task;	
-		this.configuration = configuration;
-		subscribeToLocalChangeListener();
-	}
+    private final TaskServiceImpl task;
+    private final ConfigurationServiceImpl configuration;
+    private BrowseViolations browseViolations;
+    private FilterViolations filterViolations;
+    private ConfigurationUI configurationUI;
 
-	private void subscribeToLocalChangeListener() {
-		ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				initializeAllScreens();
-				reloadGUIText();
-			}
-		});		
-	}
+    public GuiController(TaskServiceImpl task, ConfigurationServiceImpl configuration) {
+        this.task = task;
+        this.configuration = configuration;
+        subscribeToLocalChangeListener();
+    }
 
-	private void reloadGUIText(){		
-		browseViolations.loadText();
-		filterViolations.loadGUIText();
-		configurationUI.loadAfterChange();
-	}
+    private void subscribeToLocalChangeListener() {
+        ServiceProvider.getInstance().getLocaleService().addServiceListener(new IServiceListener() {
+            @Override
+            public void update() {
+                initializeAllScreens();
+                reloadGUIText();
+            }
+        });
+    }
 
-	public JInternalFrame getBrowseViolationsGUI(){
-		initializeBrowseViolations();
-		return browseViolations;
-	}
+    private void reloadGUIText() {
+        browseViolations.loadText();
+        filterViolations.loadGUIText();
+        configurationUI.loadAfterChange();
+    }
 
-	public JInternalFrame getConfigurationGUI(){
-		initializeConfigurationUI();
-		return configurationUI;
-	}
+    public JInternalFrame getBrowseViolationsGUI() {
+        initializeBrowseViolations();
+        return browseViolations;
+    }
 
-	public void violationChanged(){
-		if(browseViolations != null){
-			browseViolations.loadAfterChange();
-		}
-	}
+    public JInternalFrame getConfigurationGUI() {
+        initializeConfigurationUI();
+        return configurationUI;
+    }
 
-	private void initializeAllScreens(){
-		initializeBrowseViolations();
-		initializeConfigurationUI();
-		initializeFilterViolations();
-	}
+    public void violationChanged() {
+        if (browseViolations != null) {
+            browseViolations.loadAfterChange();
+        }
+    }
 
-	private void initializeBrowseViolations(){
-		if(browseViolations == null){
-			this.browseViolations = new BrowseViolations(task, configuration);
-			configuration.attachViolationHistoryRepositoryObserver(this.browseViolations);
-		}
-	}
+    private void initializeAllScreens() {
+        initializeBrowseViolations();
+        initializeConfigurationUI();
+        initializeFilterViolations();
+    }
 
-	private void initializeConfigurationUI(){
-		if(configurationUI == null){
-			this.configurationUI = new ConfigurationUI(task);
-		}
-	}
+    private void initializeBrowseViolations() {
+        if (browseViolations == null) {
+            this.browseViolations = new BrowseViolations(task, configuration);
+            configuration.attachViolationHistoryRepositoryObserver(this.browseViolations);
+        }
+    }
 
-	private void initializeFilterViolations(){
-		if(filterViolations == null){
-			initializeBrowseViolations();
-			this.filterViolations = new FilterViolations(task, browseViolations);
-		}
-	}
+    private void initializeConfigurationUI() {
+        if (configurationUI == null) {
+            this.configurationUI = new ConfigurationUI(task);
+        }
+    }
+
+    private void initializeFilterViolations() {
+        if (filterViolations == null) {
+            initializeBrowseViolations();
+            this.filterViolations = new FilterViolations(task, browseViolations);
+        }
+    }
 }

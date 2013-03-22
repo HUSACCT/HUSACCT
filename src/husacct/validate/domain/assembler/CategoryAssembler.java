@@ -10,42 +10,43 @@ import java.util.List;
 import java.util.Set;
 
 public class CategoryAssembler {
-	private RuletypeAssembler ruleAssembler;
 
-	public CategoryAssembler(){
-		this.ruleAssembler = new RuletypeAssembler();
-	}
+    private RuletypeAssembler ruleAssembler;
 
-	public CategoryDTO[] createCategoryDTO(List<RuleType> rules){
-		List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
-		List<String> categoryKeys = getCategoryKeyList(rules);
+    public CategoryAssembler() {
+        this.ruleAssembler = new RuletypeAssembler();
+    }
 
-		for(String key : categoryKeys){
-			List<RuleType> categoryRules = getRulesByCategorykey(rules, key);
+    public CategoryDTO[] createCategoryDTO(List<RuleType> rules) {
+        List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
+        List<String> categoryKeys = getCategoryKeyList(rules);
 
-			RuleTypeDTO[] ruletypes = ruleAssembler.createRuleTypeDTO(categoryRules);
-			categories.add(new CategoryDTO(key, ruletypes));
-		}
-		return categories.toArray(new CategoryDTO[categories.size()]);
-	}
+        for (String key : categoryKeys) {
+            List<RuleType> categoryRules = getRulesByCategorykey(rules, key);
 
-	private List<String> getCategoryKeyList(List<RuleType> rules){
-		Set<String> categoryKeys = new HashSet<String>();
+            RuleTypeDTO[] ruletypes = ruleAssembler.createRuleTypeDTO(categoryRules);
+            categories.add(new CategoryDTO(key, ruletypes));
+        }
+        return categories.toArray(new CategoryDTO[categories.size()]);
+    }
 
-		for(RuleType rule : rules){
-			categoryKeys.add(rule.getCategoryKey());
-		}
-		return new ArrayList<String>(categoryKeys);
-	}
+    private List<String> getCategoryKeyList(List<RuleType> rules) {
+        Set<String> categoryKeys = new HashSet<String>();
 
-	private List<RuleType> getRulesByCategorykey(List<RuleType> rules, String categoryKey){
-		List<RuleType> categoryRules = new ArrayList<RuleType>();
+        for (RuleType rule : rules) {
+            categoryKeys.add(rule.getCategoryKey());
+        }
+        return new ArrayList<String>(categoryKeys);
+    }
 
-		for(RuleType rule : rules){
-			if(rule.getCategoryKey().equals(categoryKey)){
-				categoryRules.add(rule);
-			}
-		}
-		return categoryRules;
-	}
+    private List<RuleType> getRulesByCategorykey(List<RuleType> rules, String categoryKey) {
+        List<RuleType> categoryRules = new ArrayList<RuleType>();
+
+        for (RuleType rule : rules) {
+            if (rule.getCategoryKey().equals(categoryKey)) {
+                categoryRules.add(rule);
+            }
+        }
+        return categoryRules;
+    }
 }

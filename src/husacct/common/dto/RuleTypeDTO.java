@@ -1,31 +1,32 @@
 package husacct.common.dto;
 
 public class RuleTypeDTO extends AbstractDTO {
-	public final String key;
-	public final String descriptionKey;
-	public final ViolationTypeDTO[] violationTypes;
-	public final RuleTypeDTO[] exceptionRuleTypes;
 
-	public RuleTypeDTO(String key, String description, ViolationTypeDTO[] violationTypes, RuleTypeDTO[] exceptionRuleTypes) {
-		this.key = key;
-		this.descriptionKey = description;
-		this.violationTypes = violationTypes;
-		this.exceptionRuleTypes = exceptionRuleTypes;
-	}
+    public final String key;
+    public final String descriptionKey;
+    public final ViolationTypeDTO[] violationTypes;
+    public final RuleTypeDTO[] exceptionRuleTypes;
 
-	public String getKey() {
-		return key;
-	}
+    public RuleTypeDTO(String key, String description, ViolationTypeDTO[] violationTypes, RuleTypeDTO[] exceptionRuleTypes) {
+        this.key = key;
+        this.descriptionKey = description;
+        this.violationTypes = violationTypes;
+        this.exceptionRuleTypes = exceptionRuleTypes;
+    }
 
-	public String getDescriptionKey() {
-		return descriptionKey;
-	}
+    public String getKey() {
+        return key;
+    }
 
-	public ViolationTypeDTO[] getViolationTypes() {
-		return violationTypes;
-	}
+    public String getDescriptionKey() {
+        return descriptionKey;
+    }
 
-	public RuleTypeDTO[] getExceptionRuleTypes() {
-		return exceptionRuleTypes;
-	}
+    public ViolationTypeDTO[] getViolationTypes() {
+        return violationTypes;
+    }
+
+    public RuleTypeDTO[] getExceptionRuleTypes() {
+        return exceptionRuleTypes;
+    }
 }

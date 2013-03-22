@@ -22,106 +22,106 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class ViolationTypesJDialog extends JDialog{
+public class ViolationTypesJDialog extends JDialog {
 
-	private static final long serialVersionUID = 6413960215557327449L;
-	private HashMap<String, JCheckBox> violationCheckBoxHashMap;
-	protected AppliedRuleController appliedRuleController;
-	
-	public ViolationTypesJDialog(AppliedRuleController appliedRuleController) {
-		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
-		this.appliedRuleController = appliedRuleController;
-		violationCheckBoxHashMap = new HashMap<String, JCheckBox>();
-		initDetails();
-	}
-	
-	private void initDetails(){
-		//TODO imo the DTO should not be known in presentation layer
-		String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
-		ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
-		
-		for (ViolationTypeDTO vt : violationTypeDtoList){
-			JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
-			jCheckBox.setSelected(vt.isDefault);
-			violationCheckBoxHashMap.put(vt.key, jCheckBox);
-		}
-	}
-	
-	public void initGUI(){
-		try {
-			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			this.setTitle("Violation Types");
-			this.setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
-			
-			this.getContentPane().removeAll();
-			getContentPane().add(this.createViolationPanel(), BorderLayout.CENTER);
-			
-			this.setResizable(false);
-			this.pack();
-			this.setSize(300, 300);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void load(HashMap<String, Object> ruleDetails) {
-		String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
-		ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
-		
-		String[] dependencies = (String[]) ruleDetails.get("dependencies");
-		
-		for (ViolationTypeDTO vt : violationTypeDtoList){
-			JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
-			jCheckBox.setSelected(false);
-			for (String dependency : dependencies){
-				if (dependency.equals(vt.key)){
-					jCheckBox.setSelected(true);
-				}
-			}
-			violationCheckBoxHashMap.put(vt.key, jCheckBox);
-		}
-	}
+    private static final long serialVersionUID = 6413960215557327449L;
+    private HashMap<String, JCheckBox> violationCheckBoxHashMap;
+    protected AppliedRuleController appliedRuleController;
 
-	private Component createViolationPanel() {
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(this.createViolationsLayout());
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		
-		GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
-		
-		Set<String> collection = violationCheckBoxHashMap.keySet();
-	    //Iterate through HashMap values iterator
-	    for(String key : collection) {
-	    	JCheckBox currentCheckBox = violationCheckBoxHashMap.get(key);
-	    	mainPanel.add(currentCheckBox, gridBagConstraints);
-	    	gridBagConstraints.gridy++;
-	  	}
-	    mainPanel.setVisible(true);
-		return mainPanel;
-	}
+    public ViolationTypesJDialog(AppliedRuleController appliedRuleController) {
+        super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+        this.appliedRuleController = appliedRuleController;
+        violationCheckBoxHashMap = new HashMap<String, JCheckBox>();
+        initDetails();
+    }
 
-	private GridBagLayout createViolationsLayout() {
-		GridBagLayout mainPanelLayout = new GridBagLayout();
-		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.1 };
-		mainPanelLayout.rowHeights = new int[] { 30, 23, 6, 0 };
-		mainPanelLayout.columnWeights = new double[] { 0.0, 0.1 };
-		mainPanelLayout.columnWidths = new int[] { 132, 7 };
-		return mainPanelLayout;
-	}
+    private void initDetails() {
+        //TODO imo the DTO should not be known in presentation layer
+        String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
+        ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
 
-	public String[] save() {	
-		ArrayList<String> dependencyList = new ArrayList<String>();
-		
-	    Set<String> collection = violationCheckBoxHashMap.keySet();
-	    //iterate through HashMap values iterator
-	    for(String key : collection) {
-	    	JCheckBox currentCheckBox = violationCheckBoxHashMap.get(key);
-	    	if (currentCheckBox.isSelected()){
-	    		dependencyList.add(key);
-	    	}
-	  	}
-		
-		String[] dependencies = dependencyList.toArray(new String[dependencyList.size()]);
-		return dependencies;
-	}
+        for (ViolationTypeDTO vt : violationTypeDtoList) {
+            JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
+            jCheckBox.setSelected(vt.isDefault);
+            violationCheckBoxHashMap.put(vt.key, jCheckBox);
+        }
+    }
+
+    public void initGUI() {
+        try {
+            this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            this.setTitle("Violation Types");
+            this.setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
+
+            this.getContentPane().removeAll();
+            getContentPane().add(this.createViolationPanel(), BorderLayout.CENTER);
+
+            this.setResizable(false);
+            this.pack();
+            this.setSize(300, 300);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load(HashMap<String, Object> ruleDetails) {
+        String selectedRuleTypeKey = this.appliedRuleController.getSelectedRuleTypeKey();
+        ArrayList<ViolationTypeDTO> violationTypeDtoList = this.appliedRuleController.getViolationTypesByRuleType(selectedRuleTypeKey);
+
+        String[] dependencies = (String[]) ruleDetails.get("dependencies");
+
+        for (ViolationTypeDTO vt : violationTypeDtoList) {
+            JCheckBox jCheckBox = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString(vt.key));
+            jCheckBox.setSelected(false);
+            for (String dependency : dependencies) {
+                if (dependency.equals(vt.key)) {
+                    jCheckBox.setSelected(true);
+                }
+            }
+            violationCheckBoxHashMap.put(vt.key, jCheckBox);
+        }
+    }
+
+    private Component createViolationPanel() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(this.createViolationsLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
+
+        Set<String> collection = violationCheckBoxHashMap.keySet();
+        //Iterate through HashMap values iterator
+        for (String key : collection) {
+            JCheckBox currentCheckBox = violationCheckBoxHashMap.get(key);
+            mainPanel.add(currentCheckBox, gridBagConstraints);
+            gridBagConstraints.gridy++;
+        }
+        mainPanel.setVisible(true);
+        return mainPanel;
+    }
+
+    private GridBagLayout createViolationsLayout() {
+        GridBagLayout mainPanelLayout = new GridBagLayout();
+        mainPanelLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.1};
+        mainPanelLayout.rowHeights = new int[]{30, 23, 6, 0};
+        mainPanelLayout.columnWeights = new double[]{0.0, 0.1};
+        mainPanelLayout.columnWidths = new int[]{132, 7};
+        return mainPanelLayout;
+    }
+
+    public String[] save() {
+        ArrayList<String> dependencyList = new ArrayList<String>();
+
+        Set<String> collection = violationCheckBoxHashMap.keySet();
+        //iterate through HashMap values iterator
+        for (String key : collection) {
+            JCheckBox currentCheckBox = violationCheckBoxHashMap.get(key);
+            if (currentCheckBox.isSelected()) {
+                dependencyList.add(key);
+            }
+        }
+
+        String[] dependencies = dependencyList.toArray(new String[dependencyList.size()]);
+        return dependencies;
+    }
 }

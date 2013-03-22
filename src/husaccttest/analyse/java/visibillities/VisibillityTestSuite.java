@@ -5,11 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AttributeVisibillityTest.class,
-	ClassVisibillityTest.class, 
-	InterfaceVisibillityTest.class
+    AttributeVisibillityTest.class,
+    ClassVisibillityTest.class,
+    InterfaceVisibillityTest.class
 })
-
 public class VisibillityTestSuite {
-
 }

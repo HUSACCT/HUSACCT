@@ -3,143 +3,146 @@ package husacct.analyse.task.analyser.csharp;
 import java.util.ArrayList;
 
 public class CSharpData {
-	private String className;
-	private String uniqueName;
-	private int intentLevel;
-	private boolean closed = false;
-	private String parentClass;
-	private boolean hasParent;
-	private String belongsToPackage;
-	private boolean isAbstract;
-	private int lineNumber;
-	private String invocationName;
-	private String invocationTo;
-	private String inheritanceTo;
-	public String inheritanceFrom;
-	private ArrayList<String> moreInherit = new ArrayList<String>();
-	
-	public CSharpData(String className, int intentLevel, String belongsToPackage) {
-		this.className = className;
-		this.intentLevel = intentLevel;
-		this.belongsToPackage = belongsToPackage;
-	}
-	
-	public CSharpData() {
-		super();
-	}
 
-	public CSharpData(String tempNamespaceName, int indentLevel) {
-		this.className = tempNamespaceName;
-		this.intentLevel = indentLevel;
-	}
+    private String className;
+    private String uniqueName;
+    private int intentLevel;
+    private boolean closed = false;
+    private String parentClass;
+    private boolean hasParent;
+    private String belongsToPackage;
+    private boolean isAbstract;
+    private int lineNumber;
+    private String invocationName;
+    private String invocationTo;
+    private String inheritanceTo;
+    public String inheritanceFrom;
+    private ArrayList<String> moreInherit = new ArrayList<String>();
 
-	public ArrayList<String> getInherits()
-	{
-		return moreInherit;
-	}
-	
-	public void addInherit(String to)
-	{
-		moreInherit.add(to);
-	}
-	
-	public void setClassName(String className) {
-		this.className = className;
-	}
-	public String getClassName() {
-		return className;
-	}
-	public void setIntentLevel(int intentLevel) {
-		this.intentLevel = intentLevel;
-	}
-	public int getIntentLevel() {
-		return intentLevel;
-	}
-	public void setClosed(boolean closed) {
-		this.closed = closed;
-	}
-	public boolean getClosed() {
-		return closed;
-	}
+    public CSharpData(String className, int intentLevel, String belongsToPackage) {
+        this.className = className;
+        this.intentLevel = intentLevel;
+        this.belongsToPackage = belongsToPackage;
+    }
 
-	public void setParentClass(String parentClass) {
-		this.parentClass = parentClass;
-	}
+    public CSharpData() {
+        super();
+    }
 
-	public String getParentClass() {
-		return parentClass;
-	}
+    public CSharpData(String tempNamespaceName, int indentLevel) {
+        this.className = tempNamespaceName;
+        this.intentLevel = indentLevel;
+    }
 
-	public void setHasParent(boolean hasParent) {
-		this.hasParent = hasParent;
-	}
+    public ArrayList<String> getInherits() {
+        return moreInherit;
+    }
 
-	public boolean isHasParent() {
-		return hasParent;
-	}
+    public void addInherit(String to) {
+        moreInherit.add(to);
+    }
 
-	public void setUniqueName(String uniqueName) {
-		this.uniqueName = uniqueName;
-	}
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
-	public String getUniqueName() {
-		return uniqueName;
-	}
+    public String getClassName() {
+        return className;
+    }
 
-	public void setBelongsToPackage(String belongsToPackage) {
-		this.belongsToPackage = belongsToPackage;
-	}
+    public void setIntentLevel(int intentLevel) {
+        this.intentLevel = intentLevel;
+    }
 
-	public String getBelongsToPackage() {
-		return belongsToPackage;
-	}
+    public int getIntentLevel() {
+        return intentLevel;
+    }
 
-	public void setAbstract(boolean isAbstract) {
-		this.isAbstract = isAbstract;
-	}
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
 
-	public boolean isAbstract() {
-		return isAbstract;
-	}
+    public boolean getClosed() {
+        return closed;
+    }
 
-	public String getInheritanceFrom() {
-		return inheritanceFrom;
-	}
+    public void setParentClass(String parentClass) {
+        this.parentClass = parentClass;
+    }
 
-	public void setInheritanceFrom(String inheritanceClass) {
-		this.inheritanceFrom = inheritanceClass;
-	}
+    public String getParentClass() {
+        return parentClass;
+    }
 
-	public String getInheritanceTo() {
-		return inheritanceTo;
-	}
+    public void setHasParent(boolean hasParent) {
+        this.hasParent = hasParent;
+    }
 
-	public void setInheritanceTo(String inheritanceTo) {
-		this.inheritanceTo = inheritanceTo;
-	}
+    public boolean isHasParent() {
+        return hasParent;
+    }
 
-	public int getLineNumber() {
-		return lineNumber;
-	}
+    public void setUniqueName(String uniqueName) {
+        this.uniqueName = uniqueName;
+    }
 
-	public void setLineNumber(int lineNumber) {
-		this.lineNumber = lineNumber;
-	}
+    public String getUniqueName() {
+        return uniqueName;
+    }
 
-	public String getInvocationName() {
-		return invocationName;
-	}
+    public void setBelongsToPackage(String belongsToPackage) {
+        this.belongsToPackage = belongsToPackage;
+    }
 
-	public void setInvocationName(String invocationName) {
-		this.invocationName = invocationName;
-	}
+    public String getBelongsToPackage() {
+        return belongsToPackage;
+    }
 
-	public String getInvocationTo() {
-		return invocationTo;
-	}
+    public void setAbstract(boolean isAbstract) {
+        this.isAbstract = isAbstract;
+    }
 
-	public void setInvocationTo(String invocationTo) {
-		this.invocationTo = invocationTo;
-	}
-	
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+
+    public String getInheritanceFrom() {
+        return inheritanceFrom;
+    }
+
+    public void setInheritanceFrom(String inheritanceClass) {
+        this.inheritanceFrom = inheritanceClass;
+    }
+
+    public String getInheritanceTo() {
+        return inheritanceTo;
+    }
+
+    public void setInheritanceTo(String inheritanceTo) {
+        this.inheritanceTo = inheritanceTo;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public String getInvocationName() {
+        return invocationName;
+    }
+
+    public void setInvocationName(String invocationName) {
+        this.invocationName = invocationName;
+    }
+
+    public String getInvocationTo() {
+        return invocationTo;
+    }
+
+    public void setInvocationTo(String invocationTo) {
+        this.invocationTo = invocationTo;
+    }
 }

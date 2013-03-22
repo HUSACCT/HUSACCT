@@ -14,80 +14,80 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-class ViolationtypeGenerator {	
-	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
+class ViolationtypeGenerator {
 
-	List<CategoryKeySeverityDTO> getAllViolationTypes(List<IViolationType> violationtypes){
-		return new ArrayList<CategoryKeySeverityDTO>(getClasses(violationtypes));		
-	}
+    private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
 
-	private Set<CategoryKeySeverityDTO> getClasses(List<IViolationType> violationtypes) {
-		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
+    List<CategoryKeySeverityDTO> getAllViolationTypes(List<IViolationType> violationtypes) {
+        return new ArrayList<CategoryKeySeverityDTO>(getClasses(violationtypes));
+    }
 
-		Set<Class<?>> scannedClasses = new HashSet<Class<?>>();
-		for(IViolationType type : violationtypes){
-			Class<?> scannedClass = type.getClass();
-			if(scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)){
-				scannedClasses.add(scannedClass);
-			}
-		}		
-		keyList.addAll(generateViolationTypes(scannedClasses));
-		return keyList;
-	}
+    private Set<CategoryKeySeverityDTO> getClasses(List<IViolationType> violationtypes) {
+        Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
 
-	private boolean hasIViolationTypeInterface(Class<?> scannedClass){
-		Class<?>[] interfaces = scannedClass.getInterfaces();
-		for(Class<?> violationInterface : interfaces){
-			if(violationInterface.getSimpleName().equals("IViolationType")){
-				return true;
-			}
-		}		
-		return false;		
-	}
+        Set<Class<?>> scannedClasses = new HashSet<Class<?>>();
+        for (IViolationType type : violationtypes) {
+            Class<?> scannedClass = type.getClass();
+            if (scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)) {
+                scannedClasses.add(scannedClass);
+            }
+        }
+        keyList.addAll(generateViolationTypes(scannedClasses));
+        return keyList;
+    }
 
-	private Set<CategoryKeySeverityDTO> generateViolationTypes(Set<Class<?>> scannedClasses){
-		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
+    private boolean hasIViolationTypeInterface(Class<?> scannedClass) {
+        Class<?>[] interfaces = scannedClass.getInterfaces();
+        for (Class<?> violationInterface : interfaces) {
+            if (violationInterface.getSimpleName().equals("IViolationType")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-		Iterator<Class<?>> it = scannedClasses.iterator();
-		while(it.hasNext()){
-			Class<?> scannedClass = it.next();
-			for(Object enumValue : scannedClass.getEnumConstants()){
-				Class<?> enumClass = enumValue.getClass();
-				try {
-					Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
-					String category = (String) getCategoryMethod.invoke(enumValue);
+    private Set<CategoryKeySeverityDTO> generateViolationTypes(Set<Class<?>> scannedClasses) {
+        Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
 
-					Method getDefaultSeverityMethod = enumClass.getDeclaredMethod("getDefaultSeverity");
-					DefaultSeverities defaultSeverity = (DefaultSeverities) getDefaultSeverityMethod.invoke(enumValue);
+        Iterator<Class<?>> it = scannedClasses.iterator();
+        while (it.hasNext()) {
+            Class<?> scannedClass = it.next();
+            for (Object enumValue : scannedClass.getEnumConstants()) {
+                Class<?> enumClass = enumValue.getClass();
+                try {
+                    Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
+                    String category = (String) getCategoryMethod.invoke(enumValue);
 
-					if(!containsViolationTypeInSet(keyList, enumValue.toString())){									
-						keyList.add(new CategoryKeySeverityDTO(enumValue.toString(), category, defaultSeverity));
-					}								
-					else{
-						logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
-					}									
-				} catch (SecurityException e) {
-					logger.error(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
-					logger.error(e.getMessage(), e);
-				} catch (IllegalArgumentException e) {
-					logger.error(e.getMessage(), e);
-				} catch (IllegalAccessException e) {
-					logger.error(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
-					logger.error(e.getMessage(), e);
-				}								
-			}
-		}
-		return keyList;
-	}
+                    Method getDefaultSeverityMethod = enumClass.getDeclaredMethod("getDefaultSeverity");
+                    DefaultSeverities defaultSeverity = (DefaultSeverities) getDefaultSeverityMethod.invoke(enumValue);
 
-	private boolean containsViolationTypeInSet(Set<CategoryKeySeverityDTO> keyList, String key){
-		for(CategoryKeySeverityDTO dto : keyList){
-			if(dto.getKey().toLowerCase().equals(key.toLowerCase())){
-				return true;
-			}
-		}
-		return false;
-	}
+                    if (!containsViolationTypeInSet(keyList, enumValue.toString())) {
+                        keyList.add(new CategoryKeySeverityDTO(enumValue.toString(), category, defaultSeverity));
+                    } else {
+                        logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
+                    }
+                } catch (SecurityException e) {
+                    logger.error(e.getMessage(), e);
+                } catch (NoSuchMethodException e) {
+                    logger.error(e.getMessage(), e);
+                } catch (IllegalArgumentException e) {
+                    logger.error(e.getMessage(), e);
+                } catch (IllegalAccessException e) {
+                    logger.error(e.getMessage(), e);
+                } catch (InvocationTargetException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+        return keyList;
+    }
+
+    private boolean containsViolationTypeInSet(Set<CategoryKeySeverityDTO> keyList, String key) {
+        for (CategoryKeySeverityDTO dto : keyList) {
+            if (dto.getKey().toLowerCase().equals(key.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

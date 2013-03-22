@@ -1,19 +1,20 @@
 package husacct.common.dto;
 
 public class CategoryDTO extends AbstractDTO {
-	public final String key;
-	public final RuleTypeDTO[] ruleTypes;
 
-	public CategoryDTO(String key, RuleTypeDTO[] ruleTypes) {
-		this.key = key;
-		this.ruleTypes = ruleTypes;
-	}
+    public final String key;
+    public final RuleTypeDTO[] ruleTypes;
 
-	public String getKey() {
-		return key;
-	}
+    public CategoryDTO(String key, RuleTypeDTO[] ruleTypes) {
+        this.key = key;
+        this.ruleTypes = ruleTypes;
+    }
 
-	public RuleTypeDTO[] getRuleTypes() {
-		return ruleTypes;
-	}
+    public String getKey() {
+        return key;
+    }
+
+    public RuleTypeDTO[] getRuleTypes() {
+        return ruleTypes;
+    }
 }

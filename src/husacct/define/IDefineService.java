@@ -11,18 +11,26 @@ import javax.swing.JInternalFrame;
 import org.jdom2.Element;
 
 public interface IDefineService extends ISaveable, IObservableService {
-	
-	public RuleDTO[] getDefinedRules();
-	public ModuleDTO[] getRootModules();
-	public ApplicationDTO getApplicationDetails();
-	public void createApplication(String name, String[] paths, String language, String version);
-	public ModuleDTO[] getChildrenFromModule(String logicalPath);
-	public String getParentFromModule(String logicalPath);
-	public boolean isDefined();
-	public boolean isMapped();
-	
-	public JInternalFrame getDefinedGUI();
-	
-	public Element getLogicalArchitectureData();
-	public void loadLogicalArchitectureData(Element e);
+
+    public RuleDTO[] getDefinedRules();
+
+    public ModuleDTO[] getRootModules();
+
+    public ApplicationDTO getApplicationDetails();
+
+    public void createApplication(String name, String[] paths, String language, String version);
+
+    public ModuleDTO[] getChildrenFromModule(String logicalPath);
+
+    public String getParentFromModule(String logicalPath);
+
+    public boolean isDefined();
+
+    public boolean isMapped();
+
+    public JInternalFrame getDefinedGUI();
+
+    public Element getLogicalArchitectureData();
+
+    public void loadLogicalArchitectureData(Element e);
 }

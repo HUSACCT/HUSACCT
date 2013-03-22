@@ -18,41 +18,40 @@ import java.util.List;
 
 public class SubClassConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+    private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	public SubClassConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
-	}
+    public SubClassConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+        super(key, category, violationtypes, exceptionrules, severity);
+    }
 
-	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+    @Override
+    public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+        this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+        this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+        List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+        List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+        DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){	
-			int dependencyCounter = 0;
-			for(Mapping classPathTo : physicalClasspathsTo){
-				for(DependencyDTO dependency : dependencies){
-					if(dependency.from.equals(classPathFrom.getPhysicalPath())){
-						if(dependency.to.equals(classPathTo.getPhysicalPath())){
-							if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
-								dependencyCounter++;					
-							}
-						}
-					}
-				}				 			
-			}
-			if(dependencyCounter == 0 && physicalClasspathsTo.size() != 0){
-				Violation violation = createViolation(rootRule, classPathFrom, configuration);
-				violations.add(violation);
-			}
-		}
-		return violations;
-	}
+        for (Mapping classPathFrom : physicalClasspathsFrom) {
+            int dependencyCounter = 0;
+            for (Mapping classPathTo : physicalClasspathsTo) {
+                for (DependencyDTO dependency : dependencies) {
+                    if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
+                        if (dependency.to.equals(classPathTo.getPhysicalPath())) {
+                            if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                                dependencyCounter++;
+                            }
+                        }
+                    }
+                }
+            }
+            if (dependencyCounter == 0 && physicalClasspathsTo.size() != 0) {
+                Violation violation = createViolation(rootRule, classPathFrom, configuration);
+                violations.add(violation);
+            }
+        }
+        return violations;
+    }
 }
-

@@ -8,27 +8,28 @@ import java.util.Calendar;
 import java.util.List;
 
 class ViolationRepository {
-	private List<Violation> violations;
-	private Calendar date;
 
-	ViolationRepository(){
-		this.violations = new ArrayList<Violation>();
-		this.date = Calendar.getInstance();
-	}	
+    private List<Violation> violations;
+    private Calendar date;
 
-	void addViolation(List<Violation> newViolations){
-		this.violations = newViolations;
-	}
+    ViolationRepository() {
+        this.violations = new ArrayList<Violation>();
+        this.date = Calendar.getInstance();
+    }
 
-	void addViolation(Violation violation){
-		this.violations.add(violation);
-	}
+    void addViolation(List<Violation> newViolations) {
+        this.violations = newViolations;
+    }
 
-	SimpleEntry<Calendar, List<Violation>> getAllViolations(){
-		return new SimpleEntry<Calendar, List<Violation>>(date, violations);
-	}
+    void addViolation(Violation violation) {
+        this.violations.add(violation);
+    }
 
-	void clear(){
-		this.violations = new ArrayList<Violation>();
-	}
+    SimpleEntry<Calendar, List<Violation>> getAllViolations() {
+        return new SimpleEntry<Calendar, List<Violation>>(date, violations);
+    }
+
+    void clear() {
+        this.violations = new ArrayList<Violation>();
+    }
 }

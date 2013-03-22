@@ -24,240 +24,241 @@ import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
 public class RelationFigure extends BaseFigure implements ConnectionFigure, FigureListener {
-	private static final long serialVersionUID = 1805821357919823648L;
-	private LineConnectionFigure line;
-	private TextFigure amountFigure;
 
-	public RelationFigure(String name, boolean violated, int amount) {
-		super(name);
+    private static final long serialVersionUID = 1805821357919823648L;
+    private LineConnectionFigure line;
+    private TextFigure amountFigure;
 
-		line = new LineConnectionFigure();
-		add(line);
+    public RelationFigure(String name, boolean violated, int amount) {
+        super(name);
 
-		amountFigure = new TextFigure(Integer.toString(amount));
-		add(amountFigure);
+        line = new LineConnectionFigure();
+        add(line);
 
-		line.addFigureListener(this);
-	}
+        amountFigure = new TextFigure(Integer.toString(amount));
+        add(amountFigure);
 
-	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		line.updateConnection();
-		relayout();
-	}
+        line.addFigureListener(this);
+    }
 
-	private void relayout() {
-		double midX = line.getBounds().x + line.getBounds().width / 2;
-		double midY = line.getBounds().y + line.getBounds().height / 2;
+    @Override
+    public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+        line.updateConnection();
+        relayout();
+    }
 
-		amountFigure.willChange();
-		amountFigure.setBounds(new Point2D.Double(midX, midY), null);
-		amountFigure.changed();
-	}
+    private void relayout() {
+        double midX = line.getBounds().x + line.getBounds().width / 2;
+        double midY = line.getBounds().y + line.getBounds().height / 2;
 
-	public void transform(AffineTransform tx) {
-		line.updateConnection();
-		relayout();
-	}
+        amountFigure.willChange();
+        amountFigure.setBounds(new Point2D.Double(midX, midY), null);
+        amountFigure.changed();
+    }
 
-	public void setLineColor(Color newColor) {
-		set(AttributeKeys.STROKE_COLOR, newColor);
-		amountFigure.set(AttributeKeys.TEXT_COLOR, newColor);
-	}
+    public void transform(AffineTransform tx) {
+        line.updateConnection();
+        relayout();
+    }
 
-	public void setLineThickness(double thickness) {
-		set(AttributeKeys.STROKE_WIDTH, thickness);
-	}
+    public void setLineColor(Color newColor) {
+        set(AttributeKeys.STROKE_COLOR, newColor);
+        amountFigure.set(AttributeKeys.TEXT_COLOR, newColor);
+    }
 
-	@Override
-	public void draw(Graphics2D graphics) {
-		ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
-		set(AttributeKeys.END_DECORATION, arrowTip);
+    public void setLineThickness(double thickness) {
+        set(AttributeKeys.STROKE_WIDTH, thickness);
+    }
 
-		double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
-		set(AttributeKeys.STROKE_DASHES, new double[] { 6.0, dashes });
+    @Override
+    public void draw(Graphics2D graphics) {
+        ArrowTip arrowTip = new ArrowTip(0.5, 12, 3.0);
+        set(AttributeKeys.END_DECORATION, arrowTip);
 
-		super.draw(graphics);
-	}
+        double dashes = 4.0 / this.get(AttributeKeys.STROKE_WIDTH);
+        set(AttributeKeys.STROKE_DASHES, new double[]{6.0, dashes});
 
-	@Override
-	public Collection<Handle> createHandles(int detailLevel) {
-		ArrayList<Handle> handles = new ArrayList<Handle>(getNodeCount());
-		switch (detailLevel) {
-		case -1:
-			handles.add(new BezierOutlineHandle(line, true));
-			break;
-		case 0:
-			handles.add(new BezierOutlineHandle(line));
-			if (getLiner() == null) {
-				for (int i = 1, n = getNodeCount() - 1; i < n; i++) {
-					handles.add(new BezierNodeHandle(line, i));
-				}
-			}
-			break;
-		}
-		return handles;
-	}
+        super.draw(graphics);
+    }
 
-	@Override
-	public RelationFigure clone() {
-		RelationFigure other = (RelationFigure) super.clone();
-		other.children = new ArrayList<Figure>();
-		other.line = line.clone();
-		other.children.add(other.line);
-		other.amountFigure = amountFigure.clone();
-		other.children.add(other.amountFigure);
+    @Override
+    public Collection<Handle> createHandles(int detailLevel) {
+        ArrayList<Handle> handles = new ArrayList<Handle>(getNodeCount());
+        switch (detailLevel) {
+            case -1:
+                handles.add(new BezierOutlineHandle(line, true));
+                break;
+            case 0:
+                handles.add(new BezierOutlineHandle(line));
+                if (getLiner() == null) {
+                    for (int i = 1, n = getNodeCount() - 1; i < n; i++) {
+                        handles.add(new BezierNodeHandle(line, i));
+                    }
+                }
+                break;
+        }
+        return handles;
+    }
 
-		return other;
-	}
+    @Override
+    public RelationFigure clone() {
+        RelationFigure other = (RelationFigure) super.clone();
+        other.children = new ArrayList<Figure>();
+        other.line = line.clone();
+        other.children.add(other.line);
+        other.amountFigure = amountFigure.clone();
+        other.children.add(other.amountFigure);
 
-	@Override
-	public void setStartConnector(Connector start) {
-		line.setStartConnector(start);
-	}
+        return other;
+    }
 
-	@Override
-	public Connector getStartConnector() {
-		return line.getStartConnector();
-	}
+    @Override
+    public void setStartConnector(Connector start) {
+        line.setStartConnector(start);
+    }
 
-	@Override
-	public void setEndConnector(Connector end) {
-		line.setEndConnector(end);
-	}
+    @Override
+    public Connector getStartConnector() {
+        return line.getStartConnector();
+    }
 
-	@Override
-	public Connector getEndConnector() {
-		return line.getEndConnector();
-	}
+    @Override
+    public void setEndConnector(Connector end) {
+        line.setEndConnector(end);
+    }
 
-	@Override
-	public void updateConnection() {
-		line.updateConnection();
-		relayout();
-	}
+    @Override
+    public Connector getEndConnector() {
+        return line.getEndConnector();
+    }
 
-	@Override
-	public boolean canConnect(Connector start, Connector end) {
-		return line.canConnect(start, end);
-	}
+    @Override
+    public void updateConnection() {
+        line.updateConnection();
+        relayout();
+    }
 
-	@Override
-	public boolean canConnect(Connector start) {
-		return line.canConnect(start);
-	}
+    @Override
+    public boolean canConnect(Connector start, Connector end) {
+        return line.canConnect(start, end);
+    }
 
-	@Override
-	public void setStartPoint(Double p) {
-		line.setStartPoint(p);
-	}
+    @Override
+    public boolean canConnect(Connector start) {
+        return line.canConnect(start);
+    }
 
-	@Override
-	public void setEndPoint(Double p) {
-		line.setEndPoint(p);
-	}
+    @Override
+    public void setStartPoint(Double p) {
+        line.setStartPoint(p);
+    }
 
-	@Override
-	public void setPoint(int index, Double p) {
-		line.setPoint(index, p);
-	}
+    @Override
+    public void setEndPoint(Double p) {
+        line.setEndPoint(p);
+    }
 
-	@Override
-	public int getNodeCount() {
-		return line.getNodeCount();
-	}
+    @Override
+    public void setPoint(int index, Double p) {
+        line.setPoint(index, p);
+    }
 
-	@Override
-	public Double getPoint(int index) {
-		return line.getPoint(index);
-	}
+    @Override
+    public int getNodeCount() {
+        return line.getNodeCount();
+    }
 
-	@Override
-	public Node getNode(int index) {
-		return line.getNode(index);
-	}
+    @Override
+    public Double getPoint(int index) {
+        return line.getPoint(index);
+    }
 
-	@Override
-	public void setNode(int index, Node node) {
-		line.setNode(index, node);
-	}
+    @Override
+    public Node getNode(int index) {
+        return line.getNode(index);
+    }
 
-	@Override
-	public Figure getStartFigure() {
-		return line.getStartFigure();
-	}
+    @Override
+    public void setNode(int index, Node node) {
+        line.setNode(index, node);
+    }
 
-	@Override
-	public Figure getEndFigure() {
-		return line.getEndFigure();
-	}
+    @Override
+    public Figure getStartFigure() {
+        return line.getStartFigure();
+    }
 
-	@Override
-	public Liner getLiner() {
-		return line.getLiner();
-	}
+    @Override
+    public Figure getEndFigure() {
+        return line.getEndFigure();
+    }
 
-	@Override
-	public void setLiner(Liner newValue) {
-		this.willChange();
-		line.setLiner(newValue);
-		this.changed();
-	}
+    @Override
+    public Liner getLiner() {
+        return line.getLiner();
+    }
 
-	@Override
-	public void lineout() {
-		line.lineout();
-	}
+    @Override
+    public void setLiner(Liner newValue) {
+        this.willChange();
+        line.setLiner(newValue);
+        this.changed();
+    }
 
-	@Override
-	public boolean isLine() {
-		return true;
-	}
+    @Override
+    public void lineout() {
+        line.lineout();
+    }
 
-	public int getAmount() {
-		return Integer.parseInt(amountFigure.getText());
-	}
-	
-	@Override 
-	public void willChange() {
-		line.willChange();
-		amountFigure.willChange();
-		super.willChange();
-	}
-	
-	@Override
-	public void changed() {
-		line.changed();
-		amountFigure.changed();
-		super.changed();
-	}	
+    @Override
+    public boolean isLine() {
+        return true;
+    }
 
-	@Override
-	public void areaInvalidated(FigureEvent e) {
-		relayout();
-	}
+    public int getAmount() {
+        return Integer.parseInt(amountFigure.getText());
+    }
 
-	@Override
-	public void attributeChanged(FigureEvent e) {
-	}
+    @Override
+    public void willChange() {
+        line.willChange();
+        amountFigure.willChange();
+        super.willChange();
+    }
 
-	@Override
-	public void figureHandlesChanged(FigureEvent e) {
-	}
+    @Override
+    public void changed() {
+        line.changed();
+        amountFigure.changed();
+        super.changed();
+    }
 
-	@Override
-	public void figureChanged(FigureEvent e) {
-	}
+    @Override
+    public void areaInvalidated(FigureEvent e) {
+        relayout();
+    }
 
-	@Override
-	public void figureAdded(FigureEvent e) {
-	}
+    @Override
+    public void attributeChanged(FigureEvent e) {
+    }
 
-	@Override
-	public void figureRemoved(FigureEvent e) {
-	}
+    @Override
+    public void figureHandlesChanged(FigureEvent e) {
+    }
 
-	@Override
-	public void figureRequestRemove(FigureEvent e) {
-	}
+    @Override
+    public void figureChanged(FigureEvent e) {
+    }
+
+    @Override
+    public void figureAdded(FigureEvent e) {
+    }
+
+    @Override
+    public void figureRemoved(FigureEvent e) {
+    }
+
+    @Override
+    public void figureRequestRemove(FigureEvent e) {
+    }
 }

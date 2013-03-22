@@ -8,27 +8,27 @@ import static org.junit.Assert.*;
 import husacct.graphics.*;
 
 public class GraphicsServiceTest {
-	IGraphicsService service;
 
-	@Before
-	public void setUp() {
-		service = (IGraphicsService) new GraphicsServiceImpl();
-	}
+    IGraphicsService service;
 
-	@Test
-	public void testGetAnalysedArchitecture() {
-		JInternalFrame panel = service.getAnalysedArchitectureGUI();
+    @Before
+    public void setUp() {
+        service = (IGraphicsService) new GraphicsServiceImpl();
+    }
 
-		assertNotNull(panel);
-		assertTrue(panel instanceof JInternalFrame);
-	}
+    @Test
+    public void testGetAnalysedArchitecture() {
+        JInternalFrame panel = service.getAnalysedArchitectureGUI();
 
-	@Test
-	public void testGetDefinedArchitecture() {
-		JInternalFrame panel = service.getDefinedArchitectureGUI();
+        assertNotNull(panel);
+        assertTrue(panel instanceof JInternalFrame);
+    }
 
-		assertNotNull(panel);
-		assertTrue(panel instanceof JInternalFrame);
-	}
+    @Test
+    public void testGetDefinedArchitecture() {
+        JInternalFrame panel = service.getDefinedArchitectureGUI();
 
+        assertNotNull(panel);
+        assertTrue(panel instanceof JInternalFrame);
+    }
 }

@@ -30,132 +30,128 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyListener {
 
-	private static final long serialVersionUID = 3093579720278942807L;
-	
-	public JButton saveButton;
-	public JButton cancelButton;
-	
-	public AnalyzedModuleTree softwareDefinitionTree;
-	private SoftwareUnitController softwareUnitController;
-	
-	public SoftwareUnitJDialog(long moduleId) {
-		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
-		this.softwareUnitController = new SoftwareUnitController(moduleId);
-		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
-		initUI();
-	}
+    private static final long serialVersionUID = 3093579720278942807L;
+    public JButton saveButton;
+    public JButton cancelButton;
+    public AnalyzedModuleTree softwareDefinitionTree;
+    private SoftwareUnitController softwareUnitController;
 
-	/**
-	 * Creating Gui
-	 */
-	private void initUI() {
-		try {
-			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
-			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
-			
-			this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
-			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
-			
-			this.setResizable(false);
-			this.pack();
-			this.setSize(650, 300);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private JPanel createSofwareUnitsPanel() {
-		JPanel softwareUnitsPanel = new JPanel();
-		softwareUnitsPanel.setLayout(this.createSoftwareUnitsPanelLayout());
-		softwareUnitsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		
-		JLabel softwareUnitsLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectSoftwareDefinition"));
-		softwareUnitsPanel.add(softwareUnitsLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		softwareUnitsPanel.add(this.getSoftwareUnitScrollPane(), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 220));
-		return softwareUnitsPanel;
-	}
-	
-	private GridBagLayout createSoftwareUnitsPanelLayout() {
-		GridBagLayout softwareUnitsPanelLayout = new GridBagLayout();
-		softwareUnitsPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.1 };
-		softwareUnitsPanelLayout.rowHeights = new int[] { 25, 25, 220 };
-		softwareUnitsPanelLayout.columnWeights = new double[] { 0.0 };
-		softwareUnitsPanelLayout.columnWidths = new int[] { 500 };
-		return softwareUnitsPanelLayout;
-	}
-	
-	private JScrollPane getSoftwareUnitScrollPane() {
-		JScrollPane softwareUnitScrollPane = new JScrollPane();
-		softwareUnitScrollPane.setSize(400, 220);
-		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
-		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
-		softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
-		return softwareUnitScrollPane;
-	}
-	
-	private JPanel createButtonPanel() {
-		JPanel buttonPanel = new JPanel();
-		
-		saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
-		buttonPanel.add(saveButton);
-		saveButton.addActionListener(this);
-		
-		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
-		buttonPanel.add(cancelButton);
-		cancelButton.addActionListener(this);
-		
-		return buttonPanel;
-	}
+    public SoftwareUnitJDialog(long moduleId) {
+        super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+        this.softwareUnitController = new SoftwareUnitController(moduleId);
+        this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
+        initUI();
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.saveButton) {
-			this.save();
-		} else if (action.getSource() == this.cancelButton) {
-			this.cancel();
-		}
-	}
-	
-	/**
-	 * Do nothing
-	 */
-	@Override
-	public void keyPressed(KeyEvent event) {
-		
-	}
-	
-	@Override
-	public void keyReleased(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			this.dispose();
-		} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-			this.save();
-		}
-	}
-	
-	/**
-	 * Do nothing
-	 */
-	@Override
-	public void keyTyped(KeyEvent event) {
-		
-	}
+    /**
+     * Creating Gui
+     */
+    private void initUI() {
+        try {
+            setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
+            setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
 
-	private void save() {
-		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
-		for (TreePath path : paths.getSelectionPaths()){
-			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-			this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
-		}
-		this.dispose();
-		
-		
+            this.getContentPane().add(this.createSofwareUnitsPanel(), BorderLayout.CENTER);
+            this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
+
+            this.setResizable(false);
+            this.pack();
+            this.setSize(650, 300);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JPanel createSofwareUnitsPanel() {
+        JPanel softwareUnitsPanel = new JPanel();
+        softwareUnitsPanel.setLayout(this.createSoftwareUnitsPanelLayout());
+        softwareUnitsPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+
+        JLabel softwareUnitsLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectSoftwareDefinition"));
+        softwareUnitsPanel.add(softwareUnitsLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+        softwareUnitsPanel.add(this.getSoftwareUnitScrollPane(), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 220));
+        return softwareUnitsPanel;
+    }
+
+    private GridBagLayout createSoftwareUnitsPanelLayout() {
+        GridBagLayout softwareUnitsPanelLayout = new GridBagLayout();
+        softwareUnitsPanelLayout.rowWeights = new double[]{0.0, 0.0, 0.1};
+        softwareUnitsPanelLayout.rowHeights = new int[]{25, 25, 220};
+        softwareUnitsPanelLayout.columnWeights = new double[]{0.0};
+        softwareUnitsPanelLayout.columnWidths = new int[]{500};
+        return softwareUnitsPanelLayout;
+    }
+
+    private JScrollPane getSoftwareUnitScrollPane() {
+        JScrollPane softwareUnitScrollPane = new JScrollPane();
+        softwareUnitScrollPane.setSize(400, 220);
+        softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
+        AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
+        this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
+        softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
+        return softwareUnitScrollPane;
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+
+        saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+        buttonPanel.add(saveButton);
+        saveButton.addActionListener(this);
+
+        cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
+        buttonPanel.add(cancelButton);
+        cancelButton.addActionListener(this);
+
+        return buttonPanel;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent action) {
+        if (action.getSource() == this.saveButton) {
+            this.save();
+        } else if (action.getSource() == this.cancelButton) {
+            this.cancel();
+        }
+    }
+
+    /**
+     * Do nothing
+     */
+    @Override
+    public void keyPressed(KeyEvent event) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            this.dispose();
+        } else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.save();
+        }
+    }
+
+    /**
+     * Do nothing
+     */
+    @Override
+    public void keyTyped(KeyEvent event) {
+    }
+
+    private void save() {
+        TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
+        for (TreePath path : paths.getSelectionPaths()) {
+            AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+            this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());
+        }
+        this.dispose();
+
+
 //		TreePath path = this.softwareDefinitionTree.getSelectionPath();
-	}
-	
-	private void cancel() {
-		this.dispose();
-	}
+    }
+
+    private void cancel() {
+        this.dispose();
+    }
 }

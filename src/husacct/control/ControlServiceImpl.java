@@ -19,88 +19,85 @@ import javax.swing.JDialog;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
+public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable {
 
-public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable{
+    private Logger logger = Logger.getLogger(ControlServiceImpl.class);
+    ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
+    private MainController mainController;
+    private WorkspaceController workspaceController;
+    private ApplicationController applicationController;
+    private StateController stateController;
+    private ViewController viewController;
 
-	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
-	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
-	
-	private MainController mainController; 
-	private WorkspaceController workspaceController;
-	private ApplicationController applicationController;
-	private StateController stateController;
-	private ViewController viewController;
-	
-	public ControlServiceImpl(){
-		logger.debug("Starting HUSACCT");
-		mainController = new MainController();
-		workspaceController = mainController.getWorkspaceController();
-		applicationController = mainController.getApplicationController();
-		stateController = mainController.getStateController();
-		viewController = mainController.getViewController();
-	}
-	
-	@Override
-	public void parseCommandLineArguments(String[] commandLineArguments){
-		mainController.parseCommandLineArguments(commandLineArguments);
-	}
-	
-	@Override
-	public void startApplication() {
-		mainController.startGui();
+    public ControlServiceImpl() {
+        logger.debug("Starting HUSACCT");
+        mainController = new MainController();
+        workspaceController = mainController.getWorkspaceController();
+        applicationController = mainController.getApplicationController();
+        stateController = mainController.getStateController();
+        viewController = mainController.getViewController();
+    }
 
-		if(mainController.getCommandLineController().getResult().contains("bootstrap")){
-			new BootstrapHandler(mainController.getCommandLineController().getResult().getStringArray("bootstrap"));
-		}
-	}
-	
-	@Override
-	public Element getWorkspaceData() {
-		Element data = new Element("workspace");
-		Workspace workspace = workspaceController.getCurrentWorkspace();
-		data.setAttribute("name", workspace.getName());
-		return data;
-	}
-	
-	@Override
-	public void loadWorkspaceData(Element workspaceData) {
-		try {
-			String workspaceName = workspaceData.getAttributeValue("name");
-			workspaceController.createWorkspace(workspaceName);
-		} catch (Exception e){
-			logger.debug("WorkspaceData corrupt: " + e);
-		}
-	}
-	
-	@Override
-	public void showErrorMessage(String message){
-		applicationController.showErrorMessage(message);
-	}
-	
-	@Override
-	public void showInfoMessage(String message){
-		applicationController.showInfoMessage(message);
-	}
-	
-	@Override
-	public void centerDialog(JDialog dialog){
-		DialogUtils.alignCenter(dialog);
-	}
-	
-	@Override
-	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask) {
-		ThreadWithLoader loader = new ThreadWithLoader(mainController, progressInfoText, threadTask);
-		return loader;
-	}
-	
-	@Override
-	public void setServiceListeners(){
-		stateController.setServiceListeners();
-		viewController.setLocaleListeners();
-	}
-	
-	public MainController getMainController(){
-		return mainController;
-	}
+    @Override
+    public void parseCommandLineArguments(String[] commandLineArguments) {
+        mainController.parseCommandLineArguments(commandLineArguments);
+    }
 
+    @Override
+    public void startApplication() {
+        mainController.startGui();
+
+        if (mainController.getCommandLineController().getResult().contains("bootstrap")) {
+            new BootstrapHandler(mainController.getCommandLineController().getResult().getStringArray("bootstrap"));
+        }
+    }
+
+    @Override
+    public Element getWorkspaceData() {
+        Element data = new Element("workspace");
+        Workspace workspace = workspaceController.getCurrentWorkspace();
+        data.setAttribute("name", workspace.getName());
+        return data;
+    }
+
+    @Override
+    public void loadWorkspaceData(Element workspaceData) {
+        try {
+            String workspaceName = workspaceData.getAttributeValue("name");
+            workspaceController.createWorkspace(workspaceName);
+        } catch (Exception e) {
+            logger.debug("WorkspaceData corrupt: " + e);
+        }
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        applicationController.showErrorMessage(message);
+    }
+
+    @Override
+    public void showInfoMessage(String message) {
+        applicationController.showInfoMessage(message);
+    }
+
+    @Override
+    public void centerDialog(JDialog dialog) {
+        DialogUtils.alignCenter(dialog);
+    }
+
+    @Override
+    public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask) {
+        ThreadWithLoader loader = new ThreadWithLoader(mainController, progressInfoText, threadTask);
+        return loader;
+    }
+
+    @Override
+    public void setServiceListeners() {
+        stateController.setServiceListeners();
+        viewController.setLocaleListeners();
+    }
+
+    public MainController getMainController() {
+        return mainController;
+    }
 }

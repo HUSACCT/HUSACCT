@@ -4,23 +4,23 @@ import javax.swing.table.DefaultTableModel;
 
 public class JTableTableModel extends DefaultTableModel {
 
-	private static final long serialVersionUID = 3535559394466714205L;
-	private boolean editable = false;
+    private static final long serialVersionUID = 3535559394466714205L;
+    private boolean editable = false;
 
-	public JTableTableModel() {
-		super();
-	}
+    public JTableTableModel() {
+        super();
+    }
 
-	@Override
-	public boolean isCellEditable(int row, int column) {
-		return isEditable();
-	}
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return isEditable();
+    }
 
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
 
-	public boolean isEditable() {
-		return editable;
-	}
+    public boolean isEditable() {
+        return editable;
+    }
 }

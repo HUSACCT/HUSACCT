@@ -30,242 +30,237 @@ import javax.swing.tree.TreePath;
 
 public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectionListener, Observer, IServiceListener, KeyListener {
 
-	private static final long serialVersionUID = 6141711414139061921L;
+    private static final long serialVersionUID = 6141711414139061921L;
+    private JScrollPane moduleTreeScrollPane;
+    private ModuleTree moduleTree;
+    private JButton newModuleButton = new JButton();
+    private JButton moveModuleUpButton = new JButton();
+    private JButton removeModuleButton = new JButton();
+    private JButton moveModuleDownButton = new JButton();
 
-	private JScrollPane moduleTreeScrollPane;
-	private ModuleTree moduleTree;
-	
-	private JButton newModuleButton = new JButton();
-	private JButton moveModuleUpButton = new JButton();
-	private JButton removeModuleButton = new JButton();
-	private JButton moveModuleDownButton = new JButton();
-	
-	public ModuleJPanel() {
-		super();
-	}
+    public ModuleJPanel() {
+        super();
+    }
 
-	public void initGui() {
-		DefinitionController.getInstance().addObserver(this);
-		BorderLayout modulePanelLayout = new BorderLayout();
-		this.setLayout(modulePanelLayout);
-		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		this.add(createInnerModulePanel(), BorderLayout.CENTER);
-		this.updateModuleTree();
-		ServiceProvider.getInstance().getControlService().addServiceListener(this);
-	}
-	
-	public JPanel createInnerModulePanel() {
-		JPanel innerModulePanel = new JPanel();
-		BorderLayout innerModulePanelLayout = new BorderLayout();
-		innerModulePanel.setLayout(innerModulePanelLayout);
-		innerModulePanel.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleHierachy")));
-		innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
-		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
-		return innerModulePanel;
-	}
-	
-	private JPanel createModuleTreePanel() {
-		JPanel moduleTreePanel = new JPanel();
-		BorderLayout moduleTreePanelLayout = new BorderLayout();
-		moduleTreePanel.setLayout(moduleTreePanelLayout);
-		this.createModuleTreeScrollPane();
-		moduleTreePanel.add(this.moduleTreeScrollPane, BorderLayout.CENTER);
-		return moduleTreePanel;
-	}
-	
-	private void createModuleTreeScrollPane() {
-		this.moduleTreeScrollPane = new JScrollPane();
-		this.moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
-		this.updateModuleTree();
-	}
+    public void initGui() {
+        DefinitionController.getInstance().addObserver(this);
+        BorderLayout modulePanelLayout = new BorderLayout();
+        this.setLayout(modulePanelLayout);
+        this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        this.add(createInnerModulePanel(), BorderLayout.CENTER);
+        this.updateModuleTree();
+        ServiceProvider.getInstance().getControlService().addServiceListener(this);
+    }
 
-	protected JPanel addButtonPanel() {
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(this.createButtonPanelLayout());
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		
-		this.newModuleButton = new JButton();
-		buttonPanel.add(this.newModuleButton);
-		this.newModuleButton.addActionListener(this);
-		this.newModuleButton.addKeyListener(this);
-			
-		this.moveModuleUpButton = new JButton();
-		buttonPanel.add(this.moveModuleUpButton);
-		this.moveModuleUpButton.addActionListener(this);
-		this.moveModuleUpButton.addKeyListener(this);
+    public JPanel createInnerModulePanel() {
+        JPanel innerModulePanel = new JPanel();
+        BorderLayout innerModulePanelLayout = new BorderLayout();
+        innerModulePanel.setLayout(innerModulePanelLayout);
+        innerModulePanel.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleHierachy")));
+        innerModulePanel.add(this.createModuleTreePanel(), BorderLayout.CENTER);
+        innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
+        return innerModulePanel;
+    }
 
-		this.removeModuleButton = new JButton();
-		buttonPanel.add(this.removeModuleButton);
-		this.removeModuleButton.addActionListener(this);
-		this.removeModuleButton.addKeyListener(this);
+    private JPanel createModuleTreePanel() {
+        JPanel moduleTreePanel = new JPanel();
+        BorderLayout moduleTreePanelLayout = new BorderLayout();
+        moduleTreePanel.setLayout(moduleTreePanelLayout);
+        this.createModuleTreeScrollPane();
+        moduleTreePanel.add(this.moduleTreeScrollPane, BorderLayout.CENTER);
+        return moduleTreePanel;
+    }
 
-		this.moveModuleDownButton = new JButton();
-		buttonPanel.add(this.moveModuleDownButton);
-		this.moveModuleDownButton.addActionListener(this);
-		this.moveModuleDownButton.addKeyListener(this);
-		
-		this.setButtonTexts();
-		return buttonPanel;
-	}
-	
-	private GridLayout createButtonPanelLayout() {
-		GridLayout buttonPanelLayout = new GridLayout(2, 2);
-		buttonPanelLayout.setColumns(2);
-		buttonPanelLayout.setHgap(5);
-		buttonPanelLayout.setVgap(5);
-		buttonPanelLayout.setRows(2);
-		return buttonPanelLayout;
-	}
-	
-	/**
-	 * Observer
-	 */
-	@Override
-	public void update(Observable o, Object arg) {
-		this.updateModuleTree();
-	}
-	
-	public void updateModuleTree() {
-		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
-		this.moduleTree = new ModuleTree(rootComponent);
-		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
-		this.moduleTree.addTreeSelectionListener(this);
-		this.checkLayerComponentIsSelected();
-		
-		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
-		
-		for (int i = 0; i < moduleTree.getRowCount(); i++) {
-			moduleTree.expandRow(i);
-		}
-	}
-	
-	/**
-	 * Handling ActionPerformed
-	 */
-	@Override
-	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.newModuleButton) {
-			this.newModule();
-		} else if (action.getSource() == this.removeModuleButton) {
-			this.removeModule();
-		} else if (action.getSource() == this.moveModuleUpButton) {
-			this.moveLayerUp();
-		} else if (action.getSource() == this.moveModuleDownButton) {
-			this.moveLayerDown();
-		}
-		this.updateModuleTree();
-	}
-	
-	private void newModule() {
-		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
-		DialogUtils.alignCenter(addModuleFrame);
-		addModuleFrame.initGUI();
-	}
-	
-	private void removeModule() {
-		long moduleId = getSelectedModuleId();
-		if (moduleId != -1 && moduleId != 0){
-			boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
-			if (confirm) {
-				this.moduleTree.clearSelection();
-				DefinitionController.getInstance().removeModuleById(moduleId);
-			}
-		}
-	}
-	
-	private void moveLayerUp() {
-		long layerId = getSelectedModuleId();
-		DefinitionController.getInstance().moveLayerUp(layerId);
-		this.updateModuleTree();
-	}
-	
-	private void moveLayerDown() {
-		long layerId = getSelectedModuleId();
-		DefinitionController.getInstance().moveLayerDown(layerId);
-		this.updateModuleTree();
-	}
-	
-	private long getSelectedModuleId() {
-		long moduleId = -1;
-		TreePath path = this.moduleTree.getSelectionPath();
-		if (path != null){//returns null if nothing is selected
-			AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-			moduleId = selectedComponent.getModuleId();
-		}
-		return moduleId;
-	}
+    private void createModuleTreeScrollPane() {
+        this.moduleTreeScrollPane = new JScrollPane();
+        this.moduleTreeScrollPane.setPreferredSize(new java.awt.Dimension(383, 213));
+        this.updateModuleTree();
+    }
 
-	@Override
-	public void valueChanged(TreeSelectionEvent event) {
+    protected JPanel addButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(this.createButtonPanelLayout());
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+
+        this.newModuleButton = new JButton();
+        buttonPanel.add(this.newModuleButton);
+        this.newModuleButton.addActionListener(this);
+        this.newModuleButton.addKeyListener(this);
+
+        this.moveModuleUpButton = new JButton();
+        buttonPanel.add(this.moveModuleUpButton);
+        this.moveModuleUpButton.addActionListener(this);
+        this.moveModuleUpButton.addKeyListener(this);
+
+        this.removeModuleButton = new JButton();
+        buttonPanel.add(this.removeModuleButton);
+        this.removeModuleButton.addActionListener(this);
+        this.removeModuleButton.addKeyListener(this);
+
+        this.moveModuleDownButton = new JButton();
+        buttonPanel.add(this.moveModuleDownButton);
+        this.moveModuleDownButton.addActionListener(this);
+        this.moveModuleDownButton.addKeyListener(this);
+
+        this.setButtonTexts();
+        return buttonPanel;
+    }
+
+    private GridLayout createButtonPanelLayout() {
+        GridLayout buttonPanelLayout = new GridLayout(2, 2);
+        buttonPanelLayout.setColumns(2);
+        buttonPanelLayout.setHgap(5);
+        buttonPanelLayout.setVgap(5);
+        buttonPanelLayout.setRows(2);
+        return buttonPanelLayout;
+    }
+
+    /**
+     * Observer
+     */
+    @Override
+    public void update(Observable o, Object arg) {
+        this.updateModuleTree();
+    }
+
+    public void updateModuleTree() {
+        AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
+        this.moduleTree = new ModuleTree(rootComponent);
+        this.moduleTreeScrollPane.setViewportView(this.moduleTree);
+        this.moduleTree.addTreeSelectionListener(this);
+        this.checkLayerComponentIsSelected();
+
+        moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
+
+        for (int i = 0; i < moduleTree.getRowCount(); i++) {
+            moduleTree.expandRow(i);
+        }
+    }
+
+    /**
+     * Handling ActionPerformed
+     */
+    @Override
+    public void actionPerformed(ActionEvent action) {
+        if (action.getSource() == this.newModuleButton) {
+            this.newModule();
+        } else if (action.getSource() == this.removeModuleButton) {
+            this.removeModule();
+        } else if (action.getSource() == this.moveModuleUpButton) {
+            this.moveLayerUp();
+        } else if (action.getSource() == this.moveModuleDownButton) {
+            this.moveLayerDown();
+        }
+        this.updateModuleTree();
+    }
+
+    private void newModule() {
+        AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
+        DialogUtils.alignCenter(addModuleFrame);
+        addModuleFrame.initGUI();
+    }
+
+    private void removeModule() {
+        long moduleId = getSelectedModuleId();
+        if (moduleId != -1 && moduleId != 0) {
+            boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
+            if (confirm) {
+                this.moduleTree.clearSelection();
+                DefinitionController.getInstance().removeModuleById(moduleId);
+            }
+        }
+    }
+
+    private void moveLayerUp() {
+        long layerId = getSelectedModuleId();
+        DefinitionController.getInstance().moveLayerUp(layerId);
+        this.updateModuleTree();
+    }
+
+    private void moveLayerDown() {
+        long layerId = getSelectedModuleId();
+        DefinitionController.getInstance().moveLayerDown(layerId);
+        this.updateModuleTree();
+    }
+
+    private long getSelectedModuleId() {
+        long moduleId = -1;
+        TreePath path = this.moduleTree.getSelectionPath();
+        if (path != null) {//returns null if nothing is selected
+            AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
+            moduleId = selectedComponent.getModuleId();
+        }
+        return moduleId;
+    }
+
+    @Override
+    public void valueChanged(TreeSelectionEvent event) {
         TreePath path = event.getPath();
         AbstractDefineComponent selectedComponent = (AbstractDefineComponent) path.getLastPathComponent();
-        if (selectedComponent.getModuleId() != DefinitionController.getInstance().getSelectedModuleId()){
-        	this.updateSelectedModule(selectedComponent.getModuleId());
+        if (selectedComponent.getModuleId() != DefinitionController.getInstance().getSelectedModuleId()) {
+            this.updateSelectedModule(selectedComponent.getModuleId());
         }
         this.checkLayerComponentIsSelected();
-	}
-	
-	
-	private void updateSelectedModule(long moduleId) {
-		DefinitionController.getInstance().setSelectedModuleId(moduleId);
-	}
-	
-	public void checkLayerComponentIsSelected() {
-		TreePath path = this.moduleTree.getSelectionPath();
-		if(path != null && path.getLastPathComponent() instanceof LayerComponent) {
-			this.enableMoveLayerButtons();
-		} else {
-			this.disableMoveLayerButtons();
-		}
-	}
-	
-	public void disableMoveLayerButtons() {
-		this.moveModuleDownButton.setEnabled(false);
-		this.moveModuleUpButton.setEnabled(false);
-	}
-	
-	public void enableMoveLayerButtons() {
-		this.moveModuleDownButton.setEnabled(true);
-		this.moveModuleUpButton.setEnabled(true);
-	}
+    }
 
-	@Override
-	public void update() {
-		this.setButtonTexts();
-	}
-	
-	private void setButtonTexts() {
-		this.newModuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
-		this.moveModuleUpButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveUp"));
-		this.removeModuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveModule"));
-		this.moveModuleDownButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveDown"));
-	}
+    private void updateSelectedModule(long moduleId) {
+        DefinitionController.getInstance().setSelectedModuleId(moduleId);
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void checkLayerComponentIsSelected() {
+        TreePath path = this.moduleTree.getSelectionPath();
+        if (path != null && path.getLastPathComponent() instanceof LayerComponent) {
+            this.enableMoveLayerButtons();
+        } else {
+            this.disableMoveLayerButtons();
+        }
+    }
 
-	@Override
-	public void keyReleased(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.VK_ENTER){
-			if (event.getSource() == this.newModuleButton) {
-				this.newModule();
-			} else if (event.getSource() == this.removeModuleButton) {
-				this.removeModule();
-			} else if (event.getSource() == this.moveModuleUpButton) {
-				this.moveLayerUp();
-			} else if (event.getSource() == this.moveModuleDownButton) {
-				this.moveLayerDown();
-			}
-			this.updateModuleTree();
-		}
-	}
+    public void disableMoveLayerButtons() {
+        this.moveModuleDownButton.setEnabled(false);
+        this.moveModuleUpButton.setEnabled(false);
+    }
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void enableMoveLayerButtons() {
+        this.moveModuleDownButton.setEnabled(true);
+        this.moveModuleUpButton.setEnabled(true);
+    }
+
+    @Override
+    public void update() {
+        this.setButtonTexts();
+    }
+
+    private void setButtonTexts() {
+        this.newModuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NewModule"));
+        this.moveModuleUpButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveUp"));
+        this.removeModuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveModule"));
+        this.moveModuleDownButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("MoveDown"));
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void keyReleased(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (event.getSource() == this.newModuleButton) {
+                this.newModule();
+            } else if (event.getSource() == this.removeModuleButton) {
+                this.removeModule();
+            } else if (event.getSource() == this.moveModuleUpButton) {
+                this.moveLayerUp();
+            } else if (event.getSource() == this.moveModuleDownButton) {
+                this.moveLayerDown();
+            }
+            this.updateModuleTree();
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+    }
 }

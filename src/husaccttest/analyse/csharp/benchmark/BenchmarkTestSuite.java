@@ -7,8 +7,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	ModuleRecognitionTest.class
+    ModuleRecognitionTest.class
 })
-
-public class BenchmarkTestSuite {	
+public class BenchmarkTestSuite {
 }

@@ -17,72 +17,72 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
-	
-	private static final long serialVersionUID = 6225304804416378425L;
 
-	/**
-	 * only TreeCellRenderer method
-	 * Compute the String to display, and pass it to the wrapped renderer
-	 */
-	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-		if(value instanceof AbstractCombinedComponent) {
-			AbstractCombinedComponent component = (AbstractCombinedComponent) value;
-			super.getTreeCellRendererComponent(tree, component.getName(), selected, expanded, leaf, row, hasFocus);
-			this.determineIcon(component);
-			this.checkEnabled(component, tree);
-		}
-		return this;
-	}
-	
-	private void determineIcon(AbstractCombinedComponent component) {
-		if(component instanceof AnalyzedModuleComponent) {
-			AnalyzedModuleComponent analyzedModuleComponent = (AnalyzedModuleComponent) component;
-			this.setIcon(this.determineAnalyzedModuleComponentIcon(analyzedModuleComponent));
-		} else if(component instanceof AbstractDefineComponent) {
-			AbstractDefineComponent abstractDefineComponent = (AbstractDefineComponent) component;
-			this.setIcon(this.determineAbstractDefineComponentIcon(abstractDefineComponent));
-		}
-	}
-	
-	private ImageIcon determineAnalyzedModuleComponentIcon(AnalyzedModuleComponent component) {
-		ImageIcon icon = new ImageIcon();
-		if(component.getType().equals("PACKAGE")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
-		} else if(component.getType().equals("CLASS")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
-		} else if(component.getType().equals("INTERFACE")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
-		} else if(component.getType().equals("ENUMERATION")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
-		}
-		return icon;
-	}
-	
-	private ImageIcon determineAbstractDefineComponentIcon(AbstractDefineComponent component) {
-		ImageIcon icon = new ImageIcon();
-		if(component instanceof ComponentComponent) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_COMPONENT));
-		} else if(component instanceof ExternalLibraryComponent) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_LIBRARY));
-		} else if(component instanceof LayerComponent) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_LAYER));
-		} else if(component instanceof SubSystemComponent) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEM));
-		} else if(component instanceof SoftwareArchitectureComponent) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_SOFTWARE_ARCHITECTURE));
-		}
-		return icon;
-	}
-	
-	private void checkEnabled(AbstractCombinedComponent component, JTree tree) {
-		if(component instanceof AbstractDefineComponent && tree instanceof CombinedModuleTree) {
-			AbstractDefineComponent abstractDefineComponent = (AbstractDefineComponent) component;
-			CombinedModuleTree moduleTree = (CombinedModuleTree) tree;
-			if(abstractDefineComponent.getModuleId() == moduleTree.getSelectedModuleId() || abstractDefineComponent.getModuleId() == -1L) {
-				this.setEnabled(false);
-				return;
-			}
-		}
-		this.setEnabled(true);
-	}
+    private static final long serialVersionUID = 6225304804416378425L;
+
+    /**
+     * only TreeCellRenderer method
+     * Compute the String to display, and pass it to the wrapped renderer
+     */
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        if (value instanceof AbstractCombinedComponent) {
+            AbstractCombinedComponent component = (AbstractCombinedComponent) value;
+            super.getTreeCellRendererComponent(tree, component.getName(), selected, expanded, leaf, row, hasFocus);
+            this.determineIcon(component);
+            this.checkEnabled(component, tree);
+        }
+        return this;
+    }
+
+    private void determineIcon(AbstractCombinedComponent component) {
+        if (component instanceof AnalyzedModuleComponent) {
+            AnalyzedModuleComponent analyzedModuleComponent = (AnalyzedModuleComponent) component;
+            this.setIcon(this.determineAnalyzedModuleComponentIcon(analyzedModuleComponent));
+        } else if (component instanceof AbstractDefineComponent) {
+            AbstractDefineComponent abstractDefineComponent = (AbstractDefineComponent) component;
+            this.setIcon(this.determineAbstractDefineComponentIcon(abstractDefineComponent));
+        }
+    }
+
+    private ImageIcon determineAnalyzedModuleComponentIcon(AnalyzedModuleComponent component) {
+        ImageIcon icon = new ImageIcon();
+        if (component.getType().equals("PACKAGE")) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
+        } else if (component.getType().equals("CLASS")) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
+        } else if (component.getType().equals("INTERFACE")) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
+        } else if (component.getType().equals("ENUMERATION")) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
+        }
+        return icon;
+    }
+
+    private ImageIcon determineAbstractDefineComponentIcon(AbstractDefineComponent component) {
+        ImageIcon icon = new ImageIcon();
+        if (component instanceof ComponentComponent) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_COMPONENT));
+        } else if (component instanceof ExternalLibraryComponent) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_LIBRARY));
+        } else if (component instanceof LayerComponent) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_LAYER));
+        } else if (component instanceof SubSystemComponent) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEM));
+        } else if (component instanceof SoftwareArchitectureComponent) {
+            icon = new ImageIcon(Resource.get(Resource.ICON_SOFTWARE_ARCHITECTURE));
+        }
+        return icon;
+    }
+
+    private void checkEnabled(AbstractCombinedComponent component, JTree tree) {
+        if (component instanceof AbstractDefineComponent && tree instanceof CombinedModuleTree) {
+            AbstractDefineComponent abstractDefineComponent = (AbstractDefineComponent) component;
+            CombinedModuleTree moduleTree = (CombinedModuleTree) tree;
+            if (abstractDefineComponent.getModuleId() == moduleTree.getSelectedModuleId() || abstractDefineComponent.getModuleId() == -1L) {
+                this.setEnabled(false);
+                return;
+            }
+        }
+        this.setEnabled(true);
+    }
 }

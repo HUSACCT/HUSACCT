@@ -18,49 +18,50 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class IsOnlyAllowedToUseRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
-	}
+    private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
-	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+    public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+        super(key, category, violationtypes, exceptionrules, severity);
+    }
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+    @Override
+    public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+        this.violations = new ArrayList<Violation>();
 
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();	
+        this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+        this.physicalClasspathsFrom = mappings.getMappingFrom();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){
-			for(DependencyDTO dependency: dependencies){
-				if(classPathFrom.getPhysicalPath().equals(dependency.from)){
-					if(!containsMapping(mappings, dependency.to)){
-						if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
-							Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
-							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-							violations.add(violation);							
-						}	
-					}
-				}
-			}
-		}
-		return violations;
-	}
+        DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-	private boolean containsMapping(Mappings mappings, String physicalPath){
-		for(Mapping mappingFrom : mappings.getMappingFrom()){
-			if(mappingFrom.getPhysicalPath().equals(physicalPath)){
-				return true;
-			}
-		}
+        for (Mapping classPathFrom : physicalClasspathsFrom) {
+            for (DependencyDTO dependency : dependencies) {
+                if (classPathFrom.getPhysicalPath().equals(dependency.from)) {
+                    if (!containsMapping(mappings, dependency.to)) {
+                        if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                            Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
+                            Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                            violations.add(violation);
+                        }
+                    }
+                }
+            }
+        }
+        return violations;
+    }
 
-		for(Mapping mappingTo : mappings.getMappingTo()){
-			if(mappingTo.getPhysicalPath().equals(physicalPath)){
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean containsMapping(Mappings mappings, String physicalPath) {
+        for (Mapping mappingFrom : mappings.getMappingFrom()) {
+            if (mappingFrom.getPhysicalPath().equals(physicalPath)) {
+                return true;
+            }
+        }
+
+        for (Mapping mappingTo : mappings.getMappingTo()) {
+            if (mappingTo.getPhysicalPath().equals(physicalPath)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
