@@ -14,89 +14,91 @@ import java.util.List;
 
 public class Report {
 
-	private String projectName;
-	private String version;
-	private List<Severity> severities;
-	private String imagePath;
-	private SimpleEntry<Calendar, List<Violation>> violations; 
-	private final SimpleDateFormat dateFormat;
-	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+    private String projectName;
+    private String version;
+    private List<Severity> severities;
+    private String imagePath;
+    private SimpleEntry<Calendar, List<Violation>> violations;
+    private final SimpleDateFormat dateFormat;
+    private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
-	public Report(String projectName, String version, SimpleEntry<Calendar, List<Violation>> violations, String path, List<Severity> severities) {
-		this.projectName = projectName;
-		this.version = version;
-		this.violations = violations;
-		this.imagePath = path + "/image.png";
-		this.severities = severities;
-		new StatisticsImage().createStatisticsImage(imagePath, getViolationsPerSeverity());
-		dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
-	}
-	
-	public String getFormattedDate() {
-		return dateFormat.format(violations.getKey().getTime());
-	}
+    public Report(String projectName, String version, SimpleEntry<Calendar, List<Violation>> violations, String path, List<Severity> severities) {
+        this.projectName = projectName;
+        this.version = version;
+        this.violations = violations;
+        this.imagePath = path + "/image.png";
+        this.severities = severities;
+        new StatisticsImage().createStatisticsImage(imagePath, getViolationsPerSeverity());
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
+    }
 
-	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
-		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
-		for(Severity severity : severities) {
-			int violationsCount = 0;
-			for(Violation violation : violations.getValue()) {
-				if(violation.getSeverity().getSeverityKey().equals(severity.getSeverityKey())) {					
-					violationsCount++;
-				}
-			}
-			violationsPerSeverity.add(new ViolationsPerSeverity(violationsCount, severity));
-		}
-		return violationsPerSeverity;
-	}
+    public String getFormattedDate() {
+        return dateFormat.format(violations.getKey().getTime());
+    }
 
-	public String[] getLocaleColumnHeaders() {
-		String[] headers = new String[] {
-				localeService.getTranslatedString("Source"),
-				localeService.getTranslatedString("Rule"),
-				localeService.getTranslatedString("LineNumber"),
-				localeService.getTranslatedString("DependencyKind"),
-				localeService.getTranslatedString("Target"),
-				localeService.getTranslatedString("Severity")
-		};
-		return headers;
-	}
+    public List<ViolationsPerSeverity> getViolationsPerSeverity() {
+        List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
+        for (Severity severity : severities) {
+            int violationsCount = 0;
+            for (Violation violation : violations.getValue()) {
+                if (violation.getSeverity().getSeverityKey().equals(severity.getSeverityKey())) {
+                    violationsCount++;
+                }
+            }
+            violationsPerSeverity.add(new ViolationsPerSeverity(violationsCount, severity));
+        }
+        return violationsPerSeverity;
+    }
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	public String getProjectName() {
-		return projectName;
-	}
+    public String[] getLocaleColumnHeaders() {
+        String[] headers = new String[]{
+            localeService.getTranslatedString("Source"),
+            localeService.getTranslatedString("Rule"),
+            localeService.getTranslatedString("LineNumber"),
+            localeService.getTranslatedString("DependencyKind"),
+            localeService.getTranslatedString("Target"),
+            localeService.getTranslatedString("Severity")
+        };
+        return headers;
+    }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
-	public String getVersion() {
-		return version;
-	}
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-	public String getImagePath() {
-		return imagePath;
-	}
+    public String getProjectName() {
+        return projectName;
+    }
 
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-	public List<Severity> getSeverities() {
-		return severities;
-	}
+    public String getVersion() {
+        return version;
+    }
 
-	public void setSeverities(List<Severity> severities) {
-		this.severities = severities;
-	}
+    public String getImagePath() {
+        return imagePath;
+    }
 
-	public SimpleEntry<Calendar, List<Violation>> getViolations() {
-		return violations;
-	}
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
-	public void setViolations(SimpleEntry<Calendar, List<Violation>> violations) {
-		this.violations = violations;
-	}	
+    public List<Severity> getSeverities() {
+        return severities;
+    }
+
+    public void setSeverities(List<Severity> severities) {
+        this.severities = severities;
+    }
+
+    public SimpleEntry<Calendar, List<Violation>> getViolations() {
+        return violations;
+    }
+
+    public void setViolations(SimpleEntry<Calendar, List<Violation>> violations) {
+        this.violations = violations;
+    }
 }

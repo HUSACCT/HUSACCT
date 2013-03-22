@@ -18,56 +18,56 @@ import javax.swing.border.EmptyBorder;
 
 public class LoadingDialog extends JDialog implements Runnable {
 
-	private static final long serialVersionUID = 1L;
-	private String progressInfoText;
-	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+    private static final long serialVersionUID = 1L;
+    private String progressInfoText;
+    private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
-	public LoadingDialog(MainController mainController, String progressInfoText) {
-		super(mainController.getMainGui(), true);
-		setTitle(localeService.getTranslatedString("Loading"));
-		this.progressInfoText = progressInfoText;
-		setup();
-		addComponents();
+    public LoadingDialog(MainController mainController, String progressInfoText) {
+        super(mainController.getMainGui(), true);
+        setTitle(localeService.getTranslatedString("Loading"));
+        this.progressInfoText = progressInfoText;
+        setup();
+        addComponents();
 
-	}
-	
-	public LoadingDialog(String progressInfoText){
-		ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
-		new LoadingDialog(controlService.getMainController(), progressInfoText);
-	}
+    }
 
-	private void setup() {
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-		this.setSize(new Dimension(400, 130));
-		this.setResizable(false);
-		DialogUtils.alignCenter(this);
-	}
+    public LoadingDialog(String progressInfoText) {
+        ControlServiceImpl controlService = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
+        new LoadingDialog(controlService.getMainController(), progressInfoText);
+    }
 
-	private void addComponents() {
-		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel progressPanel = new JPanel(new GridLayout(1, 1));
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    private void setup() {
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        this.setSize(new Dimension(400, 130));
+        this.setResizable(false);
+        DialogUtils.alignCenter(this);
+    }
 
-		JLabel progressLabel = new JLabel(progressInfoText);
-		JProgressBar progressBar = new JProgressBar();
+    private void addComponents() {
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel progressPanel = new JPanel(new GridLayout(1, 1));
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		progressPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		progressBar.setIndeterminate(true);
+        JLabel progressLabel = new JLabel(progressInfoText);
+        JProgressBar progressBar = new JProgressBar();
 
-		JLabel waitLabel = new JLabel(localeService.getTranslatedString("Wait"));
+        progressPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        progressBar.setIndeterminate(true);
 
-		labelPanel.add(progressLabel);
-		progressPanel.add(progressBar);
-		buttonsPanel.add(waitLabel);
+        JLabel waitLabel = new JLabel(localeService.getTranslatedString("Wait"));
 
-		add(labelPanel);
-		add(progressPanel);
-		add(buttonsPanel);
-	}
+        labelPanel.add(progressLabel);
+        progressPanel.add(progressBar);
+        buttonsPanel.add(waitLabel);
 
-	@Override
-	public void run() {
-		this.setVisible(true);
-	}
+        add(labelPanel);
+        add(progressPanel);
+        add(buttonsPanel);
+    }
+
+    @Override
+    public void run() {
+        this.setVisible(true);
+    }
 }

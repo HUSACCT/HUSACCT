@@ -18,66 +18,62 @@ import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+    private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+    private HashSet<String> interfaceCache;
+    private HashSet<String> noInterfaceCache;
 
-	private HashSet<String> interfaceCache;
-	private HashSet<String> noInterfaceCache;
+    public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+        super(key, category, violationtypes, exceptionrules, severity);
 
-	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
-		
-		this.interfaceCache = new HashSet<String>();
-		this.noInterfaceCache = new HashSet<String>();
-	}
+        this.interfaceCache = new HashSet<String>();
+        this.noInterfaceCache = new HashSet<String>();
+    }
 
-	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+    @Override
+    public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+        this.violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+        this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+        List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+        List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
-		DependencyDTO[] dependencies = analyseService.getAllDependencies();
+        DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){	
-			int interfaceCounter = 0;
-			for(Mapping classPathTo : physicalClasspathsTo){
-				for(DependencyDTO dependency : dependencies){
-					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)){
-						interfaceCounter++;
-					}
-				}
-			}
-			if(interfaceCounter == 0 && physicalClasspathsTo.size() != 0){
-				Violation violation = createViolation(rootRule, classPathFrom, configuration);
-				violations.add(violation);
-			}
-		}
-		return violations;
-	}
+        for (Mapping classPathFrom : physicalClasspathsFrom) {
+            int interfaceCounter = 0;
+            for (Mapping classPathTo : physicalClasspathsTo) {
+                for (DependencyDTO dependency : dependencies) {
+                    if (dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)) {
+                        interfaceCounter++;
+                    }
+                }
+            }
+            if (interfaceCounter == 0 && physicalClasspathsTo.size() != 0) {
+                Violation violation = createViolation(rootRule, classPathFrom, configuration);
+                violations.add(violation);
+            }
+        }
+        return violations;
+    }
 
-	private boolean isInterface(String classPath){
-		if(interfaceCache.contains(classPath)){
-			return true;
-		}
-		else if(noInterfaceCache.contains(classPath)){
-			return false;
-		}
-		else{
-			return addToCache(classPath);
-		}
-	}
-	
-	private boolean addToCache(String classPath){
-		boolean isInterface = analyseService.getModuleForUniqueName(classPath).type.toLowerCase().equals("interface");
-		if(isInterface){
-			interfaceCache.add(classPath);
-			return true;
-		}
-		else{
-			noInterfaceCache.add(classPath);
-			return false;
-		}
-	}
+    private boolean isInterface(String classPath) {
+        if (interfaceCache.contains(classPath)) {
+            return true;
+        } else if (noInterfaceCache.contains(classPath)) {
+            return false;
+        } else {
+            return addToCache(classPath);
+        }
+    }
+
+    private boolean addToCache(String classPath) {
+        boolean isInterface = analyseService.getModuleForUniqueName(classPath).type.toLowerCase().equals("interface");
+        if (isInterface) {
+            interfaceCache.add(classPath);
+            return true;
+        } else {
+            noInterfaceCache.add(classPath);
+            return false;
+        }
+    }
 }

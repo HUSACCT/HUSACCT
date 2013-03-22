@@ -10,104 +10,105 @@ import husacct.common.services.ObservableService;
 import javax.swing.JInternalFrame;
 
 //TODO Add implement-clause  ISavable when the savechain is fixed
-public class AnalyseServiceImpl extends ObservableService implements IAnalyseService{
+public class AnalyseServiceImpl extends ObservableService implements IAnalyseService {
 
-	private IAnalyseControlService service;
-	private AnalyseInternalFrame analyseInternalFrame;
-	private boolean isAnalysed;
-	
-	public AnalyseServiceImpl(){
-		this.service = new AnalyseControlerServiceImpl();
-		this.analyseInternalFrame = null;
-		this.isAnalysed = false;
-	}
+    private IAnalyseControlService service;
+    private AnalyseInternalFrame analyseInternalFrame;
+    private boolean isAnalysed;
 
-	@Override
-	public String[] getAvailableLanguages() {
-		return service.getAvailableLanguages();
-	}
-	
-	public void analyseApplication(String[] paths, String programmingLanguage){
-		service.analyseApplication(paths, programmingLanguage);
-		this.analyseInternalFrame = new AnalyseInternalFrame();
-		this.isAnalysed = true;
-		super.notifyServiceListeners();
-	}
-	
-	@Override
-	public boolean isAnalysed() {
-		return this.isAnalysed;
-	}
-	
-	@Override
-	public JInternalFrame getJInternalFrame() {
-		if(analyseInternalFrame == null) analyseInternalFrame = new AnalyseInternalFrame();
-		return analyseInternalFrame;
-	}
-	
-	@Override
-	public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
-		return service.getModuleForUniqueName(uniquename);
-	}
-	
-	@Override
-	public AnalysedModuleDTO[] getRootModules() {
-		return service.getRootModules();
-	}
-	
+    public AnalyseServiceImpl() {
+        this.service = new AnalyseControlerServiceImpl();
+        this.analyseInternalFrame = null;
+        this.isAnalysed = false;
+    }
 
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from) {
-		return service.getChildModulesInModule(from);
-	}
+    @Override
+    public String[] getAvailableLanguages() {
+        return service.getAvailableLanguages();
+    }
 
-	@Override
-	public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
-		return service.getChildModulesInModule(from, depth);
-	}
+    public void analyseApplication(String[] paths, String programmingLanguage) {
+        service.analyseApplication(paths, programmingLanguage);
+        this.analyseInternalFrame = new AnalyseInternalFrame();
+        this.isAnalysed = true;
+        super.notifyServiceListeners();
+    }
 
-	@Override
-	public AnalysedModuleDTO getParentModuleForModule(String child) {
-		return service.getParentModuleForModule(child);
-	}
+    @Override
+    public boolean isAnalysed() {
+        return this.isAnalysed;
+    }
 
-	@Override
-	public DependencyDTO[] getAllDependencies(){
-		return service.getAllDependencies();
-	}
-	
-	@Override
-	public DependencyDTO[] getDependencies(String from, String to) {
-		return service.getDependencies(from, to);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter){
-		return service.getDependencies(from, to, dependencyFilter);
-	}
+    @Override
+    public JInternalFrame getJInternalFrame() {
+        if (analyseInternalFrame == null) {
+            analyseInternalFrame = new AnalyseInternalFrame();
+        }
+        return analyseInternalFrame;
+    }
 
-	@Override
-	public DependencyDTO[] getDependenciesFrom(String from) {
-		return service.getDependenciesFrom(from);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter){
-		return service.getDependenciesFrom(from, dependencyFilter);
-	}
-	
-	@Override
-	public DependencyDTO[] getDependenciesTo(String to){
-		return service.getDependenciesTo(to);
-	}
+    @Override
+    public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {
+        return service.getModuleForUniqueName(uniquename);
+    }
 
-	@Override
-	public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter){
-		return service.getDependenciesTo(to, dependencyFilter);
-	}
+    @Override
+    public AnalysedModuleDTO[] getRootModules() {
+        return service.getRootModules();
+    }
 
-	@Override
-	public void exportDependencies(String fullPath) {
-		service.exportDependencies(fullPath);
-	}
+    @Override
+    public AnalysedModuleDTO[] getChildModulesInModule(String from) {
+        return service.getChildModulesInModule(from);
+    }
+
+    @Override
+    public AnalysedModuleDTO[] getChildModulesInModule(String from, int depth) {
+        return service.getChildModulesInModule(from, depth);
+    }
+
+    @Override
+    public AnalysedModuleDTO getParentModuleForModule(String child) {
+        return service.getParentModuleForModule(child);
+    }
+
+    @Override
+    public DependencyDTO[] getAllDependencies() {
+        return service.getAllDependencies();
+    }
+
+    @Override
+    public DependencyDTO[] getDependencies(String from, String to) {
+        return service.getDependencies(from, to);
+    }
+
+    @Override
+    public DependencyDTO[] getDependencies(String from, String to, String[] dependencyFilter) {
+        return service.getDependencies(from, to, dependencyFilter);
+    }
+
+    @Override
+    public DependencyDTO[] getDependenciesFrom(String from) {
+        return service.getDependenciesFrom(from);
+    }
+
+    @Override
+    public DependencyDTO[] getDependenciesFrom(String from, String[] dependencyFilter) {
+        return service.getDependenciesFrom(from, dependencyFilter);
+    }
+
+    @Override
+    public DependencyDTO[] getDependenciesTo(String to) {
+        return service.getDependenciesTo(to);
+    }
+
+    @Override
+    public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
+        return service.getDependenciesTo(to, dependencyFilter);
+    }
+
+    @Override
+    public void exportDependencies(String fullPath) {
+        service.exportDependencies(fullPath);
+    }
 }

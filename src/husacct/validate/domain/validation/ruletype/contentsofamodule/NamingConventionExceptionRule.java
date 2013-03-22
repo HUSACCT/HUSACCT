@@ -12,15 +12,16 @@ import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
-public class NamingConventionExceptionRule extends RuleType{
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
-	
-	public NamingConventionExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
-	}
-	
-	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		return Collections.emptyList();
-	}
+public class NamingConventionExceptionRule extends RuleType {
+
+    private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
+
+    public NamingConventionExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+        super(key, category, violationtypes, exceptionrules, severity);
+    }
+
+    @Override
+    public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
+        return Collections.emptyList();
+    }
 }

@@ -22,38 +22,39 @@ import java.util.List;
 import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
-	private ReportWriter writer;
-	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-	public void exportReport(String fileType, SimpleEntry<Calendar, List<Violation>> violations, String name, String path, List<Severity> severities) {
-		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-		Report report = new Report(applicationDetails.name, applicationDetails.version, violations, path, severities);
+    private ReportWriter writer;
+    private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-		try{
-			if(fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {
-				writer = new XMLReportWriter(report, path, name);
-			} else if(fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
-				writer = new HTMLReportWriter(report, path, name);
-			} else if(fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {
-				writer = new PDFReportWriter(report, path, name);
-			}
-			if(writer == null) {
-				throw new UnknownStorageTypeException("Storage type " + fileType + " doesn't exist or is not implemented");
-			}
+    public void exportReport(String fileType, SimpleEntry<Calendar, List<Violation>> violations, String name, String path, List<Severity> severities) {
+        final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
+        Report report = new Report(applicationDetails.name, applicationDetails.version, violations, path, severities);
 
-			writer.createReport();
-		}catch(IOException e){
-			createException(e);
-		} catch (UnknownStorageTypeException e) {
-			createException(e);
-		} catch (URISyntaxException e) {
-			createException(e);
-		} catch (DocumentException e) {
-			createException(e);
-		}		
-	}
+        try {
+            if (fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {
+                writer = new XMLReportWriter(report, path, name);
+            } else if (fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
+                writer = new HTMLReportWriter(report, path, name);
+            } else if (fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {
+                writer = new PDFReportWriter(report, path, name);
+            }
+            if (writer == null) {
+                throw new UnknownStorageTypeException("Storage type " + fileType + " doesn't exist or is not implemented");
+            }
 
-	private void createException(Exception exception){
-		throw new ReportException(exception.getMessage(), exception);
-	}
+            writer.createReport();
+        } catch (IOException e) {
+            createException(e);
+        } catch (UnknownStorageTypeException e) {
+            createException(e);
+        } catch (URISyntaxException e) {
+            createException(e);
+        } catch (DocumentException e) {
+            createException(e);
+        }
+    }
+
+    private void createException(Exception exception) {
+        throw new ReportException(exception.getMessage(), exception);
+    }
 }

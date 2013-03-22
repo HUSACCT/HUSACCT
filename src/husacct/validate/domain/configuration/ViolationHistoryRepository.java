@@ -8,59 +8,60 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 
-class ViolationHistoryRepository extends Observable {	
-	private List<ViolationHistory> violationHistories;
+class ViolationHistoryRepository extends Observable {
 
-	ViolationHistoryRepository() {
-		this.violationHistories = new ArrayList<ViolationHistory>();
-	}
+    private List<ViolationHistory> violationHistories;
 
-	List<ViolationHistory> getViolationHistory() {
-		return violationHistories;
-	}
+    ViolationHistoryRepository() {
+        this.violationHistories = new ArrayList<ViolationHistory>();
+    }
 
-	void setViolationHistories(List<ViolationHistory> violationhistories){
-		this.violationHistories = violationhistories;
-	}
+    List<ViolationHistory> getViolationHistory() {
+        return violationHistories;
+    }
 
-	void addViolationHistory(ViolationHistory violationHistory){
-		violationHistories.add(violationHistory);
-		setChanged();
-		notifyObservers();
-	}
+    void setViolationHistories(List<ViolationHistory> violationhistories) {
+        this.violationHistories = violationhistories;
+    }
 
-	void removeViolationHistory(Calendar date) {
-		if(dateExistsInRepository(date)){
-			ViolationHistory recordToDelete = null;
-			for(ViolationHistory violationHistory : violationHistories) {
-				if(violationHistory.getDate().equals(date)) {
-					recordToDelete = violationHistory;
-					break;
-				}
-			}
-			violationHistories.remove(recordToDelete);
-			return;
-		}
-		throw new ViolationHistoryNotFoundException(date);
-	}
+    void addViolationHistory(ViolationHistory violationHistory) {
+        violationHistories.add(violationHistory);
+        setChanged();
+        notifyObservers();
+    }
 
-	ViolationHistory getViolationHistoryByDate(Calendar date) {
-		if(dateExistsInRepository(date)){
-			for(ViolationHistory violationHistory : violationHistories) {
-				if(violationHistory.getDate().equals(date)) {
-					return violationHistory;
-				}
-			}
-		}
-		throw new ViolationHistoryNotFoundException(date);
-	}
+    void removeViolationHistory(Calendar date) {
+        if (dateExistsInRepository(date)) {
+            ViolationHistory recordToDelete = null;
+            for (ViolationHistory violationHistory : violationHistories) {
+                if (violationHistory.getDate().equals(date)) {
+                    recordToDelete = violationHistory;
+                    break;
+                }
+            }
+            violationHistories.remove(recordToDelete);
+            return;
+        }
+        throw new ViolationHistoryNotFoundException(date);
+    }
 
-	private boolean dateExistsInRepository(Calendar date){
-		for(ViolationHistory violationHistory : violationHistories){
-			if(violationHistory.getDate().equals(date)){
-				return true;
-			}
-		}
-		return false;
-	}
+    ViolationHistory getViolationHistoryByDate(Calendar date) {
+        if (dateExistsInRepository(date)) {
+            for (ViolationHistory violationHistory : violationHistories) {
+                if (violationHistory.getDate().equals(date)) {
+                    return violationHistory;
+                }
+            }
+        }
+        throw new ViolationHistoryNotFoundException(date);
+    }
+
+    private boolean dateExistsInRepository(Calendar date) {
+        for (ViolationHistory violationHistory : violationHistories) {
+            if (violationHistory.getDate().equals(date)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

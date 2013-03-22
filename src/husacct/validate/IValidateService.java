@@ -9,23 +9,27 @@ import java.util.Calendar;
 
 import javax.swing.JInternalFrame;
 
-public interface IValidateService extends IObservableService
-{
-	public CategoryDTO[] getCategories();
+public interface IValidateService extends IObservableService {
 
-	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo);
+    public CategoryDTO[] getCategories();
 
-	public void checkConformance();
+    public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);
 
-	public Calendar[] getViolationHistoryDates();
-	public String[] getExportExtentions();
-	
-	public void exportViolations(File file, String fileType, Calendar date);	
-	public void exportViolations(File file, String fileType);
+    public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo);
 
-	public boolean isValidated();
+    public void checkConformance();
 
-	public JInternalFrame getBrowseViolationsGUI();
-	public JInternalFrame getConfigurationGUI();
+    public Calendar[] getViolationHistoryDates();
+
+    public String[] getExportExtentions();
+
+    public void exportViolations(File file, String fileType, Calendar date);
+
+    public void exportViolations(File file, String fileType);
+
+    public boolean isValidated();
+
+    public JInternalFrame getBrowseViolationsGUI();
+
+    public JInternalFrame getConfigurationGUI();
 }

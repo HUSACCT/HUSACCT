@@ -7,22 +7,22 @@ import org.jhotdraw.draw.AttributeKeys;
 import husacct.graphics.presentation.figures.BaseFigure;
 
 public class ViolationsDecorator implements Decorator {
-	private Color oldStrokeColor;
-	private Color severityColor;
 
-	public ViolationsDecorator(Color severityColor) {
-		this.severityColor = severityColor;
-	}
+    private Color oldStrokeColor;
+    private Color severityColor;
 
-	@Override
-	public void decorate(BaseFigure f) {
-		this.oldStrokeColor = f.get(AttributeKeys.STROKE_COLOR);
-		f.setStrokeColor(this.severityColor);
-	}
+    public ViolationsDecorator(Color severityColor) {
+        this.severityColor = severityColor;
+    }
 
-	@Override
-	public void deDecorate(BaseFigure f) {
-		f.setStrokeColor(this.oldStrokeColor);
-	}
+    @Override
+    public void decorate(BaseFigure f) {
+        this.oldStrokeColor = f.get(AttributeKeys.STROKE_COLOR);
+        f.setStrokeColor(this.severityColor);
+    }
 
+    @Override
+    public void deDecorate(BaseFigure f) {
+        f.setStrokeColor(this.oldStrokeColor);
+    }
 }

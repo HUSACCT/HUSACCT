@@ -11,221 +11,220 @@ import org.jdom2.Element;
 
 public class DomainXML {
 
-	private SoftwareArchitecture domainSoftwareArchitecture;
-	
-	private Boolean parseLogical = true;
-	
-	public DomainXML(SoftwareArchitecture sa){
-		this.domainSoftwareArchitecture = sa;
-	}
-	
-	public Boolean getParseLogical() {
-		return this.parseLogical;
-	}
-	
-	public void setParseLogical(Boolean doParse) {
-		this.parseLogical = doParse;
-	}
+    private SoftwareArchitecture domainSoftwareArchitecture;
+    private Boolean parseLogical = true;
 
-	public Element getSoftwareUnitDefinitionInXML(SoftwareUnitDefinition SUD) {
-		Element XMLSoftwareUnitDefinition = new Element("SoftwareUnitDefinition");
+    public DomainXML(SoftwareArchitecture sa) {
+        this.domainSoftwareArchitecture = sa;
+    }
 
-		Element SudName = new Element("name");
-		SudName.addContent(SUD.getName());
-		XMLSoftwareUnitDefinition.addContent(SudName);
+    public Boolean getParseLogical() {
+        return this.parseLogical;
+    }
 
-		Element SudType = new Element("type");
-		SudType.addContent(SUD.getType().toString());
-		XMLSoftwareUnitDefinition.addContent(SudType);
+    public void setParseLogical(Boolean doParse) {
+        this.parseLogical = doParse;
+    }
 
-		return XMLSoftwareUnitDefinition;
-	}
+    public Element getSoftwareUnitDefinitionInXML(SoftwareUnitDefinition SUD) {
+        Element XMLSoftwareUnitDefinition = new Element("SoftwareUnitDefinition");
 
-	public Element getSoftwareArchitectureInXML() {
-		Element XMLArchitecture = new Element("Architecture");
+        Element SudName = new Element("name");
+        SudName.addContent(SUD.getName());
+        XMLSoftwareUnitDefinition.addContent(SudName);
 
-		Element SAName = new Element("name");
-		SAName.addContent(this.domainSoftwareArchitecture.getName());
-		XMLArchitecture.addContent(SAName);
+        Element SudType = new Element("type");
+        SudType.addContent(SUD.getType().toString());
+        XMLSoftwareUnitDefinition.addContent(SudType);
 
-		Element SADescription = new Element("description");
-		SADescription.addContent(this.domainSoftwareArchitecture.getDescription());
-		XMLArchitecture.addContent(SADescription);
+        return XMLSoftwareUnitDefinition;
+    }
 
-		if (this.domainSoftwareArchitecture.getModules().size() > 0) {
-			Element SAModules = new Element("modules");
-			for (Module m : this.domainSoftwareArchitecture.getModules()) {
-				SAModules.addContent(this.getModuleInXML(m));
-			}
-			XMLArchitecture.addContent(SAModules);
-		}
+    public Element getSoftwareArchitectureInXML() {
+        Element XMLArchitecture = new Element("Architecture");
 
-		if (this.domainSoftwareArchitecture.getAppliedRules().size() > 0) {
-			Element SARules = new Element("rules");
-			for (AppliedRule ar : this.domainSoftwareArchitecture.getAppliedRules()) {
-				SARules.addContent(this.getAppliedRuleInXML(ar));
-			}
-			XMLArchitecture.addContent(SARules);
-		}
-		
-		return XMLArchitecture;
-	}
+        Element SAName = new Element("name");
+        SAName.addContent(this.domainSoftwareArchitecture.getName());
+        XMLArchitecture.addContent(SAName);
 
-	public Element getModuleInXML(Module module) {
-		Element xmlModule = new Element("Module");
+        Element SADescription = new Element("description");
+        SADescription.addContent(this.domainSoftwareArchitecture.getDescription());
+        XMLArchitecture.addContent(SADescription);
 
-		Element moduleType = new Element("type");
-		moduleType.addContent(module.getClass().getSimpleName());
-		xmlModule.addContent(moduleType);
+        if (this.domainSoftwareArchitecture.getModules().size() > 0) {
+            Element SAModules = new Element("modules");
+            for (Module m : this.domainSoftwareArchitecture.getModules()) {
+                SAModules.addContent(this.getModuleInXML(m));
+            }
+            XMLArchitecture.addContent(SAModules);
+        }
 
-		Element moduleDescription = new Element("description");
-		moduleDescription.addContent(module.getDescription());
-		xmlModule.addContent(moduleDescription);
+        if (this.domainSoftwareArchitecture.getAppliedRules().size() > 0) {
+            Element SARules = new Element("rules");
+            for (AppliedRule ar : this.domainSoftwareArchitecture.getAppliedRules()) {
+                SARules.addContent(this.getAppliedRuleInXML(ar));
+            }
+            XMLArchitecture.addContent(SARules);
+        }
 
-		Element moduleId = new Element("id");
-		moduleId.addContent(Long.toString(module.getId()));
-		xmlModule.addContent(moduleId);
+        return XMLArchitecture;
+    }
 
-		Element moduleName = new Element("name");
-		moduleName.addContent(module.getName());
-		xmlModule.addContent(moduleName);
+    public Element getModuleInXML(Module module) {
+        Element xmlModule = new Element("Module");
 
-		/**
-		 * build extra elements based on type (Module is generic)
-		 */
-		if (module.getClass().getSimpleName().toLowerCase().equals("layer")) {
-			Element moduleLevel = new Element("HierarchicalLevel");
-			moduleLevel.addContent("" + ((Layer)module).getHierarchicalLevel());
-			xmlModule.addContent(moduleLevel);
-		}
+        Element moduleType = new Element("type");
+        moduleType.addContent(module.getClass().getSimpleName());
+        xmlModule.addContent(moduleType);
 
-		/**
-		 * Check for units and add them to the XML root of this element
-		 */
-		if (module.getUnits().size() > 0) {
-			Element units = new Element("SoftwareUnitDefinitions");
-			for (SoftwareUnitDefinition SUD : module.getUnits()) {
-				units.addContent(this.getSoftwareUnitDefinitionInXML(SUD));
-			}
-			xmlModule.addContent(units);
-		}
+        Element moduleDescription = new Element("description");
+        moduleDescription.addContent(module.getDescription());
+        xmlModule.addContent(moduleDescription);
 
-		/**
-		 * Check for submodules and add them to the root of the parent (recursive call)
-		 */
-		if (module.getSubModules().size() > 0) {
-			Element subModule = new Element("SubModules");
-			for (Module m : module.getSubModules()) {
-				subModule.addContent(this.getModuleInXML(m));	
-			}
-			xmlModule.addContent(subModule);
-		}
+        Element moduleId = new Element("id");
+        moduleId.addContent(Long.toString(module.getId()));
+        xmlModule.addContent(moduleId);
 
-		if (module.getUnits().size() > 0) {
-			Element physicalPaths = new Element("PhysicalPaths");
-			
-			for (SoftwareUnitDefinition su : module.getUnits()){
-				physicalPaths.addContent(this.getPhysicalPathInXML(su.getName()));
-			}
+        Element moduleName = new Element("name");
+        moduleName.addContent(module.getName());
+        xmlModule.addContent(moduleName);
 
-			xmlModule.addContent(physicalPaths);
-		}
+        /**
+         * build extra elements based on type (Module is generic)
+         */
+        if (module.getClass().getSimpleName().toLowerCase().equals("layer")) {
+            Element moduleLevel = new Element("HierarchicalLevel");
+            moduleLevel.addContent("" + ((Layer) module).getHierarchicalLevel());
+            xmlModule.addContent(moduleLevel);
+        }
 
-		return xmlModule;
-	}
+        /**
+         * Check for units and add them to the XML root of this element
+         */
+        if (module.getUnits().size() > 0) {
+            Element units = new Element("SoftwareUnitDefinitions");
+            for (SoftwareUnitDefinition SUD : module.getUnits()) {
+                units.addContent(this.getSoftwareUnitDefinitionInXML(SUD));
+            }
+            xmlModule.addContent(units);
+        }
 
-	public Element getPhysicalPathInXML(String path) {
-		Element XMLPath = new Element("path");
-		XMLPath.addContent(path);
-		return XMLPath;
-	}
+        /**
+         * Check for submodules and add them to the root of the parent (recursive call)
+         */
+        if (module.getSubModules().size() > 0) {
+            Element subModule = new Element("SubModules");
+            for (Module m : module.getSubModules()) {
+                subModule.addContent(this.getModuleInXML(m));
+            }
+            xmlModule.addContent(subModule);
+        }
 
-	public Element getAppliedRuleInXML(AppliedRule AR) {
-		Element XMLAppliedRule = new Element("AppliedRule");
+        if (module.getUnits().size() > 0) {
+            Element physicalPaths = new Element("PhysicalPaths");
 
-		Element ruleRegex = new Element("regex");
-		ruleRegex.addContent(AR.getRegex());
-		XMLAppliedRule.addContent(ruleRegex);
+            for (SoftwareUnitDefinition su : module.getUnits()) {
+                physicalPaths.addContent(this.getPhysicalPathInXML(su.getName()));
+            }
 
-		Element ruleDescription = new Element("description");
-		ruleDescription.addContent(AR.getDescription());
-		XMLAppliedRule.addContent(ruleDescription);
+            xmlModule.addContent(physicalPaths);
+        }
 
-		Element ruleEnabled = new Element("enabled");
-		if (AR.isEnabled()) {
-			ruleEnabled.addContent("true");
-		} else {
-			ruleEnabled.addContent("false");
-		}
-		XMLAppliedRule.addContent(ruleEnabled);
+        return xmlModule;
+    }
 
-		Element ruleId = new Element("id");
-		ruleId.addContent(Long.toString(AR.getId()));
-		XMLAppliedRule.addContent(ruleId);
+    public Element getPhysicalPathInXML(String path) {
+        Element XMLPath = new Element("path");
+        XMLPath.addContent(path);
+        return XMLPath;
+    }
 
-		Element ruleType = new Element("type");
-		ruleType.addContent(AR.getRuleType());
-		XMLAppliedRule.addContent(ruleType);
+    public Element getAppliedRuleInXML(AppliedRule AR) {
+        Element XMLAppliedRule = new Element("AppliedRule");
 
-		if (AR.getModuleFrom() instanceof Module) {
-			Element moduleFrom = new Element("moduleFrom");
-			moduleFrom.addContent(this.getModuleInXML(AR.getModuleFrom()));
-			XMLAppliedRule.addContent(moduleFrom);
-		}
+        Element ruleRegex = new Element("regex");
+        ruleRegex.addContent(AR.getRegex());
+        XMLAppliedRule.addContent(ruleRegex);
 
-		if (AR.getModuleTo() instanceof Module) {
-			Element moduleTo = new Element("moduleTo");
-			moduleTo.addContent(this.getModuleInXML(AR.getModuleTo()));
-			XMLAppliedRule.addContent(moduleTo);
-		}
+        Element ruleDescription = new Element("description");
+        ruleDescription.addContent(AR.getDescription());
+        XMLAppliedRule.addContent(ruleDescription);
 
-		Element dependencies = new Element("dependencies");
-		if (AR.getDependencies().length > 0) {
-			for (int i = 0; i < AR.getDependencies().length; i++) {
-				Element dependency = new Element("dependency");
-				dependency.addContent(AR.getDependencies()[i].toString());
-				dependencies.addContent(dependency);
-			}
-		}
-		XMLAppliedRule.addContent(dependencies);
+        Element ruleEnabled = new Element("enabled");
+        if (AR.isEnabled()) {
+            ruleEnabled.addContent("true");
+        } else {
+            ruleEnabled.addContent("false");
+        }
+        XMLAppliedRule.addContent(ruleEnabled);
 
-		if (AR.getExceptions().size() > 0) {
-			Element ruleExceptions = new Element("exceptions");
-			for (AppliedRule ap : AR.getExceptions()) {
-				ruleExceptions.addContent(this.getAppliedRuleInXML(ap));
-			}
-			XMLAppliedRule.addContent(ruleExceptions);
-		}
+        Element ruleId = new Element("id");
+        ruleId.addContent(Long.toString(AR.getId()));
+        XMLAppliedRule.addContent(ruleId);
 
-		return XMLAppliedRule;
-	}
+        Element ruleType = new Element("type");
+        ruleType.addContent(AR.getRuleType());
+        XMLAppliedRule.addContent(ruleType);
 
-	public Element getApplicationInXML(Application App) {	
-		Element XMLApplication = new Element("Application");
+        if (AR.getModuleFrom() instanceof Module) {
+            Element moduleFrom = new Element("moduleFrom");
+            moduleFrom.addContent(this.getModuleInXML(AR.getModuleFrom()));
+            XMLAppliedRule.addContent(moduleFrom);
+        }
 
-		Element applicationName = new Element("name");
-		applicationName.addContent(App.getName());
-		XMLApplication.addContent(applicationName);
+        if (AR.getModuleTo() instanceof Module) {
+            Element moduleTo = new Element("moduleTo");
+            moduleTo.addContent(this.getModuleInXML(AR.getModuleTo()));
+            XMLAppliedRule.addContent(moduleTo);
+        }
 
-		Element applicationPrLanguage = new Element("programmingLanguage");
-		applicationPrLanguage.addContent(App.getLanguage());
-		XMLApplication.addContent(applicationPrLanguage);
+        Element dependencies = new Element("dependencies");
+        if (AR.getDependencies().length > 0) {
+            for (int i = 0; i < AR.getDependencies().length; i++) {
+                Element dependency = new Element("dependency");
+                dependency.addContent(AR.getDependencies()[i].toString());
+                dependencies.addContent(dependency);
+            }
+        }
+        XMLAppliedRule.addContent(dependencies);
 
-		Element applicationVersion = new Element("version");
-		applicationVersion.addContent(App.getVersion());
-		XMLApplication.addContent(applicationVersion);
-		
-		Element applicationPaths = new Element("physicalPaths");
-		if (App.getPaths().length > 0) {
-			for (int i = 0; i < App.getPaths().length; i++) {
-				Element appPath = new Element("path");
-				appPath.addContent(App.getPaths()[i].toString());
-				applicationPaths.addContent(appPath);
-			}
-		}
-		XMLApplication.addContent(applicationPaths);
-		XMLApplication.addContent(this.getSoftwareArchitectureInXML());
-		
-		return XMLApplication;
-	}
+        if (AR.getExceptions().size() > 0) {
+            Element ruleExceptions = new Element("exceptions");
+            for (AppliedRule ap : AR.getExceptions()) {
+                ruleExceptions.addContent(this.getAppliedRuleInXML(ap));
+            }
+            XMLAppliedRule.addContent(ruleExceptions);
+        }
+
+        return XMLAppliedRule;
+    }
+
+    public Element getApplicationInXML(Application App) {
+        Element XMLApplication = new Element("Application");
+
+        Element applicationName = new Element("name");
+        applicationName.addContent(App.getName());
+        XMLApplication.addContent(applicationName);
+
+        Element applicationPrLanguage = new Element("programmingLanguage");
+        applicationPrLanguage.addContent(App.getLanguage());
+        XMLApplication.addContent(applicationPrLanguage);
+
+        Element applicationVersion = new Element("version");
+        applicationVersion.addContent(App.getVersion());
+        XMLApplication.addContent(applicationVersion);
+
+        Element applicationPaths = new Element("physicalPaths");
+        if (App.getPaths().length > 0) {
+            for (int i = 0; i < App.getPaths().length; i++) {
+                Element appPath = new Element("path");
+                appPath.addContent(App.getPaths()[i].toString());
+                applicationPaths.addContent(appPath);
+            }
+        }
+        XMLApplication.addContent(applicationPaths);
+        XMLApplication.addContent(this.getSoftwareArchitectureInXML());
+
+        return XMLApplication;
+    }
 }

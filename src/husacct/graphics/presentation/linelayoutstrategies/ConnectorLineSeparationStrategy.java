@@ -7,24 +7,24 @@ import java.util.HashSet;
 import org.jhotdraw.draw.connector.Connector;
 
 public class ConnectorLineSeparationStrategy implements ILineSeparationStrategy {
-	public final int RELATIONS_DISTANCE = 200;
 
-	@Override
-	public void separateLines(HashSet<RelationFigure> overlappingLineFigures) {
+    public final int RELATIONS_DISTANCE = 200;
 
-		double start = 0 - ((overlappingLineFigures.size() - 1) * RELATIONS_DISTANCE / 2);
+    @Override
+    public void separateLines(HashSet<RelationFigure> overlappingLineFigures) {
 
-		for (RelationFigure figure : overlappingLineFigures) {
+        double start = 0 - ((overlappingLineFigures.size() - 1) * RELATIONS_DISTANCE / 2);
 
-			Connector newStartConnector = new DistantiatedChopRectangleConnector(figure.getStartFigure(), start);
-			figure.setStartConnector(newStartConnector);
+        for (RelationFigure figure : overlappingLineFigures) {
 
-			Connector newEndConnector = new DistantiatedChopRectangleConnector(figure.getEndFigure(), start);
-			figure.setEndConnector(newEndConnector);
+            Connector newStartConnector = new DistantiatedChopRectangleConnector(figure.getStartFigure(), start);
+            figure.setStartConnector(newStartConnector);
 
-			start += RELATIONS_DISTANCE;
-		}
+            Connector newEndConnector = new DistantiatedChopRectangleConnector(figure.getEndFigure(), start);
+            figure.setEndConnector(newEndConnector);
 
-	}
+            start += RELATIONS_DISTANCE;
+        }
 
+    }
 }

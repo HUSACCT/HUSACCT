@@ -7,9 +7,9 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ 
-	JavaTestSuite.class,
-	CSharpTestSuite.class
+@SuiteClasses({
+    JavaTestSuite.class,
+    CSharpTestSuite.class
 })
 public class AnalyseTestSuite {
 }

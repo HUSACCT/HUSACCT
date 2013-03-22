@@ -15,10 +15,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 public class ColorTableModel extends AbstractTableModel {
-	
-	private static final long serialVersionUID = 2492345975488386436L;
-	
-	private Vector dataVector = new Vector();
+
+    private static final long serialVersionUID = 2492345975488386436L;
+    private Vector dataVector = new Vector();
     private String columnNames[] = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color")};
     private Class<?>[] types = new Class[]{String.class, JButton.class};
     private boolean[] canEdit = new boolean[]{false, true};
@@ -48,14 +47,14 @@ public class ColorTableModel extends AbstractTableModel {
     public int getRowCount() {
         return dataVector.size();
     }
-    
-	@Override
+
+    @Override
     public Object getValueAt(int row, int column) {
         Vector rowVector = (Vector) dataVector.elementAt(row);
         return rowVector.elementAt(column);
     }
-    
-	@Override
+
+    @Override
     public void setValueAt(Object value, int row, int column) {
         Vector rowVector = (Vector) dataVector.elementAt(row);
         rowVector.setElementAt(value, column);
@@ -69,7 +68,7 @@ public class ColorTableModel extends AbstractTableModel {
         column.setCellRenderer(new ColorRenderer(true));
     }
 
-	protected static Vector convertToVector(Object[] anArray) {
+    protected static Vector convertToVector(Object[] anArray) {
         if (anArray == null) {
             return null;
         }
@@ -80,7 +79,7 @@ public class ColorTableModel extends AbstractTableModel {
         return v;
     }
 
-	private void justifyRows(int from, int to) {
+    private void justifyRows(int from, int to) {
         dataVector.setSize(getRowCount());
 
         for (int i = from; i < to; i++) {
@@ -91,7 +90,7 @@ public class ColorTableModel extends AbstractTableModel {
         }
     }
 
-	public void addRow(Vector rowData) {
+    public void addRow(Vector rowData) {
         insertRow(getRowCount(), rowData);
     }
 
@@ -99,7 +98,7 @@ public class ColorTableModel extends AbstractTableModel {
         addRow(convertToVector(rowData));
     }
 
-	public void insertRow(int row, Vector rowData) {
+    public void insertRow(int row, Vector rowData) {
         dataVector.insertElementAt(rowData, row);
         justifyRows(row, row + 1);
         fireTableRowsInserted(row, row);
@@ -113,7 +112,7 @@ public class ColorTableModel extends AbstractTableModel {
         return (j == 0) ? i : gcd(j, i % j);
     }
 
-	private static void rotate(Vector v, int a, int b, int shift) {
+    private static void rotate(Vector v, int a, int b, int shift) {
         int size = b - a;
         int r = size - shift;
         int g = gcd(size, r);

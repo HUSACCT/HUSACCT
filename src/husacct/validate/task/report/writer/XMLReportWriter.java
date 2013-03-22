@@ -18,81 +18,81 @@ import org.jdom2.output.XMLOutputter;
 
 public class XMLReportWriter extends ReportWriter {
 
-	public XMLReportWriter(Report report, String path, String fileName) {
-		super(report, path, fileName, ExtensionType.XML);
-	}
+    public XMLReportWriter(Report report, String path, String fileName) {
+        super(report, path, fileName, ExtensionType.XML);
+    }
 
-	@Override
-	public void createReport() throws IOException {		
-		Document document = new Document();
+    @Override
+    public void createReport() throws IOException {
+        Document document = new Document();
 
-		Element reportElement = new Element("report");
-		document.setRootElement(reportElement);
+        Element reportElement = new Element("report");
+        document.setRootElement(reportElement);
 
-		Element projectName = new Element("projectName");
-		projectName.setText(report.getProjectName());
-		reportElement.addContent(projectName);
+        Element projectName = new Element("projectName");
+        projectName.setText(report.getProjectName());
+        reportElement.addContent(projectName);
 
-		Element projectVersion = new Element("version");
-		projectVersion.setText(report.getVersion());
-		reportElement.addContent(projectVersion);
+        Element projectVersion = new Element("version");
+        projectVersion.setText(report.getVersion());
+        reportElement.addContent(projectVersion);
 
-		Element totalViolations = new Element("totalViolations");
-		totalViolations.setText("" + report.getViolations().getValue().size());
-		reportElement.addContent(totalViolations);
+        Element totalViolations = new Element("totalViolations");
+        totalViolations.setText("" + report.getViolations().getValue().size());
+        reportElement.addContent(totalViolations);
 
-		Element violationGeneratedOn = new Element("violationsGeneratedOn");
-		violationGeneratedOn.setText(report.getFormattedDate());
-		reportElement.addContent(violationGeneratedOn);
+        Element violationGeneratedOn = new Element("violationsGeneratedOn");
+        violationGeneratedOn.setText(report.getFormattedDate());
+        reportElement.addContent(violationGeneratedOn);
 
-		Element violationsSeverities = new Element("violations");
-		violationsSeverities.setAttribute(new Attribute("totalViolations" , "" +  report.getViolations().getValue().size()));
-		for(ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
-			Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
-			violationElement.setText("" + violationPerSeverity.getAmount());
-			violationsSeverities.addContent(violationElement);
-		}
-		reportElement.addContent(violationsSeverities);
+        Element violationsSeverities = new Element("violations");
+        violationsSeverities.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
+        for (ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
+            Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
+            violationElement.setText("" + violationPerSeverity.getAmount());
+            violationsSeverities.addContent(violationElement);
+        }
+        reportElement.addContent(violationsSeverities);
 
-		Element violations = new Element("violations");
-		reportElement.addContent(violations);
+        Element violations = new Element("violations");
+        reportElement.addContent(violations);
 
-		for(Violation violation : report.getViolations().getValue()) {
-			Element xmlViolation = new Element("violation");
+        for (Violation violation : report.getViolations().getValue()) {
+            Element xmlViolation = new Element("violation");
 
-			Element source = new Element("source");
-			Element target = new Element("target");
-			Element lineNr = new Element("lineNr");
-			Element severity = new Element("severity");
-			Element ruleType = new Element("ruleType");
-			Element dependencyKind = new Element("dependencyKind");
-			Element isDirect = new Element("isDirect");
+            Element source = new Element("source");
+            Element target = new Element("target");
+            Element lineNr = new Element("lineNr");
+            Element severity = new Element("severity");
+            Element ruleType = new Element("ruleType");
+            Element dependencyKind = new Element("dependencyKind");
+            Element isDirect = new Element("isDirect");
 
-			target.setText(violation.getClassPathTo());
-			source.setText(violation.getClassPathFrom());
-			lineNr.setText("" + violation.getLinenumber());
-			severity.setText(violation.getSeverity().getSeverityName());
-			if(violation.getLogicalModules() != null) {
-				Message messageObject = violation.getMessage();
-				String message = new Messagebuilder().createMessage(messageObject);
-				ruleType.setText(message);
-			}
-			dependencyKind.setText(violation.getViolationtypeKey());
-			isDirect.setText("" + violation.isIndirect());
+            target.setText(violation.getClassPathTo());
+            source.setText(violation.getClassPathFrom());
+            lineNr.setText("" + violation.getLinenumber());
+            severity.setText(violation.getSeverity().getSeverityName());
+            if (violation.getLogicalModules() != null) {
+                Message messageObject = violation.getMessage();
+                String message = new Messagebuilder().createMessage(messageObject);
+                ruleType.setText(message);
+            }
+            dependencyKind.setText(violation.getViolationtypeKey());
+            isDirect.setText("" + violation.isIndirect());
 
-			xmlViolation.addContent(source);
-			xmlViolation.addContent(target);
-			xmlViolation.addContent(lineNr);
-			xmlViolation.addContent(severity);
-			xmlViolation.addContent(ruleType);
-			xmlViolation.addContent(dependencyKind);
-			xmlViolation.addContent(isDirect);
+            xmlViolation.addContent(source);
+            xmlViolation.addContent(target);
+            xmlViolation.addContent(lineNr);
+            xmlViolation.addContent(severity);
+            xmlViolation.addContent(ruleType);
+            xmlViolation.addContent(dependencyKind);
+            xmlViolation.addContent(isDirect);
 
-			violations.addContent(xmlViolation);
-		}
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		FileWriter fileWriter = new FileWriter(getFileName());
-		outputter.output(document, fileWriter);
-		fileWriter.close();		
-	}
+            violations.addContent(xmlViolation);
+        }
+        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+        FileWriter fileWriter = new FileWriter(getFileName());
+        outputter.output(document, fileWriter);
+        fileWriter.close();
+    }
 }

@@ -10,64 +10,64 @@ import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
 public class LayerFigure extends BaseFigure {
-	private static final long serialVersionUID = 101138923385231941L;
-	private RectangleFigure body;
-	private TextFigure text;
 
-	public int MIN_WIDTH = 150;
-	public int MIN_HEIGHT = 30;
+    private static final long serialVersionUID = 101138923385231941L;
+    private RectangleFigure body;
+    private TextFigure text;
+    public int MIN_WIDTH = 150;
+    public int MIN_HEIGHT = 30;
 
-	public LayerFigure(String name) {
-		super(name);
+    public LayerFigure(String name) {
+        super(name);
 
-		body = new RectangleFigure();
-		text = new TextFigure(name);
-		text.set(AttributeKeys.FONT_BOLD, true);
-		children.add(body);
-		children.add(text);
+        body = new RectangleFigure();
+        text = new TextFigure(name);
+        text.set(AttributeKeys.FONT_BOLD, true);
+        children.add(body);
+        children.add(text);
 
-		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
-	}
+        body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+    }
 
-	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
-		}
+    @Override
+    public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+        if ((lead.x - anchor.x) < MIN_WIDTH) {
+            lead.x = anchor.x + MIN_WIDTH;
+        }
+        if ((lead.y - anchor.y) < MIN_HEIGHT) {
+            lead.y = anchor.y + MIN_HEIGHT;
+        }
 
-		body.setBounds(anchor, lead);
+        body.setBounds(anchor, lead);
 
-		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
+        // textbox centralising
+        double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+        double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
 
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX;
-		textAnchor.y += plusY;
-		text.setBounds(textAnchor, null);
+        Point2D.Double textAnchor = (Double) anchor.clone();
+        textAnchor.x += plusX;
+        textAnchor.y += plusY;
+        text.setBounds(textAnchor, null);
 
-		invalidate();
-	}
+        invalidate();
+    }
 
-	@Override
-	public LayerFigure clone() {
+    @Override
+    public LayerFigure clone() {
 
-		LayerFigure other = (LayerFigure) super.clone();
-		other.body = body.clone();
-		other.text = text.clone();
+        LayerFigure other = (LayerFigure) super.clone();
+        other.body = body.clone();
+        other.text = text.clone();
 
-		other.children = new ArrayList<Figure>();
-		other.children.add(other.body);
-		other.children.add(other.text);
+        other.children = new ArrayList<Figure>();
+        other.children.add(other.body);
+        other.children.add(other.text);
 
-		return other;
-	}
+        return other;
+    }
 
-	@Override
-	public boolean isModule() {
-		return true;
-	}
+    @Override
+    public boolean isModule() {
+        return true;
+    }
 }

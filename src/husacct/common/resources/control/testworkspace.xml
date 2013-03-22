@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <husacct version="1">
-  <husacct.control.ControlServiceImpl>
-    <workspace name="TestWorkspace" />
-  </husacct.control.ControlServiceImpl>
+	<husacct.control.ControlServiceImpl>
+		<workspace name="TestWorkspace" />
+	</husacct.control.ControlServiceImpl>
 </husacct>

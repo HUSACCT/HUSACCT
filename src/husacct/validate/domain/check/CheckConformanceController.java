@@ -20,72 +20,71 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class CheckConformanceController {
-	private final ConfigurationServiceImpl configuration;
 
-	private Logger logger = Logger.getLogger(CheckConformanceController.class);
-	private RuleTypesFactory ruleFactory;
-	private Map<String, RuleType> ruleCache;
-	private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
+    private final ConfigurationServiceImpl configuration;
+    private Logger logger = Logger.getLogger(CheckConformanceController.class);
+    private RuleTypesFactory ruleFactory;
+    private Map<String, RuleType> ruleCache;
+    private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
-	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory){
-		this.configuration = configuration;
-		this.configuration.clearViolations();
-		this.ruleCache = new HashMap<String, RuleType>();
-		this.ruleFactory = ruleFactory;
-	}
+    public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory) {
+        this.configuration = configuration;
+        this.configuration.clearViolations();
+        this.ruleCache = new HashMap<String, RuleType>();
+        this.ruleFactory = ruleFactory;
+    }
 
-	public void checkConformance(RuleDTO[] appliedRules){
-		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-		if(applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()){
-			configuration.clearViolations();
-			ruleCache.clear();
-			
-			List<Violation> violationList = new ArrayList<Violation>();
-			
-			for(RuleDTO appliedRule : appliedRules){
-				try{
-					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
-					violationList.addAll(newViolations);
+    public void checkConformance(RuleDTO[] appliedRules) {
+        final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
+        if (applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()) {
+            configuration.clearViolations();
+            ruleCache.clear();
 
-					if(appliedRule.exceptionRules != null){
-						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
-					}
-				}catch(RuleTypeNotFoundException e){
-					logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-				} catch (RuleInstantionException e) {
-					logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
-				}
-			}
-			configuration.addViolations(violationList);
-		}
-		else{
-			throw new ProgrammingLanguageNotFoundException();
-		}
-	}
+            List<Violation> violationList = new ArrayList<Violation>();
 
-	private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent){
-		for(RuleDTO appliedRule : exceptionRules){
-			try{
-				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
-				List<Violation> newViolations = rule.check(configuration, parent, appliedRule);
-				configuration.addViolations(newViolations);
-			}catch(RuleTypeNotFoundException e){
-				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-			} catch (RuleInstantionException e) {
-				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
-			}
-		}
-	}
+            for (RuleDTO appliedRule : appliedRules) {
+                try {
+                    RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+                    List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
+                    violationList.addAll(newViolations);
 
-	private RuleType getRuleType(String ruleKey) throws RuleInstantionException{
-		RuleType rule = ruleCache.get(ruleKey);
-		if(rule == null){
-			rule = ruleFactory.generateRuleType(ruleKey);
-		}
-		if(rule != null){
-			ruleCache.put(ruleKey, rule);
-		}
-		return rule;
-	}
+                    if (appliedRule.exceptionRules != null) {
+                        checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
+                    }
+                } catch (RuleTypeNotFoundException e) {
+                    logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+                } catch (RuleInstantionException e) {
+                    logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
+                }
+            }
+            configuration.addViolations(violationList);
+        } else {
+            throw new ProgrammingLanguageNotFoundException();
+        }
+    }
+
+    private void checkConformanceExceptionRules(RuleDTO[] exceptionRules, RuleDTO parent) {
+        for (RuleDTO appliedRule : exceptionRules) {
+            try {
+                RuleType rule = getRuleType(appliedRule.ruleTypeKey);
+                List<Violation> newViolations = rule.check(configuration, parent, appliedRule);
+                configuration.addViolations(newViolations);
+            } catch (RuleTypeNotFoundException e) {
+                logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
+            } catch (RuleInstantionException e) {
+                logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
+            }
+        }
+    }
+
+    private RuleType getRuleType(String ruleKey) throws RuleInstantionException {
+        RuleType rule = ruleCache.get(ruleKey);
+        if (rule == null) {
+            rule = ruleFactory.generateRuleType(ruleKey);
+        }
+        if (rule != null) {
+            ruleCache.put(ruleKey, rule);
+        }
+        return rule;
+    }
 }

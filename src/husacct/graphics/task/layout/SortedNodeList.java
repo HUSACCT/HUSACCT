@@ -7,72 +7,77 @@ import java.util.List;
 
 public class SortedNodeList extends NodeList {
 
-	public void sort() {
-		ArrayList<ArrayList<Node>> trees = new ArrayList<ArrayList<Node>>();
+    public void sort() {
+        ArrayList<ArrayList<Node>> trees = new ArrayList<ArrayList<Node>>();
 
-		while (!nodes.isEmpty()) {
-			ArrayList<Node> openNodes = new ArrayList<Node>();
-			ArrayList<Node> tree = new ArrayList<Node>();
+        while (!nodes.isEmpty()) {
+            ArrayList<Node> openNodes = new ArrayList<Node>();
+            ArrayList<Node> tree = new ArrayList<Node>();
 
-			openNodes.add(nodes.get(0));
-			while (!openNodes.isEmpty()) {
-				Node node = ListUtils.pop(openNodes);
-				
-				nodes.remove(node);
-				for (Node n : node.getConnections()) {
-					if (nodes.contains(n))
-						openNodes.add(n);
-				}
+            openNodes.add(nodes.get(0));
+            while (!openNodes.isEmpty()) {
+                Node node = ListUtils.pop(openNodes);
 
-				tree.add(node);
-			}
+                nodes.remove(node);
+                for (Node n : node.getConnections()) {
+                    if (nodes.contains(n)) {
+                        openNodes.add(n);
+                    }
+                }
 
-			trees.add(tree);
-		}
+                tree.add(node);
+            }
 
-		if (!trees.isEmpty()) {
-			ArrayList<ArrayList<Node>> finalOrdering = new ArrayList<ArrayList<Node>>();
-			finalOrdering.add(ListUtils.pop(trees));
+            trees.add(tree);
+        }
 
-			while (!trees.isEmpty()) {
-				ArrayList<Node> tree = ListUtils.pop(trees);
+        if (!trees.isEmpty()) {
+            ArrayList<ArrayList<Node>> finalOrdering = new ArrayList<ArrayList<Node>>();
+            finalOrdering.add(ListUtils.pop(trees));
 
-				for (int i = 0; i < finalOrdering.size(); i++) {
-					ArrayList<Node> finalOrderedTree = finalOrdering.get(i);
-				
-					if (compareIfListsOverlap(tree, finalOrderedTree))
-						mergeLists(finalOrderedTree, tree);
-					else
-						finalOrdering.add(tree);
-				}
-			}
+            while (!trees.isEmpty()) {
+                ArrayList<Node> tree = ListUtils.pop(trees);
 
-			nodes.clear();
-			while (!finalOrdering.isEmpty()) {
-				ArrayList<Node> tree = ListUtils.pop(finalOrdering);
-				nodes.addAll(tree);
-			}
-		}
-	}
+                for (int i = 0; i < finalOrdering.size(); i++) {
+                    ArrayList<Node> finalOrderedTree = finalOrdering.get(i);
 
-	private boolean compareIfListsOverlap(List<Node> lhs, List<Node> rhs) {
-		for (Node n : lhs) {
-			if (rhs.contains(n))
-				return true;
-		}
+                    if (compareIfListsOverlap(tree, finalOrderedTree)) {
+                        mergeLists(finalOrderedTree, tree);
+                    } else {
+                        finalOrdering.add(tree);
+                    }
+                }
+            }
 
-		return false;
-	}
-	
-	private void mergeLists(List<Node> dest, List<Node> src) {
-		if (dest == src)
-			return;
-		
-		while (!src.isEmpty()) {
-			Node node = ListUtils.pop(src);
-			
-			if (!dest.contains(node))
-				dest.add(node);
-		}
-	}
+            nodes.clear();
+            while (!finalOrdering.isEmpty()) {
+                ArrayList<Node> tree = ListUtils.pop(finalOrdering);
+                nodes.addAll(tree);
+            }
+        }
+    }
+
+    private boolean compareIfListsOverlap(List<Node> lhs, List<Node> rhs) {
+        for (Node n : lhs) {
+            if (rhs.contains(n)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void mergeLists(List<Node> dest, List<Node> src) {
+        if (dest == src) {
+            return;
+        }
+
+        while (!src.isEmpty()) {
+            Node node = ListUtils.pop(src);
+
+            if (!dest.contains(node)) {
+                dest.add(node);
+            }
+        }
+    }
 }

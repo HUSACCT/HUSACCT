@@ -7,21 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationtypeAssembler {
-	public ViolationTypeDTO[] createViolationTypeDTO(List<ViolationType> violationtypes){
-		List<ViolationTypeDTO> violationtypeDTOs = new ArrayList<ViolationTypeDTO>();
 
-		for(ViolationType violationtype:violationtypes){
-			ViolationTypeDTO dto = createViolationTypeDTO(violationtype);
-			violationtypeDTOs.add(dto);
-		}
-		return violationtypeDTOs.toArray(new ViolationTypeDTO[violationtypeDTOs.size()]);
-	}
+    public ViolationTypeDTO[] createViolationTypeDTO(List<ViolationType> violationtypes) {
+        List<ViolationTypeDTO> violationtypeDTOs = new ArrayList<ViolationTypeDTO>();
 
-	public ViolationTypeDTO createViolationTypeDTO(ViolationType violationtype){
-		String key = violationtype.getViolationtypeKey();
-		String description = violationtype.getViolationDescriptionKey();
-		boolean isActive = violationtype.isActive();
+        for (ViolationType violationtype : violationtypes) {
+            ViolationTypeDTO dto = createViolationTypeDTO(violationtype);
+            violationtypeDTOs.add(dto);
+        }
+        return violationtypeDTOs.toArray(new ViolationTypeDTO[violationtypeDTOs.size()]);
+    }
 
-		return new ViolationTypeDTO(key, description, isActive);
-	}
+    public ViolationTypeDTO createViolationTypeDTO(ViolationType violationtype) {
+        String key = violationtype.getViolationtypeKey();
+        String description = violationtype.getViolationDescriptionKey();
+        boolean isActive = violationtype.isActive();
+
+        return new ViolationTypeDTO(key, description, isActive);
+    }
 }

@@ -12,16 +12,17 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-	AnalyseTestSuite.class, 
-	ControlTestSuite.class,
-	DefineTestSuite.class, 
-	GraphicsTestSuite.class,
-	ValidateTestSuite.class
+@Suite.SuiteClasses({
+    AnalyseTestSuite.class,
+    ControlTestSuite.class,
+    DefineTestSuite.class,
+    GraphicsTestSuite.class,
+    ValidateTestSuite.class
 })
 public class TestAll {
-	@Before
-	public void prepareLog4J(){
-		BasicConfigurator.configure();
-	}
+
+    @Before
+    public void prepareLog4J() {
+        BasicConfigurator.configure();
+    }
 }

@@ -30,157 +30,157 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class DrawingControllerTest {
-	AnalysedController analysedController;
-	
-	@Before
-	public void setup() {
-		analysedController = new AnalysedController();
-	}
 
-	@Test
-	public void drawSingleLevelModulesTest() {
-		AnalysedModuleDTO layerDTO = new AnalysedModuleDTO("test.layer", "analysedLayer", "layer", "public");
-		ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", new PhysicalPathDTO[] {}, "subsystem", new ModuleDTO[] {});
-		ModuleDTO componentDTO = new ModuleDTO("test.component", new PhysicalPathDTO[] {}, "component", new ModuleDTO[] {});
-		AnalysedModuleDTO externalLibraryDTO = new AnalysedModuleDTO("test.externalLibrary", "analysedLibrary", "externallibrary", "public");
+    AnalysedController analysedController;
 
-		analysedController.drawSingleLevelModules(new AbstractDTO[] { layerDTO, subsystemDTO, componentDTO, externalLibraryDTO });
+    @Before
+    public void setup() {
+        analysedController = new AnalysedController();
+    }
 
-		assertEquals("wrong amount of figures drawn", 4, analysedController.getDrawing().getChildren().size());
+    @Test
+    public void drawSingleLevelModulesTest() {
+        AnalysedModuleDTO layerDTO = new AnalysedModuleDTO("test.layer", "analysedLayer", "layer", "public");
+        ModuleDTO subsystemDTO = new ModuleDTO("test.subsystem", new PhysicalPathDTO[]{}, "subsystem", new ModuleDTO[]{});
+        ModuleDTO componentDTO = new ModuleDTO("test.component", new PhysicalPathDTO[]{}, "component", new ModuleDTO[]{});
+        AnalysedModuleDTO externalLibraryDTO = new AnalysedModuleDTO("test.externalLibrary", "analysedLibrary", "externallibrary", "public");
 
-		for (Figure f : analysedController.getDrawing().getChildren()) {
-			if (!(f instanceof BaseFigure)) {
-				fail("non-basefigure in drawing");
-			}
+        analysedController.drawSingleLevelModules(new AbstractDTO[]{layerDTO, subsystemDTO, componentDTO, externalLibraryDTO});
 
-			BaseFigure baseF = (BaseFigure) f;
+        assertEquals("wrong amount of figures drawn", 4, analysedController.getDrawing().getChildren().size());
 
-			assertTrue("module figure says not to be a module", baseF.isModule());
+        for (Figure f : analysedController.getDrawing().getChildren()) {
+            if (!(f instanceof BaseFigure)) {
+                fail("non-basefigure in drawing");
+            }
 
-			if (f instanceof LayerFigure) {
-				assertSame("wrong dto for layer figure", layerDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof SubsystemFigure) {
-				assertSame("wrong dto for subsystem figure", subsystemDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof ComponentFigure) {
-				assertSame("wrong dto for component figure", componentDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof ModuleFigure) {
-				assertSame("wrong dto for external library figure", externalLibraryDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else {
-				fail("unexpected type of figure found in drawing");
-			}
-		}
-	}
+            BaseFigure baseF = (BaseFigure) f;
 
-	@Test
-	public void drawMultiLevelModulesTest() {
-		HashMap<String, ArrayList<AbstractDTO>> multiLevelDTOs = new HashMap<String, ArrayList<AbstractDTO>>();
+            assertTrue("module figure says not to be a module", baseF.isModule());
 
-		ModuleDTO classDTO = new ModuleDTO("parent.class", new PhysicalPathDTO[] {}, "class", new ModuleDTO[] {});
-		ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", new PhysicalPathDTO[] {}, "interface", new ModuleDTO[] {});
-		ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass", new PhysicalPathDTO[] {}, "abstract", new ModuleDTO[] {});
+            if (f instanceof LayerFigure) {
+                assertSame("wrong dto for layer figure", layerDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+            } else if (f instanceof SubsystemFigure) {
+                assertSame("wrong dto for subsystem figure", subsystemDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+            } else if (f instanceof ComponentFigure) {
+                assertSame("wrong dto for component figure", componentDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+            } else if (f instanceof ModuleFigure) {
+                assertSame("wrong dto for external library figure", externalLibraryDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+            } else {
+                fail("unexpected type of figure found in drawing");
+            }
+        }
+    }
 
-		AnalysedModuleDTO analysedClassDTO = new AnalysedModuleDTO("parent.analysedChild", "analysedChild", "class", "public");
+    @Test
+    public void drawMultiLevelModulesTest() {
+        HashMap<String, ArrayList<AbstractDTO>> multiLevelDTOs = new HashMap<String, ArrayList<AbstractDTO>>();
 
-		ArrayList<AbstractDTO> childModules = new ArrayList<AbstractDTO>();
-		childModules.add(classDTO);
-		childModules.add(interfaceDTO);
-		childModules.add(abstractClassDTO);
-		childModules.add(analysedClassDTO);
+        ModuleDTO classDTO = new ModuleDTO("parent.class", new PhysicalPathDTO[]{}, "class", new ModuleDTO[]{});
+        ModuleDTO interfaceDTO = new ModuleDTO("parent.interface", new PhysicalPathDTO[]{}, "interface", new ModuleDTO[]{});
+        ModuleDTO abstractClassDTO = new ModuleDTO("parent.abstractClass", new PhysicalPathDTO[]{}, "abstract", new ModuleDTO[]{});
 
-		multiLevelDTOs.put("parent", childModules);
+        AnalysedModuleDTO analysedClassDTO = new AnalysedModuleDTO("parent.analysedChild", "analysedChild", "class", "public");
 
-		analysedController.drawMultiLevelModules(multiLevelDTOs);
+        ArrayList<AbstractDTO> childModules = new ArrayList<AbstractDTO>();
+        childModules.add(classDTO);
+        childModules.add(interfaceDTO);
+        childModules.add(abstractClassDTO);
+        childModules.add(analysedClassDTO);
 
-		assertEquals("wrong amount of figure drawn", 5, analysedController.getDrawing().getChildren().size());
+        multiLevelDTOs.put("parent", childModules);
 
-		for (Figure f : analysedController.getDrawing().getChildren()) {
-			if (!(f instanceof BaseFigure)) {
-				fail("non-basefigure in drawing");
-			}
+        analysedController.drawMultiLevelModules(multiLevelDTOs);
 
-			BaseFigure baseF = (BaseFigure) f;
+        assertEquals("wrong amount of figure drawn", 5, analysedController.getDrawing().getChildren().size());
 
-			if (f instanceof ParentFigure) {
-				BaseFigure[] children = ((ParentFigure) f).getChildFigures();
-				assertEquals("wrong amount of children in parent", 4, children.length);
-				assertEquals("unexpected child figure", "parent.class", children[0].getName());
-				assertEquals("unexpected child figure", "parent.interface", children[1].getName());
-				assertEquals("unexpected child figure", "parent.abstractClass", children[2].getName());
-				assertEquals("unexpected child figure", "analysedChild", children[3].getName());
-			} else if (f instanceof AbstractClassFigure) {
-				assertSame("wrong dto for abstract class figure", abstractClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof InterfaceFigure) {
-				assertSame("wrong dto for interface figure", interfaceDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-			} else if (f instanceof ClassFigure) {
-				if (baseF.getName().equals("parent.class")) {
-					assertSame("wrong dto for class figure", classDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-				} else if (baseF.getName().equals("analysedChild")) {
-					assertSame("wrong analysed dto for class figure", analysedClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
-				} else {
-					fail("unexpected class figure in drawing");
-				}
-			} else {
-				fail("unexpected type of figure in drawing");
-			}
-		}
-	}
+        for (Figure f : analysedController.getDrawing().getChildren()) {
+            if (!(f instanceof BaseFigure)) {
+                fail("non-basefigure in drawing");
+            }
 
-	@Test
-	public void drawDependenciesBetweenTest() {
-		AnalysedModuleDTO dtoFrom = new AnalysedModuleDTO("test.from", "from", "class", "public");
-		AnalysedModuleDTO dtoTo = new AnalysedModuleDTO("test.to", "to", "class", "public");
+            BaseFigure baseF = (BaseFigure) f;
 
-		analysedController.drawSingleLevelModules(new AbstractDTO[] { dtoFrom, dtoTo });
+            if (f instanceof ParentFigure) {
+                BaseFigure[] children = ((ParentFigure) f).getChildFigures();
+                assertEquals("wrong amount of children in parent", 4, children.length);
+                assertEquals("unexpected child figure", "parent.class", children[0].getName());
+                assertEquals("unexpected child figure", "parent.interface", children[1].getName());
+                assertEquals("unexpected child figure", "parent.abstractClass", children[2].getName());
+                assertEquals("unexpected child figure", "analysedChild", children[3].getName());
+            } else if (f instanceof AbstractClassFigure) {
+                assertSame("wrong dto for abstract class figure", abstractClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+            } else if (f instanceof InterfaceFigure) {
+                assertSame("wrong dto for interface figure", interfaceDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+            } else if (f instanceof ClassFigure) {
+                if (baseF.getName().equals("parent.class")) {
+                    assertSame("wrong dto for class figure", classDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+                } else if (baseF.getName().equals("analysedChild")) {
+                    assertSame("wrong analysed dto for class figure", analysedClassDTO, analysedController.getFigureMap().getModuleDTO(baseF));
+                } else {
+                    fail("unexpected class figure in drawing");
+                }
+            } else {
+                fail("unexpected type of figure in drawing");
+            }
+        }
+    }
 
-		DependencyDTO dep1 = new DependencyDTO("from", "to", "test", 20);
-		DependencyDTO dep2 = new DependencyDTO("from", "to", "test", 21);
+    @Test
+    public void drawDependenciesBetweenTest() {
+        AnalysedModuleDTO dtoFrom = new AnalysedModuleDTO("test.from", "from", "class", "public");
+        AnalysedModuleDTO dtoTo = new AnalysedModuleDTO("test.to", "to", "class", "public");
 
-		BaseFigure figFrom = null;
-		BaseFigure figTo = null;
-		for (Figure f : analysedController.getDrawing().getChildren()) {
-			if (f instanceof BaseFigure) {
-				AbstractDTO figDTO = analysedController.getFigureMap().getModuleDTO((BaseFigure) f);
-				if (figDTO == dtoFrom) {
-					figFrom = (BaseFigure) f;
-				}
-				if (figDTO == dtoTo) {
-					figTo = (BaseFigure) f;
-				}
-			}
-		}
+        analysedController.drawSingleLevelModules(new AbstractDTO[]{dtoFrom, dtoTo});
 
-		assertNotNull("figure from not found in drawing", figFrom);
-		assertNotNull("figure to not found in drawing", figTo);
+        DependencyDTO dep1 = new DependencyDTO("from", "to", "test", 20);
+        DependencyDTO dep2 = new DependencyDTO("from", "to", "test", 21);
 
-		analysedController.drawDependenciesBetween(new DependencyDTO[] { dep1, dep2 }, figFrom, figTo);
+        BaseFigure figFrom = null;
+        BaseFigure figTo = null;
+        for (Figure f : analysedController.getDrawing().getChildren()) {
+            if (f instanceof BaseFigure) {
+                AbstractDTO figDTO = analysedController.getFigureMap().getModuleDTO((BaseFigure) f);
+                if (figDTO == dtoFrom) {
+                    figFrom = (BaseFigure) f;
+                }
+                if (figDTO == dtoTo) {
+                    figTo = (BaseFigure) f;
+                }
+            }
+        }
 
-		ArrayList<RelationFigure> relationFigures = new ArrayList<RelationFigure>();
-		for (Figure f : analysedController.getDrawing().getChildren()) {
-			if (!(f instanceof BaseFigure)) {
-				fail("found figure not a base figure");
-			}
+        assertNotNull("figure from not found in drawing", figFrom);
+        assertNotNull("figure to not found in drawing", figTo);
 
-			BaseFigure baseF = (BaseFigure) f;
+        analysedController.drawDependenciesBetween(new DependencyDTO[]{dep1, dep2}, figFrom, figTo);
 
-			if (baseF.isLine()) {
-				if (!(baseF instanceof RelationFigure)) {
-					fail("found line not a relation figure");
-				}
+        ArrayList<RelationFigure> relationFigures = new ArrayList<RelationFigure>();
+        for (Figure f : analysedController.getDrawing().getChildren()) {
+            if (!(f instanceof BaseFigure)) {
+                fail("found figure not a base figure");
+            }
 
-				relationFigures.add((RelationFigure) baseF);
-			}
-		}
+            BaseFigure baseF = (BaseFigure) f;
 
-		assertEquals("unexpected number of lines found", 1, relationFigures.size());
+            if (baseF.isLine()) {
+                if (!(baseF instanceof RelationFigure)) {
+                    fail("found line not a relation figure");
+                }
 
-		for (RelationFigure relationFigure : relationFigures) {
-			assertSame("wrong from figure", figFrom, relationFigure.getStartFigure());
-			assertSame("wrong to figure", figTo, relationFigure.getEndFigure());
+                relationFigures.add((RelationFigure) baseF);
+            }
+        }
 
-			DependencyDTO[] depDTOs = analysedController.getFigureMap().getDependencyDTOs(relationFigure);
-			assertSame("wrong dto", dep1, depDTOs[0]);
-			assertSame("wrong dto", dep2, depDTOs[1]);
-		}
-	}
+        assertEquals("unexpected number of lines found", 1, relationFigures.size());
 
+        for (RelationFigure relationFigure : relationFigures) {
+            assertSame("wrong from figure", figFrom, relationFigure.getStartFigure());
+            assertSame("wrong to figure", figTo, relationFigure.getEndFigure());
+
+            DependencyDTO[] depDTOs = analysedController.getFigureMap().getDependencyDTOs(relationFigure);
+            assertSame("wrong dto", dep1, depDTOs[0]);
+            assertSame("wrong dto", dep2, depDTOs[1]);
+        }
+    }
 }

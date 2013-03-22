@@ -19,203 +19,202 @@ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 
 public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
-	private static final long serialVersionUID = 971276235252293165L;
 
-	public static final Color defaultBackgroundColor = new Color(252, 255, 182);
-	protected int baseZIndex, zIndex, raiseZIndex;
-	
-	private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
-	private boolean isSizeable = false;
-	private boolean isEnabled = true;
-	private boolean isStoredInContainer = false;
-	private String name;
-	
-	public BaseFigure(String theName) {
-		super();
-		name = theName;
-		baseZIndex = 0;
-		raiseZIndex = 5;
-		zIndex = baseZIndex;
-	}
-	
-	public void raiseLayer(){
-		zIndex = raiseZIndex;
-	}
-	
-	public void resetLayer(){
-		zIndex = baseZIndex;
-	}
-	
-	@Override
-	public int getLayer(){
-		return zIndex;
-	}
+    private static final long serialVersionUID = 971276235252293165L;
+    public static final Color defaultBackgroundColor = new Color(252, 255, 182);
+    protected int baseZIndex, zIndex, raiseZIndex;
+    private ArrayList<Decorator> decorators = new ArrayList<Decorator>();
+    private boolean isSizeable = false;
+    private boolean isEnabled = true;
+    private boolean isStoredInContainer = false;
+    private String name;
 
-	public String getName() {
-		return name;
-	}
-	
-	public void addDecorator(Decorator decorator) {
-		decorators.add(decorator);
-	}
+    public BaseFigure(String theName) {
+        super();
+        name = theName;
+        baseZIndex = 0;
+        raiseZIndex = 5;
+        zIndex = baseZIndex;
+    }
 
-	public void removeDecoratorByType(Class<?> searchClass) {
-		ArrayList<Decorator> removes = new ArrayList<Decorator>();
+    public void raiseLayer() {
+        zIndex = raiseZIndex;
+    }
 
-		for (Decorator decorator : decorators) {
-			if (decorator.getClass().isAssignableFrom(searchClass)) {
-				removes.add(decorator);
-			}
-		}
+    public void resetLayer() {
+        zIndex = baseZIndex;
+    }
 
-		removeDecorators(removes.toArray(new Decorator[] {}));
-	}
+    @Override
+    public int getLayer() {
+        return zIndex;
+    }
 
-	public void removeDecorators(Decorator[] decorators) {
-		for (Decorator decorator : decorators) {
-			removeDecorator(decorator);
-		}
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void removeDecorator(Decorator decorator) {
-		willChange();
-		decorator.deDecorate(this);
-		decorators.remove(decorator);
-		changed();
-	}
+    public void addDecorator(Decorator decorator) {
+        decorators.add(decorator);
+    }
 
-	@Override
-	public void transform(AffineTransform at) {
-		Point2D.Double anchor = getStartPoint();
-		Point2D.Double lead = getEndPoint();
+    public void removeDecoratorByType(Class<?> searchClass) {
+        ArrayList<Decorator> removes = new ArrayList<Decorator>();
 
-		Point2D.Double newAnchor = new Point2D.Double(0, 0), newLead = new Point2D.Double(0, 0);
-		newAnchor = (Point2D.Double) at.transform(anchor, newAnchor);
-		newLead = (Point2D.Double) at.transform(lead, newLead);
+        for (Decorator decorator : decorators) {
+            if (decorator.getClass().isAssignableFrom(searchClass)) {
+                removes.add(decorator);
+            }
+        }
 
-		setBounds(newAnchor, newLead);
-	}
+        removeDecorators(removes.toArray(new Decorator[]{}));
+    }
 
-	@Override
-	protected void drawFill(Graphics2D g) {
-		// This function is used by the JHotDraw framework to draw the 'background' of a figure.
-		// Since the BaseFigure is a composite figure it will not have to draw
-		// it's background and therefore this function is empty. However, it cannot be removed
-		// because of the requirements to override it.
-	}
+    public void removeDecorators(Decorator[] decorators) {
+        for (Decorator decorator : decorators) {
+            removeDecorator(decorator);
+        }
+    }
 
-	@Override
-	protected void drawStroke(Graphics2D g) {
-		// This function is used by the JHotDraw framework to draw the outline
-		// of a figure
-		// Since the BaseFigure is a composite figure it will not have to draw
-		// it's outline
-		// and therefore this function is empty. However, it cannot be removed
-		// because of the
-		// requirements to override it.
-	}
+    public void removeDecorator(Decorator decorator) {
+        willChange();
+        decorator.deDecorate(this);
+        decorators.remove(decorator);
+        changed();
+    }
 
-	@Override
-	public BaseFigure clone() {
-		BaseFigure other = (BaseFigure) super.clone();
-		return other;
-	}
+    @Override
+    public void transform(AffineTransform at) {
+        Point2D.Double anchor = getStartPoint();
+        Point2D.Double lead = getEndPoint();
 
-	@Override
-	public void draw(Graphics2D g) {
-		for (Decorator decorator : this.decorators) {
-			decorator.decorate(this);
-		}
+        Point2D.Double newAnchor = new Point2D.Double(0, 0), newLead = new Point2D.Double(0, 0);
+        newAnchor = (Point2D.Double) at.transform(anchor, newAnchor);
+        newLead = (Point2D.Double) at.transform(lead, newLead);
 
-		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
+        setBounds(newAnchor, newLead);
+    }
 
-		super.draw(g);
-	}
+    @Override
+    protected void drawFill(Graphics2D g) {
+        // This function is used by the JHotDraw framework to draw the 'background' of a figure.
+        // Since the BaseFigure is a composite figure it will not have to draw
+        // it's background and therefore this function is empty. However, it cannot be removed
+        // because of the requirements to override it.
+    }
 
-	@Override
-	public Collection<Handle> createHandles(int detailLevel) {
-		LinkedList<Handle> handles = new LinkedList<Handle>();
-		if (isSizeable) {
-			handles.addAll(createSizeableHandles(detailLevel));
-		} else {
-			handles.addAll(createSelectionHandles(detailLevel));
-		}
-		return handles;		
-	}
+    @Override
+    protected void drawStroke(Graphics2D g) {
+        // This function is used by the JHotDraw framework to draw the outline
+        // of a figure
+        // Since the BaseFigure is a composite figure it will not have to draw
+        // it's outline
+        // and therefore this function is empty. However, it cannot be removed
+        // because of the
+        // requirements to override it.
+    }
 
-	private Collection<Handle> createSizeableHandles(int detailLevel) {
-		return super.createHandles(detailLevel);
-	}
+    @Override
+    public BaseFigure clone() {
+        BaseFigure other = (BaseFigure) super.clone();
+        return other;
+    }
 
-	private Collection<Handle> createSelectionHandles(int detailLevel) {
-		LinkedList<Handle> handles = new LinkedList<Handle>();
-		if (detailLevel == 0) {
-			Handle handle = new BoundsOutlineHandle(this, false, false);
-			handles.add(handle);
-		}
-		return handles;
-	}
+    @Override
+    public void draw(Graphics2D g) {
+        for (Decorator decorator : this.decorators) {
+            decorator.decorate(this);
+        }
 
-	public void setStrokeColor(Color newColor) {
-		set(AttributeKeys.STROKE_COLOR, newColor);
-	}
+        set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 
-	public double getWidth() {
-		return getBounds().width;
-	}
+        super.draw(g);
+    }
 
-	public double getHeight() {
-		return getBounds().height;
-	}
+    @Override
+    public Collection<Handle> createHandles(int detailLevel) {
+        LinkedList<Handle> handles = new LinkedList<Handle>();
+        if (isSizeable) {
+            handles.addAll(createSizeableHandles(detailLevel));
+        } else {
+            handles.addAll(createSelectionHandles(detailLevel));
+        }
+        return handles;
+    }
 
-	public boolean isSizeable() {
-		return isSizeable;
-	}
+    private Collection<Handle> createSizeableHandles(int detailLevel) {
+        return super.createHandles(detailLevel);
+    }
 
-	public void setSizeable(boolean newValue) {
-		isSizeable = newValue;
-	}
-	
-	public void updateLocation(double x, double y) {
-		willChange();
-		double widthX = x + getBounds().getWidth();
-		double heightY = y + getBounds().getHeight();
-		setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX, heightY));
-		changed();
-	}
+    private Collection<Handle> createSelectionHandles(int detailLevel) {
+        LinkedList<Handle> handles = new LinkedList<Handle>();
+        if (detailLevel == 0) {
+            Handle handle = new BoundsOutlineHandle(this, false, false);
+            handles.add(handle);
+        }
+        return handles;
+    }
 
-	@Override
-	public Connector findConnector(Point2D.Double p, ConnectionFigure figure) {
-		return new ChopRectangleConnector(this);
-	}
+    public void setStrokeColor(Color newColor) {
+        set(AttributeKeys.STROKE_COLOR, newColor);
+    }
 
-	public boolean isParent(){
-		return false;
-	}
-	
-	public boolean isModule(){
-		return false;
-	}
+    public double getWidth() {
+        return getBounds().width;
+    }
 
-	public boolean isLine(){
-		return false;
-	}
-	
-	public void setInContainer(boolean value) {
-		this.isStoredInContainer = value;
-	}
-	
-	public boolean isInContainer() {
-		return isStoredInContainer;
-	}
-	
-	public void setEnabled(boolean newValue) {
-		isEnabled = newValue;
-		setVisible(newValue);
-		setSelectable(newValue);
-	}
-	
-	public boolean isEnabled() {
-		return isEnabled;
-	}
+    public double getHeight() {
+        return getBounds().height;
+    }
+
+    public boolean isSizeable() {
+        return isSizeable;
+    }
+
+    public void setSizeable(boolean newValue) {
+        isSizeable = newValue;
+    }
+
+    public void updateLocation(double x, double y) {
+        willChange();
+        double widthX = x + getBounds().getWidth();
+        double heightY = y + getBounds().getHeight();
+        setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX, heightY));
+        changed();
+    }
+
+    @Override
+    public Connector findConnector(Point2D.Double p, ConnectionFigure figure) {
+        return new ChopRectangleConnector(this);
+    }
+
+    public boolean isParent() {
+        return false;
+    }
+
+    public boolean isModule() {
+        return false;
+    }
+
+    public boolean isLine() {
+        return false;
+    }
+
+    public void setInContainer(boolean value) {
+        this.isStoredInContainer = value;
+    }
+
+    public boolean isInContainer() {
+        return isStoredInContainer;
+    }
+
+    public void setEnabled(boolean newValue) {
+        isEnabled = newValue;
+        setVisible(newValue);
+        setSelectable(newValue);
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 }

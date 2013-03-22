@@ -13,26 +13,27 @@ import java.util.Map;
 import org.jdom2.Element;
 
 public class ExportFactory {
-	private final ExportSeverities exportSeverities;
-	private final ExportSeveritiesPerTypesPerProgrammingLanguages exportSeveritiesPerTypesPerProgrammingLanguages;
-	private final ExportActiveViolationTypes exportActiveViolationTypes;
 
-	public ExportFactory(){
-		this.exportSeverities = new ExportSeverities();
-		this.exportSeveritiesPerTypesPerProgrammingLanguages = new ExportSeveritiesPerTypesPerProgrammingLanguages();
-		this.exportActiveViolationTypes = new ExportActiveViolationTypes();
-	}
+    private final ExportSeverities exportSeverities;
+    private final ExportSeveritiesPerTypesPerProgrammingLanguages exportSeveritiesPerTypesPerProgrammingLanguages;
+    private final ExportActiveViolationTypes exportActiveViolationTypes;
 
-	public Element exportSeverities(List<Severity> severities)  {
-		return exportSeverities.exportSeverities(severities);
-	}
+    public ExportFactory() {
+        this.exportSeverities = new ExportSeverities();
+        this.exportSeveritiesPerTypesPerProgrammingLanguages = new ExportSeveritiesPerTypesPerProgrammingLanguages();
+        this.exportActiveViolationTypes = new ExportActiveViolationTypes();
+    }
 
-	public Element exportSeveritiesPerTypesPerProgrammingLanguages(HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
-		return exportSeveritiesPerTypesPerProgrammingLanguages.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
-	}
+    public Element exportSeverities(List<Severity> severities) {
+        return exportSeverities.exportSeverities(severities);
+    }
 
-	public Element exportActiveViolationTypes(
-			Map<String, List<ActiveRuleType>> activeViolationTypes) {
-		return exportActiveViolationTypes.exportActiveViolationTypes(activeViolationTypes);
-	}
+    public Element exportSeveritiesPerTypesPerProgrammingLanguages(HashMap<String, HashMap<String, Severity>> allSeveritiesPerTypesPerProgrammingLanguages) {
+        return exportSeveritiesPerTypesPerProgrammingLanguages.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
+    }
+
+    public Element exportActiveViolationTypes(
+            Map<String, List<ActiveRuleType>> activeViolationTypes) {
+        return exportActiveViolationTypes.exportActiveViolationTypes(activeViolationTypes);
+    }
 }

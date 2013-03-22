@@ -12,33 +12,33 @@ import org.jdom2.Element;
 
 public class ImportSeverities {
 
-	private Logger logger = Logger.getLogger(ImportSeverities.class);
+    private Logger logger = Logger.getLogger(ImportSeverities.class);
 
-	public List<Severity> importSeverities(Element element) {
-		List<Severity> severities = new ArrayList<Severity>();
+    public List<Severity> importSeverities(Element element) {
+        List<Severity> severities = new ArrayList<Severity>();
 
-		for (Element severityElement : element.getChildren()) {
-			UUID id = UUID.fromString(severityElement.getChildText("id"));
+        for (Element severityElement : element.getChildren()) {
+            UUID id = UUID.fromString(severityElement.getChildText("id"));
 
-			final String severityKey = severityElement.getChildText("severityKey");
+            final String severityKey = severityElement.getChildText("severityKey");
 
-			final String rgbColor = severityElement.getChildText("color");
-			Color color = getColor(rgbColor);
+            final String rgbColor = severityElement.getChildText("color");
+            Color color = getColor(rgbColor);
 
-			Severity severity = new Severity(id, severityKey, color);
-			severities.add(severity);
-		}
-		return severities;
-	}
+            Severity severity = new Severity(id, severityKey, color);
+            severities.add(severity);
+        }
+        return severities;
+    }
 
-	private Color getColor(String rgbColor){
-		Color color = null;
-		try{
-			color = new Color(Integer.parseInt(rgbColor));
-		}catch(NumberFormatException e){
-			logger.warn(String.format("No valid RGB color found for value: %s", rgbColor));
-			color = Color.WHITE;
-		}
-		return color;
-	}
+    private Color getColor(String rgbColor) {
+        Color color = null;
+        try {
+            color = new Color(Integer.parseInt(rgbColor));
+        } catch (NumberFormatException e) {
+            logger.warn(String.format("No valid RGB color found for value: %s", rgbColor));
+            color = Color.WHITE;
+        }
+        return color;
+    }
 }
