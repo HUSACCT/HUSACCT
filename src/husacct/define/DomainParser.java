@@ -181,7 +181,7 @@ public class DomainParser {
 		exceptionRuleList.toArray(exceptionRuleDTOs);
 		RuleDTO[] exceptionRules = exceptionRuleDTOs; 
 		
-		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
+		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, false, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
 		return ruleDTO;
 	}
 }
