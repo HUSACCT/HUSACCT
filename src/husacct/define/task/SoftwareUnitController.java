@@ -10,7 +10,6 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 
-import java.util.Arrays;
 import org.apache.log4j.Logger;
 
 
@@ -50,8 +49,6 @@ public class SoftwareUnitController extends PopUpController {
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();
-		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
-        Arrays.sort(modules, comparator);
 		for(AnalysedModuleDTO module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}
@@ -67,8 +64,6 @@ public class SoftwareUnitController extends PopUpController {
 	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(module.uniqueName, module.name, module.type, module.visibility);
 		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
-		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
-        Arrays.sort(children, comparator);
 		for(AnalysedModuleDTO subModule : children) {
 			this.addChildComponents(childComponent, subModule);
 		}
