@@ -357,7 +357,7 @@ public class SoftwareArchitecture {
 		}
 		return logicalPath;
 	}
-	
+	//TODO SEE IF CAN BE BETTER IMPLEMENTED
 	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 		

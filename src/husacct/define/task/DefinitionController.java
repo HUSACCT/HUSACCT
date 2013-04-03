@@ -278,6 +278,7 @@ public class DefinitionController extends Observable implements Observer {
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 		ArrayList<Module> modules = this.moduleService.getSortedModules();
 		for (Module module : modules) {
+			logger.debug(module.getName()+"  ]"+module.getType());
 			this.addChildComponents(rootComponent, module);
 		}
 
@@ -288,6 +289,7 @@ public class DefinitionController extends Observable implements Observer {
 	private void addChildComponents(AbstractDefineComponent parentComponent, Module module) {
 		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
 		for(Module subModule : module.getSubModules()) {
+			logger.debug(module.getName()+"  ]"+module.getType());
 			this.addChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);

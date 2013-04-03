@@ -9,6 +9,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	private String uniqueName = "";
 	private String type = "";
 	private String visibility;
+
 	
 	public AnalyzedModuleComponent() {
 		super();
@@ -20,21 +21,40 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		this.setName(name);
 		this.setType(type);
 		this.setVisibility(visibility);
+		if(uniqueName.equals("root"))
+		{
+			setParentOfChild(this);
+		}
 	}
 
 	public void addChild(AbstractCombinedComponent child) {
+		child.setParentOfChild(this);
+		child.setAnalyzedModuleComponentPosition(children.size());
+		
 		this.children.add(child);
 	}
 	
 	public void addChild(int index, AbstractCombinedComponent child) {
+		
+		child.setParentOfChild(this);
+		child.setAnalyzedModuleComponentPosition(index);
+		
 		this.children.add(index, child);
 	}
 
 	public void setChildren(ArrayList<AbstractCombinedComponent> children) {
+		for(AbstractCombinedComponent a: children)
+		{
+			
+			a.setParentOfChild(this);
+		}
+		
+		
 		this.children = children;
 	}
 
 	public ArrayList<AbstractCombinedComponent> getChildren() {
+		
 		return this.children;
 	}
 
@@ -69,4 +89,15 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	public void setVisibility(String visibility) {
 		this.visibility = visibility;
 	}
+
+	public void updateChilderenPosition() {
+		for(int i=0;i<children.size();i++)
+		{
+		int newPosition=i;
+		children.get(i).setAnalyzedModuleComponentPosition(newPosition);
+			
+		}
+		
+	}
+	
 }

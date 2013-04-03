@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -89,9 +90,16 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
 		softwareUnitScrollPane.setSize(400, 220);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
+		if(JtreeController.isLoaded())
+		{
+			this.softwareDefinitionTree= JtreeController.getTree();
+			softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
+		}else {
 		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
 		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
 		softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
+		JtreeController.setLoadState(true);
+		}
 		return softwareUnitScrollPane;
 	}
 	
@@ -147,6 +155,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 		for (TreePath path : paths.getSelectionPaths()){
 			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+			this.softwareDefinitionTree.removeTreeItem(selectedComponent);
 			this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
 		}
 		this.dispose();

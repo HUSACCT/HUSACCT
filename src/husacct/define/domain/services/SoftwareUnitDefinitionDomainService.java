@@ -5,6 +5,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Module;
+import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,8 @@ public class SoftwareUnitDefinitionDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
+		JtreeController.registerTreeRestore(unit.getName());
+		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 }

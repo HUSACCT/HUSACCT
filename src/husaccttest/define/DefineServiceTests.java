@@ -166,6 +166,8 @@ public class DefineServiceTests {
 		assertTrue(parentModuleName.equals("Layer 1.SubSystem 1"));
 	}
 	
+	//public void Ifremove
+	
 	private boolean areArraysEqual(Object[] list, Object[] list2){
 		boolean areEqual = true;
 		if (list.length == list2.length){

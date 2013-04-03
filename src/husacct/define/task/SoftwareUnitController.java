@@ -9,6 +9,9 @@ import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -58,6 +61,18 @@ public class SoftwareUnitController extends PopUpController {
 	
 	private AnalysedModuleDTO[] getAnalyzedModules() {
 		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
+		//AnalysedModuleDTO mockModule1 = new AnalysedModuleDTO("plant uml", "plant uml", "externallibrary", "true");
+		//AnalysedModuleDTO mockModule2 = new AnalysedModuleDTO("plant this op", "plant this op", "subsystem", "true");
+		
+		//AnalysedModuleDTO[]	testreturnlist = new AnalysedModuleDTO[modules.length+2];
+		
+		
+		
+		
+		
+		
+		//testreturnlist[modules.length]=mockModule1;
+		//testreturnlist[modules.length+1]=mockModule2;
 		return modules;
 	}
 	
@@ -66,6 +81,7 @@ public class SoftwareUnitController extends PopUpController {
 		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
 		for(AnalysedModuleDTO subModule : children) {
 			this.addChildComponents(childComponent, subModule);
+			logger.debug(subModule.uniqueName+subModule.name+" ---"+subModule.type+"----"+subModule.subModules.size());
 		}
 		parentComponent.addChild(childComponent);
 	}
