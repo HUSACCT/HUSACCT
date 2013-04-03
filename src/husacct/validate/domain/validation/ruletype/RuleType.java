@@ -28,7 +28,7 @@ public abstract class RuleType {
 	protected final String categoryKey;
 	protected final EnumSet<RuleTypes> exceptionRuleKeys;	
 	protected final List<ViolationType> violationtypes;	
-	protected List<RuleType> exceptionrules;
+	protected List<RuleType> exceptionRules;
 	protected final Severity severity;
 
 	protected List<Violation> violations;
@@ -70,11 +70,11 @@ public abstract class RuleType {
 	}
 
 	public void setExceptionrules(List<RuleType> ruletypes){
-		this.exceptionrules = ruletypes;
+		this.exceptionRules = ruletypes;
 	}
 
 	public List<RuleType> getExceptionrules(){
-		return exceptionrules;
+		return exceptionRules;
 	}
 
 	public Severity getSeverity(){

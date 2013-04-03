@@ -4,17 +4,17 @@ public class LogicalModules {
 	private final LogicalModule logicalModuleFrom;
 	private final LogicalModule logicalModuleTo;
 	
-	public LogicalModules(){
+	public LogicalModules() {
 		this.logicalModuleFrom = new LogicalModule("","");
 		this.logicalModuleTo = new LogicalModule("","");
 	}
 
-	public LogicalModules(LogicalModule logicalModuleFrom, LogicalModule logicalModuleTo){
+	public LogicalModules(LogicalModule logicalModuleFrom, LogicalModule logicalModuleTo) {
 		this.logicalModuleFrom = logicalModuleFrom;
 		this.logicalModuleTo = logicalModuleTo;
 	}
 
-	public LogicalModules(LogicalModule logicalModuleFrom){
+	public LogicalModules(LogicalModule logicalModuleFrom) {
 		this.logicalModuleFrom = logicalModuleFrom;
 		this.logicalModuleTo = new LogicalModule("","");
 	}

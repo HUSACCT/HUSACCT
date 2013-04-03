@@ -22,7 +22,6 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 	private JTabbedPane tabbedPane;
 
 	public LanguageSeverityConfigurationPanel(ConfigurationRuleTypeDTO configurationRuleTypeDTO, ConfigurationViolationTypeDTO configurationViolationTypeDTO, TaskServiceImpl ts) {
-
 		this.configurationSubPanelDTO = configurationRuleTypeDTO;
 		this.configurationViolationTypeDTO = configurationViolationTypeDTO;
 		this.taskServiceImpl = ts;

@@ -33,7 +33,6 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private List<Severity> severities;
 
 	ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, ConfigurationViolationTypeDTO configurationViolationTypeDTO) {
-
 		categoryModel = new DefaultListModel();
 		this.taskServiceImpl = taskServiceImpl;
 		this.language = configurationViolationTypeDTO.getLanguage();
@@ -47,7 +46,6 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	private void initComponents() {
-
 		categoryScrollpane = new JScrollPane();
 		category = new JList();
 		violationtypeScrollpane = new JScrollPane();
@@ -70,8 +68,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
-		violationtypeTable.setSelectionMode(
-				ListSelectionModel.SINGLE_SELECTION);
+		violationtypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		violationtypeTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -233,7 +230,8 @@ class ViolationTypeSeverityPanel extends JPanel {
 					Severity severity;
 					try {
 						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationtypeKey());
-					} catch (Exception e) {
+					} 
+					catch (Exception e) {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
@@ -248,7 +246,8 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private void checkRestoreButtonEnabled() {
 		if (violationtypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		} else {
+		} 
+		else {
 			restore.setEnabled(false);
 		}
 	}

@@ -10,13 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 public class StatisticsPanel extends JPanel{
-
 	private static final long serialVersionUID = -7741400148880504572L;
 
 	private JLabel totalViolationLabel, totalViolationNumber, shownViolationsLabel, shownViolationsNumber;
 
 	public StatisticsPanel() {
-		
 		inintComponents();
 	}
 

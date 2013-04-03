@@ -24,7 +24,7 @@ public class ImportFactory {
 	}
 
 	List<Severity> importSeverities(Element element) {
-		return	importSeverities.importSeverities(element);
+		return importSeverities.importSeverities(element);
 	}
 
 	HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {

@@ -21,9 +21,9 @@ class RuleTypesGenerator {
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
 
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
-	private static final String[] ruleTypeLocations = new String[]{"husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency"};
+	private static final String[] ruleTypeLocations = new String[]{ "husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency" };
 
-	RuleTypesGenerator(){
+	RuleTypesGenerator() {
 		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
 
@@ -33,9 +33,10 @@ class RuleTypesGenerator {
 		
 		for (Enum<RuleTypes> ruleKey : rules) {		
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
-			if (ruleCategory != null) {
+			if(ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
-			} else {				
+			} 
+			else {				
 				logger.warn(String.format("Rulekey: %s not found", ruleKey.toString()));
 			}
 		}
@@ -47,14 +48,15 @@ class RuleTypesGenerator {
 		List<Class<?>> ruleClasses = getRuleClasses(EnumSet.allOf(RuleTypes.class));
 		for (Class<?> ruleClass : ruleClasses) {			
 			String ruleKey = "";
-			try{
-				if (isInstanceOfRule(ruleClass)) {
+			try {
+				if(isInstanceOfRule(ruleClass)) {
 					ruleKey = getRuleKey(ruleClass);
 					final String categoryKey = getCategoryKey(ruleClass);	
 					final DefaultSeverities defaultSeverity = getDefaultSeverity(ruleKey);
 					keyClasses.put(ruleKey, new CategoryKeyClassDTO(categoryKey, (Class<RuleType>) ruleClass, defaultSeverity));
 				}
-			}catch(DefaultSeverityNotFoundException e){
+			}
+			catch(DefaultSeverityNotFoundException e){
 				logger.warn(String.format("No default severity found for: %s, thus this ruleType will be ignored", ruleKey), e);
 			}
 		}
@@ -86,10 +88,11 @@ class RuleTypesGenerator {
 					classPath = packageName + "." + ruleType.toString() + "Rule";					
 					Class<?> myClass = myClassLoader.loadClass(classPath);
 					
-					if (!Modifier.isAbstract(myClass.getModifiers()) && classHasRuleConstructor(myClass)) {
+					if(!Modifier.isAbstract(myClass.getModifiers()) && classHasRuleConstructor(myClass)) {
 						classList.add(myClass);
 					}
-				} catch (ClassNotFoundException e) {
+				} 
+				catch (ClassNotFoundException e) {
 					//logger.debug(String.format("Classpath: %s not found" , classPath));
 				} 
 			}
@@ -100,9 +103,11 @@ class RuleTypesGenerator {
 	private boolean classHasRuleConstructor(Class<?> ruleClass) {		
 		try {
 			ruleClass.getConstructor(String.class, String.class, List.class, Severity.class);
-		} catch (SecurityException e) {
+		} 
+		catch (SecurityException e) {
 			return exceptionOccured(e);
-		} catch (NoSuchMethodException e) {
+		} 
+		catch (NoSuchMethodException e) {
 			return exceptionOccured(e);
 		}
 		return true;
@@ -120,7 +125,8 @@ class RuleTypesGenerator {
 		try {
 			String[] splittedPackageName = ruleClass.getPackage().getName().split("\\.");
 			return splittedPackageName[splittedPackageName.length - 1];
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} 
+		catch (ArrayIndexOutOfBoundsException e) {
 			return "";
 		}
 	}
@@ -129,9 +135,9 @@ class RuleTypesGenerator {
 		return ruleClass.getSimpleName().replace("Rule", "");
 	}	
 
-	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity(){
+	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity() {
 		HashMap<String, DefaultSeverities> defaultRulesPerRuleTypeLocal = new HashMap<String, DefaultSeverities>();
-		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)){
+		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)) {
 			defaultRulesPerRuleTypeLocal.put(ruletype.toString(), ruletype.getDefaultSeverity());
 		}
 

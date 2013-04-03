@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ViolationHistoryNotFoundException extends RuntimeException {
-
 	private static final long serialVersionUID = -6735471839503937206L;
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");;

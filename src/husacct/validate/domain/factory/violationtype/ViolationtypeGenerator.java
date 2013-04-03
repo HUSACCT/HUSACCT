@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 class ViolationtypeGenerator {	
 	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
 
-	List<CategoryKeySeverityDTO> getAllViolationTypes(List<IViolationType> violationtypes){
+	List<CategoryKeySeverityDTO> getAllViolationTypes(List<IViolationType> violationtypes) {
 		return new ArrayList<CategoryKeySeverityDTO>(getClasses(violationtypes));		
 	}
 
@@ -25,9 +25,9 @@ class ViolationtypeGenerator {
 		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
 
 		Set<Class<?>> scannedClasses = new HashSet<Class<?>>();
-		for(IViolationType type : violationtypes){
+		for(IViolationType type : violationtypes) {
 			Class<?> scannedClass = type.getClass();
-			if(scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)){
+			if(scannedClass.isEnum() && hasIViolationTypeInterface(scannedClass)) {
 				scannedClasses.add(scannedClass);
 			}
 		}		
@@ -35,23 +35,23 @@ class ViolationtypeGenerator {
 		return keyList;
 	}
 
-	private boolean hasIViolationTypeInterface(Class<?> scannedClass){
+	private boolean hasIViolationTypeInterface(Class<?> scannedClass) {
 		Class<?>[] interfaces = scannedClass.getInterfaces();
 		for(Class<?> violationInterface : interfaces){
-			if(violationInterface.getSimpleName().equals("IViolationType")){
+			if(violationInterface.getSimpleName().equals("IViolationType")) {
 				return true;
 			}
 		}		
 		return false;		
 	}
 
-	private Set<CategoryKeySeverityDTO> generateViolationTypes(Set<Class<?>> scannedClasses){
+	private Set<CategoryKeySeverityDTO> generateViolationTypes(Set<Class<?>> scannedClasses) {
 		Set<CategoryKeySeverityDTO> keyList = new HashSet<CategoryKeySeverityDTO>();
 
 		Iterator<Class<?>> it = scannedClasses.iterator();
-		while(it.hasNext()){
+		while(it.hasNext()) {
 			Class<?> scannedClass = it.next();
-			for(Object enumValue : scannedClass.getEnumConstants()){
+			for(Object enumValue : scannedClass.getEnumConstants()) {
 				Class<?> enumClass = enumValue.getClass();
 				try {
 					Method getCategoryMethod = enumClass.getDeclaredMethod("getCategory");
@@ -60,21 +60,26 @@ class ViolationtypeGenerator {
 					Method getDefaultSeverityMethod = enumClass.getDeclaredMethod("getDefaultSeverity");
 					DefaultSeverities defaultSeverity = (DefaultSeverities) getDefaultSeverityMethod.invoke(enumValue);
 
-					if(!containsViolationTypeInSet(keyList, enumValue.toString())){									
+					if(!containsViolationTypeInSet(keyList, enumValue.toString())) {									
 						keyList.add(new CategoryKeySeverityDTO(enumValue.toString(), category, defaultSeverity));
 					}								
-					else{
+					else {
 						logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
 					}									
-				} catch (SecurityException e) {
+				} 
+				catch (SecurityException e) {
 					logger.error(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
+				} 
+				catch (NoSuchMethodException e) {
 					logger.error(e.getMessage(), e);
-				} catch (IllegalArgumentException e) {
+				} 
+				catch (IllegalArgumentException e) {
 					logger.error(e.getMessage(), e);
-				} catch (IllegalAccessException e) {
+				} 
+				catch (IllegalAccessException e) {
 					logger.error(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
+				}
+				catch (InvocationTargetException e) {
 					logger.error(e.getMessage(), e);
 				}								
 			}

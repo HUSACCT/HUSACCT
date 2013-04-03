@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
-
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
 	private HashSet<String> interfaceCache;
@@ -40,16 +39,16 @@ public class InterfaceConventionRule extends RuleType {
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){	
+		for(Mapping classPathFrom : physicalClasspathsFrom) {	
 			int interfaceCounter = 0;
-			for(Mapping classPathTo : physicalClasspathsTo){
-				for(DependencyDTO dependency : dependencies){
+			for(Mapping classPathTo : physicalClasspathsTo) {
+				for(DependencyDTO dependency : dependencies) {
 					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)){
 						interfaceCounter++;
 					}
 				}
 			}
-			if(interfaceCounter == 0 && physicalClasspathsTo.size() != 0){
+			if(interfaceCounter == 0 && physicalClasspathsTo.size() != 0) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}
@@ -57,25 +56,25 @@ public class InterfaceConventionRule extends RuleType {
 		return violations;
 	}
 
-	private boolean isInterface(String classPath){
-		if(interfaceCache.contains(classPath)){
+	private boolean isInterface(String classPath) {
+		if(interfaceCache.contains(classPath)) {
 			return true;
 		}
-		else if(noInterfaceCache.contains(classPath)){
+		else if(noInterfaceCache.contains(classPath)) {
 			return false;
 		}
-		else{
+		else {
 			return addToCache(classPath);
 		}
 	}
 	
-	private boolean addToCache(String classPath){
+	private boolean addToCache(String classPath) {
 		boolean isInterface = analyseService.getModuleForUniqueName(classPath).type.toLowerCase().equals("interface");
-		if(isInterface){
+		if(isInterface) {
 			interfaceCache.add(classPath);
 			return true;
 		}
-		else{
+		else {
 			noInterfaceCache.add(classPath);
 			return false;
 		}

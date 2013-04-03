@@ -28,11 +28,11 @@ public class NamingConventionRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 
-		if(arrayContainsValue(currentRule.violationTypeKeys, "package")){
+		if(arrayContainsValue(currentRule.violationTypeKeys, "package")) {
 			checkPackageConvention(currentRule, rootRule, configuration);
 		}
 
-		if(arrayContainsValue(currentRule.violationTypeKeys, "class")){
+		if(arrayContainsValue(currentRule.violationTypeKeys, "class")) {
 			checkClassConvention(currentRule, rootRule, configuration);
 		}
 
@@ -47,9 +47,9 @@ public class NamingConventionRule extends RuleType {
 		
 		final String regex = Regex.makeRegexString(currentRule.regex);
 		
-		for(Mapping physicalClasspathFrom : physicalClasspathsFrom){
+		for(Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
-			if(!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")){
+			if(!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
 				violations.add(violation);
 			}
@@ -57,7 +57,7 @@ public class NamingConventionRule extends RuleType {
 		return violations;
 	}
 
-	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration){
+	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
 		this.violations = new ArrayList<Violation>();
 
 		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
@@ -65,9 +65,9 @@ public class NamingConventionRule extends RuleType {
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 		
-		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ){
+		for(Mapping physicalClasspathFrom : physicalClasspathsFrom ) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());	
-			if(!Regex.matchRegex(regex,analysedModule.name) && !analysedModule.type.toLowerCase().equals("package")){
+			if(!Regex.matchRegex(regex,analysedModule.name) && !analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom , configuration);
 				violations.add(violation);
 			}
@@ -75,9 +75,9 @@ public class NamingConventionRule extends RuleType {
 		return violations;
 	}
 
-	private boolean arrayContainsValue(String[] array, String value){
-		for(String arrayValue : array){
-			if(arrayValue.toLowerCase().equals(value.toLowerCase())){
+	private boolean arrayContainsValue(String[] array, String value) {
+		for(String arrayValue : array) {
+			if(arrayValue.toLowerCase().equals(value.toLowerCase())) {
 				return true;
 			}
 		}

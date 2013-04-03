@@ -30,12 +30,12 @@ public final class FilterViolations extends JDialog  {
 
 	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
-	private JTabbedPane TabbedPane;
+	private JTabbedPane tabbedPane;
 	private JButton addPath, removePath, save, cancel;
 	private JPanel filterViolationPanel, pathFilterPanel;
 	private ButtonGroup filtergroup;
 	private JRadioButton hideFilteredValues, showFilteredValues;
-	private JScrollPane pathFilterScrollPane, ruletypepanel, violationtypePanel;
+	private JScrollPane pathFilterScrollPane, ruletypePanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
 	private FilterViolationsObserver filterViolationsObserver;
 
@@ -57,9 +57,9 @@ public final class FilterViolations extends JDialog  {
 	private void initComponents() {
 
 		filtergroup = new ButtonGroup();
-		TabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
 		filterViolationPanel = new JPanel();
-		ruletypepanel = new JScrollPane();
+		ruletypePanel = new JScrollPane();
 		ruletypeTable = new JTable();
 		violationtypePanel = new JScrollPane();
 		violationtypeTable = new JTable();
@@ -83,7 +83,7 @@ public final class FilterViolations extends JDialog  {
 		ruletypeTable.setFillsViewportHeight(true);
 		ruletypeTable.getTableHeader().setResizingAllowed(false);
 		ruletypeTable.getTableHeader().setReorderingAllowed(false);
-		ruletypepanel.setViewportView(ruletypeTable);
+		ruletypePanel.setViewportView(ruletypeTable);
 		
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
@@ -139,14 +139,14 @@ public final class FilterViolations extends JDialog  {
 		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
 		
 		GroupLayout.SequentialGroup horizontalFilterViolationGroup = filterViolationPanelLayout.createSequentialGroup();
-		horizontalFilterViolationGroup.addComponent(ruletypepanel);
+		horizontalFilterViolationGroup.addComponent(ruletypePanel);
 		horizontalFilterViolationGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
 		horizontalFilterViolationGroup.addComponent(violationtypePanel);
 		
 		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
 		
 		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
-		verticalFilterViolationGroup.addComponent(ruletypepanel);
+		verticalFilterViolationGroup.addComponent(ruletypePanel);
 		verticalFilterViolationGroup.addComponent(violationtypePanel);
 		
 		filterViolationPanelLayout.setVerticalGroup(verticalFilterViolationGroup);
@@ -196,7 +196,7 @@ public final class FilterViolations extends JDialog  {
 		horizontalButtonGroup.addContainerGap();
 		
 		GroupLayout.ParallelGroup horizontalPaneGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-		horizontalPaneGroup.addComponent(TabbedPane);
+		horizontalPaneGroup.addComponent(tabbedPane);
 		horizontalPaneGroup.addGroup(horizontalButtonGroup);
 		
 		getContentPane().setLayout(layout);
@@ -212,7 +212,7 @@ public final class FilterViolations extends JDialog  {
 		verticalButtonGroup.addGroup(verticalRadioButtonGroup);
 		
 		GroupLayout.SequentialGroup verticalPaneGroup = layout.createSequentialGroup();
-		verticalPaneGroup.addComponent(TabbedPane);
+		verticalPaneGroup.addComponent(tabbedPane);
 		verticalPaneGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
 		
@@ -225,10 +225,10 @@ public final class FilterViolations extends JDialog  {
 	
 	public void loadGUIText(){
 		setTitle(localeService.getTranslatedString("TotalViolations"));
-		TabbedPane.addTab(localeService.getTranslatedString("FilterViolations"), filterViolationPanel);
+		tabbedPane.addTab(localeService.getTranslatedString("FilterViolations"), filterViolationPanel);
 		addPath.setText(localeService.getTranslatedString("Add"));
 		removePath.setText(localeService.getTranslatedString("Remove"));
-		TabbedPane.addTab(localeService.getTranslatedString("FilterPaths"), pathFilterPanel);
+		tabbedPane.addTab(localeService.getTranslatedString("FilterPaths"), pathFilterPanel);
 		save.setText(localeService.getTranslatedString("Save"));
 		cancel.setText(localeService.getTranslatedString("Cancel"));
 		showFilteredValues.setText(localeService.getTranslatedString("ShowSelectedValues"));

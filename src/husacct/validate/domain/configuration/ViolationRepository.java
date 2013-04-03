@@ -11,20 +11,20 @@ class ViolationRepository {
 	private List<Violation> violations;
 	private Calendar date;
 
-	ViolationRepository(){
+	public ViolationRepository() {
 		this.violations = new ArrayList<Violation>();
 		this.date = Calendar.getInstance();
 	}	
 
-	void addViolation(List<Violation> newViolations){
+	void addViolation(List<Violation> newViolations) {
 		this.violations = newViolations;
 	}
 
-	void addViolation(Violation violation){
+	void addViolation(Violation violation) {
 		this.violations.add(violation);
 	}
 
-	SimpleEntry<Calendar, List<Violation>> getAllViolations(){
+	SimpleEntry<Calendar, List<Violation>> getAllViolations() {
 		return new SimpleEntry<Calendar, List<Violation>>(date, violations);
 	}
 

@@ -27,7 +27,7 @@ public class ImportController {
 		this.severities = new ArrayList<Severity>();
 	}
 
-	public void importWorkspace(Element element) throws DatatypeConfigurationException{
+	public void importWorkspace(Element element) throws DatatypeConfigurationException {
 		importSeverties(element.getChild("severities"));
 		
 		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
@@ -36,15 +36,16 @@ public class ImportController {
 	}
 
 	private void importSeverties(Element element) {
-		try{
-		this.severities = importFactory.importSeverities(element);
-		configuration.setSeverities(severities);
-		}catch(SeverityChangedException e){
+		try {
+			this.severities = importFactory.importSeverities(element);
+			configuration.setSeverities(severities);
+		}
+		catch(SeverityChangedException e) {
 			logger.error("Error during importing of severities, default severities will be used: " + e.getMessage());
 		}
 	}
 
-	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element){
+	private void importSeveritiesPerTypesPerProgrammingLanguages(Element element) {
 		HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguage = importFactory.importSeveritiesPerTypesPerProgrammingLanguages(element, severities);
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(severitiesPerTypesPerProgrammingLanguage);
 	}

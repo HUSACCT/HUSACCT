@@ -15,7 +15,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
 public class ColorChooserEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-
 	private static final long serialVersionUID = 2378648633168150198L;
 	
 	private Color currentColor;
@@ -61,7 +60,8 @@ public class ColorChooserEditor extends AbstractCellEditor implements TableCellE
 			//Make the renderer reappear.
 			fireEditingStopped();
 
-		} else { //User pressed dialog's "OK" button.
+		} 
+		else { //User pressed dialog's "OK" button.
 			currentColor = colorChooser.getColor();
 		}
 	}

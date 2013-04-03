@@ -42,12 +42,10 @@ class ActiveViolationPanel extends JPanel {
 	private DefaultTableModel violationtypeModel;
 	private JButton apply, deselectAll, selectAll;
 	private JList categoryJList, ruletypeJList;
-	private JScrollPane categoryScrollpane, ruletypeScrollpane,
-			violationtypeScrollpane;
+	private JScrollPane categoryScrollpane, ruletypeScrollpane,	violationtypeScrollpane;
 	private JTable violationtypeTable;
 
 	ActiveViolationPanel(TaskServiceImpl taskServiceImpl, HashMap<String, List<RuleType>> ruletypes, String language) {
-
 		categoryModel = new DefaultListModel();
 		ruletypeModel = new DefaultListModel();
 
@@ -239,7 +237,8 @@ class ActiveViolationPanel extends JPanel {
 			boolean test = (Boolean) violationtypeModel.getValueAt(i, 1);
 			try {
 				activeViolationtypes.get(i).setEnabled(test);
-			} catch (IndexOutOfBoundsException outOfBoundsException) {
+			} 
+			catch (IndexOutOfBoundsException outOfBoundsException) {
 				logger.error("Something went wrong. Active violationtypes can not be set.");
 			}
 		}

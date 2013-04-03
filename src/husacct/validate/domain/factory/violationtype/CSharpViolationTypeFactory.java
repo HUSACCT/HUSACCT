@@ -15,7 +15,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	private final EnumSet<CSharpViolationTypes> defaultAccess;
 	private final EnumSet<CSharpViolationTypes> defaultPackaging;
 
-	CSharpViolationTypeFactory(ConfigurationServiceImpl configuration){
+	CSharpViolationTypeFactory(ConfigurationServiceImpl configuration) {
 		super(configuration, "C#");
 		this.defaultDependencies = EnumSet.allOf(CSharpViolationTypes.class);
 		this.defaultAccess = EnumSet.of(CSharpViolationTypes.PUBLIC, CSharpViolationTypes.PROTECTED, CSharpViolationTypes.DEFAULT, CSharpViolationTypes.PRIVATE);
@@ -26,19 +26,19 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 
 	@Override
 	public List<ViolationType> createViolationTypesByRule(String ruleTypeKey) {
-		if(isCategoryLegalityOfDependency(ruleTypeKey)){
+		if(isCategoryLegalityOfDependency(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, defaultDependencies);
 		}
-		else if(isVisibilityConvenctionRule(ruleTypeKey)){
+		else if(isVisibilityConventionRule(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, defaultAccess);
 		}
-		else if(isNamingConvention(ruleTypeKey)){
+		else if(isNamingConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
 		}
-		else if(isInterfaceConvention(ruleTypeKey)){
+		else if(isInterfaceConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
 		}
-		else if(isSubClassConvention(ruleTypeKey)){
+		else if(isSubClassConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.of(CSharpViolationTypes.EXTENDS_ABSTRACT, CSharpViolationTypes.EXTENDS_CONCRETE, CSharpViolationTypes.EXTENDS_LIBRARY));
 		}
 		else{
@@ -47,7 +47,7 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	}
 
 	@Override
-	List<IViolationType> createViolationTypesMetaData(){
+	List<IViolationType> createViolationTypesMetaData() {
 		return Arrays.asList(EnumSet.allOf(CSharpViolationTypes.class).toArray(new IViolationType[]{}));
 	}
 }

@@ -19,8 +19,6 @@ public class ImportViolationsHistory extends XmlImportUtils {
 	private Logger logger = Logger.getLogger(ImportViolationsHistory.class);
 
 	public List<ViolationHistory> importViolationsHistory(Element violationHistoriesElement) {
-
-
 		List<ViolationHistory> violationHistories = new ArrayList<ViolationHistory>();
 		for(Element violationHistoryElement : violationHistoriesElement.getChildren("violationHistory")) {
 			List<Severity> severities = new ArrayList<Severity>();
@@ -29,11 +27,11 @@ public class ImportViolationsHistory extends XmlImportUtils {
 
 			for(Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {
 				String stringUUID = severityElement.getChildText("id");
-				if(isValidUUID(stringUUID)){
+				if(isValidUUID(stringUUID)) {
 					Severity severity = new Severity(UUID.fromString(severityElement.getChildText("id")), severityElement.getChildText("severityKey"), new Color(Integer.parseInt(severityElement.getChildText("color"))));
 					severities.add(severity);
 				}
-				else{
+				else {
 					logger.error(String.format("%s is not a valid UUID severity will be ignored", stringUUID));
 				}
 			}
@@ -62,17 +60,16 @@ public class ImportViolationsHistory extends XmlImportUtils {
 				final String stringUUID = violationElement.getChildText("severityId");
 				boolean found = false;
 				for(Severity severity : severities) {
-
-					if(isValidUUID(stringUUID)){
+					if(isValidUUID(stringUUID)) {
 						UUID id = UUID.fromString(stringUUID);
-						if(id.equals(severity.getId())) {
-							
+						if(id.equals(severity.getId())) {	
 							Violation violation = new Violation(date, lineNumber, severity.clone(), ruleTypeKey, violationTypeKey, classPathFrom, classPathTo, isIndirect, message, logicalModules);
 							violations.add(violation);
 							found = true;
 							break;
 						}                            
-					} else{
+					}
+					else {
 						logger.error(String.format("%s is not a valid severity UUID, violation will not be added", stringUUID));
 						break;
 					}
@@ -88,10 +85,11 @@ public class ImportViolationsHistory extends XmlImportUtils {
 		return violationHistories;
 	}
 
-	private boolean isValidUUID(String stringUUID){
-		try{
+	private boolean isValidUUID(String stringUUID) {
+		try {
 			UUID.fromString(stringUUID);
-		}catch(IllegalArgumentException e){
+		}
+		catch(IllegalArgumentException e) {
 			return false;
 		}
 		return true;
