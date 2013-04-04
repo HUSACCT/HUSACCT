@@ -12,7 +12,7 @@ import java.util.Set;
 public class CategoryAssembler {
 	private RuletypeAssembler ruleAssembler;
 
-	public CategoryAssembler(){
+	public CategoryAssembler() {
 		this.ruleAssembler = new RuletypeAssembler();
 	}
 
@@ -20,7 +20,7 @@ public class CategoryAssembler {
 		List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
 		List<String> categoryKeys = getCategoryKeyList(rules);
 
-		for(String key : categoryKeys) {
+		for (String key : categoryKeys) {
 			List<RuleType> categoryRules = getRulesByCategorykey(rules, key);
 
 			RuleTypeDTO[] ruletypes = ruleAssembler.createRuleTypeDTO(categoryRules);
@@ -32,7 +32,7 @@ public class CategoryAssembler {
 	private List<String> getCategoryKeyList(List<RuleType> rules) {
 		Set<String> categoryKeys = new HashSet<String>();
 
-		for(RuleType rule : rules) {
+		for (RuleType rule : rules) {
 			categoryKeys.add(rule.getCategoryKey());
 		}
 		return new ArrayList<String>(categoryKeys);
@@ -41,8 +41,8 @@ public class CategoryAssembler {
 	private List<RuleType> getRulesByCategorykey(List<RuleType> rules, String categoryKey) {
 		List<RuleType> categoryRules = new ArrayList<RuleType>();
 
-		for(RuleType rule : rules) {
-			if(rule.getCategoryKey().equals(categoryKey)) {
+		for (RuleType rule : rules) {
+			if (rule.getCategoryKey().equals(categoryKey)) {
 				categoryRules.add(rule);
 			}
 		}

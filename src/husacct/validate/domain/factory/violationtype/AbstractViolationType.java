@@ -1,6 +1,5 @@
 package husacct.validate.domain.factory.violationtype;
 
-
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 import husacct.validate.domain.exception.RuleTypeNotFoundException;
@@ -26,19 +25,20 @@ public abstract class AbstractViolationType {
 	protected String languageName;
 
 	public abstract List<ViolationType> createViolationTypesByRule(String key);
+
 	abstract List<IViolationType> createViolationTypesMetaData();
 
 	AbstractViolationType(ConfigurationServiceImpl configuration, String languageName) {
 		this.configuration = configuration;
 		this.languageName = languageName;
-		ViolationtypeGenerator generator = new ViolationtypeGenerator();		
+		ViolationtypeGenerator generator = new ViolationtypeGenerator();
 		this.allViolationKeys = generator.getAllViolationTypes(createViolationTypesMetaData());
 	}
 
 	protected List<ViolationType> generateViolationTypes(String ruleTypeKey, EnumSet<?> enums) {
 		List<ViolationType> violationtypes = new ArrayList<ViolationType>();
-		for(Enum<?> enumValue : enums){			
-			ViolationType violationtype = generateViolationType(ruleTypeKey, enumValue);	
+		for (Enum<?> enumValue : enums) {
+			ViolationType violationtype = generateViolationType(ruleTypeKey, enumValue);
 			violationtypes.add(violationtype);
 		}
 		return violationtypes;
@@ -50,8 +50,8 @@ public abstract class AbstractViolationType {
 
 	protected HashMap<String, List<ViolationType>> getAllViolationTypes(List<CategoryKeySeverityDTO> keyList) {
 		HashMap<String, List<ViolationType>> categoryViolations = new HashMap<String, List<ViolationType>>();
-		for(CategoryKeySeverityDTO dto : keyList) {
-			if(categoryViolations.containsKey(dto.getCategory())) {
+		for (CategoryKeySeverityDTO dto : keyList) {
+			if (categoryViolations.containsKey(dto.getCategory())) {
 				List<ViolationType> violationtypes = categoryViolations.get(dto.getCategory());
 				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);
@@ -59,7 +59,7 @@ public abstract class AbstractViolationType {
 			else {
 				List<ViolationType> violationtypes = new ArrayList<ViolationType>();
 				ViolationType violationtype = createViolationType(dto.getKey());
-				violationtypes.add(violationtype);	
+				violationtypes.add(violationtype);
 				categoryViolations.put(dto.getCategory(), violationtypes);
 			}
 		}
@@ -68,56 +68,56 @@ public abstract class AbstractViolationType {
 
 	private ViolationType createViolationType(String violationTypeKey) {
 		List<String> violationKeysToLower = new ArrayList<String>();
-		for(CategoryKeySeverityDTO violationtype : allViolationKeys) {
+		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
-		}		
+		}
 
-		if(violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
+		if (violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
 			final Severity severity = createSeverity(languageName, violationTypeKey);
 			return new ViolationType(violationTypeKey, severity);
 		}
 		else {
-			logger.warn(String.format("Warning specified %s not found in the system", violationTypeKey));			
+			logger.warn(String.format("Warning specified %s not found in the system", violationTypeKey));
 		}
 		throw new ViolationTypeNotFoundException();
 	}
 
 	public ViolationType createViolationType(String ruleTypeKey, String violationTypeKey) {
 		List<String> violationKeysToLower = new ArrayList<String>();
-		for(CategoryKeySeverityDTO violationtype : allViolationKeys){
+		for (CategoryKeySeverityDTO violationtype : allViolationKeys) {
 			violationKeysToLower.add(violationtype.getKey().toLowerCase());
-		}		
+		}
 
-		if(violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
+		if (violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
 			try {
 				final Severity severity = createSeverity(languageName, violationTypeKey);
 				boolean enabled = configuration.isViolationEnabled(languageName, ruleTypeKey, violationTypeKey);
 				return new ViolationType(violationTypeKey, enabled, severity);
 			}
-			catch(ProgrammingLanguageNotFoundException e) {
+			catch (ProgrammingLanguageNotFoundException e) {
 				logger.warn(String.format("ProgrammingLanguage %s not found", languageName));
 			}
-			catch(RuleTypeNotFoundException e) {
+			catch (RuleTypeNotFoundException e) {
 				logger.warn(String.format("RuleTypeKey: %s not found", ruleTypeKey));
 			}
-			catch(ViolationTypeNotFoundException e) {
+			catch (ViolationTypeNotFoundException e) {
 				logger.warn(String.format("ViolationTypeKey: %s not found", violationTypeKey));
 			}
 		}
 		else {
-			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));			
+			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
 		}
 		throw new ViolationTypeNotFoundException();
 	}
 
-	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue) {		
+	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue) {
 		final Severity severity = createSeverity(languageName, enumValue.toString());
 		final boolean isEnabled = configuration.isViolationEnabled(languageName, ruleTypeKey, enumValue.toString());
 		return new ViolationType(enumValue.toString(), isEnabled, severity);
 	}
 
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey) {
-		if(ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString())||ruleTypeKey.equals(RuleTypes.MUST_USE.toString())||ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString())||ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
+		if (ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.MUST_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
 			return true;
 		}
 		else {
@@ -126,25 +126,25 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isVisibilityConventionRule(String ruleTypeKey) {
-		if(ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION_EXCEPTION.toString())) {
+		if (ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION_EXCEPTION.toString())) {
 			return true;
 		}
-		else { 
-			return false;		
+		else {
+			return false;
 		}
 	}
 
 	protected boolean isNamingConvention(String ruleTypeKey) {
-		if(ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION_EXCEPTION.toString())) {
+		if (ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION_EXCEPTION.toString())) {
 			return true;
 		}
-		else { 
+		else {
 			return false;
 		}
 	}
 
 	protected boolean isInterfaceConvention(String ruleTypeKey) {
-		if(ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)) {
+		if (ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)) {
 			return true;
 		}
 		else {
@@ -153,7 +153,7 @@ public abstract class AbstractViolationType {
 	}
 
 	protected boolean isSubClassConvention(String ruleTypeKey) {
-		if(ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)) {
+		if (ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)) {
 			return true;
 		}
 		else {
@@ -163,23 +163,23 @@ public abstract class AbstractViolationType {
 
 	private Severity createSeverity(String programmingLanguage, String violationKey) {
 		try {
-			return configuration.getSeverityFromKey(programmingLanguage, violationKey);			
+			return configuration.getSeverityFromKey(programmingLanguage, violationKey);
 		}
-		catch(SeverityNotFoundException e) {
+		catch (SeverityNotFoundException e) {
 			CategoryKeySeverityDTO violation = getCategoryKeySeverityDTO(violationKey);
-			if(violation != null) {
+			if (violation != null) {
 				return configuration.getSeverityByName(violation.getDefaultSeverity().toString());
 			}
-		}	
+		}
 		return null;
 	}
 
-	private CategoryKeySeverityDTO getCategoryKeySeverityDTO(String violationKey) {		
-		for(CategoryKeySeverityDTO violation : allViolationKeys) {
-			if(violation.getKey().toLowerCase().equals(violationKey.toLowerCase())) {				
+	private CategoryKeySeverityDTO getCategoryKeySeverityDTO(String violationKey) {
+		for (CategoryKeySeverityDTO violation : allViolationKeys) {
+			if (violation.getKey().toLowerCase().equals(violationKey.toLowerCase())) {
 				return violation;
 			}
 		}
-		return null;		
+		return null;
 	}
 }

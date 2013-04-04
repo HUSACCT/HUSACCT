@@ -29,7 +29,7 @@ public class DomainServiceImpl {
 	private final CheckConformanceController checkConformanceController;
 	private final ConfigurationServiceImpl configuration;
 
-	public DomainServiceImpl(ConfigurationServiceImpl configuration) {	
+	public DomainServiceImpl(ConfigurationServiceImpl configuration) {
 		this.configuration = configuration;
 		this.ruletypefactory = configuration.getRuleTypesFactory();
 		this.checkConformanceController = new CheckConformanceController(configuration, ruletypefactory);
@@ -42,14 +42,15 @@ public class DomainServiceImpl {
 
 	/**
 	 * Gets all the possible violationtypes of the given programmingLanguage
-	 * Gives always the defaultSeverity back, despite what there is configured in the configuration,
-	 * this is because a violationtype is configurable per ruletype
+	 * Gives always the defaultSeverity back, despite what there is configured
+	 * in the configuration, this is because a violationtype is configurable per
+	 * ruletype
 	 */
 	public Map<String, List<ViolationType>> getAllViolationTypes(String programmingLanguage) {
 		initializeViolationtypeFactory();
 
 		AbstractViolationType violationtypefactory = this.violationtypefactory.getViolationTypeFactory(programmingLanguage, configuration);
-		if(violationtypefactory != null) {
+		if (violationtypefactory != null) {
 			return violationtypefactory.getAllViolationTypes();
 		}
 		else {
@@ -59,7 +60,7 @@ public class DomainServiceImpl {
 	}
 
 	private void initializeViolationtypeFactory() {
-		if(violationtypefactory == null){
+		if (violationtypefactory == null) {
 			this.violationtypefactory = new ViolationTypeFactory();
 		}
 	}

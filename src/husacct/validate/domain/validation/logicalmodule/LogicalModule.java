@@ -12,7 +12,7 @@ public class LogicalModule {
 	}
 
 	public LogicalModule(Mapping mapping) {
-		if(mapping != null) {
+		if (mapping != null) {
 			this.logicalModulePath = mapping.getLogicalPath();
 			this.logicalModuleType = mapping.getLogicalPathType();
 		}

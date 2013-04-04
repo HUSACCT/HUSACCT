@@ -8,7 +8,7 @@ public class ViolationHistoryNotFoundException extends RuntimeException {
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");;
 
-	public ViolationHistoryNotFoundException(Calendar date){
+	public ViolationHistoryNotFoundException(Calendar date) {
 		super(String.format("%s not found in the history of saved violations", dateFormat.format(date.getTime())));
 	}
 }

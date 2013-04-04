@@ -6,9 +6,9 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -130,7 +130,8 @@ public class FilterPanel extends JPanel {
 						try {
 							Thread.sleep(1);
 							browseViolations.loadAfterChange();
-						} catch (InterruptedException e) {
+						}
+						catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -156,7 +157,8 @@ public class FilterPanel extends JPanel {
 									browseViolations.loadAfterChange();
 								}
 							});
-						} catch (InterruptedException e) {
+						}
+						catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -182,7 +184,8 @@ public class FilterPanel extends JPanel {
 									browseViolations.loadAfterChange();
 								}
 							});
-						} catch (InterruptedException e) {
+						}
+						catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -195,10 +198,10 @@ public class FilterPanel extends JPanel {
 	}
 
 	public List<Violation> fillViolationsTable(List<Violation> violations) {
-		
+
 		List<Violation> violationsIndirect = new ArrayList<Violation>();
 
-		if(radioButtonAll.isSelected()){
+		if (radioButtonAll.isSelected()) {
 			return violations;
 		}
 		boolean isIndirect = radioButtonIndirect.isSelected();
@@ -207,7 +210,7 @@ public class FilterPanel extends JPanel {
 				violationsIndirect.add(violation);
 			}
 		}
-		
+
 		return violationsIndirect;
 	}
 

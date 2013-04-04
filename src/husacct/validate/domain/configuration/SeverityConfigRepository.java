@@ -15,7 +15,7 @@ class SeverityConfigRepository {
 
 	public SeverityConfigRepository() {
 		this.currentSeverities = new ArrayList<Severity>();
-		this.defaultSeverities = generateDefaultSeverities();		
+		this.defaultSeverities = generateDefaultSeverities();
 
 		initializeCurrentSeverities();
 	}
@@ -24,18 +24,18 @@ class SeverityConfigRepository {
 		initializeCurrentSeverities();
 	}
 
-	private void initializeCurrentSeverities() {	
+	private void initializeCurrentSeverities() {
 		this.currentSeverities = new ArrayList<Severity>(defaultSeverities.size());
-		for(Severity severity : defaultSeverities) {
+		for (Severity severity : defaultSeverities) {
 			currentSeverities.add(severity);
 		}
 	}
 
 	Severity getSeverityByName(String severityName) {
-		for(Severity customSeverity : currentSeverities) {
-			if(!severityName.isEmpty() && (severityName.toLowerCase().equals(customSeverity.getSeverityKey().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getSeverityName().toLowerCase()))){
-				return customSeverity;	
-			}		
+		for (Severity customSeverity : currentSeverities) {
+			if (!severityName.isEmpty() && (severityName.toLowerCase().equals(customSeverity.getSeverityKey().toLowerCase()) || severityName.toLowerCase().equals(customSeverity.getSeverityName().toLowerCase()))) {
+				return customSeverity;
+			}
 		}
 		throw new SeverityNotFoundException(severityName);
 	}
@@ -48,21 +48,21 @@ class SeverityConfigRepository {
 		return currentSeverities;
 	}
 
-	/** 
+	/**
 	 * @throws SeverityChangedException
 	 */
 	void setSeverities(List<Severity> newSeverities) {
 		isSeverityKeyOrOrderChanged(newSeverities);
 		this.currentSeverities = newSeverities;
-	}	
+	}
 
 	private void isSeverityKeyOrOrderChanged(List<Severity> newSeverities) {
-		if(newSeverities.size() != defaultSeverities.size()) {
-			for(int i = 0; i < newSeverities.size(); i++) {
+		if (newSeverities.size() != defaultSeverities.size()) {
+			for (int i = 0; i < newSeverities.size(); i++) {
 				Severity defaulSeverity = defaultSeverities.get(i);
 				Severity newSeverity = newSeverities.get(i);
 
-				if(!defaulSeverity.getSeverityKey().toLowerCase().equals(newSeverity.getSeverityKey().toLowerCase())) {
+				if (!defaulSeverity.getSeverityKey().toLowerCase().equals(newSeverity.getSeverityKey().toLowerCase())) {
 					throw new SeverityChangedException(newSeverity.getSeverityKey());
 				}
 			}
@@ -71,7 +71,7 @@ class SeverityConfigRepository {
 
 	private List<Severity> generateDefaultSeverities() {
 		List<Severity> newDefaultSeverities = new ArrayList<Severity>();
-		for(DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)) {
+		for (DefaultSeverities defaultSeverity : EnumSet.allOf(DefaultSeverities.class)) {
 			Severity severity = new Severity(defaultSeverity.toString(), defaultSeverity.getColor());
 			newDefaultSeverities.add(severity);
 		}

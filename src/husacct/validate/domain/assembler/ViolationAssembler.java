@@ -42,7 +42,7 @@ public class ViolationAssembler {
 
 		ViolationTypeFactory abstractViolationtypeFactory = new ViolationTypeFactory();
 		this.violationtypeFactory = abstractViolationtypeFactory.getViolationTypeFactory(configuration);
-		if(violationtypeFactory == null) {
+		if (violationtypeFactory == null) {
 			logger.debug("Warning no language specified in define component");
 		}
 	}
@@ -51,20 +51,20 @@ public class ViolationAssembler {
 		List<ViolationDTO> violationDTOList = new ArrayList<ViolationDTO>();
 
 		for (Violation violation : violations) {
-			try{		
+			try {
 				ViolationDTO violationDTO = createViolationDTO(violation);
 				violationDTOList.add(violationDTO);
 			}
-			catch(ViolationTypeNotFoundException e){
+			catch (ViolationTypeNotFoundException e) {
 				logger.warn(String.format("ViolationtypeKey: %s not found in violation", violation.getViolationtypeKey()));
-			}	
-			catch(LanguageNotFoundException e){
+			}
+			catch (LanguageNotFoundException e) {
 				logger.warn(e.getMessage());
 			}
 			catch (RuleInstantionException e) {
 				logger.warn(e.getMessage());
 			}
-		}	
+		}
 		Collections.sort(violationDTOList, violationSeverityComparator);
 		return violationDTOList;
 	}
@@ -74,7 +74,7 @@ public class ViolationAssembler {
 		public int compare(ViolationDTO o1, ViolationDTO o2) {
 			Integer severityValue1 = new Integer(o1.severityValue);
 			Integer severityValue2 = new Integer(o2.severityValue);
-			return severityValue2.compareTo(severityValue1);			
+			return severityValue2.compareTo(severityValue1);
 		}
 	};
 
@@ -90,7 +90,7 @@ public class ViolationAssembler {
 			final String message = messageBuilder.createMessage(violation.getMessage());
 			final int linenumber = violation.getLinenumber();
 
-			if(violation.getSeverity() != null) {
+			if (violation.getSeverity() != null) {
 				final Severity severity = violation.getSeverity();
 				final Color color = severity.getColor();
 				final String severityName = severity.getSeverityName();
@@ -99,29 +99,28 @@ public class ViolationAssembler {
 
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, severityName, severityValue, isIndirect);
 			}
-			else {				
+			else {
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", 0, false);
 			}
 		}
-		catch(ViolationTypeNotFoundException e) {
+		catch (ViolationTypeNotFoundException e) {
 			throw new ViolationTypeNotFoundException();
 		}
 	}
 
-
 	private RuleTypeDTO createRuleTypeDTO(Violation violation) throws RuleInstantionException, LanguageNotFoundException {
 		try {
-			if(violationtypeFactory == null) {
+			if (violationtypeFactory == null) {
 				throw new LanguageNotFoundException();
-			}			
+			}
 			ViolationType violationtype = violationtypeFactory.createViolationType(violation.getRuletypeKey(), violation.getViolationtypeKey());
 			RuleType rule = ruleFactory.generateRuleType(violation.getRuletypeKey());
 
 			RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);
 			return ruleDTO;
 		}
-		catch(ViolationTypeNotFoundException e){
+		catch (ViolationTypeNotFoundException e) {
 			throw new ViolationTypeNotFoundException();
-		}		
+		}
 	}
 }

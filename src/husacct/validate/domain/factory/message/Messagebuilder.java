@@ -14,23 +14,23 @@ public class Messagebuilder {
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private final String whiteSpace = " ";
-	
+
 	public String createMessage(Violation violation) {
 		return generateMessage(violation.getMessage());
 	}
 
 	public String createMessage(Message message) {
 		return generateMessage(message);
-	}	
+	}
 
 	private String generateMessage(Message message) {
 		String messageText = generateSingleMessage(message);
 
-		for(int i = 0; i < message.getExceptionMessage().size(); i++) {
-			if(i == 0) {
+		for (int i = 0; i < message.getExceptionMessage().size(); i++) {
+			if (i == 0) {
 				messageText += generateFirstExceptionMessage(message.getExceptionMessage().get(i));
 			}
-			else{
+			else {
 				messageText += generateRestExceptionMessage(message.getExceptionMessage().get(i));
 			}
 		}
@@ -38,7 +38,7 @@ public class Messagebuilder {
 	}
 
 	private String generateSingleMessage(Message message) {
-		final String left = generateLeftMessage(message);		
+		final String left = generateLeftMessage(message);
 		final String right = generateRightMessage(message);
 
 		final String textFormat = getTextFormat(message.getRuleKey());
@@ -54,10 +54,10 @@ public class Messagebuilder {
 	}
 
 	private String generateRightMessage(Message message) {
-		if(message.getRuleKey().toLowerCase().equals("namingconvention")) {
+		if (message.getRuleKey().toLowerCase().equals("namingconvention")) {
 			return generateNamingConventionMessage(message);
 		}
-		else if(message.getRuleKey().toLowerCase().equals("visibilityconvention")) {
+		else if (message.getRuleKey().toLowerCase().equals("visibilityconvention")) {
 			return generateInterfaceConventionMessage(message);
 		}
 		else {
@@ -76,11 +76,11 @@ public class Messagebuilder {
 
 		StringBuilder sb = new StringBuilder();
 		String seperationCharacter = ", ";
-		for(int iterator = 0; iterator < violationTypeKeys.size(); iterator++) {	
+		for (int iterator = 0; iterator < violationTypeKeys.size(); iterator++) {
 
 			sb.append(violationTypeKeys.get(iterator));
-			if(iterator != violationTypeKeys.size()-1) {				
-				if(iterator == violationTypeKeys.size()-2) {
+			if (iterator != violationTypeKeys.size() - 1) {
+				if (iterator == violationTypeKeys.size() - 2) {
 					sb.append(whiteSpace);
 					sb.append(localeService.getTranslatedString("OrMessage"));
 					sb.append("whiteSpace");
@@ -88,7 +88,7 @@ public class Messagebuilder {
 				else {
 					sb.append(seperationCharacter);
 				}
-			}			
+			}
 		}
 		return sb.toString();
 	}
@@ -98,11 +98,11 @@ public class Messagebuilder {
 	}
 
 	private String getTextFormat(String ruleTypeKey) {
-		try{
+		try {
 			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
-			return localeService.getTranslatedString(ruleTextKey);		
+			return localeService.getTranslatedString(ruleTextKey);
 		}
-		catch(IllegalFormatException e) {
+		catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
@@ -112,14 +112,14 @@ public class Messagebuilder {
 		try {
 			return String.format(textFormat, left, right);
 		}
-		catch(IllegalFormatException e) {
+		catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
 	}
 
 	private String generateFirstExceptionMessage(Message message) {
-		StringBuilder sb = new StringBuilder();		
+		StringBuilder sb = new StringBuilder();
 		try {
 			sb.append(whiteSpace);
 			sb.append(localeService.getTranslatedString("ExceptionMessage"));
@@ -128,7 +128,7 @@ public class Messagebuilder {
 			final String exceptionKey = sb.toString();
 			return exceptionKey + generateSingleMessage(message);
 		}
-		catch(IllegalFormatException e) {
+		catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
@@ -136,15 +136,15 @@ public class Messagebuilder {
 
 	private String generateRestExceptionMessage(Message message) {
 		StringBuilder sb = new StringBuilder();
-		try {			
+		try {
 			sb.append(whiteSpace);
 			sb.append(localeService.getTranslatedString("EnumerationMessage"));
-			sb.append(whiteSpace);			
+			sb.append(whiteSpace);
 
 			final String exceptionKey = sb.toString();
 			return exceptionKey + generateSingleMessage(message);
 		}
-		catch(IllegalFormatException e) {
+		catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";

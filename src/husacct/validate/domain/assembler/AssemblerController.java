@@ -1,11 +1,11 @@
 package husacct.validate.domain.assembler;
 
-import java.util.List;
-
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.ruletype.RuleType;
+
+import java.util.List;
 
 public class AssemblerController {
 	public CategoryDTO[] createCategoryDTO(List<RuleType> rules) {

@@ -3,10 +3,10 @@ package husacct.validate.domain.validation.logicalmodule;
 public class LogicalModules {
 	private final LogicalModule logicalModuleFrom;
 	private final LogicalModule logicalModuleTo;
-	
+
 	public LogicalModules() {
-		this.logicalModuleFrom = new LogicalModule("","");
-		this.logicalModuleTo = new LogicalModule("","");
+		this.logicalModuleFrom = new LogicalModule("", "");
+		this.logicalModuleTo = new LogicalModule("", "");
 	}
 
 	public LogicalModules(LogicalModule logicalModuleFrom, LogicalModule logicalModuleTo) {
@@ -16,7 +16,7 @@ public class LogicalModules {
 
 	public LogicalModules(LogicalModule logicalModuleFrom) {
 		this.logicalModuleFrom = logicalModuleFrom;
-		this.logicalModuleTo = new LogicalModule("","");
+		this.logicalModuleTo = new LogicalModule("", "");
 	}
 
 	public LogicalModule getLogicalModuleFrom() {

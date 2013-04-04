@@ -25,7 +25,7 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
-public final class FilterViolations extends JDialog  {
+public final class FilterViolations extends JDialog {
 	private static final long serialVersionUID = -6295611607558238501L;
 
 	private TaskServiceImpl taskServiceImpl;
@@ -43,7 +43,7 @@ public final class FilterViolations extends JDialog  {
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
 	private Calendar violationDate = Calendar.getInstance();
-	
+
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
@@ -84,11 +84,11 @@ public final class FilterViolations extends JDialog  {
 		ruletypeTable.getTableHeader().setResizingAllowed(false);
 		ruletypeTable.getTableHeader().setReorderingAllowed(false);
 		ruletypePanel.setViewportView(ruletypeTable);
-		
+
 		violationtypeTable.setFillsViewportHeight(true);
 		violationtypeTable.getTableHeader().setReorderingAllowed(false);
 		violationtypePanel.setViewportView(violationtypeTable);
-		
+
 		pathFilterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
 		pathFilterTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 		pathFilterTable.setFillsViewportHeight(true);
@@ -134,57 +134,57 @@ public final class FilterViolations extends JDialog  {
 		createBaseLayout();
 		setSize(800, 600);
 	}
-	
-	private void createFilterViolationPanelLayout(){
+
+	private void createFilterViolationPanelLayout() {
 		GroupLayout filterViolationPanelLayout = new GroupLayout(filterViolationPanel);
-		
+
 		GroupLayout.SequentialGroup horizontalFilterViolationGroup = filterViolationPanelLayout.createSequentialGroup();
 		horizontalFilterViolationGroup.addComponent(ruletypePanel);
 		horizontalFilterViolationGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
 		horizontalFilterViolationGroup.addComponent(violationtypePanel);
-		
+
 		filterViolationPanelLayout.setHorizontalGroup(horizontalFilterViolationGroup);
-		
+
 		GroupLayout.ParallelGroup verticalFilterViolationGroup = filterViolationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalFilterViolationGroup.addComponent(ruletypePanel);
 		verticalFilterViolationGroup.addComponent(violationtypePanel);
-		
+
 		filterViolationPanelLayout.setVerticalGroup(verticalFilterViolationGroup);
 		filterViolationPanel.setLayout(filterViolationPanelLayout);
 	}
-	
-	private void createPathFilterPanelLayout(){
+
+	private void createPathFilterPanelLayout() {
 		GroupLayout pathFilterPanelLayout = new GroupLayout(pathFilterPanel);
-		
+
 		GroupLayout.ParallelGroup horizontalButtonPathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false);
 		horizontalButtonPathGroup.addComponent(removePath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
 		horizontalButtonPathGroup.addComponent(addPath, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-		
+
 		GroupLayout.SequentialGroup horizontalPanePathGroup = pathFilterPanelLayout.createSequentialGroup();
 		horizontalPanePathGroup.addComponent(pathFilterScrollPane);
 		horizontalPanePathGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
 		horizontalPanePathGroup.addGroup(horizontalButtonPathGroup);
 		horizontalPanePathGroup.addContainerGap();
-		
+
 		pathFilterPanelLayout.setHorizontalGroup(horizontalPanePathGroup);
-		
+
 		GroupLayout.SequentialGroup verticalButtonPathGroup = pathFilterPanelLayout.createSequentialGroup();
 		verticalButtonPathGroup.addComponent(addPath);
 		verticalButtonPathGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
 		verticalButtonPathGroup.addComponent(removePath);
 		verticalButtonPathGroup.addContainerGap();
-		
+
 		GroupLayout.ParallelGroup verticalPanePathGroup = pathFilterPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		verticalPanePathGroup.addComponent(pathFilterScrollPane);
 		verticalPanePathGroup.addGroup(verticalButtonPathGroup);
-		
+
 		pathFilterPanelLayout.setVerticalGroup(verticalPanePathGroup);
 		pathFilterPanel.setLayout(pathFilterPanelLayout);
 	}
-	
-	private void createBaseLayout(){
+
+	private void createBaseLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
-		
+
 		GroupLayout.SequentialGroup horizontalButtonGroup = layout.createSequentialGroup();
 		horizontalButtonGroup.addComponent(hideFilteredValues);
 		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
@@ -194,36 +194,36 @@ public final class FilterViolations extends JDialog  {
 		horizontalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
 		horizontalButtonGroup.addComponent(cancel);
 		horizontalButtonGroup.addContainerGap();
-		
+
 		GroupLayout.ParallelGroup horizontalPaneGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		horizontalPaneGroup.addComponent(tabbedPane);
 		horizontalPaneGroup.addGroup(horizontalButtonGroup);
-		
+
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(horizontalPaneGroup);
-		
+
 		GroupLayout.ParallelGroup verticalRadioButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
 		verticalRadioButtonGroup.addComponent(hideFilteredValues);
 		verticalRadioButtonGroup.addComponent(showFilteredValues);
-		
+
 		GroupLayout.ParallelGroup verticalButtonGroup = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
 		verticalButtonGroup.addComponent(save);
 		verticalButtonGroup.addComponent(cancel);
 		verticalButtonGroup.addGroup(verticalRadioButtonGroup);
-		
+
 		GroupLayout.SequentialGroup verticalPaneGroup = layout.createSequentialGroup();
 		verticalPaneGroup.addComponent(tabbedPane);
 		verticalPaneGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED);
 		verticalPaneGroup.addGroup(verticalButtonGroup);
-		
+
 		layout.setVerticalGroup(verticalPaneGroup);
 	}
-	
-	public void setViolationDate(Calendar date){
+
+	public void setViolationDate(Calendar date) {
 		violationDate = date;
 	}
-	
-	public void loadGUIText(){
+
+	public void loadGUIText() {
 		setTitle(localeService.getTranslatedString("TotalViolations"));
 		tabbedPane.addTab(localeService.getTranslatedString("FilterViolations"), filterViolationPanel);
 		addPath.setText(localeService.getTranslatedString("Add"));
@@ -233,19 +233,19 @@ public final class FilterViolations extends JDialog  {
 		cancel.setText(localeService.getTranslatedString("Cancel"));
 		showFilteredValues.setText(localeService.getTranslatedString("ShowSelectedValues"));
 		hideFilteredValues.setText(localeService.getTranslatedString("HideSelectedValues"));
-		
+
 		loadModels();
 	}
-	
-	public void loadModels(){
-		String[] columnNamesRuletype = {"", localeService.getTranslatedString("Ruletypes")};
-		String[] columnNamesViolationtype = {"", localeService.getTranslatedString("Violationtypes")};
-		String[] columnNamesPath = {" ", localeService.getTranslatedString("Path")};
-		
+
+	public void loadModels() {
+		String[] columnNamesRuletype = { "", localeService.getTranslatedString("Ruletypes") };
+		String[] columnNamesViolationtype = { "", localeService.getTranslatedString("Violationtypes") };
+		String[] columnNamesPath = { " ", localeService.getTranslatedString("Path") };
+
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 			private static final long serialVersionUID = -7173080075671054375L;
-			Class<?>[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, false};
+			Class<?>[] types = new Class[] { Boolean.class, String.class };
+			boolean[] canEdit = new boolean[] { true, false };
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -260,8 +260,8 @@ public final class FilterViolations extends JDialog  {
 
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
 			private static final long serialVersionUID = -9191282154177444964L;
-			Class<?>[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, false};
+			Class<?>[] types = new Class[] { Boolean.class, String.class };
+			boolean[] canEdit = new boolean[] { true, false };
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -276,8 +276,8 @@ public final class FilterViolations extends JDialog  {
 
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
 			private static final long serialVersionUID = 1832644249597223838L;
-			Class<?>[] types = new Class[]{Boolean.class, String.class};
-			boolean[] canEdit = new boolean[]{true, true};
+			Class<?>[] types = new Class[] { Boolean.class, String.class };
+			boolean[] canEdit = new boolean[] { true, true };
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -289,11 +289,11 @@ public final class FilterViolations extends JDialog  {
 				return canEdit[columnIndex];
 			}
 		};
-		
+
 		ruletypeTable.setModel(ruletypeModelFilter);
 		violationtypeTable.setModel(violationtypeModelFilter);
 		pathFilterTable.setModel(pathFilterModel);
-		
+
 		loadFilterValues();
 	}
 
@@ -305,19 +305,17 @@ public final class FilterViolations extends JDialog  {
 		ruletypesfilter = getRuletypesFilter();
 		violationtypesfilter = getViolationtypesFilter();
 		pathsfilter = getPathFilter();
-		if(!checkPathsNames()){
+		if (!checkPathsNames()) {
 			return;
 		}
-		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter,
-				pathsfilter);
+		PathDTO dto = new PathDTO(ruletypesfilter, violationtypesfilter, pathsfilter);
 		taskServiceImpl.setFilterValues(dto, hideFilteredValues.isSelected(), violationDate);
 		filterViolationsObserver.updateViolationsTable();
 		dispose();
 	}
-	
 
 	private void addPathActionPerformed() {
-		pathFilterModel.addRow(new Object[]{true, ""});
+		pathFilterModel.addRow(new Object[] { true, "" });
 	}
 
 	private void removePathActionPerformed() {
@@ -329,7 +327,7 @@ public final class FilterViolations extends JDialog  {
 	private ArrayList<String> getRuletypesFilter() {
 		ArrayList<String> Ruletypes = new ArrayList<String>();
 		for (int i = 0; i < ruletypeModelFilter.getRowCount(); i++) {
-			if ( (Boolean) ruletypeModelFilter.getValueAt(i, 0)) {
+			if ((Boolean) ruletypeModelFilter.getValueAt(i, 0)) {
 				Ruletypes.add((String) ruletypeModelFilter.getValueAt(i, 1));
 			}
 		}
@@ -341,9 +339,8 @@ public final class FilterViolations extends JDialog  {
 		ArrayList<String> violationtypes = new ArrayList<String>();
 
 		for (int i = 0; i < violationtypeModelFilter.getRowCount(); i++) {
-			if ( (Boolean) violationtypeModelFilter.getValueAt(i, 0)) {
-				violationtypes.add((String)
-						violationtypeModelFilter.getValueAt(i, 1));
+			if ((Boolean) violationtypeModelFilter.getValueAt(i, 0)) {
+				violationtypes.add((String) violationtypeModelFilter.getValueAt(i, 1));
 			}
 		}
 
@@ -354,52 +351,52 @@ public final class FilterViolations extends JDialog  {
 		ArrayList<String> paths = new ArrayList<String>();
 
 		for (int i = 0; i < pathFilterModel.getRowCount(); i++) {
-			if ( (Boolean) pathFilterModel.getValueAt(i, 0)) {
+			if ((Boolean) pathFilterModel.getValueAt(i, 0)) {
 				paths.add((String) pathFilterModel.getValueAt(i, 1));
 			}
 		}
 
 		return paths;
 	}
-	
-	public void loadFilterValues(){
+
+	public void loadFilterValues() {
 		loadRuletypes();
 		loadViolationtypes();
 	}
 
-	private void loadRuletypes(){
-		while(ruletypeModelFilter.getRowCount() > 0){
+	private void loadRuletypes() {
+		while (ruletypeModelFilter.getRowCount() > 0) {
 			ruletypeModelFilter.removeRow(0);
 		}
 		ArrayList<String> ruletypes = taskServiceImpl.loadRuletypesForFilter(violationDate);
-		for(String ruletype : ruletypes){
-			ruletypeModelFilter.addRow(new Object[]{false, ruletype});
+		for (String ruletype : ruletypes) {
+			ruletypeModelFilter.addRow(new Object[] { false, ruletype });
 		}
 	}
 
-	private void loadViolationtypes(){
-		while(violationtypeModelFilter.getRowCount() > 0){
+	private void loadViolationtypes() {
+		while (violationtypeModelFilter.getRowCount() > 0) {
 			violationtypeModelFilter.removeRow(0);
 		}
 		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
-		for(String violationtype : violationtypes){
-			if(!violationtype.isEmpty()){
-				violationtypeModelFilter.addRow(new Object[]{false, violationtype});
+		for (String violationtype : violationtypes) {
+			if (!violationtype.isEmpty()) {
+				violationtypeModelFilter.addRow(new Object[] { false, violationtype });
 			}
 		}
 	}
 
 	private boolean checkPathsNames() {
-		if(pathsfilter.isEmpty()){
+		if (pathsfilter.isEmpty()) {
 			return true;
 		}
 		boolean returnValue = true;
-		for(String path : pathsfilter){
-			if(path.isEmpty()){
+		for (String path : pathsfilter) {
+			if (path.isEmpty()) {
 				returnValue = false;
 			}
 		}
-		if(!returnValue){
+		if (!returnValue) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(String.format(localeService.getTranslatedString("EmptyField"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Path")));
 		}
 		return returnValue;

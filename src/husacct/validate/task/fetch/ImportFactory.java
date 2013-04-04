@@ -16,8 +16,8 @@ public class ImportFactory {
 	private final ImportSeverities importSeverities;
 	private final ImportSeveritiesPerTypesPerProgrammingLanguages importSeveritiesPerRuleTypesPerProgrammingLanguages;
 	private final ImportActiveViolationTypes importActiveViolationTypes;
-	
-	ImportFactory(){
+
+	ImportFactory() {
 		this.importSeverities = new ImportSeverities();
 		this.importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
 		this.importActiveViolationTypes = new ImportActiveViolationTypes();

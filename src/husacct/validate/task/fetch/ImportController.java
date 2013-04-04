@@ -29,10 +29,10 @@ public class ImportController {
 
 	public void importWorkspace(Element element) throws DatatypeConfigurationException {
 		importSeverties(element.getChild("severities"));
-		
+
 		importSeveritiesPerTypesPerProgrammingLanguages(element.getChild("severitiesPerTypesPerProgrammingLanguages"));
 		importActiveViolationTypes(element.getChild("activeViolationTypes"));
-		
+
 	}
 
 	private void importSeverties(Element element) {
@@ -40,7 +40,7 @@ public class ImportController {
 			this.severities = importFactory.importSeverities(element);
 			configuration.setSeverities(severities);
 		}
-		catch(SeverityChangedException e) {
+		catch (SeverityChangedException e) {
 			logger.error("Error during importing of severities, default severities will be used: " + e.getMessage());
 		}
 	}

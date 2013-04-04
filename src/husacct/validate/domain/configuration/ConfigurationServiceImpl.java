@@ -26,11 +26,11 @@ public final class ConfigurationServiceImpl extends Observable {
 
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
-		this.violationRepository = new ViolationRepository();		
+		this.violationRepository = new ViolationRepository();
 		this.severityPerTypeRepository = new SeverityPerTypeRepository(this.ruletypeFactory = new RuleTypesFactory(this), this);
 		this.activeViolationTypesRepository = new ActiveViolationTypesRepository(this.ruletypeFactory);
-		this.severityPerTypeRepository.initializeDefaultSeverities();			
-		this.violationHistoryRepository = new ViolationHistoryRepository();		
+		this.severityPerTypeRepository.initializeDefaultSeverities();
+		this.violationHistoryRepository = new ViolationHistoryRepository();
 	}
 
 	public void clearViolations() {
@@ -45,7 +45,7 @@ public final class ConfigurationServiceImpl extends Observable {
 		return severityConfig.getAllSeverities();
 	}
 
-	/** 
+	/**
 	 * @throws SeverityChangedException
 	 */
 	public void setSeverities(List<Severity> severities) {
@@ -134,7 +134,7 @@ public final class ConfigurationServiceImpl extends Observable {
 		final Calendar date = violationsResult.getKey();
 		final List<Violation> violations = violationsResult.getValue();
 
-		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);	
+		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);
 		violationHistoryRepository.addViolationHistory(violationHistory);
 	}
 
@@ -150,21 +150,21 @@ public final class ConfigurationServiceImpl extends Observable {
 		return violationHistoryRepository.getViolationHistory();
 	}
 
-	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
-		if(activeViolationTypesRepository != null){
+	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey) {
+		if (activeViolationTypesRepository != null) {
 			getActiveViolationTypes();
 			return activeViolationTypesRepository.isEnabled(programmingLanguage, ruleTypeKey, violationTypeKey);
 		}
-		else{
+		else {
 			return true;
 		}
 	}
-	
+
 	public void attachViolationHistoryRepositoryObserver(Observer observer) {
 		violationHistoryRepository.addObserver(observer);
 	}
-	
-	private void notifyServiceListeners(){
+
+	private void notifyServiceListeners() {
 		ServiceProvider.getInstance().getValidateService().notifyServiceListeners();
 	}
 }

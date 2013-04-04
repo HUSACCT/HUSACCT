@@ -39,6 +39,6 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 		}
 		catch (InterruptedException e) {
 			logger.debug(e.getMessage());
-		}	
+		}
 	}
 }

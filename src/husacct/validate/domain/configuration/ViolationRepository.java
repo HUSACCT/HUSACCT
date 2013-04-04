@@ -14,7 +14,7 @@ class ViolationRepository {
 	public ViolationRepository() {
 		this.violations = new ArrayList<Violation>();
 		this.date = Calendar.getInstance();
-	}	
+	}
 
 	void addViolation(List<Violation> newViolations) {
 		this.violations = newViolations;
@@ -28,7 +28,7 @@ class ViolationRepository {
 		return new SimpleEntry<Calendar, List<Violation>>(date, violations);
 	}
 
-	void clear(){
+	void clear() {
 		this.violations = new ArrayList<Violation>();
 	}
 }

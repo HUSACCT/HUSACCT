@@ -24,7 +24,7 @@ public class InterfaceConventionRule extends RuleType {
 
 	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
-		
+
 		this.interfaceCache = new HashSet<String>();
 		this.noInterfaceCache = new HashSet<String>();
 	}
@@ -39,16 +39,16 @@ public class InterfaceConventionRule extends RuleType {
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom) {	
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			int interfaceCounter = 0;
-			for(Mapping classPathTo : physicalClasspathsTo) {
-				for(DependencyDTO dependency : dependencies) {
-					if(dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)){
+			for (Mapping classPathTo : physicalClasspathsTo) {
+				for (DependencyDTO dependency : dependencies) {
+					if (dependency.from.equals(classPathFrom.getPhysicalPath()) && dependency.to.equals(classPathTo.getPhysicalPath()) && isInterface(dependency.to)) {
 						interfaceCounter++;
 					}
 				}
 			}
-			if(interfaceCounter == 0 && physicalClasspathsTo.size() != 0) {
+			if (interfaceCounter == 0 && physicalClasspathsTo.size() != 0) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}
@@ -57,20 +57,20 @@ public class InterfaceConventionRule extends RuleType {
 	}
 
 	private boolean isInterface(String classPath) {
-		if(interfaceCache.contains(classPath)) {
+		if (interfaceCache.contains(classPath)) {
 			return true;
 		}
-		else if(noInterfaceCache.contains(classPath)) {
+		else if (noInterfaceCache.contains(classPath)) {
 			return false;
 		}
 		else {
 			return addToCache(classPath);
 		}
 	}
-	
+
 	private boolean addToCache(String classPath) {
 		boolean isInterface = analyseService.getModuleForUniqueName(classPath).type.toLowerCase().equals("interface");
-		if(isInterface) {
+		if (isInterface) {
 			interfaceCache.add(classPath);
 			return true;
 		}

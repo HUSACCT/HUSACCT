@@ -8,17 +8,17 @@ import javax.swing.JButton;
 import org.apache.log4j.Logger;
 
 public class CheckConformanceTask implements Runnable {
-	
+
 	private final FilterPanel filterPanel;
 	private final JButton buttonSaveInHistory;
-	
+
 	private Logger logger = Logger.getLogger(CheckConformanceTask.class);
-	
+
 	public CheckConformanceTask(FilterPanel filterPanel, JButton buttonSaveInHistory) {
 		this.filterPanel = filterPanel;
 		this.buttonSaveInHistory = buttonSaveInHistory;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -26,9 +26,9 @@ public class CheckConformanceTask implements Runnable {
 			ServiceProvider.getInstance().getValidateService().checkConformance();
 			filterPanel.loadAfterChange();
 			buttonSaveInHistory.setEnabled(true);
-		} 
+		}
 		catch (InterruptedException e) {
 			logger.debug(e.getMessage());
-		}		
+		}
 	}
 }
