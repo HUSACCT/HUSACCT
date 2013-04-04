@@ -1,28 +1,28 @@
 package husacct.define.domain;
 
+import java.util.ArrayList;
+
 public class Application {
 	
 	private String name;
-	private String[] paths;
-	private String programmingLanguage;
 	private String version;
+	private ArrayList<Project> projects;
 	private SoftwareArchitecture architecture;
 	
 	public Application()
 	{
-		this("",new String[]{},"", "1.0");
+		this("",new ArrayList<Project>(), "1.0");
 	}
 	
-	public Application(String name, String lang)
+	public Application(String name)
 	{
-		this(name,new String[]{},lang, "1.0");
+		this(name,new ArrayList<Project>(), "1.0");
 	}
 	
-	public Application(String name, String[] paths, String lang, String version)
+	public Application(String name, ArrayList<Project> projects, String version)
 	{
 		this.setName(name);
-		this.setPaths(paths);
-		this.setLanguage(lang);
+		this.setProjects(projects);
 		this.setVersion(version);
 		this.architecture = new SoftwareArchitecture();
 	}
@@ -35,20 +35,12 @@ public class Application {
 		return name;
 	}
 
-	public void setPaths(String[] paths) {
-		this.paths = paths;
+	public void setProjects(ArrayList<Project> projects) {
+		this.projects = projects;
 	}
 
-	public String[] getPaths() {
-		return paths;
-	}
-
-	public void setLanguage(String language) {
-		this.programmingLanguage = language;
-	}
-
-	public String getLanguage() {
-		return programmingLanguage;
+	public ArrayList<Project> getProjects() {
+		return projects;
 	}
 
 	public SoftwareArchitecture getArchitecture() {
@@ -65,10 +57,5 @@ public class Application {
 
 	public void setVersion(String version) {
 		this.version = version;
-	}
-	
-	
-	
-	
-
+	}	
 }

@@ -89,7 +89,7 @@ public class PersistentDomain implements ISaveable {
 		
 		switch (parseData) {
 			default:
-				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
+				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getProjects(), workspaceApplication.getVersion());
 				domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				for (Module m : workspaceArchitecture.getModules()) {
 					long rootModule = moduleService.addModuleToRoot(m);
