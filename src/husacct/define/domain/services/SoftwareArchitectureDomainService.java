@@ -2,7 +2,10 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.Application;
+import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
+
+import java.util.ArrayList;
 
 public class SoftwareArchitectureDomainService {
 	private Application app;
@@ -18,8 +21,8 @@ public class SoftwareArchitectureDomainService {
 	/**
 	 * Application
 	 */
-	public void createApplication(String name, String[] paths, String language, String version) {
-		app = new Application(name, paths, language, version);
+	public void createApplication(String name, ArrayList<Project> projects, String version) {
+		app = new Application(name, projects, version);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();	
 	}
 	
