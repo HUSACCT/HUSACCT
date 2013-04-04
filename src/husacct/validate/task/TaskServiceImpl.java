@@ -31,7 +31,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.jdom2.Element;
 
-public class TaskServiceImpl{
+public class TaskServiceImpl {
 	private final FilterController filterController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
@@ -42,13 +42,13 @@ public class TaskServiceImpl{
 
 	public TaskServiceImpl(ConfigurationServiceImpl configuration, DomainServiceImpl domain) {
 		this.configuration = configuration;
-		this.domain = domain;	
+		this.domain = domain;
 		this.exportController = new ExportController();
 		this.importController = new ImportController(configuration);
 		this.filterController = new FilterController(this, domain.getRuleTypesFactory(), configuration);
 	}
 
-	public SimpleEntry<Calendar, List<Violation>> getAllViolations(){
+	public SimpleEntry<Calendar, List<Violation>> getAllViolations() {
 		return configuration.getAllViolations();
 	}
 
@@ -74,24 +74,24 @@ public class TaskServiceImpl{
 
 	public HashMap<String, List<RuleType>> getRuletypes(String language) {
 		return domain.getAllRuleTypes(language);
-	}	
+	}
 
-	public List<Severity> getAllSeverities(){
+	public List<Severity> getAllSeverities() {
 		return configuration.getAllSeverities();
 	}
 
-	public String[] getAvailableLanguages(){
+	public String[] getAvailableLanguages() {
 		return analyseService.getAvailableLanguages();
 	}
 
-	/** 
+	/**
 	 * @throws SeverityChangedException
 	 */
 	public void addSeverities(List<Severity> severities) {
 		configuration.setSeverities(severities);
 	}
 
-	public void updateSeverityPerType(HashMap<String, Severity> map, String language){
+	public void updateSeverityPerType(HashMap<String, Severity> map, String language) {
 		configuration.setSeveritiesPerTypesPerProgrammingLanguages(language, map);
 	}
 
@@ -103,7 +103,7 @@ public class TaskServiceImpl{
 		return domain.getAllViolationTypes(language);
 	}
 
-	public Severity getSeverityFromKey(String language, String key){
+	public Severity getSeverityFromKey(String language, String key) {
 		return configuration.getSeverityFromKey(language, key);
 	}
 
@@ -115,25 +115,25 @@ public class TaskServiceImpl{
 		return exportController.exportAllData(configuration);
 	}
 
-	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities){
+	public LinkedHashMap<Severity, Integer> getViolationsPerSeverity(List<Violation> shownViolations, List<Severity> severities) {
 		return filterController.getViolationsPerSeverity(shownViolations, severities);
 	}
 
-	public void restoreAllKeysToDefaultSeverities(String language){
+	public void restoreAllKeysToDefaultSeverities(String language) {
 		configuration.restoreAllKeysToDefaultSeverities(language);
 	}
 
-	public void restoreKeyToDefaultSeverity(String language, String key){
+	public void restoreKeyToDefaultSeverity(String language, String key) {
 		configuration.restoreKeyToDefaultSeverity(language, key);
 	}
 
-	public void restoreSeveritiesToDefault(){
+	public void restoreSeveritiesToDefault() {
 		configuration.restoreSeveritiesToDefault();
 	}
 
 	public List<Violation> getHistoryViolations(Calendar date) {
-		for(ViolationHistory violationHistory : configuration.getViolationHistory()) {
-			if(violationHistory.getDate().equals(date)) {
+		for (ViolationHistory violationHistory : configuration.getViolationHistory()) {
+			if (violationHistory.getDate().equals(date)) {
 				return violationHistory.getViolations();
 			}
 		}
@@ -143,7 +143,7 @@ public class TaskServiceImpl{
 	public Calendar[] getViolationHistoryDates() {
 		Calendar[] calendars = new Calendar[configuration.getViolationHistory().size()];
 		int i = 0;
-		for(ViolationHistory violationHistory : configuration.getViolationHistory()) {
+		for (ViolationHistory violationHistory : configuration.getViolationHistory()) {
 			calendars[i] = violationHistory.getDate();
 			i++;
 		}
@@ -166,19 +166,19 @@ public class TaskServiceImpl{
 		return configuration.getViolationHistories();
 	}
 
-	public Map<String, List<ActiveRuleType>> getActiveViolationTypes(){
+	public Map<String, List<ActiveRuleType>> getActiveViolationTypes() {
 		return configuration.getActiveViolationTypes();
 	}
 
-	public void setActiveViolationTypes(String language, List<ActiveRuleType> activeViolations){
+	public void setActiveViolationTypes(String language, List<ActiveRuleType> activeViolations) {
 		configuration.setActiveViolationTypes(language, activeViolations);
 	}
-	
-	public String getMessage(Message message){
+
+	public String getMessage(Message message) {
 		return domain.getMessage(message);
 	}
 
-	public void subscribe(Observer frame){
+	public void subscribe(Observer frame) {
 		configuration.addObserver(frame);
 	}
 }

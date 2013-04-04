@@ -11,54 +11,56 @@ import java.util.List;
 public class RuletypeAssembler {
 	private ViolationtypeAssembler violationtypeassembler;
 
-	public RuletypeAssembler(){
+	public RuletypeAssembler() {
 		this.violationtypeassembler = new ViolationtypeAssembler();
 	}
 
-	public RuleTypeDTO[] createRuleTypeDTO(List<RuleType> rules){
+	public RuleTypeDTO[] createRuleTypeDTO(List<RuleType> rules) {
 		List<RuleTypeDTO> ruletypes = new ArrayList<RuleTypeDTO>();
 
-		for(RuleType rule: rules){			
+		for (RuleType rule : rules) {
 			RuleTypeDTO dto = createRuleTypeDTOWithViolationtypes(rule);
 			ruletypes.add(dto);
 		}
 		return ruletypes.toArray(new RuleTypeDTO[ruletypes.size()]);
 	}
 
-	private RuleTypeDTO createRuleTypeDTOWithViolationtypes(RuleType rule){
+	private RuleTypeDTO createRuleTypeDTOWithViolationtypes(RuleType rule) {
 		String key = rule.getKey();
 		String description = rule.getDescriptionKey();
 		ViolationTypeDTO[] violationtypes = createViolationTypeDTO(rule.getViolationTypes());
-		final RuleTypeDTO[] exceptionRuleTypes = createExceptionRuleTypeDTO(rule);		
+		final RuleTypeDTO[] exceptionRuleTypes = createExceptionRuleTypeDTO(rule);
+
 		return new RuleTypeDTO(key, description, violationtypes, exceptionRuleTypes);
 	}
 
-	private ViolationTypeDTO[] createViolationTypeDTO(List<ViolationType> violationTypes){
+	private ViolationTypeDTO[] createViolationTypeDTO(List<ViolationType> violationTypes) {
 		return violationtypeassembler.createViolationTypeDTO(violationTypes);
 	}
 
-	public RuleTypeDTO createRuleTypeDTO(RuleType rule, ViolationType violationtype){
+	public RuleTypeDTO createRuleTypeDTO(RuleType rule, ViolationType violationtype) {
 		String key = rule.getKey();
 		String description = rule.getDescriptionKey();
 		ViolationTypeDTO violationtypeDTO = violationtypeassembler.createViolationTypeDTO(violationtype);
+		final RuleTypeDTO[] exceptionRuleTypes = createExceptionRuleTypeDTO(rule);
 
-		final RuleTypeDTO[] exceptionRuleTypes = createExceptionRuleTypeDTO(rule);		
-		return new RuleTypeDTO(key, description, new ViolationTypeDTO[]{violationtypeDTO}, exceptionRuleTypes);
+		return new RuleTypeDTO(key, description, new ViolationTypeDTO[] { violationtypeDTO }, exceptionRuleTypes);
 	}
 
-	private RuleTypeDTO[] createExceptionRuleTypeDTO(RuleType rule){		
+	private RuleTypeDTO[] createExceptionRuleTypeDTO(RuleType rule) {
 		List<RuleTypeDTO> exceptionRuleTypes = new ArrayList<RuleTypeDTO>();
-		for(RuleType ruletype : rule.getExceptionrules()){
+		for (RuleType ruletype : rule.getExceptionrules()) {
 			final RuleTypeDTO exceptionRuleType = createRootRuleTypeDTOWithViolationtypes(ruletype);
 			exceptionRuleTypes.add(exceptionRuleType);
 		}
-		return exceptionRuleTypes.toArray(new RuleTypeDTO[]{});
+		return exceptionRuleTypes.toArray(new RuleTypeDTO[] {});
 	}
 
-	private RuleTypeDTO createRootRuleTypeDTOWithViolationtypes(RuleType rule){
+	private RuleTypeDTO createRootRuleTypeDTOWithViolationtypes(RuleType rule) {
 		String key = rule.getKey();
 		String description = rule.getDescriptionKey();
 		ViolationTypeDTO[] violationtypes = createViolationTypeDTO(rule.getViolationTypes());
-		return new RuleTypeDTO(key, description, violationtypes, new RuleTypeDTO[]{});
+
+		return new RuleTypeDTO(key, description, violationtypes, new RuleTypeDTO[] {});
 	}
 }

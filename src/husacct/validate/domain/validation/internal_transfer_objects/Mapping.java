@@ -9,14 +9,14 @@ public class Mapping {
 	private final String logicalPathType;
 	private String[] violationTypes;
 
-	public Mapping(String logicalPath, String logicalPathType, String physicalPath, String[] violationTypes){
+	public Mapping(String logicalPath, String logicalPathType, String physicalPath, String[] violationTypes) {
 		this.logicalPath = logicalPath;
 		this.physicalPath = physicalPath;
 		this.logicalPathType = logicalPathType;
 		this.violationTypes = violationTypes;
 	}
-	
-	public Mapping(String physicalPath, String[] violationTypes){
+
+	public Mapping(String physicalPath, String[] violationTypes) {
 		this.logicalPath = "";
 		this.physicalPath = physicalPath;
 		this.logicalPathType = "";
@@ -39,15 +39,15 @@ public class Mapping {
 		return violationTypes;
 	}
 
-	public void removeViolationType(String violationType){
+	public void removeViolationType(String violationType) {
 		ArrayList<String> violationTypeList = new ArrayList<String>();
 		violationTypeList.addAll(Arrays.asList(violationTypes));
-		for(int i = 0; i < violationTypeList.size(); i++){
-			if(violationTypeList.get(i).toLowerCase().equals(violationType.toLowerCase())){
+		for (int i = 0; i < violationTypeList.size(); i++) {
+			if (violationTypeList.get(i).toLowerCase().equals(violationType.toLowerCase())) {
 				violationTypeList.remove(i);
 				i--;
 			}
 		}
-		violationTypes = violationTypeList.toArray(new String[]{});
+		violationTypes = violationTypeList.toArray(new String[] {});
 	}
 }
