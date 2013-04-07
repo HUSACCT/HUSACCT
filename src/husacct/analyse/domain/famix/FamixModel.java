@@ -18,6 +18,7 @@ class FamixModel extends FamixObject{
 	public HashMap<String, FamixPackage> packages;
 	public HashMap<String, FamixClass> classes;
 	public HashMap<String, FamixInterface> interfaces;
+	public HashMap<String, FamixLibrary> libraries;
 	public ArrayList<FamixAssociation> associations;
 	
 	public String exporterName;
@@ -39,6 +40,7 @@ class FamixModel extends FamixObject{
 		classes = new HashMap<String, FamixClass>();
 		packages = new HashMap<String, FamixPackage>();
 		interfaces = new HashMap<String, FamixInterface>();
+		libraries = new HashMap<String, FamixLibrary>();
 		structuralEntities = new HashMap<String, FamixStructuralEntity>();
 		behaviouralEntities = new HashMap<String, FamixBehaviouralEntity>();
 	}
@@ -68,6 +70,9 @@ class FamixModel extends FamixObject{
 			}
 			else if (e instanceof FamixInterface){
 				interfaces.put(((FamixEntity) e).uniqueName, (FamixInterface) e);
+			} 
+			else if (e instanceof FamixLibrary){
+				libraries.put(((FamixLibrary) e).uniqueName, (FamixLibrary) e);
 			} 
 		}
 		else if (e instanceof FamixAssociation){

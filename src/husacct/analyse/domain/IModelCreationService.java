@@ -7,6 +7,8 @@ public interface IModelCreationService {
 	
 
 	public void createPackage(String uniqueName, String belongsToPackage, String name);
+	
+	public void createLibrary(String uniqueName, String belongsToLibrary, String name);
 	public void clearModel( );
 	
 	@Deprecated /*This function will be replaced after all analysers have adapter one of the below functions*/

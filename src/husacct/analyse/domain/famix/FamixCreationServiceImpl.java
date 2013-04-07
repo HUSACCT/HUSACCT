@@ -29,6 +29,14 @@ public class FamixCreationServiceImpl implements IModelCreationService{
 		addToModel(fPackage);
 	}
 	
+	public void createLibrary(String uniqueName, String belongsToLibrary, String name){
+		FamixLibrary fLibrary = new FamixLibrary();
+		fLibrary.uniqueName = uniqueName;
+		fLibrary.belongsToLibrary = belongsToLibrary;
+		fLibrary.name = name;
+		addToModel(fLibrary);
+	}	
+	
 	@Override
 	public void createClass(String uniqueName, String name, String belongsToPackage, 
 			boolean isAbstract, boolean isInnerClass) {
