@@ -4,7 +4,6 @@ import static husacct.analyse.infrastructure.antlr.csharp.CSharpParser.*;
 
 import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.task.analyser.csharp4.generators.CSharpUsingGenerator;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -27,12 +26,14 @@ public class CSharpTreeConvertController {
     public CSharpTreeConvertController() {
         csUsingGenerator = new CSharpUsingGenerator();
         csNamespaceGenerator = new CSharpNamespaceGenerator();
-        //methodGenerator = new JavaMethodGeneratorController();
-        //javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator();
-        javaImportGenerator = new JavaImportGenerator();
-        javaInheritanceDefinitionGenerator = new JavaInubheritanceDefinitionGenerator();
-        implementsGenerator = new JavaImplementsDefinitionGenerator();
     }
+    
+    public void delegateDomainObjectGenerators(final CSharpParser cSharpParser)	throws RecognitionException {
+		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
+		TreePrinter tp = new TreePrinter(compilationCommonTree);
+                
+                //code to walk through tree.
+	}
     
     private CommonTree getCompilationTree(final CSharpParser cSharpParser) throws RecognitionException {
         final compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
