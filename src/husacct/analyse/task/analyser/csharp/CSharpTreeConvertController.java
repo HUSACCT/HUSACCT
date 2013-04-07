@@ -4,6 +4,7 @@ import static husacct.analyse.infrastructure.antlr.csharp.CSharpParser.*;
 
 import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.task.analyser.csharp.generators.*;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -27,13 +28,15 @@ public class CSharpTreeConvertController {
         csUsingGenerator = new CSharpUsingGenerator();
         csNamespaceGenerator = new CSharpNamespaceGenerator();
     }
-    
-    public void delegateDomainObjectGenerators(final CSharpParser cSharpParser)	throws RecognitionException {
-		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-		TreePrinter tp = new TreePrinter(compilationCommonTree);
-                
-                //code to walk through tree.
-	}
+
+    public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
+        final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
+        
+        //Print tree for debug/development perposes
+        TreePrinter tp = new TreePrinter(compilationCommonTree);
+
+        //code to walk through tree & safe to famix
+    }
     
     private CommonTree getCompilationTree(final CSharpParser cSharpParser) throws RecognitionException {
         final compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
@@ -42,8 +45,6 @@ public class CSharpTreeConvertController {
 
     public void delegateASTToGenerators(CSharpParser cSharpParser) throws RecognitionException { 
         CommonTree rootTree = getCompilationTree(cSharpParser);
-
-        TreePrinter tp = new TreePrinter(rootTree);
         delegateASTToGenerators(rootTree); 
     } 
 
