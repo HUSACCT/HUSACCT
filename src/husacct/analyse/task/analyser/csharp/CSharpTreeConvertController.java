@@ -1,283 +1,105 @@
 package husacct.analyse.task.analyser.csharp;
 
+import static husacct.analyse.infrastructure.antlr.csharp.CSharpParser.*;
+
+import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpAnnotationConverter;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpAttributeConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpClassConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpExceptionConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpLocalVariableConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpMethodConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpNamespaceConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpParameterConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpPropertyConvertController;
-import husacct.analyse.task.analyser.csharp.convertControllers.CSharpUsingConvertController;
-import husacct.analyse.task.analyser.csharp.generators.CSharpClassGenerator;
-import husacct.analyse.task.analyser.csharp.generators.CSharpGenerator;
-import husacct.analyse.task.analyser.csharp.generators.CSharpNamespaceGenerator;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import husacct.analyse.task.analyser.csharp4.generators.CSharpUsingGenerator;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 
-public class CSharpTreeConvertController extends CSharpGenerator {
-	private List<List<CommonTree>> namespaceTrees;
-	private List<CommonTree> classTrees;
-	private int currentIndentLevel = 0;
-	private int currentMethodIndentLevel = -1;
-	private int currentPropertyIndentLvel = -1;
-	private String currentNamespaceName;
-	private String currentClassName = "";
-	private int currentClassIndent = 0;
-	private int currentNamespaceIndent = 0;
-	private String currentMethodName = "";
-	private List<CSharpData> indentClassLevel;
-	private List<CSharpData> indentNamespaceLevel;
-	private List<CSharpInstanceData> instances;
-	private CSharpUsingConvertController usingConverter;
+public class CSharpTreeConvertController {
+    CSharpUsingGenerator csUsingGenerator;    
+    CSharpNamespaceGenerator csNamespaceGenerator;
+    
+    CSharpClassGenerator csClassGenerator;
+    CSharpInterfaceGenerator csInterfaceGenerator;
+    CSharpStructGenerator csStructGenerator;
+    CSharpEnumGenerator csEnumGenerator;
+    
+    private String theClass = null; 
+    private String thePackage = null; 
+    private String currentClass = null; 
+    private String parentClass = null; 
+    private int classCount = 0; 
 
-	public CSharpTreeConvertController() {
-		setIndentClassLevel(new ArrayList<CSharpData>());
-		setIndentNamespaceLevel(new ArrayList<CSharpData>());
-		setNamespaceTrees(new ArrayList<List<CommonTree>>());
-		setClassTrees(new ArrayList<CommonTree>());
-		setInstanceList(new ArrayList<CSharpInstanceData>());
-	}
+    public CSharpTreeConvertController() {
+        csUsingGenerator = new CSharpUsingGenerator();
+        csNamespaceGenerator = new CSharpNamespaceGenerator();
+        //methodGenerator = new JavaMethodGeneratorController();
+        //javaAttributeGenerator = new JavaAttributeAndLocalVariableGenerator();
+        javaImportGenerator = new JavaImportGenerator();
+        javaInheritanceDefinitionGenerator = new JavaInubheritanceDefinitionGenerator();
+        implementsGenerator = new JavaImplementsDefinitionGenerator();
+    }
+    
+    private CommonTree getCompilationTree(final CSharpParser cSharpParser) throws RecognitionException {
+        final compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
+        return (CommonTree) compilationUnit.getTree();
+    }
 
-	public void delegateDomainObjectGenerators(final CSharpParser cSharpParser)	throws RecognitionException {
-		final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-		final List<CommonTree> tree = checkedConversionToCommonTree(compilationCommonTree.getChildren());
-		walkThroughAST(tree);
-		createGeneratorsAfterWalkAST();
-	}
+    public void delegateASTToGenerators(CSharpParser cSharpParser) throws RecognitionException { 
+        CommonTree rootTree = getCompilationTree(cSharpParser);
 
-	private CommonTree getCompilationTree(final CSharpParser cSharpParser) throws RecognitionException {
-		final compilation_unit_return compilationUnit = cSharpParser.compilation_unit();
-		return (CommonTree) compilationUnit.getTree();
-	}
+        TreePrinter tp = new TreePrinter(rootTree);
+        delegateASTToGenerators(rootTree); 
+    } 
 
-	public List<CommonTree> checkedConversionToCommonTree(final Collection<?> collection) {
-		final List<CommonTree> commonTreeList = new ArrayList<CommonTree>(collection.size());
-		for (final Object object : collection) {
-			commonTreeList.add(CommonTree.class.cast(object));
-		}
-		return commonTreeList;
-	}
+    private void delegateASTToGenerators(CommonTree rootTree) {
+        handleUsings(rootTree);
+        handleAsNamespace(rootTree);
+    }
 
-	private void walkThroughAST(final List<CommonTree> children) {
-		boolean isPartOfNamespace = false;
-		boolean isPartOfClass = false;
-		boolean isPartOfUsing = false;
-		boolean isPartOfAttribute = false;
-		boolean isPartOfMethod = false;
-		boolean isPartOfException = false;
-		boolean isPartOfLocalVariable = false;
-		boolean isPartOfParameter = false;
-		boolean isPartOfProperty = false;
-		boolean isPartOfAnnotation = false;
-		final CSharpNamespaceConvertController namespaceConverter = new CSharpNamespaceConvertController(this);
-		final CSharpClassConvertController classConverter = new CSharpClassConvertController(this);
-		final CSharpAttributeConvertController attributeConverter = new CSharpAttributeConvertController(this);
-		final CSharpLocalVariableConvertController localVariableConverter = new CSharpLocalVariableConvertController(this);
-		final CSharpMethodConvertController methodConverter = new CSharpMethodConvertController(this);
-		usingConverter = new CSharpUsingConvertController(this);
-		final CSharpExceptionConvertController exceptionConverter = new CSharpExceptionConvertController(this);
-		final CSharpParameterConvertController parameterConverter = new CSharpParameterConvertController(this);
-		final CSharpPropertyConvertController propertyConverter = new CSharpPropertyConvertController(this);
-		final CSharpAnnotationConverter annotationConverter = new CSharpAnnotationConverter(this);
-		
-		for (final CommonTree tree : children) {
-			setIndentLevel(tree);
-			isPartOfNamespace = namespaceConverter.namespaceChecking(tree, isPartOfNamespace);
-			isPartOfClass = classConverter.classCheck(tree,	isPartOfClass);
-			isPartOfAttribute = attributeConverter.attributeCheck(tree,	isPartOfAttribute);
-			isPartOfUsing = usingConverter.usingCheck(tree,	isPartOfUsing);
-			isPartOfMethod = methodConverter.methodCheck(tree, isPartOfMethod);
-			isPartOfException = exceptionConverter.exceptionCheck(tree, isPartOfException);
-			isPartOfParameter = parameterConverter.parameterCheck(tree, isPartOfParameter);
-			isPartOfProperty = propertyConverter.propertyCheck(tree, isPartOfProperty);
-			isPartOfAnnotation = annotationConverter.annotationCheck(tree, isPartOfAnnotation);
-			if ((getIndentLevel() > currentMethodIndentLevel) && (currentMethodIndentLevel != -1)) {
-				isPartOfLocalVariable = localVariableConverter.localVariableCheck(tree, isPartOfLocalVariable);
-			}
-		}
-	}
+    private void handleAsNamespace(Tree namespaceTree) {
+        for (int i = 0; i < namespaceTree.getChildCount(); i++) {
+            Tree namespaceChild = namespaceTree.getChild(i);
+            switch(namespaceChild.getType()){
+                case NAMESPACE:
+                    handleAsNamespace(namespaceChild);
+                    break;
+                case CLASS:
+                    handleAsClass(namespaceChild);
+                    break;
+                case INTERFACE:
+                    handleAsInterface(namespaceChild);
+                    break;
+                case STRUCT:
+                    handleAsStruct(namespaceChild);
+                    break;
+                case ENUM:
+                    handleAsEnum(namespaceChild);
+                    break;
+                case DELEGATE:
+                    handleAsDelegate(namespaceChild);
+                    break;
+            }
+        }
+    }
 
-	private void createGeneratorsAfterWalkAST() {
-		new CSharpClassGenerator(getClassTrees(), getIndentClassLevel());
-		final CSharpNamespaceGenerator generator = new CSharpNamespaceGenerator();
-		for (final List<CommonTree> trees : getNamespaceTrees()) {
-			generator.namespaceGenerator(trees);
-		}
-	}
+    private void handleAsClass(Tree namespaceChild) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-	private void setIndentLevel(final CommonTree tree) {
-		final int type = tree.getType();
-		if (type == FORWARDCURLYBRACKET) {
-			currentIndentLevel++;
-		}
-		if (type == BACKWARDCURLYBRACKET) {
-			checkIfClosed(tree, getIndentClassLevel());
-			checkIfClosed(tree, getIndentNamespaceLevel());
-			usingConverter.checkIfUsingsClosed(tree);
-			currentIndentLevel--;
-		}
-	}
+    private void handleAsInterface(Tree namespaceChild) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-	private void checkData(final CSharpData cSharpData, final List<CSharpData> indentDataLevel) {
-		if ((getIndentLevel() == cSharpData.getIntentLevel()) && !cSharpData.getClosed()) {
-			checkEveryClassAndNamespace(cSharpData, indentDataLevel);
-			cSharpData.setClosed(true);
-		}
-	}
+    private void handleAsStruct(Tree namespaceChild) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-	private void checkEveryClassAndNamespace(final CSharpData classData, final List<CSharpData> indentDataLevel) {
-		for (final CSharpData nestedClassData : indentDataLevel) {
-			if ((classData.getIntentLevel() > nestedClassData.getIntentLevel()) && !nestedClassData.getClosed()) {
-				final String nestedClass = nestedClassData.getClassName();
-				final CSharpData data = indentDataLevel.get(indentDataLevel.indexOf(classData));
-				data.setParentClass(nestedClass);
-				data.setHasParent(true);
-			}
-		}
-	}
+    private void handleAsEnum(Tree namespaceChild) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-	private void checkIfClosed(final CommonTree tree, final List<CSharpData> indentDataLevel) {
-		for (final CSharpData classData : indentDataLevel) {
-			checkData(classData, indentDataLevel);
-		}
-	}
+    private void handleAsDelegate(Tree namespaceChild) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-	public String getUniqueClassName() {
-		if (getCurrentNamespaceName() != null) {
-			return getCurrentNamespaceName() + "." + getCurrentClassName();
-		} else {
-			return getCurrentClassName();
-		}
-	}
-	
-	public void cleanInstances(){
-		for(int i = 0; i < instances.size(); i++){
-			CSharpInstanceData instance = instances.get(i);
-			if(instance.getHasClassScope() == false){
-				instances.remove(i);
-				cleanInstances();
-			}
-		}
-	}
-
-	public void createUsingGenerator() {
-		usingConverter.createGenerators();
-	}
-
-	public int getIndentLevel() {
-		return currentIndentLevel;
-	}
-
-	public void setIndentLevel(final int indentLevel) {
-		this.currentIndentLevel = indentLevel;
-	}
-
-	public List<CSharpData> getIndentNamespaceLevel() {
-		return indentNamespaceLevel;
-	}
-
-	public void setIndentNamespaceLevel(final List<CSharpData> indentNamespaceLevel) {
-		this.indentNamespaceLevel = indentNamespaceLevel;
-	}
-
-	public String getCurrentNamespaceName() {
-		return currentNamespaceName;
-	}
-
-	public void setCurrentNamespaceName(final String currentNamespaceName) {
-		this.currentNamespaceName = currentNamespaceName;
-	}
-
-	public List<List<CommonTree>> getNamespaceTrees() {
-		return namespaceTrees;
-	}
-
-	public void setNamespaceTrees(final List<List<CommonTree>> namespaceTrees) {
-		this.namespaceTrees = namespaceTrees;
-	}
-	
-	public void setInstanceList(final List<CSharpInstanceData> instances){
-		this.instances = instances;
-	}
-
-	public String getCurrentClassName() {
-		return currentClassName;
-	}
-
-	public void setCurrentClassName(final String currentClassName) {
-		this.currentClassName = currentClassName;
-	}
-
-	public List<CSharpData> getIndentClassLevel() {
-		return indentClassLevel;
-	}
-
-	public void setIndentClassLevel(final List<CSharpData> indentClassLevel) {
-		this.indentClassLevel = indentClassLevel;
-	}
-
-	public List<CommonTree> getClassTrees() {
-		return classTrees;
-	}
-
-	public void setClassTrees(final List<CommonTree> classTrees) {
-		this.classTrees = classTrees;
-	}
-
-	public String getCurrentMethodName() {
-		return currentMethodName;
-	}
-
-	public void setCurrentMethodName(final String currentMethodName) {
-		this.currentMethodName = currentMethodName;
-	}
-
-	public int getMethodIndentLevel() {
-		return currentMethodIndentLevel;
-	}
-
-	public void setMethodIndentLevel(final int methodIndentLevel) {
-		this.currentMethodIndentLevel = methodIndentLevel;
-	}
-
-	public int getCurrentClassIndent() {
-		return currentClassIndent;
-	}
-
-	public void setCurrentClassIndent(int currentClassIndent) {
-		this.currentClassIndent = currentClassIndent;
-	}
-
-	public int getCurrentNamespaceIndent() {
-		return currentNamespaceIndent;
-	}
-
-	public void setCurrentNamespaceIndent(int currentNamespaceIndent) {
-		this.currentNamespaceIndent = currentNamespaceIndent;
-	}
-
-	public void addInstance(CSharpInstanceData instance) {
-		instances.add(instance);
-	}
-	
-	public List<CSharpInstanceData> getInstances(){
-		return instances;
-	}
-
-	public int getCurrentPropertyIndentLvel() {
-		return currentPropertyIndentLvel;
-	}
-
-	public void setCurrentPropertyIndentLvel(int currentPropertyIndentLvel) {
-		this.currentPropertyIndentLvel = currentPropertyIndentLvel;
-	}
+    private void handleUsings(CommonTree rootTree) {
+        Tree usingTree = rootTree.getFirstChildWithType(USING);
+        CSharpUsingGenerator.generate(usingTree);
+        rootTree.deleteChild(usingTree.getChildIndex());
+    }
 }
