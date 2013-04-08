@@ -6,3 +6,4 @@ build/reports
 .project
 .settings
 *.log*
+.metadata
