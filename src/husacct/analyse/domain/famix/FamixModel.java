@@ -186,6 +186,7 @@ class FamixModel extends FamixObject{
 		currentInstance.classes.clear();
 		currentInstance.packages.clear();
 		currentInstance.interfaces.clear();
+		currentInstance.libraries.clear();
 		currentInstance.structuralEntities.clear();
 		currentInstance.behaviouralEntities.clear();
 	}

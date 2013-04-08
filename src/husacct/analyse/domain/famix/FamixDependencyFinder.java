@@ -151,7 +151,8 @@ class FamixDependencyFinder extends FamixFinder{
 		}
 		return found;
 	}
-	
+
+
 	private boolean isPackage(String uniquename){
 		return theModel.packages.containsKey(uniquename);
 	}

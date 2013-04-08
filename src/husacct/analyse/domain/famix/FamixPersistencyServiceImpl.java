@@ -15,12 +15,13 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 
 	private FamixModel theModel;
 
-	private Element rootNode, packages, classes, methods, variables, associations;
+	private Element rootNode, packages, libraries, classes, methods, variables, associations;
 	private HashMap<String, FamixPackage> packagesList; 
 	private HashMap<String, FamixClass> classList;
 	private HashMap<String, FamixBehaviouralEntity> methodsList;
 	private HashMap<String, FamixStructuralEntity> variablesList;
 	private HashMap<String, FamixInterface> interfacesList;
+	private HashMap<String, FamixLibrary> librarieList;
 	private ArrayList<FamixAssociation> associationList;
 
 
@@ -40,6 +41,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 	//when calling this function. Please fix this.
 	private void reset(){
 		this.packagesList.clear(); this.packagesList = null;
+		this.librarieList.clear(); this.librarieList = null;
 		this.classList.clear(); this.classList = null;
 		this.methodsList.clear(); this.methodsList = null;
 		this.variablesList.clear(); this.variablesList = null;
@@ -49,6 +51,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 	private void initiateNodes(){
 		this.rootNode = new Element("Root");
 		this.packages = new Element("Packages");
+		this.libraries = new Element("Libraries");
 		this.classes = new Element("Classes");
 		this.methods = new Element("Methods");
 		this.variables = new Element("Variables");
@@ -57,6 +60,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 
 	private void loadObjects(){
 		this.packagesList = theModel.packages;
+		this.librarieList = theModel.libraries;
 		this.classList = theModel.classes;
 		this.methodsList = theModel.behaviouralEntities;
 		this.variablesList = theModel.structuralEntities;
@@ -76,6 +80,15 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService{
 		}
 		analysedProject.addContent(ElemPackages);
 
+		Element ElemLibraries = new Element("Libraries");
+		for(String famLibrarieKey: librarieList.keySet()){
+			Element ElemLibrary = new Element("Library");
+			ElemLibrary.addContent(new Element("UniqueName").setText(packagesList.get(famLibrarieKey).uniqueName));
+			ElemLibrary.addContent(new Element("Name").setText(packagesList.get(famLibrarieKey).name));
+			ElemLibrary.addContent(new Element("BelongsToPackage").setText(packagesList.get(famLibrarieKey).belongsToPackage));
+			ElemLibrary.addContent(ElemLibrary);
+		}
+		analysedProject.addContent(ElemLibraries);
 
 		Element elemClasses = new Element("Classes");
 		for(String famClassKey: classList.keySet()){

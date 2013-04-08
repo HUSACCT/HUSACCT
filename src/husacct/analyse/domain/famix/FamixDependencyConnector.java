@@ -105,8 +105,9 @@ class FamixDependencyConnector {
 		}
 	}	
 	
-	private boolean isExternalModule(String uniqueName){
-		return getClassForUniqueName(uniqueName) != null || getInterfaceForUniqueName(uniqueName) != null;
+	private FamixLibrary getLibraryForUniqueName(String uniqueName){
+		//return getClassForUniqueName(uniqueName) != null || getInterfaceForUniqueName(uniqueName) != null;
+		return theModel.libraries.get(uniqueName);
 	}
 		
 	private void determineType(FamixAssociation association){
@@ -124,6 +125,7 @@ class FamixDependencyConnector {
 				}else{
 					type = EXTENDS_LIBRARY;
 				}
+				
 			}
 			
 		}
