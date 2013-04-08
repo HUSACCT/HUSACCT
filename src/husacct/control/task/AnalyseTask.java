@@ -23,7 +23,7 @@ public class AnalyseTask implements Runnable{
 		try {
 			Thread.sleep(1);
 			logger.debug("Analysing application");
-			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.paths, applicationDTO.programmingLanguage);
+			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0).paths, applicationDTO.projects.get(0).programmingLanguage);
 			logger.debug("Application analysed");
 		} catch (InterruptedException exception){
 			logger.debug("Analyse interupted");

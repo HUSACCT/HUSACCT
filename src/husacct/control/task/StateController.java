@@ -69,7 +69,7 @@ public class StateController {
 		}
 		
 		ApplicationDTO applicationData = defineService.getApplicationDetails();
-		if(applicationData.paths.length > 0){
+		if(applicationData.projects.get(0).paths.size() > 0){
 			newStates.add(States.APPSET);
 		}
 		
