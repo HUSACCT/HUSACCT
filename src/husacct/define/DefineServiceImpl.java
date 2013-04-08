@@ -2,6 +2,7 @@ package husacct.define;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
@@ -51,7 +52,7 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	}
 
 	@Override
-	public void createApplication(String name, ArrayList<Project> projects, String version) {
+	public void createApplication(String name, ArrayList<ProjectDTO> projects, String version) {
 		defineDomainService.createApplication(name, projects, version);
 	}
 	
