@@ -33,10 +33,7 @@ public class CSharpAnalyser extends AbstractAnalyser{
 		CSharpLexer cSharpLexer = new CSharpLexer(stream);
 		CommonTokenStream commonTokenStream = new CommonTokenStream(cSharpLexer);
 		CSharpParser cSharpParser = new CSharpParser(commonTokenStream);
-                for(Object token : ((CommonTokenStream)cSharpParser.getTokenStream()).getTokens()){
-                    System.out.println(token);
-                }
-		return cSharpParser;
+               	return cSharpParser;
 	}
 
 	@Override
