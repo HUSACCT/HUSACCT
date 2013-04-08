@@ -8,7 +8,7 @@ public class ViolationTypeFactory {
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	public AbstractViolationType getViolationTypeFactory(ConfigurationServiceImpl configuration) {
-		String language = defineService.getApplicationDetails().programmingLanguage;
+		String language = defineService.getApplicationDetails().projects.get(0).programmingLanguage;
 		return getViolationTypeFactory(language, configuration);
 	}
 

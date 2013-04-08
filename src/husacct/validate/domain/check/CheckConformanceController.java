@@ -36,7 +36,7 @@ public class CheckConformanceController {
 
 	public void checkConformance(RuleDTO[] appliedRules) {
 		final ApplicationDTO applicationDetails = defineService.getApplicationDetails();
-		if (applicationDetails.programmingLanguage != null && !applicationDetails.programmingLanguage.isEmpty()) {
+		if (applicationDetails.projects.get(0).programmingLanguage != null && !applicationDetails.projects.get(0).programmingLanguage.isEmpty()) {
 			configuration.clearViolations();
 			ruleCache.clear();
 
