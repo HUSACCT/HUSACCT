@@ -1,6 +1,7 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
@@ -154,9 +155,14 @@ public class SetApplicationPanel extends JPanel{
 		String name = applicationNameText.getText();
 		String language = languages[languageSelect.getSelectedIndex()];
 		String version = versionText.getText();
-		String[] paths = Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class);
-		ApplicationDTO applicationData = new ApplicationDTO(name, paths, language, version);
-		//String name, ArrayList<ProjectDTO> projects, String version
+		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
+		
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
+		projects.add(project);
+		
+		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
 		return applicationData;
 	}
 	
