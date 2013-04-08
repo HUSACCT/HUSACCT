@@ -7,6 +7,7 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
