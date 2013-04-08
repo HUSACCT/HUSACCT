@@ -71,7 +71,7 @@ public class ValidateTest {
 	@Test
 	public void getRuleTypes(){
 		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall","IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
+		final String [] currentRuletypes = new String[]{"FacadeConvention", "InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall","IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
