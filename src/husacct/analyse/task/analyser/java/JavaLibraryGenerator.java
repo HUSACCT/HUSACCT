@@ -22,7 +22,7 @@ class JavaLibraryGenerator extends JavaGenerator{
 		String name = getNameOfLibrary(uniqueName);
 		createLibrary(name, uniqueName, belongsToLibrary);
 		if(hasParentLibraries(uniqueName)) {
-			//getResourceListing(String path);
+			
 			//createAllParentLibraries(belongsToLibrary);
 		}
 		return uniqueName;
