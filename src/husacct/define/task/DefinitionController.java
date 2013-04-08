@@ -8,6 +8,7 @@ import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
@@ -37,6 +38,7 @@ public class DefinitionController extends Observable implements Observer {
 	
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
+	private DefaultRuleDomainService defaultRuleDomainSevice;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public static DefinitionController getInstance() {
@@ -361,6 +363,11 @@ public class DefinitionController extends Observable implements Observer {
 
 	public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
 		return this.appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
+	}
+	
+	public ArrayList<Long> getDefinedRuleIdsBySelectedModule()
+	{
+		return this.defaultRuleDomainSevice.getDefaultRulesIdsByModuleFromId(getSelectedModuleId());
 	}
 	
 	public HashMap<String, Object> getRuleDetailsByAppliedRuleId(long appliedRuleId){

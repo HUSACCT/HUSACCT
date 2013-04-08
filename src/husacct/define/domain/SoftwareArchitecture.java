@@ -11,6 +11,7 @@ public class SoftwareArchitecture {
 	private Module rootModule;
 	
 	private ArrayList<AppliedRule> appliedRules;
+	private ArrayList<AppliedRule> defaultRules;
 	
 	private static SoftwareArchitecture instance = null;
 	public static SoftwareArchitecture getInstance()
@@ -84,6 +85,11 @@ public class SoftwareArchitecture {
 			}
 		}
 		return appliedRuleIds;
+	}
+	
+	public ArrayList<AppliedRule> getGeneratedRules()
+	{
+		return null; //TODO
 	}
 	
 	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
