@@ -1,17 +1,16 @@
 package husacct.common.dto;
 
+import java.util.ArrayList;
+
 public class ApplicationDTO extends AbstractDTO{
 	public String name;
-	public String[] paths;
-	public String programmingLanguage;
+	public ArrayList<ProjectDTO> projects;
 	public String version;
 	
-	public ApplicationDTO(String name, String[] paths,
-			String programmingLanguage, String version) {
+	public ApplicationDTO(String name, ArrayList<ProjectDTO> projects, String version) {
 		super();
 		this.name = name;
-		this.paths = paths;
-		this.programmingLanguage = programmingLanguage;
+		this.projects = projects;
 		this.version = version;
 	}
 }

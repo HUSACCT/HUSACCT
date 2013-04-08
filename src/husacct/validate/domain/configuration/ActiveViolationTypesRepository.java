@@ -86,11 +86,6 @@ class ActiveViolationTypesRepository {
 		return activeRuleType;
 	}
 
-	boolean isEnabled(String ruleTypeKey, String violationTypeKey) {
-		final String currentLanguage = defineService.getApplicationDetails().programmingLanguage;
-		return isEnabled(currentLanguage, ruleTypeKey, violationTypeKey);
-	}
-
 	boolean isEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey) {
 		List<ActiveRuleType> activeRuleTypes = this.currentActiveViolationTypes.get(programmingLanguage);
 		if (activeRuleTypes != null) {

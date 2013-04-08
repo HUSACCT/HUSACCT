@@ -96,11 +96,11 @@ public class RuleTypesFactory {
 	public List<RuleType> getRuleTypes() {
 		ApplicationDTO application = defineService.getApplicationDetails();
 		if (application != null) {
-			if (application.programmingLanguage == null || application.programmingLanguage.equals("")) {
+			if (application.projects.get(0).programmingLanguage == null || application.projects.get(0).programmingLanguage.equals("")) {
 				return generateDefaultRuleTypes();
 			}
 			else {
-				return generateDefaultRuleTypes(application.programmingLanguage);
+				return generateDefaultRuleTypes(application.projects.get(0).programmingLanguage);
 			}
 		}
 		return Collections.emptyList();
@@ -272,7 +272,7 @@ public class RuleTypesFactory {
 
 	private Severity createSeverity(String ruleTypeKey) {
 		try {
-			return configuration.getSeverityFromKey(defineService.getApplicationDetails().programmingLanguage, ruleTypeKey);
+			return configuration.getSeverityFromKey(defineService.getApplicationDetails().projects.get(0).programmingLanguage, ruleTypeKey);
 		}
 		catch (SeverityNotFoundException e) {
 			DefaultSeverities defaultSeverity = getCategoryKeyClassDTO(ruleTypeKey);
