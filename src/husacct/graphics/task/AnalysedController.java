@@ -170,32 +170,8 @@ public class AnalysedController extends DrawingController {
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
 		this.resetContextFigures();
-		ArrayList<String> parentNames = new ArrayList<String>();
-		for (BaseFigure figure : figures) {
-			if (figure.isModule()) {
-				try {
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this
-							.getFigureMap().getModuleDTO(figure);
-					parentNames.add(parentDTO.uniqueName);
-				} catch (Exception e) {
-					e.printStackTrace();
-					this.logger.warn("Could not zoom on this object: "
-							+ figure.getName()
-							+ ". Expected a different DTO type.");
-				}
-			} else if (!figure.isLine()) {
-				this.analysedContextFigures.add(figure);
-				this.logger
-						.warn("Could not zoom on this object: "
-								+ figure.getName()
-								+ ". Not a module to zoom on. Figure is accepted as context for multizoom.");
-			} else {
-				this.logger.warn("Could not zoom on this object: "
-						+ figure.getName() + ". Not a module to zoom on.");
-			}
-		}
-
-		// TODO: Add everything to analysedContextFigures.
+		ArrayList<String> parentNames = this
+				.sortFiguresBasedOnZoomability(figures);
 
 		if (parentNames.size() > 0) {
 			this.saveSingleLevelFigurePositions();
@@ -247,5 +223,35 @@ public class AnalysedController extends DrawingController {
 		if (this.validateService.isValidated()) {
 			super.showViolations();
 		}
+	}
+
+	protected ArrayList<String> sortFiguresBasedOnZoomability(
+			BaseFigure[] figures) {
+		ArrayList<String> parentNames = new ArrayList<String>();
+		for (BaseFigure figure : figures) {
+			if (figure.isModule()) {
+				try {
+					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this
+							.getFigureMap().getModuleDTO(figure);
+					parentNames.add(parentDTO.uniqueName);
+				} catch (Exception e) {
+					e.printStackTrace();
+					this.logger.warn("Could not zoom on this object: "
+							+ figure.getName()
+							+ ". Expected a different DTO type.");
+				}
+			} else if (!figure.isLine()) {
+				this.analysedContextFigures.add(figure);
+				this.logger
+						.warn("Could not zoom on this object: "
+								+ figure.getName()
+								+ ". Not a module to zoom on. Figure is accepted as context for multizoom.");
+			} else {
+				this.logger.warn("Could not zoom on this object: "
+						+ figure.getName() + ". Not a module to zoom on.");
+			}
+		}
+
+		return parentNames;
 	}
 }
