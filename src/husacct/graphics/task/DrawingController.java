@@ -401,7 +401,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			this.drawingView.addToSelection(selection);
 
 			for (BaseFigure f : allFigures) {
-				if (!figures.contains(f)) {
+				if (f.isModule() && !figures.contains(f)) {
 					f.isContext(true);
 					figures.add(f);
 				}
