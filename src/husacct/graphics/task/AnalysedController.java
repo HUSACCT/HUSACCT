@@ -229,7 +229,7 @@ public class AnalysedController extends DrawingController {
 			BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
-			if (figure.isModule()) {
+			if (figure.isModule() && !figure.isContext()) {
 				try {
 					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this
 							.getFigureMap().getModuleDTO(figure);
@@ -240,12 +240,10 @@ public class AnalysedController extends DrawingController {
 							+ figure.getName()
 							+ ". Expected a different DTO type.");
 				}
-			} else if (!figure.isLine()) {
+			} else if (!figure.isLine() || figure.isContext()) {
 				this.analysedContextFigures.add(figure);
-				this.logger
-						.warn("Could not zoom on this object: "
-								+ figure.getName()
-								+ ". Not a module to zoom on. Figure is accepted as context for multizoom.");
+				this.logger.warn("Figure: " + figure.getName()
+						+ " is accepted as context for multizoom.");
 			} else {
 				this.logger.warn("Could not zoom on this object: "
 						+ figure.getName() + ". Not a module to zoom on.");
