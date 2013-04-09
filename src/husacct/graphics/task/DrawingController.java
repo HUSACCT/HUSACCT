@@ -391,21 +391,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		Set<Figure> selection = this.drawingView.getSelectedFigures();
 
 		if (selection.size() > 0) {
-			this.drawingView.selectAll();
-			Set<Figure> allFigures = this.drawingView.getSelectedFigures();
-			this.drawingView.clearSelection();
-			this.drawingView.addToSelection(selection);
-
 			List<BaseFigure> figures = Arrays.asList(selection
 					.toArray(new BaseFigure[selection.size()]));
-
-			for (Figure figure : allFigures) {
-				BaseFigure clone = (BaseFigure) figure;
-				if (!figures.contains(clone)) {
-					clone.isContext(true);
-					figures.add(clone);
-				}
-			}
 
 			BaseFigure[] selectedFigures = figures
 					.toArray(new BaseFigure[figures.size()]);
