@@ -391,8 +391,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 		Set<Figure> selection = this.drawingView.getSelectedFigures();
 
 		if (selection.size() > 0) {
-			List<BaseFigure> figures = Arrays.asList(selection
-					.toArray(new BaseFigure[selection.size()]));
+			ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
+			java.util.Collections.addAll(figures,
+					selection.toArray(new BaseFigure[selection.size()]));
 
 			this.drawingView.selectAll();
 			List<BaseFigure> allFigures = Arrays.asList(this.drawingView
