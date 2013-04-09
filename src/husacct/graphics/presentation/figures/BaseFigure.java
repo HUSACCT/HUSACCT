@@ -106,6 +106,29 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+
+		BaseFigure other = (BaseFigure) obj;
+		if (this.name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!this.name.equals(other.name)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
 	public Connector findConnector(Point2D.Double p, ConnectionFigure figure) {
 		return new ChopRectangleConnector(this);
 	}
@@ -127,6 +150,14 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		return this.getBounds().width;
 	}
 
+	public boolean isContext() {
+		return this.isContext;
+	}
+
+	public void isContext(boolean b) {
+		this.isContext = b;
+	}
+
 	public boolean isEnabled() {
 		return this.isEnabled;
 	}
@@ -145,14 +176,6 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public boolean isParent() {
 		return false;
-	}
-
-	public boolean isContext() {
-		return this.isContext;
-	}
-
-	public void isContext(boolean b) {
-		this.isContext = b;
 	}
 
 	public boolean isSizeable() {
