@@ -99,6 +99,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void onMouseScrolled(MouseWheelEvent e) {
+		requestFocus();
 		if(isCtrlPressed){
 			double wheelRotation = e.getWheelRotation() * -1;
 			double wheelRotationFactor = wheelRotation / ScrollSpeed;
