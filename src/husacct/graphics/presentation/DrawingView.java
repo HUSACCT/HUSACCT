@@ -30,8 +30,6 @@ public class DrawingView extends DefaultDrawingView {
 	private static final int RightMouseButton = MouseEvent.BUTTON3;
 	private static final int DoubleClick = 2;
 	private static final int ScrollSpeed = 10;
-	private static final double MIN_SCALEFACTOR = 0.25;
-	private static final double MAX_SCALEFACTOR = 1.75;
 
 	private Drawing drawing;
 	private DefaultDrawingEditor editor;
@@ -104,14 +102,13 @@ public class DrawingView extends DefaultDrawingView {
 			double wheelRotation = e.getWheelRotation() * -1;
 			double wheelRotationFactor = wheelRotation / ScrollSpeed;
 			double scaleFactor = this.getScaleFactor() + wheelRotationFactor;
-			scaleFactor = Math.max(MIN_SCALEFACTOR, scaleFactor);
-			scaleFactor = Math.min(MAX_SCALEFACTOR, scaleFactor);
 			drawingZoomChanged(scaleFactor);
 		}
 	}
 
 	public void drawingZoomChanged(double zoomFactor) {
 		for (UserInputListener listener : listeners) {
+			listener.setZoomSlider(zoomFactor);
 			listener.drawingZoomChanged(zoomFactor);
 		}
 	}
