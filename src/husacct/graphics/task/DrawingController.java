@@ -39,6 +39,9 @@ import org.apache.log4j.Logger;
 import org.jhotdraw.draw.Figure;
 
 public abstract class DrawingController extends DrawingSettingsController {
+	private static final double MIN_ZOOMFACTOR = 0.25;
+	private static final double MAX_ZOOMFACTOR = 1.75;
+	
 	protected static final boolean debugPrint = true;
 	protected DrawingLayoutStrategy layoutStrategyOption;
 
@@ -468,7 +471,14 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
+		zoomFactor = Math.max(MIN_ZOOMFACTOR, zoomFactor);
+		zoomFactor = Math.min(MAX_ZOOMFACTOR, zoomFactor);
 		drawingView.setScaleFactor(zoomFactor);
+	}
+	
+	@Override
+	public void setZoomSlider(double zoomFactor){
+		graphicsFrame.setZoomSlider(zoomFactor);
 	}
 
 	@Override
