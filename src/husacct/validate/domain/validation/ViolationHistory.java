@@ -10,7 +10,8 @@ public class ViolationHistory {
 	private List<Severity> severities;
 	private final String description;
 
-	public ViolationHistory(List<Violation> violations, List<Severity> severities, Calendar date, String description) {
+	public ViolationHistory(List<Violation> violations,
+			List<Severity> severities, Calendar date, String description) {
 		this.violations = violations;
 		this.date = date;
 		this.severities = severities;
