@@ -5,8 +5,6 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import org.antlr.runtime.RecognitionException;
@@ -23,10 +21,9 @@ public class CSharpTreeConvertController {
     CSharpInheritanceGenerator csInheritanceGenerator;
     CSharpAttributeGenerator csAttributeGenerator;
     CSharpMethodGeneratorController csMethodeGenerator;
-    
-    List<CommonTree> usings = new ArrayList<CommonTree>();
-    Stack<String> namespaceStack = new Stack<String>();
-    Stack<String> classNameStack = new Stack<String>();
+    List<CommonTree> usings = new ArrayList<>();
+    Stack<String> namespaceStack = new Stack<>();
+    Stack<String> classNameStack = new Stack<>();
 
     public CSharpTreeConvertController() {
         csUsingGenerator = new CSharpUsingGenerator();
@@ -41,7 +38,7 @@ public class CSharpTreeConvertController {
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
         final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-        //TreePrinter tp = new TreePrinter(compilationCommonTree); //Debug functie
+        TreePrinter tp = new TreePrinter(compilationCommonTree); //Debug functie
         delegateASTToGenerators(compilationCommonTree);
     }
 
@@ -66,6 +63,7 @@ public class CSharpTreeConvertController {
                         namespaceStack.push(delegateNamespace(namespaceTree));
                         delegateASTToGenerators(namespaceTree);
                         namespaceStack.pop();
+                        break;
                     case CSharpParser.CLASS:
                         CommonTree classTree = treeNode;
                         boolean isInner = classNameStack.size() > 0;
@@ -89,8 +87,9 @@ public class CSharpTreeConvertController {
                         delegateMethod(treeNode);
                         deleteTreeChild(treeNode);
                         break;
+                    default:
+                        delegateASTToGenerators(treeNode);
                 }
-                delegateASTToGenerators(treeNode);
             }
         }
     }
@@ -135,7 +134,7 @@ public class CSharpTreeConvertController {
         for (String classNamePart : classNameStack) {
             result += classNamePart + ".";
         }
-        return result.length()> 0 ? result.substring(0, result.length() - 1) : "";
+        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
     }
 
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
@@ -147,7 +146,7 @@ public class CSharpTreeConvertController {
         }
         return analysedClass;
     }
-    
+
     private void delegateInheritanceDefinition(CommonTree inheritanceTree) {
         csInheritanceGenerator.generateToDomain(inheritanceTree, getCurrentUniqueClassName());
     }
