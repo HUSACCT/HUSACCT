@@ -50,8 +50,7 @@ class ActiveViolationTypesRepository {
 						try {
 							containsRuleType(activeRuleTypes, exceptionRuleType.getKey());
 							activeRuleTypes.add(initializeActiveViolationTypes(exceptionRuleType));
-						}
-						catch (RuntimeException e) {
+						} catch (RuntimeException e) {
 						}
 					}
 				}
@@ -106,8 +105,7 @@ class ActiveViolationTypesRepository {
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			throw new ProgrammingLanguageNotFoundException();
 		}
 		return false;
@@ -132,12 +130,10 @@ class ActiveViolationTypesRepository {
 			if (currentActiveViolationTypes.containsKey(programmingLanguage)) {
 				currentActiveViolationTypes.remove(programmingLanguage);
 				currentActiveViolationTypes.put(programmingLanguage, checkedNewActiveViolationTypes);
-			}
-			else {
+			} else {
 				currentActiveViolationTypes.put(programmingLanguage, checkedNewActiveViolationTypes);
 			}
-		}
-		else {
+		} else {
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
 	}
@@ -166,16 +162,14 @@ class ActiveViolationTypesRepository {
 					if (violationTypeKeyExists(programmingLanguage, newActiveRuleType.getRuleType(), newActiveViolationType.getType())) {
 						foundViolationTypeKey = true;
 						activeViolationTypes.add(new ActiveViolationType(newActiveViolationType.getType(), newActiveViolationType.isEnabled()));
-					}
-					else {
+					} else {
 						logger.debug(String.format("violationTypeKey %s not exists", newActiveViolationType.getType()));
 					}
 				}
 				if (foundViolationTypeKey) {
 					activeViolationTypesForLanguage.add(activeRuleType);
 				}
-			}
-			else {
+			} else {
 				logger.debug(String.format("ruleTypeKey %s not exists in programminglanguage %s", newActiveRuleType.getRuleType(), programmingLanguage));
 			}
 		}
@@ -204,8 +198,7 @@ class ActiveViolationTypesRepository {
 				}
 				activeViolationTypesForLanguage.add(new ActiveRuleType(existingActiveRuleType.getRuleType(), activeViolationTypes));
 
-			}
-			catch (RuntimeException e) {
+			} catch (RuntimeException e) {
 				List<ActiveViolationType> activeViolationTypes = new ArrayList<ActiveViolationType>();
 				for (ActiveViolationType activeViolationType : currentActiveRuleType.getViolationTypes()) {
 					activeViolationTypes.add(new ActiveViolationType(activeViolationType.getType(), activeViolationType.isEnabled()));
@@ -224,8 +217,7 @@ class ActiveViolationTypesRepository {
 					return true;
 				}
 			}
-		}
-		else {
+		} else {
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
 		throw new RuleTypeNotFoundException(ruleTypeKey);

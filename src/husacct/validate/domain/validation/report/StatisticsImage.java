@@ -39,8 +39,7 @@ public class StatisticsImage {
 
 		try {
 			ChartUtilities.saveChartAsPNG(new File(path), chart, 600, 200);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

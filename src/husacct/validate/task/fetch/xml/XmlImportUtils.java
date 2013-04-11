@@ -53,11 +53,9 @@ public abstract class XmlImportUtils {
 		Calendar calendar = Calendar.getInstance();
 		try {
 			calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(stringCalendar).toGregorianCalendar();
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			logger.error(String.format("%s is not a valid datetime, switching back to current datetime", stringCalendar));
-		}
-		catch (DatatypeConfigurationException e) {
+		} catch (DatatypeConfigurationException e) {
 			logger.error(e.getMessage());
 		}
 		return calendar;

@@ -49,8 +49,7 @@ public class CheckConformanceUtilPackage extends CheckConformanceUtil {
 
 		if (rootModule.logicalPath.equals("**") && rootModule.physicalPathDTOs.length == 0 && rootModule.subModules.length == 0) {
 			classpathsFrom.addAll(getAllPackages(violationTypeKeys));
-		}
-		else {
+		} else {
 			classpathsFrom.addAll(getPackageFromPhysicalPathDTO(rootModule, violationTypeKeys));
 			getAllPackagepathsFromModule(rootModule, classpathsFrom, violationTypeKeys);
 		}

@@ -54,14 +54,11 @@ public class ViolationAssembler {
 			try {
 				ViolationDTO violationDTO = createViolationDTO(violation);
 				violationDTOList.add(violationDTO);
-			}
-			catch (ViolationTypeNotFoundException e) {
+			} catch (ViolationTypeNotFoundException e) {
 				logger.warn(String.format("ViolationtypeKey: %s not found in violation", violation.getViolationtypeKey()));
-			}
-			catch (LanguageNotFoundException e) {
+			} catch (LanguageNotFoundException e) {
 				logger.warn(e.getMessage());
-			}
-			catch (RuleInstantionException e) {
+			} catch (RuleInstantionException e) {
 				logger.warn(e.getMessage());
 			}
 		}
@@ -97,12 +94,10 @@ public class ViolationAssembler {
 				final boolean isIndirect = violation.isIndirect();
 
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, color, severityName, severityValue, isIndirect);
-			}
-			else {
+			} else {
 				return new ViolationDTO(classPathFrom, classPathTo, logicalModuleFromPath, logicalModuleToPath, violationtype, rule, message, linenumber, Color.BLACK, "", 0, false);
 			}
-		}
-		catch (ViolationTypeNotFoundException e) {
+		} catch (ViolationTypeNotFoundException e) {
 			throw new ViolationTypeNotFoundException();
 		}
 	}
@@ -117,8 +112,7 @@ public class ViolationAssembler {
 
 			RuleTypeDTO ruleDTO = ruleAssembler.createRuleTypeDTO(rule, violationtype);
 			return ruleDTO;
-		}
-		catch (ViolationTypeNotFoundException e) {
+		} catch (ViolationTypeNotFoundException e) {
 			throw new ViolationTypeNotFoundException();
 		}
 	}

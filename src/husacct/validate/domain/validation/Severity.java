@@ -73,8 +73,7 @@ public class Severity implements Cloneable {
 		try {
 			Severity clone = (Severity) super.clone();
 			return clone;
-		}
-		catch (CloneNotSupportedException e) {
+		} catch (CloneNotSupportedException e) {
 			throw new husacct.validate.domain.exception.CloneNotSupportedException(e);
 		}
 	}

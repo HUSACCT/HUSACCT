@@ -35,8 +35,7 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 			browseViolations.loadAfterChange();
 			browseViolations.updateFilterValues();
 			applyFilter.setSelected(false);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());
 		}
 	}

@@ -56,8 +56,7 @@ public abstract class AbstractViolationType {
 				List<ViolationType> violationtypes = categoryViolations.get(dto.getCategory());
 				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);
-			}
-			else {
+			} else {
 				List<ViolationType> violationtypes = new ArrayList<ViolationType>();
 				ViolationType violationtype = createViolationType(dto.getKey());
 				violationtypes.add(violationtype);
@@ -76,8 +75,7 @@ public abstract class AbstractViolationType {
 		if (violationKeysToLower.contains(violationTypeKey.toLowerCase())) {
 			final Severity severity = createSeverity(languageName, violationTypeKey);
 			return new ViolationType(violationTypeKey, severity);
-		}
-		else {
+		} else {
 			logger.warn(String.format("Warning specified %s not found in the system", violationTypeKey));
 		}
 		throw new ViolationTypeNotFoundException();
@@ -94,18 +92,14 @@ public abstract class AbstractViolationType {
 				final Severity severity = createSeverity(languageName, violationTypeKey);
 				boolean enabled = configuration.isViolationEnabled(languageName, ruleTypeKey, violationTypeKey);
 				return new ViolationType(violationTypeKey, enabled, severity);
-			}
-			catch (ProgrammingLanguageNotFoundException e) {
+			} catch (ProgrammingLanguageNotFoundException e) {
 				logger.warn(String.format("ProgrammingLanguage %s not found", languageName));
-			}
-			catch (RuleTypeNotFoundException e) {
+			} catch (RuleTypeNotFoundException e) {
 				logger.warn(String.format("RuleTypeKey: %s not found", ruleTypeKey));
-			}
-			catch (ViolationTypeNotFoundException e) {
+			} catch (ViolationTypeNotFoundException e) {
 				logger.warn(String.format("ViolationTypeKey: %s not found", violationTypeKey));
 			}
-		}
-		else {
+		} else {
 			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
 		}
 		throw new ViolationTypeNotFoundException();
@@ -120,8 +114,7 @@ public abstract class AbstractViolationType {
 	protected boolean isCategoryLegalityOfDependency(String ruleTypeKey) {
 		if (ruleTypeKey.equals(RuleTypes.IS_ONLY_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.IS_ONLY_MODULE_ALLOWED.toString()) || ruleTypeKey.equals(RuleTypes.MUST_USE.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()) || ruleTypeKey.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString())) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -129,8 +122,7 @@ public abstract class AbstractViolationType {
 	protected boolean isVisibilityConventionRule(String ruleTypeKey) {
 		if (ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.VISIBILITY_CONVENTION_EXCEPTION.toString())) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -138,8 +130,7 @@ public abstract class AbstractViolationType {
 	protected boolean isNamingConvention(String ruleTypeKey) {
 		if (ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION.toString()) || ruleTypeKey.equals(RuleTypes.NAMING_CONVENTION_EXCEPTION.toString())) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -147,8 +138,7 @@ public abstract class AbstractViolationType {
 	protected boolean isInterfaceConvention(String ruleTypeKey) {
 		if (ruleTypeKey.equals(RuleTypes.INTERFACE_CONVENTION)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -156,8 +146,7 @@ public abstract class AbstractViolationType {
 	protected boolean isSubClassConvention(String ruleTypeKey) {
 		if (ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -165,8 +154,7 @@ public abstract class AbstractViolationType {
 	private Severity createSeverity(String programmingLanguage, String violationKey) {
 		try {
 			return configuration.getSeverityFromKey(programmingLanguage, violationKey);
-		}
-		catch (SeverityNotFoundException e) {
+		} catch (SeverityNotFoundException e) {
 			CategoryKeySeverityDTO violation = getCategoryKeySeverityDTO(violationKey);
 			if (violation != null) {
 				return configuration.getSeverityByName(violation.getDefaultSeverity().toString());

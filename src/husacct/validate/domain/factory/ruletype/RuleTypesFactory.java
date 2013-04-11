@@ -65,8 +65,7 @@ public class RuleTypesFactory {
 					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, violationlist);
 					rules.add(rule);
 				}
-			}
-			catch (RuleInstantionException e) {
+			} catch (RuleInstantionException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}
@@ -81,8 +80,7 @@ public class RuleTypesFactory {
 			List<RuleType> categoryRules = returnMap.get(categoryKey);
 			if (categoryRules != null) {
 				categoryRules.add(ruletype);
-			}
-			else {
+			} else {
 				List<RuleType> ruleList = new ArrayList<RuleType>();
 				ruleList.add(ruletype);
 				returnMap.put(categoryKey, ruleList);
@@ -96,8 +94,7 @@ public class RuleTypesFactory {
 		if (application != null) {
 			if (application.programmingLanguage == null || application.programmingLanguage.equals("")) {
 				return generateDefaultRuleTypes();
-			}
-			else {
+			} else {
 				return generateDefaultRuleTypes(application.programmingLanguage);
 			}
 		}
@@ -116,8 +113,7 @@ public class RuleTypesFactory {
 					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, new ArrayList<ViolationType>());
 					rules.add(rule);
 				}
-			}
-			catch (RuleInstantionException e) {
+			} catch (RuleInstantionException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}
@@ -143,8 +139,7 @@ public class RuleTypesFactory {
 					RuleType rule = generateRuleObject(ruletypeClass, set.getKey(), categoryKey, violationlist);
 					rules.add(rule);
 				}
-			}
-			catch (RuleInstantionException e) {
+			} catch (RuleInstantionException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}
@@ -172,8 +167,7 @@ public class RuleTypesFactory {
 				}
 				return generateRuleObject(ruletypeClass, ruleKey, categoryKey, violationtypes);
 			}
-		}
-		else {
+		} else {
 			logger.warn(String.format("Key: %s does not exists", ruleKey));
 		}
 		throw new RuleTypeNotFoundException(ruleKey);
@@ -198,23 +192,17 @@ public class RuleTypesFactory {
 			}
 			rootRule.setExceptionrules(exceptionRuletypes);
 			return rootRule;
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);
-		}
-		catch (SecurityException e) {
+		} catch (SecurityException e) {
 			ExceptionOccured(e);
-		}
-		catch (InstantiationException e) {
+		} catch (InstantiationException e) {
 			ExceptionOccured(e);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			ExceptionOccured(e);
-		}
-		catch (InvocationTargetException e) {
+		} catch (InvocationTargetException e) {
 			ExceptionOccured(e);
-		}
-		catch (NoSuchMethodException e) {
+		} catch (NoSuchMethodException e) {
 			ExceptionOccured(e);
 		}
 		throw new RuleInstantionException(key);
@@ -232,8 +220,7 @@ public class RuleTypesFactory {
 				}
 				return generateRuleObjectWithoutExceptionRules(ruletypeClass, ruleKey, categoryKey, violationtypes);
 			}
-		}
-		else {
+		} else {
 			logger.warn(String.format("Key: %s does not exists", ruleKey));
 		}
 		throw new RuleInstantionException(ruleKey);
@@ -242,23 +229,17 @@ public class RuleTypesFactory {
 	private RuleType generateRuleObjectWithoutExceptionRules(Class<RuleType> ruleClass, String key, String categoryKey, List<ViolationType> violationtypes) throws RuleInstantionException {
 		try {
 			return (RuleType) ruleClass.getConstructor(String.class, String.class, List.class, Severity.class).newInstance(key, categoryKey, violationtypes, createSeverity(key));
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			ExceptionOccured(e);
-		}
-		catch (SecurityException e) {
+		} catch (SecurityException e) {
 			ExceptionOccured(e);
-		}
-		catch (InstantiationException e) {
+		} catch (InstantiationException e) {
 			ExceptionOccured(e);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			ExceptionOccured(e);
-		}
-		catch (InvocationTargetException e) {
+		} catch (InvocationTargetException e) {
 			ExceptionOccured(e);
-		}
-		catch (NoSuchMethodException e) {
+		} catch (NoSuchMethodException e) {
 			ExceptionOccured(e);
 		}
 		throw new RuleInstantionException(key);
@@ -271,8 +252,7 @@ public class RuleTypesFactory {
 	private Severity createSeverity(String ruleTypeKey) {
 		try {
 			return configuration.getSeverityFromKey(defineService.getApplicationDetails().programmingLanguage, ruleTypeKey);
-		}
-		catch (SeverityNotFoundException e) {
+		} catch (SeverityNotFoundException e) {
 			DefaultSeverities defaultSeverity = getCategoryKeyClassDTO(ruleTypeKey);
 			if (defaultSeverity != null) {
 				return configuration.getSeverityByName(defaultSeverity.toString());

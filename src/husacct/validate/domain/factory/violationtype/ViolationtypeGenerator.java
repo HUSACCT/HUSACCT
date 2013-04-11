@@ -63,24 +63,18 @@ class ViolationtypeGenerator {
 
 					if (!containsViolationTypeInSet(keyList, enumValue.toString())) {
 						keyList.add(new CategoryKeySeverityDTO(enumValue.toString(), category, defaultSeverity));
-					}
-					else {
+					} else {
 						logger.warn(String.format("ViolationTypeKey: %s already exists", enumValue.toString()));
 					}
-				}
-				catch (SecurityException e) {
+				} catch (SecurityException e) {
 					logger.error(e.getMessage(), e);
-				}
-				catch (NoSuchMethodException e) {
+				} catch (NoSuchMethodException e) {
 					logger.error(e.getMessage(), e);
-				}
-				catch (IllegalArgumentException e) {
+				} catch (IllegalArgumentException e) {
 					logger.error(e.getMessage(), e);
-				}
-				catch (IllegalAccessException e) {
+				} catch (IllegalAccessException e) {
 					logger.error(e.getMessage(), e);
-				}
-				catch (InvocationTargetException e) {
+				} catch (InvocationTargetException e) {
 					logger.error(e.getMessage(), e);
 				}
 			}

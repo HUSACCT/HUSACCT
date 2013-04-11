@@ -30,8 +30,7 @@ public class Messagebuilder {
 		for (int i = 0; i < message.getExceptionMessage().size(); i++) {
 			if (i == 0) {
 				messageText += generateFirstExceptionMessage(message.getExceptionMessage().get(i));
-			}
-			else {
+			} else {
 				messageText += generateRestExceptionMessage(message.getExceptionMessage().get(i));
 			}
 		}
@@ -57,11 +56,9 @@ public class Messagebuilder {
 	private String generateRightMessage(Message message) {
 		if (message.getRuleKey().toLowerCase().equals("namingconvention")) {
 			return generateNamingConventionMessage(message);
-		}
-		else if (message.getRuleKey().toLowerCase().equals("visibilityconvention")) {
+		} else if (message.getRuleKey().toLowerCase().equals("visibilityconvention")) {
 			return generateInterfaceConventionMessage(message);
-		}
-		else {
+		} else {
 			final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
 			final String logicalModuleToType = message.getLogicalModules().getLogicalModuleTo().getLogicalModuleType();
 			return appendStrings(logicalModuleToType, logicalModuleToPath);
@@ -85,8 +82,7 @@ public class Messagebuilder {
 					sb.append(whiteSpace);
 					sb.append(localeService.getTranslatedString("OrMessage"));
 					sb.append("whiteSpace");
-				}
-				else {
+				} else {
 					sb.append(seperationCharacter);
 				}
 			}
@@ -102,8 +98,7 @@ public class Messagebuilder {
 		try {
 			final String ruleTextKey = String.format("%sMessage", ruleTypeKey);
 			return localeService.getTranslatedString(ruleTextKey);
-		}
-		catch (IllegalFormatException e) {
+		} catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
@@ -112,8 +107,7 @@ public class Messagebuilder {
 	private String generateMessage(String textFormat, String left, String right) {
 		try {
 			return String.format(textFormat, left, right);
-		}
-		catch (IllegalFormatException e) {
+		} catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
@@ -128,8 +122,7 @@ public class Messagebuilder {
 
 			final String exceptionKey = sb.toString();
 			return exceptionKey + generateSingleMessage(message);
-		}
-		catch (IllegalFormatException e) {
+		} catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
@@ -144,8 +137,7 @@ public class Messagebuilder {
 
 			final String exceptionKey = sb.toString();
 			return exceptionKey + generateSingleMessage(message);
-		}
-		catch (IllegalFormatException e) {
+		} catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";

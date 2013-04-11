@@ -35,8 +35,7 @@ class RuleTypesGenerator {
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
 			if (ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
-			}
-			else {
+			} else {
 				logger.warn(String.format("Rulekey: %s not found", ruleKey.toString()));
 			}
 		}
@@ -55,8 +54,7 @@ class RuleTypesGenerator {
 					final DefaultSeverities defaultSeverity = getDefaultSeverity(ruleKey);
 					keyClasses.put(ruleKey, new CategoryKeyClassDTO(categoryKey, (Class<RuleType>) ruleClass, defaultSeverity));
 				}
-			}
-			catch (DefaultSeverityNotFoundException e) {
+			} catch (DefaultSeverityNotFoundException e) {
 				logger.warn(String.format("No default severity found for: %s, thus this ruleType will be ignored", ruleKey), e);
 			}
 		}
@@ -67,8 +65,7 @@ class RuleTypesGenerator {
 		DefaultSeverities defaultSeverity = defaultRulesPerRuleType.get(ruleKey);
 		if (defaultSeverity != null) {
 			return defaultSeverity;
-		}
-		else {
+		} else {
 			throw new DefaultSeverityNotFoundException();
 		}
 	}
@@ -91,8 +88,7 @@ class RuleTypesGenerator {
 					if (!Modifier.isAbstract(myClass.getModifiers()) && classHasRuleConstructor(myClass)) {
 						classList.add(myClass);
 					}
-				}
-				catch (ClassNotFoundException e) {
+				} catch (ClassNotFoundException e) {
 					// logger.debug(String.format("Classpath: %s not found" ,
 					// classPath));
 				}
@@ -104,11 +100,9 @@ class RuleTypesGenerator {
 	private boolean classHasRuleConstructor(Class<?> ruleClass) {
 		try {
 			ruleClass.getConstructor(String.class, String.class, List.class, Severity.class);
-		}
-		catch (SecurityException e) {
+		} catch (SecurityException e) {
 			return exceptionOccured(e);
-		}
-		catch (NoSuchMethodException e) {
+		} catch (NoSuchMethodException e) {
 			return exceptionOccured(e);
 		}
 		return true;
@@ -126,8 +120,7 @@ class RuleTypesGenerator {
 		try {
 			String[] splittedPackageName = ruleClass.getPackage().getName().split("\\.");
 			return splittedPackageName[splittedPackageName.length - 1];
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			return "";
 		}
 	}

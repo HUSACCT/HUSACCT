@@ -90,8 +90,7 @@ public class PDFReportWriter extends ReportWriter {
 			document.add(Chunk.NEWLINE);
 			document.add(Chunk.NEWLINE);
 			document.add(Chunk.NEWLINE);
-		}
-		else {
+		} else {
 			for (ViolationsPerSeverity violationPerSeverity : violationsPerSeverity) {
 				document.add(new Paragraph(violationPerSeverity.getSeverity().getSeverityName() + ": " + violationPerSeverity.getAmount()));
 			}
@@ -120,8 +119,7 @@ public class PDFReportWriter extends ReportWriter {
 			// Source
 			if (violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
 				addCellToTable(pdfTable, violation.getClassPathFrom(), BaseColor.WHITE, false);
-			}
-			else {
+			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 
@@ -129,39 +127,34 @@ public class PDFReportWriter extends ReportWriter {
 			if (violation.getMessage() != null) {
 				String message = new Messagebuilder().createMessage(violation.getMessage());
 				addCellToTable(pdfTable, message, BaseColor.WHITE, false);
-			}
-			else {
+			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 
 			// LineNumber
 			if (!(violation.getLinenumber() == 0)) {
 				addCellToTable(pdfTable, "" + violation.getLinenumber(), BaseColor.WHITE, false);
-			}
-			else {
+			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 
 			// DependencyKind
 			if (violation.getViolationtypeKey() != null) {
 				addCellToTable(pdfTable, getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()), BaseColor.WHITE, false);
-			}
-			else {
+			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 			// Target
 			if (violation.getClassPathFrom() != null && !violation.getClassPathFrom().trim().equals("")) {
 				addCellToTable(pdfTable, violation.getClassPathTo(), BaseColor.WHITE, false);
-			}
-			else {
+			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 
 			// Severity
 			if (violation.getSeverity() != null) {
 				addCellToTable(pdfTable, "" + violation.getSeverity().getSeverityName(), BaseColor.WHITE, false);
-			}
-			else {
+			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);
 			}
 		}
@@ -179,8 +172,7 @@ public class PDFReportWriter extends ReportWriter {
 		if (header) {
 			phrase.setFont(FontFactory.getFont(FontFactory.HELVETICA_BOLD, 7));
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		}
-		else {
+		} else {
 			phrase.setFont(FontFactory.getFont(FontFactory.HELVETICA, 7));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 		}

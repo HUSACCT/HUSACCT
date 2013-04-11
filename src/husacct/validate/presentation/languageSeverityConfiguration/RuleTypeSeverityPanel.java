@@ -99,8 +99,7 @@ class RuleTypeSeverityPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				if (ruletypeTable.getSelectedRow() > -1) {
 					ApplyActionPerformed();
-				}
-				else {
+				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
 			}
@@ -225,8 +224,7 @@ class RuleTypeSeverityPanel extends JPanel {
 			Severity severity;
 			try {
 				severity = taskServiceImpl.getSeverityFromKey(language, ruletype.getKey());
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
 			ruletypeModel.addRow(new Object[] {new DataLanguageHelper(ruletype.getKey()), severity});
@@ -248,8 +246,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	private void checkRestoreButtonEnabled() {
 		if (ruletypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		}
-		else {
+		} else {
 			restore.setEnabled(false);
 		}
 	}

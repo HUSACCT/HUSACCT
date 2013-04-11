@@ -25,8 +25,7 @@ public class CheckConformanceTask implements Runnable {
 			ServiceProvider.getInstance().getValidateService().checkConformance();
 			filterPanel.loadAfterChange();
 			buttonSaveInHistory.setEnabled(true);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());
 		}
 	}

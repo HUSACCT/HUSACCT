@@ -22,19 +22,15 @@ public class CheckConformanceUtilSeverity {
 
 		if (ruleTypeValue == -1 && violationTypeValue != -1) {
 			return violationTypeSeverity;
-		}
-		else if (ruleTypeValue != -1 && violationTypeValue == -1) {
+		} else if (ruleTypeValue != -1 && violationTypeValue == -1) {
 			return ruleTypeSeverity;
-		}
-		else if (ruleTypeValue != -1 && violationTypeValue != -1) {
+		} else if (ruleTypeValue != -1 && violationTypeValue != -1) {
 			if (ruleTypeValue >= violationTypeValue) {
 				return ruleTypeSeverity;
-			}
-			else {
+			} else {
 				return violationTypeSeverity;
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

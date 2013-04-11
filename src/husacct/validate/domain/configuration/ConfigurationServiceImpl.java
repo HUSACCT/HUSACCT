@@ -154,8 +154,7 @@ public final class ConfigurationServiceImpl extends Observable {
 		if (activeViolationTypesRepository != null) {
 			getActiveViolationTypes();
 			return activeViolationTypesRepository.isEnabled(programmingLanguage, ruleTypeKey, violationTypeKey);
-		}
-		else {
+		} else {
 			return true;
 		}
 	}

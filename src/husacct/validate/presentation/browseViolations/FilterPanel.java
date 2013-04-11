@@ -126,8 +126,7 @@ public class FilterPanel extends JPanel {
 						try {
 							Thread.sleep(1);
 							browseViolations.loadAfterChange();
-						}
-						catch (InterruptedException e) {
+						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -150,8 +149,7 @@ public class FilterPanel extends JPanel {
 									browseViolations.loadAfterChange();
 								}
 							});
-						}
-						catch (InterruptedException e) {
+						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -174,8 +172,7 @@ public class FilterPanel extends JPanel {
 									browseViolations.loadAfterChange();
 								}
 							});
-						}
-						catch (InterruptedException e) {
+						} catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}

@@ -211,8 +211,7 @@ class ActiveViolationPanel extends JPanel {
 	private void SelectAllActionPerformed() {
 		if (!apply.isEnabled()) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
-		}
-		else {
+		} else {
 			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(true, i, 1);
 			}
@@ -222,8 +221,7 @@ class ActiveViolationPanel extends JPanel {
 	private void DeselectAllActionPerformed() {
 		if (!apply.isEnabled()) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
-		}
-		else {
+		} else {
 			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(false, i, 1);
 			}
@@ -236,8 +234,7 @@ class ActiveViolationPanel extends JPanel {
 			boolean test = (Boolean) violationtypeModel.getValueAt(i, 1);
 			try {
 				activeViolationtypes.get(i).setEnabled(test);
-			}
-			catch (IndexOutOfBoundsException outOfBoundsException) {
+			} catch (IndexOutOfBoundsException outOfBoundsException) {
 				logger.error("Something went wrong. Active violationtypes can not be set.");
 			}
 		}

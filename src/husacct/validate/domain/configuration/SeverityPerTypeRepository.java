@@ -66,8 +66,7 @@ public class SeverityPerTypeRepository {
 					severityPerType.put(violationType.getViolationtypeKey(), violationType.getSeverity());
 				}
 			}
-		}
-		else {
+		} else {
 			logger.debug("Warning no language specified in define component");
 		}
 		return severitiesPerTypePerProgrammingLanguage;
@@ -81,13 +80,11 @@ public class SeverityPerTypeRepository {
 		HashMap<String, Severity> severityPerType = severitiesPerTypePerProgrammingLanguage.get(language);
 		if (severityPerType == null) {
 			throw new SeverityNotFoundException();
-		}
-		else {
+		} else {
 			Severity severity = severityPerType.get(key);
 			if (severity == null) {
 				throw new SeverityNotFoundException();
-			}
-			else {
+			} else {
 				return severity;
 			}
 		}
@@ -114,13 +111,11 @@ public class SeverityPerTypeRepository {
 		HashMap<String, Severity> severityPerType = defaultSeveritiesPerTypePerProgrammingLanguage.get(language);
 		if (severityPerType == null) {
 			throw new SeverityNotFoundException();
-		}
-		else {
+		} else {
 			Severity severity = severityPerType.get(key);
 			if (severity == null) {
 				throw new SeverityNotFoundException();
-			}
-			else {
+			} else {
 				return severity;
 			}
 		}
@@ -134,13 +129,11 @@ public class SeverityPerTypeRepository {
 		for (String programmingLanguage : severitiesPerTypePerProgrammingLanguage.keySet()) {
 			if (!programmingLanguageExists(programmingLanguage)) {
 				throw new ProgrammingLanguageNotFoundException(programmingLanguage);
-			}
-			else {
+			} else {
 				for (Entry<String, Severity> keySeverity : severitiesPerTypePerProgrammingLanguage.get(programmingLanguage).entrySet()) {
 					if (isValidKey(programmingLanguage, keySeverity.getKey())) {
 						keySeverity.setValue(isValidSeverity(keySeverity.getValue()));
-					}
-					else {
+					} else {
 						throw new KeyNotFoundException(keySeverity.getKey());
 					}
 				}
@@ -159,16 +152,13 @@ public class SeverityPerTypeRepository {
 						local.remove(entry.getKey());
 						local.put(entry.getKey(), severity);
 					}
-				}
-				catch (SeverityNotFoundException e) {
+				} catch (SeverityNotFoundException e) {
 					logger.warn(String.format("%s is not a know severity, %s will not be set in SeverityPerTypeRepository", entry.getValue().getSeverityKey(), entry.getKey()));
-				}
-				catch (NullPointerException e) {
+				} catch (NullPointerException e) {
 					logger.error("Cannot severity cannot be null in SeverityPerTypeRepository");
 				}
 			}
-		}
-		else {
+		} else {
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
 	}
@@ -180,8 +170,7 @@ public class SeverityPerTypeRepository {
 					return true;
 				}
 			}
-		}
-		else {
+		} else {
 			throw new ProgrammingLanguageNotFoundException(programmingLanguage);
 		}
 		return false;
@@ -191,8 +180,7 @@ public class SeverityPerTypeRepository {
 		HashMap<String, Severity> local = defaultSeveritiesPerTypePerProgrammingLanguage.get(programmingLanguage);
 		if (local != null) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}

@@ -31,8 +31,7 @@ public class ImportViolationsHistory extends XmlImportUtils {
 				if (isValidUUID(stringUUID)) {
 					Severity severity = new Severity(UUID.fromString(severityElement.getChildText("id")), severityElement.getChildText("severityKey"), new Color(Integer.parseInt(severityElement.getChildText("color"))));
 					severities.add(severity);
-				}
-				else {
+				} else {
 					logger.error(String.format("%s is not a valid UUID severity will be ignored", stringUUID));
 				}
 			}
@@ -69,8 +68,7 @@ public class ImportViolationsHistory extends XmlImportUtils {
 							found = true;
 							break;
 						}
-					}
-					else {
+					} else {
 						logger.error(String.format("%s is not a valid severity UUID, violation will not be added", stringUUID));
 						break;
 					}
@@ -89,8 +87,7 @@ public class ImportViolationsHistory extends XmlImportUtils {
 	private boolean isValidUUID(String stringUUID) {
 		try {
 			UUID.fromString(stringUUID);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return false;
 		}
 		return true;

@@ -133,8 +133,7 @@ public class ColorTableModel extends AbstractTableModel {
 		if (shift < 0) {
 			first = to;
 			last = end;
-		}
-		else {
+		} else {
 			first = start;
 			last = to + end - start;
 		}

@@ -100,8 +100,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				if (violationtypeTable.getSelectedRow() > -1) {
 					restoreActionPerformed();
-				}
-				else {
+				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
 			}
@@ -243,8 +242,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 					Severity severity;
 					try {
 						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationtypeKey());
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
@@ -259,8 +257,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private void checkRestoreButtonEnabled() {
 		if (violationtypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		}
-		else {
+		} else {
 			restore.setEnabled(false);
 		}
 	}

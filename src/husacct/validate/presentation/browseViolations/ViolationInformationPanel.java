@@ -57,16 +57,14 @@ public class ViolationInformationPanel extends JPanel {
 			Violation violation = shownViolations.get(row);
 			if (violation.getLinenumber() <= 0) {
 				detailLineNumberLabelValue.setText("");
-			}
-			else {
+			} else {
 				detailLineNumberLabelValue.setText("" + violation.getLinenumber());
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
 			String message = task.getMessage(violation.getMessage());
 			detailMessageLabelValue.setText(message);
-		}
-		else {
+		} else {
 			detailLineNumberLabelValue.setText("");
 			detailLogicalModuleFromLabelValue.setText("");
 			detailLogicalModuleToValue.setText("");

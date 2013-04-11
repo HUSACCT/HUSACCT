@@ -52,8 +52,7 @@ public class DomainServiceImpl {
 		AbstractViolationType violationtypefactory = this.violationtypefactory.getViolationTypeFactory(programmingLanguage, configuration);
 		if (violationtypefactory != null) {
 			return violationtypefactory.getAllViolationTypes();
-		}
-		else {
+		} else {
 			logger.debug("Warning no language specified in define component");
 			return Collections.emptyMap();
 		}

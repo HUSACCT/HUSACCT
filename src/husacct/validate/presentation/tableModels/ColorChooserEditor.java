@@ -55,8 +55,7 @@ public class ColorChooserEditor extends AbstractCellEditor implements TableCellE
 			// Make the renderer reappear.
 			fireEditingStopped();
 
-		}
-		else { // User pressed dialog's "OK" button.
+		} else { // User pressed dialog's "OK" button.
 			currentColor = colorChooser.getColor();
 		}
 	}

@@ -40,8 +40,7 @@ public class ImportController {
 		try {
 			this.severities = importFactory.importSeverities(element);
 			configuration.setSeverities(severities);
-		}
-		catch (SeverityChangedException e) {
+		} catch (SeverityChangedException e) {
 			logger.error("Error during importing of severities, default severities will be used: " + e.getMessage());
 		}
 	}

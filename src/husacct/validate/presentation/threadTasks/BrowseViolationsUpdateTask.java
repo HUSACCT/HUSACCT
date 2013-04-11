@@ -22,8 +22,7 @@ public class BrowseViolationsUpdateTask implements Runnable {
 		try {
 			Thread.sleep(1);
 			browseViolations.updateViolationsTable();
-		}
-		catch (InterruptedException exception) {
+		} catch (InterruptedException exception) {
 			logger.debug("Validate interupted");
 		}
 	}

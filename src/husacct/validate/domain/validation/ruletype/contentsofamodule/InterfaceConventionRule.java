@@ -59,11 +59,9 @@ public class InterfaceConventionRule extends RuleType {
 	private boolean isInterface(String classPath) {
 		if (interfaceCache.contains(classPath)) {
 			return true;
-		}
-		else if (noInterfaceCache.contains(classPath)) {
+		} else if (noInterfaceCache.contains(classPath)) {
 			return false;
-		}
-		else {
+		} else {
 			return addToCache(classPath);
 		}
 	}
@@ -73,8 +71,7 @@ public class InterfaceConventionRule extends RuleType {
 		if (isInterface) {
 			interfaceCache.add(classPath);
 			return true;
-		}
-		else {
+		} else {
 			noInterfaceCache.add(classPath);
 			return false;
 		}

@@ -209,8 +209,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 					clearViolationsTableModelRows();
 					fillChooseViolationHistoryTable();
 					selectedViolationHistory = null;
-				}
-				else {
+				} else {
 					JOptionPane.showMessageDialog(null, "Select a violation history first");
 				}
 			}
@@ -330,8 +329,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			if (!violation.getViolationtypeKey().isEmpty()) {
 				if (!violation.getViolationtypeKey().equals("VisibilityConvention")) {
 					violationtypeString = localeService.getTranslatedString(violation.getViolationtypeKey()) + ", " + (violation.isIndirect() ? "Indirect" : "Direct");
-				}
-				else {
+				} else {
 					violationtypeString = localeService.getTranslatedString(violation.getViolationtypeKey());
 				}
 			}
@@ -347,8 +345,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		if (selectedViolationHistory == null) {
 			violationsSize = taskServiceImpl.getAllViolations().getValue().size();
 			severities = taskServiceImpl.getAllSeverities();
-		}
-		else {
+		} else {
 			violationsSize = selectedViolationHistory.getViolations().size();
 			severities = selectedViolationHistory.getSeverities();
 		}
@@ -369,8 +366,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 					Thread.sleep(1);
 					fillViolationsTable(shownViolations);
 					loadInformationPanel();
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 					logger.debug(e.getMessage());
 				}
 			}

@@ -135,8 +135,7 @@ public abstract class RuleType {
 	private Severity getViolationTypeSeverity(String violationTypeKey) {
 		try {
 			return violationtypefactory.createViolationType(this.key, violationTypeKey).getSeverity();
-		}
-		catch (ViolationTypeNotFoundException e) {
+		} catch (ViolationTypeNotFoundException e) {
 		}
 		return null;
 	}

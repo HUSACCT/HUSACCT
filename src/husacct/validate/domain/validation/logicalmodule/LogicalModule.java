@@ -16,8 +16,7 @@ public class LogicalModule {
 		if (mapping != null) {
 			this.logicalModulePath = mapping.getLogicalPath();
 			this.logicalModuleType = mapping.getLogicalPathType();
-		}
-		else {
+		} else {
 			this.logicalModulePath = "";
 			this.logicalModuleType = "";
 		}
