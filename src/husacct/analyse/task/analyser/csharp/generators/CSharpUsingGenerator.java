@@ -5,29 +5,29 @@ import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpUsingGenerator extends CSharpGenerator {
 
-    private String importingClass;
-    private String importedModule;
-    private String completeImportDeclaration;
-    private boolean isCompletePackageImport;
+    private String usingClass;
+    private String usingModule;
+    private String completeUsingDeclaration;
+    private boolean isCompleteNamespaceUsing;
     private int lineNumber;
 
-    public void generateToDomain(CommonTree importTree, String className) {
-        this.importingClass = className;
-        fillImportObject(importTree);
-        modelService.createImport(importingClass, importedModule, lineNumber, completeImportDeclaration, isCompletePackageImport);
+    public void generateToDomain(CommonTree usingTree, String className) {
+        this.usingClass = className;
+        fillUsingObject(usingTree);
+        modelService.createImport(usingClass, usingModule, lineNumber, completeUsingDeclaration, isCompleteNamespaceUsing);
     }
 
-    private void fillImportObject(CommonTree importTree) {
-        String importDetails = createImportDetails(importTree, "--");
+    private void fillUsingObject(CommonTree usingTree) {
+        String importDetails = createImportDetails(usingTree, "--");
         String declaration = convertToImportDeclaration(importDetails, "--");
 
-        this.lineNumber = importTree.getLine();
-        this.completeImportDeclaration = declaration;
-        this.isCompletePackageImport = isPackageImport(declaration);
-        if (isCompletePackageImport) {
-            importedModule = removeStar(declaration);
+        this.lineNumber = usingTree.getLine();
+        this.completeUsingDeclaration = declaration;
+        this.isCompleteNamespaceUsing = isPackageImport(declaration);
+        if (isCompleteNamespaceUsing) {
+            usingModule = removeStar(declaration);
         } else {
-            importedModule = declaration;
+            usingModule = declaration;
         }
     }
 
