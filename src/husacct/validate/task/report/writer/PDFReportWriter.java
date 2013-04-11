@@ -109,7 +109,7 @@ public class PDFReportWriter extends ReportWriter {
 		document.add(new Paragraph(" "));
 
 		PdfPTable pdfTable = new PdfPTable(report.getLocaleColumnHeaders().length);
-		pdfTable.setWidths(new int[] { 3, 4, 1, 2, 2, 1 });
+		pdfTable.setWidths(new int[] {3, 4, 1, 2, 2, 1});
 		pdfTable.setWidthPercentage(100);
 
 		for (String columnHeader : report.getLocaleColumnHeaders()) {

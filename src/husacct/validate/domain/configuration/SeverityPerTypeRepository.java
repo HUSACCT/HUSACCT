@@ -21,11 +21,9 @@ import org.apache.log4j.Logger;
 public class SeverityPerTypeRepository {
 
 	private Logger logger = Logger.getLogger(SeverityPerTypeRepository.class);
-
 	private final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	private final RuleTypesFactory ruletypeFactory;
 	private final ConfigurationServiceImpl configuration;
-
 	private HashMap<String, HashMap<String, Severity>> severitiesPerTypePerProgrammingLanguage;
 	private HashMap<String, HashMap<String, Severity>> defaultSeveritiesPerTypePerProgrammingLanguage;
 	private AbstractViolationType violationtypefactory;

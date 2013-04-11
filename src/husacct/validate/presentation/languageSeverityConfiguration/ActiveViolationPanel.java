@@ -178,11 +178,11 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void loadModels() {
-		String[] ViolationtypeModelHeaders = { ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Active") };
+		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Active")};
 		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0) {
 			private static final long serialVersionUID = 3779670097825676765L;
-			Class<?>[] types = new Class[] { String.class, Boolean.class };
-			boolean[] canEdit = new boolean[] { false, true };
+			Class<?>[] types = new Class[] {String.class, Boolean.class};
+			boolean[] canEdit = new boolean[] {false, true};
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -279,7 +279,7 @@ class ActiveViolationPanel extends JPanel {
 		for (ActiveRuleType ruletype : activeRuletypes) {
 			if (ruletype.getRuleType().equals(ruletypekey)) {
 				for (ActiveViolationType violationtype : ruletype.getViolationTypes()) {
-					violationtypeModel.addRow(new Object[] { ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtype.getType()), violationtype.isEnabled() });
+					violationtypeModel.addRow(new Object[] {ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
 				}
 				activeViolationtypes = ruletype.getViolationTypes();
 				break;

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CheckConformanceUtilClass extends CheckConformanceUtil {
+
 	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
 	private static IAnalyseService analyse = ServiceProvider.getInstance().getAnalyseService();
 

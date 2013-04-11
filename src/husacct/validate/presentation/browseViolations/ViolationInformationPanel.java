@@ -16,8 +16,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 
 public class ViolationInformationPanel extends JPanel {
-	private static final long serialVersionUID = 8505333261388149299L;
 
+	private static final long serialVersionUID = 8505333261388149299L;
 	private final TaskServiceImpl task;
 	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 
@@ -74,5 +74,4 @@ public class ViolationInformationPanel extends JPanel {
 		}
 		updateUI();
 	}
-
 }

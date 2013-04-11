@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.logicalmodule;
 import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
 
 public class LogicalModule {
+
 	private final String logicalModulePath;
 	private final String logicalModuleType;
 

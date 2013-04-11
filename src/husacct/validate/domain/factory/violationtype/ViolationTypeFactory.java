@@ -5,6 +5,7 @@ import husacct.define.IDefineService;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 
 public class ViolationTypeFactory {
+
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	public AbstractViolationType getViolationTypeFactory(ConfigurationServiceImpl configuration) {

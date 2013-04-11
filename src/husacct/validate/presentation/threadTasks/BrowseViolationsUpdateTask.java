@@ -6,6 +6,7 @@ import husacct.validate.presentation.BrowseViolations;
 import org.apache.log4j.Logger;
 
 public class BrowseViolationsUpdateTask implements Runnable {
+
 	private Logger logger = Logger.getLogger(AnalyseTask.class);
 	private final BrowseViolations browseViolations;
 

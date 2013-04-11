@@ -17,15 +17,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FilterController {
+
 	private final TaskServiceImpl taskServiceImpl;
 	private final RuleTypesFactory ruletypesfactory;
 	private final ConfigurationServiceImpl configuration;
-
 	private ArrayList<String> ruletypes = new ArrayList<String>();
 	private ArrayList<String> violationtypes = new ArrayList<String>();
 	private ArrayList<String> paths = new ArrayList<String>();
 	private boolean hidefilter = true;
-
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterController(TaskServiceImpl ts, RuleTypesFactory ruletypesfactory, ConfigurationServiceImpl configuration) {
@@ -132,7 +131,8 @@ public class FilterController {
 				try {
 					count = violationsPerSeverity.get(violation.getSeverity());
 				}
-				catch (Exception e) {}
+				catch (Exception e) {
+				}
 				finally {
 					violationsPerSeverity.remove(violation.getSeverity());
 					count = count + 1;

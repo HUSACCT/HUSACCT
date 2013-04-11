@@ -222,7 +222,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		clearModel(severityModel);
 		severities = taskServiceImpl.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[] { severity.getSeverityName(), severity.getColor() });
+			severityModel.addRow(new Object[] {severity.getSeverityName(), severity.getColor()});
 		}
 
 	}

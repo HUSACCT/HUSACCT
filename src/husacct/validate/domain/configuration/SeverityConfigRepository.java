@@ -10,6 +10,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 class SeverityConfigRepository {
+
 	private List<Severity> currentSeverities;
 	private final List<Severity> defaultSeverities;
 

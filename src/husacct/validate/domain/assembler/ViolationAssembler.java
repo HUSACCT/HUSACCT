@@ -26,8 +26,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class ViolationAssembler {
-	private Logger logger = Logger.getLogger(ViolationAssembler.class);
 
+	private Logger logger = Logger.getLogger(ViolationAssembler.class);
 	private AbstractViolationType violationtypeFactory;
 	private RuleTypesFactory ruleFactory;
 	private RuletypeAssembler ruleAssembler;
@@ -68,7 +68,6 @@ public class ViolationAssembler {
 		Collections.sort(violationDTOList, violationSeverityComparator);
 		return violationDTOList;
 	}
-
 	private Comparator<ViolationDTO> violationSeverityComparator = new Comparator<ViolationDTO>() {
 		@Override
 		public int compare(ViolationDTO o1, ViolationDTO o2) {

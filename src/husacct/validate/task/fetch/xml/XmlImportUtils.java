@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public abstract class XmlImportUtils {
+
 	private Logger logger = Logger.getLogger(XmlImportUtils.class);
 
 	protected Message getMessage(Element messageElement) {
@@ -61,5 +62,4 @@ public abstract class XmlImportUtils {
 		}
 		return calendar;
 	}
-
 }

@@ -1,6 +1,7 @@
 package husacct.validate.domain.exception;
 
 public class ReportException extends RuntimeException {
+
 	private static final long serialVersionUID = 7193037512975053282L;
 
 	public ReportException() {

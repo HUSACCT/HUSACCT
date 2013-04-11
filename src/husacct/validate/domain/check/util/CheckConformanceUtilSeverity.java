@@ -4,6 +4,7 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 
 public class CheckConformanceUtilSeverity {
+
 	public static Severity getSeverity(ConfigurationServiceImpl configuration, Severity ruleTypeSeverity, Severity violationTypeSeverity) {
 		if (violationTypeSeverity == null && ruleTypeSeverity == null) {
 			return null;

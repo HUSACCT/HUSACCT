@@ -19,6 +19,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class MustUseRule extends RuleType {
+
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED, RuleTypes.IS_NOT_ALLOWED);
 
 	public MustUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {

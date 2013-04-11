@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CheckConformanceUtilPackage extends CheckConformanceUtil {
+
 	private static IDefineService define = ServiceProvider.getInstance().getDefineService();
 
 	public static Mappings filterPackages(RuleDTO rule) {

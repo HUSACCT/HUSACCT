@@ -17,8 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 	private HashSet<String> interfaceCache;
 	private HashSet<String> noInterfaceCache;
 

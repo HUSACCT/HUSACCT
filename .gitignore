@@ -1,7 +1,10 @@
 bin
+build.xml
 build/bin
 build/jar
 build/reports
+manifest.mf
+nbproject/
 .classpath
 .project
 .settings

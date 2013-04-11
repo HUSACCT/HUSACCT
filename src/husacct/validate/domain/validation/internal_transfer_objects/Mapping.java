@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Mapping {
+
 	private final String logicalPath;
 	private final String physicalPath;
 	private final String logicalPathType;

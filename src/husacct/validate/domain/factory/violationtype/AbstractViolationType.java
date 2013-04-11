@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public abstract class AbstractViolationType {
+
 	private Logger logger = Logger.getLogger(AbstractViolationType.class);
 	private final ConfigurationServiceImpl configuration;
 	protected List<CategoryKeySeverityDTO> allViolationKeys;

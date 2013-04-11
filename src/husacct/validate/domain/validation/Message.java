@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Message {
+
 	private LogicalModules logicalModules;
 	private String ruleKey;
 	private List<String> violationTypeKeys;

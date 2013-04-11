@@ -26,12 +26,10 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 public class RuleTypesFactory {
+
 	private Logger logger = Logger.getLogger(RuleTypesFactory.class);
-
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-
 	private final ConfigurationServiceImpl configuration;
-
 	private AbstractViolationType violationtypefactory;
 	private HashMap<String, CategoryKeyClassDTO> allRuleTypes;
 	private HashMap<String, CategoryKeyClassDTO> mainRuleTypes;

@@ -27,6 +27,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 
 class RuleTypeSeverityPanel extends JPanel {
+
 	private static final long serialVersionUID = 5947125752371446966L;
 	private final DefaultListModel rtsCategoryModel;
 	private final String language;
@@ -175,10 +176,10 @@ class RuleTypeSeverityPanel extends JPanel {
 	}
 
 	void loadModel() {
-		String[] ruletypeColumnNames = { ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity") };
+		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities);
-		ruletypeModel.setTypes(new Class[] { DataLanguageHelper.class, Severity.class });
-		ruletypeModel.setCanEdit(new Boolean[] { false, true });
+		ruletypeModel.setTypes(new Class[] {DataLanguageHelper.class, Severity.class});
+		ruletypeModel.setCanEdit(new Boolean[] {false, true});
 
 		ruletypeTable.setModel(ruletypeModel);
 
@@ -228,7 +229,7 @@ class RuleTypeSeverityPanel extends JPanel {
 			catch (Exception e) {
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
-			ruletypeModel.addRow(new Object[] { new DataLanguageHelper(ruletype.getKey()), severity });
+			ruletypeModel.addRow(new Object[] {new DataLanguageHelper(ruletype.getKey()), severity});
 		}
 		ruletypeModel.checkValuesAreValid();
 	}

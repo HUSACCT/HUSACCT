@@ -32,11 +32,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.jdom2.Element;
 
 public class TaskServiceImpl {
+
 	private final FilterController filterController;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
-
 	private final ExportController exportController;
 	private final ImportController importController;
 

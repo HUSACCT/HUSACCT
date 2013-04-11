@@ -11,6 +11,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 class CSharpViolationTypeFactory extends AbstractViolationType {
+
 	private final EnumSet<CSharpViolationTypes> defaultDependencies;
 	private final EnumSet<CSharpViolationTypes> defaultAccess;
 	private final EnumSet<CSharpViolationTypes> defaultPackaging;

@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class Messagebuilder {
+
 	private Logger logger = Logger.getLogger(Messagebuilder.class);
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private final String whiteSpace = " ";

@@ -22,6 +22,7 @@ import java.util.List;
 import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
+
 	private ReportWriter writer;
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 

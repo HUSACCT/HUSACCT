@@ -8,6 +8,7 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import java.util.List;
 
 public class AssemblerController {
+
 	public CategoryDTO[] createCategoryDTO(List<RuleType> rules) {
 		CategoryAssembler assembler = new CategoryAssembler();
 		return assembler.createCategoryDTO(rules);

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import javax.swing.JInternalFrame;
 
 public interface IValidateService extends IObservableService {
+
 	public CategoryDTO[] getCategories();
 
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo);

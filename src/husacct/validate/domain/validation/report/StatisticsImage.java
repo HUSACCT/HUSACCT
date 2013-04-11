@@ -18,6 +18,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class StatisticsImage {
+
 	public void createStatisticsImage(String path, List<ViolationsPerSeverity> list) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

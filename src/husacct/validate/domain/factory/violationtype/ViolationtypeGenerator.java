@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 class ViolationtypeGenerator {
+
 	private Logger logger = Logger.getLogger(ViolationtypeGenerator.class);
 
 	List<CategoryKeySeverityDTO> getAllViolationTypes(List<IViolationType> violationtypes) {

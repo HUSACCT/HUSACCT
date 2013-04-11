@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ReportServiceImpl implements IReportService {
+
 	private final ExportReportFactory reportFactory;
 	private final TaskServiceImpl taskServiceImpl;
 

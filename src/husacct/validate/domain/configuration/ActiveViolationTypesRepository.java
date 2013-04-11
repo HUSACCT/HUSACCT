@@ -25,7 +25,6 @@ class ActiveViolationTypesRepository {
 	private final RuleTypesFactory ruletypesfactory;
 	private final Map<String, List<ActiveRuleType>> startupViolationTypes;
 	private Map<String, List<ActiveRuleType>> currentActiveViolationTypes;
-
 	private Logger logger = Logger.getLogger(ActiveViolationTypesRepository.class);
 
 	public ActiveViolationTypesRepository(RuleTypesFactory ruletypesfactory) {
@@ -53,7 +52,6 @@ class ActiveViolationTypesRepository {
 							activeRuleTypes.add(initializeActiveViolationTypes(exceptionRuleType));
 						}
 						catch (RuntimeException e) {
-
 						}
 					}
 				}

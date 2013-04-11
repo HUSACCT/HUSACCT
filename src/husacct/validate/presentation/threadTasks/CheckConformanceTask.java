@@ -11,7 +11,6 @@ public class CheckConformanceTask implements Runnable {
 
 	private final FilterPanel filterPanel;
 	private final JButton buttonSaveInHistory;
-
 	private Logger logger = Logger.getLogger(CheckConformanceTask.class);
 
 	public CheckConformanceTask(FilterPanel filterPanel, JButton buttonSaveInHistory) {

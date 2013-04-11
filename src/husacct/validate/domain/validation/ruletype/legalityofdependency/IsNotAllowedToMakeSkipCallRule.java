@@ -18,6 +18,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class IsNotAllowedToMakeSkipCallRule extends RuleType {
+
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
 	public IsNotAllowedToMakeSkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
@@ -57,8 +58,9 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
 		for (ModuleDTO module : allModules) {
 			if (module.type.toLowerCase().contains("layer")) {
-				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
+				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
 					returnModules = getModulesTo(allModules, allModules.indexOf(module), currentRule.violationTypeKeys);
+				}
 			}
 		}
 		return returnModules;
@@ -67,8 +69,9 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber, String[] violationTypeKeys) {
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
 		for (ModuleDTO module : allModules) {
-			if (allModules.indexOf(module) > moduleFromNumber + 1)
+			if (allModules.indexOf(module) > moduleFromNumber + 1) {
 				returnList.add(CheckConformanceUtilClass.getAllClasspathsFromModule(allModules.get(allModules.indexOf(module)), violationTypeKeys));
+			}
 		}
 		return returnList;
 	}

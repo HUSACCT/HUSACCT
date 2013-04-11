@@ -99,7 +99,6 @@ public class FilterPanel extends JPanel {
 
 	private void addListeners() {
 		applyFilter.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				browseViolations.loadAfterChange();
@@ -107,7 +106,6 @@ public class FilterPanel extends JPanel {
 			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -120,11 +118,9 @@ public class FilterPanel extends JPanel {
 			}
 		});
 		radioButtonAll.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				final Thread filterThread = new Thread() {
-
 					@Override
 					public void run() {
 						try {
@@ -142,17 +138,14 @@ public class FilterPanel extends JPanel {
 			}
 		});
 		radioButtonDirect.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				final Thread filterThread = new Thread() {
-
 					@Override
 					public void run() {
 						try {
 							Thread.sleep(1);
 							SwingUtilities.invokeLater(new Runnable() {
-
 								public void run() {
 									browseViolations.loadAfterChange();
 								}
@@ -169,17 +162,14 @@ public class FilterPanel extends JPanel {
 			}
 		});
 		radioButtonIndirect.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				final Thread filterThread = new Thread() {
-
 					@Override
 					public void run() {
 						try {
 							Thread.sleep(1);
 							SwingUtilities.invokeLater(new Runnable() {
-
 								public void run() {
 									browseViolations.loadAfterChange();
 								}

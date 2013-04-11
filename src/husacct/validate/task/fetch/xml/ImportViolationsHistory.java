@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ImportViolationsHistory extends XmlImportUtils {
+
 	private Logger logger = Logger.getLogger(ImportViolationsHistory.class);
 
 	public List<ViolationHistory> importViolationsHistory(Element violationHistoriesElement) {

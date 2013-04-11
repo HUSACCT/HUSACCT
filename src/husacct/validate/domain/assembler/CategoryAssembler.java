@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CategoryAssembler {
+
 	private RuletypeAssembler ruleAssembler;
 
 	public CategoryAssembler() {

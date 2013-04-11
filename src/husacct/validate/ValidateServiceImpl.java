@@ -23,16 +23,14 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {
+
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
-
 	private final GuiController gui;
 	private final ConfigurationServiceImpl configuration;
 	private final DomainServiceImpl domain;
 	private final ReportServiceImpl report;
 	private final TaskServiceImpl task;
-
 	private boolean validationExecuted;
 
 	public ValidateServiceImpl() {

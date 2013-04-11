@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation;
 
 public class ViolationType {
+
 	private String violationtypeKey;
 	private String violationDescriptionKey;
 	private boolean isActive;

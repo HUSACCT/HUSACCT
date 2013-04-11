@@ -20,8 +20,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class CheckConformanceController {
-	private final ConfigurationServiceImpl configuration;
 
+	private final ConfigurationServiceImpl configuration;
 	private Logger logger = Logger.getLogger(CheckConformanceController.class);
 	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
