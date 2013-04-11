@@ -1,5 +1,6 @@
 package husacct.analyse.task.analyser.csharp;
 
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
@@ -121,41 +122,25 @@ public class CSharpTreeConvertController {
         return csNamespaceGenerator.generateModel(namespaceStack, namespaceTree);
     }
 
-    private String getCurrentNamespace() {
-        String result = "";
-        for (String namespacePart : namespaceStack) {
-            result += namespacePart + ".";
-        }
-        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
-    }
-
-    private String getCurrentUniqueClassName() {
-        String result = "";
-        for (String classNamePart : classNameStack) {
-            result += classNamePart + ".";
-        }
-        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
-    }
-
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
-        String analysedClass;
+        String analysedClass;        
         if (isInnerClass) {
-            analysedClass = csClassGenerator.generateToModel(classTree, getCurrentNamespace(), getCurrentUniqueClassName());
+            analysedClass = csClassGenerator.generateToModel(classTree, getParentName(namespaceStack), getParentName(classNameStack));
         } else {
-            analysedClass = csClassGenerator.generateToDomain(classTree, getCurrentNamespace());
+            analysedClass = csClassGenerator.generateToDomain(classTree, getParentName(namespaceStack));
         }
         return analysedClass;
     }
 
     private void delegateInheritanceDefinition(CommonTree inheritanceTree) {
-        csInheritanceGenerator.generateToDomain(inheritanceTree, getCurrentUniqueClassName());
+        csInheritanceGenerator.generateToDomain(inheritanceTree, getParentName(classNameStack));
     }
 
     private void delegateAttribute(CommonTree attributeTree) {
-        csAttributeGenerator.generateAttributeToDomain(attributeTree, getCurrentUniqueClassName());
+        csAttributeGenerator.generateAttributeToDomain(attributeTree, getParentName(classNameStack));
     }
 
     private void delegateMethod(CommonTree methodTree) {
-        csMethodeGenerator.generateMethodToDomain(methodTree, getCurrentUniqueClassName());
+        csMethodeGenerator.generateMethodToDomain(methodTree, getParentName(classNameStack));
     }
 }
