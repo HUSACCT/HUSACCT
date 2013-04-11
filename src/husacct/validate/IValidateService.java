@@ -1,6 +1,8 @@
 package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
+import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IObservableService;
 
@@ -58,6 +60,16 @@ public interface IValidateService extends IObservableService {
 	 * @return an array of string extensions.
 	 */
 	public String[] getExportExtentions();
+
+	/**
+	 * 
+	 */
+	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type);
+
+	/**
+	 * 
+	 */
+	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type);
 
 	/**
 	 * Export the found violations to a file

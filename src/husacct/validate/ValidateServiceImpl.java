@@ -3,6 +3,7 @@ package husacct.validate;
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
@@ -183,5 +184,17 @@ public final class ValidateServiceImpl extends ObservableService implements
 	 */
 	public void Validate(RuleDTO[] appliedRules) {
 		domain.checkConformance(appliedRules);
+	}
+
+	@Override
+	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
