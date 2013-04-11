@@ -26,7 +26,7 @@ public class ApplicationAnalyser {
 				List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);
 				for(MetaFile fileInfo: fileData){
 					
-					//Added By Team 1 General GUI & Control 
+					//Added By Team 1 General GUI & Control
 					//Needed to check if Thread is allowed to continue
 					if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
 						break;
