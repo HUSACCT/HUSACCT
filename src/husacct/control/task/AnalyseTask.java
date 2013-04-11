@@ -12,7 +12,7 @@ public class AnalyseTask implements Runnable{
 	private MainController mainController;
 	private ApplicationDTO applicationDTO;
 	
-	public AnalyseTask(ApplicationDTO applicationDTO){
+	public AnalyseTask(MainController mainController,ApplicationDTO applicationDTO){
 		this.applicationDTO = applicationDTO;
 	}
 	
