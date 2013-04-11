@@ -1,7 +1,9 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
@@ -12,6 +14,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.DefaultListModel;
@@ -130,17 +133,21 @@ public class SetApplicationPanel extends JPanel{
 	}
 	
 	private void setDefaultValues(){
-		ApplicationDTO applicationData = ServiceProvider.getInstance().getDefineService().getApplicationDetails();;
+		ApplicationDTO applicationData = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
 		applicationNameText.setText(applicationData.name);
 		for(int i=0; i<languages.length; i++){
-			if(applicationData.programmingLanguage.equals(languages[i])){
+			if(applicationData.projects.size() > 0 && applicationData.projects.get(0).programmingLanguage.equals(languages[i])){
 				languageSelect.setSelectedIndex(i);
 			}
 		}
 		versionText.setText(applicationData.version);
-		String[] items = applicationData.paths;
-		for (int i=0; i<items.length; i++) {
-			pathListModel.add(i, items[i]);
+		
+		ArrayList<String> items = new ArrayList<String>();
+		if(applicationData.projects.size() > 0){
+			items = applicationData.projects.get(0).paths;
+		}
+		for (int i=0; i<items.size(); i++) {
+			pathListModel.add(i, items.get(i));
 		}
 	}
 	
@@ -148,8 +155,14 @@ public class SetApplicationPanel extends JPanel{
 		String name = applicationNameText.getText();
 		String language = languages[languageSelect.getSelectedIndex()];
 		String version = versionText.getText();
-		String[] paths = Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class);
-		ApplicationDTO applicationData = new ApplicationDTO(name, paths, language, version);
+		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
+		
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
+		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
+		projects.add(project);
+		
+		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
 		return applicationData;
 	}
 	
