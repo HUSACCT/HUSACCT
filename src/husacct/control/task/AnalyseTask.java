@@ -23,6 +23,7 @@ public class AnalyseTask implements Runnable{
 		try {
 			Thread.sleep(1);
 			logger.debug("Analysing application");
+			//TODO: Wait for Analyse to change the parameter of analyseApplication from String[] to ArrayList<String>
 			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0).paths, applicationDTO.projects.get(0).programmingLanguage);
 			logger.debug("Application analysed");
 		} catch (InterruptedException exception){
