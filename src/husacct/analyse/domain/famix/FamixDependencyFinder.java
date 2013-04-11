@@ -1,6 +1,7 @@
 package husacct.analyse.domain.famix;
 
 import husacct.common.dto.DependencyDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,30 +104,36 @@ class FamixDependencyFinder extends FamixFinder{
 				if (!containsDependency(foundDependency, result)) result.add(foundDependency);
 			}
 		}
-//		if(!this.from.equals("")){
-//			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
-//				if(!containsDependency(dependency, result)){
-//					result.add(dependency);
-//				}
-//			}
-//		}
-		return result;
-	}
-	
-	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> directDependencies){
-		//TODO Create complete indirect-dependency-path in the future. Indirect dependencies are untraceable at this moment.
-		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
-		for(DependencyDTO directDependency: directDependencies){		
-			for(DependencyDTO indirectDependency: this.findIndirectDependenciesFrom(directDependency)){
-				if(!containsDependency(indirectDependency, result)){
-					indirectDependency.from = directDependency.from;
-					result.add(indirectDependency);
+		if(!this.from.equals("")){
+			for(DependencyDTO dependency: this.findIndirectDependencies(result)){
+				if(!containsDependency(dependency, result)){
+					result.add(dependency);
 				}
-			}			
+			}
 		}
 		return result;
 	}
 	
+	private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> Dependencies){
+		List<DependencyDTO> tempDirectDependencies = Dependencies;
+		List<DependencyDTO> returnIndirectDependencies = new ArrayList<DependencyDTO>();
+		for(DependencyDTO directDependency : tempDirectDependencies){
+			List<DependencyDTO> indirectDependenciesForDirectDependency = findDependenciesRelatedTo(tempDirectDependencies, directDependency);
+			for(DependencyDTO indirectDependency : indirectDependenciesForDirectDependency){
+				returnIndirectDependencies.add(new DependencyDTO(directDependency.from, indirectDependency.to, directDependency.type+""+indirectDependency.type, true, directDependency.lineNumber));
+			}	
+		}
+		return returnIndirectDependencies;
+	}
+	
+	private List<DependencyDTO> findDependenciesRelatedTo(List<DependencyDTO> allDependencies, DependencyDTO relatedTo){
+		List<DependencyDTO> returnArray = new ArrayList<DependencyDTO>();
+		for(DependencyDTO dependency : allDependencies)
+			if(dependency.from.equals(relatedTo.to))
+				returnArray.add(dependency);
+		return returnArray;
+	}
+		
 	private boolean containsDependency(DependencyDTO find, List<DependencyDTO> dependencies){
 		for(DependencyDTO d : dependencies){
 			if(find.equals(d)){
@@ -151,8 +158,7 @@ class FamixDependencyFinder extends FamixFinder{
 		}
 		return found;
 	}
-
-
+	
 	private boolean isPackage(String uniquename){
 		return theModel.packages.containsKey(uniquename);
 	}
