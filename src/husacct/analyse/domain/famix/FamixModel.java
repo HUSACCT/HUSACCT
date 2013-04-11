@@ -171,6 +171,7 @@ class FamixModel extends FamixObject{
 				+ "\n ------------Classes------------- \n" + classes
 				+ "\n ------------Interfaces------------\n" + interfaces
 				+ "\n -----------Assocations:-------------- \n" + associations
+				+ "\n -----------Libraries:-------------- \n" + libraries
 				+ "\n --------------Methoden (behavioural entities) ----------- \n" + behaviouralEntities
 				+ "\n --------------Variabelen (structural entities) ----------- \n" + structuralEntities
 				+ "\n -----------Invocations-------------- \n" + associations

@@ -1,31 +1,84 @@
 package husacct.analyse.task.analyser.java;
 
+import husacct.analyse.infrastructure.antlr.java.JavaParser;
+import husacct.analyse.task.analyser.VisibillitySet;
+
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
 
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 class JavaLibraryGenerator extends JavaGenerator{
 	
+	private static final String SEARCH_PATH = "C:\\Users\\Gulum\\workspacees\\SACCT";
+	private String name = "";
+	private String uniqueName = "";
+	private String belongsToPackage = "";
+	private String visibillity = VisibillitySet.DEFAULT.toString();
+	
+	public JavaLibraryGenerator(String uniquePackageName){
+	    File dir = new File("c:\\");
+
+	    File[] files = dir.listFiles(new JARFileFilter());
+	    for (File f : files)
+	    {
+	         System.out.println("file: " + f.getName());
+	      //System.out.println("file " + f.getName());
+	    }
+	}
+	
+	/*  public static void main(String[] args)
+	  {
+	    new FileFilterTest();
+	  }*/
+
+/*	  public void FileFilterTest()
+	  {
+	    File dir = new File("c:\\");
+
+	    // list the files using our FileFilter
+	    File[] files = dir.listFiles(new JARFileFilter());
+	    for (File f : files)
+	    {
+	      System.out.println("file: " + f.getName());
+	    }
+	}
+	*/
+	
 	public String generateModel(CommonTree treeNode) {
-		String uniqueName = getUniqueNameOfLibrary(treeNode);
-		String belongsToLibrary = getParentLibraryName(uniqueName);
-		String name = getNameOfLibrary(uniqueName);
-		createLibrary(name, uniqueName, belongsToLibrary);
-		if(hasParentLibraries(uniqueName)) {
-			
-			//createAllParentLibraries(belongsToLibrary);
+		return belongsToPackage;
+	   /* new FileFilterTest();
+	    File dir = new File("c:\\");
+
+	    // list the files using our FileFilter
+	    File[] files = dir.listFiles(new JARFileFilter());
+	    for (File f : files)
+	    {
+	    	uniqueName = f.getName();
+	      System.out.println("file: " + f.getName());
 		}
-		return uniqueName;
+		/*String strippedPath = SEARCH_PATH.substring(1);
+		String uniqueName = getUniqueNameOfLibrary(treeNode);
+		//String naam = SEARCH_PATH.getClass().getClassLoader().getResource(strippedPath).endsWith(".jar");
+		getClass().getClassLoader().getResource(SEARCH_PATH).getPath().endsWith(".jar");
+		//String me = getClass().getName().replace(".", "/")+".jar";
+		//getClass().getClassLoader().getResource(me);
+		
+		return uniqueName;*/
 	}
 	
 	private String getParentLibraryName(String completLibraryName){
@@ -39,14 +92,41 @@ class JavaLibraryGenerator extends JavaGenerator{
 	}	
 	
 	private String getUniqueNameOfLibrary(Tree antlrTree){
-		String uniqueName = antlrTree.toStringTree();
-		uniqueName = uniqueName.replace("(import", "");
-		uniqueName = uniqueName.replace("(","");
-		uniqueName = uniqueName.replace(")", "");
-		uniqueName = uniqueName.replace(". ","").substring(1);
-		uniqueName = uniqueName.replace(" ", ".");
+		String name = antlrTree.toStringTree();
+		String pathToDir = "c:\\Workspace\\SACCT";
+		File myDir = new File(pathToDir);
+		File[] jarFiles = myDir.listFiles(new FilenameFilter() {
+
+			  public boolean accept(File dir, String name) {
+			    return name.endsWith(".jar");
+			  }
+		});
+		return uniqueName;
+	
+	}
+	
+	public String generateToDomain(CommonTree commonTree) {
+		setVisibillityFromTree(commonTree);
+		this.name = commonTree.getChild(1).toString();
+		if(belongsToPackage.equals("")) {
+			this.uniqueName = commonTree.getChild(1).toString();
+		}else{
+			this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
+		}
+		modelService.createLibrary(uniqueName, name, belongsToPackage, visibillity);
 		return uniqueName;
 	}
+	
+	private void setVisibillityFromTree(CommonTree tree){
+		CommonTree modifierList = (CommonTree)tree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
+		if(!(modifierList == null || modifierList.getChildCount() < 1)){
+			String found = modifierList.getChild(0).toString();
+			if(VisibillitySet.isValidVisibillity(found)){
+				this.visibillity = found;
+			}
+		}
+	}
+
 	
 	/*private void createAllParentLibraries(String uniqueChildLibraryName){
 		String belongsToLibrary = "";

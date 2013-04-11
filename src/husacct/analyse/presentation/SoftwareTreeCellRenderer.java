@@ -54,6 +54,8 @@ class SoftwareTreeCellRenderer extends DefaultTreeCellRenderer {
         		}else{
         			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PRIVATE));
         		}
+        	}else if(moduleSelected.type.equals("library")){
+        			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
         	}else if(moduleSelected.type.equals("enumeration")){
         		icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
         	}else{

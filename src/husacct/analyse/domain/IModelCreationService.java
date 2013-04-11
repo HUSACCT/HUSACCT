@@ -8,13 +8,15 @@ public interface IModelCreationService {
 
 	public void createPackage(String uniqueName, String belongsToPackage, String name);
 	
-	public void createLibrary(String uniqueName, String belongsToLibrary, String name);
 	public void clearModel( );
 	
 	@Deprecated /*This function will be replaced after all analysers have adapter one of the below functions*/
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass);
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass);
 	public void createClass(String uniqueName, String name, String belongsToPackage, boolean isAbstract, boolean isInnerClass, String belongsToClass, String visibillity);
+
+	public void createLibrary(String uniqueName, String name, String belongsToPackage);
+	public void createLibrary(String uniqueName, String name, String belongsToPackage, String visibility);
 	
 	public void createInterface(String uniqueName, String name, String belongsToPackage);
 	public void createInterface(String uniqueName, String name, String belongsToPackage, String visibility);
