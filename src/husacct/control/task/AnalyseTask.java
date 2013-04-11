@@ -27,8 +27,7 @@ public class AnalyseTask implements Runnable{
 			Thread.sleep(1);			
 			logger.debug("Analysing application");		
 			//ServiceProvider.getInstance().resetAnalyseService();
-			//TODO: Wait for Analyse to change the parameter of analyseApplication from String[] to ArrayList<String>
-			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0).paths, applicationDTO.projects.get(0).programmingLanguage);
+			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0));
 			logger.debug("Analysing finished");
 			if(!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
