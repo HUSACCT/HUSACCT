@@ -9,9 +9,7 @@ public class TestIndirectDependency extends TestCaseExtended  {
 	
 	@Test
 	public void testCheck(){
-		
 		DependencyDTO[] dependencies = service.getAllDependencies();
-		 
 		
 		printDependencies(dependencies);
 	}
