@@ -43,6 +43,11 @@ public class AnalyseServiceStub implements IAnalyseService{
 	public void analyseApplication(String[] paths, String programmingLanguage) {
 
 	}
+	
+	@Override
+	public void analyseApplication(ProjectDTO project){
+		
+	}
 
 	@Override
 	public DependencyDTO[] getDependencies(String from, String to) {

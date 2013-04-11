@@ -8,7 +8,9 @@ import husacct.common.services.IObservableService;
 public interface IAnalyseService extends IObservableService{
 	
 	public String[] getAvailableLanguages();
+	@Deprecated
 	public void analyseApplication(String[] paths, String programmingLanguage);
+	public void analyseApplication(ProjectDTO project);
 	
 	public boolean isAnalysed();
 	
