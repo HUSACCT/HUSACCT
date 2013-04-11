@@ -22,62 +22,59 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ValidateTest {
+
 	IDefineService define;
 	IValidateService validate;
 
 	@Before
-	public void setup()
-	{
+	public void setup() {
 		ServiceProvider.getInstance().getControlService();
 		this.define = ServiceProvider.getInstance().getDefineService();
 		this.validate = ServiceProvider.getInstance().getValidateService();
 	}
-	
+
 	@Test
-	public void getBrowseViolationsGUI(){
+	public void getBrowseViolationsGUI() {
 		Object screen = validate.getBrowseViolationsGUI();
 		assertNotNull(screen);
 		assertTrue(screen instanceof javax.swing.JInternalFrame);
-		assertFalse(((JInternalFrame)screen).isVisible());
+		assertFalse(((JInternalFrame) screen).isVisible());
 	}
-	
+
 	@Test
-	public void getConfigurationGUI(){
+	public void getConfigurationGUI() {
 		Object screen = validate.getConfigurationGUI();
 		assertNotNull(screen);
 		assertTrue(screen instanceof javax.swing.JInternalFrame);
-		assertFalse(((JInternalFrame)screen).isVisible());
+		assertFalse(((JInternalFrame) screen).isVisible());
 	}
-	
+
 	@Test
-	public void getExportExtentions()
-	{
-		assertArrayEquals(new String[]{"pdf","html","xml"}, validate.getExportExtentions());
+	public void getExportExtentions() {
+		assertArrayEquals(new String[] {"pdf", "html", "xml"}, validate.getExportExtentions());
 	}
-	
+
 	@Test
-	public void exportViolations()
-	{
+	public void exportViolations() {
 		//cant test void
 	}
 
 	@Test
-	public void getCategories()
-	{
-		CategoryDTO[] dtos = validate.getCategories();		
-		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));	
+	public void getCategories() {
+		CategoryDTO[] dtos = validate.getCategories();
+		assertArrayEquals(new String[] {"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));
 	}
 
 	@Test
-	public void getRuleTypes(){
-		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"FacadeConvention", "InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall","IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
+	public void getRuleTypes() {
+		CategoryDTO[] dtos = validate.getCategories();
+		final String[] currentRuletypes = new String[] {"FacadeConvention", "InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
 	@Test
-	public void getViolationTypesJavaLanguage(){
-		define.createApplication("", new String[]{}, "Java", "");
+	public void getViolationTypesJavaLanguage() {
+		define.createApplication("", new String[] {}, "Java", "");
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -85,8 +82,8 @@ public class ValidateTest {
 	}
 
 	@Test
-	public void getViolationTypesCSharpLanguage(){
-		define.createApplication("", new String[]{}, "C#", "");
+	public void getViolationTypesCSharpLanguage() {
+		define.createApplication("", new String[] {}, "C#", "");
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -94,66 +91,65 @@ public class ValidateTest {
 	}
 
 	@Test
-	public void getViolationTypesNoLanguage(){
-		define.createApplication("", new String[]{}, "", "");
+	public void getViolationTypesNoLanguage() {
+		define.createApplication("", new String[] {}, "", "");
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
 	}
 
-	private String[] getCategoryStringArray(CategoryDTO[] dtos){
+	private String[] getCategoryStringArray(CategoryDTO[] dtos) {
 		List<String> categoryList = new ArrayList<String>();
-		for(CategoryDTO dto: dtos){
+		for (CategoryDTO dto : dtos) {
 			categoryList.add(dto.getKey());
 		}
-		return categoryList.toArray(new String[]{});
+		return categoryList.toArray(new String[] {});
 	}
 
-	private String[] getRuleTypesStringArray(CategoryDTO[] dtos){
+	private String[] getRuleTypesStringArray(CategoryDTO[] dtos) {
 		List<String> ruletypeList = new ArrayList<String>();
-		for(CategoryDTO cDTO : dtos){
-			for(RuleTypeDTO rDTO : cDTO.getRuleTypes()){
+		for (CategoryDTO cDTO : dtos) {
+			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
 				ruletypeList.add(rDTO.getKey());
 			}
 		}
-		return ruletypeList.toArray(new String[]{});
+		return ruletypeList.toArray(new String[] {});
 	}
 
-	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, String ruleTypeKey){
+	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, String ruleTypeKey) {
 		List<String> violationtypeList = new ArrayList<String>();
-		for(CategoryDTO cDTO : dtos){
-			for(RuleTypeDTO rDTO : cDTO.getRuleTypes()){
-				if(rDTO.getKey().equals(ruleTypeKey)){
+		for (CategoryDTO cDTO : dtos) {
+			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
+				if (rDTO.getKey().equals(ruleTypeKey)) {
 					return getViolationTypesStringArray(rDTO);
 				}
-				else{
-					for(RuleTypeDTO exceptionDTO : rDTO.getExceptionRuleTypes()){
-						if(exceptionDTO.getKey().equals(ruleTypeKey)){
+				else {
+					for (RuleTypeDTO exceptionDTO : rDTO.getExceptionRuleTypes()) {
+						if (exceptionDTO.getKey().equals(ruleTypeKey)) {
 							return getViolationTypesStringArray(exceptionDTO);
 						}
 					}
 				}
 			}
 		}
-		return violationtypeList.toArray(new String[]{});
+		return violationtypeList.toArray(new String[] {});
 	}
 
-	private String[] getViolationTypesStringArray(RuleTypeDTO rule){
+	private String[] getViolationTypesStringArray(RuleTypeDTO rule) {
 		List<String> violationTypeList = new ArrayList<String>();
-		for(ViolationTypeDTO vDTO : rule.getViolationTypes()){
+		for (ViolationTypeDTO vDTO : rule.getViolationTypes()) {
 			violationTypeList.add(vDTO.getKey());
 		}
-		return violationTypeList.toArray(new String[]{});
+		return violationTypeList.toArray(new String[] {});
 	}
 
 	@Test
-	public void isValidatedBeforeValidation(){
+	public void isValidatedBeforeValidation() {
 		assertFalse(validate.isValidated());
 	}
 
 	@Test
-	public void getViolationsByLogicalPath()
-	{
+	public void getViolationsByLogicalPath() {
 		// Can't test this now, need to find a way with define (and analyze) to test this method
 	}
 
@@ -163,17 +159,17 @@ public class ValidateTest {
 	}
 
 	@Test
-	public void isValidatedAfterValidation(){
-		boolean exceptionOccured = false;		
-		try{
-			validate.checkConformance();	
+	public void isValidatedAfterValidation() {
+		boolean exceptionOccured = false;
+		try {
+			validate.checkConformance();
 		}
-		catch(ProgrammingLanguageNotFoundException e){
+		catch (ProgrammingLanguageNotFoundException e) {
 			exceptionOccured = true;
 			assertFalse(validate.isValidated());
 		}
 
-		if(!exceptionOccured){
+		if (!exceptionOccured) {
 			assertTrue(validate.isValidated());
 		}
 	}

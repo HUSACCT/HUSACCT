@@ -31,14 +31,13 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 public class ImportExportTest {
+
 	private ValidateServiceImpl validate;
 
 	@Before
-	public void setup()
-	{
+	public void setup() {
 		validate = new ValidateServiceImpl();
 	}
-
 
 	public void testImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException, DatatypeConfigurationException {
 		ClassLoader.getSystemResource("husaccttest/validate/testfile.xml").toURI();
@@ -57,7 +56,7 @@ public class ImportExportTest {
 
 	private void checkSeveritiesTheSameAsSeveritiesElement(List<Severity> severities, Element severitiesElement) {
 		assertEquals(severitiesElement.getChildren().size(), severities.size());
-		for(int i = 0; i < severitiesElement.getChildren().size(); i++) {
+		for (int i = 0; i < severitiesElement.getChildren().size(); i++) {
 			Element severityElement = severitiesElement.getChildren().get(i);
 			Severity severity = severities.get(i);
 			checkSeverityTheSameAsSeverityElement(severity, severityElement);
@@ -67,9 +66,9 @@ public class ImportExportTest {
 	//TODO assert a programming language is found like findSeverityPerTypeElement();
 	private void checkSeveritiesPerTypesPerProgrammingLanguagesTheSameAsSeveritiesPerTypesPerProgrammingLanguagesElement(HashMap<String, HashMap<String, Severity>> severitiesPerTypesPerProgrammingLanguages, Element severitiesPerTypesPerProgrammingLanguagesElement) {
 		assertEquals(severitiesPerTypesPerProgrammingLanguages.size(), severitiesPerTypesPerProgrammingLanguagesElement.getChildren().size());
-		for(Entry<String, HashMap<String, Severity>> severityPerTypePerProgrammingLanguage : severitiesPerTypesPerProgrammingLanguages.entrySet()) {
-			for(Element severityPerTypePerProgrammingLanguageElement : severitiesPerTypesPerProgrammingLanguagesElement.getChildren()) {
-				if(severityPerTypePerProgrammingLanguageElement.getAttribute("language").getValue().equals(severityPerTypePerProgrammingLanguage.getKey())) {
+		for (Entry<String, HashMap<String, Severity>> severityPerTypePerProgrammingLanguage : severitiesPerTypesPerProgrammingLanguages.entrySet()) {
+			for (Element severityPerTypePerProgrammingLanguageElement : severitiesPerTypesPerProgrammingLanguagesElement.getChildren()) {
+				if (severityPerTypePerProgrammingLanguageElement.getAttribute("language").getValue().equals(severityPerTypePerProgrammingLanguage.getKey())) {
 					checkSeverityPerTypePerProgrammingLanguageTheSameAsSeverityPerTypePerProgrammingLanguageElement(severityPerTypePerProgrammingLanguage, severityPerTypePerProgrammingLanguageElement);
 				}
 			}
@@ -78,11 +77,11 @@ public class ImportExportTest {
 
 	private void checkActiveViolationTypesTheSameAsActiveViolationTypesElement(Map<String, List<ActiveRuleType>> activeViolationTypes, Element child) {
 		int i = 0;
-		for(Entry<String, List<ActiveRuleType>> activeViolationType : activeViolationTypes.entrySet()) {
+		for (Entry<String, List<ActiveRuleType>> activeViolationType : activeViolationTypes.entrySet()) {
 			Element activeViolationTypeElement = child.getChildren().get(i);
 			assertEquals(activeViolationType.getKey(), activeViolationTypeElement.getAttributeValue("language"));
 
-			for(int ruleTypeIndex = 0; ruleTypeIndex < activeViolationTypeElement.getChildren().size(); ruleTypeIndex++) {				
+			for (int ruleTypeIndex = 0; ruleTypeIndex < activeViolationTypeElement.getChildren().size(); ruleTypeIndex++) {
 				Element activeRuleTypeElement = activeViolationTypeElement.getChildren().get(ruleTypeIndex);
 
 				assertNotNull(containsActiveRuleType(activeRuleTypeElement.getAttributeValue("type"), activeViolationType.getValue()));
@@ -90,8 +89,8 @@ public class ImportExportTest {
 				ActiveRuleType activeRuleType = containsActiveRuleType(activeRuleTypeElement.getAttributeValue("type"), activeViolationType.getValue());
 				assertEquals(activeRuleType.getRuleType(), activeRuleTypeElement.getAttributeValue("type"));
 
-				for(Element violationTypesElement : activeRuleTypeElement.getChildren("violationTypes")){
-					for(int violationTypesRootIndex = 0; violationTypesRootIndex < violationTypesElement.getChildren().size(); violationTypesRootIndex++) {
+				for (Element violationTypesElement : activeRuleTypeElement.getChildren("violationTypes")) {
+					for (int violationTypesRootIndex = 0; violationTypesRootIndex < violationTypesElement.getChildren().size(); violationTypesRootIndex++) {
 
 						assertNotNull(containsActiveViolationType(violationTypesElement.getChildren().get(violationTypesRootIndex).getChildText("violationKey"), activeRuleType.getViolationTypes()));
 						ActiveViolationType violationType = containsActiveViolationType(violationTypesElement.getChildren().get(violationTypesRootIndex).getChildText("violationKey"), activeRuleType.getViolationTypes());
@@ -104,18 +103,18 @@ public class ImportExportTest {
 		}
 	}
 
-	private ActiveRuleType containsActiveRuleType(String key, List<ActiveRuleType> activeViolationTypes){
-		for(ActiveRuleType activeRuleType : activeViolationTypes){
-			if(activeRuleType.getRuleType().equals(key)){
+	private ActiveRuleType containsActiveRuleType(String key, List<ActiveRuleType> activeViolationTypes) {
+		for (ActiveRuleType activeRuleType : activeViolationTypes) {
+			if (activeRuleType.getRuleType().equals(key)) {
 				return activeRuleType;
 			}
-		}		
-		return null;		
+		}
+		return null;
 	}
 
-	private ActiveViolationType containsActiveViolationType(String key, List<ActiveViolationType> activeViolationTypes){
-		for(ActiveViolationType activeViolationType : activeViolationTypes){
-			if(activeViolationType.getType().equals(key)){
+	private ActiveViolationType containsActiveViolationType(String key, List<ActiveViolationType> activeViolationTypes) {
+		for (ActiveViolationType activeViolationType : activeViolationTypes) {
+			if (activeViolationType.getType().equals(key)) {
 				return activeViolationType;
 			}
 		}
@@ -129,15 +128,15 @@ public class ImportExportTest {
 
 	private void checkSeverityPerTypePerProgrammingLanguageTheSameAsSeverityPerTypePerProgrammingLanguageElement(Entry<String, HashMap<String, Severity>> severityPerTypePerProgrammingLanguage, Element severityPerTypePerProgrammingLanguageElement) {
 		assertEquals(severityPerTypePerProgrammingLanguageElement.getChildren().size(), severityPerTypePerProgrammingLanguage.getValue().size());
-		for(Entry<String, Severity> severityPerType : severityPerTypePerProgrammingLanguage.getValue().entrySet()) {
+		for (Entry<String, Severity> severityPerType : severityPerTypePerProgrammingLanguage.getValue().entrySet()) {
 			String severityId = findSeverityPerTypeElement(severityPerTypePerProgrammingLanguageElement, severityPerType);
 			assertEquals(severityId, severityPerType.getValue().getId().toString());
 		}
 	}
 
 	private String findSeverityPerTypeElement(Element severityPerTypePerProgrammingLanguageElement, Entry<String, Severity> severityPerType) {
-		for(Element severityPerTypeElement : severityPerTypePerProgrammingLanguageElement.getChildren()) {
-			if(severityPerTypeElement.getChildText("typeKey").equals(severityPerType.getKey())) {
+		for (Element severityPerTypeElement : severityPerTypePerProgrammingLanguageElement.getChildren()) {
+			if (severityPerTypeElement.getChildText("typeKey").equals(severityPerType.getKey())) {
 				return severityPerTypeElement.getChildText("severityId");
 			}
 		}
