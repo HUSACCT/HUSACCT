@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import org.jdom2.Element;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
@@ -89,7 +91,18 @@ public class PersistentDomain implements ISaveable {
 		
 		switch (parseData) {
 			default:
-				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), workspaceApplication.getPaths(), workspaceApplication.getLanguage(), workspaceApplication.getVersion());
+				ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+				for (Project project : workspaceApplication.getProjects()) {
+					projects.add(new ProjectDTO(
+							project.getName(),
+							project.getPaths(),
+							project.getProgrammingLanguage(),
+							project.getVersion(),
+							project.getDescription(),
+							null
+					));
+				}
+				ServiceProvider.getInstance().getDefineService().createApplication(workspaceApplication.getName(), projects, workspaceApplication.getVersion());
 				domainService.createNewArchitectureDefinition(workspaceArchitecture.getName());
 				for (Module m : workspaceArchitecture.getModules()) {
 					long rootModule = moduleService.addModuleToRoot(m);
