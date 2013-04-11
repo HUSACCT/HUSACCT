@@ -14,11 +14,11 @@ import java.util.List;
 
 public class VisibilityConventionExceptionRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
-	
+
 	public VisibilityConventionExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
-	
+
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		return Collections.emptyList();

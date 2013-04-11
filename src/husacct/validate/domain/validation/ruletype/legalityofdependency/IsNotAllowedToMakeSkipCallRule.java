@@ -29,48 +29,47 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 		this.violations = new ArrayList<Violation>();
 
 		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();		
+		this.physicalClasspathsFrom = mappings.getMappingFrom();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){
-			for(List<Mapping> physicalClasspathsTo : modulesTo){
-				for(Mapping classPathTo : physicalClasspathsTo){					
-					for(DependencyDTO dependency: dependencies){
-						if(dependency.from.equals(classPathFrom.getPhysicalPath())){
-							if(dependency.to.equals(classPathTo.getPhysicalPath())){
-								if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
+			for (List<Mapping> physicalClasspathsTo : modulesTo) {
+				for (Mapping classPathTo : physicalClasspathsTo) {
+					for (DependencyDTO dependency : dependencies) {
+						if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
+							if (dependency.to.equals(classPathTo.getPhysicalPath())) {
+								if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
 									Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-									violations.add(violation);							
+									violations.add(violation);
 								}
 							}
 						}
 					}
-				}					
-			}				
-		}		
+				}
+			}
+		}
 		return violations;
 	}
 
-	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule){
+	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule) {
 		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
-		for (ModuleDTO module :allModules){
-			if(module.type.toLowerCase().contains("layer"))
-			{
-				if(module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
-					returnModules = getModulesTo(allModules,allModules.indexOf(module), currentRule.violationTypeKeys);				
+		for (ModuleDTO module : allModules) {
+			if (module.type.toLowerCase().contains("layer")) {
+				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
+					returnModules = getModulesTo(allModules, allModules.indexOf(module), currentRule.violationTypeKeys);
 			}
-		}			
-		return returnModules;	
-	}	
+		}
+		return returnModules;
+	}
 
-	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber, String[] violationTypeKeys){
+	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber, String[] violationTypeKeys) {
 		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
-		for(ModuleDTO module : allModules){
-			if(allModules.indexOf(module) > moduleFromNumber+1)
+		for (ModuleDTO module : allModules) {
+			if (allModules.indexOf(module) > moduleFromNumber + 1)
 				returnList.add(CheckConformanceUtilClass.getAllClasspathsFromModule(allModules.get(allModules.indexOf(module)), violationTypeKeys));
-		}		
+		}
 		return returnList;
 	}
 }

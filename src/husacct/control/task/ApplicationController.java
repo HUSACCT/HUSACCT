@@ -33,8 +33,7 @@ public class ApplicationController {
 	public void setApplicationData(ApplicationDTO applicationDTO) {
 		ServiceProvider.getInstance().getDefineService().createApplication(
 				applicationDTO.name, 
-				applicationDTO.paths, 
-				applicationDTO.programmingLanguage, 
+				applicationDTO.projects,
 				applicationDTO.version
 		);
 	}

@@ -2,6 +2,7 @@ package husacct.define.persistency;
 
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
@@ -37,30 +38,40 @@ public class XMLDomain {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
 
 	    Element ApName = (Element)applicationProperties.get(0);
-	    Element ApLanguage = (Element)applicationProperties.get(1);
-	    Element ApVersion = (Element)applicationProperties.get(2);
-	    Element ApPathRoot = (Element)applicationProperties.get(3);
+	    Element ApVersion = (Element)applicationProperties.get(1);
+	    Element ApProjects = (Element)applicationProperties.get(2);
+	    ArrayList<Project> applicationProjects = getProjects(ApProjects);
 	    
-	    ArrayList<String> ApplicationPaths = new ArrayList<String>();
-	    if (ApPathRoot != null) {
-	    	List<Element> ApPaths = ApPathRoot.getChildren("path");
-	    	if (ApPaths.size() > 0) {
-	    		@SuppressWarnings("rawtypes")
-				Iterator pathIterator = ApPaths.iterator();
-	    		while (pathIterator.hasNext()) {
-	    			Object o = pathIterator.next();
-	    			if (o instanceof Element) {
-	    				ApplicationPaths.add(this.getFilePath(((Element) o).getValue().toString()));
-	    			}
-	    		}
-	    	}
-	    }
-	    int size = (ApplicationPaths.size() > 0) ? ApplicationPaths.size() - 1 : 0;
-	    String[] strArray = new String[size];
-	    Application XMLAp = new Application(ApName.getText(), ApplicationPaths.toArray(strArray), ApLanguage.getText(), ApVersion.getText());
+	    Application XMLAp = new Application(ApName.getText(), applicationProjects, ApVersion.getText());
 	    XMLAp.setArchitecture( this.getArchitecture() );
     
 	    return XMLAp;
+	}
+	
+	private ArrayList<Project> getProjects(Element projectsElement) {
+		ArrayList<Project> projects = new ArrayList<Project>();
+		List<Element> projectElements = projectsElement.getChildren("project");
+    	for(Element project : projectElements) {
+    		projects.add(getProject(project));
+    	}
+    	return projects;
+	}
+	
+	private Project getProject(Element projectElement) {
+		Project project = new Project();
+		project.setName(projectElement.getChild("name").getText());
+		project.setProgrammingLanguage(projectElement.getChild("programmingLanguage").getText());
+		project.setVersion(projectElement.getChild("version").getText());
+		project.setDescription(projectElement.getChild("description").getText());
+		
+		ArrayList<String> projectPaths = new ArrayList<String>(); 
+		List<Element> pathElements = projectElement.getChild("paths").getChildren("path");
+		for(Element path : pathElements) {
+			projectPaths.add(path.getText());
+		}
+		project.setPaths(projectPaths);
+		
+		return project;
 	}
 	
 	private String getFilePath(String path) {
