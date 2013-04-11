@@ -6,8 +6,8 @@ public class CategoryKeySeverityDTO {
 	private final String key;
 	private final String category;
 	private final DefaultSeverities defaultSeverity;
-	
-	public CategoryKeySeverityDTO(String key, String category, DefaultSeverities defaultSeverity){
+
+	public CategoryKeySeverityDTO(String key, String category, DefaultSeverities defaultSeverity) {
 		this.key = key;
 		this.category = category;
 		this.defaultSeverity = defaultSeverity;

@@ -18,7 +18,7 @@ public class Report {
 	private String version;
 	private List<Severity> severities;
 	private String imagePath;
-	private SimpleEntry<Calendar, List<Violation>> violations; 
+	private SimpleEntry<Calendar, List<Violation>> violations;
 	private final SimpleDateFormat dateFormat;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
@@ -31,17 +31,17 @@ public class Report {
 		new StatisticsImage().createStatisticsImage(imagePath, getViolationsPerSeverity());
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy kk:mm:ss");
 	}
-	
+
 	public String getFormattedDate() {
 		return dateFormat.format(violations.getKey().getTime());
 	}
 
 	public List<ViolationsPerSeverity> getViolationsPerSeverity() {
 		List<ViolationsPerSeverity> violationsPerSeverity = new ArrayList<ViolationsPerSeverity>();
-		for(Severity severity : severities) {
+		for (Severity severity : severities) {
 			int violationsCount = 0;
-			for(Violation violation : violations.getValue()) {
-				if(violation.getSeverity().getSeverityKey().equals(severity.getSeverityKey())) {					
+			for (Violation violation : violations.getValue()) {
+				if (violation.getSeverity().getSeverityKey().equals(severity.getSeverityKey())) {
 					violationsCount++;
 				}
 			}
@@ -51,20 +51,14 @@ public class Report {
 	}
 
 	public String[] getLocaleColumnHeaders() {
-		String[] headers = new String[] {
-				localeService.getTranslatedString("Source"),
-				localeService.getTranslatedString("Rule"),
-				localeService.getTranslatedString("LineNumber"),
-				localeService.getTranslatedString("DependencyKind"),
-				localeService.getTranslatedString("Target"),
-				localeService.getTranslatedString("Severity")
-		};
+		String[] headers = new String[] { localeService.getTranslatedString("Source"), localeService.getTranslatedString("Rule"), localeService.getTranslatedString("LineNumber"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("Severity") };
 		return headers;
 	}
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
+
 	public String getProjectName() {
 		return projectName;
 	}
@@ -72,6 +66,7 @@ public class Report {
 	public void setVersion(String version) {
 		this.version = version;
 	}
+
 	public String getVersion() {
 		return version;
 	}
@@ -98,5 +93,5 @@ public class Report {
 
 	public void setViolations(SimpleEntry<Calendar, List<Violation>> violations) {
 		this.violations = violations;
-	}	
+	}
 }

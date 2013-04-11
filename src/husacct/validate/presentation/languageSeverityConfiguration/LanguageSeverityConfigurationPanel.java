@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class LanguageSeverityConfigurationPanel extends JPanel {
-
 	private static final long serialVersionUID = 6607502138038915874L;
 	private final TaskServiceImpl taskServiceImpl;
 	private final ConfigurationRuleTypeDTO configurationSubPanelDTO;
@@ -22,7 +21,6 @@ public class LanguageSeverityConfigurationPanel extends JPanel {
 	private JTabbedPane tabbedPane;
 
 	public LanguageSeverityConfigurationPanel(ConfigurationRuleTypeDTO configurationRuleTypeDTO, ConfigurationViolationTypeDTO configurationViolationTypeDTO, TaskServiceImpl ts) {
-
 		this.configurationSubPanelDTO = configurationRuleTypeDTO;
 		this.configurationViolationTypeDTO = configurationViolationTypeDTO;
 		this.taskServiceImpl = ts;

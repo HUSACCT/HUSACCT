@@ -24,24 +24,22 @@ public class StatisticsImage {
 		JFreeChart chart = ChartFactory.createBarChart("Violations Chart", "severity", "violations", dataset, PlotOrientation.VERTICAL, true, true, false);
 		CategoryPlot plot = chart.getCategoryPlot();
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-		NumberAxis numberAxis = (NumberAxis)plot.getRangeAxis();
+		NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
 		numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-		int index = 0;		
-		for(ViolationsPerSeverity violationPerSeverity : list) {
-			final String severityKey =violationPerSeverity.getSeverity().getSeverityKey();
+		int index = 0;
+		for (ViolationsPerSeverity violationPerSeverity : list) {
+			final String severityKey = violationPerSeverity.getSeverity().getSeverityKey();
 			dataset.addValue(violationPerSeverity.getAmount(), severityKey, severityKey);
-			
-			GradientPaint paint = new GradientPaint(
-					0.0f, 0.0f, violationPerSeverity.getSeverity().getColor(),
-					0.0f, 0.0f, new Color(0, 0, 20)
-					);
+
+			GradientPaint paint = new GradientPaint(0.0f, 0.0f, violationPerSeverity.getSeverity().getColor(), 0.0f, 0.0f, new Color(0, 0, 20));
 			renderer.setSeriesPaint(index, paint);
 			index++;
-		}		
-		
+		}
+
 		try {
 			ChartUtilities.saveChartAsPNG(new File(path), chart, 600, 200);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
