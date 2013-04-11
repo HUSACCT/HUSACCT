@@ -43,14 +43,16 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	}
 
 	/**
-	 * Gets all the Categories of all the available ruletypes The RuleTypeDTO
-	 * contains RuleTypeDTOs The RuleTypeDTO contains ViolationTypeDTOs
+	 * {@inheritDoc}
 	 */
 	@Override
 	public CategoryDTO[] getCategories() {
 		return domain.getCategories();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		if (!validationExecuted) {
@@ -59,6 +61,9 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
 		if (!validationExecuted) {
@@ -67,11 +72,17 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String[] getExportExtentions() {
 		return report.getExportExtentions();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void checkConformance() {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
@@ -81,58 +92,90 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		gui.violationChanged();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public JInternalFrame getBrowseViolationsGUI() {
 		return gui.getBrowseViolationsGUI();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public JInternalFrame getConfigurationGUI() {
 		return gui.getConfigurationGUI();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Element getWorkspaceData() {
 		return task.exportValidationWorkspace();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			task.importValidationWorkspace(workspaceData);
-		}
-		catch (DatatypeConfigurationException e) {
+		} catch (DatatypeConfigurationException e) {
 			logger.error("Error exporting the workspace: " + e.getMessage(), e);
 		}
 		notifyServiceListeners();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isValidated() {
 		return validationExecuted;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Calendar[] getViolationHistoryDates() {
 		return task.getViolationHistoryDates();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void exportViolations(File file, String fileType, Calendar date) {
 		report.createReport(file, fileType, date);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void exportViolations(File file, String fileType) {
 		report.createReport(file, fileType);
 	}
 
-	// This method is only used for testing with the Testsuite
+	/**
+	 * This method is only used for testing with the Testsuite
+	 *
+	 * @return a ConfigurationServiceImpl object
+	 */
 	public ConfigurationServiceImpl getConfiguration() {
 		return configuration;
 	}
 
-	// This method is only used for testing with the Testsuite
+	/**
+	 * This method is only used for testing with the Testsuite
+	 * It checks an array of applied rules for conformance.
+	 *
+	 * @param appliedRules an array of applied rules.
+	 */
 	public void Validate(RuleDTO[] appliedRules) {
 		domain.checkConformance(appliedRules);
 	}
