@@ -41,8 +41,7 @@ public class AnalyzedModuleTree extends JTree {
 			bufferComponent.updateChilderenPosition();
 			this.setModel(new CombinedModuleTreeModel(rootComponent));
 		}
-		else
-		{
+		else{
 			int valueofposition =position.get(i);
 			bufferComponent=(AnalyzedModuleComponent)bufferComponent.getChildren().get(valueofposition);
 		} 
@@ -51,7 +50,7 @@ public class AnalyzedModuleTree extends JTree {
 	
 	
 	
-	public void removeTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent)
+	public void removeTreeItem(long moduleId,AnalyzedModuleComponent analyzedsoftwarecomponent)
 	{
 		AnalyzedModuleComponent rootComponent=(AnalyzedModuleComponent)this.getModel().getRoot();
 		AnalyzedModuleComponent bufferComponent;
@@ -66,14 +65,13 @@ public class AnalyzedModuleTree extends JTree {
 			{
 				
 			    int positionOfchild=(position.get(position.size()-1));
-				JtreeController.setCurrentTree(this);
-				JtreeController.registerTreeRemoval(bufferComponent.getChildren().get(positionOfchild));
+				
+				JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
 				bufferComponent.getChildren().remove(positionOfchild);
 				bufferComponent.updateChilderenPosition();
 				this.setModel(new CombinedModuleTreeModel(rootComponent));
 			}
-			else
-			{
+			else{
 				bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
 			} 
 		    }
@@ -94,8 +92,7 @@ public class AnalyzedModuleTree extends JTree {
 			if(temp.getParentofChild().getUniqueName().equals("root"))
 		{
 			stop=false;
-		}else
-		{
+		}else{
 			temp=temp.getParentofChild();
 			continue;
 		}

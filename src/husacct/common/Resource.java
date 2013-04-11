@@ -7,6 +7,20 @@ import common.Logger;
 public class Resource {
 	private static Logger logger = Logger.getLogger(Resource.class);
 
+
+
+
+
+
+
+	
+
+
+
+	
+
+	
+
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
 	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
@@ -51,6 +65,9 @@ public class Resource {
 	public static final String ICON_EXTERNALLIB=ICONSET_PATH+"define_externalLib.png";
 	public static final String ICON_SUBSYSTEMJAVA=ICONSET_PATH+"define-subsystem.png";
 	public static final String CONTROL_TEST_WORKSPACE = RESOURCE_PATH + "control/testworkspace.xml";
+	public static final String ICON_ROOT=ICONSET_PATH+"define-root.png";
+	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
+	public static String ICON_FACADE=ICONSET_PATH+"define-facade.png";;
 	
 	public static URL get(String path){
 		URL resourceUrl = null;

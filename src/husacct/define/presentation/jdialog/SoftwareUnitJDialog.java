@@ -8,6 +8,7 @@ import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.conventions_checker.AnalyzedComponentHelper;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -38,9 +39,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
+	private long _moduleId;
 	
 	public SoftwareUnitJDialog(long moduleId) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
+		_moduleId=moduleId;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
 		initUI();
@@ -90,15 +93,18 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
 		softwareUnitScrollPane.setSize(400, 220);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
-		if(JtreeController.isLoaded())
+		if(JtreeController.instance().isLoaded())
 		{
-			this.softwareDefinitionTree= JtreeController.getTree();
+			this.softwareDefinitionTree= JtreeController.instance().getTree();
 			softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
 		}else {
 		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
+		AnalyzedComponentHelper helpercheker= new AnalyzedComponentHelper();
+		helpercheker.chekIfDataIsTheSame(rootComponent);
 		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
+		JtreeController.instance().setCurrentTree(this.softwareDefinitionTree);
 		softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
-		JtreeController.setLoadState(true);
+		JtreeController.instance().setLoadState(true);
 		}
 		return softwareUnitScrollPane;
 	}
@@ -155,13 +161,13 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 		for (TreePath path : paths.getSelectionPaths()){
 			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-			this.softwareDefinitionTree.removeTreeItem(selectedComponent);
+			this.softwareDefinitionTree.removeTreeItem(_moduleId,selectedComponent);
 			this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
 		}
 		this.dispose();
 		
 		
-//		TreePath path = this.softwareDefinitionTree.getSelectionPath();
+
 	}
 	
 	private void cancel() {

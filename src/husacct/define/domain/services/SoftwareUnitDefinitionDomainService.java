@@ -58,7 +58,7 @@ public class SoftwareUnitDefinitionDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
-		JtreeController.registerTreeRestore(unit.getName());
+		JtreeController.instance().registerTreeRestore(moduleId,unit.getName());
 		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}

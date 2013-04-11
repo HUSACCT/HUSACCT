@@ -1,11 +1,13 @@
 package husacct.define.presentation.moduletree;
 
 import husacct.common.Resource;
+import husacct.define.domain.module.Facade;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.ComponentComponent;
 import husacct.define.task.components.ExternalLibraryComponent;
+import husacct.define.task.components.FacadeComponent;
 import husacct.define.task.components.LayerComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 import husacct.define.task.components.SubSystemComponent;
@@ -48,7 +50,8 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		ImageIcon icon = new ImageIcon();
 		if(component.getType().equals("PACKAGE")) {
 			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
-		} else if(component.getType().equals("CLASS")) {
+		}
+		else if(component.getType().equals("CLASS")) {
 			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
 		} else if(component.getType().equals("INTERFACE")) {
 			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
@@ -62,6 +65,15 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		{
 			icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA));
 		}
+		else if(component.getType().equals("ROOT"))
+		{
+			icon = new ImageIcon(Resource.get(Resource.ICON_ROOT));
+		}
+		
+		if(component.getType().equals("PACKAGE")&&component.getChildren().size()==0) {
+			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));
+		}
+		
 		
 		return icon;
 	}
@@ -78,6 +90,8 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEM));
 		} else if(component instanceof SoftwareArchitectureComponent) {
 			icon = new ImageIcon(Resource.get(Resource.ICON_SOFTWARE_ARCHITECTURE));
+		}else if(component instanceof FacadeComponent) {
+			icon = new ImageIcon(Resource.get(Resource.ICON_FACADE));
 		}
 		return icon;
 	}

@@ -17,6 +17,7 @@ import husacct.define.persistency.PersistentDomain.DomainElement;
 import husacct.define.task.ApplicationController;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
+import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
 
 import java.util.ArrayList;
@@ -176,5 +177,11 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	
 	public SoftwareUnitController getSoftwareUnitController(){
 		return new SoftwareUnitController(0);
+	}
+
+	@Override
+	public void isReanalyzed() {
+		JtreeController.instance().setLoadState(false);
+		
 	}
 }

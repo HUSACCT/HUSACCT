@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
@@ -114,8 +115,11 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
+			Facade f= new Facade();
 			Component newComponent = new Component(componentName, componentDescription);
-			this.passModuleToService(selectedModuleId, newComponent);
+			f.setName("Facade"+newComponent.getName());
+			f.addSubModule(newComponent);
+			this.passModuleToService(selectedModuleId, f);
 			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
@@ -165,6 +169,7 @@ public class DefinitionController extends Observable implements Observer {
 		} catch (Exception e) {
 			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			System.out.println(e.getStackTrace());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
