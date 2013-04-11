@@ -15,27 +15,26 @@ public class ThreadWithLoader implements Runnable {
 	private Thread monitorThread;
 	
 	public ThreadWithLoader(MainController mainController, String progressInfoText, Runnable threadTask){
-		int taskCounter = ThreadWithLoader.taskcounter++;
-		
+		int taskCounter = ThreadWithLoader.taskcounter++;		
 		loadingDialog = new LoadingDialog(mainController, progressInfoText);
-		taskThread = new Thread(threadTask);
-		
-		monitorThread = new MonitorThread(taskThread, loadingDialog);
-		
-		loadingDialog.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosed(WindowEvent e) {
-				taskThread.interrupt();
-			}
-		});
-		
+		taskThread = new Thread(threadTask);		
+		monitorThread = new MonitorThread(taskThread, loadingDialog);	
 		taskThread.setName(String.format("thread-%s", taskCounter));
 		monitorThread.setName(String.format("monitor-%s", taskCounter));
+	}
+	
+	public LoadingDialog getLoader() {
+		return this.loadingDialog;
+	}
+	
+	public Thread getThread() {
+		return this.taskThread;
 	}
 
 	@Override
 	public void run() {
 		taskThread.start();
+		
 		monitorThread.start();
 		loadingDialog.run();
 	}

@@ -8,11 +8,13 @@ import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
+import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -101,6 +103,27 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	
 	public MainController getMainController(){
 		return mainController;
+	}
+	
+	@Override
+	public void finishPreAnalysing() {
+		mainController.getStateController().addState(States.PREANALYSED);
+	}
+	
+	@Override
+	public boolean isPreAnalysed() {
+		return getState().contains(States.PREANALYSED);
+	}
+	
+	@Override
+	public List<States> getState() {
+		return this.getMainController().getStateController().getState();
+	}
+	
+
+	@Override
+	public void updateProgress(int progressPercentage) {
+		mainController.getApplicationController().getCurrentLoader().setProgressText(progressPercentage);
 	}
 
 }

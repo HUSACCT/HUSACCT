@@ -19,6 +19,10 @@ public class StateController {
 	
 	private WorkspaceController workspaceController;
 	
+	private boolean isPreAnalysed = false;
+	private boolean isAnalysing = false;
+	private boolean isValidating = false;
+	
 	public StateController(MainController mainController){
 		workspaceController = mainController.getWorkspaceController();
 		states.add(States.NONE);
@@ -55,6 +59,9 @@ public class StateController {
 		if(validateService.isValidated()){
 			newStates.add(States.VALIDATED);
 		}
+		else if(isValidating()) {
+			newStates.add(States.VALIDATING);
+		}
 		
 		if(defineService.isMapped()){
 			newStates.add(States.MAPPED);
@@ -64,9 +71,14 @@ public class StateController {
 			newStates.add(States.ANALYSED);
 		}
 		
+		if(isAnalysing()) {
+			newStates.add(States.ANALYSING);
+		}
+		
 		if(defineService.isDefined()){
 			newStates.add(States.DEFINED);
 		}
+		
 		
 		ApplicationDTO applicationData = defineService.getApplicationDetails();
 		if(applicationData.projects.get(0).paths.size() > 0){
@@ -102,5 +114,36 @@ public class StateController {
 		for(IStateChangeListener listener : this.stateListeners){
 			listener.changeState(states);
 		}
+	}
+	public void addState(States State) {
+		this.states.add(State);
+	}
+	
+	public void removeState(States State) {
+		this.states.remove(State);
+	
+	}
+	
+	public boolean isValidating() {
+		return this.isValidating;
+	}
+	
+	public boolean isAnalysing() {
+		return this.isAnalysing;
+	}
+	
+	public void setAnalysing(boolean analysing) {		
+		this.isAnalysing = analysing;
+		checkState();
+	}
+	
+	public void setValidating(boolean validating) {
+		this.isValidating = validating;
+		checkState();
+	}
+
+	public void setPreAnalysed(boolean preAnalysed) {
+		this.isPreAnalysed = preAnalysed;
+		
 	}
 }
