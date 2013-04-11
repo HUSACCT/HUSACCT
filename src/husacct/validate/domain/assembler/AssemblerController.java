@@ -14,6 +14,11 @@ public class AssemblerController {
 		return assembler.createCategoryDTO(rules);
 	}
 
+	public RuleTypeDTO[] createRuleTypeDTO(List<RuleType> rules) {
+		RuletypeAssembler assembler = new RuletypeAssembler();
+		return assembler.createRuleTypeDTO(rules);
+	}
+	
 	public RuleTypeDTO createRuleTypeDTO(RuleType rule, ViolationType violationtype) {
 		RuletypeAssembler assembler = new RuletypeAssembler();
 		return assembler.createRuleTypeDTO(rule, violationtype);

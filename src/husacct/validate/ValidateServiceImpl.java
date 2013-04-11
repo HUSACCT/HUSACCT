@@ -188,13 +188,11 @@ public final class ValidateServiceImpl extends ObservableService implements
 
 	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		return domain.getDefaultRuleTypeOfModule(type);
 	}
 
 	@Override
 	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		return domain.getAllowedRuleTypeOfModule(type);
 	}
 }
