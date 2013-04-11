@@ -2,6 +2,7 @@ package husacct.analyse;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.services.IServiceListener;
 
 import java.util.ArrayList;
