@@ -21,7 +21,7 @@ public class FacadeConventionRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 	private HashSet<String> facadeCollection;
 
-	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity) {
+	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationtypes, Severity severity) {
 		super(key, categoryKey, violationtypes, exceptionrules, severity);
 
 		this.facadeCollection = new HashSet<String>();
