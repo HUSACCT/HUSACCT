@@ -3,6 +3,7 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ILocaleChangeListener;
+import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
@@ -20,6 +21,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +54,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private Logger logger = Logger.getLogger(BrowseViolations.class);
 	private final TaskServiceImpl taskServiceImpl;
 	private final SimpleDateFormat dateFormat;
+	
 
 	private JButton buttonSaveInHistory;
 	private JButton buttonLatestViolations;
@@ -188,6 +192,16 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
+				LoadingDialog currentLoader = validateThread.getLoader();		
+				currentLoader.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {		
+						ServiceProvider.getInstance().getControlService().setValidate(false);
+
+						logger.debug("Stopping Thread");				
+					}			
+				});	
+				
 				validateThread.run();
 			}
 		});

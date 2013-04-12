@@ -67,6 +67,10 @@ public class ApplicationController {
 		return this.currentLoader;
 	}
 	
+	public void setCurrentLoader(LoadingDialog ld) {
+		this.currentLoader = ld;
+	}
+	
 	public void showAboutHusacctGui(){
 		new AboutDialog(mainController);
 	}
