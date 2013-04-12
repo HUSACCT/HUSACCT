@@ -46,6 +46,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	public JRadioButton UIMapping;
 	public JRadioButton regExMapping;
 	
+	public JTextField regExTextField;
+	
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
 	
@@ -147,20 +149,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		regExMappingPanel.add(regExLabel);
 		regExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegularExpression"));
 		
-		JTextField regExTextfield = new JTextField();
-		regExTextfield.setToolTipText(DefaultMessages.TIP_MODULE);
-		regExMappingPanel.add(regExTextfield);
+		regExTextField = new JTextField();
+		regExTextField.setToolTipText(DefaultMessages.TIP_REGEXLANGUAGE);
+		regExMappingPanel.add(regExTextField);
 		
 		return regExMappingPanel;
-	}
-	
-	private GridBagLayout createRegExMappingPanelLayout() {
-		GridBagLayout regExPanelLayout = new GridBagLayout();
-		regExPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.1 };
-		regExPanelLayout.rowHeights = new int[] { 25, 25, 220 };
-		regExPanelLayout.columnWeights = new double[] { 0.0 };
-		regExPanelLayout.columnWidths = new int[] { 500 };
-		return regExPanelLayout;
 	}
 	
 	private JPanel createButtonPanel() {
@@ -185,16 +178,12 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			this.cancel();
 		}
 		else if (action.getSource() == this.UIMapping) {
-			System.out.println(this.getContentPane().getComponentCount());
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
 			this.pack();
-			this.repaint();
 		}
 		else if (action.getSource() == this.regExMapping) {
-			System.out.println(this.getContentPane().getComponentCount());
 			this.getContentPane().add(this.createRegExMappingPanel(), BorderLayout.CENTER);
 			this.pack();
-			this.repaint();
 		}
 	}
 	
@@ -224,11 +213,17 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
-		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
-		for (TreePath path : paths.getSelectionPaths()){
-			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-			this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
+		if(regExMappingPanel != null) {
+			this.softwareUnitController.save(regExTextField.getText());
 		}
+		else {
+			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
+			for (TreePath path : paths.getSelectionPaths()){
+				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+				this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
+			}
+		}
+		
 		this.dispose();
 		
 		
