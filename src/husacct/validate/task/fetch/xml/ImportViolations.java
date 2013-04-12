@@ -17,12 +17,12 @@ public class ImportViolations extends XmlImportUtils {
 
 	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
 		List<Violation> violations = new ArrayList<Violation>();
-		for(Element violationElement : violationsElement.getChildren()) {
+		for (Element violationElement : violationsElement.getChildren()) {
 			Severity violationSeverity = null;
 
 			final String id = violationElement.getChildText("severityId");
-			for(Severity severity : severities) {
-				if(id.equals(severity.getId().toString())) {
+			for (Severity severity : severities) {
+				if (id.equals(severity.getId().toString())) {
 					violationSeverity = severity;
 					break;
 				}

@@ -2,9 +2,7 @@ package husacct.validate.task.extensiontypes;
 
 public class ExtensionTypes {
 	public enum ExtensionType {
-		PDF("pdf"), 
-		HTML("html"), 
-		XML("xml");
+		PDF("pdf"), HTML("html"), XML("xml");
 
 		private String extension;
 
@@ -17,10 +15,10 @@ public class ExtensionTypes {
 		}
 	}
 
-	public String[] getExtensionTypes() {		
+	public String[] getExtensionTypes() {
 		String[] extensionTypes = new String[ExtensionType.values().length];
 		int extensionTypesIndex = 0;
-		for(ExtensionType extensionType : ExtensionType.values()) {
+		for (ExtensionType extensionType : ExtensionType.values()) {
 			extensionTypes[extensionTypesIndex] = extensionType.getExtension();
 			extensionTypesIndex++;
 		}

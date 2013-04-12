@@ -6,9 +6,9 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.presentation.BrowseViolations;
 import husacct.validate.presentation.FilterViolations;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class FilterPanel extends JPanel {
 	private final FilterViolations filterViolations;
 	private JCheckBox applyFilter;
 	private JButton buttonEditFilter;
-	private JRadioButton rdbtnIndirect, rdbtnAll, rdbtnDirect;
+	private JRadioButton radioButtonIndirect, radioButtonAll, radioButtonDirect;
 	private static Logger logger = Logger.getLogger(FilterPanel.class);
 
 	public FilterPanel(BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl) {
@@ -47,15 +47,15 @@ public class FilterPanel extends JPanel {
 	private void initComponents() {
 		applyFilter = new JCheckBox("Apply Filter");
 		buttonEditFilter = new JButton("Edit Filter");
-		rdbtnAll = new JRadioButton("All");
-		rdbtnDirect = new JRadioButton("Direct");
-		rdbtnIndirect = new JRadioButton("Indirect");
+		radioButtonAll = new JRadioButton("All");
+		radioButtonDirect = new JRadioButton("Direct");
+		radioButtonIndirect = new JRadioButton("Indirect");
 
 		ButtonGroup filterIndirectButtonGroup = new ButtonGroup();
-		filterIndirectButtonGroup.add(rdbtnAll);
-		filterIndirectButtonGroup.add(rdbtnDirect);
-		filterIndirectButtonGroup.add(rdbtnIndirect);
-		rdbtnAll.setSelected(true);
+		filterIndirectButtonGroup.add(radioButtonAll);
+		filterIndirectButtonGroup.add(radioButtonDirect);
+		filterIndirectButtonGroup.add(radioButtonIndirect);
+		radioButtonAll.setSelected(true);
 
 		createBaseLayout();
 		addListeners();
@@ -66,11 +66,11 @@ public class FilterPanel extends JPanel {
 
 		GroupLayout.SequentialGroup horizontalRadioButtonGroup = filterPane.createSequentialGroup();
 		horizontalRadioButtonGroup.addContainerGap();
-		horizontalRadioButtonGroup.addComponent(rdbtnAll);
+		horizontalRadioButtonGroup.addComponent(radioButtonAll);
 		horizontalRadioButtonGroup.addPreferredGap(ComponentPlacement.RELATED);
-		horizontalRadioButtonGroup.addComponent(rdbtnDirect);
+		horizontalRadioButtonGroup.addComponent(radioButtonDirect);
 		horizontalRadioButtonGroup.addPreferredGap(ComponentPlacement.RELATED);
-		horizontalRadioButtonGroup.addComponent(rdbtnIndirect);
+		horizontalRadioButtonGroup.addComponent(radioButtonIndirect);
 
 		GroupLayout.ParallelGroup horizontalGroup = filterPane.createParallelGroup(Alignment.LEADING);
 		horizontalGroup.addComponent(buttonEditFilter);
@@ -80,9 +80,9 @@ public class FilterPanel extends JPanel {
 		filterPane.setHorizontalGroup(horizontalGroup);
 
 		GroupLayout.ParallelGroup verticalRadioButtonGroup = filterPane.createParallelGroup(Alignment.LEADING, false);
-		verticalRadioButtonGroup.addComponent(rdbtnAll);
-		verticalRadioButtonGroup.addComponent(rdbtnDirect);
-		verticalRadioButtonGroup.addComponent(rdbtnIndirect);
+		verticalRadioButtonGroup.addComponent(radioButtonAll);
+		verticalRadioButtonGroup.addComponent(radioButtonDirect);
+		verticalRadioButtonGroup.addComponent(radioButtonIndirect);
 
 		GroupLayout.SequentialGroup verticalGroup = filterPane.createSequentialGroup();
 		verticalGroup.addComponent(applyFilter);
@@ -119,7 +119,7 @@ public class FilterPanel extends JPanel {
 				filterViolations.setVisible(true);
 			}
 		});
-		rdbtnAll.addActionListener(new ActionListener() {
+		radioButtonAll.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -130,7 +130,8 @@ public class FilterPanel extends JPanel {
 						try {
 							Thread.sleep(1);
 							browseViolations.loadAfterChange();
-						} catch (InterruptedException e) {
+						}
+						catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -140,7 +141,7 @@ public class FilterPanel extends JPanel {
 
 			}
 		});
-		rdbtnDirect.addActionListener(new ActionListener() {
+		radioButtonDirect.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -156,7 +157,8 @@ public class FilterPanel extends JPanel {
 									browseViolations.loadAfterChange();
 								}
 							});
-						} catch (InterruptedException e) {
+						}
+						catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -166,7 +168,7 @@ public class FilterPanel extends JPanel {
 
 			}
 		});
-		rdbtnIndirect.addActionListener(new ActionListener() {
+		radioButtonIndirect.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -182,7 +184,8 @@ public class FilterPanel extends JPanel {
 									browseViolations.loadAfterChange();
 								}
 							});
-						} catch (InterruptedException e) {
+						}
+						catch (InterruptedException e) {
 							logger.debug(e.getMessage());
 						}
 					}
@@ -195,19 +198,19 @@ public class FilterPanel extends JPanel {
 	}
 
 	public List<Violation> fillViolationsTable(List<Violation> violations) {
-		
+
 		List<Violation> violationsIndirect = new ArrayList<Violation>();
 
-		if(rdbtnAll.isSelected()){
+		if (radioButtonAll.isSelected()) {
 			return violations;
 		}
-		boolean isIndirect = rdbtnIndirect.isSelected();
+		boolean isIndirect = radioButtonIndirect.isSelected();
 		for (Violation violation : violations) {
 			if (violation.isIndirect() == isIndirect) {
 				violationsIndirect.add(violation);
 			}
 		}
-		
+
 		return violationsIndirect;
 	}
 

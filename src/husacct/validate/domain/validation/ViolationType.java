@@ -6,14 +6,14 @@ public class ViolationType {
 	private boolean isActive;
 	private Severity severity;
 
-	public ViolationType(String violationtypeKey, Severity severity){
+	public ViolationType(String violationtypeKey, Severity severity) {
 		this.violationtypeKey = violationtypeKey;
 		this.violationDescriptionKey = violationtypeKey + "Description";
 		this.isActive = true;
 		this.setSeverity(severity);
 	}
 
-	public ViolationType(String violationtypeKey, boolean isActive, Severity severity){
+	public ViolationType(String violationtypeKey, boolean isActive, Severity severity) {
 		this.violationtypeKey = violationtypeKey;
 		this.violationDescriptionKey = violationtypeKey + "Description";
 		this.isActive = isActive;

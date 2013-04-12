@@ -16,15 +16,15 @@ public class ImportFactory {
 	private final ImportSeverities importSeverities;
 	private final ImportSeveritiesPerTypesPerProgrammingLanguages importSeveritiesPerRuleTypesPerProgrammingLanguages;
 	private final ImportActiveViolationTypes importActiveViolationTypes;
-	
-	ImportFactory(){
+
+	ImportFactory() {
 		this.importSeverities = new ImportSeverities();
 		this.importSeveritiesPerRuleTypesPerProgrammingLanguages = new ImportSeveritiesPerTypesPerProgrammingLanguages();
 		this.importActiveViolationTypes = new ImportActiveViolationTypes();
 	}
 
 	List<Severity> importSeverities(Element element) {
-		return	importSeverities.importSeverities(element);
+		return importSeverities.importSeverities(element);
 	}
 
 	HashMap<String, HashMap<String, Severity>> importSeveritiesPerTypesPerProgrammingLanguages(Element element, List<Severity> severities) {
