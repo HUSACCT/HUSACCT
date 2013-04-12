@@ -105,7 +105,7 @@ public class AnalyseMenu extends JMenu{
 				if(states.contains(States.OPENED)){
 					setApplicationPropertiesItem.setEnabled(true);
 				}
-				if(states.contains(States.APPSET)){
+				if(states.contains(States.APPSET) && (!states.contains(States.VALIDATING))){
 					analyseNowItem.setEnabled(true);
 				}
 				if(states.contains(States.ANALYSED)){

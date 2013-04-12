@@ -132,6 +132,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void setValidate(boolean validate) {
 		this.mainController.getStateController().setValidating(validate);
+		this.mainController.getStateController().checkState();
 	}
 
 }

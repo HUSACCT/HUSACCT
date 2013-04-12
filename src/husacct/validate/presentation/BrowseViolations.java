@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ILocaleChangeListener;
 import husacct.control.presentation.util.LoadingDialog;
+import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
@@ -54,7 +55,7 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	private Logger logger = Logger.getLogger(BrowseViolations.class);
 	private final TaskServiceImpl taskServiceImpl;
 	private final SimpleDateFormat dateFormat;
-	
+
 
 	private JButton buttonSaveInHistory;
 	private JButton buttonLatestViolations;
@@ -191,18 +192,23 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		buttonValidate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
-				LoadingDialog currentLoader = validateThread.getLoader();		
-				currentLoader.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosing(WindowEvent e) {		
-						ServiceProvider.getInstance().getControlService().setValidate(false);
+				if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)){
+					ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
+					LoadingDialog currentLoader = validateThread.getLoader();		
+					currentLoader.addWindowListener(new WindowAdapter() {
+						@Override
+						public void windowClosing(WindowEvent e) {		
+							ServiceProvider.getInstance().getControlService().setValidate(false);
 
-						logger.debug("Stopping Thread");				
-					}			
-				});	
-				
-				validateThread.run();
+							logger.debug("Stopping Thread");				
+						}			
+					});	
+
+					validateThread.run();
+				}
+				else {
+					//TODO make an error frame that validating or analysing is already running
+				}
 			}
 		});
 		buttonSaveInHistory.addActionListener(new ActionListener() {
