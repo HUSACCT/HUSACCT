@@ -30,6 +30,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -47,6 +49,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	public JRadioButton regExMapping;
 	
 	public JTextField regExTextField;
+	
+	public JLabel dynamicRegExLabel;
 	
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
@@ -151,9 +155,44 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		
 		regExTextField = new JTextField();
 		regExTextField.setToolTipText(DefaultMessages.TIP_REGEXLANGUAGE);
+		
+		regExTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				updateDynamicRegExField();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				updateDynamicRegExField();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				updateDynamicRegExField();
+			}
+			});
+		
 		regExMappingPanel.add(regExTextField);
 		
+		dynamicRegExLabel = new JLabel("bülük");
+		regExMappingPanel.add(dynamicRegExLabel);
+		
 		return regExMappingPanel;
+	}
+	
+	private void updateDynamicRegExField() {
+		String enteredText = regExTextField.getText();
+		if(enteredText.startsWith("*") && enteredText.endsWith("*")) {
+			enteredText = enteredText.replace("*", "");
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExContains") + " " + enteredText);
+		}
+		else if(enteredText.startsWith("*")) {
+			enteredText = enteredText.replace("*", "");
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExEndsWith") + " " + enteredText);
+		}
+		else if(enteredText.endsWith("*")) {
+			enteredText = enteredText.replace("*", "");
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExStartsWith") + " " + enteredText);
+		}
+		else {
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExIsExactly") + " " + enteredText);
+		}
 	}
 	
 	private JPanel createButtonPanel() {

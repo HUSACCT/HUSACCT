@@ -12,7 +12,7 @@ public class DefaultMessages {
 	public static final String TIP_MODULE = ServiceProvider.getInstance().getLocaleService().getTranslatedString("NameOfTheModule");
 	public static final String TIP_MODULEDESCRIPTION = ServiceProvider.getInstance().getLocaleService().getTranslatedString("DescriptionOfTheModule");
 	public static final String TIP_FACADE = ServiceProvider.getInstance().getLocaleService().getTranslatedString("FacadeAccessible");
-	public static final String TIP_REGEXLANGUAGE = ServiceProvider.getInstance().getLocaleService().getTranslatedString("FacadeAccessible");
+	public static final String TIP_REGEXLANGUAGE = ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExLanguage");
 	
 	public static final String MSG_NOARCHITECTURENAME = ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoArchitectureName");
 
