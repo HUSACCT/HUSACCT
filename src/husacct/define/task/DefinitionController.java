@@ -8,7 +8,6 @@ import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
-import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
@@ -38,7 +37,6 @@ public class DefinitionController extends Observable implements Observer {
 	
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
-	private DefaultRuleDomainService defaultRuleDomainSevice;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public static DefinitionController getInstance() {
@@ -207,21 +205,25 @@ public class DefinitionController extends Observable implements Observer {
 	/**
 	 * Remove the selected software unit
 	 */
-	public void removeSoftwareUnit(String softwareUnitName) {
-		logger.info("Removing software unit " + softwareUnitName);
+	public void removeSoftwareUnits(List<String> softwareUnitNames) {
 		try {
 			long moduleId = getSelectedModuleId();
+			
+			boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
+			
+			for(String softwareUnit : softwareUnitNames) {
+				logger.info("Removing software unit " + softwareUnit);
 
-			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
-				if (confirm) {
-					// Remove the software unit
-					JPanelStatus.getInstance("Removing software unit").start();
-					this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnitName);
-					// Update the software unit table
-					this.notifyObservers();
+				if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
+					if (confirm) {
+						// Remove the software unit
+						JPanelStatus.getInstance("Removing software unit").start();
+						this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
+						// Update the software unit table
+						this.notifyObservers();
+					}
 				}
-			}
+			} 
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
@@ -363,11 +365,6 @@ public class DefinitionController extends Observable implements Observer {
 
 	public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
 		return this.appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
-	}
-	
-	public ArrayList<Long> getDefinedRuleIdsBySelectedModule()
-	{
-		return this.defaultRuleDomainSevice.getDefaultRulesIdsByModuleFromId(getSelectedModuleId());
 	}
 	
 	public HashMap<String, Object> getRuleDetailsByAppliedRuleId(long appliedRuleId){
