@@ -39,7 +39,7 @@ public class CSharpTreeConvertController {
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
         final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-        TreePrinter tp = new TreePrinter(compilationCommonTree); //Debug functie
+        new TreePrinter(compilationCommonTree); //Debug functie
         delegateASTToGenerators(compilationCommonTree);
     }
 
@@ -110,7 +110,6 @@ public class CSharpTreeConvertController {
 
     private void saveUsing(CommonTree usingTree) {
         csUsingGenerator.add(usingTree);
-        //usings.add(usingTree); //usingTree komt goed binnen, word fout opgeslagen (zonder children) Stak i.p.v List?
     }
 
     private void delegateUsings() {
@@ -122,7 +121,7 @@ public class CSharpTreeConvertController {
     }
 
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
-        String analysedClass;        
+        String analysedClass;
         if (isInnerClass) {
             analysedClass = csClassGenerator.generateToModel(classTree, getParentName(namespaceStack), getParentName(classNameStack));
         } else {
@@ -132,7 +131,7 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateInheritanceDefinition(CommonTree inheritanceTree) {
-        csInheritanceGenerator.generateToDomain(inheritanceTree, getParentName(classNameStack));
+        csInheritanceGenerator.generateToDomain(inheritanceTree, belongsToClass(namespaceStack, classNameStack));
     }
 
     private void delegateAttribute(CommonTree attributeTree) {

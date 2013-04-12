@@ -7,7 +7,7 @@ import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpUsingGenerator extends CSharpGenerator {
 
-    ArrayList<UsingInformation> usingArray;
+    ArrayList<UsingInformation> usingArray = new ArrayList<>();
 
     public void add(CommonTree usingTree) {
         usingArray = getUsingModule(usingTree);
