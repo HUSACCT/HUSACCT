@@ -170,7 +170,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		
 		regExMappingPanel.add(regExTextField);
 		
-		dynamicRegExLabel = new JLabel("bülük");
+		dynamicRegExLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EnterRegExLabel"));
 		regExMappingPanel.add(dynamicRegExLabel);
 		
 		return regExMappingPanel;
