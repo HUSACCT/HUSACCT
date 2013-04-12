@@ -139,4 +139,8 @@ public abstract class RuleType {
 		}
 		return null;
 	}
+
+	public boolean equals(RuleTypes desiredRuleType) {
+	    return this.getKey().equals(desiredRuleType.toString());
+	}
 }
