@@ -1,87 +1,87 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import java.util.List;
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import java.util.ArrayList;
+import org.antlr.runtime.tree.CommonErrorNode;
 import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpUsingGenerator extends CSharpGenerator {
 
-    private String usingClass;
-    private String usingModule;
-    private String completeUsingDeclaration;
-    private boolean isCompleteNamespaceUsing;
-    private int lineNumber;
+    ArrayList<UsingInformation> usingArray;
 
-    public void generateToDomain(CommonTree usingTree, String className) {
-        this.usingClass = className;
-        fillUsingObject(usingTree);
-        modelService.createImport(usingClass, usingModule, lineNumber, completeUsingDeclaration, isCompleteNamespaceUsing);
+    public void add(CommonTree usingTree) {
+        usingArray = getUsingModule(usingTree);
     }
 
-    private void fillUsingObject(CommonTree usingTree) {
-        String importDetails = createImportDetails(usingTree, "--");
-        String declaration = convertToImportDeclaration(importDetails, "--");
-
-        this.lineNumber = usingTree.getLine();
-        this.completeUsingDeclaration = declaration;
-        this.isCompleteNamespaceUsing = isPackageImport(declaration);
-        if (isCompleteNamespaceUsing) {
-            usingModule = removeStar(declaration);
-        } else {
-            usingModule = declaration;
+    public void generateToDomain(String location) {
+        String usingLocation = location;
+        for (UsingInformation ui : usingArray) {
+            String usingModule = removerStar(ui.module);
+            String completeUsingDeclaration = ui.module;
+            int lineNumber = ui.line;
+            boolean isCompleteNamespace = ui.isComplete;
+            modelService.createImport(usingLocation, usingModule, lineNumber, completeUsingDeclaration, isCompleteNamespace);
         }
     }
 
-    private String createImportDetails(CommonTree importTree, String detailSeperator) {
-        String details = "";
-        @SuppressWarnings("unchecked")
-        List<CommonTree> importDetail = (List<CommonTree>) importTree.getChildren();
-        if (importDetail != null) {
-            if (importDetail.size() < 2) {
-                if (!isDot(importDetail.get(0))) {
-                    details += importDetail.get(0).getText() + detailSeperator;
-                }
-                details += createImportDetails(importDetail.get(0), detailSeperator);
-            } else {
-                for (CommonTree singleDetail : importDetail) {
-                    if (!isDot(singleDetail)) {
-                        if (isStar(singleDetail)) {
-                            details += "*" + detailSeperator;
-                        } else {
-                            details += singleDetail.getText() + detailSeperator;
-                        }
-                    }
-                    details += createImportDetails(singleDetail, detailSeperator);
+    private ArrayList<UsingInformation> getUsingModule(CommonTree usingTree) {
+        ArrayList<UsingInformation> usings = new ArrayList<>();
+        for (int i = 0; i < usingTree.getChildCount(); i++) {
+            if (usingTree.getChild(i).getType() == CSharpParser.USING_NAMESPACE_DIRECTIVE) {
+                usings.add(getUsing((CommonTree) usingTree.getChild(i)));
+            } else if (usingTree.getChild(i) instanceof CommonErrorNode) {
+                usings.add(getUsingFromError((CommonErrorNode) usingTree.getChild(i)));
+            }
+        }
+        return usings;
+    }
+
+    private UsingInformation getUsing(CommonTree tree) {
+        String result = "";
+        UsingInformation usingInfo = new UsingInformation();
+        for (int i = 0; i < tree.getChildCount(); i++) {
+            if (tree.getChild(i).getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
+                result = ((CommonTree) tree.getChild(i).getChild(0)).token.getText();
+                for (int j = 1; j < tree.getChild(i).getChildCount(); j++) {
+                    result += getUsingPart((CommonTree) tree.getChild(i).getChild(j));
                 }
             }
         }
-        return details;
+        usingInfo.module = result;
+        usingInfo.line = tree.getLine();
+        usingInfo.isComplete = false;
+        return usingInfo;
     }
 
-    private String convertToImportDeclaration(String walkedImportDescription, String detailSeporator) {
-        String[] items = walkedImportDescription.split(detailSeporator);
-        String declaration = "";
-        for (int itemCount = 0; itemCount < items.length; itemCount++) {
-            if (itemCount > 0) {
-                declaration += ".";
-            }
-            declaration += items[itemCount];
+    private String getUsingPart(CommonTree partTree) {
+        String part = "";
+        if (partTree.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
+            part = "." + partTree.getChild(0).getText();
         }
-        return declaration;
+        return part;
     }
 
-    private boolean isPackageImport(String importString) {
-        return importString.contains("*");
+    private UsingInformation getUsingFromError(CommonErrorNode commonErrorNode) {
+        String usingPath = commonErrorNode.getText();
+        usingPath = usingPath.replace("using ", "");
+        usingPath = usingPath.replace(";", "");
+
+        UsingInformation usingInfo = new UsingInformation();
+        usingInfo.module = usingPath;
+        usingInfo.line = commonErrorNode.getLine();
+        usingInfo.isComplete = true;
+
+        return usingInfo;
     }
 
-    private boolean isDot(CommonTree treeChild) {
-        return treeChild.getText().equals(".");
+    private String removerStar(String module) {
+        return module.contains("*") ? module.substring(0, module.length() - 2) : module;
     }
 
-    private boolean isStar(CommonTree treeChild) {
-        return treeChild.getText().equals(".*");
-    }
+    public class UsingInformation {
 
-    private String removeStar(String declaration) {
-        return declaration.replace(".*", "");
+        String module;
+        int line;
+        boolean isComplete;
     }
 }

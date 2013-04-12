@@ -15,14 +15,25 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
         modelService.createPackage(uniqueName, parentNamespace, namespaceName);
         return namespaceName;
     }
-    
-     public static String getNamespaceName(Tree namespaceTree) {
+
+    public String getNamespaceName(Tree namespaceTree) {
         for (int i = 0; i < namespaceTree.getChildCount(); i++) {
-            if (namespaceTree.getChild(i).getType() == CSharpParser.QUALIFIED_IDENTIFIER) {
-                CommonTree mTree = (CommonTree) namespaceTree.getChild(i).getChild(0);
-                return mTree.token.getText();
-            }
+            return getQualifiedIdentifiers((CommonTree) namespaceTree.getChild(i));
         }
         throw new ParserException();
+    }
+
+    public String getQualifiedIdentifiers(CommonTree tree) {
+        String result = "";
+        if (tree.getType() == CSharpParser.QUALIFIED_IDENTIFIER) {
+        for (int i = 0; i < tree.getChildCount(); i++) {
+             
+                result += "." + ((CommonTree) tree.getChild(i)).token.getText();
+            
+        }}
+        if (result.length() > 0) {
+            result = result.substring(1);
+        }
+        return result;
     }
 }

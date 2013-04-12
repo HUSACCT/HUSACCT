@@ -109,13 +109,12 @@ public class CSharpTreeConvertController {
     }
 
     private void saveUsing(CommonTree usingTree) {
-        usings.add(usingTree);
+        csUsingGenerator.add(usingTree);
+        //usings.add(usingTree); //usingTree komt goed binnen, word fout opgeslagen (zonder children) Stak i.p.v List?
     }
 
     private void delegateUsings() {
-        for (CommonTree usingTree : usings) {
-            csUsingGenerator.generateToDomain(usingTree, classNameStack.peek());
-        }
+        csUsingGenerator.generateToDomain(belongsToClass(namespaceStack, classNameStack));
     }
 
     private String delegateNamespace(CommonTree namespaceTree) {
