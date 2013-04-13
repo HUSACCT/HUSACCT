@@ -162,7 +162,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		packageCheckBox.setSelected(true);
 		classCheckBox.setSelected(true);
 		
-		JLabel packageClassChoice = new JLabel("Kies package of classes");
+		JLabel packageClassChoice = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ChooseClassOrPackage"));
 		regExMappingPanel.add(packageClassChoice);
 		Font bold=new Font(packageClassChoice.getFont().getName(),Font.BOLD,packageClassChoice.getFont().getSize());  
 		packageClassChoice.setFont(bold);
