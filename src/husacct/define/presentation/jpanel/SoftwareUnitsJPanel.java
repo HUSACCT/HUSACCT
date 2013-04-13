@@ -18,6 +18,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -121,9 +122,13 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		}
 	}
 	private void removeSoftwareUnit(){
-		if (getSelectedRow() != -1){
-			String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
-			DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
+		if (softwareUnitsTable.getSelectedRow() != -1){
+			List<String> selectedModules = new ArrayList<String>();
+			for(int selectedRow : softwareUnitsTable.getSelectedRows()) {
+				String softwareUnitName = (String)softwareUnitsTable.getValueAt(selectedRow, 0);
+				selectedModules.add(softwareUnitName);
+			}
+			DefinitionController.getInstance().removeSoftwareUnits(selectedModules);
 		}
 	}
 		

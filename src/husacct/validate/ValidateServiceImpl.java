@@ -22,7 +22,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {		
+public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable {
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
@@ -35,7 +35,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 
 	private boolean validationExecuted;
 
-	public ValidateServiceImpl(){
+	public ValidateServiceImpl() {
 		this.configuration = new ConfigurationServiceImpl();
 		this.domain = new DomainServiceImpl(configuration);
 		this.task = new TaskServiceImpl(configuration, domain);
@@ -43,30 +43,29 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
 	}
-	
+
 	/**
-	 * Gets all the Categories of all the available ruletypes
-	 * The RuleTypeDTO contains RuleTypeDTOs
-	 * The RuleTypeDTO contains ViolationTypeDTOs 
+	 * Gets all the Categories of all the available ruletypes The RuleTypeDTO
+	 * contains RuleTypeDTOs The RuleTypeDTO contains ViolationTypeDTOs
 	 */
 	@Override
-	public CategoryDTO[] getCategories(){
+	public CategoryDTO[] getCategories() {
 		return domain.getCategories();
 	}
 
 	@Override
-	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {		
-		if(!validationExecuted){
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
+		if (!validationExecuted) {
 			logger.debug("warning, method: getViolationsByLogicalPath executed but no validation is executed");
-		}		
+		}
 		return task.getViolationsByLogicalPath(logicalpathFrom, logicalpathTo);
 	}
 
 	@Override
 	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
-		if(!validationExecuted){
+		if (!validationExecuted) {
 			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
-		}	
+		}
 		return task.getViolationsByPhysicalPath(physicalpathFrom, physicalpathTo);
 	}
 
@@ -76,21 +75,21 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	}
 
 	@Override
-	public void checkConformance() {		
+	public void checkConformance() {
 		RuleDTO[] appliedRules = defineService.getDefinedRules();
-		domain.checkConformance(appliedRules);		
+		domain.checkConformance(appliedRules);
 		this.validationExecuted = true;
 		notifyServiceListeners();
 		gui.violationChanged();
 	}
 
 	@Override
-	public JInternalFrame getBrowseViolationsGUI(){
+	public JInternalFrame getBrowseViolationsGUI() {
 		return gui.getBrowseViolationsGUI();
 	}
 
 	@Override
-	public JInternalFrame getConfigurationGUI(){
+	public JInternalFrame getConfigurationGUI() {
 		return gui.getConfigurationGUI();
 	}
 
@@ -103,7 +102,8 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			task.importValidationWorkspace(workspaceData);
-		} catch (DatatypeConfigurationException e) {
+		}
+		catch (DatatypeConfigurationException e) {
 			logger.error("Error exporting the workspace: " + e.getMessage(), e);
 		}
 		notifyServiceListeners();
@@ -127,15 +127,15 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	@Override
 	public void exportViolations(File file, String fileType) {
 		report.createReport(file, fileType);
-	}	
+	}
 
-	//This method is only used for testing with the Testsuite
+	// This method is only used for testing with the Testsuite
 	public ConfigurationServiceImpl getConfiguration() {
 		return configuration;
 	}
 
-	//This method is only used for testing with the Testsuite
-	public void Validate(RuleDTO[] appliedRules){
+	// This method is only used for testing with the Testsuite
+	public void Validate(RuleDTO[] appliedRules) {
 		domain.checkConformance(appliedRules);
 	}
 }

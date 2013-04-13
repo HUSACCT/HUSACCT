@@ -5,6 +5,7 @@ import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.services.ObservableService;
 
 import javax.swing.JInternalFrame;
@@ -27,8 +28,16 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 		return service.getAvailableLanguages();
 	}
 	
+	@Deprecated
 	public void analyseApplication(String[] paths, String programmingLanguage){
 		service.analyseApplication(paths, programmingLanguage);
+		this.analyseInternalFrame = new AnalyseInternalFrame();
+		this.isAnalysed = true;
+		super.notifyServiceListeners();
+	}
+	
+	public void analyseApplication(ProjectDTO project){
+		service.analyseApplication((String[]) project.paths.toArray(new String[project.paths.size()]), project.programmingLanguage);
 		this.analyseInternalFrame = new AnalyseInternalFrame();
 		this.isAnalysed = true;
 		super.notifyServiceListeners();

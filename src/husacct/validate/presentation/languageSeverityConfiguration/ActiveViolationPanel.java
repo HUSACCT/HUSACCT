@@ -42,12 +42,10 @@ class ActiveViolationPanel extends JPanel {
 	private DefaultTableModel violationtypeModel;
 	private JButton apply, deselectAll, selectAll;
 	private JList categoryJList, ruletypeJList;
-	private JScrollPane categoryScrollpane, ruletypeScrollpane,
-			violationtypeScrollpane;
+	private JScrollPane categoryScrollpane, ruletypeScrollpane, violationtypeScrollpane;
 	private JTable violationtypeTable;
 
 	ActiveViolationPanel(TaskServiceImpl taskServiceImpl, HashMap<String, List<RuleType>> ruletypes, String language) {
-
 		categoryModel = new DefaultListModel();
 		ruletypeModel = new DefaultListModel();
 
@@ -91,9 +89,7 @@ class ActiveViolationPanel extends JPanel {
 		violationtypeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ruletypeScrollpane.setViewportView(violationtypeTable);
 
-
-		ruletypeJList.setSelectionMode(
-				ListSelectionModel.SINGLE_SELECTION);
+		ruletypeJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ruletypeJList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
@@ -182,11 +178,11 @@ class ActiveViolationPanel extends JPanel {
 	}
 
 	private void loadModels() {
-		String[] ViolationtypeModelHeaders = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Active")};
+		String[] ViolationtypeModelHeaders = { ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Active") };
 		violationtypeModel = new DefaultTableModel(ViolationtypeModelHeaders, 0) {
 			private static final long serialVersionUID = 3779670097825676765L;
-			Class<?>[] types = new Class[]{String.class, Boolean.class};
-			boolean[] canEdit = new boolean[]{false, true};
+			Class<?>[] types = new Class[] { String.class, Boolean.class };
+			boolean[] canEdit = new boolean[] { false, true };
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -198,7 +194,6 @@ class ActiveViolationPanel extends JPanel {
 				return canEdit[columnIndex];
 			}
 		};
-
 
 		violationtypeTable.setModel(violationtypeModel);
 	}
@@ -216,7 +211,8 @@ class ActiveViolationPanel extends JPanel {
 	private void SelectAllActionPerformed() {
 		if (!apply.isEnabled()) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
-		} else {
+		}
+		else {
 			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(true, i, 1);
 			}
@@ -226,7 +222,8 @@ class ActiveViolationPanel extends JPanel {
 	private void DeselectAllActionPerformed() {
 		if (!apply.isEnabled()) {
 			ServiceProvider.getInstance().getControlService().showInfoMessage(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ActiveViolationTypesNoViolationTypesInfoMessage"));
-		} else {
+		}
+		else {
 			for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 				violationtypeModel.setValueAt(false, i, 1);
 			}
@@ -235,15 +232,16 @@ class ActiveViolationPanel extends JPanel {
 
 	private void ApplyActionPerformed() {
 		activeRuletypes.get(ruletypeJList.getSelectedIndex());
-		for(int i = 0; i < violationtypeModel.getRowCount(); i++){
+		for (int i = 0; i < violationtypeModel.getRowCount(); i++) {
 			boolean test = (Boolean) violationtypeModel.getValueAt(i, 1);
 			try {
 				activeViolationtypes.get(i).setEnabled(test);
-			} catch (IndexOutOfBoundsException outOfBoundsException) {
+			}
+			catch (IndexOutOfBoundsException outOfBoundsException) {
 				logger.error("Something went wrong. Active violationtypes can not be set.");
 			}
 		}
-		
+
 		taskServiceImpl.setActiveViolationTypes(language, activeRuletypes);
 	}
 
@@ -281,7 +279,7 @@ class ActiveViolationPanel extends JPanel {
 		for (ActiveRuleType ruletype : activeRuletypes) {
 			if (ruletype.getRuleType().equals(ruletypekey)) {
 				for (ActiveViolationType violationtype : ruletype.getViolationTypes()) {
-					violationtypeModel.addRow(new Object[]{ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtype.getType()), violationtype.isEnabled()});
+					violationtypeModel.addRow(new Object[] { ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtype.getType()), violationtype.isEnabled() });
 				}
 				activeViolationtypes = ruletype.getViolationTypes();
 				break;
