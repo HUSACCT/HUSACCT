@@ -101,7 +101,7 @@ public class SoftwareUnitController extends PopUpController {
 		save(this.getModuleId(), softwareUnit, type);
 	}
 	
-	public void save(String regEx) {
+	public void saveRegEx(String regEx, String packageClass) {
 		String translatedRegEx = "";
 		
 		if(regEx.startsWith("*") && regEx.endsWith("*")) {
@@ -122,37 +122,103 @@ public class SoftwareUnitController extends PopUpController {
 		for(AnalysedModuleDTO module : this.getAnalyzedModulesWithChildren()) {
 			Matcher matcher = regExPattern.matcher(module.name);
 			
-			while(matcher.find()) {
-				logger.info("Adding software unit to module with id " + this.getModuleId());
-				try {
-					this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-					DefinitionController.getInstance().notifyObservers();
-				} catch (Exception e) {
-					this.logger.error(e.getMessage());
-					UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+			System.out.println(module.type);
+			
+			if(packageClass.equals("P")) {
+				if(module.type.equals("package")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
 				}
 			}
 			
-			checkChildRegEx(module, regExPattern);
+			else if(packageClass.equals("C")) {
+				if(module.type.equals("class") || module.type.equals("INTERFACE")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+			}
+			
+			else if(packageClass.equals("PC")) {
+				while(matcher.find()) {
+					logger.info("Adding software unit to module with id " + this.getModuleId());
+					try {
+						this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+						DefinitionController.getInstance().notifyObservers();
+					} catch (Exception e) {
+						this.logger.error(e.getMessage());
+						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+					}
+				}
+			}
+			
+			checkChildRegEx(module, regExPattern, packageClass);
 		}
 	}
 	
-	public void checkChildRegEx(AnalysedModuleDTO childModule, Pattern pattern) {
+	public void checkChildRegEx(AnalysedModuleDTO childModule, Pattern pattern, String packageClass) {
 		for(AnalysedModuleDTO module : childModule.subModules) {
 			Matcher matcher = pattern.matcher(module.name);
 			
-			while(matcher.find()) {
-				logger.info("Adding software unit to module with id " + this.getModuleId());
-				try {
-					this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-					DefinitionController.getInstance().notifyObservers();
-				} catch (Exception e) {
-					this.logger.error(e.getMessage());
-					UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+			if(packageClass.equals("P")) {
+				if(module.type.equals("package")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
 				}
 			}
 			
-			checkChildRegEx(module, pattern);
+			else if(packageClass.equals("C")) {
+				if(module.type.equals("class") || module.type.equals("INTERFACE")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+			}
+			
+			if(packageClass.equals("PC")) {
+				while(matcher.find()) {
+					logger.info("Adding software unit to module with id " + this.getModuleId());
+					try {
+						this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+						DefinitionController.getInstance().notifyObservers();
+					} catch (Exception e) {
+						this.logger.error(e.getMessage());
+						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+					}
+				}
+			}
+			
+			checkChildRegEx(module, pattern, packageClass);
 		}
 	}
 	

@@ -10,6 +10,7 @@ import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -23,8 +24,10 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -42,15 +45,18 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private JPanel UIMappingPanel;
 	private JPanel regExMappingPanel;
 	
-	public JButton saveButton;
-	public JButton cancelButton;
+	private JButton saveButton;
+	private JButton cancelButton;
 	
-	public JRadioButton UIMapping;
-	public JRadioButton regExMapping;
+	private JRadioButton UIMapping;
+	private JRadioButton regExMapping;
 	
-	public JTextField regExTextField;
+	private JTextField regExTextField;
 	
-	public JLabel dynamicRegExLabel;
+	private JLabel dynamicRegExLabel;
+	
+	private JCheckBox packageCheckBox;
+	private JCheckBox classCheckBox;
 	
 	public AnalyzedModuleTree softwareDefinitionTree;
 	private SoftwareUnitController softwareUnitController;
@@ -89,6 +95,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		typeSelectionPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		
 		JLabel typeSelectionLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectSoftwareDefinitionType"));
+		Font bold=new Font(typeSelectionLabel.getFont().getName(),Font.BOLD,typeSelectionLabel.getFont().getSize());  
+		typeSelectionLabel.setFont(bold);
 		typeSelectionPanel.add(typeSelectionLabel);
 		typeSelectionPanel.add(new JLabel(""));
 		
@@ -146,11 +154,29 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		this.getContentPane().remove(UIMappingPanel);
 
 		regExMappingPanel = new JPanel();
-		regExMappingPanel.setLayout(new GridLayout(2,2));
+		regExMappingPanel.setLayout(new GridLayout(6,2));
 		regExMappingPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		
+		packageCheckBox = new JCheckBox("Packages");
+		classCheckBox = new JCheckBox("Classes");
+		packageCheckBox.setSelected(true);
+		classCheckBox.setSelected(true);
+		
+		JLabel packageClassChoice = new JLabel("Kies package of classes");
+		regExMappingPanel.add(packageClassChoice);
+		Font bold=new Font(packageClassChoice.getFont().getName(),Font.BOLD,packageClassChoice.getFont().getSize());  
+		packageClassChoice.setFont(bold);
+		regExMappingPanel.add(new JLabel(""));
+		
+		regExMappingPanel.add(packageCheckBox);
+		regExMappingPanel.add(classCheckBox);
+		
+		regExMappingPanel.add(new JLabel(""));
+		regExMappingPanel.add(new JLabel(""));
 		
 		JLabel regExLabel = new JLabel();
 		regExMappingPanel.add(regExLabel);
+		regExMappingPanel.add(new JLabel(""));
 		regExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegularExpression"));
 		
 		regExTextField = new JTextField();
@@ -169,7 +195,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			});
 		
 		regExMappingPanel.add(regExTextField);
-		
+		regExMappingPanel.add(new JLabel(""));
 		dynamicRegExLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EnterRegExLabel"));
 		regExMappingPanel.add(dynamicRegExLabel);
 		
@@ -180,18 +206,18 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		String enteredText = regExTextField.getText();
 		if(enteredText.startsWith("*") && enteredText.endsWith("*")) {
 			enteredText = enteredText.replace("*", "");
-			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExContains") + " " + enteredText);
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExContains") + " '" + enteredText + "'");
 		}
 		else if(enteredText.startsWith("*")) {
 			enteredText = enteredText.replace("*", "");
-			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExEndsWith") + " " + enteredText);
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExEndsWith") + " '" + enteredText + "'");
 		}
 		else if(enteredText.endsWith("*")) {
 			enteredText = enteredText.replace("*", "");
-			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExStartsWith") + " " + enteredText);
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExStartsWith") + " '" + enteredText + "'");
 		}
 		else {
-			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExIsExactly") + " " + enteredText);
+			dynamicRegExLabel.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RegExIsExactly") + " '" + enteredText + "'");
 		}
 	}
 	
@@ -253,7 +279,27 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 
 	private void save() {
 		if(regExMappingPanel != null) {
-			this.softwareUnitController.save(regExTextField.getText());
+			if(!regExTextField.getText().equals("")) {
+				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
+					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
+					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
+						this.softwareUnitController.saveRegEx(regExTextField.getText(), "PC");
+					}
+					else if(packageCheckBox.isSelected()) {
+						this.softwareUnitController.saveRegEx(regExTextField.getText(), "P");
+					}
+					else if(classCheckBox.isSelected()) {
+						this.softwareUnitController.saveRegEx(regExTextField.getText(), "C");
+					}
+					this.dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectRegExCheckBoxError"),  "Message", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("FillInRegExError"),  "Message", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		else {
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
@@ -261,12 +307,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
 				this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
 			}
+			this.dispose();
 		}
-		
-		this.dispose();
-		
-		
-//		TreePath path = this.softwareDefinitionTree.getSelectionPath();
 	}
 	
 	private void cancel() {
