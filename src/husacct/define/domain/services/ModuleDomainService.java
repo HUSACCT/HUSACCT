@@ -42,7 +42,7 @@ public class ModuleDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		
 		SoftwareArchitecture.getInstance().removeModule(module);
-		JtreeController.instance().registerTreeRemoval(module);
+		//JtreeController.instance().registerTreeRemoval(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	

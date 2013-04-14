@@ -5,6 +5,8 @@ import husacct.define.domain.module.Module;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Component;
+import husacct.define.domain.module.SubSystem;
+
 import org.apache.log4j.Logger;
 
 public class DefineComponentFactory {
@@ -19,6 +21,8 @@ public class DefineComponentFactory {
 			returnComponent = DefineComponentFactory.createComponentComponent(module);
 		} else if(module instanceof Facade) {
 			returnComponent = DefineComponentFactory.createFacade(module);
+		} else if(module instanceof SubSystem) {
+			returnComponent = DefineComponentFactory.createModuleComponent(module);
 		
 		} else {
 			Logger logger = Logger.getLogger(DefineComponentFactory.class);
