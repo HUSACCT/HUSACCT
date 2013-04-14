@@ -6,6 +6,7 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
@@ -55,9 +56,7 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
-		AnalysedModuleDTO[] modules = this.getAnalyzedModules();
-		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
-        Arrays.sort(modules, comparator);
+		AnalysedModuleDTO[] modules = this.getAnalyzedModules();	
 		for(AnalysedModuleDTO module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}
@@ -67,8 +66,8 @@ public class SoftwareUnitController extends PopUpController {
 	
 	private AnalysedModuleDTO[] getAnalyzedModules() {
 		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-		AnalysedModuleDTO mockModule1 = new AnalysedModuleDTO("plant uml", "plant uml", "externallibrary", "true");
-		AnalysedModuleDTO mockModule2 = new AnalysedModuleDTO("plant this op", "plant this op", "subsystem", "true");
+		AnalysedModuleDTO mockModule1 = new AnalysedModuleDTO("externallibrary", "test externallibrary", "externallibrary", "true");
+		AnalysedModuleDTO mockModule2 = new AnalysedModuleDTO("subsystem", " test subsystem", "subsystem", "true");
 		
 		AnalysedModuleDTO[]	testreturnlist = new AnalysedModuleDTO[modules.length+2];
 		for (int i = 0; i < modules.length; i++) {
@@ -243,11 +242,18 @@ public class SoftwareUnitController extends PopUpController {
 	public void save(Long moduleId, String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
+			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(moduleId, softwareUnit, type);
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
 			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 		}
+	}
+	
+	public void save(Long moduleid,AbstractCombinedComponent component)
+	{
+		logger.info("Adding software unit to module with id " + this.getModuleId());
+		
 	}
 }

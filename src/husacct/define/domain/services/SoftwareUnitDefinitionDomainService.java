@@ -42,10 +42,12 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 
 	public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
+        
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		try {
 			Type type = Type.valueOf(t);
 			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+			JtreeController.instance().registerTreeRemoval(moduleId,unit);
 			module.addSUDefinition(unit);
 		} catch (Exception e){
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + t);

@@ -3,6 +3,7 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
+import husacct.define.DefineServiceImpl;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 
 import husacct.define.task.JtreeController;
@@ -125,6 +126,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 	
 	private JPanel createUIMappingPanel() {
+		getSoftwareDefinationTree();
 		if(regExMappingPanel != null)
 			this.getContentPane().remove(regExMappingPanel);
 		
@@ -151,25 +153,17 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
 		softwareUnitScrollPane.setSize(400, 220);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 220));
-		if(JtreeController.instance().isLoaded())
-		{
-			this.softwareDefinitionTree= JtreeController.instance().getTree();
-			softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
-		}else {
-		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-		AnalyzedComponentHelper helpercheker= new AnalyzedComponentHelper();
-		helpercheker.chekIfDataIsTheSame(rootComponent);
-		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
-		JtreeController.instance().setCurrentTree(this.softwareDefinitionTree);
+		getSoftwareDefinationTree();
 		softwareUnitScrollPane.setViewportView(this.softwareDefinitionTree);
-		JtreeController.instance().setLoadState(true);
-		}
 		return softwareUnitScrollPane;
 	}
 	
-	private JPanel createRegExMappingPanel() {
-		this.getContentPane().remove(UIMappingPanel);
 
+
+	private JPanel createRegExMappingPanel() {
+		getSoftwareDefinationTree();
+		this.getContentPane().remove(UIMappingPanel);
+		
 		regExMappingPanel = new JPanel();
 		regExMappingPanel.setLayout(new GridLayout(6,2));
 		regExMappingPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -217,6 +211,25 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		regExMappingPanel.add(dynamicRegExLabel);
 		
 		return regExMappingPanel;
+	}
+	
+	
+	private void getSoftwareDefinationTree() {
+		if(JtreeController.instance().isLoaded())
+		{
+			this.softwareDefinitionTree= JtreeController.instance().getTree();
+		
+		}else {
+			
+		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
+		AnalyzedComponentHelper helpercheker= new AnalyzedComponentHelper();
+		helpercheker.chekIfDataIsTheSame(rootComponent);
+		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
+		JtreeController.instance().setCurrentTree(this.softwareDefinitionTree);
+		
+		JtreeController.instance().setLoadState(true);
+		}
+		
 	}
 	
 	private void updateDynamicRegExField() {
@@ -334,6 +347,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+				this.softwareDefinitionTree.removeTreeItem(_moduleId,selectedComponent);
 				this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
 			}
 			this.dispose();
