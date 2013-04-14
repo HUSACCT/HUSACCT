@@ -60,8 +60,10 @@ public class SoftwareUnitDefinitionDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
+		//quikfix
+		try{
 		JtreeController.instance().registerTreeRestore(moduleId,unit.getName());
-		
+		}catch(NullPointerException exe){}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 }
