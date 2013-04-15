@@ -21,8 +21,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 public class CheckConformanceController {
-	private final ConfigurationServiceImpl configuration;
 
+	private final ConfigurationServiceImpl configuration;
 	private Logger logger = Logger.getLogger(CheckConformanceController.class);
 	private RuleTypesFactory ruleFactory;
 	private Map<String, RuleType> ruleCache;
@@ -67,17 +67,14 @@ public class CheckConformanceController {
 					if (appliedRule.exceptionRules != null) {
 						checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
 					}
-				}
-				catch (RuleTypeNotFoundException e) {
+				} catch (RuleTypeNotFoundException e) {
 					logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-				}
-				catch (RuleInstantionException e) {
+				} catch (RuleInstantionException e) {
 					logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 				}
 			}
 			configuration.addViolations(violationList);
-		}
-		else {
+		} else {
 			throw new ProgrammingLanguageNotFoundException();
 		}
 	}
@@ -88,11 +85,9 @@ public class CheckConformanceController {
 				RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 				List<Violation> newViolations = rule.check(configuration, parent, appliedRule);
 				configuration.addViolations(newViolations);
-			}
-			catch (RuleTypeNotFoundException e) {
+			} catch (RuleTypeNotFoundException e) {
 				logger.warn(String.format("RuleTypeKey: %s not found, this rule will not be validated", appliedRule.ruleTypeKey));
-			}
-			catch (RuleInstantionException e) {
+			} catch (RuleInstantionException e) {
 				logger.warn(String.format("RuleTypeKey: %s can not be instantiated, this rule will not be validated", appliedRule.ruleTypeKey));
 			}
 		}

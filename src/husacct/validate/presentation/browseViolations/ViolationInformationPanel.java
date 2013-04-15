@@ -16,8 +16,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 
 public class ViolationInformationPanel extends JPanel {
-	private static final long serialVersionUID = 8505333261388149299L;
 
+	private static final long serialVersionUID = 8505333261388149299L;
 	private final TaskServiceImpl task;
 	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 
@@ -57,16 +57,14 @@ public class ViolationInformationPanel extends JPanel {
 			Violation violation = shownViolations.get(row);
 			if (violation.getLinenumber() <= 0) {
 				detailLineNumberLabelValue.setText("");
-			}
-			else {
+			} else {
 				detailLineNumberLabelValue.setText("" + violation.getLinenumber());
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
 			String message = task.getMessage(violation.getMessage());
 			detailMessageLabelValue.setText(message);
-		}
-		else {
+		} else {
 			detailLineNumberLabelValue.setText("");
 			detailLogicalModuleFromLabelValue.setText("");
 			detailLogicalModuleToValue.setText("");
@@ -74,5 +72,4 @@ public class ViolationInformationPanel extends JPanel {
 		}
 		updateUI();
 	}
-
 }

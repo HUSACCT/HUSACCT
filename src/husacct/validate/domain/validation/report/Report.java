@@ -51,7 +51,7 @@ public class Report {
 	}
 
 	public String[] getLocaleColumnHeaders() {
-		String[] headers = new String[] { localeService.getTranslatedString("Source"), localeService.getTranslatedString("Rule"), localeService.getTranslatedString("LineNumber"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("Severity") };
+		String[] headers = new String[] {localeService.getTranslatedString("Source"), localeService.getTranslatedString("Rule"), localeService.getTranslatedString("LineNumber"), localeService.getTranslatedString("DependencyKind"), localeService.getTranslatedString("Target"), localeService.getTranslatedString("Severity")};
 		return headers;
 	}
 

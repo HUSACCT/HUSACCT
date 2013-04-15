@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation.logicalmodule;
 
 public class LogicalModules {
+
 	private final LogicalModule logicalModuleFrom;
 	private final LogicalModule logicalModuleTo;
 

@@ -17,15 +17,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FilterController {
+
 	private final TaskServiceImpl taskServiceImpl;
 	private final RuleTypesFactory ruletypesfactory;
 	private final ConfigurationServiceImpl configuration;
-
 	private ArrayList<String> ruletypes = new ArrayList<String>();
 	private ArrayList<String> violationtypes = new ArrayList<String>();
 	private ArrayList<String> paths = new ArrayList<String>();
 	private boolean hidefilter = true;
-
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterController(TaskServiceImpl ts, RuleTypesFactory ruletypesfactory, ConfigurationServiceImpl configuration) {
@@ -54,8 +53,7 @@ public class FilterController {
 		for (Violation violation : violations) {
 			if (hidefilter && (!ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) && !violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) && !paths.contains(violation.getClassPathFrom()))) {
 				filteredViolations.add(violation);
-			}
-			else if ((!hidefilter) && (ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()))) {
+			} else if ((!hidefilter) && (ruletypes.contains(localeService.getTranslatedString(violation.getRuletypeKey())) || violationtypes.contains(localeService.getTranslatedString(violation.getViolationtypeKey())) || paths.contains(violation.getClassPathFrom()))) {
 				filteredViolations.add(violation);
 			}
 		}
@@ -93,8 +91,7 @@ public class FilterController {
 			if (violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath().startsWith(logicalpathFrom)) {
 				if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathFrom)) {
 					violations.add(violation);
-				}
-				else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
+				} else if (violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath().startsWith(logicalpathTo)) {
 					violations.add(violation);
 				}
 			}
@@ -108,8 +105,7 @@ public class FilterController {
 		for (Violation violation : taskServiceImpl.getAllViolations().getValue()) {
 			if (violation.getClassPathFrom().startsWith(physicalPathFrom) && violation.getClassPathTo().startsWith(physicalPathTo)) {
 				violations.add(violation);
-			}
-			else if (violation.getClassPathFrom().startsWith(physicalPathFrom) && physicalPathFrom.equals(physicalPathTo) && violation.getClassPathTo().isEmpty()) {
+			} else if (violation.getClassPathFrom().startsWith(physicalPathFrom) && physicalPathFrom.equals(physicalPathTo) && violation.getClassPathTo().isEmpty()) {
 				violations.add(violation);
 			}
 		}
@@ -131,9 +127,8 @@ public class FilterController {
 				int count = 0;
 				try {
 					count = violationsPerSeverity.get(violation.getSeverity());
-				}
-				catch (Exception e) {}
-				finally {
+				} catch (Exception e) {
+				} finally {
 					violationsPerSeverity.remove(violation.getSeverity());
 					count = count + 1;
 					violationsPerSeverity.put(violation.getSeverity(), count);

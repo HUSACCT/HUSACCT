@@ -30,6 +30,7 @@ import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 
 class ViolationTypeSeverityPanel extends JPanel {
+
 	private static final long serialVersionUID = 1283848062887016417L;
 	private static Logger logger = Logger.getLogger(ViolationTypeSeverityPanel.class);
 	private ComboBoxTableModel violationtypeModel;
@@ -99,8 +100,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				if (violationtypeTable.getSelectedRow() > -1) {
 					restoreActionPerformed();
-				}
-				else {
+				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
 			}
@@ -177,10 +177,10 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	final void loadModel() {
-		String[] violationtypeModelHeaders = { ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity") };
+		String[] violationtypeModelHeaders = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Violationtype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 		violationtypeModel = new ComboBoxTableModel(violationtypeModelHeaders, 0, severities);
-		violationtypeModel.setTypes(new Class[] { String.class, Severity.class });
-		violationtypeModel.setCanEdit(new Boolean[] { false, true });
+		violationtypeModel.setTypes(new Class[] {String.class, Severity.class});
+		violationtypeModel.setCanEdit(new Boolean[] {false, true});
 
 		violationtypeTable.setModel(violationtypeModel);
 
@@ -232,7 +232,8 @@ class ViolationTypeSeverityPanel extends JPanel {
 	}
 
 	private void loadViolationType(String category) {
-		if (violationtypeModel != null) {}
+		if (violationtypeModel != null) {
+		}
 		violationtypeModel.clear();
 		for (String categoryString : violationTypes.keySet()) {
 			if (categoryString.equals(category)) {
@@ -241,12 +242,11 @@ class ViolationTypeSeverityPanel extends JPanel {
 					Severity severity;
 					try {
 						severity = taskServiceImpl.getSeverityFromKey(language, violationtype.getViolationtypeKey());
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						logger.error(e);
 						severity = taskServiceImpl.getAllSeverities().get(0);
 					}
-					violationtypeModel.addRow(new Object[] { new DataLanguageHelper(violationtype.getViolationtypeKey()), severity });
+					violationtypeModel.addRow(new Object[] {new DataLanguageHelper(violationtype.getViolationtypeKey()), severity});
 				}
 			}
 
@@ -257,8 +257,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private void checkRestoreButtonEnabled() {
 		if (violationtypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		}
-		else {
+		} else {
 			restore.setEnabled(false);
 		}
 	}

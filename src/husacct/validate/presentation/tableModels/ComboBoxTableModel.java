@@ -10,10 +10,9 @@ import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 
 public class ComboBoxTableModel extends AbstractTableModel {
+
 	private static final long serialVersionUID = -7158951096196307267L;
-
 	private Vector dataVector;
-
 	private Vector columnIdentifiers;
 	private DefaultCellEditor editor;
 	private List<Severity> comboboxValues;
@@ -42,7 +41,6 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		comboBox.setEditable(true);
 		editor = new DefaultCellEditor(comboBox);
 	}
-
 	Class<?>[] types;
 	Boolean[] canEdit;
 
