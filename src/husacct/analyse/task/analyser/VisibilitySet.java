@@ -2,7 +2,7 @@ package husacct.analyse.task.analyser;
 
 import java.util.EnumSet;
 
-public enum VisibillitySet {
+public enum VisibilitySet {
 
 	PUBLIC("public"),
 	PRIVATE("private"),
@@ -11,7 +11,7 @@ public enum VisibillitySet {
 	
 	private final String visibillity;
 	
-	private VisibillitySet(String visibillity){
+	private VisibilitySet(String visibillity){
 		this.visibillity = visibillity;
 	}
 	
@@ -21,7 +21,7 @@ public enum VisibillitySet {
 	}
 	
 	public static boolean isValidVisibillity(String visibillty){
-		for(VisibillitySet option : EnumSet.allOf(VisibillitySet.class)){
+		for(VisibilitySet option : EnumSet.allOf(VisibilitySet.class)){
 			if(option.toString().equals(visibillty)){
 				return true;
 			}
