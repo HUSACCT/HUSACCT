@@ -25,8 +25,6 @@ import org.apache.log4j.Logger;
 
 public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	private static final long serialVersionUID = -7419378432318031359L;
-	private static final double MIN_SCALEFACTOR = 0.25;
-	private static final double MAX_SCALEFACTOR = 1.75;
 
 	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
@@ -228,9 +226,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	public double getScaleFactor() {
 		double scaleFactor = zoomSlider.getValue() / 100.0;
-		scaleFactor = Math.max(MIN_SCALEFACTOR, scaleFactor);
-		scaleFactor = Math.min(MAX_SCALEFACTOR, scaleFactor);
-
 		return scaleFactor;
 	}
 
@@ -411,6 +406,11 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
+	}
+
+	public void setZoomSlider(double zoomFactor) {
+		int value = (int) (zoomFactor * 100);
+		zoomSlider.setValue(value);
 	}
 
 }
