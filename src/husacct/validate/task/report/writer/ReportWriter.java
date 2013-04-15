@@ -31,8 +31,7 @@ public abstract class ReportWriter {
 	protected String convertIsIndirectBooleanToString(boolean isIndirect) {
 		if (isIndirect) {
 			return "direct";
-		}
-		else {
+		} else {
 			return "indirect";
 		}
 	}
@@ -44,8 +43,7 @@ public abstract class ReportWriter {
 			if (!violationtypeKey.equals("VisibilityConvention")) {
 				if (indirect) {
 					value += "indirect";
-				}
-				else {
+				} else {
 					value += "direct";
 				}
 			}

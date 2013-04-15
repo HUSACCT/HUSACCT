@@ -8,6 +8,7 @@ import husacct.validate.task.TaskServiceImpl;
 import javax.swing.JInternalFrame;
 
 public class GuiController {
+
 	private final TaskServiceImpl task;
 	private final ConfigurationServiceImpl configuration;
 	private BrowseViolations browseViolations;

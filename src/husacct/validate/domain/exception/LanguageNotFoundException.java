@@ -1,6 +1,7 @@
 package husacct.validate.domain.exception;
 
 public class LanguageNotFoundException extends Exception {
+
 	private static final long serialVersionUID = 780096305107666489L;
 
 	public LanguageNotFoundException() {

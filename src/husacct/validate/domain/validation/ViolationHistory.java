@@ -4,12 +4,14 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ViolationHistory {
+
 	private final List<Violation> violations;
 	private final Calendar date;
 	private List<Severity> severities;
 	private final String description;
 
-	public ViolationHistory(List<Violation> violations, List<Severity> severities, Calendar date, String description) {
+	public ViolationHistory(List<Violation> violations,
+			List<Severity> severities, Calendar date, String description) {
 		this.violations = violations;
 		this.date = date;
 		this.severities = severities;

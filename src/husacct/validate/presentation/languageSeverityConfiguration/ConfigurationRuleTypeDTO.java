@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ConfigurationRuleTypeDTO {
+
 	private final String language;
 	private final List<Severity> severities;
 	private final HashMap<String, List<RuleType>> ruletypes;

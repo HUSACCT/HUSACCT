@@ -27,6 +27,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 
 class RuleTypeSeverityPanel extends JPanel {
+
 	private static final long serialVersionUID = 5947125752371446966L;
 	private final DefaultListModel rtsCategoryModel;
 	private final String language;
@@ -98,8 +99,7 @@ class RuleTypeSeverityPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				if (ruletypeTable.getSelectedRow() > -1) {
 					ApplyActionPerformed();
-				}
-				else {
+				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
 			}
@@ -175,10 +175,10 @@ class RuleTypeSeverityPanel extends JPanel {
 	}
 
 	void loadModel() {
-		String[] ruletypeColumnNames = { ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity") };
+		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities);
-		ruletypeModel.setTypes(new Class[] { DataLanguageHelper.class, Severity.class });
-		ruletypeModel.setCanEdit(new Boolean[] { false, true });
+		ruletypeModel.setTypes(new Class[] {DataLanguageHelper.class, Severity.class});
+		ruletypeModel.setCanEdit(new Boolean[] {false, true});
 
 		ruletypeTable.setModel(ruletypeModel);
 
@@ -224,11 +224,10 @@ class RuleTypeSeverityPanel extends JPanel {
 			Severity severity;
 			try {
 				severity = taskServiceImpl.getSeverityFromKey(language, ruletype.getKey());
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
-			ruletypeModel.addRow(new Object[] { new DataLanguageHelper(ruletype.getKey()), severity });
+			ruletypeModel.addRow(new Object[] {new DataLanguageHelper(ruletype.getKey()), severity});
 		}
 		ruletypeModel.checkValuesAreValid();
 	}
@@ -247,8 +246,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	private void checkRestoreButtonEnabled() {
 		if (ruletypeTable.getSelectedRow() > -1) {
 			restore.setEnabled(true);
-		}
-		else {
+		} else {
 			restore.setEnabled(false);
 		}
 	}

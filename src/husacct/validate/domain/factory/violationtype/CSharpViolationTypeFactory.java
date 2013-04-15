@@ -11,6 +11,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 class CSharpViolationTypeFactory extends AbstractViolationType {
+
 	private final EnumSet<CSharpViolationTypes> defaultDependencies;
 	private final EnumSet<CSharpViolationTypes> defaultAccess;
 	private final EnumSet<CSharpViolationTypes> defaultPackaging;
@@ -28,20 +29,15 @@ class CSharpViolationTypeFactory extends AbstractViolationType {
 	public List<ViolationType> createViolationTypesByRule(String ruleTypeKey) {
 		if (isCategoryLegalityOfDependency(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, defaultDependencies);
-		}
-		else if (isVisibilityConventionRule(ruleTypeKey)) {
+		} else if (isVisibilityConventionRule(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, defaultAccess);
-		}
-		else if (isNamingConvention(ruleTypeKey)) {
+		} else if (isNamingConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
-		}
-		else if (isInterfaceConvention(ruleTypeKey)) {
+		} else if (isInterfaceConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.noneOf(CSharpViolationTypes.class));
-		}
-		else if (isSubClassConvention(ruleTypeKey)) {
+		} else if (isSubClassConvention(ruleTypeKey)) {
 			return generateViolationTypes(ruleTypeKey, EnumSet.of(CSharpViolationTypes.EXTENDS_ABSTRACT, CSharpViolationTypes.EXTENDS_CONCRETE, CSharpViolationTypes.EXTENDS_LIBRARY));
-		}
-		else {
+		} else {
 			return Collections.emptyList();
 		}
 	}

@@ -1,10 +1,9 @@
 package husacct.validate.domain.validation.violationtype;
 
 public enum ViolationCategories {
-	DEPENDENCY_RECOGNITION("DependencyRecognition"), 
-	ACCESS_MODIFIERS("AccessModifiers"), 
+	DEPENDENCY_RECOGNITION("DependencyRecognition"),
+	ACCESS_MODIFIERS("AccessModifiers"),
 	PACKAGING("Packaging");
-
 	private final String key;
 
 	ViolationCategories(String key) {

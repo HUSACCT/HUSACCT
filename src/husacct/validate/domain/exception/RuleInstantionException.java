@@ -1,6 +1,7 @@
 package husacct.validate.domain.exception;
 
 public class RuleInstantionException extends Exception {
+
 	private static final long serialVersionUID = -7817967411904174045L;
 
 	public RuleInstantionException() {

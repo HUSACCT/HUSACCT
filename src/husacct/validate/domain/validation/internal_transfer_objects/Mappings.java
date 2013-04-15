@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.internal_transfer_objects;
 import java.util.List;
 
 public class Mappings {
+
 	private final List<Mapping> mappingFrom;
 	private final List<Mapping> mappingTo;
 

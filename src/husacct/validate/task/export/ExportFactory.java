@@ -13,6 +13,7 @@ import java.util.Map;
 import org.jdom2.Element;
 
 public class ExportFactory {
+
 	private final ExportSeverities exportSeverities;
 	private final ExportSeveritiesPerTypesPerProgrammingLanguages exportSeveritiesPerTypesPerProgrammingLanguages;
 	private final ExportActiveViolationTypes exportActiveViolationTypes;

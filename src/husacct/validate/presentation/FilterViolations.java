@@ -26,8 +26,8 @@ import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
 public final class FilterViolations extends JDialog {
-	private static final long serialVersionUID = -6295611607558238501L;
 
+	private static final long serialVersionUID = -6295611607558238501L;
 	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane tabbedPane;
@@ -38,12 +38,10 @@ public final class FilterViolations extends JDialog {
 	private JScrollPane pathFilterScrollPane, ruletypePanel, violationtypePanel;
 	private JTable pathFilterTable, ruletypeTable, violationtypeTable;
 	private FilterViolationsObserver filterViolationsObserver;
-
 	private ArrayList<String> ruletypesfilter = new ArrayList<String>();
 	private ArrayList<String> violationtypesfilter = new ArrayList<String>();
 	private ArrayList<String> pathsfilter = new ArrayList<String>();
 	private Calendar violationDate = Calendar.getInstance();
-
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public FilterViolations(TaskServiceImpl taskServiceImpl, FilterViolationsObserver filterViolationsObserver) {
@@ -238,14 +236,14 @@ public final class FilterViolations extends JDialog {
 	}
 
 	public void loadModels() {
-		String[] columnNamesRuletype = { "", localeService.getTranslatedString("Ruletypes") };
-		String[] columnNamesViolationtype = { "", localeService.getTranslatedString("Violationtypes") };
-		String[] columnNamesPath = { " ", localeService.getTranslatedString("Path") };
+		String[] columnNamesRuletype = {"", localeService.getTranslatedString("Ruletypes")};
+		String[] columnNamesViolationtype = {"", localeService.getTranslatedString("Violationtypes")};
+		String[] columnNamesPath = {" ", localeService.getTranslatedString("Path")};
 
 		ruletypeModelFilter = new DefaultTableModel(columnNamesRuletype, 0) {
 			private static final long serialVersionUID = -7173080075671054375L;
-			Class<?>[] types = new Class[] { Boolean.class, String.class };
-			boolean[] canEdit = new boolean[] { true, false };
+			Class<?>[] types = new Class[] {Boolean.class, String.class};
+			boolean[] canEdit = new boolean[] {true, false};
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -260,8 +258,8 @@ public final class FilterViolations extends JDialog {
 
 		violationtypeModelFilter = new DefaultTableModel(columnNamesViolationtype, 0) {
 			private static final long serialVersionUID = -9191282154177444964L;
-			Class<?>[] types = new Class[] { Boolean.class, String.class };
-			boolean[] canEdit = new boolean[] { true, false };
+			Class<?>[] types = new Class[] {Boolean.class, String.class};
+			boolean[] canEdit = new boolean[] {true, false};
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -276,8 +274,8 @@ public final class FilterViolations extends JDialog {
 
 		pathFilterModel = new DefaultTableModel(columnNamesPath, 0) {
 			private static final long serialVersionUID = 1832644249597223838L;
-			Class<?>[] types = new Class[] { Boolean.class, String.class };
-			boolean[] canEdit = new boolean[] { true, true };
+			Class<?>[] types = new Class[] {Boolean.class, String.class};
+			boolean[] canEdit = new boolean[] {true, true};
 
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -315,7 +313,7 @@ public final class FilterViolations extends JDialog {
 	}
 
 	private void addPathActionPerformed() {
-		pathFilterModel.addRow(new Object[] { true, "" });
+		pathFilterModel.addRow(new Object[] {true, ""});
 	}
 
 	private void removePathActionPerformed() {
@@ -370,7 +368,7 @@ public final class FilterViolations extends JDialog {
 		}
 		ArrayList<String> ruletypes = taskServiceImpl.loadRuletypesForFilter(violationDate);
 		for (String ruletype : ruletypes) {
-			ruletypeModelFilter.addRow(new Object[] { false, ruletype });
+			ruletypeModelFilter.addRow(new Object[] {false, ruletype});
 		}
 	}
 
@@ -381,7 +379,7 @@ public final class FilterViolations extends JDialog {
 		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
 		for (String violationtype : violationtypes) {
 			if (!violationtype.isEmpty()) {
-				violationtypeModelFilter.addRow(new Object[] { false, violationtype });
+				violationtypeModelFilter.addRow(new Object[] {false, violationtype});
 			}
 		}
 	}

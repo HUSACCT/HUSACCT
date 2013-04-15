@@ -17,6 +17,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class IsNotAllowedToUseRule extends RuleType {
+
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
 	public IsNotAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {

@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.internal_transfer_objects;
 import husacct.validate.domain.validation.DefaultSeverities;
 
 public class CategoryKeySeverityDTO {
+
 	private final String key;
 	private final String category;
 	private final DefaultSeverities defaultSeverity;
