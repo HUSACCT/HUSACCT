@@ -120,10 +120,23 @@ class FamixDependencyFinder extends FamixFinder{
 		for(DependencyDTO directDependency : tempDirectDependencies){
 			List<DependencyDTO> indirectDependenciesForDirectDependency = findDependenciesRelatedTo(tempDirectDependencies, directDependency);
 			for(DependencyDTO indirectDependency : indirectDependenciesForDirectDependency){
-				returnIndirectDependencies.add(new DependencyDTO(directDependency.from, indirectDependency.to, directDependency.type+""+indirectDependency.type, true, directDependency.lineNumber));
+				DependencyDTO tempDTO = new DependencyDTO(directDependency.from, indirectDependency.to, directDependency.type+""+indirectDependency.type, true, directDependency.lineNumber);
+				if(!returnIndirectDependencies.contains(tempDTO) && !containsDependency(tempDTO, returnIndirectDependencies) && !isDependencyInList(tempDTO, returnIndirectDependencies)){
+					returnIndirectDependencies.add(tempDTO);
+				}else {
+					System.out.println("Already on the list bru! 2");
+				}
 			}	
 		}
 		return returnIndirectDependencies;
+	}
+	
+	private boolean isDependencyInList(DependencyDTO dependency, List<DependencyDTO> allDependencies){
+		for(DependencyDTO loopingDependency : allDependencies){
+			if(loopingDependency.from.equals(dependency.from) && loopingDependency.to.equals(dependency.to) && loopingDependency.type.equals(dependency.type) && loopingDependency.lineNumber == dependency.lineNumber)
+				return true;
+		}
+		return false;
 	}
 	
 	private List<DependencyDTO> findDependenciesRelatedTo(List<DependencyDTO> allDependencies, DependencyDTO relatedTo){
