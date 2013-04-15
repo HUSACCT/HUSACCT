@@ -1,6 +1,7 @@
 package husacct.validate.domain.validation;
 
 public class ViolationType {
+
 	private String violationtypeKey;
 	private String violationDescriptionKey;
 	private boolean isActive;
@@ -13,7 +14,8 @@ public class ViolationType {
 		this.setSeverity(severity);
 	}
 
-	public ViolationType(String violationtypeKey, boolean isActive, Severity severity) {
+	public ViolationType(String violationtypeKey, boolean isActive,
+			Severity severity) {
 		this.violationtypeKey = violationtypeKey;
 		this.violationDescriptionKey = violationtypeKey + "Description";
 		this.isActive = isActive;

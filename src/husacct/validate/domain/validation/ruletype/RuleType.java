@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public abstract class RuleType {
+
 	protected final String key;
 	protected final String descriptionKey;
 	protected final String categoryKey;
@@ -30,14 +31,11 @@ public abstract class RuleType {
 	protected final List<ViolationType> violationtypes;
 	protected List<RuleType> exceptionRules;
 	protected final Severity severity;
-
 	protected List<Violation> violations;
 	protected Mappings mappings;
 	protected List<Mapping> physicalClasspathsFrom;
-
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-
 	private AbstractViolationType violationtypefactory;
 
 	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity) {
@@ -137,10 +135,12 @@ public abstract class RuleType {
 	private Severity getViolationTypeSeverity(String violationTypeKey) {
 		try {
 			return violationtypefactory.createViolationType(this.key, violationTypeKey).getSeverity();
-		}
-		catch (ViolationTypeNotFoundException e) {
-
+		} catch (ViolationTypeNotFoundException e) {
 		}
 		return null;
+	}
+
+	public boolean equals(RuleTypes desiredRuleType) {
+	    return this.getKey().equals(desiredRuleType.toString());
 	}
 }

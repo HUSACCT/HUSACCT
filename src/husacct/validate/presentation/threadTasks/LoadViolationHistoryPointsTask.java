@@ -15,7 +15,6 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 	private final BrowseViolations browseViolations;
 	private final TaskServiceImpl taskServiceImpl;
 	private final JCheckBox applyFilter;
-
 	private Logger logger = Logger.getLogger(LoadViolationHistoryPointsTask.class);
 
 	public LoadViolationHistoryPointsTask(JTable chooseViolationHistoryTable, BrowseViolations browseViolations, TaskServiceImpl taskServiceImpl, JCheckBox applyFilter) {
@@ -36,8 +35,7 @@ public class LoadViolationHistoryPointsTask implements Runnable {
 			browseViolations.loadAfterChange();
 			browseViolations.updateFilterValues();
 			applyFilter.setSelected(false);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			logger.debug(e.getMessage());
 		}
 	}

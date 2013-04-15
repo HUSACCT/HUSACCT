@@ -42,5 +42,4 @@ public class ExportActiveViolationTypes extends XmlExportUtils {
 		}
 		return ruleTypeElement;
 	}
-
 }

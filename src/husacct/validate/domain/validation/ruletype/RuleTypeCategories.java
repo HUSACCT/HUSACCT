@@ -6,7 +6,6 @@ public enum RuleTypeCategories {
 	PROPERTY_RULE_TYPES("PropertyRuleTypes", "Property Rule Types"), RELATION_RULE_TYPES("RelationruleTypes", "Relation Rule Types");
 
 	public static final EnumSet<RuleTypeCategories> mainRuleTypeCategories = EnumSet.of(PROPERTY_RULE_TYPES, RELATION_RULE_TYPES);
-	
 	private final String key;
 	private final String categoryName;
 
@@ -18,7 +17,7 @@ public enum RuleTypeCategories {
 	public String getCategoryName() {
 		return categoryName;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.key;

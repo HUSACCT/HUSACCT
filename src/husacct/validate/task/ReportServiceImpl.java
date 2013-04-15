@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ReportServiceImpl implements IReportService {
+
 	private final ExportReportFactory reportFactory;
 	private final TaskServiceImpl taskServiceImpl;
 
@@ -33,8 +34,7 @@ public class ReportServiceImpl implements IReportService {
 				reportFactory.exportReport(fileType, taskServiceImpl.getAllViolations(), file.getName(), file.getParent(), taskServiceImpl.getAllSeverities());
 				return;
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new FileNotAccessibleException(file);
 		}
 		throw new FileNotAccessibleException(file);
@@ -48,8 +48,7 @@ public class ReportServiceImpl implements IReportService {
 				reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), file.getName(), file.getParent(), violationHistory.getSeverities());
 				return;
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new FileNotAccessibleException(file);
 		}
 		throw new FileNotAccessibleException(file);

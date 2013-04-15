@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Observable;
 
 class ViolationHistoryRepository extends Observable {
+
 	private List<ViolationHistory> violationHistories;
 
 	ViolationHistoryRepository() {

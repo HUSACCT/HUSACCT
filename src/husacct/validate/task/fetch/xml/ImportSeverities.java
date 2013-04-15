@@ -35,8 +35,7 @@ public class ImportSeverities {
 		Color color = null;
 		try {
 			color = new Color(Integer.parseInt(rgbColor));
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			logger.warn(String.format("No valid RGB color found for value: %s", rgbColor));
 			color = Color.WHITE;
 		}

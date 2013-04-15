@@ -13,6 +13,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class NamingConventionExceptionRule extends RuleType {
+
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 
 	public NamingConventionExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
