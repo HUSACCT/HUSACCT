@@ -3,6 +3,7 @@ package husacct.validate.domain.check;
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.RuleDTO;
+import husacct.control.task.States;
 import husacct.define.IDefineService;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
@@ -27,6 +28,11 @@ public class CheckConformanceController {
 	private Map<String, RuleType> ruleCache;
 	private IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
+	//added by team 1 general gui & control
+	//declaration that keeps the progress
+	private int appliedRulesHandled = 0;
+	//end adding by team1
+	
 	public CheckConformanceController(ConfigurationServiceImpl configuration, RuleTypesFactory ruleFactory) {
 		this.configuration = configuration;
 		this.configuration.clearViolations();
@@ -41,8 +47,18 @@ public class CheckConformanceController {
 			ruleCache.clear();
 
 			List<Violation> violationList = new ArrayList<Violation>();
-
+			appliedRulesHandled = 0;
 			for (RuleDTO appliedRule : appliedRules) {
+				
+				//Added by Team 1 General GUI & Control
+				//needed for interrupting this thread
+				if(!ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)) {
+					break;
+				}
+				//calculating percentage for progress bar
+				ServiceProvider.getInstance().getControlService().updateProgress((++appliedRulesHandled * 100)/appliedRules.length);
+				//end adding by Team 1
+				
 				try {
 					RuleType rule = getRuleType(appliedRule.ruleTypeKey);
 					List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);

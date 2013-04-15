@@ -22,10 +22,12 @@ public class CheckConformanceTask implements Runnable {
 	@Override
 	public void run() {
 		try {
+			ServiceProvider.getInstance().getControlService().setValidate(true);
 			Thread.sleep(1);
 			ServiceProvider.getInstance().getValidateService().checkConformance();
 			filterPanel.loadAfterChange();
 			buttonSaveInHistory.setEnabled(true);
+			ServiceProvider.getInstance().getControlService().setValidate(false);
 		}
 		catch (InterruptedException e) {
 			logger.debug(e.getMessage());

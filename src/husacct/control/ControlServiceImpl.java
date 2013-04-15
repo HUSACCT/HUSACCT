@@ -92,6 +92,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public ThreadWithLoader getThreadWithLoader(String progressInfoText, Runnable threadTask) {
 		ThreadWithLoader loader = new ThreadWithLoader(mainController, progressInfoText, threadTask);
+		
+		mainController.getApplicationController().setCurrentLoader(loader.getLoader());
+		
 		return loader;
 	}
 	
@@ -124,6 +127,12 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void updateProgress(int progressPercentage) {
 		mainController.getApplicationController().getCurrentLoader().setProgressText(progressPercentage);
+	}
+	
+	@Override
+	public void setValidate(boolean validate) {
+		this.mainController.getStateController().setValidating(validate);
+		this.mainController.getStateController().checkState();
 	}
 
 }
