@@ -2,10 +2,12 @@ package husacct.validate.presentation.languageSeverityConfiguration;
 
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ruletype.RuleType;
+
 import java.util.HashMap;
 import java.util.List;
 
 public class ConfigurationRuleTypeDTO {
+
 	private final String language;
 	private final List<Severity> severities;
 	private final HashMap<String, List<RuleType>> ruletypes;

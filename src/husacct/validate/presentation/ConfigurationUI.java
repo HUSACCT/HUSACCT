@@ -119,7 +119,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		severityNamePanelLayout.setHorizontalGroup(horizontalPaneGroup);
 
 		GroupLayout.SequentialGroup verticalButtonGroup = severityNamePanelLayout.createSequentialGroup();
-		verticalButtonGroup.addContainerGap();		
+		verticalButtonGroup.addContainerGap();
 		verticalButtonGroup.addComponent(restore);
 		verticalButtonGroup.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED);
 		verticalButtonGroup.addComponent(applySeverity);
@@ -221,7 +221,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		clearModel(severityModel);
 		severities = taskServiceImpl.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[]{severity.getSeverityName(), severity.getColor()});
+			severityModel.addRow(new Object[] {severity.getSeverityName(), severity.getColor()});
 		}
 
 	}

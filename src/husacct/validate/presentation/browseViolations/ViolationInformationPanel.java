@@ -18,10 +18,8 @@ import javax.swing.event.ListSelectionEvent;
 public class ViolationInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 8505333261388149299L;
-
 	private final TaskServiceImpl task;
-	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, 
-	detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
+	private JLabel detailLogicalModuleFromLabelValue, detailMessageLabelValue, detailLineNumberLabelValue, detailsLogicalModuleFromLabel, detailsLineNumberLabel, detailsMessageLabel, detailLogicalModuleToLabel, detailLogicalModuleToValue;
 
 	public ViolationInformationPanel(TaskServiceImpl task) {
 		this.task = task;
@@ -39,47 +37,9 @@ public class ViolationInformationPanel extends JPanel {
 		detailLogicalModuleToValue = new JLabel();
 
 		GroupLayout gl_violationDetailPane = new GroupLayout(this);
-		gl_violationDetailPane.setHorizontalGroup(
-				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_violationDetailPane.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(detailsLogicalModuleFromLabel)
-								.addComponent(detailLogicalModuleToLabel)
-								.addComponent(detailsMessageLabel)
-								.addGroup(gl_violationDetailPane.createSequentialGroup()
-										.addComponent(detailsLineNumberLabel)
-										.addGap(53)
-										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(detailLogicalModuleFromLabelValue)
-												.addComponent(detailLogicalModuleToValue)
-												.addComponent(detailLineNumberLabelValue)
-												.addComponent(detailMessageLabelValue))))
-												.addContainerGap(397, Short.MAX_VALUE))
-				);
-		gl_violationDetailPane.setVerticalGroup(
-				gl_violationDetailPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_violationDetailPane.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(detailsLineNumberLabel)
-								.addComponent(detailLineNumberLabelValue))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(detailsLogicalModuleFromLabel)
-										.addComponent(detailLogicalModuleFromLabelValue))
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(detailLogicalModuleToLabel)
-												.addComponent(detailLogicalModuleToValue))
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE)
-														.addComponent(detailsMessageLabel)
-														.addComponent(detailMessageLabelValue))
-														.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				);
+		gl_violationDetailPane.setHorizontalGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING).addGroup(gl_violationDetailPane.createSequentialGroup().addContainerGap().addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING).addComponent(detailsLogicalModuleFromLabel).addComponent(detailLogicalModuleToLabel).addComponent(detailsMessageLabel).addGroup(gl_violationDetailPane.createSequentialGroup().addComponent(detailsLineNumberLabel).addGap(53).addGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING).addComponent(detailLogicalModuleFromLabelValue).addComponent(detailLogicalModuleToValue).addComponent(detailLineNumberLabelValue).addComponent(detailMessageLabelValue)))).addContainerGap(397, Short.MAX_VALUE)));
+		gl_violationDetailPane.setVerticalGroup(gl_violationDetailPane.createParallelGroup(Alignment.LEADING).addGroup(gl_violationDetailPane.createSequentialGroup().addContainerGap().addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE).addComponent(detailsLineNumberLabel).addComponent(detailLineNumberLabelValue)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE).addComponent(detailsLogicalModuleFromLabel).addComponent(detailLogicalModuleFromLabelValue)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE).addComponent(detailLogicalModuleToLabel).addComponent(detailLogicalModuleToValue)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(gl_violationDetailPane.createParallelGroup(Alignment.BASELINE).addComponent(detailsMessageLabel).addComponent(detailMessageLabelValue)).addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		setLayout(gl_violationDetailPane);
-
 
 	}
 
@@ -92,13 +52,12 @@ public class ViolationInformationPanel extends JPanel {
 	}
 
 	public void update(ListSelectionEvent arg0, JTable violationsTable, List<Violation> shownViolations) {
-		if(!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
+		if (!arg0.getValueIsAdjusting() && violationsTable.getSelectedRow() > -1) {
 			int row = violationsTable.convertRowIndexToModel(violationsTable.getSelectedRow());
 			Violation violation = shownViolations.get(row);
-			if(violation.getLinenumber() <= 0){
+			if (violation.getLinenumber() <= 0) {
 				detailLineNumberLabelValue.setText("");
-			}
-			else{
+			} else {
 				detailLineNumberLabelValue.setText("" + violation.getLinenumber());
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
@@ -113,5 +72,4 @@ public class ViolationInformationPanel extends JPanel {
 		}
 		updateUI();
 	}
-
 }
