@@ -121,18 +121,27 @@ public  AnalyzedModuleTree getTree()
 }
 
 public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
+	
 	String[] adress=unit.getName().split("\\.");
 	AbstractCombinedComponent temp= (AbstractCombinedComponent)instance.tree.getModel().getRoot();
 	
 	
 	for (int i = 0; i < adress.length; i++) 
 	{
-		for(AbstractCombinedComponent list : temp.getChildren())
-		{
-			
 		
-		}
-		AnalyzedModuleComponent chek = (AnalyzedModuleComponent) temp;
+		for(AbstractCombinedComponent item : temp.getChildren())
+		{
+				AnalyzedModuleComponent chek = (AnalyzedModuleComponent) item;
+				String[] result= chek.getUniqueName().split("\\.");
+			
+				if(adress[i].equals(result[0]))
+				{
+					
+					temp=item;
+				}
+		
+	     }
+	
 		
 		
 		
@@ -140,6 +149,8 @@ public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
 		
 	
 	}
+	
+	
 	
 	
 }
