@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationtypeAssembler {
+
 	public ViolationTypeDTO[] createViolationTypeDTO(List<ViolationType> violationtypes) {
 		List<ViolationTypeDTO> violationtypeDTOs = new ArrayList<ViolationTypeDTO>();
 

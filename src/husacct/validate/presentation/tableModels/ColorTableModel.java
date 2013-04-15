@@ -17,11 +17,10 @@ import javax.swing.table.TableColumn;
 public class ColorTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 2492345975488386436L;
-
 	private Vector dataVector = new Vector();
-	private String columnNames[] = { ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color") };
-	private Class<?>[] types = new Class[] { String.class, JButton.class };
-	private boolean[] canEdit = new boolean[] { false, true };
+	private String columnNames[] = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color")};
+	private Class<?>[] types = new Class[] {String.class, JButton.class};
+	private boolean[] canEdit = new boolean[] {false, true};
 	private List<Color> rowColours = new ArrayList<Color>();
 
 	@Override
@@ -134,8 +133,7 @@ public class ColorTableModel extends AbstractTableModel {
 		if (shift < 0) {
 			first = to;
 			last = end;
-		}
-		else {
+		} else {
 			first = start;
 			last = to + end - start;
 		}

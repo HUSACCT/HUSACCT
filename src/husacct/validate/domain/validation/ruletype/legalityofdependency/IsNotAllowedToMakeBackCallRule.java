@@ -18,6 +18,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class IsNotAllowedToMakeBackCallRule extends RuleType {
+
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
 	public IsNotAllowedToMakeBackCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
@@ -59,8 +60,9 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 		for (ModuleDTO module : allModules) {
 			counter++;
 			if (module.type.toLowerCase().equals("layer")) {
-				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase()))
+				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
 					returnModules = getModulesTo(allModules, counter, currentRule.violationTypeKeys);
+				}
 			}
 		}
 		return returnModules;

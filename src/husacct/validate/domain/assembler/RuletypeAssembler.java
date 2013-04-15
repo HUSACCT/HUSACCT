@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RuletypeAssembler {
+
 	private ViolationtypeAssembler violationtypeassembler;
 
 	public RuletypeAssembler() {
@@ -44,7 +45,7 @@ public class RuletypeAssembler {
 		ViolationTypeDTO violationtypeDTO = violationtypeassembler.createViolationTypeDTO(violationtype);
 		final RuleTypeDTO[] exceptionRuleTypes = createExceptionRuleTypeDTO(rule);
 
-		return new RuleTypeDTO(key, description, new ViolationTypeDTO[] { violationtypeDTO }, exceptionRuleTypes);
+		return new RuleTypeDTO(key, description, new ViolationTypeDTO[] {violationtypeDTO}, exceptionRuleTypes);
 	}
 
 	private RuleTypeDTO[] createExceptionRuleTypeDTO(RuleType rule) {

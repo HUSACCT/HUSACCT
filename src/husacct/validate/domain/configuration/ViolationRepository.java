@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 
 class ViolationRepository {
+
 	private List<Violation> violations;
 	private Calendar date;
 

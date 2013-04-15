@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public class ImportController {
+
 	private Logger logger = Logger.getLogger(ImportController.class);
 	private List<Severity> severities;
 	private final ImportFactory importFactory;
@@ -39,8 +40,7 @@ public class ImportController {
 		try {
 			this.severities = importFactory.importSeverities(element);
 			configuration.setSeverities(severities);
-		}
-		catch (SeverityChangedException e) {
+		} catch (SeverityChangedException e) {
 			logger.error("Error during importing of severities, default severities will be used: " + e.getMessage());
 		}
 	}

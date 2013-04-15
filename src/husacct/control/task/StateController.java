@@ -59,7 +59,7 @@ public class StateController {
 		if(validateService.isValidated()){
 			newStates.add(States.VALIDATED);
 		}
-		else if(isValidating()) {
+		if(isValidating()) {
 			newStates.add(States.VALIDATING);
 		}
 

@@ -22,4 +22,6 @@ public interface IControlService extends IObservableService{
 	public void updateProgress(int progressPercentage);
 	public boolean isPreAnalysed();
 	public void finishPreAnalysing();
+	
+	public void setValidate(boolean validate);
 }

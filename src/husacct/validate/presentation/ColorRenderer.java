@@ -30,8 +30,7 @@ public class ColorRenderer extends JLabel implements TableCellRenderer {
 					selectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5, table.getSelectionBackground());
 				}
 				setBorder(selectedBorder);
-			}
-			else {
+			} else {
 				if (unselectedBorder == null) {
 					unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5, table.getBackground());
 				}

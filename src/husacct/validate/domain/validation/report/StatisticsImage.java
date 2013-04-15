@@ -18,6 +18,7 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class StatisticsImage {
+
 	public void createStatisticsImage(String path, List<ViolationsPerSeverity> list) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -38,8 +39,7 @@ public class StatisticsImage {
 
 		try {
 			ChartUtilities.saveChartAsPNG(new File(path), chart, 600, 200);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

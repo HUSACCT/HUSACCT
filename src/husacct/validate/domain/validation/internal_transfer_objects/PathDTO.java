@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.internal_transfer_objects;
 import java.util.ArrayList;
 
 public class PathDTO {
+
 	private ArrayList<String> ruletypes;
 	private ArrayList<String> violationtypes;
 	private ArrayList<String> paths;
@@ -36,5 +37,4 @@ public class PathDTO {
 	public void setPaths(ArrayList<String> paths) {
 		this.paths = paths;
 	}
-
 }

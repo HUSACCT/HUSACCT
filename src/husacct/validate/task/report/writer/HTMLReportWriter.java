@@ -117,8 +117,7 @@ public class HTMLReportWriter extends ReportWriter {
 			html.append("<th>");
 			if (columnHeader != null && !columnHeader.trim().equals("")) {
 				html.append(columnHeader);
-			}
-			else {
+			} else {
 				html.append("&nbsp;");
 			}
 			html.append("</th>");
@@ -131,8 +130,7 @@ public class HTMLReportWriter extends ReportWriter {
 			// Source
 			if (violation.getClassPathFrom() != null) {
 				createColumn(violation.getClassPathFrom());
-			}
-			else {
+			} else {
 				createColumn("");
 			}
 
@@ -140,40 +138,35 @@ public class HTMLReportWriter extends ReportWriter {
 			if (violation.getMessage() != null) {
 				String message = new Messagebuilder().createMessage(violation.getMessage());
 				createColumn(message);
-			}
-			else {
+			} else {
 				createColumn("");
 			}
 
 			// LineNumber
 			if (violation.getLinenumber() > 0) {
 				createColumn("" + violation.getLinenumber());
-			}
-			else {
+			} else {
 				createColumn("");
 			}
 
 			// Dependency Kind
 			if (violation.getViolationtypeKey() != null) {
 				createColumn(getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()));
-			}
-			else {
+			} else {
 				createColumn("");
 			}
 
 			// Target
 			if (violation.getClassPathTo() != null) {
 				createColumn(violation.getClassPathTo());
-			}
-			else {
+			} else {
 				createColumn("");
 			}
 
 			// Severity
 			if (violation.getSeverity() != null) {
 				createColumn(violation.getSeverity().getSeverityName());
-			}
-			else {
+			} else {
 				createColumn("");
 			}
 			html.append("</tr>");
@@ -186,8 +179,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("<td>");
 		if (content != null && !content.trim().equals("")) {
 			html.append(content);
-		}
-		else {
+		} else {
 			html.append("&nbsp;");
 		}
 		html.append("</td>");

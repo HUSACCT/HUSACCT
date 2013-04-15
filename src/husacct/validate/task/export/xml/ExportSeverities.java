@@ -25,5 +25,4 @@ public class ExportSeverities {
 		element.setText(content);
 		destination.addContent(element);
 	}
-
 }

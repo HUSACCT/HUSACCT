@@ -22,6 +22,7 @@ import java.util.List;
 import com.itextpdf.text.DocumentException;
 
 public class ExportReportFactory {
+
 	private ReportWriter writer;
 	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 
@@ -32,11 +33,9 @@ public class ExportReportFactory {
 		try {
 			if (fileType.toLowerCase().equals(ExtensionType.XML.getExtension().toLowerCase())) {
 				writer = new XMLReportWriter(report, path, name);
-			}
-			else if (fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
+			} else if (fileType.toLowerCase().equals(ExtensionType.HTML.getExtension().toLowerCase())) {
 				writer = new HTMLReportWriter(report, path, name);
-			}
-			else if (fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {
+			} else if (fileType.toLowerCase().equals(ExtensionType.PDF.getExtension().toLowerCase())) {
 				writer = new PDFReportWriter(report, path, name);
 			}
 			if (writer == null) {
@@ -44,17 +43,13 @@ public class ExportReportFactory {
 			}
 
 			writer.createReport();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			createException(e);
-		}
-		catch (UnknownStorageTypeException e) {
+		} catch (UnknownStorageTypeException e) {
 			createException(e);
-		}
-		catch (URISyntaxException e) {
+		} catch (URISyntaxException e) {
 			createException(e);
-		}
-		catch (DocumentException e) {
+		} catch (DocumentException e) {
 			createException(e);
 		}
 	}

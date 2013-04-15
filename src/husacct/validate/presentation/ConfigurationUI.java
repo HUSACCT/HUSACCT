@@ -171,8 +171,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 				Severity severity = severities.get(i);
 				severity.setColor((Color) severityModel.getValueAt(i, 1));
 				severities.set(i, severity);
-			}
-			catch (IndexOutOfBoundsException e) {
+			} catch (IndexOutOfBoundsException e) {
 				severities.add(new Severity((String) severityModel.getValueAt(i, 0), (Color) severityModel.getValueAt(i, 1)));
 			}
 		}
@@ -222,7 +221,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		clearModel(severityModel);
 		severities = taskServiceImpl.getAllSeverities();
 		for (Severity severity : severities) {
-			severityModel.addRow(new Object[] { severity.getSeverityName(), severity.getColor() });
+			severityModel.addRow(new Object[] {severity.getSeverityName(), severity.getColor()});
 		}
 
 	}
