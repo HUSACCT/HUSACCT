@@ -24,9 +24,7 @@ public class CSharpInheritanceGenerator extends CSharpGenerator {
         return result;
     }
 
-    private String getTypeName(CommonTree child) {
-        for(int i = 0; i < child.getChildCount(); i++) {
-            
-        }
+    private String getTypeName(CommonTree commonTree) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
