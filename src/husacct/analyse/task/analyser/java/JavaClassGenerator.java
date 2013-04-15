@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-import husacct.analyse.task.analyser.VisibillitySet;
+import husacct.analyse.task.analyser.VisibilitySet;
 
 import org.antlr.runtime.tree.CommonTree;
 
@@ -48,13 +48,13 @@ class JavaClassGenerator extends JavaGenerator{
 	private String getVisibillityFromTree(CommonTree tree){
 		CommonTree modifierList = (CommonTree)tree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
 		if(modifierList == null || modifierList.getChildCount() < 1){
-			return VisibillitySet.DEFAULT.toString();
+			return VisibilitySet.DEFAULT.toString();
 		}else{
 			String found = modifierList.getChild(0).toString();
-			if(VisibillitySet.isValidVisibillity(found)){
+			if(VisibilitySet.isValidVisibillity(found)){
 				return found;
 			}else{
-				return VisibillitySet.DEFAULT.toString();
+				return VisibilitySet.DEFAULT.toString();
 			}
 		}
 	}

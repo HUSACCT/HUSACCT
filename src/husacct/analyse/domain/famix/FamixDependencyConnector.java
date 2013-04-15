@@ -1,5 +1,8 @@
 package husacct.analyse.domain.famix;
 
+import husacct.ServiceProvider;
+import husacct.control.task.States;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +21,11 @@ class FamixDependencyConnector {
 	private FamixModel theModel;
 	private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
 	
+	//Added By Team 1 General GUI & Control
+	//Is needed for the progressBar
+	private int amountOfModulesConnected = 0;
+	//End added by Team 1
+	
 	private FamixModuleFinder moduleFinder;
 	
 	public FamixDependencyConnector(){
@@ -27,6 +35,14 @@ class FamixDependencyConnector {
 	
 	void connectStructuralDependecies() {
 		for(FamixStructuralEntity entity : theModel.waitingStructuralEntitys){
+			
+			//Added By Team 1 General GUI & Control
+			//Needed to check if Thread is allowed to continue
+			if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+				break;
+			}
+			//end added by Team 1
+			
 			try{
 				String theClass = entity.belongsToClass;
 				if(!isCompleteTypeDeclaration(entity.declareType)){
@@ -52,6 +68,14 @@ class FamixDependencyConnector {
 	void connectAssociationDependencies() {
 		int count = 0;
 		for(FamixAssociation association : theModel.waitingAssociations){
+			
+			//Added By Team 1 General GUI & Control
+			//Needed to check if Thread is allowed to continue
+			if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING)) {
+				break;
+			}
+			//end added by Team 1
+			
 			String oldy = association.to;
 			count += 1;
 			try{
@@ -202,6 +226,13 @@ class FamixDependencyConnector {
 	}
 	
 	private boolean isCompleteTypeDeclaration(String typeDeclaration){
+		
+		
+		//Added By Team 1 General GUI & Control
+		//Is needed for the progressBar
+		ServiceProvider.getInstance().getControlService().updateProgress((++amountOfModulesConnected*100)/(1+theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()));
+		//End added by Team 1 General GUI & Control
+		
 		return typeDeclaration.contains(".");
 	}
 	

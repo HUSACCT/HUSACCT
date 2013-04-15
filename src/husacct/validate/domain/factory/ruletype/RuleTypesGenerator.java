@@ -17,25 +17,25 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-class RuleTypesGenerator {		
+class RuleTypesGenerator {
+
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
-
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
-	private static final String[] ruleTypeLocations = new String[]{"husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency"};
+	private static final String[] ruleTypeLocations = new String[] {"husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency"};
 
-	RuleTypesGenerator(){
+	RuleTypesGenerator() {
 		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();
 	}
 
 	HashMap<String, CategoryKeyClassDTO> generateRules(EnumSet<RuleTypes> rules) {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		HashMap<String, CategoryKeyClassDTO> allClasses = generateAllRules();
-		
-		for (Enum<RuleTypes> ruleKey : rules) {		
+
+		for (Enum<RuleTypes> ruleKey : rules) {
 			CategoryKeyClassDTO ruleCategory = allClasses.get(ruleKey.toString());
 			if (ruleCategory != null) {
 				keyClasses.put(ruleKey.toString(), ruleCategory);
-			} else {				
+			} else {
 				logger.warn(String.format("Rulekey: %s not found", ruleKey.toString()));
 			}
 		}
@@ -45,28 +45,27 @@ class RuleTypesGenerator {
 	HashMap<String, CategoryKeyClassDTO> generateAllRules() {
 		HashMap<String, CategoryKeyClassDTO> keyClasses = new HashMap<String, CategoryKeyClassDTO>();
 		List<Class<?>> ruleClasses = getRuleClasses(EnumSet.allOf(RuleTypes.class));
-		for (Class<?> ruleClass : ruleClasses) {			
+		for (Class<?> ruleClass : ruleClasses) {
 			String ruleKey = "";
-			try{
+			try {
 				if (isInstanceOfRule(ruleClass)) {
 					ruleKey = getRuleKey(ruleClass);
-					final String categoryKey = getCategoryKey(ruleClass);	
+					final String categoryKey = getCategoryKey(ruleClass);
 					final DefaultSeverities defaultSeverity = getDefaultSeverity(ruleKey);
 					keyClasses.put(ruleKey, new CategoryKeyClassDTO(categoryKey, (Class<RuleType>) ruleClass, defaultSeverity));
 				}
-			}catch(DefaultSeverityNotFoundException e){
+			} catch (DefaultSeverityNotFoundException e) {
 				logger.warn(String.format("No default severity found for: %s, thus this ruleType will be ignored", ruleKey), e);
 			}
 		}
 		return keyClasses;
 	}
 
-	private DefaultSeverities getDefaultSeverity(String ruleKey){
+	private DefaultSeverities getDefaultSeverity(String ruleKey) {
 		DefaultSeverities defaultSeverity = defaultRulesPerRuleType.get(ruleKey);
-		if(defaultSeverity != null){
+		if (defaultSeverity != null) {
 			return defaultSeverity;
-		}
-		else{
+		} else {
 			throw new DefaultSeverityNotFoundException();
 		}
 	}
@@ -79,25 +78,26 @@ class RuleTypesGenerator {
 		List<Class<?>> classList = new ArrayList<Class<?>>();
 
 		ClassLoader myClassLoader = this.getClass().getClassLoader();
-		for(String packageName : packageNames){
-			for(Enum<RuleTypes> ruleType : ruleTypes){
+		for (String packageName : packageNames) {
+			for (Enum<RuleTypes> ruleType : ruleTypes) {
 				String classPath;
-				try {	
-					classPath = packageName + "." + ruleType.toString() + "Rule";					
+				try {
+					classPath = packageName + "." + ruleType.toString() + "Rule";
 					Class<?> myClass = myClassLoader.loadClass(classPath);
-					
+
 					if (!Modifier.isAbstract(myClass.getModifiers()) && classHasRuleConstructor(myClass)) {
 						classList.add(myClass);
 					}
 				} catch (ClassNotFoundException e) {
-					//logger.debug(String.format("Classpath: %s not found" , classPath));
-				} 
+					// logger.debug(String.format("Classpath: %s not found" ,
+					// classPath));
+				}
 			}
 		}
 		return classList;
 	}
 
-	private boolean classHasRuleConstructor(Class<?> ruleClass) {		
+	private boolean classHasRuleConstructor(Class<?> ruleClass) {
 		try {
 			ruleClass.getConstructor(String.class, String.class, List.class, Severity.class);
 		} catch (SecurityException e) {
@@ -127,14 +127,14 @@ class RuleTypesGenerator {
 
 	private String getRuleKey(Class<?> ruleClass) {
 		return ruleClass.getSimpleName().replace("Rule", "");
-	}	
+	}
 
-	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity(){
+	private HashMap<String, DefaultSeverities> getRuleTypeDefaultSeverity() {
 		HashMap<String, DefaultSeverities> defaultRulesPerRuleTypeLocal = new HashMap<String, DefaultSeverities>();
-		for(RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)){
+		for (RuleTypes ruletype : EnumSet.allOf(RuleTypes.class)) {
 			defaultRulesPerRuleTypeLocal.put(ruletype.toString(), ruletype.getDefaultSeverity());
 		}
 
 		return defaultRulesPerRuleTypeLocal;
-	}	
+	}
 }

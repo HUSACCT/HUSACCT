@@ -13,11 +13,14 @@ public class Violation {
 	private String classPathFrom;
 	private String classPathTo;
 	private LogicalModules logicalModules;
-	private Message message; 
+	private Message message;
 	private boolean inDirect;
 	private Calendar occured;
 
-	public Violation(Calendar occured, int linenumber, Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, String classPathTo, boolean inDirect, Message message, LogicalModules logicalModules){
+	public Violation(Calendar occured, int linenumber, Severity severity,
+			String ruletypeKey, String violationtypeKey, String classPathFrom,
+			String classPathTo, boolean inDirect, Message message,
+			LogicalModules logicalModules) {
 		this.linenumber = linenumber;
 		this.setSeverity(severity);
 		this.ruletypeKey = ruletypeKey;
@@ -29,9 +32,10 @@ public class Violation {
 		this.logicalModules = logicalModules;
 		this.message = message;
 	}
-	
-	
-	public Violation(int linenumber, Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, String classPathTo, boolean inDirect, Message message, LogicalModules logicalModules){
+
+	public Violation(int linenumber, Severity severity, String ruletypeKey,
+			String violationtypeKey, String classPathFrom, String classPathTo,
+			boolean inDirect, Message message, LogicalModules logicalModules) {
 		this.linenumber = linenumber;
 		this.setSeverity(severity);
 		this.ruletypeKey = ruletypeKey;
@@ -44,7 +48,8 @@ public class Violation {
 		this.message = message;
 	}
 
-	public Violation(Severity severity, String ruletypeKey, boolean inDirect, Message message, LogicalModules logicalModules){
+	public Violation(Severity severity, String ruletypeKey, boolean inDirect,
+			Message message, LogicalModules logicalModules) {
 		this.linenumber = 0;
 		this.setSeverity(severity);
 		this.ruletypeKey = ruletypeKey;
@@ -57,7 +62,9 @@ public class Violation {
 		this.message = message;
 	}
 
-	public Violation(Severity severity, String ruletypeKey, String classPathFrom, boolean inDirect, Message message, LogicalModules logicalModules){
+	public Violation(Severity severity, String ruletypeKey,
+			String classPathFrom, boolean inDirect, Message message,
+			LogicalModules logicalModules) {
 		this.linenumber = 0;
 		this.setSeverity(severity);
 		this.ruletypeKey = ruletypeKey;
@@ -70,7 +77,9 @@ public class Violation {
 		this.message = message;
 	}
 
-	public Violation(Severity severity, String ruletypeKey, String violationtypeKey, String classPathFrom, boolean inDirect, Message message, LogicalModules logicalModules){
+	public Violation(Severity severity, String ruletypeKey,
+			String violationtypeKey, String classPathFrom, boolean inDirect,
+			Message message, LogicalModules logicalModules) {
 		this.linenumber = 0;
 		this.setSeverity(severity);
 		this.ruletypeKey = ruletypeKey;
@@ -90,7 +99,6 @@ public class Violation {
 	public int getLinenumber() {
 		return linenumber;
 	}
-
 
 	public void setViolationtypeKey(String violationtypeKey) {
 		this.violationtypeKey = violationtypeKey;
@@ -139,7 +147,6 @@ public class Violation {
 	public String getRuletypeKey() {
 		return ruletypeKey;
 	}
-
 
 	public LogicalModules getLogicalModules() {
 		return logicalModules;
