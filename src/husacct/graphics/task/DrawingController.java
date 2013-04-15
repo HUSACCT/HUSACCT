@@ -43,7 +43,7 @@ import org.jhotdraw.draw.Figure;
 public abstract class DrawingController extends DrawingSettingsController {
 	private static final double MIN_ZOOMFACTOR = 0.25;
 	private static final double MAX_ZOOMFACTOR = 1.75;
-	
+
 	protected static final boolean debugPrint = true;
 	protected DrawingLayoutStrategy layoutStrategyOption;
 
@@ -407,7 +407,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 			this.drawingView.addToSelection(selection);
 
 			for (BaseFigure f : allFigures) {
-				if (f.isModule() && !figures.contains(f)) {
+				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
 					f.isContext(true);
 					figures.add(f);
 				}
@@ -445,11 +445,6 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public void refreshFrame() {
 		this.graphicsFrame.refreshFrame();
-	}
-	
-	@Override
-	public void setZoomSlider(double zoomFactor){
-		graphicsFrame.setZoomSlider(zoomFactor);
 	}
 
 	protected void resetAllFigurePositions() {
@@ -527,6 +522,11 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void setDrawingViewVisible() {
 		this.graphicsFrame.hideLoadingScreen();
 		this.drawingView.setVisible(true);
+	}
+
+	@Override
+	public void setZoomSlider(double zoomFactor) {
+		this.graphicsFrame.setZoomSlider(zoomFactor);
 	}
 
 	@Override
