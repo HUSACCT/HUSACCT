@@ -462,4 +462,8 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	public void figureDeselected(BaseFigure[] figures) {
 		// Not used in this UI
 	}
+
+	public void setZoomSlider(double zoomFactor) {
+		menuBar.setZoomSlider(zoomFactor);
+	}
 }

@@ -34,20 +34,20 @@ public class SubClassConventionRule extends RuleType {
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for(Mapping classPathFrom : physicalClasspathsFrom){	
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			int dependencyCounter = 0;
-			for(Mapping classPathTo : physicalClasspathsTo){
-				for(DependencyDTO dependency : dependencies){
-					if(dependency.from.equals(classPathFrom.getPhysicalPath())){
-						if(dependency.to.equals(classPathTo.getPhysicalPath())){
-							if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
-								dependencyCounter++;					
+			for (Mapping classPathTo : physicalClasspathsTo) {
+				for (DependencyDTO dependency : dependencies) {
+					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
+						if (dependency.to.equals(classPathTo.getPhysicalPath())) {
+							if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+								dependencyCounter++;
 							}
 						}
 					}
-				}				 			
+				}
 			}
-			if(dependencyCounter == 0 && physicalClasspathsTo.size() != 0){
+			if (dependencyCounter == 0 && physicalClasspathsTo.size() != 0) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}
@@ -55,4 +55,3 @@ public class SubClassConventionRule extends RuleType {
 		return violations;
 	}
 }
-

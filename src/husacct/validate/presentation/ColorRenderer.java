@@ -18,21 +18,21 @@ public class ColorRenderer extends JLabel implements TableCellRenderer {
 
 	public ColorRenderer(boolean isBordered) {
 		this.isBordered = isBordered;
-		setOpaque(true); //MUST do this for background to show up.
+		setOpaque(true); // MUST do this for background to show up.
 	}
 
 	public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-		Color newColor = (Color)color;
+		Color newColor = (Color) color;
 		setBackground(newColor);
 		if (isBordered) {
 			if (isSelected) {
 				if (selectedBorder == null) {
-					selectedBorder = BorderFactory.createMatteBorder(2,5,2,5, table.getSelectionBackground());
+					selectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5, table.getSelectionBackground());
 				}
 				setBorder(selectedBorder);
 			} else {
 				if (unselectedBorder == null) {
-					unselectedBorder = BorderFactory.createMatteBorder(2,5,2,5, table.getBackground());
+					unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5, table.getBackground());
 				}
 				setBorder(unselectedBorder);
 			}
