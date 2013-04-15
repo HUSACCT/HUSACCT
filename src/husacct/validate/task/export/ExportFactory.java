@@ -13,17 +13,18 @@ import java.util.Map;
 import org.jdom2.Element;
 
 public class ExportFactory {
+
 	private final ExportSeverities exportSeverities;
 	private final ExportSeveritiesPerTypesPerProgrammingLanguages exportSeveritiesPerTypesPerProgrammingLanguages;
 	private final ExportActiveViolationTypes exportActiveViolationTypes;
 
-	public ExportFactory(){
+	public ExportFactory() {
 		this.exportSeverities = new ExportSeverities();
 		this.exportSeveritiesPerTypesPerProgrammingLanguages = new ExportSeveritiesPerTypesPerProgrammingLanguages();
 		this.exportActiveViolationTypes = new ExportActiveViolationTypes();
 	}
 
-	public Element exportSeverities(List<Severity> severities)  {
+	public Element exportSeverities(List<Severity> severities) {
 		return exportSeverities.exportSeverities(severities);
 	}
 
@@ -31,8 +32,7 @@ public class ExportFactory {
 		return exportSeveritiesPerTypesPerProgrammingLanguages.exportSeveritiesPerTypesPerProgrammingLanguages(allSeveritiesPerTypesPerProgrammingLanguages);
 	}
 
-	public Element exportActiveViolationTypes(
-			Map<String, List<ActiveRuleType>> activeViolationTypes) {
+	public Element exportActiveViolationTypes(Map<String, List<ActiveRuleType>> activeViolationTypes) {
 		return exportActiveViolationTypes.exportActiveViolationTypes(activeViolationTypes);
 	}
 }

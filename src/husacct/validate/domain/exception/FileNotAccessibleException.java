@@ -5,6 +5,7 @@ import husacct.ServiceProvider;
 import java.io.File;
 
 public class FileNotAccessibleException extends RuntimeException {
+
 	private static final long serialVersionUID = 1L;
 
 	public FileNotAccessibleException(File file) {

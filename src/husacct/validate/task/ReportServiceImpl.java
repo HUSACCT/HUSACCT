@@ -12,11 +12,12 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
 import java.util.List;
 
-public class ReportServiceImpl implements IReportService{
-	private final ExportReportFactory reportFactory; 
+public class ReportServiceImpl implements IReportService {
+
+	private final ExportReportFactory reportFactory;
 	private final TaskServiceImpl taskServiceImpl;
 
-	public ReportServiceImpl(TaskServiceImpl taskServiceImpl){
+	public ReportServiceImpl(TaskServiceImpl taskServiceImpl) {
 		this.reportFactory = new ExportReportFactory();
 		this.taskServiceImpl = taskServiceImpl;
 	}
@@ -27,12 +28,12 @@ public class ReportServiceImpl implements IReportService{
 	}
 
 	@Override
-	public void createReport(File file, String fileType){
+	public void createReport(File file, String fileType) {
 		try {
-			if(file.createNewFile()) {
+			if (file.createNewFile()) {
 				reportFactory.exportReport(fileType, taskServiceImpl.getAllViolations(), file.getName(), file.getParent(), taskServiceImpl.getAllSeverities());
 				return;
-			} 
+			}
 		} catch (IOException e) {
 			throw new FileNotAccessibleException(file);
 		}
@@ -42,15 +43,15 @@ public class ReportServiceImpl implements IReportService{
 	@Override
 	public void createReport(File file, String fileType, Calendar date) {
 		try {
-			if(file.createNewFile()) {
+			if (file.createNewFile()) {
 				ViolationHistory violationHistory = taskServiceImpl.getViolationHistoryByDate(date);
 				reportFactory.exportReport(fileType, new SimpleEntry<Calendar, List<Violation>>(violationHistory.getDate(), violationHistory.getViolations()), file.getName(), file.getParent(), violationHistory.getSeverities());
 				return;
-			} 
+			}
 		} catch (IOException e) {
 			throw new FileNotAccessibleException(file);
 		}
 		throw new FileNotAccessibleException(file);
-		
+
 	}
 }
