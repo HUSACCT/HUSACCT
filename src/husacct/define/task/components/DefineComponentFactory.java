@@ -1,9 +1,13 @@
 package husacct.define.task.components;
 
+import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.ExternalLibrary;
 import husacct.define.domain.module.Component;
+import husacct.define.domain.module.SubSystem;
+import husacct.define.task.JtreeController;
+
 import org.apache.log4j.Logger;
 
 public class DefineComponentFactory {
@@ -16,8 +20,11 @@ public class DefineComponentFactory {
 			returnComponent = DefineComponentFactory.createExternalLibraryComponent(module);
 		} else if(module instanceof Component) { //husacct.define.domain.module.Component
 			returnComponent = DefineComponentFactory.createComponentComponent(module);
-		} else if(module instanceof Module) {
+		} else if(module instanceof Facade) {
+			returnComponent = DefineComponentFactory.createFacade(module);
+		} else if(module instanceof SubSystem) {
 			returnComponent = DefineComponentFactory.createModuleComponent(module);
+		
 		} else {
 			Logger logger = Logger.getLogger(DefineComponentFactory.class);
 			logger.error("ModuleType not implemented");
@@ -25,6 +32,13 @@ public class DefineComponentFactory {
 		return returnComponent;
 	}
 	
+	private static AbstractDefineComponent createFacade(Module module) {
+		FacadeComponent facade =new FacadeComponent();
+		facade.setModuleId(module.getId());
+		facade.setName(module.getName());
+		return facade;
+	}
+
 	private static SubSystemComponent createModuleComponent(Module module) {
 		SubSystemComponent subSystemComponent = new SubSystemComponent();
 		subSystemComponent.setModuleId(module.getId());

@@ -3,9 +3,11 @@ package husacct.define;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
@@ -19,11 +21,21 @@ public class DomainParser {
 	 **/
 	public ApplicationDTO parseApplication(Application app) {
 		String name = app.getName();
-		String[] paths = app.getPaths();
-		String programmingLanguage = app.getLanguage();
+		ArrayList<ProjectDTO> projects = parseProjects(app.getProjects());
 		String version = app.getVersion();
-		ApplicationDTO appDTO = new ApplicationDTO(name, paths, programmingLanguage, version);
+		ApplicationDTO appDTO = new ApplicationDTO(name, projects, version);
 		return appDTO;
+	}
+	
+	public ArrayList<ProjectDTO> parseProjects(ArrayList<Project> projects) {
+		ArrayList<ProjectDTO> projectDTOs = new ArrayList<ProjectDTO>();
+		for(Project project : projects) {
+			ProjectDTO projectDTO = new ProjectDTO(
+					project.getName(), project.getPaths(), project.getProgrammingLanguage(),
+					project.getVersion(), project.getDescription(), null);
+			projectDTOs.add(projectDTO);
+		}
+		return projectDTOs;
 	}
 	/**
 	 * Modules
@@ -55,7 +67,7 @@ public class DomainParser {
 		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module.getUnits());
 		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(expandedSoftwareUnits);
 		String type = module.getType();
-		
+	
 		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
 		for (Module subModule : module.getSubModules()){
 			ModuleDTO subModuleDTO = parseModule(subModule);
@@ -181,7 +193,7 @@ public class DomainParser {
 		exceptionRuleList.toArray(exceptionRuleDTOs);
 		RuleDTO[] exceptionRules = exceptionRuleDTOs; 
 		
-		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
+		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, false, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
 		return ruleDTO;
 	}
 }

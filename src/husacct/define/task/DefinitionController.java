@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
@@ -111,11 +112,15 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription){
+		logger.info("Adding component " + "Facade"+componentName);
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
+			Facade f= new Facade();
 			Component newComponent = new Component(componentName, componentDescription);
-			this.passModuleToService(selectedModuleId, newComponent);
+			f.setName("Facade"+newComponent.getName());
+			f.addSubModule(newComponent);
+			this.passModuleToService(selectedModuleId, f);
 			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
@@ -165,6 +170,7 @@ public class DefinitionController extends Observable implements Observer {
 		} catch (Exception e) {
 			logger.error("removeModuleById(" + moduleId + ") - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			System.out.println(e.getStackTrace());
 		} finally {
 			JPanelStatus.getInstance().stop();
 		}
@@ -205,21 +211,25 @@ public class DefinitionController extends Observable implements Observer {
 	/**
 	 * Remove the selected software unit
 	 */
-	public void removeSoftwareUnit(String softwareUnitName) {
-		logger.info("Removing software unit " + softwareUnitName);
+	public void removeSoftwareUnits(List<String> softwareUnitNames) {
 		try {
 			long moduleId = getSelectedModuleId();
+			
+			boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
+			
+			for(String softwareUnit : softwareUnitNames) {
+				logger.info("Removing software unit " + softwareUnit);
 
-			if (moduleId != -1 && softwareUnitName != null && !softwareUnitName.equals("")) {
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
-				if (confirm) {
-					// Remove the software unit
-					JPanelStatus.getInstance("Removing software unit").start();
-					this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnitName);
-					// Update the software unit table
-					this.notifyObservers();
+				if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
+					if (confirm) {
+						// Remove the software unit
+						JPanelStatus.getInstance("Removing software unit").start();
+						this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
+						// Update the software unit table
+						this.notifyObservers();
+					}
 				}
-			}
+			} 
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
@@ -278,6 +288,7 @@ public class DefinitionController extends Observable implements Observer {
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 		ArrayList<Module> modules = this.moduleService.getSortedModules();
 		for (Module module : modules) {
+			logger.debug(module.getName()+"  ]"+module.getType());
 			this.addChildComponents(rootComponent, module);
 		}
 
@@ -288,6 +299,7 @@ public class DefinitionController extends Observable implements Observer {
 	private void addChildComponents(AbstractDefineComponent parentComponent, Module module) {
 		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
 		for(Module subModule : module.getSubModules()) {
+			logger.debug(module.getName()+"  ]"+module.getType());
 			this.addChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);

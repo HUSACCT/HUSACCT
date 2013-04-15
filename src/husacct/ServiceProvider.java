@@ -58,6 +58,13 @@ public final class ServiceProvider {
 		this.controlService.setServiceListeners();
 	}
 	
+	public void resetAnalyseService() {		
+		this.analyseService = new AnalyseServiceImpl();
+	}
+	public void resetValidateService() {		
+		this.validateService = new ValidateServiceImpl();
+	}
+	
 	public ILocaleService getLocaleService(){
 		return localeService;
 	}

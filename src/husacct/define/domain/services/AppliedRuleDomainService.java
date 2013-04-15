@@ -17,11 +17,17 @@ public class AppliedRuleDomainService {
 			ruleList = SoftwareArchitecture.getInstance().getEnabledAppliedRules();
 		}
 		AppliedRule[] rules = new AppliedRule[ruleList.size()]; ruleList.toArray(rules);
+		//TODO: Add generated rules??
 		return rules;
 	}
 	
 	public AppliedRule[] getAppliedRules() {
 		return getAppliedRules(true);
+	}
+	
+	public AppliedRule[] getGeneratedRules()
+	{
+		return null; //TODO!!
 	}
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,

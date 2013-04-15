@@ -71,13 +71,13 @@ public class ValidateTest {
 	@Test
 	public void getRuleTypes(){
 		CategoryDTO[] dtos = validate.getCategories();	
-		final String [] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall","IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
+		final String [] currentRuletypes = new String[]{"FacadeConvention", "InterfaceConvention", "NamingConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall","IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
 	@Test
 	public void getViolationTypesJavaLanguage(){
-		define.createApplication("", new String[]{}, "Java", "");
+		//define.createApplication("", new String[]{}, "Java", "");
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -86,7 +86,7 @@ public class ValidateTest {
 
 	@Test
 	public void getViolationTypesCSharpLanguage(){
-		define.createApplication("", new String[]{}, "C#", "");
+		//define.createApplication("", new String[]{}, "C#", "");
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -95,7 +95,7 @@ public class ValidateTest {
 
 	@Test
 	public void getViolationTypesNoLanguage(){
-		define.createApplication("", new String[]{}, "", "");
+		//define.createApplication("", new String[]{}, "", "");
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);

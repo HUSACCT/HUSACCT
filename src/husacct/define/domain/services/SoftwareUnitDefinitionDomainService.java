@@ -5,6 +5,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Module;
+import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 
@@ -41,10 +42,12 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 
 	public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
+        
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		try {
 			Type type = Type.valueOf(t);
 			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+			
 			module.addSUDefinition(unit);
 		} catch (Exception e){
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + t);
@@ -57,6 +60,10 @@ public class SoftwareUnitDefinitionDomainService {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
+		//quikfix
+		try{
+		JtreeController.instance().registerTreeRestore(moduleId,unit.getName());
+		}catch(NullPointerException exe){}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 }

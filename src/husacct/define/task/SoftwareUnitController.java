@@ -6,11 +6,18 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 
 
@@ -49,9 +56,7 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
-		AnalysedModuleDTO[] modules = this.getAnalyzedModules();
-		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
-        Arrays.sort(modules, comparator);
+		AnalysedModuleDTO[] modules = this.getAnalyzedModules();	
 		for(AnalysedModuleDTO module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}
@@ -61,7 +66,40 @@ public class SoftwareUnitController extends PopUpController {
 	
 	private AnalysedModuleDTO[] getAnalyzedModules() {
 		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-		return modules;
+		AnalysedModuleDTO mockModule1 = new AnalysedModuleDTO("externallibrary", "test externallibrary", "externallibrary", "true");
+		AnalysedModuleDTO mockModule2 = new AnalysedModuleDTO("subsystem", " test subsystem", "subsystem", "true");
+		
+		AnalysedModuleDTO[]	testreturnlist = new AnalysedModuleDTO[modules.length+2];
+		for (int i = 0; i < modules.length; i++) {
+			testreturnlist[i]=modules[i];
+		}
+		
+		
+		
+		
+		
+		testreturnlist[modules.length]=mockModule1;
+		testreturnlist[modules.length+1]=mockModule2;
+		return testreturnlist;
+	}
+	
+	private AnalysedModuleDTO[] getAnalyzedModulesWithChildren() {
+		AnalysedModuleDTO[] rootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
+		
+		for(AnalysedModuleDTO rootModule : rootModules) {
+			this.addChildModules(rootModule);
+		}
+		
+		return rootModules;
+	}
+	
+	private void addChildModules(AnalysedModuleDTO module) {
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
+		
+		for(AnalysedModuleDTO subModule : children) {
+			module.subModules.add(subModule);
+			this.addChildModules(subModule);
+		}
 	}
 	
 	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
@@ -71,6 +109,7 @@ public class SoftwareUnitController extends PopUpController {
         Arrays.sort(children, comparator);
 		for(AnalysedModuleDTO subModule : children) {
 			this.addChildComponents(childComponent, subModule);
+			
 		}
 		parentComponent.addChild(childComponent);
 	}
@@ -79,14 +118,143 @@ public class SoftwareUnitController extends PopUpController {
 		save(this.getModuleId(), softwareUnit, type);
 	}
 	
+	public void saveRegEx(String regEx, String packageClass) {
+		String translatedRegEx = "";
+		
+		if(regEx.startsWith("*") && regEx.endsWith("*")) {
+			regEx = regEx.replace("*", "");
+			translatedRegEx = regEx;
+		} else if(regEx.startsWith("*")) {
+			regEx = regEx.replace("*", "");
+			translatedRegEx = regEx + "$";
+		} else if(regEx.endsWith("*")) {
+			regEx = regEx.replace("*", "");
+			translatedRegEx = "^" + regEx;
+		} else {
+			translatedRegEx = "^" + regEx + "$";
+		}
+		
+		Pattern regExPattern = Pattern.compile(translatedRegEx);
+		
+		for(AnalysedModuleDTO module : this.getAnalyzedModulesWithChildren()) {
+			Matcher matcher = regExPattern.matcher(module.name);
+			
+			System.out.println(module.type);
+			
+			if(packageClass.equals("P")) {
+				if(module.type.equals("package")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+			}
+			
+			else if(packageClass.equals("C")) {
+				if(module.type.equals("class") || module.type.equals("INTERFACE")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+			}
+			
+			else if(packageClass.equals("PC")) {
+				while(matcher.find()) {
+					logger.info("Adding software unit to module with id " + this.getModuleId());
+					try {
+						this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+						DefinitionController.getInstance().notifyObservers();
+					} catch (Exception e) {
+						this.logger.error(e.getMessage());
+						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+					}
+				}
+			}
+			
+			checkChildRegEx(module, regExPattern, packageClass);
+		}
+	}
+	
+	public void checkChildRegEx(AnalysedModuleDTO childModule, Pattern pattern, String packageClass) {
+		for(AnalysedModuleDTO module : childModule.subModules) {
+			Matcher matcher = pattern.matcher(module.name);
+			
+			if(packageClass.equals("P")) {
+				if(module.type.equals("package")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+			}
+			
+			else if(packageClass.equals("C")) {
+				if(module.type.equals("class") || module.type.equals("INTERFACE")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+							DefinitionController.getInstance().notifyObservers();
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+			}
+			
+			if(packageClass.equals("PC")) {
+				while(matcher.find()) {
+					logger.info("Adding software unit to module with id " + this.getModuleId());
+					try {
+						this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
+						DefinitionController.getInstance().notifyObservers();
+					} catch (Exception e) {
+						this.logger.error(e.getMessage());
+						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+					}
+				}
+			}
+			
+			checkChildRegEx(module, pattern, packageClass);
+		}
+	}
+	
 	public void save(Long moduleId, String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
+			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(moduleId, softwareUnit, type);
+			
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
 			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 		}
+	}
+	
+	public void save(Long moduleid,AbstractCombinedComponent component)
+	{
+		logger.info("Adding software unit to module with id " + this.getModuleId());
+		
 	}
 }

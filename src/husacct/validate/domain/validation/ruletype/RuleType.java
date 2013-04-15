@@ -26,9 +26,9 @@ public abstract class RuleType {
 	protected final String key;
 	protected final String descriptionKey;
 	protected final String categoryKey;
-	protected final EnumSet<RuleTypes> exceptionRuleKeys;	
-	protected final List<ViolationType> violationtypes;	
-	protected List<RuleType> exceptionrules;
+	protected final EnumSet<RuleTypes> exceptionRuleKeys;
+	protected final List<ViolationType> violationtypes;
+	protected List<RuleType> exceptionRules;
 	protected final Severity severity;
 
 	protected List<Violation> violations;
@@ -40,7 +40,7 @@ public abstract class RuleType {
 
 	private AbstractViolationType violationtypefactory;
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity){
+	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity) {
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
@@ -49,41 +49,41 @@ public abstract class RuleType {
 		this.severity = severity;
 	}
 
-	public String getKey(){
+	public String getKey() {
 		return key;
 	}
 
-	public String getDescriptionKey(){
+	public String getDescriptionKey() {
 		return descriptionKey;
 	}
 
-	public String getCategoryKey(){
+	public String getCategoryKey() {
 		return categoryKey;
 	}
 
-	public EnumSet<RuleTypes> getExceptionRuleKeys(){
+	public EnumSet<RuleTypes> getExceptionRuleKeys() {
 		return exceptionRuleKeys;
 	}
 
-	public List<ViolationType> getViolationTypes(){
+	public List<ViolationType> getViolationTypes() {
 		return violationtypes;
 	}
 
-	public void setExceptionrules(List<RuleType> ruletypes){
-		this.exceptionrules = ruletypes;
+	public void setExceptionrules(List<RuleType> ruletypes) {
+		this.exceptionRules = ruletypes;
 	}
 
-	public List<RuleType> getExceptionrules(){
-		return exceptionrules;
+	public List<RuleType> getExceptionrules() {
+		return exceptionRules;
 	}
 
-	public Severity getSeverity(){
+	public Severity getSeverity() {
 		return severity;
 	}
 
 	public abstract List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule);
 
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, DependencyDTO dependency, ConfigurationServiceImpl configuration){
+	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, Mapping classPathTo, DependencyDTO dependency, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 
@@ -92,20 +92,20 @@ public abstract class RuleType {
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);
 
 		final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
-		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);	
+		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
 
 		return new Violation(dependency.lineNumber, severity.clone(), this.key, dependency.type, dependency.from, dependency.to, dependency.isIndirect, message, logicalModules);
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules,ConfigurationServiceImpl configuration){
+	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
-		return new Violation(severity.clone(), this.key, false, message,logicalModules);
+		return new Violation(severity.clone(), this.key, false, message, logicalModules);
 
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, ConfigurationServiceImpl configuration){
+	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 
@@ -116,28 +116,29 @@ public abstract class RuleType {
 		return new Violation(severity.clone(), this.key, classPathFrom.getPhysicalPath(), false, message, logicalModules);
 	}
 
-	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration){
+	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 		LogicalModule logicalModuleFrom = new LogicalModule(classPathFrom);
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
 
-		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);	
+		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);
 
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
 		return new Violation(severity.clone(), this.key, violationTypeKey, classPathFrom.getPhysicalPath(), false, message, logicalModules);
 	}
 
-	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration){
-		if(violationtypefactory == null){
+	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {
+		if (violationtypefactory == null) {
 			this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		}
 	}
 
-	private Severity getViolationTypeSeverity(String violationTypeKey){
-		try{
+	private Severity getViolationTypeSeverity(String violationTypeKey) {
+		try {
 			return violationtypefactory.createViolationType(this.key, violationTypeKey).getSeverity();
-		}catch(ViolationTypeNotFoundException e){
+		}
+		catch (ViolationTypeNotFoundException e) {
 
 		}
 		return null;

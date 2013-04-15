@@ -16,7 +16,7 @@ import org.jdom2.Element;
 
 public abstract class XmlImportUtils {
 	private Logger logger = Logger.getLogger(XmlImportUtils.class);
-	
+
 	protected Message getMessage(Element messageElement) {
 		Element logicalModulesElement = messageElement.getChild("logicalModules");
 		LogicalModules logicalModules = getLogicalModules(logicalModulesElement);
@@ -24,13 +24,13 @@ public abstract class XmlImportUtils {
 		String regex = messageElement.getChildText("regex");
 		Element violationTypeKeys = messageElement.getChild("violationTypeKeys");
 		List<String> violationTypeKeysList = new ArrayList<String>();
-		for(Element violationTypeKey : violationTypeKeys.getChildren()) {
+		for (Element violationTypeKey : violationTypeKeys.getChildren()) {
 			violationTypeKeysList.add(violationTypeKey.getText());
 		}
 		List<Message> exceptionMessages = new ArrayList<Message>();
 		Element exceptionMessagesElement = messageElement.getChild("exceptionMessages");
-		if(exceptionMessagesElement != null) {
-			for(Element exceptionMessageElement : exceptionMessagesElement.getChildren()) {
+		if (exceptionMessagesElement != null) {
+			for (Element exceptionMessageElement : exceptionMessagesElement.getChildren()) {
 				exceptionMessages.add(getMessage(exceptionMessageElement));
 			}
 		}
@@ -48,14 +48,15 @@ public abstract class XmlImportUtils {
 		return logicalModules;
 	}
 
-	protected Calendar getCalendar(String stringCalendar){
+	protected Calendar getCalendar(String stringCalendar) {
 		Calendar calendar = Calendar.getInstance();
-		try{
+		try {
 			calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(stringCalendar).toGregorianCalendar();
 		}
-		catch(IllegalArgumentException e){
+		catch (IllegalArgumentException e) {
 			logger.error(String.format("%s is not a valid datetime, switching back to current datetime", stringCalendar));
-		} catch (DatatypeConfigurationException e) {
+		}
+		catch (DatatypeConfigurationException e) {
 			logger.error(e.getMessage());
 		}
 		return calendar;

@@ -18,7 +18,7 @@ public class ExportController {
 		this.exportFactory = new ExportFactory();
 	}
 
-	public Element exportAllData(ConfigurationServiceImpl configuration){
+	public Element exportAllData(ConfigurationServiceImpl configuration) {
 		Element rootValidateElement = new Element("validate");
 		rootValidateElement.addContent(exportSeveritiesXML(configuration.getAllSeverities()));
 		rootValidateElement.addContent(exportSeveritiesPerTypesPerProgrammingLanguagesXML(configuration.getAllSeveritiesPerTypesPerProgrammingLanguages()));
