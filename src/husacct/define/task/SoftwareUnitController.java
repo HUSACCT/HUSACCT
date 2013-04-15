@@ -244,6 +244,7 @@ public class SoftwareUnitController extends PopUpController {
 		try {
 			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(moduleId, softwareUnit, type);
+			
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());

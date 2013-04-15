@@ -126,7 +126,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 	
 	private JPanel createUIMappingPanel() {
-		getSoftwareDefinationTree();
+	
 		if(regExMappingPanel != null)
 			this.getContentPane().remove(regExMappingPanel);
 		
@@ -161,7 +161,6 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 
 
 	private JPanel createRegExMappingPanel() {
-		getSoftwareDefinationTree();
 		this.getContentPane().remove(UIMappingPanel);
 		
 		regExMappingPanel = new JPanel();
@@ -217,17 +216,18 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void getSoftwareDefinationTree() {
 		if(JtreeController.instance().isLoaded())
 		{
+			
 			this.softwareDefinitionTree= JtreeController.instance().getTree();
 		
 		}else {
 			
 		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-		AnalyzedComponentHelper helpercheker= new AnalyzedComponentHelper();
-		helpercheker.chekIfDataIsTheSame(rootComponent);
+		
 		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
 		JtreeController.instance().setCurrentTree(this.softwareDefinitionTree);
 		
 		JtreeController.instance().setLoadState(true);
+	
 		}
 		
 	}
@@ -309,17 +309,6 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 
 	private void save() {
 
-		TreeSelectionModel _paths = this.softwareDefinitionTree.getSelectionModel();
-		for (TreePath path : _paths.getSelectionPaths()){
-			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-			this.softwareDefinitionTree.removeTreeItem(_moduleId,selectedComponent);
-			this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
-		}
-		this.dispose();
-		
-		
-
-
 		if(regExMappingPanel != null) {
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
@@ -347,7 +336,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-				this.softwareDefinitionTree.removeTreeItem(_moduleId,selectedComponent);
+			
 				this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
 			}
 			this.dispose();

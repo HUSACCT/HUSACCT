@@ -46,11 +46,13 @@ public  void registerTreeRemoval(long moduleId,AbstractCombinedComponent removed
 	
 	if(moduleRegistry.get(moduleId) == null)
 	{
-			
+	
 			LinkedHashMap<String,AbstractCombinedComponent> analyzedComponents = new LinkedHashMap<String, AbstractCombinedComponent>();
 			analyzedComponents.put(((AnalyzedModuleComponent) removedSoftwareunit).getUniqueName() , removedSoftwareunit);
 			moduleRegistry.put(moduleId, analyzedComponents);
+			
 	}else{
+		
 		LinkedHashMap<String,AbstractCombinedComponent> analyzedComponents=moduleRegistry.get(moduleId);
 		analyzedComponents.put(((AnalyzedModuleComponent) removedSoftwareunit).getUniqueName() , removedSoftwareunit);
 	}
@@ -82,21 +84,19 @@ public  void registerTreeRestore(long moduleId)
 }
 
 
-
-public  void registerTreeRestore(long moduleId,String removedSoftwareunitUniqName)
-{
-	AnalyzedModuleComponent  unitTobeRemoved   =  (AnalyzedModuleComponent) moduleRegistry.get(moduleId).get(removedSoftwareunitUniqName);
-	tree.restoreTreeItem(unitTobeRemoved);
-}
-
-
-
 private  void registerTreeRestoreByModuleId(LinkedHashMap<String,AbstractCombinedComponent> content)
 {
 	for(String key : content.keySet())
 	{
 		tree.restoreTreeItem((AnalyzedModuleComponent)content.get(key));
 	}
+}
+
+
+public  void registerTreeRestore(long moduleId,String removedSoftwareunitUniqName)
+{
+	AnalyzedModuleComponent  unitTobeRemoved   =  (AnalyzedModuleComponent) moduleRegistry.get(moduleId).get(removedSoftwareunitUniqName);
+	tree.restoreTreeItem(unitTobeRemoved);
 }
 
 
@@ -120,6 +120,7 @@ public  AnalyzedModuleTree getTree()
 	return tree;
 }
 
+//moet naar het tree object ^_^
 public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
 	
 	String[] adress=unit.getName().split("\\.");
@@ -142,14 +143,14 @@ public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
 		
 	     }
 	
-		
-		
-		
-		
-		
-	
 	}
+	AnalyzedModuleComponent result = (AnalyzedModuleComponent)temp;
 	
+	if(!result.getUniqueName().equals("root"))
+	{
+		
+	instance().tree.removeTreeItem(moduleId, result);
+	}
 	
 	
 	
