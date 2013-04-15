@@ -35,6 +35,8 @@ public interface UserInputListener {
 	public void hideSmartLines();
 
 	public void drawingZoomChanged(double zoomFactor);
+	
+	public void setZoomSlider(double zoomFactor);
 
 	public void hideModules();
 

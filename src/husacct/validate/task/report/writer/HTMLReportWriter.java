@@ -26,7 +26,7 @@ public class HTMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws IOException, URISyntaxException  {
+	public void createReport() throws IOException, URISyntaxException {
 		checkDirsExist();
 		createResources();
 		writer = new FileWriter(getFileName());
@@ -76,6 +76,7 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</head>");
 
 	}
+
 	private void createBody() throws IOException {
 		html.append("<body>");
 		html.append("<table width=\"100%\">");
@@ -101,19 +102,20 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("<span>Date generated: " + getCurrentDate() + "</span><br />Project: " + report.getProjectName() + "<br />Version: " + report.getVersion() + "<br />");
 		html.append("<span>Violations generated on: " + report.getFormattedDate() + "</span><br />");
 		html.append("<span class=\"stats\">Statistics</span><br/>");
-		html.append("Total violations: " + report.getViolations().getValue().size() + "<br />"+ "<br />");
-		for(ViolationsPerSeverity severityPerViolation : report.getViolationsPerSeverity()) {
+		html.append("Total violations: " + report.getViolations().getValue().size() + "<br />" + "<br />");
+		for (ViolationsPerSeverity severityPerViolation : report.getViolationsPerSeverity()) {
 			html.append(severityPerViolation.getSeverity().getSeverityName() + ": " + severityPerViolation.getAmount() + "<br />");
 		}
 	}
-	private void createTable() throws IOException  {
+
+	private void createTable() throws IOException {
 		html.append("<span class=\"stats\">Violations</span>");
 		html.append("<table id=\"example\" border=\"1\" width=\"100%\">");
 		html.append("<thead>");
 		html.append("<tr>");
-		for(String columnHeader : report.getLocaleColumnHeaders()) {
+		for (String columnHeader : report.getLocaleColumnHeaders()) {
 			html.append("<th>");
-			if(columnHeader != null && !columnHeader.trim().equals("")) {
+			if (columnHeader != null && !columnHeader.trim().equals("")) {
 				html.append(columnHeader);
 			} else {
 				html.append("&nbsp;");
@@ -123,46 +125,46 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</tr>");
 		html.append("</thead>");
 		html.append("<tbody>");
-		for(Violation violation : report.getViolations().getValue()) {
+		for (Violation violation : report.getViolations().getValue()) {
 			html.append("<tr>");
-			//Source
-			if(violation.getClassPathFrom() != null) {
+			// Source
+			if (violation.getClassPathFrom() != null) {
 				createColumn(violation.getClassPathFrom());
 			} else {
 				createColumn("");
 			}
 
-			//Rule
-			if(violation.getMessage() != null) {
+			// Rule
+			if (violation.getMessage() != null) {
 				String message = new Messagebuilder().createMessage(violation.getMessage());
 				createColumn(message);
 			} else {
 				createColumn("");
 			}
 
-			//LineNumber
-			if(violation.getLinenumber() > 0) {
+			// LineNumber
+			if (violation.getLinenumber() > 0) {
 				createColumn("" + violation.getLinenumber());
 			} else {
 				createColumn("");
 			}
 
-			//Dependency Kind
-			if(violation.getViolationtypeKey() != null) {
+			// Dependency Kind
+			if (violation.getViolationtypeKey() != null) {
 				createColumn(getDependencyKindValue(violation.getViolationtypeKey(), violation.isIndirect()));
 			} else {
 				createColumn("");
 			}
 
-			//Target
-			if(violation.getClassPathTo() != null) {
-				createColumn(violation.getClassPathTo());	
+			// Target
+			if (violation.getClassPathTo() != null) {
+				createColumn(violation.getClassPathTo());
 			} else {
 				createColumn("");
 			}
 
-			//Severity
-			if(violation.getSeverity() != null) {
+			// Severity
+			if (violation.getSeverity() != null) {
 				createColumn(violation.getSeverity().getSeverityName());
 			} else {
 				createColumn("");
@@ -172,9 +174,10 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</tbody>");
 		html.append("</table>");
 	}
+
 	private void createColumn(String content) throws IOException {
 		html.append("<td>");
-		if(content != null && !content.trim().equals("")) {
+		if (content != null && !content.trim().equals("")) {
 			html.append(content);
 		} else {
 			html.append("&nbsp;");
@@ -182,11 +185,11 @@ public class HTMLReportWriter extends ReportWriter {
 		html.append("</td>");
 	}
 
-	private void copyfile(InputStream inputStream, File destination) throws IOException{
+	private void copyfile(InputStream inputStream, File destination) throws IOException {
 		OutputStream out = new FileOutputStream(destination);
 		byte[] buf = new byte[1024];
 		int len;
-		while ((len = inputStream.read(buf)) > 0){
+		while ((len = inputStream.read(buf)) > 0) {
 			out.write(buf, 0, len);
 		}
 		inputStream.close();

@@ -18,15 +18,16 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-public class MustUseRule extends RuleType{
+public class MustUseRule extends RuleType {
+
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED, RuleTypes.IS_NOT_ALLOWED);
 
 	public MustUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules,severity);
+		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override
-	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {	
+	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		this.violations = new ArrayList<Violation>();
 
 		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
@@ -36,20 +37,20 @@ public class MustUseRule extends RuleType{
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		int dependencyCounter = 0;
-		for(Mapping classPathFrom : physicalClasspathsFrom){			
-			for(Mapping classPathTo : physicalClasspathsTo){				
-				for(DependencyDTO dependency : dependencies){
-					if(dependency.from.equals(classPathFrom.getPhysicalPath())){
-						if(dependency.to.equals(classPathTo.getPhysicalPath())){
-							if(Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0){
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
+			for (Mapping classPathTo : physicalClasspathsTo) {
+				for (DependencyDTO dependency : dependencies) {
+					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
+						if (dependency.to.equals(classPathTo.getPhysicalPath())) {
+							if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
 								dependencyCounter++;
 							}
 						}
 					}
-				}				
+				}
 			}
-		}	
-		if(dependencyCounter == 0 && physicalClasspathsTo.size() != 0){
+		}
+		if (dependencyCounter == 0 && physicalClasspathsTo.size() != 0) {
 			LogicalModule logicalModuleFrom = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
 			LogicalModule logicalModuleTo = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
 			LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);

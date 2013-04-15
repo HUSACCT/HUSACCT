@@ -1,17 +1,18 @@
 package husacct.validate.presentation.tableModels;
 
 import husacct.validate.domain.validation.Severity;
+
 import java.util.List;
 import java.util.Vector;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 
 public class ComboBoxTableModel extends AbstractTableModel {
+
 	private static final long serialVersionUID = -7158951096196307267L;
-	
 	private Vector dataVector;
-	
 	private Vector columnIdentifiers;
 	private DefaultCellEditor editor;
 	private List<Severity> comboboxValues;
@@ -33,8 +34,8 @@ public class ComboBoxTableModel extends AbstractTableModel {
 		this(convertToVector(columnNames), rowCount);
 		this.columnNames = columnNames;
 		this.comboboxValues = comboboxValues;
-		JComboBox comboBox = new JComboBox();//comboboxValues);
-		for(Severity severity : comboboxValues){
+		JComboBox comboBox = new JComboBox();// comboboxValues);
+		for (Severity severity : comboboxValues) {
 			comboBox.addItem(severity);
 		}
 		comboBox.setEditable(true);
@@ -122,17 +123,17 @@ public class ComboBoxTableModel extends AbstractTableModel {
 	private static Vector nonNullVector(Vector v) {
 		return (v != null) ? v : new Vector();
 	}
-	
-	public void checkValuesAreValid(){
+
+	public void checkValuesAreValid() {
 		for (int i = 0; i < getRowCount(); i++) {
 			boolean b = false;
-			for(Severity value : comboboxValues){
-				if(value.equals((Severity)getValueAt(i, 1))){
+			for (Severity value : comboboxValues) {
+				if (value.equals((Severity) getValueAt(i, 1))) {
 					b = true;
-					
+
 				}
 			}
-			if(!b) {
+			if (!b) {
 				setValueAt(comboboxValues.get(0), i, 1);
 			}
 		}
@@ -179,7 +180,7 @@ public class ComboBoxTableModel extends AbstractTableModel {
 	public void setCanEdit(Boolean[] canEdit) {
 		this.canEdit = canEdit;
 	}
-	
+
 	public void clear() {
 		int rows = getRowCount();
 		while (0 < rows) {

@@ -8,7 +8,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 
-class ViolationHistoryRepository extends Observable {	
+class ViolationHistoryRepository extends Observable {
+
 	private List<ViolationHistory> violationHistories;
 
 	ViolationHistoryRepository() {
@@ -19,21 +20,21 @@ class ViolationHistoryRepository extends Observable {
 		return violationHistories;
 	}
 
-	void setViolationHistories(List<ViolationHistory> violationhistories){
+	void setViolationHistories(List<ViolationHistory> violationhistories) {
 		this.violationHistories = violationhistories;
 	}
 
-	void addViolationHistory(ViolationHistory violationHistory){
+	void addViolationHistory(ViolationHistory violationHistory) {
 		violationHistories.add(violationHistory);
 		setChanged();
 		notifyObservers();
 	}
 
 	void removeViolationHistory(Calendar date) {
-		if(dateExistsInRepository(date)){
+		if (dateExistsInRepository(date)) {
 			ViolationHistory recordToDelete = null;
-			for(ViolationHistory violationHistory : violationHistories) {
-				if(violationHistory.getDate().equals(date)) {
+			for (ViolationHistory violationHistory : violationHistories) {
+				if (violationHistory.getDate().equals(date)) {
 					recordToDelete = violationHistory;
 					break;
 				}
@@ -45,9 +46,9 @@ class ViolationHistoryRepository extends Observable {
 	}
 
 	ViolationHistory getViolationHistoryByDate(Calendar date) {
-		if(dateExistsInRepository(date)){
-			for(ViolationHistory violationHistory : violationHistories) {
-				if(violationHistory.getDate().equals(date)) {
+		if (dateExistsInRepository(date)) {
+			for (ViolationHistory violationHistory : violationHistories) {
+				if (violationHistory.getDate().equals(date)) {
 					return violationHistory;
 				}
 			}
@@ -55,9 +56,9 @@ class ViolationHistoryRepository extends Observable {
 		throw new ViolationHistoryNotFoundException(date);
 	}
 
-	private boolean dateExistsInRepository(Calendar date){
-		for(ViolationHistory violationHistory : violationHistories){
-			if(violationHistory.getDate().equals(date)){
+	private boolean dateExistsInRepository(Calendar date) {
+		for (ViolationHistory violationHistory : violationHistories) {
+			if (violationHistory.getDate().equals(date)) {
 				return true;
 			}
 		}
