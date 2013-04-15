@@ -20,24 +20,24 @@ public final class ConfigurationServiceImpl extends Observable {
 	private final SeverityConfigRepository severityConfig;
 	private final SeverityPerTypeRepository severityPerTypeRepository;
 	private final ViolationRepository violationRepository;
-	private final RuleTypesFactory ruletypefactory;
+	private final RuleTypesFactory ruletypeFactory;
 	private final ViolationHistoryRepository violationHistoryRepository;
 	private final ActiveViolationTypesRepository activeViolationTypesRepository;
 
 	public ConfigurationServiceImpl() {
 		this.severityConfig = new SeverityConfigRepository();
-		this.violationRepository = new ViolationRepository();		
-		this.severityPerTypeRepository = new SeverityPerTypeRepository(this.ruletypefactory = new RuleTypesFactory(this), this);
-		this.activeViolationTypesRepository = new ActiveViolationTypesRepository(this.ruletypefactory);
-		this.severityPerTypeRepository.initializeDefaultSeverities();			
-		this.violationHistoryRepository = new ViolationHistoryRepository();		
+		this.violationRepository = new ViolationRepository();
+		this.severityPerTypeRepository = new SeverityPerTypeRepository(this.ruletypeFactory = new RuleTypesFactory(this), this);
+		this.activeViolationTypesRepository = new ActiveViolationTypesRepository(this.ruletypeFactory);
+		this.severityPerTypeRepository.initializeDefaultSeverities();
+		this.violationHistoryRepository = new ViolationHistoryRepository();
 	}
 
 	public void clearViolations() {
 		violationRepository.clear();
 	}
 
-	public int getSeverityValue(Severity severity){
+	public int getSeverityValue(Severity severity) {
 		return severityConfig.getSeverityValue(severity);
 	}
 
@@ -45,7 +45,7 @@ public final class ConfigurationServiceImpl extends Observable {
 		return severityConfig.getAllSeverities();
 	}
 
-	/** 
+	/**
 	 * @throws SeverityChangedException
 	 */
 	public void setSeverities(List<Severity> severities) {
@@ -53,7 +53,7 @@ public final class ConfigurationServiceImpl extends Observable {
 		notifyServiceListeners();
 	}
 
-	public Severity getSeverityByName(String severityName){
+	public Severity getSeverityByName(String severityName) {
 		return severityConfig.getSeverityByName(severityName);
 	}
 
@@ -82,38 +82,38 @@ public final class ConfigurationServiceImpl extends Observable {
 		notifyServiceListeners();
 	}
 
-	public Severity getSeverityFromKey(String language, String key){
+	public Severity getSeverityFromKey(String language, String key) {
 		return severityPerTypeRepository.getSeverity(language, key);
 	}
 
-	public void restoreAllKeysToDefaultSeverities(String language){
+	public void restoreAllKeysToDefaultSeverities(String language) {
 		severityPerTypeRepository.restoreAllKeysToDefaultSeverities(language);
 		setChanged();
 		notifyObservers();
 		notifyServiceListeners();
 	}
 
-	public void restoreKeyToDefaultSeverity(String language, String key){
+	public void restoreKeyToDefaultSeverity(String language, String key) {
 		severityPerTypeRepository.restoreKeyToDefaultSeverity(language, key);
 		setChanged();
 		notifyObservers();
 		notifyServiceListeners();
 	}
 
-	public void restoreSeveritiesToDefault(){
+	public void restoreSeveritiesToDefault() {
 		severityConfig.restoreToDefault();
 		notifyServiceListeners();
 	}
 
-	public RuleTypesFactory getRuleTypesFactory(){
-		return ruletypefactory;
+	public RuleTypesFactory getRuleTypesFactory() {
+		return ruletypeFactory;
 	}
 
 	public List<ViolationHistory> getViolationHistory() {
 		return violationHistoryRepository.getViolationHistory();
 	}
 
-	public void setViolationHistory(List<ViolationHistory> list){
+	public void setViolationHistory(List<ViolationHistory> list) {
 		violationHistoryRepository.setViolationHistories(list);
 	}
 
@@ -134,7 +134,7 @@ public final class ConfigurationServiceImpl extends Observable {
 		final Calendar date = violationsResult.getKey();
 		final List<Violation> violations = violationsResult.getValue();
 
-		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);	
+		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);
 		violationHistoryRepository.addViolationHistory(violationHistory);
 	}
 
@@ -150,21 +150,20 @@ public final class ConfigurationServiceImpl extends Observable {
 		return violationHistoryRepository.getViolationHistory();
 	}
 
-	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey){
-		if(activeViolationTypesRepository != null){
+	public boolean isViolationEnabled(String programmingLanguage, String ruleTypeKey, String violationTypeKey) {
+		if (activeViolationTypesRepository != null) {
 			getActiveViolationTypes();
 			return activeViolationTypesRepository.isEnabled(programmingLanguage, ruleTypeKey, violationTypeKey);
-		}
-		else{
+		} else {
 			return true;
 		}
 	}
-	
+
 	public void attachViolationHistoryRepositoryObserver(Observer observer) {
 		violationHistoryRepository.addObserver(observer);
 	}
-	
-	private void notifyServiceListeners(){
+
+	private void notifyServiceListeners() {
 		ServiceProvider.getInstance().getValidateService().notifyServiceListeners();
 	}
 }
