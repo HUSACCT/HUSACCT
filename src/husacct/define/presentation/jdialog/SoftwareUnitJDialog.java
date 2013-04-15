@@ -89,6 +89,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
 			this.getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
 			
+			UIMapping.setEnabled(false);
 			this.setResizable(false);
 			this.setSize(650, 300);
 			this.pack();
@@ -274,10 +275,14 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		}
 		else if (action.getSource() == this.UIMapping) {
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
+			UIMapping.setEnabled(false);
+			regExMapping.setEnabled(true);
 			this.pack();
 		}
 		else if (action.getSource() == this.regExMapping) {
 			this.getContentPane().add(this.createRegExMappingPanel(), BorderLayout.CENTER);
+			UIMapping.setEnabled(true);
+			regExMapping.setEnabled(false);
 			this.pack();
 		}
 	}
