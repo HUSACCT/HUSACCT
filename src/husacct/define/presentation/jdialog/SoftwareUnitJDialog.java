@@ -277,6 +277,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			this.getContentPane().add(this.createUIMappingPanel(), BorderLayout.CENTER);
 			UIMapping.setEnabled(false);
 			regExMapping.setEnabled(true);
+			regExMappingPanel = null;
 			this.pack();
 		}
 		else if (action.getSource() == this.regExMapping) {
