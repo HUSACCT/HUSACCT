@@ -125,30 +125,42 @@ public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
 	
 	String[] adress=unit.getName().split("\\.");
 	AbstractCombinedComponent temp= (AbstractCombinedComponent)instance.tree.getModel().getRoot();
-	
+	String re="";
 	
 	for (int i = 0; i < adress.length; i++) 
 	{
-		
+		System.out.println(adress[i]+"---------------"+"adresss");
 		for(AbstractCombinedComponent item : temp.getChildren())
 		{
 				AnalyzedModuleComponent chek = (AnalyzedModuleComponent) item;
 				String[] result= chek.getUniqueName().split("\\.");
-			
+				System.out.println("reault  "+result[result.length-1]+ "  ---"+result.length+"  "+chek.getUniqueName());
 				if(adress[i].equals(result[0]))
 				{
 					
 					temp=item;
+					System.out.println(result[0]+"---------<><>"+adress[i]);
 				}
 		
 	     }
 	
 	}
 	AnalyzedModuleComponent result = (AnalyzedModuleComponent)temp;
+	//quikfix
+	
+	for(AbstractCombinedComponent r:result.getChildren())
+	{
+		AnalyzedModuleComponent h = (AnalyzedModuleComponent)r;
+		
+		if(h.getUniqueName().toLowerCase().equals(re.toLowerCase()))
+		{
+			result=h;
+		}
+	}
 	
 	if(!result.getUniqueName().equals("root"))
 	{
-		
+		System.out.println(result.getUniqueName());
 	instance().tree.removeTreeItem(moduleId, result);
 	}
 	
