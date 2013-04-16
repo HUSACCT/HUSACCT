@@ -1,5 +1,4 @@
 package husacct.analyse.domain.famix;
 
-class FamixProperty{
-
+class FamixProperty {
 }
