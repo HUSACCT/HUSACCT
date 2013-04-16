@@ -107,8 +107,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	private void addSoftwareUnit() {
-//		if(ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-		if (DefinitionController.getInstance().isAnalysed()){
+//		if() {
+		if (DefinitionController.getInstance().isAnalysed() || ServiceProvider.getInstance().getControlService().isPreAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
