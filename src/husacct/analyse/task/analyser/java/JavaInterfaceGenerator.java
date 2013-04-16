@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.java;
 
 import husacct.analyse.infrastructure.antlr.java.JavaParser;
-import husacct.analyse.task.analyser.VisibillitySet;
+import husacct.analyse.task.analyser.VisibilitySet;
 
 import org.antlr.runtime.tree.CommonTree;
 
@@ -10,7 +10,7 @@ class JavaInterfaceGenerator extends JavaGenerator{
 	private String name = "";
 	private String uniqueName = "";
 	private String belongsToPackage = "";
-	private String visibillity = VisibillitySet.DEFAULT.toString();
+	private String visibillity = VisibilitySet.DEFAULT.toString();
 	
 	public JavaInterfaceGenerator(String uniquePackageName){
 		this.belongsToPackage = uniquePackageName;
@@ -32,7 +32,7 @@ class JavaInterfaceGenerator extends JavaGenerator{
 		CommonTree modifierList = (CommonTree)tree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
 		if(!(modifierList == null || modifierList.getChildCount() < 1)){
 			String found = modifierList.getChild(0).toString();
-			if(VisibillitySet.isValidVisibillity(found)){
+			if(VisibilitySet.isValidVisibillity(found)){
 				this.visibillity = found;
 			}
 		}
