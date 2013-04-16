@@ -30,7 +30,9 @@ public class AnalyseTask implements Runnable{
 			Thread.sleep(1);			
 			logger.debug("Analysing application");		
 			//ServiceProvider.getInstance().resetAnalyseService();
-			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0));
+			if(applicationDTO.projects.size() > 0){
+				ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0));
+			}
 			logger.debug("Analysing finished");
 			if(!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
