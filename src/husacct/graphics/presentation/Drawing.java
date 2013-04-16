@@ -43,7 +43,7 @@ public class Drawing extends QuadTreeDrawing {
 		figureMap = map;
 	}
 
-	/*public void showExportToImagePanel() {
+	public void showExportToImagePanel() {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
 			JFileChooser fileChooser = new JFileChooser();
@@ -62,7 +62,7 @@ public class Drawing extends QuadTreeDrawing {
 		} catch (IOException e) {
 			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
 		}
-	}*/
+	}
 
 	public BaseFigure[] getShownModules() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
