@@ -5,7 +5,7 @@ public class ActiveViolationType {
 	private final String violationTypeKey;
 	private boolean enabled;
 
-	public ActiveViolationType(String violationTypeKey, boolean enabled){
+	public ActiveViolationType(String violationTypeKey, boolean enabled) {
 		this.violationTypeKey = violationTypeKey;
 		this.enabled = enabled;
 	}
@@ -18,7 +18,7 @@ public class ActiveViolationType {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled){
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 }

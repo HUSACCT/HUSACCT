@@ -3,6 +3,7 @@ package husacct.validate.domain.validation.internal_transfer_objects;
 import husacct.validate.domain.validation.Severity;
 
 public class ViolationsPerSeverity {
+
 	private final int amount;
 	private final Severity severity;
 

@@ -3,13 +3,15 @@ package husacct.validate.domain.validation;
 import java.util.Calendar;
 import java.util.List;
 
-public class ViolationHistory {	
+public class ViolationHistory {
+
 	private final List<Violation> violations;
 	private final Calendar date;
 	private List<Severity> severities;
 	private final String description;
-	
-	public ViolationHistory(List<Violation> violations, List<Severity> severities, Calendar date, String description) {
+
+	public ViolationHistory(List<Violation> violations,
+			List<Severity> severities, Calendar date, String description) {
 		this.violations = violations;
 		this.date = date;
 		this.severities = severities;
@@ -27,8 +29,8 @@ public class ViolationHistory {
 	public List<Severity> getSeverities() {
 		return severities;
 	}
-	
-	public void addSeverity(Severity severity){
+
+	public void addSeverity(Severity severity) {
 		severities.add(severity);
 	}
 

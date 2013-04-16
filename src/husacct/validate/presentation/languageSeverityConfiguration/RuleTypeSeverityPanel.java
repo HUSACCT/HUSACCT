@@ -6,11 +6,22 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.presentation.DataLanguageHelper;
 import husacct.validate.presentation.tableModels.ComboBoxTableModel;
 import husacct.validate.task.TaskServiceImpl;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
@@ -166,8 +177,8 @@ class RuleTypeSeverityPanel extends JPanel {
 	void loadModel() {
 		String[] ruletypeColumnNames = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("Ruletype"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Severity")};
 		ruletypeModel = new ComboBoxTableModel(ruletypeColumnNames, 0, severities);
-		ruletypeModel.setTypes(new Class[]{DataLanguageHelper.class, Severity.class});
-		ruletypeModel.setCanEdit(new Boolean[]{false, true});
+		ruletypeModel.setTypes(new Class[] {DataLanguageHelper.class, Severity.class});
+		ruletypeModel.setCanEdit(new Boolean[] {false, true});
 
 		ruletypeTable.setModel(ruletypeModel);
 
@@ -216,7 +227,7 @@ class RuleTypeSeverityPanel extends JPanel {
 			} catch (Exception e) {
 				severity = taskServiceImpl.getAllSeverities().get(0);
 			}
-			ruletypeModel.addRow(new Object[]{new DataLanguageHelper(ruletype.getKey()), severity});
+			ruletypeModel.addRow(new Object[] {new DataLanguageHelper(ruletype.getKey()), severity});
 		}
 		ruletypeModel.checkValuesAreValid();
 	}
