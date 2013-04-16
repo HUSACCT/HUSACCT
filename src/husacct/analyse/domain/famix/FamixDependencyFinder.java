@@ -124,7 +124,7 @@ class FamixDependencyFinder extends FamixFinder{
 				if(!returnIndirectDependencies.contains(tempDTO) && !containsDependency(tempDTO, returnIndirectDependencies) && !isDependencyInList(tempDTO, returnIndirectDependencies)){
 					returnIndirectDependencies.add(tempDTO);
 				}else {
-					System.out.println("Already on the list bru! 2");
+					System.out.println("Dependency already in the list: {"+tempDTO.toString()+"}");
 				}
 			}	
 		}
@@ -156,6 +156,7 @@ class FamixDependencyFinder extends FamixFinder{
 		return false;
 	}
 	
+	@Deprecated
 	private List<DependencyDTO> findIndirectDependenciesFrom(DependencyDTO fromDependency){
 		List<DependencyDTO> found = new ArrayList<DependencyDTO>();
 		this.from = fromDependency.to;
