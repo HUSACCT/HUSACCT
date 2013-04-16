@@ -12,6 +12,7 @@ public class CSharpInheritanceGenerator extends CSharpGenerator {
         new TreePrinter(inheritanceTree);
         String temp = getDestination(inheritanceTree);
         // modelService.createInheritanceDefinition(from, to, lineNumber);
+        // wijziging
     }
 
     private String getDestination(CommonTree inheritTree) {
