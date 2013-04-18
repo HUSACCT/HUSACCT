@@ -1,803 +1,803 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <validate>
-	<severities>
-		<severity>
-			<severityKey>High</severityKey>
-			<id>9ba50518-9be0-47b8-a074-a46adbc89261</id>
-			<color>-65536</color>
-		</severity>
-		<severity>
-			<severityKey>Medium</severityKey>
-			<id>9ba50518-9be0-47b8-a074-a46adbc79261</id>
-			<color>-256</color>
-		</severity>
-		<severity>
-			<severityKey>Low</severityKey>
-			<id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
-			<color>-16711936</color>
-		</severity>
-	</severities>
-	<violations>
-		<violation>
-			<lineNumber>101</lineNumber>
-			<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-			<ruletypeKey>IsNotAllowedTo</ruletypeKey>
-			<violationtypeKey>Implements</violationtypeKey>
-			<classPathFrom>m1.p1.c1</classPathFrom>
-			<classPathTo>hu.sacct.validate.Validate</classPathTo>
+    <severities>
+	<severity>
+	    <severityKey>High</severityKey>
+	    <id>9ba50518-9be0-47b8-a074-a46adbc89261</id>
+	    <color>-65536</color>
+	</severity>
+	<severity>
+	    <severityKey>Medium</severityKey>
+	    <id>9ba50518-9be0-47b8-a074-a46adbc79261</id>
+	    <color>-256</color>
+	</severity>
+	<severity>
+	    <severityKey>Low</severityKey>
+	    <id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
+	    <color>-16711936</color>
+	</severity>
+    </severities>
+    <violations>
+	<violation>
+	    <lineNumber>101</lineNumber>
+	    <severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+	    <ruletypeKey>IsNotAllowedTo</ruletypeKey>
+	    <violationtypeKey>Implements</violationtypeKey>
+	    <classPathFrom>m1.p1.c1</classPathFrom>
+	    <classPathTo>hu.sacct.validate.Validate</classPathTo>
+	    <logicalModules>
+		<logicalModuleFrom>
+		    <logicalModulePath>module path</logicalModulePath>
+		    <logicalModuleType>module type</logicalModuleType>
+		</logicalModuleFrom>
+		<logicalModuleTo>
+		    <logicalModulePath>module path</logicalModulePath>
+		    <logicalModuleType>module type</logicalModuleType>
+		</logicalModuleTo>
+	    </logicalModules>
+	    <message>
+		<logicalModules>
+		    <logicalModuleFrom>
+			<logicalModulePath>module path</logicalModulePath>
+			<logicalModuleType>module type</logicalModuleType>
+		    </logicalModuleFrom>
+		    <logicalModuleTo>
+			<logicalModulePath>module path</logicalModulePath>
+			<logicalModuleType>module type</logicalModuleType>
+		    </logicalModuleTo>
+		</logicalModules>
+		<ruleKey>IsNotAllowedToUse</ruleKey>
+		<violationTypeKeys>
+		    <violationTypeKey>ExtendsAbstract</violationTypeKey>
+		    <violationTypeKey>Implements</violationTypeKey>
+		    <violationTypeKey>Declaration</violationTypeKey>
+		    <violationTypeKey>Annotation</violationTypeKey>
+		    <violationTypeKey>AccessPropertyOrField</violationTypeKey>
+		</violationTypeKeys>
+		<exceptionMessages>
+		    <message>
 			<logicalModules>
-				<logicalModuleFrom>
-					<logicalModulePath>module path</logicalModulePath>
-					<logicalModuleType>module type</logicalModuleType>
-				</logicalModuleFrom>
-				<logicalModuleTo>
-					<logicalModulePath>module path</logicalModulePath>
-					<logicalModuleType>module type</logicalModuleType>
-				</logicalModuleTo>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
 			</logicalModules>
-			<message>
+			<ruleKey>rulekey</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsAbstract</violationTypeKey>
+			    <violationTypeKey>Annotation</violationTypeKey>
+			    <violationTypeKey>Declaration</violationTypeKey>
+			    <violationTypeKey>Exception</violationTypeKey>
+			    <violationTypeKey>ExtendsConcrete</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages>
+			    <message>
 				<logicalModules>
-					<logicalModuleFrom>
-						<logicalModulePath>module path</logicalModulePath>
-						<logicalModuleType>module type</logicalModuleType>
-					</logicalModuleFrom>
-					<logicalModuleTo>
-						<logicalModulePath>module path</logicalModulePath>
-						<logicalModuleType>module type</logicalModuleType>
-					</logicalModuleTo>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
 				</logicalModules>
-				<ruleKey>IsNotAllowedToUse</ruleKey>
+				<ruleKey>rulekey</ruleKey>
 				<violationTypeKeys>
-					<violationTypeKey>ExtendsAbstract</violationTypeKey>
-					<violationTypeKey>Implements</violationTypeKey>
-					<violationTypeKey>Declaration</violationTypeKey>
-					<violationTypeKey>Annotation</violationTypeKey>
-					<violationTypeKey>AccessPropertyOrField</violationTypeKey>
+				    <violationTypeKey>ExtendsAbstract</violationTypeKey>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages />
+			    </message>
+			</exceptionMessages>
+		    </message>
+		    <message>
+			<logicalModules>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
+			</logicalModules>
+			<ruleKey>rulekey</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>InvocMethod</violationTypeKey>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages />
+		    </message>
+		</exceptionMessages>
+	    </message>
+	    <isIndirect>false</isIndirect>
+	    <occured>2012-04-27T11:52:06.221+02:00</occured>
+	</violation>
+	<violation>
+	    <lineNumber>0</lineNumber>
+	    <severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+	    <ruletypeKey>IsNotAllowedToUse</ruletypeKey>
+	    <violationtypeKey>Implements</violationtypeKey>
+	    <classPathFrom>Module.module</classPathFrom>
+	    <classPathTo>module.module2</classPathTo>
+	    <logicalModules>
+		<logicalModuleFrom>
+		    <logicalModulePath>module path</logicalModulePath>
+		    <logicalModuleType>module type</logicalModuleType>
+		</logicalModuleFrom>
+		<logicalModuleTo>
+		    <logicalModulePath>module path</logicalModulePath>
+		    <logicalModuleType>module type</logicalModuleType>
+		</logicalModuleTo>
+	    </logicalModules>
+	    <message>
+		<logicalModules>
+		    <logicalModuleFrom>
+			<logicalModulePath>module path</logicalModulePath>
+			<logicalModuleType>module type</logicalModuleType>
+		    </logicalModuleFrom>
+		    <logicalModuleTo>
+			<logicalModulePath>module path</logicalModulePath>
+			<logicalModuleType>module type</logicalModuleType>
+		    </logicalModuleTo>
+		</logicalModules>
+		<ruleKey>IsNotAllowedToUse</ruleKey>
+		<violationTypeKeys>
+		    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+		    <violationTypeKey>Implements</violationTypeKey>
+		    <violationTypeKey>Import</violationTypeKey>
+		    <violationTypeKey>InvocConstructor</violationTypeKey>
+		</violationTypeKeys>
+		<exceptionMessages>
+		    <message>
+			<logicalModules>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
+			</logicalModules>
+			<ruleKey>rulekey</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages />
+			    </message>
+			</exceptionMessages>
+		    </message>
+		    <message>
+			<logicalModules>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
+			</logicalModules>
+			<ruleKey>rulekey</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages />
+		    </message>
+		</exceptionMessages>
+	    </message>
+	    <isIndirect>true</isIndirect>
+	    <occured>2012-04-27T11:52:06.221+02:00</occured>
+	</violation>
+    </violations>
+    <severitiesPerTypesPerProgrammingLanguages>
+	<severityPerTypePerProgrammingLanguage
+	    language="C#">
+	    <severityPerType>
+		<typeKey>InvocMethod</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+	    </severityPerType>
+	    <severityPerType>
+		<typeKey>Implements</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+	    </severityPerType>
+	    <severityPerType>
+		<typeKey>Exception</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+	    </severityPerType>
+	    <severityPerType>
+		<typeKey>Annotation</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+	    </severityPerType>
+	</severityPerTypePerProgrammingLanguage>
+	<severityPerTypePerProgrammingLanguage
+	    language="Java">
+	    <severityPerType>
+		<typeKey>Import</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+	    </severityPerType>
+	    <severityPerType>
+		<typeKey>ExtendsConcrete</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+	    </severityPerType>
+	    <severityPerType>
+		<typeKey>ExtendsAbstract</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+	    </severityPerType>
+	    <severityPerType>
+		<typeKey>Implements</typeKey>
+		<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+	    </severityPerType>
+	</severityPerTypePerProgrammingLanguage>
+    </severitiesPerTypesPerProgrammingLanguages>
+    <violationHistories>
+	<violationHistory date="2012-05-16T18:35:28.368+02:00">
+	    <description>description</description>
+	    <severities>
+		<severity>
+		    <severityKey>High</severityKey>
+		    <id>9ba50518-9be0-47b8-a074-a46adbc89261</id>
+		    <color>-65536</color>
+		</severity>
+		<severity>
+		    <severityKey>Medium</severityKey>
+		    <id>9ba50518-9be0-47b8-a074-a46adbc79261</id>
+		    <color>-256</color>
+		</severity>
+		<severity>
+		    <severityKey>low</severityKey>
+		    <id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
+		    <color>-16711936</color>
+		</severity>
+	    </severities>
+	    <violations>
+		<violation>
+		    <lineNumber>101</lineNumber>
+		    <severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+		    <ruletypeKey>IsNotAllowedTo</ruletypeKey>
+		    <violationtypeKey>Implements</violationtypeKey>
+		    <classPathFrom>m1.p1.c1</classPathFrom>
+		    <classPathTo>hu.sacct.validate.Validate</classPathTo>
+		    <logicalModules>
+			<logicalModuleFrom>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleFrom>
+			<logicalModuleTo>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleTo>
+		    </logicalModules>
+		    <message>
+			<logicalModules>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
+			</logicalModules>
+			<ruleKey>IsNotAllowedToUse</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
 				</violationTypeKeys>
 				<exceptionMessages>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>rulekey</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsAbstract</violationTypeKey>
-							<violationTypeKey>Annotation</violationTypeKey>
-							<violationTypeKey>Declaration</violationTypeKey>
-							<violationTypeKey>Exception</violationTypeKey>
-							<violationTypeKey>ExtendsConcrete</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsAbstract</violationTypeKey>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages />
-							</message>
-						</exceptionMessages>
-					</message>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>rulekey</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>InvocMethod</violationTypeKey>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages />
-					</message>
+				    <message>
+					<logicalModules>
+					    <logicalModuleFrom>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleFrom>
+					    <logicalModuleTo>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleTo>
+					</logicalModules>
+					<ruleKey>rulekey</ruleKey>
+					<violationTypeKeys>
+					    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+					    <violationTypeKey>Implements</violationTypeKey>
+					    <violationTypeKey>Import</violationTypeKey>
+					    <violationTypeKey>InvocConstructor</violationTypeKey>
+					</violationTypeKeys>
+					<exceptionMessages />
+				    </message>
 				</exceptionMessages>
-			</message>
-			<isIndirect>false</isIndirect>
-			<occured>2012-04-27T11:52:06.221+02:00</occured>
+			    </message>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>VisibilityConvention</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>public</violationTypeKey>
+				    <violationTypeKey>protected</violationTypeKey>
+				    <violationTypeKey>default</violationTypeKey>
+				    <violationTypeKey>private</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages />
+			    </message>
+			</exceptionMessages>
+		    </message>
+		    <isIndirect>false</isIndirect>
+		    <occured>2012-04-27T11:52:06.221+02:00</occured>
 		</violation>
 		<violation>
-			<lineNumber>0</lineNumber>
-			<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-			<ruletypeKey>IsNotAllowedToUse</ruletypeKey>
-			<violationtypeKey>Implements</violationtypeKey>
-			<classPathFrom>Module.module</classPathFrom>
-			<classPathTo>module.module2</classPathTo>
+		    <lineNumber>0</lineNumber>
+		    <severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+		    <ruletypeKey>IsNotAllowedToUse</ruletypeKey>
+		    <violationtypeKey>Implements</violationtypeKey>
+		    <classPathFrom>Module.module</classPathFrom>
+		    <classPathTo>module.module2</classPathTo>
+		    <logicalModules>
+			<logicalModuleFrom>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleFrom>
+			<logicalModuleTo>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleTo>
+		    </logicalModules>
+		    <message>
 			<logicalModules>
-				<logicalModuleFrom>
-					<logicalModulePath>module path</logicalModulePath>
-					<logicalModuleType>module type</logicalModuleType>
-				</logicalModuleFrom>
-				<logicalModuleTo>
-					<logicalModulePath>module path</logicalModulePath>
-					<logicalModuleType>module type</logicalModuleType>
-				</logicalModuleTo>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
 			</logicalModules>
-			<message>
+			<ruleKey>IsNotAllowedToUse</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages>
+			    <message>
 				<logicalModules>
-					<logicalModuleFrom>
-						<logicalModulePath>module path</logicalModulePath>
-						<logicalModuleType>module type</logicalModuleType>
-					</logicalModuleFrom>
-					<logicalModuleTo>
-						<logicalModulePath>module path</logicalModulePath>
-						<logicalModuleType>module type</logicalModuleType>
-					</logicalModuleTo>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
 				</logicalModules>
-				<ruleKey>IsNotAllowedToUse</ruleKey>
+				<ruleKey>rulekey</ruleKey>
 				<violationTypeKeys>
-					<violationTypeKey>ExtendsLibrary</violationTypeKey>
-					<violationTypeKey>Implements</violationTypeKey>
-					<violationTypeKey>Import</violationTypeKey>
-					<violationTypeKey>InvocConstructor</violationTypeKey>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
 				</violationTypeKeys>
 				<exceptionMessages>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>rulekey</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages />
-							</message>
-						</exceptionMessages>
-					</message>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>rulekey</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages />
-					</message>
+				    <message>
+					<logicalModules>
+					    <logicalModuleFrom>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleFrom>
+					    <logicalModuleTo>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleTo>
+					</logicalModules>
+					<ruleKey>rulekey</ruleKey>
+					<violationTypeKeys>
+					    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+					    <violationTypeKey>Implements</violationTypeKey>
+					    <violationTypeKey>Import</violationTypeKey>
+					    <violationTypeKey>InvocConstructor</violationTypeKey>
+					</violationTypeKeys>
+					<exceptionMessages />
+				    </message>
 				</exceptionMessages>
-			</message>
-			<isIndirect>true</isIndirect>
-			<occured>2012-04-27T11:52:06.221+02:00</occured>
+			    </message>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages />
+			    </message>
+			</exceptionMessages>
+		    </message>
+		    <isIndirect>true</isIndirect>
+		    <occured>2012-04-27T11:52:06.221+02:00</occured>
 		</violation>
-	</violations>
-	<severitiesPerTypesPerProgrammingLanguages>
-		<severityPerTypePerProgrammingLanguage
-			language="C#">
-			<severityPerType>
-				<typeKey>InvocMethod</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-			</severityPerType>
-			<severityPerType>
-				<typeKey>Implements</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-			</severityPerType>
-			<severityPerType>
-				<typeKey>Exception</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-			</severityPerType>
-			<severityPerType>
-				<typeKey>Annotation</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-			</severityPerType>
-		</severityPerTypePerProgrammingLanguage>
-		<severityPerTypePerProgrammingLanguage
-			language="Java">
-			<severityPerType>
-				<typeKey>Import</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-			</severityPerType>
-			<severityPerType>
-				<typeKey>ExtendsConcrete</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-			</severityPerType>
-			<severityPerType>
-				<typeKey>ExtendsAbstract</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-			</severityPerType>
-			<severityPerType>
-				<typeKey>Implements</typeKey>
-				<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-			</severityPerType>
-		</severityPerTypePerProgrammingLanguage>
-	</severitiesPerTypesPerProgrammingLanguages>
-	<violationHistories>
-		<violationHistory date="2012-05-16T18:35:28.368+02:00">
-			<description>description</description>
-			<severities>
-				<severity>
-					<severityKey>High</severityKey>
-					<id>9ba50518-9be0-47b8-a074-a46adbc89261</id>
-					<color>-65536</color>
-				</severity>
-				<severity>
-					<severityKey>Medium</severityKey>
-					<id>9ba50518-9be0-47b8-a074-a46adbc79261</id>
-					<color>-256</color>
-				</severity>
-				<severity>
-					<severityKey>low</severityKey>
-					<id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
-					<color>-16711936</color>
-				</severity>
-			</severities>
-			<violations>
-				<violation>
-					<lineNumber>101</lineNumber>
-					<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-					<ruletypeKey>IsNotAllowedTo</ruletypeKey>
-					<violationtypeKey>Implements</violationtypeKey>
-					<classPathFrom>m1.p1.c1</classPathFrom>
-					<classPathTo>hu.sacct.validate.Validate</classPathTo>
+	    </violations>
+	</violationHistory>
+	<violationHistory date="1000-12-01T18:35:28.368+01:00">
+	    <description>description2</description>
+	    <severities>
+		<severity>
+		    <severityKey>High</severityKey>
+		    <id>9ba50518-9be0-47b8-a074-a46adbc89261</id>
+		    <color>-65536</color>
+		</severity>
+		<severity>
+		    <severityKey>Medium</severityKey>
+		    <id>9ba50518-9be0-47b8-a074-a46adbc79261</id>
+		    <color>-256</color>
+		</severity>
+		<severity>
+		    <severityKey>low</severityKey>
+		    <id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
+		    <color>-16711936</color>
+		</severity>
+	    </severities>
+	    <violations>
+		<violation>
+		    <lineNumber>0</lineNumber>
+		    <severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
+		    <ruletypeKey>IsNotAllowedToUse</ruletypeKey>
+		    <violationtypeKey>Implements</violationtypeKey>
+		    <classPathFrom>Module.module</classPathFrom>
+		    <classPathTo>module.module2</classPathTo>
+		    <logicalModules>
+			<logicalModuleFrom>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleFrom>
+			<logicalModuleTo>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleTo>
+		    </logicalModules>
+		    <message>
+			<logicalModules>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
+			</logicalModules>
+			<ruleKey>IsNotAllowedToUse</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages>
+				    <message>
 					<logicalModules>
-						<logicalModuleFrom>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleFrom>
-						<logicalModuleTo>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleTo>
+					    <logicalModuleFrom>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleFrom>
+					    <logicalModuleTo>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleTo>
 					</logicalModules>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>IsNotAllowedToUse</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages>
-									<message>
-										<logicalModules>
-											<logicalModuleFrom>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleFrom>
-											<logicalModuleTo>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleTo>
-										</logicalModules>
-										<ruleKey>rulekey</ruleKey>
-										<violationTypeKeys>
-											<violationTypeKey>ExtendsLibrary</violationTypeKey>
-											<violationTypeKey>Implements</violationTypeKey>
-											<violationTypeKey>Import</violationTypeKey>
-											<violationTypeKey>InvocConstructor</violationTypeKey>
-										</violationTypeKeys>
-										<exceptionMessages />
-									</message>
-								</exceptionMessages>
-							</message>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>VisibilityConvention</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>public</violationTypeKey>
-									<violationTypeKey>protected</violationTypeKey>
-									<violationTypeKey>default</violationTypeKey>
-									<violationTypeKey>private</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages />
-							</message>
-						</exceptionMessages>
-					</message>
-					<isIndirect>false</isIndirect>
-					<occured>2012-04-27T11:52:06.221+02:00</occured>
-				</violation>
-				<violation>
-					<lineNumber>0</lineNumber>
-					<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-					<ruletypeKey>IsNotAllowedToUse</ruletypeKey>
-					<violationtypeKey>Implements</violationtypeKey>
-					<classPathFrom>Module.module</classPathFrom>
-					<classPathTo>module.module2</classPathTo>
+					<ruleKey>rulekey</ruleKey>
+					<violationTypeKeys>
+					    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+					    <violationTypeKey>Implements</violationTypeKey>
+					    <violationTypeKey>Import</violationTypeKey>
+					    <violationTypeKey>InvocConstructor</violationTypeKey>
+					</violationTypeKeys>
+					<exceptionMessages />
+				    </message>
+				</exceptionMessages>
+			    </message>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages />
+			    </message>
+			</exceptionMessages>
+		    </message>
+		    <isIndirect>true</isIndirect>
+		    <occured>2012-04-27T11:52:06.221+02:00</occured>
+		</violation>
+		<violation>
+		    <lineNumber>101</lineNumber>
+		    <severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
+		    <ruletypeKey>IsNotAllowedTo</ruletypeKey>
+		    <violationtypeKey>Implements</violationtypeKey>
+		    <classPathFrom>m1.p1.c1</classPathFrom>
+		    <classPathTo>hu.sacct.validate.Validate</classPathTo>
+		    <logicalModules>
+			<logicalModuleFrom>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleFrom>
+			<logicalModuleTo>
+			    <logicalModulePath>module path</logicalModulePath>
+			    <logicalModuleType>module type</logicalModuleType>
+			</logicalModuleTo>
+		    </logicalModules>
+		    <message>
+			<logicalModules>
+			    <logicalModuleFrom>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleFrom>
+			    <logicalModuleTo>
+				<logicalModulePath>module path</logicalModulePath>
+				<logicalModuleType>module type</logicalModuleType>
+			    </logicalModuleTo>
+			</logicalModules>
+			<ruleKey>IsNotAllowedToUse</ruleKey>
+			<violationTypeKeys>
+			    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+			    <violationTypeKey>Implements</violationTypeKey>
+			    <violationTypeKey>Import</violationTypeKey>
+			    <violationTypeKey>InvocConstructor</violationTypeKey>
+			</violationTypeKeys>
+			<exceptionMessages>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>Extend</violationTypeKey>
+				    <violationTypeKey>key2</violationTypeKey>
+				    <violationTypeKey>key3</violationTypeKey>
+				    <violationTypeKey>key4</violationTypeKey>
+				    <violationTypeKey>key5</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages>
+				    <message>
 					<logicalModules>
-						<logicalModuleFrom>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleFrom>
-						<logicalModuleTo>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleTo>
+					    <logicalModuleFrom>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleFrom>
+					    <logicalModuleTo>
+						<logicalModulePath>module path</logicalModulePath>
+						<logicalModuleType>module type</logicalModuleType>
+					    </logicalModuleTo>
 					</logicalModules>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>IsNotAllowedToUse</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages>
-									<message>
-										<logicalModules>
-											<logicalModuleFrom>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleFrom>
-											<logicalModuleTo>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleTo>
-										</logicalModules>
-										<ruleKey>rulekey</ruleKey>
-										<violationTypeKeys>
-											<violationTypeKey>ExtendsLibrary</violationTypeKey>
-											<violationTypeKey>Implements</violationTypeKey>
-											<violationTypeKey>Import</violationTypeKey>
-											<violationTypeKey>InvocConstructor</violationTypeKey>
-										</violationTypeKeys>
-										<exceptionMessages />
-									</message>
-								</exceptionMessages>
-							</message>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages />
-							</message>
-						</exceptionMessages>
-					</message>
-					<isIndirect>true</isIndirect>
-					<occured>2012-04-27T11:52:06.221+02:00</occured>
-				</violation>
-			</violations>
-		</violationHistory>
-		<violationHistory date="1000-12-01T18:35:28.368+01:00">
-			<description>description2</description>
-			<severities>
-				<severity>
-					<severityKey>High</severityKey>
-					<id>9ba50518-9be0-47b8-a074-a46adbc89261</id>
-					<color>-65536</color>
-				</severity>
-				<severity>
-					<severityKey>Medium</severityKey>
-					<id>9ba50518-9be0-47b8-a074-a46adbc79261</id>
-					<color>-256</color>
-				</severity>
-				<severity>
-					<severityKey>low</severityKey>
-					<id>9ba50518-9be0-47b8-a074-a46adbc89251</id>
-					<color>-16711936</color>
-				</severity>
-			</severities>
-			<violations>
-				<violation>
-					<lineNumber>0</lineNumber>
-					<severityId>9ba50518-9be0-47b8-a074-a46adbc79261</severityId>
-					<ruletypeKey>IsNotAllowedToUse</ruletypeKey>
-					<violationtypeKey>Implements</violationtypeKey>
-					<classPathFrom>Module.module</classPathFrom>
-					<classPathTo>module.module2</classPathTo>
-					<logicalModules>
-						<logicalModuleFrom>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleFrom>
-						<logicalModuleTo>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleTo>
-					</logicalModules>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>IsNotAllowedToUse</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages>
-									<message>
-										<logicalModules>
-											<logicalModuleFrom>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleFrom>
-											<logicalModuleTo>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleTo>
-										</logicalModules>
-										<ruleKey>rulekey</ruleKey>
-										<violationTypeKeys>
-											<violationTypeKey>ExtendsLibrary</violationTypeKey>
-											<violationTypeKey>Implements</violationTypeKey>
-											<violationTypeKey>Import</violationTypeKey>
-											<violationTypeKey>InvocConstructor</violationTypeKey>
-										</violationTypeKeys>
-										<exceptionMessages />
-									</message>
-								</exceptionMessages>
-							</message>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages />
-							</message>
-						</exceptionMessages>
-					</message>
-					<isIndirect>true</isIndirect>
-					<occured>2012-04-27T11:52:06.221+02:00</occured>
-				</violation>
-				<violation>
-					<lineNumber>101</lineNumber>
-					<severityId>9ba50518-9be0-47b8-a074-a46adbc89261</severityId>
-					<ruletypeKey>IsNotAllowedTo</ruletypeKey>
-					<violationtypeKey>Implements</violationtypeKey>
-					<classPathFrom>m1.p1.c1</classPathFrom>
-					<classPathTo>hu.sacct.validate.Validate</classPathTo>
-					<logicalModules>
-						<logicalModuleFrom>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleFrom>
-						<logicalModuleTo>
-							<logicalModulePath>module path</logicalModulePath>
-							<logicalModuleType>module type</logicalModuleType>
-						</logicalModuleTo>
-					</logicalModules>
-					<message>
-						<logicalModules>
-							<logicalModuleFrom>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleFrom>
-							<logicalModuleTo>
-								<logicalModulePath>module path</logicalModulePath>
-								<logicalModuleType>module type</logicalModuleType>
-							</logicalModuleTo>
-						</logicalModules>
-						<ruleKey>IsNotAllowedToUse</ruleKey>
-						<violationTypeKeys>
-							<violationTypeKey>ExtendsLibrary</violationTypeKey>
-							<violationTypeKey>Implements</violationTypeKey>
-							<violationTypeKey>Import</violationTypeKey>
-							<violationTypeKey>InvocConstructor</violationTypeKey>
-						</violationTypeKeys>
-						<exceptionMessages>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>Extend</violationTypeKey>
-									<violationTypeKey>key2</violationTypeKey>
-									<violationTypeKey>key3</violationTypeKey>
-									<violationTypeKey>key4</violationTypeKey>
-									<violationTypeKey>key5</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages>
-									<message>
-										<logicalModules>
-											<logicalModuleFrom>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleFrom>
-											<logicalModuleTo>
-												<logicalModulePath>module path</logicalModulePath>
-												<logicalModuleType>module type</logicalModuleType>
-											</logicalModuleTo>
-										</logicalModules>
-										<ruleKey>rulekey</ruleKey>
-										<violationTypeKeys>
-											<violationTypeKey>ExtendsLibrary</violationTypeKey>
-											<violationTypeKey>Implements</violationTypeKey>
-											<violationTypeKey>Import</violationTypeKey>
-											<violationTypeKey>InvocConstructor</violationTypeKey>
-										</violationTypeKeys>
-										<exceptionMessages />
-									</message>
-								</exceptionMessages>
-							</message>
-							<message>
-								<logicalModules>
-									<logicalModuleFrom>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleFrom>
-									<logicalModuleTo>
-										<logicalModulePath>module path</logicalModulePath>
-										<logicalModuleType>module type</logicalModuleType>
-									</logicalModuleTo>
-								</logicalModules>
-								<ruleKey>rulekey</ruleKey>
-								<violationTypeKeys>
-									<violationTypeKey>ExtendsLibrary</violationTypeKey>
-									<violationTypeKey>Implements</violationTypeKey>
-									<violationTypeKey>Import</violationTypeKey>
-									<violationTypeKey>InvocConstructor</violationTypeKey>
-								</violationTypeKeys>
-								<exceptionMessages />
-							</message>
-						</exceptionMessages>
-					</message>
-					<isIndirect>false</isIndirect>
-					<occured>2012-04-27T11:52:06.221+02:00</occured>
-				</violation>
-			</violations>
-		</violationHistory>
-	</violationHistories>
-	<activeViolationTypes>
-		<activeViolationType language="C#">
-			<ruleType type="IsNotAllowedToUse">
-				<violationTypes>
-					<violationType>
-						<violationKey>ExtendsConcrete</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-					<violationType>
-						<violationKey>Implements</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-				</violationTypes>
-			</ruleType>
-			<ruleType type="VisibilityConvention">
-				<violationTypes>
-					<violationType>
-						<violationKey>public</violationKey>
-						<enabled>true</enabled>
-					</violationType>
-					<violationType>
-						<violationKey>private</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-				</violationTypes>
-			</ruleType>
-		</activeViolationType>
-		<activeViolationType language="Java">
-			<ruleType type="IsNotAllowedToUse">
-				<violationTypes>
-					<violationType>
-						<violationKey>ExtendsAbstract</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-					<violationType>
-						<violationKey>Implements</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-				</violationTypes>
-			</ruleType>
-			<ruleType type="IsAllowedToUse">
-				<violationTypes>
-					<violationType>
-						<violationKey>ExtendsConcrete</violationKey>
-						<enabled>true</enabled>
-					</violationType>
-					<violationType>
-						<violationKey>Annotation</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-				</violationTypes>
-			</ruleType>
-			<ruleType type="IsOnlyAllowedToUse">
-				<violationTypes>
-					<violationType>
-						<violationKey>Import</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-					<violationType>
-						<violationKey>Exception</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-				</violationTypes>
-			</ruleType>
-			<ruleType type="MustUse">
-				<violationTypes>
-					<violationType>
-						<violationKey>AccessPropertyOrField</violationKey>
-						<enabled>true</enabled>
-					</violationType>
-					<violationType>
-						<violationKey>InvocMethod</violationKey>
-						<enabled>false</enabled>
-					</violationType>
-				</violationTypes>
-			</ruleType>
-		</activeViolationType>
-	</activeViolationTypes>
+					<ruleKey>rulekey</ruleKey>
+					<violationTypeKeys>
+					    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+					    <violationTypeKey>Implements</violationTypeKey>
+					    <violationTypeKey>Import</violationTypeKey>
+					    <violationTypeKey>InvocConstructor</violationTypeKey>
+					</violationTypeKeys>
+					<exceptionMessages />
+				    </message>
+				</exceptionMessages>
+			    </message>
+			    <message>
+				<logicalModules>
+				    <logicalModuleFrom>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleFrom>
+				    <logicalModuleTo>
+					<logicalModulePath>module path</logicalModulePath>
+					<logicalModuleType>module type</logicalModuleType>
+				    </logicalModuleTo>
+				</logicalModules>
+				<ruleKey>rulekey</ruleKey>
+				<violationTypeKeys>
+				    <violationTypeKey>ExtendsLibrary</violationTypeKey>
+				    <violationTypeKey>Implements</violationTypeKey>
+				    <violationTypeKey>Import</violationTypeKey>
+				    <violationTypeKey>InvocConstructor</violationTypeKey>
+				</violationTypeKeys>
+				<exceptionMessages />
+			    </message>
+			</exceptionMessages>
+		    </message>
+		    <isIndirect>false</isIndirect>
+		    <occured>2012-04-27T11:52:06.221+02:00</occured>
+		</violation>
+	    </violations>
+	</violationHistory>
+    </violationHistories>
+    <activeViolationTypes>
+	<activeViolationType language="C#">
+	    <ruleType type="IsNotAllowedToUse">
+		<violationTypes>
+		    <violationType>
+			<violationKey>ExtendsConcrete</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		    <violationType>
+			<violationKey>Implements</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		</violationTypes>
+	    </ruleType>
+	    <ruleType type="VisibilityConvention">
+		<violationTypes>
+		    <violationType>
+			<violationKey>public</violationKey>
+			<enabled>true</enabled>
+		    </violationType>
+		    <violationType>
+			<violationKey>private</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		</violationTypes>
+	    </ruleType>
+	</activeViolationType>
+	<activeViolationType language="Java">
+	    <ruleType type="IsNotAllowedToUse">
+		<violationTypes>
+		    <violationType>
+			<violationKey>ExtendsAbstract</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		    <violationType>
+			<violationKey>Implements</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		</violationTypes>
+	    </ruleType>
+	    <ruleType type="IsAllowedToUse">
+		<violationTypes>
+		    <violationType>
+			<violationKey>ExtendsConcrete</violationKey>
+			<enabled>true</enabled>
+		    </violationType>
+		    <violationType>
+			<violationKey>Annotation</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		</violationTypes>
+	    </ruleType>
+	    <ruleType type="IsOnlyAllowedToUse">
+		<violationTypes>
+		    <violationType>
+			<violationKey>Import</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		    <violationType>
+			<violationKey>Exception</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		</violationTypes>
+	    </ruleType>
+	    <ruleType type="MustUse">
+		<violationTypes>
+		    <violationType>
+			<violationKey>AccessPropertyOrField</violationKey>
+			<enabled>true</enabled>
+		    </violationType>
+		    <violationType>
+			<violationKey>InvocMethod</violationKey>
+			<enabled>false</enabled>
+		    </violationType>
+		</violationTypes>
+	    </ruleType>
+	</activeViolationType>
+    </activeViolationTypes>
 </validate>
