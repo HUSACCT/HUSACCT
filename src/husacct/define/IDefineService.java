@@ -6,6 +6,9 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
+import husacct.define.domain.Project;
+
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 

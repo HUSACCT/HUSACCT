@@ -3,12 +3,12 @@ package husacct.validate.domain.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActiveRuleType  implements Cloneable {
+public class ActiveRuleType implements Cloneable {
 
 	private final String ruleType;
 	private List<ActiveViolationType> violationTypes;
 
-	public ActiveRuleType(String ruleType){
+	public ActiveRuleType(String ruleType) {
 		this.ruleType = ruleType;
 	}
 
@@ -22,7 +22,7 @@ public class ActiveRuleType  implements Cloneable {
 	}
 
 	public List<ActiveViolationType> getViolationTypes() {
-		if(violationTypes == null) {
+		if (violationTypes == null) {
 			violationTypes = new ArrayList<ActiveViolationType>();
 		}
 		return violationTypes;

@@ -31,11 +31,11 @@ public class ImportSeverities {
 		return severities;
 	}
 
-	private Color getColor(String rgbColor){
+	private Color getColor(String rgbColor) {
 		Color color = null;
-		try{
+		try {
 			color = new Color(Integer.parseInt(rgbColor));
-		}catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			logger.warn(String.format("No valid RGB color found for value: %s", rgbColor));
 			color = Color.WHITE;
 		}

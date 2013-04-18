@@ -9,10 +9,12 @@ public class AnalyseTask implements Runnable{
 
 	private Logger logger = Logger.getLogger(AnalyseTask.class);
 	
+	private MainController mainController;
 	private ApplicationDTO applicationDTO;
 	
-	public AnalyseTask(ApplicationDTO applicationDTO){
+	public AnalyseTask(MainController mainController,ApplicationDTO applicationDTO){
 		this.applicationDTO = applicationDTO;
+		this.mainController = mainController;
 	}
 	
 	@Override
@@ -21,12 +23,27 @@ public class AnalyseTask implements Runnable{
 		// InterruptedException is not yet implemented by analyse
 		// Therefor this thread can never be interrupted.
 		try {
-			Thread.sleep(1);
-			logger.debug("Analysing application");
-			ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.paths, applicationDTO.programmingLanguage);
-			logger.debug("Application analysed");
-		} catch (InterruptedException exception){
-			logger.debug("Analyse interupted");
+			
+			
+			mainController.getStateController().setAnalysing(true);
+			mainController.getStateController().setPreAnalysed(false);
+			Thread.sleep(1);			
+			logger.debug("Analysing application");		
+			//ServiceProvider.getInstance().resetAnalyseService();
+			if(applicationDTO.projects.size() > 0){
+				ServiceProvider.getInstance().getAnalyseService().analyseApplication(applicationDTO.projects.get(0));
+			}
+			logger.debug("Analysing finished");
+			if(!mainController.getStateController().isAnalysing()) {
+				ServiceProvider.getInstance().resetAnalyseService();
+			}
+			mainController.getStateController().setAnalysing(false);
+			//ServiceProvider.getInstance().getDefineService().isReAnalyzed();
+		} catch (InterruptedException exception){			
+			logger.debug("RESETTING ANALYSE SERVICE");
+			ServiceProvider.getInstance().resetAnalyseService();
+			mainController.getStateController().setAnalysing(false);
+
 		}
 	}
 
