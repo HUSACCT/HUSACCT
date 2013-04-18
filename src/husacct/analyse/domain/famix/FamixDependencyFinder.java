@@ -107,11 +107,7 @@ class FamixDependencyFinder extends FamixFinder {
             }
         }
         if (!this.from.equals("")) {
-            for (DependencyDTO dependency : this.findIndirectDependencies(result)) {
-                if (!containsDependency(dependency, result)) {
-                    result.add(dependency);
-                }
-            }
+        	result.addAll(this.findIndirectDependencies(result));
         }
         return result;
     }
@@ -123,14 +119,24 @@ class FamixDependencyFinder extends FamixFinder {
             List<DependencyDTO> indirectDependenciesForDirectDependency = findDependenciesRelatedTo(tempDirectDependencies, directDependency);
             for (DependencyDTO indirectDependency : indirectDependenciesForDirectDependency) {
                 DependencyDTO tempDTO = new DependencyDTO(directDependency.from, indirectDependency.to, directDependency.type + "" + indirectDependency.type, true, directDependency.lineNumber);
-                if (!returnIndirectDependencies.contains(tempDTO) && !containsDependency(tempDTO, returnIndirectDependencies) && !isDependencyInList(tempDTO, returnIndirectDependencies)) {
-                    returnIndirectDependencies.add(tempDTO);
-                } else {
-                    System.out.println("Already on the list bru! 2");
+                if(isValidIndirectDependency(tempDTO)){
+	                if (!returnIndirectDependencies.contains(tempDTO) && !containsDependency(tempDTO, returnIndirectDependencies) && !isDependencyInList(tempDTO, returnIndirectDependencies)) {
+	                    returnIndirectDependencies.add(tempDTO);
+	                }
                 }
             }
         }
         return returnIndirectDependencies;
+    }
+    
+    private boolean isValidIndirectDependency(DependencyDTO dependency){
+    	if(dependency.type.matches("Extends.*?Extends.*"))
+    		return true;
+    	if(dependency.type.matches("Extends.*?Implements.*"))
+    		return true;
+    	if(dependency.type.matches("Implements.*?Extends.*"))
+    		return true;
+    	return false;
     }
 
     private boolean isDependencyInList(DependencyDTO dependency, List<DependencyDTO> allDependencies) {

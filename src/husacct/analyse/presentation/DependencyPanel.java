@@ -35,6 +35,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
     private JTree fromModuleTree, toModuleTree;
     private JTable dependencyTable;
     private JCheckBox indirectFilterBox;
+    private JCheckBox directFilterBox;
     private JPanel filterPanel;
     private AbstractTableModel tableModel;
     private List<AnalysedModuleDTO> fromSelected = new ArrayList<AnalysedModuleDTO>();
@@ -45,6 +46,8 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         dataControl = new AnalyseUIController();
         this.indirectFilterBox = new JCheckBox(dataControl.translate("ShowIndirectDependencies"));
         this.indirectFilterBox.addActionListener(this);
+        this.directFilterBox = new JCheckBox(dataControl.translate("ShowDirectDependencies"));
+        this.directFilterBox.addActionListener(this);
         createLayout();
 
         dependencyTable = new JTable();
@@ -161,6 +164,9 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
                 .addComponent(dependencyScrollPane, GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addContainerGap()));
 
+        directFilterBox.setSelected(true);
+        directFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
+        filterPanel.add(directFilterBox);
         indirectFilterBox.setSelected(true);
         indirectFilterBox.setHorizontalAlignment(SwingConstants.LEFT);
         filterPanel.add(indirectFilterBox);
@@ -197,31 +203,28 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == this.indirectFilterBox) {
-            if (this.indirectFilterBox.isSelected()) {
-                showIndirectDependencies();
-            } else {
-                hideIndirectDependencies();
-            }
+        if (event.getSource() == this.indirectFilterBox || event.getSource() == this.directFilterBox) {
+            toggleDependencies(this.indirectFilterBox.isSelected(), this.directFilterBox.isSelected());
         }
     }
-
-    private void showIndirectDependencies() {
-        updateTableModel();
-    }
-
-    private void hideIndirectDependencies() {
-        List<DependencyDTO> filteredList = new ArrayList<DependencyDTO>();
+    
+    private void toggleDependencies(boolean indirect, boolean direct){
+    	List<DependencyDTO> filteredList = new ArrayList<DependencyDTO>();
         List<DependencyDTO> allDependencies = dataControl.listDependencies(fromSelected, toSelected);
         for (DependencyDTO dependency : allDependencies) {
-            if (!dependency.isIndirect) {
-                filteredList.add(dependency);
-            }
+        	if(indirect){
+        		if(dependency.isIndirect)
+        			filteredList.add(dependency);
+        	}
+        	if(direct){
+        		if(!dependency.isIndirect)
+        			filteredList.add(dependency);
+        	}
         }
         dependencyTable.setModel(new DependencyTableModel(filteredList, dataControl));
         dependencyTable.repaint();
     }
-
+    
     public void reload() {
         tableModel = new DependencyTableModel(new ArrayList<DependencyDTO>(), dataControl);
         fromModuleScrollPane.setBorder(new TitledBorder(dataControl.translate("FromModuleTreeTitle")));
@@ -229,6 +232,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         dependencyScrollPane.setBorder(new TitledBorder(dataControl.translate("DependencyTableTitle")));
         filterPanel.setBorder(new TitledBorder(dataControl.translate("AnalyseDependencyFilter")));
         this.indirectFilterBox.setText(dataControl.translate("ShowIndirectDependencies"));
+        this.directFilterBox.setText(dataControl.translate("ShowDirectDependencies"));
         toModuleScrollPane.repaint();
         fromModuleScrollPane.repaint();
         dependencyScrollPane.repaint();
