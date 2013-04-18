@@ -1,7 +1,6 @@
 package husacct.validate;
 
 import husacct.common.dto.CategoryDTO;
-import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IObservableService;

@@ -220,9 +220,7 @@ public class ImportExportTest {
 	}
 
 	@Test
-	public void testExportingAndImporting() throws URISyntaxException,
-			ParserConfigurationException, SAXException, IOException,
-			DatatypeConfigurationException {
+	public void testExportingAndImporting() throws URISyntaxException, ParserConfigurationException, SAXException, IOException,	DatatypeConfigurationException {
 		testImporting();
 		// checkViolationsTheSameAsViolationsElement(validate.getConfiguration().getAllViolations().getValue(),
 		// validate.getWorkspaceData().getChild("violations"));
