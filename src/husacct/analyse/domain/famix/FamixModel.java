@@ -73,9 +73,8 @@ class FamixModel extends FamixObject {
         } else if (e instanceof FamixAssociation){
 			if(e instanceof FamixImport){
 				imports.put(((FamixImport) e).completeImportString, (FamixImport)e);
-			}else{
-				associations.add((FamixAssociation) e);
 			}
+			associations.add((FamixAssociation) e);
 		} else {
             throw new InvalidAttributesException("Wrongtype (not of type entity or association) ");
         }
