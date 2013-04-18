@@ -1,31 +1,27 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
 
 public class CSharpInheritanceGenerator extends CSharpGenerator {
 
     public void generateToDomain(CommonTree inheritanceTree, String currentUniqueClassName) {
         String from = currentUniqueClassName;
-        new TreePrinter(inheritanceTree);
-        String temp = getDestination(inheritanceTree);
-        // modelService.createInheritanceDefinition(from, to, lineNumber);
-        // wijziging
-    }
+        String to;
 
-    private String getDestination(CommonTree inheritTree) {
-        String result = "";
-        for(int i = 0; i < inheritTree.getChildCount(); i++) {
-            if (inheritTree.getChild(i).getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
-                result += "." + getTypeName((CommonTree)inheritTree.getChild(i));
-            } 
+        for (int i = 0; i < inheritanceTree.getChildCount(); i++) {
+            if (inheritanceTree.getChild(i).getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
+                to = getTypeName((CommonTree) inheritanceTree.getChild(i));
+                int line = inheritanceTree.getChild(i).getLine();
+
+                modelService.createInheritanceDefinition(from, to, line);
+            }
         }
-        return result;
     }
 
     private String getTypeName(CommonTree commonTree) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        String result = "";
+        result = commonTree.getChild(0).getText();
+        return result;
     }
 }
