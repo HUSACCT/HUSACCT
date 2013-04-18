@@ -3,7 +3,7 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Component;
-import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
@@ -135,7 +135,7 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Adding external library " + libraryName);
 		try {
 			JPanelStatus.getInstance("Adding external library").start();
-			ExternalLibrary newComponent = new ExternalLibrary(libraryName, libraryDescription);
+			ExternalSystem newComponent = new ExternalSystem(libraryName, libraryDescription);
 			this.passModuleToService(selectedModuleId, newComponent);
 			return true;
 		} catch (Exception e) {

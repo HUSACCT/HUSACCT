@@ -164,8 +164,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		this.getContentPane().remove(UIMappingPanel);
 		
 		regExMappingPanel = new JPanel();
-		regExMappingPanel.setLayout(new GridLayout(6,2));
-		regExMappingPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		regExMappingPanel.setLayout(new GridLayout(7,3));
+		regExMappingPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		
 		packageCheckBox = new JCheckBox("Packages");
 		classCheckBox = new JCheckBox("Classes");
@@ -208,7 +208,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		regExMappingPanel.add(new JLabel(""));
 		dynamicRegExLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EnterRegExLabel"));
 		regExMappingPanel.add(dynamicRegExLabel);
-		
+		JScrollPane softwareUnitScrollPane = new JScrollPane();
+		softwareUnitScrollPane.setSize(50, 50);
+		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(50, 50));
+		softwareUnitScrollPane.setViewportView(JtreeController.instance().getResultTree());
+		regExMappingPanel.add(softwareUnitScrollPane);
 		return regExMappingPanel;
 	}
 	
@@ -317,12 +321,14 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 						this.softwareUnitController.saveRegEx(regExTextField.getText(), "PC");
 					}
 					else if(packageCheckBox.isSelected()) {
+						System.out.println("P");
 						this.softwareUnitController.saveRegEx(regExTextField.getText(), "P");
 					}
 					else if(classCheckBox.isSelected()) {
+						System.out.println("C");
 						this.softwareUnitController.saveRegEx(regExTextField.getText(), "C");
 					}
-					this.dispose();
+					
 				}
 				else {
 					JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectRegExCheckBoxError"),  "Message", JOptionPane.WARNING_MESSAGE);
@@ -336,8 +342,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-			this.softwareDefinitionTree.removeTreeItem(_moduleId, selectedComponent);
-				this.softwareUnitController.save(selectedComponent.getUniqueName(), selectedComponent.getType());			
+		
+				this.softwareUnitController.save(selectedComponent);			
 			}
 			this.dispose();
 		}

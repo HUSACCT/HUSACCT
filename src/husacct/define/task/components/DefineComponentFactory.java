@@ -3,7 +3,7 @@ package husacct.define.task.components;
 import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.SubSystem;
 import husacct.define.task.JtreeController;
@@ -16,7 +16,7 @@ public class DefineComponentFactory {
 		AbstractDefineComponent returnComponent = null;
 		if(module instanceof Layer) {
 			returnComponent = DefineComponentFactory.createLayerComponent(module);
-		} else if(module instanceof ExternalLibrary) {
+		} else if(module instanceof ExternalSystem) {
 			returnComponent = DefineComponentFactory.createExternalLibraryComponent(module);
 		} else if(module instanceof Component) { //husacct.define.domain.module.Component
 			returnComponent = DefineComponentFactory.createComponentComponent(module);
@@ -56,7 +56,7 @@ public class DefineComponentFactory {
 	}
 	
 	private static ExternalLibraryComponent createExternalLibraryComponent(Module module) {
-		ExternalLibrary externalLibrary = (ExternalLibrary) module;
+		ExternalSystem externalLibrary = (ExternalSystem) module;
 		ExternalLibraryComponent externalLibraryComponent = new ExternalLibraryComponent();
 		externalLibraryComponent.setModuleId(externalLibrary.getId());
 		externalLibraryComponent.setName(externalLibrary.getName());

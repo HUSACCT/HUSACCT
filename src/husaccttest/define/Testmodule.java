@@ -1,15 +1,13 @@
 package husaccttest.define;
-import husacct.define.*;
-import husacct.define.domain.module.Module;
+import husacct.validate.domain.validation.module.*;
+
 public class Testmodule {
 
 @org.junit.Test
 public void Test()
 {
-	Module  m1= new Module();
-	m1.setId(3);
-	
-	m1.addSubModule(new Module());
+	ModuleFactory fac = new ModuleFactory();
+	fac.createModule(type, rules)
 	
 }
 

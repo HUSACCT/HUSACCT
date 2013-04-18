@@ -7,7 +7,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Component;
-import husacct.define.domain.module.ExternalLibrary;
+import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
@@ -208,7 +208,7 @@ public class XMLDomain {
 
 		// type detection..
 		if (ModuleTypeText.equals("externallibrary")) {
-			xmlModule = new ExternalLibrary(moduleName, moduleDescription);
+			xmlModule = new ExternalSystem(moduleName, moduleDescription);
 		} else if (ModuleTypeText.equals("component")) {
 			xmlModule = new Component(moduleName, moduleDescription);
 		} else if (ModuleTypeText.equals("layer")) {

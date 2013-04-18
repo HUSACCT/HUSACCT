@@ -2,6 +2,7 @@ package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class Module implements Comparable<Module> {
 	protected String type;
 	protected ArrayList<SoftwareUnitDefinition> mappedSUunits;
 	protected ArrayList<Module> subModules;
+	
 	
 	public Module()
 	{
@@ -227,5 +229,7 @@ public class Module implements Comparable<Module> {
 		}
 		return compareResult;
 	}
+
+	
 
 }

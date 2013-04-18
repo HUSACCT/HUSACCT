@@ -25,7 +25,7 @@ public class SoftwareUnitController extends PopUpController {
 
 	private SoftwareUnitJDialog softwareUnitFrame;
 	private Logger logger;
-	
+private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public SoftwareUnitController(long moduleId) {
@@ -120,7 +120,7 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public void saveRegEx(String regEx, String packageClass) {
 		String translatedRegEx = "";
-		
+         resultofsearch = new ArrayList<AnalyzedModuleComponent>();
 		if(regEx.startsWith("*") && regEx.endsWith("*")) {
 			regEx = regEx.replace("*", "");
 			translatedRegEx = regEx;
@@ -136,18 +136,26 @@ public class SoftwareUnitController extends PopUpController {
 		
 		Pattern regExPattern = Pattern.compile(translatedRegEx);
 		
-		for(AnalysedModuleDTO module : this.getAnalyzedModulesWithChildren()) {
-			Matcher matcher = regExPattern.matcher(module.name);
+		
 			
-			System.out.println(module.type);
+			for(Iterator<AbstractCombinedComponent> it=JtreeController.instance().GetRootOfModel().getChildren().iterator();it.hasNext();)
+			{
+				
+			
+			
+			AnalyzedModuleComponent module =(AnalyzedModuleComponent)it.next();
+			Matcher matcher = regExPattern.matcher(module.getName());
+			
+			System.out.println(module.getType());
 			
 			if(packageClass.equals("P")) {
-				if(module.type.equals("package")) {
+				if(module.getType().equals("package")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-							DefinitionController.getInstance().notifyObservers();
+							//resultofsearch.add(module);
+							JtreeController.instance().additemgetResultTree(module);
+							//DefinitionController.getInstance().notifyObservers();
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -157,12 +165,12 @@ public class SoftwareUnitController extends PopUpController {
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.type.equals("class") || module.type.equals("INTERFACE")) {
+				if(module.getType().equals("class") || module.getType().equals("INTERFACE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-							DefinitionController.getInstance().notifyObservers();
+							//resultofsearch.add(module);
+							JtreeController.instance().additemgetResultTree(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -175,8 +183,10 @@ public class SoftwareUnitController extends PopUpController {
 				while(matcher.find()) {
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {
-						this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-						DefinitionController.getInstance().notifyObservers();
+						//resultofsearch.add(module);
+						JtreeController.instance().additemgetResultTree(module);
+						//System.out.println(module.getUniqueName()+"-------"+module.getName()+"-------"+module.getType());
+						
 					} catch (Exception e) {
 						this.logger.error(e.getMessage());
 						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -188,17 +198,19 @@ public class SoftwareUnitController extends PopUpController {
 		}
 	}
 	
-	public void checkChildRegEx(AnalysedModuleDTO childModule, Pattern pattern, String packageClass) {
-		for(AnalysedModuleDTO module : childModule.subModules) {
-			Matcher matcher = pattern.matcher(module.name);
+	public void checkChildRegEx(AnalyzedModuleComponent childModule, Pattern pattern, String packageClass) {
+		for(AbstractCombinedComponent mod : childModule.getChildren()) {
+			AnalyzedModuleComponent module =(AnalyzedModuleComponent)mod;
+			
+			Matcher matcher = pattern.matcher(module.getName());
 			
 			if(packageClass.equals("P")) {
-				if(module.type.equals("package")) {
+				if(module.getType().equals("package")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-							DefinitionController.getInstance().notifyObservers();
+							JtreeController.instance().additemgetResultTree(module);
+							resultofsearch.add(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -208,12 +220,12 @@ public class SoftwareUnitController extends PopUpController {
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.type.equals("class") || module.type.equals("INTERFACE")) {
+				if(module.getType().equals("class") || module.getType().equals("INTERFACE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-							DefinitionController.getInstance().notifyObservers();
+							JtreeController.instance().additemgetResultTree(module);
+							resultofsearch.add(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -226,8 +238,8 @@ public class SoftwareUnitController extends PopUpController {
 				while(matcher.find()) {
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {
-						this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), module.uniqueName, module.type.toUpperCase());
-						DefinitionController.getInstance().notifyObservers();
+						JtreeController.instance().additemgetResultTree(module);
+						resultofsearch.add(module);
 					} catch (Exception e) {
 						this.logger.error(e.getMessage());
 						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -243,7 +255,6 @@ public class SoftwareUnitController extends PopUpController {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
 			
-			this.softwareUnitDefinitionDomainService.addSoftwareUnit(moduleId, softwareUnit, type);
 			
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
@@ -255,6 +266,20 @@ public class SoftwareUnitController extends PopUpController {
 	public void save(Long moduleid,AbstractCombinedComponent component)
 	{
 		logger.info("Adding software unit to module with id " + this.getModuleId());
+		
+	}
+
+	public void save(AnalyzedModuleComponent selectedComponent) {
+		logger.info("Adding software unit to module with id " + this.getModuleId());
+		try {
+			
+			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(),selectedComponent);
+			
+			DefinitionController.getInstance().notifyObservers();
+		} catch (Exception e) {
+			this.logger.error(e.getMessage());
+			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+		}
 		
 	}
 }

@@ -1,7 +1,9 @@
 package husacct.define.task;
 
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.return_statement_return;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.conventions_checker.AnalyzedComponentHelper;
@@ -18,6 +20,7 @@ import husacct.define.domain.module.Module;
 public class JtreeController {
 private  AnalyzedModuleTree tree;
 private static JtreeController instance=null;	
+private AnalyzedModuleTree resultTree;
 
 private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
 private  boolean isLoaded=false;
@@ -123,56 +126,40 @@ public  AnalyzedModuleTree getTree()
 //moet naar het tree object ^_^
 public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
 	
-	String[] adress=unit.getName().split("\\.");
-	AbstractCombinedComponent temp= (AbstractCombinedComponent)instance.tree.getModel().getRoot();
-	String re="";
-	
-	for (int i = 0; i < adress.length; i++) 
-	{
-		System.out.println(adress[i]+"---------------"+"adresss");
-		for(AbstractCombinedComponent item : temp.getChildren())
-		{
-				AnalyzedModuleComponent chek = (AnalyzedModuleComponent) item;
-				String[] result= chek.getUniqueName().split("\\.");
-				System.out.println("reault  "+result[result.length-1]+ "  ---"+result.length+"  "+chek.getUniqueName());
-				if(adress[i].equals(result[0]))
-				{
-					
-					temp=item;
-					System.out.println(result[0]+"---------<><>"+adress[i]);
-				}
-		
-	     }
-	
-	}
-	AnalyzedModuleComponent result = (AnalyzedModuleComponent)temp;
-	//quikfix
-	
-	for(AbstractCombinedComponent r:result.getChildren())
-	{
-		AnalyzedModuleComponent h = (AnalyzedModuleComponent)r;
-		
-		if(h.getUniqueName().toLowerCase().equals(re.toLowerCase()))
-		{
-			result=h;
-		}
-	}
-	
-	if(!result.getUniqueName().equals("root"))
-	{
-		System.out.println(result.getUniqueName());
-	instance().tree.removeTreeItem(moduleId, result);
-	}
-	
 	
 	
 }
 
 
 
+ public AnalyzedModuleComponent GetRootOfModel ()
+ {
+	 
+	 return (AnalyzedModuleComponent)instance.getTree().getModel().getRoot();
+ }
+
+
+
+
+public AnalyzedModuleTree getResultTree() 
+{
+	AnalyzedModuleComponent root = new AnalyzedModuleComponent("root","search resuts","root","public");
  
+ resultTree= new AnalyzedModuleTree(root);
+ 
+ return resultTree;
+ 
+ }
+
+public void additemgetResultTree(AnalyzedModuleComponent anal) 
+{
+
+AnalyzedModuleComponent temp= (AnalyzedModuleComponent)resultTree.getModel().getRoot();
+temp.addChild(anal);
+//tree.removeTreeItem(0, anal);
+resultTree.setModel(new CombinedModuleTreeModel(temp));
+
+
 
 }
-
-
-
+}

@@ -1,6 +1,8 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.RuleDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
@@ -108,8 +110,12 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	private void addSoftwareUnit() {
-		if(ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-//		if (DefinitionController.getInstance().isAnalysed()){
+		System.out.println("-------------->"+ServiceProvider.getInstance().getControlService().isPreAnalysed());
+		RuleTypeDTO[] result=ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule("layer");
+		boolean k=result==null?true:false;
+		System.out.println(k);
+		//	if(ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+	if (DefinitionController.getInstance().isAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
@@ -119,7 +125,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
+			//JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	private void removeSoftwareUnit(){
