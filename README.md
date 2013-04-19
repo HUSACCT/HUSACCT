@@ -114,4 +114,4 @@ This project involves six teams from one class (Bachelor Computer Science Inform
 
 ## Conclusion
 
-The project is ongoing and is meant to be completed around July 2012.
+The project is ongoing and is meant to be completed around July 2013.
