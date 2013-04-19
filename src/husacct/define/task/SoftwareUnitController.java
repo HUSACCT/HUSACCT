@@ -118,9 +118,8 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 		save(this.getModuleId(), softwareUnit, type);
 	}
 	
-	public void saveRegEx(String regEx, String packageClass) {
+	public void saveRegExToResultTree(String regEx, String packageClass) {
 		String translatedRegEx = "";
-         resultofsearch = new ArrayList<AnalyzedModuleComponent>();
 		if(regEx.startsWith("*") && regEx.endsWith("*")) {
 			regEx = regEx.replace("*", "");
 			translatedRegEx = regEx;
@@ -135,30 +134,18 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 		}
 		
 		Pattern regExPattern = Pattern.compile(translatedRegEx);
-		
-		
 			
-			for(Iterator<AbstractCombinedComponent> it=JtreeController.instance().GetRootOfModel().getChildren().iterator();it.hasNext();)
-			{
-				
-			
-			
+		for(Iterator<AbstractCombinedComponent> it=JtreeController.instance().GetRootOfModel().getChildren().iterator();it.hasNext();) {
 			AnalyzedModuleComponent module =(AnalyzedModuleComponent)it.next();
 			Matcher matcher = regExPattern.matcher(module.getName());
-			
-			System.out.println(module.getType()+packageClass.toUpperCase());
 			
 			if(packageClass.equals("P")) {
 				
 				if(module.getType().equals("PACKAGE")) {
-					System.out.println(module.getType());
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							//resultofsearch.add(module);
-							System.out.println(module.getUniqueName()+"jijijjoojojojojojojojojoj");
 							JtreeController.instance().additemgetResultTree(module);
-							//DefinitionController.getInstance().notifyObservers();
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -172,7 +159,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							//resultofsearch.add(module);
 							JtreeController.instance().additemgetResultTree(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
@@ -186,10 +172,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 				while(matcher.find()) {
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {
-						//resultofsearch.add(module);
 						JtreeController.instance().additemgetResultTree(module);
-						//System.out.println(module.getUniqueName()+"-------"+module.getName()+"-------"+module.getType());
-						
 					} catch (Exception e) {
 						this.logger.error(e.getMessage());
 						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -213,7 +196,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(module);
-							//resultofsearch.add(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -228,7 +210,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(module);
-						//	resultofsearch.add(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -242,7 +223,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {
 						JtreeController.instance().additemgetResultTree(module);
-						//resultofsearch.add(module);
 					} catch (Exception e) {
 						this.logger.error(e.getMessage());
 						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());

@@ -137,7 +137,7 @@ public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
 
 public AnalyzedModuleTree getResultTree() 
 {
-	AnalyzedModuleComponent root = new AnalyzedModuleComponent("root","search resuts","root","public");
+	AnalyzedModuleComponent root = new AnalyzedModuleComponent("root","Results","root","public");
  
  resultTree= new AnalyzedModuleTree(root);
  
