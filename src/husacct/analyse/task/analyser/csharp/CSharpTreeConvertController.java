@@ -5,6 +5,7 @@ import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -117,7 +118,7 @@ public class CSharpTreeConvertController {
     }
 
     private String delegateNamespace(CommonTree namespaceTree) {
-        return csNamespaceGenerator.generateModel(namespaceStack, namespaceTree);
+        return csNamespaceGenerator.generateModel(CSharpGeneratorToolkit.getParentName(namespaceStack), namespaceTree);
     }
 
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
