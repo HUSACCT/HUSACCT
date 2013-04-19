@@ -12,12 +12,12 @@ public abstract class XmlExportUtils {
 		element.addContent(content);
 		return element;
 	}
-	
+
 	protected Element createLogicalModulesElement(LogicalModules logicalModules) {
 		Element logicalModulesElement = new Element("logicalModules");
 		Element logicalModuleFrom = new Element("logicalModuleFrom");
 		Element logicalModuleTo = new Element("logicalModuleTo");
-		
+
 		logicalModulesElement.addContent(logicalModuleFrom);
 		logicalModulesElement.addContent(logicalModuleTo);
 
@@ -25,7 +25,7 @@ public abstract class XmlExportUtils {
 		logicalModuleFrom.addContent(createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleFrom().getLogicalModuleType()));
 		logicalModuleTo.addContent(createElementWithContent("logicalModulePath", logicalModules.getLogicalModuleTo().getLogicalModulePath()));
 		logicalModuleTo.addContent(createElementWithContent("logicalModuleType", logicalModules.getLogicalModuleTo().getLogicalModuleType()));
-		
+
 		return logicalModulesElement;
 	}
 
@@ -36,13 +36,13 @@ public abstract class XmlExportUtils {
 		messageElement.addContent(createElementWithContent("regex", message.getRegex()));
 		Element violationTypeKeysElement = new Element("violationTypeKeys");
 		messageElement.addContent(violationTypeKeysElement);
-		for(String violationTypeKey : message.getViolationTypeKeys()) {
+		for (String violationTypeKey : message.getViolationTypeKeys()) {
 			violationTypeKeysElement.addContent(createElementWithContent("violationTypeKey", violationTypeKey));
 		}
 		Element exceptionMessages = new Element("exceptionMessages");
 		messageElement.addContent(exceptionMessages);
-		if(message.getExceptionMessage() != null) {
-			for(Message exceptionMessage : message.getExceptionMessage()) {
+		if (message.getExceptionMessage() != null) {
+			for (Message exceptionMessage : message.getExceptionMessage()) {
 				exceptionMessages.addContent(createMessageElementFromMessageObject(exceptionMessage));
 			}
 		}

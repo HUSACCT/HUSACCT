@@ -23,7 +23,7 @@ public class XMLReportWriter extends ReportWriter {
 	}
 
 	@Override
-	public void createReport() throws IOException {		
+	public void createReport() throws IOException {
 		Document document = new Document();
 
 		Element reportElement = new Element("report");
@@ -46,8 +46,8 @@ public class XMLReportWriter extends ReportWriter {
 		reportElement.addContent(violationGeneratedOn);
 
 		Element violationsSeverities = new Element("violations");
-		violationsSeverities.setAttribute(new Attribute("totalViolations" , "" +  report.getViolations().getValue().size()));
-		for(ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
+		violationsSeverities.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
+		for (ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
 			Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
 			violationElement.setText("" + violationPerSeverity.getAmount());
 			violationsSeverities.addContent(violationElement);
@@ -57,7 +57,7 @@ public class XMLReportWriter extends ReportWriter {
 		Element violations = new Element("violations");
 		reportElement.addContent(violations);
 
-		for(Violation violation : report.getViolations().getValue()) {
+		for (Violation violation : report.getViolations().getValue()) {
 			Element xmlViolation = new Element("violation");
 
 			Element source = new Element("source");
@@ -72,7 +72,7 @@ public class XMLReportWriter extends ReportWriter {
 			source.setText(violation.getClassPathFrom());
 			lineNr.setText("" + violation.getLinenumber());
 			severity.setText(violation.getSeverity().getSeverityName());
-			if(violation.getLogicalModules() != null) {
+			if (violation.getLogicalModules() != null) {
 				Message messageObject = violation.getMessage();
 				String message = new Messagebuilder().createMessage(messageObject);
 				ruleType.setText(message);
@@ -93,6 +93,6 @@ public class XMLReportWriter extends ReportWriter {
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		FileWriter fileWriter = new FileWriter(getFileName());
 		outputter.output(document, fileWriter);
-		fileWriter.close();		
+		fileWriter.close();
 	}
 }
