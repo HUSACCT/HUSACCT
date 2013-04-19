@@ -150,7 +150,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			
 			if(packageClass.equals("P")) {
 				
-				if(module.getType().equals("package".toUpperCase())) {
+				if(module.getType().equals("PACKAGE")) {
 					System.out.println(module.getType());
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
@@ -168,7 +168,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.getType().equals("class") || module.getType().equals("INTERFACE")) {
+				if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
@@ -208,7 +208,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			Matcher matcher = pattern.matcher(module.getName());
 			
 			if(packageClass.equals("P")) {
-				if(module.getType().toLowerCase().equals("package")) {
+				if(module.getType().equals("PACKAGE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
@@ -223,7 +223,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.getType().equals("class") || module.getType().equals("INTERFACE")) {
+				if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
@@ -237,7 +237,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 				}
 			}
 			
-			if(packageClass.equals("PC")) {
+			else if(packageClass.equals("PC")) {
 				while(matcher.find()) {
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {

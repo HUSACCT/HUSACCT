@@ -1,25 +1,19 @@
 package husacct.define.task;
 
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.return_statement_return;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
-import husacct.define.task.conventions_checker.AnalyzedComponentHelper;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 
 public class JtreeController {
 private  AnalyzedModuleTree tree;
-private static JtreeController instance=null;	
+private static JtreeController instance;	
 private AnalyzedModuleTree resultTree;
 
 private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();

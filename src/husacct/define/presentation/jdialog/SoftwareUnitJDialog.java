@@ -3,7 +3,6 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
-import husacct.define.DefineServiceImpl;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 
 import husacct.define.task.JtreeController;
@@ -13,8 +12,6 @@ import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
-import husacct.define.task.conventions_checker.AnalyzedComponentHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -209,11 +206,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		regExMappingPanel.add(new JLabel(""));
 		dynamicRegExLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EnterRegExLabel"));
 		regExMappingPanel.add(dynamicRegExLabel);
-		JScrollPane softwareUnitScrollPane = new JScrollPane();
-		softwareUnitScrollPane.setSize(50, 50);
-		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(50, 50));
-		softwareUnitScrollPane.setViewportView(JtreeController.instance().getResultTree());
-		regExMappingPanel.add(softwareUnitScrollPane);
+		
 		return regExMappingPanel;
 	}
 	
@@ -318,7 +311,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
-
+		AnalyzedModuleTree test= JtreeController.instance().getResultTree();
 		if(regExMappingPanel != null) {
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
@@ -327,14 +320,13 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 						this.softwareUnitController.saveRegEx(regExTextField.getText(), "PC");
 					}
 					else if(packageCheckBox.isSelected()) {
-						System.out.println("P");
 						this.softwareUnitController.saveRegEx(regExTextField.getText(), "P");
 					}
 					else if(classCheckBox.isSelected()) {
-						System.out.println("C");
 						this.softwareUnitController.saveRegEx(regExTextField.getText(), "C");
 					}
-					
+					this.dispose();
+					new SoftwareUnitResultJDialog(_moduleId,test);
 				}
 				else {
 					JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectRegExCheckBoxError"),  "Message", JOptionPane.WARNING_MESSAGE);
