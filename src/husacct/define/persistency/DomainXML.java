@@ -2,6 +2,7 @@ package husacct.define.persistency;
 
 import husacct.define.domain.Application;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Layer;
@@ -207,25 +208,50 @@ public class DomainXML {
 		applicationName.addContent(App.getName());
 		XMLApplication.addContent(applicationName);
 
-		Element applicationPrLanguage = new Element("programmingLanguage");
-		applicationPrLanguage.addContent(App.getLanguage());
-		XMLApplication.addContent(applicationPrLanguage);
-
 		Element applicationVersion = new Element("version");
 		applicationVersion.addContent(App.getVersion());
 		XMLApplication.addContent(applicationVersion);
 		
-		Element applicationPaths = new Element("physicalPaths");
-		if (App.getPaths().length > 0) {
-			for (int i = 0; i < App.getPaths().length; i++) {
-				Element appPath = new Element("path");
-				appPath.addContent(App.getPaths()[i].toString());
-				applicationPaths.addContent(appPath);
-			}
+		Element applicationProjects = new Element("projects");
+		for(Project project : App.getProjects()) {
+			Element applicationProject = new Element("project");
+			applicationProject.addContent(getProjectInXML(project));
+			applicationProjects.addContent(applicationProject);
 		}
-		XMLApplication.addContent(applicationPaths);
+		XMLApplication.addContent(applicationProjects);
+		
 		XMLApplication.addContent(this.getSoftwareArchitectureInXML());
 		
 		return XMLApplication;
+	}
+	
+	public Element getProjectInXML(Project project) {
+		Element XMLProject = new Element("Project");
+		
+		Element projectName = new Element("name");
+		projectName.addContent(project.getName());
+		XMLProject.addContent(projectName);
+		
+		Element projectPaths = new Element("paths");
+		for(String path : project.getPaths()) {
+			Element projectPath = new Element("path");
+			projectPath.addContent(path);
+			projectPaths.addContent(projectPath);
+		}
+		XMLProject.addContent(projectPaths);
+		
+		Element projectPrLanguage = new Element("programmingLanguage");
+		projectPrLanguage.addContent(project.getProgrammingLanguage());
+		XMLProject.addContent(projectPrLanguage);
+		
+		Element projectVersion = new Element("version");
+		projectVersion.addContent(project.getVersion());
+		XMLProject.addContent(projectVersion);
+		
+		Element projectDescription = new Element("description");
+		projectDescription.addContent(project.getDescription());
+		XMLProject.addContent(projectDescription);
+		
+		return XMLProject;
 	}
 }

@@ -27,7 +27,7 @@ public class AboutDialog extends JDialog {
 
 		private JPanel logoPanel, textPanel;
 		private JLabel pictureLabel, husacctLabel, versionLabel, versionNumberLabel;
-		private JButton okButton;
+		private JButton okButton, creditsButton;
 		private String versionNumber = "1.0";
 		
 		private GridBagConstraints constraint = new GridBagConstraints();
@@ -62,8 +62,9 @@ public class AboutDialog extends JDialog {
 			versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
 			versionNumberLabel = new JLabel(versionNumber);
 			okButton = new JButton(localeService.getTranslatedString("OkButton"));
-			
+			creditsButton = new JButton(localeService.getTranslatedString("Credits"));
 			getRootPane().setDefaultButton(okButton);
+			getRootPane().add(creditsButton);
 			logoPanel.add(pictureLabel);
 			textPanel.add(husacctLabel, getConstraint(0, 0));
 			textPanel.add(versionLabel, getConstraint(0, 1));	
@@ -72,6 +73,7 @@ public class AboutDialog extends JDialog {
 			add(logoPanel);
 			add(textPanel);
 			add(okButton);	
+			add(creditsButton);
 		}
 
 		private void setListeners(){
@@ -80,6 +82,7 @@ public class AboutDialog extends JDialog {
 					dispose();
 				}
 			});
+		
 		}
 		
 		private GridBagConstraints getConstraint(int gridx, int gridy){
