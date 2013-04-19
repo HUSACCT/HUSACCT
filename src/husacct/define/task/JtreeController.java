@@ -162,4 +162,14 @@ resultTree.setModel(new CombinedModuleTreeModel(temp));
 
 
 }
+
+public static void registerResultRemovals() {
+	TreeSelectionModel paths = instance.resultTree.getSelectionModel();
+	for (TreePath path : paths.getSelectionPaths()){
+		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+
+		//this.softwareUnitController.save(selectedComponent);	
+	
+}
+}
 }

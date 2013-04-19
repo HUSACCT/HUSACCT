@@ -168,7 +168,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.getType().equals("class") || module.getType().equals("INTERFACE")) {
+				if(module.getType().equals("class") || module.getType().toUpperCase().equals("INTERFACE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
@@ -186,9 +186,9 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 				while(matcher.find()) {
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {
-						//resultofsearch.add(module);
+						
 						JtreeController.instance().additemgetResultTree(module);
-						//System.out.println(module.getUniqueName()+"-------"+module.getName()+"-------"+module.getType());
+						
 						
 					} catch (Exception e) {
 						this.logger.error(e.getMessage());

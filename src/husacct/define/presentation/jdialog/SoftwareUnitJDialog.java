@@ -56,7 +56,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	private JRadioButton UIMapping;
 	private JRadioButton regExMapping;
-	
+	private JButton testButton;
 	private JTextField regExTextField;
 	
 	private JLabel dynamicRegExLabel;
@@ -192,7 +192,9 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		
 		regExTextField = new JTextField();
 		regExTextField.setToolTipText(DefaultMessages.TIP_REGEXLANGUAGE);
-		
+		 testButton = new JButton();
+		testButton.setText("add");
+		testButton.addActionListener(this);
 		regExTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				updateDynamicRegExField();
@@ -289,6 +291,11 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			UIMapping.setEnabled(true);
 			regExMapping.setEnabled(false);
 			this.pack();
+		}
+		else if(action.getSource()==testButton)
+		{
+			
+			JtreeController.instance().registerResultRemovals();
 		}
 	}
 	
