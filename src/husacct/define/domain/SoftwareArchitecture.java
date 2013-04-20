@@ -215,6 +215,22 @@ public class SoftwareArchitecture {
 		return currentModule;
 	}
 	
+	public Module getModuleByRegExSoftwareUnit(String softwareUnitName) {
+		Module currentModule = null;
+			if (rootModule.hasRegExSoftwareUnit(softwareUnitName)){
+				currentModule = rootModule;
+				while (!currentModule.hasRegExSoftwareUnitDirectly(softwareUnitName)){
+					for (Module subModule : currentModule.getSubModules()){
+						if (subModule.hasRegExSoftwareUnit(softwareUnitName)){
+							currentModule = subModule;
+						}
+					}
+				}
+			}
+		if (currentModule == null){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));}
+		return currentModule;
+	}
+	
 	
 	public long addModule(Module module)
 	{

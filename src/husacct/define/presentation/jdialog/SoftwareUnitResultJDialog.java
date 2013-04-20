@@ -14,6 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -38,13 +39,13 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 	private JButton selectAllButton;
 	private JButton deSelectAllButton;
 	
-	private AnalyzedModuleTree softwareDefinitionTree;
+	private AnalyzedModuleTree resultTree;
 	private SoftwareUnitJDialog previousSoftwareUnitJDialog;
 	
-	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree softwareDefinitionTree, String enteredRegEx, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
+	public SoftwareUnitResultJDialog(long moduleId, AnalyzedModuleTree resultTree, String enteredRegEx, SoftwareUnitJDialog previousSoftwareUnitJDialog) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		_moduleId=moduleId;
-		this.softwareDefinitionTree = softwareDefinitionTree;
+		this.resultTree = resultTree;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.enteredRegEx = enteredRegEx;
 		this.previousSoftwareUnitJDialog = previousSoftwareUnitJDialog;
@@ -79,12 +80,12 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
 		//softwareUnitScrollPane.setSize(50, 50);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 300));
-		softwareUnitScrollPane.setViewportView(softwareDefinitionTree);
-		int[] selectionRows = new int[softwareDefinitionTree.getRowCount()-1];
-		for(int i=1; i<softwareDefinitionTree.getRowCount(); i++){
+		softwareUnitScrollPane.setViewportView(resultTree);
+		int[] selectionRows = new int[resultTree.getRowCount()-1];
+		for(int i=1; i<resultTree.getRowCount(); i++){
 			selectionRows[i-1] = i;
        }
-		softwareDefinitionTree.setSelectionRows(selectionRows);
+		resultTree.setSelectionRows(selectionRows);
 		resultPanel.add(softwareUnitScrollPane);
 		
 		return resultPanel;
@@ -120,24 +121,24 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 			this.cancel();
 		}
 		else if (action.getSource() == this.selectAllButton) {
-			int[] selectionRows = new int[softwareDefinitionTree.getRowCount()-1];
-			for(int i=1; i<softwareDefinitionTree.getRowCount(); i++){
+			int[] selectionRows = new int[resultTree.getRowCount()-1];
+			for(int i=1; i<resultTree.getRowCount(); i++){
 				selectionRows[i-1] = i;
 	       }
-			softwareDefinitionTree.setSelectionRows(selectionRows);
+			resultTree.setSelectionRows(selectionRows);
 		}
 		else if (action.getSource() == this.deSelectAllButton) {
-			softwareDefinitionTree.setSelectionRow(-1);
+			resultTree.setSelectionRow(-1);
 		}
 	}
 	
 	private void save() {
-		TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
+		TreeSelectionModel paths = resultTree.getSelectionModel();
+		ArrayList<AnalyzedModuleComponent> components = new ArrayList<AnalyzedModuleComponent>();
 		for (TreePath path : paths.getSelectionPaths()){
-			AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-	
-			this.softwareUnitController.save(selectedComponent);			
+			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}
+		this.softwareUnitController.saveRegEx(components, enteredRegEx);
 		this.dispose();
 	}
 	

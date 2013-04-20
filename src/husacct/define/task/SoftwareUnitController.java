@@ -12,9 +12,7 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +23,6 @@ public class SoftwareUnitController extends PopUpController {
 
 	private SoftwareUnitJDialog softwareUnitFrame;
 	private Logger logger;
-private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public SoftwareUnitController(long moduleId) {
@@ -50,7 +47,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			if (softwareUnitList.contains(addedUnit)) {
 				softwareUnitList.remove(addedUnit);
 			}
-			
 		}
 	}
 	
@@ -81,25 +77,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 		testreturnlist[modules.length]=mockModule1;
 		testreturnlist[modules.length+1]=mockModule2;
 		return testreturnlist;
-	}
-	
-	private AnalysedModuleDTO[] getAnalyzedModulesWithChildren() {
-		AnalysedModuleDTO[] rootModules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-		
-		for(AnalysedModuleDTO rootModule : rootModules) {
-			this.addChildModules(rootModule);
-		}
-		
-		return rootModules;
-	}
-	
-	private void addChildModules(AnalysedModuleDTO module) {
-		AnalysedModuleDTO[] children = ServiceProvider.getInstance().getAnalyseService().getChildModulesInModule(module.uniqueName);
-		
-		for(AnalysedModuleDTO subModule : children) {
-			module.subModules.add(subModule);
-			this.addChildModules(subModule);
-		}
 	}
 	
 	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
@@ -234,6 +211,17 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 		}
 	}
 	
+	public void saveRegEx(ArrayList<AnalyzedModuleComponent> selectedComponents, String regExName) {
+		logger.info("Adding software unit to module with id " + this.getModuleId() + " to regex " + regExName);
+		try {
+			this.softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(this.getModuleId(), selectedComponents, regExName);
+			DefinitionController.getInstance().notifyObservers();
+		} catch (Exception e) {
+			this.logger.error(e.getMessage());
+			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+		}
+	}
+	
 	public void save(Long moduleId, String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
@@ -255,7 +243,6 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 	public void save(AnalyzedModuleComponent selectedComponent) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
-			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(),selectedComponent);
 			
 			DefinitionController.getInstance().notifyObservers();

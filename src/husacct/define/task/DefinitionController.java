@@ -211,25 +211,30 @@ public class DefinitionController extends Observable implements Observer {
 	/**
 	 * Remove the selected software unit
 	 */
-	public void removeSoftwareUnits(List<String> softwareUnitNames) {
+	public void removeSoftwareUnits(List<String> softwareUnitNames, List<String> types) {
 		try {
 			long moduleId = getSelectedModuleId();
 			
 			boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
 			
 			for(String softwareUnit : softwareUnitNames) {
+				for(String type : types) {
 				logger.info("Removing software unit " + softwareUnit);
 
 				if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 					if (confirm) {
 						// Remove the software unit
 						JPanelStatus.getInstance("Removing software unit").start();
-						this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
+						if(type.equals("REGEX")) 
+							this.softwareUnitDefinitionDomainService.removeRegExSoftwareUnit(moduleId, softwareUnit);
+						else
+							this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
 						// Update the software unit table
 						this.notifyObservers();
 					}
 				}
 			} 
+			}
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
@@ -288,7 +293,6 @@ public class DefinitionController extends Observable implements Observer {
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 		ArrayList<Module> modules = this.moduleService.getSortedModules();
 		for (Module module : modules) {
-			logger.debug(module.getName()+"  ]"+module.getType());
 			this.addChildComponents(rootComponent, module);
 		}
 
@@ -392,6 +396,10 @@ public class DefinitionController extends Observable implements Observer {
 	
 	public ArrayList<String> getSoftwareUnitNamesBySelectedModule() {
 		return this.softwareUnitDefinitionDomainService.getSoftwareUnitNames(getSelectedModuleId());
+	}
+	
+	public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule() {
+		return this.softwareUnitDefinitionDomainService.getRegExSoftwareUnitNames(getSelectedModuleId());
 	}
 	
 	public String getSoftwareUnitTypeBySoftwareUnitName(String softwareUnitName){
