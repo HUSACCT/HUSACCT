@@ -6,6 +6,7 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
+import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -150,7 +151,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	private void editSoftwareUnit() {
-		
+		int selectedRow = softwareUnitsTable.getSelectedRow();
+		new EditSoftwareUnitJDialog(DefinitionController.getInstance().getSelectedModuleId(), (String)softwareUnitsTable.getValueAt(selectedRow, 0));
 	}
 		
 	/**
