@@ -2,7 +2,7 @@ package husacct.define.task.components;
 
 import java.util.ArrayList;
 
-public class RegexComponent  extends AbstractCombinedComponent {
+public class RegexComponent  extends AnalyzedModuleComponent{
 
 	private String uniqueName = "";
 	private String type = "";
@@ -31,10 +31,7 @@ public class RegexComponent  extends AbstractCombinedComponent {
 		softwareUnit.add((AnalyzedModuleComponent)child);
 	}
 
-	@Override
-	public void addChild(int index, AbstractCombinedComponent child) {
-		
-	}
+	
 
 	@Override
 	public void setChildren(ArrayList<AbstractCombinedComponent> children) {

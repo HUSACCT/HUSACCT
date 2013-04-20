@@ -7,7 +7,9 @@ import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.task.JtreeController;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
 
@@ -76,14 +78,26 @@ public class SoftwareUnitDefinitionDomainService {
 	
 	
 	public void addSoftwareUnit(long moduleId, AnalyzedModuleComponent softwareunit) {
+		
+	
+		
+		
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		
 		try {
+			
+			
 			Type type = Type.valueOf(softwareunit.getType().toUpperCase());
 			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
-			
 			module.addSUDefinition(unit);
-			JtreeController.instance().getTree().removeTreeItem(moduleId, softwareunit);
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper ");
+			if(softwareunit instanceof RegexComponent)
+			{
+				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,moduleId);
+			}else{
+				JtreeController.instance().getTree().removeTreeItem(moduleId, softwareunit);
+			}
+			
 		} catch (Exception e){
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + softwareunit.getType());
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
@@ -92,7 +106,20 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 	
 	
+	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,long id) {
+		for(AbstractCombinedComponent units : softwareunit.getChildren())
+		{
+		AnalyzedModuleComponent	unitsToBeRegistered= (AnalyzedModuleComponent) units;
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+softwareunit.getChildren().size());	
+		JtreeController.instance().getTree().removeTreeItem(id, unitsToBeRegistered);
+			
+			
+		}
+		
+	}
+
 	public void addSoftwareUnitToRegex(long moduleId, ArrayList<AnalyzedModuleComponent> softwareUnits, String regExName) {
+		
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitRegExDefinition regExDefinition = new SoftwareUnitRegExDefinition(regExName);
 		
@@ -102,7 +129,8 @@ public class SoftwareUnitDefinitionDomainService {
 				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit.getUniqueName(), type);
 				regExDefinition.addSoftwareUnitDefinition(unit);
 			}
-			module.addSURegExDefinition(regExDefinition);
+	AnalyzedModuleComponent regixwrapper=JtreeController.instance().registerRegix(regExName);
+		addSoftwareUnit(moduleId, regixwrapper);
 		} catch (Exception e){
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit");
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());

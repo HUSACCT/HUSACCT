@@ -7,6 +7,9 @@ import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.RegexComponent;
+
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,8 +26,10 @@ private  AnalyzedModuleTree tree;
 private static JtreeController instance;	
 private AnalyzedModuleTree resultTree;
 private ModuleTree moduleTree;
+private AnalyzedModuleTree editTree;
 
 	private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
+	private  Map<String,AbstractCombinedComponent> regixRegistry =new LinkedHashMap<String,AbstractCombinedComponent>()  ;
 	private  boolean isLoaded=false;
 
 	public  JtreeController()
@@ -145,7 +150,7 @@ private ModuleTree moduleTree;
 
 	public AnalyzedModuleTree getResultTree() 
 	{
-		AnalyzedModuleComponent root = new AnalyzedModuleComponent("root","Results","root","public");
+		RegexComponent root = new RegexComponent("root","Regix results","regix","public");
 
 		resultTree= new AnalyzedModuleTree(root);
 
@@ -155,8 +160,9 @@ private ModuleTree moduleTree;
 
 	public void additemgetResultTree(AnalyzedModuleComponent anal) 
 	{
-
+anal.freeze();
 AnalyzedModuleComponent temp= (AnalyzedModuleComponent)resultTree.getModel().getRoot();
+temp.freeze();
 temp.addChild(anal);
 
 resultTree.setModel(new CombinedModuleTreeModel(temp));
@@ -165,7 +171,7 @@ resultTree.setModel(new CombinedModuleTreeModel(temp));
 
 }
 
-public static void registerResultRemovals() {
+public static void registerResultRemovalspiiii() {
 
 	TreeSelectionModel modulepath = instance.moduleTree.getSelectionModel();
 	TreePath selectedmodule= modulepath.getSelectionPath();
@@ -187,5 +193,20 @@ public ModuleTree getModuleTree() {
 
 public void setModuleTree(ModuleTree moduleTree) {
 	this.moduleTree = moduleTree;
+}
+
+ public AnalyzedModuleComponent registerRegix(String regExName) {
+	AnalyzedModuleComponent regixwrapper = (AnalyzedModuleComponent)instance.resultTree.getModel().getRoot();
+	 regixwrapper.setUniqueName(regExName);
+	 instance.regixRegistry.put(regExName,regixwrapper);
+	return regixwrapper;
+}
+
+public AnalyzedModuleTree getRegixTree(String editingRegEx) {
+	
+	RegexComponent result= (RegexComponent) instance.regixRegistry.get(editingRegEx);
+	editTree = new AnalyzedModuleTree(result);
+	
+	return editTree;
 }
 }

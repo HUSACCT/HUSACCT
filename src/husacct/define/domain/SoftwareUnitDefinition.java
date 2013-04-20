@@ -4,7 +4,7 @@ public class SoftwareUnitDefinition {
 	
 	public enum Type
 	{
-		PACKAGE, CLASS, INTERFACE,EXTERNALLIBRARY,SUBSYSTEM
+		PACKAGE, CLASS, INTERFACE,EXTERNALLIBRARY,SUBSYSTEM,REGIX
 	}
 
 	private String name;

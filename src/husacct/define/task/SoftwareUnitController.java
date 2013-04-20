@@ -226,7 +226,9 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public void saveRegEx(ArrayList<AnalyzedModuleComponent> selectedComponents, String regExName) {
 		logger.info("Adding software unit to module with id " + this.getModuleId() + " to regex " + regExName);
+		
 		try {
+			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(this.getModuleId(), selectedComponents, regExName);
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
@@ -263,6 +265,13 @@ public class SoftwareUnitController extends PopUpController {
 			this.logger.error(e.getMessage());
 			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 		}
+		
+	}
+
+	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,String editingRegEx) {
+		
+		
+		
 		
 	}
 }

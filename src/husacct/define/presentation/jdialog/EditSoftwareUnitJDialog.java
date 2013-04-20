@@ -25,6 +25,7 @@ import husacct.define.task.JtreeController;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.RegexComponent;
 
 public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 	
@@ -36,6 +37,7 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 	private JButton cancelButton;
 	private JButton selectAllButton;
 	private JButton deSelectAllButton;
+	private RegexComponent regexwrapper;
 	
 	private AnalyzedModuleTree resultTree;
 	
@@ -75,7 +77,8 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
 		//softwareUnitScrollPane.setSize(50, 50);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 300));
-		resultTree = JtreeController.instance().buildTreeByRegexName(_moduleId, editingRegEx);
+		resultTree = JtreeController.instance().getRegixTree(editingRegEx);
+		regexwrapper = (RegexComponent)resultTree.getModel().getRoot();
 		softwareUnitScrollPane.setViewportView(resultTree);
 		int[] selectionRows = new int[resultTree.getRowCount()-1];
 		for(int i=1; i<resultTree.getRowCount(); i++){
@@ -129,12 +132,28 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 	}
 	
 	private void save() {
+		
+		
+		
 		TreeSelectionModel paths = resultTree.getSelectionModel();
+            TreePath[] pathses =resultTree.getSelectionPaths();
 		ArrayList<AnalyzedModuleComponent> components = new ArrayList<AnalyzedModuleComponent>();
+		/*
+		 * 
+		 * inprogress
+		if(regexwrapper.getChildren().size()==pathses.length)
+		{
+			this.dispose();
+		}else
+		{
+			
+		}
+		
+		*/
 		for (TreePath path : paths.getSelectionPaths()){
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}
-		this.softwareUnitController.saveRegEx(components, editingRegEx);
+		this.softwareUnitController.editRegEx(components, editingRegEx);
 		this.dispose();
 	}
 	

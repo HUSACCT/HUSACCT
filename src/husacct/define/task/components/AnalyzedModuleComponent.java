@@ -36,21 +36,22 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	}
 	
 	public void addChild(int index, AbstractCombinedComponent child) {
-		
+		if(!isfrozen){
 		child.setParentOfChild(this);
 		child.setAnalyzedModuleComponentPosition(index);
-		
+		}
 		this.children.add(index, child);
 	}
 
 	public void setChildren(ArrayList<AbstractCombinedComponent> children) {
+		if(!isfrozen){
 		for(AbstractCombinedComponent a: children)
 		{
 			
 			a.setParentOfChild(this);
 		}
 		
-		
+		}
 		this.children = children;
 	}
 
