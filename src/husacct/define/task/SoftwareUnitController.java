@@ -120,7 +120,7 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 	
 	public void saveRegEx(String regEx, String packageClass) {
 		String translatedRegEx = "";
-         resultofsearch = new ArrayList<AnalyzedModuleComponent>();
+    
 		if(regEx.startsWith("*") && regEx.endsWith("*")) {
 			regEx = regEx.replace("*", "");
 			translatedRegEx = regEx;
@@ -150,15 +150,15 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			
 			if(packageClass.equals("P")) {
 				
-				if(module.getType().equals("package".toUpperCase())) {
+				if(module.getType().equals("PACKAGE")) {
 					System.out.println(module.getType());
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							//resultofsearch.add(module);
-							System.out.println(module.getUniqueName()+"jijijjoojojojojojojojojoj");
+							
+							
 							JtreeController.instance().additemgetResultTree(module);
-							//DefinitionController.getInstance().notifyObservers();
+							
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -168,11 +168,13 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.getType().equals("class") || module.getType().toUpperCase().equals("INTERFACE")) {
+
+				if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
+
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							//resultofsearch.add(module);
+						
 							JtreeController.instance().additemgetResultTree(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
@@ -208,12 +210,12 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			Matcher matcher = pattern.matcher(module.getName());
 			
 			if(packageClass.equals("P")) {
-				if(module.getType().toLowerCase().equals("package")) {
+				if(module.getType().equals("PACKAGE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(module);
-							//resultofsearch.add(module);
+							
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -223,12 +225,12 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 			}
 			
 			else if(packageClass.equals("C")) {
-				if(module.getType().equals("class") || module.getType().equals("INTERFACE")) {
+				if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(module);
-						//	resultofsearch.add(module);
+						
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -237,12 +239,12 @@ private	ArrayList<AnalyzedModuleComponent> resultofsearch;
 				}
 			}
 			
-			if(packageClass.equals("PC")) {
+			else if(packageClass.equals("PC")) {
 				while(matcher.find()) {
 					logger.info("Adding software unit to module with id " + this.getModuleId());
 					try {
 						JtreeController.instance().additemgetResultTree(module);
-						//resultofsearch.add(module);
+					
 					} catch (Exception e) {
 						this.logger.error(e.getMessage());
 						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());

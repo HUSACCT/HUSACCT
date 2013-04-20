@@ -2,7 +2,7 @@ package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.domain.SoftwareUnitRegExDefinition;
 
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ public class Module implements Comparable<Module> {
 	protected String description;
 	protected String type;
 	protected ArrayList<SoftwareUnitDefinition> mappedSUunits;
+	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
 	protected ArrayList<Module> subModules;
-	
 	
 	public Module()
 	{
@@ -30,6 +30,7 @@ public class Module implements Comparable<Module> {
 		this.description = description;
 		this.type = "Module";
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
+		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<Module>();
 	}
 	
@@ -61,9 +62,16 @@ public class Module implements Comparable<Module> {
 		return mappedSUunits;
 	}
 
-
 	public void setUnits(ArrayList<SoftwareUnitDefinition> units) {
 		this.mappedSUunits = units;
+	}
+	
+	public ArrayList<SoftwareUnitRegExDefinition> getRegExUnits() {
+		return mappedRegExSUunits;
+	}
+
+	public void setRegExUnits(ArrayList<SoftwareUnitRegExDefinition> units) {
+		this.mappedRegExSUunits = units;
 	}
 
 	public ArrayList<Module> getSubModules() {
@@ -90,6 +98,25 @@ public class Module implements Comparable<Module> {
 			mappedSUunits.remove(unit);
 		}else{
 			System.out.println("This software unit does not exist!");
+		}
+	}
+	
+	//SoftwareUnitDefinition
+	public void addSURegExDefinition(SoftwareUnitRegExDefinition unit)
+	{
+		if(!mappedRegExSUunits.contains(unit)) {
+			mappedRegExSUunits.add(unit);
+		}else{
+			System.out.println("This regex software unit has already been added!");
+		}
+	}
+	
+	public void removeSURegExDefinition(SoftwareUnitRegExDefinition unit)
+	{
+		if(mappedRegExSUunits.contains(unit)) {
+			mappedRegExSUunits.remove(unit);
+		}else{
+			System.out.println("This regex software unit does not exist!");
 		}
 	}
 	
@@ -229,7 +256,5 @@ public class Module implements Comparable<Module> {
 		}
 		return compareResult;
 	}
-
-	
 
 }

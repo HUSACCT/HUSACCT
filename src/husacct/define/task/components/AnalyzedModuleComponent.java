@@ -9,7 +9,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	private String uniqueName = "";
 	private String type = "";
 	private String visibility;
-
+	private boolean isfrozen=false;
 	
 	public AnalyzedModuleComponent() {
 		super();
@@ -28,9 +28,10 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	}
 
 	public void addChild(AbstractCombinedComponent child) {
+		if(!isfrozen){
 		child.setParentOfChild(this);
 		child.setAnalyzedModuleComponentPosition(children.size());
-		
+		}
 		this.children.add(child);
 	}
 	
@@ -162,5 +163,19 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		
 		
 	}
+
+	public boolean isIsfrozen() {
+		return isfrozen;
 	
+	}
+
+	public void freeze() {
+		isfrozen=true;
+	}
+	
+	public void unfreeze()
+	{
+	 isfrozen=false;
+
+	}
 }

@@ -1,16 +1,16 @@
 package husacct.define.task;
 
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.return_statement_return;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
+import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
-import husacct.define.task.conventions_checker.AnalyzedComponentHelper;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -19,8 +19,9 @@ import husacct.define.domain.module.Module;
 
 public class JtreeController {
 private  AnalyzedModuleTree tree;
-private static JtreeController instance=null;	
+private static JtreeController instance;	
 private AnalyzedModuleTree resultTree;
+private ModuleTree moduleTree;
 
 private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
 private  boolean isLoaded=false;
@@ -123,12 +124,6 @@ public  AnalyzedModuleTree getTree()
 	return tree;
 }
 
-//moet naar het tree object ^_^
-public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
-	
-	
-	
-}
 
 
 
@@ -156,7 +151,7 @@ public void additemgetResultTree(AnalyzedModuleComponent anal)
 
 AnalyzedModuleComponent temp= (AnalyzedModuleComponent)resultTree.getModel().getRoot();
 temp.addChild(anal);
-//tree.removeTreeItem(0, anal);
+
 resultTree.setModel(new CombinedModuleTreeModel(temp));
 
 
@@ -164,12 +159,26 @@ resultTree.setModel(new CombinedModuleTreeModel(temp));
 }
 
 public static void registerResultRemovals() {
+
+	TreeSelectionModel modulepath = instance.moduleTree.getSelectionModel();
+	TreePath selectedmodule= modulepath.getSelectionPath();
+	long moduleId = ((AbstractDefineComponent)selectedmodule.getLastPathComponent()).getModuleId();
 	TreeSelectionModel paths = instance.resultTree.getSelectionModel();
+	SoftwareUnitController softwareUnitController  = new SoftwareUnitController(moduleId);
 	for (TreePath path : paths.getSelectionPaths()){
 		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-
-		//this.softwareUnitController.save(selectedComponent);	
+		
+			softwareUnitController.save(selectedComponent);
 	
 }
+}
+
+public ModuleTree getModuleTree() {
+	
+	return moduleTree;
+}
+
+public void setModuleTree(ModuleTree moduleTree) {
+	this.moduleTree = moduleTree;
 }
 }

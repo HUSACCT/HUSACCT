@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
+import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -61,8 +62,6 @@ public class SoftwareUnitDefinitionDomainService {
 	
 	
 	public void addSoftwareUnit(long moduleId, AnalyzedModuleComponent softwareunit) {
-        
-	
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		
 		try {
@@ -79,7 +78,26 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 	
 	
-	
+	public void addSoftwareUnitsToRegex(long moduleId, String softwareUnit, String t, String regExName) {
+		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		SoftwareUnitRegExDefinition regExDefinition = new SoftwareUnitRegExDefinition(regExName);
+		
+		try {
+			Type type = Type.valueOf(t);
+			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+			
+			for(SoftwareUnitRegExDefinition def : module.getRegExUnits()) {
+				if(def.getName().equals(regExName)) {
+					
+				}
+			}
+			module.addSUDefinition(unit);
+		} catch (Exception e){
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + t);
+			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
+		}
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+	}
 	
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
