@@ -193,6 +193,34 @@ public class Module implements Comparable<Module> {
 		return hasSoftwareUnit;
 	}
 	
+	private boolean hasRegExSoftwareUnit(String softwareUnitName, boolean directly) 
+	{
+		boolean hasSoftwareUnit = false;
+		for (SoftwareUnitRegExDefinition unit : mappedRegExSUunits){
+			if (unit.getName().equals(softwareUnitName)){
+				hasSoftwareUnit = true;
+			}
+		}
+		if (!directly) {
+			for (Module mod : subModules){
+				if (mod.hasRegExSoftwareUnit(softwareUnitName, directly)){
+					hasSoftwareUnit = true;
+				}
+			}
+		}
+		return hasSoftwareUnit;
+	}
+	
+	public boolean hasRegExSoftwareUnitDirectly(String softwareUnitName) 
+	{
+		return hasRegExSoftwareUnit(softwareUnitName, true);
+	}
+	
+	public boolean hasRegExSoftwareUnit(String softwareUnitName) 
+	{
+		return hasRegExSoftwareUnit(softwareUnitName, false);
+	}
+	
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName){
 		SoftwareUnitDefinition softwareUnit = null;
 		for (SoftwareUnitDefinition unit : mappedSUunits){
@@ -203,6 +231,22 @@ public class Module implements Comparable<Module> {
 		for (Module mod : subModules){
 			if (mod.hasSoftwareUnit(softwareUnitName)){
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
+			}
+		}
+		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
+		return softwareUnit;
+	}
+	
+	public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(String softwareUnitName){
+		SoftwareUnitRegExDefinition softwareUnit = null;
+		for (SoftwareUnitRegExDefinition unit : mappedRegExSUunits){
+			if (unit.getName().equals(softwareUnitName)){
+				softwareUnit = unit;
+			}
+		}
+		for (Module mod : subModules){
+			if (mod.hasRegExSoftwareUnit(softwareUnitName)){
+				softwareUnit = mod.getRegExSoftwareUnitByName(softwareUnitName);
 			}
 		}
 		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}

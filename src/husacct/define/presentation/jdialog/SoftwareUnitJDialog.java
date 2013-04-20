@@ -314,22 +314,22 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
-		AnalyzedModuleTree test= JtreeController.instance().getResultTree();
 		if(regExMappingPanel != null) {
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
 					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
+					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegEx(regExTextField.getText(), "PC");
+						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "PC");
 					}
 					else if(packageCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegEx(regExTextField.getText(), "P");
+						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "P");
 					}
 					else if(classCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegEx(regExTextField.getText(), "C");
+						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "C");
 					}
 					this.dispose();
-					new SoftwareUnitResultJDialog(_moduleId,test);
+					new SoftwareUnitResultJDialog(_moduleId, resultTree, regExTextField.getText(), this);
 				}
 				else {
 					JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SelectRegExCheckBoxError"),  "Message", JOptionPane.WARNING_MESSAGE);
