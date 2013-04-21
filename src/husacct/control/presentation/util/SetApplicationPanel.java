@@ -1,7 +1,6 @@
 package husacct.control.presentation.util;
 
 import husacct.ServiceProvider;
-import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
@@ -14,17 +13,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
-<<<<<<< Updated upstream
->>>>>>> local
-import java.util.Arrays;
-=======
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
->>>>>>> Stashed changes
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -198,43 +189,12 @@ public class SetApplicationPanel extends JPanel{
 			projectListModel.add(projectListModel.size(), project);
 		}
 		versionText.setText(applicationData.version);
-<<<<<<< HEAD
-		
-		ArrayList<String> items = new ArrayList<String>();
-		if(applicationData.projects.size() > 0){
-			items = applicationData.projects.get(0).paths;
-		}
-		for (int i=0; i<items.size(); i++) {
-			pathListModel.add(i, items.get(i));
-=======
-<<<<<<< Updated upstream
-		String[] items = applicationData.paths;
-		for (int i=0; i<items.length; i++) {
-			pathListModel.add(i, items[i]);
->>>>>>> local
-		}
-=======
->>>>>>> Stashed changes
 	}
 	
 	public ApplicationDTO getApplicationData(){
 		String name = applicationNameText.getText();
 		String language = languages[languageSelect.getSelectedIndex()];
 		String version = versionText.getText();
-<<<<<<< HEAD
-		ArrayList<String> paths = new ArrayList<String>(Arrays.asList(Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class)));
-		
-		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
-		ProjectDTO project = new ProjectDTO(name, paths, language, version, "", analysedModules);
-		projects.add(project);
-		
-		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
-=======
-<<<<<<< Updated upstream
-		String[] paths = Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class);
-		ApplicationDTO applicationData = new ApplicationDTO(name, paths, language, version);
-=======
 		
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();		
 		for(int i=0; i < projectListModel.size(); i++) {
@@ -244,8 +204,6 @@ public class SetApplicationPanel extends JPanel{
 		}
 		
 		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
->>>>>>> Stashed changes
->>>>>>> local
 		return applicationData;
 	}
 	

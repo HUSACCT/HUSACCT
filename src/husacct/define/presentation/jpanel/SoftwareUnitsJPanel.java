@@ -131,23 +131,11 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 			}
-<<<<<<< HEAD
 		}
 	} 
-
-=======
-<<<<<<< Updated upstream
-		} else {
-			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
-		}
-	}
-=======
-		}} 
 	
->>>>>>> Stashed changes
->>>>>>> local
 	private void removeSoftwareUnit(){
 		if (softwareUnitsTable.getSelectedRow() != -1){
 			List<String> selectedModules = new ArrayList<String>();
