@@ -9,6 +9,7 @@ public class ModuleFactory {
 	
 	
 	public AbstractModule createModule(String type, List<RuleType> rules) throws ModuleNotFoundException {
+		
 		switch(type.toLowerCase()) {
 			case "component": 
 				return new Component(rules);

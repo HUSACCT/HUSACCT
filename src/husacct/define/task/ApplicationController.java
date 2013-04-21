@@ -2,7 +2,6 @@ package husacct.define.task;
 
 import husacct.define.presentation.ApplicationJInternalFrame;
 
-
 public class ApplicationController {
 	public ApplicationJInternalFrame jframe;
 
