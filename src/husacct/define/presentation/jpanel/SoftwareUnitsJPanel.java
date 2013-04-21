@@ -116,10 +116,15 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			} else {
 				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 			}
+<<<<<<< Updated upstream
 		} else {
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
+=======
+		}} 
+	
+>>>>>>> Stashed changes
 	private void removeSoftwareUnit(){
 		if (getSelectedRow() != -1){
 			String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);

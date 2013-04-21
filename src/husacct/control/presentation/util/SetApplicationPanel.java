@@ -12,12 +12,18 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< Updated upstream
 import java.util.Arrays;
+=======
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
+>>>>>>> Stashed changes
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -29,21 +35,24 @@ import javax.swing.event.ListSelectionListener;
 
 public class SetApplicationPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
-	private JLabel pathLabel, applicationNameLabel, languageSelectLabel, versionLabel;
-	private JList pathList;
+	private JLabel applicationNameLabel, languageSelectLabel, versionLabel, projectsLabel;
 	private JTextField applicationNameText, versionText;
 	private JComboBox languageSelect;
-	private JButton addButton, removeButton;
+	private JButton addButton, removeButton, editButton;
 	private String[] languages;
-	private DefaultListModel pathListModel = new DefaultListModel();
+	private JList projectList;
+	private DefaultListModel projectListModel = new DefaultListModel();
+	private boolean UpdateFlag;
 	
+	private JDialog dialogOwner;
 	private JPanel panel;
 	private GridBagConstraints constraint = new GridBagConstraints();
 	
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
-	public SetApplicationPanel(){
+	public SetApplicationPanel(JDialog dialogOwner){
+		this.dialogOwner = dialogOwner;
 		addComponents();
 		setListeners();
 		setDefaultValues();
@@ -56,22 +65,24 @@ public class SetApplicationPanel extends JPanel{
 		applicationNameLabel = new JLabel(localeService.getTranslatedString("ApplicationNameLabel"));
 		languageSelectLabel = new JLabel(localeService.getTranslatedString("LanguageSelectLabel"));
 		versionLabel = new JLabel(localeService.getTranslatedString("VersionLabel"));
-		pathLabel = new JLabel(localeService.getTranslatedString("PathLabel"));
+		projectsLabel = new JLabel(localeService.getTranslatedString("ProjectsLabel"));
 		addButton = new JButton(localeService.getTranslatedString("AddButton"));
 		removeButton = new JButton(localeService.getTranslatedString("RemoveButton"));
+		editButton = new JButton(localeService.getTranslatedString("Edit"));
 		
 		applicationNameText = new JTextField("myApplication", 20);
 		languageSelect = new JComboBox(languages);
 		versionText = new JTextField(10);
 		
-		pathList = new JList(pathListModel);
-		pathList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		pathList.setLayoutOrientation(JList.VERTICAL);
-		pathList.setVisibleRowCount(-1);
-		JScrollPane listScroller = new JScrollPane(pathList);
+		projectList = new JList(projectListModel);
+		projectList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		projectList.setLayoutOrientation(JList.VERTICAL);
+		projectList.setVisibleRowCount(-1);
+		JScrollPane listScroller = new JScrollPane(projectList);
 		listScroller.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		removeButton.setEnabled(false);
+		editButton.setEnabled(false);
 		
 		add(applicationNameLabel, getConstraint(0, 0, 1, 1));
 		add(applicationNameText, getConstraint(1, 0, 2, 1));
@@ -79,33 +90,42 @@ public class SetApplicationPanel extends JPanel{
 		add(languageSelect, getConstraint(1, 1, 2, 1));
 		add(versionLabel, getConstraint(0, 2, 1, 1));
 		add(versionText, getConstraint(1, 2, 2, 1));
-		add(pathLabel, getConstraint(0, 3, 1, 1));
+		add(projectsLabel, getConstraint(0, 3, 1, 1));
 		add(listScroller, getConstraint(0, 4, 2, 3, 200, 150));
 		
 		add(addButton, getConstraint(2, 4, 1, 1));
-		add(removeButton, getConstraint(2, 5, 1, 1));
+		add(editButton, getConstraint(2, 5, 1, 1));
+		add(removeButton, getConstraintForButtons(2, 6, 1, 1));
 	}
 	
 	private void setListeners(){
-		pathList.addListSelectionListener(new ListSelectionListener() {
+		projectList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				if(pathList.getSelectedIndex() >= 0){
+				if(projectList.getSelectedIndex() >= 0){
 					removeButton.setEnabled(true);
+					editButton.setEnabled(true);
 				} else {
 					removeButton.setEnabled(false);
+					editButton.setEnabled(false);
 				}
 			}
 		});
 		
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showAddFileDialog();
+				addProjectDialog();
+			}
+		});
+		
+		editButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editProjectDialog((ProjectDTO)projectListModel.getElementAt(projectList.getSelectedIndex()));
 			}
 		});
 		
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pathListModel.remove(pathList.getSelectedIndex());
+				projectListModel.remove(projectList.getSelectedIndex());
 			}
 		});
 		
@@ -114,19 +134,50 @@ public class SetApplicationPanel extends JPanel{
 				applicationNameLabel.setText(localeService.getTranslatedString("ApplicationNameLabel"));
 				languageSelectLabel.setText(localeService.getTranslatedString("LanguageSelectLabel"));
 				versionLabel.setText(localeService.getTranslatedString("VersionLabel"));
-				pathLabel.setText(localeService.getTranslatedString("PathLabel"));
+				projectsLabel.setText(localeService.getTranslatedString("ProjectsLabel"));
 				addButton.setText(localeService.getTranslatedString("AddButton"));
 				removeButton.setText(localeService.getTranslatedString("RemoveButton"));
 			}
 		});
 	}
 	
-	private void showAddFileDialog() {
-		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, localeService.getTranslatedString("AddButton"));
-		int returnVal = fileChooser.showDialog(panel);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
-		}
+	private void addProjectDialog() {
+		UpdateFlag = false;
+		AddProjectDialog project = new AddProjectDialog(dialogOwner);
+		addProjectDialogListener(project);
+	}
+	
+	private void editProjectDialog(ProjectDTO projectToEdit) {
+		UpdateFlag = true;
+		AddProjectDialog project = new AddProjectDialog(dialogOwner, projectToEdit);
+		addProjectDialogListener(project);
+	}
+	
+	private void addProjectDialogListener(final AddProjectDialog projectDialog) {
+		projectDialog.addWindowListener(new WindowListener() {
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				if(projectDialog.getProjectData() != null) {
+					if(UpdateFlag) {
+						projectListModel.set(projectList.getSelectedIndex(), projectDialog.getProjectData());
+					} else {
+						projectListModel.add(projectListModel.size(), projectDialog.getProjectData());
+					}
+				}
+			}
+			@Override
+			public void windowActivated(WindowEvent e) {}
+			@Override
+			public void windowClosing(WindowEvent e) {}
+			@Override
+			public void windowDeactivated(WindowEvent e) {}
+			@Override
+			public void windowDeiconified(WindowEvent e) {}
+			@Override
+			public void windowIconified(WindowEvent e) {}
+			@Override
+			public void windowOpened(WindowEvent e) {}
+		});
 	}
 	
 	private void setDefaultValues(){
@@ -136,25 +187,44 @@ public class SetApplicationPanel extends JPanel{
 			if(applicationData.programmingLanguage.equals(languages[i])){
 				languageSelect.setSelectedIndex(i);
 			}
+		}		
+		for(ProjectDTO project : applicationData.projects) {
+			projectListModel.add(projectListModel.size(), project);
 		}
 		versionText.setText(applicationData.version);
+<<<<<<< Updated upstream
 		String[] items = applicationData.paths;
 		for (int i=0; i<items.length; i++) {
 			pathListModel.add(i, items[i]);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 	
 	public ApplicationDTO getApplicationData(){
 		String name = applicationNameText.getText();
 		String language = languages[languageSelect.getSelectedIndex()];
 		String version = versionText.getText();
+<<<<<<< Updated upstream
 		String[] paths = Arrays.copyOf(pathListModel.toArray(), pathListModel.toArray().length, String[].class);
 		ApplicationDTO applicationData = new ApplicationDTO(name, paths, language, version);
+=======
+		
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();		
+		for(int i=0; i < projectListModel.size(); i++) {
+			ProjectDTO project = (ProjectDTO) projectListModel.getElementAt(i);
+			project.programmingLanguage = language;
+			projects.add(project);
+		}
+		
+		ApplicationDTO applicationData = new ApplicationDTO(name, projects, version);
+>>>>>>> Stashed changes
 		return applicationData;
 	}
 	
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight, int ipadx, int ipady){
 		constraint.fill = GridBagConstraints.BOTH;
+		constraint.anchor = GridBagConstraints.CENTER;
 		constraint.insets = new Insets(3, 3, 3, 3);
 		constraint.ipadx = ipadx;
 		constraint.ipady = ipady;
@@ -167,6 +237,13 @@ public class SetApplicationPanel extends JPanel{
 	
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight){
 		return getConstraint(gridx, gridy, gridwidth, gridheight, 0, 0);
+	}
+	
+	private GridBagConstraints getConstraintForButtons(int gridx, int gridy, int gridwidth, int gridheight){
+		constraint = getConstraint(gridx,gridy,gridwidth,gridheight,0,0);
+		constraint.fill = GridBagConstraints.NONE;
+		constraint.anchor = GridBagConstraints.NORTH;
+		return constraint;
 	}
 	
 	public boolean dataValidated() {

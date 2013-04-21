@@ -77,7 +77,11 @@ public class ValidateTest {
 
 	@Test
 	public void getViolationTypesJavaLanguage(){
+<<<<<<< Updated upstream
 		define.createApplication("", new String[]{}, "Java", "");
+=======
+		//define.createApplication("", new String[]{}, "Java", "");
+>>>>>>> Stashed changes
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -86,7 +90,11 @@ public class ValidateTest {
 
 	@Test
 	public void getViolationTypesCSharpLanguage(){
+<<<<<<< Updated upstream
 		define.createApplication("", new String[]{}, "C#", "");
+=======
+		//define.createApplication("", new String[]{}, "C#", "");
+>>>>>>> Stashed changes
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -95,7 +103,11 @@ public class ValidateTest {
 
 	@Test
 	public void getViolationTypesNoLanguage(){
+<<<<<<< Updated upstream
 		define.createApplication("", new String[]{}, "", "");
+=======
+		//define.createApplication("", new String[]{}, "", "");
+>>>>>>> Stashed changes
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
