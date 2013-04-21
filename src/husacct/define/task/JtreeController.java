@@ -27,7 +27,7 @@ private static JtreeController instance;
 private AnalyzedModuleTree resultTree;
 private ModuleTree moduleTree;
 private AnalyzedModuleTree editTree;
-
+private JtreeStateEngine order = new JtreeStateEngine();
 	private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
 	private  Map<String,AbstractCombinedComponent> regixRegistry =new LinkedHashMap<String,AbstractCombinedComponent>()  ;
 	private  boolean isLoaded=false;
@@ -208,5 +208,36 @@ public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	editTree = new AnalyzedModuleTree(result);
 	
 	return editTree;
+}
+public void flush(AnalyzedModuleComponent reanalyzedmodel)
+{
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 }
 }
