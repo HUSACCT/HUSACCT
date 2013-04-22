@@ -95,7 +95,7 @@ public class SoftwareUnitDefinitionDomainService {
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper ");
 			if(softwareunit instanceof RegexComponent)
 			{
-				
+				module.addSUDefinition(unit);
 			
 				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
 			}else{
