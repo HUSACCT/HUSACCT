@@ -10,6 +10,7 @@ public class CSharpGeneratorToolkit {
 
     /**
      * Returns the parentname from the stack: IE stack is C.B.A -> "A.B.C"
+     *
      * @param parentStack
      */
     public static String getParentName(Stack<String> parentStack) {
@@ -22,6 +23,7 @@ public class CSharpGeneratorToolkit {
 
     /**
      * Inserts a dot when parentName is not empty
+     *
      * @param parentName
      */
     public static String potentiallyInsertDot(String parentName) {
@@ -45,7 +47,7 @@ public class CSharpGeneratorToolkit {
     public static String belongsToClass(String namespaces, String classes) {
         return getUniqueName(namespaces, classes);
     }
-    
+
     public static String belongsToClass(Stack<String> namespaceStack, Stack<String> classStack) {
         String namespaces = getParentName(namespaceStack);
         String classes = getParentName(classStack);
