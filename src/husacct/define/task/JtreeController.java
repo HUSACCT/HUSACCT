@@ -196,9 +196,9 @@ public void setModuleTree(ModuleTree moduleTree) {
 	this.moduleTree = moduleTree;
 }
 
- public AnalyzedModuleComponent registerRegix(String regExName) {
+ public RegexComponent registerRegix(String regExName) {
 	
-	 AnalyzedModuleComponent regixwrapper = new AnalyzedModuleComponent(); 
+	 RegexComponent regixwrapper = new RegexComponent(); 
 	 
 	TreePath[] paths = instance.resultTree.getSelectionPaths();
 	for (TreePath treePath : paths) {
@@ -206,9 +206,10 @@ public void setModuleTree(ModuleTree moduleTree) {
 		regixwrapper.addChild((AnalyzedModuleComponent)treePath.getLastPathComponent());
 	
 	}
+	regixwrapper.setName(regExName);
 	regixwrapper.setType("regix");
 	regixwrapper.setUniqueName(regExName);
-	
+	regixwrapper.setVisibility("public");
 	 instance.regixRegistry.put(regExName,regixwrapper);
 	return regixwrapper;
 }
