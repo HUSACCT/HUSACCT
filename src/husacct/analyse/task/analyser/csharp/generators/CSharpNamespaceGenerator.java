@@ -26,11 +26,12 @@ public class CSharpNamespaceGenerator extends CSharpGenerator {
     public String getQualifiedIdentifiers(CommonTree tree) {
         String result = "";
         if (tree.getType() == CSharpParser.QUALIFIED_IDENTIFIER) {
-        for (int i = 0; i < tree.getChildCount(); i++) {
-             
+            for (int i = 0; i < tree.getChildCount(); i++) {
+
                 result += "." + ((CommonTree) tree.getChild(i)).token.getText();
-            
-        }}
+
+            }
+        }
         if (result.length() > 0) {
             result = result.substring(1);
         }

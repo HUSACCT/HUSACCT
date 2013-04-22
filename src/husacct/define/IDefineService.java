@@ -26,7 +26,7 @@ public interface IDefineService extends ISaveable, IObservableService {
 	public String getParentFromModule(String logicalPath);
 	public boolean isDefined();
 	public boolean isMapped();
-	
+	public void isReanalyzed();
 	public JInternalFrame getDefinedGUI();
 	
 	public Element getLogicalArchitectureData();
