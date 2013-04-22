@@ -6,7 +6,9 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
+
 import husacct.define.task.JtreeController;
+import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
@@ -93,8 +95,9 @@ public class SoftwareUnitDefinitionDomainService {
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper ");
 			if(softwareunit instanceof RegexComponent)
 			{
-				module.addSUDefinition(unit);
-				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,moduleId);
+				
+			
+				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
 			}else{
 				module.addSUDefinition(unit);
 				JtreeController.instance().getTree().removeTreeItem(moduleId, softwareunit);
@@ -109,12 +112,16 @@ public class SoftwareUnitDefinitionDomainService {
 	}
 	
 	
-	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,long id) {
+	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,Module parent,SoftwareUnitDefinition rootunit) {
+		//Regexmodule regex = new Regexmodule()
 		for(AbstractCombinedComponent units : softwareunit.getChildren())
 		{
-		AnalyzedModuleComponent	unitsToBeRegistered= (AnalyzedModuleComponent) units;
+			Type type = Type.valueOf(units.getType());
+			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(units.getUniqueName(), type);
 			
-		JtreeController.instance().getTree().removeTreeItem(id, unitsToBeRegistered);
+			AnalyzedModuleComponent	unitsToBeRegistered= (AnalyzedModuleComponent) units;
+			
+		JtreeController.instance().getTree().removeTreeItem(parent.getId(), unitsToBeRegistered);
 			
 			
 		}
@@ -156,6 +163,9 @@ public class SoftwareUnitDefinitionDomainService {
 	public void removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
+		
+		
+		
 		module.removeSURegExDefinition(unit);
 		//quikfix
 		try{

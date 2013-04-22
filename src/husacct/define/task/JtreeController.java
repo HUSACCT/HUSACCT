@@ -226,4 +226,19 @@ public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	return editTree;
 }
 
+public  void restoreRegexWrapper(String name) {
+	
+	
+	
+
+	
+}
+
+public AbstractCombinedComponent getMappedunits() {
+	// TODO Auto-generated method stub
+	return (AbstractCombinedComponent) instance.getTree().getModel().getRoot();
+}
+
+
+
 }
