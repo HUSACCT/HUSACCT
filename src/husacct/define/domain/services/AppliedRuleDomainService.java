@@ -47,6 +47,7 @@ public class AppliedRuleDomainService {
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
 
 		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom, moduleTo, enabled);
+		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return rule.getId();
