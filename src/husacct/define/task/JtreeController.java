@@ -197,16 +197,30 @@ public void setModuleTree(ModuleTree moduleTree) {
 }
 
  public AnalyzedModuleComponent registerRegix(String regExName) {
-	AnalyzedModuleComponent regixwrapper = (AnalyzedModuleComponent)instance.resultTree.getModel().getRoot();
-	 regixwrapper.setUniqueName(regExName);
+	
+	 AnalyzedModuleComponent regixwrapper = new AnalyzedModuleComponent(); 
+	 
+	TreePath[] paths = instance.resultTree.getSelectionPaths();
+	for (TreePath treePath : paths) {
+		
+		regixwrapper.addChild((AnalyzedModuleComponent)treePath.getLastPathComponent());
+	
+	}
+	regixwrapper.setType("regix");
+	regixwrapper.setUniqueName(regExName);
+	
 	 instance.regixRegistry.put(regExName,regixwrapper);
 	return regixwrapper;
 }
 
 public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	
-	RegexComponent result= (RegexComponent) instance.regixRegistry.get(editingRegEx);
-	editTree = new AnalyzedModuleTree(result);
+	RegexComponent  result = new RegexComponent();
+	result.setWrapper((AnalyzedModuleComponent) instance.regixRegistry.get(editingRegEx));
+	
+	System.out.println(result.getUniqueName());
+	
+	editTree = new AnalyzedModuleTree(result.getWrapper());
 	
 	return editTree;
 }

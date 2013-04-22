@@ -236,6 +236,7 @@ public class SoftwareUnitController extends PopUpController {
 		try {
 			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(this.getModuleId(), selectedComponents, regExName);
+			
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());

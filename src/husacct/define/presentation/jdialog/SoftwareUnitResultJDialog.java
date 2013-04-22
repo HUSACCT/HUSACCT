@@ -138,8 +138,11 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 		TreeSelectionModel paths = resultTree.getSelectionModel();
 		ArrayList<AnalyzedModuleComponent> components = new ArrayList<AnalyzedModuleComponent>();
 		for (TreePath path : paths.getSelectionPaths()){
+			System.out.println(((AnalyzedModuleComponent) path.getLastPathComponent()).getUniqueName());
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
+		
 		}
+		
 		this.softwareUnitController.saveRegEx(components, enteredRegEx);
 		this.dispose();
 	}

@@ -111,16 +111,26 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription){
+	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription,boolean ifWithFacade){
 		logger.info("Adding component " + "Facade"+componentName);
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
-			Facade f= new Facade();
 			Component newComponent = new Component(componentName, componentDescription);
-			f.setName("Facade"+newComponent.getName());
+			if (ifWithFacade) {
+				Facade f= new Facade();
+			f.setName("Facade"+componentName);
 			newComponent.addSubModule(f);
+			
+			}
+			
+			
+			
+			
+			
+			
 			this.passModuleToService(selectedModuleId, newComponent);
+			
 			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());

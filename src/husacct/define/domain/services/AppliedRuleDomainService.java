@@ -50,6 +50,8 @@ public class AppliedRuleDomainService {
 		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		System.out.println(ruleTypeKey+"<><>< -"+regex+"-  ????"+dependencies.length+" Modulee from:"+moduleFrom.getName()+ " moduleto: "+moduleTo.getName());
+		
 		return rule.getId();
 	}
 	
