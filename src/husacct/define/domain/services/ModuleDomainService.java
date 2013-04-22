@@ -5,6 +5,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.ModuleComparator;
+import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +40,15 @@ public class ModuleDomainService {
 
 	public void removeModuleById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		
 		SoftwareArchitecture.getInstance().removeModule(module);
+		//quikfix
+		try{
+		JtreeController.instance().registerTreeRemoval(module);
+		}catch(NullPointerException r)
+		{
+			
+		}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	

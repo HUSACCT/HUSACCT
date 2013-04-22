@@ -11,6 +11,7 @@ public class SoftwareArchitecture {
 	private Module rootModule;
 	
 	private ArrayList<AppliedRule> appliedRules;
+	private ArrayList<AppliedRule> defaultRules;
 	
 	private static SoftwareArchitecture instance = null;
 	public static SoftwareArchitecture getInstance()
@@ -84,6 +85,11 @@ public class SoftwareArchitecture {
 			}
 		}
 		return appliedRuleIds;
+	}
+	
+	public ArrayList<AppliedRule> getGeneratedRules()
+	{
+		return null; //TODO
 	}
 	
 	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
@@ -200,6 +206,22 @@ public class SoftwareArchitecture {
 				while (!currentModule.hasSoftwareUnitDirectly(softwareUnitName)){
 					for (Module subModule : currentModule.getSubModules()){
 						if (subModule.hasSoftwareUnit(softwareUnitName)){
+							currentModule = subModule;
+						}
+					}
+				}
+			}
+		if (currentModule == null){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitNotMapped"));}
+		return currentModule;
+	}
+	
+	public Module getModuleByRegExSoftwareUnit(String softwareUnitName) {
+		Module currentModule = null;
+			if (rootModule.hasRegExSoftwareUnit(softwareUnitName)){
+				currentModule = rootModule;
+				while (!currentModule.hasRegExSoftwareUnitDirectly(softwareUnitName)){
+					for (Module subModule : currentModule.getSubModules()){
+						if (subModule.hasRegExSoftwareUnit(softwareUnitName)){
 							currentModule = subModule;
 						}
 					}
@@ -357,7 +379,7 @@ public class SoftwareArchitecture {
 		}
 		return logicalPath;
 	}
-	
+	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D 
 	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 		
