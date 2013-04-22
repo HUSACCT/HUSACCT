@@ -1,9 +1,12 @@
 package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.RuleDTO;
+import husacct.common.dto.RuleTypeDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
+import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -18,6 +21,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -41,6 +45,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	
 	private JButton addSoftwareUnitButton;
 	private JButton removeSoftwareUnitButton;
+	private JButton editSoftwareUnitButton;
 
 	public SoftwareUnitsJPanel() {
 		super();
@@ -70,15 +75,19 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 4));
 		buttonPanel.setPreferredSize(new java.awt.Dimension(90, 156));
 		
 		addSoftwareUnitButton = new JButton();
 		buttonPanel.add(addSoftwareUnitButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		addSoftwareUnitButton.addActionListener(this);
-			
+		
+		editSoftwareUnitButton = new JButton();
+		buttonPanel.add(editSoftwareUnitButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		editSoftwareUnitButton.addActionListener(this);
+		
 		removeSoftwareUnitButton = new JButton();
-		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+		buttonPanel.add(removeSoftwareUnitButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeSoftwareUnitButton.addActionListener(this);
 		
 		this.setButtonTexts();
@@ -88,7 +97,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	private GridBagLayout createButtonPanelLayout() {
 		GridBagLayout buttonPanelLayout = new GridBagLayout();
 		buttonPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.1 };
-		buttonPanelLayout.rowHeights = new int[] { 13, 13, 7 };
+		buttonPanelLayout.rowHeights = new int[] { 0, 11, 7 };
 		buttonPanelLayout.columnWeights = new double[] { 0.1 };
 		buttonPanelLayout.columnWidths = new int[] { 7 };
 		return buttonPanelLayout;
@@ -104,10 +113,17 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		} else if (action.getSource() == this.removeSoftwareUnitButton) {
 			this.removeSoftwareUnit();
 		}
+		else if (action.getSource() == this.editSoftwareUnitButton) {
+			this.editSoftwareUnit();
+		}
 	}
 	
 	private void addSoftwareUnit() {
-//		if(ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+		System.out.println("-------------->"+ServiceProvider.getInstance().getControlService().isPreAnalysed());
+		RuleTypeDTO[] result=ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule("layer");
+		boolean k=result==null?true:false;
+		System.out.println(k);
+		//	if(ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
 		if (DefinitionController.getInstance().isAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
@@ -115,17 +131,28 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 			}
-		} else {
-			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
+		}
+	} 
+	
+	private void removeSoftwareUnit(){
+		if (softwareUnitsTable.getSelectedRow() != -1){
+			List<String> selectedModules = new ArrayList<String>();
+			List<String> types = new ArrayList<String>();
+			for(int selectedRow : softwareUnitsTable.getSelectedRows()) {
+				String softwareUnitName = (String)softwareUnitsTable.getValueAt(selectedRow, 0);
+				String type = (String)softwareUnitsTable.getValueAt(selectedRow, 1);
+				selectedModules.add(softwareUnitName);
+				types.add(type);
+			}
+			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
 		}
 	}
-	private void removeSoftwareUnit(){
-		if (getSelectedRow() != -1){
-			String softwareUnitName = (String)softwareUnitsTable.getValueAt(getSelectedRow(), 0);
-			DefinitionController.getInstance().removeSoftwareUnit(softwareUnitName);
-		}
+	
+	private void editSoftwareUnit() {
+		int selectedRow = softwareUnitsTable.getSelectedRow();
+		new EditSoftwareUnitJDialog(DefinitionController.getInstance().getSelectedModuleId(), (String)softwareUnitsTable.getValueAt(selectedRow, 0));
 	}
 		
 	/**
@@ -149,10 +176,20 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				// Get all components from the service
 				ArrayList<String> softwareUnitNames = DefinitionController.getInstance().getSoftwareUnitNamesBySelectedModule();
 				
+				ArrayList<String> regExSoftwareUnitNames = DefinitionController.getInstance().getRegExSoftwareUnitNamesBySelectedModule();
+				
 				if (softwareUnitNames != null) {
 					for (String softwareUnitName : softwareUnitNames) {
 						String softwareUnitType = DefinitionController.getInstance().getSoftwareUnitTypeBySoftwareUnitName(softwareUnitName);
 						Object rowdata[] = {softwareUnitName, softwareUnitType};
+						
+						atm.addRow(rowdata);
+					}
+				}
+				
+				if (regExSoftwareUnitNames != null) {
+					for (String softwareUnitName : regExSoftwareUnitNames) {
+						Object rowdata[] = {softwareUnitName, "REGEX"};
 						
 						atm.addRow(rowdata);
 					}
@@ -176,11 +213,13 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	
 	private void enableButtons() {
 		addSoftwareUnitButton.setEnabled(true);
+		editSoftwareUnitButton.setEnabled(true);
 		removeSoftwareUnitButton.setEnabled(true);
 	}
 
 	private void disableButtons() {
 		addSoftwareUnitButton.setEnabled(false);
+		editSoftwareUnitButton.setEnabled(false);
 		removeSoftwareUnitButton.setEnabled(false);
 	}
 	
@@ -202,6 +241,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	
 	private void setButtonTexts() {
 		addSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		editSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
 		removeSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 	}
 }

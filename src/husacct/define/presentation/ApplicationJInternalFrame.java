@@ -6,7 +6,6 @@ import husacct.define.presentation.utils.JPanelStatus;
 
 import java.awt.BorderLayout;
 import java.util.Locale;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -32,7 +31,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 			pack();
 			setSize(1000, 700);
 		} catch (Exception e) {
-			// add your error handling code here
+			
 			e.printStackTrace();
 		}
 	}
@@ -62,4 +61,5 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 	public void update(Locale newLocale) {
 	
 	}
+	
 }

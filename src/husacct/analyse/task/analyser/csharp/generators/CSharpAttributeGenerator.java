@@ -7,5 +7,4 @@ public class CSharpAttributeGenerator extends CSharpGenerator {
     public void generateAttributeToDomain(CommonTree attributeTree, String currentUniqueClassName) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
-    
 }

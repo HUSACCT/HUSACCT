@@ -16,10 +16,10 @@ public class CSharpInheritanceGenerator extends CSharpGenerator {
 
     private String getDestination(CommonTree inheritTree) {
         String result = "";
-        for(int i = 0; i < inheritTree.getChildCount(); i++) {
+        for (int i = 0; i < inheritTree.getChildCount(); i++) {
             if (inheritTree.getChild(i).getType() == CSharpParser.NAMESPACE_OR_TYPE_NAME) {
-                result += "." + getTypeName((CommonTree)inheritTree.getChild(i));
-            } 
+                result += "." + getTypeName((CommonTree) inheritTree.getChild(i));
+            }
         }
         return result;
     }
