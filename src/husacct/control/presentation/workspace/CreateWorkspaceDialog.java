@@ -40,7 +40,7 @@ public class CreateWorkspaceDialog extends JDialog{
 	public CreateWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setApplicationPanel = new SetApplicationPanel();
+		setApplicationPanel = new SetApplicationPanel(this);
 		setApplicationPanel.setVisible(false);
 		this.setTitle(localeService.getTranslatedString("CreateWorkspaceTitle"));		
 		setup();
