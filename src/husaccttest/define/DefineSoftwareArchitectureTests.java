@@ -9,6 +9,7 @@ import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
+import husacct.define.task.components.ExternalLibraryComponent;
 
 import org.junit.Test;
 
@@ -268,5 +269,26 @@ public class DefineSoftwareArchitectureTests {
 		assertTrue(su3.equals(sA.getSoftwareUnitByName(su3.getName())));
 		assertTrue(su4.equals(sA.getSoftwareUnitByName(su4.getName())));
 		assertTrue(su5.equals(sA.getSoftwareUnitByName(su5.getName())));
+	}
+	@Test
+	public void testifunitisremoved()
+	
+	{
+		ExternalLibraryComponent testComp = new ExternalLibraryComponent();
+		ExternalLibraryComponent externaltoberemoved = new ExternalLibraryComponent();
+		
+		testComp.addChild(externaltoberemoved);
+		
+		
+		assertTrue(testComp.getChildren().size()==1);
+		
+		testComp.removeChild(externaltoberemoved);
+		
+		assertTrue(testComp.getChildren().size()==0);
+		
+		
+		
+		
+		
 	}
 }

@@ -67,7 +67,7 @@ public class DomainParser {
 		ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module.getUnits());
 		PhysicalPathDTO[] physicalPathDTOs = parsePhysicalPathDTOs(expandedSoftwareUnits);
 		String type = module.getType();
-		
+	
 		ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
 		for (Module subModule : module.getSubModules()){
 			ModuleDTO subModuleDTO = parseModule(subModule);
@@ -193,7 +193,7 @@ public class DomainParser {
 		exceptionRuleList.toArray(exceptionRuleDTOs);
 		RuleDTO[] exceptionRules = exceptionRuleDTOs; 
 		
-		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
+		RuleDTO ruleDTO = new RuleDTO(ruleTypeKey, false, moduleTo, moduleFrom, violationTypeKeys, regex, exceptionRules);
 		return ruleDTO;
 	}
 }

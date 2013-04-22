@@ -294,7 +294,42 @@ public abstract class TestCaseExtended{
 		return null;
 	}
 	
+	private void createIndirectExtendsExtendsModel(){
+		famix.createPackage("domain", "", "domain");
+		famix.createPackage("domain.indirect", "domain", "direct");
+		famix.createPackage("domain.indirect.violatingfrom", "domain.indirect", "violatingfrom");
+		famix.createPackage("domain.indirect.intermediate", "domain.indirect", "intermediate");
+		famix.createPackage("domain.indirect.indirectto", "domain.indirect", "indirectto");
+		
+		famix.createClass("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect", 
+					"InheritanceExtendsExtendsIndirect", 
+					"domain.indirect.violatingfrom", false, false);
+		famix.createClass("domain.indirect.intermediate.MapsService", "MapsService", 
+					"domain.indirect.intermediate", false, false);
+		famix.createClass("domain.indirect.indirectto.POI", "POI", 
+					"domain.indirectindirectto", true, false);
+		
+		famix.createImport("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect", "domain.indirect.intermediate.MapsService", 3,
+					"domain.indirect.intermediate.MapsService", false);
+		famix.createImport("domain.indirect.intermediate.MapsService", "domain.indirect.indirectto.POI", 3,
+					"domain.indirect.indirectto.POI", false);
+		
+		famix.createInheritanceDefinition("domain.indirect.violatingfrom.InheritanceExtendsExtendsIndirect", 
+					"domain.indirect.intermediate.MapsService", 5);
+		famix.createInheritanceDefinition("domain.indirect.intermediate.MapsService", 
+				"domain.indirect.indirectto.POI", 5);
+		
+		
+		famix.createClass("abc.a", "a", "abc", false, false);
+		famix.createClass("abc.b", "b", "abc", true, false);
+		famix.createClass("abc.c", "c", "abc", false, false);
+//		famix.createInheritanceDefinition("abc.c", "abc.b", 1);
+		famix.createInheritanceDefinition("abc.b", "abc.a", 2);
+		famix.createImplementsDefinition("abc.c", "abc.b", 2);
+	}
+	
 	private void fillFamixAsStub(){
+		createIndirectExtendsExtendsModel();
 		famix.createPackage("domain", "", "domain");
 		famix.createPackage("domain.locationbased", "domain", "locationbased");
 		famix.createPackage("domain.locationbased.latitude", "domain.locationbased", "latitude");
@@ -352,6 +387,7 @@ public abstract class TestCaseExtended{
 		famix.createImport("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 3, "infrastructure.socialmedia.locationbased.latitude.AccountDAO", false);
 		famix.createImport("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", 3, "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", false);
 		famix.createImport("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 3, "infrastructure.socialmedia.locationbased.latitude.IMap", false);
+		famix.createImport("domain.locationbased.latitude.Friends",  "System.Date.Calendar", 4, "System.Date.Calendar", false);
 		
 		famix.createImplementsDefinition("indirect.houses.type.RowHouse", "indirect.houses.type.IType", 3);
 		famix.createInheritanceDefinition("indirect.houses.type.IType", "indirect.houses.type.IGlobal", 3);
