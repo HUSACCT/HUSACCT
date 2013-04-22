@@ -39,6 +39,7 @@ public class AnalyzedModuleTree extends JTree {
 		if(i+1==position.size())
 		{
 			bufferComponent.addChild(analyzedsoftwarecomponent);
+			Collections.sort(bufferComponent.getChildren());
 			bufferComponent.updateChilderenPosition();
 			this.setModel(new CombinedModuleTreeModel(rootComponent));
 		}
@@ -68,11 +69,18 @@ public class AnalyzedModuleTree extends JTree {
 				
 			    int positionOfchild=(position.get(position.size()-1));
 				
+				
+				
+				
 				JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
-				JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
+					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
+				
+				
 				bufferComponent.getChildren().remove(positionOfchild);
 				bufferComponent.updateChilderenPosition();
 				this.setModel(new CombinedModuleTreeModel(rootComponent));
+				
+				
 			}
 			else{
 				bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));

@@ -11,6 +11,8 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import java.util.Collections;
 import java.util.Iterator;
 
 import java.util.regex.Matcher;
@@ -53,10 +55,14 @@ public class SoftwareUnitController extends PopUpController {
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();	
+		
 		for(AnalysedModuleDTO module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}
-
+			
+		
+		Collections.sort(rootComponent.getChildren());
+		rootComponent.updateChilderenPosition();
 		return rootComponent;
 	}
 	

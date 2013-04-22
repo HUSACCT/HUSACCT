@@ -106,6 +106,7 @@ private JtreeStateEngine order = new JtreeStateEngine();
 	public  void registerTreeRestore(long moduleId,String removedSoftwareunitUniqName)
 	{
 		AnalyzedModuleComponent  unitTobeRemoved   =  (AnalyzedModuleComponent) moduleRegistry.get(moduleId).get(removedSoftwareunitUniqName);
+		JtreeStateEngine.instance().removeSoftwareUnit(moduleId,unitTobeRemoved);
 		tree.restoreTreeItem(unitTobeRemoved);
 	}
 
@@ -170,7 +171,7 @@ resultTree.setModel(new CombinedModuleTreeModel(temp));
 
 
 }
-
+//in future impl
 public static void registerResultRemovalspiiii() {
 
 	TreeSelectionModel modulepath = instance.moduleTree.getSelectionModel();
@@ -209,35 +210,5 @@ public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	
 	return editTree;
 }
-public void flush(AnalyzedModuleComponent reanalyzedmodel)
-{
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-}
 }

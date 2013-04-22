@@ -110,7 +110,7 @@ public class SoftwareUnitDefinitionDomainService {
 		for(AbstractCombinedComponent units : softwareunit.getChildren())
 		{
 		AnalyzedModuleComponent	unitsToBeRegistered= (AnalyzedModuleComponent) units;
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+softwareunit.getChildren().size());	
+			
 		JtreeController.instance().getTree().removeTreeItem(id, unitsToBeRegistered);
 			
 			

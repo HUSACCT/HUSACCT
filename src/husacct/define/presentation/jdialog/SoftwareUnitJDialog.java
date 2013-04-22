@@ -218,8 +218,12 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		if(JtreeController.instance().isLoaded())
 		{
 			if (ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> i was hereeeee");
-				JtreeStateEngine.instance().flush();
+				
+				AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
+				JtreeStateEngine.instance().compareNewData(rootComponent);
+				
+				
+				
 			}
 			
 			this.softwareDefinitionTree= JtreeController.instance().getTree();

@@ -119,8 +119,8 @@ public class DefinitionController extends Observable implements Observer {
 			Facade f= new Facade();
 			Component newComponent = new Component(componentName, componentDescription);
 			f.setName("Facade"+newComponent.getName());
-			f.addSubModule(newComponent);
-			this.passModuleToService(selectedModuleId, f);
+			newComponent.addSubModule(f);
+			this.passModuleToService(selectedModuleId, newComponent);
 			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
