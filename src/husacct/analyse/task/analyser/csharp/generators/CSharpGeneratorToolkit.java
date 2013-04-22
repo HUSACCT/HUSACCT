@@ -28,10 +28,19 @@ public class CSharpGeneratorToolkit {
         return parentName.length() > 0 ? "." : "";
     }
 
+	/**
+	 * Concatenates two strings and inserds a dot when parentName != null
+	 * @param parentName 
+	 * @param name
+	 */
     public static String getUniqueName(String parentName, String name) {
         return parentName + potentiallyInsertDot(parentName) + name;
     }
 
+	public static String belongsToClass(String namespaces, String classes) {
+        return getUniqueName(namespaces, classes);
+    }
+	
     public static boolean isAbstract(Tree tree) {
         CommonTree ct = (CommonTree) tree;
         CommonTree modifierList = (CommonTree) ct.getFirstChildWithType(CSharpParser.MODIFIERS);
@@ -41,11 +50,7 @@ public class CSharpGeneratorToolkit {
             return modifierList.getFirstChildWithType(CSharpParser.ABSTRACT) != null;
         }
     }
-
-    public static String belongsToClass(String namespaces, String classes) {
-        return getUniqueName(namespaces, classes);
-    }
-    
+	
     public static String belongsToClass(Stack<String> namespaceStack, Stack<String> classStack) {
         String namespaces = getParentName(namespaceStack);
         String classes = getParentName(classStack);

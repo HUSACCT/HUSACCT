@@ -39,7 +39,7 @@ public class CSharpTreeConvertController {
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
         final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-        new TreePrinter(compilationCommonTree); //Debug functie
+        //new TreePrinter(compilationCommonTree); //Debug functie
         delegateASTToGenerators(compilationCommonTree);
     }
 
@@ -139,6 +139,6 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateMethod(CommonTree methodTree) {
-        csMethodeGenerator.generateMethodToDomain(methodTree, getParentName(classNameStack));
+        csMethodeGenerator.generateMethodToDomain(methodTree, belongsToClass(namespaceStack, classNameStack));
     }
 }
