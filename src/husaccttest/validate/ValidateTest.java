@@ -6,15 +6,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.CategoryDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JInternalFrame;
 
@@ -22,22 +24,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ValidateTest {
-
 	IDefineService define;
 	IValidateService validate;
 
 	@Before
 	public void setup() {
 		ServiceProvider.getInstance().getControlService();
-		this.define = ServiceProvider.getInstance().getDefineService();
-		this.validate = ServiceProvider.getInstance().getValidateService();
+		define = ServiceProvider.getInstance().getDefineService();
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		for(int counter = 0; counter < 3; counter ++) {
+			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "C#", "1.0", 
+				"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
+		}
+		define.createApplication("TEST_APPLICATION", projects, "1.0");
+		validate = ServiceProvider.getInstance().getValidateService();
 	}
 
 	@Test
 	public void getBrowseViolationsGUI() {
 		Object screen = validate.getBrowseViolationsGUI();
 		assertNotNull(screen);
-		assertTrue(screen instanceof javax.swing.JInternalFrame);
+		assertTrue(screen instanceof JInternalFrame);
 		assertFalse(((JInternalFrame) screen).isVisible());
 	}
 
@@ -45,50 +52,50 @@ public class ValidateTest {
 	public void getConfigurationGUI() {
 		Object screen = validate.getConfigurationGUI();
 		assertNotNull(screen);
-		assertTrue(screen instanceof javax.swing.JInternalFrame);
+		assertTrue(screen instanceof JInternalFrame);
 		assertFalse(((JInternalFrame) screen).isVisible());
 	}
 
 	@Test
 	public void getExportExtentions() {
-		assertArrayEquals(new String[] {"pdf", "html", "xml"}, validate.getExportExtentions());
+		assertArrayEquals(new String[]{ "pdf", "html", "xml" }, validate.getExportExtentions());
 	}
 
 	@Test
 	public void exportViolations() {
-		// can't test void
+		String fileExtension = validate.getExportExtentions()[0];
+		String fileRelativePath = "src/husaccttest/validate/exportTestReports." + fileExtension;
+		
+		File exportTestFile = new File(fileRelativePath); 
+		validate.exportViolations(exportTestFile, fileExtension);
+		
+		File checkExportFile = new File(fileRelativePath); 
+		
+		if(checkExportFile.exists()) {
+			checkExportFile.delete();
+			assertTrue(true);
+		}
+		else {
+			assertTrue(false);
+		}
 	}
 
 	@Test
 	public void getCategories() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertArrayEquals(new String[] {"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));
+		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));
 	}
 
 	@Test
 	public void getRuleTypes() {
 		CategoryDTO[] dtos = validate.getCategories();
-		final String[] currentRuletypes = new String[] {"InterfaceConvention", "NamingConvention", "FacadeConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
+		final String[] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "FacadeConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 
 	}
 
 	@Test
-<<<<<<< HEAD
-	public void getViolationTypesJavaLanguage(){
-<<<<<<< HEAD
-		//define.createApplication("", new String[]{}, "Java", "");
-=======
 	public void getViolationTypesJavaLanguage() {
-//		define.createApplication("", new String[] {}, "Java", "");
->>>>>>> 62255dea1ad29f056c63743d09df9094c5e5f86c
-=======
-<<<<<<< Updated upstream
-		define.createApplication("", new String[]{}, "Java", "");
-=======
-		//define.createApplication("", new String[]{}, "Java", "");
->>>>>>> Stashed changes
->>>>>>> local
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -96,21 +103,7 @@ public class ValidateTest {
 	}
 
 	@Test
-<<<<<<< HEAD
-	public void getViolationTypesCSharpLanguage(){
-<<<<<<< HEAD
-		//define.createApplication("", new String[]{}, "C#", "");
-=======
 	public void getViolationTypesCSharpLanguage() {
-//		define.createApplication("", new String[] {}, "C#", "");
->>>>>>> 62255dea1ad29f056c63743d09df9094c5e5f86c
-=======
-<<<<<<< Updated upstream
-		define.createApplication("", new String[]{}, "C#", "");
-=======
-		//define.createApplication("", new String[]{}, "C#", "");
->>>>>>> Stashed changes
->>>>>>> local
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -118,52 +111,49 @@ public class ValidateTest {
 	}
 
 	@Test
-<<<<<<< HEAD
-	public void getViolationTypesNoLanguage(){
-<<<<<<< HEAD
-		//define.createApplication("", new String[]{}, "", "");
-=======
 	public void getViolationTypesNoLanguage() {
-//		define.createApplication("", new String[] {}, "", "");
->>>>>>> 62255dea1ad29f056c63743d09df9094c5e5f86c
-=======
-<<<<<<< Updated upstream
-		define.createApplication("", new String[]{}, "", "");
-=======
-		//define.createApplication("", new String[]{}, "", "");
->>>>>>> Stashed changes
->>>>>>> local
+		define = ServiceProvider.getInstance().getDefineService();
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		for(int counter = 0; counter < 3; counter ++) {
+			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "", "1.0", 
+				"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
+		}
+		define.createApplication("TEST_APPLICATION", projects, "1.0");
+		validate = ServiceProvider.getInstance().getValidateService();
+		
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
 	}
 
 	private String[] getCategoryStringArray(CategoryDTO[] dtos) {
-		List<String> categoryList = new ArrayList<String>();
+		ArrayList<String> categoryList = new ArrayList<String>();
+		
 		for (CategoryDTO dto : dtos) {
 			categoryList.add(dto.getKey());
 		}
-		return categoryList.toArray(new String[] {});
+		return categoryList.toArray(new String[]{});
 	}
 
 	private String[] getRuleTypesStringArray(CategoryDTO[] dtos) {
-		List<String> ruletypeList = new ArrayList<String>();
+		ArrayList<String> ruletypeList = new ArrayList<String>();
+		
 		for (CategoryDTO cDTO : dtos) {
 			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
 				ruletypeList.add(rDTO.getKey());
 			}
 		}
-		return ruletypeList.toArray(new String[] {});
+		return ruletypeList.toArray(new String[]{});
 	}
 
 	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, String ruleTypeKey) {
-		List<String> violationtypeList = new ArrayList<String>();
+		ArrayList<String> violationtypeList = new ArrayList<String>();
+		
 		for (CategoryDTO cDTO : dtos) {
 			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
 				if (rDTO.getKey().equals(ruleTypeKey)) {
 					return getViolationTypesStringArray(rDTO);
-				}
-				else {
+				} else {
 					for (RuleTypeDTO exceptionDTO : rDTO.getExceptionRuleTypes()) {
 						if (exceptionDTO.getKey().equals(ruleTypeKey)) {
 							return getViolationTypesStringArray(exceptionDTO);
@@ -172,15 +162,15 @@ public class ValidateTest {
 				}
 			}
 		}
-		return violationtypeList.toArray(new String[] {});
+		return violationtypeList.toArray(new String[]{});
 	}
 
 	private String[] getViolationTypesStringArray(RuleTypeDTO rule) {
-		List<String> violationTypeList = new ArrayList<String>();
+		ArrayList<String> violationTypeList = new ArrayList<String>();
 		for (ViolationTypeDTO vDTO : rule.getViolationTypes()) {
 			violationTypeList.add(vDTO.getKey());
 		}
-		return violationTypeList.toArray(new String[] {});
+		return violationTypeList.toArray(new String[]{});
 	}
 
 	@Test
@@ -203,8 +193,7 @@ public class ValidateTest {
 		boolean exceptionOccured = false;
 		try {
 			validate.checkConformance();
-		}
-		catch (ProgrammingLanguageNotFoundException e) {
+		} catch (ProgrammingLanguageNotFoundException e) {
 			exceptionOccured = true;
 			assertFalse(validate.isValidated());
 		}
