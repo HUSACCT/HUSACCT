@@ -12,5 +12,8 @@ public class TestIndirectDependency extends TestCaseExtended  {
 		DependencyDTO[] dependencies = service.getAllDependencies();
 		
 		printDependencies(dependencies);
+		
+		for(String s : service.getExternalSystems())
+			System.out.println("External system: " + s);
 	}
 }
