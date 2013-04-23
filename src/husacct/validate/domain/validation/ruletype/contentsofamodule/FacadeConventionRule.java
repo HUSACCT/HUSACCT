@@ -13,17 +13,13 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 
 public class FacadeConventionRule extends RuleType {
 	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
-	private HashSet<String> facadeCollection;
 
 	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationtypes, Severity severity) {
 		super(key, categoryKey, violationtypes, exceptionrules, severity);
-
-		this.facadeCollection = new HashSet<String>();
 	}
 
 	@Override
@@ -32,70 +28,43 @@ public class FacadeConventionRule extends RuleType {
 
 		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+		//List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
+			List<String> facadeDependenciesTo = new ArrayList<String>();
+			for (DependencyDTO dependency : dependencies) {
+				if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
+					System.out.println("[VERZAMELEN] " + dependency.to);
+					
+					if(!dependency.to.startsWith("java")) {
+					//	if(!facadeDependenciesTo.contains(dependency.to)) {
+							facadeDependenciesTo.add(dependency.to);
+					//	}
+					}
+				}
+			}
 			
-		}
+			for (DependencyDTO dependency : dependencies) {
+				if(!dependency.from.equals(classPathFrom.getPhysicalPath())) {
+					for(String facadeDependencyTo: facadeDependenciesTo) {
+						if(facadeDependencyTo.equals(dependency.to)) {
+							Violation violation = createViolation(rootRule, new Mapping(dependency.from, new String[0]), new Mapping(dependency.to, new String[0]), dependency, configuration);
+									//createViolation(rootRule, classPathFrom, configuration);
+							violations.add(violation);
+						}
+					}
+				}
+			}
+			
+		}	
 		
-		
-		for (DependencyDTO dependency : dependencies) {
-			System.out.println("[DEPENDENCY] " + dependency.from + " - " + dependency.to + " - " + dependency.lineNumber + " - " + dependency.type + " - " + dependency.isIndirect);
-		}
-		
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			System.out.println("[MAPPING FROM] " + classPathFrom.getLogicalPath() + " - " + classPathFrom.getPhysicalPath() + " - type: " + classPathFrom.getLogicalPathType());
+		//TEST VIOLATIONS
+		for(Violation theViolation: violations) {
+			System.out.println("[VIOLATION] FROM " + theViolation.getClassPathFrom() + " - TO " + theViolation.getClassPathTo() + " - " 
+					+ theViolation.getLinenumber() + " - " + theViolation.getViolationtypeKey() + " - " + theViolation.getMessage().getRuleKey());
 		}
 		
 		return violations;
-		
-//		for (Mapping classPathFrom : physicalClasspathsFrom) {
-//			isClassPathAFacade(classPathFrom.getLogicalPath());
-//		}
-//
-//		if (facadeCollection.size() > 0) {
-//			for (String facadeClassPath : facadeCollection) {
-//				String classPathFacadeLevel = facadeClassPath.substring(0, facadeClassPath.lastIndexOf("."));
-//				for (DependencyDTO dependency : dependencies) {
-//					String dependencyToClassPath = dependency.to.toLowerCase();
-//					dependencyToClassPath = dependencyToClassPath.substring(0, dependencyToClassPath.lastIndexOf("."));
-//					if (dependencyToClassPath.contains(classPathFacadeLevel)) {
-//						if (!dependencyToClassPath.equals(classPathFacadeLevel)) {
-//							Mapping classPathMappingDependency = null;
-//							for (Mapping classPathFrom : physicalClasspathsFrom) {
-//								if (classPathFrom.equals(dependency.from)) {
-//									classPathMappingDependency = classPathFrom;
-//								}
-//							}
-//							Violation violation = createViolation(rootRule, classPathMappingDependency, configuration);
-//							violations.add(violation);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return violations;
-//	}
-//
-//	private boolean isClassPathAFacade(String classPathFrom) {
-//		String classPath = classPathFrom.toLowerCase();
-//		if (classPath.contains("facade")) {
-//			if (!isFacadeAlreadyInCollection(classPath)) {
-//				addFacadeToCollection(classPath);
-//			}
-//		}
-//		return false;
-//	}
-//
-//	private boolean isFacadeAlreadyInCollection(String classPath) {
-//		if (facadeCollection.contains(classPath)) {
-//			return true;
-//		}
-//		return false;
-//	}
-//
-//	private void addFacadeToCollection(String classPath) {
-//		facadeCollection.add(classPath);
 	}
 }
