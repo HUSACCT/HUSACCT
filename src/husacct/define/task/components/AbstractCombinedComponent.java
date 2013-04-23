@@ -66,5 +66,18 @@ public abstract class AbstractCombinedComponent extends Component implements Com
 	public void setType(String type) {
 		this.type = type.toUpperCase();
 	}
+	public void updateChilderenPosition() {
+		for(int i=0;i<children.size();i++)
+		{
+		int newPosition=i;
+		children.get(i).setAnalyzedModuleComponentPosition(newPosition);
+			
+		}
+		
+		
+	
+	
+		
+	}
 
 }

@@ -5,12 +5,15 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 
 public class JtreeStateEngine {
  private static JtreeStateEngine instance =null;
@@ -51,13 +54,34 @@ private void flush() {
 	{
 		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) result1.get(key);
 		
-		mainTree.restoreTreeItem(unitTobeRestored);
+		
+		
+		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
+			flushRegix(unitTobeRestored,mainTree);
+			
+		}else
+		{
+			mainTree.restoreTreeItem(unitTobeRestored);
+		}
+		
+		
+		
+		
 		
 	}
-
+   
    }
 	 
 }
+private void flushRegix(AnalyzedModuleComponent unitTobeRestored,AnalyzedModuleTree mainTree) {
+	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
+	{
+		mainTree.restoreTreeItem((AnalyzedModuleComponent)result);
+	}
+	
+	
+}
+
 private void compare(AnalyzedModuleComponent newdata) {
 	AnalyzedModuleComponent currentparent = JtreeController.instance().GetRootOfModel();
 	
@@ -89,8 +113,15 @@ private void restoreFlush() {
 		for(Long key :result1.keySet()){
 			
 		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) result1.get(key);
+		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
+			restoreflushRegix(key,unitTobeRestored,mainTree);
 			
-		mainTree.removeTreeItem(key,unitTobeRestored);
+		}else{
+			mainTree.removeTreeItem(key,unitTobeRestored);
+		}	
+		
+		
+		
 		}
 			
 			
@@ -110,6 +141,15 @@ private void restoreFlush() {
 		 System.out.println("heluuurrr joohnnyy");
 	 }
 	   }
+
+private void restoreflushRegix(long id,AnalyzedModuleComponent unitTobeRestored,
+		AnalyzedModuleTree mainTree) {
+	
+	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
+	{
+		mainTree.removeTreeItem(id,(AnalyzedModuleComponent)result);
+	}
+}
 
 private void compareChilderens(AnalyzedModuleComponent parentComponentleft, AnalyzedModuleComponent parentComponentright)
 {

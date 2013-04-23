@@ -7,6 +7,7 @@ import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
 
+import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
 import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
@@ -16,6 +17,8 @@ import husacct.define.task.components.RegexComponent;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing.Validation;
 
 public class SoftwareUnitDefinitionDomainService {
 	
@@ -114,17 +117,8 @@ public class SoftwareUnitDefinitionDomainService {
 	
 	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,Module parent,SoftwareUnitDefinition rootunit) {
 		//Regexmodule regex = new Regexmodule()
-		for(AbstractCombinedComponent units : softwareunit.getChildren())
-		{
-			Type type = Type.valueOf(units.getType());
-			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(units.getUniqueName(), type);
-			
-			AnalyzedModuleComponent	unitsToBeRegistered= (AnalyzedModuleComponent) units;
-			
-		JtreeController.instance().getTree().removeTreeItem(parent.getId(), unitsToBeRegistered);
-			
-			
-		}
+	
+		JtreeController.instance().getTree().removeRegexTreeItem(parent.getId(), softwareunit);
 		
 	}
 
@@ -162,15 +156,19 @@ public class SoftwareUnitDefinitionDomainService {
 	
 	public void removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
+		/*
+		 * treed problemen
+		 * */
+		//SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
+	
+		System.out.println(softwareUnit+">>>>>>>>>");
+		
+		Type type = Type.valueOf("regex".toUpperCase());
+		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+		module.removeSUDefintion(unit);
 		
 		
-		
-		module.removeSURegExDefinition(unit);
-		//quikfix
-		try{
-			JtreeController.instance().registerTreeRestore(moduleId, softwareUnit);
-		}catch(NullPointerException exe){}
+		JtreeController.instance().restoreRegexWrapper(softwareUnit);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 }

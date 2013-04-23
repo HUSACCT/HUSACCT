@@ -7,6 +7,7 @@ import husacct.define.task.JtreeController;
 import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
+import husacct.define.task.components.RegexComponent;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
@@ -77,6 +78,7 @@ public class AnalyzedModuleTree extends JTree {
 				
 				
 				bufferComponent.getChildren().remove(positionOfchild);
+				Collections.sort(bufferComponent.getChildren());
 				bufferComponent.updateChilderenPosition();
 				this.setModel(new CombinedModuleTreeModel(rootComponent));
 				
@@ -117,9 +119,52 @@ public class AnalyzedModuleTree extends JTree {
 		return retrievedposition;
 		
 		}
+
+	public void removeRegexTreeItem(long id, RegexComponent softwareunit) {
+		
+		
+		for(AbstractCombinedComponent result: softwareunit.getChildren()){
+		
+		
+		AnalyzedModuleComponent rootComponent=(AnalyzedModuleComponent)this.getModel().getRoot();
+		AnalyzedModuleComponent bufferComponent;
+		bufferComponent=rootComponent;
+		ArrayList<Integer> position= 	getQueryofposition((AnalyzedModuleComponent)result);
+		
+		
+		
+		 for(int i=0;i<position.size();i++)
+		 {
+			 if(i+1==position.size())
+			{
+				
+			    int positionOfchild=(position.get(position.size()-1));
+				
+				
+				
+				
+								
+				
+				bufferComponent.getChildren().remove(positionOfchild);
+				Collections.sort(bufferComponent.getChildren());
+				bufferComponent.updateChilderenPosition();
+				this.setModel(new CombinedModuleTreeModel(rootComponent));
+				
+				
+			}
+			else{
+				bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
+			} 
+		    }
+		 
+		 
+		
+	}
+		JtreeController.instance().registerTreeRemoval(id,softwareunit);
+		JtreeStateEngine.instance().registerSate(id,softwareunit);
+
 	
 	
 	
-	
-	
+	}
 }

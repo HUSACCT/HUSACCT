@@ -115,6 +115,7 @@ public class Module implements Comparable<Module> {
 	
 	public void removeSURegExDefinition(SoftwareUnitRegExDefinition unit)
 	{
+		System.out.println(unit.getName());
 		if(mappedRegExSUunits.contains(unit)) {
 			mappedRegExSUunits.remove(unit);
 		}else{

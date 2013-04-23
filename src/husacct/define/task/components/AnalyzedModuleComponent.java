@@ -76,19 +76,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		this.visibility = visibility;
 	}
 
-	public void updateChilderenPosition() {
-		for(int i=0;i<children.size();i++)
-		{
-		int newPosition=i;
-		children.get(i).setAnalyzedModuleComponentPosition(newPosition);
-			
-		}
-		
-		
 	
-	
-		
-	}
 	
 	
 	

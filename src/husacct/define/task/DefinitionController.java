@@ -234,14 +234,19 @@ public class DefinitionController extends Observable implements Observer {
 				if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 					if (confirm) {
 						// Remove the software unit
+						logger.info("getting type:" + type);
+
 						JPanelStatus.getInstance("Removing software unit").start();
-						if(type.equals("REGEX")) 
+						if(type.toUpperCase().equals("REGEX")) {
+							
 							this.softwareUnitDefinitionDomainService.removeRegExSoftwareUnit(moduleId, softwareUnit);
-						else
+							this.notifyObservers();
+						}else{
 							this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
-						// Update the software unit table
+						//Update the software unit table
 						this.notifyObservers();
-					}
+						}
+						}
 				}
 			} 
 			}
