@@ -61,20 +61,10 @@ public class AnalysedController extends DrawingController {
 		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
-				AbstractDTO[] children = this.analyseService
-						.getChildModulesInModule(parentName);
-				if (parentName.equals("")) {
-					this.drawArchitecture(this.getCurrentDrawingDetail());
-					continue;
-				} else if (children.length > 0) {
-					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
-					for (AbstractDTO child : children) {
-						knownChildren.add(child);
-					}
+				ArrayList<AbstractDTO> knownChildren = this
+						.getChildrenOf(parentName);
+				if (knownChildren.size() > 0) {
 					allChildren.put(parentName, knownChildren);
-				} else {
-					this.logger.warn("Tried to draw modules for \""
-							+ parentName + "\", but it has no children.");
 				}
 			}
 			if (this.analysedContextFigures.size() > 0) {
@@ -88,6 +78,15 @@ public class AnalysedController extends DrawingController {
 						} else {
 							this.logger.debug(figure.getName() + " -> "
 									+ figure);
+						}
+					} else if (!figure.isLine() && !figure.isModule()) {
+						// NOTE: Pretty sure selected stuff that is both not a
+						// module and not a line
+						// is actually one of those weird blue square things
+						ArrayList<AbstractDTO> knownChildren = this
+								.getChildrenOf(figure.getName());
+						if (knownChildren.size() > 0) {
+							allChildren.put(figure.getName(), knownChildren);
 						}
 					}
 				}
@@ -108,6 +107,27 @@ public class AnalysedController extends DrawingController {
 				this.drawModulesAndLines(allChildren);
 			}
 		}
+	}
+
+	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
+		AbstractDTO[] children = this.analyseService
+				.getChildModulesInModule(parentName);
+
+		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
+
+		if (parentName.equals("")) {
+			this.drawArchitecture(this.getCurrentDrawingDetail());
+		} else if (children.length > 0) {
+			knownChildren = new ArrayList<AbstractDTO>();
+			for (AbstractDTO child : children) {
+				knownChildren.add(child);
+			}
+		} else {
+			this.logger.warn("Tried to draw modules for \"" + parentName
+					+ "\", but it has no children.");
+		}
+
+		return knownChildren;
 	}
 
 	@Override
