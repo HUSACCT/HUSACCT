@@ -1,14 +1,132 @@
 package husacct.define.domain.services;
 
+import husacct.ServiceProvider;
+import husacct.common.dto.RuleTypeDTO;
+import husacct.define.domain.AppliedRule;
+import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
 import java.util.ArrayList;
 
 public class DefaultRuleDomainService {
-
-	public ArrayList<Long> getDefaultRulesIdsByModuleFromId(long selectedModuleId) {
+	private Module _module;
+	private RuleTypeDTO[] defaultRuleTypeDTOs = null;
+	private ArrayList<AppliedRule> defaultRules = new ArrayList<AppliedRule>();
+	private ModuleDomainService domainService = new ModuleDomainService();
 		
+	public void addDefaultRules(Module newModule) //
+	{
+		_module = newModule;
+		retrieveRuleTypeDTOsByModule();		
+		generateRules();
+		saveDefaultRules();
+	}
+	
+	private void retrieveRuleTypeDTOsByModule()
+	{
+		defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+	}
+	
+	private void generateRules()
+	{
+		if (!defaultRuleTypeDTOs.equals(null))
+		{
+			for (int i =0; i < defaultRuleTypeDTOs.length;i++)
+			{
+				generateRule(defaultRuleTypeDTOs[i]);
+				System.out.println(defaultRuleTypeDTOs[i].key);
+				System.out.println(defaultRuleTypeDTOs[i].descriptionKey);
+			}
+		}
+	}
+	
+	public AppliedRule getBaseRule()
+	{
+		AppliedRule appliedRule = new AppliedRule();
+		
+		appliedRule.setDescription("This is a default rule for this type of module.");
+		appliedRule.setModuleFrom(_module);
+		appliedRule.setEnabled(true);
+		
+		return appliedRule;
+	}
+	
+	private void generateRule(RuleTypeDTO ruleType) {		
+		switch (ruleType.getKey()) {
+			case "Interface":  ;
+			break;
+			case "Naming":  ;
+            break;
+			case "Facade":  ;
+            break;
+			case "SubClass":  ;
+            break;       
+			case "Visibility":  ;
+            break;     
+			case "Allowed":  ;
+            break;
+			case "NotAllowed":  ;
+            break;
+            case "IsNotAllowedToMakeSkipCall":  skipCall(ruleType);
+            break;
+            case "IsNotAllowedToMakeBackCall":  backCall(ruleType);
+            break;    
+            case "OnlyAllowed":  ;
+            break;
+            case "MustUse":  ;
+            break;
+            default: ;
+            break;
+		}
+	}
+	private void saveDefaultRules()
+	{
+		for (AppliedRule defaultRule : defaultRules)
+		{
+			//if valid?
+			SoftwareArchitecture.getInstance().addAppliedRule(defaultRule);
+		}
+	}
+	
+	public boolean isMandatoryRule(Module module)
+	{
+		return false;
+	}
+	
+	public AppliedRule[] generateLayerModuleRules()
+	{
+		return null;
+	}
+	
+	public AppliedRule[] generateExternalSystem()
+	{
 		return null;
 	}
 	
 	
-
+	//RuleTypes
+	public void skipCall(RuleTypeDTO rule)
+	{
+		AppliedRule skipCallRule = getBaseRule();
+		skipCallRule.setRuleType("IsNotAllowedToMakeSkipCall");
+		skipCallRule.setDescription(skipCallRule.getDescription()+"\n"+rule.getDescriptionKey());
+		
+		skipCallRule.setModuleTo(skipCallRule.getModuleFrom());
+		defaultRules.add(skipCallRule);
+	}
+	
+	public void backCall(RuleTypeDTO rule)
+	{
+		AppliedRule backCallRule = getBaseRule();
+		backCallRule.setRuleType("IsNotAllowedToMakeSkipCall");
+		backCallRule.setDescription(backCallRule.getDescription()+"\n"+rule.getDescriptionKey());
+		
+		backCallRule.setModuleTo(backCallRule.getModuleFrom());
+		defaultRules.add(backCallRule);
+	}
+	
+	public void facadeRule(AppliedRule baseRule)
+	{
+		return;
+	}
 }

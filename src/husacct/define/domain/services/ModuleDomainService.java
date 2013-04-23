@@ -68,6 +68,11 @@ public class ModuleDomainService {
 		return module;
 	}
 	
+	public Module getRootModule()
+	{
+		return SoftwareArchitecture.getInstance().getRootModule();
+	}
+	
 	public Module[] getRootModules(){
 		ArrayList<Module> moduleList = SoftwareArchitecture.getInstance().getModules();
 		Module[] modules = new Module[moduleList.size()]; moduleList.toArray(modules);
@@ -156,5 +161,31 @@ public class ModuleDomainService {
 	
 	public Long getParentModuleIdByChildId(Long moduleId) {
 		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
+	}
+
+	//TODO: public Lay
+	
+	
+	
+	//Retrieve parentModule
+	public Module getParentModule(Module module)
+	{	
+		return recursiveSearch(SoftwareArchitecture.getInstance().getRootModule(),module);
+	}	
+	
+	private Module recursiveSearch(Module currentModule, Module comparrisonModule)
+	{
+		if (currentModule.equals(comparrisonModule))
+		{
+			return currentModule;
+		}
+		if (currentModule.hasSubModules())
+		{
+			for (Module subModule : currentModule.getSubModules())
+			{
+				return recursiveSearch(subModule, comparrisonModule);
+			}
+		}
+		return new Module();
 	}
 }

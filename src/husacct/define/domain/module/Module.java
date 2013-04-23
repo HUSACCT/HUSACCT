@@ -3,6 +3,7 @@ package husacct.define.domain.module;
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
+import husacct.define.domain.services.DefaultRuleDomainService;
 
 import java.util.ArrayList;
 
@@ -125,7 +126,10 @@ public class Module implements Comparable<Module> {
 	{
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModules.add(subModule);
-		}else{
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.addDefaultRules(subModule);  //Correct way?
+		}
+		else {
 			System.out.println("This sub module has already been added!");
 		}
 	}
@@ -137,6 +141,11 @@ public class Module implements Comparable<Module> {
 		}else{
 			System.out.println("This sub module does not exist!");
 		}
+	}
+	
+	public boolean hasSubModules()
+	{
+		return subModules.isEmpty();	
 	}
 	
 	public boolean hasSubModule(String name) 

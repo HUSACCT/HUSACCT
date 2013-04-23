@@ -11,7 +11,6 @@ public class SoftwareArchitecture {
 	private Module rootModule;
 	
 	private ArrayList<AppliedRule> appliedRules;
-	private ArrayList<AppliedRule> defaultRules;
 	
 	private static SoftwareArchitecture instance = null;
 	public static SoftwareArchitecture getInstance()
@@ -232,14 +231,15 @@ public class SoftwareArchitecture {
 	}
 	
 	
-	public long addModule(Module module)
+	public long addModule(Module module) //HERE BE DRAGONS
 	{
 		long moduleId;
 		if(!this.hasModule(module.getName())) {
 			rootModule.addSubModule(module);
 			moduleId = module.getId();
-		}else{
-			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"));
+		}else
+		{
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule")); //TODO! Foutmelding ffs!
 		}
 		return moduleId;
 	}
@@ -444,7 +444,25 @@ public class SoftwareArchitecture {
 		}
 	}
 	
-	private Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
+	public ArrayList<Layer> getLayersBelow(Layer layer){
+		ArrayList<Layer> returnList = new ArrayList<Layer>();
+		Layer underlyingLayer = getTheFirstLayerBelow(layer);
+		
+		Layer _temp = underlyingLayer;
+		while (getTheFirstLayerBelow(_temp).equals(null))
+		{
+			returnList.add(_temp);
+			_temp = getTheFirstLayerBelow(_temp);
+		}
+		return returnList; //TODO!
+	}
+	
+	public Layer getTheFirstLayerBelow(Layer layer)
+	{
+		return getTheFirstLayerBelow(layer.getHierarchicalLevel(),getParentModuleIdByChildId(layer.getId()));
+	}
+	
+	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
 		for (Module mod : getModulesForLayerSorting(parentModuleId)){
 			if (mod instanceof Layer) {
@@ -471,5 +489,9 @@ public class SoftwareArchitecture {
 		int hierarchicalLevelLayerOne = layerOne.getHierarchicalLevel();
 		layerOne.setHierarchicalLevel(layerTwo.getHierarchicalLevel());
 		layerTwo.setHierarchicalLevel(hierarchicalLevelLayerOne);
+	}
+
+	public Module getRootModule() {
+		return rootModule;
 	}
 }
