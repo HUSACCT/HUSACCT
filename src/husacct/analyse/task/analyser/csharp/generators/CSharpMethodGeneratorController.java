@@ -1,7 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-import java.util.ArrayList;
 import java.util.*;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -76,7 +76,9 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	private void walkThroughMethod(CommonTree methodTree) {
 		for (int childCount = 0; childCount < methodTree.getChildCount(); childCount++) {
 			Tree child = methodTree.getChild(childCount);
-
+			new TreePrinter(methodTree);
+			
+			
 			switch (child.getType()) {
 				case CSharpParser.ABSTRACT:
 					isAbstract = true;
@@ -85,12 +87,27 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					hasClassScope = true;
 					break;
 				case CSharpParser.FORMAL_PARAMETER_LIST:
-
 					System.out.println(child.toStringTree());
 					getFormalParameter((CommonTree) child);
 					break;
+				case CSharpParser.BLOCK:
+					CommonTree blockTree = (CommonTree)child;
+					stepIntoBlock(blockTree);
+					System.out.println(child.toStringTree());
+					break;
+				default:
+					walkThroughMethod((CommonTree)child);
 			}
 		}
+	}
+
+	private void stepIntoBlock(CommonTree blockTree) {
+		String belongsToMethod = name + createArgumentString(argTypes);
+		
+		CSharpBlockScopeGenerator csBlockScopeGenerator = new CSharpBlockScopeGenerator();
+		csBlockScopeGenerator.walkThroughBlockScope(blockTree, belongsToClass, belongsToMethod);
+		
+		
 	}
 
 	private void getFormalParameter(CommonTree paramtree) {
@@ -117,13 +134,13 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	}
 
 	private void createMethodObject() {
-		String argumentTypes = creatArgumentString(argTypes);
+		String argumentTypes = createArgumentString(argTypes);
 		argTypes.clear();
 		this.uniqueName = getMethodUniqueName(belongsToClass, name, argumentTypes);
 		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
 	}
 
-	private String creatArgumentString(Stack<String> argTypes) {
+	private String createArgumentString(Stack<String> argTypes) {
 		return "(" + createCommaSeperatedString(argTypes) + ")";
 	}
 
