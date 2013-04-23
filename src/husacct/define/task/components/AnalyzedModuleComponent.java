@@ -9,6 +9,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	private String uniqueName = "";
 	private String type = "";
 	private String visibility;
+	private boolean isfrozen=false;
 	
 	public AnalyzedModuleComponent() {
 		super();
@@ -20,21 +21,42 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		this.setName(name);
 		this.setType(type);
 		this.setVisibility(visibility);
+		if(uniqueName.equals("root"))
+		{
+			setParentOfChild(this);
+		}
 	}
 
 	public void addChild(AbstractCombinedComponent child) {
+		if(!isfrozen){
+		child.setParentOfChild(this);
+		child.setAnalyzedModuleComponentPosition(children.size());
+		}
 		this.children.add(child);
 	}
 	
 	public void addChild(int index, AbstractCombinedComponent child) {
+		if(!isfrozen){
+		child.setParentOfChild(this);
+		child.setAnalyzedModuleComponentPosition(index);
+		}
 		this.children.add(index, child);
 	}
 
 	public void setChildren(ArrayList<AbstractCombinedComponent> children) {
+		if(!isfrozen){
+		for(AbstractCombinedComponent a: children)
+		{
+			
+			a.setParentOfChild(this);
+		}
+		
+		}
 		this.children = children;
 	}
 
 	public ArrayList<AbstractCombinedComponent> getChildren() {
+		
 		return this.children;
 	}
 
@@ -68,5 +90,93 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 
 	public void setVisibility(String visibility) {
 		this.visibility = visibility;
+	}
+
+	public void updateChilderenPosition() {
+		for(int i=0;i<children.size();i++)
+		{
+		int newPosition=i;
+		children.get(i).setAnalyzedModuleComponentPosition(newPosition);
+			
+		}
+		
+		
+	
+	
+		
+	}
+	
+	@Override
+	public boolean equals(Object analyzedComponent){
+	   if(analyzedComponent==null){return false;}
+	   
+	   if(analyzedComponent instanceof AnalyzedModuleComponent && (this.getUniqueName().equals("root")&& ((AnalyzedModuleComponent)analyzedComponent).getUniqueName().equals("root")))
+	   {
+		   
+		   chekme(this.getChildren(),((AnalyzedModuleComponent)analyzedComponent).getChildren());
+		   return false;
+	   }
+	   else 
+	   {
+		   return false;
+	   }
+		
+	   
+	}
+	
+	
+	
+	public void chekme(ArrayList<AbstractCombinedComponent> firstroot,ArrayList<AbstractCombinedComponent> secondroot)
+	{
+		ArrayList<Integer> found = new ArrayList<Integer>();
+		int sizefirst = firstroot.size();
+		int sizesecond = secondroot.size();
+		int indexfirst=0;
+		int indexsecond=0;
+		
+		if(sizefirst==sizesecond)
+		{
+			
+			for(AbstractCombinedComponent chek : firstroot)
+			{
+				
+				for(AbstractCombinedComponent chek2 : secondroot)
+				{
+					
+				
+		     	}
+				
+			}
+		}
+		
+		
+		
+		for(AbstractCombinedComponent ab:firstroot)
+		{
+			
+		
+		
+		}
+		
+		
+		
+		
+		
+		
+	}
+
+	public boolean isIsfrozen() {
+		return isfrozen;
+	
+	}
+
+	public void freeze() {
+		isfrozen=true;
+	}
+	
+	public void unfreeze()
+	{
+	 isfrozen=false;
+
 	}
 }

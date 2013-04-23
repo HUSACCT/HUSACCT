@@ -23,7 +23,7 @@ public class CSharpClassGenerator extends CSharpGenerator {
         String uniqueName = getUniqueName(belongsToClass, name);
         String visibility = getVisibility(classTree);
         boolean isAbstract = isAbstract(classTree);
-        
+
         modelService.createClass(uniqueName, name, namespace, isAbstract, true, belongsToClass, visibility);
         return name;
     }

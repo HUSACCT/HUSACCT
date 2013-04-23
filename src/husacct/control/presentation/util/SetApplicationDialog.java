@@ -29,7 +29,7 @@ public class SetApplicationDialog extends JDialog {
 	public SetApplicationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setApplicationPanel = new SetApplicationPanel();
+		setApplicationPanel = new SetApplicationPanel(this);
 		setTitle(localeService.getTranslatedString("ApplicationProperties"));
 		setup();
 		addComponents();

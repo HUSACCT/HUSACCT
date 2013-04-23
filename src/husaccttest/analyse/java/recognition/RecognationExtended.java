@@ -19,7 +19,7 @@ public abstract class RecognationExtended extends TestCaseExtended{
 
 		String path = TestProjectFinder.lookupProject("java", "recognition");
 		String[] paths = new String[]{path};
-		defService.createApplication("Java Recognition", paths, "Java", "1.0");
+		//defService.createApplication("Java Recognition", paths, "Java", "1.0");
 		
 		service = provider.getAnalyseService();
 				

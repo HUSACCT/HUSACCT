@@ -32,11 +32,15 @@ public class ExternalLibraryComponent extends AbstractDefineComponent {
 
 	@Override
 	public void removeChild(AbstractCombinedComponent child) {
-		for(AbstractCombinedComponent currentchild : this.children) {
+		
+		/*for(AbstractCombinedComponent currentchild : this.children) {
 			if(currentchild.equals(child)) {
 				this.children.remove(currentchild);
 			}
 		}
+		*/
+	int u=	 this.children.indexOf(child);
+	this.children.remove(u);
 	}
 
 	@Override
