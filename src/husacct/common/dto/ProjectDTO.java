@@ -21,4 +21,9 @@ public class ProjectDTO extends AbstractDTO {
 		this.description = description;
 		this.analysedModules = analysedModules;
 	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
 }

@@ -16,35 +16,34 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 
-public class CSharpAnalyser extends AbstractAnalyser{
+public class CSharpAnalyser extends AbstractAnalyser {
 
-	@Override
-	public String getProgrammingLanguage(){
-		return "C#";
-	}
+    @Override
+    public String getProgrammingLanguage() {
+        return "C#";
+    }
 
-	@Override
-	public String getFileExtension() {
-		return ".cs";
-	}
+    @Override
+    public String getFileExtension() {
+        return ".cs";
+    }
 
-	private CSharpParser generateCSharpParser(String filePath) throws IOException {
-		ANTLRFileStream stream = new ANTLRFileStream(filePath);
-		CSharpLexer cSharpLexer = new CSharpLexer(stream);
-		CommonTokenStream commonTokenStream = new CommonTokenStream(cSharpLexer);
-		CSharpParser cSharpParser = new CSharpParser(commonTokenStream);
-               	return cSharpParser;
-	}
+    private CSharpParser generateCSharpParser(String filePath) throws IOException {
+        ANTLRFileStream stream = new ANTLRFileStream(filePath);
+        CSharpLexer cSharpLexer = new CSharpLexer(stream);
+        CommonTokenStream commonTokenStream = new CommonTokenStream(cSharpLexer);
+        CSharpParser cSharpParser = new CSharpParser(commonTokenStream);
+        return cSharpParser;
+    }
 
-	@Override
-	public void generateModelFromSource(String sourceFilePath) {
-		try {
-			CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController();
-			CSharpParser cSharpParser = generateCSharpParser(sourceFilePath);
-			cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-	}
+    @Override
+    public void generateModelFromSource(String sourceFilePath) {
+        try {
+            CSharpTreeConvertController cSharpTreeParserDelegater = new CSharpTreeConvertController();
+            CSharpParser cSharpParser = generateCSharpParser(sourceFilePath);
+            cSharpTreeParserDelegater.delegateDomainObjectGenerators(cSharpParser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
-

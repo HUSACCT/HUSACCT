@@ -112,16 +112,26 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription){
+	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription,boolean ifWithFacade){
 		logger.info("Adding component " + "Facade"+componentName);
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
-			Facade f= new Facade();
 			Component newComponent = new Component(componentName, componentDescription);
-			f.setName("Facade"+newComponent.getName());
-			f.addSubModule(newComponent);
-			this.passModuleToService(selectedModuleId, f);
+			if (ifWithFacade) {
+				Facade f= new Facade();
+			f.setName("Facade"+componentName);
+			newComponent.addSubModule(f);
+			
+			}
+			
+			
+			
+			
+			
+			
+			this.passModuleToService(selectedModuleId, newComponent);
+			
 			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
@@ -225,14 +235,19 @@ public class DefinitionController extends Observable implements Observer {
 				if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 					if (confirm) {
 						// Remove the software unit
+						logger.info("getting type:" + type);
+
 						JPanelStatus.getInstance("Removing software unit").start();
-						if(type.equals("REGEX")) 
+						if(type.toUpperCase().equals("REGEX")) {
+							
 							this.softwareUnitDefinitionDomainService.removeRegExSoftwareUnit(moduleId, softwareUnit);
-						else
+							this.notifyObservers();
+						}else{
 							this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
-						// Update the software unit table
+						//Update the software unit table
 						this.notifyObservers();
-					}
+						}
+						}
 				}
 			} 
 			}

@@ -108,8 +108,7 @@ public class ModuleDomainService {
 			
 			for (Module module : parentModule.getSubModules()) {
 				childModuleIdList.add(module.getId());
-				//get the submoduleIds of this submodule
-				//recursive
+				
 				ArrayList<Long> subModuleIdList = getSubModuleIds(module.getId());
 				for (Long l : subModuleIdList){
 					childModuleIdList.add(l);

@@ -76,11 +76,19 @@ public class ValidateTest {
 	@Test
 <<<<<<< HEAD
 	public void getViolationTypesJavaLanguage(){
+<<<<<<< HEAD
 		//define.createApplication("", new String[]{}, "Java", "");
 =======
 	public void getViolationTypesJavaLanguage() {
 //		define.createApplication("", new String[] {}, "Java", "");
 >>>>>>> 62255dea1ad29f056c63743d09df9094c5e5f86c
+=======
+<<<<<<< Updated upstream
+		define.createApplication("", new String[]{}, "Java", "");
+=======
+		//define.createApplication("", new String[]{}, "Java", "");
+>>>>>>> Stashed changes
+>>>>>>> local
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -90,11 +98,19 @@ public class ValidateTest {
 	@Test
 <<<<<<< HEAD
 	public void getViolationTypesCSharpLanguage(){
+<<<<<<< HEAD
 		//define.createApplication("", new String[]{}, "C#", "");
 =======
 	public void getViolationTypesCSharpLanguage() {
 //		define.createApplication("", new String[] {}, "C#", "");
 >>>>>>> 62255dea1ad29f056c63743d09df9094c5e5f86c
+=======
+<<<<<<< Updated upstream
+		define.createApplication("", new String[]{}, "C#", "");
+=======
+		//define.createApplication("", new String[]{}, "C#", "");
+>>>>>>> Stashed changes
+>>>>>>> local
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -104,11 +120,19 @@ public class ValidateTest {
 	@Test
 <<<<<<< HEAD
 	public void getViolationTypesNoLanguage(){
+<<<<<<< HEAD
 		//define.createApplication("", new String[]{}, "", "");
 =======
 	public void getViolationTypesNoLanguage() {
 //		define.createApplication("", new String[] {}, "", "");
 >>>>>>> 62255dea1ad29f056c63743d09df9094c5e5f86c
+=======
+<<<<<<< Updated upstream
+		define.createApplication("", new String[]{}, "", "");
+=======
+		//define.createApplication("", new String[]{}, "", "");
+>>>>>>> Stashed changes
+>>>>>>> local
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);

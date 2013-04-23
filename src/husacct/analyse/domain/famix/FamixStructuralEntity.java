@@ -1,8 +1,8 @@
 package husacct.analyse.domain.famix;
 
-class FamixStructuralEntity extends FamixEntity{
+class FamixStructuralEntity extends FamixEntity {
 
-	public String declareType;
-	public String belongsToClass;
-	public int lineNumber;
+    public String declareType;
+    public String belongsToClass;
+    public int lineNumber;
 }
