@@ -131,6 +131,8 @@ public class Drawing extends QuadTreeDrawing {
 		}
 	}
 	
+	
+	
 	public void restoreHiddenFigures(){
 		for (BaseFigure figure : hiddenFigures) {
 			figure.setEnabled(true);

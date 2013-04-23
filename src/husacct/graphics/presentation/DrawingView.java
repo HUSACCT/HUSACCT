@@ -16,11 +16,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.log4j.Logger;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.draw.event.FigureSelectionListener;
+import org.jhotdraw.draw.io.ImageOutputFormat;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
