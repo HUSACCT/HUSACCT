@@ -153,7 +153,9 @@ private void restoreflushRegix(long id,AnalyzedModuleComponent unitTobeRestored,
 
 private void compareChilderens(AnalyzedModuleComponent parentComponentleft, AnalyzedModuleComponent parentComponentright)
 {
-
+Collections.sort(parentComponentleft.getChildren());
+Collections.sort(parentComponentright.getChildren());
+	
 	for (int i = 0; i < parentComponentleft.getChildren().size(); i++) {
 	AbstractCombinedComponent left = parentComponentleft.getChildren().get(i);
 	AbstractCombinedComponent right = parentComponentright.getChildren().get(i);
