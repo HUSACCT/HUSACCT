@@ -83,15 +83,20 @@ public class ValidateTest {
 	@Test
 	public void getCategories() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertArrayEquals(new String[]{"contentsofamodule", "legalityofdependency"}, getCategoryStringArray(dtos));
+		assertArrayEquals(new String[]{ "contentsofamodule", "legalityofdependency" }, getCategoryStringArray(dtos));
 	}
 
 	@Test
 	public void getRuleTypes() {
 		CategoryDTO[] dtos = validate.getCategories();
-		final String[] currentRuletypes = new String[]{"InterfaceConvention", "NamingConvention", "FacadeConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall"};
+		final String[] currentRuletypes = new String[]{ "InterfaceConvention", "NamingConvention", "FacadeConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall" };
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
-
+	}
+	
+	@Test
+	public void checkFacadeRuleConventionSupport() {
+		//TODO Add rule in define (facade convention rule)
+		//TODO Check violationinput, check current support of this rule
 	}
 
 	@Test
