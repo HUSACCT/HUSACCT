@@ -41,6 +41,12 @@ public class CSharpGeneratorToolkit {
         return getUniqueName(namespaces, classes);
     }
 	
+	public static String belongsToClass(Stack<String> namespaceStack, Stack<String> classStack) {
+        String namespaces = getParentName(namespaceStack);
+        String classes = getParentName(classStack);
+        return getUniqueName(namespaces, classes);
+    }
+	
     public static boolean isAbstract(Tree tree) {
         CommonTree ct = (CommonTree) tree;
         CommonTree modifierList = (CommonTree) ct.getFirstChildWithType(CSharpParser.MODIFIERS);
@@ -51,12 +57,6 @@ public class CSharpGeneratorToolkit {
         }
     }
 	
-    public static String belongsToClass(Stack<String> namespaceStack, Stack<String> classStack) {
-        String namespaces = getParentName(namespaceStack);
-        String classes = getParentName(classStack);
-        return getUniqueName(namespaces, classes);
-    }
-
     public static String getVisibility(Tree tree) {
         CommonTree ct = (CommonTree) tree;
         CommonTree modifierList = (CommonTree) ct.getFirstChildWithType(CSharpParser.MODIFIERS);

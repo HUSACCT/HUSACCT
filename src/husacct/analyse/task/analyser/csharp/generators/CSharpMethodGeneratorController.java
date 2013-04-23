@@ -1,6 +1,5 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import java.util.ArrayList;
 import java.util.*;
@@ -12,36 +11,37 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	String belongsToClass;
 	String name;
 	String uniqueName;
-	String signature;
+	String accessControlQualifier;
 	Stack<String> argTypes = new Stack<>();
 	ArrayList<String> returnTypes;
-	boolean isPureAccessor;
-	boolean isConstructor;
-	boolean isAbstract;
-	boolean hasClassScope;
+	boolean isPureAccessor = false; //Not known
+	boolean isConstructor = false;
+	boolean isAbstract = false;
+	boolean hasClassScope = false;
+	int lineNumber;
 
 	public void generateMethodToDomain(CommonTree methodTree, String currentUniqueClassName) {
-		this.belongsToClass = currentUniqueClassName;
-		String accessControlQualifier = CSharpGeneratorToolkit.getVisibility(methodTree);
-		int lineNumber = methodTree.getLine();
+		belongsToClass = currentUniqueClassName;
+		accessControlQualifier = CSharpGeneratorToolkit.getVisibility(methodTree);
+		lineNumber = methodTree.getLine();
 
 		checkMethodType(methodTree, belongsToClass);
 		walkThroughMethod(methodTree);
-		createMethodObject(belongsToClass, accessControlQualifier, lineNumber);
+		createMethodObject();
 	}
 
 	private void checkMethodType(CommonTree methodTree, String belongsToClass) {
-		returnTypes = new ArrayList<String>();
+		returnTypes = new ArrayList<>();
 
 		switch (methodTree.getType()) {
 			case CSharpParser.CONSTRUCTOR_DECL:
 				returnTypes.add("");
-				isConstructor = true;
 				name = getClassOfUniqueName(belongsToClass);
+				isConstructor = true;
 				break;
 			default:
 				getReturnTypes(methodTree);
-				isConstructor = false;
+				name = getMethodName(methodTree);
 				break;
 		}
 	}
@@ -67,6 +67,12 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 		}
 	}
 
+	private String getMethodName(CommonTree methodTree) {
+		CommonTree memberTree = (CommonTree) methodTree.getFirstChildWithType(CSharpParser.MEMBER_NAME);
+		Tree nameTree = memberTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+		return nameTree.getChild(0).getText();
+	}
+
 	private void walkThroughMethod(CommonTree methodTree) {
 		for (int childCount = 0; childCount < methodTree.getChildCount(); childCount++) {
 			Tree child = methodTree.getChild(childCount);
@@ -83,22 +89,8 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					System.out.println(child.toStringTree());
 					getFormalParameter((CommonTree) child);
 					break;
-
 			}
 		}
-	}
-
-	private void createMethodObject(String belongsToClass, String accessControlQualifier, int lineNumber) {
-		uniqueName = belongsToClass + "." + this.name + signature;
-		/*for(String s : declaredReturnType){
-		 if(!SkippedTypes.isSkippable(s)){
-		 returnTypes.add(s);
-		 }
-		 }
-		 */
-		//if(!SkippedTypes.isSkippable(declaredReturnType)){
-		modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
-		//}
 	}
 
 	private void getFormalParameter(CommonTree paramtree) {
@@ -122,6 +114,28 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 			return;
 		}
 		argTypes.push(firstChildWithType.getChild(0).getText());
+	}
 
+	private void createMethodObject() {
+		String argumentTypes = creatArgumentString(argTypes);
+		argTypes.clear();
+		this.uniqueName = getMethodUniqueName(belongsToClass, name, argumentTypes);
+		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
+	}
+
+	private String creatArgumentString(Stack<String> argTypes) {
+		return "(" + createCommaSeperatedString(argTypes) + ")";
+	}
+
+	private String createCommaSeperatedString(Stack<String> argTypes) {
+		String result = "";
+		for (String parentNamePart : argTypes) {
+			result += parentNamePart + ",";
+		}
+		return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
+	}
+
+	private String getMethodUniqueName(String belongsToClass, String name, String argumentTypes) {
+		return CSharpGeneratorToolkit.getUniqueName(belongsToClass, name) + argumentTypes;
 	}
 }
