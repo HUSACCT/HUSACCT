@@ -65,6 +65,7 @@ public class ValidateTest {
 	public void exportViolations() {
 		String fileExtension = validate.getExportExtentions()[0];
 		String fileRelativePath = "src/husaccttest/validate/exportTestReports." + fileExtension;
+		boolean testResult = false;
 		
 		File exportTestFile = new File(fileRelativePath); 
 		validate.exportViolations(exportTestFile, fileExtension);
@@ -73,11 +74,10 @@ public class ValidateTest {
 		
 		if(checkExportFile.exists()) {
 			checkExportFile.delete();
-			assertTrue(true);
+			testResult = true;
 		}
-		else {
-			assertTrue(false);
-		}
+		
+		assertTrue(testResult);
 	}
 
 	@Test
