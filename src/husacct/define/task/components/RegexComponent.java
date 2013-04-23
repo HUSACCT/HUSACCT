@@ -8,6 +8,7 @@ public class RegexComponent  extends AnalyzedModuleComponent{
 	private String type = "";
 	private String visibility;
 	private AnalyzedModuleComponent wrapper;
+	private ArrayList<String> removedModules = new ArrayList<>();
 
 	private String regix ="";
 	private ArrayList<AbstractCombinedComponent> softwareUnit = new ArrayList<AbstractCombinedComponent>();
