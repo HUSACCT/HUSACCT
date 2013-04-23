@@ -155,7 +155,7 @@ private JtreeStateEngine order = new JtreeStateEngine();
 
 	public AnalyzedModuleTree getResultTree() 
 	{
-		RegexComponent root = new RegexComponent("root","Regix results","regix","public");
+		RegexComponent root = new RegexComponent("root","Regix results","SEARCH","public");
 
 		resultTree= new AnalyzedModuleTree(root);
 

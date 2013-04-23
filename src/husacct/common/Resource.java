@@ -67,6 +67,38 @@ public class Resource {
 	public static final String CONTROL_TEST_WORKSPACE = RESOURCE_PATH + "control/testworkspace.xml";
 	public static final String ICON_ROOT=ICONSET_PATH+"define-root.png";
 	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
+	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";
+	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public static String ICON_FACADE=ICONSET_PATH+"define-facade.png";;
 	
 	public static URL get(String path){
