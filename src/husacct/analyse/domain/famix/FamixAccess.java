@@ -1,37 +1,32 @@
 package husacct.analyse.domain.famix;
 
-class FamixAccess extends FamixAssociation
-{
-	private String accesses;
-	private String accessedIn;
-	private boolean isAccessedLValue = false;
-	
-	public String getAccesses()
-	{
-		return accesses;
-	}
-	public void setAccesses(String accesses)
-	{
-		this.accesses = accesses;
-	}
+class FamixAccess extends FamixAssociation {
 
-	public String getAccessedIn()
-	{
-		return accessedIn;
-	}
+    private String accesses;
+    private String accessedIn;
+    private boolean isAccessedLValue = false;
 
-	public void setAccessedIn(String accessedIn)
-	{
-		this.accessedIn = accessedIn;
-	}
+    public String getAccesses() {
+        return accesses;
+    }
 
-	public boolean isAccessedLValue()
-	{
-		return isAccessedLValue;
-	}
+    public void setAccesses(String accesses) {
+        this.accesses = accesses;
+    }
 
-	public void setAccessedLValue(boolean isAccessedLValue)
-	{
-		this.isAccessedLValue = isAccessedLValue;
-	}
+    public String getAccessedIn() {
+        return accessedIn;
+    }
+
+    public void setAccessedIn(String accessedIn) {
+        this.accessedIn = accessedIn;
+    }
+
+    public boolean isAccessedLValue() {
+        return isAccessedLValue;
+    }
+
+    public void setAccessedLValue(boolean isAccessedLValue) {
+        this.isAccessedLValue = isAccessedLValue;
+    }
 }

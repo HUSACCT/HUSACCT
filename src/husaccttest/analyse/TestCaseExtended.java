@@ -387,6 +387,7 @@ public abstract class TestCaseExtended{
 		famix.createImport("domain.locationbased.latitude.Account", "infrastructure.socialmedia.locationbased.latitude.AccountDAO", 3, "infrastructure.socialmedia.locationbased.latitude.AccountDAO", false);
 		famix.createImport("domain.locationbased.latitude.Friends", "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", 3, "infrastructure.socialmedia.locationbased.latitude.FriendsDAO", false);
 		famix.createImport("domain.locationbased.latitude.Map", "infrastructure.socialmedia.locationbased.latitude.IMap", 3, "infrastructure.socialmedia.locationbased.latitude.IMap", false);
+		famix.createImport("domain.locationbased.latitude.Friends",  "System.Date.Calendar", 4, "System.Date.Calendar", false);
 		
 		famix.createImplementsDefinition("indirect.houses.type.RowHouse", "indirect.houses.type.IType", 3);
 		famix.createInheritanceDefinition("indirect.houses.type.IType", "indirect.houses.type.IGlobal", 3);
