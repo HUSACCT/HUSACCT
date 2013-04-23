@@ -1,5 +1,7 @@
 package husacct.control.task;
 
+import javax.swing.JOptionPane;
+
 import husacct.control.presentation.MainGui;
 
 import org.apache.log4j.Logger;
@@ -85,8 +87,14 @@ public class MainController {
 	
 	public void exit(){
 		// TODO: check saved 
-		logger.debug("Close HUSACCT");
-		System.exit(0);
+		// TODO: Implement translations:
+		//Exit (bestaat al)
+		//AreYouSureYouWantToExitHUSACCT
+		
+		if(JOptionPane.showConfirmDialog(this.mainGUI, "Are you sure you want to exit HUSACCT?", "Exit HUSACCT", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+			logger.debug("Close HUSACCT");
+			System.exit(0);
+		}
 	}
 	
 	public MainGui getMainGui(){
