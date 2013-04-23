@@ -16,11 +16,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.log4j.Logger;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.draw.event.FigureSelectionListener;
+import org.jhotdraw.draw.io.ImageOutputFormat;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
@@ -247,5 +252,36 @@ public class DrawingView extends DefaultDrawingView {
 		BaseFigure[] retVal = new BaseFigure[collection.size()];
 		retVal = collection.toArray(retVal);
 		return retVal;
+	}
+    
+    public void showExportToImagePanel() {
+		Drawing exportDrawing = drawing;
+		ArrayList<BaseFigure> hiddenFigures = exportDrawing.getHiddenFigures();
+		try {
+			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
+			JFileChooser fileChooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png", "png");
+			fileChooser.setFileFilter(filter);
+			fileChooser.setVisible(true);
+			int returnValue = fileChooser.showSaveDialog(fileChooser);
+            
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				selectedFile = fileChooser.getSelectedFile();
+				filemanager.setFile(selectedFile);
+				filemanager.createOutputStream();
+				for(BaseFigure hiddenFigure : hiddenFigures){
+					if(!hiddenFigure.isVisible()){
+						exportDrawing.remove(hiddenFigure);
+					}
+				}
+				imageoutputformat.write(filemanager.getOutputStream(), exportDrawing);
+				filemanager.closeOutputStream();
+				for(BaseFigure figure : hiddenFigures){
+					drawing.add(figure);
+				}
+			}
+		} catch (IOException e) {
+			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
+		}
 	}
 }
