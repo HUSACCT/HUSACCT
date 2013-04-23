@@ -129,15 +129,10 @@ public class Module implements Comparable<Module> {
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-<<<<<<< HEAD
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
 			service.addDefaultRules(subModule);  //Correct way?
 		}
 		else {
-=======
-			DefaultRuleDomainService.getInstance().setDefaultRule(subModule);
-		}else{
->>>>>>> develop
 			System.out.println("This sub module has already been added!");
 		}
 	}
