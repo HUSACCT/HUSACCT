@@ -56,12 +56,18 @@ public class Drawing extends QuadTreeDrawing {
 				selectedFile = fileChooser.getSelectedFile();
 				filemanager.setFile(selectedFile);
 				filemanager.createOutputStream();
-				imageoutputformat.write(filemanager.getOutputStream(), this);
+				QuadTreeDrawing cloneDrawing = this.clone();
+				for(BaseFigure bf : hiddenFigures){
+					cloneDrawing.remove(bf);
+				}
+				imageoutputformat.write(filemanager.getOutputStream(), cloneDrawing);
 				filemanager.closeOutputStream();
+				
 			}
 		} catch (IOException e) {
 			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
 		}
+		
 	}
 
 	public BaseFigure[] getShownModules() {
@@ -129,6 +135,7 @@ public class Drawing extends QuadTreeDrawing {
 		for (BaseFigure figure : hiddenFigures) {
 			figure.setEnabled(true);
 		}
+		hiddenFigures.clear();
 	}
 
 	public void clearAll() {
