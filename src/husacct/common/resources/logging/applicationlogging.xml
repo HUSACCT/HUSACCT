@@ -3,14 +3,14 @@
     <workspace name="myHusacctWorkspace">
     	<application name="Java Benchmark">
     		<project name="Java Benchmark">
-   				<analyse timestamp="1366889220">
+   				<analysis timestamp="1366889220">
    					<path>D:\HUSACCT\</path>
    					<packages>20</packages>
    					<classes>300</classes>
    					<interfaces>58</interfaces>
    					<dependencies>380</dependencies>
    					<violations>15</violations>
-   				</analyse>
+   				</analysis>
     		</project>
     	</application>
     </workspace>
