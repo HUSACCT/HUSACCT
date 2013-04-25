@@ -12,6 +12,11 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.IDefineService;
+import husacct.define.domain.AppliedRule;
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.SoftwareUnitDefinition.Type;
+import husacct.define.domain.module.Layer;
+import husacct.define.domain.module.Module;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 
@@ -26,6 +31,7 @@ import org.junit.Test;
 public class ValidateTest {
 	IDefineService define;
 	IValidateService validate;
+	DefineTestLibrary defineTestLibrary; 
 
 	@Before
 	public void setup() {
@@ -96,7 +102,19 @@ public class ValidateTest {
 	@Test
 	public void checkFacadeRuleConventionSupport() {
 		//TODO Add rule in define (facade convention rule)
-		//TODO Check violationinput, check current support of this rule
+		
+		define = ServiceProvider.getInstance().getDefineService();
+		ArrayList<ProjectDTO> project = new ArrayList<ProjectDTO>();
+		project.add(new ProjectDTO("TEST_PROJECT", new ArrayList<String>(), "", "1.0",
+				"DESCRIPTION PROJECT", new ArrayList<AnalysedModuleDTO>()));
+		define.createApplication("TEST_APPLICATION", project, "1.0");
+		defineTestLibrary.setInstance();
+		Layer moduleFrom = defineTestLibrary.addLayerModule(new Layer("Layer1"));
+		defineTestLibrary.addSoftwareDefinition(new SoftwareUnitDefinition("infrastructure.socialmedia.twitter.TwitterFacade", Type.CLASS));
+		defineTestLibrary.addAppliedRule(new AppliedRule("FacadeConvention", "", moduleFrom , new Module("", "")));
+		
+		//TODO Check violation output, check current support of this rule (not finished yet)
+		validate.checkConformance();
 	}
 
 	@Test
