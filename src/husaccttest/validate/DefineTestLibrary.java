@@ -16,19 +16,16 @@ public class DefineTestLibrary {
 	private SoftwareArchitecture sA;
 
 	private Layer layerFrom;
-	private Layer layerTo;
-
 	private AppliedRule rule;
 
 	public DefineTestLibrary() {
+		this.layerFrom = new Layer("FromLayer");
 		setInstance();
 	}
-	
+
 	private void setInstance() {
-//		SoftwareArchitecture.setInstance(new SoftwareArchitecture());
-//		sA = SoftwareArchitecture.getInstance();
-//		
-		SoftwareArchitecture.setInstance(new SoftwareArchitecture("Test", "description"));
+		SoftwareArchitecture.setInstance(new SoftwareArchitecture(
+				"TestSoftwareArchitecture", "description"));
 		sA = SoftwareArchitecture.getInstance();
 	}
 
@@ -37,26 +34,21 @@ public class DefineTestLibrary {
 		sA.addAppliedRule(rule);
 	}
 
-	public Layer addLayerModule(Module moduleFrom, Module moduleTo, Layer... layers) {
+	public Layer addLayerModule(Module moduleFrom, Module moduleTo,
+			Layer... layers) {
 		sA.addModule(moduleFrom);
 		sA.addModule(moduleTo);
-		for (Layer layer : layers) {
-			layerFrom.addSubModule(layer);
-		}
 		return layerFrom;
 	}
 
-//	public void addModule(Module moduleFrom, Module moduleTo, Layer... layers) {
-//		sA.addModule(moduleFrom);
-//		sA.addModule(moduleTo);
-//		for (Layer layer : layers) {
-//			moduleFrom.addSubModule(layer);
-//		}
-//	}
-
-	public void addSoftwareDefinition(SoftwareUnitDefinition... softwareunitdefinitions) {
+	public void addSoftwareUnitDefinition(
+			SoftwareUnitDefinition... softwareunitdefinitions) {
 		for (SoftwareUnitDefinition softwareunitdefintion : softwareunitdefinitions) {
 			layerFrom.addSUDefinition(softwareunitdefintion);
 		}
+	}
+	
+	public String getAppliedRule(){
+		return rule.getRuleType();
 	}
 }

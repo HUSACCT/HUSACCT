@@ -101,24 +101,30 @@ public class ValidateTest {
 	
 	@Test
 	public void checkFacadeRuleConventionSupport() {
-		//TODO Add rule in define (facade convention rule)
-		
 		define = ServiceProvider.getInstance().getDefineService();
+		defineTestLibrary = new DefineTestLibrary();
 		ArrayList<ProjectDTO> project = new ArrayList<ProjectDTO>();
 		project.add(new ProjectDTO("TEST_PROJECT", new ArrayList<String>(), "", "1.0", "DESCRIPTION PROJECT", new ArrayList<AnalysedModuleDTO>()));
 		
 		define.createApplication("TEST_APPLICATION", project, "1.0");
-		defineTestLibrary = new DefineTestLibrary();
 		
 		Module moduleFrom = new Module("infrastructure.socialmedia.twitter.TwitterFacade", "");
 		Module moduleTo = new Module("", "");
 
-		Layer layerFrom = defineTestLibrary.addLayerModule(moduleFrom, moduleTo, new Layer("Layer1"));
-		defineTestLibrary.addSoftwareDefinition(new SoftwareUnitDefinition(moduleFrom.getName(), Type.CLASS));
-		defineTestLibrary.addAppliedRule(new AppliedRule("FacadeConvention", "", layerFrom , new Module("", "")));
+		defineTestLibrary.addLayerModule(moduleFrom, moduleTo, new Layer("Layer1"));
+		defineTestLibrary.addSoftwareUnitDefinition(new SoftwareUnitDefinition(moduleFrom.getName(), Type.CLASS));
+		defineTestLibrary.addAppliedRule(new AppliedRule("FacadeConvention", "", moduleFrom, moduleTo));
 		
 		//TODO Check violation output, check current support of this rule (not finished yet)
-		//validate.checkConformance();
+//		RuleDTO[] appliedRules = define.getDefinedRules();
+//		assertEquals("FacadeConvention", defineTestLibrary.getAppliedRule());
+//		ViolationDTO[] violations = validate.getViolationsByPhysicalPath("presentation.legal.TwitterIlLegal", "infrastructure.socialmedia.twitter.LegalInformation");
+//		System.out.println("No. of violations: " + violations.length);
+//		for (ViolationDTO  violation : violations) {
+//			System.out.println(violation.violationType);
+//		}
+		
+		validate.checkConformance();
 	}
 
 	@Test
