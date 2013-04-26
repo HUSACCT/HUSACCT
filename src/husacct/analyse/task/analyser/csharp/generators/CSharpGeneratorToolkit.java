@@ -71,4 +71,20 @@ public class CSharpGeneratorToolkit {
             }
         }
     }
+    
+    public static CommonTree walkTree(CommonTree ancestor, int...types) {
+		CommonTree currentParent = ancestor;
+		for (int i = 0; i < types.length; i++) {
+			if (currentParent == null)
+				return null;
+    		currentParent = (CommonTree)currentParent.getFirstChildWithType(types[i]);
+    	}
+    	return currentParent;    	
+    }
+    
+    public static boolean hasChild(CommonTree parent, int type) {
+    	if (parent == null)
+    		return false;
+    	return parent.getFirstChildWithType(type) != null;
+    }
 }
