@@ -28,19 +28,22 @@ public class FacadeConventionRule extends RuleType {
 
 		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
-		//List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+		List<Violation> allViolations = new ArrayList<Violation>();
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			List<String> facadeDependenciesTo = new ArrayList<String>();
 			for (DependencyDTO dependency : dependencies) {
 				if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-					System.out.println("[VERZAMELEN] " + dependency.to);
+					boolean fromDependencyKnown = false;
+					for (DependencyDTO innerDependency : dependencies) {
+						if(dependency.to.equals(innerDependency.from)) {
+							fromDependencyKnown = true;
+						}
+					}
 					
-					if(!dependency.to.startsWith("java")) {
-					//	if(!facadeDependenciesTo.contains(dependency.to)) {
-							facadeDependenciesTo.add(dependency.to);
-					//	}
+					if(fromDependencyKnown) {
+						facadeDependenciesTo.add(dependency.to);
 					}
 				}
 			}
@@ -48,21 +51,33 @@ public class FacadeConventionRule extends RuleType {
 			for (DependencyDTO dependency : dependencies) {
 				if(!dependency.from.equals(classPathFrom.getPhysicalPath())) {
 					for(String facadeDependencyTo: facadeDependenciesTo) {
-						if(facadeDependencyTo.equals(dependency.to)) {
-							Violation violation = createViolation(rootRule, new Mapping(dependency.from, new String[0]), new Mapping(dependency.to, new String[0]), dependency, configuration);
-									//createViolation(rootRule, classPathFrom, configuration);
-							violations.add(violation);
+						if(facadeDependencyTo.equals(dependency.to)) { 					
+							Violation violation = createViolation(rootRule, new Mapping(dependency.from, new String[0]), 
+									new Mapping(dependency.to, new String[0]), dependency, configuration);
+							allViolations.add(violation);
 						}
 					}
 				}
 			}
-			
 		}	
 		
-		//TEST VIOLATIONS
-		for(Violation theViolation: violations) {
-			System.out.println("[VIOLATION] FROM " + theViolation.getClassPathFrom() + " - TO " + theViolation.getClassPathTo() + " - " 
-					+ theViolation.getLinenumber() + " - " + theViolation.getViolationtypeKey() + " - " + theViolation.getMessage().getRuleKey());
+		for(Violation violation: allViolations) {
+			if(violations.size() == 0) {
+				violations.add(violation);
+			}
+			else { 
+				boolean newViolation = true;
+				for(Violation theViolation: violations) {
+					if(theViolation.getClassPathTo().equals(violation.getClassPathTo()) && theViolation.getLinenumber() == violation.getLinenumber() 
+							&& violation.getViolationtypeKey().equals(theViolation.getViolationtypeKey())) {
+						newViolation = false;
+					}
+				}
+				
+				if(newViolation) {
+					violations.add(violation);
+				}
+			}
 		}
 		
 		return violations;
