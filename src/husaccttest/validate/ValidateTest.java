@@ -105,16 +105,20 @@ public class ValidateTest {
 		
 		define = ServiceProvider.getInstance().getDefineService();
 		ArrayList<ProjectDTO> project = new ArrayList<ProjectDTO>();
-		project.add(new ProjectDTO("TEST_PROJECT", new ArrayList<String>(), "", "1.0",
-				"DESCRIPTION PROJECT", new ArrayList<AnalysedModuleDTO>()));
+		project.add(new ProjectDTO("TEST_PROJECT", new ArrayList<String>(), "", "1.0", "DESCRIPTION PROJECT", new ArrayList<AnalysedModuleDTO>()));
+		
 		define.createApplication("TEST_APPLICATION", project, "1.0");
-		defineTestLibrary.setInstance();
-		Layer moduleFrom = defineTestLibrary.addLayerModule(new Layer("Layer1"));
-		defineTestLibrary.addSoftwareDefinition(new SoftwareUnitDefinition("infrastructure.socialmedia.twitter.TwitterFacade", Type.CLASS));
-		defineTestLibrary.addAppliedRule(new AppliedRule("FacadeConvention", "", moduleFrom , new Module("", "")));
+		defineTestLibrary = new DefineTestLibrary();
+		
+		Module moduleFrom = new Module("infrastructure.socialmedia.twitter.TwitterFacade", "");
+		Module moduleTo = new Module("", "");
+
+		Layer layerFrom = defineTestLibrary.addLayerModule(moduleFrom, moduleTo, new Layer("Layer1"));
+		defineTestLibrary.addSoftwareDefinition(new SoftwareUnitDefinition(moduleFrom.getName(), Type.CLASS));
+		defineTestLibrary.addAppliedRule(new AppliedRule("FacadeConvention", "", layerFrom , new Module("", "")));
 		
 		//TODO Check violation output, check current support of this rule (not finished yet)
-		validate.checkConformance();
+		//validate.checkConformance();
 	}
 
 	@Test
