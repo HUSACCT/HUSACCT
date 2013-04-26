@@ -71,18 +71,20 @@ public class CSharpGeneratorToolkit {
             }
         }
     }
-	
-	public static void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
-        }
+    
+    public static CommonTree walkTree(CommonTree ancestor, int...types) {
+		CommonTree currentParent = ancestor;
+		for (int i = 0; i < types.length; i++) {
+			if (currentParent == null)
+				return null;
+    		currentParent = (CommonTree)currentParent.getFirstChildWithType(types[i]);
+    	}
+    	return currentParent;    	
     }
-	
-	public static String createCommaSeperatedString(Stack<String> names) {
-		String result = "";
-		for (String parentNamePart : names) {
-			result += parentNamePart + ",";
-		}
-		return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
-	}
+    
+    public static boolean hasChild(CommonTree parent, int type) {
+    	if (parent == null)
+    		return false;
+    	return parent.getFirstChildWithType(type) != null;
+    }
 }
