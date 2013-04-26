@@ -40,7 +40,7 @@ public class CSharpTreeConvertController {
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
         final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-        //new TreePrinter(compilationCommonTree); //Debug functie
+        new TreePrinter(compilationCommonTree); //Debug functie
         delegateASTToGenerators(compilationCommonTree);
     }
 
@@ -101,12 +101,6 @@ public class CSharpTreeConvertController {
             return true;
         }
         return false;
-    }
-
-    private void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
-        }
     }
 
     private void saveUsing(CommonTree usingTree) {

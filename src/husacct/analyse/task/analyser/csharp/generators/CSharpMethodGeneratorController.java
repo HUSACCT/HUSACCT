@@ -1,6 +1,6 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import java.util.*;
 import org.antlr.runtime.tree.CommonTree;
@@ -76,9 +76,6 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	private void walkThroughMethod(CommonTree methodTree) {
 		for (int childCount = 0; childCount < methodTree.getChildCount(); childCount++) {
 			Tree child = methodTree.getChild(childCount);
-			new TreePrinter(methodTree);
-			
-			
 			switch (child.getType()) {
 				case CSharpParser.ABSTRACT:
 					isAbstract = true;
@@ -87,50 +84,26 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					hasClassScope = true;
 					break;
 				case CSharpParser.FORMAL_PARAMETER_LIST:
-					System.out.println(child.toStringTree());
-					getFormalParameter((CommonTree) child);
+					CSharpParameterGenerator csParameterGenerator = new CSharpParameterGenerator();
+					argTypes = csParameterGenerator.generateParameterObjects(child, name, belongsToClass);
+					deleteTreeChild(child);
 					break;
 				case CSharpParser.BLOCK:
-					CommonTree blockTree = (CommonTree)child;
+					CommonTree blockTree = (CommonTree) child;
 					stepIntoBlock(blockTree);
 					System.out.println(child.toStringTree());
 					break;
 				default:
-					walkThroughMethod((CommonTree)child);
+					walkThroughMethod((CommonTree) child);
 			}
 		}
 	}
 
 	private void stepIntoBlock(CommonTree blockTree) {
 		String belongsToMethod = name + createArgumentString(argTypes);
-		
+
 		CSharpBlockScopeGenerator csBlockScopeGenerator = new CSharpBlockScopeGenerator();
 		csBlockScopeGenerator.walkThroughBlockScope(blockTree, belongsToClass, belongsToMethod);
-		
-		
-	}
-
-	private void getFormalParameter(CommonTree paramtree) {
-		for (int i = 0; i < paramtree.getChildCount(); i++) {
-			Tree child = paramtree.getChild(i);
-			if (child.getType() == CSharpParser.FIXED_PARAMETER) {
-				CommonTree typetree = (CommonTree) child;
-				getType(typetree.getFirstChildWithType(CSharpParser.TYPE));
-			}
-		}
-	}
-
-	private void getType(Tree tree) {
-		CommonTree ctree = (CommonTree) tree;
-		getNameSpaceOrTypePart(ctree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME));
-
-	}
-
-	private void getNameSpaceOrTypePart(Tree firstChildWithType) {
-		if (firstChildWithType == null) {
-			return;
-		}
-		argTypes.push(firstChildWithType.getChild(0).getText());
 	}
 
 	private void createMethodObject() {
@@ -142,14 +115,6 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 
 	private String createArgumentString(Stack<String> argTypes) {
 		return "(" + createCommaSeperatedString(argTypes) + ")";
-	}
-
-	private String createCommaSeperatedString(Stack<String> argTypes) {
-		String result = "";
-		for (String parentNamePart : argTypes) {
-			result += parentNamePart + ",";
-		}
-		return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
 	}
 
 	private String getMethodUniqueName(String belongsToClass, String name, String argumentTypes) {
