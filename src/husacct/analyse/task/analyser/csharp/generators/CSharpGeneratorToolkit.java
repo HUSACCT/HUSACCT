@@ -71,4 +71,18 @@ public class CSharpGeneratorToolkit {
             }
         }
     }
+	
+	public static void deleteTreeChild(Tree treeNode) {
+        for (int child = 0; child < treeNode.getChildCount();) {
+            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
+        }
+    }
+	
+	public static String createCommaSeperatedString(Stack<String> names) {
+		String result = "";
+		for (String parentNamePart : names) {
+			result += parentNamePart + ",";
+		}
+		return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
+	}
 }
