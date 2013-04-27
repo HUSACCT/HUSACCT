@@ -19,6 +19,7 @@ import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
@@ -104,7 +105,7 @@ public class DefinitionController extends Observable implements Observer {
 			return true;
 		} catch (Exception e) {
 			logger.error("addSubSystem(" + moduleName + ") - exception: " + e.getMessage());
-			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
+			UiDialogs.errorDialog(definitionJPanel, e.getMessage()+"ehm faal!");
 			return false;
 		} finally {
 			JPanelStatus.getInstance().stop();
@@ -333,7 +334,7 @@ public class DefinitionController extends Observable implements Observer {
 		return moduleName;
 	}
 	
-	/**
+		/**
 	 * This function will return a hash map with the details of the requested module.
 	 */
 	public HashMap<String, Object> getModuleDetails(long moduleId) {

@@ -129,10 +129,14 @@ public class Module implements Comparable<Module> {
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-			DefaultRuleDomainService.getInstance().setDefaultRule(subModule);
+
+		//	DefaultRuleDomainService.getInstance().setDefaultRule(subModule);
+		//service.addDefaultRules(subModule);
 		}else{
+
 			System.out.println("This sub module has already been added!");
-		}
+			}
+		
 	}
 	
 	public void removeSubModule(Module subModule)
@@ -142,6 +146,11 @@ public class Module implements Comparable<Module> {
 		}else{
 			System.out.println("This sub module does not exist!");
 		}
+	}
+	
+	public boolean hasSubModules()
+	{
+		return subModules.isEmpty();	
 	}
 	
 	public boolean hasSubModule(String name) 

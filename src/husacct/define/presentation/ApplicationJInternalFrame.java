@@ -29,7 +29,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 			this.addToolBar();
 			
 			pack();
-			setSize(1000, 700);
+			setSize(1200, 1200);
 		} catch (Exception e) {
 			
 			e.printStackTrace();

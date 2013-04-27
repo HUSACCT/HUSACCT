@@ -2,6 +2,7 @@ package husacct.define.task;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.object_creation_expression2_return;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -85,11 +86,11 @@ private void flushRegix(AnalyzedModuleComponent unitTobeRestored,AnalyzedModuleT
 private void compare(AnalyzedModuleComponent newdata) {
 	AnalyzedModuleComponent currentparent = JtreeController.instance().GetRootOfModel();
 	
-	compareChilderens(currentparent, newdata);
+	//compareChilderens(currentparent, newdata);
 	
+	AnalyzedUnitComparator c = new AnalyzedUnitComparator();
 	
-	
-	
+	c.calucalteChanges(currentparent, newdata);
 	
 	
 }
@@ -177,7 +178,38 @@ Collections.sort(parentComponentright.getChildren());
 		
 		compareChilderens((AnalyzedModuleComponent)left,(AnalyzedModuleComponent) right);
 		
-}	
+}
+}
+
+
+private void NotfoudResult(ArrayList<AbstractCombinedComponent> left ,ArrayList<AbstractCombinedComponent> right  )  
+{
+	ArrayList<AbstractCombinedComponent> notFound = new ArrayList<>();
+	ArrayList<AbstractCombinedComponent> newFound = new ArrayList<>();
+	ArrayList<AbstractCombinedComponent> tobedeleted = new ArrayList<>();
+	Collections.sort(left);
+	Collections.sort(right);
+	
+	
+	
+	if(left.size()==right.size())
+	{
+		
+	
+	}else if(left.size()>right.size()) 
+	{
+		
+	}else if(left.size()<right.size()) 
+	{
+		
+	}	
+		
+		
+		
+		
+	
+
+
 }
 	
 

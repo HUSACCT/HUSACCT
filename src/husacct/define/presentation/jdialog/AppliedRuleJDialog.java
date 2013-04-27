@@ -323,7 +323,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.dispose();
 	}
 
-	private void save() {	
+	private void save() {	//TODO : check of 
 		if (ruleDetailsJPanel.hasValidData()) {
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 			
