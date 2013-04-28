@@ -8,17 +8,17 @@ import org.antlr.runtime.tree.Tree;
 
 public class CSharpParameterGenerator extends CSharpGenerator {
 
-	private String belongsToMethod;
-	private String belongsToClass;
+	private String methodName;
+	private String packageAndClassName;
 	Stack<Argument> arguments = new Stack();
 	int lineNumber;
 
-	Stack<String> generateParameterObjects(Tree child, String name, String classUniqueName) {
-		belongsToClass = classUniqueName;
-		belongsToMethod = name;
-		lineNumber = child.getLine();
+	public Stack<String> generateParameterObjects(CommonTree argumentTree, String name, String classUniqueName) {
+		packageAndClassName = classUniqueName;
+		methodName = name;
+		lineNumber = argumentTree.getLine();
 
-		getArgumentsInformation((CommonTree) child);
+		getArgumentsInformation(argumentTree);
 		writeParameterToDomain();
 
 		return getArgumentTypes(arguments);
@@ -44,37 +44,6 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 		}
 	}
 
-	private CommonTree getGenericListTree(CommonTree parameterTree) {
-		try {
-			CommonTree typeTree = (CommonTree) parameterTree.getFirstChildWithType(CSharpParser.TYPE);
-			CommonTree typeNameTree = (CommonTree) typeTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-			CommonTree genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
-			return genericListTree;
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	private List<String> getGenericTypes(CommonTree inputTree, List<String> genericTypes) {
-		if (inputTree != null) {
-			for (int i = 0; i < inputTree.getChildCount(); i++) {
-
-				CommonTree childTree = (CommonTree) inputTree.getChild(i);
-				CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-
-				genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
-
-				if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
-					CommonTree genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
-					genericTypes = getGenericTypes(genericListTree, genericTypes);
-				}
-			}
-		}
-		return genericTypes;
-	}
-
 	private String getFormalParameter(CommonTree childTree) {
 		if (childTree.getType() == CSharpParser.FIXED_PARAMETER) {
 			CommonTree typetree = (CommonTree) childTree;
@@ -85,18 +54,40 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	private String getType(Tree tree) {
 		CommonTree ctree = (CommonTree) tree;
-		return getNameSpaceOrTypePart(ctree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME));
+		return getNameSpaceOrTypePart((CommonTree) ctree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME));
 	}
 
-	private String getNameSpaceOrTypePart(Tree firstChildWithType) {
-		if (firstChildWithType == null) {
+	private String getNameSpaceOrTypePart(CommonTree typeTree) {
+		if (typeTree == null) {
 			return null;
 		}
-		return firstChildWithType.getChild(0).getText();
+		return typeTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 	}
 
 	private String getArgumentName(CommonTree child) {
 		return child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+	}
+
+	private CommonTree getGenericListTree(CommonTree parameterTree) {
+		return walkTree(parameterTree, CSharpParser.TYPE, CSharpParser.NAMESPACE_OR_TYPE_NAME, CSharpParser.TYPE_ARGUMENT_LIST);
+	}
+
+	private List<String> getGenericTypes(CommonTree genericListTree, List<String> genericTypes) {
+		if (genericListTree != null) {
+			for (int i = 0; i < genericListTree.getChildCount(); i++) {
+
+				CommonTree childTree = (CommonTree) genericListTree.getChild(i);
+				CommonTree typeNameTree = (CommonTree) childTree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+
+				genericTypes.add(typeNameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText());
+
+				if (typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST) != null) {
+					genericListTree = (CommonTree) typeNameTree.getFirstChildWithType(CSharpParser.TYPE_ARGUMENT_LIST);
+					genericTypes = getGenericTypes(genericListTree, genericTypes);
+				}
+			}
+		}
+		return genericTypes;
 	}
 
 	private void writeParameterToDomain() {
@@ -104,8 +95,12 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 		for (Argument arg : arguments) {
 			String uniqueName = uniqueParentName + "." + arg.name;
-			modelService.createParameter(arg.name, uniqueName, arg.type, belongsToClass, lineNumber, uniqueParentName, arg.genericType);
+			modelService.createParameter(arg.name, uniqueName, arg.type, packageAndClassName, lineNumber, uniqueParentName, arg.genericType);
 		}
+	}
+
+	private String createUniqueParentName() {
+		return packageAndClassName + "." + methodName + "(" + createCommaSeperatedString(getArgumentTypes(arguments)) + ")";
 	}
 
 	private Stack<String> getArgumentTypes(Stack<Argument> arguments) {
@@ -114,10 +109,6 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 			result.push(arg.type);
 		}
 		return result;
-	}
-
-	private String createUniqueParentName() {
-		return belongsToClass + "." + belongsToMethod + "(" + createCommaSeperatedString(getArgumentTypes(arguments)) + ")";
 	}
 
 	public class Argument {

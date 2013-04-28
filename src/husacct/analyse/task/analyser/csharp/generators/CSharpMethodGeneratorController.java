@@ -85,7 +85,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 					break;
 				case CSharpParser.FORMAL_PARAMETER_LIST:
 					CSharpParameterGenerator csParameterGenerator = new CSharpParameterGenerator();
-					argTypes = csParameterGenerator.generateParameterObjects(child, name, belongsToClass);
+					argTypes = csParameterGenerator.generateParameterObjects((CommonTree) child, name, belongsToClass);
 					deleteTreeChild(child);
 					break;
 				case CSharpParser.BLOCK:
