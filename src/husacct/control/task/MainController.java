@@ -17,6 +17,7 @@ public class MainController {
 	private ApplicationController applicationController;
 	private ImportController importController;
 	private ExportController exportController;
+	private LogController logController;
 	
 	public MainGui mainGUI;
 	
@@ -42,6 +43,7 @@ public class MainController {
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
+		this.logController = new LogController(this);
 	}
 	
 	private void setAppleProperties(){
@@ -85,6 +87,10 @@ public class MainController {
 	
 	public ExportController getExportController(){
 		return this.exportController;
+	}
+	
+	public LogController getLogController(){
+		return this.logController;
 	}
 	
 	public void exit(){
