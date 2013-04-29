@@ -5,19 +5,24 @@ import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+//TODO: Make this an JInternalFrame
 @SuppressWarnings("serial")
 public class AnalysisHistoryOverviewFrame extends JFrame{
 
 	private MainController mainController;
 	private JTable analysisTable;
 	private DefaultTableModel analysisTableModel;
-	private JScrollPane analysisHistoryOverviewContainer;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -42,39 +47,15 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	
 	private void addComponents(){
 		addTable();
-		/*loaderList = new JList(loaderListData.toArray());
-		loaderList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		loaderList.setLayoutOrientation(JList.VERTICAL);
-		loaderList.setVisibleRowCount(-1);
-		JScrollPane listScrollPane = new JScrollPane(loaderList);
-		listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-		
-		openPanel = new JPanel();
-		openPanel.setLayout(new BoxLayout(openPanel, BoxLayout.Y_AXIS));
-		
-		loaderPanelContainer = new JPanel();
-		loaderPanelContainer.setPreferredSize(new Dimension(350, 300));
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		
-		openButton = new JButton(localeService.getTranslatedString("OpenButton"));
-		cancelButton = new JButton(localeService.getTranslatedString("CancelButton"));
-		
-		openButton.setEnabled(false);
-		getRootPane().setDefaultButton(openButton);
-		
-		buttonsPanel.add(openButton);
-		buttonsPanel.add(cancelButton);
-		
-		openPanel.add(loaderPanelContainer);
-		openPanel.add(buttonsPanel);
-		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, openPanel);
-		splitPane.setDividerLocation(150);
-		splitPane.setEnabled(false);
-		add(splitPane);*/
 	}
 	
 	private void addTable(){
+		//TODO: Dynamically fetch this data
+		String workspace = "myHusacctWorkspace";
+		String application = "Java Benchmark";
+		String project = "Java Benchmark";
+		HashMap<String, HashMap<String, String>> tableData = mainController.getLogController().getApplicationHistoryFromFile(workspace, application, project);
+		
 		analysisTableModel = new DefaultTableModel();
 		analysisTable = new JTable(analysisTableModel){
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -90,24 +71,23 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		analysisTableModel.addColumn(localeService.getTranslatedString("Dependencies"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Violations"));
 
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
-		analysisTableModel.addRow(new Object[]{"Applicatie", "Pad", "Datum", "Packages", "Classes", "Interfaces", "Dependencies", "Violations"});
+		for (Entry<String, HashMap<String, String>> entry : tableData.entrySet()) {
+		    Long analysisTimestampLong = Long.parseLong(entry.getKey());
+			Date analysisTimestampDate = new Date(analysisTimestampLong*1000);
+			DateFormat analysisTimestampFormat = new SimpleDateFormat("dd-MM-yyyy hh:MM:ss");
+			
+		    HashMap<String, String> analysisData = entry.getValue();
+		    analysisTableModel.addRow(new Object[]{
+		    		analysisData.get("application"), 
+		    		analysisData.get("path"), 
+		    		analysisTimestampFormat.format(analysisTimestampDate),
+		    		analysisData.get("packages"), 
+		    		analysisData.get("classes"), 
+		    		analysisData.get("interfaces"), 
+		    		analysisData.get("dependencies"), 
+		    		analysisData.get("violations")
+		    });
+		}
 		
 		this.add(new JScrollPane(analysisTable));
 	}
