@@ -24,7 +24,9 @@ public class ViewController {
 		defineContainer = new AbstractViewContainer(mainController, new ImageIcon(Resource.get(Resource.ICON_DEFINE_ARCHITECTURE)), "DefineArchitecture"){
 			@Override
 			public JInternalFrame getInternalFrame() {
-				return ServiceProvider.getInstance().getDefineService().getDefinedGUI();
+				JInternalFrame output = ServiceProvider.getInstance().getDefineService().getDefinedGUI();
+				output.setIconifiable(true);
+				return output;
 			}
 		};
 		

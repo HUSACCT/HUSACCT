@@ -8,6 +8,7 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.AboutDialog;
+import husacct.control.presentation.util.ConfigurationDialog;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
 import husacct.control.task.threading.ThreadWithLoader;
@@ -83,5 +84,9 @@ public class ApplicationController {
 	public void showInfoMessage(String message){
 		JOptionPane.showMessageDialog(mainController.getMainGui(), message, "Info", JOptionPane.INFORMATION_MESSAGE);
 		logger.error("Info: " + message);
+	}
+	
+	public void showConfiguartionGUI() {
+		new ConfigurationDialog(mainController);
 	}
 }
