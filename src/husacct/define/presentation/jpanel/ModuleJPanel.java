@@ -5,6 +5,7 @@ import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
+import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
@@ -18,11 +19,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.TreeSelectionEvent;
@@ -43,6 +48,8 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	
 	public ModuleJPanel() {
 		super();
+		
+		
 	}
 
 	public void initGui() {
@@ -67,10 +74,12 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	
 	private JPanel createModuleTreePanel() {
 		JPanel moduleTreePanel = new JPanel();
+		
 		BorderLayout moduleTreePanelLayout = new BorderLayout();
 		moduleTreePanel.setLayout(moduleTreePanelLayout);
 		this.createModuleTreeScrollPane();
 		moduleTreePanel.add(this.moduleTreeScrollPane, BorderLayout.CENTER);
+		
 		return moduleTreePanel;
 	}
 	
@@ -129,6 +138,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	public void updateModuleTree() {
 		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
 		this.moduleTree = new ModuleTree(rootComponent);
+		moduleTree.setContextMenu(new ModuletreeContextMenu(this));
 		JtreeController.instance().setModuleTree(moduleTree);
 		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
 		this.moduleTree.addTreeSelectionListener(this);
@@ -158,13 +168,13 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.updateModuleTree();
 	}
 	
-	private void newModule() {
+	public void newModule() {
 		AddModuleValuesJDialog addModuleFrame = new AddModuleValuesJDialog(this);
 		DialogUtils.alignCenter(addModuleFrame);
 		addModuleFrame.initGUI();
 	}
 	
-	private void removeModule() {
+	public void removeModule() {
 		long moduleId = getSelectedModuleId();
 		if (moduleId != -1 && moduleId != 0){
 			boolean confirm = UiDialogs.confirmDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveConfirm"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemovePopupTitle"));
@@ -175,13 +185,13 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		}
 	}
 	
-	private void moveLayerUp() {
+	public void moveLayerUp() {
 		long layerId = getSelectedModuleId();
 		DefinitionController.getInstance().moveLayerUp(layerId);
 		this.updateModuleTree();
 	}
 	
-	private void moveLayerDown() {
+	public void moveLayerDown() {
 		long layerId = getSelectedModuleId();
 		DefinitionController.getInstance().moveLayerDown(layerId);
 		this.updateModuleTree();
@@ -230,7 +240,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.moveModuleDownButton.setEnabled(true);
 		this.moveModuleUpButton.setEnabled(true);
 	}
-
+ 
 	@Override
 	public void update() {
 		this.setButtonTexts();
@@ -270,4 +280,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		// TODO Auto-generated method stub
 		
 	}
+	
+
+ 
 }

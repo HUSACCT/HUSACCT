@@ -135,16 +135,11 @@ private JtreeStateEngine order = new JtreeStateEngine();
 		return tree;
 	}
 
-	//moet naar het tree object ^_^
-	public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
+	
 
 
 
-	}
-
-
-
-	public AnalyzedModuleComponent GetRootOfModel ()
+	public AnalyzedModuleComponent getRootOfModel ()
 	{
 
 		return (AnalyzedModuleComponent)instance.getTree().getModel().getRoot();
@@ -165,7 +160,8 @@ private JtreeStateEngine order = new JtreeStateEngine();
 
 	public void additemgetResultTree(AnalyzedModuleComponent anal) 
 	{
-anal.freeze();
+
+		anal.freeze();
 AnalyzedModuleComponent temp= (AnalyzedModuleComponent)resultTree.getModel().getRoot();
 temp.freeze();
 temp.addChild(anal);
@@ -175,22 +171,6 @@ resultTree.setModel(new CombinedModuleTreeModel(temp));
 
 
 }
-//in future impl
-public static void registerResultRemovalspiiii() {
-
-	TreeSelectionModel modulepath = instance.moduleTree.getSelectionModel();
-	TreePath selectedmodule= modulepath.getSelectionPath();
-	long moduleId = ((AbstractDefineComponent)selectedmodule.getLastPathComponent()).getModuleId();
-	TreeSelectionModel paths = instance.resultTree.getSelectionModel();
-	SoftwareUnitController softwareUnitController  = new SoftwareUnitController(moduleId);
-	for (TreePath path : paths.getSelectionPaths()){
-		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		
-			softwareUnitController.save(selectedComponent);
-	
-}
-}
-
 public ModuleTree getModuleTree() {
 	
 	return moduleTree;
@@ -203,18 +183,16 @@ public void setModuleTree(ModuleTree moduleTree) {
  public RegexComponent registerRegix(String regExName) {
 	
 	 RegexComponent regixwrapper = new RegexComponent(); 
-	 
-	TreePath[] paths = instance.resultTree.getSelectionPaths();
-	for (TreePath treePath : paths) {
+	 TreePath[] paths = instance.resultTree.getSelectionPaths();
+	 for (TreePath treePath : paths) {
 		
 		regixwrapper.addChild((AnalyzedModuleComponent)treePath.getLastPathComponent());
-	
 	}
 	regixwrapper.setName(regExName);
 	regixwrapper.setType("regex");
 	regixwrapper.setUniqueName(regExName);
 	regixwrapper.setVisibility("public");
-	 instance.regixRegistry.put(regExName,regixwrapper);
+	instance.regixRegistry.put(regExName,regixwrapper);
 	return regixwrapper;
 }
 
@@ -244,7 +222,7 @@ public  void restoreRegexWrapper(String name) {
 }
 
 public AbstractCombinedComponent getMappedunits() {
-	// TODO Auto-generated method stub
+	
 	return (AbstractCombinedComponent) instance.getTree().getModel().getRoot();
 }
 

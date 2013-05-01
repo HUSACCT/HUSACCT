@@ -34,7 +34,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			this.checkEnabled(component, tree);
 		}
 		return this;
-	}
+	} 
 	
 	private void determineIcon(AbstractCombinedComponent component) {
 		if(component instanceof AnalyzedModuleComponent) {

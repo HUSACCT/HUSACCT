@@ -1,77 +1,67 @@
 package husacct.define.task;
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.object_creation_expression2_return;
-import husacct.common.dto.AnalysedModuleDTO;
+
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
-import husacct.define.task.components.RegexComponent;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 
 public class JtreeStateEngine {
- private static JtreeStateEngine instance =null;
-private 	ArrayList<Map<Long,AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
+private static JtreeStateEngine instance =null;
+private ArrayList<Map<Long,AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
+private Logger logger;
 	
-	
-	
+
+
+public JtreeStateEngine()
+{
+	logger=Logger.getLogger(JtreeStateEngine.class);
+}
 	
  public static JtreeStateEngine instance()
- {
+{
 	 
 	 if (instance==null) {
 	return	instance= new JtreeStateEngine();
 	}else{
 		
 		return instance;
-	}
-	 
-	 
-	
-	 
- }
+    }
+}
  
  public void compareNewData(AnalyzedModuleComponent newdata)
  {
 	
 	importNewData(newdata);
-	 
-	 
+	
  }
 
 
-private void flush() {
+private void flush() 
+{
    AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
-   for (Map<Long,AbstractCombinedComponent> result1: orderofinsertions) 
+   for (Map<Long,AbstractCombinedComponent> usersequenceinput: orderofinsertions) 
    {
-	for(Long key: result1.keySet())
-	{
-		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) result1.get(key);
-		
-		
-		
+	for(Long key: usersequenceinput.keySet())
+	  {
+		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) usersequenceinput.get(key);
 		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
 			flushRegix(unitTobeRestored,mainTree);
 			
-		}else
-		{
+		}else{
 			mainTree.restoreTreeItem(unitTobeRestored);
 		}
 		
-		
-		
-		
-		
-	}
+	  }
    
-   }
+    }
 	 
 }
 private void flushRegix(AnalyzedModuleComponent unitTobeRestored,AnalyzedModuleTree mainTree) {
@@ -84,12 +74,8 @@ private void flushRegix(AnalyzedModuleComponent unitTobeRestored,AnalyzedModuleT
 }
 
 private void compare(AnalyzedModuleComponent newdata) {
-	AnalyzedModuleComponent currentparent = JtreeController.instance().GetRootOfModel();
-	
-	//compareChilderens(currentparent, newdata);
-	
+	AnalyzedModuleComponent currentparent = JtreeController.instance().getRootOfModel();
 	AnalyzedUnitComparator c = new AnalyzedUnitComparator();
-	
 	c.calucalteChanges(currentparent, newdata);
 	
 	
@@ -98,8 +84,7 @@ private void compare(AnalyzedModuleComponent newdata) {
 
 
 private void restoreFlush() {
-	  AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
-	
+	 AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
 	 Collections.reverse(orderofinsertions);
 	 ArrayList<Map<Long,AbstractCombinedComponent>> temp =orderofinsertions;
 	 
@@ -107,12 +92,7 @@ private void restoreFlush() {
 	 try{ 
 	 for (Map<Long,AbstractCombinedComponent> result1 : temp) 
 	   {
-		
-		  
-		
-		
 		for(Long key :result1.keySet()){
-			
 		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) result1.get(key);
 		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
 			restoreflushRegix(key,unitTobeRestored,mainTree);
@@ -125,21 +105,11 @@ private void restoreFlush() {
 		
 		}
 			
-			
-			
-			
-			
-			
-			
-		
-
-	   
-	
-	   }
+		}
 	 }
 	 catch(Exception o)
 	 {
-		 System.out.println("heluuurrr joohnnyy");
+		 System.out.println(o.getMessage());
 	 }
 	   }
 
@@ -152,65 +122,7 @@ private void restoreflushRegix(long id,AnalyzedModuleComponent unitTobeRestored,
 	}
 }
 
-private void compareChilderens(AnalyzedModuleComponent parentComponentleft, AnalyzedModuleComponent parentComponentright)
-{
-Collections.sort(parentComponentleft.getChildren());
-Collections.sort(parentComponentright.getChildren());
-	
-	for (int i = 0; i < parentComponentleft.getChildren().size(); i++) {
-	AbstractCombinedComponent left = parentComponentleft.getChildren().get(i);
-	AbstractCombinedComponent right = parentComponentright.getChildren().get(i);
 
-	if(left.getUniqueName().toUpperCase().equals(right.getUniqueName().toUpperCase()))
-	{
-		if(!left.getType().toUpperCase().equals(right.getType().toUpperCase()))
-		{
-			System.out.println("Type has changed from: "+left.getType()+" to: "+right.getType());
-			left.setType(right.getType().toUpperCase());
-		}
-		
-		
-	}else
-	{
-		parentComponentleft.addChild(left);
-		System.out.println("new code detected+ "+left.getUniqueName() );
-	}
-		
-		compareChilderens((AnalyzedModuleComponent)left,(AnalyzedModuleComponent) right);
-		
-}
-}
-
-
-private void NotfoudResult(ArrayList<AbstractCombinedComponent> left ,ArrayList<AbstractCombinedComponent> right  )  
-{
-	ArrayList<AbstractCombinedComponent> notFound = new ArrayList<>();
-	ArrayList<AbstractCombinedComponent> newFound = new ArrayList<>();
-	ArrayList<AbstractCombinedComponent> tobedeleted = new ArrayList<>();
-	Collections.sort(left);
-	Collections.sort(right);
-	
-	
-	
-	if(left.size()==right.size())
-	{
-		
-	
-	}else if(left.size()>right.size()) 
-	{
-		
-	}else if(left.size()<right.size()) 
-	{
-		
-	}	
-		
-		
-		
-		
-	
-
-
-}
 	
 
 public void registerSate(Long id,AbstractCombinedComponent inpute)
@@ -230,10 +142,10 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 			
 			@Override
 			public void run() {
-				System.out.println("first began");
+				logger.debug("Strating to reanalyze");
 				flush();
 				
-				System.out.println("first stopeed");
+			
 				
 			}
 		});
@@ -243,9 +155,9 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 			
 			@Override
 			public void run() {
-				System.out.println("second began"); 
+				
 				compare(newdata);
-					System.out.println("second stopeed");
+					
 			}
 		});
 		
@@ -253,17 +165,17 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 			
 			@Override
 			public void run() {
-				System.out.println("third began");
+				
 				restoreFlush();
 				
-				System.out.println("third stopeed");
+				System.out.println("Finished Reanalyzing");
 			}
 		});
 			
 		
 		try {
-			first.start();
-			first.join();
+		first.start();
+		first.join();
 		second.start();
 		second.join();
 		third.start();
@@ -273,22 +185,13 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 			e.printStackTrace();
 		}
 		
-		
-		
-		
-		
-	
-			
-			
-		
-	
-	
 }
 
 public void removeSoftwareUnit(long moduleId,
-		AnalyzedModuleComponent unitTobeRemoved) {
+	AnalyzedModuleComponent unitTobeRemoved) {
 	int index=0;
-	for (int i=0;i< orderofinsertions.size();i++) {
+	for (int i=0;i< orderofinsertions.size();i++)
+	{
 		
 		for(long key : orderofinsertions.get(i).keySet())
 		{
