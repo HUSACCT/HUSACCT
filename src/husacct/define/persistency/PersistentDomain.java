@@ -87,7 +87,6 @@ public class PersistentDomain implements ISaveable {
 		XMLParser = new XMLDomain(workspaceData);	
 		Application workspaceApplication = XMLParser.getApplication();
 		SoftwareArchitecture workspaceArchitecture = XMLParser.getArchitecture();
-		ArrayList<AppliedRule> AppliedRules = XMLParser.getAppliedRules();
 		
 		switch (parseData) {
 			default:
@@ -112,7 +111,7 @@ public class PersistentDomain implements ISaveable {
 						}
 					}
 				}
-				for (AppliedRule ApplRule : AppliedRules) {
+				for (AppliedRule ApplRule : workspaceArchitecture.getAppliedRules()) {
 					long addedRule = appliedRuleService.addAppliedRule(ApplRule.getRuleType(),ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
 					if (ApplRule.getExceptions().size() > 0) {
 						for (AppliedRule Ap : ApplRule.getExceptions()) {
