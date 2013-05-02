@@ -61,6 +61,7 @@ public class TaskBar extends JPanel{
 			public void internalFrameIconified(InternalFrameEvent e){
 				deactivateFrame(internalFrame, toggleButton);
 				internalFrame.setVisible(false);
+				iconifyFrame(internalFrame, toggleButton);
 				
 			}
 			
