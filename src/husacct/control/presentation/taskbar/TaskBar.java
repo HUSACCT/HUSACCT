@@ -107,15 +107,11 @@ public class TaskBar extends JPanel{
 		manager.activateFrame(internalFrame);
 		try {
 			internalFrame.setSelected(true);
-		} catch (PropertyVetoException event) {
-			logger.debug(event.getMessage());
-		}
-		button.setSelected(true);
-		try {
 			internalFrame.setIcon(false);
 		} catch (PropertyVetoException event) {
 			logger.debug(event.getMessage());
 		}
+		button.setSelected(true);
 	}
 	
 	private void deactivateFrame(JInternalFrame internalFrame, JToggleButton button){
