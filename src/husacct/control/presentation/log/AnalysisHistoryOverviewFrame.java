@@ -33,7 +33,6 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		this.setup();
 		//this.setLoaders();
 		this.addComponents();
-		this.setListeners();
 		this.setResizable(true);
 		this.setVisible(true);
 		this.setSize(800, 400);
@@ -50,10 +49,9 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	}
 	
 	private void addTable(){
-		//TODO: Dynamically fetch this data
-		String workspace = "myHusacctWorkspace";
-		String application = "Java Benchmark";
-		String project = "Java Benchmark";
+		String workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+		String application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
+		String project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
 		HashMap<String, HashMap<String, String>> tableData = mainController.getLogController().getApplicationHistoryFromFile(workspace, application, project);
 		
 		analysisTableModel = new DefaultTableModel();
@@ -90,28 +88,5 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		}
 		
 		this.add(new JScrollPane(analysisTable));
-	}
-	
-	private void setListeners(){
-		/*loaderList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				loadSelectedOpenMethodPanel();
-				openButton.setEnabled(true);
-			}
-		});
-		
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		
-		openButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(selectedLoaderPanel.validateData() && loadWorkspace()){
-					dispose();
-				}
-			}
-		});*/
 	}
 }

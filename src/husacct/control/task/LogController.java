@@ -123,10 +123,10 @@ public class LogController {
 
 	public void showApplicationAnalysisHistoryOverview() {
 		if(logFileExists()){
-			//TODO: Dynamically fetch this data
-			String workspace = "myHusacctWorkspace";
-			String application = "Java Benchmark";
-			String project = "Java Benchmark";
+			String workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+			String application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
+			String project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
+			
 			if(getNumberOfAnalyses(workspace, application, project)<1){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);
 			}else{

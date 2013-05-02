@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <husacct version="1">
-    <workspace name="myHusacctWorkspace" test="1">
+    <workspace name="BootstrapWorkspace" test="1">
     	<application name="Java Benchmark" test="2">
     		<project name="Java Benchmark" test="3">
    				<analysis timestamp="1367245325">
@@ -22,9 +22,9 @@
     		</project>
     	</application>
     </workspace>
-    <workspace name="myHusacctWorkspace2" test="4">
-    	<application name="Java Benchmark2" test="5">
-    		<project name="Java Benchmark2" test="6">
+    <workspace name="myHusacctWorkspace" test="4">
+    	<application name="Java Benchmark" test="5">
+    		<project name="Java Benchmark" test="6">
    				<analysis timestamp="1366889220">
    					<path>D:\HUSACCT\</path>
    					<packages>20</packages>
