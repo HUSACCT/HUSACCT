@@ -15,8 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
-//TODO: Make this an JInternalFrame
 @SuppressWarnings("serial")
 public class AnalysisHistoryOverviewFrame extends JFrame{
 
@@ -27,15 +27,13 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public AnalysisHistoryOverviewFrame(MainController mainController){
-		//super(mainController.getMainGui(), true);
 		this.setTitle(localeService.getTranslatedString("ApplicationAnalysisHistory"));
 		this.mainController = mainController;
 		this.setup();
-		//this.setLoaders();
 		this.addComponents();
 		this.setResizable(true);
 		this.setVisible(true);
-		this.setSize(800, 400);
+		this.setSize(1000, 400);
 	}
 	
 	private void setup(){
@@ -60,6 +58,7 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 				return false;
 			}
 		};
+
 		analysisTableModel.addColumn(localeService.getTranslatedString("Application"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Path"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("DateTime"));
@@ -68,7 +67,12 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		analysisTableModel.addColumn(localeService.getTranslatedString("Interfaces"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Dependencies"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Violations"));
-
+		
+		analysisTable.getTableHeader().setReorderingAllowed(false);
+		analysisTable.getTableHeader().setResizingAllowed(false);
+		analysisTable.setAutoCreateRowSorter(true);
+		analysisTable.getRowSorter().toggleSortOrder(2); analysisTable.getRowSorter().toggleSortOrder(2);	//Sort by date/time, newest on top
+		
 		for (Entry<String, HashMap<String, String>> entry : tableData.entrySet()) {
 		    Long analysisTimestampLong = Long.parseLong(entry.getKey());
 			Date analysisTimestampDate = new Date(analysisTimestampLong*1000);

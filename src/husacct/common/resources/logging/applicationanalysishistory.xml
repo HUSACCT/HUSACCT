@@ -14,10 +14,10 @@
    				<analysis timestamp="1345003920">
    					<path>D:\HUSACCT\</path>
    					<packages>20</packages>
-   					<classes>300</classes>
-   					<interfaces>58</interfaces>
-   					<dependencies>380</dependencies>
-   					<violations>15</violations>
+   					<classes>350</classes>
+   					<interfaces>55</interfaces>
+   					<dependencies>390</dependencies>
+   					<violations>20</violations>
    				</analysis>
     		</project>
     	</application>
