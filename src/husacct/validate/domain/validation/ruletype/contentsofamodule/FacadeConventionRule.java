@@ -51,9 +51,8 @@ public class FacadeConventionRule extends RuleType {
 			for (DependencyDTO dependency : dependencies) {
 				if(!dependency.from.equals(classPathFrom.getPhysicalPath())) {
 					for(String facadeDependencyTo: facadeDependenciesTo) {
-						if(facadeDependencyTo.equals(dependency.to)) { 					
-							Violation violation = createViolation(rootRule, new Mapping(dependency.from, new String[0]), 
-									new Mapping(dependency.to, new String[0]), dependency, configuration);
+						if(facadeDependencyTo.equals(dependency.to)) {
+							Violation violation = createViolation(rootRule, classPathFrom, new Mapping(dependency.to, new String[0]), dependency, configuration); 
 							allViolations.add(violation);
 						}
 					}

@@ -74,7 +74,7 @@ public class XMLReportWriter extends ReportWriter {
 			severity.setText(violation.getSeverity().getSeverityName());
 			if (violation.getLogicalModules() != null) {
 				Message messageObject = violation.getMessage();
-				String message = new Messagebuilder().createMessage(messageObject);
+				String message = new Messagebuilder().createMessage(messageObject,violation);
 				ruleType.setText(message);
 			}
 			dependencyKind.setText(violation.getViolationtypeKey());
