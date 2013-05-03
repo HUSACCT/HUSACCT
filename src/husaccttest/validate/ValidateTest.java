@@ -12,11 +12,6 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.IDefineService;
-import husacct.define.domain.AppliedRule;
-import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.SoftwareUnitDefinition.Type;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
 
@@ -29,13 +24,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ValidateTest {
-	IDefineService define;
-	IValidateService validate;
-	DefineTestLibrary defineTestLibrary; 
+	private IDefineService define;
+	private IValidateService validate;
 
 	@Before
 	public void setup() {
-		ServiceProvider.getInstance().getControlService();
 		define = ServiceProvider.getInstance().getDefineService();
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
@@ -44,6 +37,7 @@ public class ValidateTest {
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 		validate = ServiceProvider.getInstance().getValidateService();
+		
 	}
 
 	@Test
@@ -101,30 +95,10 @@ public class ValidateTest {
 	
 	@Test
 	public void checkFacadeRuleConventionSupport() {
-		define = ServiceProvider.getInstance().getDefineService();
-		defineTestLibrary = new DefineTestLibrary();
-		ArrayList<ProjectDTO> project = new ArrayList<ProjectDTO>();
-		project.add(new ProjectDTO("TEST_PROJECT", new ArrayList<String>(), "", "1.0", "DESCRIPTION PROJECT", new ArrayList<AnalysedModuleDTO>()));
+		DefineTestSoftwareArchitectureFacade facadeArchitecture = new DefineTestSoftwareArchitectureFacade();
 		
-		define.createApplication("TEST_APPLICATION", project, "1.0");
-		
-		Module moduleFrom = new Module("infrastructure.socialmedia.twitter.TwitterFacade", "");
-		Module moduleTo = new Module("", "");
-
-		defineTestLibrary.addLayerModule(moduleFrom, moduleTo, new Layer("Layer1"));
-		defineTestLibrary.addSoftwareUnitDefinition(new SoftwareUnitDefinition(moduleFrom.getName(), Type.CLASS));
-		defineTestLibrary.addAppliedRule(new AppliedRule("FacadeConvention", "", moduleFrom, moduleTo));
-		
-		//TODO Check violation output, check current support of this rule (not finished yet)
-//		RuleDTO[] appliedRules = define.getDefinedRules();
-//		assertEquals("FacadeConvention", defineTestLibrary.getAppliedRule());
-//		ViolationDTO[] violations = validate.getViolationsByPhysicalPath("presentation.legal.TwitterIlLegal", "infrastructure.socialmedia.twitter.LegalInformation");
-//		System.out.println("No. of violations: " + violations.length);
-//		for (ViolationDTO  violation : violations) {
-//			System.out.println(violation.violationType);
-//		}
-		
-		validate.checkConformance();
+		boolean facadeViolations = facadeArchitecture.checkFacadeConventionRule();
+		assertTrue(facadeViolations);
 	}
 
 	@Test
@@ -145,14 +119,9 @@ public class ValidateTest {
 
 	@Test
 	public void getViolationTypesNoLanguage() {
-		define = ServiceProvider.getInstance().getDefineService();
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-		for(int counter = 0; counter < 3; counter ++) {
-			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "", "1.0", 
-				"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
-		}
+		projects.add(new ProjectDTO("project", new ArrayList<String>(), "", "", "", new ArrayList<AnalysedModuleDTO>()));
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
-		validate = ServiceProvider.getInstance().getValidateService();
 		
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
@@ -206,10 +175,13 @@ public class ValidateTest {
 		return violationTypeList.toArray(new String[]{});
 	}
 
-	@Test
-	public void isValidatedBeforeValidation() {
-		assertFalse(validate.isValidated());
-	}
+//	@Test
+	/*
+	 * Not reliable testable with the current structure. 
+	 */
+//	public void isValidatedBeforeValidation() {
+//		assertFalse(validate.isValidated());
+//	}
 
 	@Test
 	public void getViolationsByLogicalPath() {
