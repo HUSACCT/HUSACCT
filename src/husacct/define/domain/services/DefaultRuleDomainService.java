@@ -2,20 +2,21 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.return_type_return;
+
 import husacct.common.dto.RuleTypeDTO;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.DefaultLayerRulesGenerator;
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.module.Component;
-import husacct.define.domain.module.Facade;
 
 
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.task.AppliedRuleController;
+
 import java.util.ArrayList;
 
 
-import com.sun.org.apache.bcel.internal.generic.INVOKEVIRTUAL;
+
 
 
 public class DefaultRuleDomainService {
@@ -27,13 +28,33 @@ public class DefaultRuleDomainService {
 		public static DefaultRuleDomainService instance;
 	public void addDefaultRules(Module newModule) //
 	{
+		applyDefaultRule(newModule);
 		_module = newModule;
 		retrieveRuleTypeDTOsByModule();
-				
 		generateRules();
 		//saveDefaultRules();
 	}
 	
+	private void applyDefaultRule(Module newModule) {
+		switch (newModule.getType().toLowerCase()) {
+		case "layer":
+			isLayer();
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+
+	private void isLayer() {
+		 DefaultLayerRulesGenerator gen = new DefaultLayerRulesGenerator(new AppliedRuleController(-1, -1));
+		 SoftwareArchitecture.getInstance().removeLayerAppliedRules();
+		gen.applydefualtrules(SoftwareArchitecture.getInstance().getRootModule());
+		gen.applychanges();
+		
+	}
+
 	public static DefaultRuleDomainService getInstance()
 	{
 		if(instance==null){
@@ -56,6 +77,8 @@ public class DefaultRuleDomainService {
 	private void generateRules()
 
 	{
+		 retrieveRuleTypeDTOsByModule();
+	
 		if (!defaultRuleTypeDTOs.equals(null))
 		{
 			for (int i =0; i < defaultRuleTypeDTOs.length;i++)
@@ -193,4 +216,26 @@ public class DefaultRuleDomainService {
 	{
 		return;
 	}
+	
+	
+	public void createDependacies()
+	{
+		
+		/*
+		        InvocMethod
+				Exception
+				AccessPropertyOrField 
+				ExtendsInterface 
+				Import 
+				ExtendsConcrete 
+				Annotation 
+				Declaration 
+				InvocConstructor 
+				ExtendsLibrary 
+				ExtendsAbstract 
+				Implements 
+		*/
+		
+	}
+	
 }

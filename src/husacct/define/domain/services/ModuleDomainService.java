@@ -21,6 +21,7 @@ public class ModuleDomainService {
 	public long addModuleToParent(long parentModuleId, Module module){
 		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 		parentModule.addSubModule(module);
+		DefaultRuleDomainService.getInstance().addDefaultRules(module);
 		long moduleId = module.getId();
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;

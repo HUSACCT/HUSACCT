@@ -266,6 +266,28 @@ public class AppliedRuleController extends PopUpController {
 		}
 	}
 	
+	public boolean saveDefualtrules(HashMap<String, Object> ruleDetails){
+		
+		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
+		Object from = ruleDetails.get("moduleFromId");
+		Object to = ruleDetails.get("moduleToId");
+		boolean isEnabled = (Boolean) ruleDetails.get("enabled");
+		String description = (String) ruleDetails.get("description");
+		String regex = (String) ruleDetails.get("regex");
+		String[] dependencies = (String[]) ruleDetails.get("dependencies");
+		
+		Module moduleFrom = (Module)(from);
+		Module moduleTo = (Module)(to);
+		
+		appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+		
+		return true;
+		
+		
+		
+		
+	}
+	
 	private Module assignToCorrectModule(Object o){
 		Module module;
 		if (o instanceof SoftwareUnitDefinition){

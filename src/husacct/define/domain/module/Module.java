@@ -130,8 +130,7 @@ public class Module implements Comparable<Module> {
 			subModule.parent=this;
 			subModules.add(subModule);
 
-		//	DefaultRuleDomainService.getInstance().setDefaultRule(subModule);
-		//service.addDefaultRules(subModule);
+		
 		}else{
 
 			System.out.println("This sub module has already been added!");

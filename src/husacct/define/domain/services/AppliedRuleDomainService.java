@@ -2,8 +2,10 @@ package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
+import husacct.define.domain.DefaultLayerRulesGenerator;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
+import husacct.define.task.AppliedRuleController;
 
 import java.util.ArrayList;
 
@@ -35,7 +37,7 @@ public class AppliedRuleDomainService {
 		}
 		
 		return addAppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom , moduleTo, enabled);
-	}
+	}          
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
@@ -44,7 +46,6 @@ public class AppliedRuleDomainService {
 		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		System.out.println(ruleTypeKey+"<><>< -"+regex+"-  ????"+dependencies.length+" Modulee from:"+moduleFrom.getName()+ " moduleto: "+moduleTo.getName());
 		
 		return rule.getId();
 	}
@@ -73,6 +74,13 @@ public class AppliedRuleDomainService {
 	
 	public void removeAppliedRules() {
 		SoftwareArchitecture.getInstance().removeAppliedRules();
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+	}
+	
+	public void removeLayerAppliedRules() {
+		SoftwareArchitecture.getInstance().removeLayerAppliedRules();
+		DefaultLayerRulesGenerator layergen = new DefaultLayerRulesGenerator(new AppliedRuleController(-1,-1));
+		layergen.applydefualtrules(SoftwareArchitecture.getInstance().getRootModule());
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
