@@ -47,6 +47,7 @@ public class XMLReportWriter extends ReportWriter {
 
 		Element violationsSeverities = new Element("violations");
 		violationsSeverities.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
+		
 		for (ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
 			Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
 			violationElement.setText("" + violationPerSeverity.getAmount());
