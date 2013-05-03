@@ -44,54 +44,54 @@ public class Violation {
 	// =======================================
 	// SETTERS, chain-able.
 	// =======================================
-	public Violation lineNumber(int lineNumber){
+	public Violation setLineNumber(int lineNumber){
 		this.linenumber = lineNumber;
 		return this;
 	}
 	
-	public Violation severity(Severity severity){
+	public Violation setSeverity(Severity severity){
 		this.severity = severity;
 		return this;
 	}
 	
-	public Violation ruletypeKey(String ruletypeKey){
+	public Violation setRuletypeKey(String ruletypeKey){
 		this.ruletypeKey = ruletypeKey;
 		return this;
 	}
 	
-	public Violation violationtypeKey(String violationtypeKey){
+	public Violation setViolationtypeKey(String violationtypeKey){
 		this.violationtypeKey = violationtypeKey;
 		return this;
 	}
 	
-	public Violation classPathFrom(String classPathFrom){
+	public Violation setClassPathFrom(String classPathFrom){
 		this.classPathFrom = classPathFrom;
 		return this;
 	}
 	
-	public Violation classPathTo(String classPathTo){
+	public Violation setClassPathTo(String classPathTo){
 		this.classPathTo = classPathTo;
 		return this;
 	}
 	
 	// inDirect is by default false
-	public Violation inDirect(boolean inDirect){
+	public Violation setInDirect(boolean inDirect){
 		this.inDirect = inDirect;
 		return this;
 	}
 	
 	// Occured is by default "now".
-	public Violation occured(Calendar occured){
+	public Violation setOccured(Calendar occured){
 		this.occured = occured;
 		return this;
 	}
 	
-	public Violation logicalModules(LogicalModules logicalModules){
+	public Violation setLogicalModules(LogicalModules logicalModules){
 		this.logicalModules = logicalModules;
 		return this;
 	}
 	
-	public Violation message(Message message){
+	public Violation setMessage(Message message){
 		this.message = message;
 		return this;
 	}
