@@ -19,9 +19,9 @@ public class ImportViolations extends XmlImportUtils {
 		for (Element violationElement : violationsElement.getChildren()) {
 			Severity violationSeverity = null;
 
-			final String id = violationElement.getChildText("severityId");
+			final String severityId = violationElement.getChildText("severityId");
 			for (Severity severity : severities) {
-				if (id.equals(severity.getId().toString())) {
+				if (severityId.equals(severity.getId().toString())) {
 					violationSeverity = severity;
 					break;
 				}
