@@ -14,7 +14,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.jdom2.Element;
 
 public class ImportViolations extends XmlImportUtils {
-
 	public List<Violation> importViolations(Element violationsElement, List<Severity> severities) throws DatatypeConfigurationException {
 		List<Violation> violations = new ArrayList<Violation>();
 		for (Element violationElement : violationsElement.getChildren()) {
@@ -40,7 +39,17 @@ public class ImportViolations extends XmlImportUtils {
 			final String stringCalendar = violationElement.getChildText("occured");
 			final Calendar occured = getCalendar(stringCalendar);
 
-			Violation violation = new Violation(occured, lineNumber, violationSeverity, ruleTypeKey, violationTypeKey, classPathFrom, classPathTo, isIndirect, message, logicalModules);
+			Violation violation = new Violation();
+			violation.setOccured(occured)
+				.setLineNumber(lineNumber)
+				.setSeverity(violationSeverity)
+				.setRuletypeKey(ruleTypeKey)
+				.setViolationtypeKey(violationTypeKey)
+				.setClassPathFrom(classPathFrom)
+				.setClassPathTo(classPathTo)
+				.setInDirect(isIndirect)
+				.setMessage(message)
+				.setLogicalModules(logicalModules);
 
 			violations.add(violation);
 		}
