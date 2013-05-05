@@ -35,5 +35,18 @@ public class SoftwareUnitRegExDefinition {
 	public void setSoftwareUnitDefinitions(ArrayList<SoftwareUnitDefinition> softwareUnitDefinitions) {
 		this.softwareUnitDefinitions = softwareUnitDefinitions;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		boolean isEqual = false;
+		if (o instanceof SoftwareUnitRegExDefinition ){
+			SoftwareUnitRegExDefinition  unit = (SoftwareUnitRegExDefinition ) o;
+			if (unit.name.equals(this.name)){
+				
+				isEqual = true;
+			}
+		}
+		return isEqual;
+	}
 
 }

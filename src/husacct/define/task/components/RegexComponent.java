@@ -7,6 +7,7 @@ public class RegexComponent  extends AnalyzedModuleComponent{
 	private String uniqueName = "";
 	private String type = "";
 	private String visibility;
+	private AnalyzedModuleComponent wrapper;
 
 	private String regix ="";
 	private ArrayList<AbstractCombinedComponent> softwareUnit = new ArrayList<AbstractCombinedComponent>();
@@ -77,6 +78,16 @@ public class RegexComponent  extends AnalyzedModuleComponent{
 
 	public void setVisibility(String visibility) {
 		this.visibility = visibility;
+	}
+	public AnalyzedModuleComponent getWrapper() {
+		return wrapper;
+	}
+	public void setWrapper(AnalyzedModuleComponent wrapper) {
+		this.setUniqueName(wrapper.getUniqueName());
+		this.setName(wrapper.getName());
+		this.setType(wrapper.type);
+		this.setChildren(wrapper.getChildren());
+		this.wrapper = wrapper;
 	}
 
 }
