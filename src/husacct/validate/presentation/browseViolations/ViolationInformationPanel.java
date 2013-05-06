@@ -62,7 +62,7 @@ public class ViolationInformationPanel extends JPanel {
 			}
 			detailLogicalModuleFromLabelValue.setText(violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath());
 			detailLogicalModuleToValue.setText(violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath());
-			String message = task.getMessage(violation.getMessage());
+			String message = task.getMessage(violation.getMessage(), violation);
 			detailMessageLabelValue.setText(message);
 		} else {
 			detailLineNumberLabelValue.setText("");

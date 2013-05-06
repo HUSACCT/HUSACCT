@@ -1,5 +1,6 @@
 package husacct.control;
 
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
@@ -133,6 +134,11 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void setValidate(boolean validate) {
 		this.mainController.getStateController().setValidating(validate);
 		this.mainController.getStateController().checkState();
+	}
+
+	@Override
+	public ApplicationDTO getApplicationDTO() {
+		return mainController.getWorkspaceController().getCurrentWorkspace().getApplicationData();
 	}
 
 }

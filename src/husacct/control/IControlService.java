@@ -2,6 +2,7 @@ package husacct.control;
 
 import java.util.List;
 
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.services.IObservableService;
 import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
@@ -24,4 +25,6 @@ public interface IControlService extends IObservableService{
 	public void finishPreAnalysing();
 	
 	public void setValidate(boolean validate);
+	
+	public ApplicationDTO getApplicationDTO();
 }

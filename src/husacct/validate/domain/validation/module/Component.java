@@ -14,7 +14,7 @@ public class Component extends AbstractModule {
 
     @Override
     public List<RuleType> initDefaultModuleRuleTypes() {
-	List<RuleType> defaultModuleRuleTypes = new ArrayList();
+	List<RuleType> defaultModuleRuleTypes = new ArrayList<RuleType>();
 
 	for (RuleType ruleType : ruleTypes) {
 	    if (ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
