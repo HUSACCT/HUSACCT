@@ -51,7 +51,7 @@ abstract public class AbstractViewContainer {
 		internalFrame.setTitle(getTitle());
 		internalFrame.setMaximizable(true);
 		internalFrame.setResizable(true);
-		internalFrame.setIconifiable(false);
+		internalFrame.setIconifiable(true);
 		internalFrame.setFrameIcon(frameIcon);
 		internalFrame.setClosable(true);
 		internalFrame.pack();
