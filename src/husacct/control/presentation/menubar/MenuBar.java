@@ -16,6 +16,7 @@ public class MenuBar extends JMenuBar{
 	private AnalyseMenu analyseMenu;
 	private ValidateMenu validateMenu;
 	private LanguageMenu languageMenu;
+	private ConfigurationMenu configurationMenu;
 	private HelpMenu helpMenu;
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -34,6 +35,7 @@ public class MenuBar extends JMenuBar{
 		analyseMenu = new AnalyseMenu(mainController);
 		validateMenu = new ValidateMenu(mainController);
 		languageMenu = new LanguageMenu(mainController);
+		//configurationMenu = new ConfigurationMenu(mainController);
 		helpMenu = new HelpMenu(mainController);		
 
 		fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
@@ -48,6 +50,7 @@ public class MenuBar extends JMenuBar{
 		add(analyseMenu);
 		add(validateMenu);
 		add(languageMenu);
+		//add(configurationMenu);
 		add(helpMenu);
 	}
 

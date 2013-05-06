@@ -6,7 +6,10 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
+
+import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
+import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
@@ -14,6 +17,8 @@ import husacct.define.task.components.RegexComponent;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing.Validation;
 
 public class SoftwareUnitDefinitionDomainService {
 	
@@ -87,34 +92,33 @@ public class SoftwareUnitDefinitionDomainService {
 		try {
 			
 			
-			Type type = Type.valueOf(softwareunit.getType().toUpperCase());
+			Type type = Type.valueOf(softwareunit.getType());
 			SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareunit.getUniqueName(), type);
-			module.addSUDefinition(unit);
+			
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).info("cheking if regex wrapper ");
 			if(softwareunit instanceof RegexComponent)
 			{
-				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,moduleId);
+				module.addSUDefinition(unit);
+			
+				RegisterRegixSoftwareUnits((RegexComponent)softwareunit,module,unit);
 			}else{
+				module.addSUDefinition(unit);
 				JtreeController.instance().getTree().removeTreeItem(moduleId, softwareunit);
 			}
 			
 		} catch (Exception e){
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit type: " + softwareunit.getType());
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error(e.getMessage());
+			System.out.println(e.getStackTrace());
 		}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 	
 	
-	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,long id) {
-		for(AbstractCombinedComponent units : softwareunit.getChildren())
-		{
-		AnalyzedModuleComponent	unitsToBeRegistered= (AnalyzedModuleComponent) units;
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+softwareunit.getChildren().size());	
-		JtreeController.instance().getTree().removeTreeItem(id, unitsToBeRegistered);
-			
-			
-		}
+	private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,Module parent,SoftwareUnitDefinition rootunit) {
+		//Regexmodule regex = new Regexmodule()
+	
+		JtreeController.instance().getTree().removeRegexTreeItem(parent.getId(), softwareunit);
 		
 	}
 
@@ -125,11 +129,11 @@ public class SoftwareUnitDefinitionDomainService {
 		
 		try {
 			for(AnalyzedModuleComponent softwareUnit : softwareUnits) {
-				Type type = Type.valueOf(softwareUnit.getType().toUpperCase());
+				Type type = Type.valueOf(softwareUnit.getType());
 				SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit.getUniqueName(), type);
 				regExDefinition.addSoftwareUnitDefinition(unit);
 			}
-	AnalyzedModuleComponent regixwrapper=JtreeController.instance().registerRegix(regExName);
+	RegexComponent regixwrapper=JtreeController.instance().registerRegix(regExName);
 		addSoftwareUnit(moduleId, regixwrapper);
 		} catch (Exception e){
 			Logger.getLogger(SoftwareUnitDefinitionDomainService.class).error("Undefined softwareunit");
@@ -152,12 +156,19 @@ public class SoftwareUnitDefinitionDomainService {
 	
 	public void removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
-		SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
-		module.removeSURegExDefinition(unit);
-		//quikfix
-		try{
-			JtreeController.instance().registerTreeRestore(moduleId, softwareUnit);
-		}catch(NullPointerException exe){}
+		/*
+		 * treed problemen
+		 * */
+		//SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
+	
+		System.out.println(softwareUnit+">>>>>>>>>");
+		
+		Type type = Type.valueOf("regex".toUpperCase());
+		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);
+		module.removeSUDefintion(unit);
+		
+		
+		JtreeController.instance().restoreRegexWrapper(softwareUnit);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 }

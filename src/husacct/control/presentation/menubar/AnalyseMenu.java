@@ -23,6 +23,7 @@ public class AnalyseMenu extends JMenu{
 	private JMenuItem analyseNowItem;
 	private JMenuItem analysedArchitectureDiagramItem;
 	private JMenuItem analysedApplicationOverviewItem;
+	private JMenuItem analysisHistory;
 	private JMenuItem exportDependenciesItem;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -51,6 +52,8 @@ public class AnalyseMenu extends JMenu{
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
+		analysisHistory = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
+		
 		exportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
 		exportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
 		exportDependenciesItem.setMnemonic(getMnemonicKeycode("ExportDependenciesMnemonic"));
@@ -59,8 +62,8 @@ public class AnalyseMenu extends JMenu{
 		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
+		this.add(analysisHistory);
 		this.add(exportDependenciesItem);
-		
 	}
 	
 	private void setListeners() {
@@ -85,6 +88,12 @@ public class AnalyseMenu extends JMenu{
 		analysedArchitectureDiagramItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getViewController().showAnalysedArchitectureDiagram();
+			}
+		});
+		
+		analysisHistory.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mainController.getLogController().showApplicationAnalysisHistoryOverview();
 			}
 		});
 		

@@ -4,6 +4,7 @@ package husacct.define.presentation.jpanel.ruledetails.components;
 import husacct.ServiceProvider;
 import husacct.define.presentation.moduletree.CombinedModuleTree;
 import husacct.define.task.AppliedRuleController;
+import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 
 import java.awt.GridBagConstraints;
@@ -74,9 +75,13 @@ public class ModuleFromPanelComponent extends AbstractPanelComponent implements 
 	
 	private JScrollPane createFromModuleScrollPane() {
 		AbstractCombinedComponent rootComponent = this.appliedRuleController.getModuleTreeComponents();
+		
 		this.moduleFromTree = new CombinedModuleTree(rootComponent, appliedRuleController.getCurrentModuleId());
 		this.moduleFromTree.addTreeSelectionListener(this);
+		
 		JScrollPane moduleTreeScrollPane = new JScrollPane(this.moduleFromTree);
+		
+		
 		return moduleTreeScrollPane;
 	}
 	

@@ -45,11 +45,11 @@ public class FilterPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		applyFilter = new JCheckBox("Apply Filter");
-		buttonEditFilter = new JButton("Edit Filter");
-		radioButtonAll = new JRadioButton("All");
-		radioButtonDirect = new JRadioButton("Direct");
-		radioButtonIndirect = new JRadioButton("Indirect");
+		applyFilter = new JCheckBox(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ApplyFilter"));
+		buttonEditFilter = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EditFilter"));
+		radioButtonAll = new JRadioButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("All"));
+		radioButtonDirect = new JRadioButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Direct"));
+		radioButtonIndirect = new JRadioButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Indirect"));
 
 		ButtonGroup filterIndirectButtonGroup = new ButtonGroup();
 		filterIndirectButtonGroup.add(radioButtonAll);

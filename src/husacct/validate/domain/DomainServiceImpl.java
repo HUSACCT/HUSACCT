@@ -11,6 +11,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
+import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.module.AbstractModule;
 import husacct.validate.domain.validation.module.ModuleFactory;
@@ -81,8 +82,8 @@ public class DomainServiceImpl {
 		return ruletypefactory;
 	}
 
-	public String getMessage(Message message) {
-		return messagebuilder.createMessage(message);
+	public String getMessage(Message message, Violation violation) {
+		return messagebuilder.createMessage(message, violation);
 	}
 
 	public RuleTypeDTO[] getDefaultRuleTypeOfModule(String moduleType) {

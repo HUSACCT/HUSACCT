@@ -69,15 +69,6 @@ public class DrawingView extends DefaultDrawingView {
 		this.contextMenu.setCanZoomout(false);
 	}
 
-	private void onMouseScrolled(MouseWheelEvent e) {
-		if(isCtrlPressed){
-			requestFocus();
-			double wheelRotation = e.getWheelRotation() * -1;
-			double wheelRotationFactor = wheelRotation / ScrollSpeed;
-			double scaleFactor = this.getScaleFactor() + wheelRotationFactor;
-			drawingZoomChanged(scaleFactor);
-		}
-	}
 	public void canZoomOut() {
 		this.contextMenu.setCanZoomout(true);
 	}
@@ -231,6 +222,16 @@ public class DrawingView extends DefaultDrawingView {
 			this.figureSelected(selection);
 		}
 		this.contextMenu.setHasSelection(this.hasSelection());
+	}
+	
+	private void onMouseScrolled(MouseWheelEvent e) {
+		if(isCtrlPressed){
+			requestFocus();
+			double wheelRotation = e.getWheelRotation() * -1;
+			double wheelRotationFactor = wheelRotation / ScrollSpeed;
+			double scaleFactor = this.getScaleFactor() + wheelRotationFactor;
+			drawingZoomChanged(scaleFactor);
+		}
 	}
 
 	public void removeListener(UserInputListener listener) {
