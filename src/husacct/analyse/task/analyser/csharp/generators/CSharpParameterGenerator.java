@@ -10,7 +10,7 @@ public class CSharpParameterGenerator extends CSharpGenerator {
 
 	private String methodName;
 	private String packageAndClassName;
-	Stack<Argument> arguments = new Stack();
+	Stack<Argument> arguments = new Stack<>();
 	int lineNumber;
 
 	public Stack<String> generateParameterObjects(CommonTree argumentTree, String name, String classUniqueName) {
