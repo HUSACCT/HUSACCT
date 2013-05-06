@@ -10,14 +10,16 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -39,11 +41,16 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	private int menuItemMaxHeight = 45;
 	private HashMap<String, String> menuBarLocale;
+	
+	private final ContextMenuButton zoomOptionsMenu;
 
 	public GraphicsMenuBar() {
+		this.zoomOptionsMenu = new ContextMenuButton();
+		
 		icons = new HashMap<String, String>();
 		icons.put("options", Resource.ICON_OPTIONS);
 		icons.put("zoomIn", Resource.ICON_ZOOM);
+		icons.put("zoomInContext", Resource.ICON_ZOOMCONTEXT);
 		icons.put("zoomOut", Resource.ICON_BACK);
 		icons.put("refresh", Resource.ICON_REFRESH);
 		icons.put("save", Resource.ICON_SAVE);
@@ -67,10 +74,12 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		actions.add(showViolationsButton);
 		actions.add(zoomSlider);
 		actions.add(outOfDateButton);
+		
 	}
 
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
+		this.zoomOptionsMenu.addListener(listener);
 	}
 
 	public void removeListener(UserInputListener listener) {
@@ -93,8 +102,34 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moduleZoom();
+				if(zoomOptionsMenu.canZoomModule()){
+					moduleZoom();
+				}else if(zoomOptionsMenu.canZoomModuleContext()){
+					moduleZoom();
+				}
+				
 			}
+		});
+		zoomInButton.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
+					zoomOptionsMenu.show(zoomInButton, e.getX(), e.getY());
+					
+                }
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
 		});
 		add(zoomInButton);
 		setButtonIcon(zoomInButton, "zoomIn");
