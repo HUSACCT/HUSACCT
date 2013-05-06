@@ -78,7 +78,7 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 		//softwareUnitScrollPane.setSize(50, 50);
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 300));
 		resultTree = JtreeController.instance().getRegixTree(editingRegEx);
-		regexwrapper = (RegexComponent)resultTree.getModel().getRoot();
+		
 		softwareUnitScrollPane.setViewportView(resultTree);
 		int[] selectionRows = new int[resultTree.getRowCount()-1];
 		for(int i=1; i<resultTree.getRowCount(); i++){

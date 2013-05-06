@@ -11,6 +11,9 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.StringTokenizer;
+
+import java.util.Collections;
 import java.util.Iterator;
 
 import java.util.regex.Matcher;
@@ -53,10 +56,14 @@ public class SoftwareUnitController extends PopUpController {
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();	
+		
 		for(AnalysedModuleDTO module : modules) {
 			this.addChildComponents(rootComponent, module);
 		}
-
+			
+		
+		Collections.sort(rootComponent.getChildren());
+		rootComponent.updateChilderenPosition();
 		return rootComponent;
 	}
 	
@@ -97,52 +104,121 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public void saveRegExToResultTree(String regEx, String packageClass) {
 		String translatedRegEx = "";
-    
-		if(regEx.startsWith("*") && regEx.endsWith("*")) {
+		boolean packagesOnly = false;
+		boolean innerClass = false;
+		String start = "^";
+		String end = "$";
+
+		if(regEx.startsWith("*.") && regEx.endsWith(".*")) {
+			packagesOnly = true;
+			regEx = regEx.replace("*.", "");
+			regEx = regEx.replace(".*", "");
+			if(regEx.contains(".")) {
+				innerClass = true;
+				StringTokenizer stringTokenizer = new StringTokenizer(regEx, ".");
+				while (stringTokenizer.hasMoreElements()) {
+					translatedRegEx = translatedRegEx + start + stringTokenizer.nextToken() + end + ".";
+				}
+				translatedRegEx = translatedRegEx.replaceAll("\\.(?!.*\\.)","");
+			}
+			else
+				translatedRegEx = start + regEx + end;
+		} else if(regEx.startsWith("*.")) {
+			packagesOnly = true;
+			regEx = regEx.replace("*.", "");
+			if(regEx.contains(".")) {
+				innerClass = true;
+				StringTokenizer stringTokenizer = new StringTokenizer(regEx, ".");
+				while (stringTokenizer.hasMoreElements()) {
+					translatedRegEx = translatedRegEx + start + stringTokenizer.nextToken() + end + ".";
+				}
+				translatedRegEx = translatedRegEx.replaceAll("\\.(?!.*\\.)","");
+			}
+			else
+				translatedRegEx = start + regEx + end;
+		} else if(regEx.endsWith(".*")) {
+			packagesOnly = true;
+			regEx = regEx.replace(".*", "");
+			if(regEx.contains(".")) {
+				innerClass = true;
+				StringTokenizer stringTokenizer = new StringTokenizer(regEx, ".");
+				while (stringTokenizer.hasMoreElements()) {
+					translatedRegEx = translatedRegEx + start + stringTokenizer.nextToken() + end + ".";
+				}
+				translatedRegEx = translatedRegEx.replaceAll("\\.(?!.*\\.)","");
+			}
+			else
+				translatedRegEx = start + regEx + end;
+		} else if(regEx.startsWith("*") && regEx.endsWith("*")) {
 			regEx = regEx.replace("*", "");
 			translatedRegEx = regEx;
 		} else if(regEx.startsWith("*")) {
 			regEx = regEx.replace("*", "");
-			translatedRegEx = regEx + "$";
+			translatedRegEx = regEx + end;
 		} else if(regEx.endsWith("*")) {
 			regEx = regEx.replace("*", "");
-			translatedRegEx = "^" + regEx;
+			translatedRegEx = start + regEx;
 		} else {
-			translatedRegEx = "^" + regEx + "$";
+			translatedRegEx = start + regEx + end;
 		}
 		
-		Pattern regExPattern = Pattern.compile(translatedRegEx);
-			
+		Pattern regExPattern = null;
+
 		for(Iterator<AbstractCombinedComponent> it=JtreeController.instance().GetRootOfModel().getChildren().iterator();it.hasNext();) {
 			AnalyzedModuleComponent module =(AnalyzedModuleComponent)it.next();
-			Matcher matcher = regExPattern.matcher(module.getName());
-			
-			if(packageClass.equals("P")) {
-				
+
+			if(!packagesOnly && !innerClass) {
+				regExPattern = Pattern.compile(translatedRegEx);
+				Matcher matcher = regExPattern.matcher(module.getName());
+				if(packageClass.equals("P")) {
+					if(module.getType().equals("PACKAGE")) {
+						while(matcher.find()) {
+							logger.info("Adding software unit to module with id " + this.getModuleId());
+							try {
+								JtreeController.instance().additemgetResultTree(module);
+							} catch (Exception e) {
+								this.logger.error(e.getMessage());
+								UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+							}
+						}
+					}
+				}
+
+				else if(packageClass.equals("C")) {
+					if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
+						while(matcher.find()) {
+							logger.info("Adding software unit to module with id " + this.getModuleId());
+							try {
+								JtreeController.instance().additemgetResultTree(module);
+							} catch (Exception e) {
+								this.logger.error(e.getMessage());
+								UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+							}
+						}
+					}
+				}
+
+				else if(packageClass.equals("PC")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							JtreeController.instance().additemgetResultTree(module);
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+				checkChildRegEx(module, regExPattern, packageClass, packagesOnly, false);
+			}
+
+			else if(packagesOnly && !innerClass) {
+				regExPattern = Pattern.compile(translatedRegEx);
+				Matcher matcher = regExPattern.matcher(module.getName());
 				if(module.getType().equals("PACKAGE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
-							
-							
-							JtreeController.instance().additemgetResultTree(module);
-							
-						} catch (Exception e) {
-							this.logger.error(e.getMessage());
-							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
-						}
-					}
-				}
-			}
-			
-			else if(packageClass.equals("C")) {
-
-				if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
-
-					while(matcher.find()) {
-						logger.info("Adding software unit to module with id " + this.getModuleId());
-						try {
-						
 							JtreeController.instance().additemgetResultTree(module);
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
@@ -150,55 +226,108 @@ public class SoftwareUnitController extends PopUpController {
 						}
 					}
 				}
+				checkChildRegEx(module, regExPattern, packageClass, packagesOnly, false);
 			}
 			
-			else if(packageClass.equals("PC")) {
-				while(matcher.find()) {
-					logger.info("Adding software unit to module with id " + this.getModuleId());
-					try {
-						
-						JtreeController.instance().additemgetResultTree(module);
-						
-						
-					} catch (Exception e) {
-						this.logger.error(e.getMessage());
-						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
-					}
+			else if(innerClass) {
+				StringTokenizer stringTokenizer = new StringTokenizer(translatedRegEx, ".");
+				String firstPackage = stringTokenizer.nextToken();
+				regExPattern = Pattern.compile(firstPackage);
+				Matcher matcher = regExPattern.matcher(module.getName());
+				if(matcher.find()) {
+					translatedRegEx = translatedRegEx.replace(firstPackage + ".", "");
+					regExPattern = Pattern.compile(translatedRegEx);
+					checkChildRegEx(module, regExPattern, packageClass, packagesOnly, true);
 				}
 			}
-			
-			checkChildRegEx(module, regExPattern, packageClass);
 		}
 	}
-	
-	public void checkChildRegEx(AnalyzedModuleComponent childModule, Pattern pattern, String packageClass) {
+
+	public void checkChildRegEx(AnalyzedModuleComponent childModule, Pattern pattern, String packageClass, boolean packagesOnly, boolean innerClass) {
+		String translatedRegEx = pattern.pattern();
+		String nextPackage = "";
+		if(innerClass) {
+			StringTokenizer stringTokenizer = new StringTokenizer(translatedRegEx, ".");
+			nextPackage = stringTokenizer.nextToken();
+			pattern = Pattern.compile(nextPackage);
+		}
+		
 		for(AbstractCombinedComponent mod : childModule.getChildren()) {
 			AnalyzedModuleComponent module =(AnalyzedModuleComponent)mod;
+
+			if(!packagesOnly && !innerClass) {
+				Matcher matcher = pattern.matcher(module.getName());
+				if(packageClass.equals("P")) {
+					if(module.getType().equals("PACKAGE")) {
+						while(matcher.find()) {
+							logger.info("Adding software unit to module with id " + this.getModuleId());
+							try {
+								JtreeController.instance().additemgetResultTree(module);
+							} catch (Exception e) {
+								this.logger.error(e.getMessage());
+								UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+							}
+						}
+					}
+				}
+	
+				else if(packageClass.equals("C")) {
+					if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
+						while(matcher.find()) {
+							logger.info("Adding software unit to module with id " + this.getModuleId());
+							try {
+								JtreeController.instance().additemgetResultTree(module);
+							} catch (Exception e) {
+								this.logger.error(e.getMessage());
+								UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+							}
+						}
+					}
+				}
+	
+				else if(packageClass.equals("PC")) {
+					while(matcher.find()) {
+						logger.info("Adding software unit to module with id " + this.getModuleId());
+						try {
+							JtreeController.instance().additemgetResultTree(module);
+						} catch (Exception e) {
+							this.logger.error(e.getMessage());
+							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+						}
+					}
+				}
+				checkChildRegEx(module, pattern, packageClass, packagesOnly, false);
+			}
 			
-			Matcher matcher = pattern.matcher(module.getName());
-			
-			if(packageClass.equals("P")) {
+			else if(packagesOnly && !innerClass) {
+				Matcher matcher = pattern.matcher(module.getName());
 				if(module.getType().equals("PACKAGE")) {
 					while(matcher.find()) {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(module);
-							
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 						}
 					}
 				}
+				checkChildRegEx(module, pattern, packageClass, packagesOnly, false);
 			}
 			
-			else if(packageClass.equals("C")) {
-				if(module.getType().equals("CLASS") || module.getType().equals("INTERFACE")) {
-					while(matcher.find()) {
+			else if(innerClass) {
+				Matcher matcher = pattern.matcher(module.getName());
+				if(matcher.find()) {
+					translatedRegEx = translatedRegEx.replace(nextPackage, "");
+					if(translatedRegEx.startsWith(".")) {
+						translatedRegEx = translatedRegEx.substring(1, translatedRegEx.length());
+						pattern = Pattern.compile(translatedRegEx);
+						checkChildRegEx(module, pattern, packageClass, packagesOnly, true);
+					}
+					else {
 						logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(module);
-						
 						} catch (Exception e) {
 							this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
@@ -206,21 +335,6 @@ public class SoftwareUnitController extends PopUpController {
 					}
 				}
 			}
-			
-			else if(packageClass.equals("PC")) {
-				while(matcher.find()) {
-					logger.info("Adding software unit to module with id " + this.getModuleId());
-					try {
-						JtreeController.instance().additemgetResultTree(module);
-					
-					} catch (Exception e) {
-						this.logger.error(e.getMessage());
-						UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
-					}
-				}
-			}
-			
-			checkChildRegEx(module, pattern, packageClass);
 		}
 	}
 	
@@ -230,6 +344,7 @@ public class SoftwareUnitController extends PopUpController {
 		try {
 			
 			this.softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(this.getModuleId(), selectedComponents, regExName);
+			
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
@@ -269,6 +384,8 @@ public class SoftwareUnitController extends PopUpController {
 	}
 
 	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,String editingRegEx) {
+		
+		JtreeController.instance().editRegex(this.getModuleId(),components, editingRegEx);
 		
 		
 		

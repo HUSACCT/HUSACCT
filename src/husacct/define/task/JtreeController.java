@@ -1,6 +1,7 @@
 package husacct.define.task;
 
 
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.integral_type_return;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.presentation.moduletree.ModuleTree;
@@ -10,6 +11,8 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 
 public class JtreeController {
 private  AnalyzedModuleTree tree;
@@ -27,7 +31,7 @@ private static JtreeController instance;
 private AnalyzedModuleTree resultTree;
 private ModuleTree moduleTree;
 private AnalyzedModuleTree editTree;
-
+private JtreeStateEngine order = new JtreeStateEngine();
 	private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
 	private  Map<String,AbstractCombinedComponent> regixRegistry =new LinkedHashMap<String,AbstractCombinedComponent>()  ;
 	private  boolean isLoaded=false;
@@ -106,6 +110,7 @@ private AnalyzedModuleTree editTree;
 	public  void registerTreeRestore(long moduleId,String removedSoftwareunitUniqName)
 	{
 		AnalyzedModuleComponent  unitTobeRemoved   =  (AnalyzedModuleComponent) moduleRegistry.get(moduleId).get(removedSoftwareunitUniqName);
+		JtreeStateEngine.instance().removeSoftwareUnit(moduleId,unitTobeRemoved);
 		tree.restoreTreeItem(unitTobeRemoved);
 	}
 
@@ -150,7 +155,7 @@ private AnalyzedModuleTree editTree;
 
 	public AnalyzedModuleTree getResultTree() 
 	{
-		RegexComponent root = new RegexComponent("root","Regix results","regix","public");
+		RegexComponent root = new RegexComponent("root","Regix results","SEARCH","public");
 
 		resultTree= new AnalyzedModuleTree(root);
 
@@ -170,7 +175,7 @@ resultTree.setModel(new CombinedModuleTreeModel(temp));
 
 
 }
-
+//in future impl
 public static void registerResultRemovalspiiii() {
 
 	TreeSelectionModel modulepath = instance.moduleTree.getSelectionModel();
@@ -195,18 +200,89 @@ public void setModuleTree(ModuleTree moduleTree) {
 	this.moduleTree = moduleTree;
 }
 
- public AnalyzedModuleComponent registerRegix(String regExName) {
-	AnalyzedModuleComponent regixwrapper = (AnalyzedModuleComponent)instance.resultTree.getModel().getRoot();
-	 regixwrapper.setUniqueName(regExName);
+ public RegexComponent registerRegix(String regExName) {
+	
+	 RegexComponent regixwrapper = new RegexComponent(); 
+	 
+	TreePath[] paths = instance.resultTree.getSelectionPaths();
+	for (TreePath treePath : paths) {
+		
+		regixwrapper.addChild((AnalyzedModuleComponent)treePath.getLastPathComponent());
+	
+	}
+	regixwrapper.setName(regExName);
+	regixwrapper.setType("regex");
+	regixwrapper.setUniqueName(regExName);
+	regixwrapper.setVisibility("public");
 	 instance.regixRegistry.put(regExName,regixwrapper);
 	return regixwrapper;
 }
 
 public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	
-	RegexComponent result= (RegexComponent) instance.regixRegistry.get(editingRegEx);
-	editTree = new AnalyzedModuleTree(result);
+	RegexComponent  result = new RegexComponent();
+	result.setWrapper((AnalyzedModuleComponent) instance.regixRegistry.get(editingRegEx));
+	
+	System.out.println(result.getUniqueName());
+	
+	editTree = new AnalyzedModuleTree(result.getWrapper());
 	
 	return editTree;
 }
+
+public  void restoreRegexWrapper(String name) {
+	   
+	AbstractCombinedComponent regixwrapper= regixRegistry.get(name);
+	for (AbstractCombinedComponent result : regixwrapper.getChildren() ) {
+		instance.tree.restoreTreeItem((AnalyzedModuleComponent)result);
+		
+	}
+	
+	
+
+	
+}
+
+public AbstractCombinedComponent getMappedunits() {
+	// TODO Auto-generated method stub
+	return (AbstractCombinedComponent) instance.getTree().getModel().getRoot();
+}
+
+public void editRegex(long moduleId,ArrayList<AnalyzedModuleComponent> components,
+		String editingRegEx) {
+	AbstractCombinedComponent temp =   regixRegistry.get(editingRegEx);
+	   
+   for(AbstractCombinedComponent result : components)
+   {
+	   int index =temp.getChildren().indexOf(result);
+	   
+	   if(index !=-1)
+	   {
+		   tree.restoreTreeItem((AnalyzedModuleComponent) result);
+		   
+		   temp.getChildren().remove(index);
+		   if(temp.getChildren().size()==0)
+		   {
+			   SoftwareUnitDefinitionDomainService domainService = new SoftwareUnitDefinitionDomainService();
+			   domainService.removeRegExSoftwareUnit(moduleId, editingRegEx);
+			   AbstractCombinedComponent parent=   temp.getParentofChild();
+			 int indexofchild = parent.getChildren().indexOf(temp);
+			 parent.getChildren().remove(indexofchild);
+			 Collections.sort(parent.getChildren());
+			 parent.updateChilderenPosition();
+			 
+			   
+		   }
+		   
+	   }
+	   
+	   
+   }
+	
+	
+	
+}
+
+
+
 }
