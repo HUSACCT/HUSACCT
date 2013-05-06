@@ -24,8 +24,8 @@ public class ImportViolationsHistory extends XmlImportUtils {
 		for (Element violationHistoryElement : violationHistoriesElement.getChildren("violationHistory")) {
 			List<Severity> severities = new ArrayList<Severity>();
 			List<Violation> violations = new ArrayList<Violation>();
+			
 			// severities
-
 			for (Element severityElement : violationHistoryElement.getChild("severities").getChildren()) {
 				String stringUUID = severityElement.getChildText("id");
 				if (isValidUUID(stringUUID)) {
@@ -63,7 +63,17 @@ public class ImportViolationsHistory extends XmlImportUtils {
 					if (isValidUUID(stringUUID)) {
 						UUID id = UUID.fromString(stringUUID);
 						if (id.equals(severity.getId())) {
-							Violation violation = new Violation(date, lineNumber, severity.clone(), ruleTypeKey, violationTypeKey, classPathFrom, classPathTo, isIndirect, message, logicalModules);
+							Violation violation = new Violation();
+							violation.setOccured(date)
+								.setLineNumber(lineNumber)
+								.setSeverity(severity.clone())
+								.setRuletypeKey(ruleTypeKey)
+								.setViolationtypeKey(violationTypeKey)
+								.setClassPathFrom(classPathFrom)
+								.setClassPathTo(classPathTo)
+								.setInDirect(isIndirect)
+								.setMessage(message)
+								.setLogicalModules(logicalModules);
 							violations.add(violation);
 							found = true;
 							break;

@@ -6,6 +6,9 @@ import java.util.Calendar;
 
 public class Violation {
 
+	// =======================================
+	// VARIABLES
+	// =======================================
 	private int linenumber;
 	private Severity severity;
 	private String ruletypeKey;
@@ -17,131 +20,107 @@ public class Violation {
 	private boolean inDirect;
 	private Calendar occured;
 
-	public Violation(Calendar occured, int linenumber, Severity severity,
-			String ruletypeKey, String violationtypeKey, String classPathFrom,
-			String classPathTo, boolean inDirect, Message message,
-			LogicalModules logicalModules) {
-		this.linenumber = linenumber;
-		this.setSeverity(severity);
-		this.ruletypeKey = ruletypeKey;
-		this.violationtypeKey = violationtypeKey;
-		this.classPathFrom = classPathFrom;
-		this.classPathTo = classPathTo;
-		this.inDirect = inDirect;
-		this.occured = occured;
-		this.logicalModules = logicalModules;
-		this.message = message;
-	}
-
-	public Violation(int linenumber, Severity severity, String ruletypeKey,
-			String violationtypeKey, String classPathFrom, String classPathTo,
-			boolean inDirect, Message message, LogicalModules logicalModules) {
-		this.linenumber = linenumber;
-		this.setSeverity(severity);
-		this.ruletypeKey = ruletypeKey;
-		this.violationtypeKey = violationtypeKey;
-		this.classPathFrom = classPathFrom;
-		this.classPathTo = classPathTo;
-		this.inDirect = inDirect;
-		this.occured = Calendar.getInstance();
-		this.logicalModules = logicalModules;
-		this.message = message;
-	}
-
-	public Violation(Severity severity, String ruletypeKey, boolean inDirect,
-			Message message, LogicalModules logicalModules) {
+	// =======================================
+	// CONSTRUCTOR
+	// =======================================
+	// Violation constructor, chain config to
+	// create new violation:
+	// Validation error = new Validation().LineNumber(100).Message("");
+	// ect...
+	// =======================================
+	public Violation(){
 		this.linenumber = 0;
-		this.setSeverity(severity);
-		this.ruletypeKey = ruletypeKey;
+		this.severity = null;
+		this.ruletypeKey = "";
 		this.violationtypeKey = "";
 		this.classPathFrom = "";
 		this.classPathTo = "";
-		this.inDirect = inDirect;
+		this.inDirect = false;
 		this.occured = Calendar.getInstance();
-		this.logicalModules = logicalModules;
-		this.message = message;
+		this.logicalModules = null;
+		this.message = null;
 	}
 
-	public Violation(Severity severity, String ruletypeKey,
-			String classPathFrom, boolean inDirect, Message message,
-			LogicalModules logicalModules) {
-		this.linenumber = 0;
-		this.setSeverity(severity);
-		this.ruletypeKey = ruletypeKey;
-		this.violationtypeKey = "";
-		this.classPathFrom = classPathFrom;
-		this.classPathTo = "";
-		this.inDirect = inDirect;
-		this.occured = Calendar.getInstance();
-		this.logicalModules = logicalModules;
-		this.message = message;
+	// =======================================
+	// SETTERS, chain-able.
+	// =======================================
+	public Violation setLineNumber(int lineNumber){
+		this.linenumber = lineNumber;
+		return this;
 	}
-
-	public Violation(Severity severity, String ruletypeKey,
-			String violationtypeKey, String classPathFrom, boolean inDirect,
-			Message message, LogicalModules logicalModules) {
-		this.linenumber = 0;
-		this.setSeverity(severity);
+	
+	public Violation setSeverity(Severity severity){
+		this.severity = severity;
+		return this;
+	}
+	
+	public Violation setRuletypeKey(String ruletypeKey){
 		this.ruletypeKey = ruletypeKey;
+		return this;
+	}
+	
+	public Violation setViolationtypeKey(String violationtypeKey){
 		this.violationtypeKey = violationtypeKey;
+		return this;
+	}
+	
+	public Violation setClassPathFrom(String classPathFrom){
 		this.classPathFrom = classPathFrom;
-		this.classPathTo = "";
+		return this;
+	}
+	
+	public Violation setClassPathTo(String classPathTo){
+		this.classPathTo = classPathTo;
+		return this;
+	}
+	
+	// inDirect is by default false
+	public Violation setInDirect(boolean inDirect){
 		this.inDirect = inDirect;
-		this.occured = Calendar.getInstance();
+		return this;
+	}
+	
+	// Occured is by default "now".
+	public Violation setOccured(Calendar occured){
+		this.occured = occured;
+		return this;
+	}
+	
+	public Violation setLogicalModules(LogicalModules logicalModules){
 		this.logicalModules = logicalModules;
+		return this;
+	}
+	
+	public Violation setMessage(Message message){
 		this.message = message;
+		return this;
 	}
 
-	public void setLinenumber(int linenumber) {
-		this.linenumber = linenumber;
-	}
-
+	// =======================================
+	// GETTERS
+	// =======================================
 	public int getLinenumber() {
 		return linenumber;
-	}
-
-	public void setViolationtypeKey(String violationtypeKey) {
-		this.violationtypeKey = violationtypeKey;
 	}
 
 	public String getViolationtypeKey() {
 		return violationtypeKey;
 	}
 
-	public void setClassPathFrom(String classPathFrom) {
-		this.classPathFrom = classPathFrom;
-	}
-
 	public String getClassPathFrom() {
 		return classPathFrom;
-	}
-
-	public void setClassPathTo(String classPathTo) {
-		this.classPathTo = classPathTo;
 	}
 
 	public String getClassPathTo() {
 		return classPathTo;
 	}
 
-	public void setIndirect(boolean inDirect) {
-		this.inDirect = inDirect;
-	}
-
 	public boolean isIndirect() {
 		return inDirect;
 	}
 
-	public void setOccured(Calendar occured) {
-		this.occured = occured;
-	}
-
 	public Calendar getOccured() {
 		return occured;
-	}
-
-	public void setRuletypeKey(String ruletypeKey) {
-		this.ruletypeKey = ruletypeKey;
 	}
 
 	public String getRuletypeKey() {
@@ -152,23 +131,11 @@ public class Violation {
 		return logicalModules;
 	}
 
-	public void setLogicalModules(LogicalModules logicalModules) {
-		this.logicalModules = logicalModules;
-	}
-
-	public void setMessage(Message message) {
-		this.message = message;
-	}
-
 	public Message getMessage() {
 		return message;
 	}
 
 	public Severity getSeverity() {
 		return severity;
-	}
-
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
 	}
 }

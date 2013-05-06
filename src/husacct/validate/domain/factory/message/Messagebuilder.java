@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Violation;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.IllegalFormatException;
 import java.util.List;
@@ -17,46 +18,51 @@ public class Messagebuilder {
 	private final String whiteSpace = " ";
 
 	public String createMessage(Violation violation) {
-		return generateMessage(violation.getMessage());
+		return generateMessage(violation.getMessage(), violation);
 	}
 
-	public String createMessage(Message message) {
-		return generateMessage(message);
+	public String createMessage(Message message, Violation violation) {
+		return generateMessage(message, violation);
 	}
 
-	private String generateMessage(Message message) {
-		String messageText = generateSingleMessage(message);
+	private String generateMessage(Message message, Violation violation) {
+		String messageText = generateSingleMessage(message, violation);
 
 		for (int i = 0; i < message.getExceptionMessage().size(); i++) {
 			if (i == 0) {
-				messageText += generateFirstExceptionMessage(message.getExceptionMessage().get(i));
+				messageText += generateFirstExceptionMessage(message.getExceptionMessage().get(i), violation);
 			} else {
-				messageText += generateRestExceptionMessage(message.getExceptionMessage().get(i));
+				messageText += generateRestExceptionMessage(message.getExceptionMessage().get(i), violation);
 			}
 		}
 		return messageText;
 	}
 
-	private String generateSingleMessage(Message message) {
-		final String left = generateLeftMessage(message);
-		final String right = generateRightMessage(message);
+	private String generateSingleMessage(Message message, Violation violation) {
+		final String left = generateLeftMessage(message, violation);
+		final String right = generateRightMessage(message, violation);
 
 		final String textFormat = getTextFormat(message.getRuleKey());
 
 		return generateMessage(textFormat, left, right);
 	}
 
-	private String generateLeftMessage(Message message) {
+	private String generateLeftMessage(Message message, Violation violation) {
+		if (message.getRuleKey().toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) {
+			return generateLeftFacadeConventionMessage(violation);
+		}
 		final String logicalModuleFromPath = message.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 		final String logicalModuleFromType = message.getLogicalModules().getLogicalModuleFrom().getLogicalModuleType();
 
 		return appendStrings(logicalModuleFromType, logicalModuleFromPath);
 	}
 
-	private String generateRightMessage(Message message) {
-		if (message.getRuleKey().toLowerCase().equals("namingconvention")) {
+	private String generateRightMessage(Message message, Violation violation) {
+		if (message.getRuleKey().toLowerCase().equals(RuleTypes.FACADE_CONVENTION.toString().toLowerCase())) {
+			return generateRightFacadeConventionMessage(violation);
+		} else if (message.getRuleKey().toLowerCase().equals(RuleTypes.NAMING_CONVENTION.toString().toLowerCase())) {
 			return generateNamingConventionMessage(message);
-		} else if (message.getRuleKey().toLowerCase().equals("visibilityconvention")) {
+		} else if (message.getRuleKey().toLowerCase().equals(RuleTypes.VISIBILITY_CONVENTION.toString().toLowerCase())) {
 			return generateInterfaceConventionMessage(message);
 		} else {
 			final String logicalModuleToPath = message.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
@@ -65,6 +71,15 @@ public class Messagebuilder {
 		}
 	}
 
+	private String generateLeftFacadeConventionMessage(Violation violation) {
+		return violation.getClassPathFrom();
+		
+	}
+	
+	private String generateRightFacadeConventionMessage(Violation violation) {
+		return violation.getClassPathTo();
+	}
+	
 	private String generateNamingConventionMessage(Message message) {
 		return message.getRegex();
 	}
@@ -113,7 +128,7 @@ public class Messagebuilder {
 		return "";
 	}
 
-	private String generateFirstExceptionMessage(Message message) {
+	private String generateFirstExceptionMessage(Message message, Violation violation) {
 		StringBuilder sb = new StringBuilder();
 		try {
 			sb.append(whiteSpace);
@@ -121,14 +136,14 @@ public class Messagebuilder {
 			sb.append(whiteSpace);
 
 			final String exceptionKey = sb.toString();
-			return exceptionKey + generateSingleMessage(message);
+			return exceptionKey + generateSingleMessage(message, violation);
 		} catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
 	}
 
-	private String generateRestExceptionMessage(Message message) {
+	private String generateRestExceptionMessage(Message message, Violation violation) {
 		StringBuilder sb = new StringBuilder();
 		try {
 			sb.append(whiteSpace);
@@ -136,7 +151,7 @@ public class Messagebuilder {
 			sb.append(whiteSpace);
 
 			final String exceptionKey = sb.toString();
-			return exceptionKey + generateSingleMessage(message);
+			return exceptionKey + generateSingleMessage(message, violation);
 		} catch (IllegalFormatException e) {
 			logger.error(e.getMessage(), e);
 		}

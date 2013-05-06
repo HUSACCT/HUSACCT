@@ -17,7 +17,7 @@ import javax.swing.table.TableColumn;
 public class ColorTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 2492345975488386436L;
-	private Vector dataVector = new Vector();
+	private Vector<Object> dataVector = new Vector<Object>();
 	private String columnNames[] = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SeverityName"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Color")};
 	private Class<?>[] types = new Class[] {String.class, JButton.class};
 	private boolean[] canEdit = new boolean[] {false, true};
@@ -50,13 +50,13 @@ public class ColorTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int column) {
-		Vector rowVector = (Vector) dataVector.elementAt(row);
+		Vector<?> rowVector = (Vector<?>) dataVector.elementAt(row);
 		return rowVector.elementAt(column);
 	}
 
 	@Override
 	public void setValueAt(Object value, int row, int column) {
-		Vector rowVector = (Vector) dataVector.elementAt(row);
+		Vector<Object> rowVector = (Vector<Object>) dataVector.elementAt(row);
 		rowVector.setElementAt(value, column);
 		fireTableRowsUpdated(row, row);
 	}
@@ -68,11 +68,11 @@ public class ColorTableModel extends AbstractTableModel {
 		column.setCellRenderer(new ColorRenderer(true));
 	}
 
-	protected static Vector convertToVector(Object[] anArray) {
+	protected static Vector<Object> convertToVector(Object[] anArray) {
 		if (anArray == null) {
 			return null;
 		}
-		Vector v = new Vector(anArray.length);
+		Vector<Object> v = new Vector<Object>(anArray.length);
 		for (int i = 0; i < anArray.length; i++) {
 			v.addElement(anArray[i]);
 		}
@@ -84,13 +84,13 @@ public class ColorTableModel extends AbstractTableModel {
 
 		for (int i = from; i < to; i++) {
 			if (dataVector.elementAt(i) == null) {
-				dataVector.setElementAt(new Vector(), i);
+				dataVector.setElementAt(new Vector<Object>(), i);
 			}
-			((Vector) dataVector.elementAt(i)).setSize(getColumnCount());
+			((Vector<?>) dataVector.elementAt(i)).setSize(getColumnCount());
 		}
 	}
 
-	public void addRow(Vector rowData) {
+	public void addRow(Vector<Object> rowData) {
 		insertRow(getRowCount(), rowData);
 	}
 
@@ -98,7 +98,7 @@ public class ColorTableModel extends AbstractTableModel {
 		addRow(convertToVector(rowData));
 	}
 
-	public void insertRow(int row, Vector rowData) {
+	public void insertRow(int row, Vector<Object> rowData) {
 		dataVector.insertElementAt(rowData, row);
 		justifyRows(row, row + 1);
 		fireTableRowsInserted(row, row);
@@ -112,7 +112,7 @@ public class ColorTableModel extends AbstractTableModel {
 		return (j == 0) ? i : gcd(j, i % j);
 	}
 
-	private static void rotate(Vector v, int a, int b, int shift) {
+	private static void rotate(Vector<Object> v, int a, int b, int shift) {
 		int size = b - a;
 		int r = size - shift;
 		int g = gcd(size, r);
