@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 @SuppressWarnings("serial")
 public class AnalysisHistoryOverviewFrame extends JFrame{
