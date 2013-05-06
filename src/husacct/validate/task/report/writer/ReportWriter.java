@@ -2,6 +2,7 @@ package husacct.validate.task.report.writer;
 
 import husacct.ServiceProvider;
 import husacct.validate.domain.validation.report.Report;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public abstract class ReportWriter {
 		if (!violationtypeKey.isEmpty()) {
 			String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(violationtypeKey);
 			value += ", ";
-			if (!violationtypeKey.equals("VisibilityConvention")) {
+			if (!violationtypeKey.equals(RuleTypes.VISIBILITY_CONVENTION.toString())) {
 				if (indirect) {
 					value += "indirect";
 				} else {

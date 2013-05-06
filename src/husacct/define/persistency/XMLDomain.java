@@ -50,7 +50,7 @@ public class XMLDomain {
 	
 	private ArrayList<Project> getProjects(Element projectsElement) {
 		ArrayList<Project> projects = new ArrayList<Project>();
-		List<Element> projectElements = projectsElement.getChildren("project");
+		List<Element> projectElements = projectsElement.getChildren("Project");
     	for(Element project : projectElements) {
     		projects.add(getProject(project));
     	}
@@ -80,7 +80,7 @@ public class XMLDomain {
 
 	public SoftwareArchitecture getArchitecture() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
-		Element ApArchitecture = (Element)applicationProperties.get(4);
+		Element ApArchitecture = (Element)applicationProperties.get(3);
     	Element ArchitectureName = (Element)ApArchitecture.getChild("name");
     	Element ArchitectureDescription = (Element)ApArchitecture.getChild("description");   	
     	SoftwareArchitecture XMLArchitecture = new SoftwareArchitecture(ArchitectureName.getText(), ArchitectureDescription.getText());    	
@@ -105,11 +105,11 @@ public class XMLDomain {
     	XMLArchitecture.setAppliedRules(this.getAppliedRules(ApArchitecture));
     	return XMLArchitecture;
 	}
-	
+	/*
 	public ArrayList<AppliedRule> getAppliedRules() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
 		return this.getAppliedRules((Element)applicationProperties.get(4));
-	}
+	}*/
 
 	@SuppressWarnings("rawtypes")
 	public ArrayList<AppliedRule> getAppliedRules(Element ApplicationArchitecture) {

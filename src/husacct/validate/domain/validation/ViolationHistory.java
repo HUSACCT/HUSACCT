@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ViolationHistory {
-
 	private final List<Violation> violations;
 	private final Calendar date;
 	private List<Severity> severities;

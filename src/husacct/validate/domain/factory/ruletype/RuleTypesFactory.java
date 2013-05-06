@@ -102,7 +102,11 @@ public class RuleTypesFactory {
 		return Collections.emptyList();
 	}
 
-	// Return all the default instances of Rule
+	/**
+	 * Generate all default available main ruletypes (stored in a HashMap).
+	 * 
+	 * @return all the default instances of Rule
+	 */
 	private List<RuleType> generateDefaultRuleTypes() {
 		List<RuleType> rules = new ArrayList<RuleType>();
 		setViolationTypeFactory();
@@ -122,6 +126,13 @@ public class RuleTypesFactory {
 	}
 
 	// Depending on the language give instance of Rule + violationtypes
+	
+	/**
+	 * Generate all default available main ruletypes (stored in a HashMap).
+	 * Depending on the language give instance of rule + violationtypes.
+	 * 
+	 * @return all the default instances of Rule depending on given program language.
+	 */
 	private List<RuleType> generateDefaultRuleTypes(String language) {
 		setViolationTypeFactory(language);
 
