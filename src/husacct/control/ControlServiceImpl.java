@@ -7,11 +7,14 @@ import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
+import husacct.control.task.CodeViewController;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
 import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.task.configuration.NonExistingSettingException;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
@@ -33,6 +36,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ApplicationController applicationController;
 	private StateController stateController;
 	private ViewController viewController;
+	private ConfigurationManager configurationManager;
+	private CodeViewController codeViewController;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -41,6 +46,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
+		configurationManager = mainController.getConfigurationManager();
+		codeViewController = mainController.getCodeViewerController();
 	}
 	
 	@Override
@@ -139,6 +146,16 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public ApplicationDTO getApplicationDTO() {
 		return mainController.getWorkspaceController().getCurrentWorkspace().getApplicationData();
+	}
+
+	@Override
+	public String getProperty(String key) throws NonExistingSettingException {
+		return configurationManager.getProperty(key);
+	}
+
+	@Override
+	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
+		codeViewController.displayErrorsInFile(fileName, errors);
 	}
 
 }
