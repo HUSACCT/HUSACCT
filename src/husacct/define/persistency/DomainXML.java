@@ -214,9 +214,7 @@ public class DomainXML {
 		
 		Element applicationProjects = new Element("projects");
 		for(Project project : App.getProjects()) {
-			Element applicationProject = new Element("project");
-			applicationProject.addContent(getProjectInXML(project));
-			applicationProjects.addContent(applicationProject);
+			applicationProjects.addContent(getProjectInXML(project));
 		}
 		XMLApplication.addContent(applicationProjects);
 		

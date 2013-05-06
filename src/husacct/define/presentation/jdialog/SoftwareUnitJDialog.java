@@ -9,6 +9,7 @@ import husacct.define.task.JtreeController;
 
 import husacct.define.presentation.utils.DefaultMessages;
 
+import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.PopUpController;
 import husacct.define.task.SoftwareUnitController;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -216,6 +217,14 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void getSoftwareDefinationTree() {
 		if(JtreeController.instance().isLoaded())
 		{
+			if (ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
+				
+				AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
+				JtreeStateEngine.instance().compareNewData(rootComponent);
+				
+				
+				
+			}
 			
 			this.softwareDefinitionTree= JtreeController.instance().getTree();
 		
