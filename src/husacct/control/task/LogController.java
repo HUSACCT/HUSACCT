@@ -131,7 +131,7 @@ public class LogController {
 				workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 				application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
 				project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
-			}catch(NullPointerException e){
+			}catch(Exception e){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoWorkspaceApplicationProjectIsOpen"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoWorkspaceApplicationProjectIsOpenTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
