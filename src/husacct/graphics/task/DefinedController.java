@@ -101,25 +101,26 @@ public class DefinedController extends DrawingController {
 		}
 	}
 
-	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
 		if (getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
 			String firstCurrentPaths = getCurrentPaths()[0];
 			String parentPath = defineService.getParentFromModule(firstCurrentPaths);
-			if (null != parentPath) {
+			if (parentPath != null) {
 				getAndDrawModulesIn(parentPath);
 			} else {
-				logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
-				logger.debug("Reverting to the root of the application.");
-				drawArchitecture(getCurrentDrawingDetail());
+				moduleZoomOutFailed();
 			}
 		} else {
-			logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
-			logger.debug("Reverting to the root of the application.");
-			drawArchitecture(getCurrentDrawingDetail());
+			moduleZoomOutFailed();
 		}
+	}
+	
+	public void moduleZoomOutFailed(){
+		logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+		logger.debug("Reverting to the root of the application.");
+		drawArchitecture(getCurrentDrawingDetail());
 	}
 
 	@Override
