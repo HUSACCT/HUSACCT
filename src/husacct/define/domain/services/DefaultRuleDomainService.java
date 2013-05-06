@@ -28,32 +28,14 @@ public class DefaultRuleDomainService {
 		public static DefaultRuleDomainService instance;
 	public void addDefaultRules(Module newModule) //
 	{
-		applyDefaultRule(newModule);
+		
 		_module = newModule;
 		retrieveRuleTypeDTOsByModule();
 		generateRules();
 		//saveDefaultRules();
 	}
 	
-	private void applyDefaultRule(Module newModule) {
-		switch (newModule.getType().toLowerCase()) {
-		case "layer":
-			isLayer();
-			break;
 
-		default:
-			break;
-		}
-		
-	}
-
-	private void isLayer() {
-		 DefaultLayerRulesGenerator gen = new DefaultLayerRulesGenerator(new AppliedRuleController(-1, -1));
-		 SoftwareArchitecture.getInstance().removeLayerAppliedRules();
-		gen.applydefualtrules(SoftwareArchitecture.getInstance().getRootModule());
-		gen.applychanges();
-		
-	}
 
 	public static DefaultRuleDomainService getInstance()
 	{
