@@ -6,8 +6,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 
 	private static final long serialVersionUID = 1713515026043620607L;
 	
-	private String uniqueName = "";
-	private String type = "";
+	
 	private String visibility;
 	private boolean isfrozen=false;
 	
@@ -68,22 +67,7 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		}
 	}
 
-	public void setUniqueName(String uniqueName) {
-		this.uniqueName = uniqueName;
-	}
-
-	public String getUniqueName() {
-		return this.uniqueName;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type.toUpperCase();
-	}
-
+	
 	public String getVisibility() {
 		return this.visibility;
 	}
@@ -92,78 +76,11 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 		this.visibility = visibility;
 	}
 
-	public void updateChilderenPosition() {
-		for(int i=0;i<children.size();i++)
-		{
-		int newPosition=i;
-		children.get(i).setAnalyzedModuleComponentPosition(newPosition);
-			
-		}
-		
-		
-	
-	
-		
-	}
-	
-	@Override
-	public boolean equals(Object analyzedComponent){
-	   if(analyzedComponent==null){return false;}
-	   
-	   if(analyzedComponent instanceof AnalyzedModuleComponent && (this.getUniqueName().equals("root")&& ((AnalyzedModuleComponent)analyzedComponent).getUniqueName().equals("root")))
-	   {
-		   
-		   chekme(this.getChildren(),((AnalyzedModuleComponent)analyzedComponent).getChildren());
-		   return false;
-	   }
-	   else 
-	   {
-		   return false;
-	   }
-		
-	   
-	}
 	
 	
 	
-	public void chekme(ArrayList<AbstractCombinedComponent> firstroot,ArrayList<AbstractCombinedComponent> secondroot)
-	{
-		ArrayList<Integer> found = new ArrayList<Integer>();
-		int sizefirst = firstroot.size();
-		int sizesecond = secondroot.size();
-		int indexfirst=0;
-		int indexsecond=0;
-		
-		if(sizefirst==sizesecond)
-		{
-			
-			for(AbstractCombinedComponent chek : firstroot)
-			{
-				
-				for(AbstractCombinedComponent chek2 : secondroot)
-				{
-					
-				
-		     	}
-				
-			}
-		}
-		
-		
-		
-		for(AbstractCombinedComponent ab:firstroot)
-		{
-			
-		
-		
-		}
-		
-		
-		
-		
-		
-		
-	}
+	
+	
 
 	public boolean isIsfrozen() {
 		return isfrozen;
@@ -179,4 +96,8 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	 isfrozen=false;
 
 	}
+
+
+
+	
 }
