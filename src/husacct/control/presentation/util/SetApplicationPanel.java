@@ -238,8 +238,8 @@ public class SetApplicationPanel extends JPanel{
 		String errorMessage = "";
 		
 		
-		if(applicationName == null || applicationName.length() < 1){
-			errorMessage = localeService.getTranslatedString("FieldEmptyError");
+		if(applicationName == null || applicationName.trim().length() < 1){
+			errorMessage = localeService.getTranslatedString("ApplicationNameEmptyError");
 			showError = true;
 		}
 		if (!Regex.matchRegex(Regex.nameWithSpacesRegex, applicationNameText.getText())) {

@@ -3,8 +3,9 @@ package husacct.define.task.components;
 import java.awt.Component;
 import java.util.ArrayList;
 
-public abstract class AbstractCombinedComponent extends Component {
-	
+public abstract class AbstractCombinedComponent extends Component implements Comparable<AbstractCombinedComponent>{
+	protected String uniqueName = "";
+	protected String type = "";
 	private static final long serialVersionUID = 1L;
 	protected ArrayList<AbstractCombinedComponent> children;
 	private AnalyzedModuleComponent parent;
@@ -44,5 +45,39 @@ public abstract class AbstractCombinedComponent extends Component {
 		this.analyzedModuleComponentPosition = analyzedModuleComponentPosition;
 	}
 	
+	@Override
+	public int compareTo(AbstractCombinedComponent left) {
+		
+		return this.getUniqueName().toUpperCase().compareTo(left.getUniqueName().toUpperCase());
+	}	
+
+	public void setUniqueName(String uniqueName) {
+		this.uniqueName = uniqueName;
+	}
+
+	public String getUniqueName() {
+		return this.uniqueName;
+	}
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type.toUpperCase();
+	}
+	public void updateChilderenPosition() {
+		for(int i=0;i<children.size();i++)
+		{
+		int newPosition=i;
+		children.get(i).setAnalyzedModuleComponentPosition(newPosition);
+			
+		}
+		
+		
 	
+	
+		
+	}
+
 }

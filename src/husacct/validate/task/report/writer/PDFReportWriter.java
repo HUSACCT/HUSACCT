@@ -125,7 +125,7 @@ public class PDFReportWriter extends ReportWriter {
 
 			// Rule
 			if (violation.getMessage() != null) {
-				String message = new Messagebuilder().createMessage(violation.getMessage());
+				String message = new Messagebuilder().createMessage(violation.getMessage(), violation);
 				addCellToTable(pdfTable, message, BaseColor.WHITE, false);
 			} else {
 				addCellToTable(pdfTable, "", BaseColor.WHITE, false);

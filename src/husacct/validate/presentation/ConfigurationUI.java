@@ -253,7 +253,7 @@ public final class ConfigurationUI extends JInternalFrame implements Observer {
 		}
 		if (tabPanel.getTabCount() == 1) {
 			logger.error("No programming language set");
-			tabPanel.addTab(localeService.getTranslatedString("NoProgrammingLanguageAvailible"), new JPanel());
+			tabPanel.addTab(localeService.getTranslatedString("NoProgrammingLanguageAvailable"), new JPanel());
 		}
 	}
 }
