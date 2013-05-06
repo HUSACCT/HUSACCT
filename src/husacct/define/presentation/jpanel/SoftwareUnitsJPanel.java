@@ -119,12 +119,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	private void addSoftwareUnit() {
-		System.out.println("-------------->"+ServiceProvider.getInstance().getControlService().isPreAnalysed());
-		RuleTypeDTO[] result=ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule("layer");
-		boolean k=result==null?true:false;
-		System.out.println(k);
-		//	if(ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-		if (DefinitionController.getInstance().isAnalysed()){
+		if (DefinitionController.getInstance().isAnalysed() || ServiceProvider.getInstance().getControlService().isPreAnalysed()){
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
@@ -135,6 +130,14 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			}
 		}
 	} 
+	
+	private void editSoftwareUnit() {
+		if(softwareUnitsTable.getSelectedRow() != -1){
+			new EditSoftwareUnitJDialog(DefinitionController.getInstance().getSelectedModuleId(), (String)softwareUnitsTable.getValueAt(softwareUnitsTable.getSelectedRow(), 0));
+		}else{
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
 	
 	private void removeSoftwareUnit(){
 		if (softwareUnitsTable.getSelectedRow() != -1){
@@ -147,12 +150,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				types.add(type);
 			}
 			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
+		}else{
+			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
-	}
-	
-	private void editSoftwareUnit() {
-		int selectedRow = softwareUnitsTable.getSelectedRow();
-		new EditSoftwareUnitJDialog(DefinitionController.getInstance().getSelectedModuleId(), (String)softwareUnitsTable.getValueAt(selectedRow, 0));
 	}
 		
 	/**

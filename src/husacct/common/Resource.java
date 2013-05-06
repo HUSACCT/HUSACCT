@@ -23,6 +23,7 @@ public class Resource {
 
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
 	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
+	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
 	
@@ -45,7 +46,7 @@ public class Resource {
 	public static final String ICON_FIGURES_SHOW = ICONSET_PATH + "figures-show.png";
 	public static final String ICON_INTERFACE_PRIVATE = ICONSET_PATH + "interface-private.png";
 	public static final String ICON_INTERFACE_PUBLIC = ICONSET_PATH + "interface-public.png";
-	public static final String ICON_LAYER = ICONSET_PATH + "layer.png";
+	public static final String ICON_LAYER = ICONSET_PATH + "define-layer.png";
 	public static final String ICON_LIBRARY = ICONSET_PATH + "library.png";
 	public static final String ICON_MODULE = ICONSET_PATH + "module.png";
 	public static final String ICON_NEW = ICONSET_PATH + "new.png";
@@ -67,6 +68,38 @@ public class Resource {
 	public static final String CONTROL_TEST_WORKSPACE = RESOURCE_PATH + "control/testworkspace.xml";
 	public static final String ICON_ROOT=ICONSET_PATH+"define-root.png";
 	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
+	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";
+	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public static String ICON_FACADE=ICONSET_PATH+"define-facade.png";;
 	
 	public static URL get(String path){

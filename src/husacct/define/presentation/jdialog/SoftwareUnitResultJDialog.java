@@ -140,6 +140,7 @@ public class SoftwareUnitResultJDialog extends JDialog implements ActionListener
 		for (TreePath path : paths.getSelectionPaths()){
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}
+		
 		this.softwareUnitController.saveRegEx(components, enteredRegEx);
 		this.dispose();
 	}

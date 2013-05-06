@@ -1,5 +1,9 @@
 package husacct.control.task;
 
+import javax.swing.JOptionPane;
+
+import husacct.ServiceProvider;
+import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
 
 import org.apache.log4j.Logger;
@@ -13,6 +17,7 @@ public class MainController {
 	private ApplicationController applicationController;
 	private ImportController importController;
 	private ExportController exportController;
+	private LogController logController;
 	
 	public MainGui mainGUI;
 	
@@ -38,6 +43,7 @@ public class MainController {
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
+		this.logController = new LogController(this);
 	}
 	
 	private void setAppleProperties(){
@@ -83,10 +89,18 @@ public class MainController {
 		return this.exportController;
 	}
 	
+	public LogController getLogController(){
+		return this.logController;
+	}
+	
 	public void exit(){
 		// TODO: check saved 
-		logger.debug("Close HUSACCT");
-		System.exit(0);
+		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+		int clickedOption = JOptionPane.showConfirmDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_OPTION);
+		if(clickedOption == JOptionPane.YES_OPTION){
+			logger.debug("Close HUSACCT");
+			System.exit(0);
+		}
 	}
 	
 	public MainGui getMainGui(){
