@@ -86,7 +86,7 @@ public class ApplicationController {
 		logger.error("Info: " + message);
 	}
 	
-	public void showConfiguartionGUI() {
+	public void showConfigurationGUI() {
 		new ConfigurationDialog(mainController);
 	}
 }
