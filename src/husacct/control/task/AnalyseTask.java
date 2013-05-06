@@ -1,17 +1,11 @@
 package husacct.control.task;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
-<<<<<<< HEAD
-=======
 
 import java.util.ArrayList;
->>>>>>> 404c864164e2a6f8c8e19ad626685ae1286da588
 
 import org.apache.log4j.Logger;
 
