@@ -1,8 +1,10 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
+import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.property_declaration2_return;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
+import husacct.define.domain.services.DefaultRuleDomainService;
 
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ public class Module implements Comparable<Module> {
 	protected ArrayList<SoftwareUnitDefinition> mappedSUunits;
 	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
 	protected ArrayList<Module> subModules;
-	
+	protected Module parent;
 	public Module()
 	{
 		this("", "");
@@ -113,6 +115,7 @@ public class Module implements Comparable<Module> {
 	
 	public void removeSURegExDefinition(SoftwareUnitRegExDefinition unit)
 	{
+		System.out.println(unit.getName());
 		if(mappedRegExSUunits.contains(unit)) {
 			mappedRegExSUunits.remove(unit);
 		}else{
@@ -124,7 +127,9 @@ public class Module implements Comparable<Module> {
 	public void addSubModule(Module subModule)
 	{
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+			subModule.parent=this;
 			subModules.add(subModule);
+			DefaultRuleDomainService.getInstance().setDefaultRule(subModule);
 		}else{
 			System.out.println("This sub module has already been added!");
 		}
@@ -299,6 +304,11 @@ public class Module implements Comparable<Module> {
 			compareResult = 1;
 		}
 		return compareResult;
+	}
+
+	public Module getparent() {
+		
+		return parent;
 	}
 
 }

@@ -174,8 +174,8 @@ public class TaskServiceImpl {
 		configuration.setActiveViolationTypes(language, activeViolations);
 	}
 
-	public String getMessage(Message message) {
-		return domain.getMessage(message);
+	public String getMessage(Message message, Violation violation) {
+		return domain.getMessage(message, violation);
 	}
 
 	public void subscribe(Observer frame) {

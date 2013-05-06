@@ -123,9 +123,18 @@ public class LogController {
 
 	public void showApplicationAnalysisHistoryOverview() {
 		if(logFileExists()){
-			String workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
-			String application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
-			String project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
+			String workspace = "";
+			String application = "";
+			String project = "";
+			
+			try{
+				workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+				application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
+				project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoWorkspaceApplicationProjectIsOpen"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoWorkspaceApplicationProjectIsOpenTitle"), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			
 			if(getNumberOfAnalyses(workspace, application, project)<1){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);

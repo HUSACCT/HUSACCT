@@ -34,23 +34,23 @@ public class MenuBar extends JMenuBar{
 		defineMenu = new DefineMenu(mainController);
 		analyseMenu = new AnalyseMenu(mainController);
 		validateMenu = new ValidateMenu(mainController);
-		//languageMenu = new LanguageMenu(mainController);
-		configurationMenu = new ConfigurationMenu(mainController);
+		languageMenu = new LanguageMenu(mainController);
+		//configurationMenu = new ConfigurationMenu(mainController);
 		helpMenu = new HelpMenu(mainController);		
 
 		fileMenu.setMnemonic(getMnemonicKeycode("FileMenuMnemonic"));
 		defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
 		analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
 		validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
-		//languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
+		languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
 		helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
 
 		add(fileMenu);
 		add(defineMenu);
 		add(analyseMenu);
 		add(validateMenu);
-		//add(languageMenu);
-		add(configurationMenu);
+		add(languageMenu);
+		//add(configurationMenu);
 		add(helpMenu);
 	}
 

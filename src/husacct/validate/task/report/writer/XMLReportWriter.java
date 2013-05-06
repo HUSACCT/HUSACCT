@@ -47,6 +47,7 @@ public class XMLReportWriter extends ReportWriter {
 
 		Element violationsSeverities = new Element("violations");
 		violationsSeverities.setAttribute(new Attribute("totalViolations", "" + report.getViolations().getValue().size()));
+		
 		for (ViolationsPerSeverity violationPerSeverity : report.getViolationsPerSeverity()) {
 			Element violationElement = new Element(violationPerSeverity.getSeverity().getSeverityKey());
 			violationElement.setText("" + violationPerSeverity.getAmount());
@@ -74,7 +75,7 @@ public class XMLReportWriter extends ReportWriter {
 			severity.setText(violation.getSeverity().getSeverityName());
 			if (violation.getLogicalModules() != null) {
 				Message messageObject = violation.getMessage();
-				String message = new Messagebuilder().createMessage(messageObject);
+				String message = new Messagebuilder().createMessage(messageObject,violation);
 				ruleType.setText(message);
 			}
 			dependencyKind.setText(violation.getViolationtypeKey());
