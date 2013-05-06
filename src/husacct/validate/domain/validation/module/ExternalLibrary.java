@@ -19,7 +19,7 @@ public class ExternalLibrary extends AbstractModule {
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-	    List<RuleType> allowedRules = new ArrayList();
+	    List<RuleType> allowedRules = new ArrayList<RuleType>();
 
 	    for (RuleType ruleType : ruleTypes) {
 		if (ruleType.equals(RuleTypes.IS_NOT_ALLOWED) ||

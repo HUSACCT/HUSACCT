@@ -23,6 +23,7 @@ public class ApplicationController {
 		DefinitionController definitionController = DefinitionController.getInstance();
 		definitionController.initSettings();
 		jframe.setContentView(definitionController.initUi());
+		jframe.setIconifiable(true);
 
 		jframe.setVisible(true);
 	}

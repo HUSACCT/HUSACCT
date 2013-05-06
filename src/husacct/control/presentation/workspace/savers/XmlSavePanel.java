@@ -30,7 +30,7 @@ public class XmlSavePanel extends SaverPanel{
 	private JTextField pathText;
 	private JButton browseButton;
 	
-	private File selectedFile;
+	private static File selectedFile;
 	
 	private GridBagConstraints constraints;
 	
@@ -56,6 +56,10 @@ public class XmlSavePanel extends SaverPanel{
 		pathText = new JTextField(20);
 		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
+		
+		if(selectedFile != null){
+			pathText.setText(selectedFile.getAbsolutePath());
+		}
 		
 		JPanel hiddenPanel = new JPanel();
 		hiddenPanel.setPreferredSize(new Dimension(100, 10));
@@ -88,6 +92,10 @@ public class XmlSavePanel extends SaverPanel{
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("xml", "xml");
 		FileDialog fileDialog = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("SaveButton"), filter);
+		
+		File currentDirectory = getDirectoryFromFile(selectedFile);
+		fileDialog.setCurrentDirectory(currentDirectory);
+		
 		int returnVal = fileDialog.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			if(fileDialog.getSelectedFile().exists()){
