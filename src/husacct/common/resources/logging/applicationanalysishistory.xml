@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<husacct version="1">
+    <workspace name="BootstrapWorkspace" test="1">
+    	<application name="Java Benchmark" test="2">
+    		<project name="Java Benchmark" test="3">
+   				<analysis timestamp="1367245325">
+   					<path>D:\HUSACCT\</path>
+   					<packages>20</packages>
+   					<classes>300</classes>
+   					<interfaces>58</interfaces>
+   					<dependencies>380</dependencies>
+   					<violations>15</violations>
+   				</analysis>
+   				<analysis timestamp="1345003920">
+   					<path>D:\HUSACCT\</path>
+   					<packages>20</packages>
+   					<classes>350</classes>
+   					<interfaces>55</interfaces>
+   					<dependencies>390</dependencies>
+   					<violations>20</violations>
+   				</analysis>
+    		</project>
+    	</application>
+    </workspace>
+    <workspace name="myHusacctWorkspace" test="4">
+    	<application name="Java Benchmark" test="5">
+    		<project name="Java Benchmark" test="6">
+   				<analysis timestamp="1366889220">
+   					<path>D:\HUSACCT\</path>
+   					<packages>20</packages>
+   					<classes>300</classes>
+   					<interfaces>58</interfaces>
+   					<dependencies>380</dependencies>
+   					<violations>15</violations>
+   				</analysis>
+   				<analysis timestamp="1366889520">
+   					<path>D:\HUSACCT\</path>
+   					<packages>20</packages>
+   					<classes>300</classes>
+   					<interfaces>58</interfaces>
+   					<dependencies>380</dependencies>
+   					<violations>15</violations>
+   				</analysis>
+    		</project>
+    	</application>
+    </workspace>
+</husacct>
