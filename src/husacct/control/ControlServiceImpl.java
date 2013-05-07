@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -34,7 +35,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
-	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	private MainController mainController; 
 	private WorkspaceController workspaceController;
@@ -165,13 +165,16 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public String getConfigurationName() {
-		return localeService.getTranslatedString("ConfigGeneral");
+		//return localeService.getTranslatedString("ConfigGeneral");
+		return "General";
 	}
 
 	@Override
 	public JPanel getConfigurationPanel() {
-		// TODO Auto-generated method stub
-		return null;
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("test");
+		panel.add(label);
+		return panel;
 	}
 
 }

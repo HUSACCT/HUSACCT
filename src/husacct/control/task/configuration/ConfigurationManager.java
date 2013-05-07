@@ -48,6 +48,7 @@ public class ConfigurationManager {
 	}
 	
 	private void createDefaults(File file) {
+		/*
 		try {
 			file.createNewFile();
 			File defaults = new File("/husacct/common/resources/config.properties");
@@ -61,5 +62,6 @@ public class ConfigurationManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 }
