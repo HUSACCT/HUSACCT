@@ -127,10 +127,11 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
+				
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
 				DialogUtils.alignCenter(softwareUnitFrame);
 				softwareUnitFrame.setVisible(true);
-			} else {
+			}else {
 				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		}

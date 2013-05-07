@@ -269,17 +269,7 @@ public class SoftwareArchitecture {
 		return moduleId;
 	}
 	
-	private void isLayer(Module module) {
-		System.out.println(module.getType()+"weessttt ssssiidee");
-		if(module.getType().toLowerCase().equals("layer"))
-		{
-			
-			AppliedRuleDomainService test = new AppliedRuleDomainService();
-			test.removeLayerAppliedRules();
-			
-		}
-		
-	}
+	
 
 	public void removeAllModules() {
 		rootModule.setSubModules(new ArrayList<Module>());
