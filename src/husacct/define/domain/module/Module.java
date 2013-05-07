@@ -3,7 +3,7 @@ package husacct.define.domain.module;
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
-import husacct.define.presentation.utils.UiDialogs;
+import husacct.define.domain.services.DefaultRuleDomainService;
 
 import java.util.ArrayList;
 
@@ -128,6 +128,8 @@ public class Module implements Comparable<Module> {
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.addDefaultRules(subModule);
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");

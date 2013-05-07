@@ -454,7 +454,6 @@ public class SoftwareArchitecture {
 		}
 	}
 	
-
 	public ArrayList<Layer> getLayersBelow(Layer layer){
 		ArrayList<Layer> returnList = new ArrayList<Layer>();
 		Layer underlyingLayer = getTheFirstLayerBelow(layer);
@@ -473,7 +472,6 @@ public class SoftwareArchitecture {
 		return getTheFirstLayerBelow(layer.getHierarchicalLevel(),getParentModuleIdByChildId(layer.getId()));
 	}
 	
-
 	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
 		for (Module mod : getModulesForLayerSorting(parentModuleId)){
