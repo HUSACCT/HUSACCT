@@ -21,9 +21,10 @@ public class ApplicationAnalyser {
         AbstractAnalyser analyser = builder.getAnalyser(programmingLanguage);
         SourceFileFinder sourceFileFinder = new SourceFileFinder();
         String sourceFileExtension = getExtensionForLanguage(programmingLanguage);
-        for (String workspacePath : paths) {
+		int size = paths.length;
+        for (int i = 0; i < size; i ++) {
             try {
-                List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(workspacePath, sourceFileExtension);
+                List<MetaFile> fileData = sourceFileFinder.getFileInfoFromProject(paths[i], sourceFileExtension);
                 for (MetaFile fileInfo : fileData) {
 
                     //Added By Team 1 General GUI & Control

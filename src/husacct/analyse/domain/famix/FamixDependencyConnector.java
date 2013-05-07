@@ -61,7 +61,6 @@ class FamixDependencyConnector {
     }
 
     void connectAssociationDependencies() {
-        int count = 0;
         for (FamixAssociation association : theModel.waitingAssociations) {
 
             //Added By Team 1 General GUI & Control
@@ -71,8 +70,6 @@ class FamixDependencyConnector {
             }
             //end added by Team 1
 
-            String oldy = association.to;
-            count += 1;
             try {
                 boolean connected = false;
                 String theClass = association.from;
@@ -122,11 +119,6 @@ class FamixDependencyConnector {
         }
     }
 
-    private FamixLibrary getLibraryForUniqueName(String uniqueName) {
-        //return getClassForUniqueName(uniqueName) != null || getInterfaceForUniqueName(uniqueName) != null;
-        return theModel.libraries.get(uniqueName);
-    }
-
     private void determineType(FamixAssociation association) {
         String type = association.type;
         if (type.equals(EXTENDS)) {
@@ -136,8 +128,6 @@ class FamixDependencyConnector {
                     type = EXTENDS_ABSTRACT;
                 } else if (!theClass.isAbstract) {
                     type = EXTENDS_CONCRETE;
-                } else {
-                    type = EXTENDS_LIBRARY;
                 }
             } else {
                 FamixInterface theInterface = getInterfaceForUniqueName(association.to);
@@ -225,8 +215,6 @@ class FamixDependencyConnector {
     }
 
     private boolean isCompleteTypeDeclaration(String typeDeclaration) {
-
-
         //Added By Team 1 General GUI & Control
         //Is needed for the progressBar
         ServiceProvider.getInstance().getControlService().updateProgress((++amountOfModulesConnected * 100) / (1 + theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()));
