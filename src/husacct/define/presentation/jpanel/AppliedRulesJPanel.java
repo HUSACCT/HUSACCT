@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -117,6 +118,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
+			
 		} else {
 			//TODO Test popup
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);

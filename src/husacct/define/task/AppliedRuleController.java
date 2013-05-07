@@ -85,6 +85,7 @@ public class AppliedRuleController extends PopUpController {
 					
 			//Get the correct display value for each ruletypekey from the resourcebundle
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
+				
 				try {
 					if(!(selectedModule instanceof Layer) && (ruleTypeDTO.key.contains("SkipCall") || ruleTypeDTO.key.contains("BackCall"))) {
 						continue;
@@ -264,6 +265,28 @@ public class AppliedRuleController extends PopUpController {
 			UiDialogs.errorDialog(jframeAppliedRule, e.getMessage());
 			return false;
 		}
+	}
+	
+	public boolean saveDefualtrules(HashMap<String, Object> ruleDetails){
+		
+		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
+		Object from = ruleDetails.get("moduleFromId");
+		Object to = ruleDetails.get("moduleToId");
+		boolean isEnabled = (Boolean) ruleDetails.get("enabled");
+		String description = (String) ruleDetails.get("description");
+		String regex = (String) ruleDetails.get("regex");
+		String[] dependencies = (String[]) ruleDetails.get("dependencies");
+		
+		Module moduleFrom = (Module)(from);
+		Module moduleTo = (Module)(to);
+		
+		appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+		
+		return true;
+		
+		
+		
+		
 	}
 	
 	private Module assignToCorrectModule(Object o){

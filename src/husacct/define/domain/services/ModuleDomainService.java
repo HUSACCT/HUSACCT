@@ -14,6 +14,7 @@ public class ModuleDomainService {
 	
 	public long addModuleToRoot(Module module){
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+		//DefaultRuleDomainService.getInstance().addDefaultRules(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
@@ -21,10 +22,19 @@ public class ModuleDomainService {
 	public long addModuleToParent(long parentModuleId, Module module){
 		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 		parentModule.addSubModule(module);
+		DefaultRuleDomainService service = new DefaultRuleDomainService();
+		
 		long moduleId = module.getId();
+		service.addDefaultRules(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
-	}	
+	}
+	
+	public String addNewModuleToParent(long parentModuleId, Module module){
+		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		return parentModule.addSubModule(module);
+	}
 	
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);

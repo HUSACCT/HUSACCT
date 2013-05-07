@@ -164,7 +164,7 @@ public class SoftwareUnitController extends PopUpController {
 		
 		Pattern regExPattern = null;
 
-		for(Iterator<AbstractCombinedComponent> it=JtreeController.instance().GetRootOfModel().getChildren().iterator();it.hasNext();) {
+		for(Iterator<AbstractCombinedComponent> it=JtreeController.instance().getRootOfModel().getChildren().iterator();it.hasNext();) {
 			AnalyzedModuleComponent module =(AnalyzedModuleComponent)it.next();
 
 			if(!packagesOnly && !innerClass) {
@@ -191,7 +191,8 @@ public class SoftwareUnitController extends PopUpController {
 							try {
 								JtreeController.instance().additemgetResultTree(module);
 							} catch (Exception e) {
-								this.logger.error(e.getMessage());
+								
+								this.logger.error(e.getStackTrace());
 								UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 							}
 						}
@@ -200,11 +201,14 @@ public class SoftwareUnitController extends PopUpController {
 
 				else if(packageClass.equals("PC")) {
 					while(matcher.find()) {
-						logger.info("Adding software unit to module with id " + this.getModuleId());
+					//	logger.info("Adding software unit to module with id " + this.getModuleId());
 						try {
+							
+							
+							
 							JtreeController.instance().additemgetResultTree(module);
 						} catch (Exception e) {
-							this.logger.error(e.getMessage());
+							//this.logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 						}
 					}

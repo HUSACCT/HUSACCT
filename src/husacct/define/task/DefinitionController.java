@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.AppliedRule;
 import husacct.define.domain.module.Component;
 //import husacct.define.domain.module.ExternalSystem;
+import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
@@ -115,19 +116,16 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 	
-	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription,boolean ifWithFacade){
+	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription){
 		logger.info("Adding component " + "Facade"+componentName);
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
 			Component newComponent = new Component(componentName, componentDescription);
-			if (ifWithFacade) {
+			
 				Facade f= new Facade();
 			f.setName("Facade"+componentName);
 			newComponent.addSubModule(f);
-			
-			}		
-			
 			this.passModuleToService(selectedModuleId, newComponent);
 			
 			return true;
@@ -144,8 +142,8 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Adding external library " + libraryName);
 		try {
 			JPanelStatus.getInstance("Adding external library").start();
-			//ExternalSystem newComponent = new ExternalSystem(libraryName, libraryDescription);
-			//this.passModuleToService(selectedModuleId, newComponent);
+			ExternalSystem newComponent = new ExternalSystem(libraryName, libraryDescription);
+			this.passModuleToService(selectedModuleId, newComponent);
 			return true;
 		} catch (Exception e) {
 			logger.error("addExternalLibrary(" + libraryName + ") - exception: " + e.getMessage());
@@ -157,13 +155,18 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	private void passModuleToService(long selectedModuleId, Module module) {
+		String ExceptionMessage = "";
 		if(selectedModuleId == -1) {
 			this.moduleService.addModuleToRoot(module);
 		} else {
 			logger.debug("Adding child");
-			this.moduleService.addModuleToParent(selectedModuleId, module);
+			ExceptionMessage = this.moduleService.addNewModuleToParent(selectedModuleId, module);
 		}
 		this.notifyObservers();
+		
+		if(!ExceptionMessage.isEmpty()) {
+			UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
+		}
 	}
 
 	/**

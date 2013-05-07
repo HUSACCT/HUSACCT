@@ -111,7 +111,6 @@ public class PersistentDomain implements ISaveable {
 						}
 					}
 				}
-
 				for (AppliedRule ApplRule : workspaceArchitecture.getAppliedRules()) {
 					long addedRule = appliedRuleService.addAppliedRule(ApplRule.getRuleType(), ApplRule.getDescription(), ApplRule.getDependencies(), ApplRule.getRegex(), ApplRule.getModuleFrom().getId(), ApplRule.getModuleTo().getId(), ApplRule.isEnabled());
 					if (ApplRule.getExceptions().size() > 0) {

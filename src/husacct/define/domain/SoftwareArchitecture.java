@@ -3,6 +3,7 @@ package husacct.define.domain;
 import husacct.ServiceProvider;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.services.AppliedRuleDomainService;
 
 import java.util.ArrayList;
 
@@ -113,6 +114,29 @@ public class SoftwareArchitecture {
 	
 	public void removeAppliedRules() {
 		appliedRules = new ArrayList<AppliedRule>();
+	
+	}
+	
+	public void removeLayerAppliedRules() {
+		ArrayList<AppliedRule>rulesTobeRemoved = new ArrayList<AppliedRule>();
+		for (AppliedRule rules : appliedRules) {
+			String moduleFromType =rules.getModuleFrom().getType().toLowerCase();
+			String moduleToType=rules.getModuleTo().getType().toLowerCase();
+			String ruleType=rules.getRuleType();
+			
+			if (ruleType.equals("IsNotAllowedToUse")&&moduleFromType.equals("layer")&&moduleToType.equals("layer")) {
+			
+				rulesTobeRemoved.add(rules);
+			}
+		}
+	
+		for (AppliedRule rule : rulesTobeRemoved) {
+			int index= appliedRules.indexOf(rule);
+			appliedRules.remove(index);
+		}
+		
+		
+	
 	}
 	
 	public void removeAppliedRule(long appliedRuleId)
@@ -231,12 +255,13 @@ public class SoftwareArchitecture {
 	}
 	
 	
-	public long addModule(Module module) //HERE BE DRAGONS
+	public long addModule(Module module)
 	{
 		long moduleId;
 		if(!this.hasModule(module.getName())) {
 			rootModule.addSubModule(module);
 			moduleId = module.getId();
+			
 		}else
 		{
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule")); //TODO! Foutmelding ffs!
@@ -244,6 +269,16 @@ public class SoftwareArchitecture {
 		return moduleId;
 	}
 	
+	public String addNewModule(Module module)
+	{
+		if(!this.hasModule(module.getName())) {
+			rootModule.addSubModule(module);
+		} else {
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
+		}
+		return "";
+	}
+
 	public void removeAllModules() {
 		rootModule.setSubModules(new ArrayList<Module>());
 	}
