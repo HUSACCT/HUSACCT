@@ -28,7 +28,7 @@ public class HusacctLoadPanel extends LoaderPanel{
 	private JTextField pathText;
 	private JButton browseButton;
 	
-	private File selectedFile;
+	private static File selectedFile;
 	
 	private GridBagConstraints constraints;
 	
@@ -53,6 +53,10 @@ public class HusacctLoadPanel extends LoaderPanel{
 		pathText = new JTextField(20);
 		browseButton = new JButton(localeService.getTranslatedString("BrowseButton"));
 		pathText.setEnabled(false);
+		
+		if(selectedFile != null){
+			pathText.setText(selectedFile.getAbsolutePath());
+		}
 		
 		JPanel hiddenPanel = new JPanel();
 		hiddenPanel.setPreferredSize(new Dimension(100, 10));
@@ -85,6 +89,10 @@ public class HusacctLoadPanel extends LoaderPanel{
 	protected void showFileDialog() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("hu", "hu");
 		FileDialog fileChooser = new FileDialog(JFileChooser.FILES_ONLY, localeService.getTranslatedString("OpenButton"), filter);
+		
+		File currentDirectory = getDirectoryFromFile(selectedFile);
+		fileChooser.setCurrentDirectory(currentDirectory);
+		
 		int returnVal = fileChooser.showDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			setFile(fileChooser.getSelectedFile());
