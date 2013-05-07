@@ -120,7 +120,7 @@ public class SoftwareArchitecture {
 		if(this.hasAppliedRule(appliedRuleId))
 		{
 			AppliedRule rule = getAppliedRuleById(appliedRuleId);
-			appliedRules.remove(rule);	
+			appliedRules.remove(rule);
 		}else{
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoRule"));
 		}
@@ -379,7 +379,7 @@ public class SoftwareArchitecture {
 		}
 		return logicalPath;
 	}
-	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D 
+	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D //al gedaan in ModuleDomainService maar dan zonder kut id....
 	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 		

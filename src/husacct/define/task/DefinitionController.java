@@ -9,6 +9,7 @@ import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
@@ -39,6 +40,7 @@ public class DefinitionController extends Observable implements Observer {
 	
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
+	private DefaultRuleDomainService defaultRuleService;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public static DefinitionController getInstance() {
@@ -55,6 +57,7 @@ public class DefinitionController extends Observable implements Observer {
 		this.moduleService = new ModuleDomainService();
 		this.appliedRuleService = new AppliedRuleDomainService();
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
+		this.defaultRuleService = new DefaultRuleDomainService();
 	}
 	
 	public void initSettings() {
@@ -123,12 +126,7 @@ public class DefinitionController extends Observable implements Observer {
 			f.setName("Facade"+componentName);
 			newComponent.addSubModule(f);
 			
-			}
-			
-			
-			
-			
-			
+			}		
 			
 			this.passModuleToService(selectedModuleId, newComponent);
 			
@@ -263,19 +261,27 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Removing rule " + appliedRuleId);
 		try {
 			long moduleId = getSelectedModuleId();
-
+			AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
+			
+			if (defaultRuleService.isMandatoryRule(rule))
+			{
+				UiDialogs.errorDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultRule"));
+			}
+			else {
 			if (moduleId != -1 && appliedRuleId != -1L) {
 				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveAppliedRule"), "Remove?");
 				if (confirm) {
-					// Remove the software unit
-					JPanelStatus.getInstance("Removing applied rule").start();
-					this.appliedRuleService.removeAppliedRule(appliedRuleId);
+						// Remove the software unit
+						JPanelStatus.getInstance("Removing applied rule").start();
+						this.appliedRuleService.removeAppliedRule(appliedRuleId);
 
-					// Update the applied rules table
-					this.notifyObservers();
+						// Update the applied rules table
+						this.notifyObservers();
+					}
 				}
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			logger.error("removeRule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {

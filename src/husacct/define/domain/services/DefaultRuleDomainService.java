@@ -24,7 +24,30 @@ public class DefaultRuleDomainService {
 	
 	private void retrieveRuleTypeDTOsByModule()
 	{
-		defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+		//defaultRuleTypeDTOs = ServiceProvider.getInstance().getValidateService().getDefaultRuleTypesOfModule(_module.getType());
+		defaultRuleTypeDTOs = dirtyHack(_module.getType());
+	}
+	
+	public RuleTypeDTO[] dirtyHack(String moduleType)
+	{
+		ArrayList<RuleTypeDTO> returnhack = new ArrayList<RuleTypeDTO>();
+		switch (moduleType) {
+		case "SubSystem": ;			
+		break;
+		case "Layer":
+			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeSkipCall", "A layer should not access other layers other than the adjectent below",null,null));
+			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeBackCall", "A layer should not access other layers above",null,null));
+        break;
+		case "Component": 
+			returnhack.add(new RuleTypeDTO("Visibility", "",null,null));
+			returnhack.add(new RuleTypeDTO("Facade", "",null,null));
+        break;
+		case "ExternalLibrary":  ;
+		}
+		
+		RuleTypeDTO[] _temp = new RuleTypeDTO[returnhack.size()];
+		_temp = returnhack.toArray(_temp);
+		return _temp;
 	}
 	
 	private void generateRules()
@@ -34,8 +57,6 @@ public class DefaultRuleDomainService {
 			for (int i =0; i < defaultRuleTypeDTOs.length;i++)
 			{
 				generateRule(defaultRuleTypeDTOs[i]);
-				System.out.println(defaultRuleTypeDTOs[i].key);
-				System.out.println(defaultRuleTypeDTOs[i].descriptionKey);
 			}
 		}
 	}
@@ -53,15 +74,15 @@ public class DefaultRuleDomainService {
 	
 	private void generateRule(RuleTypeDTO ruleType) {		
 		switch (ruleType.getKey()) {
-			case "Interface":  interfaceRule(ruleType);
+			case "Interface":  ;
 			break;
 			case "Naming":  ;
             break;
-			case "Facade":  ;
+			case "Facade":  facadeRule(ruleType);
             break;
 			case "SubClass":  ;
             break;       
-			case "Visibility":  ;
+			case "Visibility": visibilityRule(ruleType) ;
             break;     
 			case "Allowed":  ;
             break;
@@ -88,8 +109,17 @@ public class DefaultRuleDomainService {
 		}
 	}
 	
-	public boolean isMandatoryRule(Module module)
+	public boolean isMandatoryRule(AppliedRule rule)
 	{
+		_module = rule.getModuleFrom();
+		retrieveRuleTypeDTOsByModule();			
+		for (RuleTypeDTO ruleType: defaultRuleTypeDTOs)
+		{
+			if(rule.getRuleType().equals(ruleType.getKey()))
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -126,8 +156,25 @@ public class DefaultRuleDomainService {
 		defaultRules.add(backCallRule);
 	}
 	
-	private void interfaceRule(RuleTypeDTO ruleType) 
+	private void visibilityRule(RuleTypeDTO rule) 
 	{
+		AppliedRule visibilityRule = getBaseRule();
+		visibilityRule.setRuleType("Visibility");
+		visibilityRule.setDescription(visibilityRule.getDescription()+"\n"+rule.getDescriptionKey());
 		
+		visibilityRule.setModuleTo(new Module());
+		defaultRules.add(visibilityRule);
 	}
+	
+	private void facadeRule(RuleTypeDTO rule) 
+	{
+		AppliedRule facadeRule = getBaseRule();
+		facadeRule.setRuleType("Facade");
+		facadeRule.setDescription(facadeRule.getDescription()+"\n"+rule.getDescriptionKey());
+		
+		facadeRule.setModuleTo(new Module());
+		defaultRules.add(facadeRule);
+	}
+	
+	
 }
