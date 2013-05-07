@@ -231,7 +231,7 @@ public class SoftwareArchitecture {
 	}
 	
 	
-	public long addModule(Module module) //HERE BE DRAGONS
+	public long addModule(Module module)
 	{
 		long moduleId;
 		if(!this.hasModule(module.getName())) {
@@ -242,6 +242,16 @@ public class SoftwareArchitecture {
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule")); //TODO! Foutmelding ffs!
 		}
 		return moduleId;
+	}
+	
+	public String addNewModule(Module module)
+	{
+		if(!this.hasModule(module.getName())) {
+			rootModule.addSubModule(module);
+		} else {
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
+		}
+		return "";
 	}
 	
 	public void removeAllModules() {

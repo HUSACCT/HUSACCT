@@ -28,10 +28,6 @@ public class AnalyseTask implements Runnable {
 		// InterruptedException is not yet implemented by analyse
 		// Therefore this thread can never be interrupted.
 		try {
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
 			mainController.getStateController().setAnalysing(true);
 			mainController.getStateController().setPreAnalysed(false);
 			Thread.sleep(1);

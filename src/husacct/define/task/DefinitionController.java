@@ -159,13 +159,18 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	private void passModuleToService(long selectedModuleId, Module module) {
+		String ExceptionMessage = "";
 		if(selectedModuleId == -1) {
 			this.moduleService.addModuleToRoot(module);
 		} else {
 			logger.debug("Adding child");
-			this.moduleService.addModuleToParent(selectedModuleId, module);
+			ExceptionMessage = this.moduleService.addNewModuleToParent(selectedModuleId, module);
 		}
 		this.notifyObservers();
+		
+		if(!ExceptionMessage.isEmpty()) {
+			UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
+		}
 	}
 
 	/**
