@@ -70,6 +70,9 @@ public class StateController {
 		if(analyseService.isAnalysed()){
 			newStates.add(States.ANALYSED);
 		}
+		if(isPreAnalysed) {
+			newStates.add(States.PREANALYSED);
+		}
 
 		if(isAnalysing()) {
 			newStates.add(States.ANALYSING);
@@ -146,6 +149,7 @@ public class StateController {
 
 	public void setPreAnalysed(boolean preAnalysed) {
 		this.isPreAnalysed = preAnalysed;
+		checkState();
 
 	}
 }

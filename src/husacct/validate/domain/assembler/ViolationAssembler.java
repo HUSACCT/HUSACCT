@@ -83,7 +83,7 @@ public class ViolationAssembler {
 			final String classPathTo = violation.getClassPathTo();
 			final String logicalModuleFromPath = violation.getLogicalModules().getLogicalModuleFrom().getLogicalModulePath();
 			final String logicalModuleToPath = violation.getLogicalModules().getLogicalModuleTo().getLogicalModulePath();
-			final String message = messageBuilder.createMessage(violation.getMessage());
+			final String message = messageBuilder.createMessage(violation.getMessage(), violation);
 			final int linenumber = violation.getLinenumber();
 
 			if (violation.getSeverity() != null) {

@@ -26,9 +26,12 @@ public class AnalyseTask implements Runnable {
 	public void run() {
 		// Thread.sleep added to support InterruptedException catch
 		// InterruptedException is not yet implemented by analyse
-		// Therefor this thread can never be interrupted.
+		// Therefore this thread can never be interrupted.
 		try {
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
 			mainController.getStateController().setAnalysing(true);
 			mainController.getStateController().setPreAnalysed(false);
 			Thread.sleep(1);
@@ -56,6 +59,7 @@ public class AnalyseTask implements Runnable {
 					applicationDTO.projects.add(i, currentProject);
 				}
 			}
+			
 			logger.debug("Analysing finished");
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
