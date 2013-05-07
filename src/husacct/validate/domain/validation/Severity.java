@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.util.UUID;
 
 public class Severity implements Cloneable {
-
 	private final UUID id;
 	private final String severityKey;
 	private Color color;
@@ -78,8 +77,7 @@ public class Severity implements Cloneable {
 			Severity clone = (Severity) super.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
-			throw new husacct.validate.domain.exception.CloneNotSupportedException(
-					e);
+			throw new husacct.validate.domain.exception.CloneNotSupportedException(e);
 		}
 	}
 

@@ -6,8 +6,6 @@ import husacct.validate.domain.exception.ModuleNotFoundException;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 public class ModuleFactory {
-	
-	
 	public AbstractModule createModule(String type, List<RuleType> rules) throws ModuleNotFoundException {
 		
 		switch(type.toLowerCase()) {

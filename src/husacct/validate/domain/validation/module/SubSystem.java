@@ -6,7 +6,6 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import java.util.ArrayList;
 
 public class SubSystem extends AbstractModule {
-
 	public SubSystem(List<RuleType> ruleTypes) {
 		super(ruleTypes);
 	}
