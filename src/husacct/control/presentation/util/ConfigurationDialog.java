@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
-import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.control.task.MainController;
 

@@ -1,6 +1,8 @@
 package husacct.control;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.locale.ILocaleService;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
@@ -32,6 +34,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	private MainController mainController; 
 	private WorkspaceController workspaceController;
@@ -162,8 +165,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public String getConfigurationName() {
-		// TODO Auto-generated method stub
-		return null;
+		return localeService.getTranslatedString("ConfigGeneral");
 	}
 
 	@Override
