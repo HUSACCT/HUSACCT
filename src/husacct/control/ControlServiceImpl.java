@@ -2,6 +2,7 @@ package husacct.control;
 
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
@@ -21,12 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 
-public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable{
+public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
@@ -156,6 +158,18 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
 		codeViewController.displayErrorsInFile(fileName, errors);
+	}
+
+	@Override
+	public String getConfigurationName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JPanel getConfigurationPanel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
