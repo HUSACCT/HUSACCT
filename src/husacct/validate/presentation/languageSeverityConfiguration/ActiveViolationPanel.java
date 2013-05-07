@@ -32,8 +32,8 @@ class ActiveViolationPanel extends JPanel {
 
 	private static final long serialVersionUID = 3957004303176017057L;
 	private static Logger logger = Logger.getLogger(ActiveViolationPanel.class);
-	private final DefaultListModel categoryModel;
-	private final DefaultListModel ruletypeModel;
+	private final DefaultListModel<DataLanguageHelper> categoryModel;
+	private final DefaultListModel<DataLanguageHelper> ruletypeModel;
 	private final String language;
 	private final TaskServiceImpl taskServiceImpl;
 	private final HashMap<String, List<RuleType>> ruletypes;
@@ -41,13 +41,13 @@ class ActiveViolationPanel extends JPanel {
 	private List<ActiveViolationType> activeViolationtypes;
 	private DefaultTableModel violationtypeModel;
 	private JButton apply, deselectAll, selectAll;
-	private JList categoryJList, ruletypeJList;
+	private JList<DataLanguageHelper> categoryJList, ruletypeJList;
 	private JScrollPane categoryScrollpane, ruletypeScrollpane, violationtypeScrollpane;
 	private JTable violationtypeTable;
 
 	ActiveViolationPanel(TaskServiceImpl taskServiceImpl, HashMap<String, List<RuleType>> ruletypes, String language) {
-		categoryModel = new DefaultListModel();
-		ruletypeModel = new DefaultListModel();
+		categoryModel = new DefaultListModel<DataLanguageHelper>();
+		ruletypeModel = new DefaultListModel<DataLanguageHelper>();
 
 		this.taskServiceImpl = taskServiceImpl;
 		this.ruletypes = ruletypes;
@@ -62,12 +62,12 @@ class ActiveViolationPanel extends JPanel {
 	private void initComponents() {
 
 		categoryScrollpane = new JScrollPane();
-		categoryJList = new JList();
+		categoryJList = new JList<DataLanguageHelper>();
 		categoryJList.setModel(categoryModel);
 		ruletypeScrollpane = new JScrollPane();
 		violationtypeTable = new JTable();
 		violationtypeScrollpane = new JScrollPane();
-		ruletypeJList = new JList();
+		ruletypeJList = new JList<DataLanguageHelper>();
 		ruletypeJList.setModel(ruletypeModel);
 		selectAll = new JButton();
 		deselectAll = new JButton();

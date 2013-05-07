@@ -46,6 +46,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 	}
 	
 	public void setProgressText(int percentage) {
+		progressBar.setIndeterminate(false);
 		this.setTitle(percentage + "%");
 		this.progressBar.setValue(percentage);
 	}
@@ -68,7 +69,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 		progressBar = new JProgressBar();
 		progressBar.setValue(0);
 		progressPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		//progressBar.setIndeterminate(true);
+		progressBar.setIndeterminate(true);
 
 		JLabel waitLabel = new JLabel(localeService.getTranslatedString("Wait"));
 

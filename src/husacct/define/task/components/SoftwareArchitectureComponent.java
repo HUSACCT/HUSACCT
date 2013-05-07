@@ -52,4 +52,7 @@ public class SoftwareArchitectureComponent extends AbstractDefineComponent {
 	public long getModuleId() {
 		return this.moduleId;
 	}
+
+	
+	
 }

@@ -29,19 +29,19 @@ import javax.swing.table.TableColumnModel;
 class RuleTypeSeverityPanel extends JPanel {
 
 	private static final long serialVersionUID = 5947125752371446966L;
-	private final DefaultListModel rtsCategoryModel;
+	private final DefaultListModel<DataLanguageHelper> rtsCategoryModel;
 	private final String language;
 	private final HashMap<String, List<RuleType>> ruletypes;
 	private List<Severity> severities;
 	private TaskServiceImpl taskServiceImpl;
 	private ComboBoxTableModel ruletypeModel;
 	private JButton apply, restore, restoreAll;
-	private JList category;
+	private JList<DataLanguageHelper> category;
 	private JScrollPane categoryScrollpane, ruletypeScrollpane;
 	private JTable ruletypeTable;
 
 	RuleTypeSeverityPanel(TaskServiceImpl taskServiceImpl, ConfigurationRuleTypeDTO configurationSubPanelDTO) {
-		rtsCategoryModel = new DefaultListModel();
+		rtsCategoryModel = new DefaultListModel<DataLanguageHelper>();
 
 		this.taskServiceImpl = taskServiceImpl;
 		this.severities = configurationSubPanelDTO.getSeverities();
@@ -56,7 +56,7 @@ class RuleTypeSeverityPanel extends JPanel {
 	private void initComponents() {
 
 		categoryScrollpane = new JScrollPane();
-		category = new JList();
+		category = new JList<DataLanguageHelper>();
 		ruletypeScrollpane = new JScrollPane();
 		ruletypeTable = new JTable();
 		apply = new JButton();

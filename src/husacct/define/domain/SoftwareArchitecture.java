@@ -444,7 +444,7 @@ public class SoftwareArchitecture {
 		}
 	}
 	
-	private Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
+	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
 		for (Module mod : getModulesForLayerSorting(parentModuleId)){
 			if (mod instanceof Layer) {

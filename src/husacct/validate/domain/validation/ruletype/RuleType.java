@@ -23,7 +23,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 public abstract class RuleType {
-
 	protected final String key;
 	protected final String descriptionKey;
 	protected final String categoryKey;
@@ -92,15 +91,33 @@ public abstract class RuleType {
 		final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
 
-		return new Violation(dependency.lineNumber, severity.clone(), this.key, dependency.type, dependency.from, dependency.to, dependency.isIndirect, message, logicalModules);
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setLineNumber(dependency.lineNumber)
+				.setSeverity(severity.clone())
+				.setRuletypeKey(this.key)
+				.setViolationtypeKey(dependency.type)
+				.setClassPathFrom(dependency.from)
+				.setClassPathTo(dependency.to)
+				.setInDirect(dependency.isIndirect)
+				.setMessage(message)
+				.setLogicalModules(logicalModules);
+		return newViolation;
 	}
 
 	protected Violation createViolation(RuleDTO rootRule, LogicalModules logicalModules, ConfigurationServiceImpl configuration) {
 		initializeViolationTypeFactory(configuration);
 		Message message = new Message(rootRule);
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
-		return new Violation(severity.clone(), this.key, false, message, logicalModules);
 
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setSeverity(severity.clone())
+				.setRuletypeKey(this.key)
+				.setInDirect(false)
+				.setMessage(message)
+				.setLogicalModules(logicalModules);
+		return newViolation;
 	}
 
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, ConfigurationServiceImpl configuration) {
@@ -111,7 +128,16 @@ public abstract class RuleType {
 		LogicalModules logicalModules = new LogicalModules(logicalModuleFrom);
 
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, null);
-		return new Violation(severity.clone(), this.key, classPathFrom.getPhysicalPath(), false, message, logicalModules);
+
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setSeverity(severity.clone())
+				.setRuletypeKey(this.key)
+				.setClassPathFrom(classPathFrom.getPhysicalPath())
+				.setInDirect(false)
+				.setMessage(message)
+				.setLogicalModules(logicalModules);
+		return newViolation;
 	}
 
 	protected Violation createViolation(RuleDTO rootRule, Mapping classPathFrom, String violationTypeKey, ConfigurationServiceImpl configuration) {
@@ -123,7 +149,17 @@ public abstract class RuleType {
 		final Severity violationTypeSeverity = getViolationTypeSeverity(violationTypeKey);
 
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
-		return new Violation(severity.clone(), this.key, violationTypeKey, classPathFrom.getPhysicalPath(), false, message, logicalModules);
+
+		Violation newViolation = new Violation();
+		newViolation = newViolation
+				.setSeverity(severity.clone())
+				.setRuletypeKey(this.key)
+				.setViolationtypeKey(violationTypeKey)
+				.setClassPathFrom(classPathFrom.getPhysicalPath())
+				.setInDirect(false)
+				.setMessage(message)
+				.setLogicalModules(logicalModules);
+		return newViolation;		
 	}
 
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {
@@ -136,11 +172,12 @@ public abstract class RuleType {
 		try {
 			return violationtypefactory.createViolationType(this.key, violationTypeKey).getSeverity();
 		} catch (ViolationTypeNotFoundException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
 
 	public boolean equals(RuleTypes desiredRuleType) {
-	    return this.getKey().equals(desiredRuleType.toString());
+		return this.getKey().equals(desiredRuleType.toString());
 	}
 }
