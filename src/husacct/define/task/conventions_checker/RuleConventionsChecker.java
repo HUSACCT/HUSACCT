@@ -92,7 +92,7 @@ public class RuleConventionsChecker {
 		if(isNotAllowedToUseSucces) {
 			isNotAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("MustUse", moduleFrom, moduleTo);
 		}
-		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkTypeIsLayer(moduleTo)){
+		if(isNotAllowedToUseSucces && layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkTypeIsLayer(moduleTo)){
 			ArrayList<Layer> backCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
 			ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
 			for(Layer skipCallLayer : skipCallLayers) {
