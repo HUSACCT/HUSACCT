@@ -5,6 +5,7 @@ import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.task.ExportController;
 import husacct.control.task.MainController;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -98,8 +99,18 @@ public class ExportViolationsReportDialog extends JDialog{
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			if(fileDialog.getSelectedFile().exists()){
 				setFile(fileDialog.getSelectedFile());
-			} else {
-				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileDialog.getFileFilter().getDescription()));
+			} 
+			else {
+				String fileExtension = "";
+				
+				if(fileDialog.getFileFilter() == null) {
+					fileExtension = ExtensionType.PDF.getExtension();
+				}
+				else {
+					fileExtension = fileDialog.getFileFilter().getDescription();
+				}
+				
+				setFile(new File(fileDialog.getSelectedFile().getAbsolutePath() + "." + fileExtension));
 			}
 		}
 	}
