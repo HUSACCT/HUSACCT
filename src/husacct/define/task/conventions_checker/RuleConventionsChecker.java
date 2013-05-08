@@ -41,9 +41,9 @@ public class RuleConventionsChecker {
 			conventionCheckSucces = checkIsAllowedToUse();
 		} else if(ruleTypeKey.equals("MustUse")) {
 			conventionCheckSucces = checkMustUse();
-		} else if(ruleTypeKey.equals("SkipCall")) {
+		} else if(ruleTypeKey.equals("IsNotAllowedToMakeSkipCall")) {
 			conventionCheckSucces = checkSkipCall();
-		} else if(ruleTypeKey.equals("BackCall")) {
+		} else if(ruleTypeKey.equals("IsNotAllowedToMakeBackCall")) {
 			conventionCheckSucces = checkBackCall();
 		}
 		return conventionCheckSucces;
@@ -91,6 +91,20 @@ public class RuleConventionsChecker {
 		}
 		if(isNotAllowedToUseSucces) {
 			isNotAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("MustUse", moduleFrom, moduleTo);
+		}
+		if(layerCheckerHelper.checkTypeIsLayer(moduleFrom) && layerCheckerHelper.checkTypeIsLayer(moduleTo)){
+			ArrayList<Layer> backCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
+			ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
+			for(Layer skipCallLayer : skipCallLayers) {
+				if(skipCallLayer.equals(moduleTo)){
+					isNotAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeSkipCall", moduleFrom);
+				}
+			}
+			for(Layer backCallLayer : backCallLayers) {
+				if(backCallLayer.equals(moduleTo)){
+					isNotAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeBackCall", moduleFrom);
+				}
+			}
 		}
 		return isNotAllowedToUseSucces;
 	}

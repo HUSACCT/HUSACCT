@@ -3,8 +3,6 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
-
-import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -19,6 +17,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -63,6 +63,13 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	private JScrollPane addAppliedRulesTable() {
 		appliedRulesPane = new JScrollPane();
 		appliedRulesTable = new JTableAppliedRule();
+		appliedRulesTable.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				if (e.getClickCount()==2){
+					editRule();
+				}
+			}
+		});
 		appliedRulesPane.setViewportView(appliedRulesTable);
 		return appliedRulesPane;
 	}
