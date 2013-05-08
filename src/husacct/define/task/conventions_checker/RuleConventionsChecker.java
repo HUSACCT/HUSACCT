@@ -112,6 +112,9 @@ public class RuleConventionsChecker {
 	private boolean checkIsOnlyAllowedToUse() {
 		boolean isOnlyAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse", moduleFrom, moduleTo);
 		if(isOnlyAllowedToUseSucces) {
+			isOnlyAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToSelected("IsOnlyAllowedToUse", moduleFrom, moduleTo);
+		}
+		if(isOnlyAllowedToUseSucces) {
 			isOnlyAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToOther("IsOnlyAllowedToUse", moduleFrom, moduleTo);
 		}
 		if(isOnlyAllowedToUseSucces) {
@@ -122,6 +125,28 @@ public class RuleConventionsChecker {
 		}
 		if(isOnlyAllowedToUseSucces) {
 			isOnlyAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromThisToOther("MustUse", moduleFrom, moduleTo);
+		}
+		if(isOnlyAllowedToUseSucces) {
+			if(!moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeSkipCall", moduleFrom)) {
+				ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
+				for(Layer skipCallLayer : skipCallLayers) {
+					if(skipCallLayer == moduleTo) {
+						isOnlyAllowedToUseSucces = false;
+						break;
+					}
+				}
+			}
+		}
+		if(isOnlyAllowedToUseSucces) {
+			if(!moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeBackCall", moduleFrom)) {
+				ArrayList<Layer> skipCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
+				for(Layer skipCallLayer : skipCallLayers) {
+					if(skipCallLayer == moduleTo) {
+						isOnlyAllowedToUseSucces = false;
+						break;
+					}
+				}
+			}
 		}
 		return isOnlyAllowedToUseSucces;
 	}
@@ -139,6 +164,28 @@ public class RuleConventionsChecker {
 		}
 		if(isOnlyModuleAllowedToUseSucces) {
 			isOnlyModuleAllowedToUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromOtherToSelected("MustUse", moduleFrom, moduleTo);
+		}
+		if(isOnlyModuleAllowedToUseSucces) {
+			if(!moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeSkipCall", moduleFrom)) {
+				ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
+				for(Layer skipCallLayer : skipCallLayers) {
+					if(skipCallLayer == moduleTo) {
+						isOnlyModuleAllowedToUseSucces = false;
+						break;
+					}
+				}
+			}
+		}
+		if(isOnlyModuleAllowedToUseSucces) {
+			if(!moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeBackCall", moduleFrom)) {
+				ArrayList<Layer> skipCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
+				for(Layer skipCallLayer : skipCallLayers) {
+					if(skipCallLayer == moduleTo) {
+						isOnlyModuleAllowedToUseSucces = false;
+						break;
+					}
+				}
+			}
 		}
 		return isOnlyModuleAllowedToUseSucces;
 	}
@@ -161,6 +208,28 @@ public class RuleConventionsChecker {
 		}
 		if(mustUseSucces) {
 			mustUseSucces = moduleCheckerHelper.checkRuleTypeAlreadyFromOtherToSelected("IsOnlyModuleAllowedToUse", moduleFrom, moduleTo);
+		}
+		if(mustUseSucces) {
+			if(!moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeSkipCall", moduleFrom)) {
+				ArrayList<Layer> skipCallLayers = layerCheckerHelper.getSkipCallLayers(moduleFrom.getId());
+				for(Layer skipCallLayer : skipCallLayers) {
+					if(skipCallLayer == moduleTo) {
+						mustUseSucces = false;
+						break;
+					}
+				}
+			}
+		}
+		if(mustUseSucces) {
+			if(!moduleCheckerHelper.checkRuleTypeAlreadySet("IsNotAllowedToMakeBackCall", moduleFrom)) {
+				ArrayList<Layer> skipCallLayers = layerCheckerHelper.getBackCallLayers(moduleFrom.getId());
+				for(Layer skipCallLayer : skipCallLayers) {
+					if(skipCallLayer == moduleTo) {
+						mustUseSucces = false;
+						break;
+					}
+				}
+			}
 		}
 		return mustUseSucces;
 	}

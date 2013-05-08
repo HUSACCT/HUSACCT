@@ -21,6 +21,7 @@ public class ModuleCheckerHelper {
 	public boolean checkRuleTypeAlreadySet(String ruleTypeKey, Module moduleFrom) {
 		for(AppliedRule appliedRule : this.getFromModuleAppliedRules(moduleFrom)) {
 			if(appliedRule.getRuleType().equals(ruleTypeKey)) {
+				System.out.println(ruleTypeKey);
 				setErrorMessage("'"+ ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleTypeKey) + "'");
 				return false;
 			}
