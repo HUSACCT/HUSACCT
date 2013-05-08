@@ -31,6 +31,11 @@ class FamixDependencyConnector {
     }
 
     void connectStructuralDependecies() {
+		String theClass;
+		String classFoundInImports;                        
+		String belongsToPackage;
+		String to;
+		
         for (FamixStructuralEntity entity : theModel.waitingStructuralEntitys) {
 
             //Added By Team 1 General GUI & Control
@@ -41,14 +46,14 @@ class FamixDependencyConnector {
             //end added by Team 1
 
             try {
-                String theClass = entity.belongsToClass;
+                theClass = entity.belongsToClass;
                 if (!isCompleteTypeDeclaration(entity.declareType)) {
-                    String classFoundInImports = findClassInImports(theClass, entity.declareType);
+                    classFoundInImports = findClassInImports(theClass, entity.declareType);
                     if (!classFoundInImports.equals("")) {
                         entity.declareType = classFoundInImports;
                     } else {
-                        String belongsToPackage = getPackageFromUniqueClassName(entity.belongsToClass);
-                        String to = findClassInPackage(entity.declareType, belongsToPackage);
+                        belongsToPackage = getPackageFromUniqueClassName(entity.belongsToClass);
+                        to = findClassInPackage(entity.declareType, belongsToPackage);
                         if (!to.equals("")) {
                             entity.declareType = to;
                         }
@@ -61,6 +66,15 @@ class FamixDependencyConnector {
     }
 
     void connectAssociationDependencies() {
+        int count = 0;
+		
+		String oldy;
+		String  theClass;
+		String belongsToPackage;
+		String classFoundInImports;
+		String to;
+		FamixInvocation theInvocation;
+		
         for (FamixAssociation association : theModel.waitingAssociations) {
 
             //Added By Team 1 General GUI & Control
@@ -70,17 +84,19 @@ class FamixDependencyConnector {
             }
             //end added by Team 1
 
+            oldy = association.to;
+            count += 1;
             try {
                 boolean connected = false;
-                String theClass = association.from;
+                theClass = association.from;
                 if (!isCompleteTypeDeclaration(association.to)) {
-                    String classFoundInImports = findClassInImports(theClass, association.to);
+                    classFoundInImports = findClassInImports(theClass, association.to);
                     if (!classFoundInImports.equals("")) {
                         association.to = classFoundInImports;
                         connected = true;
                     } else {
-                        String belongsToPackage = getPackageFromUniqueClassName(association.from);
-                        String to = findClassInPackage(association.to, belongsToPackage);
+                        belongsToPackage = getPackageFromUniqueClassName(association.from);
+                        to = findClassInPackage(association.to, belongsToPackage);
                         if (!to.equals("")) {
                             association.to = to;
                             connected = true;
@@ -88,7 +104,7 @@ class FamixDependencyConnector {
                     }
                     if (!connected) {
                         if (isInvocation(association)) {
-                            FamixInvocation theInvocation = (FamixInvocation) association;
+                            theInvocation = (FamixInvocation) association;
                             if (theInvocation.belongsToMethod.equals("")) {
                                 //Then it is an attribute
                                 theInvocation.to = getClassForAttribute(theInvocation.from, theInvocation.nameOfInstance);
@@ -175,12 +191,15 @@ class FamixDependencyConnector {
     }
 
     private String getClassForLocalVariable(String declareClass, String belongsToMethod, String nameOfInstance) {
+		FamixStructuralEntity entity;
+		FamixLocalVariable variable;
+		
         for (String s : theModel.structuralEntities.keySet()) {
             if (s.startsWith(declareClass)) {
 
-                FamixStructuralEntity entity = (FamixStructuralEntity) theModel.structuralEntities.get(s);
+                entity = (FamixStructuralEntity) theModel.structuralEntities.get(s);
                 if (entity instanceof FamixLocalVariable) {
-                    FamixLocalVariable variable = (FamixLocalVariable) entity;
+                    variable = (FamixLocalVariable) entity;
                     if (variable.belongsToMethod.equals(belongsToMethod)) {
                         if (variable.name.equals(nameOfInstance)) {
                             return variable.declareType;
@@ -215,6 +234,8 @@ class FamixDependencyConnector {
     }
 
     private boolean isCompleteTypeDeclaration(String typeDeclaration) {
+
+
         //Added By Team 1 General GUI & Control
         //Is needed for the progressBar
         ServiceProvider.getInstance().getControlService().updateProgress((++amountOfModulesConnected * 100) / (1 + theModel.waitingAssociations.size() + theModel.waitingStructuralEntitys.size()));
@@ -252,9 +273,12 @@ class FamixDependencyConnector {
     private List<String> getModulesInPackage(String packageUniqueName) {
         List<String> result = new ArrayList<String>();
         Iterator<Entry<String, FamixClass>> classIterator = theModel.classes.entrySet().iterator();
+		FamixClass currentClass;
+		FamixInterface currentInterface;
+		
         while (classIterator.hasNext()) {
             Entry<String, FamixClass> entry = (Entry<String, FamixClass>) classIterator.next();
-            FamixClass currentClass = entry.getValue();
+            currentClass = entry.getValue();
             if (currentClass.belongsToPackage.equals(packageUniqueName)) {
                 result.add(currentClass.uniqueName);
             }
@@ -262,7 +286,7 @@ class FamixDependencyConnector {
         Iterator<Entry<String, FamixInterface>> interfaceIterator = theModel.interfaces.entrySet().iterator();
         while (interfaceIterator.hasNext()) {
             Entry<String, FamixInterface> entry = (Entry<String, FamixInterface>) interfaceIterator.next();
-            FamixInterface currentInterface = entry.getValue();
+            currentInterface = entry.getValue();
             if (currentInterface.belongsToPackage.equals(packageUniqueName)) {
                 result.add(currentInterface.uniqueName);
             }
