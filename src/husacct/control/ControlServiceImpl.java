@@ -2,12 +2,12 @@ package husacct.control;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
-import husacct.common.locale.ILocaleService;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
 import husacct.control.task.CodeViewController;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -165,16 +164,12 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public String getConfigurationName() {
-		//return localeService.getTranslatedString("ConfigGeneral");
-		return "General";
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
 	}
 
 	@Override
 	public JPanel getConfigurationPanel() {
-		JPanel panel = new JPanel();
-		JLabel label = new JLabel("test");
-		panel.add(label);
-		return panel;
+		return new GeneralConfigurationPanel();
 	}
 
 }

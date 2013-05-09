@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.Properties;
 
 public class ConfigurationManager {
@@ -48,20 +47,11 @@ public class ConfigurationManager {
 	}
 	
 	private void createDefaults(File file) {
-		/*
 		try {
-			file.createNewFile();
-			File defaults = new File("/husacct/common/resources/config.properties");
-			FileInputStream defaultStream = new FileInputStream(defaults);
-			FileOutputStream destinationStream = new FileOutputStream(file);
-			FileChannel source = defaultStream.getChannel();
-			FileChannel destination = destinationStream.getChannel();
-			destination.transferFrom(source, 0, source.size());
-			defaultStream.close();
-			destinationStream.close();
+			properties.load(new FileInputStream("/husacct/common/resources/config.properties"));
+			storeProperties();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 	}
 }
