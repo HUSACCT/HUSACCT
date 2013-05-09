@@ -113,7 +113,10 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		JLabel moduleTypeLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleType"));
 		this.innerPanel.add(moduleTypeLabel);
 		
-		String[] moduleTypes = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")};
+		String[] moduleTypes = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), 
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), 
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary"),"Component with facade"};
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
@@ -201,12 +204,21 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer")) {
 			this.submitLayer();
 		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component")) {
-			this.submitComponent();
+			this.submitComponent(false);
 		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")) {
 			this.submitExternalLibrary();
+		}else if(moduleType.toUpperCase().equals("Component with facade".toUpperCase()))
+		{
+			this.submitComponentWithFacade();
 		}
 	}
 	
+	private void submitComponentWithFacade() {
+	          submitComponent(true);
+	      
+		
+	}
+
 	private void submitSubSystem() {
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
@@ -237,13 +249,13 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		}
 	}
 	
-	private void submitComponent() {
+	private void submitComponent(boolean ifWithFacade) {
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			boolean hasBeenAdded = definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
+			boolean hasBeenAdded = definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription,ifWithFacade);
 			if (hasBeenAdded){
 				//update tree view
 				this.modulePanel.updateModuleTree();
