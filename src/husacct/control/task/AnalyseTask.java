@@ -34,13 +34,11 @@ public class AnalyseTask implements Runnable {
 			logger.debug("Analysing application");
 			// ServiceProvider.getInstance().resetAnalyseService();
 			if (applicationDTO.projects.size() > 0) {
-				ServiceProvider.getInstance().getAnalyseService()
-						.analyseApplication(applicationDTO.projects.get(0));
+				
 				for (int i = 0; i < applicationDTO.projects.size(); i++) {
 					ProjectDTO currentProject = applicationDTO.projects.get(i);
 
-					ServiceProvider.getInstance().getAnalyseService()
-							.analyseApplication(currentProject);
+					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
 
 					// Add analysed root modules to project
 					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
