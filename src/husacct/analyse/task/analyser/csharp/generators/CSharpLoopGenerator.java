@@ -22,8 +22,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
             case CSharpParser.FOR:
             case CSharpParser.WHILE:
 			case CSharpParser.DO:
-				System.out.println(loopTree.toStringTree());
-                //walkForOrWhileTree(loopTree);
+                walkForOrWhileTree(loopTree);
                 break;
             case CSharpParser.FOREACH:
                 walkForEachTree(loopTree);
