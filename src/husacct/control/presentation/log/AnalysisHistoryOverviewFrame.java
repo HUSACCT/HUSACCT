@@ -41,8 +41,12 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(500, 380));
+		
+		//Center window
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((dim.width/2-this.getSize().width/2)-250, dim.height/2-this.getSize().height/2);
+		int x = (dim.width/2-this.getSize().width/2)-250;	//Well this is awkward...
+		int y = dim.height/2-this.getSize().height/2;
+		this.setLocation(x, y);
 	}
 	
 	private void addComponents(){
