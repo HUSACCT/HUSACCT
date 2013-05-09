@@ -1,12 +1,15 @@
 package husacct.control.presentation.log;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -38,7 +41,8 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(500, 380));
-		this.setLocationRelativeTo(getRootPane());
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((dim.width/2-this.getSize().width/2)-250, dim.height/2-this.getSize().height/2);
 	}
 	
 	private void addComponents(){
@@ -48,8 +52,8 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	private void addTable(){
 		String workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 		String application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
-		String project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
-		HashMap<String, HashMap<String, String>> tableData = mainController.getLogController().getApplicationHistoryFromFile(workspace, application, project);
+		ArrayList<ProjectDTO> projects = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects;
+		HashMap<String, HashMap<String, String>> tableData = mainController.getLogController().getApplicationHistoryFromFile(workspace, application, projects);
 		
 		analysisTableModel = new DefaultTableModel();
 		analysisTable = new JTable(analysisTableModel){
@@ -59,6 +63,7 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		};
 
 		analysisTableModel.addColumn(localeService.getTranslatedString("Application"));
+		analysisTableModel.addColumn(localeService.getTranslatedString("Project"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Path"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("DateTime"));
 		analysisTableModel.addColumn(localeService.getTranslatedString("Packages"));
@@ -68,7 +73,7 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		analysisTableModel.addColumn(localeService.getTranslatedString("Violations"));
 		
 		analysisTable.getTableHeader().setReorderingAllowed(false);
-		analysisTable.getTableHeader().setResizingAllowed(false);
+		analysisTable.getTableHeader().setResizingAllowed(true);
 		analysisTable.setAutoCreateRowSorter(true);
 		analysisTable.getRowSorter().toggleSortOrder(2); analysisTable.getRowSorter().toggleSortOrder(2);	//Sort by date/time, newest on top
 		
@@ -80,6 +85,7 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		    HashMap<String, String> analysisData = entry.getValue();
 		    analysisTableModel.addRow(new Object[]{
 		    		analysisData.get("application"), 
+		    		analysisData.get("project"), 
 		    		analysisData.get("path"), 
 		    		analysisTimestampFormat.format(analysisTimestampDate),
 		    		analysisData.get("packages"), 
