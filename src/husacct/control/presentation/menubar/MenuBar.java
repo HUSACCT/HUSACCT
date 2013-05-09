@@ -15,7 +15,6 @@ public class MenuBar extends JMenuBar{
 	private DefineMenu defineMenu;
 	private AnalyseMenu analyseMenu;
 	private ValidateMenu validateMenu;
-	private LanguageMenu languageMenu;
 	private ConfigurationMenu configurationMenu;
 	private HelpMenu helpMenu;
 
@@ -34,7 +33,6 @@ public class MenuBar extends JMenuBar{
 		defineMenu = new DefineMenu(mainController);
 		analyseMenu = new AnalyseMenu(mainController);
 		validateMenu = new ValidateMenu(mainController);
-		languageMenu = new LanguageMenu(mainController);
 		configurationMenu = new ConfigurationMenu(mainController);
 		helpMenu = new HelpMenu(mainController);		
 
@@ -42,14 +40,12 @@ public class MenuBar extends JMenuBar{
 		defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
 		analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
 		validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
-		languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
 		helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
 
 		add(fileMenu);
 		add(defineMenu);
 		add(analyseMenu);
 		add(validateMenu);
-		add(languageMenu);
 		add(configurationMenu);
 		add(helpMenu);
 	}
@@ -61,7 +57,6 @@ public class MenuBar extends JMenuBar{
 				defineMenu.setMnemonic(getMnemonicKeycode("DefineMenuMnemonic"));
 				analyseMenu.setMnemonic(getMnemonicKeycode("AnalyseMenuMnemonic"));
 				validateMenu.setMnemonic(getMnemonicKeycode("ValidateMenuMnemonic"));
-				languageMenu.setMnemonic(getMnemonicKeycode("LanguageMenuMnemonic"));
 				helpMenu.setMnemonic(getMnemonicKeycode("HelpMenuMnemonic"));
 			}
 		});
