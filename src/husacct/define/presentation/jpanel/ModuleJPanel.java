@@ -78,7 +78,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
 	}
-	
+		
 	private JPanel createModuleTreePanel() {
 		JPanel moduleTreePanel = new JPanel();
 		
