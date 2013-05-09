@@ -164,7 +164,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public String getConfigurationName() {
-		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigValidate");
 	}
 
 	@Override
