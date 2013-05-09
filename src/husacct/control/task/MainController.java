@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +19,9 @@ public class MainController {
 	private ImportController importController;
 	private ExportController exportController;
 	private LogController logController;
+	private CodeViewController codeViewController;
+	
+	private ConfigurationManager configurationManager;
 	
 	public MainGui mainGUI;
 	
@@ -44,6 +48,8 @@ public class MainController {
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
 		this.logController = new LogController(this);
+		this.codeViewController = new CodeViewController(this);
+		this.configurationManager = new ConfigurationManager();
 	}
 	
 	private void setAppleProperties(){
@@ -105,5 +111,13 @@ public class MainController {
 	
 	public MainGui getMainGui(){
 		return mainGUI;
+	}
+
+	public CodeViewController getCodeViewerController() {
+		return this.codeViewController;
+	}
+	
+	public ConfigurationManager getConfigurationManager() {
+		return this.configurationManager;
 	}
 }
