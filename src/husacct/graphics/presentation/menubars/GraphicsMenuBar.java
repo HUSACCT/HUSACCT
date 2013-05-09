@@ -103,11 +103,10 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(zoomOptionsMenu.canZoomModule()){
-					moduleZoom();
+					//TODO; Needs to be the old way of zooming
 				}else if(zoomOptionsMenu.canZoomModuleContext()){
 					moduleZoom();
 				}
-				
 			}
 		});
 		zoomInButton.addMouseListener(new MouseListener() {
@@ -115,7 +114,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 1) {
 					zoomOptionsMenu.show(zoomInButton, e.getX(), e.getY());
-					
                 }
 			}
 

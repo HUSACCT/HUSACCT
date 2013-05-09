@@ -6,28 +6,41 @@ import husacct.common.locale.ILocaleService;
 import husacct.graphics.util.UserInputListener;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+
+import org.apache.log4j.Logger;
 
 public class ContextMenuButton extends JPopupMenu {
 	private static final long serialVersionUID = -6033808567664371902L;
 	protected ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-
+	protected Logger logger = Logger.getLogger(GraphicsMenuBar.class);
+	
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
+	
+	private HashMap<String, String> icons;
 	
 	private JMenuItem zoomModuleContext;
 	private JMenuItem zoomModule;
+	private JButton parentZoomButton;
 	
 	
 	public ContextMenuButton() {
 		
 		ImageIcon icon;
 
+		icons = new HashMap<String, String>();
+		icons.put("zoomIn", Resource.ICON_ZOOM);
+		icons.put("zoomInContext", Resource.ICON_ZOOMCONTEXT);
+		
 		icon = new ImageIcon(Resource.get(Resource.ICON_ZOOMCONTEXT));
 		zoomModuleContext = new JMenuItem(localeService.getTranslatedString("ZoomContext"), icon);
 		add(zoomModuleContext);
@@ -45,7 +58,7 @@ public class ContextMenuButton extends JPopupMenu {
 		zoomModuleContext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				triggerZoomInContext();
+				setButtonIcon(parentZoomButton, "zoomInContext");
 				zoomModuleContext.setEnabled(false);
 				zoomModule.setEnabled(true);
 			}
@@ -54,6 +67,7 @@ public class ContextMenuButton extends JPopupMenu {
 		zoomModule.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				setButtonIcon(parentZoomButton, "zoomIn");
 				zoomModuleContext.setEnabled(true);
 				zoomModule.setEnabled(false);
 			}
@@ -88,14 +102,25 @@ public class ContextMenuButton extends JPopupMenu {
 	}
 	
 	public boolean canZoomModule(){
-		return zoomModule.isEnabled();
+		return zoomModuleContext.isEnabled();
 	}
 	public boolean canZoomModuleContext(){
-		return zoomModuleContext.isEnabled();
+		return zoomModule.isEnabled();
+	}
+	
+	private void setButtonIcon(JButton button, String iconKey) {
+		try {
+			ImageIcon icon = new ImageIcon(Resource.get(icons.get(iconKey)));
+			button.setIcon(icon);
+			button.setMargin(new Insets(1, 5, 1, 5));
+		} catch (Exception e) {
+			logger.warn("Could not find icon for \"" + iconKey + "\".");
+		}
 	}
 	
 	@Override
 	public void show(Component invoker, int x, int y) {
 		super.show(invoker, x, y);
+		parentZoomButton = (JButton) invoker;
 	}
 }
