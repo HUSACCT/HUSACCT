@@ -4,9 +4,11 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
+import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -20,6 +22,7 @@ import org.apache.log4j.Logger;
 public class AnalysedController extends DrawingController {
 	private final Logger logger = Logger.getLogger(AnalysedController.class);
 	protected IAnalyseService analyseService;
+	protected IDefineService defineService;
 	protected IValidateService validateService;
 
 	private ArrayList<BaseFigure> analysedContextFigures;
@@ -27,6 +30,35 @@ public class AnalysedController extends DrawingController {
 	public AnalysedController() {
 		super();
 		this.initializeServices();
+	}
+	
+	private void initializeServices() {
+		this.analyseService = ServiceProvider.getInstance().getAnalyseService();
+		this.analyseService.addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				AnalysedController.this.refreshDrawing();
+			}
+		});
+		
+		this.validateService = ServiceProvider.getInstance()
+				.getValidateService();
+		this.validateService.addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				if (AnalysedController.this.areViolationsShown()) {
+					AnalysedController.this.refreshDrawing();
+				}
+			}
+		});
+		
+		defineService = ServiceProvider.getInstance().getDefineService();
+		defineService.addServiceListener(new IServiceListener() {
+			@Override
+			public void update() {
+				refreshDrawing();
+			}
+		});
 	}
 
 	@Override
@@ -153,26 +185,6 @@ public class AnalysedController extends DrawingController {
 				.getModuleDTO(figureTo);
 		return this.validateService.getViolationsByPhysicalPath(
 				dtoFrom.uniqueName, dtoTo.uniqueName);
-	}
-
-	private void initializeServices() {
-		this.analyseService = ServiceProvider.getInstance().getAnalyseService();
-		this.analyseService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				AnalysedController.this.refreshDrawing();
-			}
-		});
-		this.validateService = ServiceProvider.getInstance()
-				.getValidateService();
-		this.validateService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				if (AnalysedController.this.areViolationsShown()) {
-					AnalysedController.this.refreshDrawing();
-				}
-			}
-		});
 	}
 
 	@Override
