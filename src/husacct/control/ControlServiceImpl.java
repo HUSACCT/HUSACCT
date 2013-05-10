@@ -158,18 +158,27 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 
 	@Override
+	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
+		return configurationManager.getPropertyAsInteger(key);
+	}
+
+	@Override
+	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
+		return configurationManager.getPropertyAsBoolean(key);
+	}
+	
+	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
 		codeViewController.displayErrorsInFile(fileName, errors);
 	}
 
 	@Override
 	public String getConfigurationName() {
-		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigValidate");
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
 	}
 
 	@Override
 	public JPanel getConfigurationPanel() {
 		return new GeneralConfigurationPanel();
 	}
-
 }

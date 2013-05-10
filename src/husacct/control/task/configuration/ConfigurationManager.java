@@ -22,6 +22,17 @@ public class ConfigurationManager {
 		throw new NonExistingSettingException("The setting " + key + " does not exist.");
 	}
 	
+	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
+		String property = getProperty(key);
+		return Integer.parseInt(property);
+	}
+	
+	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
+		String property = getProperty(key);
+		return Boolean.parseBoolean(property);
+	}
+	
+	
 	public void setPropertie(String key, String value) {
 		properties.setProperty(key, value);
 		storeProperties();
@@ -47,8 +58,9 @@ public class ConfigurationManager {
 	}
 	
 	private void createDefaults(File file) {
+		
 		try {
-			properties.load(new FileInputStream("/husacct/common/resources/config.properties"));
+			properties.load(this.getClass().getResourceAsStream("/husacct/common/resources/config.properties"));
 			storeProperties();
 		} catch (IOException e) {
 			e.printStackTrace();
