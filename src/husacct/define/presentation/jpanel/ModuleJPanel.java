@@ -4,11 +4,13 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
+import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
 
@@ -160,9 +162,10 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	
 	public void updateModuleTree() {
 		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
+		
 		this.moduleTree = new ModuleTree(rootComponent);
 		moduleTree.setContextMenu(new ModuletreeContextMenu(this));
-		JtreeController.instance().setModuleTree(moduleTree);
+	;
 		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
@@ -325,7 +328,8 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+	
+		
 		
 	}
 	

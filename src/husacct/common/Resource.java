@@ -58,7 +58,7 @@ public class Resource {
 	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";
 	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
 	public static final String ICON_QUESTIONMARK =ICONSET_PATH+"question_mark.png";
-
+	public static final String ICON_EXTERNALLIB2 =ICONSET_PATH+"define-externallib.png";
 
 
 

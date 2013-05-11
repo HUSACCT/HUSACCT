@@ -8,6 +8,7 @@ import husacct.control.presentation.util.DialogUtils;
 
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
+import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -129,8 +130,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			if (moduleId != -1) {
 				
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
+			
 				DialogUtils.alignCenter(softwareUnitFrame);
-				softwareUnitFrame.setVisible(true);
+			softwareUnitFrame.setVisible(true);
 			}else {
 				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 			}
