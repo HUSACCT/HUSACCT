@@ -70,7 +70,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 	
 	private void addToolBar() {
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setDividerLocation(30);
+		splitPane.setDividerLocation(200);
 		splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
 		JToolBar toolBar = new JToolBar();
@@ -104,8 +104,11 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 			}
 		});
 		
-		splitPane.add(questionButton, JSplitPane.LEFT);
-		splitPane.add(warningButton, JSplitPane.TOP);
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(questionButton);
+		buttonPanel.add(warningButton);
+		
+		splitPane.add(buttonPanel, JSplitPane.LEFT);
 		splitPane.add(toolBar, JSplitPane.RIGHT);
 		getContentPane().add(splitPane, BorderLayout.SOUTH);
 	}
