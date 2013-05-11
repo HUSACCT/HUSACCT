@@ -97,6 +97,36 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 
 	}
 
+	public void registerchildrenSize() {
+		this.sizeOfChildren=this.getChildren().size();
+		
+	}
+	
+	public boolean isComplete()
+	{
+		if(this.type.toLowerCase().equals("package")||this.type.toLowerCase().equals("externallibrary"))
+		{
+			if(this.children.size()<sizeOfChildren)
+			{
+				return false;
+			}
+			else{
+				return true;
+			}
+			
+		}else{
+				return true;
+		}
+		
+		
+	
+	}
+
+	public boolean isMapped() {
+		
+		return isfrozen;
+	}
+
 
 
 	
