@@ -125,7 +125,7 @@ public class Module implements Comparable<Module> {
 	//Module
 	public String addSubModule(Module subModule)
 	{
-		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+		if(!subModules.contains(subModule) && !moduleAlreadyExistentWithinSystem(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
@@ -151,13 +151,24 @@ public class Module implements Comparable<Module> {
 		return subModules.isEmpty();	
 	}
 	
+	public boolean moduleAlreadyExistentWithinSystem(String name) {
+		Module parentWalker = this;
+		while (parentWalker.parent != null && !(parentWalker instanceof Layer)) {
+			parentWalker = parentWalker.parent;
+		}
+		return parentWalker.hasSubModule(name);
+	}
+	
 	public boolean hasSubModule(String name) 
 	{
 		boolean hasSubModule = false;
+		
 		for(Module subModule : subModules) 
 		{
-			if(subModule.getName().equals(name) || subModule.hasSubModule(name))
+			if(subModule.getName().equals(name))
 			{
+				hasSubModule = true;
+			} else if (!(subModule instanceof Layer) && subModule.hasSubModule(name)) {
 				hasSubModule = true;
 			}
 		}
