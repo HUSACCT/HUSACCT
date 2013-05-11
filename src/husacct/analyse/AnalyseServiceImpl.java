@@ -5,6 +5,7 @@ import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.services.ObservableService;
 
@@ -122,7 +123,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
     
     @Override
-	public String[] getExternalSystems(){
+	public ExternalSystemDTO[] getExternalSystems(){
 		return service.getExternalSystems();
 	}
 }

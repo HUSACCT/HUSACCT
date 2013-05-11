@@ -6,6 +6,7 @@ import org.jdom2.Element;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 public interface IAnalyseDomainService {
 
@@ -41,5 +42,5 @@ public interface IAnalyseDomainService {
 
     public HashMap<String, DependencyDTO> mapDependencies();
     
-    public String[] getExternalSystems();
+    public ExternalSystemDTO[] getExternalSystems();
 }

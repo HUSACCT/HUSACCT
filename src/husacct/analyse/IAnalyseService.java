@@ -3,6 +3,7 @@ package husacct.analyse;
 import javax.swing.JInternalFrame;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.services.IObservableService;
 
@@ -47,5 +48,5 @@ public interface IAnalyseService extends IObservableService {
 
     public void exportDependencies(String fullPath);
     
-    public String[] getExternalSystems();
+    public ExternalSystemDTO[] getExternalSystems();
 }
