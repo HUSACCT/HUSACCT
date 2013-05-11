@@ -161,7 +161,7 @@ public class SoftwareUnitDefinitionDomainService {
 		 * */
 		//SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
 	
-		System.out.println(softwareUnit+">>>>>>>>>");
+	
 		
 		Type type = Type.valueOf("regex".toUpperCase());
 		SoftwareUnitDefinition unit = new SoftwareUnitDefinition(softwareUnit, type);

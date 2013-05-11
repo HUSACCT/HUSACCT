@@ -31,6 +31,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 /**
@@ -69,7 +71,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
-		softwareUnitsPane.setViewportView(softwareUnitsTable);
+	softwareUnitsPane.setViewportView(softwareUnitsTable);
+		softwareUnitsTable.getSelectionModel().addListSelectionListener(selectionListener);
 		return softwareUnitsPane;
 	}
 	
@@ -234,7 +237,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	public TableModel getModel(){
-		return softwareUnitsTable.getModel();
+		TableModel model = softwareUnitsTable.getModel();
+		//model.addTableModelListener(softwareUnitsTable);
+		return model;
 	}
 
 	public int getSelectedRow() {
@@ -254,4 +259,21 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		editSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
 		removeSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 	}
+	
+	ListSelectionListener selectionListener =	new ListSelectionListener() {
+		
+		@Override
+		public void valueChanged(ListSelectionEvent event) {
+			if(softwareUnitsTable.getRowCount()>0){
+			String type=(String)softwareUnitsTable.getValueAt(softwareUnitsTable.getSelectedRow(), 1);
+			if (type.toLowerCase().equals("regex")) {
+				editSoftwareUnitButton.setEnabled(true);
+			} else {
+				editSoftwareUnitButton.setEnabled(false);
+			}
+			
+			}
+			
+		}
+	};
 }

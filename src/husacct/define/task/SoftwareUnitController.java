@@ -375,24 +375,27 @@ public class SoftwareUnitController extends PopUpController {
 		
 	}
 
-	public void save(AnalyzedModuleComponent selectedComponent) {
+	public boolean save(AnalyzedModuleComponent selectedComponent) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
 			if(!selectedComponent.isComplete())
 			{
 				UiDialogs.errorDialog(softwareUnitFrame, "Inconsistency detected: an unit of  \n name: "+selectedComponent.getName()+" type: "+selectedComponent.getType()+" has been already mapped");
 				this.logger.error("Inconsistancy detected");
+				return false;
 			}else if (selectedComponent.getType().toLowerCase().equals("package")&& selectedComponent.isMapped()) {
 				UiDialogs.errorDialog(softwareUnitFrame, "The package  \n name: "+selectedComponent.getName()+" type: "+selectedComponent.getType()+" has been already mapped");
 				this.logger.error("Inconsistancy detected");
+				return false;
 			}
 			else{
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(),selectedComponent);
 			}
 			DefinitionController.getInstance().notifyObservers();
+			return true;
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
-			
+			return false;
 		}
 		
 	}

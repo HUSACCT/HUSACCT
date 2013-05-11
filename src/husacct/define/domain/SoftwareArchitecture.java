@@ -562,6 +562,7 @@ public class SoftwareArchitecture {
 		Long id=oldModule.getId();
 		String name= oldModule.getName();
 		String desc = oldModule.getDescription();
+		ArrayList<SoftwareUnitDefinition> softwareUnits = oldModule.getUnits();
 		ArrayList<Module> subModules = oldModule.getSubModules();
 		processDefaultComponents(oldModule);
 		if (ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer").toLowerCase().equals(newType.toLowerCase())) {
@@ -571,6 +572,7 @@ public class SoftwareArchitecture {
 			  layer.setName(name);
 			  layer.setType(newType);
 			  layer.setSubModules(subModules);
+			  layer.setUnits(softwareUnits);
 			  return layer;
 		
 		} else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component").toLowerCase().equals(newType.toLowerCase())) {
@@ -583,6 +585,7 @@ public class SoftwareArchitecture {
 			subModules.add(f);
 			Collections.reverse(subModules);
 			component.setSubModules(subModules);
+			component.setUnits(softwareUnits);
 			
 			  return component;
 		}else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem").toLowerCase().equals(newType.toLowerCase())) {
@@ -592,6 +595,7 @@ public class SoftwareArchitecture {
 			subSystem.setName(name);
 			subSystem.setType(newType);
 			subSystem.setSubModules(subModules);
+			subSystem.setUnits(softwareUnits);
 			return subSystem;
 		}else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary").toLowerCase().equals(newType.toLowerCase())) {
 			ExternalSystem externalSystem = new ExternalSystem();
@@ -600,6 +604,7 @@ public class SoftwareArchitecture {
 			externalSystem.setName(name);
 			externalSystem.setType(newType);
 			externalSystem.setSubModules(subModules);
+			externalSystem.setUnits(softwareUnits);
 			return externalSystem;
 		}else{
 		return null;
