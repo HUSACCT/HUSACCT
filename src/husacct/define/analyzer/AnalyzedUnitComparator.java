@@ -1,6 +1,9 @@
 package husacct.define.analyzer;
 
+import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
+import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +48,8 @@ public class AnalyzedUnitComparator {
 		
 		left.addChild(newAbstractCombinedComponent);
 	}
+	
+	JtreeController.instance().getTree().setModel(new CombinedModuleTreeModel(left));
 	
 	}
 
@@ -149,6 +154,9 @@ public class AnalyzedUnitComparator {
 	}
 		
 	}
+   
+   
+ 
 
 
 	

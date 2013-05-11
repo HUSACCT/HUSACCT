@@ -69,11 +69,10 @@ public class DefaultRuleDomainService {
 			for (int i =0; i < defaultRuleTypeDTOs.length;i++)
 			{
 
-				System.out.println(defaultRuleTypeDTOs[i].key);
+				
 
 				generateRule(defaultRuleTypeDTOs[i]);
-				System.out.println(defaultRuleTypeDTOs[i].key);
-				System.out.println(defaultRuleTypeDTOs[i].descriptionKey);
+			
 
 			}
 		}
@@ -130,7 +129,7 @@ public class DefaultRuleDomainService {
 	private void isComponent() {
 		AppliedRule facadeRule =  new AppliedRule();
 		facadeRule.setDependencies(createDependancies());
-		facadeRule.setModuleFrom(_module.getSubModules().get(0));
+		facadeRule.setModuleFrom(_module);
 		facadeRule.setModuleTo(new Module());
 		
 		facadeRule.setRuleType("FacadeConvention");
@@ -240,6 +239,50 @@ public class DefaultRuleDomainService {
 		 String[] dependencies={ "InvocMethod","Exception","AccessPropertyOrField","ExtendsInterface","Import","ExtendsConcrete","Annotation", "Declaration","InvocConstructor","ExtendsLibrary","ExtendsAbstract"," Implements "};
 		return dependencies;	
 		}
+
+
+
+		public void removeDefaultRules(Module module) {
+			_module=module;
+			retrieveRuleTypeDTOsByModule();
+			ArrayList<Long> appliedRuleIds = new ArrayList<>();
+			if (!defaultRuleTypeDTOs.equals(null))
+			{
+				for (int i =0; i < defaultRuleTypeDTOs.length;i++)
+				{
+			    
+					for(AppliedRule appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
+						if(appliedRule.getModuleFrom().getId()==_module.getId()&&defaultRuleTypeDTOs[i].getKey().equals(appliedRule.getRuleType()))
+						{
+							appliedRuleIds.add(appliedRule.getId());
+							
+						}
+						}
+			    }
+				
+				for (Long appliedRuleid : appliedRuleIds) {
+					SoftwareArchitecture.getInstance().removeAppliedRule(appliedRuleid);
+				}
+				
+				}
+		}
+
+
+
+		public void updateModuleRules(Module updatedModule) {
+			_module= updatedModule;
+			for(AppliedRule appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
+				if(appliedRule.getModuleFrom().getId()==_module.getId())
+				{
+					appliedRule.setModuleFrom(_module);
+					
+				}
+				}
+			
+		}
+		
+		
+		
 
 	
 	

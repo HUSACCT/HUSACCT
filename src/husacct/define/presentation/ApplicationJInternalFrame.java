@@ -5,6 +5,8 @@ import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Locale;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -19,6 +21,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 	public ApplicationJInternalFrame() {
 		super();
 		initUi();
+		
 	}
 
 	private void initUi() {
@@ -61,5 +64,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 	public void update(Locale newLocale) {
 	
 	}
+
+
 	
 }

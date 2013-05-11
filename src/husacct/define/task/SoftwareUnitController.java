@@ -55,6 +55,7 @@ public class SoftwareUnitController extends PopUpController {
 	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
+		addExternalComponents(rootComponent);
 		AnalysedModuleDTO[] modules = this.getAnalyzedModules();	
 		
 		for(AnalysedModuleDTO module : modules) {
@@ -69,21 +70,7 @@ public class SoftwareUnitController extends PopUpController {
 	
 	private AnalysedModuleDTO[] getAnalyzedModules() {
 		AnalysedModuleDTO[] modules = ServiceProvider.getInstance().getAnalyseService().getRootModules();
-		AnalysedModuleDTO mockModule1 = new AnalysedModuleDTO("externallibrary", "test externallibrary", "externallibrary", "true");
-		AnalysedModuleDTO mockModule2 = new AnalysedModuleDTO("subsystem", " test subsystem", "subsystem", "true");
-		
-		AnalysedModuleDTO[]	testreturnlist = new AnalysedModuleDTO[modules.length+2];
-		for (int i = 0; i < modules.length; i++) {
-			testreturnlist[i]=modules[i];
-		}
-		
-		
-		
-		
-		
-		testreturnlist[modules.length]=mockModule1;
-		testreturnlist[modules.length+1]=mockModule2;
-		return testreturnlist;
+		return modules;
 	}
 	
 	private void addChildComponents(AnalyzedModuleComponent parentComponent, AnalysedModuleDTO module) {
@@ -95,9 +82,21 @@ public class SoftwareUnitController extends PopUpController {
 			this.addChildComponents(childComponent, subModule);
 			
 		}
+		
 		parentComponent.addChild(childComponent);
+		parentComponent.registerchildrenSize();
 	}
 	
+	public void addExternalComponents(AnalyzedModuleComponent root){
+		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent("external library","externallibrary", "externalpackage", "public");
+		AnalyzedModuleComponent mockModule1 = new AnalyzedModuleComponent("externallibrary", "test externallibrary", "externallibrary", "true");
+		AnalyzedModuleComponent mockModule2 = new AnalyzedModuleComponent("subsystem", " test subsystem", "subsystem", "true");
+		rootOfExterexternalLibrary.addChild(mockModule1);
+		rootOfExterexternalLibrary.addChild(mockModule2);
+		rootOfExterexternalLibrary.registerchildrenSize();
+		root.addChild(rootOfExterexternalLibrary);
+		
+	}
 	public void save(String softwareUnit, String type) {
 		save(this.getModuleId(), softwareUnit, type);
 	}
@@ -377,12 +376,17 @@ public class SoftwareUnitController extends PopUpController {
 	public void save(AnalyzedModuleComponent selectedComponent) {
 		logger.info("Adding software unit to module with id " + this.getModuleId());
 		try {
+			if(!selectedComponent.isComplete())
+			{
+				UiDialogs.errorDialog(softwareUnitFrame, "Inconsistency detected: an unit of  \n name: "+selectedComponent.getName()+"type: "+selectedComponent.getType()+" has been already mapped");
+				this.logger.error("Inconsistancy detected");
+			}else{
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(),selectedComponent);
-			
+			}
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
 			this.logger.error(e.getMessage());
-			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
+			
 		}
 		
 	}

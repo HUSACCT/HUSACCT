@@ -77,6 +77,10 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		{
 			icon = new ImageIcon(Resource.get(Resource.ICON_REGEXSEARCH));
 		}
+		else if(component.getType().toLowerCase().equals("externalpackage"))
+		{
+			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2));
+		}
 		
 		if(component.getType().equals("PACKAGE")&&component.getChildren().size()==0) {
 			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));

@@ -70,6 +70,7 @@ public class Resource {
 	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
 	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";
 	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
+	public static final String ICON_EXTERNALLIB2 =ICONSET_PATH+"define-externallib.png";
 
 
 

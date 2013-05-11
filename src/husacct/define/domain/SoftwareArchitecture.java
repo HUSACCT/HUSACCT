@@ -1,11 +1,20 @@
 package husacct.define.domain;
 
 import husacct.ServiceProvider;
+import husacct.define.domain.module.Component;
+import husacct.define.domain.module.ExternalSystem;
+import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import javax.swing.DefaultComboBoxModel;
+
+import antlr.collections.List;
 
 public class SoftwareArchitecture {
 	
@@ -522,5 +531,81 @@ public class SoftwareArchitecture {
 
 	public Module getRootModule() {
 		return rootModule;
+	}
+
+	public Module updateModuleType(Module oldModule, String newType) {
+		
+	
+	
+    System.out.println(oldModule.getClass().getName());
+
+
+	Module parent=oldModule.getparent();
+	
+	int index =oldModule.getparent().getSubModules().indexOf(oldModule);
+	parent.getSubModules().remove(index);
+	Module updatedModule =generateNewType(oldModule,newType) ;
+	parent.addSubModule(index,updatedModule );
+	
+	return updatedModule;
+		
+		
+	}
+
+	private Module generateNewType(Module oldModule,String newType) {
+		Long id=oldModule.getId();
+		String name= oldModule.getName();
+		String desc = oldModule.getDescription();
+		ArrayList<Module> subModules = oldModule.getSubModules();
+		processDefaultComponents(oldModule);
+		if (ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer").toLowerCase().equals(newType.toLowerCase())) {
+			  Layer layer = new Layer();
+			  layer.setDescription(desc);
+			  layer.setId(id);
+			  layer.setName(name);
+			  layer.setType(newType);
+			  layer.setSubModules(subModules);
+			  return layer;
+		
+		} else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component").toLowerCase().equals(newType.toLowerCase())) {
+			Component component = new Component();
+			component.setDescription(desc);
+			component.setId(id);
+			component.setName(name);
+			component.setType(newType);
+			Facade f = new Facade("Facade"+name,"is Facade of "+name);
+			subModules.add(f);
+			Collections.reverse(subModules);
+			component.setSubModules(subModules);
+			
+			  return component;
+		}else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem").toLowerCase().equals(newType.toLowerCase())) {
+			SubSystem subSystem = new SubSystem();
+			subSystem.setDescription(desc);
+			subSystem.setId(id);
+			subSystem.setName(name);
+			subSystem.setType(newType);
+			subSystem.setSubModules(subModules);
+			return subSystem;
+		}else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary").toLowerCase().equals(newType.toLowerCase())) {
+			ExternalSystem externalSystem = new ExternalSystem();
+			externalSystem.setDescription(desc);
+			externalSystem.setId(id);
+			externalSystem.setName(name);
+			externalSystem.setType(newType);
+			externalSystem.setSubModules(subModules);
+			return externalSystem;
+		}else{
+		return null;
+		}
+
+		
+	}
+
+	private void processDefaultComponents(Module oldModule) {
+		if (oldModule instanceof Component) {
+			oldModule.getSubModules().remove(0);
+		}
+		
 	}
 }

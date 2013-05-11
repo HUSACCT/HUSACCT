@@ -6,7 +6,6 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.task.JtreeController;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -190,5 +189,18 @@ public class ModuleDomainService {
 			}
 		}
 		return new Module();
+	}
+
+	public void updateModule(long moduleId, String moduleName,
+			String moduleDescription, String newType) {
+	
+	Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+	DefaultRuleDomainService service = new DefaultRuleDomainService();
+	service.removeDefaultRules(module);
+	Module updatedModule=SoftwareArchitecture.getInstance().updateModuleType(module,newType);
+	service.addDefaultRules(updatedModule);
+    service.updateModuleRules(updatedModule);
+	ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		
 	}
 }

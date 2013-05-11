@@ -8,6 +8,8 @@ import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
+import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.warningmessages.CodeLevelWarning;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
@@ -69,9 +71,9 @@ public class AnalyzedModuleTree extends JTree {
 			{
 				
 			    int positionOfchild=(position.get(position.size()-1));
+				AnalyzedModuleComponent resultingChild =(AnalyzedModuleComponent) bufferComponent.getChildren().get(positionOfchild);
 				
-				
-				
+				if(resultingChild.getUniqueName().toLowerCase().equals(analyzedsoftwarecomponent.getUniqueName().toLowerCase())){
 				
 				JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
 					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
@@ -81,19 +83,41 @@ public class AnalyzedModuleTree extends JTree {
 				Collections.sort(bufferComponent.getChildren());
 				bufferComponent.updateChilderenPosition();
 				this.setModel(new CombinedModuleTreeModel(rootComponent));
+				}else{
+			        
+					System.out.println("Code does not exist 1");
+					WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
+				}
+				
+			    }else{
+				System.out.println(position.get(i)+"<--------->"+bufferComponent.getChildren().size());
+			    	if(bufferComponent.getChildren().size()>position.get(i)){
 				
 				
-			}
-			else{
-				bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
-			} 
-		    }
-		    }
+					bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
+					}else{
+						System.out.println("Code does not exist 2");
+						WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
+						break;
+					}
+					}
+					}
+		
+	
+	
+	} 
+		   
 	
 	
 	
 	
 	
+
+	private CodeLevelWarning CodeLevelWarning(long moduleId,
+			AnalyzedModuleComponent analyzedsoftwarecomponent) {
+		
+		return new CodeLevelWarning(moduleId, analyzedsoftwarecomponent);
+	}
 
 	private ArrayList<Integer> getQueryofposition(AnalyzedModuleComponent analyzedsoftwarecomponent) {
 		ArrayList<Integer> retrievedposition = new ArrayList<Integer>();

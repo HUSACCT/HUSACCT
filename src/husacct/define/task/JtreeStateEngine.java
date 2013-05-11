@@ -17,6 +17,7 @@ public class JtreeStateEngine {
 private static JtreeStateEngine instance =null;
 private ArrayList<Map<Long,AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
 private Logger logger;
+private AnalyzedModuleComponent currentRoot;
 	
 
 
@@ -52,6 +53,7 @@ private void flush()
 	for(Long key: usersequenceinput.keySet())
 	  {
 		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) usersequenceinput.get(key);
+		unitTobeRestored.unfreeze();
 		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
 			flushRegix(unitTobeRestored,mainTree);
 			
@@ -67,16 +69,19 @@ private void flush()
 private void flushRegix(AnalyzedModuleComponent unitTobeRestored,AnalyzedModuleTree mainTree) {
 	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
 	{
-		mainTree.restoreTreeItem((AnalyzedModuleComponent)result);
+		AnalyzedModuleComponent restoreUnit =(AnalyzedModuleComponent)result;
+		restoreUnit.unfreeze();
+		mainTree.restoreTreeItem(restoreUnit);
 	}
 	
 	
 }
 
 private void compare(AnalyzedModuleComponent newdata) {
-	AnalyzedModuleComponent currentparent = JtreeController.instance().getRootOfModel();
+	currentRoot = JtreeController.instance().getRootOfModel();
+	
 	AnalyzedUnitComparator c = new AnalyzedUnitComparator();
-	c.calucalteChanges(currentparent, newdata);
+	c.calucalteChanges(currentRoot, newdata);
 	
 	
 }
@@ -110,6 +115,7 @@ private void restoreFlush() {
 	 catch(Exception o)
 	 {
 		 System.out.println(o.getMessage());
+		 o.printStackTrace();
 	 }
 	   }
 

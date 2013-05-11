@@ -352,7 +352,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		
+				
 				this.softwareUnitController.save(selectedComponent);			
 			}
 			this.dispose();

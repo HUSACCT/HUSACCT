@@ -310,6 +310,7 @@ public class DefinitionController extends Observable implements Observer {
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 		ArrayList<Module> modules = this.moduleService.getSortedModules();
 		for (Module module : modules) {
+			
 			this.addChildComponents(rootComponent, module);
 		}
 
@@ -425,5 +426,11 @@ public class DefinitionController extends Observable implements Observer {
 	
 	public boolean isAnalysed(){
 		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
+	}
+
+	public void updateModule(String moduleName, String moduleDescription,
+			String type) {
+		this.moduleService.updateModule(getSelectedModuleId(), moduleName, moduleDescription,type);
+		this.notifyObservers();
 	}
 }

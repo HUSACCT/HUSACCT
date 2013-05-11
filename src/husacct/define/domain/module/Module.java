@@ -81,6 +81,9 @@ public class Module implements Comparable<Module> {
 	}
 
 	public void setSubModules(ArrayList<Module> subModules) {
+		for (Module module : subModules) {
+			module.parent=this;
+		}
 		this.subModules = subModules;
 	}
 	
@@ -129,6 +132,19 @@ public class Module implements Comparable<Module> {
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
+
+		
+		}else{
+
+			System.out.println("This sub module has already been added!");
+			}
+		
+	}
+	public void addSubModule(int index,Module subModule)
+	{
+		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+			subModule.parent=this;
+			subModules.add(index,subModule);
 
 		
 		}else{
