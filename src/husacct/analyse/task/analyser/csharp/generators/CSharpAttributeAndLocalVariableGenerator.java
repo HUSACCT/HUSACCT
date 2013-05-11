@@ -14,7 +14,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	private Boolean hasClassScope = false;
 	private String name;
 	private String accessControlQualifier;
-	private String belongsToClass; 
+	private String packageAndClassName; 
 	private String declareType;  //int, string, CustomClass etc
 	private int lineNumber;
 	private String belongsToMethod = ""; //alleen voor local variables
@@ -27,23 +27,49 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		setMembers(treeNode, belongsToClass);
 		createLocalVariableObject();
 	}
-
+	
+	public void generateAttributeToDomain(Tree treeNode, String packageAndClassName) {
+		setMembers(treeNode, packageAndClassName);
+		createAttributeObject();
+	}
+	
+	public void generateLocalLoopVariable(String packageAndClassName, String belongsToMethod, String declareType, String name, int lineNumber) {
+		this.packageAndClassName = packageAndClassName;
+		this.belongsToMethod = packageAndClassName + "." + belongsToMethod;
+		this.declareType = declareType;
+		this.name = name;
+		this.lineNumber = lineNumber;
+		createLocalVariableObject();
+	}
+	
+	
+	
+	private void createAttributeObject() {
+		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1);
+		if(!SkippableTypes.isSkippable(declareType)){
+			modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, this.declareTypes);
+		}
+		declareType = "";
+		
+	}
+	
 	private void createLocalVariableObject() {
 		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1);
 		if(!SkippableTypes.isSkippable(declareType)){
-			modelService.createAttribute(hasClassScope, accessControlQualifier, belongsToClass, declareType, name, belongsToClass + "." + name, lineNumber, this.declareTypes);
+			modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
 		}
 		declareType = "";
 		
 	}
 
-	private void setMembers(Tree treeNode, String belongsToClass) { //startFiltering in Java Implementation
+	
+	private void setMembers(Tree treeNode, String packageAndClassName) { //startFiltering in Java Implementation
 		CommonTree currentTree = (CommonTree) treeNode;
 		CommonTree identifierTree = (CommonTree) currentTree.getFirstChildWithType(CSharpParser.IDENTIFIER);
 		if(identifierTree != null){
 			this.name = identifierTree.getText();
 		}
-		this.belongsToClass = belongsToClass;
+		this.packageAndClassName = packageAndClassName;
 		treeNodeTypeFilter(treeNode);
 	}
 
@@ -51,35 +77,36 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		
 		for(int i = 0; i < treeNode.getChildCount(); i++){
 			Tree child = treeNode.getChild(i);
-			int treeType = child.getType();
-			if(treeType == CSharpParser.MODIFIERS){
-				setAccessControlQualifier(treeNode);
-				setClassScope(child);
-			}else if(treeType == CSharpParser.TYPE){
-				setDeclareType(child);		
-			}else if(treeType == CSharpParser.VARIABLE_DECLARATOR){
-				setAttributeName(child);	
-			}
-			else if(treeType == CSharpParser.CONSTRUCTOR_DECL){
-				CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-				cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);
-			
-			} else if(treeType == CSharpParser.EXPRESSION_STATEMENT){
-				CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.belongsToClass);
-				cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);
-			
-				if (child.getChild(0).getType() == CSharpParser.METHOD_INVOCATION){
-					cSharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) child.getChild(0), belongsToMethod);
+			switch(child.getType()){
+
+			case CSharpParser.MODIFIERS:
+					setAccessControlQualifier(treeNode);
+					setClassScope(child);
+			case CSharpParser.TYPE:
+					setDeclareType(child);		
+			case CSharpParser.VARIABLE_DECLARATOR:
+					setAttributeName(child);	
+			case CSharpParser.CONSTRUCTOR_DECL:
+					CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+					cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);
+			case CSharpParser.EXPRESSION_STATEMENT:
+					cSharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+					cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);				
+					if (child.getChild(0).getType() == CSharpParser.METHOD_INVOCATION){
+						cSharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) child.getChild(0), belongsToMethod);
+					}
+					else if (child.getChild(0).getType() == CSharpParser.DOT){
+						cSharpInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
+					}
 				}
-				else if (child.getChild(0).getType() == CSharpParser.DOT){
-					cSharpInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
-				}
-			}
+			
+		
 			treeNodeTypeFilter(child);
 		}
+		}
 		
-
-	}
+		
+	
 
 	private void setAttributeName(Tree tree) {
 		for(int i = 0; i < tree.getChildCount(); i++){
@@ -95,8 +122,8 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		
 	}
 	
-	public ArrayList<String> generateMethodReturnType(Tree returnTypeTree, String belongsToClass){
-		this.belongsToClass = belongsToClass;
+	public ArrayList<String> generateMethodReturnType(Tree returnTypeTree, String packageAndClassName){
+		this.packageAndClassName = packageAndClassName;
 		
 		if(returnTypeTree.getType() == CSharpParser.TYPE){
 			setDeclareType(returnTypeTree);
