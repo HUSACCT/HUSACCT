@@ -34,6 +34,10 @@ public class AnalyzedModuleTree extends JTree {
 	
 	public void restoreTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent)
 	{
+		if(analyzedsoftwarecomponent.getType().toLowerCase().equals("package"))
+		{
+		analyzedsoftwarecomponent.unfreeze();	
+		}else{
 		ArrayList<Integer> position= 	getQueryofposition(analyzedsoftwarecomponent);
 		AnalyzedModuleComponent rootComponent=(AnalyzedModuleComponent)this.getModel().getRoot();
 		AnalyzedModuleComponent bufferComponent;
@@ -53,6 +57,7 @@ public class AnalyzedModuleTree extends JTree {
 		} 
 	    }
 		}
+	}
 	
 	
 	
@@ -77,6 +82,9 @@ public class AnalyzedModuleTree extends JTree {
 				if(resultingChild.getUniqueName().toLowerCase().equals(analyzedsoftwarecomponent.getUniqueName().toLowerCase())){
 				if(!resultingChild.isMapped()&&resultingChild.getType().toLowerCase().equals("package")){
 					resultingChild.freeze();
+					JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
+					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
+				
 				}	
 				if(!resultingChild.isMapped()){
 				JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
@@ -109,7 +117,7 @@ public class AnalyzedModuleTree extends JTree {
 					}
 		
 	
-	
+		
 	} 
 		   
 	
