@@ -122,6 +122,11 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	
 	}
 
+	public boolean isMapped() {
+		
+		return isfrozen;
+	}
+
 
 
 	

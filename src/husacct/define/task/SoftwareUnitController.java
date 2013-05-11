@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AbstractCombinedComponent;
@@ -29,6 +30,7 @@ public class SoftwareUnitController extends PopUpController {
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public SoftwareUnitController(long moduleId) {
+		
 		logger = Logger.getLogger(SoftwareUnitController.class);
 		this.setModuleId(moduleId);
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
@@ -378,9 +380,13 @@ public class SoftwareUnitController extends PopUpController {
 		try {
 			if(!selectedComponent.isComplete())
 			{
-				UiDialogs.errorDialog(softwareUnitFrame, "Inconsistency detected: an unit of  \n name: "+selectedComponent.getName()+"type: "+selectedComponent.getType()+" has been already mapped");
+				UiDialogs.errorDialog(softwareUnitFrame, "Inconsistency detected: an unit of  \n name: "+selectedComponent.getName()+" type: "+selectedComponent.getType()+" has been already mapped");
 				this.logger.error("Inconsistancy detected");
-			}else{
+			}else if (selectedComponent.getType().toLowerCase().equals("package")&& selectedComponent.isMapped()) {
+				UiDialogs.errorDialog(softwareUnitFrame, "The package  \n name: "+selectedComponent.getName()+" type: "+selectedComponent.getType()+" has been already mapped");
+				this.logger.error("Inconsistancy detected");
+			}
+			else{
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(),selectedComponent);
 			}
 			DefinitionController.getInstance().notifyObservers();

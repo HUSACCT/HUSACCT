@@ -11,6 +11,7 @@ import husacct.define.task.components.RegexComponent;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -74,29 +75,33 @@ public class AnalyzedModuleTree extends JTree {
 				AnalyzedModuleComponent resultingChild =(AnalyzedModuleComponent) bufferComponent.getChildren().get(positionOfchild);
 				
 				if(resultingChild.getUniqueName().toLowerCase().equals(analyzedsoftwarecomponent.getUniqueName().toLowerCase())){
-				
+				if(!resultingChild.isMapped()&&resultingChild.getType().toLowerCase().equals("package")){
+					resultingChild.freeze();
+				}	
+				if(!resultingChild.isMapped()){
 				JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
-					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
+				JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
 				
 				
 				bufferComponent.getChildren().remove(positionOfchild);
 				Collections.sort(bufferComponent.getChildren());
 				bufferComponent.updateChilderenPosition();
 				this.setModel(new CombinedModuleTreeModel(rootComponent));
+				}
 				}else{
 			        
-					System.out.println("Code does not exist 1");
+				
 					WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
 				}
 				
 			    }else{
-				System.out.println(position.get(i)+"<--------->"+bufferComponent.getChildren().size());
+		
 			    	if(bufferComponent.getChildren().size()>position.get(i)){
 				
 				
 					bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
 					}else{
-						System.out.println("Code does not exist 2");
+						
 						WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
 						break;
 					}

@@ -281,11 +281,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	@Override
 	public void keyTyped(KeyEvent e) {
 	
-		if(e.getKeyChar()=='w')
-		{
-			WarningTableJDialog warnings = new WarningTableJDialog();
-			warnings.setVisible(true);
-		}
+		
 		
 	}
 	
