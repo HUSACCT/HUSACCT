@@ -27,7 +27,13 @@ public class ModuleDomainService {
 		service.addDefaultRules(module);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
-	}	
+	}
+	
+	public String addNewModuleToParent(long parentModuleId, Module module){
+		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		return parentModule.addSubModule(module);
+	}
 	
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
@@ -47,10 +53,10 @@ public class ModuleDomainService {
 		SoftwareArchitecture.getInstance().removeModule(module);
 		//quikfix
 		try{
-		JtreeController.instance().registerTreeRemoval(module);
-		}catch(NullPointerException r)
+			JtreeController.instance().registerTreeRemoval(module);
+		}
+		catch(Exception e)
 		{
-			
 		}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
@@ -163,10 +169,7 @@ public class ModuleDomainService {
 	
 	public Long getParentModuleIdByChildId(Long moduleId) {
 		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
-	}
-
-	//TODO: public Lay
-	
+	}	
 	
 	
 	//Retrieve parentModule

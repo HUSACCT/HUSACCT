@@ -153,7 +153,7 @@ public class SoftwareArchitecture {
 		if(this.hasAppliedRule(appliedRuleId))
 		{
 			AppliedRule rule = getAppliedRuleById(appliedRuleId);
-			appliedRules.remove(rule);	
+			appliedRules.remove(rule);
 		}else{
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoRule"));
 		}
@@ -264,7 +264,7 @@ public class SoftwareArchitecture {
 	}
 	
 	
-	public long addModule(Module module) //HERE BE DRAGONS
+	public long addModule(Module module)
 	{
 		long moduleId;
 		if(!this.hasModule(module.getName())) {
@@ -278,7 +278,15 @@ public class SoftwareArchitecture {
 		return moduleId;
 	}
 	
-	
+	public String addNewModule(Module module)
+	{
+		if(!this.hasModule(module.getName())) {
+			rootModule.addSubModule(module);
+		} else {
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
+		}
+		return "";
+	}
 
 	public void removeAllModules() {
 		rootModule.setSubModules(new ArrayList<Module>());
@@ -415,7 +423,7 @@ public class SoftwareArchitecture {
 		}
 		return logicalPath;
 	}
-	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D 
+	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D //al gedaan in ModuleDomainService maar dan zonder kut id....
 	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 		
@@ -480,7 +488,6 @@ public class SoftwareArchitecture {
 		}
 	}
 	
-
 	public ArrayList<Layer> getLayersBelow(Layer layer){
 		ArrayList<Layer> returnList = new ArrayList<Layer>();
 		Layer underlyingLayer = getTheFirstLayerBelow(layer);
@@ -499,7 +506,6 @@ public class SoftwareArchitecture {
 		return getTheFirstLayerBelow(layer.getHierarchicalLevel(),getParentModuleIdByChildId(layer.getId()));
 	}
 	
-
 	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
 		for (Module mod : getModulesForLayerSorting(parentModuleId)){

@@ -1,7 +1,6 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.property_declaration2_return;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.services.DefaultRuleDomainService;
@@ -127,17 +126,17 @@ public class Module implements Comparable<Module> {
 	}
 	
 	//Module
-	public void addSubModule(Module subModule)
+	public String addSubModule(Module subModule)
 	{
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-
-		
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.addDefaultRules(subModule);
+			return "";
 		}else{
-
-			System.out.println("This sub module has already been added!");
-			}
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
+		}
 		
 	}
 	public void addSubModule(int index,Module subModule)

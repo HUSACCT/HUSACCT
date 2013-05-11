@@ -10,6 +10,7 @@ import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
+import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
@@ -40,6 +41,7 @@ public class DefinitionController extends Observable implements Observer {
 	
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
+	private DefaultRuleDomainService defaultRuleService;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
 	
 	public static DefinitionController getInstance() {
@@ -56,6 +58,7 @@ public class DefinitionController extends Observable implements Observer {
 		this.moduleService = new ModuleDomainService();
 		this.appliedRuleService = new AppliedRuleDomainService();
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
+		this.defaultRuleService = new DefaultRuleDomainService();
 	}
 	
 	public void initSettings() {
@@ -123,14 +126,6 @@ public class DefinitionController extends Observable implements Observer {
 				Facade f= new Facade();
 			f.setName("Facade"+componentName);
 			newComponent.addSubModule(f);
-			
-			
-			
-			
-			
-			
-			
-			
 			this.passModuleToService(selectedModuleId, newComponent);
 			
 			return true;
@@ -160,13 +155,18 @@ public class DefinitionController extends Observable implements Observer {
 	}
 	
 	private void passModuleToService(long selectedModuleId, Module module) {
+		String ExceptionMessage = "";
 		if(selectedModuleId == -1) {
 			this.moduleService.addModuleToRoot(module);
 		} else {
 			logger.debug("Adding child");
-			this.moduleService.addModuleToParent(selectedModuleId, module);
+			ExceptionMessage = this.moduleService.addNewModuleToParent(selectedModuleId, module);
 		}
 		this.notifyObservers();
+		
+		if(!ExceptionMessage.isEmpty()) {
+			UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
+		}
 	}
 
 	/**
@@ -264,19 +264,27 @@ public class DefinitionController extends Observable implements Observer {
 		logger.info("Removing rule " + appliedRuleId);
 		try {
 			long moduleId = getSelectedModuleId();
-
+			AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
+			
+			if (defaultRuleService.isMandatoryRule(rule))
+			{
+				UiDialogs.errorDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultRule"));
+			}
+			else {
 			if (moduleId != -1 && appliedRuleId != -1L) {
 				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveAppliedRule"), "Remove?");
 				if (confirm) {
-					// Remove the software unit
-					JPanelStatus.getInstance("Removing applied rule").start();
-					this.appliedRuleService.removeAppliedRule(appliedRuleId);
+						// Remove the software unit
+						JPanelStatus.getInstance("Removing applied rule").start();
+						this.appliedRuleService.removeAppliedRule(appliedRuleId);
 
-					// Update the applied rules table
-					this.notifyObservers();
+						// Update the applied rules table
+						this.notifyObservers();
+					}
 				}
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			logger.error("removeRule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
