@@ -2,11 +2,7 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.common.dto.AbstractDTO;
-import husacct.common.dto.AnalysedModuleDTO;
-import husacct.common.dto.ApplicationDTO;
-import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ViolationDTO;
+import husacct.common.dto.*;
 import husacct.common.services.IServiceListener;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -65,6 +61,18 @@ public class AnalysedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(this.getCurrentDrawingDetail());
 		super.notifyServiceListeners();
+		
+		/*ArrayList<ProjectDTO> projects = this.defineService.getApplicationDetails().projects;
+		
+		for(ProjectDTO project : projects){
+			System.out.println("Project name: "+project.name);
+			for(AnalysedModuleDTO am : project.analysedModules){
+				System.out.println("Module name: "+am.name);
+				for(AnalysedModuleDTO sam : am.subModules){
+					System.out.println("Submodule name: "+sam.name);
+				}
+			}
+		}*/
 		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
