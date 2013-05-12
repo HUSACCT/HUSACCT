@@ -77,6 +77,7 @@ public class WarningMessageService extends Observable implements Observer {
 					String rightUniqName = analyzedModuleToChek.getUniqueName().toLowerCase();
 					if(leftUniqName.equals(rightUniqName))
 					{
+						
 						haswarning=true;
 						messagesTobeRemoved.add(message);
 						
@@ -199,6 +200,14 @@ public class WarningMessageService extends Observable implements Observer {
 	
 	
 	return haswarning;
+	}
+
+
+	public void addCodeLevelWarning(Long key,
+			AnalyzedModuleComponent unitTobeRestored) {
+		CodeLevelWarning codeLevelWarning = new CodeLevelWarning(key, unitTobeRestored);
+		warnings.add(codeLevelWarning);
+		
 	}
 	
 }

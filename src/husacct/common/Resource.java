@@ -59,6 +59,12 @@ public class Resource {
 	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
 	public static final String ICON_QUESTIONMARK =ICONSET_PATH+"question_mark.png";
 	public static final String ICON_EXTERNALLIB2 =ICONSET_PATH+"define-externallib.png";
+    public static final String ICON_CLASS_PUBLIC_GRAY = ICONSET_PATH + "class-public-gray.png";
+    public static final String ICON_INTERFACE_PUBLIC_GRAY = ICONSET_PATH + "interface-public-gray.png";
+    public static final String ICON_ENUMERATION_GRAY = ICONSET_PATH + "enumeration-gray.png";
+    public static final String ICON_EXTERNALLIB_GRAY =ICONSET_PATH+"define_externalLib-gray.png";
+    public static final String ICON_SUBSYSTEMJAVA_GRAY = ICONSET_PATH+"define-subsystem-gray.png";
+    public static final String ICON_EXTERNALLIB2_GRAY = ICONSET_PATH+"define-externallib-gray.png";
 
 
 

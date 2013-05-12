@@ -34,29 +34,7 @@ public class AnalyzedModuleTree extends JTree {
 	
 	public void restoreTreeItem(AnalyzedModuleComponent analyzedsoftwarecomponent)
 	{
-		if(analyzedsoftwarecomponent.getType().toLowerCase().equals("package"))
-		{
-		analyzedsoftwarecomponent.unfreeze();	
-		}else{
-		ArrayList<Integer> position= 	getQueryofposition(analyzedsoftwarecomponent);
-		AnalyzedModuleComponent rootComponent=(AnalyzedModuleComponent)this.getModel().getRoot();
-		AnalyzedModuleComponent bufferComponent;
-		bufferComponent=rootComponent;
-	 for(int i=0;i<position.size();i++)
-	 {
-		if(i+1==position.size())
-		{
-			bufferComponent.addChild(analyzedsoftwarecomponent);
-			Collections.sort(bufferComponent.getChildren());
-			bufferComponent.updateChilderenPosition();
-			this.setModel(new CombinedModuleTreeModel(rootComponent));
-		}
-		else{
-			int valueofposition =position.get(i);
-			bufferComponent=(AnalyzedModuleComponent)bufferComponent.getChildren().get(valueofposition);
-		} 
-	    }
-		}
+	analyzedsoftwarecomponent.unfreeze();
 	}
 	
 	
@@ -64,69 +42,11 @@ public class AnalyzedModuleTree extends JTree {
 	public void removeTreeItem(long moduleId,AnalyzedModuleComponent analyzedsoftwarecomponent)
 	{
 		
-		AnalyzedModuleComponent rootComponent=(AnalyzedModuleComponent)this.getModel().getRoot();
-		AnalyzedModuleComponent bufferComponent;
-		bufferComponent=rootComponent;
-		ArrayList<Integer> position= 	getQueryofposition(analyzedsoftwarecomponent);
+		analyzedsoftwarecomponent.freeze();
+		JtreeController.instance().registerTreeRemoval(moduleId,analyzedsoftwarecomponent);
+		JtreeStateEngine.instance().registerSate(moduleId,analyzedsoftwarecomponent);
+		JtreeController.instance().getTree().repaint();
 		
-		
-		
-		 for(int i=0;i<position.size();i++)
-		 {
-			 if(i+1==position.size())
-			{
-				
-			    int positionOfchild=(position.get(position.size()-1));
-				
-				if(positionOfchild>=bufferComponent.getChildren().size()&&analyzedsoftwarecomponent.getType().toLowerCase().equals("package"))
-				{
-					System.out.println("is stopped");
-					analyzedsoftwarecomponent.freeze();
-					JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
-					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
-					WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
-					
-					break;
-				}
-			   
-				
-				AnalyzedModuleComponent resultingChild =(AnalyzedModuleComponent) bufferComponent.getChildren().get(positionOfchild);
-				
-				if(resultingChild.getUniqueName().toLowerCase().equals(analyzedsoftwarecomponent.getUniqueName().toLowerCase())){
-				if(!resultingChild.isMapped()&&resultingChild.getType().toLowerCase().equals("package")){
-					resultingChild.freeze();
-					JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
-					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
-				
-				}	
-				if(!resultingChild.isMapped()){
-				JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
-				JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
-				
-				
-				bufferComponent.getChildren().remove(positionOfchild);
-				Collections.sort(bufferComponent.getChildren());
-				bufferComponent.updateChilderenPosition();
-				this.setModel(new CombinedModuleTreeModel(rootComponent));
-				}
-				}else{
-			        WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
-			    }
-				
-			    }else{
-		
-			    	System.out.println(bufferComponent.getChildren().size()+"<---------->"+position.get(i));
-			    	if(bufferComponent.getChildren().size()>position.get(i)){
-				
-				
-					bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
-					}else{
-						
-						WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
-						break;
-					}
-					}
-					}
 		
 	
 		

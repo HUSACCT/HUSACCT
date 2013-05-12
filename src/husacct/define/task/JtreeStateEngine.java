@@ -1,7 +1,10 @@
 package husacct.define.task;
 
 
+import husacct.ServiceProvider;
 import husacct.define.analyzer.AnalyzedUnitComparator;
+import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.warningmessages.WarningMessage;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -103,7 +106,9 @@ private void restoreFlush() {
 			restoreflushRegix(key,unitTobeRestored,mainTree);
 			
 		}else{
-			mainTree.removeTreeItem(key,unitTobeRestored);
+			if (unitTobeRestored.isRemoved()) {
+				WarningMessageService.getInstance().addCodeLevelWarning(key,unitTobeRestored);
+			}
 		}	
 		
 		
@@ -124,7 +129,10 @@ private void restoreflushRegix(long id,AnalyzedModuleComponent unitTobeRestored,
 	
 	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
 	{
-		mainTree.removeTreeItem(id,(AnalyzedModuleComponent)result);
+		AnalyzedModuleComponent child= (AnalyzedModuleComponent)result;
+		if (unitTobeRestored.isRemoved()) {
+			WarningMessageService.getInstance().addCodeLevelWarning(id,child);
+		}
 	}
 }
 

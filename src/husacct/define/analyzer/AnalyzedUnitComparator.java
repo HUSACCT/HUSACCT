@@ -38,7 +38,7 @@ public class AnalyzedUnitComparator {
 		
 	for(AbstractCombinedComponent remove :toBeDeleted)
 	{
-		
+		((AnalyzedModuleComponent)remove).removeChildFromParent();
 		AbstractCombinedComponent parent = remove.getParentofChild();
 		int index = parent.getChildren().indexOf(remove);
 		parent.getChildren().remove(index);
@@ -48,10 +48,10 @@ public class AnalyzedUnitComparator {
 	for(AbstractCombinedComponent newAbstractCombinedComponent: toBeAaded)
 	{
 		if (WarningMessageService.getInstance().hasCodeLevelWarning((AnalyzedModuleComponent)newAbstractCombinedComponent)) {
-			if (newAbstractCombinedComponent.getType().toLowerCase().equals("package")) {
-				((AnalyzedModuleComponent)newAbstractCombinedComponent).freeze();
+			
+			  ((AnalyzedModuleComponent)newAbstractCombinedComponent).freeze();
 				left.addChild(newAbstractCombinedComponent);
-			}
+			
 			
 		} else {
 			 left.addChild(newAbstractCombinedComponent);
