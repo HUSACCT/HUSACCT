@@ -4,9 +4,10 @@ import javax.swing.JInternalFrame;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
 
-public interface IAnalyseService extends IObservableService {
+public interface IAnalyseService extends IObservableService, ISaveable {
 
     public String[] getAvailableLanguages();
 

@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.swing.JInternalFrame;
 
+import org.jdom2.Element;
+
 public class AnalyseServiceStub implements IAnalyseService {
 
     private HashMap<String, ArrayList<Object>> analysed;
@@ -497,5 +499,17 @@ public class AnalyseServiceStub implements IAnalyseService {
     @Override
 	public String[] getExternalSystems(){
 		return new String[0];
+	}
+
+	@Override
+	public Element getWorkspaceData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void loadWorkspaceData(Element root) {
+		// TODO Auto-generated method stub
+		
 	}
 }
