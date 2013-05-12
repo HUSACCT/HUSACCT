@@ -32,6 +32,17 @@ public class ConfigurationManager {
 		return Boolean.parseBoolean(property);
 	}
 	
+	public void setProperty(String key, String value) {
+		properties.setProperty(key, value);
+	}
+	
+	public void setPropertyFromInteger(String key, int value) {
+		properties.setProperty(key, String.valueOf(value));
+	}
+	
+	public void setPropertyFromBoolean(String key, boolean value) {
+		properties.setProperty(key, String.valueOf(value));
+	}
 	
 	public void setPropertie(String key, String value) {
 		properties.setProperty(key, value);

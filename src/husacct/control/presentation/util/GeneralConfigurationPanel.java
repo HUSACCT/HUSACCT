@@ -4,13 +4,12 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
+import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.NonExistingSettingException;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -30,33 +29,42 @@ import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
-public class GeneralConfigurationPanel extends JPanel {
+public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
+	
+	final JTextField location = new JTextField();
+	final JFileChooser fileChooser = new JFileChooser();
+	
+	private JCheckBox enable;
+	private JButton selectFile;
+	private JPanel languagePanel, codeviewerPanel;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	private Logger logger = Logger.getLogger(GeneralConfigurationPanel.class);
 	
-	ButtonGroup languageGroup = new ButtonGroup();
-	
-	GridBagConstraints constraints = new GridBagConstraints();
+	private ButtonGroup languageGroup = new ButtonGroup();
+	private GridBagConstraints constraints = new GridBagConstraints();
 	
 	public GeneralConfigurationPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		initialiseLanguage();
 		initialiseCodeviewer();
+		
+		setComponentText();
+		setListeners();
+		
+		loadDefaults();
 	}
-	
+
 	private void initialiseLanguage() {
 		
-		JPanel languagePanel = new JPanel();
-		languagePanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralLanguage")));
-		
+		languagePanel = new JPanel();
+
 		for(final Locale locale : localeService.getAvailableLocales()){
 			String language = locale.getDisplayLanguage();
 			final JRadioButton languageItem = new JRadioButton(language);
-			
 			
 			if(language.equals(localeService.getLocale().getDisplayLanguage())){
 				languageItem.setSelected(true);
@@ -85,26 +93,10 @@ public class GeneralConfigurationPanel extends JPanel {
 	}
 	
 	private void initialiseCodeviewer() {
-		final JTextField location = new JTextField();
-		final JFileChooser fileChooser = new JFileChooser();
-		final JCheckBox enable = new JCheckBox(localeService.getTranslatedString("ConfigGeneralCodeviewerEnable"));
-		final JButton selectFile = new JButton("A Button"); //TODO Language String
-		
-		JPanel codeviewerPanel = new JPanel(new GridBagLayout());
-		
-		
-		codeviewerPanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralCodeviewer")));
-		
-		
-		boolean external = false;
-		try {
-			external = controlService.getPropertyAsBoolean("ExternalCodeviewer");
-		} catch (NonExistingSettingException e) { }
-		
-		enable.setSelected(external);
-		location.setEnabled(external);
-		selectFile.setEnabled(external);
-		
+		codeviewerPanel = new JPanel(new GridBagLayout());
+		enable = new JCheckBox();
+		selectFile = new JButton();
+
 		enable.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent event) {
@@ -117,18 +109,6 @@ public class GeneralConfigurationPanel extends JPanel {
 				}
 			}
 		});
-		
-		selectFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int result = fileChooser.showOpenDialog(GeneralConfigurationPanel.this);
-				if(result == JFileChooser.APPROVE_OPTION) {
-					location.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
-		
-		
 		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -147,6 +127,24 @@ public class GeneralConfigurationPanel extends JPanel {
 		this.add(codeviewerPanel);
 	}
 	
+	private void setListeners() {
+		localeService.addServiceListener(new IServiceListener() {
+			public void update() {
+				setComponentText();
+			}
+		});
+		
+		selectFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int result = fileChooser.showOpenDialog(GeneralConfigurationPanel.this);
+				if(result == JFileChooser.APPROVE_OPTION) {
+					location.setText(fileChooser.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
+	}
+	
 	private void setLocaleFromString(String locale){
 		logger.debug("User sets language to: " + locale);
 		localeService.setLocale(new Locale(locale, locale));
@@ -154,5 +152,37 @@ public class GeneralConfigurationPanel extends JPanel {
 	
 	public JPanel getGUI() {
 		return this;
+	}
+	
+	protected void setComponentText() {
+		languagePanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralLanguage")));
+		codeviewerPanel.setBorder(BorderFactory.createTitledBorder(localeService.getTranslatedString("ConfigGeneralCodeviewer")));
+		
+		enable.setText(localeService.getTranslatedString("ConfigGeneralCodeviewerEnable"));
+		selectFile.setText(localeService.getTranslatedString("ConfigGeneralCodeviewerBrowse"));
+	}
+
+	public void loadDefaults() {
+		boolean external = false;
+		try {
+			external = controlService.getPropertyAsBoolean("ExternalCodeviewer");
+		
+			enable.setSelected(external);
+			location.setEnabled(external);
+			selectFile.setEnabled(external);
+
+			location.setText(controlService.getProperty("CodeviewerLocation"));
+		} catch (NonExistingSettingException e) { }
+	}
+	
+	@Override
+	public void SaveSettings() {
+		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
+		controlService.setProperty("CodeviewerLocation", location.getText());
+	}
+
+	@Override
+	public void ResetSettings() {
+		loadDefaults();
 	}
 }

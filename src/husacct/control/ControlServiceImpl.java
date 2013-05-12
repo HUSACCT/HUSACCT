@@ -168,6 +168,21 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	@Override
+	public void setProperty(String key, String value) {
+		configurationManager.setProperty(key, value);
+	}
+
+	@Override
+	public void setPropertyFromInteger(String key, int value) {
+		configurationManager.setPropertyFromInteger(key, value);
+	}
+
+	@Override
+	public void setPropertyFromBoolean(String key, boolean value) {
+		configurationManager.setPropertyFromBoolean(key, value);
+	}
+	
+	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
 		codeViewController.displayErrorsInFile(fileName, errors);
 	}

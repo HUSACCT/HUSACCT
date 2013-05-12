@@ -1,31 +1,35 @@
 package husacct.control.task;
 
+import husacct.control.task.codeviewer.CodeviewerService;
+import husacct.control.task.codeviewer.InternalCodeviewerImpl;
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.configuration.NonExistingSettingException;
 
 import java.util.ArrayList;
 
 public class CodeViewController {
 	
-	private MainController mainController;
+	private ConfigurationManager configurationManager;
+	private CodeviewerService currentCodeviewer;
 	
 	public CodeViewController(MainController mainController) {
-		this.mainController = mainController;
+		configurationManager = mainController.getConfigurationManager();
 	}
 	
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
-		String application;
+		currentCodeviewer.displayErrorsInFile(fileName, errorLines);
+	}
+	
+	public void setCurrentCodeviewer() {
 		try {
-			application = mainController.getConfigurationManager().getProperty("CodeViewApplication");
+			if(configurationManager.getPropertyAsBoolean("ExternalCodeviewer")) {
+				currentCodeviewer = new InternalCodeviewerImpl();
+			} else {
+				
+			}
 		} catch (NonExistingSettingException e) {
-			application = "default";
+			e.printStackTrace();
 		}
-		switch(application) {
-		case "default":
-			
-			break;
 		
-		default:
-			break;
-		}
 	}
 }
