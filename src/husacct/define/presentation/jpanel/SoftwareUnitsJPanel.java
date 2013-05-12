@@ -164,9 +164,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				types.add(type);
 			}
 			
-			//@Depreciated
+			
 			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
-			//WarningMessageService.getInstance().isCodeLevelWarning(selectedModules, types);
+		
 		}else{
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}

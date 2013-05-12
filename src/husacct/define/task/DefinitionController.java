@@ -250,6 +250,7 @@ public class DefinitionController extends Observable implements Observer {
 							boolean confirm2 = UiDialogs.confirmDialog(definitionJPanel,"Your about to remove an software unit that does exist at code level", "Remove?");
 							if(confirm2)
 							{
+								
 								this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
 							}
 							
