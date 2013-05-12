@@ -2,6 +2,9 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 
 
+import java.util.ArrayList;
+
+import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
@@ -20,6 +23,7 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	private boolean constructorInMethodInvocationFound = false;
 	private boolean foundAllMethodInvocInfo = false;
 	private boolean allIdents = true;
+	private ArrayList<String> toNames = new ArrayList<String>();
 	
 	
 	public CSharpInvocationGenerator(String uniqueClassName) {
@@ -29,7 +33,8 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 	public void generateConstructorInvocToDomain(CommonTree treeNode, String belongsToMethod) {
 		invocationName = "Constructor";
 		this.belongsToMethod = belongsToMethod;
-		createConstructorInvocationDetails(treeNode);
+		
+		findConstructorInvocation(treeNode);
 		createConstructorInvocationDomainObject();
 	}
 	
@@ -39,17 +44,39 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		allIdents = true;
 		this.belongsToMethod = belongsToMethod;
 		lineNumber = treeNode.getLine();
-		// TODO
+		
+		findMethodInvocation(treeNode);
+	}
+
+	private void findMethodInvocation(CommonTree tree) {
+		if (tree.getChildCount() <= 0){
+			return;
+		}
+		for (int i = 0; i < tree.getChildCount(); i++) {
+			CommonTree child = (CommonTree)tree.getChild(i);
+			switch (child.getType()) {
+			case CSharpParser.MEMBER_ACCESS:
+				createMethodInvocationDetails(child);
+				createMethodInvocationDomainObject();
+			}
+		}
+	}
+
+	private void createMethodInvocationDetails(CommonTree child) {
+		CommonTree toChild = (CommonTree)child.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
+		this.to = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.invocationName = child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 	}
 
 	public void generatePropertyOrFieldInvocToDomain(CommonTree tree,String belongsToMethod) {
 		// TODO Auto-generated method stub	
 	}
 
-	private void createConstructorInvocationDetails(CommonTree tree) {
+	private void findConstructorInvocation(CommonTree tree) {
 		boolean constructorFound = hasConstructorCall(tree);
 		if (constructorFound){
-			createConstructorInvocationDetailsWhenFoundClassConstructorCall((CommonTree) tree);
+			createConstructorInvocationDetails((CommonTree) tree);
 		}
 		else {
 			int childcount = tree.getChildCount();
@@ -57,28 +84,52 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 				CommonTree child =  (CommonTree) tree.getChild(i);
 
 				if (hasConstructorCall(child)) { 
-					createConstructorInvocationDetailsWhenFoundClassConstructorCall(child);
+					createConstructorInvocationDetails(child);
 				}
-				createConstructorInvocationDetails(child);
+				findConstructorInvocation(child);
 			}
 		}
 	}
 		
 	
-	private CommonTree getDetailsForConstructorInvocationTree(CommonTree tree) {
-		return walkTree(tree, CSharpParser.TYPE, CSharpParser.NAMESPACE_OR_TYPE_NAME, CSharpParser.IDENTIFIER);
-	}
+	private void createConstructorInvocationDetails(CommonTree tree) {	
+		this.to = setToName(tree);
+		this.lineNumber = tree.getChild(0).getLine();
 
-	private void createConstructorInvocationDetailsWhenFoundClassConstructorCall(CommonTree tree) {	
-		CommonTree constructorInvocationDetailsTree = getDetailsForConstructorInvocationTree(tree);
-		if (constructorInvocationDetailsTree != null) {
-			this.to = constructorInvocationDetailsTree.getText();
-			this.lineNumber = constructorInvocationDetailsTree.getLine();
-		}
 	}
 	
+	private String setToName(CommonTree tree) {
+		String toName = "";
+		walkTreeToGetNames(tree);	
+		
+		for (String name : toNames) {
+			toName += name + ".";
+		}
+		toName = toName.substring(0, toName.length()-1); // remove last dot
+		
+		return toName;
+	}
+	
+	private void walkTreeToGetNames(CommonTree tree) {
+		for (int i = 0; i < tree.getChildCount(); i++) {
+			CommonTree child = (CommonTree)tree.getChild(i);
+			switch (child.getType()) {
+			case CSharpParser.NAMESPACE_OR_TYPE_NAME:
+			case CSharpParser.NAMESPACE_OR_TYPE_PART:	
+				String name = child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+				this.toNames.add(name);
+				break;
+			}
+			walkTreeToGetNames(child);
+		}	
+	}
+
 	private void createConstructorInvocationDomainObject() {
 		modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
+	}
+	
+	private void createMethodInvocationDomainObject() {
+		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 	}
 	
 	private boolean hasConstructorCall(CommonTree tree) {
