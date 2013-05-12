@@ -69,7 +69,7 @@ class FamixDependencyConnector {
         int count = 0;
 		
 		String oldy;
-		String  theClass;
+		String theClass;
 		String belongsToPackage;
 		String classFoundInImports;
 		String to;
@@ -196,14 +196,11 @@ class FamixDependencyConnector {
 		
         for (String s : theModel.structuralEntities.keySet()) {
             if (s.startsWith(declareClass)) {
-
                 entity = (FamixStructuralEntity) theModel.structuralEntities.get(s);
                 if (entity instanceof FamixLocalVariable) {
                     variable = (FamixLocalVariable) entity;
-                    if (variable.belongsToMethod.equals(belongsToMethod)) {
-                        if (variable.name.equals(nameOfInstance)) {
+                    if (variable.belongsToMethod.equals(belongsToMethod) && variable.name.equals(nameOfInstance)) {
                             return variable.declareType;
-                        }
                     }
                 }
             }
@@ -222,7 +219,8 @@ class FamixDependencyConnector {
                 if (fImport.to.endsWith("." + typeDeclaration)) {
                     return fImport.to;
                 }
-            } else {
+            } 
+            else {
                 for (String uniqueClassName : getModulesInPackage(fImport.to)) {
                     if (uniqueClassName.endsWith("." + typeDeclaration)) {
                         return uniqueClassName;

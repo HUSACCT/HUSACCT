@@ -146,7 +146,7 @@ class FamixModel extends FamixObject {
             if (association instanceof FamixImport) {
                 FamixImport theImport = (FamixImport) association;
                 if (theImport.from.equals(uniqueClassName)) {
-                    imports.add((FamixImport) association);
+                    imports.add(theImport); 
                 }
             }
         }

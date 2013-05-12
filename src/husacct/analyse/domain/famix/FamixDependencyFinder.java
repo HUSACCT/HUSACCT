@@ -98,11 +98,9 @@ class FamixDependencyFinder extends FamixFinder {
     private List<DependencyDTO> findDependencies() {
         List<DependencyDTO> result = new ArrayList<DependencyDTO>();
         List<FamixAssociation> allAssocations = theModel.associations;
-		DependencyDTO foundDependency;
-		
         for (FamixAssociation assocation : allAssocations) {
             if (compliesWithFunction(assocation) && compliesWithFilter(assocation)) {
-				foundDependency = buildDependencyDTO(assocation, false);
+                DependencyDTO foundDependency = buildDependencyDTO(assocation, false);
                 if (!containsDependency(foundDependency, result)) {
                     result.add(foundDependency);
                 }
@@ -117,12 +115,10 @@ class FamixDependencyFinder extends FamixFinder {
     private List<DependencyDTO> findIndirectDependencies(List<DependencyDTO> Dependencies) {
         List<DependencyDTO> tempDirectDependencies = Dependencies;
         List<DependencyDTO> returnIndirectDependencies = new ArrayList<DependencyDTO>();
-		DependencyDTO tempDTO;
-		
         for (DependencyDTO directDependency : tempDirectDependencies) {
             List<DependencyDTO> indirectDependenciesForDirectDependency = findDependenciesRelatedTo(tempDirectDependencies, directDependency);
             for (DependencyDTO indirectDependency : indirectDependenciesForDirectDependency) {
-                tempDTO = new DependencyDTO(directDependency.from, indirectDependency.to, directDependency.type + "" + indirectDependency.type, true, directDependency.lineNumber);
+                DependencyDTO tempDTO = new DependencyDTO(directDependency.from, indirectDependency.to, directDependency.type + "" + indirectDependency.type, true, directDependency.lineNumber);
                 if(isValidIndirectDependency(tempDTO)){
 	                if (!returnIndirectDependencies.contains(tempDTO) && !containsDependency(tempDTO, returnIndirectDependencies) && !isDependencyInList(tempDTO, returnIndirectDependencies)) {
 	                    returnIndirectDependencies.add(tempDTO);
@@ -213,10 +209,8 @@ class FamixDependencyFinder extends FamixFinder {
         if (!filtered) {
             return true;
         }
-        //for (String value : filter) {
-		int size = filter.length;
-		for(int i = 0; i < size; i ++){
-            if (association.type.equals(filter[i])) {
+        for (String value : filter) {
+            if (association.type.equals(value)) {
                 return true;
             }
         }
@@ -242,14 +236,10 @@ class FamixDependencyFinder extends FamixFinder {
     }
 
     private DependencyDTO buildDependencyDTO(FamixAssociation association, boolean isIndirect) {
-		/*
-		//Creating too many Variables.
         String dependencyFrom = association.from;
         String dependencyTo = association.to;
         String dependencyType = association.type;
         int dependencyLine = association.lineNumber;
         return new DependencyDTO(dependencyFrom, dependencyTo, dependencyType, isIndirect, dependencyLine);
-		*/
-		return new DependencyDTO(association.from, association.to, association.type, isIndirect, association.lineNumber);
     }
 }
