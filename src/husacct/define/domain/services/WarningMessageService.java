@@ -172,12 +172,11 @@ public class WarningMessageService extends Observable implements Observer {
 	}
 
 
-	public void isCodeLevelWarning(List<String> selectedModules,
-			List<String> types) {
+	public boolean isCodeLevelWarning(String uniqname) {
 		
 	    
 		boolean haswarning=false;
-	    for (String uniqname : selectedModules) {
+	    
 			 for (WarningMessage message : warnings) {
 			if (message instanceof CodeLevelWarning) {
 				AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
@@ -191,7 +190,7 @@ public class WarningMessageService extends Observable implements Observer {
 				}
 				
 			}
-		}
+		
 		
 	    
 	    }
@@ -199,7 +198,7 @@ public class WarningMessageService extends Observable implements Observer {
 	
 	
 	
-	//return haswarning;
+	return haswarning;
 	}
 	
 }
