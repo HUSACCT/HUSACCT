@@ -113,12 +113,12 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 	};
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("updated??????????????????");
+		
 		if (WarningMessageService.getInstance().hasWarnings()) {
 			Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 			togglebutton.setIcon(icon);
 		}else {
-			System.out.println("updated??????????????????");
+		
 			togglebutton.repaint();
 		}
 		
@@ -126,7 +126,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 
 	@Override
 	public void update() {
-		System.out.println("updated??????????????????");
+		
 		
 	}
 

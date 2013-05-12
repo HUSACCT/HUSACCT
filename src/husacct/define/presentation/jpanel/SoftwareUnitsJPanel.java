@@ -6,6 +6,7 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.WarningTableJDialog;
@@ -163,7 +164,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				types.add(type);
 			}
 			
+			//@Depreciated
 			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
+			//WarningMessageService.getInstance().isCodeLevelWarning(selectedModules, types);
 		}else{
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}

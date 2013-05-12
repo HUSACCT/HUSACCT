@@ -10,7 +10,7 @@ protected String location="";
 protected String type="";
 
 
-public abstract void getMessage();
+public abstract void generateMessage();
 
 
 public String getDescription() {

@@ -13,7 +13,7 @@ public class ModuleDomainService {
 	
 	public long addModuleToRoot(Module module){
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
-		//DefaultRuleDomainService.getInstance().addDefaultRules(module);
+	
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
@@ -25,6 +25,7 @@ public class ModuleDomainService {
 		
 		long moduleId = module.getId();
 		service.addDefaultRules(module);
+		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}

@@ -91,7 +91,7 @@ public int getColumnCount() {
 
 @Override
 public Object getValueAt(int rowIndex, int columnIndex) {
-CodeLevelWarning message =(CodeLevelWarning) warnings.get(rowIndex);
+WarningMessage message = warnings.get(rowIndex);
 
     switch (columnIndex) {
         case 0: 

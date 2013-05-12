@@ -15,12 +15,12 @@ public class CodeLevelWarning  extends WarningMessage{
 	{
 		this.moduldeId=id;
 		this.notCodeLevelModule=notcodelevelmodule;
-		getMessage();
+		generateMessage();
 	}
 	
 	
 	@Override
-public	void getMessage() {
+public	void generateMessage() {
 		this.description="your mapped unit does not exist at code level";
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduldeId);
 		this.resource="Module name: "+module.getName()+" Unit name: "+notCodeLevelModule.getUniqueName();

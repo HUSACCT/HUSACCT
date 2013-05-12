@@ -1,13 +1,16 @@
 package husacct.define.domain.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.antlr.tool.LeftRecursionCyclesMessage;
 
 
+import husacct.define.domain.module.Module;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
+import husacct.define.domain.warningmessages.ImplementationLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.graphics.util.threads.ObservableThread;
@@ -36,14 +39,14 @@ public class WarningMessageService extends Observable implements Observer {
 	
 		
 		warnings.add(warning);
-		notifyAllObservers();
+		notifyAllObservers(this,"warningadded");
 	}
 	
 	public void removeWarning(WarningMessage warning)
 	{
 		int index = warnings.indexOf(warning);
 		warnings.remove(index);
-		notifyAllObservers();
+		notifyAllObservers(this,"warningremoved");
 		
 	}
 	
@@ -75,7 +78,6 @@ public class WarningMessageService extends Observable implements Observer {
 					if(leftUniqName.equals(rightUniqName))
 					{
 						haswarning=true;
-						System.out.println("whoopp there it is "+leftUniqName+"<----->"+rightUniqName);
 						messagesTobeRemoved.add(message);
 						
 					}
@@ -113,6 +115,43 @@ public class WarningMessageService extends Observable implements Observer {
 		
 		return haswarning;
 	}
+	
+	public void processModule(Module module)
+	{
+		
+		if (module.isMapped()) {
+			chekIfImplementationWarningExist(module);
+		} else {
+			createModuleWarning(module);
+		}
+	}
+
+
+	private void chekIfImplementationWarningExist(Module module) {
+		for (WarningMessage warning : warnings) {
+			
+			if(warning instanceof ImplementationLevelWarning)
+			{
+				Long idOfWarningModule = ((ImplementationLevelWarning)warning).getModule().getId();
+				if(module.getId()==idOfWarningModule)
+				{
+					int index= warnings.indexOf(warning);
+					warnings.remove(index);
+					break;
+				}
+			}
+			
+		}
+		notifyAllObservers(this, "removedModule");
+	}
+
+
+	private void createModuleWarning(Module module) {
+		ImplementationLevelWarning warning = new ImplementationLevelWarning(module);
+	
+		warnings.add(warning);
+		notifyAllObservers(this,"createModule");
+	}
 
 
 	@Override
@@ -126,10 +165,41 @@ public class WarningMessageService extends Observable implements Observer {
 		observers.add(o);
 	}
 	
-	public void notifyAllObservers() {
+	public void notifyAllObservers(Observable o, Object arg) {
 		for (Observer observer : observers) {
-			observer.update(this, new Object());
+			observer.update(this, arg);
 		}
+	}
+
+
+	public void isCodeLevelWarning(List<String> selectedModules,
+			List<String> types) {
+		
+	    
+		boolean haswarning=false;
+	    for (String uniqname : selectedModules) {
+			 for (WarningMessage message : warnings) {
+			if (message instanceof CodeLevelWarning) {
+				AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
+				String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
+				String rightUniqName =uniqname ;
+				if(leftUniqName.equals(rightUniqName))
+				{
+					haswarning=true;
+					break;
+					
+				}
+				
+			}
+		}
+		
+	    
+	    }
+	   
+	
+	
+	
+	//return haswarning;
 	}
 	
 }
