@@ -5,6 +5,7 @@ import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -17,7 +18,6 @@ public class CSharpTreeConvertController {
     CSharpUsingGenerator csUsingGenerator;
     CSharpNamespaceGenerator csNamespaceGenerator;
     CSharpClassGenerator csClassGenerator;
-    CSharpStructGenerator csStructGenerator;
     CSharpEnumGenerator csEnumGenerator;
     CSharpInheritanceGenerator csInheritanceGenerator;
     CSharpAttributeGenerator csAttributeGenerator;
@@ -30,7 +30,6 @@ public class CSharpTreeConvertController {
         csUsingGenerator = new CSharpUsingGenerator();
         csNamespaceGenerator = new CSharpNamespaceGenerator();
         csClassGenerator = new CSharpClassGenerator();
-        csStructGenerator = new CSharpStructGenerator();
         csEnumGenerator = new CSharpEnumGenerator();
         csInheritanceGenerator = new CSharpInheritanceGenerator();
         csAttributeGenerator = new CSharpAttributeGenerator();
@@ -66,6 +65,8 @@ public class CSharpTreeConvertController {
                         namespaceStack.pop();
                         break;
                     case CSharpParser.CLASS:
+					case CSharpParser.ENUM:
+					case CSharpParser.STRUCT:
                         CommonTree classTree = treeNode;
                         boolean isInner = classNameStack.size() > 0;
                         classNameStack.push(delegateClass(classTree, isInner));
@@ -102,12 +103,6 @@ public class CSharpTreeConvertController {
         return false;
     }
 
-    private void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
-        }
-    }
-
     private void saveUsing(CommonTree usingTree) {
         csUsingGenerator.add(usingTree);
     }
@@ -117,7 +112,7 @@ public class CSharpTreeConvertController {
     }
 
     private String delegateNamespace(CommonTree namespaceTree) {
-        return csNamespaceGenerator.generateModel(namespaceStack, namespaceTree);
+        return csNamespaceGenerator.generateModel(CSharpGeneratorToolkit.getParentName(namespaceStack), namespaceTree);
     }
 
     private String delegateClass(CommonTree classTree, boolean isInnerClass) {
@@ -139,6 +134,6 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateMethod(CommonTree methodTree) {
-        csMethodeGenerator.generateMethodToDomain(methodTree, getParentName(classNameStack));
+        csMethodeGenerator.generateMethodToDomain(methodTree, belongsToClass(namespaceStack, classNameStack));
     }
 }
