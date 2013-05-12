@@ -77,6 +77,19 @@ public class AnalyzedModuleTree extends JTree {
 			{
 				
 			    int positionOfchild=(position.get(position.size()-1));
+				
+				if(positionOfchild>=bufferComponent.getChildren().size()&&analyzedsoftwarecomponent.getType().toLowerCase().equals("package"))
+				{
+					System.out.println("is stopped");
+					analyzedsoftwarecomponent.freeze();
+					JtreeController.instance().registerTreeRemoval(moduleId,bufferComponent.getChildren().get(positionOfchild));
+					JtreeStateEngine.instance().registerSate(moduleId,bufferComponent.getChildren().get(positionOfchild));
+					WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
+					
+					break;
+				}
+			   
+				
 				AnalyzedModuleComponent resultingChild =(AnalyzedModuleComponent) bufferComponent.getChildren().get(positionOfchild);
 				
 				if(resultingChild.getUniqueName().toLowerCase().equals(analyzedsoftwarecomponent.getUniqueName().toLowerCase())){
@@ -97,13 +110,12 @@ public class AnalyzedModuleTree extends JTree {
 				this.setModel(new CombinedModuleTreeModel(rootComponent));
 				}
 				}else{
-			        
-				
-					WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
-				}
+			        WarningMessageService.getInstance().addWarning(CodeLevelWarning(moduleId, analyzedsoftwarecomponent));
+			    }
 				
 			    }else{
 		
+			    	System.out.println(bufferComponent.getChildren().size()+"<---------->"+position.get(i));
 			    	if(bufferComponent.getChildren().size()>position.get(i)){
 				
 				
@@ -157,6 +169,7 @@ public class AnalyzedModuleTree extends JTree {
 		
 		}
 
+	//Todo make it more Generic
 	public void removeRegexTreeItem(long id, RegexComponent softwareunit) {
 		
 		
@@ -176,21 +189,39 @@ public class AnalyzedModuleTree extends JTree {
 			{
 				
 			    int positionOfchild=(position.get(position.size()-1));
-				
-				
-				
-				
-								
-				
-				bufferComponent.getChildren().remove(positionOfchild);
-				Collections.sort(bufferComponent.getChildren());
-				bufferComponent.updateChilderenPosition();
-				this.setModel(new CombinedModuleTreeModel(rootComponent));
-				
+                AnalyzedModuleComponent resultingChild =(AnalyzedModuleComponent) bufferComponent.getChildren().get(positionOfchild);
+                if(resultingChild.getUniqueName().toLowerCase().equals(result.getUniqueName().toLowerCase())){
+    				if(!resultingChild.isMapped()&&resultingChild.getType().toLowerCase().equals("package")){
+    					resultingChild.freeze();
+    				
+    					
+    				
+    				}	
+    				if(!resultingChild.isMapped()){
+    				
+    				
+    				bufferComponent.getChildren().remove(positionOfchild);
+    				Collections.sort(bufferComponent.getChildren());
+    				bufferComponent.updateChilderenPosition();
+    				this.setModel(new CombinedModuleTreeModel(rootComponent));
+    				}
+    				}else{
+    			        
+    				
+    					WarningMessageService.getInstance().addWarning(CodeLevelWarning(id, (AnalyzedModuleComponent)result));
+    				}
+    				
+    			    
 				
 			}
 			else{
+				if(bufferComponent.getChildren().size()>position.get(i)){
 				bufferComponent=(AnalyzedModuleComponent) bufferComponent.getChildren().get(position.get(i));
+				}else{
+					
+					WarningMessageService.getInstance().addWarning(CodeLevelWarning(id,(AnalyzedModuleComponent) result));
+					break;
+				}
 			} 
 		    }
 		 

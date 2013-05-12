@@ -148,7 +148,7 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 			
 			@Override
 			public void run() {
-				logger.debug("Strating to reanalyze");
+				logger.debug("Starting to reanalyze");
 				flush();
 				
 			
@@ -213,6 +213,26 @@ public void removeSoftwareUnit(long moduleId,
 	
 	orderofinsertions.remove(index);
 	
+	
+}
+
+public void analyze() {
+	SoftwareUnitController controller = new SoftwareUnitController(-1);
+	if (JtreeController.instance().isLoaded()) {
+		AnalyzedModuleComponent rootComponent = controller.getSoftwareUnitTreeComponents();
+		JtreeStateEngine.instance().compareNewData(rootComponent); 
+		
+		
+	}else {
+		
+	AnalyzedModuleComponent rootComponent = controller.getSoftwareUnitTreeComponents();
+	
+	 
+	JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(rootComponent));
+	
+	JtreeController.instance().setLoadState(true);
+
+	}
 	
 }
 	

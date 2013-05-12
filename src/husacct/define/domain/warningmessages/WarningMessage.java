@@ -1,5 +1,8 @@
 package husacct.define.domain.warningmessages;
 
+import husacct.define.task.components.AnalyzedModuleComponent;
+import husaccttest.control.ObservableServiceTest;
+
 public abstract class WarningMessage {
 protected String description="";
 protected String resource="";
@@ -32,6 +35,8 @@ public String getType() {
 	
 	return type;
 }
+
+
+
+
 }
-
-

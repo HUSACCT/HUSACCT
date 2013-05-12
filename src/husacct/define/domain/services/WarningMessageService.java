@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.antlr.tool.LeftRecursionCyclesMessage;
 
+
+import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
+import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.graphics.util.threads.ObservableThread;
 
 public class WarningMessageService extends Observable implements Observer {
@@ -57,6 +61,57 @@ public class WarningMessageService extends Observable implements Observer {
 			return true;
 		}
 		
+	}
+	public boolean hasCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek)
+	{
+		ArrayList<WarningMessage> messagesTobeRemoved = new ArrayList<WarningMessage>();
+		boolean haswarning=false;
+		
+			for (WarningMessage message : warnings) {
+				if (message instanceof CodeLevelWarning) {
+					AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
+					String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
+					String rightUniqName = analyzedModuleToChek.getUniqueName().toLowerCase();
+					if(leftUniqName.equals(rightUniqName))
+					{
+						haswarning=true;
+						System.out.println("whoopp there it is "+leftUniqName+"<----->"+rightUniqName);
+						messagesTobeRemoved.add(message);
+						
+					}
+					
+				}
+			}
+			for (WarningMessage warningMessage : messagesTobeRemoved) {
+				removeWarning(warningMessage);
+			}
+		
+		
+		return haswarning;
+	}
+	
+	public boolean isCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek)
+	{
+		
+		    boolean haswarning=false;
+		    for (WarningMessage message : warnings) {
+				if (message instanceof CodeLevelWarning) {
+					AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
+					String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
+					String rightUniqName = analyzedModuleToChek.getUniqueName().toLowerCase();
+					if(leftUniqName.equals(rightUniqName))
+					{
+						haswarning=true;
+						break;
+						
+					}
+					
+				}
+			}
+		
+		
+		
+		return haswarning;
 	}
 
 

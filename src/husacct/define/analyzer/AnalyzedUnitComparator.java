@@ -1,5 +1,7 @@
 package husacct.define.analyzer;
 
+import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.warningmessages.WarningMessage;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
@@ -45,8 +47,17 @@ public class AnalyzedUnitComparator {
 	
 	for(AbstractCombinedComponent newAbstractCombinedComponent: toBeAaded)
 	{
+		if (WarningMessageService.getInstance().hasCodeLevelWarning((AnalyzedModuleComponent)newAbstractCombinedComponent)) {
+			if (newAbstractCombinedComponent.getType().toLowerCase().equals("package")) {
+				((AnalyzedModuleComponent)newAbstractCombinedComponent).freeze();
+				left.addChild(newAbstractCombinedComponent);
+			}
+			
+		} else {
+			 left.addChild(newAbstractCombinedComponent);
+		}
 		
-		left.addChild(newAbstractCombinedComponent);
+		
 	}
 	
 	JtreeController.instance().getTree().setModel(new CombinedModuleTreeModel(left));

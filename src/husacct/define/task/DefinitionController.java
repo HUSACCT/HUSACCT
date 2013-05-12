@@ -254,6 +254,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
+			e.printStackTrace();
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();

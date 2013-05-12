@@ -162,6 +162,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				selectedModules.add(softwareUnitName);
 				types.add(type);
 			}
+			
 			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
 		}else{
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
@@ -264,8 +265,11 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		
 		@Override
 		public void valueChanged(ListSelectionEvent event) {
-			if(softwareUnitsTable.getRowCount()>0){
-			String type=(String)softwareUnitsTable.getValueAt(softwareUnitsTable.getSelectedRow(), 1);
+			//TODO : find a better way to load data into the table see-->updateSoftwareUnitTable()
+			try {
+					if(softwareUnitsTable.getRowCount()>0){
+			          
+						String type=(String)softwareUnitsTable.getValueAt(softwareUnitsTable.getSelectedRow(), 1);
 			if (type.toLowerCase().equals("regex")) {
 				editSoftwareUnitButton.setEnabled(true);
 			} else {
@@ -273,6 +277,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			}
 			
 			}
+			} catch (Exception e) {
+			
+			}
+		
 			
 		}
 	};
