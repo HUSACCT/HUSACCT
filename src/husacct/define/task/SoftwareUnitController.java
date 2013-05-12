@@ -37,47 +37,21 @@ public class SoftwareUnitController extends PopUpController {
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
 
-	public void fillSoftwareUnitsList(
-			ArrayList<SoftwareUnitDefinition> softwareUnitList) {
-		AnalysedModuleDTO[] modules = getAnalyzedModules();
-		for (AnalysedModuleDTO module : modules) {
-			SoftwareUnitDefinition softwareUnit = new SoftwareUnitDefinition(
-					module.name,
-					SoftwareUnitDefinition.Type.valueOf(module.type
-							.toUpperCase()));
-			softwareUnitList.add(softwareUnit);
-		}
-
-		filterAddedSoftwareUnits(softwareUnitList);
-	}
-
-	private void filterAddedSoftwareUnits(
-			ArrayList<SoftwareUnitDefinition> softwareUnitList) {
-		ArrayList<SoftwareUnitDefinition> addedsoftwareUnitList = this.softwareUnitDefinitionDomainService
-				.getSoftwareUnit(currentModuleId);
-		for (SoftwareUnitDefinition addedUnit : addedsoftwareUnitList) {
-			if (softwareUnitList.contains(addedUnit)) {
-				softwareUnitList.remove(addedUnit);
-			}
-		}
-	}
-
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
-				"root", "Projects", "root", "public");
+				"root", "Application", "application", "public");
 		addExternalComponents(rootComponent);
 
 		ApplicationDTO application = ServiceProvider.getInstance()
 				.getControlService().getApplicationDTO();
-		int i = 0;
+		
 		for (ProjectDTO project : application.projects) {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
-					"project" + i, project.name, "project", "public");
+					project.name, project.name, "root", "public");
 			for (AnalysedModuleDTO module : project.analysedModules) {
 				this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
-			i++;
 		}
 
 		Collections.sort(rootComponent.getChildren());
