@@ -2,6 +2,8 @@ package husacct.define.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.WarningMessageService;
@@ -56,14 +58,22 @@ public class SoftwareUnitController extends PopUpController {
 	}
 	
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
-		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Software Units", "root", "public");
+		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent("root", "Projects", "root", "public");
 		addExternalComponents(rootComponent);
-		AnalysedModuleDTO[] modules = this.getAnalyzedModules();	
 		
-		for(AnalysedModuleDTO module : modules) {
-			this.addChildComponents(rootComponent, module);
+		ApplicationDTO application = ServiceProvider.getInstance().getControlService().getApplicationDTO();
+		
+		if(application != null) {
+			int i = 0;
+			for(ProjectDTO project : application.projects) {
+				AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent("project"+i, project.name, "project", "public");
+				for(AnalysedModuleDTO module : project.analysedModules) {
+					this.addChildComponents(projectComponent, module);
+				}
+				rootComponent.addChild(projectComponent);
+				i++;
+			}	
 		}
-			
 		
 		Collections.sort(rootComponent.getChildren());
 		rootComponent.updateChilderenPosition();
@@ -82,9 +92,7 @@ public class SoftwareUnitController extends PopUpController {
         Arrays.sort(children, comparator);
 		for(AnalysedModuleDTO subModule : children) {
 			this.addChildComponents(childComponent, subModule);
-			
 		}
-		
 		parentComponent.addChild(childComponent);
 		parentComponent.registerchildrenSize();
 	}
