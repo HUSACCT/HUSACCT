@@ -7,20 +7,6 @@ import common.Logger;
 public class Resource {
 	private static Logger logger = Logger.getLogger(Resource.class);
 
-
-
-
-
-
-
-	
-
-
-
-	
-
-	
-
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
 	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
 	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
@@ -29,6 +15,7 @@ public class Resource {
 	
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
+	public static final String DEFINE_WORKFLOW = IMAGE_PATH + "define_workflow.png";
 	
 	public static final String ICON_BACK = ICONSET_PATH + "back.png";
 	public static final String ICON_ANALYSED_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "analysed-architecture-diagram.png";
@@ -70,8 +57,8 @@ public class Resource {
 	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
 	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";
 	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
+	public static final String ICON_QUESTIONMARK =ICONSET_PATH+"question_mark.png";
 	public static final String ICON_EXTERNALLIB2 =ICONSET_PATH+"define-externallib.png";
-
 
 
 

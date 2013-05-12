@@ -20,8 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -80,7 +80,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
 	}
-	
+		
 	private JPanel createModuleTreePanel() {
 		JPanel moduleTreePanel = new JPanel();
 		
@@ -170,29 +170,22 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
 		
+		moduleTree.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent event) {
+				createPopup(event);
+			}
+			public void mouseClicked(MouseEvent event) {
+				createPopup(event);
+			}
+			public void mouseEntered(MouseEvent event) {
+				createPopup(event);
+			}
+		});
+		
 		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
 		
 		for (int i = 0; i < moduleTree.getRowCount(); i++) {
 			moduleTree.expandRow(i);
-			moduleTree.addMouseListener(new MouseListener() {
-				@Override
-				public void mousePressed(MouseEvent event) {
-					createPopup(event);
-				}
-				@Override
-				public void mouseClicked(MouseEvent event) {
-					createPopup(event);
-				}
-				@Override
-				public void mouseEntered(MouseEvent event) {
-					createPopup(event);
-				}
-				@Override
-				public void mouseReleased(MouseEvent arg0) {}
-				@Override
-				public void mouseExited(MouseEvent arg0) {}
-				
-			});
 		}
 	}
 	private void createPopup(MouseEvent event){
