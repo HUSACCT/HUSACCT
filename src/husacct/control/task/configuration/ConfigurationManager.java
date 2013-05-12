@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.Properties;
 
 public class ConfigurationManager {
@@ -21,6 +20,28 @@ public class ConfigurationManager {
 		if(properties.containsKey(key))
 			return properties.getProperty(key);
 		throw new NonExistingSettingException("The setting " + key + " does not exist.");
+	}
+	
+	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
+		String property = getProperty(key);
+		return Integer.parseInt(property);
+	}
+	
+	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
+		String property = getProperty(key);
+		return Boolean.parseBoolean(property);
+	}
+	
+	public void setProperty(String key, String value) {
+		properties.setProperty(key, value);
+	}
+	
+	public void setPropertyFromInteger(String key, int value) {
+		properties.setProperty(key, String.valueOf(value));
+	}
+	
+	public void setPropertyFromBoolean(String key, boolean value) {
+		properties.setProperty(key, String.valueOf(value));
 	}
 	
 	public void setPropertie(String key, String value) {
@@ -48,20 +69,12 @@ public class ConfigurationManager {
 	}
 	
 	private void createDefaults(File file) {
-		/*
+		
 		try {
-			file.createNewFile();
-			File defaults = new File("/husacct/common/resources/config.properties");
-			FileInputStream defaultStream = new FileInputStream(defaults);
-			FileOutputStream destinationStream = new FileOutputStream(file);
-			FileChannel source = defaultStream.getChannel();
-			FileChannel destination = destinationStream.getChannel();
-			destination.transferFrom(source, 0, source.size());
-			defaultStream.close();
-			destinationStream.close();
+			properties.load(this.getClass().getResourceAsStream("/husacct/common/resources/config.properties"));
+			storeProperties();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		*/
 	}
 }
