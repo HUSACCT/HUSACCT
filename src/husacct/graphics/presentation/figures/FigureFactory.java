@@ -4,6 +4,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.decorators.ViolationsDecorator;
 
@@ -53,7 +54,7 @@ public final class FigureFactory {
 	public BaseFigure createFigure(AbstractDTO dto) {
 		BaseFigure createdFigure = null;
 
-		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO)) {
+		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO) || (dto instanceof ProjectDTO)) {
 			createdFigure = createModuleFigure(dto);
 		}
 
@@ -78,12 +79,17 @@ public final class FigureFactory {
 		} else if (dto instanceof AnalysedModuleDTO) {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
+		} else if (dto instanceof ProjectDTO){
+			type = "Project";
+			name = ((ProjectDTO) dto).name;
 		} else {
 			throw new RuntimeException("DTO type '" + dto.getClass().getSimpleName() + "' is not recognized as a module dto.");
 		}
 
 		// TODO check these values with the define team
-		if (type.toLowerCase().equals("layer")) {
+		if (type.toLowerCase().equals("project")) {
+			return new ProjectFigure(name);
+		} else if (type.toLowerCase().equals("layer")) {
 			return new LayerFigure(name);
 		} else if (type.toLowerCase().equals("component")) {
 			return new ComponentFigure(name);
