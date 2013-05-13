@@ -1,7 +1,11 @@
 package husacct.define.presentation.moduletree;
 
+import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.task.components.AbstractDefineComponent;
+import husacct.define.task.components.LayerComponent;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JTree;
@@ -12,13 +16,14 @@ import javax.swing.tree.TreeSelectionModel;
 public class ModuleTree extends JTree {
 
 	private static final long serialVersionUID = 3282591641481691737L;
-	
+	private ModuletreeContextMenu moduletreeContextMenu;
 	public ModuleTree(AbstractDefineComponent rootComponent) {
 		super(new CombinedModuleTreeModel(rootComponent));
 		CombinedModuleCellRenderer moduleCellRenderer = new CombinedModuleCellRenderer();
 	    this.setCellRenderer(moduleCellRenderer);
 	    this.setDefaultSettings();
-	}
+	    this.addMouseListener(righclikmenu);
+	} 
 	
 	public void setDefaultSettings() {
 		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -57,4 +62,68 @@ public class ModuleTree extends JTree {
 			}
 		}
 	}
+	
+	
+public  void setContextMenu(ModuletreeContextMenu moduletreeContextMenu) {
+
+	this.moduletreeContextMenu=moduletreeContextMenu;
+}
+ 	
+	
+	
+	
+	
+private MouseListener righclikmenu = new MouseListener() {
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			
+			
+			 if(e.getSource() instanceof ModuleTree&& e.getButton()==MouseEvent.BUTTON3)
+			 {
+		ModuleTree temp=  (ModuleTree) e.getSource();
+	     TreePath path=   temp.getSelectionPath();
+		AbstractDefineComponent selectedModule=(AbstractDefineComponent)path.getLastPathComponent();
+			    if (selectedModule instanceof LayerComponent) {
+			    	moduletreeContextMenu.isLayer();
+				} else {
+					moduletreeContextMenu.isComponent();
+				}
+				 
+				 
+				 
+				 
+				 moduletreeContextMenu.show(e.getComponent(),e.getX(), e.getY());
+			     moduletreeContextMenu.setVisible(true);
+			 }
+			
+		}
+	};
+
+
 }
