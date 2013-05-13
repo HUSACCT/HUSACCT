@@ -139,17 +139,24 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 	};
 	@Override
 	public void update(Observable o, Object arg) {
+
 		if (WarningMessageService.getInstance().hasWarnings()) {
 			Icon icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
 			warningButton.setIcon(icon);
 		}else {
+
+		
+		
+
 			warningButton.repaint();
+
 		}
 		
 	}
 
 	@Override
 	public void update() {
+
 	}
 
 

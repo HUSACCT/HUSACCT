@@ -49,21 +49,57 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon determineAnalyzedModuleComponentIcon(AnalyzedModuleComponent component) {
 		ImageIcon icon = new ImageIcon();
 		if(component.getType().equals("PACKAGE")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
+			if(component.isMapped()){
+				icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));
+			}else{
+				icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
+			}
+			
 		}
 		else if(component.getType().equals("CLASS")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
+			if(component.isMapped()){
+				icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC_GRAY));
+			}else{
+				icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
+			}
+			
+			
+			
 		} else if(component.getType().equals("INTERFACE")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
+			if(component.isMapped()){
+				icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC_GRAY));
+			}else{
+				icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
+			}
+			
+		
+		
 		} else if(component.getType().equals("ENUMERATION")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
+			if (component.isMapped()) {
+			  icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION_GRAY));
+			} else {
+              icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
+			}
+			
+			
+			
 		}else if(component.getType().equals("EXTERNALLIBRARY"))
 		{
-			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB));
+			if (component.isMapped()) {
+				icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
+			} else {
+				icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB));
+			}
+			
 		}
 		else if(component.getType().equals("SUBSYSTEM"))
 		{
-			icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA));
+			if (component.isMapped()) {
+				icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA_GRAY));
+			} else {
+				icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA));
+			}
+			
 		}
 		else if(component.getType().equals("ROOT"))
 		{
@@ -79,12 +115,15 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 		}
 		else if(component.getType().toLowerCase().equals("externalpackage"))
 		{
-			icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2));
+			if (component.isMapped()) {
+			  icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2_GRAY));
+			} else {
+              icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2));
+			}
+			
 		}
 		
-		if(component.getType().equals("PACKAGE")&&component.isMapped()) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));
-		}
+		
 		
 		
 		return icon;

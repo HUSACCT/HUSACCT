@@ -13,6 +13,7 @@ import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
 import husacct.define.presentation.utils.UiDialogs;
@@ -244,8 +245,19 @@ public class DefinitionController extends Observable implements Observer {
 							this.softwareUnitDefinitionDomainService.removeRegExSoftwareUnit(moduleId, softwareUnit);
 							this.notifyObservers();
 						}else{
+							boolean chekHasCodelevelWarning=WarningMessageService.getInstance().isCodeLevelWarning(softwareUnit);
+							if(chekHasCodelevelWarning){
+							boolean confirm2 = UiDialogs.confirmDialog(definitionJPanel,"Your about to remove an software unit that does exist at code level", "Remove?");
+							if(confirm2)
+							{
+								
+								this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
+							}
+							
+							}else{
 							this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
-						//Update the software unit table
+							}
+							//Update the software unit table
 						this.notifyObservers();
 						}
 						}
@@ -254,6 +266,7 @@ public class DefinitionController extends Observable implements Observer {
 			}
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
+			e.printStackTrace();
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
 			JPanelStatus.getInstance().stop();

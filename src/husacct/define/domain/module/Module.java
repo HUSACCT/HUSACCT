@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.services.DefaultRuleDomainService;
+import husacct.define.domain.services.WarningMessageService;
 
 import java.util.ArrayList;
 
@@ -133,6 +134,7 @@ public class Module implements Comparable<Module> {
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
 			service.addDefaultRules(subModule);
+			WarningMessageService.getInstance().processModule(subModule);
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
@@ -321,11 +323,8 @@ public class Module implements Comparable<Module> {
 		if (mappedSUunits.size() > 0){
 			isMapped = true;
 		}
-		for (Module mod : subModules){
-			if (mod.isMapped()){
-				isMapped = true;
-			}
-		}
+	
+		
 		return isMapped;
 	}
 

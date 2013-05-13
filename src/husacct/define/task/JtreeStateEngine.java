@@ -1,7 +1,10 @@
 package husacct.define.task;
 
 
+import husacct.ServiceProvider;
 import husacct.define.analyzer.AnalyzedUnitComparator;
+import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.warningmessages.WarningMessage;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -18,6 +21,9 @@ private static JtreeStateEngine instance =null;
 private ArrayList<Map<Long,AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
 private Logger logger;
 private AnalyzedModuleComponent currentRoot;
+private ArrayList<AnalyzedModuleComponent> reNewedCodes = new ArrayList<AnalyzedModuleComponent>(); 
+	
+
 	
 
 
@@ -103,7 +109,9 @@ private void restoreFlush() {
 			restoreflushRegix(key,unitTobeRestored,mainTree);
 			
 		}else{
-			mainTree.removeTreeItem(key,unitTobeRestored);
+			if (unitTobeRestored.isRemoved()) {
+				WarningMessageService.getInstance().addCodeLevelWarning(key,unitTobeRestored);
+			}
 		}	
 		
 		
@@ -124,7 +132,10 @@ private void restoreflushRegix(long id,AnalyzedModuleComponent unitTobeRestored,
 	
 	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
 	{
-		mainTree.removeTreeItem(id,(AnalyzedModuleComponent)result);
+		AnalyzedModuleComponent child= (AnalyzedModuleComponent)result;
+		if (unitTobeRestored.isRemoved()) {
+			WarningMessageService.getInstance().addCodeLevelWarning(id,child);
+		}
 	}
 }
 
@@ -148,7 +159,7 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 			
 			@Override
 			public void run() {
-				logger.debug("Strating to reanalyze");
+				logger.debug("Starting to reanalyze");
 				flush();
 				
 			
@@ -195,7 +206,8 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 
 public void removeSoftwareUnit(long moduleId,
 	AnalyzedModuleComponent unitTobeRemoved) {
-	int index=0;
+	
+	int index=-1;
 	for (int i=0;i< orderofinsertions.size();i++)
 	{
 		
@@ -211,8 +223,61 @@ public void removeSoftwareUnit(long moduleId,
 		}	
 	}
 	
+	if(index!=-1){
 	orderofinsertions.remove(index);
+	}else{
+	restoreCodeRenewal(unitTobeRemoved);
+	}
+}
+
+private void restoreCodeRenewal(AnalyzedModuleComponent unitTobeRemoved) {
+	AnalyzedModuleComponent result=null;
+	for (AnalyzedModuleComponent softwareUnit : reNewedCodes) {
+		if(unitTobeRemoved.getUniqueName().toLowerCase().equals(softwareUnit.getUniqueName().toLowerCase()))
+		{
+			result=softwareUnit;
+			
+			break;
+			
+		}
+		
+		
+	}
+	if(result!=null)
+	{
+		result.unfreeze();
+		int index = reNewedCodes.indexOf(result);
+		reNewedCodes.remove(index);
+	}else{
+		WarningMessageService.getInstance().hasCodeLevelWarning(unitTobeRemoved,WarningMessageService.removalType.fullRemoval);
+	}
 	
+}
+
+
+
+public void analyze() {
+	SoftwareUnitController controller = new SoftwareUnitController(-1);
+	if (JtreeController.instance().isLoaded()) {
+		AnalyzedModuleComponent rootComponent = controller.getSoftwareUnitTreeComponents();
+		JtreeStateEngine.instance().compareNewData(rootComponent); 
+		
+		
+	}else {
+		
+	AnalyzedModuleComponent rootComponent = controller.getSoftwareUnitTreeComponents();
+	
+	 
+	JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(rootComponent));
+	
+	JtreeController.instance().setLoadState(true);
+
+	}
+	
+}
+
+public void registerCodeRenewal(AnalyzedModuleComponent analyzedModuleToChek) {
+	reNewedCodes.add(analyzedModuleToChek);
 	
 }
 	

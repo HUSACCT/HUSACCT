@@ -220,23 +220,25 @@ public class DefineSoftwareArchitectureTests {
 		assertTrue(subModule2.getSubModules().size() == 0);
 		assertTrue(moduleFrom.getSubModules().size() == 3);
 		assertTrue(moduleTo.getSubModules().size() == 0);
-		assertTrue(sA.getAppliedRules().size() == 1);
+		
 		sA.removeModule(subsubModule1);
 		assertTrue(subModule1.getSubModules().size() == 0);
 		assertTrue(subModule2.getSubModules().size() == 0);
 		assertTrue(moduleFrom.getSubModules().size() == 3);
 		assertTrue(moduleTo.getSubModules().size() == 0);
-		assertTrue(sA.getAppliedRules().size() == 1);
+	
 		
 		sA.removeModule(moduleFrom);
 		assertTrue(sA.getModules().size() == 1);
 		assertTrue(moduleTo.getSubModules().size() == 0);
-		assertTrue(sA.getAppliedRules().size() == 0);
+	
 		sA.addModule(moduleFrom);
 		sA.removeAllModules();
 		assertTrue(sA.getModules().size() == 0);
 		
 		//rootModule should not be removeable
+		Long id =sA.getModuleById(rootModule.getId()).getId();
+		assertTrue(rootModule.getId()==id);
 		sA.removeModule(rootModule);
 		assertTrue(rootModule.equals(sA.getModuleById(rootModule.getId())));
 	}
