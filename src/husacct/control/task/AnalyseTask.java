@@ -41,7 +41,6 @@ public class AnalyseTask implements Runnable {
 					
 					ProjectDTO currentProject = applicationDTO.projects.get(i);
 					mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
-					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
 
 					// Add analysed root modules to project
 					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
