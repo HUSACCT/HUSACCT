@@ -5,7 +5,6 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.*;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
-import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
@@ -68,17 +67,27 @@ public class AnalysedController extends DrawingController {
 				}
 			}
 		}
+		
 		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			this.showViolations();
 		}
-		this.drawModulesAndLines(modules);
+		
+		AbstractDTO[] projectArray = projects.toArray(new AbstractDTO[projects.size()]);
+		if(projectArray.length <= 1){
+			this.drawModulesAndLines(modules);
+		} else{
+			this.drawProjects();
+		}
+	}
+
+	private void drawProjects() {
+		// TODO everything!
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		AnalysedModuleDTO[] children = this.analyseService
-				.getChildModulesInModule(parentName);
+		AnalysedModuleDTO[] children = this.analyseService.getChildModulesInModule(parentName);
 		if (parentName.equals("")) {
 			this.drawArchitecture(this.getCurrentDrawingDetail());
 		} else if (children.length > 0) {
