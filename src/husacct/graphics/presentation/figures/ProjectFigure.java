@@ -24,14 +24,14 @@ public class ProjectFigure extends BaseFigure{
 	private BufferedImage compIcon;
 	private ImageFigure compIconFig;
 	
-	private int MIN_WIDTH = 60;
-	private int MIN_HEIGHT = 50;
+	private int MIN_WIDTH = 120;
+	private int MIN_HEIGHT = 60;
 	
 	public ProjectFigure(String figureName) {
 		super(figureName);
 
 		body = new RectangleFigure();
-		body.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		body.set(AttributeKeys.FILL_COLOR, projectBackground);
 		children.add(body);
 
 		text = new TextFigure(figureName);
@@ -40,7 +40,7 @@ public class ProjectFigure extends BaseFigure{
 
 		compIconFig = new ImageFigure();
 		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
-		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+		compIconFig.set(AttributeKeys.FILL_COLOR, projectBackground);
 
 		try {
 			//TODO There needs to be a icon for Projects

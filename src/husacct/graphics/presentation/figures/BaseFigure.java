@@ -22,6 +22,7 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	private static final long serialVersionUID = 971276235252293165L;
 
 	public static final Color defaultBackgroundColor = new Color(252, 255, 182);
+	public static final Color projectBackground = new Color(156, 244, 116);
 	protected int baseZIndex, zIndex, raiseZIndex;
 
 	private final ArrayList<Decorator> decorators = new ArrayList<Decorator>();

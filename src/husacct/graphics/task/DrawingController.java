@@ -180,8 +180,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
 			if (!parentName.isEmpty()) {
-				parentFigure = this.figureFactory
-						.createParentFigure(parentName);
+				parentFigure = this.figureFactory.createParentFigure(parentName);
 				this.drawing.add(parentFigure);
 			}
 			for (AbstractDTO dto : modules.get(parentName)) {
