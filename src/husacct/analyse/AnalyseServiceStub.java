@@ -2,6 +2,7 @@ package husacct.analyse;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.services.IServiceListener;
 
@@ -497,8 +498,8 @@ public class AnalyseServiceStub implements IAnalyseService {
     }
     
     @Override
-	public String[] getExternalSystems(){
-		return new String[0];
+	public ExternalSystemDTO[] getExternalSystems(){
+		return new ExternalSystemDTO[] { new ExternalSystemDTO() };
 	}
 
 	@Override
@@ -509,6 +510,12 @@ public class AnalyseServiceStub implements IAnalyseService {
 
 	@Override
 	public void loadWorkspaceData(Element root) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void logHistory() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -4,9 +4,11 @@ import husacct.analyse.domain.IModelPersistencyService;
 import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
+import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
@@ -20,11 +22,13 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     private IAnalyseControlService service;
     private IModelPersistencyService persistService;
     private AnalyseInternalFrame analyseInternalFrame;
+    private HistoryLogger historyLogger;
     private boolean isAnalysed;
 
     public AnalyseServiceImpl() {
         this.service = new AnalyseControlerServiceImpl();
         this.persistService = new FamixPersistencyServiceImpl();
+        this.historyLogger = new HistoryLogger();
         this.analyseInternalFrame = null;
         this.isAnalysed = false;
     }
@@ -128,7 +132,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     }
     
     @Override
-	public String[] getExternalSystems(){
+	public ExternalSystemDTO[] getExternalSystems(){
 		return service.getExternalSystems();
 	}
 
@@ -142,5 +146,10 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	@Override
 	public void loadWorkspaceData(Element rootElement) {
 		persistService.loadModel(rootElement.getChild("AnalysedApplication"));
+	}
+
+	@Override
+	public void logHistory() {
+		historyLogger.saveHistory();
 	}
 }
