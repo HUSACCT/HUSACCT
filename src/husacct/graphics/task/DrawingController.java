@@ -167,6 +167,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
+		this.graphicsFrame.setUpToDate();
 		this.clearDrawing();
 		this.drawMultiLevelModules(modules);
 		this.updateLayout();

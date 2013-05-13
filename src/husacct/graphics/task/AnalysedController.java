@@ -6,6 +6,7 @@ import husacct.common.dto.*;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
+import husacct.graphics.presentation.figures.ProjectFigure;
 import husacct.graphics.util.DrawingDetail;
 import husacct.validate.IValidateService;
 
@@ -204,8 +205,15 @@ public class AnalysedController extends DrawingController {
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
 		this.resetContextFigures();
-		ArrayList<String> parentNames = this
-				.sortFiguresBasedOnZoomability(figures);
+		
+		//TODO optimize for selecting multiple projects
+		if(figures[0] instanceof ProjectFigure){
+			ProjectDTO project = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
+			AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new AbstractDTO[project.analysedModules.size()] );
+			this.drawModulesAndLines(abstractDTOs);
+		}
+		
+		ArrayList<String> parentNames = this.sortFiguresBasedOnZoomability(figures);
 
 		if (parentNames.size() > 0) {
 			this.saveSingleLevelFigurePositions();
@@ -261,8 +269,7 @@ public class AnalysedController extends DrawingController {
 		for (BaseFigure figure : figures) {
 			if (figure.isModule() && !figure.isContext()) {
 				try {
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this
-							.getFigureMap().getModuleDTO(figure);
+					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figure);
 					parentNames.add(parentDTO.uniqueName);
 				} catch (Exception e) {
 					e.printStackTrace();
