@@ -15,7 +15,6 @@ public class DefinitionJPanel extends javax.swing.JPanel {
 	public SoftwareUnitsJPanel sofwareUnitsPanel;
 	public AppliedRulesJPanel appliedRulesPanel;
 	
-	
 	private JPanel mappingPanel;
 
 	
