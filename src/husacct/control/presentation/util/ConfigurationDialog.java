@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.IServiceListener;
+import husacct.control.IControlService;
 import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigPanel;
 

@@ -14,6 +14,7 @@ public class CodeViewController {
 	
 	public CodeViewController(MainController mainController) {
 		configurationManager = mainController.getConfigurationManager();
+		setCurrentCodeviewer();
 	}
 	
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
@@ -22,7 +23,7 @@ public class CodeViewController {
 	
 	public void setCurrentCodeviewer() {
 		try {
-			if(configurationManager.getPropertyAsBoolean("ExternalCodeviewer")) {
+			if(!configurationManager.getPropertyAsBoolean("ExternalCodeviewer")) {
 				currentCodeviewer = new InternalCodeviewerImpl();
 			} else {
 				
