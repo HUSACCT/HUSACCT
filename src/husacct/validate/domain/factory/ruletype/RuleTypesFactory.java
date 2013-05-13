@@ -91,6 +91,7 @@ public class RuleTypesFactory {
 
 	public List<RuleType> getRuleTypes() {
 		ApplicationDTO application = defineService.getApplicationDetails();
+	
 		if (application != null && application.projects.size() > 0) {
 			if (application.projects.get(0).programmingLanguage == null || application.projects.get(0).programmingLanguage.equals("")) {
 				return generateDefaultRuleTypes();
@@ -139,6 +140,7 @@ public class RuleTypesFactory {
 		List<RuleType> rules = new ArrayList<RuleType>();
 
 		for (Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()) {
+			
 			try {
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();

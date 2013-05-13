@@ -323,13 +323,14 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
+		boolean canclose= false;
 		if(regExMappingPanel != null) {
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
 					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
 					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "PC");
+							this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "PC");
 					}
 					else if(packageCheckBox.isSelected()) {
 						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "P");
@@ -352,10 +353,13 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		
-				this.softwareUnitController.save(selectedComponent);			
+				
+				canclose= this.softwareUnitController.save(selectedComponent);			
 			}
-			this.dispose();
+			if (canclose) {
+				this.dispose();
+			}
+			
 		}
 
 	}

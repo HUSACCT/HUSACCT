@@ -6,11 +6,12 @@ import java.util.ArrayList;
 public abstract class AbstractCombinedComponent extends Component implements Comparable<AbstractCombinedComponent>{
 	protected String uniqueName = "";
 	protected String type = "";
+	protected int sizeOfChildren;
 	private static final long serialVersionUID = 1L;
 	protected ArrayList<AbstractCombinedComponent> children;
 	private AnalyzedModuleComponent parent;
 	private int analyzedModuleComponentPosition=0;
-
+  
 	public AbstractCombinedComponent() {
 		super();
 		this.children = new ArrayList<AbstractCombinedComponent>();
@@ -47,9 +48,20 @@ public abstract class AbstractCombinedComponent extends Component implements Com
 	
 	@Override
 	public int compareTo(AbstractCombinedComponent left) {
+	
+		if(left.getType().toLowerCase().equals("externalpackage"))
+		{
+			return -1;
+		}else if(this.getType().toLowerCase().equals("externalpackage"))
+		{
+			return 1;
+		}
+		
+		else{
 		
 		return this.getUniqueName().toUpperCase().compareTo(left.getUniqueName().toUpperCase());
-	}	
+		}
+		}	
 
 	public void setUniqueName(String uniqueName) {
 		this.uniqueName = uniqueName;
