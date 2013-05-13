@@ -1,25 +1,34 @@
 package husacct.analyse;
 
+import husacct.analyse.domain.IModelPersistencyService;
+import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.presentation.AnalyseInternalFrame;
 import husacct.analyse.task.AnalyseControlerServiceImpl;
+//import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.savechain.ISaveable;
 import husacct.common.services.ObservableService;
 
 import javax.swing.JInternalFrame;
 
-//TODO Add implement-clause  ISavable when the savechain is fixed
-public class AnalyseServiceImpl extends ObservableService implements IAnalyseService {
+import org.jdom2.Element;
+
+public class AnalyseServiceImpl extends ObservableService implements IAnalyseService, ISaveable {
 
     private IAnalyseControlService service;
+    private IModelPersistencyService persistService;
     private AnalyseInternalFrame analyseInternalFrame;
+//    private HistoryLogger historyLogger;
     private boolean isAnalysed;
 
     public AnalyseServiceImpl() {
         this.service = new AnalyseControlerServiceImpl();
+        this.persistService = new FamixPersistencyServiceImpl();
+//        this.historyLogger = new HistoryLogger();
         this.analyseInternalFrame = null;
         this.isAnalysed = false;
     }
@@ -125,5 +134,22 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
     @Override
 	public ExternalSystemDTO[] getExternalSystems(){
 		return service.getExternalSystems();
+	}
+
+	@Override
+	public Element getWorkspaceData() {
+		Element rootElement = new Element("rootElement");
+		rootElement.addContent(persistService.saveModel());
+		return rootElement;
+	}
+
+	@Override
+	public void loadWorkspaceData(Element rootElement) {
+		persistService.loadModel(rootElement.getChild("AnalysedApplication"));
+	}
+
+	@Override
+	public void logHistory() {
+//		historyLogger.saveHistory();
 	}
 }

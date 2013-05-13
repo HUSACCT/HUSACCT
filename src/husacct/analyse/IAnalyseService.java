@@ -5,9 +5,10 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.savechain.ISaveable;
 import husacct.common.services.IObservableService;
 
-public interface IAnalyseService extends IObservableService {
+public interface IAnalyseService extends IObservableService, ISaveable {
 
     public String[] getAvailableLanguages();
 
@@ -49,4 +50,6 @@ public interface IAnalyseService extends IObservableService {
     public void exportDependencies(String fullPath);
     
     public ExternalSystemDTO[] getExternalSystems();
+    
+    public void logHistory();
 }
