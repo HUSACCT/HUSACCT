@@ -4,6 +4,7 @@ import org.jdom2.Element;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 public interface IAnalyseControlService {
 
@@ -43,5 +44,5 @@ public interface IAnalyseControlService {
 
     public void exportDependencies(String path);
     
-    public String[] getExternalSystems();
+    public ExternalSystemDTO[] getExternalSystems();
 }

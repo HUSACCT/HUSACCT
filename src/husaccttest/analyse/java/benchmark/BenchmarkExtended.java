@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.analyse.domain.famix.FamixCreationServiceImpl;
+import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.define.IDefineService;
 import husaccttest.analyse.TestObject;
 import husaccttest.analyse.TestProjectFinder;
@@ -23,15 +25,18 @@ public abstract class BenchmarkExtended extends TestCaseExtended{
 		IDefineService defService = provider.getDefineService();
 
 		String path = TestProjectFinder.lookupProject("java", "benchmark");
-		String[] paths = new String[]{path};
-		defService.createApplication("Java Benchmark", paths, "Java", "1.0");
+		ArrayList<String> paths = new ArrayList<String>();
+		paths.add(path);
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		projects.add(new ProjectDTO("TestProjectBenchmark", new ArrayList<String>(), "java", "1.0", "test project for unit tests", new ArrayList<AnalysedModuleDTO>()));
+		defService.createApplication("Java Benchmark", projects, "1.0");
 		
 		super.setConfig();
 		service = provider.getAnalyseService();
 		
 		try {
 			if(!isAnalysed){
-				service.analyseApplication(paths, "Java");
+				service.analyseApplication(projects.get(0));
 				isAnalysed = true;
 			}
 
