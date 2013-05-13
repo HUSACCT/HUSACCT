@@ -1,29 +1,36 @@
 package husacct.control;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
+import husacct.control.task.CodeViewController;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
 import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.task.configuration.NonExistingSettingException;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 
-public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable{
+public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
@@ -33,6 +40,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ApplicationController applicationController;
 	private StateController stateController;
 	private ViewController viewController;
+	private ConfigurationManager configurationManager;
+	private CodeViewController codeViewController;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -41,6 +50,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
+		configurationManager = mainController.getConfigurationManager();
+		codeViewController = mainController.getCodeViewerController();
 	}
 	
 	@Override
@@ -141,4 +152,48 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		return mainController.getWorkspaceController().getCurrentWorkspace().getApplicationData();
 	}
 
+	@Override
+	public String getProperty(String key) throws NonExistingSettingException {
+		return configurationManager.getProperty(key);
+	}
+
+	@Override
+	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
+		return configurationManager.getPropertyAsInteger(key);
+	}
+
+	@Override
+	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
+		return configurationManager.getPropertyAsBoolean(key);
+	}
+	
+	@Override
+	public void setProperty(String key, String value) {
+		configurationManager.setProperty(key, value);
+	}
+
+	@Override
+	public void setPropertyFromInteger(String key, int value) {
+		configurationManager.setPropertyFromInteger(key, value);
+	}
+
+	@Override
+	public void setPropertyFromBoolean(String key, boolean value) {
+		configurationManager.setPropertyFromBoolean(key, value);
+	}
+	
+	@Override
+	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
+		codeViewController.displayErrorsInFile(fileName, errors);
+	}
+
+	@Override
+	public String getConfigurationName() {
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
+	}
+
+	@Override
+	public JPanel getConfigurationPanel() {
+		return new GeneralConfigurationPanel();
+	}
 }

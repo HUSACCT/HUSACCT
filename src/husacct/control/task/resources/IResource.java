@@ -7,6 +7,8 @@ import org.jdom2.Document;
 public interface IResource {
 
 	public Document load(HashMap<String, Object> dataValues);
+	public boolean save(Document doc, HashMap<String, Object> dataValues,HashMap<String, Object> config);
+
 	public boolean save(Document doc, HashMap<String, Object> dataValues);
 	
 }
