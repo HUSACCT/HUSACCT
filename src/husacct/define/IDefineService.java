@@ -31,4 +31,5 @@ public interface IDefineService extends ISaveable, IObservableService {
 	
 	public Element getLogicalArchitectureData();
 	public void loadLogicalArchitectureData(Element e);
+	public void analyze();
 }

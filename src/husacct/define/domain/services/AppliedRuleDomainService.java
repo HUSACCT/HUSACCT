@@ -5,6 +5,7 @@ import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 
+
 import java.util.ArrayList;
 
 public class AppliedRuleDomainService {
@@ -17,17 +18,11 @@ public class AppliedRuleDomainService {
 			ruleList = SoftwareArchitecture.getInstance().getEnabledAppliedRules();
 		}
 		AppliedRule[] rules = new AppliedRule[ruleList.size()]; ruleList.toArray(rules);
-		//TODO: Add generated rules??
 		return rules;
 	}
 	
 	public AppliedRule[] getAppliedRules() {
 		return getAppliedRules(true);
-	}
-	
-	public AppliedRule[] getGeneratedRules()
-	{
-		return null; //TODO!!
 	}
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
@@ -41,7 +36,7 @@ public class AppliedRuleDomainService {
 		}
 		
 		return addAppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom , moduleTo, enabled);
-	}
+	}          
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
@@ -50,12 +45,11 @@ public class AppliedRuleDomainService {
 		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		System.out.println(ruleTypeKey+"<><>< -"+regex+"-  ????"+dependencies.length+" Modulee from:"+moduleFrom.getName()+ " moduleto: "+moduleTo.getName());
 		
 		return rule.getId();
 	}
 	
-	public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,String description, String[] dependencies, 
+	public void updateAppliedRule(long appliedRuleId, Boolean isGenerated, String ruleTypeKey,String description, String[] dependencies, 
 			String regex,long moduleFromId, long moduleToId, boolean enabled) {
 
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
@@ -81,6 +75,8 @@ public class AppliedRuleDomainService {
 		SoftwareArchitecture.getInstance().removeAppliedRules();
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
+	
+	
 	
 	public void removeAppliedRule(long appliedrule_id) {
 		SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);

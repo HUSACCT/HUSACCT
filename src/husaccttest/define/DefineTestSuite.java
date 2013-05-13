@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
 	DefineSoftwareArchitectureTests.class,
-	DefineServiceTests.class
+	DefineServiceTests.class,RegexTest.class
 })
 public class DefineTestSuite {
 	

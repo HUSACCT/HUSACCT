@@ -7,34 +7,53 @@ import org.antlr.runtime.tree.Tree;
 
 public class CSharpNamespaceGenerator extends CSharpGenerator {
 
-    public String generateModel(Stack<String> namespaceStack, Tree namespaceTree) {
-        String parentNamespace = CSharpGeneratorToolkit.getParentName(namespaceStack);
-        String namespaceName = getNamespaceName(namespaceTree);
-        String uniqueName = CSharpGeneratorToolkit.getUniqueName(parentNamespace, namespaceName);
+	private Stack<String> namespaceStack = new Stack<>();
 
-        modelService.createPackage(uniqueName, parentNamespace, namespaceName);
-        return namespaceName;
-    }
+	public String generateModel(String rootParentNamespace, Tree namespaceTree) {
+		String namespaceName = getNamespaceName(namespaceTree);
+		createPackageModelForEachNamespace(rootParentNamespace); 	
 
-    public String getNamespaceName(Tree namespaceTree) {
-        for (int i = 0; i < namespaceTree.getChildCount(); i++) {
-            return getQualifiedIdentifiers((CommonTree) namespaceTree.getChild(i));
-        }
-        throw new ParserException();
-    }
+		return namespaceName;
+	}
 
-    public String getQualifiedIdentifiers(CommonTree tree) {
-        String result = "";
-        if (tree.getType() == CSharpParser.QUALIFIED_IDENTIFIER) {
-            for (int i = 0; i < tree.getChildCount(); i++) {
+	private String getNamespaceName(Tree namespaceTree) {
+		for (int i = 0; i < namespaceTree.getChildCount(); i++) {
+			return getQualifiedIdentifiers((CommonTree) namespaceTree.getChild(i));
+		}
+		throw new ParserException();
+	}
 
-                result += "." + ((CommonTree) tree.getChild(i)).token.getText();
+	private String getQualifiedIdentifiers(CommonTree tree) {
+		String result = "";
+		if (tree.getType() == CSharpParser.QUALIFIED_IDENTIFIER) {
+			for (int i = 0; i < tree.getChildCount(); i++) {
 
-            }
-        }
-        if (result.length() > 0) {
-            result = result.substring(1);
-        }
-        return result;
-    }
+				result += "." + tree.getChild(i).getText();
+				namespaceStack.push(tree.getChild(i).getText());
+
+			}}
+		if (result.length() > 0) {
+			result = result.substring(1);
+		}
+		return result;
+	}
+
+	private void createPackageModelForEachNamespace(String rootNamespace) {
+		String namespaceName;
+		String uniqueName;
+		String parentNamespace;
+
+		for (int i = namespaceStack.size(); i > 0; i--)
+		{
+			namespaceName = namespaceStack.peek();
+			uniqueName = CSharpGeneratorToolkit.getUniqueName(rootNamespace, CSharpGeneratorToolkit.getParentName(namespaceStack));
+
+			namespaceStack.pop();
+
+			String parentName = CSharpGeneratorToolkit.getParentName(namespaceStack);
+			parentNamespace = rootNamespace + CSharpGeneratorToolkit.potentiallyInsertDot(parentName) + parentName;
+
+			modelService.createPackage(uniqueName, parentNamespace, namespaceName);
+		}
+	}
 }

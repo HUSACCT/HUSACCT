@@ -1,17 +1,26 @@
 package husacct.define.domain;
 
 import husacct.ServiceProvider;
+import husacct.define.domain.module.Component;
+import husacct.define.domain.module.ExternalSystem;
+import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
+import husacct.define.domain.module.SubSystem;
+import husacct.define.domain.services.AppliedRuleDomainService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import javax.swing.DefaultComboBoxModel;
+
+import antlr.collections.List;
 
 public class SoftwareArchitecture {
 	
 	private Module rootModule;
 	
 	private ArrayList<AppliedRule> appliedRules;
-	private ArrayList<AppliedRule> defaultRules;
 	
 	private static SoftwareArchitecture instance = null;
 	public static SoftwareArchitecture getInstance()
@@ -114,6 +123,29 @@ public class SoftwareArchitecture {
 	
 	public void removeAppliedRules() {
 		appliedRules = new ArrayList<AppliedRule>();
+	
+	}
+	
+	public void removeLayerAppliedRules() {
+		ArrayList<AppliedRule>rulesTobeRemoved = new ArrayList<AppliedRule>();
+		for (AppliedRule rules : appliedRules) {
+			String moduleFromType =rules.getModuleFrom().getType().toLowerCase();
+			String moduleToType=rules.getModuleTo().getType().toLowerCase();
+			String ruleType=rules.getRuleType();
+			
+			if (ruleType.equals("IsNotAllowedToUse")&&moduleFromType.equals("layer")&&moduleToType.equals("layer")) {
+			
+				rulesTobeRemoved.add(rules);
+			}
+		}
+	
+		for (AppliedRule rule : rulesTobeRemoved) {
+			int index= appliedRules.indexOf(rule);
+			appliedRules.remove(index);
+		}
+		
+		
+	
 	}
 	
 	public void removeAppliedRule(long appliedRuleId)
@@ -121,7 +153,7 @@ public class SoftwareArchitecture {
 		if(this.hasAppliedRule(appliedRuleId))
 		{
 			AppliedRule rule = getAppliedRuleById(appliedRuleId);
-			appliedRules.remove(rule);	
+			appliedRules.remove(rule);
 		}else{
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoRule"));
 		}
@@ -238,12 +270,24 @@ public class SoftwareArchitecture {
 		if(!this.hasModule(module.getName())) {
 			rootModule.addSubModule(module);
 			moduleId = module.getId();
-		}else{
-			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule"));
+			
+		}else
+		{
+			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule")); //TODO! Foutmelding ffs!
 		}
 		return moduleId;
 	}
 	
+	public String addNewModule(Module module)
+	{
+		if(!this.hasModule(module.getName())) {
+			rootModule.addSubModule(module);
+		} else {
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
+		}
+		return "";
+	}
+
 	public void removeAllModules() {
 		rootModule.setSubModules(new ArrayList<Module>());
 	}
@@ -379,7 +423,7 @@ public class SoftwareArchitecture {
 		}
 		return logicalPath;
 	}
-	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D 
+	//TODO SEE IF CAN BE BETTER IMPLEMENTED yes we caaan :D //al gedaan in ModuleDomainService maar dan zonder kut id....
 	public long getParentModuleIdByChildId(long childModuleId) {
 		long parentModuleId = -1L;
 		
@@ -444,6 +488,24 @@ public class SoftwareArchitecture {
 		}
 	}
 	
+	public ArrayList<Layer> getLayersBelow(Layer layer){
+		ArrayList<Layer> returnList = new ArrayList<Layer>();
+		Layer underlyingLayer = getTheFirstLayerBelow(layer);
+		
+		Layer _temp = underlyingLayer;
+		while (getTheFirstLayerBelow(_temp).equals(null))
+		{
+			returnList.add(_temp);
+			_temp = getTheFirstLayerBelow(_temp);
+		}
+		return returnList; //TODO!
+	}
+	
+	public Layer getTheFirstLayerBelow(Layer layer)
+	{
+		return getTheFirstLayerBelow(layer.getHierarchicalLevel(),getParentModuleIdByChildId(layer.getId()));
+	}
+	
 	public Layer getTheFirstLayerBelow(int currentHierarchicalLevel, long parentModuleId){
 		Layer layer = null;
 		for (Module mod : getModulesForLayerSorting(parentModuleId)){
@@ -471,5 +533,90 @@ public class SoftwareArchitecture {
 		int hierarchicalLevelLayerOne = layerOne.getHierarchicalLevel();
 		layerOne.setHierarchicalLevel(layerTwo.getHierarchicalLevel());
 		layerTwo.setHierarchicalLevel(hierarchicalLevelLayerOne);
+	}
+
+	public Module getRootModule() {
+		return rootModule;
+	}
+
+	public Module updateModuleType(Module oldModule, String newType) {
+		
+	
+	
+    System.out.println(oldModule.getClass().getName());
+
+
+	Module parent=oldModule.getparent();
+	
+	int index =oldModule.getparent().getSubModules().indexOf(oldModule);
+	parent.getSubModules().remove(index);
+	Module updatedModule =generateNewType(oldModule,newType) ;
+	parent.addSubModule(index,updatedModule );
+	
+	return updatedModule;
+		
+		
+	}
+
+	private Module generateNewType(Module oldModule,String newType) {
+		Long id=oldModule.getId();
+		String name= oldModule.getName();
+		String desc = oldModule.getDescription();
+		ArrayList<SoftwareUnitDefinition> softwareUnits = oldModule.getUnits();
+		ArrayList<Module> subModules = oldModule.getSubModules();
+		processDefaultComponents(oldModule);
+		if (ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer").toLowerCase().equals(newType.toLowerCase())) {
+			  Layer layer = new Layer();
+			  layer.setDescription(desc);
+			  layer.setId(id);
+			  layer.setName(name);
+			  layer.setType(newType);
+			  layer.setSubModules(subModules);
+			  layer.setUnits(softwareUnits);
+			  return layer;
+		
+		} else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component").toLowerCase().equals(newType.toLowerCase())) {
+			Component component = new Component();
+			component.setDescription(desc);
+			component.setId(id);
+			component.setName(name);
+			component.setType(newType);
+			Facade f = new Facade("Facade"+name,"is Facade of "+name);
+			subModules.add(f);
+			Collections.reverse(subModules);
+			component.setSubModules(subModules);
+			component.setUnits(softwareUnits);
+			
+			  return component;
+		}else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem").toLowerCase().equals(newType.toLowerCase())) {
+			SubSystem subSystem = new SubSystem();
+			subSystem.setDescription(desc);
+			subSystem.setId(id);
+			subSystem.setName(name);
+			subSystem.setType(newType);
+			subSystem.setSubModules(subModules);
+			subSystem.setUnits(softwareUnits);
+			return subSystem;
+		}else if(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary").toLowerCase().equals(newType.toLowerCase())) {
+			ExternalSystem externalSystem = new ExternalSystem();
+			externalSystem.setDescription(desc);
+			externalSystem.setId(id);
+			externalSystem.setName(name);
+			externalSystem.setType(newType);
+			externalSystem.setSubModules(subModules);
+			externalSystem.setUnits(softwareUnits);
+			return externalSystem;
+		}else{
+		return null;
+		}
+
+		
+	}
+
+	private void processDefaultComponents(Module oldModule) {
+		if (oldModule instanceof Component) {
+			oldModule.getSubModules().remove(0);
+		}
+		
 	}
 }
