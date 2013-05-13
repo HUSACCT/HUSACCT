@@ -35,18 +35,17 @@ public class DrawingState {
 
 	public void save(FigureMap figureMap) {
 		this.figureMap = figureMap;
-		clear();
-
+		this.clear();
 		List<Figure> figures = drawing.getChildren();
+		
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
-
 			if (!bf.isLine() && shouldSaveState(bf)) {
 				FigureState state = saveFigureState(bf);
 				savedPositions.put(state.path, state);
-				
-				if (!state.enabled)
+				if (!state.enabled){
 					hasHiddenFigures = true;
+				}
 			}
 		}
 	}

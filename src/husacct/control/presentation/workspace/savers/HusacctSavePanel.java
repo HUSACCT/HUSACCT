@@ -131,4 +131,10 @@ public class HusacctSavePanel extends SaverPanel{
 		return true;
 	}
 
+	@Override
+	public HashMap<String, Object> getConfig() {
+		//TODO return config;
+		return null;
+	}
+
 }

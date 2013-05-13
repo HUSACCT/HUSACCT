@@ -6,7 +6,6 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.task.JtreeController;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -14,6 +13,7 @@ public class ModuleDomainService {
 	
 	public long addModuleToRoot(Module module){
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
+	
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
@@ -21,10 +21,20 @@ public class ModuleDomainService {
 	public long addModuleToParent(long parentModuleId, Module module){
 		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
 		parentModule.addSubModule(module);
+		DefaultRuleDomainService service = new DefaultRuleDomainService();
+		
 		long moduleId = module.getId();
+		service.addDefaultRules(module);
+		
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
-	}	
+	}
+	
+	public String addNewModuleToParent(long parentModuleId, Module module){
+		Module parentModule = SoftwareArchitecture.getInstance().getModuleById(parentModuleId);
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		return parentModule.addSubModule(module);
+	}
 	
 	public void updateModule(long moduleId, String moduleName, String moduleDescription) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
@@ -44,10 +54,10 @@ public class ModuleDomainService {
 		SoftwareArchitecture.getInstance().removeModule(module);
 		//quikfix
 		try{
-		JtreeController.instance().registerTreeRemoval(module);
-		}catch(NullPointerException r)
+			JtreeController.instance().registerTreeRemoval(module);
+		}
+		catch(Exception e)
 		{
-			
 		}
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
@@ -66,6 +76,11 @@ public class ModuleDomainService {
 	public Module getModuleById(long moduleId) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		return module;
+	}
+	
+	public Module getRootModule()
+	{
+		return SoftwareArchitecture.getInstance().getRootModule();
 	}
 	
 	public Module[] getRootModules(){
@@ -155,5 +170,41 @@ public class ModuleDomainService {
 	
 	public Long getParentModuleIdByChildId(Long moduleId) {
 		return SoftwareArchitecture.getInstance().getParentModuleIdByChildId(moduleId);
+	}	
+	
+	
+	//Retrieve parentModule
+	public Module getParentModule(Module module)
+	{	
+		return recursiveSearch(SoftwareArchitecture.getInstance().getRootModule(),module);
+	}	
+	
+	private Module recursiveSearch(Module currentModule, Module comparrisonModule)
+	{
+		if (currentModule.equals(comparrisonModule))
+		{
+			return currentModule;
+		}
+		if (currentModule.hasSubModules())
+		{
+			for (Module subModule : currentModule.getSubModules())
+			{
+				return recursiveSearch(subModule, comparrisonModule);
+			}
+		}
+		return new Module();
+	}
+
+	public void updateModule(long moduleId, String moduleName,
+			String moduleDescription, String newType) {
+	
+	Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+	DefaultRuleDomainService service = new DefaultRuleDomainService();
+	service.removeDefaultRules(module);
+	Module updatedModule=SoftwareArchitecture.getInstance().updateModuleType(module,newType);
+	service.addDefaultRules(updatedModule);
+    service.updateModuleRules(updatedModule);
+	ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		
 	}
 }
