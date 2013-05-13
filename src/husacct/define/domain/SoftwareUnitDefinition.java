@@ -51,5 +51,4 @@ public class SoftwareUnitDefinition {
 		}
 		return isEqual;
 	}
-
 }
