@@ -21,6 +21,7 @@ public class AnalyseServiceStub implements IAnalyseService {
     public AnalyseServiceStub() {
         generateModule();
         //printHashmap(analysed.get("").get(0));
+        
     }
 
     private void GenerateHashmap(List<AnalysedModuleDTO> subModules) {
