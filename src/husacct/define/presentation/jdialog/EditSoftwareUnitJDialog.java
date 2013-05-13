@@ -37,7 +37,9 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 	private JButton cancelButton;
 	private JButton selectAllButton;
 	private JButton deSelectAllButton;
+	
 	private RegexComponent regexwrapper;
+	private AnalyzedModuleTree excludedUnitTree = new AnalyzedModuleTree(new AnalyzedModuleComponent("root", "excluded Units","root", "public"));
 	
 	private AnalyzedModuleTree resultTree;
 	
@@ -47,6 +49,7 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 		this.editingRegEx = editingRegEx;
 		this.softwareUnitController = new SoftwareUnitController(moduleId);
 		this.softwareUnitController.setAction(PopUpController.ACTION_NEW);
+		
 		initUI();
 	}
 	
@@ -75,7 +78,7 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 		resultPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		
 		JScrollPane softwareUnitScrollPane = new JScrollPane();
-		//softwareUnitScrollPane.setSize(50, 50);
+	
 		softwareUnitScrollPane.setPreferredSize(new java.awt.Dimension(500, 300));
 		resultTree = JtreeController.instance().getRegixTree(editingRegEx);
 		
@@ -138,18 +141,7 @@ public class EditSoftwareUnitJDialog extends JDialog implements ActionListener {
 		TreeSelectionModel paths = resultTree.getSelectionModel();
             TreePath[] pathses =resultTree.getSelectionPaths();
 		ArrayList<AnalyzedModuleComponent> components = new ArrayList<AnalyzedModuleComponent>();
-		/*
-		 * 
-		 * inprogress
-		if(regexwrapper.getChildren().size()==pathses.length)
-		{
-			this.dispose();
-		}else
-		{
-			
-		}
-		
-		*/
+	
 		for (TreePath path : paths.getSelectionPaths()){
 			components.add((AnalyzedModuleComponent) path.getLastPathComponent());	
 		}

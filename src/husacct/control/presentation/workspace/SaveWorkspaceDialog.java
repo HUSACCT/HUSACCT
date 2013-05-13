@@ -122,7 +122,8 @@ public class SaveWorkspaceDialog extends JDialog{
 	private boolean saveWorkspace(){
 		String selectedLoader = (String) saverList.getSelectedValue();
 		HashMap<String, Object> data = selectedSaverPanel.getData();
-		return mainController.getWorkspaceController().saveWorkspace(selectedLoader, data);
+		HashMap<String, Object> config = selectedSaverPanel.getConfig();
+		return mainController.getWorkspaceController().saveWorkspace(selectedLoader, data, config);
 	}
 	
 	private void loadSelectedOpenMethodPanel(){

@@ -103,8 +103,9 @@ class JavaTreeConvertController {
 
     private void delegateASTToGenerators(CommonTree tree) {
         if (isTreeAvailable(tree)) {
+        	CommonTree treeNode;
             for (int i = 0; i < tree.getChildCount(); i++) {
-                CommonTree treeNode = (CommonTree) tree.getChild(i);
+                treeNode = (CommonTree) tree.getChild(i);
                 int nodeType = treeNode.getType();
 
                 switch (nodeType) {

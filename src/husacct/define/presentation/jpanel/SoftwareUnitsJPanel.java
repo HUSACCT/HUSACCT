@@ -6,8 +6,10 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 
+import husacct.define.domain.services.WarningMessageService;
 import husacct.define.presentation.jdialog.EditSoftwareUnitJDialog;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
+import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.tables.JTableSoftwareUnits;
 import husacct.define.presentation.tables.JTableTableModel;
 import husacct.define.presentation.utils.JPanelStatus;
@@ -30,6 +32,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 /**
@@ -68,7 +72,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	private JScrollPane addSoftwareUnitsTable() {
 		softwareUnitsPane = new JScrollPane();
 		softwareUnitsTable = new JTableSoftwareUnits();
-		softwareUnitsPane.setViewportView(softwareUnitsTable);
+	softwareUnitsPane.setViewportView(softwareUnitsTable);
+		softwareUnitsTable.getSelectionModel().addListSelectionListener(selectionListener);
 		return softwareUnitsPane;
 	}
 	
@@ -119,16 +124,25 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	private void addSoftwareUnit() {
+
+	
+		if (DefinitionController.getInstance().isAnalysed()){
+
 		if (DefinitionController.getInstance().isAnalysed() || ServiceProvider.getInstance().getControlService().isPreAnalysed()){
+
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			if (moduleId != -1) {
+				
 				SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
+			
 				DialogUtils.alignCenter(softwareUnitFrame);
-				softwareUnitFrame.setVisible(true);
-			} else {
+			softwareUnitFrame.setVisible(true);
+			}else {
 				JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYet"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAnalysedYetTitle"), JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		}
+		
 	} 
 	
 	private void editSoftwareUnit() {
@@ -149,7 +163,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				selectedModules.add(softwareUnitName);
 				types.add(type);
 			}
+			
+			//@Depreciated
 			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
+			//WarningMessageService.getInstance().isCodeLevelWarning(selectedModules, types);
 		}else{
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
@@ -224,7 +241,9 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	}
 	
 	public TableModel getModel(){
-		return softwareUnitsTable.getModel();
+		TableModel model = softwareUnitsTable.getModel();
+		//model.addTableModelListener(softwareUnitsTable);
+		return model;
 	}
 
 	public int getSelectedRow() {
@@ -244,4 +263,28 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		editSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
 		removeSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 	}
+	
+	ListSelectionListener selectionListener =	new ListSelectionListener() {
+		
+		@Override
+		public void valueChanged(ListSelectionEvent event) {
+			//TODO : find a better way to load data into the table see-->updateSoftwareUnitTable()
+			try {
+					if(softwareUnitsTable.getRowCount()>0){
+			          
+						String type=(String)softwareUnitsTable.getValueAt(softwareUnitsTable.getSelectedRow(), 1);
+			if (type.toLowerCase().equals("regex")) {
+				editSoftwareUnitButton.setEnabled(true);
+			} else {
+				editSoftwareUnitButton.setEnabled(false);
+			}
+			
+			}
+			} catch (Exception e) {
+			
+			}
+		
+			
+		}
+	};
 }

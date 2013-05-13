@@ -18,9 +18,9 @@ public class RuletypeAssembler {
 
 	public RuleTypeDTO[] createRuleTypeDTO(List<RuleType> rules) {
 		List<RuleTypeDTO> ruletypes = new ArrayList<RuleTypeDTO>();
-
+ 
 		for (RuleType rule : rules) {
-			RuleTypeDTO dto = createRuleTypeDTOWithViolationtypes(rule);
+		    RuleTypeDTO dto = createRuleTypeDTOWithViolationtypes(rule);
 			ruletypes.add(dto);
 		}
 		return ruletypes.toArray(new RuleTypeDTO[ruletypes.size()]);
