@@ -128,7 +128,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		buttonPanelLayout.columnWidths = new int[] { 7 };
 		return buttonPanelLayout;
 	}
-	
+
 	private void createPopupMenu(){
 		this.addSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		this.addSoftwareUnitItem.addActionListener(this);
@@ -136,7 +136,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		this.editSoftwareUnitItem.addActionListener(this);
 		this.removeSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
 		this.removeSoftwareUnitItem.addActionListener(this);
-		
+
 		popupMenu.add(addSoftwareUnitItem);
 		popupMenu.add(editSoftwareUnitItem);
 		popupMenu.add(removeSoftwareUnitItem);
@@ -268,10 +268,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	private void enableButtons() {
 		addSoftwareUnitButton.setEnabled(true);
 		addSoftwareUnitItem.setEnabled(true);
-		
+
 		editSoftwareUnitButton.setEnabled(true);
 		editSoftwareUnitItem.setEnabled(true);
-		
+
 		removeSoftwareUnitButton.setEnabled(true);
 		removeSoftwareUnitItem.setEnabled(true);		
 	}
@@ -279,25 +279,25 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	private void disableButtons() {
 		addSoftwareUnitButton.setEnabled(false);
 		addSoftwareUnitItem.setEnabled(false);
-		
+
 		editSoftwareUnitButton.setEnabled(false);
 		editSoftwareUnitItem.setEnabled(false);
-		
+
 		removeSoftwareUnitButton.setEnabled(false);
 		removeSoftwareUnitItem.setEnabled(false);
 	}
-	
+
 	private void enableAddDisableEditRemoveButtons(){
 		addSoftwareUnitButton.setEnabled(true);
 		addSoftwareUnitItem.setEnabled(true); 
-		
+
 		editSoftwareUnitButton.setEnabled(false);
 		editSoftwareUnitItem.setEnabled(false);
-		
+
 		removeSoftwareUnitButton.setEnabled(false);
 		removeSoftwareUnitItem.setEnabled(false);
 	}
-	
+
 	private void setButtonTexts() {
 		addSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		editSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
