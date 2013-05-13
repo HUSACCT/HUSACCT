@@ -1,10 +1,10 @@
 package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.property_declaration2_return;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.services.DefaultRuleDomainService;
+import husacct.define.domain.services.WarningMessageService;
 
 import java.util.ArrayList;
 
@@ -81,6 +81,9 @@ public class Module implements Comparable<Module> {
 	}
 
 	public void setSubModules(ArrayList<Module> subModules) {
+		for (Module module : subModules) {
+			module.parent=this;
+		}
 		this.subModules = subModules;
 	}
 	
@@ -124,15 +127,32 @@ public class Module implements Comparable<Module> {
 	}
 	
 	//Module
-	public void addSubModule(Module subModule)
+	public String addSubModule(Module subModule)
 	{
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
-			DefaultRuleDomainService.getInstance().setDefaultRule(subModule);
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.addDefaultRules(subModule);
+			WarningMessageService.getInstance().processModule(subModule);
+			return "";
 		}else{
-			System.out.println("This sub module has already been added!");
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
 		}
+		
+	}
+	public void addSubModule(int index,Module subModule)
+	{
+		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+			subModule.parent=this;
+			subModules.add(index,subModule);
+
+		
+		}else{
+
+			System.out.println("This sub module has already been added!");
+			}
+		
 	}
 	
 	public void removeSubModule(Module subModule)
@@ -142,6 +162,11 @@ public class Module implements Comparable<Module> {
 		}else{
 			System.out.println("This sub module does not exist!");
 		}
+	}
+	
+	public boolean hasSubModules()
+	{
+		return subModules.isEmpty();	
 	}
 	
 	public boolean hasSubModule(String name) 
@@ -287,11 +312,8 @@ public class Module implements Comparable<Module> {
 		if (mappedSUunits.size() > 0){
 			isMapped = true;
 		}
-		for (Module mod : subModules){
-			if (mod.isMapped()){
-				isMapped = true;
-			}
-		}
+	
+		
 		return isMapped;
 	}
 

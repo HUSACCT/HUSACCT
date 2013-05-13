@@ -1,5 +1,6 @@
 package husacct.define.presentation.jpanel.ruledetails;
 
+import husacct.define.presentation.jpanel.ruledetails.contentsmodule.FacadeConventionRuleJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.InterfaceConventionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionExceptionJPanel;
 import husacct.define.presentation.jpanel.ruledetails.contentsmodule.NamingConventionJPanel;
@@ -22,6 +23,7 @@ import org.apache.log4j.Logger;
 public class FactoryDetails {
 	//Rules on the Contents of a module
 	private InterfaceConventionJPanel interfaceConventionJPanel;
+	private FacadeConventionRuleJPanel facadeConventionJPanel;
 	private SubClassConventionJPanel subClassConventionJPanel;
 	private VisibilityConventionJPanel visibilityConventionJPanel;
 	private VisibilityConventionExceptionJPanel visibilityConventionExceptionJPanel;
@@ -79,6 +81,10 @@ public class FactoryDetails {
 		}else if (ruleTypeKey.equals(SkipCallJPanel.ruleTypeKey)){
 			skipCallJPanel = new SkipCallJPanel(appliedRuleController);
 			return skipCallJPanel;
+		}else if (ruleTypeKey.equals(facadeConventionJPanel.ruleTypeKey)){
+				facadeConventionJPanel = new FacadeConventionRuleJPanel(appliedRuleController);
+				return facadeConventionJPanel;
+			
 		}else if (ruleTypeKey.equals(BackCallJPanel.ruleTypeKey)){
 			backCallJPanel = new BackCallJPanel(appliedRuleController);
 			return backCallJPanel;
