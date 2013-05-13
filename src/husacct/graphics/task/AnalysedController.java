@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.*;
 import husacct.common.services.IServiceListener;
+import husacct.control.IControlService;
 import husacct.define.IDefineService;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingDetail;
@@ -18,7 +19,7 @@ import org.apache.log4j.Logger;
 public class AnalysedController extends DrawingController {
 	private final Logger logger = Logger.getLogger(AnalysedController.class);
 	protected IAnalyseService analyseService;
-	protected IDefineService defineService;
+	protected IControlService controlService;
 	protected IValidateService validateService;
 
 	private ArrayList<BaseFigure> analysedContextFigures;
@@ -29,6 +30,8 @@ public class AnalysedController extends DrawingController {
 	}
 	
 	private void initializeServices() {
+		this.controlService = ServiceProvider.getInstance().getControlService();
+		
 		this.analyseService = ServiceProvider.getInstance().getAnalyseService();
 		this.analyseService.addServiceListener(new IServiceListener() {
 			@Override
@@ -47,14 +50,6 @@ public class AnalysedController extends DrawingController {
 				}
 			}
 		});
-		
-		defineService = ServiceProvider.getInstance().getDefineService();
-		defineService.addServiceListener(new IServiceListener() {
-			@Override
-			public void update() {
-				refreshDrawing();
-			}
-		});
 	}
 
 	@Override
@@ -62,7 +57,7 @@ public class AnalysedController extends DrawingController {
 		super.drawArchitecture(this.getCurrentDrawingDetail());
 		super.notifyServiceListeners();
 		
-		/*ArrayList<ProjectDTO> projects = this.defineService.getApplicationDetails().projects;
+		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
 		
 		for(ProjectDTO project : projects){
 			System.out.println("Project name: "+project.name);
@@ -72,7 +67,7 @@ public class AnalysedController extends DrawingController {
 					System.out.println("Submodule name: "+sam.name);
 				}
 			}
-		}*/
+		}
 		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
