@@ -200,29 +200,24 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
 		if (this.getCurrentPaths().length > 0) {
 			this.saveSingleLevelFigurePositions();
 			this.resetContextFigures();
 			String firstCurrentPaths = this.getCurrentPaths()[0];
-			AnalysedModuleDTO parentDTO = this.analyseService.getParentModuleForModule(firstCurrentPaths);
+			AnalysedModuleDTO parentDTO = this.analyseService
+					.getParentModuleForModule(firstCurrentPaths);
 
-			if(parentDTO != null){
+			if (parentDTO != null) {
 				this.getAndDrawModulesIn(parentDTO.uniqueName);
 			} else {
-				zoomOutFailed();
+				this.zoomOutFailed();
 			}
 		} else {
-			zoomOutFailed();
+			this.zoomOutFailed();
 		}
-	}
-	
-	public void zoomOutFailed(){
-		this.logger.warn("Tried to zoom out from \"" + this.getCurrentPaths()
-				+ "\", but it has no parent (could be root if it's an empty string).");
-		this.logger.debug("Reverting to the root of the application.");
-		this.drawArchitecture(this.getCurrentDrawingDetail());
 	}
 
 	@Override
@@ -268,5 +263,14 @@ public class AnalysedController extends DrawingController {
 		}
 
 		return parentNames;
+	}
+
+	public void zoomOutFailed() {
+		this.logger
+				.warn("Tried to zoom out from \""
+						+ this.getCurrentPaths()
+						+ "\", but it has no parent (could be root if it's an empty string).");
+		this.logger.debug("Reverting to the root of the application.");
+		this.drawArchitecture(this.getCurrentDrawingDetail());
 	}
 }
