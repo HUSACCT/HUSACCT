@@ -39,6 +39,8 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -89,6 +91,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			
 			UIMapping.setEnabled(false);
 			this.setResizable(false);
+			this.softwareDefinitionTree.addTreeSelectionListener(treeselectionListener);
+		
 			this.setSize(650, 300);
 			this.pack();
 		} catch (Exception e) {
@@ -266,7 +270,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		saveButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		buttonPanel.add(saveButton);
 		saveButton.addActionListener(this);
-		
+		saveButton.setEnabled(false);
 		cancelButton = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(this);
@@ -357,6 +361,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 				canclose= this.softwareUnitController.save(selectedComponent);			
 			}
 			if (canclose) {
+				
 				this.dispose();
 			}
 			
@@ -367,4 +372,23 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	private void cancel() {
 		this.dispose();
 	}
+	
+	private TreeSelectionListener treeselectionListener = new TreeSelectionListener() {
+		
+		@Override
+		public void valueChanged(TreeSelectionEvent arg0) {
+			TreeSelectionModel paths = softwareDefinitionTree.getSelectionModel();
+			boolean isButtonAddEnabled =true;
+			for (TreePath path : paths.getSelectionPaths()){
+				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
+				if (selectedComponent.isMapped()|| selectedComponent.getType().toLowerCase().equals("root")||selectedComponent.getType().toLowerCase().equals("application")) {
+					isButtonAddEnabled=false;
+				}
+			}
+		
+			saveButton.setEnabled(isButtonAddEnabled);
+	}
+
+	
+	};
 }
