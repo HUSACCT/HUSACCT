@@ -9,3 +9,6 @@ nbproject/
 .project
 .settings
 *.log*
+.metadata
+/bin
+/config.properties
