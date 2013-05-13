@@ -4,11 +4,13 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
+import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
+import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.LayerComponent;
 
@@ -18,8 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -78,7 +80,7 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 		innerModulePanel.add(this.addButtonPanel(), BorderLayout.SOUTH);
 		return innerModulePanel;
 	}
-	
+		
 	private JPanel createModuleTreePanel() {
 		JPanel moduleTreePanel = new JPanel();
 		
@@ -160,36 +162,30 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 	
 	public void updateModuleTree() {
 		AbstractDefineComponent rootComponent = DefinitionController.getInstance().getModuleTreeComponents();
+		
 		this.moduleTree = new ModuleTree(rootComponent);
 		moduleTree.setContextMenu(new ModuletreeContextMenu(this));
-		JtreeController.instance().setModuleTree(moduleTree);
+	;
 		this.moduleTreeScrollPane.setViewportView(this.moduleTree);
 		this.moduleTree.addTreeSelectionListener(this);
 		this.checkLayerComponentIsSelected();
+		
+		moduleTree.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent event) {
+				createPopup(event);
+			}
+			public void mouseClicked(MouseEvent event) {
+				createPopup(event);
+			}
+			public void mouseEntered(MouseEvent event) {
+				createPopup(event);
+			}
+		});
 		
 		moduleTree.setSelectedRow(DefinitionController.getInstance().getSelectedModuleId());
 		
 		for (int i = 0; i < moduleTree.getRowCount(); i++) {
 			moduleTree.expandRow(i);
-			moduleTree.addMouseListener(new MouseListener() {
-				@Override
-				public void mousePressed(MouseEvent event) {
-					createPopup(event);
-				}
-				@Override
-				public void mouseClicked(MouseEvent event) {
-					createPopup(event);
-				}
-				@Override
-				public void mouseEntered(MouseEvent event) {
-					createPopup(event);
-				}
-				@Override
-				public void mouseReleased(MouseEvent arg0) {}
-				@Override
-				public void mouseExited(MouseEvent arg0) {}
-				
-			});
 		}
 	}
 	private void createPopup(MouseEvent event){
@@ -332,7 +328,8 @@ public class ModuleJPanel extends JPanel implements ActionListener, TreeSelectio
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+	
+		
 		
 	}
 	

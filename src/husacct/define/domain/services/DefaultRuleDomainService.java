@@ -69,7 +69,14 @@ public class DefaultRuleDomainService {
 		{
 			for (int i =0; i < defaultRuleTypeDTOs.length;i++)
 			{
+
+
+				
+
 				generateRule(defaultRuleTypeDTOs[i]);
+			
+
+
 			}
 		}
 	}
@@ -181,9 +188,41 @@ public class DefaultRuleDomainService {
 		
 		defaultRules.add(visibilityRule);
 	}
-		
-	private void interfaceRule(RuleTypeDTO ruleType) 
-	{
-		
-	}
+
+	public void removeDefaultRules(Module module) {
+			_module=module;
+			retrieveRuleTypeDTOsByModule();
+			ArrayList<Long> appliedRuleIds = new ArrayList<>();
+			if (!defaultRuleTypeDTOs.equals(null))
+			{
+				for (int i =0; i < defaultRuleTypeDTOs.length;i++)
+				{
+			    
+					for(AppliedRule appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
+						if(appliedRule.getModuleFrom().getId()==_module.getId()&&defaultRuleTypeDTOs[i].getKey().equals(appliedRule.getRuleType()))
+						{
+							appliedRuleIds.add(appliedRule.getId());
+							
+						}
+						}
+			    }
+				
+				for (Long appliedRuleid : appliedRuleIds) {
+					SoftwareArchitecture.getInstance().removeAppliedRule(appliedRuleid);
+				}
+				
+				}
+		}
+
+		public void updateModuleRules(Module updatedModule) {
+			_module= updatedModule;
+			for(AppliedRule appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
+				if(appliedRule.getModuleFrom().getId()==_module.getId())
+				{
+					appliedRule.setModuleFrom(_module);
+					
+				}
+				}
+			
+		}
 }

@@ -190,16 +190,9 @@ public final class ValidateServiceImpl extends ObservableService implements
 	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
 		RuleTypeDTO[] result= {};
-		try{
+		
 		result=domain.getDefaultRuleTypeOfModule(type);
 		
-		
-		System.out.println(result.length+" returned");
-		}catch(Exception exe)
-		{
-			System.out.println(exe.getMessage()+"\n"+exe.getStackTrace()+"\n"+exe.getLocalizedMessage());
-			exe.printStackTrace();
-		}
 		
 		return  result;
 	}

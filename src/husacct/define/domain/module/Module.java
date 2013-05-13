@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.services.DefaultRuleDomainService;
+import husacct.define.domain.services.WarningMessageService;
 
 import java.util.ArrayList;
 
@@ -80,6 +81,9 @@ public class Module implements Comparable<Module> {
 	}
 
 	public void setSubModules(ArrayList<Module> subModules) {
+		for (Module module : subModules) {
+			module.parent=this;
+		}
 		this.subModules = subModules;
 	}
 	
@@ -125,15 +129,29 @@ public class Module implements Comparable<Module> {
 	//Module
 	public String addSubModule(Module subModule)
 	{
-		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+		if(!subModules.contains(subModule) && !moduleAlreadyExistentWithinSystem(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
 			service.addDefaultRules(subModule);
+			WarningMessageService.getInstance().processModule(subModule);
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
 		}
+		
+	}
+	public void addSubModule(int index,Module subModule)
+	{
+		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+			subModule.parent=this;
+			subModules.add(index,subModule);
+
+		
+		}else{
+
+			System.out.println("This sub module has already been added!");
+			}
 		
 	}
 	
@@ -151,13 +169,24 @@ public class Module implements Comparable<Module> {
 		return subModules.isEmpty();	
 	}
 	
+	public boolean moduleAlreadyExistentWithinSystem(String name) {
+		Module parentWalker = this;
+		while (parentWalker.parent != null && !(parentWalker instanceof Layer)) {
+			parentWalker = parentWalker.parent;
+		}
+		return parentWalker.hasSubModule(name);
+	}
+	
 	public boolean hasSubModule(String name) 
 	{
 		boolean hasSubModule = false;
+		
 		for(Module subModule : subModules) 
 		{
-			if(subModule.getName().equals(name) || subModule.hasSubModule(name))
+			if(subModule.getName().equals(name))
 			{
+				hasSubModule = true;
+			} else if (!(subModule instanceof Layer) && subModule.hasSubModule(name)) {
 				hasSubModule = true;
 			}
 		}
@@ -294,11 +323,8 @@ public class Module implements Comparable<Module> {
 		if (mappedSUunits.size() > 0){
 			isMapped = true;
 		}
-		for (Module mod : subModules){
-			if (mod.isMapped()){
-				isMapped = true;
-			}
-		}
+	
+		
 		return isMapped;
 	}
 

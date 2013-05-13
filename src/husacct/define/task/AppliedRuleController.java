@@ -87,7 +87,7 @@ public class AppliedRuleController extends PopUpController {
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
 				
 				try {
-					if(!(selectedModule instanceof Layer) && (ruleTypeDTO.key.contains("SkipCall") || ruleTypeDTO.key.contains("BackCall"))) {
+					if(!(selectedModule instanceof Layer)  && (ruleTypeDTO.key.contains("SkipCall") || ruleTypeDTO.key.contains("BackCall"))) {
 						continue;
 					} else {
 						String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleTypeDTO.key);
