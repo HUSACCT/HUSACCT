@@ -16,6 +16,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
@@ -131,7 +133,10 @@ public String promptUserForPassword() {
 
 @Override
 public boolean save(Document doc, HashMap<String, Object> dataValues) {
-	// TODO Auto-generated method stub
+	HashMap<String,Object> config = new HashMap<String, Object>();
+	config.put("doCompress", false);
+	config.put("doPasswordProtection", false);
+	save(doc, dataValues, config);
 	return false;
 }
 

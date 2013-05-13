@@ -22,6 +22,7 @@ import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -73,6 +74,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		Element data = new Element("workspace");
 		Workspace workspace = workspaceController.getCurrentWorkspace();
 		data.setAttribute("name", workspace.getName());
+		data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
+
 		return data;
 	}
 	
@@ -80,7 +83,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
+			String languageName = workspaceData.getAttributeValue("language");
 			workspaceController.createWorkspace(workspaceName);
+			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
 		}

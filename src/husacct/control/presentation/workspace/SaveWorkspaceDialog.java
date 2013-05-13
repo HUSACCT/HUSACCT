@@ -53,7 +53,7 @@ public class SaveWorkspaceDialog extends JDialog{
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 380));
+		this.setSize(new Dimension(550, 380));
 		this.setLocationRelativeTo(getRootPane());
 	}
 	
