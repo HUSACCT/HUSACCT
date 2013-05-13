@@ -7,8 +7,7 @@ public class Layer extends Module {
 	
 	public Layer()
 	{
-		this("", "");
-		
+		this("", "");	
 	}
 
 	public Layer(String name)

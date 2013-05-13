@@ -19,6 +19,7 @@ public enum RuleTypes {
 	INTERFACE_CONVENTION("InterfaceConvention", DefaultSeverities.LOW),
 	SUBCLASS_CONVENTION("SubClassConvention", DefaultSeverities.MEDIUM),
 	FACADE_CONVENTION("FacadeConvention", DefaultSeverities.MEDIUM);
+	                   
 	
 	public static final EnumSet<RuleTypes> mainRuleTypes = EnumSet.of(
 			FACADE_CONVENTION, SUBCLASS_CONVENTION, INTERFACE_CONVENTION, IS_NOT_ALLOWED, IS_ONLY_ALLOWED,
