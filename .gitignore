@@ -10,4 +10,6 @@ nbproject/
 .settings
 *.log*
 .metadata
+/bin
+/config.properties
 
