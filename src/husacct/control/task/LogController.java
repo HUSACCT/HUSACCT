@@ -1,12 +1,14 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -34,7 +36,7 @@ public class LogController {
 		return logFile.exists();
 	}
 	
-	public HashMap<String, HashMap<String, String>> getApplicationHistoryFromFile(String workspace, String application, String project){
+	public HashMap<String, HashMap<String, String>> getApplicationHistoryFromFile(String workspace, String application, ArrayList<ProjectDTO> projects){
 		HashMap<String, HashMap<String, String>> output = new HashMap<String, HashMap<String, String>>();
 		
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
@@ -54,22 +56,27 @@ public class LogController {
 					for(Element applicationElement : workspaceElement.getChildren()){
 						if(applicationElement.getAttributeValue("name").equals(application)){
 							
-							//Project
-							for(Element projectElement : applicationElement.getChildren()){
-								if(projectElement.getAttributeValue("name").equals(project)){
-									
-									//Analysis
-									for(Element analysisElement : projectElement.getChildren()){
+							//Given projects
+							for(ProjectDTO project : projects){
+								
+								//Project
+								for(Element projectElement : applicationElement.getChildren()){
+									if(projectElement.getAttributeValue("name").equals(project.name)){
 										
-										//Analysis info
-										HashMap<String, String> analysisInfo = new HashMap<String, String>();
-										analysisInfo.put("application", applicationElement.getAttributeValue("name"));
-										for(Element analysisInfoElement : analysisElement.getChildren()){
-											analysisInfo.put(analysisInfoElement.getName(), analysisInfoElement.getText());
+										//Analysis
+										for(Element analysisElement : projectElement.getChildren()){
+											
+											//Analysis info
+											HashMap<String, String> analysisInfo = new HashMap<String, String>();
+											analysisInfo.put("application", applicationElement.getAttributeValue("name"));
+											analysisInfo.put("project", projectElement.getAttributeValue("name"));
+											for(Element analysisInfoElement : analysisElement.getChildren()){
+												analysisInfo.put(analysisInfoElement.getName(), analysisInfoElement.getText());
+											}
+											
+											//Add every analysis to hashmap
+											output.put(analysisElement.getAttributeValue("timestamp"), analysisInfo);
 										}
-										
-										//Add every analysis to hashmap
-										output.put(analysisElement.getAttributeValue("timestamp"), analysisInfo);
 									}
 								}
 							}
@@ -85,10 +92,12 @@ public class LogController {
 		return output;
 	}
 	
-	public int getNumberOfAnalyses(String workspace, String application, String project){
+	public int getNumberOfAnalyses(String workspace, String application, ArrayList<ProjectDTO> projects){
 		HashMap<String, Object> resourceData = new HashMap<String, Object>();
 		resourceData.put("file", logFile);
 		IResource xmlResource = ResourceFactory.get("xml");
+		
+		int output = 0;
 		
 		try {
 			Document doc = xmlResource.load(resourceData);	
@@ -103,10 +112,14 @@ public class LogController {
 					for(Element applicationElement : workspaceElement.getChildren()){
 						if(applicationElement.getAttributeValue("name").equals(application)){
 							
-							//Project
-							for(Element projectElement : applicationElement.getChildren()){
-								if(projectElement.getAttributeValue("name").equals(project)){
-									return projectElement.getChildren().size();
+							//Given projects
+							for(ProjectDTO project : projects){
+								
+								//XML projects
+								for(Element projectElement : applicationElement.getChildren()){
+									if(projectElement.getAttributeValue("name").equals(project.name)){
+										output += projectElement.getChildren().size();
+									}
 								}
 							}
 						}
@@ -118,25 +131,25 @@ public class LogController {
 			logger.debug("Unable load application analysis history file: " + e.getMessage());
 		}
 		
-		return 0;
+		return output;
 	}
 
 	public void showApplicationAnalysisHistoryOverview() {
 		if(logFileExists()){
 			String workspace = "";
 			String application = "";
-			String project = "";
+			ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 			
 			try{
 				workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 				application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
-				project = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects.get(0).name;
+				projects = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects;
 			}catch(Exception e){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoWorkspaceApplicationProjectIsOpen"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoWorkspaceApplicationProjectIsOpenTitle"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
-			if(getNumberOfAnalyses(workspace, application, project)<1){
+			if(getNumberOfAnalyses(workspace, application, projects)<1){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);
 			}else{
 				new AnalysisHistoryOverviewFrame(mainController);

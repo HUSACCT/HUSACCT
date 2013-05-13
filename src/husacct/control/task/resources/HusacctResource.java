@@ -43,4 +43,11 @@ public class HusacctResource implements IResource{
 		return false;
 	}
 
+	@Override
+	public boolean save(Document doc, HashMap<String, Object> dataValues,
+			HashMap<String, Object> config) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
