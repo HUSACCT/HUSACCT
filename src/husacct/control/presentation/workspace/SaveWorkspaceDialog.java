@@ -71,6 +71,7 @@ public class SaveWorkspaceDialog extends JDialog{
 		JScrollPane listScrollPane = new JScrollPane(saverList);
 		listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
 		
+		
 		savePanel = new JPanel();
 		savePanel.setLayout(new BoxLayout(savePanel, BoxLayout.Y_AXIS));
 		

@@ -2,6 +2,9 @@ package husacct.control.task.resources;
 
 
 
+import husacct.ServiceProvider;
+
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,6 +25,10 @@ import org.jdom2.output.XMLOutputter;
 import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
 
 import javax.crypto.*;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 public class XmlResource implements IResource{
 
@@ -39,99 +46,94 @@ public class XmlResource implements IResource{
 		try {
 
 			doc = sax.build(file);
-
-
-			//Cryptographer crypto = new Cryptographer();
-			//Document doc = crypto.decrypt(file);
-
-			//File file2 = decrypt(file);
-			//doc = sax.build(file);
-	//	} catch (Exception mfex) {
-		//	try {
-			System.out.println("DECRYPTING");
-				File f = new File(file.getPath() + ".key");
-				FileReader fr = new FileReader(f);
-				BufferedReader bfr = new BufferedReader(fr);
-				String line;
-				String output = "";
-				String password = "test";
-				Cryptographer crypto = new Cryptographer();
-				while((line = bfr.readLine()) != null) {
-					output += line;
-				}
-				bfr.close();
-				File f2 = new File(file.getPath() + ".dekey");
-				FileWriter fw = new FileWriter(f2);
-				BufferedWriter bfw = new BufferedWriter(fw);
-				bfw.write(new String(crypto.decrypt(output.getBytes())));
-				bfw.close();
+		}
+		catch (Exception ex) {
+			Cryptographer crypto = new Cryptographer();
+			String password = "";
+			while(password.equals("")) {
+				password = promptUserForPassword();
 				
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		//}
+				if(password.equals("")) {
+					break;
+				}
+				try {
+					doc = sax.build(crypto.decrypt(password, file));
+
+				}
+				catch (Exception e) {
+					password = "";
+				}
+			}					
+		}
 		return doc;
 	}
 
-	public boolean save(Document doc, HashMap<String, Object> dataValues, HashMap<String, Object> config) {
+public boolean save(Document doc, HashMap<String, Object> dataValues, HashMap<String, Object> config) {
 
-		//this.doEncrypt = (boolean)config.get("doEncrypt");
-		this.doCompress = (boolean)config.get("doCompress");
-		this.doPasswordProtection = (boolean)config.get("doPasswordProtection");
+	//this.doEncrypt = (boolean)config.get("doEncrypt");
+	this.doCompress = (boolean)config.get("doCompress");
+	this.doPasswordProtection = (boolean)config.get("doPasswordProtection");
 
-		File file = (File) dataValues.get("file");
-		try {
-			FileOutputStream outputStream = new FileOutputStream(file);
-			XMLOutputter xout;
-			if(doCompress) {
-				System.out.println("compress");
-				xout = new XMLOutputter(Format.getRawFormat());
-			}
-			else {
-				xout = new XMLOutputter(Format.getPrettyFormat());
-			}
-			xout.output(doc, outputStream);
-
-			outputStream.close();
-			
-			//if(doEncrypt) {
-			//	Cryptographer crypto = new Cryptographer();
-			//	crypto.encrypt(doc, file);
-			//}
-			if(doPasswordProtection) {
-				FileReader fr = new FileReader(file);
-				BufferedReader bfr = new BufferedReader(fr);
-				String line;
-				String output = "";
-				String password = "test";
-				Cryptographer crypto = new Cryptographer();
-				while((line = bfr.readLine()) != null) {
-					output += line;
-				}
-				bfr.close();
-				File f = new File(file.getPath() + ".key");
-				FileWriter fw = new FileWriter(f);
-				BufferedWriter bfw = new BufferedWriter(fw);
-				bfw.write(new String(crypto.encrypt(output)));
-				bfw.close();
-			}
-			
-
-			return true;
-		} catch (Exception e){
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			new RuntimeException(e);
+	File file = (File) dataValues.get("file");
+	try {
+		FileOutputStream outputStream = new FileOutputStream(file);
+		XMLOutputter xout;
+		if(doCompress) {
+			System.out.println("compress");
+			xout = new XMLOutputter(Format.getRawFormat());
 		}
-		return false;
-	}
+		else {
+			xout = new XMLOutputter(Format.getPrettyFormat());
+		}
+		xout.output(doc, outputStream);
 
-	@Override
-	public boolean save(Document doc, HashMap<String, Object> dataValues) {
-		// TODO Auto-generated method stub
-		return false;
+		outputStream.close();
+
+		//if(doEncrypt) {
+		//	Cryptographer crypto = new Cryptographer();
+		//	crypto.encrypt(doc, file);
+		//}
+		if(doPasswordProtection) {
+			Cryptographer crypto = new Cryptographer();
+			crypto.encrypt((String)config.get("password"), file);
+		}
+
+
+		return true;
+	} catch (Exception e){
+		e.printStackTrace();
+		logger.error(e.getMessage());
+		new RuntimeException(e);
 	}
+	return false;
+}
+
+public String promptUserForPassword() {
+	JPanel panel = new JPanel();
+	panel.setPreferredSize(new Dimension(150,75));
+	JLabel label = new JLabel("Enter a password to open the workspace:");
+	JPasswordField pass = new JPasswordField(20);
+	panel.add(label);
+	panel.add(pass);
+	String[] options = new String[]{"OK", "Cancel"};
+	int option = JOptionPane.showOptionDialog(null, panel, "The file is locked.",
+			JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+			null, options, options[1]);
+	if(option == 0) // pressing OK button
+	{
+		char[] password = pass.getPassword();
+		return new String(password);
+	}
+	else {
+		return "";
+	}
+}
+
+@Override
+public boolean save(Document doc, HashMap<String, Object> dataValues) {
+	// TODO Auto-generated method stub
+	return false;
+}
 
 
 
