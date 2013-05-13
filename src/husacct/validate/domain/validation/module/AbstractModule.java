@@ -1,7 +1,6 @@
 package husacct.validate.domain.validation.module;
 
 import husacct.validate.domain.validation.ruletype.RuleType;
-import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 import java.util.List;
 

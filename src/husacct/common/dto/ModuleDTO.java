@@ -20,5 +20,6 @@ public class ModuleDTO extends AbstractDTO{
 		this.physicalPathDTOs = physicalPaths;
 		this.subModules = subModules;
 		this.type = type;
+		
 	}
 }

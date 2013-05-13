@@ -36,16 +36,16 @@ class ViolationTypeSeverityPanel extends JPanel {
 	private ComboBoxTableModel violationtypeModel;
 	private TaskServiceImpl taskServiceImpl;
 	private JButton apply, restore, restoreAll;
-	private JList category;
+	private JList<DataLanguageHelper> category;
 	private JScrollPane categoryScrollpane, violationtypeScrollpane;
 	private JTable violationtypeTable;
-	private final DefaultListModel categoryModel;
+	private final DefaultListModel<DataLanguageHelper> categoryModel;
 	private final String language;
 	private final Map<String, List<ViolationType>> violationTypes;
 	private List<Severity> severities;
 
 	ViolationTypeSeverityPanel(TaskServiceImpl taskServiceImpl, ConfigurationViolationTypeDTO configurationViolationTypeDTO) {
-		categoryModel = new DefaultListModel();
+		categoryModel = new DefaultListModel<DataLanguageHelper>();
 		this.taskServiceImpl = taskServiceImpl;
 		this.language = configurationViolationTypeDTO.getLanguage();
 		this.violationTypes = configurationViolationTypeDTO.getViolationtypes();
@@ -59,7 +59,7 @@ class ViolationTypeSeverityPanel extends JPanel {
 
 	private void initComponents() {
 		categoryScrollpane = new JScrollPane();
-		category = new JList();
+		category = new JList<DataLanguageHelper>();
 		violationtypeScrollpane = new JScrollPane();
 		violationtypeTable = new JTable();
 		restore = new JButton();

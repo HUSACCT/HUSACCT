@@ -42,7 +42,7 @@ public class AppliedRule {
 	}
 
 	public AppliedRule() {
-		this("", "",new String[0], "",null,null, true);
+		this("","",new String[0], "",null,null, true);
 	}
 
 	/**
@@ -59,14 +59,10 @@ public class AppliedRule {
 	
 	private boolean hasException(long l) 
 	{
-		for(AppliedRule exception : exceptions) 
+		if (exceptions.size()>=0)
 		{
-			if(exception.getId() == l)
-			{
-				return true;
-			}
+			return true;
 		}
-		
 		return false;
 	}
 	
@@ -116,7 +112,7 @@ public class AppliedRule {
 	public void setRuleType(String ruleType) {
 		this.ruleType = ruleType;
 	}
-
+	
 	public boolean isEnabled() {
 		return enabled;
 	}

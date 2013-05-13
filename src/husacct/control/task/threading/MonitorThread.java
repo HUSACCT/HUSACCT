@@ -1,5 +1,6 @@
 package husacct.control.task.threading;
 
+import husacct.ServiceProvider;
 import husacct.control.presentation.util.LoadingDialog;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,8 @@ public class MonitorThread extends Thread implements Runnable {
 		try {
 			taskThread.join();
 			loadingDialog.dispose();
+		  ServiceProvider.getInstance().getControlService().finishPreAnalysing();
+		  ServiceProvider.getInstance().getDefineService().analyze();
 			logger.debug(String.format("thread [%s] finished, removed loader", taskThread.getName()));
 		} catch (InterruptedException exception){
 			taskThread.interrupt();

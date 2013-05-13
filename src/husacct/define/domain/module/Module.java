@@ -2,6 +2,9 @@ package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.SoftwareUnitRegExDefinition;
+import husacct.define.domain.services.DefaultRuleDomainService;
+import husacct.define.domain.services.WarningMessageService;
 
 import java.util.ArrayList;
 
@@ -13,8 +16,9 @@ public class Module implements Comparable<Module> {
 	protected String description;
 	protected String type;
 	protected ArrayList<SoftwareUnitDefinition> mappedSUunits;
+	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
 	protected ArrayList<Module> subModules;
-	
+	protected Module parent;
 	public Module()
 	{
 		this("", "");
@@ -28,6 +32,7 @@ public class Module implements Comparable<Module> {
 		this.description = description;
 		this.type = "Module";
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
+		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<Module>();
 	}
 	
@@ -59,9 +64,16 @@ public class Module implements Comparable<Module> {
 		return mappedSUunits;
 	}
 
-
 	public void setUnits(ArrayList<SoftwareUnitDefinition> units) {
 		this.mappedSUunits = units;
+	}
+	
+	public ArrayList<SoftwareUnitRegExDefinition> getRegExUnits() {
+		return mappedRegExSUunits;
+	}
+
+	public void setRegExUnits(ArrayList<SoftwareUnitRegExDefinition> units) {
+		this.mappedRegExSUunits = units;
 	}
 
 	public ArrayList<Module> getSubModules() {
@@ -69,6 +81,9 @@ public class Module implements Comparable<Module> {
 	}
 
 	public void setSubModules(ArrayList<Module> subModules) {
+		for (Module module : subModules) {
+			module.parent=this;
+		}
 		this.subModules = subModules;
 	}
 	
@@ -91,14 +106,53 @@ public class Module implements Comparable<Module> {
 		}
 	}
 	
+	//SoftwareUnitDefinition
+	public void addSURegExDefinition(SoftwareUnitRegExDefinition unit)
+	{
+		if(!mappedRegExSUunits.contains(unit)) {
+			mappedRegExSUunits.add(unit);
+		}else{
+			System.out.println("This regex software unit has already been added!");
+		}
+	}
+	
+	public void removeSURegExDefinition(SoftwareUnitRegExDefinition unit)
+	{
+		System.out.println(unit.getName());
+		if(mappedRegExSUunits.contains(unit)) {
+			mappedRegExSUunits.remove(unit);
+		}else{
+			System.out.println("This regex software unit does not exist!");
+		}
+	}
+	
 	//Module
-	public void addSubModule(Module subModule)
+	public String addSubModule(Module subModule)
 	{
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+			subModule.parent=this;
 			subModules.add(subModule);
+			DefaultRuleDomainService service = new DefaultRuleDomainService();
+			service.addDefaultRules(subModule);
+			WarningMessageService.getInstance().processModule(subModule);
+			return "";
 		}else{
-			System.out.println("This sub module has already been added!");
+			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");
 		}
+		
+	}
+	public void addSubModule(int index,Module subModule)
+	{
+		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
+			subModule.parent=this;
+			subModules.add(index,subModule);
+
+		
+		}else{
+
+			System.out.println("This sub module has already been added!");
+			}
+		
 	}
 	
 	public void removeSubModule(Module subModule)
@@ -108,6 +162,11 @@ public class Module implements Comparable<Module> {
 		}else{
 			System.out.println("This sub module does not exist!");
 		}
+	}
+	
+	public boolean hasSubModules()
+	{
+		return subModules.isEmpty();	
 	}
 	
 	public boolean hasSubModule(String name) 
@@ -164,6 +223,34 @@ public class Module implements Comparable<Module> {
 		return hasSoftwareUnit;
 	}
 	
+	private boolean hasRegExSoftwareUnit(String softwareUnitName, boolean directly) 
+	{
+		boolean hasSoftwareUnit = false;
+		for (SoftwareUnitRegExDefinition unit : mappedRegExSUunits){
+			if (unit.getName().equals(softwareUnitName)){
+				hasSoftwareUnit = true;
+			}
+		}
+		if (!directly) {
+			for (Module mod : subModules){
+				if (mod.hasRegExSoftwareUnit(softwareUnitName, directly)){
+					hasSoftwareUnit = true;
+				}
+			}
+		}
+		return hasSoftwareUnit;
+	}
+	
+	public boolean hasRegExSoftwareUnitDirectly(String softwareUnitName) 
+	{
+		return hasRegExSoftwareUnit(softwareUnitName, true);
+	}
+	
+	public boolean hasRegExSoftwareUnit(String softwareUnitName) 
+	{
+		return hasRegExSoftwareUnit(softwareUnitName, false);
+	}
+	
 	public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName){
 		SoftwareUnitDefinition softwareUnit = null;
 		for (SoftwareUnitDefinition unit : mappedSUunits){
@@ -174,6 +261,22 @@ public class Module implements Comparable<Module> {
 		for (Module mod : subModules){
 			if (mod.hasSoftwareUnit(softwareUnitName)){
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
+			}
+		}
+		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
+		return softwareUnit;
+	}
+	
+	public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(String softwareUnitName){
+		SoftwareUnitRegExDefinition softwareUnit = null;
+		for (SoftwareUnitRegExDefinition unit : mappedRegExSUunits){
+			if (unit.getName().equals(softwareUnitName)){
+				softwareUnit = unit;
+			}
+		}
+		for (Module mod : subModules){
+			if (mod.hasRegExSoftwareUnit(softwareUnitName)){
+				softwareUnit = mod.getRegExSoftwareUnitByName(softwareUnitName);
 			}
 		}
 		if (softwareUnit == null){ throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoSoftwareUnit"));}
@@ -209,11 +312,8 @@ public class Module implements Comparable<Module> {
 		if (mappedSUunits.size() > 0){
 			isMapped = true;
 		}
-		for (Module mod : subModules){
-			if (mod.isMapped()){
-				isMapped = true;
-			}
-		}
+	
+		
 		return isMapped;
 	}
 
@@ -226,6 +326,11 @@ public class Module implements Comparable<Module> {
 			compareResult = 1;
 		}
 		return compareResult;
+	}
+
+	public Module getparent() {
+		
+		return parent;
 	}
 
 }

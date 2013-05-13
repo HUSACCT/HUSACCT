@@ -113,7 +113,10 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		JLabel moduleTypeLabel = new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleType"));
 		this.innerPanel.add(moduleTypeLabel);
 		
-		String[] moduleTypes = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")};
+		String[] moduleTypes = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"),
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), 
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), 
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")};
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
@@ -207,6 +210,11 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		}
 	}
 	
+	
+	      
+		
+	
+
 	private void submitSubSystem() {
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();

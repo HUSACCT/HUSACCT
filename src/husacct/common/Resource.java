@@ -9,11 +9,13 @@ public class Resource {
 
 	public static final String RESOURCE_PATH = "/husacct/common/resources/";
 	public static final String LOCALE_PATH = RESOURCE_PATH + "locale/";
+	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
 	
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
+	public static final String DEFINE_WORKFLOW = IMAGE_PATH + "define_workflow.png";
 	
 	public static final String ICON_BACK = ICONSET_PATH + "back.png";
 	public static final String ICON_ANALYSED_ARCHITECTURE_DIAGRAM = ICONSET_PATH + "analysed-architecture-diagram.png";
@@ -31,7 +33,7 @@ public class Resource {
 	public static final String ICON_FIGURES_SHOW = ICONSET_PATH + "figures-show.png";
 	public static final String ICON_INTERFACE_PRIVATE = ICONSET_PATH + "interface-private.png";
 	public static final String ICON_INTERFACE_PUBLIC = ICONSET_PATH + "interface-public.png";
-	public static final String ICON_LAYER = ICONSET_PATH + "layer.png";
+	public static final String ICON_LAYER = ICONSET_PATH + "define-layer.png";
 	public static final String ICON_LIBRARY = ICONSET_PATH + "library.png";
 	public static final String ICON_MODULE = ICONSET_PATH + "module.png";
 	public static final String ICON_NEW = ICONSET_PATH + "new.png";
@@ -48,8 +50,51 @@ public class Resource {
 	public static final String ICON_VIOLATIONS_ACTIVE = ICONSET_PATH + "violations-active.png";
 	public static final String ICON_VIOLATIONS_INACTIVE = ICONSET_PATH + "violations-inactive.png";
 	public static final String ICON_ZOOM = ICONSET_PATH + "zoom.png";
-
+	public static final String ICON_EXTERNALLIB=ICONSET_PATH+"define_externalLib.png";
+	public static final String ICON_SUBSYSTEMJAVA=ICONSET_PATH+"define-subsystem.png";
 	public static final String CONTROL_TEST_WORKSPACE = RESOURCE_PATH + "control/testworkspace.xml";
+	public static final String ICON_ROOT=ICONSET_PATH+"define-root.png";
+	public static final String ICON_PACKAGE_EMPTY=ICONSET_PATH+"define-emptypackage.png";
+	public static final String ICON_REGEX = ICONSET_PATH+"define-regex.png";
+	public static final String ICON_REGEXSEARCH =ICONSET_PATH+"define-search.png";
+	public static final String ICON_QUESTIONMARK =ICONSET_PATH+"question_mark.png";
+	public static final String ICON_EXTERNALLIB2 =ICONSET_PATH+"define-externallib.png";
+    public static final String ICON_CLASS_PUBLIC_GRAY = ICONSET_PATH + "class-public-gray.png";
+    public static final String ICON_INTERFACE_PUBLIC_GRAY = ICONSET_PATH + "interface-public-gray.png";
+    public static final String ICON_ENUMERATION_GRAY = ICONSET_PATH + "enumeration-gray.png";
+    public static final String ICON_EXTERNALLIB_GRAY =ICONSET_PATH+"define_externalLib-gray.png";
+    public static final String ICON_SUBSYSTEMJAVA_GRAY = ICONSET_PATH+"define-subsystem-gray.png";
+    public static final String ICON_EXTERNALLIB2_GRAY = ICONSET_PATH+"define-externallib-gray.png";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public static String ICON_FACADE=ICONSET_PATH+"define-facade.png";;
 	
 	public static URL get(String path){
 		URL resourceUrl = null;

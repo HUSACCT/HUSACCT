@@ -24,6 +24,7 @@ public class JTableSoftwareUnits extends AbstractJTable implements ILocaleChange
 	protected void setColumnHeaders() {
 		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitName"));
 		tablemodel.addColumn(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Type"));
+		
 	}
 	
 	public void changeColumnHeaders() {
