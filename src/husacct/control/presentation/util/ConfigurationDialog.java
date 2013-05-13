@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.IServiceListener;
-import husacct.control.task.CodeViewController;
 import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigPanel;
 
@@ -39,14 +38,12 @@ public class ConfigurationDialog extends JDialog {
 	
 	private HashMap<String, JPanel> configPanelMap = new HashMap<String, JPanel>();
 	
-	private CodeViewController codeviewController;
-	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.setLayout(new BorderLayout());
 		initiliaze();
 		setComponentText();
-		codeviewController = mainController.getCodeViewerController();
+		
 		this.setVisible(true);
 	}
 	
@@ -107,6 +104,7 @@ public class ConfigurationDialog extends JDialog {
 				for(ConfigPanel panel : configPanels) {
 					panel.SaveSettings();
 				}
+				ServiceProvider.getInstance().getControlService().saveConfig();
 			}	
 		});
 		
@@ -117,8 +115,6 @@ public class ConfigurationDialog extends JDialog {
 				for(ConfigPanel panel : configPanels) {
 					panel.ResetSettings();
 				}
-				ArrayList<Integer> errorLines = new ArrayList<Integer>();
-				codeviewController.displayErrorsInFile("", errorLines);
 			}	
 		});
 		buttonPanel.add(cancel);

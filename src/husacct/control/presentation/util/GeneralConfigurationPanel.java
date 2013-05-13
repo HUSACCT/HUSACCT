@@ -171,14 +171,14 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 			location.setEnabled(external);
 			selectFile.setEnabled(external);
 
-			location.setText(controlService.getProperty("CodeviewerLocation"));
+			location.setText(controlService.getProperty("IDELocation"));
 		} catch (NonExistingSettingException e) { }
 	}
 	
 	@Override
 	public void SaveSettings() {
 		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
-		controlService.setProperty("CodeviewerLocation", location.getText());
+		controlService.setProperty("IDELocation", location.getText());
 	}
 
 	@Override
