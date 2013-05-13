@@ -517,6 +517,5 @@ public class AnalyseServiceStub implements IAnalyseService {
 	@Override
 	public void logHistory() {
 		// TODO Auto-generated method stub
-		
 	}
 }
