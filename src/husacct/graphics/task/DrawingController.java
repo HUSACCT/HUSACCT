@@ -3,6 +3,7 @@ package husacct.graphics.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
@@ -101,7 +102,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void clearLines() {
 		this.drawing.clearAllLines();
 	}
-
+	
 	public void drawArchitecture(DrawingDetail detail) {
 		this.drawingView.cannotZoomOut();
 	}
@@ -209,7 +210,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 		this.graphicsFrame.setUpToDate();
 		this.drawSingleLevelModules(modules);
 		this.updateLayout();
-		this.drawLinesBasedOnSetting();
+		if(!(modules[0] instanceof ProjectDTO)){
+			this.drawLinesBasedOnSetting();
+		}
 		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
 		this.graphicsFrame.updateGUI();
 	}
@@ -217,8 +220,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void drawSingleLevelModules(AbstractDTO[] modules) {
 		for (AbstractDTO dto : modules) {
 			try {
-				BaseFigure generatedFigure = this.figureFactory
-						.createFigure(dto);
+				BaseFigure generatedFigure = this.figureFactory.createFigure(dto);
 				this.drawing.add(generatedFigure);
 				this.figureMap.linkModule(generatedFigure, dto);
 			} catch (Exception e) {

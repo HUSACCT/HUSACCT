@@ -1,6 +1,7 @@
 package husacct.graphics.util.threads;
 
 import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.graphics.task.DrawingController;
 
 public class DrawingSingleLevelThread implements Runnable {

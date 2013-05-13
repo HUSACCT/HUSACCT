@@ -58,6 +58,7 @@ public class AnalysedController extends DrawingController {
 		
 		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
 		
+		//TODO remove printlns
 		for(ProjectDTO project : projects){
 			System.out.println("Project name: "+project.name);
 			for(AnalysedModuleDTO am : project.analysedModules){
@@ -75,15 +76,7 @@ public class AnalysedController extends DrawingController {
 		}
 		
 		AbstractDTO[] projectArray = projects.toArray(new AbstractDTO[projects.size()]);
-		if(projectArray.length <= 1){
-			this.drawModulesAndLines(modules);
-		} else{
-			this.drawProjects();
-		}
-	}
-
-	private void drawProjects() {
-		// TODO everything!
+		this.drawModulesAndLines(projectArray);
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
@@ -175,15 +168,11 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap()
-				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap()
-				.getModuleDTO(figureTo);
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,	BaseFigure figureTo) {
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figureTo);
 		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) {
-			return this.analyseService.getDependencies(dtoFrom.uniqueName,
-					dtoTo.uniqueName);
+			return this.analyseService.getDependencies(dtoFrom.uniqueName, dtoTo.uniqueName);
 		}
 		return new DependencyDTO[] {};
 	}
