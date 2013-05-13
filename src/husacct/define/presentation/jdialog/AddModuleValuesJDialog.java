@@ -116,7 +116,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		String[] moduleTypes = {ServiceProvider.getInstance().getLocaleService().getTranslatedString("SubSystem"),
 				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), 
 				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), 
-				ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary"),"Component with facade"};
+				ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")};
 		this.moduleTypeComboBox = new JComboBox(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
@@ -204,20 +204,16 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer")) {
 			this.submitLayer();
 		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component")) {
-			this.submitComponent(false);
+			this.submitComponent();
 		} else if(moduleType == ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")) {
 			this.submitExternalLibrary();
-		}else if(moduleType.toUpperCase().equals("Component with facade".toUpperCase()))
-		{
-			this.submitComponentWithFacade();
 		}
 	}
 	
-	private void submitComponentWithFacade() {
-	          submitComponent(true);
+	
 	      
 		
-	}
+	
 
 	private void submitSubSystem() {
 		if(this.checkModuleName()) {
@@ -249,13 +245,13 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 		}
 	}
 	
-	private void submitComponent(boolean ifWithFacade) {
+	private void submitComponent() {
 		if(this.checkModuleName()) {
 			String moduleName = this.moduleNameField.getText();
 			String moduleDescription = this.moduleDescriptionField.getText();
 			
 			DefinitionController definitionController = DefinitionController.getInstance();
-			boolean hasBeenAdded = definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription,ifWithFacade);
+			boolean hasBeenAdded = definitionController.addComponent(definitionController.getSelectedModuleId(), moduleName, moduleDescription);
 			if (hasBeenAdded){
 				//update tree view
 				this.modulePanel.updateModuleTree();
