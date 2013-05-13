@@ -91,8 +91,8 @@ public class CSharpGeneratorToolkit {
     }
 
     public static void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
+        for (int child = 0; child < treeNode.getChildCount(); child++) {
+            treeNode.deleteChild(child);
         }
     }
 

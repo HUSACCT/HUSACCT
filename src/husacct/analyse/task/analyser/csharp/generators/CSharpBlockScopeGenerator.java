@@ -22,7 +22,6 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 			switch (child.getType()) {
 				case CSharpParser.VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
-					//TODO check when this is hit
 					break;
 				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
@@ -31,9 +30,7 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 					delegateInvocationConstructor(child);
 					break;
 				case CSharpParser.METHOD_INVOCATION:
-					if (child.getChild(0).getType() == CSharpParser.DOT) {
-						delegateInvocationMethod(child);
-					}
+					delegateInvocationMethod(child);
 					break;
 				case CSharpParser.ASSIGNMENT:
 					if (child.getChild(0).getType() == CSharpParser.DOT) {
