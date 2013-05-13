@@ -26,11 +26,12 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Observer, IServiceListener {
@@ -38,6 +39,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 	private static final long serialVersionUID = 8086576683923713276L;
 	private JTableSoftwareUnits softwareUnitsTable;
 	private JScrollPane softwareUnitsPane;
+	private JPopupMenu popupMenu = new JPopupMenu();
+	private JMenuItem addSoftwareUnitItem = new JMenuItem();
+	private JMenuItem editSoftwareUnitItem= new JMenuItem();
+	private JMenuItem removeSoftwareUnitItem = new JMenuItem();
 
 	private JButton addSoftwareUnitButton;
 	private JButton removeSoftwareUnitButton;
@@ -58,6 +63,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		this.add(this.addSoftwareUnitsTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
 		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
+		createPopupMenu();
 		setButtonEnableState();
 	}
 
@@ -67,16 +73,29 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		softwareUnitsPane.setViewportView(softwareUnitsTable);
 		softwareUnitsTable.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent event) {
-				setButtonEnableState();
+				createPopup(event);
+				setButtonEnableState();				
 			}
 			public void mouseClicked(MouseEvent event) {
-				setButtonEnableState();
+				createPopup(event);
+				setButtonEnableState();				
 			}
 			public void mouseEntered(MouseEvent event) {
+				createPopup(event);
 				setButtonEnableState();
 			}
 		});
 		return softwareUnitsPane;
+	}
+	private void createPopup(MouseEvent event){
+		if(SwingUtilities.isRightMouseButton(event)){
+			int row = softwareUnitsTable.rowAtPoint(event.getPoint());
+			int column = softwareUnitsTable.columnAtPoint(event.getPoint());
+			if(!softwareUnitsTable.isRowSelected(row)){
+				softwareUnitsTable.changeSelection(row, column, false, false);
+			}
+			popupMenu.show(event.getComponent(), event.getX(), event.getY());			
+		}
 	}
 
 	protected JPanel addButtonPanel() {
@@ -109,34 +128,41 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		buttonPanelLayout.columnWidths = new int[] { 7 };
 		return buttonPanelLayout;
 	}
+	
+	private void createPopupMenu(){
+		this.addSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		this.addSoftwareUnitItem.addActionListener(this);
+		this.editSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
+		this.editSoftwareUnitItem.addActionListener(this);
+		this.removeSoftwareUnitItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
+		this.removeSoftwareUnitItem.addActionListener(this);
+		
+		popupMenu.add(addSoftwareUnitItem);
+		popupMenu.add(editSoftwareUnitItem);
+		popupMenu.add(removeSoftwareUnitItem);
+	}
 
 	/**
 	 * Handling ActionPerformed
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.addSoftwareUnitButton) {
+		if (action.getSource() == this.addSoftwareUnitButton || action.getSource() == this.addSoftwareUnitItem) {
 			this.addSoftwareUnit();
-		} else if (action.getSource() == this.removeSoftwareUnitButton) {
+		} else if (action.getSource() == this.removeSoftwareUnitButton || action.getSource() == this.removeSoftwareUnitItem) {
 			this.removeSoftwareUnit();
 		}
-		else if (action.getSource() == this.editSoftwareUnitButton) {
+		else if (action.getSource() == this.editSoftwareUnitButton || action.getSource() == this.editSoftwareUnitItem) {
 			this.editSoftwareUnit();
 		}
 	}
 
 	private void addSoftwareUnit() {
-
-
 		if (DefinitionController.getInstance().isAnalysed()){
-
 			if (DefinitionController.getInstance().isAnalysed() || ServiceProvider.getInstance().getControlService().isPreAnalysed()){
-
 				long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 				if (moduleId != -1) {
-
 					SoftwareUnitJDialog softwareUnitFrame = new SoftwareUnitJDialog(moduleId);
-
 					DialogUtils.alignCenter(softwareUnitFrame);
 					softwareUnitFrame.setVisible(true);
 				}else {
@@ -144,7 +170,6 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				}
 			}
 		}
-
 	} 
 
 	private void editSoftwareUnit() {
@@ -165,9 +190,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 				selectedModules.add(softwareUnitName);
 				types.add(type);
 			}
-			
 			DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
-		
 		}else{
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareunitSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
@@ -229,10 +252,11 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 			enableButtons();
 			if(!isSelectedRegex()){
 				editSoftwareUnitButton.setEnabled(false);
+				editSoftwareUnitItem.setEnabled(false);
 			}
 		}
 	}
-	
+
 	private boolean isSelectedRegex(){
 		if (((String) softwareUnitsTable.getValueAt(getSelectedRow(), 1)).toLowerCase().equals("regex")) {
 			return true;
@@ -243,20 +267,37 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 
 	private void enableButtons() {
 		addSoftwareUnitButton.setEnabled(true);
+		addSoftwareUnitItem.setEnabled(true);
+		
 		editSoftwareUnitButton.setEnabled(true);
+		editSoftwareUnitItem.setEnabled(true);
+		
 		removeSoftwareUnitButton.setEnabled(true);
+		removeSoftwareUnitItem.setEnabled(true);		
 	}
 
 	private void disableButtons() {
 		addSoftwareUnitButton.setEnabled(false);
+		addSoftwareUnitItem.setEnabled(false);
+		
 		editSoftwareUnitButton.setEnabled(false);
+		editSoftwareUnitItem.setEnabled(false);
+		
 		removeSoftwareUnitButton.setEnabled(false);
+		removeSoftwareUnitItem.setEnabled(false);
 	}
+	
 	private void enableAddDisableEditRemoveButtons(){
 		addSoftwareUnitButton.setEnabled(true);
+		addSoftwareUnitItem.setEnabled(true); 
+		
 		editSoftwareUnitButton.setEnabled(false);
+		editSoftwareUnitItem.setEnabled(false);
+		
 		removeSoftwareUnitButton.setEnabled(false);
+		removeSoftwareUnitItem.setEnabled(false);
 	}
+	
 	private void setButtonTexts() {
 		addSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		editSoftwareUnitButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
