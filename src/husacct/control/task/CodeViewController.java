@@ -1,6 +1,7 @@
 package husacct.control.task;
 
 import husacct.control.task.codeviewer.CodeviewerService;
+import husacct.control.task.codeviewer.EclipseCodeviewerImpl;
 import husacct.control.task.codeviewer.InternalCodeviewerImpl;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.configuration.NonExistingSettingException;
@@ -26,7 +27,7 @@ public class CodeViewController {
 			if(!configurationManager.getPropertyAsBoolean("ExternalCodeviewer")) {
 				currentCodeviewer = new InternalCodeviewerImpl();
 			} else {
-				
+				currentCodeviewer = new EclipseCodeviewerImpl(configurationManager);
 			}
 		} catch (NonExistingSettingException e) {
 			e.printStackTrace();

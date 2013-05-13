@@ -196,4 +196,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public JPanel getConfigurationPanel() {
 		return new GeneralConfigurationPanel();
 	}
+
+	@Override
+	public void saveConfig() {
+		configurationManager.storeProperties();
+	}
 }

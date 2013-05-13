@@ -42,6 +42,7 @@ public class MainController {
 	private void setControllers() {
 		this.configurationManager = new ConfigurationManager();
 		this.commandLineController = new CommandLineController();
+		this.codeViewController = new CodeViewController(this);
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
 		this.stateController = new StateController(this);
@@ -49,7 +50,7 @@ public class MainController {
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
 		this.logController = new LogController(this);
-		this.codeViewController = new CodeViewController(this);
+		
 	}
 	
 	private void setAppleProperties(){

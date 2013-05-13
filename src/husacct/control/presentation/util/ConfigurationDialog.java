@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigPanel;
 
@@ -39,12 +38,12 @@ public class ConfigurationDialog extends JDialog {
 	
 	private HashMap<String, JPanel> configPanelMap = new HashMap<String, JPanel>();
 	
-	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.setLayout(new BorderLayout());
 		initiliaze();
 		setComponentText();
+		
 		this.setVisible(true);
 	}
 	
@@ -105,6 +104,7 @@ public class ConfigurationDialog extends JDialog {
 				for(ConfigPanel panel : configPanels) {
 					panel.SaveSettings();
 				}
+				ServiceProvider.getInstance().getControlService().saveConfig();
 			}	
 		});
 		
