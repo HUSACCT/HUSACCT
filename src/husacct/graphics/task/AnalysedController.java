@@ -57,7 +57,7 @@ public class AnalysedController extends DrawingController {
 		super.drawArchitecture(this.getCurrentDrawingDetail());
 		super.notifyServiceListeners();
 		
-		/*ProjectDTO[] projects = (ProjectDTO[]) this.controlService.getApplicationDTO().projects.toArray();
+		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
 		
 		for(ProjectDTO project : projects){
 			System.out.println("Project name: "+project.name);
@@ -67,7 +67,7 @@ public class AnalysedController extends DrawingController {
 					System.out.println("Submodule name: "+sam.name);
 				}
 			}
-		}*/
+		}
 		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
