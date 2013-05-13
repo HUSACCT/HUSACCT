@@ -13,8 +13,7 @@ public class ModuleFactory {
 				return new Component(rules);
 			case "externallibrary": 
 				return new ExternalLibrary(rules);
-			case "layer": 
-				
+			case "layer": 	
 				return new Layer(rules);
 			case "subsystem": 
 				return new SubSystem(rules);

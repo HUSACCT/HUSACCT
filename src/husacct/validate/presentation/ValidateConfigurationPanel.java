@@ -32,7 +32,7 @@ public final class ValidateConfigurationPanel extends JPanel {
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private static Logger logger = Logger.getLogger(ValidateConfigurationPanel.class);
-	
+
 	private TaskServiceImpl taskServiceImpl;
 	private ColorTableModel severityModel;
 	private List<Severity> severities;
@@ -51,10 +51,8 @@ public final class ValidateConfigurationPanel extends JPanel {
 		initComponents();
 		loadAfterChange();
 	}
-	
 
 	private void initComponents() {
-
 		tabPanel = new JTabbedPane();
 		severityNamePanel = new JPanel();
 		severityNameScrollPane = new JScrollPane();
@@ -83,7 +81,7 @@ public final class ValidateConfigurationPanel extends JPanel {
 				restore();
 			}
 		});
-		
+
 		localeService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
@@ -129,7 +127,7 @@ public final class ValidateConfigurationPanel extends JPanel {
 
 	private void createRootLayout() {
 		GroupLayout baseLayout = new GroupLayout(this);
-		
+
 		GroupLayout.ParallelGroup horizontalGroup = baseLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		horizontalGroup.addComponent(tabPanel);
 		horizontalGroup.addComponent(cancel);
@@ -207,7 +205,6 @@ public final class ValidateConfigurationPanel extends JPanel {
 		for (Severity severity : severities) {
 			severityModel.addRow(new Object[] {severity.getSeverityName(), severity.getColor()});
 		}
-
 	}
 
 	private void clearModel(ColorTableModel model) {
@@ -240,7 +237,7 @@ public final class ValidateConfigurationPanel extends JPanel {
 			tabPanel.addTab(localeService.getTranslatedString("NoProgrammingLanguageAvailable"), new JPanel());
 		}
 	}
-	
+
 	public JPanel getGUI() {
 		return this;
 	}
