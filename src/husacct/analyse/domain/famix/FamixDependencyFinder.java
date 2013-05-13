@@ -1,6 +1,7 @@
 package husacct.analyse.domain.famix;
 
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,32 @@ class FamixDependencyFinder extends FamixFinder {
         this.currentResult.clear();
         performQuery(FinderFunction.TO, "", to, dependencyFilter);
         return this.currentResult;
+    }
+    
+    public ExternalSystemDTO[] getExternalSystems(){
+    	List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
+		List<String> pathsToImports = new ArrayList<String>();
+		List<String> pathsToPackages = new ArrayList<String>();
+		for(String imp : theModel.imports.keySet())
+			if(!pathsToImports.contains(imp))
+				pathsToImports.add(imp);
+		for(String clls : theModel.classes.keySet())
+			if(!pathsToPackages.contains(clls))
+				pathsToPackages.add(clls);
+		for(String intrfc : theModel.interfaces.keySet())
+			if(!pathsToPackages.contains(intrfc))
+				pathsToPackages.add(intrfc);
+		for(String compareString : pathsToImports)
+			if(!pathsToPackages.contains(compareString)){
+				ExternalSystemDTO dto = new ExternalSystemDTO();
+				dto.systemName = (compareString.contains(".") && compareString.lastIndexOf('.') != compareString.length() - 1) ? compareString.substring(compareString.lastIndexOf('.')+1) : compareString;
+				dto.systemPackage = compareString;
+				externalSystems.add(dto);
+			}
+		for(ExternalSystemDTO dto : externalSystems){
+			dto.fromDependencies = (ArrayList<DependencyDTO>) getDependenciesTo(dto.systemPackage);
+		}
+		return externalSystems.toArray(new ExternalSystemDTO[externalSystems.size()]);
     }
 
     private void performQuery(FinderFunction function, String argumentFrom, String argumentTo, String[] applyFilter) {

@@ -103,7 +103,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     
     @Override
 	public ExternalSystemDTO[] getExternalSystems(){
-		return theModel.getExternalSystems();
+		return dependencyFinder.getExternalSystems();
 	}
     
     public int getAmountOfDependencies() {
