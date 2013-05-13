@@ -19,7 +19,7 @@ public class CSharpTreeConvertController {
     CSharpClassGenerator csClassGenerator;
     CSharpEnumGenerator csEnumGenerator;
     CSharpInheritanceGenerator csInheritanceGenerator;
-    CSharpAttributeGenerator csAttributeGenerator;
+    CSharpAttributeAndLocalVariableGenerator csAttributeGenerator;
     CSharpMethodGeneratorController csMethodeGenerator;
     List<CommonTree> usings = new ArrayList<>();
     Stack<String> namespaceStack = new Stack<>();
@@ -31,7 +31,7 @@ public class CSharpTreeConvertController {
         csClassGenerator = new CSharpClassGenerator();
         csEnumGenerator = new CSharpEnumGenerator();
         csInheritanceGenerator = new CSharpInheritanceGenerator();
-        csAttributeGenerator = new CSharpAttributeGenerator();
+        csAttributeGenerator = new CSharpAttributeAndLocalVariableGenerator();
         csMethodeGenerator = new CSharpMethodGeneratorController();
     }
 
