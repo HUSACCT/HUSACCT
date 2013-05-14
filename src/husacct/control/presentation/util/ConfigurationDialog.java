@@ -145,7 +145,7 @@ public class ConfigurationDialog extends JDialog {
 				errorLines.add(27);
 				errorLines.add(51);
 				errorLines.add(79);
-				ServiceProvider.getInstance().getControlService().displayErrorsInFile("E:\\Users\\Hayena\\Dropbox\\Hogeschool Utrecht\\General GUI & Control\\Construction 2\\AnalyseServiceImpl.java", errorLines);
+				ServiceProvider.getInstance().getControlService().displayErrorsInFile("D:\\Dropbox\\Hogeschool Utrecht\\General GUI & Control\\Construction 2\\AnalyseServiceImpl.java", errorLines);
 			}	
 		});
 		

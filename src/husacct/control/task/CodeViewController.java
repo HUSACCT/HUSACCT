@@ -19,6 +19,8 @@ public class CodeViewController {
 	}
 	
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
+		if(controlService == null)
+			controlService = ServiceProvider.getInstance().getControlService();
 		setCurrentCodeviewer();
 		currentCodeviewer.displayErrorsInFile(fileName, errorLines);
 	}
