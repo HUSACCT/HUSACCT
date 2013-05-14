@@ -1,7 +1,6 @@
 package husacct.analyse.task.analyser.csharp;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
@@ -20,7 +19,7 @@ public class CSharpTreeConvertController {
     CSharpClassGenerator csClassGenerator;
     CSharpEnumGenerator csEnumGenerator;
     CSharpInheritanceGenerator csInheritanceGenerator;
-    CSharpAttributeGenerator csAttributeGenerator;
+    CSharpAttributeAndLocalVariableGenerator csAttributeGenerator;
     CSharpMethodGeneratorController csMethodeGenerator;
     List<CommonTree> usings = new ArrayList<>();
     Stack<String> namespaceStack = new Stack<>();
@@ -32,13 +31,12 @@ public class CSharpTreeConvertController {
         csClassGenerator = new CSharpClassGenerator();
         csEnumGenerator = new CSharpEnumGenerator();
         csInheritanceGenerator = new CSharpInheritanceGenerator();
-        csAttributeGenerator = new CSharpAttributeGenerator();
+        csAttributeGenerator = new CSharpAttributeAndLocalVariableGenerator();
         csMethodeGenerator = new CSharpMethodGeneratorController();
     }
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
         final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-        new TreePrinter(compilationCommonTree); //Debug functie
         delegateASTToGenerators(compilationCommonTree);
     }
 
