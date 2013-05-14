@@ -63,16 +63,6 @@ public class AnalysedController extends DrawingController {
 
 		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
 
-		//TODO remove printlns
-		for(ProjectDTO project : projects){
-			for(AnalysedModuleDTO am : project.analysedModules){
-				System.out.println("Module name: " + project.name + "." + am.name);
-				for(AnalysedModuleDTO sam : am.subModules){
-					System.out.println("Submodule name: "+sam.name);
-				}
-			}
-		}
-
 		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
