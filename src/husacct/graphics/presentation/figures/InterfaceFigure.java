@@ -1,18 +1,46 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.common.Resource;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+
+import org.apache.log4j.Logger;
+import org.jhotdraw.draw.AttributeKeys;
+import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.TextFigure;
 
 public class InterfaceFigure extends ClassFigure {
 	private static final long serialVersionUID = 3150088710360391913L;
 	private TextFigure interfaceTextFigure;
 
+	private BufferedImage compIcon;
+	private ImageFigure compIconFig;
+	
 	public InterfaceFigure(String figureName) {
 		super(figureName);
 
 		interfaceTextFigure = new TextFigure("\u00ABinterface\u00BB");
 		children.add(interfaceTextFigure);
+		
+		compIconFig = new ImageFigure();
+		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+
+		try {
+			//TODO There needs to be a icon for Projects
+			URL componentImageURL = Resource.get(Resource.ICON_INTERFACE_PUBLIC);
+			compIcon = ImageIO.read(componentImageURL);
+			compIconFig.setImage(null, compIcon);
+			children.add(compIconFig);
+		} catch (Exception e) {
+			compIconFig = null;
+			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
+		}
 	}
 
 	@Override
@@ -53,6 +81,14 @@ public class InterfaceFigure extends ClassFigure {
 		classNameTextFigureAnchor.y += plusY;
 		classNameText.setBounds(classNameTextFigureAnchor, null);
 
+		if (compIconFig != null) {
+			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
+			double iconAnchorY = anchor.y + 6;
+			double iconLeadX = iconAnchorX + compIcon.getWidth();
+			double iconLeadY = iconAnchorY + compIcon.getHeight();
+			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
+		
 		invalidate();
 	}
 
@@ -61,9 +97,13 @@ public class InterfaceFigure extends ClassFigure {
 		InterfaceFigure other = (InterfaceFigure) super.clone();
 
 		other.interfaceTextFigure = interfaceTextFigure.clone();
-
+		other.compIconFig = compIconFig.clone();
+		
 		other.children.add(other.interfaceTextFigure);
-
+		if (compIconFig != null) {
+			other.children.add(other.compIconFig);
+		}
+		
 		return other;
 	}
 }

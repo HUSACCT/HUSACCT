@@ -25,7 +25,7 @@ public class LayerFigure extends BaseFigure {
 	private ImageFigure compIconFig;
 
 	public int MIN_WIDTH = 150;
-	public int MIN_HEIGHT = 30;
+	public int MIN_HEIGHT = 50;
 
 	public LayerFigure(String name) {
 		super(name);

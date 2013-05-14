@@ -94,8 +94,8 @@ public class ClassFigure extends BaseFigure {
 		classNameText.setBounds(textAnchor, null);
 		
 		if (compIconFig != null) {
-			double iconAnchorX = lead.x - compIcon.getWidth();
-			double iconAnchorY = anchor.y - compIcon.getHeight();
+			double iconAnchorX = lead.x - 6 - compIcon.getWidth();
+			double iconAnchorY = anchor.y + MIN_HEIGHT;
 			double iconLeadX = iconAnchorX + compIcon.getWidth();
 			double iconLeadY = iconAnchorY + compIcon.getHeight();
 			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
