@@ -28,10 +28,10 @@ public class AnalysedController extends DrawingController {
 		super();
 		this.initializeServices();
 	}
-	
+
 	private void initializeServices() {
 		this.controlService = ServiceProvider.getInstance().getControlService();
-		
+
 		this.analyseService = ServiceProvider.getInstance().getAnalyseService();
 		this.analyseService.addServiceListener(new IServiceListener() {
 			@Override
@@ -39,7 +39,7 @@ public class AnalysedController extends DrawingController {
 				AnalysedController.this.refreshDrawing();
 			}
 		});
-		
+
 		this.validateService = ServiceProvider.getInstance()
 				.getValidateService();
 		this.validateService.addServiceListener(new IServiceListener() {
@@ -56,26 +56,25 @@ public class AnalysedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(this.getCurrentDrawingDetail());
 		super.notifyServiceListeners();
-		
+
 		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
-		
+
 		//TODO remove printlns
 		for(ProjectDTO project : projects){
-			System.out.println("Project name: "+project.name);
 			for(AnalysedModuleDTO am : project.analysedModules){
-				System.out.println("Module name: "+am.name);
+				System.out.println("Module name: " + project.name + "." + am.name);
 				for(AnalysedModuleDTO sam : am.subModules){
 					System.out.println("Submodule name: "+sam.name);
 				}
 			}
 		}
-		
+
 		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			this.showViolations();
 		}
-		
+
 		AbstractDTO[] projectArray = projects.toArray(new AbstractDTO[projects.size()]);
 		this.drawModulesAndLines(projectArray);
 	}
@@ -205,14 +204,16 @@ public class AnalysedController extends DrawingController {
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
 		this.resetContextFigures();
-		
+
 		//TODO optimize for selecting multiple projects
 		if(figures[0] instanceof ProjectFigure){
 			ProjectDTO project = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
 			AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new AbstractDTO[project.analysedModules.size()] );
-			this.drawModulesAndLines(abstractDTOs);
+			if(abstractDTOs.length != 0){
+				this.drawModulesAndLines(abstractDTOs);
+			}
 		}
-		
+
 		ArrayList<String> parentNames = this.sortFiguresBasedOnZoomability(figures);
 
 		if (parentNames.size() > 0) {
@@ -238,7 +239,7 @@ public class AnalysedController extends DrawingController {
 			zoomOutFailed();
 		}
 	}
-	
+
 	public void zoomOutFailed(){
 		this.logger.warn("Tried to zoom out from \"" + this.getCurrentPaths()
 				+ "\", but it has no parent (could be root if it's an empty string).");

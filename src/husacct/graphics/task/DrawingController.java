@@ -211,7 +211,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 		this.graphicsFrame.setUpToDate();
 		this.drawSingleLevelModules(modules);
 		this.updateLayout();
-		if(!(modules[0] instanceof ProjectDTO)){
+		if(modules.length != 0 && !(modules[0] instanceof ProjectDTO)){
 			this.drawLinesBasedOnSetting();
 		}
 		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());

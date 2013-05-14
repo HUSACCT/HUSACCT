@@ -128,7 +128,6 @@ public class FigureMap {
 			ProjectDTO pd = (ProjectDTO) dto;
 			this.moduleFiguresByName.put(pd.name, figure);
 		}
-		//TODO!!! instanceof ProjectDTO
 	}
 
 	public void linkViolatedModule(BaseFigure figure, ViolationDTO[] dtos) {
