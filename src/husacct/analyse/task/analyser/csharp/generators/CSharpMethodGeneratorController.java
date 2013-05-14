@@ -8,11 +8,6 @@ import org.antlr.runtime.tree.Tree;
 
 public class CSharpMethodGeneratorController extends CSharpGenerator {
 
-<<<<<<< HEAD
-    public void generateMethodToDomain(CommonTree methodTree, String currentUniqueClassName) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-=======
 	String belongsToClass;
 	String name;
 	String uniqueName;
@@ -125,5 +120,4 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 	private String getMethodUniqueName(String belongsToClass, String name, String argumentTypes) {
 		return CSharpGeneratorToolkit.getUniqueName(belongsToClass, name) + argumentTypes;
 	}
->>>>>>> 2eeefc8f784b03c41e5c1376da943f2998bbf46a
 }

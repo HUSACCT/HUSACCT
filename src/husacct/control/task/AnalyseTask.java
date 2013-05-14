@@ -34,13 +34,13 @@ public class AnalyseTask implements Runnable {
 			logger.debug("Analysing application");
 			// ServiceProvider.getInstance().resetAnalyseService();
 			if (applicationDTO.projects.size() > 0) {
-				ServiceProvider.getInstance().getAnalyseService()
-						.analyseApplication(applicationDTO.projects.get(0));
+			//	ServiceProvider.getInstance().getAnalyseService()
+			//			.analyseApplication(applicationDTO.projects.get(0));
+				mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(applicationDTO.projects.size());
 				for (int i = 0; i < applicationDTO.projects.size(); i++) {
+					
 					ProjectDTO currentProject = applicationDTO.projects.get(i);
-
-					ServiceProvider.getInstance().getAnalyseService()
-							.analyseApplication(currentProject);
+					mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
 
 					// Add analysed root modules to project
 					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
@@ -50,11 +50,15 @@ public class AnalyseTask implements Runnable {
 						currentProject.analysedModules.add(analysedModule);
 					}
 
+					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
+					
 					// Update project with analysedRootModules
 					applicationDTO.projects.remove(i);
 					applicationDTO.projects.add(i, currentProject);
 				}
 			}
+			
+			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
 			
 			logger.debug("Analysing finished");
 			if (!mainController.getStateController().isAnalysing()) {

@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 public abstract class SaverPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
+	abstract public HashMap<String, Object> getConfig();
 	abstract public boolean validateData();
 	abstract public HashMap<String, Object> getData();
 	

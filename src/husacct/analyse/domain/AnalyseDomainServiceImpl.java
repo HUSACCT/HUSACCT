@@ -10,6 +10,7 @@ import husacct.analyse.domain.famix.FamixPersistencyServiceImpl;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
 
@@ -122,7 +123,7 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     }
     
     @Override
-	public String[] getExternalSystems(){
+	public ExternalSystemDTO[] getExternalSystems(){
 		return queryService.getExternalSystems();
 	}
 }
