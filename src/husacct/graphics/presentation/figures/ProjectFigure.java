@@ -2,6 +2,7 @@ package husacct.graphics.presentation.figures;
 
 import husacct.common.Resource;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
@@ -19,6 +20,9 @@ import org.jhotdraw.draw.TextFigure;
 
 public class ProjectFigure extends BaseFigure{
 	private static final long serialVersionUID = -1533554255484459174L;
+	
+	public static final Color projectBackground = new Color(182, 234, 255);
+	
 	private RectangleFigure body;
 	private TextFigure text;
 	private BufferedImage compIcon;

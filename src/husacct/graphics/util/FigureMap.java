@@ -4,6 +4,7 @@ import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
@@ -123,6 +124,9 @@ public class FigureMap {
 		} else if (dto instanceof AnalysedModuleDTO) {
 			AnalysedModuleDTO md = (AnalysedModuleDTO) dto;
 			this.moduleFiguresByName.put(md.uniqueName, figure);
+		} else if(dto instanceof ProjectDTO){
+			ProjectDTO pd = (ProjectDTO) dto;
+			this.moduleFiguresByName.put(pd.name, figure);
 		}
 		//TODO!!! instanceof ProjectDTO
 	}
