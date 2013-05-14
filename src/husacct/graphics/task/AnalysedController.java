@@ -2,7 +2,11 @@ package husacct.graphics.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
-import husacct.common.dto.*;
+import husacct.common.dto.AbstractDTO;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ProjectDTO;
+import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -222,24 +226,25 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
 		if (this.getCurrentPaths().length > 0) {
 			this.saveSingleLevelFigurePositions();
 			this.resetContextFigures();
 			String firstCurrentPaths = this.getCurrentPaths()[0];
-			AnalysedModuleDTO parentDTO = this.analyseService.getParentModuleForModule(firstCurrentPaths);
+			AnalysedModuleDTO parentDTO = this.analyseService
+					.getParentModuleForModule(firstCurrentPaths);
 
-			if(parentDTO != null){
+			if (parentDTO != null) {
 				this.getAndDrawModulesIn(parentDTO.uniqueName);
 			} else {
-				zoomOutFailed();
+				this.zoomOutFailed();
 			}
 		} else {
-			zoomOutFailed();
+			this.zoomOutFailed();
 		}
 	}
-
 	public void zoomOutFailed(){
 		this.logger.warn("Tried to zoom out from \"" + this.getCurrentPaths()
 				+ "\", but it has no parent (could be root if it's an empty string).");

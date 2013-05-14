@@ -416,6 +416,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
 					f.isContext(true);
 					figures.add(f);
+				} else {
+					f.isContext(false);
 				}
 			}
 
