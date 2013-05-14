@@ -265,8 +265,10 @@ public class AnalysedController extends DrawingController {
 		for (BaseFigure figure : figures) {
 			if (figure.isModule() && !figure.isContext()) {
 				try {
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figure);
-					parentNames.add(parentDTO.uniqueName);
+					if(!(this.getFigureMap().getModuleDTO(figure) instanceof ProjectDTO)){
+						AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figure);
+						parentNames.add(parentDTO.uniqueName);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					this.logger.warn("Could not zoom on this object: "
