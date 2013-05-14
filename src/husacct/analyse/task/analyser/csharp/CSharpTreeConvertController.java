@@ -106,7 +106,7 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateUsings() {
-        csUsingGenerator.generateToDomain(belongsToClass(namespaceStack, classNameStack));
+        csUsingGenerator.generateToDomain(createPackageAndClassName(namespaceStack, classNameStack));
     }
 
     private String delegateNamespace(CommonTree namespaceTree) {
@@ -124,14 +124,14 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateInheritanceDefinition(CommonTree inheritanceTree) {
-        csInheritanceGenerator.generateToDomain(inheritanceTree, belongsToClass(namespaceStack, classNameStack));
+        csInheritanceGenerator.generateToDomain(inheritanceTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
 
     private void delegateAttribute(CommonTree attributeTree) {
-        csAttributeGenerator.generateAttributeToDomain(attributeTree, getParentName(classNameStack));
+        csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
 
     private void delegateMethod(CommonTree methodTree) {
-        csMethodeGenerator.generateMethodToDomain(methodTree, belongsToClass(namespaceStack, classNameStack));
+        csMethodeGenerator.generateMethodToDomain(methodTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
 }

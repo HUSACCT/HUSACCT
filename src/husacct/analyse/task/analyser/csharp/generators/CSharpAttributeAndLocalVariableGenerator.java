@@ -87,9 +87,11 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 			case CSharpParser.VARIABLE_DECLARATOR:
 					setAttributeName(child);	
 			case CSharpParser.CONSTRUCTOR_DECL:
+				//wrong packageAndClassName
 					CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
 					cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);
 			case CSharpParser.EXPRESSION_STATEMENT:
+				//wrong packageAndClassName
 					cSharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
 					cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);				
 					if (child.getChild(0).getType() == CSharpParser.METHOD_INVOCATION){
