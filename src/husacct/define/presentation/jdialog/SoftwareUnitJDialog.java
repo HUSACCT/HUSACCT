@@ -129,7 +129,6 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 	
 	private JPanel createUIMappingPanel() {
-	
 		if(regExMappingPanel != null)
 			this.getContentPane().remove(regExMappingPanel);
 		
@@ -290,12 +289,14 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 			UIMapping.setEnabled(false);
 			regExMapping.setEnabled(true);
 			regExMappingPanel = null;
+			saveButton.setEnabled(false);
 			this.pack();
 		}
 		else if (action.getSource() == this.regExMapping) {
 			this.getContentPane().add(this.createRegExMappingPanel(), BorderLayout.CENTER);
 			UIMapping.setEnabled(true);
 			regExMapping.setEnabled(false);
+			saveButton.setEnabled(true);
 			this.pack();
 		}
 		
