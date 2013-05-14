@@ -103,6 +103,7 @@ public class DrawingView extends DefaultDrawingView {
 		}
 		return Collections.unmodifiableSet(deltaSelection);
 	}
+	
 
 	private void handleDeselect() {
 		Set<Figure> deselectedFigures = this.getDeltaSelection();
