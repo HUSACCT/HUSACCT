@@ -1,11 +1,19 @@
 package husacct.graphics.presentation.figures;
 
+import husacct.common.Resource;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import org.apache.log4j.Logger;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
 
@@ -14,6 +22,8 @@ public class ClassFigure extends BaseFigure {
 	private static final long serialVersionUID = -468596930534802557L;
 	protected RectangleFigure top, middle, bottom;
 	protected TextFigure classNameText;
+	private BufferedImage compIcon;
+	private ImageFigure compIconFig;
 
 	public int MIN_WIDTH = 60;
 	public int MIN_HEIGHT = 50;
@@ -32,6 +42,21 @@ public class ClassFigure extends BaseFigure {
 		children.add(classNameText);
 		children.add(bottom);
 
+		compIconFig = new ImageFigure();
+		compIconFig.set(AttributeKeys.STROKE_WIDTH, 0.0);
+		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
+
+		try {
+			//TODO There needs to be a icon for Projects
+			URL componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
+			compIcon = ImageIO.read(componentImageURL);
+			compIconFig.setImage(null, compIcon);
+			children.add(compIconFig);
+		} catch (Exception e) {
+			compIconFig = null;
+			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
+		}
+		
 		set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 	}
@@ -67,6 +92,14 @@ public class ClassFigure extends BaseFigure {
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		classNameText.setBounds(textAnchor, null);
+		
+		if (compIconFig != null) {
+			double iconAnchorX = lead.x - compIcon.getWidth();
+			double iconAnchorY = anchor.y - compIcon.getHeight();
+			double iconLeadX = iconAnchorX + compIcon.getWidth();
+			double iconLeadY = iconAnchorY + compIcon.getHeight();
+			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+		}
 
 		this.invalidate();
 	}
@@ -79,13 +112,17 @@ public class ClassFigure extends BaseFigure {
 		other.middle = middle.clone();
 		other.classNameText = classNameText.clone();
 		other.bottom = bottom.clone();
-
+		other.compIconFig = compIconFig.clone();
+		
 		other.children = new ArrayList<Figure>();
 		other.children.add(other.top);
 		other.children.add(other.middle);
 		other.children.add(other.classNameText);
 		other.children.add(other.bottom);
-
+		if (compIconFig != null) {
+			other.children.add(other.compIconFig);
+		}
+		
 		return other;
 	}
 }

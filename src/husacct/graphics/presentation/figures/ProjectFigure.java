@@ -48,7 +48,7 @@ public class ProjectFigure extends BaseFigure{
 
 		try {
 			//TODO There needs to be a icon for Projects
-			URL componentImageURL = Resource.get(Resource.ICON_COMPONENT);
+			URL componentImageURL = Resource.get(Resource.ICON_SOFTWARE_ARCHITECTURE);
 			compIcon = ImageIO.read(componentImageURL);
 			compIconFig.setImage(null, compIcon);
 			children.add(compIconFig);
