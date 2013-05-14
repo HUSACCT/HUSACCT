@@ -5,61 +5,66 @@ import java.util.ArrayList;
 public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 
 	private static final long serialVersionUID = 1713515026043620607L;
-	
-	private String uniqueName = "";
-	private String type = "";
+
 	private String visibility;
-	
+	private boolean isfrozen = false;
+	private boolean attached = true;
+	private boolean isRemoved= false;
+
 	public AnalyzedModuleComponent() {
 		super();
 	}
-	
-	public AnalyzedModuleComponent(String uniqueName, String name, String type, String visibility) {
+
+	public AnalyzedModuleComponent(String uniqueName, String name, String type,
+			String visibility) {
 		this();
 		this.setUniqueName(uniqueName);
 		this.setName(name);
 		this.setType(type);
 		this.setVisibility(visibility);
+		if (uniqueName.equals("root")) {
+			setParentOfChild(this);
+		}
 	}
 
 	public void addChild(AbstractCombinedComponent child) {
+		if (attached) {
+			child.setParentOfChild(this);
+			child.setAnalyzedModuleComponentPosition(children.size());
+		}
 		this.children.add(child);
 	}
-	
+
 	public void addChild(int index, AbstractCombinedComponent child) {
+		if (attached) {
+			child.setParentOfChild(this);
+			child.setAnalyzedModuleComponentPosition(index);
+		}
 		this.children.add(index, child);
 	}
 
 	public void setChildren(ArrayList<AbstractCombinedComponent> children) {
+		if (attached) {
+			for (AbstractCombinedComponent a : children) {
+
+				a.setParentOfChild(this);
+			}
+
+		}
 		this.children = children;
 	}
 
 	public ArrayList<AbstractCombinedComponent> getChildren() {
+
 		return this.children;
 	}
 
 	public void removeChild(AbstractCombinedComponent child) {
-		for(AbstractCombinedComponent currentchild : this.children) {
-			if(currentchild.equals(child)) {
+		for (AbstractCombinedComponent currentchild : this.children) {
+			if (currentchild.equals(child)) {
 				this.children.remove(currentchild);
 			}
 		}
-	}
-
-	public void setUniqueName(String uniqueName) {
-		this.uniqueName = uniqueName;
-	}
-
-	public String getUniqueName() {
-		return this.uniqueName;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type.toUpperCase();
 	}
 
 	public String getVisibility() {
@@ -69,4 +74,61 @@ public class AnalyzedModuleComponent extends AbstractCombinedComponent {
 	public void setVisibility(String visibility) {
 		this.visibility = visibility;
 	}
+
+	public boolean isIsfrozen() {
+		return isfrozen;
+
+	}
+
+	public void freeze() {
+		isfrozen = true;
+	}
+
+	public void unfreeze() {
+		isfrozen = false;
+
+	}
+
+	public void attach() {
+		attached = true;
+	}
+
+	public void detach() {
+		attached = false;
+	}
+	
+	public void removeChildFromParent()
+	{
+		isRemoved=true;
+	}
+	public boolean isRemoved()
+	{
+		return isRemoved;
+	}
+
+	public void registerchildrenSize() {
+		this.sizeOfChildren = this.getChildren().size();
+
+	}
+
+	public boolean isComplete() {
+		if (this.type.toLowerCase().equals("package")
+				|| this.type.toLowerCase().equals("externallibrary")) {
+			if (this.children.size() < sizeOfChildren) {
+				return false;
+			} else {
+				return true;
+			}
+
+		} else {
+			return true;
+		}
+
+	}
+
+	public boolean isMapped() {
+
+		return isfrozen;
+	}
+
 }

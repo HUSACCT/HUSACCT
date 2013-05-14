@@ -1,13 +1,13 @@
 package husacct.define.domain.module;
 
-public class ExternalLibrary extends Module{
+public class ExternalSystem extends Module{
 	
-	public ExternalLibrary()
+	public ExternalSystem()
 	{
 		this("", "");
 	}
 	
-	public ExternalLibrary(String name, String description)
+	public ExternalSystem(String name, String description)
 	{
 		super(name, description);
 		super.type = "ExternalLibrary";

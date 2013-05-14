@@ -5,6 +5,7 @@ import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 
+
 import java.util.ArrayList;
 
 public class AppliedRuleDomainService {
@@ -35,18 +36,20 @@ public class AppliedRuleDomainService {
 		}
 		
 		return addAppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom , moduleTo, enabled);
-	}
+	}          
 	
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
 
 		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom, moduleTo, enabled);
+		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		
 		return rule.getId();
 	}
 	
-	public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,String description, String[] dependencies, 
+	public void updateAppliedRule(long appliedRuleId, Boolean isGenerated, String ruleTypeKey,String description, String[] dependencies, 
 			String regex,long moduleFromId, long moduleToId, boolean enabled) {
 
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
@@ -72,6 +75,8 @@ public class AppliedRuleDomainService {
 		SoftwareArchitecture.getInstance().removeAppliedRules();
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
+	
+	
 	
 	public void removeAppliedRule(long appliedrule_id) {
 		SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);

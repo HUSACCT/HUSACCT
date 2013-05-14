@@ -1,11 +1,13 @@
 package husacct.define.presentation.moduletree;
 
 import husacct.common.Resource;
+import husacct.define.domain.module.Facade;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.ComponentComponent;
 import husacct.define.task.components.ExternalLibraryComponent;
+import husacct.define.task.components.FacadeComponent;
 import husacct.define.task.components.LayerComponent;
 import husacct.define.task.components.SoftwareArchitectureComponent;
 import husacct.define.task.components.SubSystemComponent;
@@ -32,7 +34,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			this.checkEnabled(component, tree);
 		}
 		return this;
-	}
+	} 
 	
 	private void determineIcon(AbstractCombinedComponent component) {
 		if(component instanceof AnalyzedModuleComponent) {
@@ -47,14 +49,83 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon determineAnalyzedModuleComponentIcon(AnalyzedModuleComponent component) {
 		ImageIcon icon = new ImageIcon();
 		if(component.getType().equals("PACKAGE")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
-		} else if(component.getType().equals("CLASS")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
-		} else if(component.getType().equals("INTERFACE")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
-		} else if(component.getType().equals("ENUMERATION")) {
-			icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
+			if(component.isMapped()){
+				icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE_EMPTY));
+			}else{
+				icon = new ImageIcon(Resource.get(Resource.ICON_PACKAGE));
+			}
+			
 		}
+		else if(component.getType().equals("CLASS")) {
+			if(component.isMapped()){
+				icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC_GRAY));
+			}else{
+				icon = new ImageIcon(Resource.get(Resource.ICON_CLASS_PUBLIC));
+			}
+			
+			
+			
+		} else if(component.getType().equals("INTERFACE")) {
+			if(component.isMapped()){
+				icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC_GRAY));
+			}else{
+				icon = new ImageIcon(Resource.get(Resource.ICON_INTERFACE_PUBLIC));
+			}
+			
+		
+		
+		} else if(component.getType().equals("ENUMERATION")) {
+			if (component.isMapped()) {
+			  icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION_GRAY));
+			} else {
+              icon = new ImageIcon(Resource.get(Resource.ICON_ENUMERATION));
+			}
+			
+			
+			
+		}else if(component.getType().equals("EXTERNALLIBRARY"))
+		{
+			if (component.isMapped()) {
+				icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB_GRAY));
+			} else {
+				icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB));
+			}
+			
+		}
+		else if(component.getType().equals("SUBSYSTEM"))
+		{
+			if (component.isMapped()) {
+				icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA_GRAY));
+			} else {
+				icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEMJAVA));
+			}
+			
+		}
+		else if(component.getType().equals("ROOT"))
+		{
+			icon = new ImageIcon(Resource.get(Resource.ICON_ROOT));
+		}
+		else if(component.getType().equals("REGEX"))
+		{
+			icon = new ImageIcon(Resource.get(Resource.ICON_REGEX));
+		}
+		else if(component.getType().equals("SEARCH"))
+		{
+			icon = new ImageIcon(Resource.get(Resource.ICON_REGEXSEARCH));
+		}
+		else if(component.getType().toLowerCase().equals("externalpackage"))
+		{
+			if (component.isMapped()) {
+			  icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2_GRAY));
+			} else {
+              icon = new ImageIcon(Resource.get(Resource.ICON_EXTERNALLIB2));
+			}
+			
+		}
+		
+		
+		
+		
 		return icon;
 	}
 	
@@ -70,6 +141,8 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 			icon = new ImageIcon(Resource.get(Resource.ICON_SUBSYSTEM));
 		} else if(component instanceof SoftwareArchitectureComponent) {
 			icon = new ImageIcon(Resource.get(Resource.ICON_SOFTWARE_ARCHITECTURE));
+		}else if(component instanceof FacadeComponent) {
+			icon = new ImageIcon(Resource.get(Resource.ICON_FACADE));
 		}
 		return icon;
 	}

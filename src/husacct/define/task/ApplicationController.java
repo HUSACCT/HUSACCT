@@ -2,7 +2,6 @@ package husacct.define.task;
 
 import husacct.define.presentation.ApplicationJInternalFrame;
 
-
 public class ApplicationController {
 	public ApplicationJInternalFrame jframe;
 
@@ -24,6 +23,7 @@ public class ApplicationController {
 		DefinitionController definitionController = DefinitionController.getInstance();
 		definitionController.initSettings();
 		jframe.setContentView(definitionController.initUi());
+		jframe.setIconifiable(true);
 
 		jframe.setVisible(true);
 	}

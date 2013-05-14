@@ -11,6 +11,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.factory.violationtype.AbstractViolationType;
 import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.Message;
+import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.module.AbstractModule;
 import husacct.validate.domain.validation.module.ModuleFactory;
@@ -81,22 +82,26 @@ public class DomainServiceImpl {
 		return ruletypefactory;
 	}
 
-	public String getMessage(Message message) {
-		return messagebuilder.createMessage(message);
+	public String getMessage(Message message, Violation violation) {
+		return messagebuilder.createMessage(message, violation);
 	}
 
 	public RuleTypeDTO[] getDefaultRuleTypeOfModule(String moduleType) {
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
-		
+		modulefactory= new ModuleFactory();
 		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
 		List<RuleType> moduleRuleTypes = module.getDefaultModuleruleTypes();
 		
+		
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
+		
+		
+		
 	}
 	
 	public RuleTypeDTO[] getAllowedRuleTypeOfModule(String moduleType) {
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
-		
+		modulefactory= new ModuleFactory();
 		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
 		List<RuleType> moduleRuleTypes = module.getAllowedModuleruleTypes();
 		

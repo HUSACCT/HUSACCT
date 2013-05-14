@@ -4,7 +4,7 @@ public class SoftwareUnitDefinition {
 	
 	public enum Type
 	{
-		PACKAGE, CLASS, INTERFACE
+		PACKAGE, CLASS, INTERFACE,EXTERNALLIBRARY,SUBSYSTEM,REGEX
 	}
 
 	private String name;
@@ -51,5 +51,4 @@ public class SoftwareUnitDefinition {
 		}
 		return isEqual;
 	}
-
 }

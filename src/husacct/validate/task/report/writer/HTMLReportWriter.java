@@ -136,7 +136,7 @@ public class HTMLReportWriter extends ReportWriter {
 
 			// Rule
 			if (violation.getMessage() != null) {
-				String message = new Messagebuilder().createMessage(violation.getMessage());
+				String message = new Messagebuilder().createMessage(violation.getMessage(), violation);
 				createColumn(message);
 			} else {
 				createColumn("");

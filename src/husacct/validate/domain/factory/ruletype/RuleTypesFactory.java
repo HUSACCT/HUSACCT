@@ -91,6 +91,7 @@ public class RuleTypesFactory {
 
 	public List<RuleType> getRuleTypes() {
 		ApplicationDTO application = defineService.getApplicationDetails();
+	
 		if (application != null && application.projects.size() > 0) {
 			if (application.projects.get(0).programmingLanguage == null || application.projects.get(0).programmingLanguage.equals("")) {
 				return generateDefaultRuleTypes();
@@ -102,7 +103,11 @@ public class RuleTypesFactory {
 		return Collections.emptyList();
 	}
 
-	// Return all the default instances of Rule
+	/**
+	 * Generate all default available main ruletypes (stored in a HashMap).
+	 * 
+	 * @return all the default instances of Rule
+	 */
 	private List<RuleType> generateDefaultRuleTypes() {
 		List<RuleType> rules = new ArrayList<RuleType>();
 		setViolationTypeFactory();
@@ -122,12 +127,20 @@ public class RuleTypesFactory {
 	}
 
 	// Depending on the language give instance of Rule + violationtypes
+	
+	/**
+	 * Generate all default available main ruletypes (stored in a HashMap).
+	 * Depending on the language give instance of rule + violationtypes.
+	 * 
+	 * @return all the default instances of Rule depending on given program language.
+	 */
 	private List<RuleType> generateDefaultRuleTypes(String language) {
 		setViolationTypeFactory(language);
 
 		List<RuleType> rules = new ArrayList<RuleType>();
 
 		for (Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()) {
+			
 			try {
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();

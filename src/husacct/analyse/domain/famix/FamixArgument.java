@@ -1,27 +1,23 @@
 package husacct.analyse.domain.famix;
 
-class FamixArgument extends FamixObject
-{
-	private int index;
-	private boolean isReceiver;
+class FamixArgument extends FamixObject {
 
-	public int getIndex()
-	{
-		return index;
-	}
+    private int index;
+    private boolean isReceiver;
 
-	public void setIndex(int index)
-	{
-		this.index = index;
-	}
+    public int getIndex() {
+        return index;
+    }
 
-	public boolean isReceiver()
-	{
-		return isReceiver;
-	}
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
-	public void setReceiver(boolean isReceiver)
-	{
-		this.isReceiver = isReceiver;
-	}
+    public boolean isReceiver() {
+        return isReceiver;
+    }
+
+    public void setReceiver(boolean isReceiver) {
+        this.isReceiver = isReceiver;
+    }
 }

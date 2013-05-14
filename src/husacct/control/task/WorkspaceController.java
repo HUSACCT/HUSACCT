@@ -67,10 +67,10 @@ public class WorkspaceController {
 		mainController.getStateController().checkState();
 	}
 	
-	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues) {
+	public boolean saveWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues, HashMap<String, Object> config) {
 		IResource workspaceResource = ResourceFactory.get(resourceIdentifier);
 		Document document = getWorkspaceData();
-		return workspaceResource.save(document, dataValues);
+		return workspaceResource.save(document, dataValues, config);
 	}
 	
 	public boolean loadWorkspace(String resourceIdentifier, HashMap<String, Object> dataValues){

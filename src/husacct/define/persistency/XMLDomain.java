@@ -7,7 +7,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.module.Component;
-import husacct.define.domain.module.ExternalLibrary;
+//import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
@@ -50,7 +50,7 @@ public class XMLDomain {
 	
 	private ArrayList<Project> getProjects(Element projectsElement) {
 		ArrayList<Project> projects = new ArrayList<Project>();
-		List<Element> projectElements = projectsElement.getChildren("project");
+		List<Element> projectElements = projectsElement.getChildren("Project");
     	for(Element project : projectElements) {
     		projects.add(getProject(project));
     	}
@@ -80,7 +80,7 @@ public class XMLDomain {
 
 	public SoftwareArchitecture getArchitecture() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
-		Element ApArchitecture = (Element)applicationProperties.get(4);
+		Element ApArchitecture = (Element)applicationProperties.get(3);
     	Element ArchitectureName = (Element)ApArchitecture.getChild("name");
     	Element ArchitectureDescription = (Element)ApArchitecture.getChild("description");   	
     	SoftwareArchitecture XMLArchitecture = new SoftwareArchitecture(ArchitectureName.getText(), ArchitectureDescription.getText());    	
@@ -105,11 +105,11 @@ public class XMLDomain {
     	XMLArchitecture.setAppliedRules(this.getAppliedRules(ApArchitecture));
     	return XMLArchitecture;
 	}
-	
+	/*
 	public ArrayList<AppliedRule> getAppliedRules() {
 		List<Element> applicationProperties = this.getWorkspaceChildren();
 		return this.getAppliedRules((Element)applicationProperties.get(4));
-	}
+	}*/
 
 	@SuppressWarnings("rawtypes")
 	public ArrayList<AppliedRule> getAppliedRules(Element ApplicationArchitecture) {
@@ -207,9 +207,10 @@ public class XMLDomain {
 		String moduleId = e.getChild("id").getValue();
 
 		// type detection..
-		if (ModuleTypeText.equals("externallibrary")) {
-			xmlModule = new ExternalLibrary(moduleName, moduleDescription);
-		} else if (ModuleTypeText.equals("component")) {
+		//if (ModuleTypeText.equals("externallibrary")) {
+			//xmlModule = new ExternalSystem(moduleName, moduleDescription);
+		//} 
+		if (ModuleTypeText.equals("component")) {
 			xmlModule = new Component(moduleName, moduleDescription);
 		} else if (ModuleTypeText.equals("layer")) {
 			xmlModule = new Layer(moduleName, moduleDescription, Integer.parseInt(e.getChild("HierarchicalLevel").getValue()));

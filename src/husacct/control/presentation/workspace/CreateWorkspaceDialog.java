@@ -40,7 +40,7 @@ public class CreateWorkspaceDialog extends JDialog{
 	public CreateWorkspaceDialog(MainController mainController){
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
-		setApplicationPanel = new SetApplicationPanel();
+		setApplicationPanel = new SetApplicationPanel(this);
 		setApplicationPanel.setVisible(false);
 		this.setTitle(localeService.getTranslatedString("CreateWorkspaceTitle"));		
 		setup();
@@ -99,7 +99,7 @@ public class CreateWorkspaceDialog extends JDialog{
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(analyseApplicationCheckbox.isSelected()){
-					if(setApplicationPanel.dataValidated() && workspaceNameValidated()) {
+					if(workspaceNameValidated()&&setApplicationPanel.dataValidated()) {
 						createWorkspace();
 						ApplicationDTO applicationData = setApplicationPanel.getApplicationData();
 						mainController.getApplicationController().setAndAnalyseApplicationData(applicationData);
@@ -140,8 +140,8 @@ public class CreateWorkspaceDialog extends JDialog{
 
 	private boolean workspaceNameValidated() {
 		String workspaceName = workspaceNameText.getText();
-		if (workspaceName == null || workspaceName.length() < 1) {
-			controlService.showErrorMessage(localeService.getTranslatedString("FieldEmptyError"));
+		if (workspaceName == null || workspaceName.trim().length() < 1) {
+			controlService.showErrorMessage(localeService.getTranslatedString("WorkspaceNameEmptyError"));
 			return false;
 		}
 		else if(!Regex.matchRegex(Regex.nameRegex, workspaceName)) {

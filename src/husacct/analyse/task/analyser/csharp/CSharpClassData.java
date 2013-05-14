@@ -1,81 +1,86 @@
 package husacct.analyse.task.analyser.csharp;
 
 public class CSharpClassData {
-	private String className;
-	private String uniqueName;
-	private int intentLevel;
-	private boolean closed = false;
-	private String parentClass;
-	private boolean hasParent;
-	private String belongsToPackage;
-	private boolean isAbstract;
-	
-	public CSharpClassData(String className, int intentLevel) {
-		this.className = className;
-		this.intentLevel = intentLevel;
-	}
-	
-	public CSharpClassData() {
-		super();
-	}
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
-	public String getClassName() {
-		return className;
-	}
-	public void setIntentLevel(int intentLevel) {
-		this.intentLevel = intentLevel;
-	}
-	public int getIntentLevel() {
-		return intentLevel;
-	}
-	public void setClosed(boolean closed) {
-		this.closed = closed;
-	}
-	public boolean getClosed() {
-		return closed;
-	}
+    private String className;
+    private String uniqueName;
+    private int intentLevel;
+    private boolean closed = false;
+    private String parentClass;
+    private boolean hasParent;
+    private String belongsToPackage;
+    private boolean isAbstract;
 
-	public void setParentClass(String parentClass) {
-		this.parentClass = parentClass;
-	}
+    public CSharpClassData(String className, int intentLevel) {
+        this.className = className;
+        this.intentLevel = intentLevel;
+    }
 
-	public String getParentClass() {
-		return parentClass;
-	}
+    public CSharpClassData() {
+        super();
+    }
 
-	public void setHasParent(boolean hasParent) {
-		this.hasParent = hasParent;
-	}
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
-	public boolean isHasParent() {
-		return hasParent;
-	}
+    public String getClassName() {
+        return className;
+    }
 
-	public void setUniqueName(String uniqueName) {
-		this.uniqueName = uniqueName;
-	}
+    public void setIntentLevel(int intentLevel) {
+        this.intentLevel = intentLevel;
+    }
 
-	public String getUniqueName() {
-		return uniqueName;
-	}
+    public int getIntentLevel() {
+        return intentLevel;
+    }
 
-	public void setBelongsToPackage(String belongsToPackage) {
-		this.belongsToPackage = belongsToPackage;
-	}
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
 
-	public String getBelongsToPackage() {
-		return belongsToPackage;
-	}
+    public boolean getClosed() {
+        return closed;
+    }
 
-	public void setAbstract(boolean isAbstract) {
-		this.isAbstract = isAbstract;
-	}
+    public void setParentClass(String parentClass) {
+        this.parentClass = parentClass;
+    }
 
-	public boolean isAbstract() {
-		return isAbstract;
-	}
-	
+    public String getParentClass() {
+        return parentClass;
+    }
+
+    public void setHasParent(boolean hasParent) {
+        this.hasParent = hasParent;
+    }
+
+    public boolean isHasParent() {
+        return hasParent;
+    }
+
+    public void setUniqueName(String uniqueName) {
+        this.uniqueName = uniqueName;
+    }
+
+    public String getUniqueName() {
+        return uniqueName;
+    }
+
+    public void setBelongsToPackage(String belongsToPackage) {
+        this.belongsToPackage = belongsToPackage;
+    }
+
+    public String getBelongsToPackage() {
+        return belongsToPackage;
+    }
+
+    public void setAbstract(boolean isAbstract) {
+        this.isAbstract = isAbstract;
+    }
+
+    public boolean isAbstract() {
+        return isAbstract;
+    }
 }
