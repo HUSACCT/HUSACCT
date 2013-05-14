@@ -16,7 +16,6 @@ public class SetJavaBenchmark extends AbstractBootstrap{
 		paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "java" + File.separator + "benchmark");
 		paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "java" + File.separator + "benchmark");
 		
-		
 		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
 		ProjectDTO project = new ProjectDTO("Java Benchmark", paths, "Java", "1.0", "Benchmark Project", analysedModules);
 		ProjectDTO project2 = new ProjectDTO("Project 2", paths, "Java", "1.0", "Benchmark Project", analysedModules);

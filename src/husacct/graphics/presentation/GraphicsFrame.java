@@ -57,7 +57,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		setVisible(false);
 		frameTotalWidth = getWidth();
 
-		ROOT_LEVEL = localeService.getTranslatedString("Root");
+		ROOT_LEVEL = localeService.getTranslatedString("ProjectsLabel");
 		resetCurrentPaths();
 
 		drawingView = givenDrawingView;
@@ -171,7 +171,7 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
 		menuBar.setLocale(menuBarLocale);
 
-		ROOT_LEVEL = localeService.getTranslatedString("Root");
+		ROOT_LEVEL = localeService.getTranslatedString("ProjectsLabel");
 		locationBar.setLocale(ROOT_LEVEL);
 	}
 
