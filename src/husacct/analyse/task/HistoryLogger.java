@@ -116,10 +116,10 @@ public class HistoryLogger {
 			analyse.appendChild(interfaces);
 
 			//dependencies
-			Element dependancies = doc.createElement("dependancies");
-			dependancies.appendChild(doc.createTextNode(queryService.getAmountOfDependencies() + ""));
+			Element dependencies = doc.createElement("dependencies");
+			dependencies.appendChild(doc.createTextNode(queryService.getAmountOfDependencies() + ""));
 
-			analyse.appendChild(dependancies);
+			analyse.appendChild(dependencies);
 
 			//violations
 			Element violations = doc.createElement("violations");
@@ -131,10 +131,11 @@ public class HistoryLogger {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("src/common/resources/applicationanalysishistory.xml"));
-
+			//StreamResult result = new StreamResult(new File("src/common/resources/applicationanalysishistory.xml"));
+			//StreamResult result = new StreamResult(new File("C:\\Users\\Rick\\Desktop\\file.xml"));
+			
 			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
+			StreamResult result = new StreamResult(System.out);
 
 			transformer.transform(source, result);
 
