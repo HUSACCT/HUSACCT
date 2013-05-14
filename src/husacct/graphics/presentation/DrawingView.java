@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.*;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -253,5 +254,18 @@ public class DrawingView extends DefaultDrawingView {
 		BaseFigure[] retVal = new BaseFigure[collection.size()];
 		retVal = collection.toArray(retVal);
 		return retVal;
+	}
+	
+	public void showExternalSystems(){
+		String[] columnNames ={"External systems"};
+		Object[] externalSystems = this.analyseService.getExternalSystems();
+			
+		final JTable externalSystemsTable = new JTable(data, columnNames);
+		
+		externalSystemsTable.setFont(new Font("Sans-Serif", Font.PLAIN, 10));
+		JScrollPane scrollPane = new JScrollPane(externalSystemsTable);		
+		scrollPane.setPreferredSize(new Dimension(450, 200));
+							
+		JOptionPane.showMessageDialog(parent, scrollPane, "Externals systems", JOptionPane.PLAIN_MESSAGE);
 	}
 }

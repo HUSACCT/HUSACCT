@@ -34,7 +34,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	private HashMap<String, String> icons;
 	private ArrayList<JComponent> actions;
 
-	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton, showDependenciesButton, showViolationsButton, outOfDateButton;
+	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, optionsDialogButton, showDependenciesButton, showViolationsButton, outOfDateButton, showExternalSystems;
 
 	private JSlider zoomSlider;
 	private GraphicsOptionsDialog graphicsOptionsDialog;
@@ -74,7 +74,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		actions.add(showViolationsButton);
 		actions.add(zoomSlider);
 		actions.add(outOfDateButton);
-		
+		actions.add(showExternalSystems);
 	}
 
 	public void addListener(UserInputListener listener) {
@@ -224,6 +224,16 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		outOfDateButton = new JButton();
 		outOfDateButton.setSize(50, menuItemMaxHeight);
 		setButtonIcon(outOfDateButton, "outofdate");
+		
+		showExternalSystems = new JButton();
+		showExternalSystems.setSize(50, menuItemMaxHeight);
+		setButtonIcon(showExternalSystems, "dependenciesHide");
+		showExternalSystems.addActionListener(addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DrawingView.showExternalSystems();
+			}
+		});
 	}
 
 	public void setOptionsDialogAction(ActionListener listener) {
