@@ -69,7 +69,6 @@ public class AnalysedController extends DrawingController {
 
 				if (knownChildren.size() > 0) {
 					allChildren.put(parentName, knownChildren);
-
 				}
 			}
 
@@ -93,11 +92,6 @@ public class AnalysedController extends DrawingController {
 								.getChildrenOf(figure.getName());
 						if (knownChildren.size() > 0) {
 							allChildren.put(figure.getName(), knownChildren);
-
-							for (AbstractDTO child : knownChildren) {
-								AnalysedModuleDTO castChild = (AnalysedModuleDTO) child;
-								compoundedNames.add(castChild.uniqueName);
-							}
 						}
 					}
 				}
@@ -105,8 +99,7 @@ public class AnalysedController extends DrawingController {
 					allChildren.put("", tmp);
 				}
 			}
-			this.setCurrentPaths(compoundedNames
-					.toArray(new String[compoundedNames.size()]));
+			this.setCurrentPaths(parentNames);
 
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
