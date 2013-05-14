@@ -426,6 +426,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 			this.moduleZoom(selectedFigures);
 		}
+		
 	}
 
 	protected void printFigures(String msg) {
