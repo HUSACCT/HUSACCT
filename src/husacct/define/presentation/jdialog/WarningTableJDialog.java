@@ -22,13 +22,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
-public class WarningTableJDialog  extends JDialog implements ActionListener, KeyListener {
- private JTableWarningTable warningTable;
-	
-	
-	
-	
-	
+public class WarningTableJDialog extends JDialog implements ActionListener,
+		KeyListener {
+	private JTableWarningTable warningTable;
+
 	/**
 	 * 
 	 */
@@ -37,82 +34,57 @@ public class WarningTableJDialog  extends JDialog implements ActionListener, Key
 	public WarningTableJDialog() {
 		init();
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	private void init() {
-		
+
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(500, 380));
 		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(createWarningPanel(),BorderLayout.CENTER);
-		setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("SoftwareUnitTitle"));
-		setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
+		getContentPane().add(createWarningPanel(), BorderLayout.CENTER);
+		setTitle(ServiceProvider.getInstance().getLocaleService()
+				.getTranslatedString("SoftwareUnitTitle"));
+		setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO))
+				.getImage());
 
 		this.setSize(1000, 400);
 		this.pack();
-		
-		
+
 	}
-
-
-
-
-
-
 
 	private JScrollPane createWarningPanel() {
-		JScrollPane scrollpane= new JScrollPane();
-	
-	
-		warningTable= new JTableWarningTable();
-		
+		JScrollPane scrollpane = new JScrollPane();
+
+		warningTable = new JTableWarningTable();
+
 		scrollpane.setSize(1000, 400);
-	
+
 		scrollpane.setViewportView(warningTable);
-	
+
 		return scrollpane;
 	}
-
-
-
-
-
-
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
-
-
-
-
 
 }

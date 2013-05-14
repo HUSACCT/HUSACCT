@@ -183,7 +183,7 @@ public class DefaultRuleDomainService {
 	private void visibilityRule(RuleTypeDTO rule) 
 	{
 		AppliedRule visibilityRule = getBaseRule();
-		visibilityRule.setRuleType("Visibility");
+		visibilityRule.setRuleType("Visibility Convention");
 		visibilityRule.setDescription(visibilityRule.getDescription()+"\n"+rule.getDescriptionKey());
 		visibilityRule.setModuleTo(new Module());
 		

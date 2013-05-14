@@ -121,7 +121,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private void addRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
-		if (moduleId != -1) {
+			if (moduleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);

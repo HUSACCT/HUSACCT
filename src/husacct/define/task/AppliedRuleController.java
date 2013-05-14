@@ -82,12 +82,12 @@ public class AppliedRuleController extends PopUpController {
 			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
 			
 			Module selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
-					
+				
 			//Get the correct display value for each ruletypekey from the resourcebundle
 			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
 				
 				try {
-					if(!(selectedModule instanceof Layer)) {
+					if(!(selectedModule instanceof Layer )) {
 						continue;
 					} else {
 						String value = ServiceProvider.getInstance().getLocaleService().getTranslatedString(ruleTypeDTO.key);

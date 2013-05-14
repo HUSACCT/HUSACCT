@@ -44,6 +44,7 @@ public class FactoryDetails {
 	
 	public AbstractDetailsJPanel create(AppliedRuleController appliedRuleController, String ruleTypeKey){
 	//Rules on the Contents of a module
+	
 		if (ruleTypeKey.equals(InterfaceConventionJPanel.ruleTypeKey)){
 			interfaceConventionJPanel = new InterfaceConventionJPanel(appliedRuleController);
 			return interfaceConventionJPanel;
