@@ -5,7 +5,6 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
-import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -61,13 +60,19 @@ public class AnalysedController extends DrawingController {
 			this.drawArchitecture(this.getCurrentDrawingDetail());
 		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
+			ArrayList<String> compoundedNames = new ArrayList<String>();
+
 			for (String parentName : parentNames) {
+				compoundedNames.add(parentName);
 				ArrayList<AbstractDTO> knownChildren = this
 						.getChildrenOf(parentName);
+
 				if (knownChildren.size() > 0) {
 					allChildren.put(parentName, knownChildren);
+
 				}
 			}
+
 			if (this.analysedContextFigures.size() > 0) {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : this.analysedContextFigures) {
@@ -83,11 +88,16 @@ public class AnalysedController extends DrawingController {
 					} else if (!figure.isLine() && !figure.isModule()) {
 						// NOTE: Pretty sure selected stuff that is both not a
 						// module and not a line
-						// is actually one of those weird blue square things
+						// is actually a ParentFigure (blue square thing)
 						ArrayList<AbstractDTO> knownChildren = this
 								.getChildrenOf(figure.getName());
 						if (knownChildren.size() > 0) {
 							allChildren.put(figure.getName(), knownChildren);
+
+							for (AbstractDTO child : knownChildren) {
+								AnalysedModuleDTO castChild = (AnalysedModuleDTO) child;
+								compoundedNames.add(castChild.uniqueName);
+							}
 						}
 					}
 				}
@@ -95,7 +105,8 @@ public class AnalysedController extends DrawingController {
 					allChildren.put("", tmp);
 				}
 			}
-			this.setCurrentPaths(parentNames);
+			this.setCurrentPaths(compoundedNames
+					.toArray(new String[compoundedNames.size()]));
 
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
