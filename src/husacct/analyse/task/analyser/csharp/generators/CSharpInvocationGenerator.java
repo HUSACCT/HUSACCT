@@ -82,10 +82,6 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 			int childcount = tree.getChildCount();
 			for (int i = 0; i < childcount; i++) {
 				CommonTree child =  (CommonTree) tree.getChild(i);
-
-				if (hasConstructorCall(child)) { 
-					createConstructorInvocationDetails(child);
-				}
 				findConstructorInvocation(child);
 			}
 		}

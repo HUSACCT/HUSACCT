@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 public class CSharpBlockScopeGenerator extends CSharpGenerator {
 
@@ -22,6 +23,7 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 			switch (child.getType()) {
 				case CSharpParser.VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
+					deleteTreeChild(child);
 					break;
 				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
