@@ -1,6 +1,7 @@
 package husacct.analyse;
 
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
@@ -513,9 +514,9 @@ public class AnalyseServiceStub implements IAnalyseService {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void logHistory() {
+	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
 		// TODO Auto-generated method stub
 	}
 }

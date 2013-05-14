@@ -7,6 +7,7 @@ import husacct.analyse.task.AnalyseControlerServiceImpl;
 import husacct.analyse.task.HistoryLogger;
 import husacct.analyse.task.IAnalyseControlService;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
@@ -149,7 +150,7 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 	}
 
 	@Override
-	public void logHistory() {
-		historyLogger.saveHistory();
+	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
+		historyLogger.saveHistory(applicationDTO, workspaceName);
 	}
 }

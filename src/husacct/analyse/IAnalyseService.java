@@ -2,6 +2,7 @@ package husacct.analyse;
 
 import javax.swing.JInternalFrame;
 import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
@@ -51,5 +52,5 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     
     public ExternalSystemDTO[] getExternalSystems();
     
-    public void logHistory();
+    public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
 }

@@ -2,8 +2,11 @@ package husacct.analyse.task;
 
 import husacct.analyse.domain.IModelQueryService;
 import husacct.analyse.domain.famix.FamixQueryServiceImpl;
+import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ProjectDTO;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,9 +24,24 @@ import org.w3c.dom.Element;
 public class HistoryLogger {
 	
 	private IModelQueryService queryService;
+	private ProjectDTO projectDTO;
+	private ArrayList<ProjectDTO> projects;
 	
-	public void saveHistory() {
+	public void saveHistory(ApplicationDTO applicationDTO, String workspaceName) {
 		this.queryService = new FamixQueryServiceImpl();
+		
+		projects = applicationDTO.projects;
+		
+		if(projects.size() > 0) {
+			if(projects.size() == 1) {
+				projectDTO = projects.get(0);
+			}
+			else {
+				projectDTO = projects.get(0);
+			}
+		} else {
+			projectDTO = new ProjectDTO(null, null, null, null, null, null);
+		}
 		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -34,25 +52,25 @@ public class HistoryLogger {
 			Element rootElement = doc.createElement("hussact");
 			doc.appendChild(rootElement);
 
-			rootElement.setAttribute("version", "1");
+			rootElement.setAttribute("version", projectDTO.version);
 
 			//Workspace
 			Element workspace = doc.createElement("workspace");
 			rootElement.appendChild(workspace);
 
-			workspace.setAttribute("name", "workspaceName");
+			workspace.setAttribute("name", workspaceName);
 
 			//Application
 			Element application = doc.createElement("application");
 			workspace.appendChild(application);
-
-			application.setAttribute("name", "applicationName");
+			
+			application.setAttribute("name", applicationDTO.name);
 
 			//Project
 			Element project = doc.createElement("project");
 			application.appendChild(project);
 
-			project.setAttribute("name", "projectName");
+			project.setAttribute("name", projectDTO.name);
 
 			//analyse
 			Element analyse = doc.createElement("analyse");
@@ -64,8 +82,18 @@ public class HistoryLogger {
 			analyse.setAttribute("timestamp", millis + "");
 
 			//path
+			String projectPath = "";
+			if(projectDTO.paths.size() > 0) {
+				if(projectDTO.paths.size() == 1) {
+					projectPath = projectDTO.paths.get(0);
+				}
+				else {
+					projectPath = projectDTO.paths.get(0);
+				}
+			}
+			
 			Element path = doc.createElement("path");
-			path.appendChild(doc.createTextNode("PATH"));
+			path.appendChild(doc.createTextNode(projectPath));
 
 			analyse.appendChild(path);
 
