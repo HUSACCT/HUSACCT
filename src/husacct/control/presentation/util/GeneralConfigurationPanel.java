@@ -74,7 +74,8 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 			
 			languageItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					setLanguage(locale.getLanguage());
+					//setLanguage();
+					setLocaleFromString(locale.getLanguage());
 					
 				}
 			});
@@ -185,7 +186,7 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
 		controlService.setProperty("IDELocation", location.getText());
 		
-		setLocaleFromString(language);
+		//setLocaleFromString(language);
 	}
 
 	@Override
