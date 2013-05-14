@@ -5,6 +5,7 @@ import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.warningmessages.WarningMessage;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
+import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class JtreeStateEngine {
 			@Override
 			public void run() {
 				logger.debug("Starting to reanalyze");
-				flush();
+				//flush();
 
 			}
 		});
@@ -230,9 +231,10 @@ public class JtreeStateEngine {
 	public void analyze() {
 		SoftwareUnitController controller = new SoftwareUnitController(-1);
 		if (JtreeController.instance().isLoaded()) {
-			AnalyzedModuleComponent rootComponent = controller
-					.getSoftwareUnitTreeComponents();
+			AnalyzedModuleComponent rootComponent = JtreeController.instance().getRootOfModel();
 			JtreeStateEngine.instance().compareNewData(rootComponent);
+			//JtreeController.instance().getTree().setModel( new CombinedModuleTreeModel(rootComponent));
+			
 
 		} else {
 
