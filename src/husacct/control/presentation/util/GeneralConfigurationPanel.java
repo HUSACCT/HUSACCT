@@ -34,8 +34,8 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	final JTextField location = new JTextField();
 	final JFileChooser fileChooser = new JFileChooser();
 	
-	private JCheckBox enable;
-	private JButton selectFile;
+	private JCheckBox enable = new JCheckBox();
+	private JButton selectFile = new JButton();
 	private JPanel languagePanel, codeviewerPanel;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -45,6 +45,8 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	
 	private ButtonGroup languageGroup = new ButtonGroup();
 	private GridBagConstraints constraints = new GridBagConstraints();
+	
+	private String language;
 	
 	public GeneralConfigurationPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -59,20 +61,21 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	}
 
 	private void initialiseLanguage() {
-		
+		language = localeService.getLocale().getLanguage();
 		languagePanel = new JPanel();
 
 		for(final Locale locale : localeService.getAvailableLocales()){
 			String language = locale.getDisplayLanguage();
 			final JRadioButton languageItem = new JRadioButton(language);
-			
+			languageItem.setName(locale.getLanguage());
 			if(language.equals(localeService.getLocale().getDisplayLanguage())){
 				languageItem.setSelected(true);
 			}
 			
 			languageItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					setLocaleFromString(locale.getLanguage());
+					setLanguage(locale.getLanguage());
+					
 				}
 			});
 			
@@ -94,8 +97,6 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	
 	private void initialiseCodeviewer() {
 		codeviewerPanel = new JPanel(new GridBagLayout());
-		enable = new JCheckBox();
-		selectFile = new JButton();
 
 		enable.addItemListener(new ItemListener() {
 			@Override
@@ -175,10 +176,16 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 		} catch (NonExistingSettingException e) { }
 	}
 	
+	private void setLanguage(String nwlanguage) {
+		language = nwlanguage;
+	}
+	
 	@Override
 	public void SaveSettings() {
 		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
 		controlService.setProperty("IDELocation", location.getText());
+		
+		setLocaleFromString(language);
 	}
 
 	@Override

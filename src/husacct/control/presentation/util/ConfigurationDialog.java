@@ -30,11 +30,13 @@ public class ConfigurationDialog extends JDialog {
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private ArrayList<IConfigurable> configurableServices = new ArrayList<IConfigurable>();
-	private ArrayList<ConfigPanel> configPanels = new ArrayList<ConfigPanel>();
 	
 	private JButton save = new JButton(), reset = new JButton(), cancel = new JButton();
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
 	private JList<String> list;
+	
+	//TODO remove code after demonstration 14-05-2013
+	private JButton showError = new JButton("Show Violations");
 	
 	private HashMap<String, JPanel> configPanelMap = new HashMap<String, JPanel>();
 	
@@ -49,7 +51,6 @@ public class ConfigurationDialog extends JDialog {
 	
 	public void initiliaze() {
 		getConfigurableServices();
-		getConfigPanels();
 		mainPanel = configurableServices.get(0).getConfigurationPanel();
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(800, 600));
@@ -101,8 +102,11 @@ public class ConfigurationDialog extends JDialog {
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				for(ConfigPanel panel : configPanels) {
-					panel.SaveSettings();
+				for(JPanel panel : configPanelMap.values()) {
+					if(panel instanceof ConfigPanel) {
+						ConfigPanel configPanel = (ConfigPanel)panel;
+						configPanel.SaveSettings();
+					}
 				}
 				ServiceProvider.getInstance().getControlService().saveConfig();
 			}	
@@ -112,12 +116,38 @@ public class ConfigurationDialog extends JDialog {
 		reset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				for(ConfigPanel panel : configPanels) {
-					panel.ResetSettings();
+				for(JPanel panel : configPanelMap.values()) {
+					if(panel instanceof ConfigPanel) {
+						ConfigPanel configPanel = (ConfigPanel)panel;
+						configPanel.ResetSettings();
+					}
 				}
 			}	
 		});
+		
+		final ConfigurationDialog configurationDialog = this;
 		buttonPanel.add(cancel);
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				configurationDialog.setVisible(false);
+			}	
+		});
+		
+		//TODO remove code after demonstration 14-05-2013
+		buttonPanel.add(showError);
+		showError.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				ArrayList<Integer> errorLines = new ArrayList<Integer>();
+				errorLines.add(4);
+				errorLines.add(12);
+				errorLines.add(27);
+				errorLines.add(51);
+				errorLines.add(79);
+				ServiceProvider.getInstance().getControlService().displayErrorsInFile("E:\\Users\\Hayena\\Dropbox\\Hogeschool Utrecht\\General GUI & Control\\Construction 2\\AnalyseServiceImpl.java", errorLines);
+			}	
+		});
 		
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -141,13 +171,6 @@ public class ConfigurationDialog extends JDialog {
 		
 		if(ServiceProvider.getInstance().getGraphicsService() instanceof IConfigurable){
 			configurableServices.add((IConfigurable) ServiceProvider.getInstance().getGraphicsService());
-		}
-	}
-	
-	public void getConfigPanels() {
-		for(IConfigurable config : configurableServices) {
-			if(config.getConfigurationPanel() instanceof ConfigPanel)
-				configPanels.add((ConfigPanel) config.getConfigurationPanel());
 		}
 	}
 	

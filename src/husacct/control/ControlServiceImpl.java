@@ -50,7 +50,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
-		configurationManager = mainController.getConfigurationManager();
+		configurationManager = new ConfigurationManager();
+		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
 	}
 	

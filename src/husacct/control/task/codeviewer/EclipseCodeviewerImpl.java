@@ -1,7 +1,8 @@
 package husacct.control.task.codeviewer;
 
+import husacct.ServiceProvider;
 import husacct.common.OSDetector;
-import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.IControlService;
 import husacct.control.task.configuration.NonExistingSettingException;
 
 import java.io.IOException;
@@ -9,17 +10,17 @@ import java.util.ArrayList;
 
 public class EclipseCodeviewerImpl implements CodeviewerService {
 	
-	private ConfigurationManager configurationManager;
+	private IControlService controlService;
 	
-	public EclipseCodeviewerImpl (ConfigurationManager configurationManager) {
-		this.configurationManager = configurationManager;
+	public EclipseCodeviewerImpl () {
+		controlService = ServiceProvider.getInstance().getControlService();
 	}
 	
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
 		String location = "";
 		try {
-			location = configurationManager.getProperty("IDELocation");
+			location = controlService.getProperty("IDELocation");
 		} catch (NonExistingSettingException nese) {
 			nese.printStackTrace();
 		}

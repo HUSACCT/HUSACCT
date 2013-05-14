@@ -1,11 +1,10 @@
 package husacct.control.task;
 
-import javax.swing.JOptionPane;
-
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
-import husacct.control.task.configuration.ConfigurationManager;
+
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
@@ -20,8 +19,6 @@ public class MainController {
 	private ExportController exportController;
 	private LogController logController;
 	private CodeViewController codeViewController;
-	
-	private ConfigurationManager configurationManager;
 	
 	public MainGui mainGUI;
 	
@@ -40,9 +37,8 @@ public class MainController {
 	}
 	
 	private void setControllers() {
-		this.configurationManager = new ConfigurationManager();
+		
 		this.commandLineController = new CommandLineController();
-		this.codeViewController = new CodeViewController(this);
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
 		this.stateController = new StateController(this);
@@ -117,8 +113,8 @@ public class MainController {
 	public CodeViewController getCodeViewerController() {
 		return this.codeViewController;
 	}
-	
-	public ConfigurationManager getConfigurationManager() {
-		return this.configurationManager;
+
+	public void initialiseCodeViewerController() {
+		this.codeViewController = new CodeViewController(this);
 	}
 }
