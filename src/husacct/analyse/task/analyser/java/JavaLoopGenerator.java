@@ -30,7 +30,8 @@ public class JavaLoopGenerator extends JavaGenerator {
     }
 
     private void walkForAndWhileAST(Tree tree) {
-        for (int i = 0; i < tree.getChildCount(); i++) {
+		int size = tree.getChildCount();
+        for (int i = 0; i < size; i++) {
             Tree child = tree.getChild(i);
             int treeType = child.getType();
             if (treeType == JavaParser.VAR_DECLARATION) {
@@ -53,13 +54,17 @@ public class JavaLoopGenerator extends JavaGenerator {
     }
 
     private void walkForEachAST(Tree tree) {
-        for (int childCount = 0; childCount < tree.getChildCount(); childCount++) {
-            Tree child = tree.getChild(childCount);
+    	Tree child;
+    	CommonTree myLoopTree;
+    	CommonTree typeIdentTree;
+    	int size = tree.getChildCount();
+        for (int childCount = 0; childCount < size; childCount++) {
+            child = tree.getChild(childCount);
             int treeType = child.getType();
             if (treeType == JavaParser.TYPE) {
                 if (tree.getType() != JavaParser.CAST_EXPR) {
-                    CommonTree myLoopTree = (CommonTree) child;
-                    CommonTree typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
+                    myLoopTree = (CommonTree) child;
+                    typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
                     if (typeIdentTree != null) {
 
                         String type = "";

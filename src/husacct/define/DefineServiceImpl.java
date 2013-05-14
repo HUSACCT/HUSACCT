@@ -20,6 +20,7 @@ import husacct.define.task.ApplicationController;
 import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
+import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.SoftwareUnitController;
 
 import java.util.ArrayList;
@@ -184,6 +185,12 @@ public class DefineServiceImpl extends ObservableService implements IDefineServi
 	@Override
 	public void isReanalyzed() {
 		JtreeController.instance().setLoadState(false);
+		
+	}
+
+	@Override
+	public void analyze() {
+		JtreeStateEngine.instance().analyze();
 		
 	}
 }

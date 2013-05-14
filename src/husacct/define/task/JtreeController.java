@@ -1,38 +1,33 @@
 package husacct.define.task;
 
 
-import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.integral_type_return;
+
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
-import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
-import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.SoftwareUnitRegExDefinition;
+
+
+
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 
-public class JtreeController {
-private  AnalyzedModuleTree tree;
-private static JtreeController instance;	
-private AnalyzedModuleTree resultTree;
-private ModuleTree moduleTree;
-private AnalyzedModuleTree editTree;
-private JtreeStateEngine order = new JtreeStateEngine();
-	private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
+	public class JtreeController {
+	private  AnalyzedModuleTree tree;
+	private static JtreeController instance;	
+	private AnalyzedModuleTree resultTree;
+	private ModuleTree moduleTree;
+	private AnalyzedModuleTree editTree;
+    private  Map<Long,LinkedHashMap<String,AbstractCombinedComponent>> moduleRegistry = new LinkedHashMap<Long,LinkedHashMap<String,AbstractCombinedComponent>>();
 	private  Map<String,AbstractCombinedComponent> regixRegistry =new LinkedHashMap<String,AbstractCombinedComponent>()  ;
 	private  boolean isLoaded=false;
 
@@ -135,16 +130,11 @@ private JtreeStateEngine order = new JtreeStateEngine();
 		return tree;
 	}
 
-	//moet naar het tree object ^_^
-	public void registerTreeRemoval(long moduleId, SoftwareUnitDefinition unit) {
+	
 
 
 
-	}
-
-
-
-	public AnalyzedModuleComponent GetRootOfModel ()
+	public AnalyzedModuleComponent getRootOfModel ()
 	{
 
 		return (AnalyzedModuleComponent)instance.getTree().getModel().getRoot();
@@ -163,34 +153,18 @@ private JtreeStateEngine order = new JtreeStateEngine();
 
 	}
 
-	public void additemgetResultTree(AnalyzedModuleComponent anal) 
+	public void additemgetResultTree(AnalyzedModuleComponent analyzedModule) 
 	{
-anal.freeze();
-AnalyzedModuleComponent temp= (AnalyzedModuleComponent)resultTree.getModel().getRoot();
-temp.freeze();
-temp.addChild(anal);
 
-resultTree.setModel(new CombinedModuleTreeModel(temp));
+		analyzedModule.freeze();
+		AnalyzedModuleComponent rootOfResultTree = (AnalyzedModuleComponent)resultTree.getModel().getRoot();
+		rootOfResultTree.freeze();
+		rootOfResultTree.addChild(analyzedModule);
+		resultTree.setModel(new CombinedModuleTreeModel(rootOfResultTree));
 
 
 
 }
-//in future impl
-public static void registerResultRemovalspiiii() {
-
-	TreeSelectionModel modulepath = instance.moduleTree.getSelectionModel();
-	TreePath selectedmodule= modulepath.getSelectionPath();
-	long moduleId = ((AbstractDefineComponent)selectedmodule.getLastPathComponent()).getModuleId();
-	TreeSelectionModel paths = instance.resultTree.getSelectionModel();
-	SoftwareUnitController softwareUnitController  = new SoftwareUnitController(moduleId);
-	for (TreePath path : paths.getSelectionPaths()){
-		AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-		
-			softwareUnitController.save(selectedComponent);
-	
-}
-}
-
 public ModuleTree getModuleTree() {
 	
 	return moduleTree;
@@ -203,18 +177,16 @@ public void setModuleTree(ModuleTree moduleTree) {
  public RegexComponent registerRegix(String regExName) {
 	
 	 RegexComponent regixwrapper = new RegexComponent(); 
-	 
-	TreePath[] paths = instance.resultTree.getSelectionPaths();
-	for (TreePath treePath : paths) {
+	 TreePath[] paths = instance.resultTree.getSelectionPaths();
+	 for (TreePath treePath : paths) {
 		
 		regixwrapper.addChild((AnalyzedModuleComponent)treePath.getLastPathComponent());
-	
 	}
 	regixwrapper.setName(regExName);
 	regixwrapper.setType("regex");
 	regixwrapper.setUniqueName(regExName);
 	regixwrapper.setVisibility("public");
-	 instance.regixRegistry.put(regExName,regixwrapper);
+	instance.regixRegistry.put(regExName,regixwrapper);
 	return regixwrapper;
 }
 
@@ -222,9 +194,6 @@ public AnalyzedModuleTree getRegixTree(String editingRegEx) {
 	
 	RegexComponent  result = new RegexComponent();
 	result.setWrapper((AnalyzedModuleComponent) instance.regixRegistry.get(editingRegEx));
-	
-	System.out.println(result.getUniqueName());
-	
 	editTree = new AnalyzedModuleTree(result.getWrapper());
 	
 	return editTree;
@@ -244,7 +213,7 @@ public  void restoreRegexWrapper(String name) {
 }
 
 public AbstractCombinedComponent getMappedunits() {
-	// TODO Auto-generated method stub
+	
 	return (AbstractCombinedComponent) instance.getTree().getModel().getRoot();
 }
 

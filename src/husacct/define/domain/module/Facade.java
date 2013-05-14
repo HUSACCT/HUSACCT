@@ -5,7 +5,7 @@ public class Facade extends Module {
 	
 	public Facade()
 	{
-		super();
+		this("", "");
 		super.type = "Facade";
 		
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import husacct.analyse.domain.IModelQueryService;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 public class FamixQueryServiceImpl implements IModelQueryService {
 
@@ -101,7 +102,7 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     }
     
     @Override
-	public String[] getExternalSystems(){
+	public ExternalSystemDTO[] getExternalSystems(){
 		return theModel.getExternalSystems();
 	}
 }

@@ -18,6 +18,7 @@ import husacct.validate.task.TaskServiceImpl;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Collections;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -191,7 +192,12 @@ public final class ValidateServiceImpl extends ObservableService implements
 
 	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
-		return domain.getDefaultRuleTypeOfModule(type);
+		RuleTypeDTO[] result= {};
+		
+		result=domain.getDefaultRuleTypeOfModule(type);
+		
+		
+		return  result;
 	}
 
 	@Override
