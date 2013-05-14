@@ -6,6 +6,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.UserInputListener;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -17,8 +18,11 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -228,12 +232,13 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		showExternalSystems = new JButton();
 		showExternalSystems.setSize(50, menuItemMaxHeight);
 		setButtonIcon(showExternalSystems, "dependenciesHide");
-		showExternalSystems.addActionListener(addActionListener(new ActionListener() {
+		showExternalSystems.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DrawingView.showExternalSystems();
+				showExternalSystems();
 			}
 		});
+		add(showExternalSystems);
 	}
 
 	public void setOptionsDialogAction(ActionListener listener) {
@@ -454,6 +459,17 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	public void setZoomSlider(double zoomFactor) {
 		int value = (int) (zoomFactor * 100);
 		zoomSlider.setValue(value);
+	}
+	
+	public void showExternalSystems(){
+		String[] columnNames ={"External systems"};
+		Object[][] externalSystems = {{"test"}, {"test1"}};
+			
+		final JTable externalSystemsTable = new JTable(externalSystems, columnNames);
+		JScrollPane scrollPane = new JScrollPane(externalSystemsTable);		
+		scrollPane.setPreferredSize(new Dimension(450, 200));
+							
+		JOptionPane.showMessageDialog(this, scrollPane, "Externals systems", JOptionPane.PLAIN_MESSAGE);
 	}
 
 }

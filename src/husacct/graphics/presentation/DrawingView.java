@@ -4,6 +4,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.util.UserInputListener;
 
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -17,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.*;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
@@ -254,18 +254,5 @@ public class DrawingView extends DefaultDrawingView {
 		BaseFigure[] retVal = new BaseFigure[collection.size()];
 		retVal = collection.toArray(retVal);
 		return retVal;
-	}
-	
-	public void showExternalSystems(){
-		String[] columnNames ={"External systems"};
-		Object[] externalSystems = this.analyseService.getExternalSystems();
-			
-		final JTable externalSystemsTable = new JTable(data, columnNames);
-		
-		externalSystemsTable.setFont(new Font("Sans-Serif", Font.PLAIN, 10));
-		JScrollPane scrollPane = new JScrollPane(externalSystemsTable);		
-		scrollPane.setPreferredSize(new Dimension(450, 200));
-							
-		JOptionPane.showMessageDialog(parent, scrollPane, "Externals systems", JOptionPane.PLAIN_MESSAGE);
 	}
 }
