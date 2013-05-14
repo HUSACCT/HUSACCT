@@ -18,6 +18,7 @@ import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.FigureConnectorStrategy;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
+import husacct.graphics.task.layout.NoLayoutStrategy;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.FigureMap;
@@ -560,6 +561,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		case LAYERED_LAYOUT:
 			this.layoutStrategy = new LayeredLayoutStrategy(this.drawing);
 			break;
+		case NO_LAYOUT:
+			this.layoutStrategy = new NoLayoutStrategy();
 		default:
 			this.layoutStrategy = new BasicLayoutStrategy(this.drawing);
 			break;
