@@ -23,7 +23,7 @@ public class AnalyseMenu extends JMenu{
 	private JMenuItem analyseNowItem;
 	private JMenuItem analysedArchitectureDiagramItem;
 	private JMenuItem analysedApplicationOverviewItem;
-	private JMenuItem analysisHistory;
+	private JMenuItem analysisHistoryItem;
 	private JMenuItem exportDependenciesItem;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -52,7 +52,7 @@ public class AnalyseMenu extends JMenu{
 		analysedArchitectureDiagramItem.setAccelerator(KeyStroke.getKeyStroke('A', KeyEvent.CTRL_DOWN_MASK));
 		analysedArchitectureDiagramItem.setMnemonic(getMnemonicKeycode("AnalysedArchitectureDiagramMnemonic"));
 		
-		analysisHistory = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
+		analysisHistoryItem = new JMenuItem(localeService.getTranslatedString("AnalysisHistory"));
 		
 		exportDependenciesItem = new JMenuItem(localeService.getTranslatedString("ExportDependencies"));
 		exportDependenciesItem.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_DOWN_MASK));
@@ -62,7 +62,7 @@ public class AnalyseMenu extends JMenu{
 		this.add(analyseNowItem);
 		this.add(analysedApplicationOverviewItem);
 		this.add(analysedArchitectureDiagramItem);
-		this.add(analysisHistory);
+		this.add(analysisHistoryItem);
 		this.add(exportDependenciesItem);
 	}
 	
@@ -91,7 +91,7 @@ public class AnalyseMenu extends JMenu{
 			}
 		});
 		
-		analysisHistory.addActionListener(new ActionListener(){
+		analysisHistoryItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getLogController().showApplicationAnalysisHistoryOverview();
 			}
@@ -109,10 +109,12 @@ public class AnalyseMenu extends JMenu{
 				analyseNowItem.setEnabled(false);
 				analysedArchitectureDiagramItem.setEnabled(false);
 				analysedApplicationOverviewItem.setEnabled(false);
+				analysisHistoryItem.setEnabled(false);
 				exportDependenciesItem.setEnabled(false);
 				
 				if(states.contains(States.OPENED)){
 					setApplicationPropertiesItem.setEnabled(true);
+					analysisHistoryItem.setEnabled(true);
 				}
 				if(states.contains(States.APPSET) && (!states.contains(States.VALIDATING))){
 					analyseNowItem.setEnabled(true);
@@ -121,6 +123,7 @@ public class AnalyseMenu extends JMenu{
 					analysedArchitectureDiagramItem.setEnabled(true);
 					analysedApplicationOverviewItem.setEnabled(true);
 					exportDependenciesItem.setEnabled(true);
+					analysisHistoryItem.setEnabled(true);
 				}
 			}
 		});

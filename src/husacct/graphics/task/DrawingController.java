@@ -400,6 +400,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 			java.util.Collections.addAll(figures,
 					selection.toArray(new BaseFigure[selection.size()]));
 
+			for (BaseFigure f : figures) {
+				f.isContext(false); // minimising potential side effects
+			}
+
 			this.drawingView.selectAll();
 			List<BaseFigure> allFigures = Arrays.asList(this.drawingView
 					.getSelectedFigures().toArray(new BaseFigure[0]));
