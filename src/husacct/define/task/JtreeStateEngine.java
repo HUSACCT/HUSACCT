@@ -96,9 +96,12 @@ public class JtreeStateEngine {
 						restoreflushRegix(key, unitTobeRestored, mainTree);
 
 					} else {
+					   System.out.println(" restore flush : "+unitTobeRestored.getUniqueName()+" isremoved="+unitTobeRestored.isRemoved());
 						if (unitTobeRestored.isRemoved()) {
 							WarningMessageService.getInstance()
 									.addCodeLevelWarning(key, unitTobeRestored);
+						}else{
+							unitTobeRestored.freeze();
 						}
 					}
 
@@ -120,6 +123,7 @@ public class JtreeStateEngine {
 			if (unitTobeRestored.isRemoved()) {
 				WarningMessageService.getInstance().addCodeLevelWarning(id,
 						child);
+				unitTobeRestored.freeze();
 			}
 		}
 	}
@@ -231,7 +235,8 @@ public class JtreeStateEngine {
 	public void analyze() {
 		SoftwareUnitController controller = new SoftwareUnitController(-1);
 		if (JtreeController.instance().isLoaded()) {
-			AnalyzedModuleComponent rootComponent = JtreeController.instance().getRootOfModel();
+			AnalyzedModuleComponent rootComponent = controller
+					.getSoftwareUnitTreeComponents();
 			JtreeStateEngine.instance().compareNewData(rootComponent);
 			//JtreeController.instance().getTree().setModel( new CombinedModuleTreeModel(rootComponent));
 			
