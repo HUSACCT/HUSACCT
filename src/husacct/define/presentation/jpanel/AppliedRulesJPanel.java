@@ -26,9 +26,12 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, IServiceListener {
@@ -37,6 +40,10 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	
 	private JTableAppliedRule appliedRulesTable;
 	private JScrollPane appliedRulesPane;
+	private JPopupMenu popupMenu = new JPopupMenu();
+	private JMenuItem addRuleItem = new JMenuItem();
+	private JMenuItem editRuleItem= new JMenuItem();
+	private JMenuItem removeRuleItem = new JMenuItem();
 	
 	private JButton addRuleButton;
 	private JButton editRuleButton;
@@ -56,6 +63,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rules")));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
+		createPopupMenu();
 		setButtonEnableState();
 		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 	}
@@ -64,10 +72,20 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		appliedRulesPane = new JScrollPane();
 		appliedRulesTable = new JTableAppliedRule();
 		appliedRulesTable.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent e){
-				if (e.getClickCount()==2){
+			public void mousePressed(MouseEvent event) {
+				createPopup(event);
+				setButtonEnableState();				
+			}
+			public void mouseClicked(MouseEvent event) {
+				createPopup(event);
+				setButtonEnableState();			
+				if (event.getClickCount()==2){
 					editRule();
 				}
+			}
+			public void mouseEntered(MouseEvent event) {
+				createPopup(event);
+				setButtonEnableState();
 			}
 		});
 		appliedRulesPane.setViewportView(appliedRulesTable);
@@ -105,16 +123,40 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		return buttonPanelLayout;
 	}
 	
+	private void createPopup(MouseEvent event){
+		if(SwingUtilities.isRightMouseButton(event)){
+			int row = appliedRulesTable.rowAtPoint(event.getPoint());
+			int column = appliedRulesTable.columnAtPoint(event.getPoint());
+			if(!appliedRulesTable.isRowSelected(row)){
+				appliedRulesTable.changeSelection(row, column, false, false);
+			}
+			popupMenu.show(event.getComponent(), event.getX(), event.getY());			
+		}
+	}
+	
+	private void createPopupMenu(){
+		this.addRuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		this.addRuleItem.addActionListener(this);
+		this.editRuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
+		this.editRuleItem.addActionListener(this);
+		this.removeRuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
+		this.removeRuleItem.addActionListener(this);
+		
+		popupMenu.add(addRuleItem);
+		popupMenu.add(editRuleItem);
+		popupMenu.add(removeRuleItem);
+	}
+	
 	/**
 	 * Handling ActionPerformed
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.addRuleButton) {
+		if (action.getSource() == this.addRuleButton || action.getSource() == this.addRuleItem) {
 			this.addRule();
-		} else if (action.getSource() == this.editRuleButton) {
+		} else if (action.getSource() == this.editRuleButton || action.getSource() == this.editRuleItem) {
 			this.editRule();
-		} else if (action.getSource() == this.removeRuleButton) {
+		} else if (action.getSource() == this.removeRuleButton || action.getSource() == this.removeRuleItem) {
 			this.removeRule();
 		}
 	}
@@ -223,21 +265,44 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 	private void setButtonEnableState() {
 		if (DefinitionController.getInstance().getSelectedModuleId() == -1){
 			disableButtons();
-		} else {
+		}else if(appliedRulesTable.getSelectedRowCount() == 0 || getSelectedRow() == -1){
+			enableAddDisableEditRemoveButtons();
+		}else {
 			enableButtons();
 		}
 	}
 	
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
+		addRuleItem.setEnabled(true); 
+		
 		editRuleButton.setEnabled(true);
+		editRuleItem.setEnabled(true);
+		
 		removeRuleButton.setEnabled(true);
+		removeRuleItem.setEnabled(true);
 	}
 
 	private void disableButtons() {
 		addRuleButton.setEnabled(false);
+		addRuleItem.setEnabled(false);
+		
 		editRuleButton.setEnabled(false);
+		editRuleItem.setEnabled(false);
+		
 		removeRuleButton.setEnabled(false);
+		removeRuleItem.setEnabled(false);
+	}
+	
+	private void enableAddDisableEditRemoveButtons(){
+		addRuleButton.setEnabled(true);
+		addRuleItem.setEnabled(true);
+		
+		editRuleButton.setEnabled(false);
+		editRuleItem.setEnabled(false);
+		
+		removeRuleButton.setEnabled(false);
+		removeRuleItem.setEnabled(false);
 	}
 	
 	public TableModel getModel() {

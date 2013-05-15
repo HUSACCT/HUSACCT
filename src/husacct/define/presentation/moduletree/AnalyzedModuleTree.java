@@ -130,6 +130,7 @@ public class AnalyzedModuleTree extends JTree {
 				}
 			}
 
+
 		}
 		JtreeController.instance().registerTreeRemoval(id, softwareunit);
 		JtreeStateEngine.instance().registerSate(id, softwareunit);
