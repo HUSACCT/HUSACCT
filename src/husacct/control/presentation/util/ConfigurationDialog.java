@@ -38,7 +38,7 @@ public class ConfigurationDialog extends JDialog {
 	//TODO remove code after demonstration 14-05-2013
 	private JButton showError = new JButton("Show Violations");
 	
-	private HashMap<String, JPanel> configPanelMap = new HashMap<String, JPanel>();
+	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<String, ConfigPanel>();
 	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
@@ -80,7 +80,6 @@ public class ConfigurationDialog extends JDialog {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		for(final IConfigurable config : configurableServices) {
 			listModel.addElement(config.getConfigurationName());
-			configPanelMap.put(config.getConfigurationName(), config.getConfigurationPanel());
 		}
 		list = new JList<String>(listModel);
 		list.setSelectedIndex(0);
@@ -102,11 +101,8 @@ public class ConfigurationDialog extends JDialog {
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				for(JPanel panel : configPanelMap.values()) {
-					if(panel instanceof ConfigPanel) {
-						ConfigPanel configPanel = (ConfigPanel)panel;
-						configPanel.SaveSettings();
-					}
+				for(ConfigPanel configPanel : configPanelMap.values()) {
+					configPanel.SaveSettings();
 				}
 				ServiceProvider.getInstance().getControlService().saveConfig();
 			}	
@@ -116,11 +112,8 @@ public class ConfigurationDialog extends JDialog {
 		reset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				for(JPanel panel : configPanelMap.values()) {
-					if(panel instanceof ConfigPanel) {
-						ConfigPanel configPanel = (ConfigPanel)panel;
-						configPanel.ResetSettings();
-					}
+				for(ConfigPanel configPanel : configPanelMap.values()) {
+					configPanel.ResetSettings();
 				}
 			}	
 		});
@@ -171,6 +164,11 @@ public class ConfigurationDialog extends JDialog {
 		
 		if(ServiceProvider.getInstance().getGraphicsService() instanceof IConfigurable){
 			configurableServices.add((IConfigurable) ServiceProvider.getInstance().getGraphicsService());
+		}
+		for(final IConfigurable config : configurableServices) {
+			if(config.getConfigurationPanel() instanceof ConfigPanel) {
+				configPanelMap.put(config.getConfigurationName(), (ConfigPanel)config.getConfigurationPanel());
+			}
 		}
 	}
 	

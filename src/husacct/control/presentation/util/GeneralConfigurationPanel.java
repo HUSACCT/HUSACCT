@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
-public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
+public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	final JTextField location = new JTextField();
 	final JFileChooser fileChooser = new JFileChooser();
@@ -74,9 +74,7 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 			
 			languageItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//setLanguage();
-					setLocaleFromString(locale.getLanguage());
-					
+					setLanguage(locale.getLanguage());					
 				}
 			});
 			
@@ -177,8 +175,8 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 		} catch (NonExistingSettingException e) { }
 	}
 	
-	private void setLanguage(String nwlanguage) {
-		language = nwlanguage;
+	private void setLanguage(String language) {
+		this.language = language;
 	}
 	
 	@Override
@@ -186,7 +184,7 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
 		controlService.setProperty("IDELocation", location.getText());
 		
-		//setLocaleFromString(language);
+		setLocaleFromString(language);
 	}
 
 	@Override

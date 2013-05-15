@@ -43,6 +43,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ViewController viewController;
 	private ConfigurationManager configurationManager;
 	private CodeViewController codeViewController;
+	private GeneralConfigurationPanel generalConfigurationPanel;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -200,7 +201,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public JPanel getConfigurationPanel() {
-		return new GeneralConfigurationPanel();
+		if (generalConfigurationPanel == null)
+			generalConfigurationPanel = new GeneralConfigurationPanel();
+		return generalConfigurationPanel;
 	}
 
 	@Override

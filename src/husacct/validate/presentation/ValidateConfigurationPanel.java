@@ -29,7 +29,7 @@ import javax.swing.ListSelectionModel;
 import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
-public final class ValidateConfigurationPanel extends JPanel implements ConfigPanel {
+public final class ValidateConfigurationPanel extends ConfigPanel {
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private static Logger logger = Logger.getLogger(ValidateConfigurationPanel.class);
