@@ -38,6 +38,8 @@ public interface IControlService extends IObservableService{
 	void setPropertyFromInteger(String key, int value);
 	void setPropertyFromBoolean(String key, boolean value);
 	
+	void saveConfig();
+	
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors);
 	
 }

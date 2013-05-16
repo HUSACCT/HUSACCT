@@ -22,6 +22,7 @@ import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -42,6 +43,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ViewController viewController;
 	private ConfigurationManager configurationManager;
 	private CodeViewController codeViewController;
+	private GeneralConfigurationPanel generalConfigurationPanel;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -50,7 +52,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
-		configurationManager = mainController.getConfigurationManager();
+		configurationManager = new ConfigurationManager();
+		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
 	}
 	
@@ -73,6 +76,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		Element data = new Element("workspace");
 		Workspace workspace = workspaceController.getCurrentWorkspace();
 		data.setAttribute("name", workspace.getName());
+		data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
+
 		return data;
 	}
 	
@@ -80,7 +85,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
+			String languageName = workspaceData.getAttributeValue("language");
 			workspaceController.createWorkspace(workspaceName);
+			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
 		}
@@ -194,6 +201,13 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public JPanel getConfigurationPanel() {
-		return new GeneralConfigurationPanel();
+		if (generalConfigurationPanel == null)
+			generalConfigurationPanel = new GeneralConfigurationPanel();
+		return generalConfigurationPanel;
+	}
+
+	@Override
+	public void saveConfig() {
+		configurationManager.storeProperties();
 	}
 }

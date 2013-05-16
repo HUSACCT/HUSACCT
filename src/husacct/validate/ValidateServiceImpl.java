@@ -35,6 +35,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	private final DomainServiceImpl domain;
 	private final ReportServiceImpl report;
 	private final TaskServiceImpl task;
+	private final ValidateConfigurationPanel validateConfigurationPanel;
 	private boolean validationExecuted;
 
 	public ValidateServiceImpl() {
@@ -44,6 +45,7 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		this.report = new ReportServiceImpl(task);
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
+		this.validateConfigurationPanel = new ValidateConfigurationPanel(task);
 	}
 
 	/**
@@ -202,6 +204,6 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 
 	@Override
 	public JPanel getConfigurationPanel() {
-		return new ValidateConfigurationPanel(task);
+		return validateConfigurationPanel;
 	}
 }

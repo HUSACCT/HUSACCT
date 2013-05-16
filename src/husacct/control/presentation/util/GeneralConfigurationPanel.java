@@ -29,13 +29,13 @@ import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
-public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
+public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	final JTextField location = new JTextField();
 	final JFileChooser fileChooser = new JFileChooser();
 	
-	private JCheckBox enable;
-	private JButton selectFile;
+	private JCheckBox enable = new JCheckBox();
+	private JButton selectFile = new JButton();
 	private JPanel languagePanel, codeviewerPanel;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -45,6 +45,8 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	
 	private ButtonGroup languageGroup = new ButtonGroup();
 	private GridBagConstraints constraints = new GridBagConstraints();
+	
+	private String language;
 	
 	public GeneralConfigurationPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -59,20 +61,20 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	}
 
 	private void initialiseLanguage() {
-		
+		language = localeService.getLocale().getLanguage();
 		languagePanel = new JPanel();
 
 		for(final Locale locale : localeService.getAvailableLocales()){
 			String language = locale.getDisplayLanguage();
 			final JRadioButton languageItem = new JRadioButton(language);
-			
+			languageItem.setName(locale.getLanguage());
 			if(language.equals(localeService.getLocale().getDisplayLanguage())){
 				languageItem.setSelected(true);
 			}
 			
 			languageItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					setLocaleFromString(locale.getLanguage());
+					setLanguage(locale.getLanguage());					
 				}
 			});
 			
@@ -94,8 +96,6 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 	
 	private void initialiseCodeviewer() {
 		codeviewerPanel = new JPanel(new GridBagLayout());
-		enable = new JCheckBox();
-		selectFile = new JButton();
 
 		enable.addItemListener(new ItemListener() {
 			@Override
@@ -171,14 +171,20 @@ public class GeneralConfigurationPanel extends JPanel implements ConfigPanel {
 			location.setEnabled(external);
 			selectFile.setEnabled(external);
 
-			location.setText(controlService.getProperty("CodeviewerLocation"));
+			location.setText(controlService.getProperty("IDELocation"));
 		} catch (NonExistingSettingException e) { }
+	}
+	
+	private void setLanguage(String language) {
+		this.language = language;
 	}
 	
 	@Override
 	public void SaveSettings() {
 		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
-		controlService.setProperty("CodeviewerLocation", location.getText());
+		controlService.setProperty("IDELocation", location.getText());
+		
+		setLocaleFromString(language);
 	}
 
 	@Override
