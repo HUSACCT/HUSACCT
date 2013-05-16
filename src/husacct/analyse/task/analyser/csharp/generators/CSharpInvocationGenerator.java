@@ -47,6 +47,15 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		
 		findMethodInvocation(treeNode);
 	}
+	
+	public void generatePropertyOrFieldInvocToDomain(CommonTree tree,String belongsToMethod) {
+		invocationNameFound = false;
+        allIdents = true;
+        this.belongsToMethod = belongsToMethod;	
+        
+        createPropertyOrFieldInvocationDetails(tree);
+        createPropertyOrFieldInvocationDomainObject();
+	}
 
 	private void findMethodInvocation(CommonTree tree) {
 		if (tree.getChildCount() <= 0){
@@ -69,8 +78,16 @@ public class CSharpInvocationGenerator extends CSharpGenerator {
 		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 	}
 
-	public void generatePropertyOrFieldInvocToDomain(CommonTree tree,String belongsToMethod) {
-		// TODO Auto-generated method stub	
+	private void createPropertyOrFieldInvocationDetails(CommonTree child) {
+		CommonTree toChild = (CommonTree)child.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
+		this.to = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.invocationName = child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.lineNumber = toChild.getLine();
+	}
+
+	private void createPropertyOrFieldInvocationDomainObject() {
+		modelService.createPropertyOrFieldInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
 	}
 
 	private void findConstructorInvocation(CommonTree tree) {
