@@ -83,7 +83,7 @@ public class ValidateTest {
 	@Test
 	public void getCategories() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertArrayEquals(new String[]{ "contentsofamodule", "legalityofdependency" }, getCategoryStringArray(dtos));
+		assertArrayEquals(new String[]{ "propertyruletypes", "relationruletypes" }, getCategoryStringArray(dtos));
 	}
 
 	@Test
