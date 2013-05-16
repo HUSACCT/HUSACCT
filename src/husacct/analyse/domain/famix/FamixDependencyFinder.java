@@ -133,9 +133,9 @@ class FamixDependencyFinder extends FamixFinder {
                 }
             }
         }
-        if (!this.from.equals("")) {
-        	result.addAll(this.findIndirectDependencies(result));
-        }
+        //if (!this.from.equals("")) {
+        result.addAll(this.findIndirectDependencies(result));
+        //}
         return result;
     }
 
