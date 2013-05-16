@@ -24,42 +24,69 @@ public class FacadeConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
-
+		this.violations = new ArrayList<Violation>();	
 		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
+		List<Mapping> mappingsFrom = mappings.getMappingFrom();
 		List<Violation> allViolations = new ArrayList<Violation>();
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
-
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
-			List<String> facadeDependenciesTo = new ArrayList<String>();
-			for (DependencyDTO dependency : dependencies) {
-				if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-					boolean fromDependencyKnown = false;
-					for (DependencyDTO innerDependency : dependencies) {
-						if(dependency.to.equals(innerDependency.from)) {
-							fromDependencyKnown = true;
-						}
-					}
-					
-					if(fromDependencyKnown) {
-						facadeDependenciesTo.add(dependency.to);
-					}
-				}
-			}
-			
-			for (DependencyDTO dependency : dependencies) {
-				if(!dependency.from.equals(classPathFrom.getPhysicalPath())) {
-					for(String facadeDependencyTo: facadeDependenciesTo) {
-						if(facadeDependencyTo.equals(dependency.to)) {
-							Violation violation = createViolation(rootRule, classPathFrom, new Mapping(dependency.to, new String[0]), dependency, configuration); 
-							allViolations.add(violation);
-						}
-					}
-				}
-			}
-		}	
+		List<String> facadeDependenciesTo = new ArrayList<String>();
 		
+		Mapping componentMapping = null;
+		Mapping facadeMapping = null;
+		
+		for (Mapping mappingFrom : mappingsFrom) {
+			if(mappingFrom.getLogicalPathType().toLowerCase().equals("component")) {
+				if(componentMapping == null) {
+					componentMapping = mappingFrom;
+				}
+				else {
+					if(mappingFrom.getPhysicalPath().length() < componentMapping.getPhysicalPath().length()) {
+						componentMapping = mappingFrom;
+					}
+				}
+			}
+			else if(mappingFrom.getLogicalPathType().toLowerCase().equals("facade")) {
+				facadeMapping = mappingFrom;
+			}
+		}
+		
+		//TIJDELIJK
+		System.out.println("================\n- COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - " 
+		+ componentMapping.getLogicalPathType() + "\n- FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - " 
+		+ facadeMapping.getLogicalPathType());
+		//EINDE
+		
+		for (DependencyDTO dependency : dependencies) {
+			if (dependency.to.contains(componentMapping.getPhysicalPath())) {
+				if (!dependency.from.contains(componentMapping.getPhysicalPath())) {
+					if (!dependency.to.contains(facadeMapping.getPhysicalPath())) {
+						System.out.println("<1> " + dependency.from + " <2> " + dependency.to);
+						
+						Violation violation = createViolation(rootRule, facadeMapping, new Mapping(dependency.to, new String[0]), dependency, configuration); 
+						allViolations.add(violation);
+					}
+				}
+			}
+		}
+		
+		for (DependencyDTO dependency : dependencies) {
+			if(dependency.from.equals(facadeMapping.getPhysicalPath())) {
+				facadeDependenciesTo.add(dependency.to);
+			}
+		}
+		
+
+		for (DependencyDTO dependency : dependencies) {
+			if(!dependency.from.equals(facadeMapping.getPhysicalPath())) {
+				for(String facadeDependencyTo: facadeDependenciesTo) {
+					if(facadeDependencyTo.equals(dependency.to)) {
+						Violation violation = createViolation(rootRule, facadeMapping, new Mapping(dependency.to, new String[0]), dependency, configuration); 
+						allViolations.add(violation);
+					}
+				}
+			}
+		}
+
 		for(Violation violation: allViolations) {
 			if(violations.size() == 0) {
 				violations.add(violation);
@@ -72,13 +99,13 @@ public class FacadeConventionRule extends RuleType {
 						newViolation = false;
 					}
 				}
-				
+
 				if(newViolation) {
 					violations.add(violation);
 				}
 			}
 		}
-		
+
 		return violations;
 	}
 }
