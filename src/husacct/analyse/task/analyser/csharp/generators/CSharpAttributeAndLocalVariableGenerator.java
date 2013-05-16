@@ -157,7 +157,11 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		}else{
 			if(child.getChildCount() > 1){
 				for(int i = 0; i<child.getChildCount(); i++){
-					foundType += child.getChild(i).toString() + ".";
+					if(i >= 1){
+						foundType += child.getChild(i).getChild(0).toString() + ".";
+					}else{
+						foundType += child.getChild(0).toString() + ".";
+					}
 				}
 			}
 			else foundType = declareTypeNode.getText();
