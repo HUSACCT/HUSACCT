@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigPanel;
 
@@ -31,26 +30,27 @@ public class ConfigurationDialog extends JDialog {
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private ArrayList<IConfigurable> configurableServices = new ArrayList<IConfigurable>();
-	private ArrayList<ConfigPanel> configPanels = new ArrayList<ConfigPanel>();
 	
 	private JButton save = new JButton(), reset = new JButton(), cancel = new JButton();
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
 	private JList<String> list;
 	
-	private HashMap<String, JPanel> configPanelMap = new HashMap<String, JPanel>();
+	//TODO remove code after demonstration 14-05-2013
+	private JButton showError = new JButton("Show Violations");
 	
+	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<String, ConfigPanel>();
 	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
 		this.setLayout(new BorderLayout());
 		initiliaze();
 		setComponentText();
+		
 		this.setVisible(true);
 	}
 	
 	public void initiliaze() {
 		getConfigurableServices();
-		getConfigPanels();
 		mainPanel = configurableServices.get(0).getConfigurationPanel();
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(800, 600));
@@ -80,7 +80,6 @@ public class ConfigurationDialog extends JDialog {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		for(final IConfigurable config : configurableServices) {
 			listModel.addElement(config.getConfigurationName());
-			configPanelMap.put(config.getConfigurationName(), config.getConfigurationPanel());
 		}
 		list = new JList<String>(listModel);
 		list.setSelectedIndex(0);
@@ -102,9 +101,10 @@ public class ConfigurationDialog extends JDialog {
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				for(ConfigPanel panel : configPanels) {
-					panel.SaveSettings();
+				for(ConfigPanel configPanel : configPanelMap.values()) {
+					configPanel.SaveSettings();
 				}
+				ServiceProvider.getInstance().getControlService().saveConfig();
 			}	
 		});
 		
@@ -112,12 +112,35 @@ public class ConfigurationDialog extends JDialog {
 		reset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				for(ConfigPanel panel : configPanels) {
-					panel.ResetSettings();
+				for(ConfigPanel configPanel : configPanelMap.values()) {
+					configPanel.ResetSettings();
 				}
 			}	
 		});
+		
+		final ConfigurationDialog configurationDialog = this;
 		buttonPanel.add(cancel);
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				configurationDialog.setVisible(false);
+			}	
+		});
+		
+		//TODO remove code after demonstration 14-05-2013
+		buttonPanel.add(showError);
+		showError.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				ArrayList<Integer> errorLines = new ArrayList<Integer>();
+				errorLines.add(4);
+				errorLines.add(12);
+				errorLines.add(27);
+				errorLines.add(51);
+				errorLines.add(79);
+				ServiceProvider.getInstance().getControlService().displayErrorsInFile("D:\\Dropbox\\Hogeschool Utrecht\\General GUI & Control\\Construction 2\\AnalyseServiceImpl.java", errorLines);
+			}	
+		});
 		
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -142,12 +165,10 @@ public class ConfigurationDialog extends JDialog {
 		if(ServiceProvider.getInstance().getGraphicsService() instanceof IConfigurable){
 			configurableServices.add((IConfigurable) ServiceProvider.getInstance().getGraphicsService());
 		}
-	}
-	
-	public void getConfigPanels() {
-		for(IConfigurable config : configurableServices) {
-			if(config.getConfigurationPanel() instanceof ConfigPanel)
-				configPanels.add((ConfigPanel) config.getConfigurationPanel());
+		for(final IConfigurable config : configurableServices) {
+			if(config.getConfigurationPanel() instanceof ConfigPanel) {
+				configPanelMap.put(config.getConfigurationName(), (ConfigPanel)config.getConfigurationPanel());
+			}
 		}
 	}
 	
