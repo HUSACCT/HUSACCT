@@ -68,6 +68,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 		CommonTree identifierTree = (CommonTree) currentTree.getFirstChildWithType(CSharpParser.IDENTIFIER);
 		if(identifierTree != null){
 			this.name = identifierTree.getText();
+			this.lineNumber = identifierTree.getLine();
 		}
 		this.packageAndClassName = packageAndClassName;
 		treeNodeTypeFilter(treeNode);
