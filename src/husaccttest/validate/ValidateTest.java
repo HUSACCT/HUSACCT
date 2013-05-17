@@ -32,7 +32,7 @@ public class ValidateTest {
 		define = ServiceProvider.getInstance().getDefineService();
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
-			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "C#", "1.0", 
+			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "java", "1.0", 
 				"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
@@ -92,13 +92,37 @@ public class ValidateTest {
 		final String[] currentRuletypes = new String[]{ "InterfaceConvention", "NamingConvention", "FacadeConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall" };
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
+
+	@Test
+	public void getAndPrintAllowedRuleTypesOfModules() {
+		try {
+		String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+		for (String module : modules) {
+			RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
+			System.out.print("\nallowedRuleTypes for " + module + " : ");
+			for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
+				System.out.print(allowedRuleType.getKey() + ", ");
+			}
+		}
+		} catch(Exception exc) {
+			exc.printStackTrace();
+		}
+	}
 	
 	@Test
-	public void checkFacadeRuleConventionSupport() {
-		DefineTestSoftwareArchitectureFacade facadeArchitecture = new DefineTestSoftwareArchitectureFacade();
-		
-		boolean facadeViolations = facadeArchitecture.checkFacadeConventionRule();
-		assertTrue(facadeViolations);
+	public void getAndPrintDefaultRuleTypesOfModules() {
+		try {
+		String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+		for (String module : modules) {
+			RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
+			System.out.print("\ndefaultRuleTypes for " + module + " : ");
+			for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
+				System.out.print(defaultRuleType.getKey() + ", ");
+			}
+		}
+		} catch(Exception exc) {
+			exc.printStackTrace();
+		}
 	}
 
 	@Test

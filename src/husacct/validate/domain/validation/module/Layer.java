@@ -12,19 +12,21 @@ public class Layer extends AbstractModule {
 
 	@Override
 	public List<RuleType> initDefaultModuleRuleTypes() {
-		List<RuleType> moduleRuleTypes = new ArrayList<RuleType>();
+		List<RuleType> defaultRuleTypes = new ArrayList<RuleType>();
 
 		for (RuleType ruleType : ruleTypes) {
 			if (ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL) ||
-					ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
-				moduleRuleTypes.add(ruleType);
+				ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
+				defaultRuleTypes.add(ruleType);
 			}
 		}
-		return moduleRuleTypes;
+		return defaultRuleTypes;
 	}
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-		return ruleTypes;
+		List<RuleType> allowedRuleTypes = ruleTypes;
+		
+		return allowedRuleTypes;
 	}
 }

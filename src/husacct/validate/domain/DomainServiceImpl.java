@@ -88,6 +88,7 @@ public class DomainServiceImpl {
 
 	public RuleTypeDTO[] getDefaultRuleTypeOfModule(String moduleType) {
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
+		
 		modulefactory = new ModuleFactory();
 		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
 		List<RuleType> moduleRuleTypes = module.getDefaultModuleruleTypes();
@@ -97,6 +98,7 @@ public class DomainServiceImpl {
 	
 	public RuleTypeDTO[] getAllowedRuleTypeOfModule(String moduleType) {
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
+		
 		modulefactory = new ModuleFactory();
 		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
 		List<RuleType> moduleRuleTypes = module.getAllowedModuleruleTypes();

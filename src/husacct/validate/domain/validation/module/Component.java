@@ -7,6 +7,7 @@ import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
 public class Component extends AbstractModule {
+	protected List<RuleType> ruletypes;
 
 	public Component(List<RuleType> ruleTypes) {
 		super(ruleTypes);
@@ -26,14 +27,14 @@ public class Component extends AbstractModule {
 
 	@Override
 	public List<RuleType> initAllowedModuleRuleTypes() {
-		List<RuleType> allowedRules = ruleTypes;
+		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
 
 		for (RuleType ruleType : ruleTypes) {
 			if (ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL) ||
-					ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
-				allowedRules.remove(ruleType);
+				ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
+				allowedRuleTypes.add(ruleType);
 			}
 		}
-		return allowedRules;
+		return allowedRuleTypes;
 	}
 }
