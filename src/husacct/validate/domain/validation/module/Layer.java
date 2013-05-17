@@ -25,8 +25,13 @@ public class Layer extends AbstractModule {
 
     @Override
     public List<RuleType> initAllowedModuleRuleTypes() {
-	List<RuleType> allowedRuleTypes = ruleTypes;
+	List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
 
+	for (RuleType ruleType : ruleTypes) {
+	    if (!ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
+		allowedRuleTypes.add(ruleType);
+	    }
+	}
 	return allowedRuleTypes;
     }
 }
