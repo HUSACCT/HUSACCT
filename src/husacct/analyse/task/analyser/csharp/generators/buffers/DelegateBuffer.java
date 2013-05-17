@@ -1,13 +1,22 @@
 package husacct.analyse.task.analyser.csharp.generators.buffers;
 
+import java.util.List;
+
 import org.antlr.runtime.tree.CommonTree;
 
 public class DelegateBuffer {
 	public final String packageAndClassName;
-	public CommonTree delegateTree;
+	public String returntype;
+	public String name;
+	public List<String> argtypes;
 	
-	public DelegateBuffer(String packageAndClassName, CommonTree delegateTree) {
+	public DelegateBuffer(String packageAndClassName) {
 		this.packageAndClassName  = packageAndClassName;
-		this.delegateTree = delegateTree;
 	}
+	
+	public DelegateBuffer writeToFamix(CommonTree tree) {
+		//TODO: write delegate to famix as abstract method.
+		return this;
+	}
+	
 }

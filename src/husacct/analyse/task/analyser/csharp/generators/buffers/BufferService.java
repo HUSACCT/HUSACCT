@@ -1,13 +1,14 @@
 package husacct.analyse.task.analyser.csharp.generators.buffers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.tree.CommonTree;
 
 public class BufferService {
 	private static BufferService instance;
-	public List<LambdaBuffer> lambdabuffer;
-	public List<DelegateBuffer> delegatebuffer;
+	public List<LambdaBuffer> lambdabuffers = new ArrayList<>();
+	public List<DelegateBuffer> delegatebuffers = new ArrayList<>();
 	
 	private BufferService() {}
 	
@@ -18,10 +19,10 @@ public class BufferService {
 	}
 	
 	public void addLambda(String packageAndClassname, String methodname, CommonTree lambdaTree) {
-		lambdabuffer.add(new LambdaBuffer(packageAndClassname, methodname, lambdaTree));
+		lambdabuffers.add(new LambdaBuffer(packageAndClassname, methodname, lambdaTree));
 	}
 	
 	public void addDelegate(String packageAndClassname, CommonTree delegateTree) {
-		delegatebuffer.add(new DelegateBuffer(packageAndClassname, delegateTree));
+		delegatebuffers.add(new DelegateBuffer(packageAndClassname).writeToFamix(delegateTree));
 	}
 }
