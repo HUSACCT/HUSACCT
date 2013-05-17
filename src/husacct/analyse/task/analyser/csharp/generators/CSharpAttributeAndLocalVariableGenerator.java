@@ -1,6 +1,5 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.task.analyser.csharp.generators.CSharpInvocationGenerator;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 
 
@@ -75,7 +74,6 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	private void treeNodeTypeFilter(Tree treeNode) {
-
 		for(int i = 0; i < treeNode.getChildCount(); i++){
 			Tree child = treeNode.getChild(i);
 			switch(child.getType()){
@@ -87,66 +85,11 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 			case CSharpParser.TYPE:
 				setDeclareType(child);		
 				break;
-			case CSharpParser.VARIABLE_DECLARATOR:
-				setAttributeName(child);	
-				break;
-			case CSharpParser.CONSTRUCTOR_DECL:
-				//wrong packageAndClassName
-				CSharpInvocationGenerator cSharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-				cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);
-				break;
-			case CSharpParser.EXPRESSION_STATEMENT:
-				//wrong packageAndClassName
-				cSharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-				cSharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) treeNode, belongsToMethod);				
-				if (child.getChild(0).getType() == CSharpParser.METHOD_INVOCATION){
-					cSharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) child.getChild(0), belongsToMethod);
-				}
-				else if (child.getChild(0).getType() == CSharpParser.DOT){
-					cSharpInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
-				}
-				break;
 			}
-
-
 			treeNodeTypeFilter(child);
 		}
 	}
 
-
-
-
-	private void setAttributeName(Tree tree) {
-		for(int i = 0; i < tree.getChildCount(); i++){
-			Tree child = tree.getChild(i);
-			int treeType = child.getType();
-			if(treeType == CSharpParser.IDENTIFIER){
-				this.name = child.getText();
-				this.lineNumber = tree.getLine();
-				break;
-			} 		
-			setAttributeName(child);
-		}
-
-	}
-
-	public ArrayList<String> generateMethodReturnType(Tree returnTypeTree, String packageAndClassName){
-		this.packageAndClassName = packageAndClassName;
-
-		if(returnTypeTree.getType() == CSharpParser.TYPE){
-			setDeclareType(returnTypeTree);
-		}
-
-		treeNodeTypeFilter(returnTypeTree);
-
-		ArrayList<String> returnDeclareTypes = new ArrayList<String>();
-		returnDeclareTypes.add(this.declareType);
-		for(String s : this.declareTypes){
-			returnDeclareTypes.add(s);
-		}
-
-		return returnDeclareTypes;
-	}
 
 	private void setDeclareType(Tree typeNode) {
 		Tree child = typeNode.getChild(0);
