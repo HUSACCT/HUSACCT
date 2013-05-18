@@ -267,31 +267,31 @@ public class DefinitionController extends Observable implements Observer {
 		}
 	}
 
-	public void removeRule(long appliedRuleId) {
-		logger.info("Removing rule " + appliedRuleId);
+	public void removeRules(List<Long> appliedRuleIds) {
+		boolean mandatory = false;
 		try {
-			long moduleId = getSelectedModuleId();
-			AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-
-			if (defaultRuleService.isMandatoryRule(rule))
-			{
-				UiDialogs.errorDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultRule"));
-			}
-			else {
-				if (moduleId != -1 && appliedRuleId != -1L) {
+			if(getSelectedModuleId() != -1L && !appliedRuleIds.isEmpty()){
+				for(long appliedRuleID : appliedRuleIds){
+					AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleID);
+					if (defaultRuleService.isMandatoryRule(rule)){
+						mandatory = true;
+						UiDialogs.errorDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultRule") + "\n- " +rule.getRuleType());
+						break;
+					}
+				}
+				if(!mandatory){
 					boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveAppliedRule"), "Remove?");
-					if (confirm) {
-						// Remove the software unit
-						JPanelStatus.getInstance("Removing applied rule").start();
-						this.appliedRuleService.removeAppliedRule(appliedRuleId);
-
-						// Update the applied rules table
+					if(confirm){
+						for(long appliedRuleID : appliedRuleIds){
+							logger.info("Removing rule " + appliedRuleID);
+							JPanelStatus.getInstance("Removing applied rule").start();
+							this.appliedRuleService.removeAppliedRule(appliedRuleID);
+						}
 						this.notifyObservers();
 					}
 				}
 			}
-		} 
-		catch (Exception e) {
+		}catch (Exception e) {
 			logger.error("removeRule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
