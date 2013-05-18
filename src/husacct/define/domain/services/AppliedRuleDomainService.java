@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AppliedRuleDomainService {
 
-	public AppliedRule[] getAppliedRules(boolean enabledRulesOnly) {
+	public AppliedRule[] getAppliedRules(boolean enabledRulesOnly) { // name of boolean is misleading 
 		ArrayList<AppliedRule> ruleList;
 		if (enabledRulesOnly) {
 			ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
@@ -18,6 +18,7 @@ public class AppliedRuleDomainService {
 			ruleList = SoftwareArchitecture.getInstance().getEnabledAppliedRules();
 		}
 		AppliedRule[] rules = new AppliedRule[ruleList.size()]; ruleList.toArray(rules);
+	
 		return rules;
 	}
 	
@@ -42,7 +43,9 @@ public class AppliedRuleDomainService {
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
 
 		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom, moduleTo, enabled);
-		
+		if(isDuplicate(rule)){
+			return -1;
+		}		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		
@@ -118,5 +121,19 @@ public class AppliedRuleDomainService {
 	public AppliedRule getAppliedRuleById(long appliedRuleId) {
 		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
 		return rule;
+	}
+	
+	
+	/** 
+	 * Domain checks
+	 */
+	public boolean isDuplicate(AppliedRule rule){
+		AppliedRule[] appliedRules = getAppliedRules(true);
+		for(AppliedRule appliedRule : appliedRules){
+			if(rule.equals(appliedRule)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

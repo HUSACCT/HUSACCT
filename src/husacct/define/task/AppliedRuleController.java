@@ -236,6 +236,7 @@ public class AppliedRuleController extends PopUpController {
 	/*
 	 * Saving
 	 */
+	
 	public boolean save(HashMap<String, Object> ruleDetails){
 		
 		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
@@ -251,8 +252,11 @@ public class AppliedRuleController extends PopUpController {
 		
 		try {
 			if (this.getAction().equals(PopUpController.ACTION_NEW)) {
-				if (!this.checkRuleConventions(moduleFrom, moduleTo, ruleTypeKey)){ return false;}//Does not comply with ruleconventions
 				this.currentAppliedRuleId = this.appliedRuleService.addAppliedRule(ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
+				if(this.currentAppliedRuleId == -1){
+					logger.info("An identical rule already exists");
+					return false;
+				}
 			} else if (getAction().equals(PopUpController.ACTION_EDIT)) {
 				this.appliedRuleService.updateAppliedRule(currentAppliedRuleId, ruleTypeKey, description, dependencies, regex, moduleFrom, moduleTo, isEnabled);
 				this.appliedRuleExceptionService.removeAllAppliedRuleExceptions(currentAppliedRuleId);
@@ -354,14 +358,21 @@ public class AppliedRuleController extends PopUpController {
 		return moduleToReturn;
 	}
 	
-	private boolean checkRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
+	//TODO: these booleans need to go to domain
+	public boolean conformRuleConventions(HashMap<String, Object> ruleDetails) {
+		Module moduleFrom = assignToCorrectModule(ruleDetails.get("moduleFromId"));
+		Module moduleTo = assignToCorrectModule(ruleDetails.get("moduleToId"));
+		String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
+		return conformRuleConventions(moduleFrom, moduleTo, ruleTypeKey);
+	}	
+	private boolean conformRuleConventions(Module moduleFrom, Module moduleTo, String ruleTypeKey) {
 		RuleConventionsChecker conventionsChecker = new RuleConventionsChecker(moduleFrom, moduleTo, ruleTypeKey);
-		if(!conventionsChecker.checkRuleConventions()) {
+		if(conventionsChecker.checkRuleConventions()) {
+			return true;
+		} else {
 			String errorMessage = conventionsChecker.getErrorMessage();
 			JOptionPane.showMessageDialog(jframeAppliedRule, errorMessage, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConventionError"), JOptionPane.ERROR_MESSAGE);
 			return false;
-		} else {
-			return true;
 		}
 	}
 

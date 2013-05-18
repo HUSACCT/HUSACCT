@@ -180,5 +180,14 @@ public class AppliedRule {
 	public void setModuleFrom(Module moduleFrom) {
 		this.moduleFrom = moduleFrom;
 	}
-
+	
+	/**
+	 * Overrides
+	 */
+	public boolean equals(Object obj){
+		AppliedRule doppelganger = (AppliedRule) obj;
+		if(this.ruleType == doppelganger.ruleType && this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom)
+			return true;
+		return false;
+	}
 }
