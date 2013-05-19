@@ -6,19 +6,13 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.Module;
-
-import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
-import husacct.define.task.JtreeStateEngine;
-import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-
-import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing.Validation;
 
 public class SoftwareUnitDefinitionDomainService {
 	
@@ -148,7 +142,7 @@ public class SoftwareUnitDefinitionDomainService {
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
 		WarningMessageService.getInstance().processModule(module);
-		//quikfix
+		//quickfix
 		try{
 			JtreeController.instance().registerTreeRestore(moduleId, softwareUnit);
 		}catch(NullPointerException exe){}
@@ -158,7 +152,7 @@ public class SoftwareUnitDefinitionDomainService {
 	public void removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
 		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		/*
-		 * treed problemen
+		 * thread problemen
 		 * */
 		//SoftwareUnitRegExDefinition unit = getRegExSoftwareUnitByName(softwareUnit);
 	
