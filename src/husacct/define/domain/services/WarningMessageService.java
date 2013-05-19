@@ -29,14 +29,14 @@ public class WarningMessageService extends Observable implements Observer {
 	public void addWarning(WarningMessage warning )
 	{
 		warnings.add(warning);
-		notifyAllObservers(this,"warningadded");
+		notifyAllObservers(this,"warning added");
 	}
 
 	public void removeWarning(WarningMessage warning)
 	{
 		int index = warnings.indexOf(warning);
 		warnings.remove(index);
-		notifyAllObservers(this,"warningremoved");
+		notifyAllObservers(this,"warning removed");
 	}
 
 	public ArrayList<WarningMessage> getWarningMessages(){
@@ -45,6 +45,10 @@ public class WarningMessageService extends Observable implements Observer {
 
 	public boolean hasWarnings() {
 		return (warnings.size()>0);
+	}
+	
+	public int warningsCount(){
+		return warnings.size();
 	}
 
 	// TODO: This is a very bad function, needs revising
@@ -112,14 +116,14 @@ public class WarningMessageService extends Observable implements Observer {
 				}
 			}
 		}
-		notifyAllObservers(this, "removedModule");
+		notifyAllObservers(this, "removed Module");
 	}
 
 
 	private void createModuleWarning(Module module) {
 		ImplementationLevelWarning warning = new ImplementationLevelWarning(module);
 		warnings.add(warning);
-		notifyAllObservers(this,"createModule");
+		notifyAllObservers(this,"create Module");
 	}
 
 	public void addObserver(Observer o)

@@ -31,11 +31,11 @@ import javax.swing.WindowConstants;
 public class ApplicationJInternalFrame extends JInternalFrame implements ILocaleChangeListener,Observer,IServiceListener {
 
 	private static final long serialVersionUID = 6858870868564931134L;
-	private JPanel overviewPanel;
+	private JPanel overviewPanel, buttonPanel;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private HelpDialog helpDialog;
 	private WarningDialog warningDialog;
-	private JButton warningButton;
+	private JButton warningButton = new JButton();
 
 	public ApplicationJInternalFrame() {
 		super();
@@ -91,8 +91,8 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 		});
 
 		ImageIcon warningSign = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.ICON_VALIDATE)));
-		JButton warningButton = new JButton(warningSign);
-		warningButton.setText(localeService.getTranslatedString("Warnings"));
+		warningButton = new JButton(warningSign);
+		setWarningButtonText();
 		warningButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -104,7 +104,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 			}
 		});
 
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		buttonPanel.add(questionButton);
 		buttonPanel.add(warningButton);
 
@@ -117,14 +117,18 @@ public class ApplicationJInternalFrame extends JInternalFrame implements ILocale
 		this.overviewPanel.removeAll();
 		this.overviewPanel.add(jp);
 	}
+	
+	public void setWarningButtonText(){
+		if(WarningMessageService.getInstance().hasWarnings()){
+			warningButton.setText(localeService.getTranslatedString("Warnings")+" ("+WarningMessageService.getInstance().warningsCount()+")");
+		}else{
+			warningButton.setText("");
+		}
+	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (WarningMessageService.getInstance().hasWarnings()) {
-			warningButton.setText(localeService.getTranslatedString("Warnings"));
-		}else{
-			warningButton.setText(" ");
-		}
+		setWarningButtonText();
 	}
 
 	@Override
