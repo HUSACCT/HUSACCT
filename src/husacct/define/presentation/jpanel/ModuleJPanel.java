@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
 import husacct.define.presentation.jdialog.AddModuleValuesJDialog;
-import husacct.define.presentation.jdialog.WarningTableJDialog;
+import husacct.define.presentation.jdialog.WarningDialog;
 import husacct.define.presentation.jpopup.ModuletreeContextMenu;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.presentation.utils.UiDialogs;
