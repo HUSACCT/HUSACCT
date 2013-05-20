@@ -187,11 +187,17 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 		domain.checkConformance(appliedRules);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
 		return domain.getDefaultRuleTypeOfModule(type);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type) {
 		return domain.getAllowedRuleTypeOfModule(type);
