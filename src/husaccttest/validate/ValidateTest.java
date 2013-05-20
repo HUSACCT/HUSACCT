@@ -33,11 +33,11 @@ public class ValidateTest {
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
 			projects.add(new ProjectDTO("TEST_PROJECT_" + (counter)+1, new ArrayList<String>(), "java", "1.0", 
-				"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
+					"DESCRIPTION PROJECT " + counter, new ArrayList<AnalysedModuleDTO>()));
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 		validate = ServiceProvider.getInstance().getValidateService();
-		
+
 	}
 
 	@Test
@@ -66,17 +66,17 @@ public class ValidateTest {
 		String fileExtension = validate.getExportExtentions()[0];
 		String fileRelativePath = "src/husaccttest/validate/exportTestReports." + fileExtension;
 		boolean testResult = false;
-		
+
 		File exportTestFile = new File(fileRelativePath); 
 		validate.exportViolations(exportTestFile, fileExtension);
-		
+
 		File checkExportFile = new File(fileRelativePath); 
-		
+
 		if(checkExportFile.exists()) {
 			checkExportFile.delete();
 			testResult = true;
 		}
-		
+
 		assertTrue(testResult);
 	}
 
@@ -96,30 +96,30 @@ public class ValidateTest {
 	@Test
 	public void getAndPrintAllowedRuleTypesOfModules() {
 		try {
-		String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
-		for (String module : modules) {
-			RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
-			System.out.print("\nallowedRuleTypes for " + module + " : ");
-			for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
-				System.out.print(allowedRuleType.getKey() + ", ");
+			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+			for (String module : modules) {
+				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
+				System.out.print("\nallowedRuleTypes for " + module + " : ");
+				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
+					System.out.print(allowedRuleType.getKey() + ", ");
+				}
 			}
-		}
 		} catch(Exception exc) {
 			exc.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void getAndPrintDefaultRuleTypesOfModules() {
 		try {
-		String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
-		for (String module : modules) {
-			RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
-			System.out.print("\ndefaultRuleTypes for " + module + " : ");
-			for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
-				System.out.print(defaultRuleType.getKey() + ", ");
+			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+			for (String module : modules) {
+				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
+				System.out.print("\ndefaultRuleTypes for " + module + " : ");
+				for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
+					System.out.print(defaultRuleType.getKey() + ", ");
+				}
 			}
-		}
 		} catch(Exception exc) {
 			exc.printStackTrace();
 		}
@@ -146,7 +146,7 @@ public class ValidateTest {
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		projects.add(new ProjectDTO("project", new ArrayList<String>(), "", "", "", new ArrayList<AnalysedModuleDTO>()));
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
-		
+
 		CategoryDTO[] dtos = validate.getCategories();
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
 		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
@@ -154,7 +154,7 @@ public class ValidateTest {
 
 	private String[] getCategoryStringArray(CategoryDTO[] dtos) {
 		ArrayList<String> categoryList = new ArrayList<String>();
-		
+
 		for (CategoryDTO dto : dtos) {
 			categoryList.add(dto.getKey());
 		}
@@ -163,7 +163,7 @@ public class ValidateTest {
 
 	private String[] getRuleTypesStringArray(CategoryDTO[] dtos) {
 		ArrayList<String> ruletypeList = new ArrayList<String>();
-		
+
 		for (CategoryDTO cDTO : dtos) {
 			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
 				ruletypeList.add(rDTO.getKey());
@@ -174,7 +174,7 @@ public class ValidateTest {
 
 	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, String ruleTypeKey) {
 		ArrayList<String> violationtypeList = new ArrayList<String>();
-		
+
 		for (CategoryDTO cDTO : dtos) {
 			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
 				if (rDTO.getKey().equals(ruleTypeKey)) {
@@ -199,13 +199,13 @@ public class ValidateTest {
 		return violationTypeList.toArray(new String[]{});
 	}
 
-//	@Test
+	//	@Test
 	/*
 	 * Not reliable testable with the current structure. 
 	 */
-//	public void isValidatedBeforeValidation() {
-//		assertFalse(validate.isValidated());
-//	}
+	//	public void isValidatedBeforeValidation() {
+	//		assertFalse(validate.isValidated());
+	//	}
 
 	@Test
 	public void getViolationsByLogicalPath() {
