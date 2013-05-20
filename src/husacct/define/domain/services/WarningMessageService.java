@@ -19,21 +19,15 @@ public class WarningMessageService extends Observable implements Observer {
 
 	public static WarningMessageService getInstance()
 	{
-		if(instance==null){
-			instance = new WarningMessageService();
-		}
-		return instance;
+		return (instance==null) ? instance = new WarningMessageService() : instance;
 	}
 
-
-	public void addWarning(WarningMessage warning )
-	{
+	public void addWarning(WarningMessage warning ){
 		warnings.add(warning);
 		notifyAllObservers(this,"warning added");
 	}
 
-	public void removeWarning(WarningMessage warning)
-	{
+	public void removeWarning(WarningMessage warning){
 		int index = warnings.indexOf(warning);
 		warnings.remove(index);
 		notifyAllObservers(this,"warning removed");
@@ -43,10 +37,10 @@ public class WarningMessageService extends Observable implements Observer {
 		return warnings;
 	}
 
-	public boolean hasWarnings() {
+	public boolean hasWarnings(){
 		return (warnings.size()>0);
 	}
-	
+
 	public int warningsCount(){
 		return warnings.size();
 	}
@@ -78,8 +72,7 @@ public class WarningMessageService extends Observable implements Observer {
 		return haswarning;
 	}
 
-	public boolean isCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek)
-	{
+	public boolean isCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek){
 		boolean haswarning = false;
 		for (WarningMessage message : warnings) {
 			if (message instanceof CodeLevelWarning) {
@@ -95,9 +88,8 @@ public class WarningMessageService extends Observable implements Observer {
 		return haswarning;
 	}
 
-	public void processModule(Module module)
-	{
-		if (module.isMapped()) {
+	public void processModule(Module module){
+		if (module.isMapped()){
 			chekIfImplementationWarningExist(module);
 		} else {
 			createModuleWarning(module);
@@ -126,8 +118,7 @@ public class WarningMessageService extends Observable implements Observer {
 		notifyAllObservers(this,"create Module");
 	}
 
-	public void addObserver(Observer o)
-	{
+	public void addObserver(Observer o){
 		observers.add(o);
 	}
 
