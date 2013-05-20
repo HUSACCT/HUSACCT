@@ -52,11 +52,11 @@ public class DefaultRuleDomainService {
 			returnhack.add(new RuleTypeDTO("IsNotAllowedToMakeBackCall", "A layer should not access other layers above",null,null));
         break;
 		case "Component": 
-			returnhack.add(new RuleTypeDTO("Visibility", "",null,null));
+			//returnhack.add(new RuleTypeDTO("VisibilityConvention", "",null,null));
 			returnhack.add(new RuleTypeDTO("FacadeConvention", "",null,null));
         break;
 		case "ExternalLibrary":
-			returnhack.add(new RuleTypeDTO("Visibility", "",null,null));
+			//returnhack.add(new RuleTypeDTO("VisibilityConvention", "",null,null));
 		}
 		
 		RuleTypeDTO[] _temp = new RuleTypeDTO[returnhack.size()];
