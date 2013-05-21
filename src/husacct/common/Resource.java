@@ -12,6 +12,7 @@ public class Resource {
 	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
+	public static final String CREDITS_PATH = RESOURCE_PATH +"credits/";
 	
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";

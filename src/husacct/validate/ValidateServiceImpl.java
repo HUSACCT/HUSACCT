@@ -6,26 +6,28 @@ import husacct.common.dto.RuleDTO;
 import husacct.common.dto.RuleTypeDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
 import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.presentation.GuiController;
+import husacct.validate.presentation.ValidateConfigurationPanel;
 import husacct.validate.task.ReportServiceImpl;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Collections;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 public final class ValidateServiceImpl extends ObservableService implements
-		IValidateService, ISaveable {
+		IValidateService, ISaveable, IConfigurable {
 
 	private final IDefineService defineService = ServiceProvider.getInstance()
 			.getDefineService();
@@ -35,6 +37,7 @@ public final class ValidateServiceImpl extends ObservableService implements
 	private final DomainServiceImpl domain;
 	private final ReportServiceImpl report;
 	private final TaskServiceImpl task;
+	private final ValidateConfigurationPanel validateConfigurationPanel;
 	private boolean validationExecuted;
 
 	public ValidateServiceImpl() {
@@ -44,6 +47,7 @@ public final class ValidateServiceImpl extends ObservableService implements
 		this.report = new ReportServiceImpl(task);
 		this.gui = new GuiController(task, configuration);
 		this.validationExecuted = false;
+		this.validateConfigurationPanel = new ValidateConfigurationPanel(task);
 	}
 
 	/**
@@ -200,5 +204,15 @@ public final class ValidateServiceImpl extends ObservableService implements
 	@Override
 	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type) {
 		return domain.getAllowedRuleTypeOfModule(type);
+	}
+
+	@Override
+	public String getConfigurationName() {
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigValidate");
+	}
+
+	@Override
+	public JPanel getConfigurationPanel() {
+		return validateConfigurationPanel;
 	}
 }
