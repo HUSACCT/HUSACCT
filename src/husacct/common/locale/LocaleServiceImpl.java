@@ -159,6 +159,7 @@ public class LocaleServiceImpl extends ObservableService implements ILocaleServi
 					result.add(entry);
 				}
 			}
+			jar.close();
 			return result.toArray(new String[result.size()]);
 		} 
 
