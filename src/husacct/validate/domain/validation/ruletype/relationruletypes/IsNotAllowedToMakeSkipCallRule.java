@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.ruletype.legalityofdependency;
+package husacct.validate.domain.validation.ruletype.relationruletypes;
 
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ModuleDTO;

@@ -26,11 +26,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public final class ValidateServiceImpl extends ObservableService implements
-		IValidateService, ISaveable, IConfigurable {
+public final class ValidateServiceImpl extends ObservableService implements IValidateService, ISaveable, IConfigurable {
 
-	private final IDefineService defineService = ServiceProvider.getInstance()
-			.getDefineService();
+	private final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private Logger logger = Logger.getLogger(ValidateServiceImpl.class);
 	private final GuiController gui;
 	private final ConfigurationServiceImpl configuration;
@@ -62,8 +60,7 @@ public final class ValidateServiceImpl extends ObservableService implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom,
-			String logicalpathTo) {
+	public ViolationDTO[] getViolationsByLogicalPath(String logicalpathFrom, String logicalpathTo) {
 		if (!validationExecuted) {
 			logger.debug("warning, method: getViolationsByLogicalPath executed but no validation is executed");
 		}
@@ -74,8 +71,7 @@ public final class ValidateServiceImpl extends ObservableService implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom,
-			String physicalpathTo) {
+	public ViolationDTO[] getViolationsByPhysicalPath(String physicalpathFrom, String physicalpathTo) {
 		if (!validationExecuted) {
 			logger.debug("warning, method: getViolationsByPhysicalPath executed but no validation is executed");
 		}
@@ -191,16 +187,17 @@ public final class ValidateServiceImpl extends ObservableService implements
 		domain.checkConformance(appliedRules);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type) {
-		RuleTypeDTO[] result= {};
-		
-		result=domain.getDefaultRuleTypeOfModule(type);
-		
-		
-		return  result;
+		return domain.getDefaultRuleTypeOfModule(type);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type) {
 		return domain.getAllowedRuleTypeOfModule(type);

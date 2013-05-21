@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.ruletype.legalityofdependency;
+package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -12,17 +12,16 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class IsAllowedToUseRule extends RuleType {
+public class VisibilityConventionExceptionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_NOT_ALLOWED);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
 
-	public IsAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
+	public VisibilityConventionExceptionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		// Return no violations because is allowed to use is always true
 		return Collections.emptyList();
 	}
 }
