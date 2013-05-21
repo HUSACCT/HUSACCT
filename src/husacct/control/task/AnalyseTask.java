@@ -11,10 +11,10 @@ import org.apache.log4j.Logger;
 
 public class AnalyseTask implements Runnable {
 
-	private Logger logger = Logger.getLogger(AnalyseTask.class);
+	private final Logger logger = Logger.getLogger(AnalyseTask.class);
 
-	private MainController mainController;
-	private ApplicationDTO applicationDTO;
+	private final MainController mainController;
+	private final ApplicationDTO applicationDTO;
 
 	public AnalyseTask(MainController mainController,
 			ApplicationDTO applicationDTO) {
@@ -28,19 +28,25 @@ public class AnalyseTask implements Runnable {
 		// InterruptedException is not yet implemented by analyse
 		// Therefore this thread can never be interrupted.
 		try {
-			mainController.getStateController().setAnalysing(true);
-			mainController.getStateController().setPreAnalysed(false);
+			this.mainController.getStateController().setAnalysing(true);
+			this.mainController.getStateController().setPreAnalysed(false);
 			Thread.sleep(1);
-			logger.debug("Analysing application");
+			this.logger.debug("Analysing application");
 			// ServiceProvider.getInstance().resetAnalyseService();
-			if (applicationDTO.projects.size() > 0) {
-			//	ServiceProvider.getInstance().getAnalyseService()
-			//			.analyseApplication(applicationDTO.projects.get(0));
-				mainController.getApplicationController().getCurrentLoader().setAmountOfProcesses(applicationDTO.projects.size());
-				for (int i = 0; i < applicationDTO.projects.size(); i++) {
-					
-					ProjectDTO currentProject = applicationDTO.projects.get(i);
-					mainController.getApplicationController().getCurrentLoader().setCurrentProcess(i);
+			if (this.applicationDTO.projects.size() > 0) {
+				// ServiceProvider.getInstance().getAnalyseService()
+				// .analyseApplication(applicationDTO.projects.get(0));
+				this.mainController
+						.getApplicationController()
+						.getCurrentLoader()
+						.setAmountOfProcesses(
+								this.applicationDTO.projects.size());
+				for (int i = 0; i < this.applicationDTO.projects.size(); i++) {
+
+					ProjectDTO currentProject = this.applicationDTO.projects
+							.get(i);
+					this.mainController.getApplicationController()
+							.getCurrentLoader().setCurrentProcess(i);
 
 					// Add analysed root modules to project
 					currentProject.analysedModules = new ArrayList<AnalysedModuleDTO>();
@@ -50,11 +56,12 @@ public class AnalyseTask implements Runnable {
 						currentProject.analysedModules.add(analysedModule);
 					}
 
-					ServiceProvider.getInstance().getAnalyseService().analyseApplication(currentProject);
-					
+					ServiceProvider.getInstance().getAnalyseService()
+							.analyseApplication(currentProject);
+
 					// Update project with analysedRootModules
-					applicationDTO.projects.remove(i);
-					applicationDTO.projects.add(i, currentProject);
+					this.applicationDTO.projects.remove(i);
+					this.applicationDTO.projects.add(i, currentProject);
 				}
 			}
 			
@@ -62,22 +69,19 @@ public class AnalyseTask implements Runnable {
 			
 			logger.debug("Analysing finished");
 			
-			//Logcontroller
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
-			//end logcontroller
 			
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
-			mainController.getStateController().setAnalysing(false);
+			this.mainController.getStateController().setAnalysing(false);
 			// ServiceProvider.getInstance().getDefineService().isReAnalyzed();
 		} catch (InterruptedException exception) {
-			logger.debug("RESETTING ANALYSE SERVICE");
+			this.logger.debug("RESETTING ANALYSE SERVICE");
 			ServiceProvider.getInstance().resetAnalyseService();
-			mainController.getStateController().setAnalysing(false);
+			this.mainController.getStateController().setAnalysing(false);
 
 		}
 	}
-
 }
