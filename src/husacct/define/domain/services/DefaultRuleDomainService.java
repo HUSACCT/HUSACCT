@@ -131,7 +131,7 @@ public class DefaultRuleDomainService {
 		AppliedRule facadeRule = getBaseRule();
 		facadeRule.setRuleType("FacadeConvention");
 		facadeRule.setDescription(facadeRule.getDescription()+"\n"+rule.getDescriptionKey());
-		facadeRule.setModuleTo(new Module());
+		facadeRule.setModuleTo(_module);
 
 		defaultRules.add(facadeRule);
 	}
@@ -141,7 +141,7 @@ public class DefaultRuleDomainService {
 		skipCallRule.setRuleType("IsNotAllowedToMakeSkipCall");
 		skipCallRule.setDescription(skipCallRule.getDescription()+"\n"+rule.getDescriptionKey());
 
-		skipCallRule.setModuleTo(new Module());
+		skipCallRule.setModuleTo(_module);
 		defaultRules.add(skipCallRule);
 	}
 
@@ -149,7 +149,7 @@ public class DefaultRuleDomainService {
 		AppliedRule backCallRule = getBaseRule();
 		backCallRule.setRuleType("IsNotAllowedToMakeBackCall");
 		backCallRule.setDescription(backCallRule.getDescription()+"\n"+rule.getDescriptionKey());
-		backCallRule.setModuleTo(new Module());
+		backCallRule.setModuleTo(_module);
 
 		defaultRules.add(backCallRule);
 	}
@@ -158,7 +158,7 @@ public class DefaultRuleDomainService {
 		AppliedRule visibilityRule = getBaseRule();
 		visibilityRule.setRuleType("Visibility");
 		visibilityRule.setDescription(visibilityRule.getDescription()+"\n"+rule.getDescriptionKey());
-		visibilityRule.setModuleTo(new Module());
+		visibilityRule.setModuleTo(_module);
 
 		defaultRules.add(visibilityRule);
 	}
