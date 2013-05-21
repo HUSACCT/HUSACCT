@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manuals>  	
+  <AboutDialog filename = "about.html" viewname = "About">  </AboutDialog>
+  <CreditsDialog filename = "credits.html" viewname = "Credits"></CreditsDialog>
+  <MainGui filename = "maingui.html" viewname = "General"></MainGui>
+  <CreateWorkspaceDialog filename="new.html" viewname= "New workspace"> </CreateWorkspaceDialog>
+</manuals>
