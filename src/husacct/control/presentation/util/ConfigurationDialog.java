@@ -6,6 +6,7 @@ import husacct.common.services.IConfigurable;
 import husacct.common.services.IServiceListener;
 import husacct.control.task.MainController;
 import husacct.control.task.configuration.ConfigPanel;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -104,7 +105,7 @@ public class ConfigurationDialog extends JDialog {
 				for(ConfigPanel configPanel : configPanelMap.values()) {
 					configPanel.SaveSettings();
 				}
-				ServiceProvider.getInstance().getControlService().saveConfig();
+				ConfigurationManager.storeProperties();
 			}	
 		});
 		

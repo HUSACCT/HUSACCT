@@ -3,9 +3,8 @@ package husacct.control.presentation.util;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
-import husacct.control.IControlService;
 import husacct.control.task.configuration.ConfigPanel;
-import husacct.control.task.configuration.NonExistingSettingException;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -39,7 +38,6 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	private JPanel languagePanel, codeviewerPanel;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	
 	private Logger logger = Logger.getLogger(GeneralConfigurationPanel.class);
 	
@@ -164,15 +162,13 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 
 	public void loadDefaults() {
 		boolean external = false;
-		try {
-			external = controlService.getPropertyAsBoolean("ExternalCodeviewer");
-		
-			enable.setSelected(external);
-			location.setEnabled(external);
-			selectFile.setEnabled(external);
+		external = ConfigurationManager.getPropertyAsBoolean("ExternalCodeviewer", "false");
+	
+		enable.setSelected(external);
+		location.setEnabled(external);
+		selectFile.setEnabled(external);
 
-			location.setText(controlService.getProperty("IDELocation"));
-		} catch (NonExistingSettingException e) { }
+		location.setText(ConfigurationManager.getProperty("IDELocation", ""));
 	}
 	
 	private void setLanguage(String language) {
@@ -181,8 +177,9 @@ public class GeneralConfigurationPanel extends ConfigPanel {
 	
 	@Override
 	public void SaveSettings() {
-		controlService.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
-		controlService.setProperty("IDELocation", location.getText());
+		ConfigurationManager.setPropertyFromBoolean("ExternalCodeviewer", enable.isSelected());
+		ConfigurationManager.setProperty("IDELocation", location.getText());
+		ConfigurationManager.setProperty("Language", language);
 		
 		setLocaleFromString(language);
 	}

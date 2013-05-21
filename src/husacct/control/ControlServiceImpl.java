@@ -16,8 +16,6 @@ import husacct.control.task.StateController;
 import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
-import husacct.control.task.configuration.ConfigurationManager;
-import husacct.control.task.configuration.NonExistingSettingException;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.util.ArrayList;
@@ -41,7 +39,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ApplicationController applicationController;
 	private StateController stateController;
 	private ViewController viewController;
-	private ConfigurationManager configurationManager;
 	private CodeViewController codeViewController;
 	private GeneralConfigurationPanel generalConfigurationPanel;
 	
@@ -52,7 +49,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
-		configurationManager = new ConfigurationManager();
 		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
 	}
@@ -158,36 +154,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public ApplicationDTO getApplicationDTO() {
 		return mainController.getWorkspaceController().getCurrentWorkspace().getApplicationData();
 	}
-
-	@Override
-	public String getProperty(String key) throws NonExistingSettingException {
-		return configurationManager.getProperty(key);
-	}
-
-	@Override
-	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
-		return configurationManager.getPropertyAsInteger(key);
-	}
-
-	@Override
-	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
-		return configurationManager.getPropertyAsBoolean(key);
-	}
-	
-	@Override
-	public void setProperty(String key, String value) {
-		configurationManager.setProperty(key, value);
-	}
-
-	@Override
-	public void setPropertyFromInteger(String key, int value) {
-		configurationManager.setPropertyFromInteger(key, value);
-	}
-
-	@Override
-	public void setPropertyFromBoolean(String key, boolean value) {
-		configurationManager.setPropertyFromBoolean(key, value);
-	}
 	
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
@@ -204,10 +170,5 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		if (generalConfigurationPanel == null)
 			generalConfigurationPanel = new GeneralConfigurationPanel();
 		return generalConfigurationPanel;
-	}
-
-	@Override
-	public void saveConfig() {
-		configurationManager.storeProperties();
 	}
 }

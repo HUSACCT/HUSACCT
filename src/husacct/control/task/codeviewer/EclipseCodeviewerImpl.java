@@ -1,29 +1,20 @@
 package husacct.control.task.codeviewer;
 
-import husacct.ServiceProvider;
 import husacct.common.OSDetector;
-import husacct.control.IControlService;
-import husacct.control.task.configuration.NonExistingSettingException;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class EclipseCodeviewerImpl implements CodeviewerService {
 	
-	private IControlService controlService;
 	
-	public EclipseCodeviewerImpl () {
-		controlService = ServiceProvider.getInstance().getControlService();
-	}
+	public EclipseCodeviewerImpl () {}
 	
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
 		String location = "";
-		try {
-			location = controlService.getProperty("IDELocation");
-		} catch (NonExistingSettingException nese) {
-			nese.printStackTrace();
-		}
+		location = ConfigurationManager.getProperty("IDELocation", "");
 		switch(OSDetector.getOS()) {
 		case LINUX:
 			break;
