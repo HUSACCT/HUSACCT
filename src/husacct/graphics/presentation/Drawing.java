@@ -28,9 +28,9 @@ import org.jhotdraw.draw.io.ImageOutputFormat;
 
 public class Drawing extends QuadTreeDrawing {
 	private static final long serialVersionUID = 3212318618672284266L;
-	private ArrayList<BaseFigure> hiddenFigures;
-	private Logger logger = Logger.getLogger(Drawing.class);
-	private FileManager filemanager = new FileManager();
+	private final ArrayList<BaseFigure> hiddenFigures;
+	private final Logger logger = Logger.getLogger(Drawing.class);
+	private final FileManager filemanager = new FileManager();
 	private File selectedFile = filemanager.getFile();
 	private FigureMap figureMap;
 
@@ -64,20 +64,18 @@ public class Drawing extends QuadTreeDrawing {
 
 	public RelationFigure[] getShownLines() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
-		for (Figure jhotdrawfigure : getChildren()) {
+		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (figure.isLine())
-				moduleFigures.add(figure);
+			if (figure.isLine()) moduleFigures.add(figure);
 		}
 		return moduleFigures.toArray(new RelationFigure[] {});
 	}
 
 	public BaseFigure[] getShownModules() {
 		ArrayList<BaseFigure> moduleFigures = new ArrayList<BaseFigure>();
-		for (Figure jhotdrawfigure : getChildren()) {
+		for (Figure jhotdrawfigure : this.getChildren()) {
 			BaseFigure figure = (BaseFigure) jhotdrawfigure;
-			if (!figure.isLine() && !figure.isParent())
-				moduleFigures.add(figure);
+			if (!figure.isLine() && !figure.isParent()) moduleFigures.add(figure);
 		}
 		return moduleFigures.toArray(new BaseFigure[] {});
 	}
@@ -87,7 +85,7 @@ public class Drawing extends QuadTreeDrawing {
 	}
 
 	public void hideSelectedFigures(Set<Figure> selection) {
-		List<Figure> figures = getChildren();
+		List<Figure> figures = this.getChildren();
 		for (Figure figure : figures) {
 			BaseFigure bf = (BaseFigure) figure;
 			if (!bf.isLine()) {
@@ -121,21 +119,18 @@ public class Drawing extends QuadTreeDrawing {
 			Figure figure1end = figure1.getEndConnector().getOwner();
 
 			for (RelationFigure figure2 : figures) {
-				if (figure1 == figure2)
-					continue;
+				if (figure1 == figure2) continue;
 
 				Figure figure2start = figure2.getStartConnector().getOwner();
 				Figure figure2end = figure2.getEndConnector().getOwner();
 
-				if (!(figure1start == figure2start && figure1end == figure2end || figure1start == figure2end
-						&& figure1end == figure2start))
-					continue;
+				if (figure1start == figure2start && figure1end == figure2end
+						|| figure1start == figure2end
+						&& figure1end == figure2start) break;
 
 				Set<RelationFigure> addTo;
-				if (overlappingFigureSets.containsKey(figure1))
-					addTo = overlappingFigureSets.get(figure1);
-				else if (overlappingFigureSets.containsKey(figure2))
-					addTo = overlappingFigureSets.get(figure2);
+				if (overlappingFigureSets.containsKey(figure1)) addTo = overlappingFigureSets.get(figure1);
+				else if (overlappingFigureSets.containsKey(figure2)) addTo = overlappingFigureSets.get(figure2);
 				else {
 					addTo = new HashSet<RelationFigure>();
 					overlappingFigureSets.put(figure1, addTo);
@@ -201,12 +196,9 @@ public class Drawing extends QuadTreeDrawing {
 		int maxAmount = figureMap.getMaxAll();
 		for (RelationFigure figure : figures) {
 			double weight = (double) figure.getAmount() / maxAmount;
-			if (weight < 0.25)
-				figure.setLineThickness(1);
-			else if (weight < 0.50)
-				figure.setLineThickness(2);
-			else if (weight < 0.75)
-				figure.setLineThickness(4);
+			if (weight < 0.25) figure.setLineThickness(1);
+			else if (weight < 0.50) figure.setLineThickness(2);
+			else if (weight < 0.75) figure.setLineThickness(4);
 			else
 				figure.setLineThickness(5);
 		}
@@ -215,8 +207,8 @@ public class Drawing extends QuadTreeDrawing {
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
 		updateLineFigureThicknesses(figures);
-		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(),
-				figures);
+		seperateOverlappingLineFigures(
+				new ConnectorLineSeparationStrategy(), figures);
 	}
 
 	public void updateLines() {

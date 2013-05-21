@@ -97,7 +97,6 @@ public class Node {
 		return connectedTo.contains(n);
 	}
 
-	// TODO: Update to make use of the parent nodes
 	public boolean isCyclicChain(Node n) {
 		Vector<Node> open = new Vector<Node>();
 		Vector<Node> closed = new Vector<Node>();
