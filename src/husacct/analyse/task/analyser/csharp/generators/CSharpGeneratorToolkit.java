@@ -29,12 +29,13 @@ public class CSharpGeneratorToolkit {
     }
 
     /**
-     * Concatenates two strings and inserds a dot when parentName != null
+     * Concatenates two strings and inserts a dot when parentName != null
      * @param parentName
      * @param name
      */
     public static String getUniqueName(String parentName, String name) {
-        return parentName + potentiallyInsertDot(parentName) + name;
+		String result = parentName + potentiallyInsertDot(parentName) + name;
+        return result.endsWith(".") ? result.substring(0, result.length() -1) : result;
     }
 
     public static String belongsToClass(String namespaces, String classes) {

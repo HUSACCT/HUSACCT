@@ -9,20 +9,20 @@ public class BufferService {
 	private static BufferService instance;
 	public List<LambdaBuffer> lambdabuffers = new ArrayList<>();
 	public List<DelegateBuffer> delegatebuffers = new ArrayList<>();
-	
+
 	private BufferService() {}
-	
+
 	public static BufferService getInstance() {
 		if (instance == null)
 			instance = new BufferService();
 		return instance;
 	}
-	
+
 	public void addLambda(String packageAndClassname, String methodname, CommonTree lambdaTree) {
 		lambdabuffers.add(new LambdaBuffer(packageAndClassname, methodname, lambdaTree));
 	}
-	
+
 	public void addDelegate(String packageAndClassname, CommonTree delegateTree) {
-		delegatebuffers.add(new DelegateBuffer(packageAndClassname).writeToFamix(delegateTree));
+		delegatebuffers.add(new DelegateBuffer(packageAndClassname).store(delegateTree));
 	}
 }

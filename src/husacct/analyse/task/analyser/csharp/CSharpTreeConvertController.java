@@ -21,6 +21,7 @@ public class CSharpTreeConvertController {
     CSharpInheritanceGenerator csInheritanceGenerator;
     CSharpAttributeAndLocalVariableGenerator csAttributeGenerator;
     CSharpMethodGeneratorController csMethodeGenerator;
+	CSharpLamdaGenerator csLamdaGenerator;
     List<CommonTree> usings = new ArrayList<>();
     Stack<String> namespaceStack = new Stack<>();
     Stack<String> classNameStack = new Stack<>();
@@ -33,6 +34,7 @@ public class CSharpTreeConvertController {
         csInheritanceGenerator = new CSharpInheritanceGenerator();
         csAttributeGenerator = new CSharpAttributeAndLocalVariableGenerator();
         csMethodeGenerator = new CSharpMethodGeneratorController();
+		csLamdaGenerator = new CSharpLamdaGenerator();
     }
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
@@ -46,6 +48,7 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateASTToGenerators(CommonTree tree) {
+		System.out.println(tree.toStringTree());
         if (isTreeAvailable(tree)) {
             for (int i = 0; i < tree.getChildCount(); i++) {
                 CommonTree treeNode = (CommonTree) tree.getChild(i);
@@ -87,6 +90,9 @@ public class CSharpTreeConvertController {
                         delegateMethod(treeNode);
                         deleteTreeChild(treeNode);
                         break;
+					case CSharpParser.DELEGATE:
+						delegateDelegate(treeNode);
+						break;
                     default:
                         delegateASTToGenerators(treeNode);
                 }
@@ -134,4 +140,8 @@ public class CSharpTreeConvertController {
     private void delegateMethod(CommonTree methodTree) {
         csMethodeGenerator.generateMethodToDomain(methodTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
+
+	private void delegateDelegate(CommonTree lamdaTree) {
+		csLamdaGenerator.delegateDelegateToBuffer(lamdaTree, createPackageAndClassName(namespaceStack, classNameStack));
+	}
 }
