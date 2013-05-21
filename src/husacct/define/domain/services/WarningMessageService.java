@@ -12,6 +12,7 @@ import husacct.define.domain.module.Module;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
+import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.graphics.util.threads.ObservableThread;
 
@@ -19,7 +20,7 @@ public class WarningMessageService extends Observable implements Observer {
    private  ArrayList<WarningMessage> warnings= new ArrayList<WarningMessage>();
   private ArrayList<Observer> observers = new ArrayList<Observer>();
    private static WarningMessageService instance;
-	
+	public enum removalType{partialRemoval,fullRemoval};
 
 	public static WarningMessageService getInstance()
 	{
@@ -65,7 +66,7 @@ public class WarningMessageService extends Observable implements Observer {
 		}
 		
 	}
-	public boolean hasCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek)
+	public boolean hasCodeLevelWarning(AnalyzedModuleComponent analyzedModuleToChek,removalType removaltype)
 	{
 		ArrayList<WarningMessage> messagesTobeRemoved = new ArrayList<WarningMessage>();
 		boolean haswarning=false;
@@ -73,10 +74,15 @@ public class WarningMessageService extends Observable implements Observer {
 			for (WarningMessage message : warnings) {
 				if (message instanceof CodeLevelWarning) {
 					AnalyzedModuleComponent analyzedModule = ((CodeLevelWarning) message).getNotCodeLevelModule();
+					
 					String leftUniqName= analyzedModule.getUniqueName().toLowerCase();
 					String rightUniqName = analyzedModuleToChek.getUniqueName().toLowerCase();
 					if(leftUniqName.equals(rightUniqName))
 					{
+						
+						if (removalType.partialRemoval==removaltype) {
+							JtreeStateEngine.instance().registerCodeRenewal(analyzedModuleToChek);
+						} 
 						
 						haswarning=true;
 						messagesTobeRemoved.add(message);
@@ -207,6 +213,12 @@ public class WarningMessageService extends Observable implements Observer {
 			AnalyzedModuleComponent unitTobeRestored) {
 		CodeLevelWarning codeLevelWarning = new CodeLevelWarning(key, unitTobeRestored);
 		warnings.add(codeLevelWarning);
+		
+	}
+
+
+	public void removeCodeLevelWarning(AnalyzedModuleComponent unitTobeRemoved) {
+		// TODO Auto-generated method stub
 		
 	}
 	
