@@ -23,6 +23,6 @@ public class BufferService {
 	}
 	
 	public void addDelegate(String packageAndClassname, CommonTree delegateTree) {
-		delegatebuffers.add(new DelegateBuffer(packageAndClassname).writeToFamix(delegateTree));
+		delegatebuffers.add(new DelegateBuffer(packageAndClassname).store(delegateTree));
 	}
 }
