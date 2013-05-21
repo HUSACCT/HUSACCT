@@ -48,7 +48,6 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateASTToGenerators(CommonTree tree) {
-		System.out.println(tree.toStringTree());
         if (isTreeAvailable(tree)) {
             for (int i = 0; i < tree.getChildCount(); i++) {
                 CommonTree treeNode = (CommonTree) tree.getChild(i);

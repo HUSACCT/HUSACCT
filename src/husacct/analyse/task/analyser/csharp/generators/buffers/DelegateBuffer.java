@@ -18,7 +18,6 @@ public class DelegateBuffer {
 	}
 	
 	public DelegateBuffer store(CommonTree delegateTree) {
-		System.out.println(delegateTree.toStringTree());
 		name = getName(delegateTree);
 		returntype = getReturnType(delegateTree);
 		argtypes = handleParameters(delegateTree);
@@ -36,7 +35,8 @@ public class DelegateBuffer {
 	}
 	
 	private Stack<String> handleParameters(CommonTree tree) {
+		CommonTree paramTree = walkTree(tree, CSharpParser.FORMAL_PARAMETER_LIST);
 		CSharpParameterGenerator csParamGenerator = new CSharpParameterGenerator();
-		return csParamGenerator.generateParameterObjects(tree, name, packageAndClassName);
+		return csParamGenerator.generateParameterObjects(paramTree, name, packageAndClassName);
 	}
 }
