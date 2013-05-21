@@ -5,7 +5,7 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-	
+
 public class CSharpBlockScopeGenerator extends CSharpGenerator {
 
 	private String packageAndClassName;
@@ -14,7 +14,7 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	public void walkThroughBlockScope(CommonTree tree, String packageAndClassName, String belongsToMethod) {
 		this.packageAndClassName = packageAndClassName;
 		this.belongsToMethod = belongsToMethod;
-		
+
 		walkThroughBlockScope(tree);
 	}
 
@@ -56,8 +56,13 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	}
 
 	private void delegateLocalVariable(Tree tree) {
-		CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
-		csharpLocalVariableGenerator.generateLocalVariableToDomain(tree, this.packageAndClassName, this.belongsToMethod);
+		if (tree.toStringTree().contains("=>")) {
+			CSharpLamdaGenerator csLamdaGenerator = new CSharpLamdaGenerator();
+			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)tree, packageAndClassName, belongsToMethod);
+		} else {
+			CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
+			csharpLocalVariableGenerator.generateLocalVariableToDomain(tree, this.packageAndClassName, this.belongsToMethod);
+		}
 	}
 
 	private void delegateInvocationConstructor(Tree tree) {
@@ -85,4 +90,3 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 		csharpLoopGenerator.generateToDomainFromLoop((CommonTree) tree, this.packageAndClassName, this.belongsToMethod);
 	}
 }
-	

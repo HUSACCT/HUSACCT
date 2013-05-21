@@ -106,17 +106,19 @@ public class CSharpGeneratorToolkit {
     }
 
     public static String getTypeNameAndParts(CommonTree tree) {
-        String s = "";
-        CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-        s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-        for (int i = 0; i < typenameTree.getChildCount(); i++) {
-            Tree t = typenameTree.getChild(i);
-            if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
-                s += "." + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
-            }
-        }
-        return s;
-    }
+		String s = "";
+		CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+		if (typenameTree != null) {
+			s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+			for (int i = 0; i < typenameTree.getChildCount(); i++) {
+				Tree t = typenameTree.getChild(i);
+				if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
+					s += "." + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
+				}
+			}
+		}
+		return s;
+	}
 
     public static boolean isOfType(CommonTree tree, int type) {
         if (tree == null) {
