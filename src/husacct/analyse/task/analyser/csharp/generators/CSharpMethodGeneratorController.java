@@ -91,7 +91,6 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 				case CSharpParser.BLOCK:
 					CommonTree blockTree = (CommonTree) child;
 					stepIntoBlock(blockTree);
-					System.out.println(child.toStringTree());
 					break;
 				default:
 					walkThroughMethod((CommonTree) child);

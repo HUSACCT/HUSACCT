@@ -19,7 +19,7 @@ public class CSharpUsingGenerator extends CSharpGenerator {
             String usingModule = removerStar(ui.module);
             String completeUsingDeclaration = ui.module;
             int lineNumber = ui.line;
-            boolean isCompleteNamespace = ui.isComplete;
+            boolean isCompleteNamespace = true; //ui.isComplete;
             modelService.createImport(usingLocation, usingModule, lineNumber, completeUsingDeclaration, isCompleteNamespace);
         }
     }
