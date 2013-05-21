@@ -8,7 +8,8 @@ public class DrawingSingleLevelThread implements Runnable {
 	private DrawingController controller;
 	private AbstractDTO[] toDrawModules;
 
-	public DrawingSingleLevelThread(DrawingController theController, AbstractDTO[] modules) {
+	public DrawingSingleLevelThread(DrawingController theController,
+			AbstractDTO[] modules) {
 		controller = theController;
 		toDrawModules = modules;
 	}

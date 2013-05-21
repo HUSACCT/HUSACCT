@@ -38,7 +38,7 @@ public class Drawing extends QuadTreeDrawing {
 		super();
 		hiddenFigures = new ArrayList<BaseFigure>();
 	}
-	
+
 	public void setFigureMap(FigureMap map) {
 		figureMap = map;
 	}
@@ -47,7 +47,8 @@ public class Drawing extends QuadTreeDrawing {
 		try {
 			ImageOutputFormat imageoutputformat = new ImageOutputFormat();
 			JFileChooser fileChooser = new JFileChooser();
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png", "png");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG",
+					"png", "png");
 			fileChooser.setFileFilter(filter);
 			fileChooser.setVisible(true);
 			int returnValue = fileChooser.showSaveDialog(fileChooser);
@@ -57,17 +58,19 @@ public class Drawing extends QuadTreeDrawing {
 				filemanager.setFile(selectedFile);
 				filemanager.createOutputStream();
 				QuadTreeDrawing cloneDrawing = this.clone();
-				for(BaseFigure bf : hiddenFigures){
+				for (BaseFigure bf : hiddenFigures) {
 					cloneDrawing.remove(bf);
 				}
-				imageoutputformat.write(filemanager.getOutputStream(), cloneDrawing);
+				imageoutputformat.write(filemanager.getOutputStream(),
+						cloneDrawing);
 				filemanager.closeOutputStream();
-				
+
 			}
 		} catch (IOException e) {
-			logger.debug("Cannot save file to " + selectedFile.getAbsolutePath());
+			logger.debug("Cannot save file to "
+					+ selectedFile.getAbsolutePath());
 		}
-		
+
 	}
 
 	public BaseFigure[] getShownModules() {
@@ -107,11 +110,11 @@ public class Drawing extends QuadTreeDrawing {
 		invalidate();
 		changed();
 	}
-	
-	public boolean hasHiddenFigures(){
+
+	public boolean hasHiddenFigures() {
 		return hiddenFigures.size() > 0;
 	}
-	
+
 	public void hideSelectedFigures(Set<Figure> selection) {
 		List<Figure> figures = getChildren();
 		for (Figure figure : figures) {
@@ -123,17 +126,16 @@ public class Drawing extends QuadTreeDrawing {
 				}
 			} else {
 				ConnectionFigure cf = (ConnectionFigure) figure;
-				if (selection.contains(cf.getStartFigure()) || selection.contains(cf.getEndFigure())) {
+				if (selection.contains(cf.getStartFigure())
+						|| selection.contains(cf.getEndFigure())) {
 					bf.setEnabled(false);
 					hiddenFigures.add(bf);
 				}
 			}
 		}
 	}
-	
-	
-	
-	public void restoreHiddenFigures(){
+
+	public void restoreHiddenFigures() {
 		for (BaseFigure figure : hiddenFigures) {
 			figure.setEnabled(true);
 		}
@@ -156,7 +158,7 @@ public class Drawing extends QuadTreeDrawing {
 		invalidate();
 		changed();
 	}
-	
+
 	public void updateLines() {
 		RelationFigure[] lines = getShownLines();
 		for (RelationFigure line : lines) {
@@ -167,7 +169,8 @@ public class Drawing extends QuadTreeDrawing {
 	public void updateLineFigureToContext() {
 		RelationFigure[] figures = getShownLines();
 		updateLineFigureThicknesses(figures);
-		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(), figures);
+		seperateOverlappingLineFigures(new ConnectorLineSeparationStrategy(),
+				figures);
 	}
 
 	private void updateLineFigureThicknesses(RelationFigure[] figures) {
@@ -186,7 +189,8 @@ public class Drawing extends QuadTreeDrawing {
 		}
 	}
 
-	private void seperateOverlappingLineFigures(ILineSeparationStrategy strategy, RelationFigure[] figures) {
+	private void seperateOverlappingLineFigures(
+			ILineSeparationStrategy strategy, RelationFigure[] figures) {
 		HashMap<RelationFigure, Set<RelationFigure>> overlappingFigureSets = new HashMap<RelationFigure, Set<RelationFigure>>();
 
 		for (RelationFigure figure1 : figures) {

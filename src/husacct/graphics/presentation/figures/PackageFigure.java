@@ -44,9 +44,11 @@ public class PackageFigure extends BaseFigure {
 			lead.y = anchor.y + MIN_HEIGHT;
 		}
 
-		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x) * 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
+		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x)
+				* 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
 
-		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x, (anchor.y + top.getBounds().height));
+		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x,
+				(anchor.y + top.getBounds().height));
 
 		body.setBounds(bodyTopLeft, lead);
 

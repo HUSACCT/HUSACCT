@@ -44,12 +44,15 @@ public class ZoomLocationBar extends JPanel {
 		if (currentPaths.length > 0) {
 			for (int pathID = 0; pathID < currentPaths.length; pathID++) {
 				String selectedPath = currentPaths[pathID];
-				String[] pathParts = selectedPath.split("\\" + LOCATION_SEPERATOR);
+				String[] pathParts = selectedPath.split("\\"
+						+ LOCATION_SEPERATOR);
 				for (int pathLevel = 0; pathLevel < pathParts.length; pathLevel++) {
 					if (null == multiLevelPath.get(pathLevel)) {
-						multiLevelPath.put(pathLevel, new HashMap<Integer, String>());
+						multiLevelPath.put(pathLevel,
+								new HashMap<Integer, String>());
 					}
-					HashMap<Integer, String> tmpAdderHashMap = multiLevelPath.get(pathLevel);
+					HashMap<Integer, String> tmpAdderHashMap = multiLevelPath
+							.get(pathLevel);
 					tmpAdderHashMap.put(pathID, pathParts[pathLevel]);
 					multiLevelPath.put(pathLevel, tmpAdderHashMap);
 				}
@@ -58,7 +61,8 @@ public class ZoomLocationBar extends JPanel {
 
 		if (multiLevelPath.size() > 0) {
 			addLocationSeperator();
-			Integer[] levelKeySet = multiLevelPath.keySet().toArray(new Integer[] {});
+			Integer[] levelKeySet = multiLevelPath.keySet().toArray(
+					new Integer[] {});
 			HashMap<Integer, String> currentPath = new HashMap<Integer, String>();
 			for (Integer level : levelKeySet) {
 				String visiblePath = "";
@@ -67,23 +71,29 @@ public class ZoomLocationBar extends JPanel {
 				ArrayList<String> capturedLevels = new ArrayList<String>();
 				for (Integer pathID : keySet) {
 					if (!capturedLevels.contains(levelPath.get(pathID))) {
-						visiblePath += " " + LOCATION_COMBINER + " " + levelPath.get(pathID);
+						visiblePath += " " + LOCATION_COMBINER + " "
+								+ levelPath.get(pathID);
 					}
 					String currentValuePath = currentPath.get(pathID);
 					if (null == currentValuePath) {
 						currentValuePath = "";
 						currentPath.put(pathID, currentValuePath);
 					} else {
-						currentValuePath = currentPath.get(pathID) + LOCATION_SEPERATOR;
+						currentValuePath = currentPath.get(pathID)
+								+ LOCATION_SEPERATOR;
 					}
-					currentPath.put(pathID, currentValuePath + levelPath.get(pathID));
+					currentPath.put(pathID,
+							currentValuePath + levelPath.get(pathID));
 					capturedLevels.add(levelPath.get(pathID));
 				}
 				ArrayList<String> entrySetTranformToArray = new ArrayList<String>();
 				for (Entry<Integer, String> p : currentPath.entrySet()) {
 					entrySetTranformToArray.add(p.getValue());
 				}
-				createAndAddLocationButton(visiblePath.replaceFirst("\\" + LOCATION_COMBINER, "").trim(), entrySetTranformToArray.toArray(new String[] {}));
+				createAndAddLocationButton(
+						visiblePath.replaceFirst("\\" + LOCATION_COMBINER, "")
+								.trim(),
+						entrySetTranformToArray.toArray(new String[] {}));
 
 				if (!levelKeySet[levelKeySet.length - 1].equals(level)) {
 					addLocationSeperator();
@@ -125,11 +135,13 @@ public class ZoomLocationBar extends JPanel {
 		add(new JLabel(" " + LOCATION_SEPERATOR + " "));
 	}
 
-	public void addLocationButtonPressListener(LocationButtonActionListener actionListener) {
+	public void addLocationButtonPressListener(
+			LocationButtonActionListener actionListener) {
 		locationButtonPressListener.add(actionListener);
 	}
 
-	public void removeLocationButtonPressListener(LocationButtonActionListener actionListener) {
+	public void removeLocationButtonPressListener(
+			LocationButtonActionListener actionListener) {
 		locationButtonPressListener.remove(actionListener);
 	}
 

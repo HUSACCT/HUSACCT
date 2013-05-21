@@ -25,8 +25,8 @@ public class Geom {
 		return Math.toDegrees(inRads);
 	}
 
-	public static Point2D.Double
-			getPointMovementFromLineAngle(Point2D.Double pointStart, Point2D.Double pointEnd, double movement) {
+	public static Point2D.Double getPointMovementFromLineAngle(
+			Point2D.Double pointStart, Point2D.Double pointEnd, double movement) {
 		double width;
 		if (pointStart.x > pointEnd.x) {
 			width = pointStart.x - pointEnd.x;

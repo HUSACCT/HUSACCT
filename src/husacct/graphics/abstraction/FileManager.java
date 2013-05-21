@@ -41,7 +41,8 @@ public class FileManager {
 
 	private void addFileExtensionIfMissing() {
 		String absolutePathName = file.getAbsolutePath();
-		String extension = absolutePathName.substring(absolutePathName.length() - 4, absolutePathName.length());
+		String extension = absolutePathName.substring(
+				absolutePathName.length() - 4, absolutePathName.length());
 		if (!extension.equalsIgnoreCase(".png")) {
 			file = new File(absolutePathName + ".png");
 		}

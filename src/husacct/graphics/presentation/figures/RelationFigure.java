@@ -23,7 +23,8 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.geom.BezierPath.Node;
 
-public class RelationFigure extends BaseFigure implements ConnectionFigure, FigureListener {
+public class RelationFigure extends BaseFigure implements ConnectionFigure,
+		FigureListener {
 	private static final long serialVersionUID = 1805821357919823648L;
 	private LineConnectionFigure line;
 	private TextFigure amountFigure;
@@ -217,20 +218,20 @@ public class RelationFigure extends BaseFigure implements ConnectionFigure, Figu
 	public int getAmount() {
 		return Integer.parseInt(amountFigure.getText());
 	}
-	
-	@Override 
+
+	@Override
 	public void willChange() {
 		line.willChange();
 		amountFigure.willChange();
 		super.willChange();
 	}
-	
+
 	@Override
 	public void changed() {
 		line.changed();
 		amountFigure.changed();
 		super.changed();
-	}	
+	}
 
 	@Override
 	public void areaInvalidated(FigureEvent e) {

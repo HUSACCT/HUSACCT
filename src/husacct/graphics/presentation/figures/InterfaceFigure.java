@@ -23,7 +23,8 @@ public class InterfaceFigure extends ClassFigure {
 		if ((lead.y - anchor.y) < MIN_HEIGHT) {
 			lead.y = anchor.y + MIN_HEIGHT;
 		}
-		double textWidth = classNameText.getBounds().width + interfaceTextFigure.getBounds().width;
+		double textWidth = classNameText.getBounds().width
+				+ interfaceTextFigure.getBounds().width;
 		double requestTextWidth = textWidth + 10;
 		if ((lead.x - anchor.x) < requestTextWidth) {
 			lead.x = anchor.x + requestTextWidth;
@@ -35,9 +36,14 @@ public class InterfaceFigure extends ClassFigure {
 		double bottomHeight = Math.floor(totalHeight / 3);
 		double topHeight = totalHeight - middleHeight - bottomHeight;
 
-		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y + topHeight));
-		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight));
-		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight + middleHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight + bottomHeight));
+		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y
+				+ topHeight));
+		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight),
+				new Point2D.Double(anchor.x + width, anchor.y + topHeight
+						+ middleHeight));
+		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight
+				+ middleHeight), new Point2D.Double(anchor.x + width, anchor.y
+				+ topHeight + middleHeight + bottomHeight));
 
 		// textbox centralising
 		double plusX = ((top.getBounds().width - textWidth) / 2);
@@ -49,7 +55,8 @@ public class InterfaceFigure extends ClassFigure {
 		interfaceTextFigure.setBounds(interfaceTextFigureAchor, null);
 
 		Point2D.Double classNameTextFigureAnchor = (Double) anchor.clone();
-		classNameTextFigureAnchor.x += plusX + interfaceTextFigure.getBounds().width + 2;
+		classNameTextFigureAnchor.x += plusX
+				+ interfaceTextFigure.getBounds().width + 2;
 		classNameTextFigureAnchor.y += plusY;
 		classNameText.setBounds(classNameTextFigureAnchor, null);
 

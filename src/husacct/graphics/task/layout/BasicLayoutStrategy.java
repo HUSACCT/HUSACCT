@@ -33,25 +33,26 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		figures.addAll(drawing.getChildren());
 
 		int itemsToPosition = countItemsToPosition(figures);
-		int maxFiguresOnRow = (int)Math.ceil(Math.sqrt(itemsToPosition));
-		
+		int maxFiguresOnRow = (int) Math.ceil(Math.sqrt(itemsToPosition));
+
 		for (Figure f : figures) {
 			if (!isConnector(f) && !inContainer(f)) {
-				
+
 				Rectangle2D.Double bounds = f.getBounds();
-	
+
 				if (figuresOnLine >= maxFiguresOnRow) {
 					x = HORZ_ITEM_SPACING;
 					y += maxHeightOnLine + VERT_ITEM_SPACING;
 					figuresOnLine = 0;
 					maxHeightOnLine = 0;
 				}
-				
+
 				bounds.x = x;
 				bounds.y = y;
 				Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-				Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);
-			
+				Point2D.Double lead = new Point2D.Double(bounds.x
+						+ bounds.width, bounds.y + bounds.height);
+
 				f.willChange();
 				f.setBounds(anchor, lead);
 				f.changed();
@@ -62,21 +63,21 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 			} else {
 				connectors.add(f);
 			}
-		}		
+		}
 	}
-	
+
 	private int countItemsToPosition(List<Figure> figures) {
 		int count = 0;
-		
+
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
 			if (!bf.isInContainer() && !bf.isLine())
 				count++;
 		}
-		
+
 		return count;
 	}
-	
+
 	private boolean inContainer(Figure f) {
 		BaseFigure bf = (BaseFigure) f;
 		return bf.isInContainer();
@@ -87,9 +88,12 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 	// code. It's ugly and unneccessary I think.
 	private boolean isConnector(Figure figure) {
 		if (figure instanceof BaseFigure) {
-			if (figure instanceof RelationFigure) // TODO Call the isLine method?
+			if (figure instanceof RelationFigure) // TODO Call the isLine
+													// method?
 				return true;
-		} else if (figure instanceof ConnectionFigure) { //TODO extend it and implement the isLine method?
+		} else if (figure instanceof ConnectionFigure) { // TODO extend it and
+															// implement the
+															// isLine method?
 			return true;
 		}
 		return false;

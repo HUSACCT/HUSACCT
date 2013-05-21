@@ -37,13 +37,13 @@ public class DrawingState {
 		this.figureMap = figureMap;
 		this.clear();
 		List<Figure> figures = drawing.getChildren();
-		
+
 		for (Figure f : figures) {
 			BaseFigure bf = (BaseFigure) f;
 			if (!bf.isLine() && shouldSaveState(bf)) {
 				FigureState state = saveFigureState(bf);
 				savedPositions.put(state.path, state);
-				if (!state.enabled){
+				if (!state.enabled) {
 					hasHiddenFigures = true;
 				}
 			}
@@ -70,10 +70,10 @@ public class DrawingState {
 			return analysedDto.uniqueName;
 		}
 	}
-	
+
 	private boolean shouldSaveState(BaseFigure bf) {
 		return figureMap.getModuleDTO(bf) != null;
-	}	
+	}
 
 	public void restore(FigureMap figureMap) {
 		this.figureMap = figureMap;
@@ -81,7 +81,7 @@ public class DrawingState {
 		restoreFigures();
 		restoreLineStates();
 	}
-	
+
 	private void restoreFigures() {
 		Set<Entry<String, FigureState>> entries = savedPositions.entrySet();
 		for (Entry<String, FigureState> e : entries) {
@@ -92,7 +92,8 @@ public class DrawingState {
 				Rectangle2D.Double bounds = savedState.position;
 
 				Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-				Point2D.Double lead = new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height);
+				Point2D.Double lead = new Point2D.Double(bounds.x
+						+ bounds.width, bounds.y + bounds.height);
 
 				bf.willChange();
 				bf.setBounds(anchor, lead);
@@ -100,9 +101,9 @@ public class DrawingState {
 				if (!savedState.enabled)
 					bf.setEnabled(false);
 			}
-		}		
+		}
 	}
-	
+
 	private void restoreLineStates() {
 		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
@@ -110,13 +111,13 @@ public class DrawingState {
 				ConnectionFigure cf = (ConnectionFigure) f;
 				Figure start = cf.getStartFigure();
 				Figure end = cf.getEndFigure();
-				
+
 				if (!start.isVisible() || !end.isVisible())
 					bf.setEnabled(false);
 			}
-		}		
+		}
 	}
-	
+
 	public boolean hasHiddenFigures() {
 		return hasHiddenFigures;
 	}

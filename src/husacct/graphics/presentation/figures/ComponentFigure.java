@@ -49,7 +49,8 @@ public class ComponentFigure extends BaseFigure {
 			children.add(compIconFig);
 		} catch (Exception e) {
 			compIconFig = null;
-			Logger.getLogger(this.getClass()).warn("failed to load component icon image file");
+			Logger.getLogger(this.getClass()).warn(
+					"failed to load component icon image file");
 		}
 	}
 
@@ -84,7 +85,8 @@ public class ComponentFigure extends BaseFigure {
 			double iconAnchorY = anchor.y + 6;
 			double iconLeadX = iconAnchorX + compIcon.getWidth();
 			double iconLeadY = iconAnchorY + compIcon.getHeight();
-			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY), new Point2D.Double(iconLeadX, iconLeadY));
+			compIconFig.setBounds(new Point2D.Double(iconAnchorX, iconAnchorY),
+					new Point2D.Double(iconLeadX, iconLeadY));
 		}
 
 		this.invalidate();

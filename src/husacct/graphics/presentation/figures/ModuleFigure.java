@@ -50,14 +50,16 @@ public class ModuleFigure extends BaseFigure {
 		if (text.getBounds().width > maxTextWidth) {
 			maxTextWidth = text.getBounds().width;
 		}
-		double totalTextHeight = text.getBounds().height + moduleText.getBounds().height;
+		double totalTextHeight = text.getBounds().height
+				+ moduleText.getBounds().height;
 
 		// textbox centralising
 		double plusX = (((lead.x - anchor.x) - maxTextWidth) / 2);
 		double plusY = (((lead.y - anchor.y) - totalTextHeight) / 2);
 
 		Point2D.Double moduleTextAnchor = (Double) anchor.clone();
-		moduleTextAnchor.x += plusX + ((maxTextWidth - moduleText.getBounds().width) / 2);
+		moduleTextAnchor.x += plusX
+				+ ((maxTextWidth - moduleText.getBounds().width) / 2);
 		moduleTextAnchor.y += plusY;
 		moduleText.setBounds(moduleTextAnchor, null);
 

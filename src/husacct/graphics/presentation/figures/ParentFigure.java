@@ -68,7 +68,8 @@ public class ParentFigure extends BaseFigure {
 				double difX = newX - oldX;
 				double difY = newY - oldY;
 				for (Figure fig : childrenOwnImpl) {
-					((BaseFigure) fig).updateLocation(fig.getBounds().getX() + difX, fig.getBounds().getY() + difY);
+					((BaseFigure) fig).updateLocation(fig.getBounds().getX()
+							+ difX, fig.getBounds().getY() + difY);
 				}
 				currentPositionX = newX;
 				currentPositionY = newY;
@@ -127,21 +128,24 @@ public class ParentFigure extends BaseFigure {
 	}
 
 	public void updateLayout() {
-		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this, minChildPadding, minChildPadding);
+		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this,
+				minChildPadding, minChildPadding);
 		cls.doLayout();
 
 		Rectangle newSize = new Rectangle();
 		for (Figure f : childrenOwnImpl) {
 			Rectangle2D.Double bounds = f.getBounds();
 
-			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height));
+			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y
+					+ bounds.height));
 		}
 		minWidth = newSize.width + minChildPadding;
 		minHeight = newSize.height + minChildPadding;
 
 		Rectangle2D.Double bounds = getBounds();
 		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10, anchor.y + minHeight + 10);
+		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10,
+				anchor.y + minHeight + 10);
 
 		willChange();
 		setBounds(anchor, lead);
@@ -170,13 +174,16 @@ public class ParentFigure extends BaseFigure {
 			public void figureChanged(FigureEvent e) {
 				double parentFigureStartX = getBounds().getX();
 				double parentFigureWidth = getBounds().getWidth();
-				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
+				double parentFigureEndX = parentFigureStartX
+						+ parentFigureWidth;
 				double parentFigureStartY = getBounds().getY();
 				double parentFigureHeight = getBounds().getHeight();
-				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
+				double parentFigureEndY = parentFigureStartY
+						+ parentFigureHeight;
 
 				BaseFigure childFigure = ((BaseFigure) e.getFigure());
-				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
+				java.awt.geom.Rectangle2D.Double figureBounds = childFigure
+						.getBounds();
 				double childFigureX = figureBounds.getX();
 				double childFigureWidth = figureBounds.getWidth();
 				double childFigureY = figureBounds.getY();
@@ -187,9 +194,11 @@ public class ParentFigure extends BaseFigure {
 				if (outsideLeft || outsideRight) {
 					childFigure.willChange();
 					if (outsideLeft) {
-						childFigure.updateLocation(parentFigureStartX, childFigureY);
+						childFigure.updateLocation(parentFigureStartX,
+								childFigureY);
 					} else {
-						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
+						childFigure.updateLocation(parentFigureEndX
+								- childFigureWidth, childFigureY);
 					}
 					childFigure.changed();
 				}
@@ -199,9 +208,11 @@ public class ParentFigure extends BaseFigure {
 				if (outsideTop || outsideBottom) {
 					childFigure.willChange();
 					if (outsideTop) {
-						childFigure.updateLocation(childFigureX, parentFigureStartY);
+						childFigure.updateLocation(childFigureX,
+								parentFigureStartY);
 					} else {
-						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
+						childFigure.updateLocation(childFigureX,
+								parentFigureEndY - childFigureHeight);
 					}
 					childFigure.changed();
 				}

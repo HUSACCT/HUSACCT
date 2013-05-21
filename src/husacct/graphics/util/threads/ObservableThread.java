@@ -10,7 +10,8 @@ public class ObservableThread extends Thread {
 	public ObservableThread(Runnable target) {
 		super(target);
 
-		listeners = Collections.synchronizedList(new ArrayList<ThreadListener>());
+		listeners = Collections
+				.synchronizedList(new ArrayList<ThreadListener>());
 	}
 
 	public synchronized void addThreadListener(ThreadListener listener) {

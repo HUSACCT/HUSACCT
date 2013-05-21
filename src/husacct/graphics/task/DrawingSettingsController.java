@@ -8,18 +8,18 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	protected boolean areSmartLinesOn = true;
 	protected boolean areDependenciesShown;
 	protected boolean areViolationsShown;
-	
+
 	protected String[] currentPaths = new String[] {};
-	
-	public DrawingSettingsController(){
+
+	public DrawingSettingsController() {
 	}
-	
-	public void loadDefaultSettings(){
+
+	public void loadDefaultSettings() {
 		showDependencies();
 		hideViolations();
 		showSmartLines();
 	}
-	
+
 	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
 		if (areViolationsShown()) {
@@ -27,23 +27,24 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		}
 		return detail;
 	}
-	
+
 	public void notifyServiceListeners() {
-		ServiceProvider.getInstance().getGraphicsService().notifyServiceListeners();
+		ServiceProvider.getInstance().getGraphicsService()
+				.notifyServiceListeners();
 	}
-	
-	public boolean areDependenciesShown(){
+
+	public boolean areDependenciesShown() {
 		return areDependenciesShown;
 	}
-	
-	public void showDependencies(){
+
+	public void showDependencies() {
 		areDependenciesShown = true;
 	}
 
 	public void hideDependencies() {
 		areDependenciesShown = false;
 	}
-	
+
 	public boolean areViolationsShown() {
 		return areViolationsShown;
 	}
@@ -51,15 +52,15 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void showViolations() {
 		areViolationsShown = true;
 	}
-	
+
 	public void hideViolations() {
 		areViolationsShown = false;
 	}
 
-	public boolean areSmartLinesOn(){
+	public boolean areSmartLinesOn() {
 		return areSmartLinesOn;
 	}
-	
+
 	public void hideSmartLines() {
 		areSmartLinesOn = false;
 	}
@@ -67,7 +68,7 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void showSmartLines() {
 		areSmartLinesOn = true;
 	}
-	
+
 	public String[] getCurrentPaths() {
 		return currentPaths;
 	}

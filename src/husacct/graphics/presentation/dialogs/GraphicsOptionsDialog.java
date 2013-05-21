@@ -34,22 +34,28 @@ public class GraphicsOptionsDialog extends JDialog {
 	protected Logger logger = Logger.getLogger(GraphicsOptionsDialog.class);
 	private ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
 
-	private JPanel mainPanel, settingsPanel, globalActionsPanel, figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
+	private JPanel mainPanel, settingsPanel, globalActionsPanel,
+			figuresActionsPanel, optionsPanel, zoomPanel, layoutStrategyPanel;
 
 	private int menuItemMaxHeight = 45;
 
-	private JButton zoomInButton, zoomOutButton, refreshButton, exportToImageButton, hideFiguresButton, showFiguresButton, okButton, applyButton, cancelButton;
-	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu, smartLinesOptionMenu;
+	private JButton zoomInButton, zoomOutButton, refreshButton,
+			exportToImageButton, hideFiguresButton, showFiguresButton,
+			okButton, applyButton, cancelButton;
+	private JCheckBox showDependenciesOptionMenu, showViolationsOptionMenu,
+			smartLinesOptionMenu;
 	private JComboBox layoutStrategyOptions;
 	private JSlider zoomSlider;
 	private JLabel layoutStrategyLabel, zoomLabel;
 	private ArrayList<JComponent> interfaceElements;
 	private HashMap<String, Object> currentSettings;
 
-	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth, elementHeight;
+	private int totalWidth, totalHeight, paddingSize, labelWidth, elementWidth,
+			elementHeight;
 	private HashMap<String, DrawingLayoutStrategy> layoutStrategiesTranslations;
 	private String[] layoutStrategyItems;
-	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+	private ILocaleService localeService = ServiceProvider.getInstance()
+			.getLocaleService();
 
 	public GraphicsOptionsDialog() {
 		super();
@@ -57,8 +63,9 @@ public class GraphicsOptionsDialog extends JDialog {
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
 		currentSettings.put("smartLines", true);
-		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
-		
+		currentSettings.put("layoutStrategy",
+				DrawingLayoutStrategy.BASIC_LAYOUT);
+
 		totalWidth = 550;
 		totalHeight = 260;
 		paddingSize = 10;
@@ -74,12 +81,13 @@ public class GraphicsOptionsDialog extends JDialog {
 		int i = 0;
 		layoutStrategyItems = new String[DrawingLayoutStrategy.values().length];
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
-			String translation = localeService.getTranslatedString(strategy.toString());
+			String translation = localeService.getTranslatedString(strategy
+					.toString());
 			layoutStrategiesTranslations.put(translation, strategy);
 			layoutStrategyItems[i] = translation;
 			i++;
 		}
-		
+
 		initGUI();
 
 		interfaceElements = new ArrayList<JComponent>();
@@ -181,8 +189,10 @@ public class GraphicsOptionsDialog extends JDialog {
 		optionsPanel.setLayout(new GridLayout(3, 1));
 
 		showDependenciesOptionMenu = new JCheckBox();
-		showDependenciesOptionMenu.setPreferredSize(new Dimension(40, menuItemMaxHeight));
-		showDependenciesOptionMenu.setMaximumSize(new Dimension(40, menuItemMaxHeight));
+		showDependenciesOptionMenu.setPreferredSize(new Dimension(40,
+				menuItemMaxHeight));
+		showDependenciesOptionMenu.setMaximumSize(new Dimension(40,
+				menuItemMaxHeight));
 		optionsPanel.add(showDependenciesOptionMenu);
 
 		showViolationsOptionMenu = new JCheckBox();
@@ -197,17 +207,20 @@ public class GraphicsOptionsDialog extends JDialog {
 
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(new GridLayout(2, 2));
-		settingsPanel.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
+		settingsPanel
+				.setBorder(new EmptyBorder(0, paddingSize, 0, paddingSize));
 
 		layoutStrategyPanel = new JPanel();
 		layoutStrategyPanel.setSize(getWidth(), getHeight());
 		layoutStrategyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		layoutStrategyLabel = new JLabel();
-		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth, elementHeight));
+		layoutStrategyLabel.setPreferredSize(new Dimension(labelWidth,
+				elementHeight));
 		layoutStrategyPanel.add(layoutStrategyLabel);
 
 		layoutStrategyOptions = new JComboBox(layoutStrategyItems);
-		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth, elementHeight));
+		layoutStrategyOptions.setPreferredSize(new Dimension(elementWidth,
+				elementHeight));
 		layoutStrategyPanel.add(layoutStrategyOptions);
 		settingsPanel.add(layoutStrategyPanel);
 
@@ -268,10 +281,15 @@ public class GraphicsOptionsDialog extends JDialog {
 	}
 
 	private void resetUIElementsToCurrentSettings() {
-		showDependenciesOptionMenu.setSelected((Boolean) currentSettings.get("dependencies"));
-		showViolationsOptionMenu.setSelected((Boolean) currentSettings.get("violations"));
-		smartLinesOptionMenu.setSelected((Boolean) currentSettings.get("smartLines"));
-		layoutStrategyOptions.setSelectedItem(localeService.getTranslatedString(currentSettings.get("layoutStrategy").toString()));
+		showDependenciesOptionMenu.setSelected((Boolean) currentSettings
+				.get("dependencies"));
+		showViolationsOptionMenu.setSelected((Boolean) currentSettings
+				.get("violations"));
+		smartLinesOptionMenu.setSelected((Boolean) currentSettings
+				.get("smartLines"));
+		layoutStrategyOptions.setSelectedItem(localeService
+				.getTranslatedString(currentSettings.get("layoutStrategy")
+						.toString()));
 	}
 
 	public void addListener(UserInputListener listener) {
@@ -322,14 +340,18 @@ public class GraphicsOptionsDialog extends JDialog {
 			zoomOutButton.setText(menuBarLocale.get("ZoomOut"));
 			refreshButton.setText(menuBarLocale.get("Refresh"));
 			exportToImageButton.setText(menuBarLocale.get("ExportToImage"));
-			showDependenciesOptionMenu.setText(menuBarLocale.get("ShowDependencies"));
-			showViolationsOptionMenu.setText(menuBarLocale.get("ShowViolations"));
+			showDependenciesOptionMenu.setText(menuBarLocale
+					.get("ShowDependencies"));
+			showViolationsOptionMenu.setText(menuBarLocale
+					.get("ShowViolations"));
 			okButton.setText(menuBarLocale.get("Ok"));
 			applyButton.setText(menuBarLocale.get("Apply"));
 			cancelButton.setText(menuBarLocale.get("Cancel"));
-			smartLinesOptionMenu.setText(menuBarLocale.get("LineContextUpdates"));
+			smartLinesOptionMenu.setText(menuBarLocale
+					.get("LineContextUpdates"));
 			hideFiguresButton.setText(menuBarLocale.get("HideModules"));
-			showFiguresButton.setText(menuBarLocale.get("RestoreHiddenModules"));
+			showFiguresButton
+					.setText(menuBarLocale.get("RestoreHiddenModules"));
 			setTitle(menuBarLocale.get("DiagramOptions"));
 		} catch (NullPointerException e) {
 			logger.warn("Locale is not set properly.");
@@ -338,7 +360,8 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void setIcons(HashMap<String, String> icons) {
 		try {
-			ImageIcon icon = new ImageIcon(getClass().getResource(icons.get("zoomIn")));
+			ImageIcon icon = new ImageIcon(getClass().getResource(
+					icons.get("zoomIn")));
 			zoomInButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(icons.get("zoomOut")));
 			zoomOutButton.setIcon(icon);
@@ -346,9 +369,11 @@ public class GraphicsOptionsDialog extends JDialog {
 			refreshButton.setIcon(icon);
 			icon = new ImageIcon(getClass().getResource(icons.get("save")));
 			exportToImageButton.setIcon(icon);
-			icon = new ImageIcon(getClass().getResource(icons.get("hideFigures")));
+			icon = new ImageIcon(getClass().getResource(
+					icons.get("hideFigures")));
 			hideFiguresButton.setIcon(icon);
-			icon = new ImageIcon(getClass().getResource(icons.get("showFigures")));
+			icon = new ImageIcon(getClass().getResource(
+					icons.get("showFigures")));
 			showFiguresButton.setIcon(icon);
 		} catch (NullPointerException e) {
 			logger.warn("Icons are not set properly.");
@@ -357,7 +382,8 @@ public class GraphicsOptionsDialog extends JDialog {
 
 	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
 		currentSettings.put("layoutStrategy", item);
-		layoutStrategyOptions.setSelectedItem(localeService.getTranslatedString(item.toString()));
+		layoutStrategyOptions.setSelectedItem(localeService
+				.getTranslatedString(item.toString()));
 	}
 
 	public DrawingLayoutStrategy getSelectedLayoutStrategyItem() {
@@ -367,7 +393,8 @@ public class GraphicsOptionsDialog extends JDialog {
 			selectedItem = (String) layoutStrategyOptions.getSelectedItem();
 			selectedStrategy = layoutStrategiesTranslations.get(selectedItem);
 		} catch (Exception ex) {
-			logger.debug("Could not find the selected layout strategy \"" + (selectedItem == null ? "null" : selectedItem) + "\".");
+			logger.debug("Could not find the selected layout strategy \""
+					+ (selectedItem == null ? "null" : selectedItem) + "\".");
 		}
 		return selectedStrategy;
 	}

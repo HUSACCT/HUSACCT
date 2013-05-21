@@ -19,13 +19,20 @@ public class DependencyDataModel extends AbstractTableModel {
 
 	public DependencyDataModel(DependencyDTO[] dtos) {
 		localeService = ServiceProvider.getInstance().getLocaleService();
-		columnKeys = new String[] { "From", "To", "DependencyType", "LineNumber", "Direct/Indirect" };
+		columnKeys = new String[] { "From", "To", "DependencyType",
+				"LineNumber", "Direct/Indirect" };
 		columnNames = new HashMap<String, String>();
-		columnNames.put(columnKeys[0], localeService.getTranslatedString(columnKeys[0]));
-		columnNames.put(columnKeys[1], localeService.getTranslatedString(columnKeys[1]));
-		columnNames.put(columnKeys[2], localeService.getTranslatedString(columnKeys[2]));
-		columnNames.put(columnKeys[3], localeService.getTranslatedString(columnKeys[3]));
-		columnNames.put(columnKeys[4], localeService.getTranslatedString("Direct") + "/" + localeService.getTranslatedString("Indirect"));
+		columnNames.put(columnKeys[0],
+				localeService.getTranslatedString(columnKeys[0]));
+		columnNames.put(columnKeys[1],
+				localeService.getTranslatedString(columnKeys[1]));
+		columnNames.put(columnKeys[2],
+				localeService.getTranslatedString(columnKeys[2]));
+		columnNames.put(columnKeys[3],
+				localeService.getTranslatedString(columnKeys[3]));
+		columnNames.put(columnKeys[4],
+				localeService.getTranslatedString("Direct") + "/"
+						+ localeService.getTranslatedString("Indirect"));
 		data = dtos;
 	}
 
@@ -58,7 +65,9 @@ public class DependencyDataModel extends AbstractTableModel {
 		} else if (columnKey.equals(columnKeys[3])) {
 			value = "" + row.lineNumber;
 		} else if (columnKey.equals(columnKeys[4])) {
-			value = row.isIndirect ? localeService.getTranslatedString("Indirect") : localeService.getTranslatedString("Direct");
+			value = row.isIndirect ? localeService
+					.getTranslatedString("Indirect") : localeService
+					.getTranslatedString("Direct");
 		}
 		return value;
 	}

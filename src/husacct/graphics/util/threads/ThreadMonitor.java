@@ -72,10 +72,10 @@ public class ThreadMonitor implements ThreadListener {
 	public synchronized boolean add(Runnable target) {
 		synchronized (pooledThreads) {
 			synchronized (runningThreads) {
-				if(pooledThreads.isEmpty() && runningThreads.isEmpty()){
+				if (pooledThreads.isEmpty() && runningThreads.isEmpty()) {
 					pooledThreads.add(target);
 					return true;
-				}else{
+				} else {
 					return false;
 				}
 			}

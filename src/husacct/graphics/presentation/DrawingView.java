@@ -104,7 +104,6 @@ public class DrawingView extends DefaultDrawingView {
 		}
 		return Collections.unmodifiableSet(deltaSelection);
 	}
-	
 
 	private void handleDeselect() {
 		Set<Figure> deselectedFigures = this.getDeltaSelection();
@@ -224,9 +223,9 @@ public class DrawingView extends DefaultDrawingView {
 		}
 		this.contextMenu.setHasSelection(this.hasSelection());
 	}
-	
+
 	private void onMouseScrolled(MouseWheelEvent e) {
-		if(isCtrlPressed){
+		if (isCtrlPressed) {
 			requestFocus();
 			double wheelRotation = e.getWheelRotation() * -1;
 			double wheelRotationFactor = wheelRotation / ScrollSpeed;

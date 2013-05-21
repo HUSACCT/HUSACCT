@@ -83,15 +83,19 @@ public class DefinedController extends DrawingController {
 		for (BaseFigure figure : figures) {
 			if (figure.isModule()) {
 				try {
-					ModuleDTO parentDTO = (ModuleDTO) getFigureMap().getModuleDTO(figure);
+					ModuleDTO parentDTO = (ModuleDTO) getFigureMap()
+							.getModuleDTO(figure);
 					parentNames.add(parentDTO.logicalPath);
 					definedFigures.put(parentDTO.logicalPath, figure);
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.warn("Could not zoom on this object: " + figure.getName() + ". Expected a different DTO type.");
+					logger.warn("Could not zoom on this object: "
+							+ figure.getName()
+							+ ". Expected a different DTO type.");
 				}
 			} else {
-				logger.warn("Could not zoom on this object: " + figure.getName() + ". Not a module to zoom on.");
+				logger.warn("Could not zoom on this object: "
+						+ figure.getName() + ". Not a module to zoom on.");
 			}
 		}
 
@@ -106,7 +110,8 @@ public class DefinedController extends DrawingController {
 		if (getCurrentPaths().length > 0) {
 			saveSingleLevelFigurePositions();
 			String firstCurrentPaths = getCurrentPaths()[0];
-			String parentPath = defineService.getParentFromModule(firstCurrentPaths);
+			String parentPath = defineService
+					.getParentFromModule(firstCurrentPaths);
 			if (parentPath != null) {
 				getAndDrawModulesIn(parentPath);
 			} else {
@@ -116,15 +121,18 @@ public class DefinedController extends DrawingController {
 			moduleZoomOutFailed();
 		}
 	}
-	
-	public void moduleZoomOutFailed(){
-		logger.warn("Tried to zoom out from \"" + getCurrentPaths() + "\", but it has no parent (could be root if it's an empty string).");
+
+	public void moduleZoomOutFailed() {
+		logger.warn("Tried to zoom out from \""
+				+ getCurrentPaths()
+				+ "\", but it has no parent (could be root if it's an empty string).");
 		logger.debug("Reverting to the root of the application.");
 		drawArchitecture(getCurrentDrawingDetail());
 	}
 
 	@Override
-	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,
+			BaseFigure figureTo) {
 		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
 		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		ArrayList<DependencyDTO> dependencies = new ArrayList<DependencyDTO>();
@@ -132,7 +140,9 @@ public class DefinedController extends DrawingController {
 		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) {
 			for (PhysicalPathDTO physicalFromPathDTO : dtoFrom.physicalPathDTOs) {
 				for (PhysicalPathDTO physicalToPath : dtoTo.physicalPathDTOs) {
-					DependencyDTO[] foundDependencies = analyseService.getDependencies(physicalFromPathDTO.path, physicalToPath.path);
+					DependencyDTO[] foundDependencies = analyseService
+							.getDependencies(physicalFromPathDTO.path,
+									physicalToPath.path);
 					for (DependencyDTO tempDependency : foundDependencies) {
 						dependencies.add(tempDependency);
 					}
@@ -143,22 +153,26 @@ public class DefinedController extends DrawingController {
 	}
 
 	@Override
-	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom,
+			BaseFigure figureTo) {
 		ModuleDTO dtoFrom = (ModuleDTO) getFigureMap().getModuleDTO(figureFrom);
 		ModuleDTO dtoTo = (ModuleDTO) getFigureMap().getModuleDTO(figureTo);
-		return validateService.getViolationsByLogicalPath(dtoFrom.logicalPath, dtoTo.logicalPath);
+		return validateService.getViolationsByLogicalPath(dtoFrom.logicalPath,
+				dtoTo.logicalPath);
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
 		if (parentName.equals("") || parentName.equals("**")) {
 			drawArchitecture(getCurrentDrawingDetail());
 		} else {
-			ModuleDTO[] children = defineService.getChildrenFromModule(parentName);
+			ModuleDTO[] children = defineService
+					.getChildrenFromModule(parentName);
 			if (children.length > 0) {
 				setCurrentPaths(new String[] { parentName });
 				drawModulesAndLines(children);
 			} else {
-				logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+				logger.warn("Tried to draw modules for \"" + parentName
+						+ "\", but it has no children.");
 			}
 		}
 	}
@@ -169,7 +183,8 @@ public class DefinedController extends DrawingController {
 		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
-				AbstractDTO[] children = defineService.getChildrenFromModule(parentName);
+				AbstractDTO[] children = defineService
+						.getChildrenFromModule(parentName);
 				if (parentName.equals("") || parentName.equals("**")) {
 					drawArchitecture(getCurrentDrawingDetail());
 					continue;
@@ -180,11 +195,13 @@ public class DefinedController extends DrawingController {
 					}
 					allChildren.put(parentName, knownChildren);
 				} else {
-					AbstractDTO value = getFigureMap().getModuleDTO(definedFigures.get(parentName));
+					AbstractDTO value = getFigureMap().getModuleDTO(
+							definedFigures.get(parentName));
 					ArrayList<AbstractDTO> tmpList = new ArrayList<AbstractDTO>();
 					tmpList.add(value);
 					allChildren.put("", tmpList);
-					logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
+					logger.warn("Tried to draw modules for \"" + parentName
+							+ "\", but it has no children.");
 				}
 			}
 			setCurrentPaths(parentNames);
@@ -192,8 +209,10 @@ public class DefinedController extends DrawingController {
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
-				drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
+				ArrayList<AbstractDTO> onlyParentChildren = allChildren
+						.get(onlyParentModule);
+				drawModulesAndLines(onlyParentChildren
+						.toArray(new AbstractDTO[] {}));
 			} else {
 				drawModulesAndLines(allChildren);
 			}

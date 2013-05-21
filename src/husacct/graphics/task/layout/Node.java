@@ -11,7 +11,7 @@ import org.jhotdraw.draw.Figure;
 
 public class Node {
 	public static final int UNINITIALIZED = Integer.MIN_VALUE;
-	
+
 	private String name;
 	private Figure figure;
 	private int level = UNINITIALIZED;
@@ -22,9 +22,9 @@ public class Node {
 	public Node(Figure f, int l) {
 		figure = f;
 		level = l;
-		
-		if (f != null) 
-			name = ((BaseFigure)f).getName();
+
+		if (f != null)
+			name = ((BaseFigure) f).getName();
 	}
 
 	public Node(Figure f) {
@@ -34,22 +34,23 @@ public class Node {
 	public void addParent(Node n) {
 		parents.add(n);
 	}
-	
+
 	public void removeParent(Node n) {
 		parents.remove(n);
 	}
-	
+
 	public List<Node> getParents() {
 		return Collections.unmodifiableList(parents);
-	}	
-	
+	}
+
 	public void removeConnectionTo(Node n) {
 		connectedTo.remove(n);
 	}
 
 	public void connectTo(Node n) {
 		if (equals(n))
-			throw new IllegalArgumentException("Cannot connect a node to itself!");
+			throw new IllegalArgumentException(
+					"Cannot connect a node to itself!");
 
 		if (!connectedTo.contains(n))
 			connectedTo.add(n);
@@ -102,7 +103,7 @@ public class Node {
 				if (!closed.contains(node))
 					open.add(node);
 			}
-			
+
 			if (equals(nextNode))
 				return true;
 		}
@@ -130,26 +131,25 @@ public class Node {
 	public int getHeight() {
 		return (int) figure.getBounds().height;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
 
 	public boolean isParentOf(Node endNode) {
-		return connectedTo.contains(endNode) && endNode.getParents().contains(this);
+		return connectedTo.contains(endNode)
+				&& endNode.getParents().contains(this);
 	}
-	
+
 	public boolean isChildOf(Node n) {
 		return parents.contains(n) && n.isParentOf(this);
 	}
-	
-	
-	
-//	public void setStartOfChain(boolean newValue) {
-//		chainStart = newValue;
-//	}
-//	
-//	public boolean isStartOfChain() {
-//		return chainStart;
-//	}
+
+	// public void setStartOfChain(boolean newValue) {
+	// chainStart = newValue;
+	// }
+	//
+	// public boolean isStartOfChain() {
+	// return chainStart;
+	// }
 }

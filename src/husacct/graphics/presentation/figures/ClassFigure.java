@@ -55,13 +55,19 @@ public class ClassFigure extends BaseFigure {
 		double bottomHeight = Math.floor(totalHeight / 3);
 		double topHeight = totalHeight - middleHeight - bottomHeight;
 
-		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y + topHeight));
-		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight));
-		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight + middleHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight + bottomHeight));
+		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y
+				+ topHeight));
+		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight),
+				new Point2D.Double(anchor.x + width, anchor.y + topHeight
+						+ middleHeight));
+		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight
+				+ middleHeight), new Point2D.Double(anchor.x + width, anchor.y
+				+ topHeight + middleHeight + bottomHeight));
 
 		// textbox centralising
 		double plusX = ((top.getBounds().width - this.classNameText.getBounds().width) / 2);
-		double plusY = ((top.getBounds().height - this.classNameText.getBounds().height) / 2);
+		double plusY = ((top.getBounds().height - this.classNameText
+				.getBounds().height) / 2);
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;

@@ -13,7 +13,8 @@ import javax.swing.JInternalFrame;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
-public class GraphicsServiceImpl extends ObservableService implements IGraphicsService, ISaveable {
+public class GraphicsServiceImpl extends ObservableService implements
+		IGraphicsService, ISaveable {
 
 	private AnalysedController analysedController;
 	private DefinedController definedController;
@@ -81,8 +82,10 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 		createControllers();
 		Element data = new Element(workspaceServiceName);
 
-		data.addContent(getWorkspaceDataForController(workspaceAnalysedControllerName, analysedController));
-		data.addContent(getWorkspaceDataForController(workspaceDefinedControllerName, definedController));
+		data.addContent(getWorkspaceDataForController(
+				workspaceAnalysedControllerName, analysedController));
+		data.addContent(getWorkspaceDataForController(
+				workspaceDefinedControllerName, definedController));
 
 		return data;
 	}
@@ -91,34 +94,46 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 	public void loadWorkspaceData(Element workspaceData) {
 		createControllers();
 		try {
-			Element analysedControllerElement = workspaceData.getChild(workspaceAnalysedControllerName);
-			loadWorkspaceDataForController(analysedController, analysedControllerElement);
+			Element analysedControllerElement = workspaceData
+					.getChild(workspaceAnalysedControllerName);
+			loadWorkspaceDataForController(analysedController,
+					analysedControllerElement);
 		} catch (Exception e) {
 			logger.error("Error importing the workspace for analyse.", e);
 		}
 		try {
-			Element definedControllerElement = workspaceData.getChild(workspaceDefinedControllerName);
-			loadWorkspaceDataForController(definedController, definedControllerElement);
+			Element definedControllerElement = workspaceData
+					.getChild(workspaceDefinedControllerName);
+			loadWorkspaceDataForController(definedController,
+					definedControllerElement);
 		} catch (Exception e) {
 			logger.error("Error importing the workspace for define.", e);
 		}
 	}
 
-	private Element getWorkspaceDataForController(String controllerName, DrawingController controller) {
+	private Element getWorkspaceDataForController(String controllerName,
+			DrawingController controller) {
 		Element controllerElement = new Element(controllerName);
-		controllerElement.setAttribute(workspaceShowDependencies, "" + controller.areDependenciesShown());
-		controllerElement.setAttribute(workspaceShowViolations, "" + controller.areViolationsShown());
-		controllerElement.setAttribute(workspaceSmartLines, "" + controller.areSmartLinesOn());
-		controllerElement.setAttribute(workspaceSmartLines, "" + controller.areSmartLinesOn());
-		controllerElement.setAttribute(workspaceLayoutStrategy, controller.getLayoutStrategy().toString());
+		controllerElement.setAttribute(workspaceShowDependencies, ""
+				+ controller.areDependenciesShown());
+		controllerElement.setAttribute(workspaceShowViolations,
+				"" + controller.areViolationsShown());
+		controllerElement.setAttribute(workspaceSmartLines,
+				"" + controller.areSmartLinesOn());
+		controllerElement.setAttribute(workspaceSmartLines,
+				"" + controller.areSmartLinesOn());
+		controllerElement.setAttribute(workspaceLayoutStrategy, controller
+				.getLayoutStrategy().toString());
 		return controllerElement;
 	}
 
 	private boolean isActive(Element controllerElement, String attribute) {
-		return Boolean.parseBoolean(controllerElement.getAttribute(attribute).getValue());
+		return Boolean.parseBoolean(controllerElement.getAttribute(attribute)
+				.getValue());
 	}
 
-	private void loadWorkspaceDataForController(DrawingController controller, Element data) {
+	private void loadWorkspaceDataForController(DrawingController controller,
+			Element data) {
 		if (isActive(data, workspaceShowDependencies)) {
 			controller.showDependencies();
 		} else {
@@ -139,7 +154,8 @@ public class GraphicsServiceImpl extends ObservableService implements IGraphicsS
 
 		DrawingLayoutStrategy selectedStrategy = null;
 		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
-			if (strategy.toString().equals(data.getAttribute(workspaceLayoutStrategy).getValue())) {
+			if (strategy.toString().equals(
+					data.getAttribute(workspaceLayoutStrategy).getValue())) {
 				selectedStrategy = strategy;
 			}
 		}
