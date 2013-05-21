@@ -15,25 +15,39 @@ public class NodeList implements Collection<Node>, Iterable<Node> {
 		nodes = new ArrayList<Node>();
 	}
 
+	@Override
 	public boolean add(Node n) {
 		return nodes.add(n);
 	}
 
 	@Override
+	public boolean addAll(Collection<? extends Node> arg0) {
+		return nodes.addAll(arg0);
+	}
+
+	@Override
+	public void clear() {
+		nodes.clear();
+	}
+
+	@Override
 	public boolean contains(Object o) {
-		for (Node node : nodes) {
+		for (Node node : nodes)
 			if (node.equals(o))
 				return true;
-		}
 
 		return false;
 	}
 
+	@Override
+	public boolean containsAll(Collection<?> arg0) {
+		return nodes.containsAll(arg0);
+	}
+
 	public Node getByFigure(Figure f) {
-		for (Node n : nodes) {
+		for (Node n : nodes)
 			if (n.equals(f))
 				return n;
-		}
 
 		// TODO: Patrick: Should this throw an exception or return null?
 		// Please check the Java API documentation concerning collections to see
@@ -43,27 +57,17 @@ public class NodeList implements Collection<Node>, Iterable<Node> {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return nodes.isEmpty();
+	}
+
+	@Override
 	public Iterator<Node> iterator() {
 		return nodes.iterator();
 	}
 
-	public void clear() {
-		nodes.clear();
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends Node> arg0) {
-		return nodes.addAll(arg0);
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> arg0) {
-		return nodes.containsAll(arg0);
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return nodes.isEmpty();
+	public List<Node> readOnlyCopy() {
+		return Collections.unmodifiableList(nodes);
 	}
 
 	@Override
@@ -94,10 +98,6 @@ public class NodeList implements Collection<Node>, Iterable<Node> {
 	@Override
 	public <T> T[] toArray(T[] arg0) {
 		return nodes.toArray(arg0);
-	}
-
-	public List<Node> readOnlyCopy() {
-		return Collections.unmodifiableList(nodes);
 	}
 
 }

@@ -65,359 +65,332 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	public DrawingController() {
 		super();
-		this.layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
+		layoutStrategyOption = DrawingLayoutStrategy.BASIC_LAYOUT;
 
-		this.figureFactory = new FigureFactory();
-		this.connectionStrategy = new FigureConnectorStrategy();
+		figureFactory = new FigureFactory();
+		connectionStrategy = new FigureConnectorStrategy();
 
-		this.localeService = ServiceProvider.getInstance().getLocaleService();
-		this.localeService.addServiceListener(new IServiceListener() {
+		localeService = ServiceProvider.getInstance().getLocaleService();
+		localeService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				DrawingController.this.refreshFrame();
 			}
 		});
 
-		this.initializeComponents();
-		this.switchLayoutStrategy();
-		this.loadDefaultSettings();
+		initializeComponents();
+		switchLayoutStrategy();
+		loadDefaultSettings();
 	}
 
 	@Override
 	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
-		this.layoutStrategyOption = selectedStrategyEnum;
-		this.switchLayoutStrategy();
-		this.updateLayout();
+		layoutStrategyOption = selectedStrategyEnum;
+		switchLayoutStrategy();
+		updateLayout();
 	}
 
 	public void clearDrawing() {
-		this.figureMap.clearAll();
-		this.drawing.clearAll();
+		figureMap.clearAll();
+		drawing.clearAll();
 
-		this.drawingView.clearSelection();
-		this.drawingView.invalidate();
+		drawingView.clearSelection();
+		drawingView.invalidate();
 	}
 
 	public void clearLines() {
-		this.drawing.clearAllLines();
+		drawing.clearAllLines();
 	}
 
 	public void drawArchitecture(DrawingDetail detail) {
-		this.drawingView.cannotZoomOut();
+		drawingView.cannotZoomOut();
 	}
 
 	public void drawDependenciesBetween(DependencyDTO[] dependencies,
 			BaseFigure figureFrom, BaseFigure figureTo) {
 		RelationFigure dependencyFigure = null;
 		try {
-			dependencyFigure = this.figureFactory.createFigure(dependencies);
+			dependencyFigure = figureFactory.createFigure(dependencies);
 		} catch (Exception e) {
-			this.logger.error("Could not create a dependency figure.", e);
+			logger.error("Could not create a dependency figure.", e);
 		}
 		if (null != dependencyFigure) {
-			this.figureMap.linkDependencies(dependencyFigure, dependencies);
-			this.connectionStrategy.connect(dependencyFigure, figureFrom,
-					figureTo);
-			this.drawing.add(dependencyFigure);
+			figureMap.linkDependencies(dependencyFigure, dependencies);
+			connectionStrategy.connect(dependencyFigure, figureFrom, figureTo);
+			drawing.add(dependencyFigure);
 		}
 	}
 
 	public void drawDependenciesForShownModules() {
-		BaseFigure[] shownModules = this.drawing.getShownModules();
-		for (BaseFigure figureFrom : shownModules) {
-			for (BaseFigure figureTo : shownModules) {
-				this.getAndDrawDependenciesBetween(figureFrom, figureTo);
-			}
-		}
+		BaseFigure[] shownModules = drawing.getShownModules();
+		for (BaseFigure figureFrom : shownModules)
+			for (BaseFigure figureTo : shownModules)
+				getAndDrawDependenciesBetween(figureFrom, figureTo);
 	}
 
 	@Override
 	public void drawingZoomChanged(double zoomFactor) {
 		zoomFactor = Math.max(MIN_ZOOMFACTOR, zoomFactor);
 		zoomFactor = Math.min(MAX_ZOOMFACTOR, zoomFactor);
-		this.drawingView.setScaleFactor(zoomFactor);
+		drawingView.setScaleFactor(zoomFactor);
 	}
 
 	public void drawLinesBasedOnSetting() {
-		if (this.areDependenciesShown()) {
-			this.drawDependenciesForShownModules();
-		}
-		if (this.areViolationsShown()) {
-			this.drawViolationsForShownModules();
-		}
-		if (this.areSmartLinesOn()) {
-			this.drawing.updateLineFigureToContext();
-		}
+		if (areDependenciesShown())
+			drawDependenciesForShownModules();
+		if (areViolationsShown())
+			drawViolationsForShownModules();
+		if (areSmartLinesOn())
+			drawing.updateLineFigureToContext();
 	}
 
 	protected void drawLinesBasedOnSettingInTask() {
-		this.clearLines();
-		this.setDrawingViewNonVisible();
-		this.runDrawLinesTask();
+		clearLines();
+		setDrawingViewNonVisible();
+		runDrawLinesTask();
 	}
 
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
-		this.runDrawSingleLevelTask(modules);
+		runDrawSingleLevelTask(modules);
 	}
 
 	protected void drawModulesAndLines(
 			HashMap<String, ArrayList<AbstractDTO>> modules) {
-		this.runDrawMultiLevelTask(modules);
+		runDrawMultiLevelTask(modules);
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		this.clearDrawing();
-		this.drawMultiLevelModules(modules);
-		this.updateLayout();
-		this.drawLinesBasedOnSetting();
-		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
-		this.graphicsFrame.updateGUI();
+		clearDrawing();
+		drawMultiLevelModules(modules);
+		updateLayout();
+		drawLinesBasedOnSetting();
+		graphicsFrame.setCurrentPaths(getCurrentPaths());
+		graphicsFrame.updateGUI();
 	}
 
 	public void drawMultiLevelModules(
 			HashMap<String, ArrayList<AbstractDTO>> modules) {
-		this.graphicsFrame.setUpToDate();
+		graphicsFrame.setUpToDate();
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
 			if (!parentName.isEmpty()) {
-				parentFigure = this.figureFactory
-						.createParentFigure(parentName);
-				this.drawing.add(parentFigure);
+				parentFigure = figureFactory.createParentFigure(parentName);
+				drawing.add(parentFigure);
 			}
-			for (AbstractDTO dto : modules.get(parentName)) {
+			for (AbstractDTO dto : modules.get(parentName))
 				try {
-					BaseFigure generatedFigure = this.figureFactory
+					BaseFigure generatedFigure = figureFactory
 							.createFigure(dto);
 
-					if (parentFigure != null) {
+					if (parentFigure != null)
 						parentFigure.add(generatedFigure);
-					}
 
-					this.drawing.add(generatedFigure);
-					this.figureMap.linkModule(generatedFigure, dto);
+					drawing.add(generatedFigure);
+					figureMap.linkModule(generatedFigure, dto);
 				} catch (Exception e) {
-					this.logger.error("Could not generate and display figure.",
-							e);
+					logger.error("Could not generate and display figure.", e);
 				}
-			}
-			if (!parentName.isEmpty()) {
+			if (!parentName.isEmpty())
 				parentFigure.updateLayout();
-			}
 		}
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
-		this.graphicsFrame.setUpToDate();
-		this.drawSingleLevelModules(modules);
-		this.updateLayout();
-		this.drawLinesBasedOnSetting();
-		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
-		this.graphicsFrame.updateGUI();
+		graphicsFrame.setUpToDate();
+		drawSingleLevelModules(modules);
+		updateLayout();
+		drawLinesBasedOnSetting();
+		graphicsFrame.setCurrentPaths(getCurrentPaths());
+		graphicsFrame.updateGUI();
 	}
 
 	public void drawSingleLevelModules(AbstractDTO[] modules) {
-		for (AbstractDTO dto : modules) {
+		for (AbstractDTO dto : modules)
 			try {
-				BaseFigure generatedFigure = this.figureFactory
-						.createFigure(dto);
-				this.drawing.add(generatedFigure);
-				this.figureMap.linkModule(generatedFigure, dto);
+				BaseFigure generatedFigure = figureFactory.createFigure(dto);
+				drawing.add(generatedFigure);
+				figureMap.linkModule(generatedFigure, dto);
 			} catch (Exception e) {
-				this.logger.error("Could not generate and display figure.", e);
+				logger.error("Could not generate and display figure.", e);
 			}
-		}
 	}
 
 	public void drawViolationsBetween(ViolationDTO[] violations,
 			BaseFigure figureFrom, BaseFigure figureTo) {
 		try {
-			RelationFigure violationFigure = this.figureFactory
+			RelationFigure violationFigure = figureFactory
 					.createFigure(violations);
-			this.figureMap.linkViolations(violationFigure, violations);
-			this.connectionStrategy.connect(violationFigure, figureFrom,
-					figureTo);
-			this.drawing.add(violationFigure);
+			figureMap.linkViolations(violationFigure, violations);
+			connectionStrategy.connect(violationFigure, figureFrom, figureTo);
+			drawing.add(violationFigure);
 		} catch (Exception e) {
-			this.logger.error(
-					"Could not create a violation line between figures.", e);
+			logger.error("Could not create a violation line between figures.",
+					e);
 		}
 	}
 
 	public void drawViolationsForShownModules() {
-		BaseFigure[] shownModules = this.drawing.getShownModules();
-		for (BaseFigure figureFrom : shownModules) {
-			for (BaseFigure figureTo : shownModules) {
-				if (figureFrom == figureTo) {
-					this.getAndDrawViolationsIn(figureFrom);
-				} else {
-					this.getAndDrawViolationsBetween(figureFrom, figureTo);
-				}
-			}
-		}
+		BaseFigure[] shownModules = drawing.getShownModules();
+		for (BaseFigure figureFrom : shownModules)
+			for (BaseFigure figureTo : shownModules)
+				if (figureFrom == figureTo)
+					getAndDrawViolationsIn(figureFrom);
+				else
+					getAndDrawViolationsBetween(figureFrom, figureTo);
 	}
 
 	public void drawViolationsIn(ViolationDTO[] violations,
 			BaseFigure figureFrom) {
 		try {
-			figureFrom.addDecorator(this.figureFactory
+			figureFrom.addDecorator(figureFactory
 					.createViolationsDecorator(violations));
 		} catch (Exception e) {
-			this.logger
-					.error("Could not attach decorator to figure to indicate internal violations.",
-							e);
+			logger.error(
+					"Could not attach decorator to figure to indicate internal violations.",
+					e);
 		}
-		this.figureMap.linkViolatedModule(figureFrom, violations);
+		figureMap.linkViolatedModule(figureFrom, violations);
 	}
 
 	@Override
 	public void exportToImage() {
-		this.drawing.showExportToImagePanel();
+		drawing.showExportToImagePanel();
 	}
 
 	@Override
 	public void figureDeselected(BaseFigure[] figures) {
-		if (this.drawingView.getSelectionCount() == 0) {
-			this.graphicsFrame.hideProperties();
-		}
+		if (drawingView.getSelectionCount() == 0)
+			graphicsFrame.hideProperties();
 	}
 
 	@Override
 	public void figureSelected(BaseFigure[] figures) {
 		BaseFigure selectedFigure = figures[0];
-		if (this.figureMap.isViolatedFigure(selectedFigure)) {
-			this.graphicsFrame.showViolationsProperties(this.figureMap
+		if (figureMap.isViolatedFigure(selectedFigure))
+			graphicsFrame.showViolationsProperties(figureMap
 					.getViolatedDTOs(selectedFigure));
-		} else if (this.figureMap.isViolationLine(selectedFigure)) {
-			this.graphicsFrame.showViolationsProperties(this.figureMap
+		else if (figureMap.isViolationLine(selectedFigure))
+			graphicsFrame.showViolationsProperties(figureMap
 					.getViolationDTOs(selectedFigure));
-		} else if (this.figureMap.isDependencyLine(selectedFigure)) {
-			this.graphicsFrame.showDependenciesProperties(this.figureMap
+		else if (figureMap.isDependencyLine(selectedFigure))
+			graphicsFrame.showDependenciesProperties(figureMap
 					.getDependencyDTOs(selectedFigure));
-		} else {
-			this.graphicsFrame.hideProperties();
-		}
+		else
+			graphicsFrame.hideProperties();
 	}
 
 	private void getAndDrawDependenciesBetween(BaseFigure figureFrom,
 			BaseFigure figureTo) {
-		DependencyDTO[] dependencies = this.getDependenciesBetween(figureFrom,
+		DependencyDTO[] dependencies = getDependenciesBetween(figureFrom,
 				figureTo);
-		if (dependencies.length > 0) {
-			this.drawDependenciesBetween(dependencies, figureFrom, figureTo);
-		}
+		if (dependencies.length > 0)
+			drawDependenciesBetween(dependencies, figureFrom, figureTo);
 	}
 
 	private void getAndDrawViolationsBetween(BaseFigure figureFrom,
 			BaseFigure figureTo) {
-		ViolationDTO[] violations = this.getViolationsBetween(figureFrom,
-				figureTo);
-		if (violations.length > 0) {
-			this.drawViolationsBetween(violations, figureFrom, figureTo);
-		}
+		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureTo);
+		if (violations.length > 0)
+			drawViolationsBetween(violations, figureFrom, figureTo);
 	}
 
 	private void getAndDrawViolationsIn(BaseFigure figureFrom) {
-		ViolationDTO[] violations = this.getViolationsBetween(figureFrom,
-				figureFrom);
-		if (violations.length > 0) {
-			this.drawViolationsIn(violations, figureFrom);
-		}
+		ViolationDTO[] violations = getViolationsBetween(figureFrom, figureFrom);
+		if (violations.length > 0)
+			drawViolationsIn(violations, figureFrom);
 	}
 
 	protected abstract DependencyDTO[] getDependenciesBetween(
 			BaseFigure figureFrom, BaseFigure figureTo);
 
 	public Drawing getDrawing() {
-		return this.drawing;
+		return drawing;
 	}
 
 	public FigureMap getFigureMap() {
-		return this.figureMap;
+		return figureMap;
 	}
 
 	public JInternalFrame getGUI() {
-		return this.graphicsFrame;
+		return graphicsFrame;
 	}
 
 	public DrawingLayoutStrategy getLayoutStrategy() {
-		return this.layoutStrategyOption;
+		return layoutStrategyOption;
 	}
 
 	protected abstract ViolationDTO[] getViolationsBetween(
 			BaseFigure figureFrom, BaseFigure figureTo);
 
 	protected boolean hasSavedFigureStates(String paths) {
-		return this.storedStates.containsKey(paths);
+		return storedStates.containsKey(paths);
 	}
 
 	@Override
 	public void hideDependencies() {
 		super.hideDependencies();
-		this.graphicsFrame.turnOffDependencies();
+		graphicsFrame.turnOffDependencies();
 	}
 
 	@Override
 	public void hideModules() {
-		this.drawingView.hideSelectedFigures();
+		drawingView.hideSelectedFigures();
 	}
 
 	@Override
 	public void hideSmartLines() {
 		super.hideSmartLines();
-		this.graphicsFrame.turnOffSmartLines();
+		graphicsFrame.turnOffSmartLines();
 	}
 
 	@Override
 	public void hideViolations() {
 		super.hideViolations();
-		this.graphicsFrame.turnOffViolations();
-		this.drawing.setFiguresNotViolated(this.figureMap.getViolatedFigures());
+		graphicsFrame.turnOffViolations();
+		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
 
 	private void initializeComponents() {
-		this.drawing = new Drawing();
-		this.drawing.setFigureMap(this.figureMap);
-		this.drawingView = new DrawingView(this.drawing);
-		this.drawingView.addListener(this);
+		drawing = new Drawing();
+		drawing.setFigureMap(figureMap);
+		drawingView = new DrawingView(drawing);
+		drawingView.addListener(this);
 
-		this.graphicsFrame = new GraphicsFrame(this.drawingView);
-		this.graphicsFrame.addListener(this);
-		this.graphicsFrame.setSelectedLayout(this.layoutStrategyOption);
+		graphicsFrame = new GraphicsFrame(drawingView);
+		graphicsFrame.addListener(this);
+		graphicsFrame.setSelectedLayout(layoutStrategyOption);
 
-		this.threadMonitor = new ThreadMonitor(this);
+		threadMonitor = new ThreadMonitor(this);
 	}
 
 	public boolean isDrawingVisible() {
-		return this.drawingView.isVisible();
+		return drawingView.isVisible();
 	}
 
 	@Override
 	public void moduleZoom() {
-		Set<Figure> selection = this.drawingView.getSelectedFigures();
+		Set<Figure> selection = drawingView.getSelectedFigures();
 
 		if (selection.size() > 0) {
 			ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
 			java.util.Collections.addAll(figures,
 					selection.toArray(new BaseFigure[selection.size()]));
 
-			for (BaseFigure f : figures) {
+			for (BaseFigure f : figures)
 				f.isContext(false); // minimising potential side effects
-			}
 
-			this.drawingView.selectAll();
-			List<BaseFigure> allFigures = Arrays.asList(this.drawingView
+			drawingView.selectAll();
+			List<BaseFigure> allFigures = Arrays.asList(drawingView
 					.getSelectedFigures().toArray(new BaseFigure[0]));
-			this.drawingView.clearSelection();
-			this.drawingView.addToSelection(selection);
+			drawingView.clearSelection();
+			drawingView.addToSelection(selection);
 
-			for (BaseFigure f : allFigures) {
+			for (BaseFigure f : allFigures)
 				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
 					f.isContext(true);
 					figures.add(f);
-				} else {
+				} else
 					f.isContext(false);
-				}
-			}
 
 			BaseFigure[] selectedFigures = figures
 					.toArray(new BaseFigure[figures.size()]);
@@ -427,22 +400,20 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	protected void printFigures(String msg) {
-		if (!debugPrint) {
+		if (!debugPrint)
 			return;
-		}
 
 		System.out.println(msg);
 
-		for (Figure f : this.drawing.getChildren()) {
+		for (Figure f : drawing.getChildren()) {
 			BaseFigure bf = (BaseFigure) f;
 			Rectangle2D.Double bounds = bf.getBounds();
 
 			String rect = String.format(Locale.US,
 					"[x=%1.2f,y=%1.2f,w=%1.2f,h=%1.2f]", bounds.x, bounds.y,
 					bounds.width, bounds.height);
-			if (bf.getName().equals("Main")) {
+			if (bf.getName().equals("Main"))
 				System.out.println(String.format("%s: %s", bf.getName(), rect));
-			}
 		}
 	}
 
@@ -450,135 +421,131 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public abstract void refreshDrawing();
 
 	public void refreshFrame() {
-		this.graphicsFrame.refreshFrame();
+		graphicsFrame.refreshFrame();
 	}
 
 	protected void resetAllFigurePositions() {
-		this.storedStates.clear();
+		storedStates.clear();
 	}
 
 	protected void restoreFigurePositions(String paths) {
-		if (this.storedStates.containsKey(paths)) {
-			DrawingState state = this.storedStates.get(paths);
-			state.restore(this.figureMap);
-			this.drawingView.setHasHiddenFigures(state.hasHiddenFigures());
+		if (storedStates.containsKey(paths)) {
+			DrawingState state = storedStates.get(paths);
+			state.restore(figureMap);
+			drawingView.setHasHiddenFigures(state.hasHiddenFigures());
 		}
 	}
 
 	@Override
 	public void restoreModules() {
-		this.drawingView.restoreHiddenFigures();
+		drawingView.restoreHiddenFigures();
 	}
 
 	private void runDrawLinesTask() {
-		this.runThread(new DrawingLinesThread(this));
+		runThread(new DrawingLinesThread(this));
 	}
 
 	private void runDrawMultiLevelTask(
 			HashMap<String, ArrayList<AbstractDTO>> modules) {
-		this.runThread(new DrawingMultiLevelThread(this, modules));
+		runThread(new DrawingMultiLevelThread(this, modules));
 	}
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
-		this.runThread(new DrawingSingleLevelThread(this, modules));
+		runThread(new DrawingSingleLevelThread(this, modules));
 	}
 
 	private void runThread(Runnable runnable) {
-		if (!this.threadMonitor.add(runnable)) {
-			this.logger
-					.warn("A drawing thread is already running. Wait until it has finished before running another.");
-			this.graphicsFrame.setOutOfDate();
+		if (!threadMonitor.add(runnable)) {
+			logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
+			graphicsFrame.setOutOfDate();
 		}
 	}
 
 	protected void saveFigurePositions() {
-		String paths = this.getCurrentPathsToString();
+		String paths = getCurrentPathsToString();
 		DrawingState state;
-		if (this.storedStates.containsKey(paths)) {
-			state = this.storedStates.get(paths);
-		} else {
-			state = new DrawingState(this.drawing);
-		}
+		if (storedStates.containsKey(paths))
+			state = storedStates.get(paths);
+		else
+			state = new DrawingState(drawing);
 
-		state.save(this.figureMap);
-		this.storedStates.put(paths, state);
+		state.save(figureMap);
+		storedStates.put(paths, state);
 	}
 
 	public void saveSingleLevelFigurePositions() {
-		if (this.getCurrentPaths().length < 2) {
-			this.saveFigurePositions();
-		}
+		if (getCurrentPaths().length < 2)
+			saveFigurePositions();
 	}
 
 	@Override
 	public void setCurrentPaths(String[] paths) {
 		super.setCurrentPaths(paths);
-		if (!this.getCurrentPaths()[0].isEmpty()) {
-			this.drawingView.canZoomOut();
-		} else {
-			this.drawingView.cannotZoomOut();
-		}
+		if (!getCurrentPaths()[0].isEmpty())
+			drawingView.canZoomOut();
+		else
+			drawingView.cannotZoomOut();
 	}
 
 	public void setDrawingViewNonVisible() {
-		this.drawingView.setVisible(false);
-		this.graphicsFrame.showLoadingScreen();
+		drawingView.setVisible(false);
+		graphicsFrame.showLoadingScreen();
 	}
 
 	public void setDrawingViewVisible() {
-		this.graphicsFrame.hideLoadingScreen();
-		this.drawingView.setVisible(true);
+		graphicsFrame.hideLoadingScreen();
+		drawingView.setVisible(true);
 	}
 
 	@Override
 	public void setZoomSlider(double zoomFactor) {
-		this.graphicsFrame.setZoomSlider(zoomFactor);
+		graphicsFrame.setZoomSlider(zoomFactor);
 	}
 
 	@Override
 	public void showDependencies() {
 		super.showDependencies();
-		this.graphicsFrame.turnOnDependencies();
+		graphicsFrame.turnOnDependencies();
 	}
 
 	@Override
 	public void showSmartLines() {
 		super.showSmartLines();
-		this.graphicsFrame.turnOnSmartLines();
+		graphicsFrame.turnOnSmartLines();
 	}
 
 	@Override
 	public void showViolations() {
 		super.showViolations();
-		this.graphicsFrame.turnOnViolations();
+		graphicsFrame.turnOnViolations();
 	}
 
 	private void switchLayoutStrategy() {
-		switch (this.layoutStrategyOption) {
+		switch (layoutStrategyOption) {
 		case BASIC_LAYOUT:
-			this.layoutStrategy = new BasicLayoutStrategy(this.drawing);
+			layoutStrategy = new BasicLayoutStrategy(drawing);
 			break;
 		case LAYERED_LAYOUT:
-			this.layoutStrategy = new LayeredLayoutStrategy(this.drawing);
+			layoutStrategy = new LayeredLayoutStrategy(drawing);
 			break;
 		case NO_LAYOUT:
-			this.layoutStrategy = new NoLayoutStrategy();
+			layoutStrategy = new NoLayoutStrategy();
 		default:
-			this.layoutStrategy = new BasicLayoutStrategy(this.drawing);
+			layoutStrategy = new BasicLayoutStrategy(drawing);
 			break;
 		}
 	}
 
 	protected void updateLayout() {
-		String currentPaths = this.getCurrentPathsToString();
+		String currentPaths = getCurrentPathsToString();
 
-		if (this.hasSavedFigureStates(currentPaths)) {
-			this.restoreFigurePositions(currentPaths);
-		} else {
-			this.layoutStrategy.doLayout();
-			this.drawingView.setHasHiddenFigures(false);
+		if (hasSavedFigureStates(currentPaths))
+			restoreFigurePositions(currentPaths);
+		else {
+			layoutStrategy.doLayout();
+			drawingView.setHasHiddenFigures(false);
 		}
 
-		this.drawing.updateLines();
+		drawing.updateLines();
 	}
 }

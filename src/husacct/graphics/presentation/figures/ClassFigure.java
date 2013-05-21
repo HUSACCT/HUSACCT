@@ -36,18 +36,34 @@ public class ClassFigure extends BaseFigure {
 		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 	}
 
+	@Override
+	public ClassFigure clone() {
+		ClassFigure other = (ClassFigure) super.clone();
+
+		other.top = top.clone();
+		other.middle = middle.clone();
+		other.classNameText = classNameText.clone();
+		other.bottom = bottom.clone();
+
+		other.children = new ArrayList<Figure>();
+		other.children.add(other.top);
+		other.children.add(other.middle);
+		other.children.add(other.classNameText);
+		other.children.add(other.bottom);
+
+		return other;
+	}
+
 	public TextFigure getClassNameText() {
-		return this.classNameText;
+		return classNameText;
 	}
 
 	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
+		if (lead.x - anchor.x < MIN_WIDTH)
 			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+		if (lead.y - anchor.y < MIN_HEIGHT)
 			lead.y = anchor.y + MIN_HEIGHT;
-		}
 
 		double width = lead.x - anchor.x;
 		double totalHeight = lead.y - anchor.y;
@@ -65,33 +81,14 @@ public class ClassFigure extends BaseFigure {
 				+ topHeight + middleHeight + bottomHeight));
 
 		// textbox centralising
-		double plusX = ((top.getBounds().width - this.classNameText.getBounds().width) / 2);
-		double plusY = ((top.getBounds().height - this.classNameText
-				.getBounds().height) / 2);
+		double plusX = (top.getBounds().width - classNameText.getBounds().width) / 2;
+		double plusY = (top.getBounds().height - classNameText.getBounds().height) / 2;
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;
 		textAnchor.y += plusY;
 		classNameText.setBounds(textAnchor, null);
 
-		this.invalidate();
-	}
-
-	@Override
-	public ClassFigure clone() {
-		ClassFigure other = (ClassFigure) super.clone();
-
-		other.top = top.clone();
-		other.middle = middle.clone();
-		other.classNameText = classNameText.clone();
-		other.bottom = bottom.clone();
-
-		other.children = new ArrayList<Figure>();
-		other.children.add(other.top);
-		other.children.add(other.middle);
-		other.children.add(other.classNameText);
-		other.children.add(other.bottom);
-
-		return other;
+		invalidate();
 	}
 }

@@ -59,6 +59,10 @@ public class ContextMenu extends JPopupMenu {
 		hookupEventHandlers();
 	}
 
+	public void addListener(UserInputListener listener) {
+		listeners.add(listener);
+	}
+
 	private void hookupEventHandlers() {
 		zoomIn.addActionListener(new ActionListener() {
 			@Override
@@ -89,54 +93,46 @@ public class ContextMenu extends JPopupMenu {
 		});
 	}
 
-	protected void triggerZoomIn() {
-		for (UserInputListener l : listeners) {
-			l.moduleZoom();
-		}
-	}
-
-	protected void triggerRestoreModules() {
-		for (UserInputListener l : listeners) {
-			l.restoreModules();
-		}
-	}
-
-	protected void triggerHideModules() {
-		for (UserInputListener l : listeners) {
-			l.hideModules();
-		}
-	}
-
-	private void triggerZoomOut() {
-		for (UserInputListener l : listeners) {
-			l.moduleZoomOut();
-		}
-	}
-
-	public void addListener(UserInputListener listener) {
-		listeners.add(listener);
-	}
-
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
-	}
-
-	public void setHasSelection(boolean newValue) {
-		hasSelection = newValue;
-	}
-
-	public void setHasHiddenFigures(boolean newValue) {
-		hasHiddenFigures = newValue;
 	}
 
 	public void setCanZoomout(boolean newValue) {
 		canZoomout = newValue;
 	}
 
+	public void setHasHiddenFigures(boolean newValue) {
+		hasHiddenFigures = newValue;
+	}
+
+	public void setHasSelection(boolean newValue) {
+		hasSelection = newValue;
+	}
+
 	@Override
 	public void show(Component invoker, int x, int y) {
 		updateMenuItems();
 		super.show(invoker, x, y);
+	}
+
+	protected void triggerHideModules() {
+		for (UserInputListener l : listeners)
+			l.hideModules();
+	}
+
+	protected void triggerRestoreModules() {
+		for (UserInputListener l : listeners)
+			l.restoreModules();
+	}
+
+	protected void triggerZoomIn() {
+		for (UserInputListener l : listeners)
+			l.moduleZoom();
+	}
+
+	private void triggerZoomOut() {
+		for (UserInputListener l : listeners)
+			l.moduleZoomOut();
 	}
 
 	private void updateMenuItems() {

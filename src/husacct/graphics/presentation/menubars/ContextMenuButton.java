@@ -56,6 +56,18 @@ public class ContextMenuButton extends JPopupMenu {
 		hookupEventHandlers();
 	}
 
+	public void addListener(UserInputListener listener) {
+		listeners.add(listener);
+	}
+
+	public boolean canZoomModule() {
+		return zoomModuleContext.isEnabled();
+	}
+
+	public boolean canZoomModuleContext() {
+		return zoomModule.isEnabled();
+	}
+
 	private void hookupEventHandlers() {
 		zoomModuleContext.addActionListener(new ActionListener() {
 			@Override
@@ -76,38 +88,8 @@ public class ContextMenuButton extends JPopupMenu {
 		});
 	}
 
-	protected void triggerZoomInContext() {
-		for (UserInputListener l : listeners) {
-			l.moduleZoom();
-		}
-	}
-
-	protected void triggerRestoreModules() {
-		for (UserInputListener l : listeners) {
-			l.restoreModules();
-		}
-	}
-
-	protected void triggerHideModules() {
-		for (UserInputListener l : listeners) {
-			l.hideModules();
-		}
-	}
-
-	public void addListener(UserInputListener listener) {
-		listeners.add(listener);
-	}
-
 	public void removeListener(UserInputListener listener) {
 		listeners.remove(listener);
-	}
-
-	public boolean canZoomModule() {
-		return zoomModuleContext.isEnabled();
-	}
-
-	public boolean canZoomModuleContext() {
-		return zoomModule.isEnabled();
 	}
 
 	private void setButtonIcon(JButton button, String iconKey) {
@@ -124,5 +106,20 @@ public class ContextMenuButton extends JPopupMenu {
 	public void show(Component invoker, int x, int y) {
 		super.show(invoker, x, y);
 		parentZoomButton = (JButton) invoker;
+	}
+
+	protected void triggerHideModules() {
+		for (UserInputListener l : listeners)
+			l.hideModules();
+	}
+
+	protected void triggerRestoreModules() {
+		for (UserInputListener l : listeners)
+			l.restoreModules();
+	}
+
+	protected void triggerZoomInContext() {
+		for (UserInputListener l : listeners)
+			l.moduleZoom();
 	}
 }

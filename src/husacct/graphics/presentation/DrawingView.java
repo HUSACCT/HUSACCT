@@ -4,7 +4,6 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.util.UserInputListener;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -17,16 +16,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import org.apache.log4j.Logger;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.draw.event.FigureSelectionListener;
-import org.jhotdraw.draw.io.ImageOutputFormat;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
@@ -47,100 +41,94 @@ public class DrawingView extends DefaultDrawingView {
 	private final HashSet<Figure> previousSelection = new HashSet<Figure>();
 
 	public DrawingView(Drawing givenDrawing) {
-		this.drawing = givenDrawing;
-		this.setDrawing(this.drawing);
+		drawing = givenDrawing;
+		setDrawing(drawing);
 
-		this.editor = new DefaultDrawingEditor();
-		this.editor.add(this);
+		editor = new DefaultDrawingEditor();
+		editor.add(this);
 
-		this.contextMenu = new ContextMenu();
+		contextMenu = new ContextMenu();
 
-		this.initializeSelectionTool();
-		this.initializeKeyListener();
-		this.initializeMouseListener();
-		this.initializeSelectionListener();
+		initializeSelectionTool();
+		initializeKeyListener();
+		initializeMouseListener();
+		initializeSelectionListener();
 	}
 
 	public void addListener(UserInputListener listener) {
-		this.listeners.add(listener);
-		this.contextMenu.addListener(listener);
+		listeners.add(listener);
+		contextMenu.addListener(listener);
 	}
 
 	public void cannotZoomOut() {
-		this.contextMenu.setCanZoomout(false);
+		contextMenu.setCanZoomout(false);
 	}
 
 	public void canZoomOut() {
-		this.contextMenu.setCanZoomout(true);
+		contextMenu.setCanZoomout(true);
 	}
 
 	public void drawingZoomChanged(double zoomFactor) {
-		for (UserInputListener listener : this.listeners) {
+		for (UserInputListener listener : listeners) {
 			listener.setZoomSlider(zoomFactor);
 			listener.drawingZoomChanged(zoomFactor);
 		}
 	}
 
 	private void figureDeselected(BaseFigure[] figures) {
-		for (UserInputListener l : this.listeners) {
+		for (UserInputListener l : listeners)
 			l.figureDeselected(figures);
-		}
 	}
 
 	private void figureSelected(BaseFigure[] figures) {
-		for (UserInputListener l : this.listeners) {
+		for (UserInputListener l : listeners)
 			l.figureSelected(figures);
-		}
 	}
 
 	private Set<Figure> getDeltaSelection() {
 		HashSet<Figure> deltaSelection = new HashSet<Figure>();
-		Set<Figure> selection = this.getSelectedFigures();
+		Set<Figure> selection = getSelectedFigures();
 
-		for (Figure f : this.previousSelection) {
-			if (!selection.contains(f)) {
+		for (Figure f : previousSelection)
+			if (!selection.contains(f))
 				deltaSelection.add(f);
-			}
-		}
 		return Collections.unmodifiableSet(deltaSelection);
 	}
 
 	private void handleDeselect() {
-		Set<Figure> deselectedFigures = this.getDeltaSelection();
+		Set<Figure> deselectedFigures = getDeltaSelection();
 		if (deselectedFigures.size() > 0) {
 			BaseFigure[] deselection = new BaseFigure[deselectedFigures.size()];
 			deselection = deselectedFigures.toArray(deselection);
 
-			this.figureDeselected(deselection);
-			for (BaseFigure figure : deselection) {
+			figureDeselected(deselection);
+			for (BaseFigure figure : deselection)
 				figure.resetLayer();
-			}
 		}
 	}
 
 	private boolean hasSelection() {
-		return this.getSelectedFigures().size() > 0;
+		return getSelectedFigures().size() > 0;
 	}
 
 	public void hideSelectedFigures() {
-		Set<Figure> selection = this.getSelectedFigures();
-		this.drawing.hideSelectedFigures(selection);
-		this.clearSelection();
-		this.contextMenu.setHasHiddenFigures(this.drawing.hasHiddenFigures());
+		Set<Figure> selection = getSelectedFigures();
+		drawing.hideSelectedFigures(selection);
+		clearSelection();
+		contextMenu.setHasHiddenFigures(drawing.hasHiddenFigures());
 	}
 
 	private void initializeKeyListener() {
-		this.addKeyListener(new KeyListener() {
+		addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == 17) {
-					DrawingView.this.isCtrlPressed = true;
-				}
+				if (e.getKeyCode() == 17)
+					isCtrlPressed = true;
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				DrawingView.this.isCtrlPressed = false;
+				isCtrlPressed = false;
 			}
 
 			@Override
@@ -151,13 +139,13 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeMouseListener() {
-		this.addMouseListener(new MouseAdapter() {
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				DrawingView.this.onMouseClicked(e);
 			}
 		});
-		this.addMouseWheelListener(new MouseWheelListener() {
+		addMouseWheelListener(new MouseWheelListener() {
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -167,7 +155,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeSelectionListener() {
-		this.addFigureSelectionListener(new FigureSelectionListener() {
+		addFigureSelectionListener(new FigureSelectionListener() {
 			@Override
 			public void selectionChanged(FigureSelectionEvent evt) {
 				DrawingView.this.onSelectionChanged(evt);
@@ -176,14 +164,13 @@ public class DrawingView extends DefaultDrawingView {
 	}
 
 	private void initializeSelectionTool() {
-		this.selectionTool = new SelectionTool();
-		this.editor.setTool(this.selectionTool);
+		selectionTool = new SelectionTool();
+		editor.setTool(selectionTool);
 	}
 
 	private void moduleZoom(BaseFigure[] fig) {
-		for (UserInputListener listener : this.listeners) {
+		for (UserInputListener listener : listeners)
 			listener.moduleZoom(fig);
-		}
 		this.requestFocus();
 	}
 
@@ -191,37 +178,20 @@ public class DrawingView extends DefaultDrawingView {
 		int mouseButton = e.getButton();
 		int mouseClicks = e.getClickCount();
 
-		this.handleDeselect();
-		if (mouseButton == LeftMouseButton && this.hasSelection()) {
-			BaseFigure[] selection = this.toFigureArray(this
-					.getSelectedFigures());
+		handleDeselect();
+		if (mouseButton == LeftMouseButton && hasSelection()) {
+			BaseFigure[] selection = toFigureArray(getSelectedFigures());
 
-			if (mouseClicks == DoubleClick) {
-				this.moduleZoom(selection);
-			} else {
-				for (BaseFigure figure : selection) {
+			if (mouseClicks == DoubleClick)
+				moduleZoom(selection);
+			else
+				for (BaseFigure figure : selection)
 					figure.raiseLayer();
-				}
-			}
-		} else if (mouseButton == RightMouseButton) {
-			this.contextMenu.show(this, e.getX(), e.getY());
-		}
+		} else if (mouseButton == RightMouseButton)
+			contextMenu.show(this, e.getX(), e.getY());
 
-		this.previousSelection.clear();
-		this.previousSelection.addAll(this.getSelectedFigures());
-	}
-
-	protected void onSelectionChanged(FigureSelectionEvent evt) {
-		this.handleDeselect();
-		if (this.hasSelection()) {
-			BaseFigure[] selection = this.toFigureArray(this
-					.getSelectedFigures());
-			for (BaseFigure selectedFig : selection) {
-				this.drawing.bringToFront(selectedFig);
-			}
-			this.figureSelected(selection);
-		}
-		this.contextMenu.setHasSelection(this.hasSelection());
+		previousSelection.clear();
+		previousSelection.addAll(getSelectedFigures());
 	}
 
 	private void onMouseScrolled(MouseWheelEvent e) {
@@ -229,24 +199,35 @@ public class DrawingView extends DefaultDrawingView {
 			requestFocus();
 			double wheelRotation = e.getWheelRotation() * -1;
 			double wheelRotationFactor = wheelRotation / ScrollSpeed;
-			double scaleFactor = this.getScaleFactor() + wheelRotationFactor;
+			double scaleFactor = getScaleFactor() + wheelRotationFactor;
 			drawingZoomChanged(scaleFactor);
 		}
 	}
 
+	protected void onSelectionChanged(FigureSelectionEvent evt) {
+		handleDeselect();
+		if (hasSelection()) {
+			BaseFigure[] selection = toFigureArray(getSelectedFigures());
+			for (BaseFigure selectedFig : selection)
+				drawing.bringToFront(selectedFig);
+			figureSelected(selection);
+		}
+		contextMenu.setHasSelection(hasSelection());
+	}
+
 	public void removeListener(UserInputListener listener) {
-		this.listeners.remove(listener);
-		this.contextMenu.removeListener(listener);
+		listeners.remove(listener);
+		contextMenu.removeListener(listener);
 	}
 
 	public void restoreHiddenFigures() {
-		this.drawing.restoreHiddenFigures();
-		this.contextMenu.setHasHiddenFigures(false);
+		drawing.restoreHiddenFigures();
+		contextMenu.setHasHiddenFigures(false);
 	}
 
 	public void setHasHiddenFigures(boolean setting) {
-		this.contextMenu.setHasHiddenFigures(setting);
-		this.contextMenu.setHasSelection(false);
+		contextMenu.setHasHiddenFigures(setting);
+		contextMenu.setHasSelection(false);
 	}
 
 	private BaseFigure[] toFigureArray(Collection<Figure> collection) {

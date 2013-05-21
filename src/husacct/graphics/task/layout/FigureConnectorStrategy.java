@@ -17,6 +17,11 @@ public class FigureConnectorStrategy {
 		prototype = new LineConnectionFigure();
 	}
 
+	public Figure connect(BaseFigure startFigure, BaseFigure endFigure) {
+		ConnectionFigure connection = (ConnectionFigure) prototype.clone();
+		return connect(connection, startFigure, endFigure);
+	}
+
 	public ConnectionFigure connect(ConnectionFigure connection,
 			BaseFigure startFigure, BaseFigure endFigure) {
 		Connector startConnector = startFigure.findConnector(
@@ -24,7 +29,7 @@ public class FigureConnectorStrategy {
 		Connector endConnector = endFigure.findConnector(new Point2D.Double(
 				500, 30), prototype);
 
-		if ((startConnector != null && endConnector != null)
+		if (startConnector != null && endConnector != null
 				&& prototype.canConnect(startConnector, endConnector)) {
 			connection.willChange();
 			connection.setStartConnector(startConnector);
@@ -36,11 +41,6 @@ public class FigureConnectorStrategy {
 		}
 
 		throw new IllegalArgumentException("The figures cannot be connected");
-	}
-
-	public Figure connect(BaseFigure startFigure, BaseFigure endFigure) {
-		ConnectionFigure connection = (ConnectionFigure) prototype.clone();
-		return connect(connection, startFigure, endFigure);
 	}
 
 	public ConnectionFigure getConnectionPrototype() {

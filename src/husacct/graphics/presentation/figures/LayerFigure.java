@@ -30,29 +30,6 @@ public class LayerFigure extends BaseFigure {
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
-		}
-
-		body.setBounds(anchor, lead);
-
-		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
-
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX;
-		textAnchor.y += plusY;
-		text.setBounds(textAnchor, null);
-
-		invalidate();
-	}
-
-	@Override
 	public LayerFigure clone() {
 
 		LayerFigure other = (LayerFigure) super.clone();
@@ -69,5 +46,26 @@ public class LayerFigure extends BaseFigure {
 	@Override
 	public boolean isModule() {
 		return true;
+	}
+
+	@Override
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if (lead.x - anchor.x < MIN_WIDTH)
+			lead.x = anchor.x + MIN_WIDTH;
+		if (lead.y - anchor.y < MIN_HEIGHT)
+			lead.y = anchor.y + MIN_HEIGHT;
+
+		body.setBounds(anchor, lead);
+
+		// textbox centralising
+		double plusX = (lead.x - anchor.x - text.getBounds().width) / 2;
+		double plusY = (lead.y - anchor.y - text.getBounds().height) / 2;
+
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
+
+		invalidate();
 	}
 }

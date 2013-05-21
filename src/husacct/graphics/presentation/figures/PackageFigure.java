@@ -35,36 +35,6 @@ public class PackageFigure extends BaseFigure {
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		// minimum size
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
-		}
-
-		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x)
-				* 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
-
-		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x,
-				(anchor.y + top.getBounds().height));
-
-		body.setBounds(bodyTopLeft, lead);
-
-		// textbox centralising
-		double plusX = (((lead.x - bodyTopLeft.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - bodyTopLeft.y) - text.getBounds().height) / 2);
-
-		Point2D.Double textAnchor = (Double) bodyTopLeft.clone();
-		textAnchor.x += plusX;
-		textAnchor.y += plusY;
-		text.setBounds(textAnchor, null);
-
-		invalidate();
-	}
-
-	@Override
 	public PackageFigure clone() {
 		PackageFigure other = (PackageFigure) super.clone();
 
@@ -83,5 +53,33 @@ public class PackageFigure extends BaseFigure {
 	@Override
 	public boolean isModule() {
 		return true;
+	}
+
+	@Override
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		// minimum size
+		if (lead.x - anchor.x < MIN_WIDTH)
+			lead.x = anchor.x + MIN_WIDTH;
+		if (lead.y - anchor.y < MIN_HEIGHT)
+			lead.y = anchor.y + MIN_HEIGHT;
+
+		top.setBounds(anchor, new Point2D.Double(anchor.x + (lead.x - anchor.x)
+				* 0.33f, anchor.y + (lead.y - anchor.y) * 0.2f));
+
+		Point2D.Double bodyTopLeft = new Point2D.Double(anchor.x, anchor.y
+				+ top.getBounds().height);
+
+		body.setBounds(bodyTopLeft, lead);
+
+		// textbox centralising
+		double plusX = (lead.x - bodyTopLeft.x - text.getBounds().width) / 2;
+		double plusY = (lead.y - bodyTopLeft.y - text.getBounds().height) / 2;
+
+		Point2D.Double textAnchor = (Double) bodyTopLeft.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		text.setBounds(textAnchor, null);
+
+		invalidate();
 	}
 }

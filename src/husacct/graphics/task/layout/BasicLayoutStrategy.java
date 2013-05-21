@@ -23,6 +23,19 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		drawing = theDrawing;
 	}
 
+	private int countItemsToPosition(List<Figure> figures) {
+		int count = 0;
+
+		for (Figure f : figures) {
+			BaseFigure bf = (BaseFigure) f;
+			if (!bf.isInContainer() && !bf.isLine())
+				count++;
+		}
+
+		return count;
+	}
+
+	@Override
 	public void doLayout() {
 		double x = HORZ_ITEM_SPACING, y = VERT_ITEM_SPACING;
 		double maxHeightOnLine = 0.0;
@@ -35,7 +48,7 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 		int itemsToPosition = countItemsToPosition(figures);
 		int maxFiguresOnRow = (int) Math.ceil(Math.sqrt(itemsToPosition));
 
-		for (Figure f : figures) {
+		for (Figure f : figures)
 			if (!isConnector(f) && !inContainer(f)) {
 
 				Rectangle2D.Double bounds = f.getBounds();
@@ -60,22 +73,8 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 				x += bounds.width + HORZ_ITEM_SPACING;
 				maxHeightOnLine = Math.max(maxHeightOnLine, bounds.height);
 				figuresOnLine++;
-			} else {
+			} else
 				connectors.add(f);
-			}
-		}
-	}
-
-	private int countItemsToPosition(List<Figure> figures) {
-		int count = 0;
-
-		for (Figure f : figures) {
-			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isInContainer() && !bf.isLine())
-				count++;
-		}
-
-		return count;
 	}
 
 	private boolean inContainer(Figure f) {
@@ -91,11 +90,10 @@ public class BasicLayoutStrategy implements LayoutStrategy {
 			if (figure instanceof RelationFigure) // TODO Call the isLine
 													// method?
 				return true;
-		} else if (figure instanceof ConnectionFigure) { // TODO extend it and
-															// implement the
-															// isLine method?
+		} else if (figure instanceof ConnectionFigure)
+			// implement the
+			// isLine method?
 			return true;
-		}
 		return false;
 	}
 }

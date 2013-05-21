@@ -19,8 +19,20 @@ public class ElbowLiner implements Liner {
 		this.distance = distance;
 	}
 
-	public void setDistance(double distance) {
-		this.distance = distance;
+	@Override
+	public Liner clone() {
+		try {
+			return (Liner) super.clone();
+		} catch (CloneNotSupportedException ex) {
+			InternalError error = new InternalError(ex.getMessage());
+			error.initCause(ex);
+			throw error;
+		}
+	}
+
+	@Override
+	public Collection<Handle> createHandles(BezierPath path) {
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -28,9 +40,8 @@ public class ElbowLiner implements Liner {
 		BezierPath path = ((LineConnectionFigure) figure).getBezierPath();
 		Connector start = figure.getStartConnector();
 		Connector end = figure.getEndConnector();
-		if (start == null || end == null || path == null) {
+		if (start == null || end == null || path == null)
 			return;
-		}
 
 		Point2D.Double centerPoint = path.getCenter();
 
@@ -58,19 +69,8 @@ public class ElbowLiner implements Liner {
 		path.invalidatePath();
 	}
 
-	@Override
-	public Collection<Handle> createHandles(BezierPath path) {
-		return Collections.emptyList();
-	}
-
-	public Liner clone() {
-		try {
-			return (Liner) super.clone();
-		} catch (CloneNotSupportedException ex) {
-			InternalError error = new InternalError(ex.getMessage());
-			error.initCause(ex);
-			throw error;
-		}
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 }

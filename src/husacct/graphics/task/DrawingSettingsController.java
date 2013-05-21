@@ -14,59 +14,23 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public DrawingSettingsController() {
 	}
 
-	public void loadDefaultSettings() {
-		showDependencies();
-		hideViolations();
-		showSmartLines();
-	}
-
-	protected DrawingDetail getCurrentDrawingDetail() {
-		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
-		if (areViolationsShown()) {
-			detail = DrawingDetail.WITH_VIOLATIONS;
-		}
-		return detail;
-	}
-
-	public void notifyServiceListeners() {
-		ServiceProvider.getInstance().getGraphicsService()
-				.notifyServiceListeners();
-	}
-
 	public boolean areDependenciesShown() {
 		return areDependenciesShown;
-	}
-
-	public void showDependencies() {
-		areDependenciesShown = true;
-	}
-
-	public void hideDependencies() {
-		areDependenciesShown = false;
-	}
-
-	public boolean areViolationsShown() {
-		return areViolationsShown;
-	}
-
-	public void showViolations() {
-		areViolationsShown = true;
-	}
-
-	public void hideViolations() {
-		areViolationsShown = false;
 	}
 
 	public boolean areSmartLinesOn() {
 		return areSmartLinesOn;
 	}
 
-	public void hideSmartLines() {
-		areSmartLinesOn = false;
+	public boolean areViolationsShown() {
+		return areViolationsShown;
 	}
 
-	public void showSmartLines() {
-		areSmartLinesOn = true;
+	protected DrawingDetail getCurrentDrawingDetail() {
+		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
+		if (areViolationsShown())
+			detail = DrawingDetail.WITH_VIOLATIONS;
+		return detail;
 	}
 
 	public String[] getCurrentPaths() {
@@ -75,10 +39,35 @@ public abstract class DrawingSettingsController implements UserInputListener {
 
 	public String getCurrentPathsToString() {
 		String stringPaths = "";
-		for (String path : getCurrentPaths()) {
+		for (String path : getCurrentPaths())
 			stringPaths += path + " + ";
-		}
 		return stringPaths;
+	}
+
+	@Override
+	public void hideDependencies() {
+		areDependenciesShown = false;
+	}
+
+	@Override
+	public void hideSmartLines() {
+		areSmartLinesOn = false;
+	}
+
+	@Override
+	public void hideViolations() {
+		areViolationsShown = false;
+	}
+
+	public void loadDefaultSettings() {
+		showDependencies();
+		hideViolations();
+		showSmartLines();
+	}
+
+	public void notifyServiceListeners() {
+		ServiceProvider.getInstance().getGraphicsService()
+				.notifyServiceListeners();
 	}
 
 	public void resetCurrentPaths() {
@@ -87,6 +76,21 @@ public abstract class DrawingSettingsController implements UserInputListener {
 
 	public void setCurrentPaths(String[] paths) {
 		currentPaths = paths;
+	}
+
+	@Override
+	public void showDependencies() {
+		areDependenciesShown = true;
+	}
+
+	@Override
+	public void showSmartLines() {
+		areSmartLinesOn = true;
+	}
+
+	@Override
+	public void showViolations() {
+		areViolationsShown = true;
 	}
 
 }

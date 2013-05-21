@@ -13,71 +13,6 @@ import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.geom.BezierPath.Node;
 
 public class RoundedLiner implements Liner {
-	private double distance;
-
-	public RoundedLiner(double distance) {
-		this.distance = distance;
-	}
-
-	public void setDistance(double distance) {
-		this.distance = distance;
-	}
-
-	@Override
-	public void lineout(ConnectionFigure figure) {
-		BezierPath path = ((LineConnectionFigure) figure).getBezierPath();
-		Connector start = figure.getStartConnector();
-		Connector end = figure.getEndConnector();
-		if (start == null || end == null || path == null) {
-			return;
-		}
-
-		Point2D.Double centerPoint = path.getCenter();
-
-		Node startNode = path.get(0);
-		Node endNode = path.get(path.size() - 1);
-		path.clear();
-
-		path.add(startNode);
-
-		Point2D.Double pointStart = new Point2D.Double(startNode.x[0],
-				startNode.y[0]);
-		Point2D.Double pointEnd = new Point2D.Double(endNode.x[0], endNode.y[0]);
-
-		double width;
-		if (pointStart.x > pointEnd.x) {
-			width = pointStart.x - pointEnd.x;
-		} else {
-			width = pointEnd.x - pointStart.x;
-		}
-
-		double height;
-		if (pointStart.y > pointEnd.y) {
-			height = pointStart.y - pointEnd.y;
-		} else {
-			height = pointEnd.y - pointStart.y;
-		}
-
-		double diffX = width / (width + height);
-		double diffY = height / (width + height);
-
-		double angle = RoundedLiner.getAngle(pointStart, pointEnd);
-		if (angle < 90 || (angle > 180 && angle < 270)) {
-			centerPoint.x += diffY * this.distance;
-			centerPoint.y -= diffX * this.distance;
-		} else {
-			centerPoint.x += diffY * this.distance;
-			centerPoint.y += diffX * this.distance;
-		}
-
-		Node centerNode = new Node(centerPoint);
-		path.add(centerNode);
-
-		path.add(endNode);
-
-		path.invalidatePath();
-	}
-
 	public static double getAngle(Point2D.Double point1, Point2D.Double point2) {
 		double dx = point1.x - point2.x;
 		// Minus to correct for coord re-mapping
@@ -95,11 +30,13 @@ public class RoundedLiner implements Liner {
 		return Math.toDegrees(inRads);
 	}
 
-	@Override
-	public Collection<Handle> createHandles(BezierPath path) {
-		return Collections.emptyList();
+	private double distance;
+
+	public RoundedLiner(double distance) {
+		this.distance = distance;
 	}
 
+	@Override
 	public Liner clone() {
 		try {
 			return (Liner) super.clone();
@@ -108,6 +45,67 @@ public class RoundedLiner implements Liner {
 			error.initCause(ex);
 			throw error;
 		}
+	}
+
+	@Override
+	public Collection<Handle> createHandles(BezierPath path) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public void lineout(ConnectionFigure figure) {
+		BezierPath path = ((LineConnectionFigure) figure).getBezierPath();
+		Connector start = figure.getStartConnector();
+		Connector end = figure.getEndConnector();
+		if (start == null || end == null || path == null)
+			return;
+
+		Point2D.Double centerPoint = path.getCenter();
+
+		Node startNode = path.get(0);
+		Node endNode = path.get(path.size() - 1);
+		path.clear();
+
+		path.add(startNode);
+
+		Point2D.Double pointStart = new Point2D.Double(startNode.x[0],
+				startNode.y[0]);
+		Point2D.Double pointEnd = new Point2D.Double(endNode.x[0], endNode.y[0]);
+
+		double width;
+		if (pointStart.x > pointEnd.x)
+			width = pointStart.x - pointEnd.x;
+		else
+			width = pointEnd.x - pointStart.x;
+
+		double height;
+		if (pointStart.y > pointEnd.y)
+			height = pointStart.y - pointEnd.y;
+		else
+			height = pointEnd.y - pointStart.y;
+
+		double diffX = width / (width + height);
+		double diffY = height / (width + height);
+
+		double angle = RoundedLiner.getAngle(pointStart, pointEnd);
+		if (angle < 90 || angle > 180 && angle < 270) {
+			centerPoint.x += diffY * distance;
+			centerPoint.y -= diffX * distance;
+		} else {
+			centerPoint.x += diffY * distance;
+			centerPoint.y += diffX * distance;
+		}
+
+		Node centerNode = new Node(centerPoint);
+		path.add(centerNode);
+
+		path.add(endNode);
+
+		path.invalidatePath();
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 }

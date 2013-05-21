@@ -33,32 +33,6 @@ public class DrawingState {
 		hasHiddenFigures = false;
 	}
 
-	public void save(FigureMap figureMap) {
-		this.figureMap = figureMap;
-		this.clear();
-		List<Figure> figures = drawing.getChildren();
-
-		for (Figure f : figures) {
-			BaseFigure bf = (BaseFigure) f;
-			if (!bf.isLine() && shouldSaveState(bf)) {
-				FigureState state = saveFigureState(bf);
-				savedPositions.put(state.path, state);
-				if (!state.enabled) {
-					hasHiddenFigures = true;
-				}
-			}
-		}
-	}
-
-	private FigureState saveFigureState(BaseFigure bf) {
-		FigureState retVal = new FigureState();
-		retVal.path = getFullPath(bf);
-		retVal.position = bf.getBounds();
-		retVal.enabled = bf.isEnabled();
-
-		return retVal;
-	}
-
 	private String getFullPath(BaseFigure bf) {
 		AbstractDTO dto = figureMap.getModuleDTO(bf);
 
@@ -71,8 +45,8 @@ public class DrawingState {
 		}
 	}
 
-	private boolean shouldSaveState(BaseFigure bf) {
-		return figureMap.getModuleDTO(bf) != null;
+	public boolean hasHiddenFigures() {
+		return hasHiddenFigures;
 	}
 
 	public void restore(FigureMap figureMap) {
@@ -118,7 +92,32 @@ public class DrawingState {
 		}
 	}
 
-	public boolean hasHiddenFigures() {
-		return hasHiddenFigures;
+	public void save(FigureMap figureMap) {
+		this.figureMap = figureMap;
+		clear();
+		List<Figure> figures = drawing.getChildren();
+
+		for (Figure f : figures) {
+			BaseFigure bf = (BaseFigure) f;
+			if (!bf.isLine() && shouldSaveState(bf)) {
+				FigureState state = saveFigureState(bf);
+				savedPositions.put(state.path, state);
+				if (!state.enabled)
+					hasHiddenFigures = true;
+			}
+		}
+	}
+
+	private FigureState saveFigureState(BaseFigure bf) {
+		FigureState retVal = new FigureState();
+		retVal.path = getFullPath(bf);
+		retVal.position = bf.getBounds();
+		retVal.enabled = bf.isEnabled();
+
+		return retVal;
+	}
+
+	private boolean shouldSaveState(BaseFigure bf) {
+		return figureMap.getModuleDTO(bf) != null;
 	}
 }

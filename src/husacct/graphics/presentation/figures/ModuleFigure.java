@@ -35,43 +35,6 @@ public class ModuleFigure extends BaseFigure {
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
-		}
-
-		body.setBounds(anchor, lead);
-
-		// get text sizes
-		double maxTextWidth = moduleText.getBounds().width;
-		if (text.getBounds().width > maxTextWidth) {
-			maxTextWidth = text.getBounds().width;
-		}
-		double totalTextHeight = text.getBounds().height
-				+ moduleText.getBounds().height;
-
-		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - maxTextWidth) / 2);
-		double plusY = (((lead.y - anchor.y) - totalTextHeight) / 2);
-
-		Point2D.Double moduleTextAnchor = (Double) anchor.clone();
-		moduleTextAnchor.x += plusX
-				+ ((maxTextWidth - moduleText.getBounds().width) / 2);
-		moduleTextAnchor.y += plusY;
-		moduleText.setBounds(moduleTextAnchor, null);
-
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX + ((maxTextWidth - text.getBounds().width) / 2);
-		textAnchor.y += plusY + moduleText.getBounds().height;
-		text.setBounds(textAnchor, null);
-
-		invalidate();
-	}
-
-	@Override
 	public ModuleFigure clone() {
 		ModuleFigure other = (ModuleFigure) super.clone();
 		other.body = body.clone();
@@ -89,6 +52,40 @@ public class ModuleFigure extends BaseFigure {
 	@Override
 	public boolean isModule() {
 		return true;
+	}
+
+	@Override
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if (lead.x - anchor.x < MIN_WIDTH)
+			lead.x = anchor.x + MIN_WIDTH;
+		if (lead.y - anchor.y < MIN_HEIGHT)
+			lead.y = anchor.y + MIN_HEIGHT;
+
+		body.setBounds(anchor, lead);
+
+		// get text sizes
+		double maxTextWidth = moduleText.getBounds().width;
+		if (text.getBounds().width > maxTextWidth)
+			maxTextWidth = text.getBounds().width;
+		double totalTextHeight = text.getBounds().height
+				+ moduleText.getBounds().height;
+
+		// textbox centralising
+		double plusX = (lead.x - anchor.x - maxTextWidth) / 2;
+		double plusY = (lead.y - anchor.y - totalTextHeight) / 2;
+
+		Point2D.Double moduleTextAnchor = (Double) anchor.clone();
+		moduleTextAnchor.x += plusX
+				+ (maxTextWidth - moduleText.getBounds().width) / 2;
+		moduleTextAnchor.y += plusY;
+		moduleText.setBounds(moduleTextAnchor, null);
+
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX + (maxTextWidth - text.getBounds().width) / 2;
+		textAnchor.y += plusY + moduleText.getBounds().height;
+		text.setBounds(textAnchor, null);
+
+		invalidate();
 	}
 
 }
