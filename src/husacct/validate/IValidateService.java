@@ -61,12 +61,16 @@ public interface IValidateService extends IObservableService {
 	public String[] getExportExtentions();
 
 	/**
+	 * Returns a list of supported default rule types for a given module
 	 * 
+	 * @returns an array of RuleType objects
 	 */
 	public RuleTypeDTO[] getDefaultRuleTypesOfModule(String type);
 
 	/**
+	 * Returns a list of supported allowed rule types for a given module
 	 * 
+	 * @returns an array of RuleType objects
 	 */
 	public RuleTypeDTO[] getAllowedRuleTypesOfModule(String type);
 

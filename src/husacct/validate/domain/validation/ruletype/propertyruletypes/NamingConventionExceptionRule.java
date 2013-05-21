@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.ruletype.contentsofamodule;
+package husacct.validate.domain.validation.ruletype.propertyruletypes;
 
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;

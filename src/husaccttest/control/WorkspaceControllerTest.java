@@ -117,7 +117,11 @@ public class WorkspaceControllerTest {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		HashMap<String, Object> config = new HashMap<String, Object>();
 		data.put("file", testFile);
+<<<<<<< HEAD
 		workspaceController.saveWorkspace("xml", data,config);
+=======
+		workspaceController.saveWorkspace("xml", data, null); //TODO: Give last parameter a good HashMap<String, Object> config value.
+>>>>>>> 756b94bbcb46d9d335412fb76423549b01641ff0
 		assertTrue(testFile.exists());
 	}
 	
