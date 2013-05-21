@@ -133,7 +133,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
                 FamixAssociation fAssocation = new FamixAssociation();
                 fAssocation.from = belongsToClass;
                 fAssocation.to = s;
-                fAssocation.type = "Declaration";
+                fAssocation.type = "DeclarationReturnType";
                 fAssocation.lineNumber = lineNumber;
                 model.waitingAssociations.add(fAssocation);
             }
@@ -159,7 +159,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             FamixAssociation fAssocation = new FamixAssociation();
             fAssocation.from = belongsToClass;
             fAssocation.to = type;
-            fAssocation.type = "Declaration";
+            fAssocation.type = "Declaration1";
             fAssocation.lineNumber = line;
             model.waitingAssociations.add(fAssocation);
         }
@@ -182,7 +182,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "DeclarationInstanceVariable";
         fAssocation.lineNumber = line;
         model.waitingAssociations.add(fAssocation);
         addToModel(famixAttribute);
@@ -197,7 +197,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             FamixAssociation fAssocation = new FamixAssociation();
             fAssocation.from = belongsToClass;
             fAssocation.to = type;
-            fAssocation.type = "Declaration";
+            fAssocation.type = "Declaration3";
             fAssocation.lineNumber = lineNumber;
             model.waitingAssociations.add(fAssocation);
         }
@@ -220,7 +220,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "DeclarationVariableWithinMethod";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
     }
@@ -250,7 +250,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "DeclarationParameter";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
 
@@ -258,7 +258,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             FamixAssociation fParamAssocation = new FamixAssociation();
             fParamAssocation.from = belongsToClass;
             fParamAssocation.to = type;
-            fParamAssocation.type = "Declaration";
+            fParamAssocation.type = "Declaration6";
             fParamAssocation.lineNumber = lineNumber;
             model.waitingAssociations.add(fParamAssocation);
         }

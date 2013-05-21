@@ -61,6 +61,12 @@ public class AnalyseTask implements Runnable {
 			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
 			
 			logger.debug("Analysing finished");
+			
+			//Logcontroller
+			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
+			//end logcontroller
+			
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
