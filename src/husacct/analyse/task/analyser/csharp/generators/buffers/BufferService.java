@@ -25,4 +25,13 @@ public class BufferService {
 	public void addDelegate(String packageAndClassname, CommonTree delegateTree) {
 		delegatebuffers.add(new DelegateBuffer(packageAndClassname).store(delegateTree));
 	}
+
+	public void checkDelegateExists() {
+		LambdaBuffer lb = lambdabuffers.get(lambdabuffers.size()-1);
+		for(DelegateBuffer db : delegatebuffers) {
+			if(lb.lambdaTypeName.equals(db.name)) {
+				
+			}
+		}
+	}
 }
