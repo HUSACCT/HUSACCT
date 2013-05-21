@@ -3,6 +3,7 @@ package husacct.validate.presentation;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
+import husacct.control.task.configuration.ConfigPanel;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationRuleTypeDTO;
 import husacct.validate.presentation.languageSeverityConfiguration.ConfigurationViolationTypeDTO;
@@ -28,7 +29,7 @@ import javax.swing.ListSelectionModel;
 import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
-public final class ValidateConfigurationPanel extends JPanel {
+public final class ValidateConfigurationPanel extends ConfigPanel {
 
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private static Logger logger = Logger.getLogger(ValidateConfigurationPanel.class);
@@ -243,5 +244,19 @@ public final class ValidateConfigurationPanel extends JPanel {
 	
 	public JPanel getGUI() {
 		return this;
+	}
+
+
+	@Override
+	public void SaveSettings() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void ResetSettings() {
+		// TODO Auto-generated method stub
+		
 	}
 }

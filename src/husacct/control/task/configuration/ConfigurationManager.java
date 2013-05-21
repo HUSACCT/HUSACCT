@@ -8,59 +8,58 @@ import java.util.Properties;
 
 public class ConfigurationManager {
 
-	Properties properties = new Properties();
+	private final static Properties properties = loadProperties();
 	
-	
-	public ConfigurationManager() {
-		loadProperties();
-	}
-	
-	
-	public String getProperty(String key) throws NonExistingSettingException {
+	public static String getProperty(String key, String defaultParam) {
 		if(properties.containsKey(key))
 			return properties.getProperty(key);
-		throw new NonExistingSettingException("The setting " + key + " does not exist.");
+		else {
+			setProperty(key, defaultParam);
+			return defaultParam;
+		}
 	}
 	
-	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
-		String property = getProperty(key);
+	public static int getPropertyAsInteger(String key, String defaultParam) throws NumberFormatException {
+		String property = getProperty(key, defaultParam);
 		return Integer.parseInt(property);
 	}
 	
-	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
-		String property = getProperty(key);
+	public static boolean getPropertyAsBoolean(String key, String defaultParam) {
+		String property = getProperty(key, defaultParam);
 		return Boolean.parseBoolean(property);
 	}
 	
-	public void setProperty(String key, String value) {
+	public static void setProperty(String key, String value) {
 		properties.setProperty(key, value);
 	}
 	
-	public void setPropertyFromInteger(String key, int value) {
+	public static void setPropertyFromInteger(String key, int value) {
 		properties.setProperty(key, String.valueOf(value));
 	}
 	
-	public void setPropertyFromBoolean(String key, boolean value) {
+	public static void setPropertyFromBoolean(String key, boolean value) {
 		properties.setProperty(key, String.valueOf(value));
 	}
 	
-	public void setPropertie(String key, String value) {
+	public static void setPropertie(String key, String value) {
 		properties.setProperty(key, value);
 		storeProperties();
 	}
 	
-	private void loadProperties() {
+	private static Properties loadProperties() {
+		Properties props = new Properties();
 		try {
 			File file = new File("config.properties");
 			if(!file.isFile())
 				createDefaults(file);
-			properties.load(new FileInputStream(file));
+			props.load(new FileInputStream(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return props;
 	}
 	
-	public void storeProperties() {
+	public static void storeProperties() {
 		try {
 			properties.store(new FileOutputStream("config.properties"), null);
 		} catch (IOException e) {
@@ -68,10 +67,10 @@ public class ConfigurationManager {
 		}
 	}
 	
-	private void createDefaults(File file) {
+	private static void createDefaults(File file) {
 		
 		try {
-			properties.load(this.getClass().getResourceAsStream("/husacct/common/resources/config.properties"));
+			properties.load(ConfigurationManager.class.getResourceAsStream("/husacct/common/resources/config.properties"));
 			storeProperties();
 		} catch (IOException e) {
 			e.printStackTrace();
