@@ -22,14 +22,14 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 		for (int i = 0; i < tree.getChildCount(); i++) {
 			Tree child = tree.getChild(i);
 			switch (child.getType()) {
-				case CSharpParser.VARIABLE_DECLARATOR:
-					delegateLocalVariable(child);
-					deleteTreeChild(child);
-					break;
-				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
-					delegateLocalVariable(child);
-					deleteTreeChild(child);
-					break;
+//				case CSharpParser.VARIABLE_DECLARATOR:
+//					delegateLocalVariable(child);
+//					deleteTreeChild(child);
+//					break;
+//				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
+//					delegateLocalVariable(child);
+//					deleteTreeChild(child);
+//					break;
 				case CSharpParser.OBJECT_CREATION_EXPRESSION:
 					delegateInvocationConstructor(child);
 					break;

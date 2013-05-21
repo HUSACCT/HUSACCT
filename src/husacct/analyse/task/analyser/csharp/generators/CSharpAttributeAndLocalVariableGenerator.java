@@ -85,12 +85,40 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 			case CSharpParser.TYPE:
 				setDeclareType(child);		
 				break;
+			case CSharpParser.VARIABLE_INITIALIZER:				
+				break;
+			case CSharpParser.OBJECT_CREATION_EXPRESSION:
+				delegateInvocationConstructor(child);
+				break;
+			case CSharpParser.METHOD_INVOCATION:
+				delegateInvocationMethod(child);
+				break;
+			case CSharpParser.MEMBER_ACCESS:
+				delegateInvocationPropertyOrField(child);
+				break;
+			case CSharpParser.EXPRESSION_STATEMENT:
+				
+				break;
 			}
 			treeNodeTypeFilter(child);
 		}
 	}
 
+	private void delegateInvocationMethod(Tree tree) {
+		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+		csharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	}
 
+	private void delegateInvocationPropertyOrField(Tree tree) {
+		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+		csharpInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	}
+	
+	private void delegateInvocationConstructor(Tree tree) {
+		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
+		csharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
+	}
+	
 	private void setDeclareType(Tree typeNode) {
 		Tree child = typeNode.getChild(0);
 		Tree declareTypeNode = child.getChild(0);
