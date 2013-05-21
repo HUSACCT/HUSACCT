@@ -1,0 +1,4630 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<husacct version="1">
+  <husacct.control.ControlServiceImpl>
+    <workspace name="BootstrapWorkspace" />
+  </husacct.control.ControlServiceImpl>
+  <husacct.define.DefineServiceImpl>
+    <Application>
+      <name>Java Benchmark</name>
+      <version>1.0</version>
+      <projects>
+        <Project>
+          <name>Java Benchmark</name>
+          <paths>
+            <path>C:\Users\Bart\Documents\GitHub\HUSACCT_MASTER\testprojects\java\benchmark</path>
+          </paths>
+          <programmingLanguage>Java</programmingLanguage>
+          <version>1.0</version>
+          <description>Benchmark Project</description>
+        </Project>
+      </projects>
+      <Architecture>
+        <name>SoftwareArchitecture</name>
+        <description>This is the root of the architecture</description>
+        <modules>
+          <Module>
+            <type>Layer</type>
+            <description>This is the presentation layer of the benchmark</description>
+            <id>6</id>
+            <name>Presentation Layer</name>
+            <HierarchicalLevel>1</HierarchicalLevel>
+          </Module>
+          <Module>
+            <type>Layer</type>
+            <description>This is the domain layer of the benchmark</description>
+            <id>7</id>
+            <name>Domain Layer</name>
+            <HierarchicalLevel>2</HierarchicalLevel>
+          </Module>
+          <Module>
+            <type>Layer</type>
+            <description>This is the infrastructure layer of the benchmark</description>
+            <id>8</id>
+            <name>Infrastructure Layer</name>
+            <HierarchicalLevel>3</HierarchicalLevel>
+          </Module>
+        </modules>
+        <rules>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>0</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>4</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>8</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>20</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>32</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>44</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>64</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>92</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>112</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>132</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>168</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>212</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>240</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>268</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>320</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>380</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>416</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>452</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>520</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>596</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>640</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>684</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>768</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>860</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>912</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>964</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>1064</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>1172</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>1232</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>1292</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>1408</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>1532</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>1600</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>1668</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>1800</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>1940</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>2016</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>2092</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>2240</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>2396</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>2480</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>2564</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>2728</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>2900</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>2992</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>3084</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>3264</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>3452</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>3552</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>3652</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>3848</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>4052</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>4160</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>4268</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>4480</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>4700</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>4816</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>4932</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>5160</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>5396</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>5520</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>5644</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>5888</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>6140</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>6272</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>6404</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>6664</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>6932</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>7072</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>7212</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>7488</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>7772</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Presentation is not allowed to use Infrastructure</description>
+            <enabled>true</enabled>
+            <id>7920</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Domain is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>8068</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Presentation</description>
+            <enabled>true</enabled>
+            <id>8360</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the presentation layer of the benchmark</description>
+                <id>6</id>
+                <name>Presentation Layer</name>
+                <HierarchicalLevel>1</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+          <AppliedRule>
+            <regex />
+            <description>Infrastructure is not allowed to use Domain</description>
+            <enabled>true</enabled>
+            <id>8660</id>
+            <type>IsNotAllowedToUse</type>
+            <moduleFrom>
+              <Module>
+                <type>Layer</type>
+                <description>This is the infrastructure layer of the benchmark</description>
+                <id>8</id>
+                <name>Infrastructure Layer</name>
+                <HierarchicalLevel>3</HierarchicalLevel>
+              </Module>
+            </moduleFrom>
+            <moduleTo>
+              <Module>
+                <type>Layer</type>
+                <description>This is the domain layer of the benchmark</description>
+                <id>7</id>
+                <name>Domain Layer</name>
+                <HierarchicalLevel>2</HierarchicalLevel>
+              </Module>
+            </moduleTo>
+            <dependencies>
+              <dependency>InvocMethod</dependency>
+              <dependency>Exception</dependency>
+              <dependency>AccessPropertyOrField</dependency>
+              <dependency>ExtendsInterface</dependency>
+              <dependency>Import</dependency>
+              <dependency>ExtendsConcrete</dependency>
+              <dependency>Annotation</dependency>
+              <dependency>Declaration</dependency>
+              <dependency>InvocConstructor</dependency>
+              <dependency>ExtendsLibrary</dependency>
+              <dependency>ExtendsAbstract</dependency>
+              <dependency>Implements</dependency>
+            </dependencies>
+          </AppliedRule>
+        </rules>
+      </Architecture>
+    </Application>
+  </husacct.define.DefineServiceImpl>
+  <husacct.validate.ValidateServiceImpl>
+    <validate>
+      <severities>
+        <severity>
+          <severityKey>Low</severityKey>
+          <id>d19219c9-06a0-43c7-be18-895a8918bd4d</id>
+          <color>-256</color>
+        </severity>
+        <severity>
+          <severityKey>Medium</severityKey>
+          <id>7ef1d8d4-f59c-494d-bf5f-10de0163df07</id>
+          <color>-14336</color>
+        </severity>
+        <severity>
+          <severityKey>High</severityKey>
+          <id>f8eaeb02-da15-4d8e-923f-af34a3605085</id>
+          <color>-65536</color>
+        </severity>
+      </severities>
+      <severitiesPerTypesPerProgrammingLanguages>
+        <severityPerTypePerProgrammingLanguage language="C#">
+          <severityPerType>
+            <typeKey>Exception</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Import</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsConcrete</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>package</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>class</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Declaration</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsAbstract</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>InvocConstructor</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Implements</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>private</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>InvocMethod</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>AccessPropertyOrField</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsInterface</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>default</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Annotation</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>public</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsLibrary</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+        </severityPerTypePerProgrammingLanguage>
+        <severityPerTypePerProgrammingLanguage language="Java">
+          <severityPerType>
+            <typeKey>Exception</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Import</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsConcrete</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>package</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>class</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Declaration</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>InvocConstructor</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsAbstract</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>private</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Implements</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>InvocMethod</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>AccessPropertyOrField</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsInterface</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>default</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>protected</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>Annotation</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>public</typeKey>
+            <severityId>7ef1d8d4-f59c-494d-bf5f-10de0163df07</severityId>
+          </severityPerType>
+          <severityPerType>
+            <typeKey>ExtendsLibrary</typeKey>
+            <severityId>d19219c9-06a0-43c7-be18-895a8918bd4d</severityId>
+          </severityPerType>
+        </severityPerTypePerProgrammingLanguage>
+      </severitiesPerTypesPerProgrammingLanguages>
+      <activeViolationTypes>
+        <activeViolationType language="C#">
+          <ruleType type="InterfaceConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="FacadeConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConventionException">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="SubClassConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="VisibilityConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeSkipCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeBackCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsOnlyAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsOnlyModuleAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="MustUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+        </activeViolationType>
+        <activeViolationType language="Java">
+          <ruleType type="InterfaceConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="NamingConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="FacadeConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="NamingConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>package</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>class</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="SubClassConvention">
+            <violationTypes />
+          </ruleType>
+          <ruleType type="VisibilityConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConvention">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="VisibilityConventionException">
+            <violationTypes>
+              <violationType>
+                <violationKey>public</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>protected</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>default</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>private</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeSkipCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToMakeBackCall">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsOnlyAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsOnlyModuleAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="MustUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsNotAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+          <ruleType type="IsAllowedToUse">
+            <violationTypes>
+              <violationType>
+                <violationKey>AccessPropertyOrField</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Annotation</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Declaration</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Exception</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsConcrete</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsAbstract</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsLibrary</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>ExtendsInterface</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Implements</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>Import</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocConstructor</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+              <violationType>
+                <violationKey>InvocMethod</violationKey>
+                <enabled>true</enabled>
+              </violationType>
+            </violationTypes>
+          </ruleType>
+        </activeViolationType>
+      </activeViolationTypes>
+    </validate>
+  </husacct.validate.ValidateServiceImpl>
+  <husacct.graphics.GraphicsServiceImpl>
+    <ArchitecureGraphicsService>
+      <analysedController showDependencies="true" showViolations="false" smartLines="false" layoutStrategy="BASIC_LAYOUT" />
+      <definedController showDependencies="true" showViolations="false" smartLines="false" layoutStrategy="BASIC_LAYOUT" />
+    </ArchitecureGraphicsService>
+  </husacct.graphics.GraphicsServiceImpl>
+</husacct>

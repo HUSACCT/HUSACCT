@@ -5,6 +5,7 @@ import husacct.common.services.IObservableService;
 import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,5 +31,6 @@ public interface IControlService extends IObservableService{
 	public ApplicationDTO getApplicationDTO();
 	
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors);
+	public void showHelpDialog(Component component);
 	
 }

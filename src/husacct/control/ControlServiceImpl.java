@@ -18,6 +18,7 @@ import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -170,5 +171,10 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		if (generalConfigurationPanel == null)
 			generalConfigurationPanel = new GeneralConfigurationPanel();
 		return generalConfigurationPanel;
+	}
+	@Override
+	public void showHelpDialog(Component comp) {
+		mainController.getApplicationController().showHelpGUI(comp);
+		
 	}
 }
