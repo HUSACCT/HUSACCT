@@ -43,29 +43,40 @@ class JavaAttributeAndLocalVariableGenerator {
     }
 
     private void walkThroughAST(Tree tree) {
+    	JavaInvocationGenerator javaInvocationGenerator = null;
+    	JavaAnnotationGenerator annotationGenerator = null;
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree child = tree.getChild(i);
             int treeType = child.getType();
-            if (treeType == JavaParser.MODIFIER_LIST) {
+            switch(treeType)
+            {
+            case JavaParser.MODIFIER_LIST:
                 setAccesControllQualifier(tree);
                 setClassScope(child);
-            } else if (treeType == JavaParser.TYPE) {
+            	break;
+            case JavaParser.TYPE:
                 setDeclareType(child);
-            } else if (treeType == JavaParser.VAR_DECLARATOR_LIST) {
+            	break;
+            case JavaParser.VAR_DECLARATOR_LIST:
                 setAttributeName(child);
-            } else if (treeType == JavaParser.CLASS_CONSTRUCTOR_CALL) {
-                JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+            	break;
+            	
+            case JavaParser.CLASS_CONSTRUCTOR_CALL:
+                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, belongsToMethod);
-            } else if (treeType == JavaParser.AT) {
-                JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
+            	break;
+            case JavaParser.AT:
+                annotationGenerator = new JavaAnnotationGenerator(belongsToClass);
                 annotationGenerator.generateMethod((CommonTree) child);
-            } else if (treeType == JavaParser.EXPR) {
-                JavaInvocationGenerator javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
+            	break;
+            case JavaParser.EXPR:
+                javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 if (child.getChild(0).getType() == JavaParser.METHOD_CALL) {
                     javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child.getChild(0), belongsToMethod);
                 } else if (child.getChild(0).getType() == JavaParser.DOT) {
                     javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) child, belongsToMethod);
                 }
+            	break;
             }
             walkThroughAST(child);
         }

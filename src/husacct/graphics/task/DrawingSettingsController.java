@@ -5,7 +5,7 @@ import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.UserInputListener;
 
 public abstract class DrawingSettingsController implements UserInputListener {
-	protected boolean areSmartLinesOn;
+	protected boolean areSmartLinesOn = true;
 	protected boolean areDependenciesShown;
 	protected boolean areViolationsShown;
 	
@@ -17,7 +17,7 @@ public abstract class DrawingSettingsController implements UserInputListener {
 	public void loadDefaultSettings(){
 		showDependencies();
 		hideViolations();
-		hideSmartLines();
+		showSmartLines();
 	}
 	
 	protected DrawingDetail getCurrentDrawingDetail() {

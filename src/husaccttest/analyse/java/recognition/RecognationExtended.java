@@ -1,7 +1,11 @@
 package husaccttest.analyse.java.recognition;
 
+import java.util.ArrayList;
+
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.common.dto.AnalysedModuleDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.define.IDefineService;
 import husaccttest.analyse.TestProjectFinder;
 import husaccttest.analyse.TestCaseExtended;
@@ -18,14 +22,17 @@ public abstract class RecognationExtended extends TestCaseExtended{
 		IDefineService defService = provider.getDefineService();
 
 		String path = TestProjectFinder.lookupProject("java", "recognition");
-		String[] paths = new String[]{path};
-		//defService.createApplication("Java Recognition", paths, "Java", "1.0");
+		ArrayList<String> paths = new ArrayList<String>();
+		paths.add(path);
+		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
+		projects.add(new ProjectDTO("TestProject", new ArrayList<String>(), "java", "1.0", "test project for unit tests", new ArrayList<AnalysedModuleDTO>()));
+		defService.createApplication("Java Recognition", projects, "1.0");
 		
 		service = provider.getAnalyseService();
 				
 		try {
 			if(!isAnalysed){
-				service.analyseApplication(paths, "Java");
+				service.analyseApplication(projects.get(0));
 				isAnalysed = true;
 			}
 
