@@ -41,7 +41,7 @@ public class CSharpGeneratorToolkit {
         return getUniqueName(namespaces, classes);
     }
 
-    public static String belongsToClass(Stack<String> namespaceStack, Stack<String> classStack) {
+    public static String createPackageAndClassName(Stack<String> namespaceStack, Stack<String> classStack) {
         String namespaces = getParentName(namespaceStack);
         String classes = getParentName(classStack);
         return getUniqueName(namespaces, classes);
@@ -91,8 +91,8 @@ public class CSharpGeneratorToolkit {
     }
 
     public static void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
+        for (int child = 0; child < treeNode.getChildCount(); child++) {
+            treeNode.deleteChild(child);
         }
     }
 

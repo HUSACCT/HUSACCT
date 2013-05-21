@@ -1,9 +1,11 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
+	
 public class CSharpBlockScopeGenerator extends CSharpGenerator {
 
 	private String packageAndClassName;
@@ -22,23 +24,20 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 			switch (child.getType()) {
 				case CSharpParser.VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
-					//TODO check when this is hit
+					deleteTreeChild(child);
 					break;
 				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
+					deleteTreeChild(child);
 					break;
 				case CSharpParser.OBJECT_CREATION_EXPRESSION:
 					delegateInvocationConstructor(child);
 					break;
 				case CSharpParser.METHOD_INVOCATION:
-					if (child.getChild(0).getType() == CSharpParser.DOT) {
-						delegateInvocationMethod(child);
-					}
+					delegateInvocationMethod(child);
 					break;
-				case CSharpParser.ASSIGNMENT:
-					if (child.getChild(0).getType() == CSharpParser.DOT) {
-						delegateInvocationPropertyOrField(child);
-					}
+				case CSharpParser.MEMBER_ACCESS:
+					delegateInvocationPropertyOrField(child);
 					break;
 				case CSharpParser.THROW:
 				case CSharpParser.CATCH:
