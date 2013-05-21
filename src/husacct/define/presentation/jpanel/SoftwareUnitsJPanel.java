@@ -150,7 +150,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		if (action.getSource() == this.addSoftwareUnitButton || action.getSource() == this.addSoftwareUnitItem) {
 			this.addSoftwareUnit();
 		} else if (action.getSource() == this.removeSoftwareUnitButton || action.getSource() == this.removeSoftwareUnitItem) {
-			this.removeSoftwareUnit();
+			this.removeSoftwareUnits();
 		}
 		else if (action.getSource() == this.editSoftwareUnitButton || action.getSource() == this.editSoftwareUnitItem) {
 			this.editSoftwareUnit();
@@ -180,7 +180,7 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener, Obser
 		}
 	}
 
-	private void removeSoftwareUnit(){
+	private void removeSoftwareUnits(){
 		if (getSelectedRow() != -1){
 			List<String> selectedModules = new ArrayList<String>();
 			List<String> types = new ArrayList<String>();
