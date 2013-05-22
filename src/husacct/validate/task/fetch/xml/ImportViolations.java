@@ -39,8 +39,8 @@ public class ImportViolations extends XmlImportUtils {
 			final String stringCalendar = violationElement.getChildText("occured");
 			final Calendar occured = getCalendar(stringCalendar);
 
-			Violation violation = new Violation();
-			violation.setOccured(occured)
+			Violation violation = new Violation()
+				.setOccured(occured)
 				.setLineNumber(lineNumber)
 				.setSeverity(violationSeverity)
 				.setRuletypeKey(ruleTypeKey)

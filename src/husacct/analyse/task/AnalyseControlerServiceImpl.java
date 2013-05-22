@@ -7,6 +7,7 @@ import husacct.analyse.domain.AnalyseDomainServiceImpl;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 public class AnalyseControlerServiceImpl implements IAnalyseControlService {
 
@@ -110,7 +111,7 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     }
     
     @Override
-    public String[] getExternalSystems(){
+    public ExternalSystemDTO[] getExternalSystems(){
     	return domainService.getExternalSystems();
     }
 }

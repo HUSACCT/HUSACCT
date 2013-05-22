@@ -36,41 +36,6 @@ public class ClassFigure extends BaseFigure {
 		set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 	}
 
-	public TextFigure getClassNameText() {
-		return this.classNameText;
-	}
-
-	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
-			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
-			lead.y = anchor.y + MIN_HEIGHT;
-		}
-
-		double width = lead.x - anchor.x;
-		double totalHeight = lead.y - anchor.y;
-		double middleHeight = Math.floor(totalHeight / 3);
-		double bottomHeight = Math.floor(totalHeight / 3);
-		double topHeight = totalHeight - middleHeight - bottomHeight;
-
-		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y + topHeight));
-		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight));
-		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight + middleHeight), new Point2D.Double(anchor.x + width, anchor.y + topHeight + middleHeight + bottomHeight));
-
-		// textbox centralising
-		double plusX = ((top.getBounds().width - this.classNameText.getBounds().width) / 2);
-		double plusY = ((top.getBounds().height - this.classNameText.getBounds().height) / 2);
-
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX;
-		textAnchor.y += plusY;
-		classNameText.setBounds(textAnchor, null);
-
-		this.invalidate();
-	}
-
 	@Override
 	public ClassFigure clone() {
 		ClassFigure other = (ClassFigure) super.clone();
@@ -87,5 +52,43 @@ public class ClassFigure extends BaseFigure {
 		other.children.add(other.bottom);
 
 		return other;
+	}
+
+	public TextFigure getClassNameText() {
+		return classNameText;
+	}
+
+	@Override
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if (lead.x - anchor.x < MIN_WIDTH)
+			lead.x = anchor.x + MIN_WIDTH;
+		if (lead.y - anchor.y < MIN_HEIGHT)
+			lead.y = anchor.y + MIN_HEIGHT;
+
+		double width = lead.x - anchor.x;
+		double totalHeight = lead.y - anchor.y;
+		double middleHeight = Math.floor(totalHeight / 3);
+		double bottomHeight = Math.floor(totalHeight / 3);
+		double topHeight = totalHeight - middleHeight - bottomHeight;
+
+		top.setBounds(anchor, new Point2D.Double(anchor.x + width, anchor.y
+				+ topHeight));
+		middle.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight),
+				new Point2D.Double(anchor.x + width, anchor.y + topHeight
+						+ middleHeight));
+		bottom.setBounds(new Point2D.Double(anchor.x, anchor.y + topHeight
+				+ middleHeight), new Point2D.Double(anchor.x + width, anchor.y
+				+ topHeight + middleHeight + bottomHeight));
+
+		// textbox centralising
+		double plusX = (top.getBounds().width - classNameText.getBounds().width) / 2;
+		double plusY = (top.getBounds().height - classNameText.getBounds().height) / 2;
+
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		textAnchor.y += plusY;
+		classNameText.setBounds(textAnchor, null);
+
+		invalidate();
 	}
 }

@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.util.UUID;
 
 public class Severity implements Cloneable {
-
 	private final UUID id;
 	private final String severityKey;
 	private Color color;

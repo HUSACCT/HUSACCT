@@ -66,7 +66,7 @@ public class CheckConformanceController {
 						List<Violation> newViolations = rule.check(configuration, appliedRule, appliedRule);
 						violationList.addAll(newViolations);
 
-						if (appliedRule.exceptionRules != null) {
+						if (appliedRule.exceptionRules != null) {	
 							checkConformanceExceptionRules(appliedRule.exceptionRules, appliedRule);
 						}
 					} catch (RuleTypeNotFoundException e) {

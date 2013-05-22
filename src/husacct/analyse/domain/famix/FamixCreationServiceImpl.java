@@ -30,21 +30,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
     }
 
     @Override
-    public void createLibrary(String uniqueName, String name, String belongsToPackage) {
-        createLibrary(uniqueName, name, belongsToPackage, "default");
-    }
-
-    @Override
-    public void createLibrary(String uniqueName, String name, String belongsToPackage, String visibility) {
-        FamixLibrary fLibrary = new FamixLibrary();
-        fLibrary.uniqueName = uniqueName;
-        fLibrary.name = name;
-        fLibrary.belongsToPackage = belongsToPackage;
-        fLibrary.visibility = visibility;
-        addToModel(fLibrary);
-    }
-
-    @Override
     public void createClass(String uniqueName, String name, String belongsToPackage,
             boolean isAbstract, boolean isInnerClass) {
         createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", "public");
@@ -148,7 +133,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
                 FamixAssociation fAssocation = new FamixAssociation();
                 fAssocation.from = belongsToClass;
                 fAssocation.to = s;
-                fAssocation.type = "Declaration";
+                fAssocation.type = "DeclarationReturnType";
                 fAssocation.lineNumber = lineNumber;
                 model.waitingAssociations.add(fAssocation);
             }
@@ -174,7 +159,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             FamixAssociation fAssocation = new FamixAssociation();
             fAssocation.from = belongsToClass;
             fAssocation.to = type;
-            fAssocation.type = "Declaration";
+            fAssocation.type = "Declaration1";
             fAssocation.lineNumber = line;
             model.waitingAssociations.add(fAssocation);
         }
@@ -197,7 +182,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "DeclarationInstanceVariable";
         fAssocation.lineNumber = line;
         model.waitingAssociations.add(fAssocation);
         addToModel(famixAttribute);
@@ -212,7 +197,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             FamixAssociation fAssocation = new FamixAssociation();
             fAssocation.from = belongsToClass;
             fAssocation.to = type;
-            fAssocation.type = "Declaration";
+            fAssocation.type = "Declaration3";
             fAssocation.lineNumber = lineNumber;
             model.waitingAssociations.add(fAssocation);
         }
@@ -235,7 +220,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
 
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "DeclarationVariableWithinMethod";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
     }
@@ -265,7 +250,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         FamixAssociation fAssocation = new FamixAssociation();
         fAssocation.from = belongsToClass;
         fAssocation.to = declareType;
-        fAssocation.type = "Declaration";
+        fAssocation.type = "DeclarationParameter";
         fAssocation.lineNumber = lineNumber;
         model.waitingAssociations.add(fAssocation);
 
@@ -273,7 +258,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
             FamixAssociation fParamAssocation = new FamixAssociation();
             fParamAssocation.from = belongsToClass;
             fParamAssocation.to = type;
-            fParamAssocation.type = "Declaration";
+            fParamAssocation.type = "Declaration6";
             fParamAssocation.lineNumber = lineNumber;
             model.waitingAssociations.add(fParamAssocation);
         }

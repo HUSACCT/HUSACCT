@@ -6,7 +6,7 @@ import husacct.define.domain.module.Module;
 import java.util.ArrayList;
 
 public class AppliedRule {
-	
+
 	private static long STATIC_ID;
 	private long id;
 	private String description;
@@ -18,10 +18,6 @@ public class AppliedRule {
 	private boolean enabled;
 	private ArrayList<AppliedRule> exceptions;
 
-	
-	/**
-	 * Contructors
-	 */
 	public AppliedRule(String ruleType, String description, String[] dependencies,
 			String regex, Module moduleFrom,
 			Module moduleTo, boolean enabled) {
@@ -36,45 +32,34 @@ public class AppliedRule {
 		this.exceptions = new ArrayList<AppliedRule>();
 		this.enabled = enabled;
 	}
-	
+
 	public AppliedRule(String ruleType, String description, Module moduleFrom, Module moduleTo){
 		this(ruleType, description, new String[0], "",moduleFrom,moduleTo, true);
 	}
 
 	public AppliedRule() {
-		this("", "",new String[0], "",null,null, true);
+		this("","",new String[0], "",null,null, true);
 	}
 
 	/**
 	 * Logic
 	 */
-	public void addException(AppliedRule exception)
-	{
+	public void addException(AppliedRule exception){
 		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
 			exceptions.add(exception);
 		} else {
 			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExceptionAlreadyAdded"));
 		}
 	}
-	
-	private boolean hasException(long l) 
-	{
-		for(AppliedRule exception : exceptions) 
-		{
-			if(exception.getId() == l)
-			{
-				return true;
-			}
-		}
-		
-		return false;
+
+	private boolean hasException(long l){
+		return exceptions.size()>=0;
 	}
-	
-	public void removeException(AppliedRule exception)
-	{
+
+	public void removeException(AppliedRule exception){
 		removeExceptionById(exception.getId());
 	}
-	
+
 	public void removeExceptionById(long exceptionRuleId) {
 		boolean exceptionFound = false;
 		for (AppliedRule rule : exceptions){
@@ -85,11 +70,11 @@ public class AppliedRule {
 		}
 		if (!exceptionFound){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoException"));}
 	}
-	
+
 	public void removeAllExceptions() {
 		exceptions = new ArrayList<AppliedRule>();
 	}
-	
+
 	public boolean usesModule(long moduleId) {
 		boolean usesModule = false;
 		if (moduleTo.getId() == moduleId){
@@ -105,10 +90,7 @@ public class AppliedRule {
 		}
 		return usesModule;
 	}
-	
-	/**
-	 * Getters & Setters
-	 */
+
 	public String getRuleType() {
 		return ruleType;
 	}
@@ -124,21 +106,18 @@ public class AppliedRule {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 
 	public String getDescription() {
 		return description;
 	}
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 
 	public long getId() {
 		return id;
@@ -147,7 +126,6 @@ public class AppliedRule {
 	public void setExceptions(ArrayList<AppliedRule> exceptions) {
 		this.exceptions = exceptions;
 	}
-
 
 	public ArrayList<AppliedRule> getExceptions() {
 		return exceptions;
@@ -185,4 +163,14 @@ public class AppliedRule {
 		this.moduleFrom = moduleFrom;
 	}
 
+	/**
+	 * Overrides
+	 */
+	@Override
+	public boolean equals(Object obj){
+		AppliedRule doppelganger = (AppliedRule) obj;
+		if(this.ruleType == doppelganger.ruleType && this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom)
+			return true;
+		return false;
+	}
 }

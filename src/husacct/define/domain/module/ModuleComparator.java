@@ -15,7 +15,10 @@ public class ModuleComparator implements Comparator<Object> {
 			compareReturn = -1;
 		} else if(emp2 instanceof Layer) {
 			compareReturn = 1;
-		} else {
+		}  else if(((Module) emp1).getparent() instanceof Component&&
+				((Module) emp1).getparent() instanceof Component) {
+		compareReturn=	compareComponents(emp1,emp2);
+		}else {
 			long moduleid1 = ((Module)emp1).getId();
 			long moduleid2 = ((Module)emp2).getId();
 			compareReturn = this.compareLongs(moduleid1, moduleid2);
@@ -23,6 +26,8 @@ public class ModuleComparator implements Comparator<Object> {
 		return compareReturn;
     }
 	
+	
+
 	private int compareInts(int int1, int int2) {
 		if(int1 > int2) {
             return 1;
@@ -41,5 +46,25 @@ public class ModuleComparator implements Comparator<Object> {
         } else {
             return 0;
         }
+	}
+	
+	private int compareComponents(Object emp1, Object emp2) {
+		long long1 = ((Module)emp1).getId();
+		long long2 = ((Module)emp1).getId();
+		if(emp1 instanceof Facade || emp2 instanceof Facade){
+			return 1;
+		}else if(long1 > long2) {
+            return 1;
+		} else if(long1 < long2) {
+        	return -1;
+        } else {
+            return 0;
+        }
+		
+		
+		
+		
+		
+
 	}
 }

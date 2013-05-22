@@ -9,27 +9,23 @@ import java.util.ArrayList;
 
 public class AppliedRuleDomainService {
 
-	public AppliedRule[] getAppliedRules(boolean enabledRulesOnly) {
+	public AppliedRule[] getAppliedRules(boolean enabledRulesOnly) { 
 		ArrayList<AppliedRule> ruleList;
 		if (enabledRulesOnly) {
-			ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
-		} else {
 			ruleList = SoftwareArchitecture.getInstance().getEnabledAppliedRules();
+		} else {
+			ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
 		}
-		AppliedRule[] rules = new AppliedRule[ruleList.size()]; ruleList.toArray(rules);
-		//TODO: Add generated rules??
+		AppliedRule[] rules = new AppliedRule[ruleList.size()]; 
+		ruleList.toArray(rules);
+
 		return rules;
 	}
-	
+
 	public AppliedRule[] getAppliedRules() {
-		return getAppliedRules(true);
+		return getAppliedRules(false);
 	}
-	
-	public AppliedRule[] getGeneratedRules()
-	{
-		return null; //TODO!!
-	}
-	
+
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, long moduleFromId, long moduleToId, boolean enabled) {
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
@@ -39,23 +35,24 @@ public class AppliedRuleDomainService {
 		} else {
 			moduleTo = new Module();
 		}
-		
+
 		return addAppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom , moduleTo, enabled);
-	}
-	
+	}          
+
 	public long addAppliedRule(String ruleTypeKey, String description, String[] dependencies,
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
 
 		AppliedRule rule = new AppliedRule(ruleTypeKey,description,dependencies,regex,moduleFrom, moduleTo, enabled);
-		
+		if(isDuplicate(rule)){
+			return -1;
+		}		
 		SoftwareArchitecture.getInstance().addAppliedRule(rule);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
-		System.out.println(ruleTypeKey+"<><>< -"+regex+"-  ????"+dependencies.length+" Modulee from:"+moduleFrom.getName()+ " moduleto: "+moduleTo.getName());
-		
+
 		return rule.getId();
 	}
-	
-	public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,String description, String[] dependencies, 
+
+	public void updateAppliedRule(long appliedRuleId, Boolean isGenerated, String ruleTypeKey,String description, String[] dependencies, 
 			String regex,long moduleFromId, long moduleToId, boolean enabled) {
 
 		Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(moduleFromId);
@@ -63,7 +60,7 @@ public class AppliedRuleDomainService {
 		updateAppliedRule(appliedRuleId, ruleTypeKey, description, dependencies, 
 				regex, moduleFrom, moduleTo, enabled);
 	}
-	
+
 	public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,String description, String[] dependencies, 
 			String regex, Module moduleFrom, Module moduleTo, boolean enabled) {
 		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
@@ -76,51 +73,59 @@ public class AppliedRuleDomainService {
 		rule.setEnabled(enabled);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
-	
+
 	public void removeAppliedRules() {
 		SoftwareArchitecture.getInstance().removeAppliedRules();
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
-	
+
+
+
 	public void removeAppliedRule(long appliedrule_id) {
 		SoftwareArchitecture.getInstance().removeAppliedRule(appliedrule_id);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
 
 	public String getRuleTypeByAppliedRule(long appliedruleId) {
-		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedruleId);
-		String ruleTypeKey = rule.getRuleType();
-		return ruleTypeKey;
+		return SoftwareArchitecture.getInstance().getAppliedRuleById(appliedruleId).getRuleType();
 	}
 
 	public void setAppliedRuleIsEnabled(long appliedRuleId, boolean enabled) {
-		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
-		rule.setEnabled(enabled);
+		SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId).setEnabled(enabled);
 		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 	}
-	
+
 	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
 		return SoftwareArchitecture.getInstance().getAppliedRulesIdsByModuleFromId(moduleId);
 	}
-	
+
 	public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
 		return SoftwareArchitecture.getInstance().getAppliedRulesIdsByModuleToId(moduleId);
 	}
 
 	public long getModuleToIdOfAppliedRule(long appliedRuleId) {
-		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
-		Long moduleToId = rule.getModuleTo().getId();
-		return moduleToId;
+		return SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId).getModuleTo().getId();
 	}
-	
+
 	public boolean getAppliedRuleIsEnabled(long appliedRuleId) {
-		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
-		boolean isEnabled = rule.isEnabled();
-		return isEnabled;
+		return SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId).isEnabled();
 	}
 
 	public AppliedRule getAppliedRuleById(long appliedRuleId) {
-		AppliedRule rule = SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
-		return rule;
+		return SoftwareArchitecture.getInstance().getAppliedRuleById(appliedRuleId);
+	}
+
+
+	/** 
+	 * Domain checks
+	 */
+	public boolean isDuplicate(AppliedRule rule){
+		AppliedRule[] appliedRules = getAppliedRules(false);
+		for(AppliedRule appliedRule : appliedRules){
+			if(rule.equals(appliedRule)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

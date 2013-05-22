@@ -1,12 +1,16 @@
 package husacct.control;
 
+import husacct.ServiceProvider;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.savechain.ISaveable;
+import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.control.presentation.util.GeneralConfigurationPanel;
 import husacct.control.task.ApplicationController;
 import husacct.control.task.BootstrapHandler;
+import husacct.control.task.CodeViewController;
 import husacct.control.task.MainController;
 import husacct.control.task.StateController;
 import husacct.control.task.States;
@@ -14,16 +18,19 @@ import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
 import husacct.control.task.threading.ThreadWithLoader;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 
 
-public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable{
+public class ControlServiceImpl extends ObservableService implements IControlService, ISaveable, IConfigurable {
 
 	private Logger logger = Logger.getLogger(ControlServiceImpl.class);
 	ArrayList<ILocaleChangeListener> listeners = new ArrayList<ILocaleChangeListener>();
@@ -33,6 +40,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ApplicationController applicationController;
 	private StateController stateController;
 	private ViewController viewController;
+	private CodeViewController codeViewController;
+	private GeneralConfigurationPanel generalConfigurationPanel;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -41,6 +50,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
+		mainController.initialiseCodeViewerController();
+		codeViewController = mainController.getCodeViewerController();
 	}
 	
 	@Override
@@ -62,6 +73,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		Element data = new Element("workspace");
 		Workspace workspace = workspaceController.getCurrentWorkspace();
 		data.setAttribute("name", workspace.getName());
+		data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
+
 		return data;
 	}
 	
@@ -69,7 +82,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
+			String languageName = workspaceData.getAttributeValue("language");
 			workspaceController.createWorkspace(workspaceName);
+			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
 		}
@@ -127,7 +142,11 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public void updateProgress(int progressPercentage) {
+		try{
 		mainController.getApplicationController().getCurrentLoader().setProgressText(progressPercentage);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	@Override
@@ -140,5 +159,26 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public ApplicationDTO getApplicationDTO() {
 		return mainController.getWorkspaceController().getCurrentWorkspace().getApplicationData();
 	}
+	
+	@Override
+	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
+		codeViewController.displayErrorsInFile(fileName, errors);
+	}
 
+	@Override
+	public String getConfigurationName() {
+		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
+	}
+
+	@Override
+	public JPanel getConfigurationPanel() {
+		if (generalConfigurationPanel == null)
+			generalConfigurationPanel = new GeneralConfigurationPanel();
+		return generalConfigurationPanel;
+	}
+	@Override
+	public void showHelpDialog(Component comp) {
+		mainController.getApplicationController().showHelpGUI(comp);
+		
+	}
 }

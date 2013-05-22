@@ -26,75 +26,70 @@ public class AnalysedController extends DrawingController {
 
 	public AnalysedController() {
 		super();
-		this.initializeServices();
+		initializeServices();
 	}
 
 	@Override
 	public void drawArchitecture(DrawingDetail detail) {
-		super.drawArchitecture(this.getCurrentDrawingDetail());
+		super.drawArchitecture(getCurrentDrawingDetail());
 		super.notifyServiceListeners();
-		AbstractDTO[] modules = this.analyseService.getRootModules();
-		this.resetCurrentPaths();
-		if (DrawingDetail.WITH_VIOLATIONS == detail) {
-			this.showViolations();
-		}
+		AbstractDTO[] modules = analyseService.getRootModules();
+		resetCurrentPaths();
+		if (DrawingDetail.WITH_VIOLATIONS == detail)
+			showViolations();
 		this.drawModulesAndLines(modules);
 	}
 
 	private void getAndDrawModulesIn(String parentName) {
-		AnalysedModuleDTO[] children = this.analyseService
+		AnalysedModuleDTO[] children = analyseService
 				.getChildModulesInModule(parentName);
-		if (parentName.equals("")) {
-			this.drawArchitecture(this.getCurrentDrawingDetail());
-		} else if (children.length > 0) {
-			this.setCurrentPaths(new String[] { parentName });
+		if (parentName.equals(""))
+			drawArchitecture(getCurrentDrawingDetail());
+		else if (children.length > 0) {
+			setCurrentPaths(new String[] { parentName });
 			this.drawModulesAndLines(children);
-		} else {
-			this.logger.warn("Tried to draw modules for \"" + parentName
+		} else
+			logger.warn("Tried to draw modules for \"" + parentName
 					+ "\", but it has no children.");
-		}
 	}
 
 	private void getAndDrawModulesIn(String[] parentNames) {
-		if (parentNames.length == 0) {
-			this.drawArchitecture(this.getCurrentDrawingDetail());
-		} else {
+		if (parentNames.length == 0)
+			drawArchitecture(getCurrentDrawingDetail());
+		else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
+			ArrayList<String> compoundedNames = new ArrayList<String>();
+
 			for (String parentName : parentNames) {
-				ArrayList<AbstractDTO> knownChildren = this
-						.getChildrenOf(parentName);
-				if (knownChildren.size() > 0) {
+				compoundedNames.add(parentName);
+				ArrayList<AbstractDTO> knownChildren = getChildrenOf(parentName);
+
+				if (knownChildren.size() > 0)
 					allChildren.put(parentName, knownChildren);
-				}
 			}
-			if (this.analysedContextFigures.size() > 0) {
+
+			if (analysedContextFigures.size() > 0) {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
-				for (BaseFigure figure : this.analysedContextFigures) {
+				for (BaseFigure figure : analysedContextFigures)
 					if (!figure.isLine() && !figure.isParent()) {
-						AbstractDTO dto = this.getFigureMap().getModuleDTO(
-								figure);
-						if (null != dto) {
+						AbstractDTO dto = getFigureMap().getModuleDTO(figure);
+						if (null != dto)
 							tmp.add(dto);
-						} else {
-							this.logger.debug(figure.getName() + " -> "
-									+ figure);
-						}
+						else
+							logger.debug(figure.getName() + " -> " + figure);
 					} else if (!figure.isLine() && !figure.isModule()) {
 						// NOTE: Pretty sure selected stuff that is both not a
 						// module and not a line
-						// is actually one of those weird blue square things
-						ArrayList<AbstractDTO> knownChildren = this
-								.getChildrenOf(figure.getName());
-						if (knownChildren.size() > 0) {
+						// is actually a ParentFigure (blue square thing)
+						ArrayList<AbstractDTO> knownChildren = getChildrenOf(figure
+								.getName());
+						if (knownChildren.size() > 0)
 							allChildren.put(figure.getName(), knownChildren);
-						}
 					}
-				}
-				if (tmp.size() > 0) {
+				if (tmp.size() > 0)
 					allChildren.put("", tmp);
-				}
 			}
-			this.setCurrentPaths(parentNames);
+			setCurrentPaths(parentNames);
 
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
@@ -103,29 +98,26 @@ public class AnalysedController extends DrawingController {
 						.get(onlyParentModule);
 				this.drawModulesAndLines(onlyParentChildren
 						.toArray(new AbstractDTO[] {}));
-			} else {
+			} else
 				this.drawModulesAndLines(allChildren);
-			}
 		}
 	}
 
 	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
-		AbstractDTO[] children = this.analyseService
+		AbstractDTO[] children = analyseService
 				.getChildModulesInModule(parentName);
 
 		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
 
-		if (parentName.equals("")) {
-			this.drawArchitecture(this.getCurrentDrawingDetail());
-		} else if (children.length > 0) {
+		if (parentName.equals(""))
+			drawArchitecture(getCurrentDrawingDetail());
+		else if (children.length > 0) {
 			knownChildren = new ArrayList<AbstractDTO>();
-			for (AbstractDTO child : children) {
+			for (AbstractDTO child : children)
 				knownChildren.add(child);
-			}
-		} else {
-			this.logger.warn("Tried to draw modules for \"" + parentName
+		} else
+			logger.warn("Tried to draw modules for \"" + parentName
 					+ "\", but it has no children.");
-		}
 
 		return knownChildren;
 	}
@@ -133,44 +125,41 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,
 			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap()
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
 				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap()
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
 				.getModuleDTO(figureTo);
-		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo) {
-			return this.analyseService.getDependencies(dtoFrom.uniqueName,
+		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo)
+			return analyseService.getDependencies(dtoFrom.uniqueName,
 					dtoTo.uniqueName);
-		}
 		return new DependencyDTO[] {};
 	}
 
 	@Override
 	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom,
 			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap()
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
 				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap()
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
 				.getModuleDTO(figureTo);
-		return this.validateService.getViolationsByPhysicalPath(
-				dtoFrom.uniqueName, dtoTo.uniqueName);
+		return validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName,
+				dtoTo.uniqueName);
 	}
 
 	private void initializeServices() {
-		this.analyseService = ServiceProvider.getInstance().getAnalyseService();
-		this.analyseService.addServiceListener(new IServiceListener() {
+		analyseService = ServiceProvider.getInstance().getAnalyseService();
+		analyseService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
 				AnalysedController.this.refreshDrawing();
 			}
 		});
-		this.validateService = ServiceProvider.getInstance()
-				.getValidateService();
-		this.validateService.addServiceListener(new IServiceListener() {
+		validateService = ServiceProvider.getInstance().getValidateService();
+		validateService.addServiceListener(new IServiceListener() {
 			@Override
 			public void update() {
-				if (AnalysedController.this.areViolationsShown()) {
+				if (AnalysedController.this.areViolationsShown())
 					AnalysedController.this.refreshDrawing();
-				}
 			}
 		});
 	}
@@ -178,23 +167,22 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
-		this.resetContextFigures();
-		if (paths.length == 0) {
-			this.drawArchitecture(this.getCurrentDrawingDetail());
-		} else {
+		saveSingleLevelFigurePositions();
+		resetContextFigures();
+		if (paths.length == 0)
+			drawArchitecture(getCurrentDrawingDetail());
+		else
 			this.getAndDrawModulesIn(paths);
-		}
 	}
 
 	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
-		this.resetContextFigures();
-		ArrayList<String> parentNames = this
-				.sortFiguresBasedOnZoomability(figures);
+		resetContextFigures();
+		ArrayList<String> parentNames = sortFiguresBasedOnZoomability(figures);
 
 		if (parentNames.size() > 0) {
-			this.saveSingleLevelFigurePositions();
+			saveSingleLevelFigurePositions();
 			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
 	}
@@ -202,74 +190,68 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleZoomOut() {
 		super.notifyServiceListeners();
-		if (this.getCurrentPaths().length > 0) {
-			this.saveSingleLevelFigurePositions();
-			this.resetContextFigures();
-			String firstCurrentPaths = this.getCurrentPaths()[0];
-			AnalysedModuleDTO parentDTO = this.analyseService
+		if (getCurrentPaths().length > 0) {
+			saveSingleLevelFigurePositions();
+			resetContextFigures();
+			String firstCurrentPaths = getCurrentPaths()[0];
+			AnalysedModuleDTO parentDTO = analyseService
 					.getParentModuleForModule(firstCurrentPaths);
-			if (null != parentDTO) {
+
+			if (parentDTO != null)
 				this.getAndDrawModulesIn(parentDTO.uniqueName);
-			} else {
-				this.logger
-						.warn("Tried to zoom out from \""
-								+ this.getCurrentPaths()
-								+ "\", but it has no parent (could be root if it's an empty string).");
-				this.logger.debug("Reverting to the root of the application.");
-				this.drawArchitecture(this.getCurrentDrawingDetail());
-			}
-		} else {
-			this.logger
-					.warn("Tried to zoom out from \""
-							+ this.getCurrentPaths()
-							+ "\", but it has no parent (could be root if it's an empty string).");
-			this.logger.debug("Reverting to the root of the application.");
-			this.drawArchitecture(this.getCurrentDrawingDetail());
-		}
+			else
+				zoomOutFailed();
+		} else
+			zoomOutFailed();
 	}
 
 	@Override
 	public void refreshDrawing() {
 		super.notifyServiceListeners();
-		this.getAndDrawModulesIn(this.getCurrentPaths());
+		this.getAndDrawModulesIn(getCurrentPaths());
 	}
 
 	private void resetContextFigures() {
-		this.analysedContextFigures = new ArrayList<BaseFigure>();
+		analysedContextFigures = new ArrayList<BaseFigure>();
 	}
 
 	@Override
 	public void showViolations() {
-		if (this.validateService.isValidated()) {
+		if (validateService.isValidated())
 			super.showViolations();
-		}
 	}
 
 	protected ArrayList<String> sortFiguresBasedOnZoomability(
 			BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
-		for (BaseFigure figure : figures) {
-			if (figure.isModule() && !figure.isContext()) {
+		for (BaseFigure figure : figures)
+			if (figure.isModule() && !figure.isContext())
 				try {
-					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this
-							.getFigureMap().getModuleDTO(figure);
+					AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) getFigureMap()
+							.getModuleDTO(figure);
 					parentNames.add(parentDTO.uniqueName);
 				} catch (Exception e) {
 					e.printStackTrace();
-					this.logger.warn("Could not zoom on this object: "
+					logger.warn("Could not zoom on this object: "
 							+ figure.getName()
 							+ ". Expected a different DTO type.");
 				}
-			} else if (!figure.isLine() || figure.isContext()) {
-				this.analysedContextFigures.add(figure);
-				this.logger.warn("Figure: " + figure.getName()
+			else if (!figure.isLine() || figure.isContext()) {
+				analysedContextFigures.add(figure);
+				logger.warn("Figure: " + figure.getName()
 						+ " is accepted as context for multizoom.");
-			} else {
-				this.logger.warn("Could not zoom on this object: "
+			} else
+				logger.warn("Could not zoom on this object: "
 						+ figure.getName() + ". Not a module to zoom on.");
-			}
-		}
 
 		return parentNames;
+	}
+
+	public void zoomOutFailed() {
+		logger.warn("Tried to zoom out from \""
+				+ getCurrentPaths()
+				+ "\", but it has no parent (could be root if it's an empty string).");
+		logger.debug("Reverting to the root of the application.");
+		drawArchitecture(getCurrentDrawingDetail());
 	}
 }

@@ -323,17 +323,19 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.dispose();
 	}
 
-	private void save() {	
+	private void save() {	//TODO : check of 
 		if (ruleDetailsJPanel.hasValidData()) {
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 			
 			String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 			ruleDetails.put("ruleTypeKey", ruleTypeKey);
 			
-			if(this.appliedRuleController.save(ruleDetails)) {
-				this.dispose();
-			} else {
-				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CantSaveRule"));
+			if(this.appliedRuleController.conformRuleConventions(ruleDetails)){
+				if(this.appliedRuleController.save(ruleDetails)) {
+					this.dispose();
+				} else {
+					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined")+"\n"+ruleDetails.get("ruleTypeKey"));
+				}
 			}
 		} else {
 			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));

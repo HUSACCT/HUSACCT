@@ -6,18 +6,16 @@ import husacct.validate.domain.exception.ModuleNotFoundException;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 public class ModuleFactory {
-	
-	
 	public AbstractModule createModule(String type, List<RuleType> rules) throws ModuleNotFoundException {
-		
-		switch(type.toLowerCase()) {
-			case "component": 
+
+		switch (type.toLowerCase()) {
+			case "component":
 				return new Component(rules);
-			case "externallibrary": 
+			case "externallibrary":
 				return new ExternalLibrary(rules);
-			case "layer": 
+			case "layer":
 				return new Layer(rules);
-			case "subsystem": 
+			case "subsystem":
 				return new SubSystem(rules);
 			default:
 				throw new ModuleNotFoundException(type);
