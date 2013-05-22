@@ -21,6 +21,9 @@ private static JtreeStateEngine instance =null;
 private ArrayList<Map<Long,AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
 private Logger logger;
 private AnalyzedModuleComponent currentRoot;
+private ArrayList<AnalyzedModuleComponent> reNewedCodes = new ArrayList<AnalyzedModuleComponent>(); 
+	
+
 	
 
 
@@ -203,7 +206,8 @@ public void importNewData(final AnalyzedModuleComponent newdata) {
 
 public void removeSoftwareUnit(long moduleId,
 	AnalyzedModuleComponent unitTobeRemoved) {
-	int index=0;
+	
+	int index=-1;
 	for (int i=0;i< orderofinsertions.size();i++)
 	{
 		
@@ -219,10 +223,38 @@ public void removeSoftwareUnit(long moduleId,
 		}	
 	}
 	
+	if(index!=-1){
 	orderofinsertions.remove(index);
-	
+	}else{
+	restoreCodeRenewal(unitTobeRemoved);
+	}
+}
+
+private void restoreCodeRenewal(AnalyzedModuleComponent unitTobeRemoved) {
+	AnalyzedModuleComponent result=null;
+	for (AnalyzedModuleComponent softwareUnit : reNewedCodes) {
+		if(unitTobeRemoved.getUniqueName().toLowerCase().equals(softwareUnit.getUniqueName().toLowerCase()))
+		{
+			result=softwareUnit;
+			
+			break;
+			
+		}
+		
+		
+	}
+	if(result!=null)
+	{
+		result.unfreeze();
+		int index = reNewedCodes.indexOf(result);
+		reNewedCodes.remove(index);
+	}else{
+		WarningMessageService.getInstance().hasCodeLevelWarning(unitTobeRemoved,WarningMessageService.removalType.fullRemoval);
+	}
 	
 }
+
+
 
 public void analyze() {
 	SoftwareUnitController controller = new SoftwareUnitController(-1);
@@ -241,6 +273,11 @@ public void analyze() {
 	JtreeController.instance().setLoadState(true);
 
 	}
+	
+}
+
+public void registerCodeRenewal(AnalyzedModuleComponent analyzedModuleToChek) {
+	reNewedCodes.add(analyzedModuleToChek);
 	
 }
 	

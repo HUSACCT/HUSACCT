@@ -10,6 +10,7 @@ public abstract class AbstractModule implements IModule {
 	protected List<RuleType> ruleTypes;
 
 	public abstract List<RuleType> initDefaultModuleRuleTypes();
+
 	public abstract List<RuleType> initAllowedModuleRuleTypes();
 
 	public AbstractModule(List<RuleType> ruleTypes) {

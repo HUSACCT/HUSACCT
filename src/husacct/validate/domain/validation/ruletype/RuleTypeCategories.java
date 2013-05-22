@@ -3,7 +3,8 @@ package husacct.validate.domain.validation.ruletype;
 import java.util.EnumSet;
 
 public enum RuleTypeCategories {
-	PROPERTY_RULE_TYPES("PropertyRuleTypes", "Property Rule Types"), RELATION_RULE_TYPES("RelationruleTypes", "Relation Rule Types");
+	PROPERTY_RULE_TYPES("PropertyRuleTypes", "Property Rule Types"), 
+	RELATION_RULE_TYPES("RelationRuleTypes", "Relation Rule Types");
 
 	public static final EnumSet<RuleTypeCategories> mainRuleTypeCategories = EnumSet.of(PROPERTY_RULE_TYPES, RELATION_RULE_TYPES);
 	private final String key;

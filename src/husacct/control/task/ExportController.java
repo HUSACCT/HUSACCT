@@ -13,6 +13,7 @@ import husacct.validate.IValidateService;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -46,8 +47,10 @@ public class ExportController {
 		try {
 			Element logicalData = ServiceProvider.getInstance().getDefineService().getLogicalArchitectureData();
 			Document doc = new Document(logicalData);
+			
 			xmlResource.save(doc, resourceData);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.debug("Unable to export logical architecture: " + e.getMessage());
 		}
 	}

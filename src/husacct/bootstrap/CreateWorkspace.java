@@ -7,4 +7,8 @@ public class CreateWorkspace extends AbstractBootstrap {
 		getControlService().getMainController().getWorkspaceController().createWorkspace("BootstrapWorkspace");
 	}
 
+	@Override
+	public void execute(String[] args) {
+		execute();
+	}
 }
