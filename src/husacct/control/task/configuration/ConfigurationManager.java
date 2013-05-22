@@ -50,8 +50,10 @@ public class ConfigurationManager {
 		Properties props = new Properties();
 		try {
 			File file = new File("config.properties");
-			if(!file.isFile())
-				createDefaults(file);
+			if(!file.isFile()) {
+				props.load(ConfigurationManager.class.getResourceAsStream("/husacct/common/resources/config.properties"));
+				props.store(new FileOutputStream("config.properties"), null);
+			}
 			props.load(new FileInputStream(file));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -62,16 +64,6 @@ public class ConfigurationManager {
 	public static void storeProperties() {
 		try {
 			properties.store(new FileOutputStream("config.properties"), null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private static void createDefaults(File file) {
-		
-		try {
-			properties.load(ConfigurationManager.class.getResourceAsStream("/husacct/common/resources/config.properties"));
-			storeProperties();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

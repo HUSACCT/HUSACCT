@@ -126,9 +126,7 @@ public class DocumentationDialog extends JDialog{
 					}
 					
 					try {
-						Desktop dt = Desktop.getDesktop();
-						dt.open(new File(new File(".").getCanonicalPath()+ path));
-						
+						Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ new File(".").getCanonicalPath() + path);
 					}
 					catch (Exception ex) {
 						ex.printStackTrace();
