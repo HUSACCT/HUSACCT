@@ -29,14 +29,14 @@ public class SubClassConventionRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
-		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
+		List<Mapping> classpathsFrom = mappings.getMappingFrom();
+		List<Mapping> classpathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
+		for (Mapping classPathFrom : classpathsFrom) {
 			int dependencyCounter = 0;
-			for (Mapping classPathTo : physicalClasspathsTo) {
+			for (Mapping classPathTo : classpathsTo) {
 				for (DependencyDTO dependency : dependencies) {
 					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
 						if (dependency.to.equals(classPathTo.getPhysicalPath())) {
@@ -47,7 +47,7 @@ public class SubClassConventionRule extends RuleType {
 					}
 				}
 			}
-			if (dependencyCounter == 0 && !physicalClasspathsTo.isEmpty()) {
+			if (dependencyCounter == 0 && !classpathsTo.isEmpty()) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}

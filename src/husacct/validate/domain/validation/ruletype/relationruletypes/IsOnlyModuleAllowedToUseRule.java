@@ -33,7 +33,7 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType {
 		// corectly for this rule
 		// (need to filter for the 'To')
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
+		classpathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();

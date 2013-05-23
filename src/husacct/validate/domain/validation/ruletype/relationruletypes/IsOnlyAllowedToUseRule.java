@@ -30,11 +30,11 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
+		classpathsFrom = mappings.getMappingFrom();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
+		for (Mapping classPathFrom : classpathsFrom) {
 			for (DependencyDTO dependency : dependencies) {
 				if (classPathFrom.getPhysicalPath().equals(dependency.from)) {
 					if (!containsMapping(mappings, dependency.to)) {

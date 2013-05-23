@@ -27,10 +27,10 @@ public class VisibilityConventionRule extends RuleType {
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations = new ArrayList<>();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		physicalClasspathsFrom = mappings.getMappingFrom();
+		classpathsFrom = mappings.getMappingFrom();
 
 		int violationCounter = 0;
-		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
+		for (Mapping physicalClasspathFrom : classpathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!analysedModule.type.toLowerCase().equals("package")) {
 				for (String violationKey : currentRule.violationTypeKeys) {
