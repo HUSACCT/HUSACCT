@@ -58,6 +58,9 @@ public class ConfigurationManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		props = performInitMutations(props);
+		
 		return props;
 	}
 	
@@ -67,5 +70,17 @@ public class ConfigurationManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Properties performInitMutations(Properties props){
+		//Set platform independent AppDataFolder (always empty on startup of HUSACCT)
+		String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+		File appDataFolderObject = new File(appDataFolderString);
+		if(!appDataFolderObject.exists()){
+			appDataFolderObject.mkdir();
+		}
+		props.setProperty("PlatformIndependentAppDataFolder", appDataFolderString);
+		
+		return props;
 	}
 }

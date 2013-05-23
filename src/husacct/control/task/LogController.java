@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -24,16 +25,16 @@ public class LogController {
 
 	private MainController mainController;
 	
-	//Hey, at least it's dynamic :)
-	private File logFile = new File(new File("").getAbsolutePath().replace("\\", "\\\\") + "\\src\\husacct\\common\\resources\\logging\\applicationanalysishistory.xml".replace("\\", "\\\\"));
+	private String logFile = ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", "");
 	
 	public LogController(MainController mainController){
+		System.out.println("logFile: " + logFile);
 		this.mainController = mainController;
 		currentWorkspace = null;
 	}
 	
 	public boolean logFileExists(){
-		return logFile.exists();
+		return new File(logFile).exists();
 	}
 	
 	public HashMap<String, HashMap<String, String>> getApplicationHistoryFromFile(String workspace, String application, ArrayList<ProjectDTO> projects){
