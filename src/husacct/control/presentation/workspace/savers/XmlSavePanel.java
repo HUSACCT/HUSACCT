@@ -78,7 +78,7 @@ public class XmlSavePanel extends SaverPanel{
 		doCompress.setText("Compress");
 		doPasswordProtect = new JCheckBox();
 		doPasswordProtect.setText("Password protection");
-		doPasswordProtect.setEnabled(false);
+		//doPasswordProtect.setEnabled(false);
 		
 		passwordInputLabel = new JLabel(localeService.getTranslatedString("passwordInput"));
 		passwordInputLabel.setVisible(false);
@@ -236,6 +236,10 @@ public class XmlSavePanel extends SaverPanel{
 		}
 		else if(this.doPasswordProtect.isSelected() && getPassword() == null) {
 			controlService.showErrorMessage(localeService.getTranslatedString("PasswordError"));
+			return false;
+		}
+		else if(this.doPasswordProtect.isSelected() && this.getPassword().length() < 8) {
+			controlService.showErrorMessage(localeService.getTranslatedString("PasswordToShort"));
 			return false;
 		}
 

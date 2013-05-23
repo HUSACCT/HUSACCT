@@ -1,0 +1,34 @@
+@Team 1 General GUI & Control
+Donovan de Kuiper
+Thijs Schalk
+Leo Wakelkamp
+Bart Steijlen
+Coen van Driel
+@Team 2 Graphics
+Mark Wallenburg
+Tim Bazuin
+Dennis Bullee
+Ruwan Kellaert
+Stan Verhoeckx
+@Team 3 Analyse(java)
+Thomas de Cortie
+Ali Korkmaz
+Rick Samson
+Twan Verboom
+@Team 4 Analyse (csharp)
+Baruch Berger
+Gerard Bosma
+Bart Goes
+Niels Hubregtse
+Christiaan de Jong
+@Team 5 Define
+Bayram Korkmaz
+Seth Snel
+Leander Stolk
+Rob Uithol
+Reuben Krozendijk
+@Team 6 Validate
+Timothe Beemster
+Nathan Rhijnsburger
+Bram Staal
+Rick van der Staaij

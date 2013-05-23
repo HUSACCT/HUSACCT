@@ -16,7 +16,7 @@ import javax.swing.KeyStroke;
 public class HelpMenu extends JMenu {
 	
 	private MainController mainController;
-	private JMenuItem aboutItem;
+	private JMenuItem aboutItem, documentationItem;
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
@@ -32,12 +32,21 @@ public class HelpMenu extends JMenu {
 		aboutItem = new JMenuItem(localeService.getTranslatedString("About"));
 		aboutItem.setMnemonic(getMnemonicKeycode("AboutMnemonic"));
 		this.add(aboutItem);
+		
+		documentationItem = new JMenuItem(localeService.getTranslatedString("Documentation"));
+		
+		this.add(documentationItem);
 	}
 	
 	private void setListeners() {
 		aboutItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainController.getApplicationController().showAboutHusacctGui();
+			}
+		});
+		documentationItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainController.getApplicationController().showDocumentationGUI();
 			}
 		});
 		

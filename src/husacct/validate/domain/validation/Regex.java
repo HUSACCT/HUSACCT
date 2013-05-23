@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regex {
-
 	public static String makeRegexString(String regexpath) {
 		if (regexpath.endsWith("**")) {
 			return "^"
