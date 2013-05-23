@@ -85,6 +85,21 @@ public class ConfigurationManager {
 		}
 		props.setProperty("PlatformIndependentAppDataFolder", appDataFolderString);
 		
+		if(props.getProperty("LastUsedLoadXMLWorkspacePath").equals("")){
+			props.setProperty("LastUsedLoadXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		}
+		
+		if(props.getProperty("LastUsedSaveXMLWorkspacePath").equals("")){
+			props.setProperty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		}
+		
+		//TODO: Fix this storeProperties code, because class attribute properties is still empty
+		try {
+			props.store(new FileOutputStream("config.properties"), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		return props;
 	}
 }
