@@ -18,10 +18,10 @@ public class CSharpInvocationPropertyOrFieldGenerator extends AbstractCSharpInvo
         saveInvocationToDomain();
 	}
 
-	private void createPropertyOrFieldInvocationDetails(CommonTree treeNode) {
-		CommonTree toChild = (CommonTree)treeNode.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
+	private void createPropertyOrFieldInvocationDetails(CommonTree tree) {
+		CommonTree toChild = (CommonTree)tree.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
 		this.to = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		this.invocationName = treeNode.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 		this.lineNumber = toChild.getLine();
 	}

@@ -23,8 +23,12 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 
 	private void findConstructorInvocation(CommonTree treeNode) {
 		boolean constructorFound = hasConstructorCall(treeNode);
+		boolean hasConstructorcall = hasArguments(treeNode);
 		if (constructorFound){
 			createConstructorInvocationDetails((CommonTree) treeNode);
+		}
+		if (hasConstructorcall){
+			delegateArguments(treeNode);
 		}
 		else {
 			int childcount = treeNode.getChildCount();
@@ -37,6 +41,15 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 
 	private boolean hasConstructorCall(CommonTree treeNode) {
 		return treeNode.getType() == CSharpParser.OBJECT_CREATION_EXPRESSION;
+	}
+	
+	private boolean hasArguments(CommonTree child) {
+		return child.getType() == CSharpParser.ARGUMENT;
+	}
+	
+	private void delegateArguments(CommonTree tree) {
+		CSharpArgumentsGenerator csharpArgumentsGenerator = new CSharpArgumentsGenerator(this.from);
+		csharpArgumentsGenerator.delegateArguments(tree, this.belongsToMethod);
 	}
 
 	private void createConstructorInvocationDetails(CommonTree treeNode) {
