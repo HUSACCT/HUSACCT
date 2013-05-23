@@ -93,6 +93,10 @@ public class ConfigurationManager {
 			props.setProperty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
 		}
 		
+		if(props.getProperty("LastUsedAddProjectPath").equals("")){
+			props.setProperty("LastUsedAddProjectPath", appDataFolderString);
+		}
+		
 		//TODO: Fix this storeProperties code, because class attribute properties is still empty
 		try {
 			props.store(new FileOutputStream("config.properties"), null);
