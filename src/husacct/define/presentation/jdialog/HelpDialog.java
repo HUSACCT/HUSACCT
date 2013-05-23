@@ -46,6 +46,7 @@ public class HelpDialog extends JDialog {
 		this.setResizable(false);
 		this.getContentPane().setBackground(Color.WHITE);
 		DialogUtils.alignCenter(this);
+		setIconImage(new ImageIcon(Resource.get(Resource.ICON_QUESTIONMARK)).getImage());
 	}
 	
 	private void addComponents(){
