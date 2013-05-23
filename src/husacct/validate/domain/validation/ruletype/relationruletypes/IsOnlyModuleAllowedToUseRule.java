@@ -27,13 +27,13 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
 		// Only used to get the mappings, because filtering the 'From' is not
 		// corectly for this rule
 		// (need to filter for the 'To')
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();

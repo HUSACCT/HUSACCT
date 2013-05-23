@@ -6,6 +6,7 @@ build.xml
 build/bin
 build/jar
 build/reports
+build/classes
 manifest.mf
 nbproject/
 .classpath

@@ -28,10 +28,10 @@ public class MustUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
@@ -50,7 +50,7 @@ public class MustUseRule extends RuleType {
 				}
 			}
 		}
-		if (dependencyCounter == 0 && physicalClasspathsTo.size() != 0) {
+		if (dependencyCounter == 0 && !physicalClasspathsTo.isEmpty()) {
 			LogicalModule logicalModuleFrom = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
 			LogicalModule logicalModuleTo = new LogicalModule(currentRule.moduleFrom.logicalPath, currentRule.moduleTo.logicalPath);
 			LogicalModules logicalModules = new LogicalModules(logicalModuleFrom, logicalModuleTo);

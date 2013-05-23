@@ -25,15 +25,15 @@ public class InterfaceConventionRule extends RuleType {
 	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
 
-		this.interfaceCache = new HashSet<String>();
-		this.noInterfaceCache = new HashSet<String>();
+		interfaceCache = new HashSet<>();
+		noInterfaceCache = new HashSet<>();
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -48,7 +48,7 @@ public class InterfaceConventionRule extends RuleType {
 					}
 				}
 			}
-			if (interfaceCounter == 0 && physicalClasspathsTo.size() != 0) {
+			if (interfaceCounter == 0 && !physicalClasspathsTo.isEmpty()) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}

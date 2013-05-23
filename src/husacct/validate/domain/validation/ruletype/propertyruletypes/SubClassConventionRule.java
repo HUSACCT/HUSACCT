@@ -26,9 +26,9 @@ public class SubClassConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
@@ -47,7 +47,7 @@ public class SubClassConventionRule extends RuleType {
 					}
 				}
 			}
-			if (dependencyCounter == 0 && physicalClasspathsTo.size() != 0) {
+			if (dependencyCounter == 0 && !physicalClasspathsTo.isEmpty()) {
 				Violation violation = createViolation(rootRule, classPathFrom, configuration);
 				violations.add(violation);
 			}

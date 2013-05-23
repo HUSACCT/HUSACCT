@@ -27,7 +27,7 @@ public class NamingConventionRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
 		if (arrayContainsValue(currentRule.violationTypeKeys, "package")) {
 			checkPackageConvention(currentRule, rootRule, configuration);
@@ -41,10 +41,10 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkPackageConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<Violation>();
 
-		this.mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
@@ -59,10 +59,10 @@ public class NamingConventionRule extends RuleType {
 	}
 
 	private List<Violation> checkClassConvention(RuleDTO currentRule, RuleDTO rootRule, ConfigurationServiceImpl configuration) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
