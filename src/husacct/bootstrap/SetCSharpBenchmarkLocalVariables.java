@@ -22,4 +22,10 @@ public class SetCSharpBenchmarkLocalVariables extends AbstractBootstrap {
         projects.add(project);
         getDefineService().createApplication("C# SingleTest", projects, "1.0");
     }
+
+	@Override
+	public void execute(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
 }
