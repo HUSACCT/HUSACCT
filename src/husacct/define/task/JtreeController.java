@@ -156,9 +156,9 @@ import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 	public void additemgetResultTree(AnalyzedModuleComponent analyzedModule) 
 	{
 
-		analyzedModule.freeze();
+		analyzedModule.detach();
 		AnalyzedModuleComponent rootOfResultTree = (AnalyzedModuleComponent)resultTree.getModel().getRoot();
-		rootOfResultTree.freeze();
+		rootOfResultTree.detach();
 		rootOfResultTree.addChild(analyzedModule);
 		resultTree.setModel(new CombinedModuleTreeModel(rootOfResultTree));
 

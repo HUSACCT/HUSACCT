@@ -51,8 +51,7 @@ public class ModuleComparator implements Comparator<Object> {
 	private int compareComponents(Object emp1, Object emp2) {
 		long long1 = ((Module)emp1).getId();
 		long long2 = ((Module)emp1).getId();
-		if(emp1 instanceof Facade || emp2 instanceof Facade)
-		{
+		if(emp1 instanceof Facade || emp2 instanceof Facade){
 			return 1;
 		}else if(long1 > long2) {
             return 1;

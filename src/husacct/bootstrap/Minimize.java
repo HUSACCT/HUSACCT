@@ -7,4 +7,9 @@ public class Minimize extends AbstractBootstrap {
 	public void execute() {
 		this.getControlService().getMainController().getMainGui().setState ( Frame.ICONIFIED );
 	}
+
+	@Override
+	public void execute(String[] args) {
+		execute();
+	}
 }

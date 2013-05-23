@@ -11,4 +11,8 @@ public class Analyse extends AbstractBootstrap{
 		getControlService().getMainController().getMainGui().getMenu().getAnalyseMenu().getAnalysedArchitectureDiagramItem().doClick();
 	}
 
+	@Override
+	public void execute(String[] args) {
+		execute();
+	}
 }

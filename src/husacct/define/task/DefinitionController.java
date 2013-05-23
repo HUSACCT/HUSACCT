@@ -33,22 +33,22 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 public class DefinitionController extends Observable implements Observer {
-	
+
 	private DefinitionJPanel definitionJPanel;
 	private static DefinitionController instance;
 	private List<Observer> observers;
 	private Logger logger;
 	private long selectedModuleId = -1;
-	
+
 	private ModuleDomainService moduleService;
 	private AppliedRuleDomainService appliedRuleService;
 	private DefaultRuleDomainService defaultRuleService;
 	private SoftwareUnitDefinitionDomainService softwareUnitDefinitionDomainService;
-	
+
 	public static DefinitionController getInstance() {
 		return instance == null ? (instance = new DefinitionController()) : instance;
 	}
-	
+
 	public static void setInstance(DefinitionController dC){
 		instance = dC;
 	}
@@ -61,7 +61,7 @@ public class DefinitionController extends Observable implements Observer {
 		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 		this.defaultRuleService = new DefaultRuleDomainService();
 	}
-	
+
 	public void initSettings() {
 		this.observers.clear();
 		this.definitionJPanel = new DefinitionJPanel();
@@ -84,7 +84,7 @@ public class DefinitionController extends Observable implements Observer {
 	public long getSelectedModuleId() {
 		return selectedModuleId;
 	}
-	
+
 	public boolean addLayer(long selectedModuleId, String layerName, String layerDescription){
 		logger.info("Adding layer " + layerName);
 		try {
@@ -100,7 +100,7 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	public boolean addSubSystem(long selectedModuleId, String moduleName, String moduleDescription){
 		logger.info("Adding subsystem " + moduleName);
 		try {
@@ -116,19 +116,19 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	public boolean addComponent(long selectedModuleId, String componentName, String componentDescription){
 		logger.info("Adding component " + "Facade"+componentName);
 		logger.info("Adding component " + componentName);
 		try {
 			JPanelStatus.getInstance("Adding component").start();
 			Component newComponent = new Component(componentName, componentDescription);
-			
-				Facade f= new Facade();
+
+			Facade f= new Facade();
 			f.setName("Facade"+componentName);
 			newComponent.addSubModule(f);
 			this.passModuleToService(selectedModuleId, newComponent);
-			
+
 			return true;
 		} catch (Exception e) {
 			logger.error("addComponent(" + componentName + ") - exception: " + e.getMessage());
@@ -138,7 +138,7 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	public boolean addExternalLibrary(long selectedModuleId, String libraryName, String libraryDescription){
 		logger.info("Adding external library " + libraryName);
 		try {
@@ -154,7 +154,7 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	private void passModuleToService(long selectedModuleId, Module module) {
 		String ExceptionMessage = "";
 		if(selectedModuleId == -1) {
@@ -164,7 +164,7 @@ public class DefinitionController extends Observable implements Observer {
 			ExceptionMessage = this.moduleService.addNewModuleToParent(selectedModuleId, module);
 		}
 		this.notifyObservers();
-		
+
 		if(!ExceptionMessage.isEmpty()) {
 			UiDialogs.errorDialog(definitionJPanel, ExceptionMessage);
 		}
@@ -188,7 +188,7 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	public void moveLayerUp(long layerId) {
 		logger.info("Moving layer up");
 		try {
@@ -204,7 +204,7 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	public void moveLayerDown(long layerId) {
 		logger.info("Moving layer down");
 		try {
@@ -227,41 +227,36 @@ public class DefinitionController extends Observable implements Observer {
 	public void removeSoftwareUnits(List<String> softwareUnitNames, List<String> types) {
 		try {
 			long moduleId = getSelectedModuleId();
-			
+			int location = 0;
 			boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveSoftwareUnit"), "Remove?");
-			
-			for(String softwareUnit : softwareUnitNames) {
-				for(String type : types) {
-				logger.info("Removing software unit " + softwareUnit);
 
+			for(String softwareUnit : softwareUnitNames) {
+				String type = types.get(location);
+				logger.info("Removing software unit " + softwareUnit);
 				if (moduleId != -1 && softwareUnit != null && !softwareUnit.equals("")) {
 					if (confirm) {
-						// Remove the software unit
 						logger.info("getting type:" + type);
 
 						JPanelStatus.getInstance("Removing software unit").start();
 						if(type.toUpperCase().equals("REGEX")) {
-							
 							this.softwareUnitDefinitionDomainService.removeRegExSoftwareUnit(moduleId, softwareUnit);
 							this.notifyObservers();
 						}else{
 							boolean chekHasCodelevelWarning=WarningMessageService.getInstance().isCodeLevelWarning(softwareUnit);
 							if(chekHasCodelevelWarning){
-							boolean confirm2 = UiDialogs.confirmDialog(definitionJPanel,"Your about to remove an software unit that does exist at code level", "Remove?");
-							if(confirm2)
-							{
+								boolean confirm2 = UiDialogs.confirmDialog(definitionJPanel,"Your about to remove an software unit that does exist at code level", "Remove?");
+								if(confirm2)
+								{
+									this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
+								}
+							}else{
 								this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
 							}
-							
-							}else{
-							this.softwareUnitDefinitionDomainService.removeSoftwareUnit(moduleId, softwareUnit);
-							}
-							//Update the software unit table
-						this.notifyObservers();
+							this.notifyObservers();
 						}
-						}
+					}
 				}
-			} 
+				location++;
 			}
 		} catch (Exception e) {
 			logger.error("removeSoftwareUnit() - exception: " + e.getMessage());
@@ -271,32 +266,32 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
-	public void removeRule(long appliedRuleId) {
-		logger.info("Removing rule " + appliedRuleId);
-		try {
-			long moduleId = getSelectedModuleId();
-			AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
-			
-			if (defaultRuleService.isMandatoryRule(rule))
-			{
-				UiDialogs.errorDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultRule"));
-			}
-			else {
-			if (moduleId != -1 && appliedRuleId != -1L) {
-				boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveAppliedRule"), "Remove?");
-				if (confirm) {
-						// Remove the software unit
-						JPanelStatus.getInstance("Removing applied rule").start();
-						this.appliedRuleService.removeAppliedRule(appliedRuleId);
 
-						// Update the applied rules table
+	public void removeRules(List<Long> appliedRuleIds) {
+		boolean mandatory = false;
+		try {
+			if(getSelectedModuleId() != -1L && !appliedRuleIds.isEmpty()){
+				for(long appliedRuleID : appliedRuleIds){
+					AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleID);
+					if (defaultRuleService.isMandatoryRule(rule)){
+						mandatory = true;
+						UiDialogs.errorDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("DefaultRule") + "\n- " +rule.getRuleType());
+						break;
+					}
+				}
+				if(!mandatory){
+					boolean confirm = UiDialogs.confirmDialog(definitionJPanel, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfirmRemoveAppliedRule"), "Remove?");
+					if(confirm){
+						for(long appliedRuleID : appliedRuleIds){
+							logger.info("Removing rule " + appliedRuleID);
+							JPanelStatus.getInstance("Removing applied rule").start();
+							this.appliedRuleService.removeAppliedRule(appliedRuleID);
+						}
 						this.notifyObservers();
 					}
 				}
 			}
-		} 
-		catch (Exception e) {
+		}catch (Exception e) {
 			logger.error("removeRule() - exception: " + e.getMessage());
 			UiDialogs.errorDialog(definitionJPanel, e.getMessage());
 		} finally {
@@ -323,21 +318,21 @@ public class DefinitionController extends Observable implements Observer {
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	public AbstractDefineComponent getModuleTreeComponents() {
 		JPanelStatus.getInstance("Updating Modules").start();
-		
+
 		SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
 		ArrayList<Module> modules = this.moduleService.getSortedModules();
 		for (Module module : modules) {
-			
+
 			this.addChildComponents(rootComponent, module);
 		}
 
 		JPanelStatus.getInstance().stop();
 		return rootComponent;
 	}
-	
+
 	private void addChildComponents(AbstractDefineComponent parentComponent, Module module) {
 		AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
 		for(Module subModule : module.getSubModules()) {
@@ -347,7 +342,7 @@ public class DefinitionController extends Observable implements Observer {
 		parentComponent.addChild(childComponent);
 	}
 
-	
+
 	public String getModuleName(long moduleId){
 		String moduleName = "Root";
 		if (this.getSelectedModuleId() != -1){
@@ -355,8 +350,8 @@ public class DefinitionController extends Observable implements Observer {
 		}
 		return moduleName;
 	}
-	
-		/**
+
+	/**
 	 * This function will return a hash map with the details of the requested module.
 	 */
 	public HashMap<String, Object> getModuleDetails(long moduleId) {
@@ -369,7 +364,7 @@ public class DefinitionController extends Observable implements Observer {
 				moduleDetails.put("name", module.getName());
 				moduleDetails.put("description", module.getDescription());
 				moduleDetails.put("type", module.getType());
-				
+
 			} catch (Exception e) {
 				logger.error("getModuleDetails() - exception: " + e.getMessage());
 				UiDialogs.errorDialog(definitionJPanel, e.getMessage());
@@ -377,13 +372,13 @@ public class DefinitionController extends Observable implements Observer {
 		}
 		return moduleDetails;
 	}
-	
+
 	public void update(Observable o, Object arg) {
 		logger.info("update(" + o + ", " + arg + ")");
 		long moduleId = getSelectedModuleId();
 		notifyObservers(moduleId);
 	}
-	
+
 	@Override
 	public void notifyObservers(){
 		long moduleId = getSelectedModuleId();
@@ -391,7 +386,7 @@ public class DefinitionController extends Observable implements Observer {
 			o.update(this, moduleId);
 		}
 	}
-	
+
 	/**
 	 * This function will load notify all to update their data
 	 */
@@ -400,13 +395,13 @@ public class DefinitionController extends Observable implements Observer {
 			o.update(this, moduleId);
 		}
 	}
-	
+
 	public void addObserver(Observer o){
 		if (!this.observers.contains(o)){
 			this.observers.add(o);
 		}
 	}
-	
+
 	public void removeObserver(Observer o){
 		if (this.observers.contains(o)){
 			this.observers.remove(o);
@@ -416,7 +411,7 @@ public class DefinitionController extends Observable implements Observer {
 	public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
 		return this.appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
 	}
-	
+
 	public HashMap<String, Object> getRuleDetailsByAppliedRuleId(long appliedRuleId){
 		AppliedRule rule = this.appliedRuleService.getAppliedRuleById(appliedRuleId);
 		HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
@@ -431,19 +426,19 @@ public class DefinitionController extends Observable implements Observer {
 		ruleDetails.put("numberofexceptions", rule.getExceptions().size());
 		return ruleDetails;
 	}
-	
+
 	public ArrayList<String> getSoftwareUnitNamesBySelectedModule() {
 		return this.softwareUnitDefinitionDomainService.getSoftwareUnitNames(getSelectedModuleId());
 	}
-	
+
 	public ArrayList<String> getRegExSoftwareUnitNamesBySelectedModule() {
 		return this.softwareUnitDefinitionDomainService.getRegExSoftwareUnitNames(getSelectedModuleId());
 	}
-	
+
 	public String getSoftwareUnitTypeBySoftwareUnitName(String softwareUnitName){
 		return this.softwareUnitDefinitionDomainService.getSoftwareUnitType(softwareUnitName);
 	}
-	
+
 	public boolean isAnalysed(){
 		return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
 	}

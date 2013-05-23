@@ -14,6 +14,8 @@ public abstract class AbstractBootstrap {
 	
 	public abstract void execute ();
 	
+	public abstract void execute (String[] args);
+	
 	public void executeBootstrap(Class<? extends AbstractBootstrap> bootstrap){
 		bootstrapHandler.executeBootstrap(bootstrap);
 	}

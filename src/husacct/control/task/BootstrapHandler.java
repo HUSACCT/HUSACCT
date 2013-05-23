@@ -1,5 +1,7 @@
 package husacct.control.task;
 
+import java.lang.reflect.Constructor;
+
 import husacct.bootstrap.AbstractBootstrap;
 
 import org.apache.log4j.Logger;
@@ -7,6 +9,8 @@ import org.apache.log4j.Logger;
 public class BootstrapHandler {
 
 	private Logger logger = Logger.getLogger(BootstrapHandler.class);
+	private String[] args = {};
+	private boolean runArgs = false;
 	
 	public BootstrapHandler(){
 
@@ -14,6 +18,13 @@ public class BootstrapHandler {
 	
 	public BootstrapHandler(String[] bootstraps) {
 		for(String bootstrap : bootstraps){
+			runArgs = false;
+			if(bootstrap.contains("?")){
+				String allArgs = bootstrap.substring(bootstrap.indexOf('?') +1);
+				args = allArgs.contains("|") ? allArgs.split("|") : new String[]{ allArgs };
+				bootstrap = bootstrap.substring(0,  bootstrap.indexOf('?'));
+				runArgs = true;
+			}
 			Class<? extends AbstractBootstrap> bootstrapClass = getBootstrapClass(bootstrap);
 			if(bootstrapClass != null){
 				executeBootstrap(bootstrapClass);
@@ -25,7 +36,11 @@ public class BootstrapHandler {
 		logger.info("Trying to execute bootstrapper " + bootstrap.getName());
 		try {
 			AbstractBootstrap targetBootstrap = bootstrap.newInstance();
-			targetBootstrap.execute();
+			if(!runArgs){
+				targetBootstrap.execute();
+			}else{
+				targetBootstrap.execute(args);
+			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			error("Exception: " + exception.getMessage());
@@ -44,7 +59,6 @@ public class BootstrapHandler {
 		} catch (Error error){
 			error.printStackTrace();
 			error("Error " + error.getMessage());
-			
 		}
 		return null;
 	}
