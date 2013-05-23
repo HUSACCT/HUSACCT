@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.report;
 
-import husacct.validate.domain.validation.internal_transfer_objects.ViolationsPerSeverity;
+import husacct.validate.domain.validation.internaltransferobjects.ViolationsPerSeverity;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
