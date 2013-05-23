@@ -12,6 +12,7 @@ public class Resource {
 	public static final String LOGGING_PATH = RESOURCE_PATH + "logging/";
 	public static final String IMAGE_PATH = RESOURCE_PATH + "image/";
 	public static final String ICONSET_PATH = RESOURCE_PATH + "iconset/";
+	public static final String CREDITS_PATH = RESOURCE_PATH +"credits/";
 	
 	public static final String HUSACCT_LOGO = IMAGE_PATH + "husacct.png";
 	public static final String BLACKCAT = IMAGE_PATH + "blackcat.gif";
@@ -50,6 +51,7 @@ public class Resource {
 	public static final String ICON_VIOLATIONS_ACTIVE = ICONSET_PATH + "violations-active.png";
 	public static final String ICON_VIOLATIONS_INACTIVE = ICONSET_PATH + "violations-inactive.png";
 	public static final String ICON_ZOOM = ICONSET_PATH + "zoom.png";
+	public static final String ICON_ZOOMCONTEXT = ICONSET_PATH + "zoom-in.png";
 	public static final String ICON_EXTERNALLIB=ICONSET_PATH+"define_externalLib.png";
 	public static final String ICON_SUBSYSTEMJAVA=ICONSET_PATH+"define-subsystem.png";
 	public static final String CONTROL_TEST_WORKSPACE = RESOURCE_PATH + "control/testworkspace.xml";

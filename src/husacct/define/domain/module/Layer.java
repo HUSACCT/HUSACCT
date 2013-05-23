@@ -5,27 +5,23 @@ public class Layer extends Module {
 	private static int STATIC_LEVEL = 1;
 	private int hierarchicalLevel;
 	
-	public Layer()
-	{
+	public Layer(){
 		this("", "");	
 	}
 
-	public Layer(String name)
-	{
+	public Layer(String name){
 		this(name, "");
 	}
 	
-	public Layer(String name, String description)
-	{
+	public Layer(String name, String description){
 		super(name, description);
 		super.type = "Layer";
 		this.hierarchicalLevel = STATIC_LEVEL;
 		STATIC_LEVEL++;
 	}
 	
-	//TODO Test this, this contructor is only for importing
-	public Layer(String name, String description, int hierarchicalLevel)
-	{
+	//TODO Test this, this constructor is only for importing
+	public Layer(String name, String description, int hierarchicalLevel){
 		super(name, description);
 		super.type = "Layer";
 		this.hierarchicalLevel = hierarchicalLevel;

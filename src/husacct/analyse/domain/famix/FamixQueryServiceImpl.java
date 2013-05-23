@@ -103,6 +103,23 @@ public class FamixQueryServiceImpl implements IModelQueryService {
     
     @Override
 	public ExternalSystemDTO[] getExternalSystems(){
-		return theModel.getExternalSystems();
+    	List<ExternalSystemDTO> externalSystems = dependencyFinder.getExternalSystems();
+    	return externalSystems.toArray(new ExternalSystemDTO[externalSystems.size()]);
 	}
+    
+    public int getAmountOfDependencies() {
+    	return getAllDependencies().length;
+    }
+    
+    public int getAmountOfInterfaces() {
+    	return theModel.imports.size();
+    }
+    
+    public int getAmountOfPackages() {
+    	return theModel.packages.size();
+    }
+    
+    public int getAmountOfClasses() {
+    	return theModel.classes.size();
+    }
 }

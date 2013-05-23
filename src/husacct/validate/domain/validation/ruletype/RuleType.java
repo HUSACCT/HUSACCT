@@ -91,8 +91,7 @@ public abstract class RuleType {
 		final Severity violationTypeSeverity = getViolationTypeSeverity(dependency.type);
 		Severity severity = CheckConformanceUtilSeverity.getSeverity(configuration, this.severity, violationTypeSeverity);
 
-		Violation newViolation = new Violation();
-		newViolation = newViolation
+		Violation newViolation = new Violation()
 				.setLineNumber(dependency.lineNumber)
 				.setSeverity(severity.clone())
 				.setRuletypeKey(this.key)

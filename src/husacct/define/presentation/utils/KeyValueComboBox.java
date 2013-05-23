@@ -65,4 +65,15 @@ public class KeyValueComboBox extends JComboBox{
 		}
 		return key;
 	}
+	
+	@Override
+	public void setSelectedItem(Object obj){
+		if(obj != null){
+			if(!obj.toString().contains("---")){
+				super.setSelectedItem(obj);
+			}
+		}else{
+			super.setSelectedItem(obj);
+		}
+	}
 }

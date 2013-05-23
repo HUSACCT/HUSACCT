@@ -22,6 +22,6 @@ public class SaverPanelFactory {
             e.printStackTrace();
         }
         
-        return new HusacctSavePanel();
+        return new XmlSavePanel();
 	}
 }
