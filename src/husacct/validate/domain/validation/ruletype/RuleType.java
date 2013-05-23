@@ -158,7 +158,7 @@ public abstract class RuleType {
 				.setInDirect(false)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
-		return newViolation;		
+		return newViolation;
 	}
 
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {

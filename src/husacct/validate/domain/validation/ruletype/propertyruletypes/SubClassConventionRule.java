@@ -18,18 +18,17 @@ import java.util.List;
 
 public class SubClassConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> subClassExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED);
 
 	public SubClassConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+		super(key, category, violationtypes, subClassExceptionRules, severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> classpathsFrom = mappings.getMappingFrom();
+		classpathsFrom = mappings.getMappingFrom();
 		List<Mapping> classpathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();

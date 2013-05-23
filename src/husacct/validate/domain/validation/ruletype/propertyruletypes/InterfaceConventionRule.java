@@ -18,12 +18,12 @@ import java.util.List;
 
 public class InterfaceConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> interfaceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED);
 	private HashSet<String> interfaceCache;
 	private HashSet<String> noInterfaceCache;
 
 	public InterfaceConventionRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+		super(key, category, violationtypes, interfaceExceptionRules, severity);
 
 		interfaceCache = new HashSet<>();
 		noInterfaceCache = new HashSet<>();
@@ -32,9 +32,8 @@ public class InterfaceConventionRule extends RuleType {
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
 		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		List<Mapping> classpathsFrom = mappings.getMappingFrom();
+		classpathsFrom = mappings.getMappingFrom();
 		List<Mapping> classpathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();

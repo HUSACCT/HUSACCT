@@ -17,10 +17,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class FacadeConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.noneOf(RuleTypes.class);
+	private final static EnumSet<RuleTypes> facadeExceptionRules = EnumSet.noneOf(RuleTypes.class);
 
 	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationtypes, Severity severity) {
-		super(key, categoryKey, violationtypes, exceptionrules, severity);
+		super(key, categoryKey, violationtypes, facadeExceptionRules, severity);
 	}
 
 	@Override
