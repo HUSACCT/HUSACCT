@@ -25,16 +25,16 @@ public class LogController {
 
 	private MainController mainController;
 	
-	private String logFile = ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", "");
+	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", ""));
 	
 	public LogController(MainController mainController){
-		System.out.println("logFile: " + logFile);
+		System.out.println("For testing purposes (/control/task/LogController.java): " + logFile);
 		this.mainController = mainController;
 		currentWorkspace = null;
 	}
 	
 	public boolean logFileExists(){
-		return new File(logFile).exists();
+		return logFile.exists();
 	}
 	
 	public HashMap<String, HashMap<String, String>> getApplicationHistoryFromFile(String workspace, String application, ArrayList<ProjectDTO> projects){
