@@ -1,4 +1,4 @@
-package husacct.validate.domain.validation.internal_transfer_objects;
+package husacct.validate.domain.validation.internaltransferobjects;
 
 import husacct.validate.domain.validation.Severity;
 
