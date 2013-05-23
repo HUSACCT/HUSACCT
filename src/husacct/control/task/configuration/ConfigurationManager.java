@@ -24,6 +24,10 @@ public class ConfigurationManager {
 		return Integer.parseInt(property);
 	}
 	
+	public static boolean isEmptyProperty(String key){
+		return properties.getProperty(key).equals("");
+	}
+	
 	public static boolean getPropertyAsBoolean(String key, String defaultParam) {
 		String property = getProperty(key, defaultParam);
 		return Boolean.parseBoolean(property);
@@ -73,7 +77,7 @@ public class ConfigurationManager {
 	}
 	
 	public static Properties performInitMutations(Properties props){
-		//Set platform independent AppDataFolder (always empty on startup of HUSACCT)
+		//Always overwrite platform independent AppDataFolder (always empty on startup of HUSACCT)
 		String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
 		File appDataFolderObject = new File(appDataFolderString);
 		if(!appDataFolderObject.exists()){

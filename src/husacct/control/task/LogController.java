@@ -25,10 +25,12 @@ public class LogController {
 
 	private MainController mainController;
 	
-	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", ""));
+	private File logFile = new File(
+			ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + 
+			ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", ""));
 	
 	public LogController(MainController mainController){
-		System.out.println("For testing purposes (/control/task/LogController.java): " + logFile);
+		System.out.println("For testing purposes (/control/task/LogController.java): " + logFile.getAbsolutePath());
 		this.mainController = mainController;
 		currentWorkspace = null;
 	}
