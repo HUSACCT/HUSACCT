@@ -11,12 +11,9 @@ public class ConfigurationManager {
 	private final static Properties properties = loadProperties();
 	
 	public static String getProperty(String key, String defaultParam) {
-		if(properties.containsKey(key))
-			return properties.getProperty(key);
-		else {
+		if(!properties.containsKey(key))
 			setProperty(key, defaultParam);
-			return defaultParam;
-		}
+		return properties.getProperty(key);
 	}
 	
 	public static int getPropertyAsInteger(String key, String defaultParam) throws NumberFormatException {
@@ -35,6 +32,7 @@ public class ConfigurationManager {
 	
 	public static void setProperty(String key, String value) {
 		properties.setProperty(key, value);
+		storeProperties();
 	}
 	
 	public static void setPropertyFromInteger(String key, int value) {
@@ -47,7 +45,7 @@ public class ConfigurationManager {
 	
 	public static void setPropertie(String key, String value) {
 		properties.setProperty(key, value);
-		storeProperties();
+		
 	}
 	
 	private static Properties loadProperties() {
