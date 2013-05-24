@@ -2,6 +2,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 import org.antlr.runtime.tree.CommonTree;
 
@@ -12,35 +13,31 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 		super(packageAndClassName);
 	}
 
-	public void generateMethodInvocToDomain(CommonTree treeNode, String belongsToMethod) {
+	public void generateMethodInvocToDomain(CommonTree tree, String belongsToMethod) {
 		this.belongsToMethod = belongsToMethod;
-		lineNumber = treeNode.getLine();
+		lineNumber = tree.getLine();
 		
-		findMethodInvocation(treeNode);
-		saveInvocationToDomain();
+		delegateMethodInvocation(tree);
 	}
-
-	private void findMethodInvocation(CommonTree treeNode) {
-		if (treeNode.getChildCount() <= 0){
-			return;
+	
+	private void delegateMethodInvocation(CommonTree tree) {
+		CommonTree methodTree = findMethodInvocation(tree);
+		if (methodTree != null) {
+			determineMethodType(methodTree);
+			checkForArguments(methodTree);
+			saveInvocationToDomain();
 		}
-		for (int i = 0; i < treeNode.getChildCount(); i++) {
-			CommonTree child = (CommonTree)treeNode.getChild(i);
-			if (hasMethod(child)){
-				determineMethodType(child);
-			}
-			else if (hasArguments(child)){
-				delegateArguments(child);
-			}
+  	}
+
+	private CommonTree findMethodInvocation(CommonTree tree) {
+		return getFirstDescendantWithType(tree, CSharpParser.MEMBER_ACCESS);
+	}
+	
+	private void checkForArguments(CommonTree methodTree) {
+		CommonTree argumentsTree = getFirstDescendantWithType(methodTree, CSharpParser.ARGUMENT);
+		if (argumentsTree != null) {
+			delegateArguments(argumentsTree);
 		}
-	}
-
-	private boolean hasArguments(CommonTree child) {
-		return child.getType() == CSharpParser.ARGUMENT;
-	}
-
-	private boolean hasMethod(CommonTree child) {
-		return child.getType() == CSharpParser.MEMBER_ACCESS;
 	}
 
 	private void determineMethodType(CommonTree tree) {
@@ -52,9 +49,9 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 		}
 	}
 	
-	private void delegateArguments(CommonTree tree) {
+	private void delegateArguments(CommonTree argumentsTree) {
 		CSharpArgumentsGenerator csharpArgumentsGenerator = new CSharpArgumentsGenerator(this.from);
-		csharpArgumentsGenerator.delegateArguments(tree, this.belongsToMethod);
+		csharpArgumentsGenerator.delegateArguments(argumentsTree, this.belongsToMethod);
 	}
 
 	private boolean methodHasConstructor(CommonTree tree) {

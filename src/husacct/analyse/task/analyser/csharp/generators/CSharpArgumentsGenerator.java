@@ -1,8 +1,6 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -17,15 +15,11 @@ public class CSharpArgumentsGenerator {
 
 	public void delegateArguments(CommonTree argumentsTree, String belongsToMethod) {
 		this.belongsToMethod = belongsToMethod;
-		System.out.println("<<<<<<---------" + this.getClass().getName() + "----------->>>>>>");
-		new TreePrinter((CommonTree) argumentsTree);
-		System.out.println("\n<<<<<<-------------------->>>>>>");
-		
+
 		delegateEachArgument(argumentsTree);
 	}
 
 	private void delegateEachArgument(Tree argumentsTree) {
-		
 		for (int i = 0; i < argumentsTree.getChildCount(); i++) {
 			Tree child = argumentsTree.getChild(i);
 			switch (child.getType()) {
