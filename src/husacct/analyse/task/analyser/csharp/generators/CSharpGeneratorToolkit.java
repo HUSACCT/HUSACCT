@@ -1,6 +1,9 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -125,5 +128,20 @@ public class CSharpGeneratorToolkit {
             return false;
         }
         return tree.getType() == type;
+    }
+    
+    public static CommonTree getFirstDescendantWithType(CommonTree root, int type) {
+    	LinkedList<CommonTree> queue = new LinkedList<>();
+    	queue.add(root);
+    	while(!queue.isEmpty()) {
+    		CommonTree first = queue.removeFirst();
+    		for (int i = 0; i < first.getChildCount(); i++) {
+    			CommonTree child = (CommonTree)first.getChild(i);
+    			if (isOfType(child, type))
+    				return child;
+    			queue.addLast(child);
+    		}
+    	}
+    	return null;
     }
 }

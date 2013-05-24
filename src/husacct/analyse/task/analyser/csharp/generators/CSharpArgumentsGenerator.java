@@ -1,15 +1,13 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
 public class CSharpArgumentsGenerator {
 	private String packageAndClassName = "";
 	private String belongsToMethod = "";
-	
+
 	public CSharpArgumentsGenerator(String packageAndClassName){
 		this.packageAndClassName = packageAndClassName;
 
@@ -17,15 +15,11 @@ public class CSharpArgumentsGenerator {
 
 	public void delegateArguments(CommonTree argumentsTree, String belongsToMethod) {
 		this.belongsToMethod = belongsToMethod;
-		System.out.println("<<<<<<---------" + this.getClass().getName() + "----------->>>>>>");
-		new TreePrinter((CommonTree) argumentsTree);
-		System.out.println("\n<<<<<<-------------------->>>>>>");
-		
+
 		delegateEachArgument(argumentsTree);
 	}
 
 	private void delegateEachArgument(Tree argumentsTree) {
-		
 		for (int i = 0; i < argumentsTree.getChildCount(); i++) {
 			Tree child = argumentsTree.getChild(i);
 			switch (child.getType()) {
@@ -43,7 +37,7 @@ public class CSharpArgumentsGenerator {
 			}
 		}
 	}
-	
+
 	private void delegateInvocationConstructor(Tree tree) {
 		CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator= new CSharpInvocationConstructorGenerator(this.packageAndClassName);
 		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
@@ -53,7 +47,7 @@ public class CSharpArgumentsGenerator {
 		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
 		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
-	
+
 	private void delegateInvocationPropertyOrField(Tree tree) {
 		CSharpInvocationPropertyOrFieldGenerator csharpInvocationPropertyOrFieldGenerator = new CSharpInvocationPropertyOrFieldGenerator(this.packageAndClassName);
 		csharpInvocationPropertyOrFieldGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
