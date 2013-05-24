@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 import java.util.ArrayList;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 import org.antlr.runtime.tree.CommonTree;
 
@@ -13,37 +14,31 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 		super(packageAndClassName);
 	}
 	
-	public void generateConstructorInvocToDomain(CommonTree treeNode, String belongsToMethod) {
+	public void generateConstructorInvocToDomain(CommonTree tree, String belongsToMethod) {
 		invocationName = "Constructor";
 		this.belongsToMethod = belongsToMethod;
 		
-		findConstructorInvocation(treeNode);
-		saveInvocationToDomain();
+		checkForConstructorInvocation(tree);
 	}
-
-	private void findConstructorInvocation(CommonTree treeNode) {
-		boolean constructorFound = hasConstructorCall(treeNode);
-		if (constructorFound){
-			createConstructorInvocationDetails((CommonTree) treeNode);
-		}
-		else {
-			int childcount = treeNode.getChildCount();
-			for (int i = 0; i < childcount; i++) {
-				CommonTree child =  (CommonTree) treeNode.getChild(i);
-				findConstructorInvocation(child);
-			}
+	
+	private void checkForConstructorInvocation(CommonTree tree) {
+		CommonTree constructorTree = findConstructorInvocation(tree);
+		if (constructorTree != null) {
+			createConstructorInvocationDetails(constructorTree);
+			checkForArguments(constructorTree);
+			saveInvocationToDomain();	
 		}
 	}
 
-	private boolean hasConstructorCall(CommonTree treeNode) {
-		return treeNode.getType() == CSharpParser.OBJECT_CREATION_EXPRESSION;
+	private CommonTree findConstructorInvocation(CommonTree tree) {
+		return getFirstDescendantWithType(tree, CSharpParser.OBJECT_CREATION_EXPRESSION);
 	}
-
-	private void createConstructorInvocationDetails(CommonTree treeNode) {
-		this.to = setToName(treeNode);
-		this.lineNumber = treeNode.getChild(0).getLine();
+	
+	private void createConstructorInvocationDetails(CommonTree constructorTree) {
+		this.to = setToName(constructorTree);
+		this.lineNumber = constructorTree.getChild(0).getLine();
 	}
-
+	
 	private String setToName(CommonTree treeNode) {
 		String toName = "";
 		walkTreeToGetNames(treeNode);	
@@ -55,11 +50,7 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 		toName = removeLastDot(toName);
 		return toName;
 	}
-
-	private String removeLastDot(String toName) {
-		return toName.substring(0, toName.length()-1);
-	}
-
+	
 	private void walkTreeToGetNames(CommonTree treeNode) {
 		for (int i = 0; i < treeNode.getChildCount(); i++) {
 			CommonTree child = (CommonTree)treeNode.getChild(i);
@@ -73,7 +64,23 @@ public class CSharpInvocationConstructorGenerator extends AbstractCSharpInvocati
 			walkTreeToGetNames(child);
 		}
 	}
+	
+	private String removeLastDot(String toName) {
+		return toName.substring(0, toName.length()-1);
+	}
 
+	private void checkForArguments(CommonTree methodTree) {
+		CommonTree argumentsTree = getFirstDescendantWithType(methodTree, CSharpParser.ARGUMENT);
+		if (argumentsTree != null) {
+			delegateArguments(argumentsTree);
+		}
+	}
+	
+	private void delegateArguments(CommonTree tree) {
+		CSharpArgumentsGenerator csharpArgumentsGenerator = new CSharpArgumentsGenerator(this.from);
+		csharpArgumentsGenerator.delegateArguments(tree, this.belongsToMethod);
+	}
+	
 	@Override
 	void saveInvocationToDomain() {
 		modelService.createConstructorInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);

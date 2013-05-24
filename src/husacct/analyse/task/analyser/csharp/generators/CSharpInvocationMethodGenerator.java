@@ -1,43 +1,82 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
+import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 import org.antlr.runtime.tree.CommonTree;
 
 public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGenerator {
+	private CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator;
 	
 	public CSharpInvocationMethodGenerator(String packageAndClassName) {
 		super(packageAndClassName);
 	}
 
-	public void generateMethodInvocToDomain(CommonTree treeNode, String belongsToMethod) {
+	public void generateMethodInvocToDomain(CommonTree tree, String belongsToMethod) {
 		this.belongsToMethod = belongsToMethod;
-		lineNumber = treeNode.getLine();
+		lineNumber = tree.getLine();
 		
-		findMethodInvocation(treeNode);
+		delegateMethodInvocation(tree);
+	}
+	
+	private void delegateMethodInvocation(CommonTree tree) {
+		CommonTree methodTree = findMethodInvocation(tree);
+		if (methodTree != null) {
+			determineMethodType(methodTree);
+			checkForArguments(methodTree);
+			saveInvocationToDomain();
+		}
+  	}
+
+	private CommonTree findMethodInvocation(CommonTree tree) {
+		return getFirstDescendantWithType(tree, CSharpParser.MEMBER_ACCESS);
+	}
+	
+	private void checkForArguments(CommonTree methodTree) {
+		CommonTree argumentsTree = getFirstDescendantWithType(methodTree, CSharpParser.ARGUMENT);
+		if (argumentsTree != null) {
+			delegateArguments(argumentsTree);
+		}
 	}
 
-	private void findMethodInvocation(CommonTree treeNode) {
-		if (treeNode.getChildCount() <= 0){
-			return;
+	private void determineMethodType(CommonTree tree) {
+		if(methodHasConstructor(tree)) {
+			delegateConstructor(tree);
 		}
-		for (int i = 0; i < treeNode.getChildCount(); i++) {
-			CommonTree child = (CommonTree)treeNode.getChild(i);
-			switch (child.getType()) {
-			case CSharpParser.MEMBER_ACCESS:
-				createMethodInvocationDetails(child);
-				saveInvocationToDomain();
-			}
+		else {
+			createMethodInvocationDetails(tree);		
 		}
 	}
+	
+	private void delegateArguments(CommonTree argumentsTree) {
+		CSharpArgumentsGenerator csharpArgumentsGenerator = new CSharpArgumentsGenerator(this.from);
+		csharpArgumentsGenerator.delegateArguments(argumentsTree, this.belongsToMethod);
+	}
 
-	private void createMethodInvocationDetails(CommonTree child) {
-		CommonTree toChild = (CommonTree)child.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
+	private boolean methodHasConstructor(CommonTree tree) {
+		return tree.getChild(0).getType() == CSharpParser.OBJECT_CREATION_EXPRESSION;
+	}
+	
+	private void delegateConstructor(CommonTree tree) {
+		csharpInvocationConstructorGenerator = new CSharpInvocationConstructorGenerator(this.from);
+		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain(tree, this.belongsToMethod);
+		createMethodInvocationDetailsWithConstructor(tree);
+	}
+
+	private void createMethodInvocationDetailsWithConstructor(CommonTree tree) {
+		this.invocationName = tree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		this.to = csharpInvocationConstructorGenerator.to;
+		this.nameOfInstance = this.to;	
+	}
+
+	private void createMethodInvocationDetails(CommonTree treeNode) {
+		this.invocationName = treeNode.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+		CommonTree toChild = (CommonTree)treeNode.getFirstChildWithType(CSharpParser.SIMPLE_NAME);
 		this.to = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		this.invocationName = child.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();	
+		this.nameOfInstance = toChild.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 	}
-
+	
 	@Override
 	void saveInvocationToDomain() {
 		modelService.createMethodInvocation(from, to, lineNumber, invocationName, belongsToMethod, nameOfInstance);
