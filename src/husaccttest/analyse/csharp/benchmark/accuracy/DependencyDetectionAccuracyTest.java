@@ -26,6 +26,7 @@ public class DependencyDetectionAccuracyTest {
 	private static String path = new File(TestProjectFinder.lookupProject("csharp", "benchmark")).getAbsolutePath();
 	private static String language = "C#";
 	
+	@SuppressWarnings("static-access")
 	@BeforeClass
 	public static void beforeClass() {
 		try {
@@ -37,6 +38,7 @@ public class DependencyDetectionAccuracyTest {
 			ControlServiceImpl ctrlS = (ControlServiceImpl) ServiceProvider.getInstance().getControlService();
 			ctrlS.getMainController().getApplicationController().analyseApplication();
 			
+			//analyse is in a different Thread, and needs some time
 			while(!isAnalysed){
 				try {
 					Thread.currentThread().sleep((long)10);
