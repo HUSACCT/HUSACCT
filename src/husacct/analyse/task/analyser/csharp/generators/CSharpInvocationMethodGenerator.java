@@ -5,9 +5,12 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+
 
 public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGenerator {
 	private CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator;
+	private CommonTree methodTree;
 	
 	public CSharpInvocationMethodGenerator(String packageAndClassName) {
 		super(packageAndClassName);
@@ -21,13 +24,23 @@ public class CSharpInvocationMethodGenerator extends AbstractCSharpInvocationGen
 	}
 	
 	private void delegateMethodInvocation(CommonTree tree) {
-		CommonTree methodTree = findMethodInvocation(tree);
+		methodTree = findMethodInvocation(tree);
+		
 		if (methodTree != null) {
+			deleteTrainWreck(methodTree);
 			determineMethodType(methodTree);
 			checkForArguments(methodTree);
 			saveInvocationToDomain();
 		}
   	}
+	
+	private void deleteTrainWreck(CommonTree tree) {
+		Tree wagon = tree.getChild(0);
+		if (wagon.getType() == CSharpParser.METHOD_INVOCATION){
+			methodTree = findMethodInvocation((CommonTree)wagon);
+			deleteTrainWreck((CommonTree) methodTree);
+		}		
+	}
 
 	private CommonTree findMethodInvocation(CommonTree tree) {
 		return getFirstDescendantWithType(tree, CSharpParser.MEMBER_ACCESS);
