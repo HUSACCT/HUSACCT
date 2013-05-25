@@ -7,170 +7,180 @@ import java.util.ArrayList;
 
 public class AppliedRule {
 
-	private static long STATIC_ID;
-	private long id;
-	private String description;
-	private String[] dependencies;
-	private String regex;
-	private Module moduleTo;
-	private Module moduleFrom;
-	private String ruleType;
-	private boolean enabled;
-	private ArrayList<AppliedRule> exceptions;
+    private static long STATIC_ID;
+    private String[] dependencies;
+    private String description;
+    private boolean enabled;
+    private ArrayList<AppliedRule> exceptions;
+    private long id;
+    private Module moduleFrom;
+    private Module moduleTo;
+    private String regex;
+    private String ruleType;
 
-	public AppliedRule(String ruleType, String description, String[] dependencies,
-			String regex, Module moduleFrom,
-			Module moduleTo, boolean enabled) {
-		this.id = STATIC_ID++;
-		STATIC_ID++;
-		this.ruleType = ruleType;
-		this.description = description;
-		this.dependencies = dependencies;
-		this.regex = regex;
-		this.moduleTo = moduleTo;
-		this.moduleFrom = moduleFrom;
-		this.exceptions = new ArrayList<AppliedRule>();
-		this.enabled = enabled;
+    public AppliedRule() {
+	this("", "", new String[0], "", null, null, true);
+    }
+
+    public AppliedRule(String ruleType, String description, Module moduleFrom,
+	    Module moduleTo) {
+	this(ruleType, description, new String[0], "", moduleFrom, moduleTo,
+		true);
+    }
+
+    public AppliedRule(String ruleType, String description,
+	    String[] dependencies, String regex, Module moduleFrom,
+	    Module moduleTo, boolean enabled) {
+	id = STATIC_ID++;
+	STATIC_ID++;
+	this.ruleType = ruleType;
+	this.description = description;
+	this.dependencies = dependencies;
+	this.regex = regex;
+	this.moduleTo = moduleTo;
+	this.moduleFrom = moduleFrom;
+	exceptions = new ArrayList<AppliedRule>();
+	this.enabled = enabled;
+    }
+
+    /**
+     * Logic
+     */
+    public void addException(AppliedRule exception) {
+	if (!exceptions.contains(exception) && !hasException(exception.getId())) {
+	    exceptions.add(exception);
+	} else {
+	    throw new RuntimeException(ServiceProvider.getInstance()
+		    .getLocaleService()
+		    .getTranslatedString("ExceptionAlreadyAdded"));
 	}
+    }
 
-	public AppliedRule(String ruleType, String description, Module moduleFrom, Module moduleTo){
-		this(ruleType, description, new String[0], "",moduleFrom,moduleTo, true);
+    /**
+     * Overrides
+     */
+    @Override
+    public boolean equals(Object obj) {
+	AppliedRule doppelganger = (AppliedRule) obj;
+	if (ruleType == doppelganger.ruleType
+		&& moduleTo == doppelganger.moduleTo
+		&& moduleFrom == doppelganger.moduleFrom) {
+	    return true;
 	}
+	return false;
+    }
 
-	public AppliedRule() {
-		this("","",new String[0], "",null,null, true);
+    public String[] getDependencies() {
+	return dependencies;
+    }
+
+    public String getDescription() {
+	return description;
+    }
+
+    public ArrayList<AppliedRule> getExceptions() {
+	return exceptions;
+    }
+
+    public long getId() {
+	return id;
+    }
+
+    public Module getModuleFrom() {
+	return moduleFrom;
+    }
+
+    public Module getModuleTo() {
+	return moduleTo;
+    }
+
+    public String getRegex() {
+	return regex;
+    }
+
+    public String getRuleType() {
+	return ruleType;
+    }
+
+    private boolean hasException(long l) {
+	return exceptions.size() >= 0;
+    }
+
+    public boolean isEnabled() {
+	return enabled;
+    }
+
+    public void removeAllExceptions() {
+	exceptions = new ArrayList<AppliedRule>();
+    }
+
+    public void removeException(AppliedRule exception) {
+	removeExceptionById(exception.getId());
+    }
+
+    public void removeExceptionById(long exceptionRuleId) {
+	boolean exceptionFound = false;
+	for (AppliedRule rule : exceptions) {
+	    if (rule.getId() == exceptionRuleId) {
+		exceptionFound = true;
+		exceptions.remove(rule);
+	    }
 	}
+	if (!exceptionFound) {
+	    throw new RuntimeException(ServiceProvider.getInstance()
+		    .getLocaleService().getTranslatedString("NoException"));
+	}
+    }
 
-	/**
-	 * Logic
-	 */
-	public void addException(AppliedRule exception){
-		if(!exceptions.contains(exception) && !this.hasException(exception.getId())) {
-			exceptions.add(exception);
-		} else {
-			throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExceptionAlreadyAdded"));
+    public void setDependencies(String[] dependencies) {
+	this.dependencies = dependencies;
+    }
+
+    public void setDescription(String description) {
+	this.description = description;
+    }
+
+    public void setEnabled(boolean enabled) {
+	this.enabled = enabled;
+    }
+
+    public void setExceptions(ArrayList<AppliedRule> exceptions) {
+	this.exceptions = exceptions;
+    }
+
+    public void setId(int id) {
+	this.id = id;
+    }
+
+    public void setModuleFrom(Module moduleFrom) {
+	this.moduleFrom = moduleFrom;
+    }
+
+    public void setModuleTo(Module moduleTo) {
+	this.moduleTo = moduleTo;
+    }
+
+    public void setRegex(String regex) {
+	this.regex = regex;
+    }
+
+    public void setRuleType(String ruleType) {
+	this.ruleType = ruleType;
+    }
+
+    public boolean usesModule(long moduleId) {
+	boolean usesModule = false;
+	if (moduleTo.getId() == moduleId) {
+	    usesModule = true;
+	} else if (moduleFrom.getId() == moduleId) {
+	    usesModule = true;
+	} else {
+	    for (AppliedRule ruleExceptions : exceptions) {
+		if (ruleExceptions.usesModule(moduleId)) {
+		    usesModule = true;
 		}
+	    }
 	}
-
-	private boolean hasException(long l){
-		return exceptions.size()>=0;
-	}
-
-	public void removeException(AppliedRule exception){
-		removeExceptionById(exception.getId());
-	}
-
-	public void removeExceptionById(long exceptionRuleId) {
-		boolean exceptionFound = false;
-		for (AppliedRule rule : exceptions){
-			if (rule.getId() == exceptionRuleId){
-				exceptionFound = true;
-				exceptions.remove(rule);
-			}
-		}
-		if (!exceptionFound){throw new RuntimeException(ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoException"));}
-	}
-
-	public void removeAllExceptions() {
-		exceptions = new ArrayList<AppliedRule>();
-	}
-
-	public boolean usesModule(long moduleId) {
-		boolean usesModule = false;
-		if (moduleTo.getId() == moduleId){
-			usesModule = true;
-		}else if( moduleFrom.getId() == moduleId){
-			usesModule = true;
-		}else{			
-			for (AppliedRule ruleExceptions : exceptions){
-				if (ruleExceptions.usesModule(moduleId)){
-					usesModule = true;
-				}
-			}
-		}
-		return usesModule;
-	}
-
-	public String getRuleType() {
-		return ruleType;
-	}
-
-	public void setRuleType(String ruleType) {
-		this.ruleType = ruleType;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setExceptions(ArrayList<AppliedRule> exceptions) {
-		this.exceptions = exceptions;
-	}
-
-	public ArrayList<AppliedRule> getExceptions() {
-		return exceptions;
-	}
-
-	public void setDependencies(String[] dependencies) {
-		this.dependencies = dependencies;
-	}
-
-	public String[] getDependencies() {
-		return dependencies;
-	}
-
-	public void setRegex(String regex) {
-		this.regex = regex;
-	}
-
-	public String getRegex() {
-		return regex;
-	}
-
-	public Module getModuleTo() {
-		return moduleTo;
-	}
-
-	public void setModuleTo(Module moduleTo) {
-		this.moduleTo = moduleTo;
-	}
-
-	public Module getModuleFrom() {
-		return moduleFrom;
-	}
-
-	public void setModuleFrom(Module moduleFrom) {
-		this.moduleFrom = moduleFrom;
-	}
-
-	/**
-	 * Overrides
-	 */
-	@Override
-	public boolean equals(Object obj){
-		AppliedRule doppelganger = (AppliedRule) obj;
-		if(this.ruleType == doppelganger.ruleType && this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom)
-			return true;
-		return false;
-	}
+	return usesModule;
+    }
 }

@@ -28,112 +28,122 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-public class ApplicationJInternalFrame extends JInternalFrame implements ILocaleChangeListener,Observer,IServiceListener {
+public class ApplicationJInternalFrame extends JInternalFrame implements
+	ILocaleChangeListener, Observer, IServiceListener {
 
-	private static final long serialVersionUID = 6858870868564931134L;
-	private JPanel overviewPanel, buttonPanel;
-	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
-	private HelpDialog helpDialog;
-	private WarningDialog warningDialog;
-	private JButton warningButton = new JButton();
+    private static final long serialVersionUID = 6858870868564931134L;
+    private HelpDialog helpDialog;
+    private ILocaleService localeService = ServiceProvider.getInstance()
+	    .getLocaleService();
+    private JPanel overviewPanel, buttonPanel;
+    private JButton warningButton = new JButton();
+    private WarningDialog warningDialog;
 
-	public ApplicationJInternalFrame() {
-		super();
-		initUi();
-	}
+    public ApplicationJInternalFrame() {
+	super();
+	initUi();
+    }
 
-	private void initUi() {
-		try {
-			WarningMessageService.getInstance().addObserver(this);
-			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private void addDefinitionPanel() {
+	overviewPanel = new JPanel();
+	BorderLayout borderLayout = new BorderLayout();
+	overviewPanel.setLayout(borderLayout);
+	overviewPanel.add(new DefinitionJPanel());
+	getContentPane().add(overviewPanel, BorderLayout.CENTER);
+    }
 
-			this.addDefinitionPanel();
-			this.addToolBar();
-			pack();
-			setSize(1200, 1200);
-		} catch (Exception e) {
-			e.printStackTrace();
+    private void addToolBar() {
+	JSplitPane splitPane = new JSplitPane();
+	splitPane.setDividerLocation(200);
+	splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+	JToolBar toolBar = new JToolBar();
+	toolBar.setEnabled(false);
+	toolBar.setBorderPainted(false);
+
+	toolBar.add(JPanelStatus.getInstance(""));
+
+	ImageIcon questionMark = new ImageIcon(Toolkit.getDefaultToolkit()
+		.getImage(Resource.get(Resource.ICON_QUESTIONMARK)));
+	JButton questionButton = new JButton(questionMark);
+	questionButton.setToolTipText(localeService
+		.getTranslatedString("?TooltipDefineArchitecture"));
+	questionButton.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (helpDialog == null) {
+		    helpDialog = new HelpDialog();
+		} else {
+		    helpDialog.setVisible(true);
 		}
-	}
+	    }
+	});
 
-	private void addDefinitionPanel() {
-		this.overviewPanel = new JPanel();
-		BorderLayout borderLayout = new BorderLayout();
-		this.overviewPanel.setLayout(borderLayout);
-		this.overviewPanel.add(new DefinitionJPanel());
-		this.getContentPane().add(this.overviewPanel, BorderLayout.CENTER);
-	}
-
-	private void addToolBar() {
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setDividerLocation(200);
-		splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
-		JToolBar toolBar = new JToolBar();
-		toolBar.setEnabled(false);
-		toolBar.setBorderPainted(false);
-
-		toolBar.add(JPanelStatus.getInstance(""));
-
-		ImageIcon questionMark = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.ICON_QUESTIONMARK)));
-		JButton questionButton = new JButton(questionMark);
-		questionButton.setToolTipText(localeService.getTranslatedString("?TooltipDefineArchitecture"));
-		questionButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(helpDialog == null){
-					helpDialog = new HelpDialog();
-				}
-				else{
-					helpDialog.setVisible(true);
-				}
-			}
-		});
-
-		ImageIcon warningSign = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Resource.get(Resource.ICON_VALIDATE)));
-		warningButton = new JButton(warningSign);
-		setWarningButtonText();
-		warningButton.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(warningDialog == null){
-					warningDialog = new WarningDialog();
-				}else{
-					warningDialog.setVisible(true);
-				}
-			}
-		});
-
-		buttonPanel = new JPanel();
-		buttonPanel.add(questionButton);
-		buttonPanel.add(warningButton);
-
-		splitPane.add(buttonPanel, JSplitPane.LEFT);
-		splitPane.add(toolBar, JSplitPane.RIGHT);
-		getContentPane().add(splitPane, BorderLayout.SOUTH);
-	}
-
-	public void setContentView(JPanel jp) {
-		this.overviewPanel.removeAll();
-		this.overviewPanel.add(jp);
-	}
-	
-	public void setWarningButtonText(){
-		if(WarningMessageService.getInstance().hasWarnings()){
-			warningButton.setText(localeService.getTranslatedString("Warnings")+" ("+WarningMessageService.getInstance().warningsCount()+")");
-		}else{
-			warningButton.setText("");
+	ImageIcon warningSign = new ImageIcon(Toolkit.getDefaultToolkit()
+		.getImage(Resource.get(Resource.ICON_VALIDATE)));
+	warningButton = new JButton(warningSign);
+	setWarningButtonText();
+	warningButton.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (warningDialog == null) {
+		    warningDialog = new WarningDialog();
+		} else {
+		    warningDialog.setVisible(true);
 		}
+	    }
+	});
+
+	buttonPanel = new JPanel();
+	buttonPanel.add(questionButton);
+	buttonPanel.add(warningButton);
+
+	splitPane.add(buttonPanel, JSplitPane.LEFT);
+	splitPane.add(toolBar, JSplitPane.RIGHT);
+	getContentPane().add(splitPane, BorderLayout.SOUTH);
+    }
+
+    private void initUi() {
+	try {
+	    WarningMessageService.getInstance().addObserver(this);
+	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+	    addDefinitionPanel();
+	    addToolBar();
+	    pack();
+	    setSize(1200, 1200);
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
+    }
 
-	@Override
-	public void update(Observable o, Object arg) {
-		setWarningButtonText();
+    public void setContentView(JPanel jp) {
+	overviewPanel.removeAll();
+	overviewPanel.add(jp);
+    }
+
+    public void setWarningButtonText() {
+	if (WarningMessageService.getInstance().hasWarnings()) {
+	    warningButton
+		    .setText(localeService.getTranslatedString("Warnings")
+			    + " ("
+			    + WarningMessageService.getInstance()
+				    .warningsCount() + ")");
+	} else {
+	    warningButton.setText("");
 	}
+    }
 
-	@Override
-	public void update() {}
+    @Override
+    public void update() {
+    }
 
-	@Override
-	public void update(Locale newLocale) {}
+    @Override
+    public void update(Locale newLocale) {
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+	setWarningButtonText();
+    }
 }

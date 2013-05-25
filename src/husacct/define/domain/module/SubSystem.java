@@ -2,17 +2,17 @@ package husacct.define.domain.module;
 
 public class SubSystem extends Module {
 
-	public SubSystem(){
-		this("", "");
-	}
+    public SubSystem() {
+	this("", "");
+    }
 
-	public SubSystem(String name){
-		this(name, "");
-	}
+    public SubSystem(String name) {
+	this(name, "");
+    }
 
-	public SubSystem(String name, String description){
-		super(name, description);
-		super.type = "SubSystem";
-	}
+    public SubSystem(String name, String description) {
+	super(name, description);
+	super.type = "SubSystem";
+    }
 
 }

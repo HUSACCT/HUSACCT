@@ -4,9 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
-import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
-import husacct.define.domain.services.WarningMessageService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AbstractCombinedComponent;
@@ -33,8 +31,8 @@ public class SoftwareUnitController extends PopUpController {
 	public SoftwareUnitController(long moduleId) {
 
 		logger = Logger.getLogger(SoftwareUnitController.class);
-		this.setModuleId(moduleId);
-		this.softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
+		setModuleId(moduleId);
+		softwareUnitDefinitionDomainService = new SoftwareUnitDefinitionDomainService();
 	}
 
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
@@ -49,7 +47,7 @@ public class SoftwareUnitController extends PopUpController {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
 					project.name, project.name, "root", "public");
 			for (AnalysedModuleDTO module : project.analysedModules) {
-				this.addChildComponents(projectComponent, module);
+				addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
 		}
@@ -57,12 +55,6 @@ public class SoftwareUnitController extends PopUpController {
 		Collections.sort(rootComponent.getChildren());
 		rootComponent.updateChilderenPosition();
 		return rootComponent;
-	}
-
-	private AnalysedModuleDTO[] getAnalyzedModules() {
-		AnalysedModuleDTO[] modules = ServiceProvider.getInstance()
-				.getAnalyseService().getRootModules();
-		return modules;
 	}
 
 	private void addChildComponents(AnalyzedModuleComponent parentComponent,
@@ -74,7 +66,7 @@ public class SoftwareUnitController extends PopUpController {
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
 		for (AnalysedModuleDTO subModule : children) {
-			this.addChildComponents(childComponent, subModule);
+			addChildComponents(childComponent, subModule);
 		}
 		parentComponent.addChild(childComponent);
 		parentComponent.registerchildrenSize();
@@ -97,7 +89,7 @@ public class SoftwareUnitController extends PopUpController {
 	}
 
 	public void save(String softwareUnit, String type) {
-		save(this.getModuleId(), softwareUnit, type);
+		save(getModuleId(), softwareUnit, type);
 	}
 
 	public void saveRegExToResultTree(String regEx, String packageClass) {
@@ -121,8 +113,9 @@ public class SoftwareUnitController extends PopUpController {
 				}
 				translatedRegEx = translatedRegEx
 						.replaceAll("\\.(?!.*\\.)", "");
-			} else
-				translatedRegEx = start + regEx + end;
+			} else {
+			    translatedRegEx = start + regEx + end;
+			}
 		} else if (regEx.startsWith("*.")) {
 			packagesOnly = true;
 			regEx = regEx.replace("*.", "");
@@ -136,8 +129,9 @@ public class SoftwareUnitController extends PopUpController {
 				}
 				translatedRegEx = translatedRegEx
 						.replaceAll("\\.(?!.*\\.)", "");
-			} else
-				translatedRegEx = start + regEx + end;
+			} else {
+			    translatedRegEx = start + regEx + end;
+			}
 		} else if (regEx.endsWith(".*")) {
 			packagesOnly = true;
 			regEx = regEx.replace(".*", "");
@@ -151,8 +145,9 @@ public class SoftwareUnitController extends PopUpController {
 				}
 				translatedRegEx = translatedRegEx
 						.replaceAll("\\.(?!.*\\.)", "");
-			} else
-				translatedRegEx = start + regEx + end;
+			} else {
+			    translatedRegEx = start + regEx + end;
+			}
 		} else if (regEx.startsWith("*") && regEx.endsWith("*")) {
 			regEx = regEx.replace("*", "");
 			translatedRegEx = regEx;
@@ -181,12 +176,12 @@ public class SoftwareUnitController extends PopUpController {
 					if (module.getType().equals("PACKAGE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ this.getModuleId());
+									+ getModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
 							} catch (Exception e) {
-								this.logger.error(e.getMessage());
+								logger.error(e.getMessage());
 								UiDialogs.errorDialog(softwareUnitFrame,
 										e.getMessage());
 							}
@@ -199,13 +194,13 @@ public class SoftwareUnitController extends PopUpController {
 							|| module.getType().equals("INTERFACE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ this.getModuleId());
+									+ getModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
 							} catch (Exception e) {
 
-								this.logger.error(e.getStackTrace());
+								logger.error(e.getStackTrace());
 								UiDialogs.errorDialog(softwareUnitFrame,
 										e.getMessage());
 							}
@@ -238,12 +233,12 @@ public class SoftwareUnitController extends PopUpController {
 				if (module.getType().equals("PACKAGE")) {
 					while (matcher.find()) {
 						logger.info("Adding software unit to module with id "
-								+ this.getModuleId());
+								+ getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
 						} catch (Exception e) {
-							this.logger.error(e.getMessage());
+							logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame,
 									e.getMessage());
 						}
@@ -291,12 +286,12 @@ public class SoftwareUnitController extends PopUpController {
 					if (module.getType().equals("PACKAGE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ this.getModuleId());
+									+ getModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
 							} catch (Exception e) {
-								this.logger.error(e.getMessage());
+								logger.error(e.getMessage());
 								UiDialogs.errorDialog(softwareUnitFrame,
 										e.getMessage());
 							}
@@ -309,12 +304,12 @@ public class SoftwareUnitController extends PopUpController {
 							|| module.getType().equals("INTERFACE")) {
 						while (matcher.find()) {
 							logger.info("Adding software unit to module with id "
-									+ this.getModuleId());
+									+ getModuleId());
 							try {
 								JtreeController.instance()
 										.additemgetResultTree(module);
 							} catch (Exception e) {
-								this.logger.error(e.getMessage());
+								logger.error(e.getMessage());
 								UiDialogs.errorDialog(softwareUnitFrame,
 										e.getMessage());
 							}
@@ -325,12 +320,12 @@ public class SoftwareUnitController extends PopUpController {
 				else if (packageClass.equals("PC")) {
 					while (matcher.find()) {
 						logger.info("Adding software unit to module with id "
-								+ this.getModuleId());
+								+ getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
 						} catch (Exception e) {
-							this.logger.error(e.getMessage());
+							logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame,
 									e.getMessage());
 						}
@@ -345,12 +340,12 @@ public class SoftwareUnitController extends PopUpController {
 				if (module.getType().equals("PACKAGE")) {
 					while (matcher.find()) {
 						logger.info("Adding software unit to module with id "
-								+ this.getModuleId());
+								+ getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
 						} catch (Exception e) {
-							this.logger.error(e.getMessage());
+							logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame,
 									e.getMessage());
 						}
@@ -372,12 +367,12 @@ public class SoftwareUnitController extends PopUpController {
 								packagesOnly, true);
 					} else {
 						logger.info("Adding software unit to module with id "
-								+ this.getModuleId());
+								+ getModuleId());
 						try {
 							JtreeController.instance().additemgetResultTree(
 									module);
 						} catch (Exception e) {
-							this.logger.error(e.getMessage());
+							logger.error(e.getMessage());
 							UiDialogs.errorDialog(softwareUnitFrame,
 									e.getMessage());
 						}
@@ -391,41 +386,41 @@ public class SoftwareUnitController extends PopUpController {
 			ArrayList<AnalyzedModuleComponent> selectedComponents,
 			String regExName) {
 		logger.info("Adding software unit to module with id "
-				+ this.getModuleId() + " to regex " + regExName);
+				+ getModuleId() + " to regex " + regExName);
 
 		try {
 
-			this.softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(
-					this.getModuleId(), selectedComponents, regExName);
+			softwareUnitDefinitionDomainService.addSoftwareUnitToRegex(
+					getModuleId(), selectedComponents, regExName);
 
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
-			this.logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 		}
 	}
 
 	public void save(Long moduleId, String softwareUnit, String type) {
 		logger.info("Adding software unit to module with id "
-				+ this.getModuleId());
+				+ getModuleId());
 		try {
 
 			DefinitionController.getInstance().notifyObservers();
 		} catch (Exception e) {
-			this.logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			UiDialogs.errorDialog(softwareUnitFrame, e.getMessage());
 		}
 	}
 
 	public void save(Long moduleid, AbstractCombinedComponent component) {
 		logger.info("Adding software unit to module with id "
-				+ this.getModuleId());
+				+ getModuleId());
 
 	}
 
 	public boolean save(AnalyzedModuleComponent selectedComponent) {
 		logger.info("Adding software unit to module with id "
-				+ this.getModuleId());
+				+ getModuleId());
 		try {
 			if (!selectedComponent.isComplete()) {
 				UiDialogs.errorDialog(softwareUnitFrame,
@@ -433,7 +428,7 @@ public class SoftwareUnitController extends PopUpController {
 								+ selectedComponent.getName() + " type: "
 								+ selectedComponent.getType()
 								+ " has been already mapped");
-				this.logger.error("Inconsistancy detected");
+				logger.error("Inconsistancy detected");
 				return false;
 			} else if (selectedComponent.getType().toLowerCase()
 					.equals("package")
@@ -442,16 +437,16 @@ public class SoftwareUnitController extends PopUpController {
 						"The package  \n name: " + selectedComponent.getName()
 								+ " type: " + selectedComponent.getType()
 								+ " has been already mapped");
-				this.logger.error("Inconsistancy detected");
+				logger.error("Inconsistancy detected");
 				return false;
 			} else {
-				this.softwareUnitDefinitionDomainService.addSoftwareUnit(
-						this.getModuleId(), selectedComponent);
+				softwareUnitDefinitionDomainService.addSoftwareUnit(
+						getModuleId(), selectedComponent);
 			}
 			DefinitionController.getInstance().notifyObservers();
 			return true;
 		} catch (Exception e) {
-			this.logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			return false;
 		}
 
@@ -460,7 +455,7 @@ public class SoftwareUnitController extends PopUpController {
 	public void editRegEx(ArrayList<AnalyzedModuleComponent> components,
 			String editingRegEx) {
 
-		JtreeController.instance().editRegex(this.getModuleId(), components,
+		JtreeController.instance().editRegex(getModuleId(), components,
 				editingRegEx);
 
 	}
