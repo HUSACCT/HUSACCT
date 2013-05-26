@@ -1,7 +1,7 @@
 package husacct.define.task.conventions_checker;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.AppliedRule;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 
@@ -19,7 +19,7 @@ public class ModuleCheckerHelper {
 
     public boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType,
 	    Module fromModule, Module toModule) {
-	for (AppliedRule appliedRule : getToModuleAppliedRules(toModule)) {
+	for (AppliedRuleStrategy appliedRule : getToModuleAppliedRules(toModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
 			    appliedRule.getModuleFrom(), fromModule)
@@ -59,7 +59,7 @@ public class ModuleCheckerHelper {
 
     public boolean checkRuleTypeAlreadyFromThisToOther(String ruleType,
 	    Module fromModule, Module toModule) {
-	for (AppliedRule appliedRule : getFromModuleAppliedRules(fromModule)) {
+	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(fromModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
 			    .getId()
@@ -90,7 +90,7 @@ public class ModuleCheckerHelper {
 
     public boolean checkRuleTypeAlreadyFromThisToSelected(String ruleType,
 	    Module fromModule, Module toModule) {
-	for (AppliedRule appliedRule : getFromModuleAppliedRules(fromModule)) {
+	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(fromModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
 			    .getId()
@@ -120,7 +120,7 @@ public class ModuleCheckerHelper {
     }
 
     public boolean checkRuleTypeAlreadySet(String ruleTypeKey, Module moduleFrom) {
-	for (AppliedRule appliedRule : getFromModuleAppliedRules(moduleFrom)) {
+	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(moduleFrom)) {
 	    if (appliedRule.getRuleType().equals(ruleTypeKey)) {
 		setErrorMessage("'"
 			+ ServiceProvider.getInstance().getLocaleService()
@@ -135,10 +135,10 @@ public class ModuleCheckerHelper {
 	return errorMessage;
     }
 
-    private ArrayList<AppliedRule> getFromModuleAppliedRules(Module fromModule) {
+    private ArrayList<AppliedRuleStrategy> getFromModuleAppliedRules(Module fromModule) {
 	ArrayList<Long> appliedRuleIds = appliedRuleService
 		.getAppliedRulesIdsByModuleFromId(fromModule.getId());
-	ArrayList<AppliedRule> appliedRules = new ArrayList<AppliedRule>();
+	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<AppliedRuleStrategy>();
 	for (Long appliedRuleId : appliedRuleIds) {
 	    appliedRules.add(appliedRuleService
 		    .getAppliedRuleById(appliedRuleId));
@@ -146,10 +146,10 @@ public class ModuleCheckerHelper {
 	return appliedRules;
     }
 
-    private ArrayList<AppliedRule> getToModuleAppliedRules(Module toModule) {
+    private ArrayList<AppliedRuleStrategy> getToModuleAppliedRules(Module toModule) {
 	ArrayList<Long> appliedRuleIds = appliedRuleService
 		.getAppliedRulesIdsByModuleToId(toModule.getId());
-	ArrayList<AppliedRule> appliedRules = new ArrayList<AppliedRule>();
+	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<AppliedRuleStrategy>();
 	for (Long appliedRuleId : appliedRuleIds) {
 	    appliedRules.add(appliedRuleService
 		    .getAppliedRuleById(appliedRuleId));

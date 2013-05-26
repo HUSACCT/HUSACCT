@@ -1,7 +1,7 @@
 package husacct.define.task;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.AppliedRule;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Facade;
@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
-//import husacct.define.domain.module.ExternalSystem;
 
 public class DefinitionController extends Observable implements Observer {
 
@@ -77,6 +76,7 @@ public class DefinitionController extends Observable implements Observer {
 	parentComponent.addChild(childComponent);
     }
 
+    //TODO: Use Module Factory here for 1 addModule() method, instead of 9000+
     public boolean addComponent(long selectedModuleId, String componentName,
 	    String componentDescription) {
 	logger.info("Adding component " + "Facade" + componentName);
@@ -223,7 +223,7 @@ public class DefinitionController extends Observable implements Observer {
 
     public HashMap<String, Object> getRuleDetailsByAppliedRuleId(
 	    long appliedRuleId) {
-	AppliedRule rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
+	AppliedRuleStrategy rule = appliedRuleService.getAppliedRuleById(appliedRuleId);
 	HashMap<String, Object> ruleDetails = new HashMap<String, Object>();
 	ruleDetails.put("id", rule.getId());
 	ruleDetails.put("description", rule.getDescription());
@@ -365,7 +365,7 @@ public class DefinitionController extends Observable implements Observer {
 	try {
 	    if (getSelectedModuleId() != -1L && !appliedRuleIds.isEmpty()) {
 		for (long appliedRuleID : appliedRuleIds) {
-		    AppliedRule rule = appliedRuleService
+		    AppliedRuleStrategy rule = appliedRuleService
 			    .getAppliedRuleById(appliedRuleID);
 		    if (defaultRuleService.isMandatoryRule(rule)) {
 			mandatory = true;

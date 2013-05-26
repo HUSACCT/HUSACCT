@@ -1,8 +1,9 @@
 package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.appliedrule.AppliedRuleFactory;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Module;
 
 import java.util.ArrayList;
@@ -28,11 +29,12 @@ public class AppliedRuleExceptionDomainService {
     public void addExceptionToAppliedRule(long parentRuleId, String ruleType,
 	    String description, Module moduleFrom, Module moduleTo,
 	    String[] dependencies) {
-	AppliedRule exceptionRule = new AppliedRule(ruleType, description,
-		moduleFrom, moduleTo);
+	AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
+	AppliedRuleStrategy exceptionRule = ruleFactory.createRule(ruleType);
+	exceptionRule.setAppliedRule(description, moduleFrom, moduleTo);
 	exceptionRule.setDependencies(dependencies);
 
-	AppliedRule parentRule = SoftwareArchitecture.getInstance()
+	AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(parentRuleId);
 	parentRule.addException(exceptionRule);
 	ServiceProvider.getInstance().getDefineService()
@@ -40,23 +42,23 @@ public class AppliedRuleExceptionDomainService {
     }
 
     public ArrayList<Long> getExceptionIdsByAppliedRule(long parentRuleId) {
-	AppliedRule parentRule = SoftwareArchitecture.getInstance()
+	AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(parentRuleId);
-	ArrayList<AppliedRule> exceptionRules = parentRule.getExceptions();
+	ArrayList<AppliedRuleStrategy> exceptionRules = parentRule.getExceptions();
 	ArrayList<Long> exceptionIds = new ArrayList<Long>();
-	for (AppliedRule exception : exceptionRules) {
+	for (AppliedRuleStrategy exception : exceptionRules) {
 	    exceptionIds.add(exception.getId());
 	}
 	return exceptionIds;
     }
 
-    public ArrayList<AppliedRule> getExceptionsByAppliedRule(long parentRuleId) {
+    public ArrayList<AppliedRuleStrategy> getExceptionsByAppliedRule(long parentRuleId) {
 	return SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(parentRuleId).getExceptions();
     }
 
     public void removeAllAppliedRuleExceptions(long appliedRuleId) {
-	AppliedRule parentRule = SoftwareArchitecture.getInstance()
+	AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(appliedRuleId);
 	parentRule.removeAllExceptions();
 	ServiceProvider.getInstance().getDefineService()
@@ -65,7 +67,7 @@ public class AppliedRuleExceptionDomainService {
 
     public void removeAppliedRuleException(long parentRuleId,
 	    long exceptionRuleId) {
-	AppliedRule parentRule = SoftwareArchitecture.getInstance()
+	AppliedRuleStrategy parentRule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(parentRuleId);
 	parentRule.removeExceptionById(exceptionRuleId);
 	ServiceProvider.getInstance().getDefineService()

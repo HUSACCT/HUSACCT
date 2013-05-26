@@ -4,9 +4,9 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.define.domain.Application;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
@@ -96,14 +96,14 @@ public class PersistentDomain implements ISaveable {
 		    }
 		}
 	    }
-	    for (AppliedRule ApplRule : workspaceArchitecture.getAppliedRules()) {
+	    for (AppliedRuleStrategy ApplRule : workspaceArchitecture.getAppliedRules()) {
 		long addedRule = appliedRuleService.addAppliedRule(ApplRule
 			.getRuleType(), ApplRule.getDescription(), ApplRule
 			.getDependencies(), ApplRule.getRegex(), ApplRule
 			.getModuleFrom().getId(), ApplRule.getModuleTo()
 			.getId(), ApplRule.isEnabled());
 		if (ApplRule.getExceptions().size() > 0) {
-		    for (AppliedRule Ap : ApplRule.getExceptions()) {
+		    for (AppliedRuleStrategy Ap : ApplRule.getExceptions()) {
 			exceptionService.addExceptionToAppliedRule(addedRule,
 				Ap.getRuleType(), Ap.getDescription(), Ap
 					.getModuleFrom().getId(), Ap

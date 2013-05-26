@@ -1,13 +1,16 @@
 package husacct.define.domain.services;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.appliedrule.AppliedRuleFactory;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Module;
 
 import java.util.ArrayList;
 
 public class AppliedRuleDomainService {
+    
+    private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
 
     public long addAppliedRule(String ruleTypeKey, String description,
 	    String[] dependencies, String regex, long moduleFromId,
@@ -19,7 +22,7 @@ public class AppliedRuleDomainService {
 	    moduleTo = SoftwareArchitecture.getInstance().getModuleById(
 		    moduleToId);
 	} else {
-	    moduleTo = new Module();
+	    moduleTo = moduleFrom;
 	}
 
 	return addAppliedRule(ruleTypeKey, description, dependencies, regex,
@@ -30,8 +33,8 @@ public class AppliedRuleDomainService {
 	    String[] dependencies, String regex, Module moduleFrom,
 	    Module moduleTo, boolean enabled) {
 
-	AppliedRule rule = new AppliedRule(ruleTypeKey, description,
-		dependencies, regex, moduleFrom, moduleTo, enabled);
+	AppliedRuleStrategy rule = ruleFactory.createDummyRule(ruleTypeKey);
+	rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleTo, enabled); 
 	if (isDuplicate(rule)) {
 	    return -1;
 	}
@@ -42,7 +45,7 @@ public class AppliedRuleDomainService {
 	return rule.getId();
     }
 
-    public AppliedRule getAppliedRuleById(long appliedRuleId) {
+    public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
 	return SoftwareArchitecture.getInstance().getAppliedRuleById(
 		appliedRuleId);
     }
@@ -52,19 +55,19 @@ public class AppliedRuleDomainService {
 		.getAppliedRuleById(appliedRuleId).isEnabled();
     }
 
-    public AppliedRule[] getAppliedRules() {
+    public AppliedRuleStrategy[] getAppliedRules() {
 	return getAppliedRules(false);
     }
 
-    public AppliedRule[] getAppliedRules(boolean enabledRulesOnly) {
-	ArrayList<AppliedRule> ruleList;
+    public AppliedRuleStrategy[] getAppliedRules(boolean enabledRulesOnly) {
+	ArrayList<AppliedRuleStrategy> ruleList;
 	if (enabledRulesOnly) {
 	    ruleList = SoftwareArchitecture.getInstance()
 		    .getEnabledAppliedRules();
 	} else {
 	    ruleList = SoftwareArchitecture.getInstance().getAppliedRules();
 	}
-	AppliedRule[] rules = new AppliedRule[ruleList.size()];
+	AppliedRuleStrategy[] rules = new AppliedRuleStrategy[ruleList.size()];
 	ruleList.toArray(rules);
 
 	return rules;
@@ -93,9 +96,9 @@ public class AppliedRuleDomainService {
     /**
      * Domain checks
      */
-    public boolean isDuplicate(AppliedRule rule) {
-	AppliedRule[] appliedRules = getAppliedRules(false);
-	for (AppliedRule appliedRule : appliedRules) {
+    public boolean isDuplicate(AppliedRuleStrategy rule) {
+	AppliedRuleStrategy[] appliedRules = getAppliedRules(false);
+	for (AppliedRuleStrategy appliedRule : appliedRules) {
 	    if (rule.equals(appliedRule)) {
 		return true;
 	    }
@@ -137,7 +140,7 @@ public class AppliedRuleDomainService {
     public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,
 	    String description, String[] dependencies, String regex,
 	    Module moduleFrom, Module moduleTo, boolean enabled) {
-	AppliedRule rule = SoftwareArchitecture.getInstance()
+	AppliedRuleStrategy rule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(appliedRuleId);
 	rule.setRuleType(ruleTypeKey);
 	rule.setDescription(description);
@@ -148,5 +151,9 @@ public class AppliedRuleDomainService {
 	rule.setEnabled(enabled);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();
+    }
+
+    public String[][] getCategories() {
+	return ruleFactory.getCategories();
     }
 }

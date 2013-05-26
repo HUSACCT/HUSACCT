@@ -6,10 +6,10 @@ import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.define.domain.Application;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Module;
 
 import java.util.ArrayList;
@@ -177,7 +177,7 @@ public class DomainParser {
 	return moduleDTOs;
     }
 
-    public RuleDTO parseRule(AppliedRule rule) {
+    public RuleDTO parseRule(AppliedRuleStrategy rule) {
 
 	String ruleTypeKey = rule.getRuleType();
 	ModuleDTO moduleFrom = parseModule(rule.getModuleFrom());
@@ -186,7 +186,7 @@ public class DomainParser {
 	String regex = rule.getRegex();
 
 	ArrayList<RuleDTO> exceptionRuleList = new ArrayList<RuleDTO>();
-	for (AppliedRule exceptionRule : rule.getExceptions()) {
+	for (AppliedRuleStrategy exceptionRule : rule.getExceptions()) {
 	    RuleDTO exceptionRuleDTO = parseRule(exceptionRule);
 	    exceptionRuleList.add(exceptionRuleDTO);
 	}
@@ -203,9 +203,9 @@ public class DomainParser {
     /**
      * Applied Rules
      **/
-    public RuleDTO[] parseRules(AppliedRule[] rules) {
+    public RuleDTO[] parseRules(AppliedRuleStrategy[] rules) {
 	ArrayList<RuleDTO> ruleDTOsList = new ArrayList<RuleDTO>();
-	for (AppliedRule rule : rules) {
+	for (AppliedRuleStrategy rule : rules) {
 	    RuleDTO ruleDTO = parseRule(rule);
 	    ruleDTOsList.add(ruleDTO);
 	}

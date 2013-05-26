@@ -1,6 +1,7 @@
 package husacct.define.domain;
 
 import husacct.ServiceProvider;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalSystem;
 import husacct.define.domain.module.Facade;
@@ -24,29 +25,29 @@ public class SoftwareArchitecture {
 	instance = sA;
     }
 
-    private ArrayList<AppliedRule> appliedRules;
+    private ArrayList<AppliedRuleStrategy> appliedRules;
 
     private Module rootModule;
 
     public SoftwareArchitecture() {
 	this("SoftwareArchitecture", "This is the root of the architecture",
-		new ArrayList<Module>(), new ArrayList<AppliedRule>());
+		new ArrayList<Module>(), new ArrayList<AppliedRuleStrategy>());
     }
 
     public SoftwareArchitecture(String name, String description) {
 	this(name, description, new ArrayList<Module>(),
-		new ArrayList<AppliedRule>());
+		new ArrayList<AppliedRuleStrategy>());
     }
 
     public SoftwareArchitecture(String name, String description,
-	    ArrayList<Module> modules, ArrayList<AppliedRule> rules) {
+	    ArrayList<Module> modules, ArrayList<AppliedRuleStrategy> rules) {
 	rootModule = new Module(name, description);
 	rootModule.setId(0);
 	setModules(modules);
 	setAppliedRules(rules);
     }
 
-    public void addAppliedRule(AppliedRule rule) {
+    public void addAppliedRule(AppliedRuleStrategy rule) {
 	if (!appliedRules.contains(rule) && !hasAppliedRule(rule.getId())) {
 	    appliedRules.add(rule);
 	} else {
@@ -141,10 +142,9 @@ public class SoftwareArchitecture {
 
     }
 
-    public AppliedRule getAppliedRuleById(long appliedRuleId) {
-	AppliedRule appliedRule = new AppliedRule();
+    public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
 	if (hasAppliedRule(appliedRuleId)) {
-	    for (AppliedRule rule : appliedRules) {
+	    for (AppliedRuleStrategy rule : appliedRules) {
 		if (rule.getId() == appliedRuleId) {
 		    return rule;
 		}
@@ -153,16 +153,16 @@ public class SoftwareArchitecture {
 	    throw new RuntimeException(ServiceProvider.getInstance()
 		    .getLocaleService().getTranslatedString("NoRule"));
 	}
-	return appliedRule;
+	return null;
     }
 
-    public ArrayList<AppliedRule> getAppliedRules() {
+    public ArrayList<AppliedRuleStrategy> getAppliedRules() {
 	return appliedRules;
     }
 
     public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
 	ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
-	for (AppliedRule rule : appliedRules) {
+	for (AppliedRuleStrategy rule : appliedRules) {
 	    if (rule.getModuleFrom().getId() == moduleId) {
 		appliedRuleIds.add(rule.getId());
 	    }
@@ -172,7 +172,7 @@ public class SoftwareArchitecture {
 
     public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
 	ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
-	for (AppliedRule rule : appliedRules) {
+	for (AppliedRuleStrategy rule : appliedRules) {
 	    if (rule.getModuleTo().getId() == moduleId) {
 		appliedRuleIds.add(rule.getId());
 	    }
@@ -184,9 +184,9 @@ public class SoftwareArchitecture {
 	return rootModule.getDescription();
     }
 
-    public ArrayList<AppliedRule> getEnabledAppliedRules() {
-	ArrayList<AppliedRule> enabledRuleList = new ArrayList<AppliedRule>();
-	for (AppliedRule ar : appliedRules) {
+    public ArrayList<AppliedRuleStrategy> getEnabledAppliedRules() {
+	ArrayList<AppliedRuleStrategy> enabledRuleList = new ArrayList<AppliedRuleStrategy>();
+	for (AppliedRuleStrategy ar : appliedRules) {
 	    if (ar.isEnabled()) {
 		enabledRuleList.add(ar);
 	    }
@@ -194,7 +194,7 @@ public class SoftwareArchitecture {
 	return enabledRuleList;
     }
 
-    public ArrayList<AppliedRule> getGeneratedRules() {
+    public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
 	return null; // TODO: Has to get an implementation
     }
 
@@ -442,7 +442,7 @@ public class SoftwareArchitecture {
 
     private boolean hasAppliedRule(long ruleID) {
 	boolean ruleFound = false;
-	for (AppliedRule rule : appliedRules) {
+	for (AppliedRuleStrategy rule : appliedRules) {
 	    if (rule.getId() == ruleID) {
 		ruleFound = true;
 	    }
@@ -495,7 +495,7 @@ public class SoftwareArchitecture {
 
     public void removeAppliedRule(long appliedRuleId) {
 	if (hasAppliedRule(appliedRuleId)) {
-	    AppliedRule rule = getAppliedRuleById(appliedRuleId);
+	    AppliedRuleStrategy rule = getAppliedRuleById(appliedRuleId);
 	    appliedRules.remove(rule);
 	} else {
 	    throw new RuntimeException(ServiceProvider.getInstance()
@@ -504,12 +504,12 @@ public class SoftwareArchitecture {
     }
 
     public void removeAppliedRules() {
-	appliedRules = new ArrayList<AppliedRule>();
+	appliedRules = new ArrayList<AppliedRuleStrategy>();
     }
 
     public void removeLayerAppliedRules() {
-	ArrayList<AppliedRule> rulesTobeRemoved = new ArrayList<AppliedRule>();
-	for (AppliedRule rules : appliedRules) {
+	ArrayList<AppliedRuleStrategy> rulesTobeRemoved = new ArrayList<AppliedRuleStrategy>();
+	for (AppliedRuleStrategy rules : appliedRules) {
 	    String moduleFromType = rules.getModuleFrom().getType()
 		    .toLowerCase();
 	    String moduleToType = rules.getModuleTo().getType().toLowerCase();
@@ -521,7 +521,7 @@ public class SoftwareArchitecture {
 		rulesTobeRemoved.add(rules);
 	    }
 	}
-	for (AppliedRule rule : rulesTobeRemoved) {
+	for (AppliedRuleStrategy rule : rulesTobeRemoved) {
 	    int index = appliedRules.indexOf(rule);
 	    appliedRules.remove(index);
 	}
@@ -571,18 +571,18 @@ public class SoftwareArchitecture {
 	// Copy all currentValues into another list to prevent
 	// ConcurrentModificationExceptions
 	@SuppressWarnings("unchecked")
-	ArrayList<AppliedRule> tmpList = (ArrayList<AppliedRule>) appliedRules
+	ArrayList<AppliedRuleStrategy> tmpList = (ArrayList<AppliedRuleStrategy>) appliedRules
 		.clone();
-	for (AppliedRule rule : appliedRules) {
+	for (AppliedRuleStrategy rule : appliedRules) {
 	    if (rule.getModuleFrom().equals(module)
 		    || rule.getModuleTo().equals(module)) {
 		tmpList.remove(rule);
 	    }
 
 	    @SuppressWarnings("unchecked")
-	    ArrayList<AppliedRule> tmpExceptionList = (ArrayList<AppliedRule>) rule
+	    ArrayList<AppliedRuleStrategy> tmpExceptionList = (ArrayList<AppliedRuleStrategy>) rule
 		    .getExceptions().clone();
-	    for (AppliedRule exceptionRule : rule.getExceptions()) {
+	    for (AppliedRuleStrategy exceptionRule : rule.getExceptions()) {
 		if (exceptionRule.getModuleFrom().equals(module)
 			|| exceptionRule.getModuleTo().equals(module)) {
 		    tmpExceptionList.remove(exceptionRule);
@@ -593,7 +593,7 @@ public class SoftwareArchitecture {
 	appliedRules = tmpList;
     }
 
-    public void setAppliedRules(ArrayList<AppliedRule> appliedRules) {
+    public void setAppliedRules(ArrayList<AppliedRuleStrategy> appliedRules) {
 	this.appliedRules = appliedRules;
     }
 

@@ -1,10 +1,10 @@
 package husacct.define.persistency;
 
 import husacct.define.domain.Application;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 
@@ -42,7 +42,7 @@ public class DomainXML {
 	return XMLApplication;
     }
 
-    public Element getAppliedRuleInXML(AppliedRule AR) {
+    public Element getAppliedRuleInXML(AppliedRuleStrategy AR) {
 	Element XMLAppliedRule = new Element("AppliedRule");
 
 	Element ruleRegex = new Element("regex");
@@ -93,7 +93,7 @@ public class DomainXML {
 
 	if (AR.getExceptions().size() > 0) {
 	    Element ruleExceptions = new Element("exceptions");
-	    for (AppliedRule ap : AR.getExceptions()) {
+	    for (AppliedRuleStrategy ap : AR.getExceptions()) {
 		ruleExceptions.addContent(getAppliedRuleInXML(ap));
 	    }
 	    XMLAppliedRule.addContent(ruleExceptions);
@@ -228,7 +228,7 @@ public class DomainXML {
 
 	if (domainSoftwareArchitecture.getAppliedRules().size() > 0) {
 	    Element SARules = new Element("rules");
-	    for (AppliedRule ar : domainSoftwareArchitecture.getAppliedRules()) {
+	    for (AppliedRuleStrategy ar : domainSoftwareArchitecture.getAppliedRules()) {
 		SARules.addContent(getAppliedRuleInXML(ar));
 	    }
 	    XMLArchitecture.addContent(SARules);

@@ -6,8 +6,8 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
@@ -95,7 +95,7 @@ public class DefineServiceImpl extends ObservableService implements
 
     @Override
     public RuleDTO[] getDefinedRules() {
-	AppliedRule[] rules = appliedRuleService.getAppliedRules();
+	AppliedRuleStrategy[] rules = appliedRuleService.getAppliedRules();
 	RuleDTO[] ruleDTOs = domainParser.parseRules(rules);
 	return ruleDTOs;
     }
