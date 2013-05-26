@@ -132,21 +132,21 @@ public class AppliedRulesJPanel extends JPanel implements ActionListener,
     private void addRule() {
 	long moduleId = DefinitionController.getInstance()
 		.getSelectedModuleId();
-	if (moduleId != -1) {
-	    AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(
-		    moduleId, -1L);
-	    DialogUtils.alignCenter(appliedRuleFrame);
-	    appliedRuleFrame.setVisible(true);
-
-	} else {
-	    // TODO Test popup
-	    JOptionPane.showMessageDialog(this,
-		    ServiceProvider.getInstance().getLocaleService()
-			    .getTranslatedString("ModuleSelectionError"),
-		    ServiceProvider.getInstance().getLocaleService()
-			    .getTranslatedString("WrongSelectionTitle"),
-		    JOptionPane.ERROR_MESSAGE);
-	}
+		if (moduleId != -1) {
+		    AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(
+			    moduleId, -1L);
+		    DialogUtils.alignCenter(appliedRuleFrame);
+		    appliedRuleFrame.setVisible(true);
+	
+		} else {
+		    // TODO Test popup
+		    JOptionPane.showMessageDialog(this,
+			    ServiceProvider.getInstance().getLocaleService()
+				    .getTranslatedString("ModuleSelectionError"),
+			    ServiceProvider.getInstance().getLocaleService()
+				    .getTranslatedString("WrongSelectionTitle"),
+			    JOptionPane.ERROR_MESSAGE);
+		}
     }
 
     private GridBagLayout createButtonPanelLayout() {

@@ -3,6 +3,7 @@ package husacct.define.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
@@ -12,11 +13,9 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.StringTokenizer;
-
 import java.util.Collections;
 import java.util.Iterator;
-
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,14 +75,28 @@ public class SoftwareUnitController extends PopUpController {
 		AnalyzedModuleComponent rootOfExterexternalLibrary = new AnalyzedModuleComponent(
 				"external library", "externallibrary", "externalpackage",
 				"public");
-		AnalyzedModuleComponent mockModule1 = new AnalyzedModuleComponent(
-				"externallibrary", "test externallibrary", "externallibrary",
-				"true");
-		AnalyzedModuleComponent mockModule2 = new AnalyzedModuleComponent(
-				"subsystem", " test subsystem", "subsystem", "true");
-		rootOfExterexternalLibrary.addChild(mockModule1);
-		rootOfExterexternalLibrary.addChild(mockModule2);
-		rootOfExterexternalLibrary.registerchildrenSize();
+		AnalyzedModuleComponent javalibrary = new AnalyzedModuleComponent(
+				"externallibrary", "java library", "externallibrary",
+				"public");
+		AnalyzedModuleComponent externalsubsystem = new AnalyzedModuleComponent(
+				"subsystem", "external subsystem", "subsystem", "public");
+		rootOfExterexternalLibrary.addChild(javalibrary);
+		rootOfExterexternalLibrary.addChild(externalsubsystem);
+	ExternalSystemDTO[] externalSystems=	ServiceProvider.getInstance().getAnalyseService().getExternalSystems();
+	for(ExternalSystemDTO exe : externalSystems)
+	{
+		if(exe.systemPackage.startsWith("java."))
+		{
+			AnalyzedModuleComponent javalib = new AnalyzedModuleComponent(exe.systemPackage, exe.systemName, "externallibrary", "public");
+			javalibrary.addChild(javalib);
+		}else
+		{
+			AnalyzedModuleComponent subsystem = new AnalyzedModuleComponent(exe.systemPackage, exe.systemName, "subsystem", "public");
+			externalsubsystem.addChild(subsystem);
+		}
+		
+	}
+		
 		root.addChild(rootOfExterexternalLibrary);
 
 	}

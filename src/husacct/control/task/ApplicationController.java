@@ -1,5 +1,6 @@
 package husacct.control.task;
 
+import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -9,6 +10,8 @@ import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.AboutDialog;
 import husacct.control.presentation.util.ConfigurationDialog;
+import husacct.control.presentation.util.DocumentationDialog;
+import husacct.control.presentation.util.HelpDialog;
 import husacct.control.presentation.util.LoadingDialog;
 import husacct.control.presentation.util.SetApplicationDialog;
 import husacct.control.task.threading.ThreadWithLoader;
@@ -88,5 +91,13 @@ public class ApplicationController {
 	
 	public void showConfigurationGUI() {
 		new ConfigurationDialog(mainController);
+	}
+
+	public void showDocumentationGUI() {
+		new DocumentationDialog(mainController);
+		
+	}
+	public void showHelpGUI(Component component) {
+		new HelpDialog(mainController, component);
 	}
 }

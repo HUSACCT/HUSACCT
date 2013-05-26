@@ -4,6 +4,7 @@ import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.ContextMenu;
 import husacct.graphics.util.UserInputListener;
 
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -16,7 +17,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JFileChooser;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
@@ -103,6 +104,7 @@ public class DrawingView extends DefaultDrawingView {
 		}
 		return Collections.unmodifiableSet(deltaSelection);
 	}
+	
 
 	private void handleDeselect() {
 		Set<Figure> deselectedFigures = this.getDeltaSelection();

@@ -1,26 +1,30 @@
 package husacct.define.domain.warningmessages;
 
 public abstract class WarningMessage {
-    protected String description = "";
-    protected String location = "";
-    protected String resource = "";
-    protected String type = "";
+	protected String description = "";
+	protected String resource = "";
+	protected String location = "";
+	protected String type = "";
 
-    public abstract void generateMessage();
+	public abstract void generateMessage();
 
-    public String getDescription() {
-	return description;
-    }
+	public String getDescription() {
 
-    public String getLocation() {
-	return location;
-    }
+		return description;
+	}
 
-    public String getResource() {
-	return resource;
-    }
+	public String getResource() {
 
-    public String getType() {
-	return type;
-    }
+		return resource;
+	}
+
+	public String getLocation() {
+
+		return location;
+	}
+
+	public String getType() {
+
+		return type;
+	}
 }

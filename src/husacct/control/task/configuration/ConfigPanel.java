@@ -1,7 +1,10 @@
 package husacct.control.task.configuration;
 
-public interface ConfigPanel {
+import javax.swing.JPanel;
 
-	public void SaveSettings();
-	public void ResetSettings();
+@SuppressWarnings("serial")
+public abstract class ConfigPanel extends JPanel {
+
+	public abstract void SaveSettings();
+	public abstract void ResetSettings();
 }
