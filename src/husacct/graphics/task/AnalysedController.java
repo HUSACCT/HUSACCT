@@ -60,23 +60,18 @@ public class AnalysedController extends DrawingController {
 			this.drawArchitecture(this.getCurrentDrawingDetail());
 		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
+			ArrayList<String> compoundedNames = new ArrayList<String>();
+
 			for (String parentName : parentNames) {
-				AbstractDTO[] children = this.analyseService
-						.getChildModulesInModule(parentName);
-				if (parentName.equals("")) {
-					this.drawArchitecture(this.getCurrentDrawingDetail());
-					continue;
-				} else if (children.length > 0) {
-					ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
-					for (AbstractDTO child : children) {
-						knownChildren.add(child);
-					}
+				compoundedNames.add(parentName);
+				ArrayList<AbstractDTO> knownChildren = this
+						.getChildrenOf(parentName);
+
+				if (knownChildren.size() > 0) {
 					allChildren.put(parentName, knownChildren);
-				} else {
-					this.logger.warn("Tried to draw modules for \""
-							+ parentName + "\", but it has no children.");
 				}
 			}
+
 			if (this.analysedContextFigures.size() > 0) {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : this.analysedContextFigures) {
@@ -88,6 +83,15 @@ public class AnalysedController extends DrawingController {
 						} else {
 							this.logger.debug(figure.getName() + " -> "
 									+ figure);
+						}
+					} else if (!figure.isLine() && !figure.isModule()) {
+						// NOTE: Pretty sure selected stuff that is both not a
+						// module and not a line
+						// is actually a ParentFigure (blue square thing)
+						ArrayList<AbstractDTO> knownChildren = this
+								.getChildrenOf(figure.getName());
+						if (knownChildren.size() > 0) {
+							allChildren.put(figure.getName(), knownChildren);
 						}
 					}
 				}
@@ -108,6 +112,27 @@ public class AnalysedController extends DrawingController {
 				this.drawModulesAndLines(allChildren);
 			}
 		}
+	}
+
+	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
+		AbstractDTO[] children = this.analyseService
+				.getChildModulesInModule(parentName);
+
+		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
+
+		if (parentName.equals("")) {
+			this.drawArchitecture(this.getCurrentDrawingDetail());
+		} else if (children.length > 0) {
+			knownChildren = new ArrayList<AbstractDTO>();
+			for (AbstractDTO child : children) {
+				knownChildren.add(child);
+			}
+		} else {
+			this.logger.warn("Tried to draw modules for \"" + parentName
+					+ "\", but it has no children.");
+		}
+
+		return knownChildren;
 	}
 
 	@Override
@@ -158,6 +183,7 @@ public class AnalysedController extends DrawingController {
 	@Override
 	public void moduleOpen(String[] paths) {
 		super.notifyServiceListeners();
+		this.saveSingleLevelFigurePositions();
 		this.resetContextFigures();
 		if (paths.length == 0) {
 			this.drawArchitecture(this.getCurrentDrawingDetail());
@@ -188,23 +214,14 @@ public class AnalysedController extends DrawingController {
 			String firstCurrentPaths = this.getCurrentPaths()[0];
 			AnalysedModuleDTO parentDTO = this.analyseService
 					.getParentModuleForModule(firstCurrentPaths);
-			if (null != parentDTO) {
+
+			if (parentDTO != null) {
 				this.getAndDrawModulesIn(parentDTO.uniqueName);
 			} else {
-				this.logger
-						.warn("Tried to zoom out from \""
-								+ this.getCurrentPaths()
-								+ "\", but it has no parent (could be root if it's an empty string).");
-				this.logger.debug("Reverting to the root of the application.");
-				this.drawArchitecture(this.getCurrentDrawingDetail());
+				this.zoomOutFailed();
 			}
 		} else {
-			this.logger
-					.warn("Tried to zoom out from \""
-							+ this.getCurrentPaths()
-							+ "\", but it has no parent (could be root if it's an empty string).");
-			this.logger.debug("Reverting to the root of the application.");
-			this.drawArchitecture(this.getCurrentDrawingDetail());
+			this.zoomOutFailed();
 		}
 	}
 
@@ -251,5 +268,14 @@ public class AnalysedController extends DrawingController {
 		}
 
 		return parentNames;
+	}
+
+	public void zoomOutFailed() {
+		this.logger
+				.warn("Tried to zoom out from \""
+						+ this.getCurrentPaths()
+						+ "\", but it has no parent (could be root if it's an empty string).");
+		this.logger.debug("Reverting to the root of the application.");
+		this.drawArchitecture(this.getCurrentDrawingDetail());
 	}
 }

@@ -2,6 +2,7 @@ package husacct.analyse.domain;
 
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,5 +35,13 @@ public interface IModelQueryService {
 
     public HashMap<String, DependencyDTO> mapDependencies();
     
-    public String[] getExternalSystems();
+    public ExternalSystemDTO[] getExternalSystems();
+    
+    public int getAmountOfDependencies();
+    
+    public int getAmountOfInterfaces();
+    
+    public int getAmountOfPackages();
+    
+    public int getAmountOfClasses();
 }

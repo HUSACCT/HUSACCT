@@ -53,7 +53,7 @@ public class SaveWorkspaceDialog extends JDialog{
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 380));
+		this.setSize(new Dimension(550, 380));
 		this.setLocationRelativeTo(getRootPane());
 	}
 	
@@ -70,6 +70,7 @@ public class SaveWorkspaceDialog extends JDialog{
 		saverList.setVisibleRowCount(-1);
 		JScrollPane listScrollPane = new JScrollPane(saverList);
 		listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+		
 		
 		savePanel = new JPanel();
 		savePanel.setLayout(new BoxLayout(savePanel, BoxLayout.Y_AXIS));
@@ -122,7 +123,8 @@ public class SaveWorkspaceDialog extends JDialog{
 	private boolean saveWorkspace(){
 		String selectedLoader = (String) saverList.getSelectedValue();
 		HashMap<String, Object> data = selectedSaverPanel.getData();
-		return mainController.getWorkspaceController().saveWorkspace(selectedLoader, data);
+		HashMap<String, Object> config = selectedSaverPanel.getConfig();
+		return mainController.getWorkspaceController().saveWorkspace(selectedLoader, data, config);
 	}
 	
 	private void loadSelectedOpenMethodPanel(){

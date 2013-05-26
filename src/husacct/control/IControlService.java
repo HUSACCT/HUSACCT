@@ -1,11 +1,13 @@
 package husacct.control;
 
-import java.util.List;
-
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.services.IObservableService;
 import husacct.control.task.States;
 import husacct.control.task.threading.ThreadWithLoader;
+
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -27,4 +29,8 @@ public interface IControlService extends IObservableService{
 	public void setValidate(boolean validate);
 	
 	public ApplicationDTO getApplicationDTO();
+	
+	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors);
+	public void showHelpDialog(Component component);
+	
 }

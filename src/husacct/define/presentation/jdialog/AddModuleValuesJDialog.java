@@ -34,7 +34,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 	private JLabel parentModuleNameLabel;
 	private JTextField moduleNameField;
 	private JTextField moduleDescriptionField;	
-	private JComboBox moduleTypeComboBox;
+	private JComboBox<?> moduleTypeComboBox;
 	
 	private JButton cancelButton;
 	private JButton saveButton;
@@ -117,7 +117,7 @@ public class AddModuleValuesJDialog extends JDialog implements KeyListener, Acti
 				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Layer"), 
 				ServiceProvider.getInstance().getLocaleService().getTranslatedString("Component"), 
 				ServiceProvider.getInstance().getLocaleService().getTranslatedString("ExternalLibrary")};
-		this.moduleTypeComboBox = new JComboBox(moduleTypes);
+		this.moduleTypeComboBox = new JComboBox<>(moduleTypes);
 		this.moduleTypeComboBox.setSelectedIndex(0);
 		this.moduleTypeComboBox.addActionListener(this);
 		this.moduleTypeComboBox.addKeyListener(this);

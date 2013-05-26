@@ -56,7 +56,7 @@ public class GraphicsOptionsDialog extends JDialog {
 		currentSettings = new HashMap<String, Object>();
 		currentSettings.put("dependencies", true);
 		currentSettings.put("violations", false);
-		currentSettings.put("smartLines", false);
+		currentSettings.put("smartLines", true);
 		currentSettings.put("layoutStrategy", DrawingLayoutStrategy.BASIC_LAYOUT);
 		
 		totalWidth = 550;

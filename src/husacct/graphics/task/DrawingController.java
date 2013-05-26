@@ -400,6 +400,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 			java.util.Collections.addAll(figures,
 					selection.toArray(new BaseFigure[selection.size()]));
 
+			for (BaseFigure f : figures) {
+				f.isContext(false); // minimising potential side effects
+			}
+
 			this.drawingView.selectAll();
 			List<BaseFigure> allFigures = Arrays.asList(this.drawingView
 					.getSelectedFigures().toArray(new BaseFigure[0]));
@@ -410,6 +414,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
 					f.isContext(true);
 					figures.add(f);
+				} else {
+					f.isContext(false);
 				}
 			}
 
@@ -555,8 +561,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 		case LAYERED_LAYOUT:
 			this.layoutStrategy = new LayeredLayoutStrategy(this.drawing);
 			break;
-		default:
+		case NO_LAYOUT:
 			this.layoutStrategy = new NoLayoutStrategy();
+		default:
+			this.layoutStrategy = new BasicLayoutStrategy(this.drawing);
 			break;
 		}
 	}

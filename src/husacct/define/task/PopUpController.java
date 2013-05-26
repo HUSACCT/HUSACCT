@@ -7,54 +7,57 @@ import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
-public abstract class PopUpController extends Observable{
-	public static final String ACTION_NEW = "NEW";
-	public static final String ACTION_EDIT = "EDIT";
-	
-	protected String action = PopUpController.ACTION_NEW;
-	protected long currentModuleId;
-	protected Logger logger;
-	
-	protected List<Observer> observers;
-	
-	public void addObserver(Observer o){
-		if (!this.observers.contains(o)){
-			this.observers.add(o);
-		}
-	}
-	
-	public void removeObserver(Observer o){
-		if (this.observers.contains(o)){
-			this.observers.remove(o);
-		}
-	}
-	
-	public void notifyObservers(){
-		for (Observer o : this.observers){
-			o.update(this, o);
-		}
-	}
-	
-	public PopUpController(){
-		observers = new ArrayList<Observer>();
-		logger = Logger.getLogger(DefinitionController.class);
-	}
+public abstract class PopUpController extends Observable {
+    public static final String ACTION_EDIT = "EDIT";
+    public static final String ACTION_NEW = "NEW";
 
-	public void setModuleId(long moduleId) {
-		this.currentModuleId = moduleId;
-	}
+    protected String action = PopUpController.ACTION_NEW;
+    protected long currentModuleId;
+    protected Logger logger;
 
-	protected long getModuleId() {
-		return currentModuleId;
-	}
+    protected List<Observer> observers;
 
-	public void setAction(String action) {
-		if (action.equals(PopUpController.ACTION_EDIT) || action.equals(PopUpController.ACTION_NEW)) {
-			this.action = action;
-		}
-	}
+    public PopUpController() {
+	observers = new ArrayList<Observer>();
+	logger = Logger.getLogger(DefinitionController.class);
+    }
 
-	public String getAction() {
-		return action;
+    @Override
+    public void addObserver(Observer o) {
+	if (!observers.contains(o)) {
+	    observers.add(o);
 	}
+    }
+
+    public String getAction() {
+	return action;
+    }
+
+    protected long getModuleId() {
+	return currentModuleId;
+    }
+
+    @Override
+    public void notifyObservers() {
+	for (Observer o : observers) {
+	    o.update(this, o);
+	}
+    }
+
+    public void removeObserver(Observer o) {
+	if (observers.contains(o)) {
+	    observers.remove(o);
+	}
+    }
+
+    public void setAction(String action) {
+	if (action.equals(PopUpController.ACTION_EDIT)
+		|| action.equals(PopUpController.ACTION_NEW)) {
+	    this.action = action;
+	}
+    }
+
+    public void setModuleId(long moduleId) {
+	currentModuleId = moduleId;
+    }
 }

@@ -9,37 +9,32 @@ import husacct.define.domain.SoftwareArchitecture;
 import java.util.ArrayList;
 
 public class SoftwareArchitectureDomainService {
-	private Application app;
-	
-	/**
-	 * Software Architecture
-	 */
-	public void createNewArchitectureDefinition(String name) {
-		SoftwareArchitecture.getInstance().setName(name);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+    private Application app;
+
+    public void createApplication(String name, ArrayList<ProjectDTO> projects,
+	    String version) {
+	ArrayList<Project> moduleProjects = new ArrayList<Project>();
+	for (ProjectDTO project : projects) {
+	    moduleProjects.add(new Project(project.name, project.paths,
+		    project.programmingLanguage, project.version,
+		    project.description));
 	}
-	
-	/**
-	 * Application
-	 */
-	public void createApplication(String name, ArrayList<ProjectDTO> projects, String version) {
-		ArrayList<Project> moduleProjects = new ArrayList<Project>();
-		for (ProjectDTO project : projects) {
-			moduleProjects.add(new Project(
-					project.name,
-					project.paths,
-					project.programmingLanguage,
-					project.version,
-					project.description
-			));
-		}
-		app = new Application(name, moduleProjects, version);
-		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();	
+	app = new Application(name, moduleProjects, version);
+	ServiceProvider.getInstance().getDefineService()
+		.notifyServiceListeners();
+    }
+
+    public void createNewArchitectureDefinition(String name) {
+	SoftwareArchitecture.getInstance().setName(name);
+	ServiceProvider.getInstance().getDefineService()
+		.notifyServiceListeners();
+    }
+
+    public Application getApplicationDetails() {
+	if (app == null) {
+	    app = new Application();
 	}
-	
-	public Application getApplicationDetails(){
-		if (app == null) { app = new Application();}
-		return app;
-	}
+	return app;
+    }
 
 }
