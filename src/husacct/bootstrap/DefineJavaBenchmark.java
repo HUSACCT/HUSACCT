@@ -46,4 +46,9 @@ public class DefineJavaBenchmark extends AbstractBootstrap{
 		return violationTypes;
 	}
 
+	@Override
+	public void execute(String[] args) {
+		execute();
+	}
+
 }

@@ -80,7 +80,7 @@ class RuleTypeSeverityPanel extends JPanel {
 				if (evt.getValueIsAdjusting() && category.getSelectedIndex() > -1) {
 					return;
 				}
-				CategoryValueChanged();
+				categoryValueChanged();
 			}
 		});
 
@@ -98,7 +98,7 @@ class RuleTypeSeverityPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				if (ruletypeTable.getSelectedRow() > -1) {
-					ApplyActionPerformed();
+					applyActionPerformed();
 				} else {
 					ServiceProvider.getInstance().getControlService().showInfoMessage((ServiceProvider.getInstance().getLocaleService().getTranslatedString("RowNotSelected")));
 				}
@@ -108,14 +108,14 @@ class RuleTypeSeverityPanel extends JPanel {
 		restore.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				RestoreActionPerformed();
+				restoreActionPerformed();
 			}
 		});
 
 		restoreAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				RestoreAllActionPerformed();
+				restoreAllActionPerformed();
 			}
 		});
 
@@ -186,22 +186,22 @@ class RuleTypeSeverityPanel extends JPanel {
 		tcm.getColumn(1).setCellEditor(ruletypeModel.getEditor());
 	}
 
-	private void RestoreActionPerformed() {
+	private void restoreActionPerformed() {
 		taskServiceImpl.restoreKeyToDefaultSeverity(language, ((DataLanguageHelper) ruletypeModel.getValueAt(ruletypeTable.getSelectedRow(), 0)).key);
-		CategoryValueChanged();
+		categoryValueChanged();
 	}
 
-	private void RestoreAllActionPerformed() {
+	private void restoreAllActionPerformed() {
 		taskServiceImpl.restoreAllKeysToDefaultSeverities(language);
-		CategoryValueChanged();
+		categoryValueChanged();
 	}
 
-	private void ApplyActionPerformed() {
+	private void applyActionPerformed() {
 		checkRestoreButtonEnabled();
 		updateRuletypeSeverities();
 	}
 
-	private void CategoryValueChanged() {
+	private void categoryValueChanged() {
 		if (category.getSelectedValue() != null) {
 			loadRuleTypes(((DataLanguageHelper) category.getSelectedValue()).key);
 		}

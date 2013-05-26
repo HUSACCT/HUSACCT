@@ -414,6 +414,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
 					f.isContext(true);
 					figures.add(f);
+				} else {
+					f.isContext(false);
 				}
 			}
 
@@ -559,8 +561,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 		case LAYERED_LAYOUT:
 			this.layoutStrategy = new LayeredLayoutStrategy(this.drawing);
 			break;
-		default:
+		case NO_LAYOUT:
 			this.layoutStrategy = new NoLayoutStrategy();
+		default:
+			this.layoutStrategy = new BasicLayoutStrategy(this.drawing);
 			break;
 		}
 	}
