@@ -103,7 +103,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 			treeNodeTypeFilter(child);
 		}
 	}
-
+	
 	private void delegateInvocationMethod(Tree tree) {
 		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
 		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
