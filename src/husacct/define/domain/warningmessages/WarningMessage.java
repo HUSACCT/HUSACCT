@@ -27,5 +27,4 @@ public abstract class WarningMessage {
 
 		return type;
 	}
-
 }

@@ -41,7 +41,7 @@ import javax.swing.WindowConstants;
 public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionListener, ItemListener, Observer{
 
 	private static final long serialVersionUID = -3491664038962722000L;
-	
+
 	private AppliedRuleController appliedRuleController;
 	private FactoryDetails factoryDetails;
 	private AbstractDetailsJPanel ruleDetailsJPanel;
@@ -49,12 +49,12 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	private JPanel mainPanel;
 
 	private JTableException jTableException;
-	
+
 	private JButton jButtonAddExceptionRow;
 	private JButton jButtonRemoveExceptionRow;	
 	private JButton jButtonCancel;
 	private JButton jButtonSave;
-	
+
 	public AppliedRuleJDialog(long moduleId, long appliedRuleId) {
 		super(((ControlServiceImpl) ServiceProvider.getInstance().getControlService()).getMainController().getMainGui(), true);
 		this.appliedRuleController = new AppliedRuleController(moduleId, appliedRuleId);
@@ -72,11 +72,11 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 				setTitle(ServiceProvider.getInstance().getLocaleService().getTranslatedString("EditAppliedRuleTitle"));
 			}
 			setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO)).getImage());
-			
+
 			getContentPane().add(this.createMainPanel(), BorderLayout.CENTER);
 			getContentPane().add(this.createButtonPanel(), BorderLayout.SOUTH);
-			
-//			this.setResizable(false);
+
+			//			this.setResizable(false);
 			this.pack();
 			this.setSize(820, 590);
 		} catch (Exception e) {
@@ -84,32 +84,32 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			e.printStackTrace();
 		}
 	}
-	
+
 	private JPanel createMainPanel() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(this.createMainPanelLayout());
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		
+
 		mainPanel.add(new JLabel(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleType")), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		
+
 		this.createAppliedRuleKeyValueComboBox();
 		mainPanel.add(this.appliedRuleKeyValueComboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		
+
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
-		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
-		this.ruleDetailsJPanel.initGui();
+		ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
+		ruleDetailsJPanel.initGui();
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-		
+
 		//do this after the initGUI of the ruleDetailsJPanel
 		this.appliedRuleKeyValueComboBox.addItemListener(this);
-		
+
 		mainPanel.add(new JLabel("Exceptions"), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(5, 0, 0, 0), 0, 0));
 		mainPanel.add(this.createExceptionsPanel(), new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(5, 0, 0, 0), 0, 0));
-		
+
 		return mainPanel;
 	}
-	
+
 	private GridBagLayout createMainPanelLayout() {
 		GridBagLayout mainPanelLayout = new GridBagLayout();
 		mainPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.0 };
@@ -118,25 +118,25 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		mainPanelLayout.columnWidths = new int[] { 130, 660 };
 		return mainPanelLayout;
 	}
-	
+
 	private void createAppliedRuleKeyValueComboBox() {
 		this.appliedRuleKeyValueComboBox = new KeyValueComboBox();
 		this.appliedRuleController.fillRuleTypeComboBox(this.appliedRuleKeyValueComboBox);
-		
+
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)){
 			this.appliedRuleKeyValueComboBox.setEnabled(false);
 		}
 	}
-	
+
 	private void refreshRuleDetailsJPanel() {
 		String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
 		this.appliedRuleController.setSelectedRuleTypeKey(ruleTypeKey);
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
 			this.appliedRuleController.clearRuleExceptions();
 		}
-		
+
 		this.mainPanel.remove(this.ruleDetailsJPanel);
-		
+
 		this.ruleDetailsJPanel = factoryDetails.create(this.appliedRuleController, ruleTypeKey);
 		this.ruleDetailsJPanel.initGui();
 
@@ -144,13 +144,13 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		if(this.getComponentCount() > 0) {
 			this.getRootPane().revalidate();
 		}
-		
+
 		mainPanel.add(this.ruleDetailsJPanel, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
 		this.repaint();
 		this.update();
 	}
-	
+
 	private JPanel createExceptionsPanel() {
 		JPanel exceptionsPanel = new JPanel();
 		exceptionsPanel.setLayout(new BorderLayout());
@@ -158,7 +158,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		exceptionsPanel.add(this.createExceptionsButtonPanel(), BorderLayout.EAST);
 		return exceptionsPanel;
 	}
-	
+
 	private JScrollPane createExceptionsScrollPane() {
 		JScrollPane exceptionsScrollPane = new JScrollPane();
 		exceptionsScrollPane.setPreferredSize(new java.awt.Dimension(516, 155));
@@ -167,23 +167,23 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		exceptionsScrollPane.setViewportView(jTableException);
 		return exceptionsScrollPane;
 	}
-	
+
 	private JPanel createExceptionsButtonPanel() {
 		JPanel exceptionsButtonPanel = new JPanel();
 		exceptionsButtonPanel.setLayout(this.createExceptionsButtonPanelLayout());
 		exceptionsButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
-		
+
 		jButtonAddExceptionRow = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("AddException"));
 		exceptionsButtonPanel.add(jButtonAddExceptionRow, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		jButtonAddExceptionRow.addActionListener(this);
-		
+
 		jButtonRemoveExceptionRow = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("RemoveException"));
 		exceptionsButtonPanel.add(jButtonRemoveExceptionRow, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		jButtonRemoveExceptionRow.addActionListener(this);
-		
+
 		return exceptionsButtonPanel;
 	}
-	
+
 	private GridBagLayout createExceptionsButtonPanelLayout() {
 		GridBagLayout exceptionsButtonPanelLayout = new GridBagLayout();
 		exceptionsButtonPanelLayout.rowWeights = new double[] { 0.0 };
@@ -192,10 +192,10 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		exceptionsButtonPanelLayout.columnWidths = new int[] { 50, 50 };
 		return exceptionsButtonPanelLayout;
 	}
-	
+
 	private JPanel createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
-		
+
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)){
 			jButtonSave = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		} else {
@@ -203,25 +203,25 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		}
 		buttonPanel.add(jButtonSave);
 		jButtonSave.addActionListener(this);
-		
+
 		jButtonCancel = new JButton(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Cancel"));
 		buttonPanel.add(jButtonCancel);
 		jButtonCancel.addActionListener(this);
-		
+
 		return buttonPanel;
 	}
-	
+
 	public void update() {
 		update(appliedRuleController, appliedRuleController.getCurrentAppliedRuleId());
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		updateDetails();
 		updateExceptionTable();
 		setButtonEnableState();
 	}
-	
+
 	private void updateDetails() {
 		if (appliedRuleController.getCurrentAppliedRuleId() != -1){
 			HashMap<String, Object> ruleDetails = appliedRuleController.getAppliedRuleDetails(appliedRuleController.getCurrentAppliedRuleId());
@@ -231,7 +231,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			ruleDetailsJPanel.updateDetails(ruleDetails);
 		}
 	}
-	
+
 	private void setSelectedRuleTypeKey(String ruleTypeKey){
 		for (int i = 0;i < appliedRuleKeyValueComboBox.getItemCount();i++){
 			String iteratingItemKey = (String) appliedRuleKeyValueComboBox.getItemKeyAt(i);
@@ -246,16 +246,16 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		ArrayList<HashMap<String, Object>> exceptionRules = appliedRuleController.getExceptionRules();
 		JTableTableModel tableModel = (JTableTableModel) jTableException.getModel();
 		tableModel.getDataVector().removeAllElements();
-		
+
 		for (HashMap<String, Object> exceptionRule : exceptionRules) {	
 			String description = (String) exceptionRule.get("description");
-			
+
 			Object from = exceptionRule.get("moduleFromId");
 			String moduleFrom = getModuleDisplayValue(from);
-			
+
 			Object to = exceptionRule.get("moduleToId");
 			String moduleTo = getModuleDisplayValue(to);
-			
+
 			boolean appliedRuleIsEnabled = (Boolean) exceptionRule.get("enabled");
 			String enabled = ServiceProvider.getInstance().getLocaleService().getTranslatedString("Off");
 			if (appliedRuleIsEnabled) {
@@ -279,7 +279,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		}
 		return displayValue;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent action) {
 		if (action.getSource() == this.jButtonSave) {
@@ -291,7 +291,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		} else if (action.getSource() == this.jButtonRemoveExceptionRow) {
 			this.removeException();
 		}
-		
+
 	}
 
 	private void addException() {
@@ -306,7 +306,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
 		}
 	}
-	
+
 	private void removeException() {
 		appliedRuleController.removeException(jTableException.getSelectedRow());
 		updateExceptionTable();
@@ -323,23 +323,25 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.dispose();
 	}
 
-	private void save() {	//TODO : check of 
+	private void save() {	
 		if (ruleDetailsJPanel.hasValidData()) {
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-			
-			String ruleTypeKey = this.appliedRuleKeyValueComboBox.getSelectedItemKey();
-			ruleDetails.put("ruleTypeKey", ruleTypeKey);
-			
-			if(this.appliedRuleController.save(ruleDetails)) {
-				this.dispose();
-			} else {
-				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CantSaveRule"));
+			ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
+
+			if(appliedRuleController.conformRuleConventions(ruleDetails)){
+				if(this.appliedRuleController.save(ruleDetails)) {
+					this.dispose();
+				} else {
+					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined")+"\n"+ruleDetails.get("ruleTypeKey"));
+				}
+			}else{
+				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
 			}
 		} else {
 			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
 		}
 	}
-	
+
 	public void keyPressed(KeyEvent arg0) {
 		// Ignore
 	}
@@ -355,24 +357,14 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	public void keyTyped(KeyEvent arg0) {
 		// Ignore
 	}
-	
-	public void setButtonEnableState() {
-		//TODO set keyListener to all fields
-//		if (ruleDetailsJPanel.hasValidData()){
-//			this.jButtonSave.setEnabled(true);
-//			this.jButtonCancel.setEnabled(true);
-			if (appliedRuleController.hasSelectedRuleTypeHaveExceptions()){
-				this.jButtonAddExceptionRow.setEnabled(true);
-				this.jButtonRemoveExceptionRow.setEnabled(true);
-			} else {
-				this.jButtonAddExceptionRow.setEnabled(false);
-				this.jButtonRemoveExceptionRow.setEnabled(false);
-			}
-//		} else {
-//			this.jButtonSave.setEnabled(false);
-//			this.jButtonCancel.setEnabled(false);
-//			this.jButtonAddExceptionRow.setEnabled(false);
-//			this.jButtonRemoveExceptionRow.setEnabled(false);
-//		}
+
+	private void setButtonEnableState() {
+		if (appliedRuleController.hasSelectedRuleTypeHaveExceptions()){
+			this.jButtonAddExceptionRow.setEnabled(true);
+			this.jButtonRemoveExceptionRow.setEnabled(true);
+		} else {
+			this.jButtonAddExceptionRow.setEnabled(false);
+			this.jButtonRemoveExceptionRow.setEnabled(false);
+		}
 	}
 }

@@ -34,5 +34,4 @@ public class CodeLevelWarning extends WarningMessage {
 	public AnalyzedModuleComponent getNotCodeLevelModule() {
 		return notCodeLevelModule;
 	}
-
 }

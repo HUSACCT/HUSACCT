@@ -21,7 +21,7 @@ class RuleTypesGenerator {
 
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
-	private static final String[] ruleTypeLocations = new String[] {"husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency"};
+	private static final String[] ruleTypeLocations = new String[] { "husacct.validate.domain.validation.ruletype.propertyruletypes", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.relationruletypes" };
 
 	RuleTypesGenerator() {
 		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();

@@ -63,8 +63,8 @@ public class ImportViolationsHistory extends XmlImportUtils {
 					if (isValidUUID(stringUUID)) {
 						UUID id = UUID.fromString(stringUUID);
 						if (id.equals(severity.getId())) {
-							Violation violation = new Violation();
-							violation.setOccured(date)
+							Violation violation = new Violation()
+								.setOccured(date)
 								.setLineNumber(lineNumber)
 								.setSeverity(severity.clone())
 								.setRuletypeKey(ruleTypeKey)

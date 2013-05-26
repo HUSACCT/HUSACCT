@@ -8,4 +8,9 @@ public class Validate extends AbstractBootstrap {
 		getValidateService().checkConformance();
 	}
 
+	@Override
+	public void execute(String[] args) {
+		execute();
+	}
+
 }

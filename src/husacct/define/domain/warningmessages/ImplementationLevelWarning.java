@@ -27,5 +27,4 @@ public class ImplementationLevelWarning extends WarningMessage {
 		this.location = "";
 
 	}
-
 }

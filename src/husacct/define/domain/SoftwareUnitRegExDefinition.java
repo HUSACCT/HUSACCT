@@ -3,50 +3,51 @@ package husacct.define.domain;
 import java.util.ArrayList;
 
 public class SoftwareUnitRegExDefinition {
-	
-	private String name;
-	private ArrayList<SoftwareUnitDefinition> softwareUnitDefinitions;
-	
-	public SoftwareUnitRegExDefinition(String name) {
-		this.setName(name);
-		this.softwareUnitDefinitions = new ArrayList<SoftwareUnitDefinition>();
-	}
 
-	public String getName() {
-		return name;
-	}
+    private String name;
+    private ArrayList<SoftwareUnitDefinition> softwareUnitDefinitions;
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void addSoftwareUnitDefinition(SoftwareUnitDefinition softwareUnitDefinition) {
-		this.softwareUnitDefinitions.add(softwareUnitDefinition);
-	}
-	
-	public void removeSoftwareUnitDefinition(SoftwareUnitDefinition softwareUnitDefinition) {
-		this.softwareUnitDefinitions.remove(softwareUnitDefinition);
-	}
+    public SoftwareUnitRegExDefinition(String name) {
+	setName(name);
+	softwareUnitDefinitions = new ArrayList<SoftwareUnitDefinition>();
+    }
 
-	public ArrayList<SoftwareUnitDefinition> getSoftwareUnitDefinitions() {
-		return softwareUnitDefinitions;
-	}
+    public void addSoftwareUnitDefinition(
+	    SoftwareUnitDefinition softwareUnitDefinition) {
+	softwareUnitDefinitions.add(softwareUnitDefinition);
+    }
 
-	public void setSoftwareUnitDefinitions(ArrayList<SoftwareUnitDefinition> softwareUnitDefinitions) {
-		this.softwareUnitDefinitions = softwareUnitDefinitions;
+    @Override
+    public boolean equals(Object o) {
+	if (o instanceof SoftwareUnitRegExDefinition) {
+	    SoftwareUnitRegExDefinition unit = (SoftwareUnitRegExDefinition) o;
+	    if (unit.name.equals(name)) {
+		return true;
+	    }
 	}
-	
-	@Override
-	public boolean equals(Object o){
-		boolean isEqual = false;
-		if (o instanceof SoftwareUnitRegExDefinition ){
-			SoftwareUnitRegExDefinition  unit = (SoftwareUnitRegExDefinition ) o;
-			if (unit.name.equals(this.name)){
-				
-				isEqual = true;
-			}
-		}
-		return isEqual;
-	}
+	return false;
+    }
+
+    public String getName() {
+	return name;
+    }
+
+    public ArrayList<SoftwareUnitDefinition> getSoftwareUnitDefinitions() {
+	return softwareUnitDefinitions;
+    }
+
+    public void removeSoftwareUnitDefinition(
+	    SoftwareUnitDefinition softwareUnitDefinition) {
+	softwareUnitDefinitions.remove(softwareUnitDefinition);
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public void setSoftwareUnitDefinitions(
+	    ArrayList<SoftwareUnitDefinition> softwareUnitDefinitions) {
+	this.softwareUnitDefinitions = softwareUnitDefinitions;
+    }
 
 }
