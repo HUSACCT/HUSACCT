@@ -77,6 +77,7 @@ public class ConfigurationManager {
 	public static Properties performInitMutations(Properties props){
 		//Always overwrite platform independent AppDataFolder (always empty on startup of HUSACCT)
 		String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+		System.out.println("App data folder: " + appDataFolderString);
 		File appDataFolderObject = new File(appDataFolderString);
 		if(!appDataFolderObject.exists()){
 			appDataFolderObject.mkdir();
