@@ -17,6 +17,8 @@ public class ModuleFactory {
 				return new Layer(rules);
 			case "subsystem":
 				return new SubSystem(rules);
+			case "facade":
+				return new Facade(rules);
 			default:
 				throw new ModuleNotFoundException(type);
 		}

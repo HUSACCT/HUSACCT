@@ -96,7 +96,7 @@ public class ValidateTest {
 	@Test
 	public void getAndPrintAllowedRuleTypesOfModules() {
 		try {
-			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary", "Facade"};
 			for (String module : modules) {
 				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				System.out.print("\nallowedRuleTypes for " + module + " : ");
@@ -112,7 +112,7 @@ public class ValidateTest {
 	@Test
 	public void getAndPrintDefaultRuleTypesOfModules() {
 		try {
-			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary", "Facade"};
 			for (String module : modules) {
 				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
 				System.out.print("\ndefaultRuleTypes for " + module + " : ");

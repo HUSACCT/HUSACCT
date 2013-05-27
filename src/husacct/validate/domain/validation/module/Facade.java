@@ -4,8 +4,8 @@ import java.util.List;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import java.util.ArrayList;
 
-public class ExternalLibrary extends AbstractModule {
-    public ExternalLibrary(List<RuleType> ruleTypes) {
+public class Facade extends AbstractModule {
+    public Facade(List<RuleType> ruleTypes) {
 	super(ruleTypes);
     }
 
