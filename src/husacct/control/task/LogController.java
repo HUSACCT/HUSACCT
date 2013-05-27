@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -24,8 +25,7 @@ public class LogController {
 
 	private MainController mainController;
 	
-	//Hey, at least it's dynamic :)
-	private File logFile = new File(new File("").getAbsolutePath().replace("\\", "\\\\") + "\\src\\husacct\\common\\resources\\logging\\applicationanalysishistory.xml".replace("\\", "\\\\"));
+	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", ""));
 	
 	public LogController(MainController mainController){
 		this.mainController = mainController;
