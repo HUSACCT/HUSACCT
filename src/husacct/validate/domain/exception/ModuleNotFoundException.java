@@ -8,8 +8,8 @@ public class ModuleNotFoundException extends RuntimeException {
 		super();
 	}
 
-	public ModuleNotFoundException(ModuleTypes moduleType) {
-		super(String.format("ModuleType %s is not supported by the validator.", moduleType.toString()));
+	public ModuleNotFoundException(String moduleType) {
+		super(String.format("ModuleType %s is not supported by the validator.", moduleType));
 	}
 
 	public String getMessage() {

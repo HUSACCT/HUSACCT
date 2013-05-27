@@ -20,10 +20,12 @@ import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,6 +35,8 @@ public class ValidateTest {
 
 	@Before
 	public void setup() {
+		setLog4jConfiguration();
+		
 		define = ServiceProvider.getInstance().getDefineService();
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
@@ -41,9 +45,14 @@ public class ValidateTest {
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 		validate = ServiceProvider.getInstance().getValidateService();
-
 	}
-
+	
+	private void setLog4jConfiguration(){
+		URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
+		PropertyConfigurator.configure(propertiesFile);
+	}
+	
+	
 	@Test
 	public void getBrowseViolationsGUI() {
 		Object screen = validate.getBrowseViolationsGUI();
@@ -93,7 +102,10 @@ public class ValidateTest {
 	@Test
 	public void getCategories() {
 		CategoryDTO[] dtos = validate.getCategories();
-		String[] ruleTypeCategories = new String[] { RuleTypeCategories.PROPERTY_RULE_TYPES.getCategoryName().toLowerCase(), RuleTypeCategories.RELATION_RULE_TYPES.getCategoryName().toLowerCase() };
+		String[] ruleTypeCategories = new String[] { 
+				RuleTypeCategories.PROPERTY_RULE_TYPES.getCategoryName().toLowerCase().replace(" ", ""), 
+				RuleTypeCategories.RELATION_RULE_TYPES.getCategoryName().toLowerCase().replace(" ", "") };
+		
 		assertArrayEquals(ruleTypeCategories, getCategoryStringArray(dtos));
 	}
 
@@ -111,7 +123,7 @@ public class ValidateTest {
 				RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString(), 
 				RuleTypes.IS_ONLY_MODULE_ALLOWED_TO_USE.toString(), 
 				RuleTypes.MUST_USE.toString(),
-				RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString()
+				RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()
 		};
 		
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
@@ -130,7 +142,7 @@ public class ValidateTest {
 
 			for (String module : modules) {
 				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
-				System.out.print("\nAllowedRuleTypes for " + module + " : ");
+				System.out.print("\nAllowedRuleTypes for " + module + ": ");
 				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
 					System.out.print(allowedRuleType.getKey() + ", ");
 				}
@@ -153,7 +165,7 @@ public class ValidateTest {
 			
 			for (String module : modules) {
 				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
-				System.out.print("\nDefaultRuleTypes for " + module + " : ");
+				System.out.print("\nDefaultRuleTypes for " + module + ": ");
 				for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
 					System.out.print(defaultRuleType.getKey() + ", ");
 				}
