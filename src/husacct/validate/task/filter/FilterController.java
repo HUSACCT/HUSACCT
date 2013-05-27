@@ -9,7 +9,7 @@ import husacct.validate.domain.factory.ruletype.RuleTypesFactory;
 import husacct.validate.domain.validation.Regex;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.internal_transfer_objects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
 import husacct.validate.task.TaskServiceImpl;
 
 import java.util.ArrayList;
