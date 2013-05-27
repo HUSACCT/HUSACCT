@@ -15,6 +15,7 @@ import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
 import husacct.validate.domain.validation.module.AbstractModule;
 import husacct.validate.domain.validation.module.ModuleFactory;
+import husacct.validate.domain.validation.module.ModuleTypes;
 import husacct.validate.domain.validation.ruletype.RuleType;
 
 import java.util.Collections;
@@ -90,7 +91,7 @@ public class DomainServiceImpl {
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
 
 		modulefactory = new ModuleFactory();
-		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
+		AbstractModule module = modulefactory.createModule(ModuleTypes.valueOf(moduleType), ruleTypes);
 		List<RuleType> moduleRuleTypes = module.getDefaultModuleruleTypes();
 
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);
@@ -100,7 +101,7 @@ public class DomainServiceImpl {
 		List<RuleType> ruleTypes = ruletypefactory.getRuleTypes();
 
 		modulefactory = new ModuleFactory();
-		AbstractModule module = modulefactory.createModule(moduleType, ruleTypes);
+		AbstractModule module = modulefactory.createModule(ModuleTypes.valueOf(moduleType), ruleTypes);
 		List<RuleType> moduleRuleTypes = module.getAllowedModuleruleTypes();
 
 		return new AssemblerController().createRuleTypeDTO(moduleRuleTypes);

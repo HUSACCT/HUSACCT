@@ -120,7 +120,14 @@ public class ValidateTest {
 	@Test
 	public void getAndPrintAllowedRuleTypesOfModules() {
 		try {
-			String[] modules = { "Component", "Layer", "SubSystem", "ExternalLibrary", "Facade" };
+			String[] modules = { 
+					ModuleTypes.COMPONENT.toString(),
+					ModuleTypes.LAYER.toString(),
+					ModuleTypes.SUBSYSTEM.toString(),
+					ModuleTypes.EXTERNAL_LIBRARY.toString(),
+					ModuleTypes.FACADE.toString()
+			};
+
 			for (String module : modules) {
 				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
 				System.out.print("\nAllowedRuleTypes for " + module + " : ");

@@ -3,7 +3,6 @@ package husacct.validate.domain.validation.ruletype.propertyruletypes;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.RuleDTO;
 import husacct.validate.domain.check.util.CheckConformanceUtilClass;
-import husacct.validate.domain.check.util.CheckConformanceUtilPackage;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
