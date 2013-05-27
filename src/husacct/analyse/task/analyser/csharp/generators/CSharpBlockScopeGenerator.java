@@ -3,6 +3,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 public class CSharpBlockScopeGenerator extends CSharpGenerator {
 
@@ -12,8 +13,8 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	public void walkThroughBlockScope(CommonTree tree, String packageAndClassName, String belongsToMethod) {
 		this.packageAndClassName = packageAndClassName;
 		this.belongsToMethod = belongsToMethod;
-		
-		walkThroughBlockScope(tree);
+
+		walkThroughBlockScope(tree);		
 	}
 
 	private void walkThroughBlockScope(Tree tree) {
@@ -22,23 +23,20 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 			switch (child.getType()) {
 				case CSharpParser.VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
-					//TODO check when this is hit
+					deleteTreeChild(child);
 					break;
 				case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
 					delegateLocalVariable(child);
+					deleteTreeChild(child);
 					break;
 				case CSharpParser.OBJECT_CREATION_EXPRESSION:
 					delegateInvocationConstructor(child);
 					break;
 				case CSharpParser.METHOD_INVOCATION:
-					if (child.getChild(0).getType() == CSharpParser.DOT) {
-						delegateInvocationMethod(child);
-					}
+					delegateInvocationMethod(child);
 					break;
-				case CSharpParser.ASSIGNMENT:
-					if (child.getChild(0).getType() == CSharpParser.DOT) {
-						delegateInvocationPropertyOrField(child);
-					}
+				case CSharpParser.MEMBER_ACCESS:
+					delegateInvocationPropertyOrField(child);
 					break;
 				case CSharpParser.THROW:
 				case CSharpParser.CATCH:
@@ -57,23 +55,29 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	}
 
 	private void delegateLocalVariable(Tree tree) {
-		CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
-		csharpLocalVariableGenerator.generateLocalVariableToDomain(tree, this.packageAndClassName, this.belongsToMethod);
+		System.out.println(tree.toStringTree());
+		if (tree.toStringTree().contains("= >")) {
+			CSharpLamdaGenerator csLamdaGenerator = new CSharpLamdaGenerator();
+			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)tree, packageAndClassName, belongsToMethod);
+		} else {
+			CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
+			csharpLocalVariableGenerator.generateLocalVariableToDomain(tree, this.packageAndClassName, this.belongsToMethod);
+		}
 	}
 
 	private void delegateInvocationConstructor(Tree tree) {
-		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
+		CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator= new CSharpInvocationConstructorGenerator(this.packageAndClassName);
+		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
 	private void delegateInvocationMethod(Tree tree) {
-		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
+		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
+		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
 	private void delegateInvocationPropertyOrField(Tree tree) {
-		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
+		CSharpInvocationPropertyOrFieldGenerator csharpInvocationPropertyOrFieldGenerator = new CSharpInvocationPropertyOrFieldGenerator(this.packageAndClassName);
+		csharpInvocationPropertyOrFieldGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
 	private void delegateException(Tree tree) {
@@ -86,4 +90,3 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 		csharpLoopGenerator.generateToDomainFromLoop((CommonTree) tree, this.packageAndClassName, this.belongsToMethod);
 	}
 }
-	
