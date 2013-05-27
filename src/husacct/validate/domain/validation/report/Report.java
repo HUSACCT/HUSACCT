@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
-import husacct.validate.domain.validation.internal_transfer_objects.ViolationsPerSeverity;
+import husacct.validate.domain.validation.internaltransferobjects.ViolationsPerSeverity;
 
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap.SimpleEntry;
