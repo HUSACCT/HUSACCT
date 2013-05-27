@@ -19,7 +19,7 @@ import java.util.List;
 
 public class IsOnlyAllowedToUseRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
 	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
@@ -30,11 +30,11 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (DependencyDTO dependency : dependencies) {
 				if (classPathFrom.getPhysicalPath().equals(dependency.from)) {
 					if (!containsMapping(mappings, dependency.to)) {

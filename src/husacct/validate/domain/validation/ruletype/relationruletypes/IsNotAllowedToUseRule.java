@@ -18,7 +18,7 @@ import java.util.List;
 
 public class IsNotAllowedToUseRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
 	public IsNotAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
@@ -29,12 +29,12 @@ public class IsNotAllowedToUseRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
 					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {

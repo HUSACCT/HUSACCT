@@ -19,7 +19,7 @@ import java.util.List;
 
 public class IsNotAllowedToMakeBackCallRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> exceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
 	public IsNotAllowedToMakeBackCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionRules, severity);
@@ -30,12 +30,12 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (List<Mapping> moduleTo : modulesTo) {
 				for (Mapping classpathTo : moduleTo) {
 					for (DependencyDTO dependency : dependencies) {

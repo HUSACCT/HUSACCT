@@ -44,11 +44,11 @@ public class NamingConventionRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilPackage.filterPackages(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
-		for (Mapping physicalClasspathFrom : classpathsFrom) {
+		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);
@@ -62,11 +62,11 @@ public class NamingConventionRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 
 		final String regex = Regex.makeRegexString(currentRule.regex);
 
-		for (Mapping physicalClasspathFrom : classpathsFrom) {
+		for (Mapping physicalClasspathFrom : physicalClasspathsFrom) {
 			AnalysedModuleDTO analysedModule = analyseService.getModuleForUniqueName(physicalClasspathFrom.getPhysicalPath());
 			if (!Regex.matchRegex(regex, analysedModule.name) && !analysedModule.type.toLowerCase().equals("package")) {
 				Violation violation = createViolation(rootRule, physicalClasspathFrom, configuration);

@@ -32,7 +32,7 @@ public abstract class RuleType {
 	protected final Severity severity;
 	protected List<Violation> violations;
 	protected Mappings mappings;
-	protected List<Mapping> classpathsFrom;
+	protected List<Mapping> physicalClasspathsFrom;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private AbstractViolationType violationtypefactory;

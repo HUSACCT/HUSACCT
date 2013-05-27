@@ -19,7 +19,7 @@ import java.util.List;
 
 public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED);
+	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
 	public IsNotAllowedToMakeSkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
 		super(key, category, violationtypes, exceptionrules, severity);
@@ -30,12 +30,12 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 		violations = new ArrayList<>();
 
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		classpathsFrom = mappings.getMappingFrom();
+		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : classpathsFrom) {
+		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (List<Mapping> physicalClasspathsTo : modulesTo) {
 				for (Mapping classPathTo : physicalClasspathsTo) {
 					for (DependencyDTO dependency : dependencies) {
