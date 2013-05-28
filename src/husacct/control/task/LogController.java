@@ -2,6 +2,7 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
+import husacct.common.logging.MethodLogger;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
 import husacct.control.task.configuration.ConfigurationManager;
@@ -18,7 +19,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public class LogController {
+public class LogController extends MethodLogger{
 
 	private Logger logger = Logger.getLogger(LogController.class);
 	private Workspace currentWorkspace;
@@ -30,9 +31,12 @@ public class LogController {
 	public LogController(MainController mainController){
 		this.mainController = mainController;
 		currentWorkspace = null;
+		//logMethod("Instantiate logcontroller");
 	}
 	
 	public boolean logFileExists(){
+		//logMethod("Check if " + logFile.getAbsolutePath() + " exists.");
+		//printLoggedMethods();
 		return logFile.exists();
 	}
 	
