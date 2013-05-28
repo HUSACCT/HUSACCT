@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.ControlServiceImpl;
 import husacct.control.presentation.util.DialogUtils;
-import husacct.validate.domain.validation.internal_transfer_objects.PathDTO;
+import husacct.validate.domain.validation.internaltransferobjects.PathDTO;
 import husacct.validate.presentation.tableModels.FilterViolationsObserver;
 import husacct.validate.task.TaskServiceImpl;
 

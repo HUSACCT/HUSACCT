@@ -21,23 +21,31 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 public class AppliedRulesJPanel extends JPanel  implements ActionListener, Observer, IServiceListener {
-	
+
 	private static final long serialVersionUID = -2052083182258803790L;
-	
+
 	private JTableAppliedRule appliedRulesTable;
 	private JScrollPane appliedRulesPane;
-	
+	private JPopupMenu popupMenu = new JPopupMenu();
+	private JMenuItem addRuleItem = new JMenuItem();
+	private JMenuItem editRuleItem= new JMenuItem();
+	private JMenuItem removeRuleItem = new JMenuItem();
+
 	private JButton addRuleButton;
 	private JButton editRuleButton;
 	private JButton removeRuleButton;
@@ -56,46 +64,57 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rules")));
 		this.add(this.addAppliedRulesTable(), BorderLayout.CENTER);
 		this.add(this.addButtonPanel(), BorderLayout.EAST);
+		createPopupMenu();
 		setButtonEnableState();
 		ServiceProvider.getInstance().getLocaleService().addServiceListener(this);
 	}
-	
+
 	private JScrollPane addAppliedRulesTable() {
 		appliedRulesPane = new JScrollPane();
 		appliedRulesTable = new JTableAppliedRule();
 		appliedRulesTable.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent e){
-				if (e.getClickCount()==2){
+			public void mousePressed(MouseEvent event) {
+				createPopup(event);
+				setButtonEnableState();				
+			}
+			public void mouseClicked(MouseEvent event) {
+				createPopup(event);
+				setButtonEnableState();			
+				if (event.getClickCount()==2){
 					editRule();
 				}
+			}
+			public void mouseEntered(MouseEvent event) {
+				createPopup(event);
+				setButtonEnableState();
 			}
 		});
 		appliedRulesPane.setViewportView(appliedRulesTable);
 		return appliedRulesPane;
 	}
-	
+
 	protected JPanel addButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(this.createButtonPanelLayout());
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 4));
 		buttonPanel.setPreferredSize(new java.awt.Dimension(90, 156));
-		
+
 		addRuleButton = new JButton();
 		buttonPanel.add(addRuleButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		addRuleButton.addActionListener(this);
-		
+
 		editRuleButton = new JButton();
 		buttonPanel.add(editRuleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		editRuleButton.addActionListener(this);
-		
+
 		removeRuleButton = new JButton();
 		buttonPanel.add(removeRuleButton, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 		removeRuleButton.addActionListener(this);
-		
+
 		this.setButtonTexts();
 		return buttonPanel;
 	}
-	
+
 	private GridBagLayout createButtonPanelLayout() {
 		GridBagLayout buttonPanelLayout = new GridBagLayout();
 		buttonPanelLayout.rowWeights = new double[] { 0.0, 0.0, 0.1 };
@@ -104,28 +123,52 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		buttonPanelLayout.columnWidths = new int[] { 7 };
 		return buttonPanelLayout;
 	}
-	
+
+	private void createPopup(MouseEvent event){
+		if(SwingUtilities.isRightMouseButton(event)){
+			int row = appliedRulesTable.rowAtPoint(event.getPoint());
+			int column = appliedRulesTable.columnAtPoint(event.getPoint());
+			if(!appliedRulesTable.isRowSelected(row)){
+				appliedRulesTable.changeSelection(row, column, false, false);
+			}
+			popupMenu.show(event.getComponent(), event.getX(), event.getY());			
+		}
+	}
+
+	private void createPopupMenu(){
+		this.addRuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
+		this.addRuleItem.addActionListener(this);
+		this.editRuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
+		this.editRuleItem.addActionListener(this);
+		this.removeRuleItem = new JMenuItem(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Remove"));
+		this.removeRuleItem.addActionListener(this);
+
+		popupMenu.add(addRuleItem);
+		popupMenu.add(editRuleItem);
+		popupMenu.add(removeRuleItem);
+	}
+
 	/**
 	 * Handling ActionPerformed
 	 */
 	@Override
 	public void actionPerformed(ActionEvent action) {
-		if (action.getSource() == this.addRuleButton) {
+		if (action.getSource() == this.addRuleButton || action.getSource() == this.addRuleItem) {
 			this.addRule();
-		} else if (action.getSource() == this.editRuleButton) {
+		} else if (action.getSource() == this.editRuleButton || action.getSource() == this.editRuleItem) {
 			this.editRule();
-		} else if (action.getSource() == this.removeRuleButton) {
-			this.removeRule();
+		} else if (action.getSource() == this.removeRuleButton || action.getSource() == this.removeRuleItem) {
+			this.removeRules();
 		}
 	}
-	
+
 	private void addRule() {
 		long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 			AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(moduleId, -1L);
 			DialogUtils.alignCenter(appliedRuleFrame);
 			appliedRuleFrame.setVisible(true);
-			
+
 		} else {
 			//TODO Test popup
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ModuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
@@ -143,30 +186,34 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	private long getSelectedAppliedRuleId(){
 		long selectedAppliedRuleId = -1;
-		try {//TODO check if selectedRow exists
+		try {
 			Object o = appliedRulesTable.getValueAt(getSelectedRow(), appliedRulesTable.getRuleTypeColumnIndex());
 			if (o instanceof DataHelper) {
 				DataHelper datahelper = (DataHelper) o;
 				selectedAppliedRuleId = datahelper.getId();
 			}
-		} catch(Exception e){
-			
-		}
+		} catch(Exception e){}
 		return selectedAppliedRuleId;
 	}
 
-	private void removeRule() {
-		long selectedAppliedRuleId = getSelectedAppliedRuleId();
-		if(selectedAppliedRuleId != -1) {
-			DefinitionController.getInstance().removeRule(selectedAppliedRuleId);
-		} else {
-			JOptionPane.showMessageDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleSelectionError"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("WrongSelectionTitle"), JOptionPane.ERROR_MESSAGE);
+	private void removeRules() {
+		if(getSelectedRow() != -1){
+			List<Long> selectedRules = new ArrayList<Long>();
+
+			for(int selectedRow : appliedRulesTable.getSelectedRows()){
+				Object o = appliedRulesTable.getValueAt(selectedRow, 0);
+				if (o instanceof DataHelper) {
+					DataHelper datahelper = (DataHelper) o;
+					selectedRules.add(datahelper.getId());
+				}
+			}
+			DefinitionController.getInstance().removeRules(selectedRules);
 		}
 	}
-	
+
 	/**
 	 * Observer
 	 */
@@ -180,7 +227,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		try {
 			JTableTableModel atm = (JTableTableModel) appliedRulesTable.getModel();
 			atm.getDataVector().removeAllElements();
-			
+
 			long moduleId = DefinitionController.getInstance().getSelectedModuleId();
 			JPanelStatus.getInstance(ServiceProvider.getInstance().getLocaleService().getTranslatedString("UpdatingRules")).start();
 			if (moduleId != -1) {
@@ -190,7 +237,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 
 				if (appliedRulesIds != null) {
 					for (long appliedRuleId : appliedRulesIds) {
-						
+
 						HashMap<String, Object> ruleDetails = DefinitionController.getInstance().getRuleDetailsByAppliedRuleId(appliedRuleId);
 						String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
 						//SetDataHelper to help retrieve the applied Rule id through the ruleTypeKey
@@ -219,31 +266,54 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 			JPanelStatus.getInstance().stop();
 		}
 	}
-	
+
 	private void setButtonEnableState() {
 		if (DefinitionController.getInstance().getSelectedModuleId() == -1){
 			disableButtons();
-		} else {
+		}else if(appliedRulesTable.getSelectedRowCount() == 0 || getSelectedRow() == -1){
+			enableAddDisableEditRemoveButtons();
+		}else {
 			enableButtons();
 		}
 	}
-	
+
 	private void enableButtons() {
 		addRuleButton.setEnabled(true);
+		addRuleItem.setEnabled(true); 
+
 		editRuleButton.setEnabled(true);
+		editRuleItem.setEnabled(true);
+
 		removeRuleButton.setEnabled(true);
+		removeRuleItem.setEnabled(true);
 	}
 
 	private void disableButtons() {
 		addRuleButton.setEnabled(false);
+		addRuleItem.setEnabled(false);
+
 		editRuleButton.setEnabled(false);
+		editRuleItem.setEnabled(false);
+
 		removeRuleButton.setEnabled(false);
+		removeRuleItem.setEnabled(false);
 	}
-	
+
+	private void enableAddDisableEditRemoveButtons(){
+		addRuleButton.setEnabled(true);
+		addRuleItem.setEnabled(true);
+
+		editRuleButton.setEnabled(false);
+		editRuleItem.setEnabled(false);
+
+		removeRuleButton.setEnabled(false);
+		removeRuleItem.setEnabled(false);
+	}
+
 	public TableModel getModel() {
 		return appliedRulesTable.getModel();
 	}
-	
+
 	public int getSelectedRow() {
 		return appliedRulesTable.getSelectedRow();
 	}
@@ -254,7 +324,7 @@ public class AppliedRulesJPanel extends JPanel  implements ActionListener, Obser
 		this.setBorder(BorderFactory.createTitledBorder(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Rules")));
 		this.appliedRulesTable.changeColumnHeaders();
 	}
-	
+
 	private void setButtonTexts() {
 		addRuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Add"));
 		editRuleButton.setText(ServiceProvider.getInstance().getLocaleService().getTranslatedString("Edit"));
