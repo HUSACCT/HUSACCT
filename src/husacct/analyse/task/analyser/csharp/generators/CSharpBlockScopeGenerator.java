@@ -55,7 +55,6 @@ public class CSharpBlockScopeGenerator extends CSharpGenerator {
 	}
 
 	private void delegateLocalVariable(Tree tree) {
-		System.out.println(tree.toStringTree());
 		if (tree.toStringTree().contains("= >")) {
 			CSharpLamdaGenerator csLamdaGenerator = new CSharpLamdaGenerator();
 			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)tree, packageAndClassName, belongsToMethod);
