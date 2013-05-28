@@ -16,6 +16,8 @@ public abstract class MethodLogger {
 		Throwable t = new Throwable(); 
 		StackTraceElement[] elements = t.getStackTrace(); 
 
+		System.out.println();
+		
 		String classPath = elements[1].getClassName();
 		String callerMethodName = elements[1].getMethodName();
 		String calleeMethodName = elements[0].getMethodName(); 
