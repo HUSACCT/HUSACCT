@@ -12,7 +12,7 @@ import husacct.validate.domain.factory.violationtype.ViolationTypeFactory;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.CategoryKeyClassDTO;
+import husacct.validate.domain.validation.internaltransferobjects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -91,7 +91,7 @@ public class RuleTypesFactory {
 
 	public List<RuleType> getRuleTypes() {
 		ApplicationDTO application = defineService.getApplicationDetails();
-	
+
 		if (application != null && application.projects.size() > 0) {
 			if (application.projects.get(0).programmingLanguage == null || application.projects.get(0).programmingLanguage.equals("")) {
 				return generateDefaultRuleTypes();
@@ -127,7 +127,7 @@ public class RuleTypesFactory {
 	}
 
 	// Depending on the language give instance of Rule + violationtypes
-	
+
 	/**
 	 * Generate all default available main ruletypes (stored in a HashMap).
 	 * Depending on the language give instance of rule + violationtypes.
@@ -140,7 +140,6 @@ public class RuleTypesFactory {
 		List<RuleType> rules = new ArrayList<RuleType>();
 
 		for (Entry<String, CategoryKeyClassDTO> set : mainRuleTypes.entrySet()) {
-			
 			try {
 				Class<RuleType> ruletypeClass = set.getValue().getRuleClass();
 				String categoryKey = set.getValue().getCategoryKey();
@@ -264,17 +263,17 @@ public class RuleTypesFactory {
 	}
 
 	private Severity createSeverity(String ruleTypeKey) {
-	    if (defineService.getApplicationDetails() != null && defineService.getApplicationDetails().projects.size() > 0) {
-		try {
-			return configuration.getSeverityFromKey(defineService.getApplicationDetails().projects.get(0).programmingLanguage, ruleTypeKey);
-		} catch (SeverityNotFoundException e) {
-			DefaultSeverities defaultSeverity = getCategoryKeyClassDTO(ruleTypeKey);
-			if (defaultSeverity != null) {
-				return configuration.getSeverityByName(defaultSeverity.toString());
+		if (defineService.getApplicationDetails() != null && defineService.getApplicationDetails().projects.size() > 0) {
+			try {
+				return configuration.getSeverityFromKey(defineService.getApplicationDetails().projects.get(0).programmingLanguage, ruleTypeKey);
+			} catch (SeverityNotFoundException e) {
+				DefaultSeverities defaultSeverity = getCategoryKeyClassDTO(ruleTypeKey);
+				if (defaultSeverity != null) {
+					return configuration.getSeverityByName(defaultSeverity.toString());
+				}
 			}
 		}
-	    }
-	    return null;
+		return null;
 	}
 
 	private DefaultSeverities getCategoryKeyClassDTO(String ruleTypeKey) {

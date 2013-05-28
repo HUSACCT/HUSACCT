@@ -16,12 +16,12 @@ import husacct.control.task.StateController;
 import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
-import husacct.control.task.configuration.ConfigurationManager;
-import husacct.control.task.configuration.NonExistingSettingException;
 import husacct.control.task.threading.ThreadWithLoader;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -40,8 +40,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	private ApplicationController applicationController;
 	private StateController stateController;
 	private ViewController viewController;
-	private ConfigurationManager configurationManager;
 	private CodeViewController codeViewController;
+	private GeneralConfigurationPanel generalConfigurationPanel;
 	
 	public ControlServiceImpl(){
 		logger.debug("Starting HUSACCT");
@@ -50,7 +50,7 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		applicationController = mainController.getApplicationController();
 		stateController = mainController.getStateController();
 		viewController = mainController.getViewController();
-		configurationManager = mainController.getConfigurationManager();
+		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
 	}
 	
@@ -73,6 +73,8 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		Element data = new Element("workspace");
 		Workspace workspace = workspaceController.getCurrentWorkspace();
 		data.setAttribute("name", workspace.getName());
+		data.setAttribute("language", ServiceProvider.getInstance().getLocaleService().getLocale().getLanguage());
+
 		return data;
 	}
 	
@@ -80,7 +82,9 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void loadWorkspaceData(Element workspaceData) {
 		try {
 			String workspaceName = workspaceData.getAttributeValue("name");
+			String languageName = workspaceData.getAttributeValue("language");
 			workspaceController.createWorkspace(workspaceName);
+			ServiceProvider.getInstance().getLocaleService().setLocale(new Locale(languageName));
 		} catch (Exception e){
 			logger.debug("WorkspaceData corrupt: " + e);
 		}
@@ -138,7 +142,11 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public void updateProgress(int progressPercentage) {
+		try{
 		mainController.getApplicationController().getCurrentLoader().setProgressText(progressPercentage);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	@Override
@@ -150,36 +158,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public ApplicationDTO getApplicationDTO() {
 		return mainController.getWorkspaceController().getCurrentWorkspace().getApplicationData();
-	}
-
-	@Override
-	public String getProperty(String key) throws NonExistingSettingException {
-		return configurationManager.getProperty(key);
-	}
-
-	@Override
-	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
-		return configurationManager.getPropertyAsInteger(key);
-	}
-
-	@Override
-	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
-		return configurationManager.getPropertyAsBoolean(key);
-	}
-	
-	@Override
-	public void setProperty(String key, String value) {
-		configurationManager.setProperty(key, value);
-	}
-
-	@Override
-	public void setPropertyFromInteger(String key, int value) {
-		configurationManager.setPropertyFromInteger(key, value);
-	}
-
-	@Override
-	public void setPropertyFromBoolean(String key, boolean value) {
-		configurationManager.setPropertyFromBoolean(key, value);
 	}
 	
 	@Override
@@ -194,6 +172,13 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public JPanel getConfigurationPanel() {
-		return new GeneralConfigurationPanel();
+		if (generalConfigurationPanel == null)
+			generalConfigurationPanel = new GeneralConfigurationPanel();
+		return generalConfigurationPanel;
+	}
+	@Override
+	public void showHelpDialog(Component comp) {
+		mainController.getApplicationController().showHelpGUI(comp);
+		
 	}
 }

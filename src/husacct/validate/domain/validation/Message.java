@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Message {
-
 	private LogicalModules logicalModules;
 	private String ruleKey;
 	private List<String> violationTypeKeys;
@@ -27,8 +26,7 @@ public class Message {
 		this.exceptionMessage.addAll(createExceptionMessage(appliedRule));
 	}
 
-	public Message(LogicalModules logicalModules, String ruleKey,
-			List<String> violationTypeKeys) {
+	public Message(LogicalModules logicalModules, String ruleKey, List<String> violationTypeKeys) {
 		this.logicalModules = logicalModules;
 		this.ruleKey = ruleKey;
 		this.regex = "";
@@ -51,11 +49,9 @@ public class Message {
 		for (RuleDTO exceptionRule : appliedRule.exceptionRules) {
 			final LogicalModules logicalModules = createLogicalModules(exceptionRule);
 			final String ruleKey = exceptionRule.ruleTypeKey;
-			final List<String> violationTypeKeys = Arrays
-					.asList(exceptionRule.violationTypeKeys);
+			final List<String> violationTypeKeys = Arrays.asList(exceptionRule.violationTypeKeys);
 
-			Message exceptionMessage = new Message(logicalModules, ruleKey,
-					violationTypeKeys);
+			Message exceptionMessage = new Message(logicalModules, ruleKey,	violationTypeKeys);
 
 			exceptionMessages.add(exceptionMessage);
 		}

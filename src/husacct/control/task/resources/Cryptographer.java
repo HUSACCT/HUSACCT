@@ -1,96 +1,91 @@
 package husacct.control.task.resources;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.jdom2.Document;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 
 public class Cryptographer {
-	private static String algorithm = "AES";
-	private SecretKeySpec key = null;
-	private static Cipher cipher = null;
 
-
-	public Cryptographer() throws Exception {
-		key = new SecretKeySpec(md5("test".getBytes()), "AES");
-		cipher = Cipher.getInstance(algorithm);
+	
+	public Cryptographer() {
+		
 	}
-	public  byte[] encrypt(String input)
-			throws InvalidKeyException, 
-			BadPaddingException,
-			IllegalBlockSizeException {
-		cipher.init(Cipher.ENCRYPT_MODE, key);
-		byte[] inputBytes = input.getBytes();
-		return cipher.doFinal(inputBytes);
-	}
-
-	public String decrypt(byte[] encryptionBytes)
-			throws InvalidKeyException, 
-			BadPaddingException,
-			IllegalBlockSizeException {
-		cipher.init(Cipher.DECRYPT_MODE, key);
-		byte[] recoveredBytes = 
-				cipher.doFinal(encryptionBytes);
-		String recovered = 
-				new String(recoveredBytes);
-		return recovered;
-	}
-	public byte[] decrypt(byte[] data, byte[] password) {
-
-
+	
+	public void encrypt(String key, File f) {
 		try {
-			Cipher c = Cipher.getInstance("AES/ECB/NoPadding");
-			SecretKeySpec k =
-					new SecretKeySpec(md5("test".getBytes()), "AES");
-			c.init(Cipher.DECRYPT_MODE, k);
-			return c.doFinal(data);
-		} catch (Exception e) {
+		//	String key = "squirrel123"; // needs to be at least 8 characters for DES
+			//File f = new File(".");
+			
+			String EncryptedFileName = f.getName() + ".encrypted";
+			String DecryptedFileName = f.getName() + ".decrypted";
+			File outputFile = new File(f.getCanonicalPath() + ".encrypted");
+			FileInputStream fis = new FileInputStream(f);
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			encrypt(key, fis, fos);
+			f.delete();
+			outputFile.renameTo(f);
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-
-
+	}
+	public File decrypt(String key, File f) {
+		
+		try {
+			File outputFile = new File(f.getCanonicalPath() + ".decrypted");
+			FileInputStream fis2 = new FileInputStream(f);
+			FileOutputStream fos2 = new FileOutputStream(outputFile);
+			decrypt(key, fis2, fos2);
+			return outputFile;
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
-	public byte[] crypt(byte[] input, byte[] key) {
-		System.out.println(input.length);
-		byte[] result = new byte[input.length];
-		int k = 0;
-		for (int i = 0; i < input.length; i++) {
-			result[i] = (byte)(input[i] ^ key[k] );
-			k++;
-			if (k == key.length) 
-				k=0;
-		}
-
-
-		return result;
+	public static void encrypt(String key, InputStream is, OutputStream os) throws Throwable {
+		encryptOrDecrypt(key, Cipher.ENCRYPT_MODE, is, os);
 	}
 
-	public byte[] md5(byte[] input) {		
-
-
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			return md.digest(input);
-		}
-		catch (NoSuchAlgorithmException ex) {
-			return null;	
-		}
-
+	public static void decrypt(String key, InputStream is, OutputStream os) throws Throwable {
+		encryptOrDecrypt(key, Cipher.DECRYPT_MODE, is, os);
 	}
+
+	public static void encryptOrDecrypt(String key, int mode, InputStream is, OutputStream os) throws Throwable {
+
+		DESKeySpec dks = new DESKeySpec(key.getBytes());
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("DES");
+		SecretKey desKey = skf.generateSecret(dks);
+		Cipher cipher = Cipher.getInstance("DES"); // DES/ECB/PKCS5Padding for SunJCE
+
+		if (mode == Cipher.ENCRYPT_MODE) {
+			cipher.init(Cipher.ENCRYPT_MODE, desKey);
+			CipherInputStream cis = new CipherInputStream(is, cipher);
+			doCopy(cis, os);
+		} else if (mode == Cipher.DECRYPT_MODE) {
+			cipher.init(Cipher.DECRYPT_MODE, desKey);
+			CipherOutputStream cos = new CipherOutputStream(os, cipher);
+			doCopy(is, cos);
+		}
+	}
+
+	public static void doCopy(InputStream is, OutputStream os) throws IOException {
+		byte[] bytes = new byte[64];
+		int numBytes;
+		while ((numBytes = is.read(bytes)) != -1) {
+			os.write(bytes, 0, numBytes);
+		}
+		os.flush();
+		os.close();
+		is.close();
+	}
+
 }

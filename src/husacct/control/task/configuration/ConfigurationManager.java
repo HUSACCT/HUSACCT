@@ -8,59 +8,65 @@ import java.util.Properties;
 
 public class ConfigurationManager {
 
-	Properties properties = new Properties();
+	private final static Properties properties = loadProperties();
 	
-	
-	public ConfigurationManager() {
-		loadProperties();
+	public static String getProperty(String key, String defaultParam) {
+		if(!properties.containsKey(key))
+			setProperty(key, defaultParam);
+		return properties.getProperty(key);
 	}
 	
-	
-	public String getProperty(String key) throws NonExistingSettingException {
-		if(properties.containsKey(key))
-			return properties.getProperty(key);
-		throw new NonExistingSettingException("The setting " + key + " does not exist.");
-	}
-	
-	public int getPropertyAsInteger(String key) throws NonExistingSettingException, NumberFormatException {
-		String property = getProperty(key);
+	public static int getPropertyAsInteger(String key, String defaultParam) throws NumberFormatException {
+		String property = getProperty(key, defaultParam);
 		return Integer.parseInt(property);
 	}
 	
-	public boolean getPropertyAsBoolean(String key) throws NonExistingSettingException {
-		String property = getProperty(key);
+	public static boolean isEmptyProperty(String key){
+		return properties.getProperty(key).equals("");
+	}
+	
+	public static boolean getPropertyAsBoolean(String key, String defaultParam) {
+		String property = getProperty(key, defaultParam);
 		return Boolean.parseBoolean(property);
 	}
 	
-	public void setProperty(String key, String value) {
-		properties.setProperty(key, value);
-	}
-	
-	public void setPropertyFromInteger(String key, int value) {
-		properties.setProperty(key, String.valueOf(value));
-	}
-	
-	public void setPropertyFromBoolean(String key, boolean value) {
-		properties.setProperty(key, String.valueOf(value));
-	}
-	
-	public void setPropertie(String key, String value) {
+	public static void setProperty(String key, String value) {
 		properties.setProperty(key, value);
 		storeProperties();
 	}
 	
-	private void loadProperties() {
+	public static void setPropertyFromInteger(String key, int value) {
+		properties.setProperty(key, String.valueOf(value));
+	}
+	
+	public static void setPropertyFromBoolean(String key, boolean value) {
+		properties.setProperty(key, String.valueOf(value));
+	}
+	
+	public static void setPropertie(String key, String value) {
+		properties.setProperty(key, value);
+		
+	}
+	
+	private static Properties loadProperties() {
+		Properties props = new Properties();
 		try {
 			File file = new File("config.properties");
-			if(!file.isFile())
-				createDefaults(file);
-			properties.load(new FileInputStream(file));
+			if(!file.isFile()) {
+				props.load(ConfigurationManager.class.getResourceAsStream("/husacct/common/resources/config.properties"));
+				props.store(new FileOutputStream("config.properties"), null);
+			}
+			props.load(new FileInputStream(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		props = performInitMutations(props);
+		
+		return props;
 	}
 	
-	public void storeProperties() {
+	public static void storeProperties() {
 		try {
 			properties.store(new FileOutputStream("config.properties"), null);
 		} catch (IOException e) {
@@ -68,13 +74,35 @@ public class ConfigurationManager {
 		}
 	}
 	
-	private void createDefaults(File file) {
+	public static Properties performInitMutations(Properties props){
+		//Always overwrite platform independent AppDataFolder (always empty on startup of HUSACCT)
+		String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+		System.out.println("App data folder: " + appDataFolderString);
+		File appDataFolderObject = new File(appDataFolderString);
+		if(!appDataFolderObject.exists()){
+			appDataFolderObject.mkdir();
+		}
+		props.setProperty("PlatformIndependentAppDataFolder", appDataFolderString);
 		
+		if(props.getProperty("LastUsedLoadXMLWorkspacePath").equals("")){
+			props.setProperty("LastUsedLoadXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		}
+		
+		if(props.getProperty("LastUsedSaveXMLWorkspacePath").equals("")){
+			props.setProperty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		}
+		
+		if(props.getProperty("LastUsedAddProjectPath").equals("")){
+			props.setProperty("LastUsedAddProjectPath", appDataFolderString);
+		}
+		
+		//TODO: Fix this storeProperties code, because class attribute properties is still empty
 		try {
-			properties.load(this.getClass().getResourceAsStream("/husacct/common/resources/config.properties"));
-			storeProperties();
+			props.store(new FileOutputStream("config.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return props;
 	}
 }

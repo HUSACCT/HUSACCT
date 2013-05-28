@@ -5,6 +5,7 @@ import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
 import husacct.control.presentation.util.Regex;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -46,9 +47,7 @@ public class XmlSavePanel extends SaverPanel{
 	private JLabel spaceAvailableDescription;
 	private JLabel spaceAvailable;
 	
-	
-	
-	private static File selectedFile;
+	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedSaveXMLWorkspacePath", ""));
 	
 	private GridBagConstraints constraints;
 	
@@ -78,7 +77,7 @@ public class XmlSavePanel extends SaverPanel{
 		doCompress.setText("Compress");
 		doPasswordProtect = new JCheckBox();
 		doPasswordProtect.setText("Password protection");
-		doPasswordProtect.setEnabled(false);
+		//doPasswordProtect.setEnabled(false);
 		
 		passwordInputLabel = new JLabel(localeService.getTranslatedString("passwordInput"));
 		passwordInputLabel.setVisible(false);
@@ -191,6 +190,8 @@ public class XmlSavePanel extends SaverPanel{
 	
 	private void setFile(File file) {
 		selectedFile = file;
+		ConfigurationManager.setProperty("LastUsedSaveXMLWorkspacePath", file.getAbsolutePath());
+		ConfigurationManager.storeProperties();
 		pathText.setText(file.getAbsolutePath());
 	}
 	
@@ -236,6 +237,10 @@ public class XmlSavePanel extends SaverPanel{
 		}
 		else if(this.doPasswordProtect.isSelected() && getPassword() == null) {
 			controlService.showErrorMessage(localeService.getTranslatedString("PasswordError"));
+			return false;
+		}
+		else if(this.doPasswordProtect.isSelected() && this.getPassword().length() < 8) {
+			controlService.showErrorMessage(localeService.getTranslatedString("PasswordToShort"));
 			return false;
 		}
 

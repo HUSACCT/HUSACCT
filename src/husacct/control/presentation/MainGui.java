@@ -1,6 +1,7 @@
 package husacct.control.presentation;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.help.presentation.HelpableJFrame;
 import husacct.control.IControlService;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
@@ -30,7 +31,7 @@ import org.apache.log4j.Logger;
 
 import com.pagosoft.plaf.PgsLookAndFeel;
 
-public class MainGui extends JFrame{
+public class MainGui extends HelpableJFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
 
