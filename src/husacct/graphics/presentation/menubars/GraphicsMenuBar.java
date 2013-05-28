@@ -41,7 +41,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	private JButton zoomInButton, zoomOutButton, refreshButton,
 			exportToImageButton, optionsDialogButton, showDependenciesButton,
-			showViolationsButton, outOfDateButton, showExternalSystems;
+			showViolationsButton, outOfDateButton;
 
 	private JSlider zoomSlider;
 	private GraphicsOptionsDialog graphicsOptionsDialog;
@@ -81,7 +81,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		actions.add(showViolationsButton);
 		actions.add(zoomSlider);
 		actions.add(outOfDateButton);
-		actions.add(showExternalSystems);
 	}
 
 	public void addListener(UserInputListener listener) {
@@ -277,16 +276,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		outOfDateButton.setSize(50, menuItemMaxHeight);
 		setButtonIcon(outOfDateButton, "outofdate");
 
-		showExternalSystems = new JButton();
-		showExternalSystems.setSize(50, menuItemMaxHeight);
-		setButtonIcon(showExternalSystems, "dependenciesHide");
-		showExternalSystems.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showExternalSystems();
-			}
-		});
-		add(showExternalSystems);
 	}
 
 	@Override
@@ -428,19 +417,6 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	public void showDependencies() {
 		for (UserInputListener listener : listeners)
 			listener.showDependencies();
-	}
-
-	public void showExternalSystems() {
-		String[] columnNames = { "External systems" };
-		Object[][] externalSystems = { { "test" }, { "test1" } };
-
-		final JTable externalSystemsTable = new JTable(externalSystems,
-				columnNames);
-		JScrollPane scrollPane = new JScrollPane(externalSystemsTable);
-		scrollPane.setPreferredSize(new Dimension(450, 200));
-
-		JOptionPane.showMessageDialog(this, scrollPane, "Externals systems",
-				JOptionPane.PLAIN_MESSAGE);
 	}
 
 	@Override
