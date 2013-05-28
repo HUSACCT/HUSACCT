@@ -344,7 +344,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixInvocation.from = from;
         famixInvocation.lineNumber = lineNumber;
         famixInvocation.to = to;
-        famixInvocation.inovcationName = invocationName;
+        famixInvocation.invocationName = invocationName;
         famixInvocation.belongsToMethod = belongsToMethod;
         famixInvocation.nameOfInstance = nameOfInstance;
         model.waitingAssociations.add(famixInvocation);
@@ -359,7 +359,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixInvocation.from = from;
         famixInvocation.lineNumber = lineNumber;
         famixInvocation.to = to;
-        famixInvocation.inovcationName = invocationName;
+        famixInvocation.invocationName = invocationName;
         famixInvocation.belongsToMethod = belongsToMethod;
         famixInvocation.nameOfInstance = nameOfInstance;
         model.waitingAssociations.add(famixInvocation);
@@ -374,7 +374,7 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         famixInvocation.from = from;
         famixInvocation.lineNumber = lineNumber;
         famixInvocation.to = to;
-        famixInvocation.inovcationName = invocationName;
+        famixInvocation.invocationName = invocationName;
         famixInvocation.belongsToMethod = belongsToMethod;
         famixInvocation.nameOfInstance = nameOfInstance;
         model.waitingAssociations.add(famixInvocation);

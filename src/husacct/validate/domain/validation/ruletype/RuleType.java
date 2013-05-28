@@ -14,8 +14,8 @@ import husacct.validate.domain.validation.Message;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
-import husacct.validate.domain.validation.internal_transfer_objects.Mappings;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
@@ -27,12 +27,12 @@ public abstract class RuleType {
 	protected final String descriptionKey;
 	protected final String categoryKey;
 	protected final EnumSet<RuleTypes> exceptionRuleKeys;
-	protected final List<ViolationType> violationtypes;
+	protected final List<ViolationType> violationTypes;
 	protected List<RuleType> exceptionRules;
 	protected final Severity severity;
 	protected List<Violation> violations;
 	protected Mappings mappings;
-	protected List<Mapping> physicalClasspathsFrom;
+	protected List<Mapping> classpathsFrom;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
 	private AbstractViolationType violationtypefactory;
@@ -41,7 +41,7 @@ public abstract class RuleType {
 		this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
-		this.violationtypes = violationtypes;
+		this.violationTypes = violationtypes;
 		this.exceptionRuleKeys = exceptionRuletypes;
 		this.severity = severity;
 	}
@@ -63,7 +63,7 @@ public abstract class RuleType {
 	}
 
 	public List<ViolationType> getViolationTypes() {
-		return violationtypes;
+		return violationTypes;
 	}
 
 	public void setExceptionrules(List<RuleType> ruletypes) {
@@ -158,7 +158,7 @@ public abstract class RuleType {
 				.setInDirect(false)
 				.setMessage(message)
 				.setLogicalModules(logicalModules);
-		return newViolation;		
+		return newViolation;
 	}
 
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {

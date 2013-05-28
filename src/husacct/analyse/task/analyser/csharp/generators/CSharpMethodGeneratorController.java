@@ -22,7 +22,7 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 
 	public void generateMethodToDomain(CommonTree methodTree, String currentUniqueClassName) {
 		belongsToClass = currentUniqueClassName;
-		accessControlQualifier = CSharpGeneratorToolkit.getVisibility(methodTree);
+		accessControlQualifier = getVisibility(methodTree);
 		lineNumber = methodTree.getLine();
 
 		checkMethodType(methodTree, belongsToClass);
@@ -91,7 +91,6 @@ public class CSharpMethodGeneratorController extends CSharpGenerator {
 				case CSharpParser.BLOCK:
 					CommonTree blockTree = (CommonTree) child;
 					stepIntoBlock(blockTree);
-					System.out.println(child.toStringTree());
 					break;
 				default:
 					walkThroughMethod((CommonTree) child);

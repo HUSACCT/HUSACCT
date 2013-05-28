@@ -8,7 +8,7 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -27,15 +27,15 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		classpathsFrom = mappings.getMappingFrom();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
+		for (Mapping classPathFrom : classpathsFrom) {
 			for (List<Mapping> physicalClasspathsTo : modulesTo) {
 				for (Mapping classPathTo : physicalClasspathsTo) {
 					for (DependencyDTO dependency : dependencies) {
@@ -55,7 +55,7 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 	}
 
 	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule) {
-		List<List<Mapping>> returnModules = new ArrayList<List<Mapping>>();
+		List<List<Mapping>> returnModules = new ArrayList<>();
 		for (ModuleDTO module : allModules) {
 			if (module.type.toLowerCase().contains("layer")) {
 				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
@@ -67,7 +67,7 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 	}
 
 	private List<List<Mapping>> getModulesTo(List<ModuleDTO> allModules, int moduleFromNumber, String[] violationTypeKeys) {
-		List<List<Mapping>> returnList = new ArrayList<List<Mapping>>();
+		List<List<Mapping>> returnList = new ArrayList<>();
 		for (ModuleDTO module : allModules) {
 			if (allModules.indexOf(module) > moduleFromNumber + 1) {
 				returnList.add(CheckConformanceUtilClass.getAllClasspathsFromModule(allModules.get(allModules.indexOf(module)), violationTypeKeys));

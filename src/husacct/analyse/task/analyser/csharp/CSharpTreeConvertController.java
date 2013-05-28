@@ -1,7 +1,6 @@
 package husacct.analyse.task.analyser.csharp;
 
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser.compilation_unit_return;
 import husacct.analyse.task.analyser.csharp.generators.*;
@@ -20,8 +19,9 @@ public class CSharpTreeConvertController {
     CSharpClassGenerator csClassGenerator;
     CSharpEnumGenerator csEnumGenerator;
     CSharpInheritanceGenerator csInheritanceGenerator;
-    CSharpAttributeGenerator csAttributeGenerator;
+    CSharpAttributeAndLocalVariableGenerator csAttributeGenerator;
     CSharpMethodGeneratorController csMethodeGenerator;
+	CSharpLamdaGenerator csLamdaGenerator;
     List<CommonTree> usings = new ArrayList<>();
     Stack<String> namespaceStack = new Stack<>();
     Stack<String> classNameStack = new Stack<>();
@@ -32,13 +32,13 @@ public class CSharpTreeConvertController {
         csClassGenerator = new CSharpClassGenerator();
         csEnumGenerator = new CSharpEnumGenerator();
         csInheritanceGenerator = new CSharpInheritanceGenerator();
-        csAttributeGenerator = new CSharpAttributeGenerator();
+        csAttributeGenerator = new CSharpAttributeAndLocalVariableGenerator();
         csMethodeGenerator = new CSharpMethodGeneratorController();
+		csLamdaGenerator = new CSharpLamdaGenerator();
     }
 
     public void delegateDomainObjectGenerators(final CSharpParser cSharpParser) throws RecognitionException {
         final CommonTree compilationCommonTree = getCompilationTree(cSharpParser);
-        new TreePrinter(compilationCommonTree); //Debug functie
         delegateASTToGenerators(compilationCommonTree);
     }
 
@@ -89,6 +89,9 @@ public class CSharpTreeConvertController {
                         delegateMethod(treeNode);
                         deleteTreeChild(treeNode);
                         break;
+					case CSharpParser.DELEGATE:
+						delegateDelegate(treeNode);
+						break;
                     default:
                         delegateASTToGenerators(treeNode);
                 }
@@ -108,7 +111,7 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateUsings() {
-        csUsingGenerator.generateToDomain(belongsToClass(namespaceStack, classNameStack));
+        csUsingGenerator.generateToDomain(createPackageAndClassName(namespaceStack, classNameStack));
     }
 
     private String delegateNamespace(CommonTree namespaceTree) {
@@ -126,14 +129,18 @@ public class CSharpTreeConvertController {
     }
 
     private void delegateInheritanceDefinition(CommonTree inheritanceTree) {
-        csInheritanceGenerator.generateToDomain(inheritanceTree, belongsToClass(namespaceStack, classNameStack));
+        csInheritanceGenerator.generateToDomain(inheritanceTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
 
     private void delegateAttribute(CommonTree attributeTree) {
-        csAttributeGenerator.generateAttributeToDomain(attributeTree, getParentName(classNameStack));
+        csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
 
     private void delegateMethod(CommonTree methodTree) {
-        csMethodeGenerator.generateMethodToDomain(methodTree, belongsToClass(namespaceStack, classNameStack));
+        csMethodeGenerator.generateMethodToDomain(methodTree, createPackageAndClassName(namespaceStack, classNameStack));
     }
+
+	private void delegateDelegate(CommonTree lamdaTree) {
+		csLamdaGenerator.delegateDelegateToBuffer(lamdaTree, createPackageAndClassName(namespaceStack, classNameStack));
+	}
 }
