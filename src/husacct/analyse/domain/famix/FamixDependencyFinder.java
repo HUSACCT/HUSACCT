@@ -243,8 +243,6 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){
-		DependencyDTO dto = new DependencyDTO(association.from, association.to, association.type, association.lineNumber);
-		dto.extraInfo = association.optionalStuff.toArray(new String[association.optionalStuff.size()]);
-		return dto;
+		return new DependencyDTO(association.from, association.to, association.type, association.lineNumber);
 	}
 }
