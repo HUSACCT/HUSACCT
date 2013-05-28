@@ -19,8 +19,6 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-//import husacct.define.domain.module.ExternalSystem;
-
 public class XMLDomain {
 
     private Element workspace;
@@ -52,10 +50,10 @@ public class XMLDomain {
 	Element ruleType = e.getChild("type");
 	Element ruleModuleFrom = e.getChild("moduleFrom").getChild("Module");
 	Module moduleFrom = ruleModuleFrom == null ? new Module()
-		: getModuleFromXML(ruleModuleFrom);
+	: getModuleFromXML(ruleModuleFrom);
 	Element ruleModuleTo = e.getChild("moduleTo").getChild("Module");
 	Module moduleTo = ruleModuleTo == null ? new Module()
-		: getModuleFromXML(ruleModuleTo);
+	: getModuleFromXML(ruleModuleTo);
 	Element ruleExceptions = e.getChild("exceptions");
 	Element ruleEnabled = e.getChild("enabled");
 	Element ruleDependencies = e.getChild("dependencies");
@@ -89,7 +87,7 @@ public class XMLDomain {
 		    Object o = ExceptionIterator.next();
 		    if (o instanceof Element) {
 			AppliedXMLRule
-				.addException(getAppliedRuleFromXML((Element) o));
+			.addException(getAppliedRuleFromXML((Element) o));
 		    }
 		}
 	    }
@@ -143,7 +141,7 @@ public class XMLDomain {
 
 		    if (o instanceof Element) {
 			XMLArchitecture
-				.addModule(getModuleFromXML((Element) o));
+			.addModule(getModuleFromXML((Element) o));
 		    }
 		}
 	    }
@@ -173,9 +171,9 @@ public class XMLDomain {
 	String moduleId = e.getChild("id").getValue();
 
 	// type detection..
-	 if (ModuleTypeText.equalsIgnoreCase("ExternalSystem")) {
-	 xmlModule = new ExternalSystem(moduleName, moduleDescription);
-	 } else if (ModuleTypeText.equalsIgnoreCase("component")) {
+	if (ModuleTypeText.equalsIgnoreCase("ExternalSystem")) {
+	    xmlModule = new ExternalSystem(moduleName, moduleDescription);
+	} else if (ModuleTypeText.equalsIgnoreCase("component")) {
 	    xmlModule = new Component(moduleName, moduleDescription);
 	} else if (ModuleTypeText.equalsIgnoreCase("layer")) {
 	    xmlModule = new Layer(
@@ -199,7 +197,7 @@ public class XMLDomain {
 
 		if (o instanceof Element) {
 		    xmlModule
-			    .addSUDefinition(getSoftwareUnitDefinitionFromXML((Element) o));
+		    .addSUDefinition(getSoftwareUnitDefinitionFromXML((Element) o));
 		}
 	    }
 	}
