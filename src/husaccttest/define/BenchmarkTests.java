@@ -101,7 +101,7 @@ public class BenchmarkTests {
 		AppliedRule rule1 = new AppliedRule("IsOnlyModuleAllowedToUse", "Only the classes in package infrastructure.socialmedia are only allowed to use the JDBC library (derbyclient.jar)", 
 				getViolationTypeByRuleType("IsOnlyModuleAllowedToUse"),	"", module25, externalLibrary1, true);
 		
-		sA.addAppliedRule(rule1);
+		//sA.addAppliedRule(rule1);
 	}
 	
 	private String[] getViolationTypeByRuleType(String ruleTypeKey){

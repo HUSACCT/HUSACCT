@@ -66,7 +66,7 @@ public class DefineSoftwareArchitectureTests {
 		moduleFrom = new Layer("Presentation");
 		moduleTo = new Layer("Infrastructure");
 		rule = new AppliedRule("IsNotAllowedToUse", "", new String[]{}, "", moduleFrom, moduleTo, true);
-		sA.addAppliedRule(rule);
+		//sA.addAppliedRule(rule);
 		assertTrue(sA.getAppliedRules().size() == 1);
 	}
 	
@@ -92,7 +92,7 @@ public class DefineSoftwareArchitectureTests {
 		assertTrue(sA.getAppliedRules().size() == 1);
 		sA.removeAppliedRule(rule.getId());
 		assertTrue(sA.getAppliedRules().size() == 0);
-		sA.addAppliedRule(rule);
+		//sA.addAppliedRule(rule);
 		assertTrue(sA.getAppliedRules().size() == 1);
 		sA.removeAppliedRules();
 		assertTrue(sA.getAppliedRules().size() == 0);
@@ -215,7 +215,7 @@ public class DefineSoftwareArchitectureTests {
 	
 	public void removeModule(){
 		//Keep in mind that when you remove a module, the related rules should disappear aswell.
-		sA.addAppliedRule(rule);
+		//sA.addAppliedRule(rule);
 		assertTrue(subModule1.getSubModules().size() == 1);
 		assertTrue(subModule2.getSubModules().size() == 0);
 		assertTrue(moduleFrom.getSubModules().size() == 3);
