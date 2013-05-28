@@ -16,15 +16,18 @@ import husacct.control.task.StateController;
 import husacct.control.task.States;
 import husacct.control.task.ViewController;
 import husacct.control.task.WorkspaceController;
+import husacct.control.task.configuration.ConfigPanel;
+import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.threading.ThreadWithLoader;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
@@ -52,8 +55,22 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		viewController = mainController.getViewController();
 		mainController.initialiseCodeViewerController();
 		codeViewController = mainController.getCodeViewerController();
+		setDefaultSettings();
 	}
 	
+	private void setDefaultSettings() {
+		String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
+		System.out.println("App data folder: " + appDataFolderString);
+		File appDataFolderObject = new File(appDataFolderString);
+		if(!appDataFolderObject.exists()){
+			appDataFolderObject.mkdir();
+		}
+		ConfigurationManager.setPropertieIfEmpty("PlatformIndependentAppDataFolder", appDataFolderString);
+		ConfigurationManager.setPropertieIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		ConfigurationManager.setPropertieIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		ConfigurationManager.setPropertieIfEmpty("LastUsedAddProjectPath", appDataFolderString);	
+	}
+
 	@Override
 	public void parseCommandLineArguments(String[] commandLineArguments){
 		mainController.parseCommandLineArguments(commandLineArguments);
@@ -171,11 +188,18 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 
 	@Override
-	public JPanel getConfigurationPanel() {
+	public ConfigPanel getConfigurationPanel() {
 		if (generalConfigurationPanel == null)
 			generalConfigurationPanel = new GeneralConfigurationPanel();
 		return generalConfigurationPanel;
 	}
+	
+	@Override
+	public HashMap<String, ConfigPanel> getSubItems() {
+		HashMap<String, ConfigPanel> subitems = new HashMap<String, ConfigPanel>();
+		return subitems;
+	}
+	
 	@Override
 	public void showHelpDialog(Component comp) {
 		mainController.getApplicationController().showHelpGUI(comp);

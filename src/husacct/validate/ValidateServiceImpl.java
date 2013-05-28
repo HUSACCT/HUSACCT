@@ -8,6 +8,7 @@ import husacct.common.dto.ViolationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
 import husacct.common.services.ObservableService;
+import husacct.control.task.configuration.ConfigPanel;
 import husacct.define.IDefineService;
 import husacct.validate.domain.DomainServiceImpl;
 import husacct.validate.domain.configuration.ConfigurationServiceImpl;
@@ -18,6 +19,7 @@ import husacct.validate.task.TaskServiceImpl;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -209,7 +211,13 @@ public final class ValidateServiceImpl extends ObservableService implements IVal
 	}
 
 	@Override
-	public JPanel getConfigurationPanel() {
+	public ConfigPanel getConfigurationPanel() {
 		return validateConfigurationPanel;
+	}
+
+	@Override
+	public HashMap<String, ConfigPanel> getSubItems() {
+		HashMap<String, ConfigPanel> subItems = new HashMap<String, ConfigPanel>();
+		return subItems;
 	}
 }
