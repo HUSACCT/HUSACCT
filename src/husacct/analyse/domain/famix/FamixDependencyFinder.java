@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class FamixDependencyFinder extends FamixFinder {
-	private static enum FinderFunction { FROM, ONLY_FROM, TO, ONLY_TO, BOTH, ALL };
+	private static enum FinderFunction { FROM, TO, BOTH, ALL };
 	private static enum DependencyType { DIRECT, INDIRECT, EXTERNAL };
     private List<DependencyDTO> dependencyCache;
     
@@ -17,9 +17,8 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	public List<DependencyDTO> getAllDependencies(){
-		if(dependencyCache == null){
+		if(dependencyCache == null)
 			dependencyCache = findDependencies(FinderFunction.ALL, "", "");
-		}
 		return dependencyCache;
 	}
 	
@@ -86,6 +85,13 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
+		if(dependencyCache == null)
+			return findDependenciesRaw(findFunction, from, to, applyFilter, preventRecursion);
+		else
+			return queryCache(findFunction, from, to, applyFilter, preventRecursion);
+	}
+	
+	private List<DependencyDTO> findDependenciesRaw(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
 		for(FamixAssociation association : allAssociations){
@@ -114,6 +120,27 @@ class FamixDependencyFinder extends FamixFinder {
 		return result;
 	}
 	
+	private List<DependencyDTO> queryCache(FinderFunction findFunction, String from, String to, String[] applyFilter, boolean preventRecursion){
+		List<DependencyDTO> foundDependencies = new ArrayList<DependencyDTO>();
+		for(DependencyDTO dependency : dependencyCache){
+			switch(findFunction){
+			case FROM:
+				if(dependency.from.equals(from)){
+					foundDependencies.add(dependency);
+				}
+			case TO:
+				if(dependency.to.equals(to)){
+					foundDependencies.add(dependency);
+				}
+			case BOTH:
+				if(dependency.from.equals(from) && dependency.to.equals(to)){
+					foundDependencies.add(dependency);
+				}
+			}
+		}
+		return foundDependencies;
+	}
+	
 	private List<DependencyDTO> findIndirectDependencies(String from, String to, String[] applyFilter){
 		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
 		List<FamixAssociation> allAssociations = theModel.associations;
@@ -127,9 +154,6 @@ class FamixDependencyFinder extends FamixFinder {
 					dependenciesTo.add(foundDirectDependency);
 				}
 			}
-		}
-		
-		for(FamixAssociation association : allAssociations){
 			if(compliesWithFunction(association, FinderFunction.FROM, from, to) && compliesWithFilter(association, applyFilter)){
 				DependencyDTO foundDirectDependency = buildDependencyDTO(association);
 				if(!containsDependency(foundDirectDependency, dependenciesFrom)){
@@ -185,12 +209,8 @@ class FamixDependencyFinder extends FamixFinder {
 				return isFrom(association, from) && isTo(association, to);
 			case FROM:
 				return isFrom(association, from);
-			case ONLY_FROM:
-				return isFrom(association, from) && !isTo(association, to);
 			case TO:
 				return isTo(association, to);
-			case ONLY_TO:
-				return !isFrom(association, from) && isTo(association, to);
 			case ALL:
 				return true;
 		}
@@ -213,12 +233,18 @@ class FamixDependencyFinder extends FamixFinder {
 	
 	private boolean containsDependency(DependencyDTO find, List<DependencyDTO> dependencies) {
         for (DependencyDTO d : dependencies)
-            if (find.equals(d))
+            if (find.equals(d) || compareDependency(find, d))
                 return true;
         return false;
     }
 	
+	private boolean compareDependency(DependencyDTO compare1, DependencyDTO compare2){
+		return compare1.from == compare2.from && compare1.to == compare2.to && compare1.lineNumber == compare2.lineNumber && compare1.type == compare2.type;
+	}
+	
 	private DependencyDTO buildDependencyDTO(FamixAssociation association){
-		return new DependencyDTO(association.from, association.to, association.type, association.lineNumber);
+		DependencyDTO dto = new DependencyDTO(association.from, association.to, association.type, association.lineNumber);
+		dto.extraInfo = association.optionalStuff.toArray(new String[association.optionalStuff.size()]);
+		return dto;
 	}
 }
