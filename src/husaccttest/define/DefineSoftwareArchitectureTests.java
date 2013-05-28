@@ -2,10 +2,10 @@ package husaccttest.define;
 
 import static org.junit.Assert.assertTrue;
 import husacct.ServiceProvider;
-import husacct.define.domain.AppliedRule;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
@@ -16,7 +16,7 @@ import org.junit.Test;
 public class DefineSoftwareArchitectureTests {
 	private SoftwareArchitecture sA;
 	
-	private AppliedRule rule;
+	private AppliedRuleStrategy rule;
 	private Module rootModule;
 	private Layer moduleFrom;
 	private Layer moduleTo;
@@ -65,7 +65,7 @@ public class DefineSoftwareArchitectureTests {
 		assertTrue(sA.getAppliedRules().size() == 0);
 		moduleFrom = new Layer("Presentation");
 		moduleTo = new Layer("Infrastructure");
-		rule = new AppliedRule("IsNotAllowedToUse", "", new String[]{}, "", moduleFrom, moduleTo, true);
+//		rule = new AppliedRule("IsNotAllowedToUse", "", new String[]{}, "", moduleFrom, moduleTo, true);
 		//sA.addAppliedRule(rule);
 		assertTrue(sA.getAppliedRules().size() == 1);
 	}
