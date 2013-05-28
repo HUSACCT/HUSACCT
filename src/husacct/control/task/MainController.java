@@ -3,6 +3,7 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import javax.swing.JOptionPane;
 
@@ -102,6 +103,7 @@ public class MainController {
 		int clickedOption = JOptionPane.showConfirmDialog(this.mainGUI, localeService.getTranslatedString("AreYouSureYouWantToExitHUSACCT"), localeService.getTranslatedString("Exit"), JOptionPane.YES_NO_OPTION);
 		if(clickedOption == JOptionPane.YES_OPTION){
 			logger.debug("Close HUSACCT");
+			ConfigurationManager.storeProperties();
 			System.exit(0);
 		}
 	}
