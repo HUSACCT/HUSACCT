@@ -1,18 +1,13 @@
 package husacct.define.domain.appliedrule.relationrules;
 
-import java.util.ArrayList;
-
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Layer;
-import husacct.define.task.conventions_checker.LayerCheckerHelper;
-import husacct.define.task.conventions_checker.ModuleCheckerHelper;
 
 public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
-	private ModuleCheckerHelper moduleCheckerHelper = new ModuleCheckerHelper();
-	private LayerCheckerHelper layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+	//private ModuleCheckerHelper moduleCheckerHelper = new ModuleCheckerHelper();
+	//private LayerCheckerHelper layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
 
 	public boolean checkConvention() {
-		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
+		/*boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
 				this.getRuleType(), this.getModuleFrom());
 		if (conventionSuccess) {
 			conventionSuccess = layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom());
@@ -27,11 +22,11 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 					break;
 				}
 			}
-		}
-		return conventionSuccess;
+		}*/
+		return true;
 	}
 
-	private boolean checkIsNotAllowedToUse() {
+	/*private boolean checkIsNotAllowedToUse() {
 		boolean isNotAllowedToUseSucces = moduleCheckerHelper
 				.checkRuleTypeAlreadyFromThisToSelected("IsOnlyAllowedToUse",
 						this.getModuleFrom(), this.getModuleTo());
@@ -73,6 +68,6 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 			}
 		}
 		return isNotAllowedToUseSucces;
-	}
+	}*/
 
 }
