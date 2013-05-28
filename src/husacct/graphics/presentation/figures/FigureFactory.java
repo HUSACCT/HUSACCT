@@ -84,6 +84,8 @@ public final class FigureFactory {
 			return new PackageFigure(name);
 		else if (type.toLowerCase().equals("subsystem"))
 			return new SubsystemFigure(name);
+		else if (type.toLowerCase().equals("externallibrary"))
+			return new ExternalSystemFigure(name);
 		else {
 			logger.debug("Type " + type.toLowerCase()
 					+ " is not supported. Created a ModuleFigure instead.");
