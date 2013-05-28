@@ -51,9 +51,15 @@ public class FacadeConventionRule extends RuleType {
 
 		if(facadeMapping != null) {
 			//TIJDELIJK
-			//System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
-			//		+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
-			//		+ facadeMapping.getLogicalPathType() + "\n================");
+			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
+					+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
+					+ facadeMapping.getLogicalPathType());
+			System.out.println(">> VIOLATION TYPE KEYS (SIZE: " + rootRule.violationTypeKeys.length + "): ");
+			for(String test: rootRule.violationTypeKeys) {
+				System.out.println("- " + test);
+			}
+			System.out.println("================");
+			
 			//EINDE
 
 			for (DependencyDTO dependency : dependencies) {
