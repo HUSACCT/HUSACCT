@@ -14,7 +14,7 @@ public class EclipseCodeviewerImpl implements CodeviewerService {
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
 		String location = "";
-		location = ConfigurationManager.getProperty("IDELocation", "");
+		location = ConfigurationManager.getProperty("IDELocation");
 		switch(OSDetector.getOS()) {
 		case LINUX:
 			break;
