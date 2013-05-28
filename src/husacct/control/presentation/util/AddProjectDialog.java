@@ -5,6 +5,7 @@ import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
 import husacct.control.IControlService;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,6 +14,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -162,9 +164,12 @@ public class AddProjectDialog extends JDialog{
 	
 	private void showAddFileDialog() {
 		FileDialog fileChooser = new FileDialog(JFileChooser.DIRECTORIES_ONLY, localeService.getTranslatedString("AddButton"));
+		fileChooser.setCurrentDirectory(new File(ConfigurationManager.getProperty("LastUsedAddProjectPath", "")));
 		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			pathListModel.add(pathListModel.size(), fileChooser.getSelectedFile().getAbsolutePath());
+			String addedProjectPath = fileChooser.getSelectedFile().getAbsolutePath();
+			ConfigurationManager.setPropertie("LastUsedAddProjectPath", addedProjectPath);
+			pathListModel.add(pathListModel.size(), addedProjectPath);
 		}
 	}
 	

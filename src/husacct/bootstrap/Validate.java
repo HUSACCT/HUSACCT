@@ -4,7 +4,7 @@ public class Validate extends AbstractBootstrap {
 
 	@Override
 	public void execute() {
-		getControlService().getMainController().getMainGui().getMenu().getValidateMenu().getValidateNowItem().doClick();
+		getControlService().getMainController().getMainGui().getMenu().getValidateMenu().getValidateItem().doClick();
 		getValidateService().checkConformance();
 	}
 
