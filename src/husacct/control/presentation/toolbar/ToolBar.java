@@ -20,7 +20,7 @@ public class ToolBar extends JToolBar{
 	private ToolBarItem createWorkspace, openWorkspace, saveWorkspace;
 	private ToolBarItem defineArchitecture, defineArchitectureDiagram;
 	private ToolBarItem applicationProperties, analysedApplicationOverview, analysedApplicationDiagram;
-	private ToolBarItem validateNow;
+	private ToolBarItem validate;
 	
 	private MenuBar menuBar;
 	
@@ -54,7 +54,7 @@ public class ToolBar extends JToolBar{
 		JMenuItem analysedApplicationOverviewItem = analyseMenu.getAnalysedApplicationOverviewItem();
 		JMenuItem analysedApplicationDiagramItem = analyseMenu.getAnalysedArchitectureDiagramItem();
 		
-		JMenuItem validateNowItem = validateMenu.getValidateNowItem();
+		JMenuItem validateItem = validateMenu.getValidateItem();
 		
 		ImageIcon icon;
 		
@@ -83,7 +83,7 @@ public class ToolBar extends JToolBar{
 		analysedApplicationDiagram = new ToolBarItem("AnalysedArchitectureDiagram", icon, analysedApplicationDiagramItem, stateController);
 		
 		icon = new ImageIcon(Resource.get(Resource.ICON_VALIDATE));
-		validateNow = new ToolBarItem("ValidateNow", icon, validateNowItem, stateController);
+		validate = new ToolBarItem("Validate", icon, validateItem, stateController);
 		
 		createWorkspace.setEnabled(false);
 		openWorkspace.setEnabled(false);
@@ -93,7 +93,7 @@ public class ToolBar extends JToolBar{
 		applicationProperties.setEnabled(false);
 		analysedApplicationOverview.setEnabled(false);
 		analysedApplicationDiagram.setEnabled(false);
-		validateNow.setEnabled(false);
+		validate.setEnabled(false);
 		
 		add(createWorkspace);
 		add(openWorkspace);
@@ -106,7 +106,7 @@ public class ToolBar extends JToolBar{
 		add(analysedApplicationOverview);
 		add(analysedApplicationDiagram);
 		addSeparator();
-		add(validateNow);
+		add(validate);
 		
 	}
 }
