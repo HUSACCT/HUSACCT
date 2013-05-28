@@ -36,9 +36,6 @@ public class ConfigurationDialog extends JDialog {
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
 	private JList<String> list;
 	
-	//TODO remove code after demonstration 14-05-2013
-	private JButton showError = new JButton("Show Violations");
-	
 	private HashMap<String, ConfigPanel> configPanelMap = new HashMap<String, ConfigPanel>();
 	
 	public ConfigurationDialog(MainController mainController) {
@@ -52,9 +49,10 @@ public class ConfigurationDialog extends JDialog {
 	
 	public void initiliaze() {
 		getConfigurableServices();
-		mainPanel = configurableServices.get(0).getConfigurationPanel();
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(configurableServices.get(0).getConfigurationPanel(), BorderLayout.CENTER);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(800, 600));
+		this.setSize(new Dimension(800, 700));
 		loadSidePanel();
 		loadButtons();
 		
@@ -88,7 +86,9 @@ public class ConfigurationDialog extends JDialog {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
 				if(event.getValueIsAdjusting()) {
-					mainPanel = configPanelMap.get(list.getSelectedValue());
+					mainPanel.removeAll();
+					mainPanel.add(configPanelMap.get(list.getSelectedValue()), BorderLayout.CENTER);
+					mainPanel.updateUI();
 				}
 			}
 		});
@@ -128,21 +128,6 @@ public class ConfigurationDialog extends JDialog {
 			}	
 		});
 		
-		//TODO remove code after demonstration 14-05-2013
-		buttonPanel.add(showError);
-		showError.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				ArrayList<Integer> errorLines = new ArrayList<Integer>();
-				errorLines.add(4);
-				errorLines.add(12);
-				errorLines.add(27);
-				errorLines.add(51);
-				errorLines.add(79);
-				ServiceProvider.getInstance().getControlService().displayErrorsInFile("D:\\Dropbox\\Hogeschool Utrecht\\General GUI & Control\\Construction 2\\AnalyseServiceImpl.java", errorLines);
-			}	
-		});
-		
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 	
@@ -167,9 +152,7 @@ public class ConfigurationDialog extends JDialog {
 			configurableServices.add((IConfigurable) ServiceProvider.getInstance().getGraphicsService());
 		}
 		for(final IConfigurable config : configurableServices) {
-			if(config.getConfigurationPanel() instanceof ConfigPanel) {
-				configPanelMap.put(config.getConfigurationName(), (ConfigPanel)config.getConfigurationPanel());
-			}
+			configPanelMap.put(config.getConfigurationName(), config.getConfigurationPanel());
 		}
 	}
 	
