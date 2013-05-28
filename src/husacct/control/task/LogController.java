@@ -26,7 +26,7 @@ public class LogController extends MethodLogger{
 
 	private MainController mainController;
 	
-	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", ""));
+	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename"));
 	
 	public LogController(MainController mainController){
 		this.mainController = mainController;

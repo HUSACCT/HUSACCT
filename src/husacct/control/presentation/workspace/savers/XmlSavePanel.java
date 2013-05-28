@@ -47,7 +47,7 @@ public class XmlSavePanel extends SaverPanel{
 	private JLabel spaceAvailableDescription;
 	private JLabel spaceAvailable;
 	
-	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedSaveXMLWorkspacePath", ""));
+	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedSaveXMLWorkspacePath"));
 	
 	private GridBagConstraints constraints;
 	
