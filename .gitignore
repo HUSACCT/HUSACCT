@@ -1,6 +1,6 @@
 .idea*
 out/
-HUSACCT.iml
+*.iml
 bin
 build.xml
 build/bin
