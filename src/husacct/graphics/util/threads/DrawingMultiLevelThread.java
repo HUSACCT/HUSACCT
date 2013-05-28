@@ -1,10 +1,10 @@
 package husacct.graphics.util.threads;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import husacct.common.dto.AbstractDTO;
 import husacct.graphics.task.DrawingController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DrawingMultiLevelThread implements Runnable {
 

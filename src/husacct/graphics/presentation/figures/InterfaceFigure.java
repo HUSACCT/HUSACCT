@@ -2,6 +2,7 @@ package husacct.graphics.presentation.figures;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+
 import org.jhotdraw.draw.TextFigure;
 
 public class InterfaceFigure extends ClassFigure {
@@ -16,19 +17,27 @@ public class InterfaceFigure extends ClassFigure {
 	}
 
 	@Override
+	public InterfaceFigure clone() {
+		InterfaceFigure other = (InterfaceFigure) super.clone();
+
+		other.interfaceTextFigure = interfaceTextFigure.clone();
+
+		other.children.add(other.interfaceTextFigure);
+
+		return other;
+	}
+
+	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
+		if (lead.x - anchor.x < MIN_WIDTH)
 			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+		if (lead.y - anchor.y < MIN_HEIGHT)
 			lead.y = anchor.y + MIN_HEIGHT;
-		}
 		double textWidth = classNameText.getBounds().width
 				+ interfaceTextFigure.getBounds().width;
 		double requestTextWidth = textWidth + 10;
-		if ((lead.x - anchor.x) < requestTextWidth) {
+		if (lead.x - anchor.x < requestTextWidth)
 			lead.x = anchor.x + requestTextWidth;
-		}
 
 		double width = lead.x - anchor.x;
 		double totalHeight = lead.y - anchor.y;
@@ -46,8 +55,8 @@ public class InterfaceFigure extends ClassFigure {
 				+ topHeight + middleHeight + bottomHeight));
 
 		// textbox centralising
-		double plusX = ((top.getBounds().width - textWidth) / 2);
-		double plusY = ((top.getBounds().height - classNameText.getBounds().height) / 2);
+		double plusX = (top.getBounds().width - textWidth) / 2;
+		double plusY = (top.getBounds().height - classNameText.getBounds().height) / 2;
 
 		Point2D.Double interfaceTextFigureAchor = (Double) anchor.clone();
 		interfaceTextFigureAchor.x += plusX;
@@ -61,16 +70,5 @@ public class InterfaceFigure extends ClassFigure {
 		classNameText.setBounds(classNameTextFigureAnchor, null);
 
 		invalidate();
-	}
-
-	@Override
-	public InterfaceFigure clone() {
-		InterfaceFigure other = (InterfaceFigure) super.clone();
-
-		other.interfaceTextFigure = interfaceTextFigure.clone();
-
-		other.children.add(other.interfaceTextFigure);
-
-		return other;
 	}
 }

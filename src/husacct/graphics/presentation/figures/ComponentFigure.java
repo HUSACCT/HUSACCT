@@ -55,25 +55,43 @@ public class ComponentFigure extends BaseFigure {
 	}
 
 	@Override
+	public ComponentFigure clone() {
+		ComponentFigure other = (ComponentFigure) super.clone();
+		other.body = body.clone();
+		other.text = text.clone();
+		other.compIconFig = compIconFig.clone();
+
+		other.children = new ArrayList<Figure>();
+		other.children.add(other.body);
+		other.children.add(other.text);
+		if (compIconFig != null)
+			other.children.add(other.compIconFig);
+
+		return other;
+	}
+
+	@Override
+	public boolean isModule() {
+		return true;
+	}
+
+	@Override
 	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < MIN_WIDTH) {
+		if (lead.x - anchor.x < MIN_WIDTH)
 			lead.x = anchor.x + MIN_WIDTH;
-		}
-		if ((lead.y - anchor.y) < MIN_HEIGHT) {
+		if (lead.y - anchor.y < MIN_HEIGHT)
 			lead.y = anchor.y + MIN_HEIGHT;
-		}
 
 		// bigger than text
 		double requestTextWidth = text.getBounds().width + 10;
-		if ((lead.x - anchor.x) < requestTextWidth) {
+		if (lead.x - anchor.x < requestTextWidth)
 			lead.x = anchor.x + requestTextWidth;
-		}
 
 		body.setBounds(anchor, lead);
 
 		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
-		double plusY = (((lead.y - anchor.y) - text.getBounds().height) / 2);
+		double plusX = (lead.x - anchor.x - text.getBounds().width) / 2;
+		double plusY = (lead.y - anchor.y - text.getBounds().height) / 2;
 
 		Point2D.Double textAnchor = (Double) anchor.clone();
 		textAnchor.x += plusX;
@@ -89,28 +107,6 @@ public class ComponentFigure extends BaseFigure {
 					new Point2D.Double(iconLeadX, iconLeadY));
 		}
 
-		this.invalidate();
-	}
-
-	@Override
-	public ComponentFigure clone() {
-		ComponentFigure other = (ComponentFigure) super.clone();
-		other.body = body.clone();
-		other.text = text.clone();
-		other.compIconFig = compIconFig.clone();
-
-		other.children = new ArrayList<Figure>();
-		other.children.add(other.body);
-		other.children.add(other.text);
-		if (compIconFig != null) {
-			other.children.add(other.compIconFig);
-		}
-
-		return other;
-	}
-
-	@Override
-	public boolean isModule() {
-		return true;
+		invalidate();
 	}
 }

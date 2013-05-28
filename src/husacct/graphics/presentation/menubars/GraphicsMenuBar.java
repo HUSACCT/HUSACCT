@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -51,7 +52,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	private final ContextMenuButton zoomOptionsMenu;
 
 	public GraphicsMenuBar() {
-		this.zoomOptionsMenu = new ContextMenuButton();
+		zoomOptionsMenu = new ContextMenuButton();
 
 		icons = new HashMap<String, String>();
 		icons.put("options", Resource.ICON_OPTIONS);
@@ -84,21 +85,63 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	public void addListener(UserInputListener listener) {
 		listeners.add(listener);
-		this.zoomOptionsMenu.addListener(listener);
+		zoomOptionsMenu.addListener(listener);
 	}
 
-	public void removeListener(UserInputListener listener) {
-		listeners.remove(listener);
+	@Override
+	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
+		for (UserInputListener listener : listeners)
+			listener.changeLayoutStrategy(selectedStrategyEnum);
 	}
 
-	private void setButtonIcon(JButton button, String iconKey) {
-		try {
-			ImageIcon icon = new ImageIcon(Resource.get(icons.get(iconKey)));
-			button.setIcon(icon);
-			button.setMargin(new Insets(1, 5, 1, 5));
-		} catch (Exception e) {
-			logger.warn("Could not find icon for \"" + iconKey + "\".");
-		}
+	@Override
+	public void drawingZoomChanged(double zoomFactor) {
+		zoomSlider.setValue((int) zoomFactor);
+		for (UserInputListener listener : listeners)
+			listener.drawingZoomChanged(zoomFactor);
+	}
+
+	@Override
+	public void exportToImage() {
+		for (UserInputListener listener : listeners)
+			listener.exportToImage();
+	}
+
+	@Override
+	public void figureDeselected(BaseFigure[] figures) {
+	}
+
+	@Override
+	public void figureSelected(BaseFigure[] figures) {
+	}
+
+	public double getScaleFactor() {
+		double scaleFactor = zoomSlider.getValue() / 100.0;
+		return scaleFactor;
+	}
+
+	@Override
+	public void hideDependencies() {
+		for (UserInputListener listener : listeners)
+			listener.hideDependencies();
+	}
+
+	@Override
+	public void hideModules() {
+		for (UserInputListener listener : listeners)
+			listener.hideModules();
+	}
+
+	@Override
+	public void hideSmartLines() {
+		for (UserInputListener l : listeners)
+			l.hideSmartLines();
+	}
+
+	@Override
+	public void hideViolations() {
+		for (UserInputListener l : listeners)
+			l.hideViolations();
 	}
 
 	private void initializeComponents() {
@@ -109,26 +152,16 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			public void actionPerformed(ActionEvent e) {
 				if (zoomOptionsMenu.canZoomModule()) {
 					// TODO; Needs to be the old way of zooming
-				} else if (zoomOptionsMenu.canZoomModuleContext()) {
+				} else if (zoomOptionsMenu.canZoomModuleContext())
 					moduleZoom();
-				}
 			}
 		});
 		zoomInButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)
-						&& e.getClickCount() == 1) {
+						&& e.getClickCount() == 1)
 					zoomOptionsMenu.show(zoomInButton, e.getX(), e.getY());
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
 			}
 
 			@Override
@@ -137,6 +170,14 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 			@Override
 			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
 			}
 		});
 		add(zoomInButton);
@@ -170,11 +211,10 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (showDependenciesButton.getToolTipText().equals(
-						menuBarLocale.get("HideDependencies"))) {
+						menuBarLocale.get("HideDependencies")))
 					hideDependencies();
-				} else {
+				else
 					showDependencies();
-				}
 				refreshDrawing();
 			}
 		});
@@ -186,11 +226,10 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (showViolationsButton.getToolTipText().equals(
-						menuBarLocale.get("HideViolations"))) {
+						menuBarLocale.get("HideViolations")))
 					hideViolations();
-				} else {
+				else
 					showViolations();
-				}
 				refreshDrawing();
 			}
 		});
@@ -239,12 +278,66 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 
 	}
 
-	public void setOptionsDialogAction(ActionListener listener) {
-		optionsDialogButton.addActionListener(listener);
+	@Override
+	public void moduleOpen(String[] paths) {
+		// Not used from this UI
 	}
 
-	public void setOutOfDateAction(ActionListener listener) {
-		outOfDateButton.addActionListener(listener);
+	@Override
+	public void moduleZoom() {
+		for (UserInputListener listener : listeners)
+			listener.moduleZoom();
+	}
+
+	@Override
+	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
+		// Not used from this UI
+	}
+
+	@Override
+	public void moduleZoomOut() {
+		for (UserInputListener listener : listeners)
+			listener.moduleZoomOut();
+	}
+
+	@Override
+	public void refreshDrawing() {
+		for (UserInputListener listener : listeners)
+			listener.refreshDrawing();
+	}
+
+	public void removeListener(UserInputListener listener) {
+		listeners.remove(listener);
+	}
+
+	@Override
+	public void restoreModules() {
+		for (UserInputListener listener : listeners)
+			listener.restoreModules();
+	}
+
+	private void setButtonIcon(JButton button, String iconKey) {
+		try {
+			ImageIcon icon = new ImageIcon(Resource.get(icons.get(iconKey)));
+			button.setIcon(icon);
+			button.setMargin(new Insets(1, 5, 1, 5));
+		} catch (Exception e) {
+			logger.warn("Could not find icon for \"" + iconKey + "\".");
+		}
+	}
+
+	public void setDependeciesUIToActive() {
+		setButtonIcon(showDependenciesButton, "dependenciesHide");
+		showDependenciesButton.setToolTipText(menuBarLocale
+				.get("HideDependencies"));
+		graphicsOptionsDialog.setDependenciesUIToActive();
+	}
+
+	public void setDependeciesUIToInactive() {
+		setButtonIcon(showDependenciesButton, "dependenciesShow");
+		showDependenciesButton.setToolTipText(menuBarLocale
+				.get("ShowDependencies"));
+		graphicsOptionsDialog.setDependenciesUIToInactive();
 	}
 
 	public void setLocale(HashMap<String, String> locale) {
@@ -268,37 +361,8 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		}
 	}
 
-	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
-		graphicsOptionsDialog.setSelectedLayoutStrategyItem(item);
-	}
-
-	public double getScaleFactor() {
-		double scaleFactor = zoomSlider.getValue() / 100.0;
-		return scaleFactor;
-	}
-
-	public void turnOffBar() {
-		for (JComponent comp : actions) {
-			comp.setEnabled(false);
-		}
-		graphicsOptionsDialog.turnOff();
-		validate();
-		updateUI();
-	}
-
-	public void turnOnBar() {
-		for (JComponent comp : actions) {
-			comp.setEnabled(true);
-		}
-		graphicsOptionsDialog.turnOn();
-		validate();
-		updateUI();
-	}
-
-	public void setUpToDate() {
-		remove(outOfDateButton);
-		validate();
-		updateUI();
+	public void setOptionsDialogAction(ActionListener listener) {
+		optionsDialogButton.addActionListener(listener);
 	}
 
 	public void setOutOfDate() {
@@ -307,91 +371,26 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		updateUI();
 	}
 
-	@Override
-	public void moduleZoom() {
-		for (UserInputListener listener : listeners) {
-			listener.moduleZoom();
-		}
+	public void setOutOfDateAction(ActionListener listener) {
+		outOfDateButton.addActionListener(listener);
 	}
 
-	@Override
-	public void moduleOpen(String[] paths) {
-		// Not used from this UI
+	public void setSelectedLayoutStrategyItem(DrawingLayoutStrategy item) {
+		graphicsOptionsDialog.setSelectedLayoutStrategyItem(item);
 	}
 
-	@Override
-	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
-		// Not used from this UI
+	public void setSmartLinesUIToActive() {
+		graphicsOptionsDialog.setSmartLinesUIToActive();
 	}
 
-	@Override
-	public void moduleZoomOut() {
-		for (UserInputListener listener : listeners) {
-			listener.moduleZoomOut();
-		}
+	public void setSmartLinesUIToInactive() {
+		graphicsOptionsDialog.setSmartLinesUIToInactive();
 	}
 
-	@Override
-	public void exportToImage() {
-		for (UserInputListener listener : listeners) {
-			listener.exportToImage();
-		}
-	}
-
-	@Override
-	public void refreshDrawing() {
-		for (UserInputListener listener : listeners) {
-			listener.refreshDrawing();
-		}
-	}
-
-	@Override
-	public void changeLayoutStrategy(DrawingLayoutStrategy selectedStrategyEnum) {
-		for (UserInputListener listener : listeners) {
-			listener.changeLayoutStrategy(selectedStrategyEnum);
-		}
-	}
-
-	@Override
-	public void showDependencies() {
-		for (UserInputListener listener : listeners) {
-			listener.showDependencies();
-		}
-	}
-
-	@Override
-	public void hideDependencies() {
-		for (UserInputListener listener : listeners) {
-			listener.hideDependencies();
-		}
-	}
-
-	public void setDependeciesUIToActive() {
-		setButtonIcon(showDependenciesButton, "dependenciesHide");
-		showDependenciesButton.setToolTipText(menuBarLocale
-				.get("HideDependencies"));
-		graphicsOptionsDialog.setDependenciesUIToActive();
-	}
-
-	public void setDependeciesUIToInactive() {
-		setButtonIcon(showDependenciesButton, "dependenciesShow");
-		showDependenciesButton.setToolTipText(menuBarLocale
-				.get("ShowDependencies"));
-		graphicsOptionsDialog.setDependenciesUIToInactive();
-	}
-
-	@Override
-	public void showViolations() {
-		for (UserInputListener l : listeners) {
-			l.showViolations();
-		}
-	}
-
-	@Override
-	public void hideViolations() {
-		for (UserInputListener l : listeners) {
-			l.hideViolations();
-		}
+	public void setUpToDate() {
+		remove(outOfDateButton);
+		validate();
+		updateUI();
 	}
 
 	public void setViolationsUIToActive() {
@@ -409,59 +408,43 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	}
 
 	@Override
-	public void showSmartLines() {
-		for (UserInputListener l : listeners) {
-			l.showSmartLines();
-		}
-	}
-
-	@Override
-	public void hideSmartLines() {
-		for (UserInputListener l : listeners) {
-			l.hideSmartLines();
-		}
-	}
-
-	public void setSmartLinesUIToActive() {
-		graphicsOptionsDialog.setSmartLinesUIToActive();
-	}
-
-	public void setSmartLinesUIToInactive() {
-		graphicsOptionsDialog.setSmartLinesUIToInactive();
-	}
-
-	@Override
-	public void drawingZoomChanged(double zoomFactor) {
-		zoomSlider.setValue((int) zoomFactor);
-		for (UserInputListener listener : listeners) {
-			listener.drawingZoomChanged(zoomFactor);
-		}
-	}
-
-	@Override
-	public void hideModules() {
-		for (UserInputListener listener : listeners) {
-			listener.hideModules();
-		}
-	}
-
-	@Override
-	public void restoreModules() {
-		for (UserInputListener listener : listeners) {
-			listener.restoreModules();
-		}
-	}
-
-	@Override
-	public void figureSelected(BaseFigure[] figures) {
-	}
-
-	@Override
-	public void figureDeselected(BaseFigure[] figures) {
-	}
-
 	public void setZoomSlider(double zoomFactor) {
 		int value = (int) (zoomFactor * 100);
 		zoomSlider.setValue(value);
 	}
+
+	@Override
+	public void showDependencies() {
+		for (UserInputListener listener : listeners)
+			listener.showDependencies();
+	}
+
+	@Override
+	public void showSmartLines() {
+		for (UserInputListener l : listeners)
+			l.showSmartLines();
+	}
+
+	@Override
+	public void showViolations() {
+		for (UserInputListener l : listeners)
+			l.showViolations();
+	}
+
+	public void turnOffBar() {
+		for (JComponent comp : actions)
+			comp.setEnabled(false);
+		graphicsOptionsDialog.turnOff();
+		validate();
+		updateUI();
+	}
+
+	public void turnOnBar() {
+		for (JComponent comp : actions)
+			comp.setEnabled(true);
+		graphicsOptionsDialog.turnOn();
+		validate();
+		updateUI();
+	}
+
 }

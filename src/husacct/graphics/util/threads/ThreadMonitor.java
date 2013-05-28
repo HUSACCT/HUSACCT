@@ -24,6 +24,18 @@ public class ThreadMonitor implements ThreadListener {
 		thread.start();
 	}
 
+	public synchronized boolean add(Runnable target) {
+		synchronized (pooledThreads) {
+			synchronized (runningThreads) {
+				if (pooledThreads.isEmpty() && runningThreads.isEmpty()) {
+					pooledThreads.add(target);
+					return true;
+				} else
+					return false;
+			}
+		}
+	}
+
 	@Override
 	public void run() {
 		isRunning = true;
@@ -32,6 +44,32 @@ public class ThreadMonitor implements ThreadListener {
 			updateScheduledTasks();
 			updateRunningTasks();
 			suspend();
+		}
+	}
+
+	private void suspend() {
+		try {
+			Thread.sleep(SLEEP_TIME);
+		} catch (InterruptedException ie) {
+
+		}
+	}
+
+	@Override
+	public void threadTerminated(ObservableThread source) {
+		synchronized (runningThreads) {
+			runningThreads.remove(source);
+		}
+	}
+
+	@Override
+	public void update(ObservableThread source, int progress) {
+	}
+
+	private void updateRunningTasks() {
+		synchronized (runningThreads) {
+			if (runningThreads.isEmpty() && !controller.isDrawingVisible())
+				controller.setDrawingViewVisible();
 		}
 	}
 
@@ -51,45 +89,6 @@ public class ThreadMonitor implements ThreadListener {
 					runningThreads.add(t);
 				}
 			}
-		}
-	}
-
-	private void updateRunningTasks() {
-		synchronized (runningThreads) {
-			if (runningThreads.isEmpty() && !controller.isDrawingVisible())
-				controller.setDrawingViewVisible();
-		}
-	}
-
-	private void suspend() {
-		try {
-			Thread.sleep(SLEEP_TIME);
-		} catch (InterruptedException ie) {
-
-		}
-	}
-
-	public synchronized boolean add(Runnable target) {
-		synchronized (pooledThreads) {
-			synchronized (runningThreads) {
-				if (pooledThreads.isEmpty() && runningThreads.isEmpty()) {
-					pooledThreads.add(target);
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
-	}
-
-	@Override
-	public void update(ObservableThread source, int progress) {
-	}
-
-	@Override
-	public void threadTerminated(ObservableThread source) {
-		synchronized (runningThreads) {
-			runningThreads.remove(source);
 		}
 	}
 }

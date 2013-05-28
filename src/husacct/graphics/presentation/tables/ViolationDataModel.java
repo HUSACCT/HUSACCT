@@ -25,15 +25,9 @@ public class ViolationDataModel extends AbstractTableModel {
 		columnKeys = new String[] { "Source", "Rule", "DependencyKind",
 				"Target", "Severity" };
 		columnNames = new HashMap<String, String>();
-		for (String key : columnKeys) {
+		for (String key : columnKeys)
 			columnNames.put(key, localeService.getTranslatedString(key));
-		}
 		data = dtos;
-	}
-
-	@Override
-	public int getRowCount() {
-		return data.length;
 	}
 
 	@Override
@@ -47,26 +41,30 @@ public class ViolationDataModel extends AbstractTableModel {
 	}
 
 	@Override
+	public int getRowCount() {
+		return data.length;
+	}
+
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		String value = "";
 		try {
 			String columnKey = columnKeys[columnIndex];
 			ViolationDTO row = data[rowIndex];
-			if (columnKey.equals(columnKeys[0])) {
+			if (columnKey.equals(columnKeys[0]))
 				value = row.fromClasspath;
-			} else if (columnKey.equals(columnKeys[1])) {
+			else if (columnKey.equals(columnKeys[1]))
 				value = localeService.getTranslatedString(row.ruleType.key);
-			} else if (columnKey.equals(columnKeys[2])) {
+			else if (columnKey.equals(columnKeys[2])) {
 				value = localeService
 						.getTranslatedString(row.violationType.key) + ", ";
 				value += row.indirect ? localeService
 						.getTranslatedString("Indirect") : localeService
 						.getTranslatedString("Direct");
-			} else if (columnKey.equals(columnKeys[3])) {
+			} else if (columnKey.equals(columnKeys[3]))
 				value = "" + row.toClasspath;
-			} else if (columnKey.equals(columnKeys[4])) {
+			else if (columnKey.equals(columnKeys[4]))
 				value = "" + row.severityName;
-			}
 		} catch (Exception e) {
 			logger.error("Could not fill column " + columnIndex + " at row "
 					+ rowIndex);

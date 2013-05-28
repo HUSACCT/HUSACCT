@@ -20,29 +20,29 @@ public class GraphicsServiceImpl extends ObservableService implements
 	private DefinedController definedController;
 	protected Logger logger = Logger.getLogger(GraphicsServiceImpl.class);
 
+	public static final String workspaceServiceName = "ArchitecureGraphicsService";
+
+	public static final String workspaceAnalysedControllerName = "analysedController";
+
+	public static final String workspaceDefinedControllerName = "definedController";
+
+	public static final String workspaceShowDependencies = "showDependencies";
+
+	public static final String workspaceShowViolations = "showViolations";
+
+	public static final String workspaceSmartLines = "smartLines";
+
+	public static final String workspaceLayoutStrategy = "layoutStrategy";
+
 	public GraphicsServiceImpl() {
 
 	}
 
 	private void createControllers() {
-		if (analysedController == null) {
+		if (analysedController == null)
 			analysedController = new AnalysedController();
-		}
-		if (definedController == null) {
+		if (definedController == null)
 			definedController = new DefinedController();
-		}
-	}
-
-	@Override
-	public JInternalFrame getAnalysedArchitectureGUI() {
-		createControllers();
-		return analysedController.getGUI();
-	}
-
-	@Override
-	public JInternalFrame getDefinedArchitectureGUI() {
-		createControllers();
-		return definedController.getGUI();
 	}
 
 	@Override
@@ -69,13 +69,17 @@ public class GraphicsServiceImpl extends ObservableService implements
 		definedController.drawArchitecture(DrawingDetail.WITH_VIOLATIONS);
 	}
 
-	public static final String workspaceServiceName = "ArchitecureGraphicsService";
-	public static final String workspaceAnalysedControllerName = "analysedController";
-	public static final String workspaceDefinedControllerName = "definedController";
-	public static final String workspaceShowDependencies = "showDependencies";
-	public static final String workspaceShowViolations = "showViolations";
-	public static final String workspaceSmartLines = "smartLines";
-	public static final String workspaceLayoutStrategy = "layoutStrategy";
+	@Override
+	public JInternalFrame getAnalysedArchitectureGUI() {
+		createControllers();
+		return analysedController.getGUI();
+	}
+
+	@Override
+	public JInternalFrame getDefinedArchitectureGUI() {
+		createControllers();
+		return definedController.getGUI();
+	}
 
 	@Override
 	public Element getWorkspaceData() {
@@ -88,27 +92,6 @@ public class GraphicsServiceImpl extends ObservableService implements
 				workspaceDefinedControllerName, definedController));
 
 		return data;
-	}
-
-	@Override
-	public void loadWorkspaceData(Element workspaceData) {
-		createControllers();
-		try {
-			Element analysedControllerElement = workspaceData
-					.getChild(workspaceAnalysedControllerName);
-			loadWorkspaceDataForController(analysedController,
-					analysedControllerElement);
-		} catch (Exception e) {
-			logger.error("Error importing the workspace for analyse.", e);
-		}
-		try {
-			Element definedControllerElement = workspaceData
-					.getChild(workspaceDefinedControllerName);
-			loadWorkspaceDataForController(definedController,
-					definedControllerElement);
-		} catch (Exception e) {
-			logger.error("Error importing the workspace for define.", e);
-		}
 	}
 
 	private Element getWorkspaceDataForController(String controllerName,
@@ -132,35 +115,50 @@ public class GraphicsServiceImpl extends ObservableService implements
 				.getValue());
 	}
 
+	@Override
+	public void loadWorkspaceData(Element workspaceData) {
+		createControllers();
+		try {
+			Element analysedControllerElement = workspaceData
+					.getChild(workspaceAnalysedControllerName);
+			loadWorkspaceDataForController(analysedController,
+					analysedControllerElement);
+		} catch (Exception e) {
+			logger.error("Error importing the workspace for analyse.", e);
+		}
+		try {
+			Element definedControllerElement = workspaceData
+					.getChild(workspaceDefinedControllerName);
+			loadWorkspaceDataForController(definedController,
+					definedControllerElement);
+		} catch (Exception e) {
+			logger.error("Error importing the workspace for define.", e);
+		}
+	}
+
 	private void loadWorkspaceDataForController(DrawingController controller,
 			Element data) {
-		if (isActive(data, workspaceShowDependencies)) {
+		if (isActive(data, workspaceShowDependencies))
 			controller.showDependencies();
-		} else {
+		else
 			controller.hideDependencies();
-		}
 
-		if (isActive(data, workspaceShowViolations)) {
+		if (isActive(data, workspaceShowViolations))
 			controller.showViolations();
-		} else {
+		else
 			controller.hideViolations();
-		}
 
-		if (isActive(data, workspaceSmartLines)) {
+		if (isActive(data, workspaceSmartLines))
 			controller.showSmartLines();
-		} else {
+		else
 			controller.hideSmartLines();
-		}
 
 		DrawingLayoutStrategy selectedStrategy = null;
-		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values()) {
+		for (DrawingLayoutStrategy strategy : DrawingLayoutStrategy.values())
 			if (strategy.toString().equals(
-					data.getAttribute(workspaceLayoutStrategy).getValue())) {
+					data.getAttribute(workspaceLayoutStrategy).getValue()))
 				selectedStrategy = strategy;
-			}
-		}
-		if (null != selectedStrategy) {
+		if (null != selectedStrategy)
 			controller.changeLayoutStrategy(selectedStrategy);
-		}
 	}
 }

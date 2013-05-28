@@ -1,7 +1,7 @@
 package husacct.graphics.presentation.linelayoutstrategies;
 
-import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.presentation.figures.ElbowLiner;
+import husacct.graphics.presentation.figures.RelationFigure;
 
 import java.util.HashSet;
 
@@ -11,8 +11,8 @@ public class ElbowLineSeparationStrategy implements ILineSeparationStrategy {
 	@Override
 	public void separateLines(HashSet<RelationFigure> overlappingLineFigures) {
 
-		double start = 0 - ((overlappingLineFigures.size() - 1)
-				* RELATIONS_DISTANCE / 2);
+		double start = 0 - (overlappingLineFigures.size() - 1)
+				* RELATIONS_DISTANCE / 2;
 
 		for (RelationFigure figure : overlappingLineFigures) {
 
