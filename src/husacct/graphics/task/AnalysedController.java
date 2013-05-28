@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.jhotdraw.draw.Figure;
 
 public class AnalysedController extends DrawingController {
 	private final Logger logger = Logger.getLogger(AnalysedController.class);
@@ -176,6 +177,21 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
+	public void moduleZoom(String zoomType){
+
+		BaseFigure[] selection = super.getSelectedFigures();
+
+		super.notifyServiceListeners();
+		resetContextFigures();
+		ArrayList<String> parentNames = sortFiguresBasedOnZoomability(selection);
+
+		if (parentNames.size() > 0) {
+			saveSingleLevelFigurePositions();
+			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
+		}
+	}
+
+	@Override
 	public void moduleZoom(BaseFigure[] figures) {
 		super.notifyServiceListeners();
 		resetContextFigures();
@@ -254,4 +270,6 @@ public class AnalysedController extends DrawingController {
 		logger.debug("Reverting to the root of the application.");
 		drawArchitecture(getCurrentDrawingDetail());
 	}
+
+
 }

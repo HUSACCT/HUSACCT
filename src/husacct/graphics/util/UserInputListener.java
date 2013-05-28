@@ -25,6 +25,8 @@ public interface UserInputListener {
 	public void moduleOpen(String[] paths);
 
 	public void moduleZoom();
+	
+	public void moduleZoom(String zoomType);
 
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure);
 

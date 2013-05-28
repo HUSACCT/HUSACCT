@@ -151,7 +151,7 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (zoomOptionsMenu.canZoomModule()) {
-					// TODO; Needs to be the old way of zooming
+					moduleZoom("zoom");
 				} else if (zoomOptionsMenu.canZoomModuleContext())
 					moduleZoom();
 			}
@@ -287,6 +287,13 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 	public void moduleZoom() {
 		for (UserInputListener listener : listeners)
 			listener.moduleZoom();
+	}
+	
+
+	@Override
+	public void moduleZoom(String zoomType) {
+		for (UserInputListener listener : listeners)
+			listener.moduleZoom(zoomType);
 	}
 
 	@Override
@@ -446,5 +453,4 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		validate();
 		updateUI();
 	}
-
 }
