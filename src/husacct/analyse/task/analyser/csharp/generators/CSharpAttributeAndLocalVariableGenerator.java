@@ -1,6 +1,7 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
 
 import java.util.ArrayList;
@@ -96,53 +97,47 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 			case CSharpParser.MEMBER_ACCESS:
 				delegateInvocationPropertyOrField(child);
 				break;
-			case CSharpParser.EXPRESSION_STATEMENT:
-				
-				break;
 			}
 			treeNodeTypeFilter(child);
 		}
 	}
-
+	
 	private void delegateInvocationMethod(Tree tree) {
-		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
+		CSharpInvocationMethodGenerator csharpInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
+		csharpInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 
 	private void delegateInvocationPropertyOrField(Tree tree) {
-		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
+		CSharpInvocationPropertyOrFieldGenerator csharpInvocationPropertyOrFieldGenerator = new CSharpInvocationPropertyOrFieldGenerator(this.packageAndClassName);
+		csharpInvocationPropertyOrFieldGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 	
 	private void delegateInvocationConstructor(Tree tree) {
-		CSharpInvocationGenerator csharpInvocationGenerator = new CSharpInvocationGenerator(this.packageAndClassName);
-		csharpInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
+		CSharpInvocationConstructorGenerator csharpInvocationConstructorGenerator= new CSharpInvocationConstructorGenerator(this.packageAndClassName);
+		csharpInvocationConstructorGenerator.generateConstructorInvocToDomain((CommonTree) tree, this.belongsToMethod);
 	}
 	
 	private void setDeclareType(Tree typeNode) {
-		Tree child = typeNode.getChild(0);
-		Tree declareTypeNode = child.getChild(0);
-		String foundType = "";
-		if(child.getType() != CSharpParser.NAMESPACE_OR_TYPE_NAME){
-			foundType = child.getText();
-		}else{
-			if(child.getChildCount() > 1){
-				for(int i = 0; i<child.getChildCount(); i++){
-					if(i >= 1){
-						foundType += child.getChild(i).getChild(0).toString() + ".";
-					}else{
-						foundType += child.getChild(0).toString() + ".";
-					}
-				}
-			}
-			else foundType = declareTypeNode.getText();
-		}
+		CommonTree typeTree = (CommonTree) typeNode;
+		if(declareType == null || !SkippableTypes.isSkippable(declareType))	declareType = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree); 
+		addTypeNameIfNotSkippable(typeTree);
+		addArgumentListTypes(typeTree);
+	}
 
-		if(this.declareType == null || this.declareType.equals("")){
-			this.declareType = foundType;
-		} else {
-			declareTypes.add(foundType);
+	private void addArgumentListTypes(CommonTree typeTree) {
+		if(CSharpGeneratorToolkit.hasChild(typeTree, CSharpParser.TYPE_ARGUMENT_LIST)) {
+			addTypeNameIfNotSkippable((CommonTree)typeTree.getChild(1));
 		}
+		if(CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST) != null) {
+			CommonTree typeArgumentListTree =  CSharpGeneratorToolkit.getFirstDescendantWithType(typeTree, CSharpParser.TYPE_ARGUMENT_LIST);
+			treeNodeTypeFilter(typeArgumentListTree);
+		}
+		
+	}
+	
+	private void addTypeNameIfNotSkippable(CommonTree typeTree) {
+		String s = CSharpGeneratorToolkit.getTypeNameAndParts(typeTree);
+		if(!SkippableTypes.isSkippable(s))declareTypes.add(s);
 
 	}
 
