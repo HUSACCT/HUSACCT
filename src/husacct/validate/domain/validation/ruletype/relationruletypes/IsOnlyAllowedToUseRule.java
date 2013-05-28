@@ -7,8 +7,8 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
-import husacct.validate.domain.validation.internal_transfer_objects.Mappings;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mappings;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -27,14 +27,14 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		classpathsFrom = mappings.getMappingFrom();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();
 
-		for (Mapping classPathFrom : physicalClasspathsFrom) {
+		for (Mapping classPathFrom : classpathsFrom) {
 			for (DependencyDTO dependency : dependencies) {
 				if (classPathFrom.getPhysicalPath().equals(dependency.from)) {
 					if (!containsMapping(mappings, dependency.to)) {
