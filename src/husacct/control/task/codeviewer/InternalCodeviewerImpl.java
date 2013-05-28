@@ -14,7 +14,9 @@ public class InternalCodeviewerImpl implements CodeviewerService {
 	
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
-		codeviewerAPI = new API(fileName, errorLines);
+		codeviewerAPI = new API();
+		codeviewerAPI.setErrors(errorLines);
+		codeviewerAPI.openFile(fileName);
 	}
 
 }
