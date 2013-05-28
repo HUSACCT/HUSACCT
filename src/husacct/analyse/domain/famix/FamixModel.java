@@ -167,6 +167,7 @@ class FamixModel extends FamixObject {
         throw new Exception("The unit (or a part of it) '" + temp + " or " + uniqueVarName + "' is not found or defined.");
     }
     
+    @Deprecated
     public ExternalSystemDTO[] getExternalSystems(){
 		List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
 		List<String> pathsToImports = new ArrayList<String>();

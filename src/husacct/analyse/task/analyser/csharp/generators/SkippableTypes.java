@@ -4,10 +4,10 @@ import java.util.EnumSet;
 
 enum SkippableTypes {
 
-	STRING("String"),
+	STRING("string"),
 	INT("int"),
 	BOOLEAN("boolean"),
-	OBJECT("Object"),
+	OBJECT("object"),
 	BYTE("byte"),
 	CHAR("char");
 	

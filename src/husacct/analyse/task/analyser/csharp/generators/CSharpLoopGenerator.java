@@ -10,14 +10,13 @@ public class CSharpLoopGenerator extends CSharpGenerator {
     private String belongsToMethod;
     
     CSharpAttributeAndLocalVariableGenerator csAttribueteAndLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
-    CSharpInvocationGenerator csInvocationGenerator;
+    CSharpInvocationMethodGenerator csInvocationMethodGenerator;
     CSharpBlockScopeGenerator csBlockScopeGenerator;
 
     public void generateToDomainFromLoop(CommonTree loopTree, String belongsToClass, String belongsToMethod) {
         packageAndClassName = belongsToClass;
         this.belongsToMethod = belongsToMethod;
         
-        csInvocationGenerator = new CSharpInvocationGenerator(packageAndClassName);
         switch(loopTree.getType()){
             case CSharpParser.FOR:
             case CSharpParser.WHILE:
@@ -28,7 +27,7 @@ public class CSharpLoopGenerator extends CSharpGenerator {
                 walkForEachTree(loopTree);
                 break;
             default:
-                throw new ParserException(); //No supported Loop
+                System.err.println(this.getClass().getName() + " no supported loop");
         }
     }
 
@@ -37,21 +36,17 @@ public class CSharpLoopGenerator extends CSharpGenerator {
             CommonTree child = (CommonTree) loopTree.getChild(i);
             
             switch(child.getType()){
-                case CSharpParser.LOCAL_VARIABLE_DECLARATION:
+                case CSharpParser.LOCAL_VARIABLE_DECLARATOR:
+                	delegateLocalVariable(child);
                     csAttribueteAndLocalVariableGenerator.generateLocalVariableToDomain(child, packageAndClassName, this.belongsToMethod);
                     deleteTreeChild(child);
                     break;
                 case CSharpParser.METHOD_INVOCATION:
-                    csInvocationGenerator.generateMethodInvocToDomain(child, belongsToMethod);
+                	delegateInvocationMethod(child);
                     deleteTreeChild(child);
                     break;
-                case CSharpParser.DOT: //use is unknown
-					csInvocationGenerator.generatePropertyOrFieldInvocToDomain(child, this.belongsToMethod);
-					deleteTreeChild(child);
-                    break;
                 case CSharpParser.BLOCK:
-                    csBlockScopeGenerator = new CSharpBlockScopeGenerator();
-                    csBlockScopeGenerator.walkThroughBlockScope(child, this.packageAndClassName, this.belongsToMethod);
+                	delegateBlockScope(child);
                     deleteTreeChild(child);
                     break;
 				default:
@@ -61,7 +56,27 @@ public class CSharpLoopGenerator extends CSharpGenerator {
         }
     }
 
-    private void walkForEachTree(CommonTree loopTree) {
+   private void delegateLocalVariable(CommonTree child) {
+		if (child.toStringTree().contains("= >")) {
+			CSharpLamdaGenerator csLamdaGenerator = new CSharpLamdaGenerator();
+			csLamdaGenerator.delegateLambdaToBuffer((CommonTree)child, packageAndClassName, belongsToMethod);
+		} else {
+			CSharpAttributeAndLocalVariableGenerator csharpLocalVariableGenerator = new CSharpAttributeAndLocalVariableGenerator();
+			csharpLocalVariableGenerator.generateLocalVariableToDomain(child, this.packageAndClassName, this.belongsToMethod);
+		}
+	}
+
+   private void delegateInvocationMethod(CommonTree child) {
+    	csInvocationMethodGenerator = new CSharpInvocationMethodGenerator(this.packageAndClassName);
+    	csInvocationMethodGenerator.generateMethodInvocToDomain((CommonTree) child, this.belongsToMethod);
+	}
+   
+   private void delegateBlockScope(CommonTree child) {
+	   csBlockScopeGenerator = new CSharpBlockScopeGenerator();
+     csBlockScopeGenerator.walkThroughBlockScope(child, this.packageAndClassName, this.belongsToMethod);
+	}
+
+	private void walkForEachTree(CommonTree loopTree) {
         for(int childCount = 0; childCount < loopTree.getChildCount(); childCount++){
 			CommonTree child = (CommonTree) loopTree.getChild(childCount);
 			
@@ -88,23 +103,18 @@ public class CSharpLoopGenerator extends CSharpGenerator {
 						int lineNumber = loopTree.getChild(childCount + 1).getLine();
 						csAttribueteAndLocalVariableGenerator.generateLocalLoopVariable(packageAndClassName, belongsToMethod, child.getChild(0).getText(), loopTree.getChild(childCount + 1).getText(), lineNumber);
 					} else {
-						throw new ParserException(); //Type not found
+						System.err.println(this.getClass().getName() + " no type found");
 					}
 					break;
 				case CSharpParser.CAST_EXPRESSION:
 					deleteTreeChild(child.getChild(0)); //no need to know this
 					break;
 				case CSharpParser.METHOD_INVOCATION:
-					csInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
-					deleteTreeChild(child);
-					break;
-				case CSharpParser.DOT:
-					csInvocationGenerator.generatePropertyOrFieldInvocToDomain(child, this.belongsToMethod);
+					delegateInvocationMethod(child);
 					deleteTreeChild(child);
 					break;
 				case CSharpParser.BLOCK:
-					csBlockScopeGenerator = new CSharpBlockScopeGenerator();
-                    csBlockScopeGenerator.walkThroughBlockScope(child, this.packageAndClassName, this.belongsToMethod);
+					delegateBlockScope(child);
                     deleteTreeChild(child);
 					break;
 				default:

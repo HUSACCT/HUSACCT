@@ -3,7 +3,7 @@ package husacct.validate.domain.factory.ruletype;
 import husacct.validate.domain.exception.DefaultSeverityNotFoundException;
 import husacct.validate.domain.validation.DefaultSeverities;
 import husacct.validate.domain.validation.Severity;
-import husacct.validate.domain.validation.internal_transfer_objects.CategoryKeyClassDTO;
+import husacct.validate.domain.validation.internaltransferobjects.CategoryKeyClassDTO;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -21,7 +21,7 @@ class RuleTypesGenerator {
 
 	private Logger logger = Logger.getLogger(RuleTypesGenerator.class);
 	private Map<String, DefaultSeverities> defaultRulesPerRuleType = Collections.emptyMap();
-	private static final String[] ruleTypeLocations = new String[] {"husacct.validate.domain.validation.ruletype.contentsofamodule", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.legalityofdependency"};
+	private static final String[] ruleTypeLocations = new String[] { "husacct.validate.domain.validation.ruletype.propertyruletypes", "husacct.validate.domain.validation.ruletype.dependencylimitation", "husacct.validate.domain.validation.ruletype.relationruletypes" };
 
 	RuleTypesGenerator() {
 		this.defaultRulesPerRuleType = getRuleTypeDefaultSeverity();

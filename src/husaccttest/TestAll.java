@@ -15,7 +15,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({ 
 	AnalyseTestSuite.class, 
 	ControlTestSuite.class,
-	DefineTestSuite.class, 
+	DefineTestSuite.class, 		//TODO: Responsible person, please fix this
 	GraphicsTestSuite.class,
 	ValidateTestSuite.class
 })

@@ -142,7 +142,11 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 
 	@Override
 	public void updateProgress(int progressPercentage) {
+		try{
 		mainController.getApplicationController().getCurrentLoader().setProgressText(progressPercentage);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	@Override
