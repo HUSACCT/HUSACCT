@@ -1,6 +1,9 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -29,19 +32,20 @@ public class CSharpGeneratorToolkit {
     }
 
     /**
-     * Concatenates two strings and inserds a dot when parentName != null
+     * Concatenates two strings and inserts a dot when parentName != null
      * @param parentName
      * @param name
      */
     public static String getUniqueName(String parentName, String name) {
-        return parentName + potentiallyInsertDot(parentName) + name;
+		String result = parentName + potentiallyInsertDot(parentName) + name;
+        return result.endsWith(".") ? result.substring(0, result.length() -1) : result;
     }
 
     public static String belongsToClass(String namespaces, String classes) {
         return getUniqueName(namespaces, classes);
     }
 
-    public static String belongsToClass(Stack<String> namespaceStack, Stack<String> classStack) {
+    public static String createPackageAndClassName(Stack<String> namespaceStack, Stack<String> classStack) {
         String namespaces = getParentName(namespaceStack);
         String classes = getParentName(classStack);
         return getUniqueName(namespaces, classes);
@@ -91,8 +95,8 @@ public class CSharpGeneratorToolkit {
     }
 
     public static void deleteTreeChild(Tree treeNode) {
-        for (int child = 0; child < treeNode.getChildCount();) {
-            treeNode.deleteChild(treeNode.getChild(child).getChildIndex());
+        for (int child = 0; child < treeNode.getChildCount(); child++) {
+            treeNode.deleteChild(child);
         }
     }
 
@@ -105,22 +109,39 @@ public class CSharpGeneratorToolkit {
     }
 
     public static String getTypeNameAndParts(CommonTree tree) {
-        String s = "";
-        CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
-        s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
-        for (int i = 0; i < typenameTree.getChildCount(); i++) {
-            Tree t = typenameTree.getChild(i);
-            if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
-                s += "." + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
-            }
-        }
-        return s;
-    }
+		String s = "";
+		CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
+		if (typenameTree != null) {
+			s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
+			for (int i = 0; i < typenameTree.getChildCount(); i++) {
+				Tree t = typenameTree.getChild(i);
+				if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
+					s += "." + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
+				}
+			}
+		}
+		return s;
+	}
 
     public static boolean isOfType(CommonTree tree, int type) {
         if (tree == null) {
             return false;
         }
         return tree.getType() == type;
+    }
+    
+    public static CommonTree getFirstDescendantWithType(CommonTree root, int type) {
+    	LinkedList<CommonTree> queue = new LinkedList<>();
+    	queue.add(root);
+    	while(!queue.isEmpty()) {
+    		CommonTree first = queue.removeFirst();
+    		for (int i = 0; i < first.getChildCount(); i++) {
+    			CommonTree child = (CommonTree)first.getChild(i);
+    			if (isOfType(child, type))
+    				return child;
+    			queue.addLast(child);
+    		}
+    	}
+    	return null;
     }
 }

@@ -36,13 +36,17 @@ class JavaTreeConvertController {
     }
 
     public void delegateASTToGenerators(JavaParser javaParser) throws RecognitionException {
-        compilationUnit_return compilationUnit = javaParser.compilationUnit();
-        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
-        createClassInformation(compilationUnitTree);
-
-        if (this.theClass != null) {
-            delegateASTToGenerators(compilationUnitTree);
-        }
+    	try {
+	        compilationUnit_return compilationUnit = javaParser.compilationUnit();
+	        CommonTree compilationUnitTree = (CommonTree) compilationUnit.getTree();
+	        createClassInformation(compilationUnitTree);
+	        if (this.theClass != null) {
+	            delegateASTToGenerators(compilationUnitTree);
+	        } 
+    	}
+    	catch (Exception E) {
+    		
+    	}
     }
 
     private void createClassInformation(CommonTree completeTree) {

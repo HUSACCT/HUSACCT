@@ -1,6 +1,5 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
 
@@ -40,7 +39,6 @@ public class CSharpExceptionGenerator extends CSharpGenerator {
     }
 
     private boolean isCatchedException(CommonTree tree) {
-        new TreePrinter(tree);
         return isOfType(tree, CSharpParser.CATCH);
     }
 }
