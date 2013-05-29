@@ -23,17 +23,11 @@ public class EclipseCodeviewerImpl implements CodeviewerService {
 		case WINDOWS:
 			try {
 				Runtime.getRuntime().exec(location + " --launcher.openFile \"" + fileName + "\"");
-				/* TODO Remove after testing
-				 Runtime.getRuntime().exec(new String[] {
-					"rundll32", 
-					"url.dll,FileProtocolHandler",
-					location + " --launcher.openFile " + fileName
-				});
-				 */
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
 		}
 	}
+
 }

@@ -24,6 +24,7 @@ import org.antlr.runtime.tree.RewriteEarlyExitException;
 import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
 import org.antlr.runtime.tree.RewriteRuleTokenStream;
 import org.antlr.runtime.tree.TreeAdaptor;
+import org.apache.log4j.Logger;
 
 /**
  * An ANTLRv3 capable Java 1.5 grammar for building ASTs.
@@ -81,6 +82,7 @@ import org.antlr.runtime.tree.TreeAdaptor;
  */
 public class JavaParser extends Parser {
 
+	private Logger logger = Logger.getLogger(JavaParser.class);
     public static class additiveExpression_return extends ParserRuleReturnScope {
 
         CommonTree tree;
@@ -25170,9 +25172,8 @@ public class JavaParser extends Parser {
                             root_1 = (CommonTree) adaptor.becomeRoot(adaptor
                                     .create(SWITCH_BLOCK_LABEL_LIST,
                                     "SWITCH_BLOCK_LABEL_LIST"), root_1);
-
-                            adaptor.addChild(root_1,
-                                    stream_switchCaseLabels.nextTree());
+	                            adaptor.addChild(root_1,
+	                                    stream_switchCaseLabels.nextTree());
                             // :801:56: ( switchDefaultLabel )?
                             if (stream_switchDefaultLabel.hasNext()) {
                                 adaptor.addChild(root_1,
@@ -25182,7 +25183,6 @@ public class JavaParser extends Parser {
                             stream_switchDefaultLabel.reset();
                             adaptor.addChild(root_1,
                                     stream_switchCaseLabels.nextTree());
-
                             adaptor.addChild(root_0, root_1);
                         }
 

@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.IControlService;
 import husacct.control.presentation.util.FileDialog;
+import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -29,7 +30,7 @@ public class XmlLoadPanel extends LoaderPanel{
 	private JTextField pathText;
 	private JButton browseButton;
 	
-	private static File selectedFile;
+	private File selectedFile = new File(ConfigurationManager.getProperty("LastUsedLoadXMLWorkspacePath", ""));
 	
 	private GridBagConstraints constraints;
 	
@@ -103,6 +104,8 @@ public class XmlLoadPanel extends LoaderPanel{
 	
 	private void setFile(File file) {		
 		selectedFile = file;
+		ConfigurationManager.setProperty("LastUsedLoadXMLWorkspacePath", file.getAbsolutePath());
+		ConfigurationManager.storeProperties();
 		pathText.setText(file.getAbsolutePath());
 	}
 	
