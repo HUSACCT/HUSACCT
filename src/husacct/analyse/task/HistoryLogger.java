@@ -48,90 +48,73 @@ public class HistoryLogger {
 		}
 	}
 
-	public boolean saveHistory(ApplicationDTO applicationDTO, String workspaceName) {
-		projects = applicationDTO.projects;
+	public boolean saveHistory(ApplicationDTO adto, String workspaceName) {
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-		if(projects.size() > 0) {
-			try {
-				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			//Husacct root
+			doc = docBuilder.newDocument();
+			rootElement = doc.createElement("hussact");
+			doc.appendChild(rootElement);
 
-				//Husacct root
-				doc = docBuilder.newDocument();
-				rootElement = doc.createElement("hussact");
-				doc.appendChild(rootElement);
+			rootElement.setAttribute("version", adto.version);
 
-				rootElement.setAttribute("version", applicationDTO.version);
+			//Workspace
+			Element workspace = doc.createElement("workspace");
+			rootElement.appendChild(workspace);
 
-				//Workspace
-				Element workspace = doc.createElement("workspace");
-				rootElement.appendChild(workspace);
+			workspace.setAttribute("name", workspaceName);
 
-				workspace.setAttribute("name", workspaceName);
+			//Application
+			Element application = doc.createElement("application");
+			workspace.appendChild(application);
 
-				//Application
-				Element application = doc.createElement("application");
-				workspace.appendChild(application);
+			application.setAttribute("name", adto.name);
 
-				application.setAttribute("name", applicationDTO.name);
+			getProjectElement(application, adto);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		}	
+		return true;
+	}
 
-				for(ProjectDTO pdto : projects) {
-					//Project
-					Element project = doc.createElement("project");
-					application.appendChild(project);
+	public boolean addToExistingXml(ApplicationDTO adto, String workspaceName) {
 
-					project.setAttribute("name", pdto.name);
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder;
+			docBuilder = docFactory.newDocumentBuilder();
+			doc = docBuilder.parse(xmlFile);
 
-					//Analyse
-					Element analyse = doc.createElement("analyse");
-					project.appendChild(analyse);
+			Node root = doc.getFirstChild();
+			Node workspace = root.getFirstChild();
+			Node application = workspace.getFirstChild();
 
-					GregorianCalendar cal = new GregorianCalendar();
-					long millis = cal.getTimeInMillis();
 
-					analyse.setAttribute("timestamp", millis + "");
+			if(workspace.getAttributes().getNamedItem("name").getNodeValue().equals(workspaceName)) {
+				if(application.getAttributes().getNamedItem("name").getNodeValue().equals(adto.name)) {
+					NodeList projects = application.getChildNodes();
 
-					String projectPath = "";
-					projectPath = pdto.paths.get(0);
-
-					Element path = doc.createElement("path");
-					path.appendChild(doc.createTextNode(projectPath));
-
-					analyse.appendChild(path);
-
-					//packages
-					Element packages = doc.createElement("packages");
-					packages.appendChild(doc.createTextNode(queryService.getAmountOfPackages() + ""));
-
-					analyse.appendChild(packages);
-
-					//classes
-					Element classes = doc.createElement("classes");
-					classes.appendChild(doc.createTextNode(queryService.getAmountOfClasses() + ""));
-
-					analyse.appendChild(classes);
-
-					//interfaces
-					Element interfaces = doc.createElement("interfaces");
-					interfaces.appendChild(doc.createTextNode(queryService.getAmountOfInterfaces() + ""));
-
-					analyse.appendChild(interfaces);
-
-					//dependencies
-					Element dependencies = doc.createElement("dependencies");
-					dependencies.appendChild(doc.createTextNode(queryService.getAmountOfDependencies() + ""));
-
-					analyse.appendChild(dependencies);
-
-					//violations
-					Element violations = doc.createElement("violations");
-					violations.appendChild(doc.createTextNode("0"));
-
-					analyse.appendChild(violations);
+					for(int i = 0; i < projects.getLength(); i++) {
+						Node p = projects.item(i);
+						if(p.getAttributes().getNamedItem("name").getNodeValue().equals(adto.projects.get(i).name)) {
+							getAnalyseElement((Element) p, adto.projects.get(i));
+						} else {
+							getProjectElement((Element) application, adto);
+						}
+					}
 				}
-			} catch (ParserConfigurationException pce) {
-				pce.printStackTrace();
-			}	
+			}
+
+			createXML(doc, (Element)root);
+
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException saxe) {
+			saxe.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 		return true;
 	}
@@ -154,87 +137,66 @@ public class HistoryLogger {
 		}
 	}
 
-	public boolean addToExistingXml(ApplicationDTO applicationDTO, String workspaceName) {
+	public void getProjectElement(Element application, ApplicationDTO adto) {
+		projects = adto.projects;
 
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			docBuilder = docFactory.newDocumentBuilder();
-			doc = docBuilder.parse(xmlFile);
+		for(ProjectDTO pdto : projects) {
+			//Project
+			Element project = doc.createElement("project");
+			application.appendChild(project);
 
-			Node root = doc.getFirstChild();
-			Node workspace = root.getFirstChild();
-			Node application = workspace.getFirstChild();
+			project.setAttribute("name", pdto.name);
 
-
-			if(workspace.getAttributes().getNamedItem("name").getNodeValue().equals(workspaceName)) {
-				if(application.getAttributes().getNamedItem("name").getNodeValue().equals(applicationDTO.name)) {
-					NodeList projects = application.getChildNodes();
-
-					for(int i = 0; i < projects.getLength(); i++) {
-						Node p = projects.item(i);
-						if(p.getAttributes().getNamedItem("name").getNodeValue().equals(applicationDTO.projects.get(i).name)) {
-
-							//Analyse
-							Element analyse = doc.createElement("analyse");
-							p.appendChild(analyse);
-
-							GregorianCalendar cal = new GregorianCalendar();
-							long millis = cal.getTimeInMillis();
-
-							analyse.setAttribute("timestamp", millis + "");
-
-							String projectPath = "";
-							projectPath = applicationDTO.projects.get(i).paths.get(0);
-
-							Element path = doc.createElement("path");
-							path.appendChild(doc.createTextNode(projectPath));
-
-							analyse.appendChild(path);
-
-							//packages
-							Element packages = doc.createElement("packages");
-							packages.appendChild(doc.createTextNode(queryService.getAmountOfPackages() + ""));
-
-							analyse.appendChild(packages);
-
-							//classes
-							Element classes = doc.createElement("classes");
-							classes.appendChild(doc.createTextNode(queryService.getAmountOfClasses() + ""));
-
-							analyse.appendChild(classes);
-
-							//interfaces
-							Element interfaces = doc.createElement("interfaces");
-							interfaces.appendChild(doc.createTextNode(queryService.getAmountOfInterfaces() + ""));
-
-							analyse.appendChild(interfaces);
-
-							//dependencies
-							Element dependencies = doc.createElement("dependencies");
-							dependencies.appendChild(doc.createTextNode(queryService.getAmountOfDependencies() + ""));
-
-							analyse.appendChild(dependencies);
-
-							//violations
-							Element violations = doc.createElement("violations");
-							violations.appendChild(doc.createTextNode("0"));
-
-							analyse.appendChild(violations);
-						}
-					}
-				}
-			}
-
-			createXML(doc, (Element)root);
-
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		} catch (SAXException saxe) {
-			saxe.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			getAnalyseElement(project, pdto);
 		}
-		return true;
+	}
+
+	public void getAnalyseElement(Element project, ProjectDTO pdto) {
+		//Analyse
+		Element analyse = doc.createElement("analyse");
+		project.appendChild(analyse);
+
+		GregorianCalendar cal = new GregorianCalendar();
+		long millis = cal.getTimeInMillis();
+
+		analyse.setAttribute("timestamp", millis + "");
+
+		String projectPath = "";
+		projectPath = pdto.paths.get(0);
+
+		Element path = doc.createElement("path");
+		path.appendChild(doc.createTextNode(projectPath));
+
+		analyse.appendChild(path);
+
+		//packages
+		Element packages = doc.createElement("packages");
+		packages.appendChild(doc.createTextNode(queryService.getAmountOfPackages() + ""));
+
+		analyse.appendChild(packages);
+
+		//classes
+		Element classes = doc.createElement("classes");
+		classes.appendChild(doc.createTextNode(queryService.getAmountOfClasses() + ""));
+
+		analyse.appendChild(classes);
+
+		//interfaces
+		Element interfaces = doc.createElement("interfaces");
+		interfaces.appendChild(doc.createTextNode(queryService.getAmountOfInterfaces() + ""));
+
+		analyse.appendChild(interfaces);
+
+		//dependencies
+		Element dependencies = doc.createElement("dependencies");
+		dependencies.appendChild(doc.createTextNode(queryService.getAmountOfDependencies() + ""));
+
+		analyse.appendChild(dependencies);
+
+		//violations
+		Element violations = doc.createElement("violations");
+		violations.appendChild(doc.createTextNode("0"));
+
+		analyse.appendChild(violations);
 	}
 }
