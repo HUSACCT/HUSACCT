@@ -1,6 +1,6 @@
 package husacct.validate.domain.validation.logicalmodule;
 
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
 
 public class LogicalModule {
 
