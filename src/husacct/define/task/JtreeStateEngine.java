@@ -1,258 +1,183 @@
 package husacct.define.task;
 
 import husacct.define.analyzer.AnalyzedUnitComparator;
+import husacct.define.analyzer.AnalyzedUnitRegistry;
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.module.Module;
 import husacct.define.domain.services.WarningMessageService;
-import husacct.define.presentation.moduletree.AnalyzedModuleTree;
-import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.services.stateservice.state.ModuleCommand;
+import husacct.define.domain.services.stateservice.state.SoftwareUnitCommand;
+import husacct.define.domain.services.stateservice.state.StateDefineController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-public class JtreeStateEngine {
-    private static JtreeStateEngine instance = null;
+public abstract class JtreeStateEngine {
+	private Logger logger;
+	private Map<String, Object[]> mapRegistry = new LinkedHashMap<String, Object[]>();
+	private StateDefineController stateController = new StateDefineController();
+    private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
+    private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
 
-    public static JtreeStateEngine instance() {
-
-	if (instance == null) {
-	    return instance = new JtreeStateEngine();
-	} else {
-
-	    return instance;
+	public JtreeStateEngine() {
+		logger = Logger.getLogger(JtreeStateEngine.class);
 	}
-    }
 
-    private AnalyzedModuleComponent currentRoot;
-    private Logger logger;
-    private ArrayList<Map<Long, AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long, AbstractCombinedComponent>>();
+	public void removeSoftwareUnit(Module module, SoftwareUnitDefinition unit) {
 
-    private ArrayList<AnalyzedModuleComponent> reNewedCodes = new ArrayList<AnalyzedModuleComponent>();
-
-    public JtreeStateEngine() {
-	logger = Logger.getLogger(JtreeStateEngine.class);
-    }
-
-    public void analyze() {
-	SoftwareUnitController controller = new SoftwareUnitController(-1);
-	if (JtreeController.instance().isLoaded()) {
-	    AnalyzedModuleComponent rootComponent = controller
-		    .getSoftwareUnitTreeComponents();
-	    JtreeStateEngine.instance().compareNewData(rootComponent);
-
-	} else {
-
-	    AnalyzedModuleComponent rootComponent = controller
-		    .getSoftwareUnitTreeComponents();
-
-	    JtreeController.instance().setCurrentTree(
-		    new AnalyzedModuleTree(rootComponent));
-
-	    JtreeController.instance().setLoadState(true);
+		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
+				.get(unit.getName().toLowerCase())[1];
+		mapRegistry.remove(unit.getName());
+		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		data.add(analyzeModuleTobeRestored);
+		StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
+		
+		
+		WarningMessageService.getInstance().updateWarnings();
+		JtreeController.instance().restoreTreeItem(analyzeModuleTobeRestored);
+		stateController.insertCommand(new SoftwareUnitCommand(module,data));
+		
 
 	}
 
-    }
 
-    private void compare(AnalyzedModuleComponent newdata) {
-	currentRoot = JtreeController.instance().getRootOfModel();
 
-	AnalyzedUnitComparator c = new AnalyzedUnitComparator();
-	c.calucalteChanges(currentRoot, newdata);
+	public void addModule(Module module) {
 
-    }
-
-    public void compareNewData(AnalyzedModuleComponent newdata) {
-
-	importNewData(newdata);
-
-    }
-
-    private void flush() {
-	AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
-	for (Map<Long, AbstractCombinedComponent> usersequenceinput : orderofinsertions) {
-	    for (Long key : usersequenceinput.keySet()) {
-		AnalyzedModuleComponent unitTobeRestored = (AnalyzedModuleComponent) usersequenceinput
-			.get(key);
-		unitTobeRestored.unfreeze();
-		if (unitTobeRestored.getType().toUpperCase()
-			.equals("REGEX".toUpperCase())) {
-		    flushRegix(unitTobeRestored, mainTree);
-
-		} else {
-		    mainTree.restoreTreeItem(unitTobeRestored);
-		}
-
-	    }
-
+		stateController.insertCommand(new ModuleCommand(module));
 	}
 
-    }
-
-    private void flushRegix(AnalyzedModuleComponent unitTobeRestored,
-	    AnalyzedModuleTree mainTree) {
-	for (AbstractCombinedComponent result : unitTobeRestored.getChildren()) {
-	    AnalyzedModuleComponent restoreUnit = (AnalyzedModuleComponent) result;
-	    restoreUnit.unfreeze();
-	    mainTree.restoreTreeItem(restoreUnit);
-	}
-
-    }
-
-    public void importNewData(final AnalyzedModuleComponent newdata) {
-
-	Thread first = new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-		logger.debug("Starting to reanalyze");
-		flush();
-
-	    }
-	});
-
-	Thread second = new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-
-		compare(newdata);
-
-	    }
-	});
-
-	Thread third = new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-
-		restoreFlush();
-
-		System.out.println("Finished Reanalyzing");
-	    }
-	});
-
-	try {
-	    first.start();
-	    first.join();
-	    second.start();
-	    second.join();
-	    third.start();
-
-	} catch (InterruptedException e) {
-
-	    e.printStackTrace();
-	}
-
-    }
-
-    public void registerCodeRenewal(AnalyzedModuleComponent analyzedModuleToChek) {
-	reNewedCodes.add(analyzedModuleToChek);
-
-    }
-
-    public void registerSate(Long id, AbstractCombinedComponent inpute) {
-	LinkedHashMap<Long, AbstractCombinedComponent> input = new LinkedHashMap<Long, AbstractCombinedComponent>();
-	input.put(id, inpute);
-
-	orderofinsertions.add(0, input);
-
-    }
-
-    public void removeSoftwareUnit(long moduleId,
-	    AnalyzedModuleComponent unitTobeRemoved) {
-
-	int index = -1;
-	for (int i = 0; i < orderofinsertions.size(); i++) {
-
-	    for (long key : orderofinsertions.get(i).keySet()) {
-		AnalyzedModuleComponent unitTochek = (AnalyzedModuleComponent) orderofinsertions
-			.get(i).get(key);
-
-		if (unitTochek.getUniqueName().toUpperCase()
-			.equals(unitTobeRemoved.getUniqueName().toUpperCase())) {
-		    index = i;
-		}
-
-	    }
-	}
-
-	if (index != -1) {
-	    orderofinsertions.remove(index);
-	} else {
-	    restoreCodeRenewal(unitTobeRemoved);
-	}
-    }
-
-    private void restoreCodeRenewal(AnalyzedModuleComponent unitTobeRemoved) {
-	AnalyzedModuleComponent result = null;
-	for (AnalyzedModuleComponent softwareUnit : reNewedCodes) {
-	    if (unitTobeRemoved.getUniqueName().toLowerCase()
-		    .equals(softwareUnit.getUniqueName().toLowerCase())) {
-		result = softwareUnit;
-
-		break;
-
-	    }
-
-	}
-	if (result != null) {
-	    result.unfreeze();
-	    int index = reNewedCodes.indexOf(result);
-	    reNewedCodes.remove(index);
-	} else {
-	    WarningMessageService.getInstance().hasCodeLevelWarning(
-		    unitTobeRemoved,
-		    WarningMessageService.removalType.fullRemoval);
-	}
-
-    }
-
-    private void restoreFlush() {
-	AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
-	Collections.reverse(orderofinsertions);
-	ArrayList<Map<Long, AbstractCombinedComponent>> temp = orderofinsertions;
-
-	orderofinsertions = new ArrayList<Map<Long, AbstractCombinedComponent>>();
-	try {
-	    for (Map<Long, AbstractCombinedComponent> result1 : temp) {
-		for (Long key : result1.keySet()) {
-		    AnalyzedModuleComponent unitTobeRestored = (AnalyzedModuleComponent) result1
-			    .get(key);
-		    if (unitTobeRestored.getType().toUpperCase()
-			    .equals("REGEX".toUpperCase())) {
-			restoreflushRegix(key, unitTobeRestored, mainTree);
-
-		    } else {
-			if (unitTobeRestored.isRemoved()) {
-			    WarningMessageService.getInstance()
-				    .addCodeLevelWarning(key, unitTobeRestored);
-			}
-		    }
+	public void removeModule(Module module) {
+		ArrayList<AnalyzedModuleComponent> unitTobeRemoved = new ArrayList<AnalyzedModuleComponent>();
+		stateController.insertCommand(new ModuleCommand(module));
+		
+		for (SoftwareUnitDefinition analyzedmodule : module.getUnits()) {
+			String key = analyzedmodule.getName().toLowerCase();
+			AnalyzedModuleComponent analyzedModule = (AnalyzedModuleComponent) mapRegistry
+					.get(key)[1];
+			
+			unitTobeRemoved.add(analyzedModule);
+			mapRegistry.remove(key);
+			StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzedModule);
+			
+			
+			WarningMessageService.getInstance().updateWarnings();
 
 		}
-
-	    }
-	} catch (Exception o) {
-	    System.out.println(o.getMessage());
-	    o.printStackTrace();
+		
+		stateController.insertCommand(new SoftwareUnitCommand(module,unitTobeRemoved) );
+		
 	}
-    }
 
-    private void restoreflushRegix(long id,
-	    AnalyzedModuleComponent unitTobeRestored,
-	    AnalyzedModuleTree mainTree) {
+	public void addSoftwareUnit(Module module,
+			AnalyzedModuleComponent unitToBeinserted) {
 
-	for (AbstractCombinedComponent result : unitTobeRestored.getChildren()) {
-	    AnalyzedModuleComponent child = (AnalyzedModuleComponent) result;
-	    if (unitTobeRestored.isRemoved()) {
-		WarningMessageService.getInstance().addCodeLevelWarning(id,
-			child);
-	    }
+		mapRegistry.put(unitToBeinserted.getUniqueName().toLowerCase(),
+				new Object[] { module, unitToBeinserted });
+		StateService.instance().allUnitsRegistry.removeAnalyzedUnit(unitToBeinserted);
+	
+		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		data.add(unitToBeinserted);
+		stateController.insertCommand(new SoftwareUnitCommand(module,data));
+		JtreeController.instance().removeTreeItem(unitToBeinserted);
 	}
-    }
 
+	public void addSoftwareUnit(Module module,
+			ArrayList<AnalyzedModuleComponent> unitToBeinserted) {
+
+		stateController.insertCommand(new SoftwareUnitCommand(module,unitToBeinserted));
+		for (AnalyzedModuleComponent analyzedModuleComponent : unitToBeinserted) {
+			JtreeController.instance().removeTreeItem(analyzedModuleComponent);
+			mapRegistry.put(analyzedModuleComponent.getUniqueName().toLowerCase(),
+					new Object[] { module, analyzedModuleComponent });
+			StateService.instance().allUnitsRegistry.removeAnalyzedUnit(analyzedModuleComponent);
+			WarningMessageService.getInstance().updateWarnings();
+		}
+	}
+
+	public boolean undo() {
+	return 	stateController.undo();
+
+	}
+
+	public boolean redo()  {
+	return	stateController.redo();
+	}
+	
+
+	
+
+
+
+	public Module getModulebySoftwareUnitUniqName(String Uniqname) {
+
+		Object[] result = mapRegistry.get(Uniqname.toLowerCase());
+		Module resultModule = (Module) result[0];
+
+		return resultModule;
+
+	}
+
+	public AnalyzedModuleComponent getRootModel() {
+
+		return analyzerComparator.getRootModel();
+	}
+
+	public void analyze() {
+   getRootModel();
+	
+	}
+
+
+	
+	
+	public void registerAnalyzedUnit(AnalyzedModuleComponent unit)
+	{
+		allUnitsRegistry.registerAnalyzedUnit(unit);
+	}
+
+	public AnalyzedUnitRegistry getAnalzedModuleRegistry()
+	{
+		
+		return allUnitsRegistry;
+		
+	}
+
+	public void reset() {
+		allUnitsRegistry.reset();
+		
+	}
+	
+	public ArrayList<AnalyzedModuleComponent> getMappedUnits()
+	{
+	ArrayList<AnalyzedModuleComponent> analyzedUnits = new ArrayList<AnalyzedModuleComponent>();	
+	Collection<Object[]> units=	mapRegistry.values();
+	for (Object[] unit : units) {
+		analyzedUnits.add( (AnalyzedModuleComponent)unit[1]);
+	}
+	
+	return analyzedUnits;
+	
+		
+		
+		
+		
+	}
+
+	public void fromGui() {
+		stateController.unlock();
+		
+	}
+	public boolean[] getRedoAndUndoStates()
+	{
+		return stateController.getStatesStatus();
+		
+	}
+	
 }

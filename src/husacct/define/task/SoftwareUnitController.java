@@ -472,4 +472,21 @@ public class SoftwareUnitController extends PopUpController {
 				editingRegEx);
 
 	}
+	
+	public boolean save(ArrayList<AnalyzedModuleComponent> units) {
+		logger.info("Adding software unit to module with id "
+				+ this.getModuleId());
+		try {
+			
+				this.softwareUnitDefinitionDomainService.addSoftwareUnit(this.getModuleId(), units);
+			
+			DefinitionController.getInstance().notifyObservers();
+			return true;
+		} catch (Exception e) {
+			this.logger.error(e.getMessage());
+			return false;
+		}
+
+		
+	}
 }

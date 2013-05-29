@@ -318,7 +318,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
     }
 
-    private void passModuleToService(long selectedModuleId, Module module) {
+    public void passModuleToService(long selectedModuleId, Module module) {
 	String ExceptionMessage = "";
 	if (selectedModuleId == -1) {
 	    moduleService.addModuleToRoot(module);

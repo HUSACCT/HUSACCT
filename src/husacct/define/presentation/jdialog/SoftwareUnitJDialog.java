@@ -3,6 +3,8 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
+import husacct.define.domain.services.DomainGateway;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 
 import husacct.define.task.JtreeController;
@@ -23,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -218,29 +221,8 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	
 	private void getSoftwareDefinationTree() {
-		if(JtreeController.instance().isLoaded())
-		{
-			if (ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-				
-				AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-				JtreeStateEngine.instance().compareNewData(rootComponent);
-				
-				
-				
-			}
-			
-			this.softwareDefinitionTree= JtreeController.instance().getTree();
-		
-		}else {
-			
-		AnalyzedModuleComponent rootComponent = this.softwareUnitController.getSoftwareUnitTreeComponents();
-		
-		this.softwareDefinitionTree = new AnalyzedModuleTree(rootComponent);
-		JtreeController.instance().setCurrentTree(this.softwareDefinitionTree);
-		
-		JtreeController.instance().setLoadState(true);
+	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().getRootModel());
 	
-		}
 		
 	}
 	
@@ -356,11 +338,15 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 		}
 		else {
 			TreeSelectionModel paths = this.softwareDefinitionTree.getSelectionModel();
+			ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
 			for (TreePath path : paths.getSelectionPaths()){
 				AnalyzedModuleComponent selectedComponent = (AnalyzedModuleComponent) path.getLastPathComponent();
-				
-				canclose= this.softwareUnitController.save(selectedComponent);			
+				units.add(selectedComponent);
+						
 			}
+			canclose= DomainGateway.getInstance().saveAnalzedModule(units);	
+			
+			
 			if (canclose) {
 				
 				this.dispose();

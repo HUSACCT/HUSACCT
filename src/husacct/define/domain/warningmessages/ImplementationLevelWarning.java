@@ -1,5 +1,7 @@
 package husacct.define.domain.warningmessages;
 
+import java.util.Observable;
+
 import husacct.define.domain.module.Module;
 
 public class ImplementationLevelWarning extends WarningMessage {
@@ -26,5 +28,17 @@ public class ImplementationLevelWarning extends WarningMessage {
 		this.type = "Implentation Level";
 		this.location = "";
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object[] getValue() {
+		// TODO Auto-generated method stub
+		return new Object[]{module};
 	}
 }

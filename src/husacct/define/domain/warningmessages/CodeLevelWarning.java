@@ -1,5 +1,7 @@
 package husacct.define.domain.warningmessages;
 
+import java.util.Observable;
+
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.Module;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -33,5 +35,17 @@ public class CodeLevelWarning extends WarningMessage {
 
 	public AnalyzedModuleComponent getNotCodeLevelModule() {
 		return notCodeLevelModule;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object[] getValue() {
+		// TODO Auto-generated method stub
+		return new Object[]{moduldeId,notCodeLevelModule};
 	}
 }
