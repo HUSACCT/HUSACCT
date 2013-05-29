@@ -86,14 +86,14 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
+	//TODO parentNames bevat nog geen projectnamen
 	private void getAndDrawModulesIn(String[] parentNames) {
 		if (parentNames.length == 0) {
 			this.drawArchitecture(this.getCurrentDrawingDetail());
 		} else {
 			HashMap<String, ArrayList<AbstractDTO>> allChildren = new HashMap<String, ArrayList<AbstractDTO>>();
 			for (String parentName : parentNames) {
-				ArrayList<AbstractDTO> knownChildren = this
-						.getChildrenOf(parentName);
+				ArrayList<AbstractDTO> knownChildren = this.getChildrenOf(parentName);
 				if (knownChildren.size() > 0) {
 					allChildren.put(parentName, knownChildren);
 				}
@@ -102,13 +102,11 @@ public class AnalysedController extends DrawingController {
 				ArrayList<AbstractDTO> tmp = new ArrayList<AbstractDTO>();
 				for (BaseFigure figure : this.analysedContextFigures) {
 					if (!figure.isLine() && !figure.isParent()) {
-						AbstractDTO dto = this.getFigureMap().getModuleDTO(
-								figure);
+						AbstractDTO dto = this.getFigureMap().getModuleDTO(figure);
 						if (null != dto) {
 							tmp.add(dto);
 						} else {
-							this.logger.debug(figure.getName() + " -> "
-									+ figure);
+							this.logger.debug(figure.getName() + " -> "	+ figure);
 						}
 					} else if (!figure.isLine() && !figure.isModule()) {
 						// NOTE: Pretty sure selected stuff that is both not a
@@ -141,8 +139,7 @@ public class AnalysedController extends DrawingController {
 	}
 
 	private ArrayList<AbstractDTO> getChildrenOf(String parentName) {
-		AbstractDTO[] children = this.analyseService
-				.getChildModulesInModule(parentName);
+		AbstractDTO[] children = this.analyseService.getChildModulesInModule(parentName);
 
 		ArrayList<AbstractDTO> knownChildren = new ArrayList<AbstractDTO>();
 
@@ -201,6 +198,9 @@ public class AnalysedController extends DrawingController {
 
 		//TODO optimize for selecting multiple projects
 		if(figures[0] instanceof ProjectFigure){
+			String[] paths = new String[1];
+			paths[0] = figures[0].getName();
+			super.setCurrentPaths(paths);
 			ProjectDTO project = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
 			AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new AbstractDTO[project.analysedModules.size()] );
 			if(abstractDTOs.length != 0){
@@ -259,13 +259,12 @@ public class AnalysedController extends DrawingController {
 		}
 	}
 
-	protected ArrayList<String> sortFiguresBasedOnZoomability(
-			BaseFigure[] figures) {
+	protected ArrayList<String> sortFiguresBasedOnZoomability(BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
 		for (BaseFigure figure : figures) {
 			if (figure.isModule() && !figure.isContext()) {
 				try {
-					if(!(this.getFigureMap().getModuleDTO(figure) instanceof ProjectDTO)){
+					if(!(figure instanceof ProjectFigure)){
 						AnalysedModuleDTO parentDTO = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figure);
 						parentNames.add(parentDTO.uniqueName);
 					}
