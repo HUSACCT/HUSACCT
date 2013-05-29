@@ -1,11 +1,10 @@
-package husacct.define.domain.module;
+package husacct.define.domain.module.ToBeImplemented;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
-import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.module.ToBeImplemented.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
-import husacct.define.domain.services.WarningMessageService;
 
 import java.util.ArrayList;
 
@@ -121,8 +120,8 @@ public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 			subModule.parent=this;
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
-			service.addDefaultRules(subModule);
-			WarningMessageService.getInstance().processModule(subModule);
+			//service.addDefaultRules(subModule);
+			//WarningMessageService.getInstance().processModule(subModule);
 			return "";
 		}else{
 			return ServiceProvider.getInstance().getLocaleService().getTranslatedString("SameNameModule");

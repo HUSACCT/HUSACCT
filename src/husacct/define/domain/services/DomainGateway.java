@@ -114,6 +114,16 @@ public class DomainGateway {
 		DefinitionController.getInstance().setSelectedModuleId(id);
 		
 	}
+
+
+
+
+
+	public void saveRegEx(ArrayList<AnalyzedModuleComponent> components,
+			String enteredRegEx) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
