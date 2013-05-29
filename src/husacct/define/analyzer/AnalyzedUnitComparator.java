@@ -5,7 +5,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;

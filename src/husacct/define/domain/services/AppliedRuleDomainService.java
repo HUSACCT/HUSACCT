@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 
 import java.util.ArrayList;
 

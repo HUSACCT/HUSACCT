@@ -2,12 +2,12 @@ package husacct.define.task;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.modules.Component;
-import husacct.define.domain.module.ToBeImplemented.modules.Facade;
-import husacct.define.domain.module.ToBeImplemented.modules.Layer;
-import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
+import husacct.define.domain.module.ModuleFactory;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Component;
+import husacct.define.domain.module.modules.Facade;
+import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.module.modules.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;

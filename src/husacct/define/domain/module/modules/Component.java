@@ -1,14 +1,14 @@
-package husacct.define.domain.module.ToBeImplemented.modules;
+package husacct.define.domain.module.modules;
 
 
 
-
-import java.util.ArrayList;
 
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
-import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleFactory;
+import husacct.define.domain.module.ModuleStrategy;
+
+import java.util.ArrayList;
 
 
 

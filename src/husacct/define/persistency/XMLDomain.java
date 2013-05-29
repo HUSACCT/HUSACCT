@@ -7,11 +7,11 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.modules.Component;
-import husacct.define.domain.module.ToBeImplemented.modules.Layer;
-import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
+import husacct.define.domain.module.ModuleFactory;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Component;
+import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.module.modules.SubSystem;
 
 import java.util.ArrayList;
 import java.util.Iterator;

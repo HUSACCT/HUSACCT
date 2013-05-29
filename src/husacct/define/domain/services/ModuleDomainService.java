@@ -3,8 +3,8 @@ package husacct.define.domain.services;
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.module.ToBeImplemented.ModuleComparator;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleComparator;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;

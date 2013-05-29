@@ -8,7 +8,7 @@ import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;

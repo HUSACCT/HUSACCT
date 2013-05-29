@@ -1,7 +1,7 @@
 package husacct.define.domain;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 
 import java.util.ArrayList;
 

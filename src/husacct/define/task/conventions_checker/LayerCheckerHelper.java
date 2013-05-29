@@ -1,8 +1,8 @@
 package husacct.define.task.conventions_checker;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.modules.Layer;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.ModuleDomainService;
 
 import java.util.ArrayList;

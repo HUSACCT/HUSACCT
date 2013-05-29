@@ -1,6 +1,6 @@
 package husacct.define.domain.services.stateservice.state;
 
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.task.DefinitionController;
 

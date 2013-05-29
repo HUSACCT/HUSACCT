@@ -1,6 +1,6 @@
 package husacct.define.domain.warningmessages;
 
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 
 import java.util.Observable;
 

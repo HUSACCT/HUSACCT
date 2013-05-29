@@ -2,7 +2,7 @@ package husacct.define.task.conventions_checker;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 
 import java.util.ArrayList;

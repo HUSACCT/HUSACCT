@@ -1,9 +1,9 @@
-package husacct.define.domain.module.ToBeImplemented;
+package husacct.define.domain.module;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
-import husacct.define.domain.module.ToBeImplemented.modules.Layer;
+import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
 

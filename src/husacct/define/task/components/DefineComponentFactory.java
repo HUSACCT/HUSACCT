@@ -1,12 +1,12 @@
 package husacct.define.task.components;
 
 
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
-import husacct.define.domain.module.ToBeImplemented.modules.Component;
-import husacct.define.domain.module.ToBeImplemented.modules.ExternalLibrary;
-import husacct.define.domain.module.ToBeImplemented.modules.Facade;
-import husacct.define.domain.module.ToBeImplemented.modules.Layer;
-import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
+import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.module.modules.Component;
+import husacct.define.domain.module.modules.ExternalLibrary;
+import husacct.define.domain.module.modules.Facade;
+import husacct.define.domain.module.modules.Layer;
+import husacct.define.domain.module.modules.SubSystem;
 
 import org.apache.log4j.Logger;
 

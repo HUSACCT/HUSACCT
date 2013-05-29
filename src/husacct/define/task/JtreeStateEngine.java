@@ -3,7 +3,7 @@ package husacct.define.task;
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.analyzer.AnalyzedUnitRegistry;
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.ModuleCommand;

@@ -1,7 +1,7 @@
 package husacct.define.presentation.jpanel.ruledetails.contentsmodule;
 
 
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.components.DescriptionPanelComponent;
 import husacct.define.presentation.jpanel.ruledetails.components.EnabledPanelComponent;

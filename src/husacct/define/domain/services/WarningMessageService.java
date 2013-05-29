@@ -1,6 +1,6 @@
 package husacct.define.domain.services;
 
-import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
