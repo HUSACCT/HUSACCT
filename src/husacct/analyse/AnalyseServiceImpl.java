@@ -151,6 +151,6 @@ public class AnalyseServiceImpl extends ObservableService implements IAnalyseSer
 
 	@Override
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
-		historyLogger.saveHistory(applicationDTO, workspaceName);
+		historyLogger.logHistory(applicationDTO, workspaceName);
 	}
 }
