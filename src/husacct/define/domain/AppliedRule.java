@@ -1,7 +1,7 @@
 package husacct.define.domain;
 
 import husacct.ServiceProvider;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 
 import java.util.ArrayList;
 
@@ -13,8 +13,8 @@ public class AppliedRule {
     private boolean enabled;
     private ArrayList<AppliedRule> exceptions;
     private long id;
-    private Module moduleFrom;
-    private Module moduleTo;
+    private ModuleStrategy moduleFrom;
+    private ModuleStrategy moduleTo;
     private String regex;
     private String ruleType;
 
@@ -22,15 +22,15 @@ public class AppliedRule {
 	this("", "", new String[0], "", null, null, true);
     }
 
-    public AppliedRule(String ruleType, String description, Module moduleFrom,
-	    Module moduleTo) {
+    public AppliedRule(String ruleType, String description, ModuleStrategy moduleFrom,
+	    ModuleStrategy moduleTo) {
 	this(ruleType, description, new String[0], "", moduleFrom, moduleTo,
 		true);
     }
 
     public AppliedRule(String ruleType, String description,
-	    String[] dependencies, String regex, Module moduleFrom,
-	    Module moduleTo, boolean enabled) {
+	    String[] dependencies, String regex, ModuleStrategy moduleFrom,
+	    ModuleStrategy moduleTo, boolean enabled) {
 	id = STATIC_ID++;
 	STATIC_ID++;
 	this.ruleType = ruleType;
@@ -86,11 +86,11 @@ public class AppliedRule {
 	return id;
     }
 
-    public Module getModuleFrom() {
+    public ModuleStrategy getModuleFrom() {
 	return moduleFrom;
     }
 
-    public Module getModuleTo() {
+    public ModuleStrategy getModuleTo() {
 	return moduleTo;
     }
 
@@ -152,11 +152,11 @@ public class AppliedRule {
 	this.id = id;
     }
 
-    public void setModuleFrom(Module moduleFrom) {
+    public void setModuleFrom(ModuleStrategy moduleFrom) {
 	this.moduleFrom = moduleFrom;
     }
 
-    public void setModuleTo(Module moduleTo) {
+    public void setModuleTo(ModuleStrategy moduleTo) {
 	this.moduleTo = moduleTo;
     }
 

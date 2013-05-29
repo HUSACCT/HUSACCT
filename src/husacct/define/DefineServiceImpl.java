@@ -8,7 +8,7 @@ import husacct.common.services.ObservableService;
 import husacct.define.domain.Application;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -70,7 +70,7 @@ public class DefineServiceImpl extends ObservableService implements
 	if (logicalPath.equals("**")) {
 	    childModuleDTOs = getRootModules();
 	} else {
-	    Module module = moduleService.getModuleByLogicalPath(logicalPath);
+	    ModuleStrategy module = moduleService.getModuleByLogicalPath(logicalPath);
 	    ModuleDTO moduleDTO = domainParser.parseModule(module);
 	    childModuleDTOs = moduleDTO.subModules;
 	}
@@ -132,7 +132,7 @@ public class DefineServiceImpl extends ObservableService implements
 
     @Override
     public ModuleDTO[] getRootModules() {
-	Module[] modules = moduleService.getRootModules();
+	ModuleStrategy[] modules = moduleService.getRootModules();
 	ModuleDTO[] moduleDTOs = domainParser.parseRootModules(modules);
 	return moduleDTOs;
     }
@@ -160,9 +160,9 @@ public class DefineServiceImpl extends ObservableService implements
     @Override
     public boolean isMapped() {
 	boolean isMapped = false;
-	ArrayList<Module> modules = SoftwareArchitecture.getInstance()
+	ArrayList<ModuleStrategy> modules = SoftwareArchitecture.getInstance()
 		.getModules();
-	for (Module module : modules) {
+	for (ModuleStrategy module : modules) {
 	    if (module.isMapped()) {
 		isMapped = true;
 	    }

@@ -8,6 +8,7 @@ import husacct.define.domain.module.ToBeImplemented.modules.Component;
 import husacct.define.domain.module.ToBeImplemented.modules.ExternalLibrary;
 import husacct.define.domain.module.ToBeImplemented.modules.Facade;
 import husacct.define.domain.module.ToBeImplemented.modules.Layer;
+import husacct.define.domain.module.ToBeImplemented.modules.Root;
 import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
 
 import org.apache.log4j.Logger;
@@ -20,7 +21,7 @@ public class ModuleFactory {
 		"Component",
 		"Facade",
 		"SubSystem",
-		"ExternalLibrary"
+		"ExternalLibrary","Root"
 	};
 	
 	public static Class<?>[] icecreams = new Class[]{
@@ -28,7 +29,7 @@ public class ModuleFactory {
 		Component.class,
 		Facade.class,
 		SubSystem.class,
-		ExternalLibrary.class
+		ExternalLibrary.class,Root.class
 	};
 	
 	public ModuleStrategy createModule(String choice){

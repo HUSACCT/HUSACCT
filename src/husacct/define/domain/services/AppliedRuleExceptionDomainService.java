@@ -4,30 +4,33 @@ import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 
 import java.util.ArrayList;
+
+import com.sun.xml.internal.ws.api.server.Module;
 
 public class AppliedRuleExceptionDomainService {
 
     public void addExceptionToAppliedRule(long parentRuleId, String ruleType,
 	    String description, long moduleFromId, long moduleToId,
 	    String[] dependencies) {
-	Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(
+	ModuleStrategy moduleFrom = SoftwareArchitecture.getInstance().getModuleById(
 		moduleFromId);
-	Module moduleTo;
+	ModuleStrategy moduleTo;
 	if (moduleToId != -1) {
 	    moduleTo = SoftwareArchitecture.getInstance().getModuleById(
 		    moduleToId);
 	} else {
-	    moduleTo = new Module();
+	    moduleTo = new ModuleFactory().createDummy("blank");
 	}
 	addExceptionToAppliedRule(parentRuleId, ruleType, description,
 		moduleFrom, moduleTo, dependencies);
     }
 
     public void addExceptionToAppliedRule(long parentRuleId, String ruleType,
-	    String description, Module moduleFrom, Module moduleTo,
+	    String description, ModuleStrategy moduleFrom, ModuleStrategy moduleTo,
 	    String[] dependencies) {
 	AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
 	AppliedRuleStrategy exceptionRule = ruleFactory.createRule(ruleType);

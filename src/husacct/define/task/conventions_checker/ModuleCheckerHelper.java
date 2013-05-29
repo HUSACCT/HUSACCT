@@ -2,7 +2,7 @@ package husacct.define.task.conventions_checker;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class ModuleCheckerHelper {
     }
 
     public boolean checkRuleTypeAlreadyFromOtherToSelected(String ruleType,
-	    Module fromModule, Module toModule) {
+	    ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getToModuleAppliedRules(toModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
@@ -33,7 +33,7 @@ public class ModuleCheckerHelper {
 		return false;
 	    }
 	}
-	for (Module toModuleChild : toModule.getSubModules()) {
+	for (ModuleStrategy toModuleChild : toModule.getSubModules()) {
 	    if (!checkRuleTypeAlreadyFromOtherToSelected(ruleType, fromModule,
 		    toModuleChild)) {
 		return false;
@@ -43,11 +43,11 @@ public class ModuleCheckerHelper {
     }
 
     private boolean checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
-	    Module appliedRuleModule, Module fromModule) {
+	    ModuleStrategy appliedRuleModule, ModuleStrategy fromModule) {
 	if (appliedRuleModule.getId() == fromModule.getId()) {
 	    return false;
 	} else {
-	    for (Module fromModuleChild : fromModule.getSubModules()) {
+	    for (ModuleStrategy fromModuleChild : fromModule.getSubModules()) {
 		if (!checkRuleTypeAlreadyFromOtherToSelectedFromModuleId(
 			appliedRuleModule, fromModuleChild)) {
 		    return false;
@@ -58,7 +58,7 @@ public class ModuleCheckerHelper {
     }
 
     public boolean checkRuleTypeAlreadyFromThisToOther(String ruleType,
-	    Module fromModule, Module toModule) {
+	    ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(fromModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
@@ -73,13 +73,13 @@ public class ModuleCheckerHelper {
 		return false;
 	    }
 	}
-	for (Module fromModuleChild : fromModule.getSubModules()) {
+	for (ModuleStrategy fromModuleChild : fromModule.getSubModules()) {
 	    if (!checkRuleTypeAlreadyFromThisToOther(ruleType, fromModuleChild,
 		    toModule)) {
 		return false;
 	    }
 	}
-	for (Module toModuleChild : toModule.getSubModules()) {
+	for (ModuleStrategy toModuleChild : toModule.getSubModules()) {
 	    if (!checkRuleTypeAlreadyFromThisToOther(ruleType, fromModule,
 		    toModuleChild)) {
 		return false;
@@ -89,7 +89,7 @@ public class ModuleCheckerHelper {
     }
 
     public boolean checkRuleTypeAlreadyFromThisToSelected(String ruleType,
-	    Module fromModule, Module toModule) {
+	    ModuleStrategy fromModule, ModuleStrategy toModule) {
 	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(fromModule)) {
 	    if (appliedRule.getRuleType().equals(ruleType)
 		    && appliedRule.getModuleFrom().getId() == fromModule
@@ -104,13 +104,13 @@ public class ModuleCheckerHelper {
 		return false;
 	    }
 	}
-	for (Module fromModuleChild : fromModule.getSubModules()) {
+	for (ModuleStrategy fromModuleChild : fromModule.getSubModules()) {
 	    if (!checkRuleTypeAlreadyFromThisToSelected(ruleType,
 		    fromModuleChild, toModule)) {
 		return false;
 	    }
 	}
-	for (Module toModuleChild : toModule.getSubModules()) {
+	for (ModuleStrategy toModuleChild : toModule.getSubModules()) {
 	    if (!checkRuleTypeAlreadyFromThisToSelected(ruleType, fromModule,
 		    toModuleChild)) {
 		return false;
@@ -119,7 +119,7 @@ public class ModuleCheckerHelper {
 	return true;
     }
 
-    public boolean checkRuleTypeAlreadySet(String ruleTypeKey, Module moduleFrom) {
+    public boolean checkRuleTypeAlreadySet(String ruleTypeKey, ModuleStrategy moduleFrom) {
 	for (AppliedRuleStrategy appliedRule : getFromModuleAppliedRules(moduleFrom)) {
 	    if (appliedRule.getRuleType().equals(ruleTypeKey)) {
 		setErrorMessage("'"
@@ -135,9 +135,8 @@ public class ModuleCheckerHelper {
 	return errorMessage;
     }
 
-    private ArrayList<AppliedRuleStrategy> getFromModuleAppliedRules(Module fromModule) {
-	ArrayList<Long> appliedRuleIds = appliedRuleService
-		.getAppliedRulesIdsByModuleFromId(fromModule.getId());
+    private ArrayList<AppliedRuleStrategy> getFromModuleAppliedRules(ModuleStrategy fromModule) {
+	ArrayList<Long> appliedRuleIds = appliedRuleService.getAppliedRulesIdsByModuleFromId(fromModule.getId());
 	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<AppliedRuleStrategy>();
 	for (Long appliedRuleId : appliedRuleIds) {
 	    appliedRules.add(appliedRuleService
@@ -146,7 +145,7 @@ public class ModuleCheckerHelper {
 	return appliedRules;
     }
 
-    private ArrayList<AppliedRuleStrategy> getToModuleAppliedRules(Module toModule) {
+    private ArrayList<AppliedRuleStrategy> getToModuleAppliedRules(ModuleStrategy toModule) {
 	ArrayList<Long> appliedRuleIds = appliedRuleService
 		.getAppliedRulesIdsByModuleToId(toModule.getId());
 	ArrayList<AppliedRuleStrategy> appliedRules = new ArrayList<AppliedRuleStrategy>();

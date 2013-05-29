@@ -2,12 +2,12 @@ package husacct.define.task;
 
 import husacct.ServiceProvider;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Component;
-import husacct.define.domain.module.ExternalSystem;
-import husacct.define.domain.module.Facade;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.SubSystem;
+import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ToBeImplemented.modules.Component;
+import husacct.define.domain.module.ToBeImplemented.modules.Facade;
+import husacct.define.domain.module.ToBeImplemented.modules.Layer;
+import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 public class DefinitionController extends Observable implements Observer {
 
     private static DefinitionController instance;
+    private ModuleFactory moduleFactory = new ModuleFactory();
 
     public static DefinitionController getInstance() {
 	return instance == null ? (instance = new DefinitionController())
@@ -66,79 +67,18 @@ public class DefinitionController extends Observable implements Observer {
     }
 
     private void addChildComponents(AbstractDefineComponent parentComponent,
-	    Module module) {
-	AbstractDefineComponent childComponent = DefineComponentFactory
-		.getDefineComponent(module);
-	for (Module subModule : module.getSubModules()) {
+	    ModuleStrategy module) {
+	AbstractDefineComponent childComponent = DefineComponentFactory.getDefineComponent(module);
+	for (ModuleStrategy subModule : module.getSubModules()) {
 	    logger.debug(module.getName() + "  ]" + module.getType());
 	    addChildComponents(childComponent, subModule);
 	}
 	parentComponent.addChild(childComponent);
     }
 
-    //TODO: Use Module Factory here for 1 addModule() method, instead of 9000+
-    public boolean addComponent(long selectedModuleId, String componentName,
-	    String componentDescription) {
-	logger.info("Adding component " + "Facade" + componentName);
-	logger.info("Adding component " + componentName);
-	try {
-	    JPanelStatus.getInstance("Adding component").start();
-	    Component newComponent = new Component(componentName,
-		    componentDescription);
 
-	    Facade f = new Facade();
-	    f.setName("Facade" + componentName);
-	    newComponent.addSubModule(f);
-	    passModuleToService(selectedModuleId, newComponent);
 
-	    return true;
-	} catch (Exception e) {
-	    logger.error("addComponent(" + componentName + ") - exception: "
-		    + e.getMessage());
-	    UiDialogs.errorDialog(definitionJPanel, e.getMessage());
-	    return false;
-	} finally {
-	    JPanelStatus.getInstance().stop();
-	}
-    }
-
-    public boolean addExternalLibrary(long selectedModuleId,
-	    String libraryName, String libraryDescription) {
-	logger.info("Adding external library " + libraryName);
-	try {
-	    JPanelStatus.getInstance("Adding external library").start();
-	    ExternalSystem newComponent = new ExternalSystem(libraryName,
-		    libraryDescription);
-	    passModuleToService(selectedModuleId, newComponent);
-	    return true;
-	} catch (Exception e) {
-	    logger.error("addExternalLibrary(" + libraryName
-		    + ") - exception: " + e.getMessage());
-	    UiDialogs.errorDialog(definitionJPanel, e.getMessage());
-	    return false;
-	} finally {
-	    JPanelStatus.getInstance().stop();
-	}
-    }
-
-    public boolean addLayer(long selectedModuleId, String layerName,
-	    String layerDescription) {
-	logger.info("Adding layer " + layerName);
-	try {
-	    JPanelStatus.getInstance("Adding Layer").start();
-	    Layer newLayer = new Layer(layerName, layerDescription);
-	    passModuleToService(selectedModuleId, newLayer);
-	    return true;
-	} catch (Exception e) {
-	    logger.error("addLayer(" + layerName + ") - exception: "
-		    + e.getMessage());
-	    UiDialogs.errorDialog(definitionJPanel, e.getMessage());
-	    return false;
-	} finally {
-	    JPanelStatus.getInstance().stop();
-	}
-    }
-
+    
     @Override
     public void addObserver(Observer o) {
 	if (!observers.contains(o)) {
@@ -146,28 +86,10 @@ public class DefinitionController extends Observable implements Observer {
 	}
     }
 
-    public boolean addSubSystem(long selectedModuleId, String moduleName,
-	    String moduleDescription) {
-	logger.info("Adding subsystem " + moduleName);
-	try {
-	    JPanelStatus.getInstance("Adding subsystem").start();
-	    SubSystem newModule = new SubSystem(moduleName, moduleDescription);
-	    passModuleToService(selectedModuleId, newModule);
-	    return true;
-	} catch (Exception e) {
-	    logger.error("addSubSystem(" + moduleName + ") - exception: "
-		    + e.getMessage());
-	    UiDialogs.errorDialog(definitionJPanel, e.getMessage()
-		    + "ehm faal!");
-	    return false;
-	} finally {
-	    JPanelStatus.getInstance().stop();
-	}
-    }
+   
 
     public ArrayList<Long> getAppliedRuleIdsBySelectedModule() {
-	return appliedRuleService
-		.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
+	return appliedRuleService.getAppliedRulesIdsByModuleFromId(getSelectedModuleId());
     }
 
     /**
@@ -179,7 +101,7 @@ public class DefinitionController extends Observable implements Observer {
 
 	if (moduleId != -1) {
 	    try {
-		Module module = moduleService.getModuleById(moduleId);
+		ModuleStrategy module = moduleService.getModuleById(moduleId);
 		moduleDetails.put("id", module.getId());
 		moduleDetails.put("name", module.getName());
 		moduleDetails.put("description", module.getDescription());
@@ -206,8 +128,8 @@ public class DefinitionController extends Observable implements Observer {
 	JPanelStatus.getInstance("Updating Modules").start();
 
 	SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
-	ArrayList<Module> modules = moduleService.getSortedModules();
-	for (Module module : modules) {
+	ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
+	for (ModuleStrategy module : modules) {
 
 	    addChildComponents(rootComponent, module);
 	}
@@ -242,8 +164,7 @@ public class DefinitionController extends Observable implements Observer {
     }
 
     public ArrayList<String> getSoftwareUnitNamesBySelectedModule() {
-	return softwareUnitDefinitionDomainService
-		.getSoftwareUnitNames(getSelectedModuleId());
+	return softwareUnitDefinitionDomainService.getSoftwareUnitNames(getSelectedModuleId());
     }
 
     public String getSoftwareUnitTypeBySoftwareUnitName(String softwareUnitName) {
@@ -318,7 +239,7 @@ public class DefinitionController extends Observable implements Observer {
 	}
     }
 
-    public void passModuleToService(long selectedModuleId, Module module) {
+    public void passModuleToService(long selectedModuleId, ModuleStrategy module) {
 	String ExceptionMessage = "";
 	if (selectedModuleId == -1) {
 	    moduleService.addModuleToRoot(module);
@@ -340,7 +261,7 @@ public class DefinitionController extends Observable implements Observer {
     public void removeModuleById(long moduleId) {
 	logger.info("Removing module by Id " + moduleId);
 	try {
-	    JPanelStatus.getInstance("Removing Module").start();
+	    JPanelStatus.getInstance("Removing ModuleStrategy").start();
 	    moduleService.removeModuleById(moduleId);
 	    setSelectedModuleId(-1);
 	    this.notifyObservers();
@@ -506,4 +427,11 @@ public class DefinitionController extends Observable implements Observer {
 		moduleDescription, type);
 	this.notifyObservers();
     }
+
+	public void addModule(String name, String description, String type) {
+		ModuleStrategy module= moduleFactory.createModule(type);
+		 module.set(name, description);
+		this.passModuleToService(getSelectedModuleId(), module);
+		
+	}
 }

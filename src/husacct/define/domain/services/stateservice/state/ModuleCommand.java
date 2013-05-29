@@ -1,8 +1,6 @@
 package husacct.define.domain.services.stateservice.state;
 
-import husacct.ServiceProvider;
-import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.task.DefinitionController;
 
@@ -10,13 +8,13 @@ import husacct.define.task.DefinitionController;
 public class ModuleCommand implements Istate{
 
 
-	private Module child;
+	private ModuleStrategy child;
 		
 	
 	
 	
-	public ModuleCommand(Module module) {
-		this.child=module;
+	public ModuleCommand(ModuleStrategy ModuleStrategy) {
+		this.child=ModuleStrategy;
 	}
 
 	@Override

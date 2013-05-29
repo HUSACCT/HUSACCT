@@ -253,7 +253,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
      * Creating Gui
      */
     public void initGui() {
-	DefinitionController.getInstance().addObserver(this);
+	try{
+    	DefinitionController.getInstance().addObserver(this);
 	BorderLayout softwareUnitsPanelLayout = new BorderLayout();
 	setLayout(softwareUnitsPanelLayout);
 	setBorder(BorderFactory.createTitledBorder(ServiceProvider
@@ -265,7 +266,10 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
 		.addServiceListener(this);
 	createPopupMenu();
 	setButtonEnableState();
-    }
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
+	}
 
     private boolean isSelectedRegex() {
 	if (((String) softwareUnitsTable.getValueAt(getSelectedRow(), 1))
@@ -385,7 +389,8 @@ public class SoftwareUnitsJPanel extends JPanel implements ActionListener,
 	    }
 	    atm.fireTableDataChanged();
 	} catch (Exception e) {
-	    UiDialogs.errorDialog(this, e.getMessage());
+	   e.printStackTrace();
+		UiDialogs.errorDialog(this, e.getMessage());
 	} finally {
 	    JPanelStatus.getInstance().stop();
 	}

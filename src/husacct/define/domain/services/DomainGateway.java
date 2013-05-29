@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import husacct.define.domain.SoftwareArchitecture;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.ModuleFactory;
+
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
@@ -34,8 +33,8 @@ public class DomainGateway {
 	public boolean addModule(String name,String description,String type)
 	{
 		StateService.instance().fromGui();
-		ModuleFactory factory = new ModuleFactory();
-		factory.createModule(name, description, type);
+		DefinitionController.getInstance().addModule( name, description,type);
+		
 		
 		return true;
 		

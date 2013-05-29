@@ -4,7 +4,7 @@ import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 
 import java.util.ArrayList;
 
@@ -13,28 +13,28 @@ public class AppliedRuleDomainService {
     private AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
 
     public long addAppliedRule(String ruleTypeKey, String description,
-	    String[] dependencies, String regex, long moduleFromId,
-	    long moduleToId, boolean enabled) {
-	Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(
-		moduleFromId);
-	Module moduleTo;
-	if (moduleToId != -1) {
-	    moduleTo = SoftwareArchitecture.getInstance().getModuleById(
-		    moduleToId);
+	    String[] dependencies, String regex, long ModuleStrategyFromId,
+	    long ModuleStrategyToId, boolean enabled) {
+	ModuleStrategy ModuleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(
+		ModuleStrategyFromId);
+	ModuleStrategy ModuleStrategyTo;
+	if (ModuleStrategyToId != -1) {
+	    ModuleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(
+		    ModuleStrategyToId);
 	} else {
-	    moduleTo = moduleFrom;
+	    ModuleStrategyTo = ModuleStrategyFrom;
 	}
 
 	return addAppliedRule(ruleTypeKey, description, dependencies, regex,
-		moduleFrom, moduleTo, enabled);
+		ModuleStrategyFrom, ModuleStrategyTo, enabled);
     }
 
     public long addAppliedRule(String ruleTypeKey, String description,
-	    String[] dependencies, String regex, Module moduleFrom,
-	    Module moduleTo, boolean enabled) {
+	    String[] dependencies, String regex, ModuleStrategy ModuleStrategyFrom,
+	    ModuleStrategy ModuleStrategyTo, boolean enabled) {
 
 	AppliedRuleStrategy rule = ruleFactory.createDummyRule(ruleTypeKey);
-	rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleTo, enabled); 
+	rule.setAppliedRule(description, dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled); 
 	if (isDuplicate(rule)) {
 	    return -1;
 	}
@@ -73,17 +73,17 @@ public class AppliedRuleDomainService {
 	return rules;
     }
 
-    public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
+    public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long ModuleStrategyId) {
 	return SoftwareArchitecture.getInstance()
-		.getAppliedRulesIdsByModuleFromId(moduleId);
+		.getAppliedRulesIdsByModuleFromId(ModuleStrategyId);
     }
 
-    public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
+    public ArrayList<Long> getAppliedRulesIdsByModuleToId(long ModuleStrategyId) {
 	return SoftwareArchitecture.getInstance()
-		.getAppliedRulesIdsByModuleToId(moduleId);
+		.getAppliedRulesIdsByModuleToId(ModuleStrategyId);
     }
 
-    public long getModuleToIdOfAppliedRule(long appliedRuleId) {
+    public long getModuleStrategyToIdOfAppliedRule(long appliedRuleId) {
 	return SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(appliedRuleId).getModuleTo().getId();
     }
@@ -127,27 +127,27 @@ public class AppliedRuleDomainService {
 
     public void updateAppliedRule(long appliedRuleId, Boolean isGenerated,
 	    String ruleTypeKey, String description, String[] dependencies,
-	    String regex, long moduleFromId, long moduleToId, boolean enabled) {
+	    String regex, long ModuleStrategyFromId, long ModuleStrategyToId, boolean enabled) {
 
-	Module moduleFrom = SoftwareArchitecture.getInstance().getModuleById(
-		moduleFromId);
-	Module moduleTo = SoftwareArchitecture.getInstance().getModuleById(
-		moduleToId);
+	ModuleStrategy ModuleStrategyFrom = SoftwareArchitecture.getInstance().getModuleById(
+		ModuleStrategyFromId);
+	ModuleStrategy ModuleStrategyTo = SoftwareArchitecture.getInstance().getModuleById(
+		ModuleStrategyToId);
 	updateAppliedRule(appliedRuleId, ruleTypeKey, description,
-		dependencies, regex, moduleFrom, moduleTo, enabled);
+		dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled);
     }
 
     public void updateAppliedRule(long appliedRuleId, String ruleTypeKey,
 	    String description, String[] dependencies, String regex,
-	    Module moduleFrom, Module moduleTo, boolean enabled) {
+	    ModuleStrategy ModuleStrategyFrom, ModuleStrategy ModuleStrategyTo, boolean enabled) {
 	AppliedRuleStrategy rule = SoftwareArchitecture.getInstance()
 		.getAppliedRuleById(appliedRuleId);
 	rule.setRuleType(ruleTypeKey);
 	rule.setDescription(description);
 	rule.setDependencies(dependencies);
 	rule.setRegex(regex);
-	rule.setModuleFrom(moduleFrom);
-	rule.setModuleTo(moduleTo);
+	rule.setModuleFrom(ModuleStrategyFrom);
+	rule.setModuleTo(ModuleStrategyTo);
 	rule.setEnabled(enabled);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();

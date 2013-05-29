@@ -2,25 +2,20 @@ package husacct.define.task;
 
 
 
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.presentation.moduletree.ModuleTree;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-
 import javax.swing.tree.TreePath;
-
-
-
-
-import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.services.stateservice.StateService;
 
 
 	public class JtreeController {
@@ -52,7 +47,7 @@ import husacct.define.domain.services.stateservice.StateService;
 
 
 
-	public void registerTreeRemoval(Module module) 
+	public void registerTreeRemoval(ModuleStrategy module) 
 	{
 		boolean pass=module.getSubModules().size()>0 ?true:false;
 
@@ -219,12 +214,12 @@ public void setTreeModel(AnalyzedModuleComponent root) {
 	
 }
 
-public void restoreTreeItems(Module module) {
+public void restoreTreeItems(ModuleStrategy module) {
 	for (SoftwareUnitDefinition def : module.getUnits()) {
 		StateService.instance().removeSoftwareUnit(module, def);
 		
 	}
-	for (Module mod : module.getSubModules()) {
+	for (ModuleStrategy mod : module.getSubModules()) {
 		restoreTreeItems(mod);
 	}
 	

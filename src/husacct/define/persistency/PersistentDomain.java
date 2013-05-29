@@ -7,7 +7,7 @@ import husacct.define.domain.Application;
 import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -88,10 +88,10 @@ public class PersistentDomain implements ISaveable {
 			    projects, workspaceApplication.getVersion());
 	    domainService.createNewArchitectureDefinition(workspaceArchitecture
 		    .getName());
-	    for (Module m : workspaceArchitecture.getModules()) {
+	    for (ModuleStrategy m : workspaceArchitecture.getModules()) {
 		long rootModule = moduleService.addModuleToRoot(m);
 		if (m.getSubModules().size() > 0) {
-		    for (Module subModule : m.getSubModules()) {
+		    for (ModuleStrategy subModule : m.getSubModules()) {
 			moduleService.addModuleToParent(rootModule, subModule);
 		    }
 		}

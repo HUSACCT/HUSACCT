@@ -10,9 +10,10 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.SubSystem;
+import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ToBeImplemented.modules.Layer;
+import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
@@ -24,6 +25,7 @@ import husacct.define.task.components.AbstractDefineComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.DefineComponentFactory;
 import husacct.define.task.components.SoftwareArchitectureComponent;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,10 +73,10 @@ public class AppliedRuleController extends PopUpController {
     }
 
     private void addDefineModuleChildComponents(
-	    AbstractCombinedComponent parentComponent, Module module) {
+	    AbstractCombinedComponent parentComponent, ModuleStrategy module) {
 	AbstractDefineComponent childComponent = DefineComponentFactory
 		.getDefineComponent(module);
-	for (Module subModule : module.getSubModules()) {
+	for (ModuleStrategy subModule : module.getSubModules()) {
 	    addDefineModuleChildComponents(childComponent, subModule);
 	}
 
@@ -101,8 +103,8 @@ public class AppliedRuleController extends PopUpController {
 	exceptionRules.add(exceptionRule);
     }
 
-    private Module assignToCorrectModule(Object o) {
-	Module module;
+    private ModuleStrategy assignToCorrectModule(Object o) {
+	ModuleStrategy module;
 	if (o instanceof SoftwareUnitDefinition) {
 	    module = getModuleWhereSoftwareUnitNeedsToBeMapped(
 		    (SoftwareUnitDefinition) o, (SoftwareUnitDefinition) o);
@@ -112,11 +114,12 @@ public class AppliedRuleController extends PopUpController {
 		module = SoftwareArchitecture.getInstance().getModuleById(
 			moduleId);
 	    } else {
-		module = new Module();
+		module = new ModuleStrategy() {
+		};
 		module.setId(-1);
 	    }
 	} else {
-	    module = new Module();
+	    module = new ModuleStrategy(){};
 	}
 	return module;
     }
@@ -138,15 +141,16 @@ public class AppliedRuleController extends PopUpController {
 	return appliedRule.checkConvention();
     }
 
-    private Module createOrAssignModule(Module module, SoftwareUnitDefinition su) {
-	Module moduleToReturn;
+    private ModuleStrategy createOrAssignModule(ModuleStrategy module, SoftwareUnitDefinition su) {
+	ModuleStrategy moduleToReturn;
 	ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
 
 	String firstSUName = softwareUnits.get(0).getName();
 	if (module.getUnits().size() == 1 && firstSUName.equals(su.getName())) {
 	    moduleToReturn = module;
 	} else {
-	    Module subModule = new SubSystem(su.getName(), "");
+	    ModuleStrategy subModule = new ModuleFactory().createModule("SubSystem");
+	    		subModule.set(su.getName(),"");
 	    subModule.addSUDefinition(su);
 	    moduleService.addModuleToParent(module.getId(), subModule);
 	    moduleToReturn = subModule;
@@ -179,7 +183,7 @@ public class AppliedRuleController extends PopUpController {
 	//			ruleTypeValues.add(categoryName);
 	//			RuleTypeDTO[] ruleTypes = categorie.ruleTypes;
 	//
-	//			Module selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
+	//			ModuleStrategy selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
 	//			for (RuleTypeDTO ruleTypeDTO : ruleTypes){
 	//				try {
 	//					if(!(selectedModule instanceof Layer)  && (ruleTypeDTO.key.contains("SkipCall") || ruleTypeDTO.key.contains("BackCall"))) {
@@ -202,7 +206,7 @@ public class AppliedRuleController extends PopUpController {
 	ArrayList<String> ruleTypeKeys = new ArrayList<String>();
 	ArrayList<String> ruleTypeValues = new ArrayList<String>();
 
-	Module selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
+	ModuleStrategy selectedModule = this.moduleService.getModuleById(DefinitionController.getInstance().getSelectedModuleId());
 	for(String[] category : categories){
 	    if(categories[0][0].equals(category)){
 		ruleTypeKeys.add("setDisabled");
@@ -327,21 +331,21 @@ public class AppliedRuleController extends PopUpController {
 
     public AbstractCombinedComponent getModuleTreeComponents() {
 	SoftwareArchitectureComponent rootComponent = new SoftwareArchitectureComponent();
-	ArrayList<Module> modules = moduleService.getSortedModules();
-	for (Module module : modules) {
+	ArrayList<ModuleStrategy> modules = moduleService.getSortedModules();
+	for (ModuleStrategy module : modules) {
 	    addDefineModuleChildComponents(rootComponent, module);
 	}
 	return rootComponent;
     }
 
-    private Module getModuleWhereSoftwareUnitNeedsToBeMapped(
+    private ModuleStrategy getModuleWhereSoftwareUnitNeedsToBeMapped(
 	    SoftwareUnitDefinition currentSoftwareUnit,
 	    final SoftwareUnitDefinition finalSoftwareUnit) {
-	Module returnModule;
+	ModuleStrategy returnModule;
 	try {
 	    // Search all module for the softwareunit definition we are trying
 	    // to map
-	    Module module = moduleService
+	    ModuleStrategy module = moduleService
 		    .getModuleIdBySoftwareUnit(currentSoftwareUnit);
 	    // Current Softwareunit is now found, adding to current module or
 	    // sub
@@ -370,8 +374,10 @@ public class AppliedRuleController extends PopUpController {
 		logger.info("Adding " + currentSoftwareUnit.getName()
 			+ " to a module in the root");
 
-		Module subModule = new SubSystem(currentSoftwareUnit.getName(),
-			"");
+	
+		
+		 ModuleStrategy subModule = new ModuleFactory().createModule("SubSystem");
+ 		subModule.set(currentSoftwareUnit.getName(),"");
 		moduleService.addModuleToRoot(subModule);
 		returnModule = subModule;
 	    }
@@ -504,8 +510,8 @@ public class AppliedRuleController extends PopUpController {
 	String regex = (String) ruleDetails.get("regex");
 	String[] dependencies = (String[]) ruleDetails.get("dependencies");
 
-	Module moduleFrom = assignToCorrectModule(from);
-	Module moduleTo;
+	ModuleStrategy moduleFrom = assignToCorrectModule(from);
+	ModuleStrategy moduleTo;
 	if(to == null){
 	    moduleTo = assignToCorrectModule(from);   
 	}else{
@@ -550,8 +556,8 @@ public class AppliedRuleController extends PopUpController {
 
 	    Object from = exceptionRule.get("moduleFromId");
 	    Object to = exceptionRule.get("moduleToId");
-	    Module moduleFrom = assignToCorrectModule(from);
-	    Module moduleTo = assignToCorrectModule(to);
+	    ModuleStrategy moduleFrom = assignToCorrectModule(from);
+	    ModuleStrategy moduleTo = assignToCorrectModule(to);
 
 	    appliedRuleExceptionService.addExceptionToAppliedRule(
 		    appliedRuleId, ruleTypeKey, description, moduleFrom,
@@ -569,8 +575,8 @@ public class AppliedRuleController extends PopUpController {
 	String regex = (String) ruleDetails.get("regex");
 	String[] dependencies = (String[]) ruleDetails.get("dependencies");
 
-	Module moduleFrom = (Module) from;
-	Module moduleTo = (Module) to;
+	ModuleStrategy moduleFrom = (ModuleStrategy) from;
+	ModuleStrategy moduleTo = (ModuleStrategy) to;
 
 	appliedRuleService.addAppliedRule(ruleTypeKey, description,
 		dependencies, regex, moduleFrom, moduleTo, isEnabled);

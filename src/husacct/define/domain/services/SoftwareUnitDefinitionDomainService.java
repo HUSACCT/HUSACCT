@@ -5,7 +5,7 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.JtreeController;
 import husacct.define.task.components.AnalyzedModuleComponent;
@@ -19,7 +19,7 @@ public class SoftwareUnitDefinitionDomainService {
 
     public void addSoftwareUnit(long moduleId,
 	    AnalyzedModuleComponent softwareunit) {
-	Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 
 	try {
 	    Type type = Type.valueOf(softwareunit.getType());
@@ -50,7 +50,7 @@ public class SoftwareUnitDefinitionDomainService {
 
     public void addSoftwareUnit(long moduleId, String softwareUnit, String t) {
 	System.out.println("unit flow  ...." + softwareUnit);
-	Module module = SoftwareArchitecture.getInstance().getModuleById(
+	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 		moduleId);
 	try {
 	    Type type = Type.valueOf(t);
@@ -94,7 +94,7 @@ public class SoftwareUnitDefinitionDomainService {
 
     public SoftwareUnitRegExDefinition getRegExSoftwareUnitByName(
 	    String softwareUnitName) {
-	Module module = SoftwareArchitecture.getInstance()
+	ModuleStrategy module = SoftwareArchitecture.getInstance()
 		.getModuleByRegExSoftwareUnit(softwareUnitName);
 	SoftwareUnitRegExDefinition softwareUnit = module
 		.getRegExSoftwareUnitByName(softwareUnitName);
@@ -102,7 +102,7 @@ public class SoftwareUnitDefinitionDomainService {
     }
 
     public ArrayList<String> getRegExSoftwareUnitNames(long moduleId) {
-	Module module = SoftwareArchitecture.getInstance().getModuleById(
+	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 		moduleId);
 	ArrayList<SoftwareUnitRegExDefinition> softwareUnits = module
 		.getRegExUnits();
@@ -114,14 +114,14 @@ public class SoftwareUnitDefinitionDomainService {
     }
 
     public ArrayList<SoftwareUnitDefinition> getSoftwareUnit(long moduleId) {
-	Module module = SoftwareArchitecture.getInstance().getModuleById(
+	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 		moduleId);
 	ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
 	return softwareUnits;
     }
 
     public SoftwareUnitDefinition getSoftwareUnitByName(String softwareUnitName) {
-	Module module = SoftwareArchitecture.getInstance()
+	ModuleStrategy module = SoftwareArchitecture.getInstance()
 		.getModuleBySoftwareUnit(softwareUnitName);
 	SoftwareUnitDefinition softwareUnit = module
 		.getSoftwareUnitByName(softwareUnitName);
@@ -129,12 +129,18 @@ public class SoftwareUnitDefinitionDomainService {
     }
 
     public ArrayList<String> getSoftwareUnitNames(long moduleId) {
-	Module module = SoftwareArchitecture.getInstance().getModuleById(
+    	ArrayList<String> softwareUnitNames = new ArrayList<String>();
+    	try{
+    	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 		moduleId);
 	ArrayList<SoftwareUnitDefinition> softwareUnits = module.getUnits();
-	ArrayList<String> softwareUnitNames = new ArrayList<String>();
+	
 	for (SoftwareUnitDefinition unit : softwareUnits) {
 	    softwareUnitNames.add(unit.getName());
+	}
+	}catch(Exception e)
+	{
+		e.printStackTrace();
 	}
 	return softwareUnitNames;
     }
@@ -146,7 +152,7 @@ public class SoftwareUnitDefinitionDomainService {
     }
 
     private void RegisterRegixSoftwareUnits(RegexComponent softwareunit,
-	    Module parent, SoftwareUnitDefinition rootunit) {
+	    ModuleStrategy parent, SoftwareUnitDefinition rootunit) {
 	// TODO: Is this one still needed:
 	// Regexmodule regex = new Regexmodule()
 	JtreeController.instance().getTree()
@@ -155,7 +161,7 @@ public class SoftwareUnitDefinitionDomainService {
     }
 
     public void removeRegExSoftwareUnit(long moduleId, String softwareUnit) {
-	Module module = SoftwareArchitecture.getInstance().getModuleById(
+	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 		moduleId);
 	// TODO: Why is this here? Can this be resolved?
 	// thread problems
@@ -172,7 +178,7 @@ public class SoftwareUnitDefinitionDomainService {
 		.notifyServiceListeners();
     }
 	public void removeSoftwareUnit(long moduleId, String softwareUnit) {
-		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		SoftwareUnitDefinition unit = getSoftwareUnitByName(softwareUnit);
 		module.removeSUDefintion(unit);
 		WarningMessageService.getInstance().processModule(module);
@@ -185,7 +191,7 @@ public class SoftwareUnitDefinitionDomainService {
 			
 			
 		
-		Module module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
 		try{
 		
 		for (AnalyzedModuleComponent softwareunit : units) {

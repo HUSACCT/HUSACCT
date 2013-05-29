@@ -7,11 +7,11 @@ import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitDefinition.Type;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Component;
-import husacct.define.domain.module.ExternalSystem;
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
-import husacct.define.domain.module.SubSystem;
+import husacct.define.domain.module.ToBeImplemented.ModuleFactory;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ToBeImplemented.modules.Component;
+import husacct.define.domain.module.ToBeImplemented.modules.Layer;
+import husacct.define.domain.module.ToBeImplemented.modules.SubSystem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,6 +24,7 @@ import org.jdom2.Element;
 public class XMLDomain {
 
     private Element workspace;
+    private ModuleFactory factory = new ModuleFactory();
 
     public XMLDomain(Element workspaceData) {
 	workspace = workspaceData;
@@ -51,10 +52,10 @@ public class XMLDomain {
 	Element ruleId = e.getChild("id");
 	Element ruleType = e.getChild("type");
 	Element ruleModuleFrom = e.getChild("moduleFrom").getChild("Module");
-	Module moduleFrom = ruleModuleFrom == null ? new Module()
+	ModuleStrategy moduleFrom = ruleModuleFrom == null ? new ModuleStrategy(){}
 		: getModuleFromXML(ruleModuleFrom);
 	Element ruleModuleTo = e.getChild("moduleTo").getChild("Module");
-	Module moduleTo = ruleModuleTo == null ? new Module()
+	ModuleStrategy moduleTo = ruleModuleTo == null ? new ModuleStrategy(){}
 		: getModuleFromXML(ruleModuleTo);
 	Element ruleExceptions = e.getChild("exceptions");
 	Element ruleEnabled = e.getChild("enabled");
@@ -162,10 +163,10 @@ public class XMLDomain {
      */
 
     @SuppressWarnings("rawtypes")
-    public Module getModuleFromXML(Element e) {
+    public ModuleStrategy getModuleFromXML(Element e) {
 	Element ModuleType = e.getChild("type");
 	String ModuleTypeText = ModuleType.getText();
-	Module xmlModule;
+	ModuleStrategy xmlModule;
 
 	String moduleName = e.getChild("name").getValue();
 	String moduleDescription = e.getChild("description").getValue();
@@ -174,18 +175,32 @@ public class XMLDomain {
 
 	// type detection..
 	 if (ModuleTypeText.equalsIgnoreCase("ExternalSystem")) {
-	 xmlModule = new ExternalSystem(moduleName, moduleDescription);
+	 xmlModule = factory.createModule("ExternalLibrary"); 
+	xmlModule.set(moduleName, moduleDescription);		
+	
+	 
 	 } else if (ModuleTypeText.equalsIgnoreCase("component")) {
-	    xmlModule = new Component(moduleName, moduleDescription);
+	    xmlModule =factory.createModule("Component");
+	    xmlModule.set(moduleName, moduleDescription);
+	    	
 	} else if (ModuleTypeText.equalsIgnoreCase("layer")) {
-	    xmlModule = new Layer(
-		    moduleName,
-		    moduleDescription,
-		    Integer.parseInt(e.getChild("HierarchicalLevel").getValue()));
+	   
+
+			Layer layer=	(Layer)factory.createModule("Layer");
+			layer.set(moduleName,moduleDescription);
+			layer.setHierarchicalLevel(Integer.parseInt(e.getChild("HierarchicalLevel").getValue()));
+	    		xmlModule =		layer;
+	    
 	} else if (ModuleTypeText.equalsIgnoreCase("subsystem")) {
-	    xmlModule = new SubSystem(moduleName, moduleDescription);
+	    xmlModule =factory.createModule("SubSystem");
+	    xmlModule.set(moduleName, moduleDescription);
+	    		
+	    		
 	} else {
-	    xmlModule = new Module(moduleName, moduleDescription);
+	    xmlModule = new ModuleStrategy() {
+		};
+	    		
+	    xmlModule.set(moduleName, moduleDescription);
 	}
 	xmlModule.setId(Long.parseLong(moduleId));
 
@@ -221,8 +236,8 @@ public class XMLDomain {
 	return xmlModule;
     }
 
-    public ArrayList<Module> getModules(List<Element> modules) {
-	ArrayList<Module> returnList = new ArrayList<Module>();
+    public ArrayList<ModuleStrategy> getModules(List<Element> modules) {
+	ArrayList<ModuleStrategy> returnList = new ArrayList<ModuleStrategy>();
 
 	for (int i = 0; i < modules.size(); i++) {
 	    Element theModule = modules.get(i);

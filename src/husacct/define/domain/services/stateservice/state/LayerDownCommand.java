@@ -1,14 +1,14 @@
 package husacct.define.domain.services.stateservice.state;
 
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 
 public class LayerDownCommand  implements Istate{
 
-	private Module module;
+	private ModuleStrategy ModuleStrategy;
 
-	public LayerDownCommand(Module module) {
-		this.module=module;
+	public LayerDownCommand(ModuleStrategy ModuleStrategy) {
+		this.ModuleStrategy=ModuleStrategy;
 	}
 	
 	@Override

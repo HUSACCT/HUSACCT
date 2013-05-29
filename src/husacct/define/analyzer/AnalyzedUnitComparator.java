@@ -5,7 +5,7 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
@@ -48,7 +48,7 @@ public class AnalyzedUnitComparator {
 			
 			if (unittoberemoved.isMapped()) {
 			
-				Module module = StateService.instance().getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
+				ModuleStrategy module = StateService.instance().getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
 				WarningMessageService.getInstance().addCodeLevelWarning(module.getId(), unittoberemoved);
 			}
 			

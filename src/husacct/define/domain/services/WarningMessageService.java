@@ -1,24 +1,17 @@
 package husacct.define.domain.services;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
-import org.antlr.tool.LeftRecursionCyclesMessage;
-
-
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
-import husacct.define.task.JtreeController;
-import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
-import husacct.graphics.util.threads.ObservableThread;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 
 public class WarningMessageService extends Observable implements Observer {
    private  ArrayList<WarningMessage> warnings= new ArrayList<WarningMessage>();
@@ -105,7 +98,7 @@ public class WarningMessageService extends Observable implements Observer {
 		
 	
 	
-	public void processModule(Module module)
+	public void processModule(ModuleStrategy module)
 	{
 		
 		if (module.isMapped()) {
@@ -116,7 +109,7 @@ public class WarningMessageService extends Observable implements Observer {
 	}
 
 
-	private void removeImplementationWarning(Module module) {
+	private void removeImplementationWarning(ModuleStrategy module) {
 		for (WarningMessage warning : warnings) {
 			
 			if(warning instanceof ImplementationLevelWarning)
@@ -135,7 +128,7 @@ public class WarningMessageService extends Observable implements Observer {
 	}
 
 
-	private void createModuleWarning(Module module) {
+	private void createModuleWarning(ModuleStrategy module) {
 		ImplementationLevelWarning warning = new ImplementationLevelWarning(module);
 	
 		warnings.add(warning);

@@ -1,19 +1,21 @@
 package husacct.define.task.conventions_checker;
 
-import husacct.define.domain.module.Layer;
-import husacct.define.domain.module.Module;
+
+
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
+import husacct.define.domain.module.ToBeImplemented.modules.Layer;
 
 import java.util.ArrayList;
 
 public class RuleConventionsChecker {
     private LayerCheckerHelper layerCheckerHelper;
     private ModuleCheckerHelper moduleCheckerHelper;
-    private Module moduleFrom;
+    private ModuleStrategy moduleFrom;
 
-    private Module moduleTo;
+    private ModuleStrategy moduleTo;
     private String ruleTypeKey;
 
-    public RuleConventionsChecker(Module moduleFrom, Module moduleTo,
+    public RuleConventionsChecker(ModuleStrategy moduleFrom, ModuleStrategy moduleTo,
 	    String ruleTypeKey) {
 	setModuleFrom(moduleFrom);
 	setModuleTo(moduleTo);
@@ -349,11 +351,11 @@ public class RuleConventionsChecker {
 	return errorMessage;
     }
 
-    public Module getModuleFrom() {
+    public ModuleStrategy getModuleFrom() {
 	return moduleFrom;
     }
 
-    public Module getModuleTo() {
+    public ModuleStrategy getModuleTo() {
 	return moduleTo;
     }
 
@@ -361,11 +363,11 @@ public class RuleConventionsChecker {
 	return ruleTypeKey;
     }
 
-    public void setModuleFrom(Module moduleFrom) {
+    public void setModuleFrom(ModuleStrategy moduleFrom) {
 	this.moduleFrom = moduleFrom;
     }
 
-    public void setModuleTo(Module moduleTo) {
+    public void setModuleTo(ModuleStrategy moduleTo) {
 	this.moduleTo = moduleTo;
     }
 

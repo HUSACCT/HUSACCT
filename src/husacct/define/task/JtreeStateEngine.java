@@ -3,7 +3,7 @@ package husacct.define.task;
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.analyzer.AnalyzedUnitRegistry;
 import husacct.define.domain.SoftwareUnitDefinition;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.ModuleCommand;
@@ -29,7 +29,7 @@ public abstract class JtreeStateEngine {
 		logger = Logger.getLogger(JtreeStateEngine.class);
 	}
 
-	public void removeSoftwareUnit(Module module, SoftwareUnitDefinition unit) {
+	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
 
 		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
 				.get(unit.getName().toLowerCase())[1];
@@ -48,12 +48,12 @@ public abstract class JtreeStateEngine {
 
 
 
-	public void addModule(Module module) {
+	public void addModule(ModuleStrategy module) {
 
 		stateController.insertCommand(new ModuleCommand(module));
 	}
 
-	public void removeModule(Module module) {
+	public void removeModule(ModuleStrategy module) {
 		ArrayList<AnalyzedModuleComponent> unitTobeRemoved = new ArrayList<AnalyzedModuleComponent>();
 		stateController.insertCommand(new ModuleCommand(module));
 		
@@ -75,7 +75,7 @@ public abstract class JtreeStateEngine {
 		
 	}
 
-	public void addSoftwareUnit(Module module,
+	public void addSoftwareUnit(ModuleStrategy module,
 			AnalyzedModuleComponent unitToBeinserted) {
 
 		mapRegistry.put(unitToBeinserted.getUniqueName().toLowerCase(),
@@ -88,7 +88,7 @@ public abstract class JtreeStateEngine {
 		JtreeController.instance().removeTreeItem(unitToBeinserted);
 	}
 
-	public void addSoftwareUnit(Module module,
+	public void addSoftwareUnit(ModuleStrategy module,
 			ArrayList<AnalyzedModuleComponent> unitToBeinserted) {
 
 		stateController.insertCommand(new SoftwareUnitCommand(module,unitToBeinserted));
@@ -115,10 +115,10 @@ public abstract class JtreeStateEngine {
 
 
 
-	public Module getModulebySoftwareUnitUniqName(String Uniqname) {
+	public ModuleStrategy getModulebySoftwareUnitUniqName(String Uniqname) {
 
 		Object[] result = mapRegistry.get(Uniqname.toLowerCase());
-		Module resultModule = (Module) result[0];
+		ModuleStrategy resultModule = (ModuleStrategy) result[0];
 
 		return resultModule;
 

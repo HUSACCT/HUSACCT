@@ -10,7 +10,7 @@ import husacct.define.domain.Project;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 
 import java.util.ArrayList;
 
@@ -31,12 +31,12 @@ public class DomainParser {
 	return softwareUnits;
     }
 
-    public String getLogicalPath(Module module) {
+    public String getLogicalPath(ModuleStrategy module) {
 	String logicalPath = "";
-	// If the type is Module then its a placeholder for a non-existing
+	// If the type is ModuleStrategy then its a placeholder for a non-existing
 	// module
 	// since you cannot add modules of the type module
-	if (!module.getType().equals("Module")) {
+	if (!module.getType().equals("ModuleStrategy")) {
 	    logicalPath = SoftwareArchitecture.getInstance()
 		    .getModulesLogicalPath(module.getId());
 	    ;
@@ -55,7 +55,7 @@ public class DomainParser {
 	return appDTO;
     }
 
-    public ModuleDTO parseModule(Module module) {
+    public ModuleDTO parseModule(ModuleStrategy module) {
 	String logicalPath = getLogicalPath(module);
 	ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module
 		.getUnits());
@@ -63,7 +63,7 @@ public class DomainParser {
 	String type = module.getType();
 
 	ArrayList<ModuleDTO> subModuleDTOsList = new ArrayList<ModuleDTO>();
-	for (Module subModule : module.getSubModules()) {
+	for (ModuleStrategy subModule : module.getSubModules()) {
 	    ModuleDTO subModuleDTO = parseModule(subModule);
 	    subModuleDTOsList.add(subModuleDTO);
 	}
@@ -80,9 +80,9 @@ public class DomainParser {
     /**
      * Modules
      **/
-    public ModuleDTO[] parseModules(Module[] modules) {
+    public ModuleDTO[] parseModules(ModuleStrategy[] modules) {
 	ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<ModuleDTO>();
-	for (Module module : modules) {
+	for (ModuleStrategy module : modules) {
 	    ModuleDTO moduleDTO = parseModule(module);
 	    moduleDTOsList.add(moduleDTO);
 	}
@@ -152,7 +152,7 @@ public class DomainParser {
 	return projectDTOs;
     }
 
-    public ModuleDTO parseRootModule(Module module) {
+    public ModuleDTO parseRootModule(ModuleStrategy module) {
 	String logicalPath = getLogicalPath(module);
 	ArrayList<SoftwareUnitDefinition> expandedSoftwareUnits = getExpandedSoftwareUnits(module
 		.getUnits());
@@ -166,9 +166,9 @@ public class DomainParser {
 	return modDTO;
     }
 
-    public ModuleDTO[] parseRootModules(Module[] modules) {
+    public ModuleDTO[] parseRootModules(ModuleStrategy[] modules) {
 	ArrayList<ModuleDTO> moduleDTOsList = new ArrayList<ModuleDTO>();
-	for (Module module : modules) {
+	for (ModuleStrategy module : modules) {
 	    ModuleDTO moduleDTO = parseRootModule(module);
 	    moduleDTOsList.add(moduleDTO);
 	}

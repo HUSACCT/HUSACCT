@@ -4,13 +4,13 @@ import husacct.common.dto.RuleTypeDTO;
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
-import husacct.define.domain.module.Module;
+import husacct.define.domain.module.ToBeImplemented.ModuleStrategy;
 
 import java.util.ArrayList;
 
 
 public class DefaultRuleDomainService {
-	private Module _module;
+	private ModuleStrategy _module;
 	private RuleTypeDTO[] defaultRuleTypeDTOs = null;
 	private ArrayList<AppliedRuleStrategy> defaultRules = new ArrayList<AppliedRuleStrategy>();
 	private AppliedRuleFactory factory = new AppliedRuleFactory();
@@ -20,7 +20,7 @@ public class DefaultRuleDomainService {
 		return (instance == null)? instance = new DefaultRuleDomainService() : instance;
 	}
 
-	public void addDefaultRules(Module newModule){
+	public void addDefaultRules(ModuleStrategy newModule){
 		_module = newModule;
 		retrieveRuleTypeDTOsByModule();		
 		generateRules();
@@ -90,7 +90,7 @@ public class DefaultRuleDomainService {
 		return null;
 	}
 	
-	public void removeDefaultRules(Module module){
+	public void removeDefaultRules(ModuleStrategy module){
 		_module=module;
 		retrieveRuleTypeDTOsByModule();
 		ArrayList<Long> appliedRuleIds = new ArrayList<>();
@@ -108,7 +108,7 @@ public class DefaultRuleDomainService {
 		}
 	}
 
-	public void updateModuleRules(Module updatedModule) {
+	public void updateModuleRules(ModuleStrategy updatedModule) {
 		_module= updatedModule;
 		for(AppliedRuleStrategy appliedRule : SoftwareArchitecture.getInstance().getAppliedRules()) {
 			if(appliedRule.getModuleFrom().getId()==_module.getId()){
