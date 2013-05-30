@@ -16,6 +16,10 @@ class FamixDependencyFinder extends FamixFinder {
 		this.dependencyCache = null;
 	}
 	
+	public int buildCache(){
+		return getAllDependencies().size();
+	}
+	
 	public List<DependencyDTO> getAllDependencies(){
 		if(dependencyCache == null)
 			dependencyCache = findDependencies(FinderFunction.ALL, "", "");
@@ -106,12 +110,14 @@ class FamixDependencyFinder extends FamixFinder {
 					// Pass true to prevent recursion and endless calls!
 					List<DependencyDTO> extendingDirectDependencies = getDependencies(association.to, to, true);
 					for(DependencyDTO extendingDirectDependency : extendingDirectDependencies){
-						extendingDirectDependency.type = association.type + extendingDirectDependency.type;
-						extendingDirectDependency.isIndirect = typeOfDependency(extendingDirectDependency) == DependencyType.INDIRECT;
-						extendingDirectDependency.from = association.from;
-						extendingDirectDependency.to = extendingDirectDependency.from+ " -> " + extendingDirectDependency.to;
-						if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
-							result.add(extendingDirectDependency);
+						if(compliesWithFunction(association, FinderFunction.FROM, from, to) && isTo(extendingDirectDependency, to)){
+							extendingDirectDependency.type = association.type + extendingDirectDependency.type;
+							extendingDirectDependency.isIndirect = typeOfDependency(extendingDirectDependency) == DependencyType.INDIRECT;
+							extendingDirectDependency.from = association.from;
+							extendingDirectDependency.to = association.to+ " -> " + extendingDirectDependency.to;
+							if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
+								result.add(extendingDirectDependency);
+						}
 					}
 				}
 			}
@@ -224,10 +230,24 @@ class FamixDependencyFinder extends FamixFinder {
 		return result;
 	}
 	
+	private boolean isFrom(DependencyDTO dependency, String from){
+		boolean result = from.equals("") || dependency.from.equals(from);
+		result = result || dependency.from.startsWith(from + ".");
+		result = result && !dependency.from.equals(dependency.to);
+		return result;
+	}
+	
 	private boolean isTo(FamixAssociation association, String to){
 		boolean result = to.equals("") || association.to.equals(to);
 		result = result || association.to.startsWith(to + ".");
 		result = result && !association.to.equals(association.from);
+		return result;
+	}
+	
+	private boolean isTo(DependencyDTO dependency, String to){
+		boolean result = to.equals("") || dependency.to.equals(to);
+		result = result || dependency.to.startsWith(to + ".");
+		result = result && !dependency.to.equals(dependency.from);
 		return result;
 	}
 	

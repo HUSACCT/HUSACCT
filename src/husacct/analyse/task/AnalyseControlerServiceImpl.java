@@ -114,4 +114,9 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     public ExternalSystemDTO[] getExternalSystems(){
     	return domainService.getExternalSystems();
     }
+    
+    @Override
+    public int buildCache(){
+    	return domainService.buildCache();
+    }
 }

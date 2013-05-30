@@ -107,6 +107,11 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
         return queryService.getDependenciesTo(to, dependencyFilter);
     }
+    
+    @Override
+    public int buildCache(){
+    	return queryService.buildCache();
+    }
 
     @Override
     public Element saveModel() {

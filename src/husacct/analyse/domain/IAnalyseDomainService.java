@@ -43,4 +43,6 @@ public interface IAnalyseDomainService {
     public HashMap<String, DependencyDTO> mapDependencies();
     
     public ExternalSystemDTO[] getExternalSystems();
+
+	public int buildCache();
 }

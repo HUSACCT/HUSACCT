@@ -519,4 +519,9 @@ public class AnalyseServiceStub implements IAnalyseService {
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+	public int buildCache(){
+		return -1;
+	}
 }

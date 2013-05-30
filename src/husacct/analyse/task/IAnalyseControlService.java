@@ -45,4 +45,6 @@ public interface IAnalyseControlService {
     public void exportDependencies(String path);
     
     public ExternalSystemDTO[] getExternalSystems();
+    
+    public int buildCache();
 }
