@@ -225,7 +225,7 @@ public class DrawingView extends DefaultDrawingView {
 		contextMenu.setHasSelection(false);
 	}
 	
-	private BaseFigure[] toFigureArray(Collection<Figure> collection) {
+	public BaseFigure[] toFigureArray(Collection<Figure> collection) {
 		return collection.toArray(new BaseFigure[collection.size()]);
 	}
 }

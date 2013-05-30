@@ -7,8 +7,8 @@ import husacct.validate.domain.configuration.ConfigurationServiceImpl;
 import husacct.validate.domain.validation.Severity;
 import husacct.validate.domain.validation.Violation;
 import husacct.validate.domain.validation.ViolationType;
-import husacct.validate.domain.validation.internal_transfer_objects.Mapping;
-import husacct.validate.domain.validation.internal_transfer_objects.Mappings;
+import husacct.validate.domain.validation.internaltransferobjects.Mapping;
+import husacct.validate.domain.validation.internaltransferobjects.Mappings;
 import husacct.validate.domain.validation.ruletype.RuleType;
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 
@@ -27,13 +27,13 @@ public class IsOnlyModuleAllowedToUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		this.violations = new ArrayList<Violation>();
+		violations = new ArrayList<>();
 
 		// Only used to get the mappings, because filtering the 'From' is not
 		// corectly for this rule
 		// (need to filter for the 'To')
-		this.mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
-		this.physicalClasspathsFrom = mappings.getMappingFrom();
+		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
+		classpathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
 
 		DependencyDTO[] dependencies = analyseService.getAllDependencies();

@@ -1,7 +1,10 @@
 package husaccttest.analyse.csharp.benchmark;
 
+import java.util.ArrayList;
+
 import husacct.analyse.AnalyseServiceImpl;
 import husacct.analyse.IAnalyseService;
+import husacct.common.dto.ProjectDTO;
 import husaccttest.analyse.TestCaseExtended;
 import husaccttest.analyse.TestProjectFinder;
 
@@ -22,7 +25,16 @@ public class BenchmarkExtended extends TestCaseExtended{
 		
 		try {
 			if(!isAnalysed){
-				analyserService.analyseApplication(new String[]{path}, language);
+				ArrayList<String> paths = new ArrayList<String>();
+				paths.add(path);
+				ProjectDTO project = new ProjectDTO(
+						"C# test", 
+						paths , 
+						language, 
+						"version999",
+						"testdescription",
+						null);
+				analyserService.analyseApplication(project);
 				isAnalysed = true;
 			}
 
