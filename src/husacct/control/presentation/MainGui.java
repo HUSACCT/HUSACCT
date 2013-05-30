@@ -10,7 +10,6 @@ import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -18,7 +17,8 @@ import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
-import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -27,13 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -184,8 +184,8 @@ public class MainGui extends HelpableJFrame{
 		userActionLogDialog.setTitle(localeService.getTranslatedString("ActionLog"));
 		userActionLogDialog.setVisible(true);
 		
-		int dialogWidth = 250;
-		int dialogHeight = 250;
+		int dialogWidth = 300;
+		int dialogHeight = 212;
 		userActionLogDialog.setSize(dialogWidth, dialogHeight);
 
 		//Absolute positioning: Right bottom of screen
@@ -199,7 +199,7 @@ public class MainGui extends HelpableJFrame{
 		refreshUserActionsDialog();
 	}
 	
-	private JScrollPane getUserActionsDialogContents(){
+	private JScrollPane getUserActionsDialogScrollPaneContents(){
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -214,17 +214,45 @@ public class MainGui extends HelpableJFrame{
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
 
 		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getLoggedUserActionsArrayList();
+		int i = 1;
 		for(HashMap<String, String> loggedUserAction : loggedUserActions){
-			logTableModel.addRow(new Object[]{loggedUserAction.get("message")});
+			logTableModel.addRow(new Object[]{i + ": " + loggedUserAction.get("message")});
+			i++;
 		}
-
+		
 		return new JScrollPane(logTable);
+	}
+	
+	private JPanel getUserActionsDialogButtonsPanel(){
+		JPanel buttonsPanel = new JPanel();
+		
+		//TODO: Implement this feature
+		
+		JButton undoButton = new JButton(localeService.getTranslatedString("Undo"));
+		undoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainController.logUserAction("Demonstration: User clicked the undo button.");
+			}
+		});
+		buttonsPanel.add(undoButton);
+		
+		JButton redoButton = new JButton(localeService.getTranslatedString("Redo"));
+		redoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainController.logUserAction("Demonstration: User clicked the redo button.");
+			}
+		});
+		buttonsPanel.add(redoButton);
+		
+		return buttonsPanel;
 	}
 	
 	public void refreshUserActionsDialog(){
 		userActionLogDialog.getContentPane().removeAll();
-		userActionLogDialog.add(getUserActionsDialogContents());
+		userActionLogDialog.add(getUserActionsDialogScrollPaneContents());
+		userActionLogDialog.add(getUserActionsDialogButtonsPanel(), BorderLayout.SOUTH);
 		userActionLogDialog.validate();
 		userActionLogDialog.repaint();
 	}
+	
 }
