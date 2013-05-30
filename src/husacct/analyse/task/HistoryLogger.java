@@ -1,7 +1,7 @@
 package husacct.analyse.task;
 
-import husacct.analyse.domain.IModelQueryService;
-import husacct.analyse.domain.famix.FamixQueryServiceImpl;
+import husacct.ServiceProvider;
+import husacct.analyse.IAnalyseService;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.task.configuration.ConfigurationManager;
@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
 
 public class HistoryLogger {
 
-	private IModelQueryService queryService;
+	private IAnalyseService service;
 	private ArrayList<ProjectDTO> projects;
 
 	private Document doc;
@@ -37,7 +37,7 @@ public class HistoryLogger {
 
 
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
-		this.queryService = new FamixQueryServiceImpl();
+		this.service = ServiceProvider.getInstance().getAnalyseService();
 		File file = new File(xmlFile); 
 		if(file.exists()) {
 			addToExistingXml(applicationDTO, workspaceName);
@@ -95,16 +95,35 @@ public class HistoryLogger {
 			if(workspace.getAttributes().getNamedItem("name").getNodeValue().equals(workspaceName)) {
 				if(application.getAttributes().getNamedItem("name").getNodeValue().equals(adto.name)) {
 					NodeList projects = application.getChildNodes();
-
-					for(int i = 0; i < projects.getLength(); i++) {
+					
+					System.out.println("nodelist: " + projects.getLength());
+					System.out.println("adto.projects: " + adto.projects.size());
+					
+					int count = 0;
+					
+					if(projects.getLength() > adto.projects.size()) {
+						count = projects.getLength();
+					} else {
+						count = adto.projects.size();
+					}
+					
+					for(int i = 0; i < count; i++) {
 						Node p = projects.item(i);
-						if(p.getAttributes().getNamedItem("name").getNodeValue().equals(adto.projects.get(i).name)) {
-							getAnalyseElement((Element) p, adto.projects.get(i));
-						} else {
-							getProjectElement((Element) application, adto);
+						
+						if(p != null && adto.projects.get(i).name != null) {
+							if(p.getAttributes().getNamedItem("name").getNodeValue().equals(adto.projects.get(i).name)) {
+								getAnalyseElement((Element) p, adto.projects.get(i));
+							} else {
+								System.out.println("ohai thar");
+								getProjectElement((Element) application, adto);
+							}
 						}
 					}
+				} else {
+					//else for different application
 				}
+			} else {
+				//else for different workspace
 			}
 
 			createXML(doc, (Element)root);
@@ -171,25 +190,25 @@ public class HistoryLogger {
 
 		//packages
 		Element packages = doc.createElement("packages");
-		packages.appendChild(doc.createTextNode(queryService.getAmountOfPackages() + ""));
+		packages.appendChild(doc.createTextNode(service.getAmountOfPackages() + ""));
 
 		analyse.appendChild(packages);
 
 		//classes
 		Element classes = doc.createElement("classes");
-		classes.appendChild(doc.createTextNode(queryService.getAmountOfClasses() + ""));
+		classes.appendChild(doc.createTextNode(service.getAmountOfClasses() + ""));
 
 		analyse.appendChild(classes);
 
 		//interfaces
 		Element interfaces = doc.createElement("interfaces");
-		interfaces.appendChild(doc.createTextNode(queryService.getAmountOfInterfaces() + ""));
+		interfaces.appendChild(doc.createTextNode(service.getAmountOfInterfaces() + ""));
 
 		analyse.appendChild(interfaces);
 
 		//dependencies
 		Element dependencies = doc.createElement("dependencies");
-		dependencies.appendChild(doc.createTextNode(queryService.getAmountOfDependencies() + ""));
+		dependencies.appendChild(doc.createTextNode(service.getAmountOfDependencies() + ""));
 
 		analyse.appendChild(dependencies);
 

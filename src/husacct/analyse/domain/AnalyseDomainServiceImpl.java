@@ -107,6 +107,11 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
     public DependencyDTO[] getDependenciesTo(String to, String[] dependencyFilter) {
         return queryService.getDependenciesTo(to, dependencyFilter);
     }
+    
+    @Override
+    public int buildCache(){
+    	return queryService.buildCache();
+    }
 
     @Override
     public Element saveModel() {
@@ -126,4 +131,20 @@ public class AnalyseDomainServiceImpl implements IAnalyseDomainService {
 	public ExternalSystemDTO[] getExternalSystems(){
 		return queryService.getExternalSystems();
 	}
+    
+    public int getAmountOfDependencies() {
+    	return queryService.getAmountOfDependencies();
+    }
+    
+    public int getAmountOfInterfaces() {
+    	return queryService.getAmountOfInterfaces();
+    }
+    
+    public int getAmountOfPackages() {
+    	return queryService.getAmountOfPackages();
+    }
+    
+    public int getAmountOfClasses() {
+    	return queryService.getAmountOfClasses();
+    }
 }

@@ -114,4 +114,25 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     public ExternalSystemDTO[] getExternalSystems(){
     	return domainService.getExternalSystems();
     }
+    
+    public int getAmountOfDependencies() {
+    	return domainService.getAmountOfDependencies();
+    }
+    
+    public int getAmountOfInterfaces() {
+    	return domainService.getAmountOfInterfaces();
+    }
+    
+    public int getAmountOfPackages() {
+    	return domainService.getAmountOfPackages();
+    }
+    
+    public int getAmountOfClasses() {
+    	return domainService.getAmountOfClasses();
+    }
+    
+    @Override
+    public int buildCache(){
+    	return domainService.buildCache();
+    }
 }

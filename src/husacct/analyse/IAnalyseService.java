@@ -53,4 +53,14 @@ public interface IAnalyseService extends IObservableService, ISaveable {
     public ExternalSystemDTO[] getExternalSystems();
     
     public void logHistory(ApplicationDTO applicationDTO, String workspaceName);
+    
+    public int getAmountOfDependencies();
+
+    public int getAmountOfInterfaces();
+    
+    public int getAmountOfPackages();
+    
+    public int getAmountOfClasses();
+    
+    public int buildCache();
 }
