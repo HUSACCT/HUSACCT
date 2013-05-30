@@ -35,45 +35,43 @@ public class BufferService {
 	}
 
 	public void checkLambdaExistsAndCombine() {
-		DelegateBuffer db = delegatebuffers.get(delegatebuffers.size()-1);
-		for(LambdaBuffer lb : lambdabuffers) {
-			if(lb.lambdaTypeName.equals(db.name)) {
-				combineDelegateAndLambdaToMethodAndSendToBlockScope(db, lb);
+		DelegateBuffer delegateBuffer = delegatebuffers.get(delegatebuffers.size() - 1);
+		for(LambdaBuffer lambdaBuffer : lambdabuffers) {
+			if(lambdaBuffer.lambdaTypeName.equals(delegateBuffer.name)) {
+				combineDelegateAndLambdaToMethodAndSendToBlockScope(delegateBuffer, lambdaBuffer);
 			}
 		}
 	}
 	
 	//checks name maby add unique name later.
 	public void checkDelegateExistsAndCombine() {
-		LambdaBuffer lb = lambdabuffers.peekLast();
-		for(DelegateBuffer db : delegatebuffers) {
-			if(lb.lambdaTypeName.equals(db.name)) {
-				combineDelegateAndLambdaToMethodAndSendToBlockScope(db, lb);
+		LambdaBuffer lambdaBuffer = lambdabuffers.peekLast();
+		for (DelegateBuffer delegateBuffer : delegatebuffers) {
+			if (lambdaBuffer.lambdaTypeName.equals(delegateBuffer.name)) {
+				combineDelegateAndLambdaToMethodAndSendToBlockScope(delegateBuffer, lambdaBuffer);
 			}
 		}
 	}
 	
-	private void combineDelegateAndLambdaToMethod(DelegateBuffer db, LambdaBuffer lb, String name, String belongsToMethod, String packageAndClassName) {
-
-		String accessControlQualifier = getVisibility(lb.lambdaTree);
-		String argumentTypes = createCommaSeperatedString(db.argtypes);
+	private void combineDelegateAndLambdaToMethod(DelegateBuffer delegateBuffer, LambdaBuffer lambdaBuffer, String name, String belongsToMethod, String packageAndClassName) {
+		String accessControlQualifier = getVisibility(lambdaBuffer.lambdaTree);
+		String argumentTypes = createCommaSeperatedString(delegateBuffer.argtypes);
 		boolean isPureAccessor = false;
-		String returnTypes = db.returntype;
+		String returnTypes = delegateBuffer.returntype;
 		String uniqueName = getUniqueName(packageAndClassName, belongsToMethod) + "." + name + "(" + argumentTypes + ")";
 		boolean isConstructor = false;
 		boolean isAbstract = false;
 		boolean hasClassScope = checkClassScope(belongsToMethod);
-		int lineNumber = lb.lambdaTree.getLine();
+		int lineNumber = lambdaBuffer.lambdaTree.getLine();
 		modelService.createMethod(name, uniqueName, accessControlQualifier, argumentTypes, isPureAccessor, returnTypes, packageAndClassName, isConstructor, isAbstract, hasClassScope, lineNumber);
 	}
 
-	private void combineDelegateAndLambdaToMethodAndSendToBlockScope(DelegateBuffer db, LambdaBuffer lb) {
-		String name = getName(lb.lambdaTree);
-		String belongsToMethod = lb.methodName;
-		String packageAndClassName = lb.packageAndClassName;
-		
-		combineDelegateAndLambdaToMethod(db, lb, name, belongsToMethod, packageAndClassName);
-		sendScopeToGenerator(getTreeAftherLambdaSign(lb.lambdaTree), packageAndClassName, belongsToMethod, name);
+	private void combineDelegateAndLambdaToMethodAndSendToBlockScope(DelegateBuffer delegateBuffer, LambdaBuffer lambdaBuffer) {
+		String name = getName(lambdaBuffer.lambdaTree);
+		String belongsToMethod = lambdaBuffer.methodName;
+		String packageAndClassName = lambdaBuffer.packageAndClassName;
+		combineDelegateAndLambdaToMethod(delegateBuffer, lambdaBuffer, name, belongsToMethod, packageAndClassName);
+		sendScopeToGenerator(getTreeAftherLambdaSign(lambdaBuffer.lambdaTree), packageAndClassName, belongsToMethod, name);
 	}
 
 	private boolean checkClassScope(String methodName) {
@@ -86,11 +84,9 @@ public class BufferService {
 
 	private CommonTree getTreeAftherLambdaSign(CommonTree lambdaTree) {
 		CommonTree lambdaPartTree = walkTree(lambdaTree, CSharpParser.LOCAL_VARIABLE_INITIALIZER);
-		
 		CommonTree firstTypeTree = (CommonTree) lambdaPartTree.getFirstChildWithType(CSharpParser.ASSIGNMENT);
 		CommonTree secondTypeTree = (CommonTree) lambdaPartTree.getFirstChildWithType(CSharpParser.GT);
-		if(firstTypeTree != null && secondTypeTree != null && (firstTypeTree.childIndex + 1) == secondTypeTree.childIndex)
-		{
+		if (firstTypeTree != null && secondTypeTree != null && (firstTypeTree.childIndex + 1) == secondTypeTree.childIndex) {
 			return (CommonTree) lambdaPartTree.getChild(secondTypeTree.childIndex + 1);
 		}
 		return null;
@@ -98,12 +94,12 @@ public class BufferService {
 
 	private void sendScopeToGenerator(CommonTree treeAftherLambdaSign, String packageAndClassName, String methodName, String name) {
 		String belongsToMethod = methodName;
-	/*	if(methodName.isEmpty()) {
-			belongsToMethod = name;
-		}*/
-		
-		CSharpBlockScopeGenerator cbsg = new CSharpBlockScopeGenerator();
-		cbsg.walkThroughBlockScope(treeAftherLambdaSign, packageAndClassName, belongsToMethod);
-//		cbsg.walkThroughBlockScope(treeAftherLambdaSign, packageAndClassName, name);
+		CSharpBlockScopeGenerator blockscopeGenerator = new CSharpBlockScopeGenerator();
+		blockscopeGenerator.walkThroughBlockScope(treeAftherLambdaSign, packageAndClassName, belongsToMethod);
+	}
+	
+	public void clear() {
+		delegatebuffers = new ArrayList<>();
+		lambdabuffers = new LinkedList<>();
 	}
 }
