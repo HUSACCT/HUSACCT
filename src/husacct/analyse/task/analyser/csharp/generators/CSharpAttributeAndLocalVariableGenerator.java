@@ -1,12 +1,8 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
-import husacct.analyse.infrastructure.antlr.TreePrinter;
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-
-
 import java.util.ArrayList;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -30,9 +26,6 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	public void generateAttributeToDomain(Tree treeNode, String packageAndClassName) {
-		System.out.println("<<<<<<---------" + this.getClass().getName() + "----------->>>>>>");
-		new TreePrinter((CommonTree) treeNode);
-	System.out.println("\n<<<<<<-------------------->>>>>>");
 		setMembers(treeNode, packageAndClassName);
 		createAttributeObject();
 	}
@@ -100,7 +93,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 				break;
 			case CSharpParser.MEMBER_ACCESS:
 				delegateInvocationPropertyOrField(child);
-//				deleteTreeChild(child);
+				deleteTreeChild(child);
 				break;
 			}
 			treeNodeTypeFilter(child);
