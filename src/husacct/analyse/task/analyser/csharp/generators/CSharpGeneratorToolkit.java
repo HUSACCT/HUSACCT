@@ -5,6 +5,8 @@ import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+
+import org.antlr.runtime.CharStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import husacct.analyse.task.analyser.VisibilitySet;
@@ -143,5 +145,15 @@ public class CSharpGeneratorToolkit {
     		}
     	}
     	return null;
+    }
+    
+    public static String tryToGetFilePath(CommonTree tree) {
+    	if (tree == null)
+    		return "NO FILE FOUND";
+    	CharStream charStream = tree.getToken().getInputStream();
+    	if (charStream == null) 
+    		return tryToGetFilePath((CommonTree)tree.getParent());
+    	else 
+    		return tree.getToken().getInputStream().getSourceName();
     }
 }
