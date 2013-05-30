@@ -215,4 +215,9 @@ public class DefinedController extends DrawingController {
 		if (validateService.isValidated())
 			super.showViolations();
 	}
+
+	@Override
+	public void moduleZoom(String zoomType) {
+		// Unused, does not need implementation
+	}
 }
