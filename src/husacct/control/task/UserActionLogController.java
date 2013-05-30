@@ -9,9 +9,13 @@ import org.apache.log4j.Logger;
 public abstract class UserActionLogController {
 	
 	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
-	private static ArrayList<HashMap<String, String>> loggedUserActions = new ArrayList<HashMap<String, String>>();
+	private static ArrayList<HashMap<String, String>> loggedUserActions;
 	
 	public UserActionLogController(){
+		//TODO: Fix this nasty workaround
+		if(loggedUserActions==null){
+			loggedUserActions = new ArrayList<HashMap<String, String>>();
+		}
 		addDummyUserActions();
 	}
 	
@@ -35,18 +39,6 @@ public abstract class UserActionLogController {
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);
 		loggedUserActions.add(loggedMethodInfo);
-	}
-	
-	public void printLoggedMethods(){
-		String output = "Logged User Actions: \n";
-		for(HashMap<String, String> loggedMethod : loggedUserActions){
-			output += "classPath: " + loggedMethod.get("classPath") + ", \n";
-			output += "calledMethodName: " + loggedMethod.get("calledMethodName") + ", \n";
-			output += "message: " + loggedMethod.get("message") + "\n";
-			output += "========================================\n";
-		}
-		
-		logger.info(output);
 	}
 	
 	public ArrayList<HashMap<String, String>> getLoggedUserActionsArrayList(){

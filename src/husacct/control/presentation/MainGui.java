@@ -3,7 +3,6 @@ import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJFrame;
 import husacct.common.locale.ILocaleService;
-import husacct.control.IControlService;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
@@ -11,6 +10,7 @@ import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -18,6 +18,7 @@ import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -32,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -52,9 +54,8 @@ public class MainGui extends HelpableJFrame{
 	private TaskBar taskBar;
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
-	private JDialog userActionLogDialog;
 	private ToolBar toolBar;
-	
+	private JDialog userActionLogDialog;
 	
 	public MainGui(MainController mainController) {
 		this.mainController = mainController;
@@ -106,11 +107,11 @@ public class MainGui extends HelpableJFrame{
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		
-		//createUserActionsDialog();
-		
 		add(contentPane);
 		add(moonwalkPanel);
 		add(taskBarPane);
+		
+		//createUserActionsDialog();
 	}
 	
 	private void addListeners(){
@@ -128,16 +129,21 @@ public class MainGui extends HelpableJFrame{
 			}
 		});
 		
+		/*
 		addWindowFocusListener(new WindowFocusListener() {  
 			@Override  
 			public void windowGainedFocus(WindowEvent e) {
-				//actionLogDialog.setVisible(true);
+				userActionLogDialog.setVisible(true);
 			}  
 			@Override  
 			public void windowLostFocus(WindowEvent e) {
-				//actionLogDialog.setVisible(false);
+				//TODO: Fix this nasty workaround
+				if(e.getOppositeWindow()==null){
+					userActionLogDialog.setVisible(false);
+				}
 			}  
-		});  
+		});
+		*/
 	}
 	
 	private void createMenuBar() {
@@ -171,6 +177,7 @@ public class MainGui extends HelpableJFrame{
 	
 	private void createUserActionsDialog(){
 		userActionLogDialog = new JDialog(this);
+		userActionLogDialog.setUndecorated(true);
 		userActionLogDialog.setAlwaysOnTop(true);
 		userActionLogDialog.setFocusableWindowState(false);
 		userActionLogDialog.setFocusable(false);
@@ -180,15 +187,19 @@ public class MainGui extends HelpableJFrame{
 		int dialogWidth = 250;
 		int dialogHeight = 250;
 		userActionLogDialog.setSize(dialogWidth, dialogHeight);
-		
+
 		//Absolute positioning: Right bottom of screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int offsetX = 5;
-		int offsetY = 40;
-		int dialogLocationX = (int)dim.getWidth()-dialogWidth-offsetX;
-		int dialogLocationY = (int)dim.getHeight()-dialogHeight-offsetY;
+		int marginRight = 5;
+		int marginBottom = 40;
+		int dialogLocationX = (int)dim.getWidth()-dialogWidth-marginRight;
+		int dialogLocationY = (int)dim.getHeight()-dialogHeight-marginBottom;
 		userActionLogDialog.setLocation(dialogLocationX, dialogLocationY);
 		
+		refreshUserActionsDialog();
+	}
+	
+	private JScrollPane getUserActionsDialogContents(){
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -199,14 +210,21 @@ public class MainGui extends HelpableJFrame{
 		logTable.getTableHeader().setReorderingAllowed(false);
 		logTable.getTableHeader().setResizingAllowed(false);
 		logTable.setAutoCreateRowSorter(false);
+
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
-		
+
 		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getLoggedUserActionsArrayList();
 		for(HashMap<String, String> loggedUserAction : loggedUserActions){
 			logTableModel.addRow(new Object[]{loggedUserAction.get("message")});
 		}
-		
-		userActionLogDialog.add(new JScrollPane(logTable));
+
+		return new JScrollPane(logTable);
 	}
 	
+	public void refreshUserActionsDialog(){
+		userActionLogDialog.getContentPane().removeAll();
+		userActionLogDialog.add(getUserActionsDialogContents());
+		userActionLogDialog.validate();
+		userActionLogDialog.repaint();
+	}
 }
