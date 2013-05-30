@@ -57,16 +57,6 @@ public class AnalyseTask implements Runnable {
 					applicationDTO.projects.remove(i);
 					applicationDTO.projects.add(i, currentProject);
 				}
-				
-				for(ProjectDTO project : applicationDTO.projects){
-					System.out.println("Project name: "+project.name);
-					for(AnalysedModuleDTO am : project.analysedModules){
-						System.out.println("Module name: "+am.name);
-						for(AnalysedModuleDTO sam : am.subModules){
-							System.out.println("Submodule name: "+sam.name);
-						}
-					}
-				}
 			}
 			
 			mainController.getWorkspaceController().getCurrentWorkspace().setApplicationData(applicationDTO);
