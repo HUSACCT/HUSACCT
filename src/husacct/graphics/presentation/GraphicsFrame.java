@@ -268,6 +268,12 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	}
 
 	@Override
+	public void moduleZoom(String zoomType) {
+		for (UserInputListener l : listeners)
+			l.moduleZoom(zoomType);
+	}
+
+	@Override
 	public void moduleZoom(BaseFigure[] zoomedModuleFigure) {
 		// Not used through this GUI
 	}

@@ -399,6 +399,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 		}
 	}
 
+	public BaseFigure[] getSelectedFigures(){
+		return drawingView.toFigureArray(drawingView.getSelectedFigures());
+	}
+
 	protected void printFigures(String msg) {
 		if (!debugPrint)
 			return;
