@@ -70,8 +70,7 @@ public class PersistentDomain implements ISaveable {
 
 	XMLParser = new XMLDomain(workspaceData);
 	Application workspaceApplication = XMLParser.getApplication();
-	SoftwareArchitecture workspaceArchitecture = XMLParser
-		.getArchitecture();
+	SoftwareArchitecture workspaceArchitecture = workspaceApplication.getArchitecture();
 
 	switch (parseData) {
 	default:

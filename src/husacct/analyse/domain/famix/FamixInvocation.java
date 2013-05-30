@@ -3,8 +3,8 @@ package husacct.analyse.domain.famix;
 class FamixInvocation extends FamixAssociation {
 
     public String nameOfInstance;
-    public String inovcationName;
     public String belongsToMethod;
+	public String invocationName;
 
     public String toString() {
         String string = "";
@@ -13,7 +13,7 @@ class FamixInvocation extends FamixAssociation {
         string += "to: " + super.to + "\n";
         string += "linenumber: " + super.lineNumber + "\n";
         string += "nameOfInstance: " + nameOfInstance + "\n";
-        string += "inovcationName: " + inovcationName + "\n";
+        string += "invocationName: " + invocationName + "\n";
         string += "belongsToMethod: " + belongsToMethod + "\n";
         return string;
     }
