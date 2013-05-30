@@ -20,6 +20,7 @@ public class CSharpTreeConvertController {
 	CSharpEnumGenerator csEnumGenerator;
 	CSharpInheritanceGenerator csInheritanceGenerator;
 	CSharpAttributeAndLocalVariableGenerator csAttributeGenerator;
+	CSharpPropertyGenerator csPropertyGenerator;
 	CSharpMethodGeneratorController csMethodeGenerator;
 	CSharpLamdaGenerator csLamdaGenerator;
 	List<CommonTree> usings = new ArrayList<>();
@@ -33,6 +34,7 @@ public class CSharpTreeConvertController {
 		csEnumGenerator = new CSharpEnumGenerator();
 		csInheritanceGenerator = new CSharpInheritanceGenerator();
 		csAttributeGenerator = new CSharpAttributeAndLocalVariableGenerator();
+		csPropertyGenerator = new CSharpPropertyGenerator();
 		csMethodeGenerator = new CSharpMethodGeneratorController();
 		csLamdaGenerator = new CSharpLamdaGenerator();
 	}
@@ -84,6 +86,10 @@ public class CSharpTreeConvertController {
 						delegateAttribute(treeNode);
 						deleteTreeChild(treeNode);
 						break;
+					case CSharpParser.PROPERTY_DECL:
+                    	delegateProperty(treeNode);
+                    	deleteTreeChild(treeNode);
+                    	break;
 					case CSharpParser.METHOD_DECL:
 					case CSharpParser.CONSTRUCTOR_DECL:
 						delegateMethod(treeNode);
@@ -138,6 +144,10 @@ public class CSharpTreeConvertController {
 		} else {
 			csAttributeGenerator.generateAttributeToDomain(attributeTree, createPackageAndClassName(namespaceStack, classNameStack));
 		}
+	}
+	
+	private void delegateProperty(CommonTree propertyTree) {
+    	csPropertyGenerator.generateProperyToDomain(propertyTree, createPackageAndClassName(namespaceStack, classNameStack));
 	}
 
 	private void delegateMethod(CommonTree methodTree) {
