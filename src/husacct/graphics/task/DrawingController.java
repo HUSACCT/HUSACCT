@@ -403,7 +403,7 @@ public abstract class DrawingController extends DrawingSettingsController {
 					selection.toArray(new BaseFigure[selection.size()]));
 
 			for (BaseFigure f : figures) {
-				f.isContext(false); // minimising potential side effects
+				f.setContext(false); // minimising potential side effects
 			}
 
 			this.drawingView.selectAll();
@@ -414,10 +414,10 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 			for (BaseFigure f : allFigures) {
 				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
-					f.isContext(true);
+					f.setContext(true);
 					figures.add(f);
 				} else {
-					f.isContext(false);
+					f.setContext(false);
 				}
 			}
 

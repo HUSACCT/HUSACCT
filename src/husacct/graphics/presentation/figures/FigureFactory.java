@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 public final class FigureFactory {
 	protected Logger logger = Logger.getLogger(FigureFactory.class);
+	private String PROJECT_TYPE = "Project";
 
 	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
 		if (dependencyDTOs.length <= 0) {
@@ -23,20 +24,16 @@ public final class FigureFactory {
 	}
 
 	public ViolationsDecorator createViolationsDecorator(ViolationDTO[] violationDTOs) {
-		if (violationDTOs.length <= 0) {
-			throw new RuntimeException("No violations received. Cannot create a violation figure.");
-		}
-		
 		Color highestColor = null;
-		try{
-			// The violations are sorted on severity order. Highest are first in the array.
+		if (violationDTOs.length <= 0) {
+			logger.warn("No violations received. Cannot create a violation figure.");
+			//throw new RuntimeException("No violations received. Cannot create a violation figure.");
+		} else{
 			highestColor = violationDTOs[0].severityColor;
-		}catch(Exception e){
-			// See if-statement below
-		}
-		if (null == highestColor) {
-			logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
-			highestColor = Color.RED;
+			if (highestColor == null) {
+				logger.warn("No violation severity color found! Resetting to the default 'Color.RED'.");
+				highestColor = Color.RED;
+			}
 		}
 		return new ViolationsDecorator(highestColor);
 	}
@@ -52,14 +49,10 @@ public final class FigureFactory {
 	}
 
 	public BaseFigure createFigure(AbstractDTO dto) {
-		BaseFigure createdFigure = null;
-
-		if ((dto instanceof ModuleDTO) || (dto instanceof AnalysedModuleDTO) || (dto instanceof ProjectDTO)) {
-			createdFigure = createModuleFigure(dto);
-		}
-
-		if (null == createdFigure) {
-			throw new RuntimeException("Unimplemented dto type '" + (null == dto ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
+		BaseFigure createdFigure = createModuleFigure(dto);
+		
+		if (createdFigure == null) {
+			throw new RuntimeException("Unimplemented dto type '" + (dto == null ? "DTO=null" : dto.getClass().getSimpleName()) + "' passed to FigureFactory");
 		}
 		return createdFigure;
 	}
@@ -80,10 +73,10 @@ public final class FigureFactory {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
 		} else if (dto instanceof ProjectDTO){
-			type = "Project";
+			type = PROJECT_TYPE;
 			name = ((ProjectDTO) dto).name;
 		} else {
-			throw new RuntimeException("DTO type '" + dto.getClass().getSimpleName() + "' is not recognized as a module dto.");
+			return null;
 		}
 
 		// TODO check these values with the define team
