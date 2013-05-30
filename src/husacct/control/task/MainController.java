@@ -99,6 +99,10 @@ public class MainController {
 		return this.logController;
 	}
 	
+	public MethodLogController getMethodLogController(){
+		return this.methodLogController;
+	}
+	
 	public void exit(){
 		// TODO: check saved 
 		ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
