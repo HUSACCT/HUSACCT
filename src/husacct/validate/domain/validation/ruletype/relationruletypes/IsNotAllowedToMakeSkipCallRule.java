@@ -19,16 +19,12 @@ import java.util.List;
 
 public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
-
-	public IsNotAllowedToMakeSkipCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+	public IsNotAllowedToMakeSkipCallRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
@@ -39,14 +35,12 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 			for (List<Mapping> physicalClasspathsTo : modulesTo) {
 				for (Mapping classPathTo : physicalClasspathsTo) {
 					for (DependencyDTO dependency : dependencies) {
-						if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-							if (dependency.to.equals(classPathTo.getPhysicalPath())) {
-								if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-									Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-									violations.add(violation);
-								}
-							}
-						}
+						if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
+                                dependency.to.equals(classPathTo.getPhysicalPath()) &&
+                                Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                            Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                            violations.add(violation);
+                        }
 					}
 				}
 			}
@@ -57,10 +51,9 @@ public class IsNotAllowedToMakeSkipCallRule extends RuleType {
 	private List<List<Mapping>> filterLayers(List<ModuleDTO> allModules, RuleDTO currentRule) {
 		List<List<Mapping>> returnModules = new ArrayList<>();
 		for (ModuleDTO module : allModules) {
-			if (module.type.toLowerCase().contains("layer")) {
-				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
-					returnModules = getModulesTo(allModules, allModules.indexOf(module), currentRule.violationTypeKeys);
-				}
+			if (module.type.toLowerCase().contains("layer") &&
+                    module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
+                returnModules = getModulesTo(allModules, allModules.indexOf(module), currentRule.violationTypeKeys);
 			}
 		}
 		return returnModules;

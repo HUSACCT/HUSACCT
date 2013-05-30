@@ -16,15 +16,13 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class FacadeConventionRule extends RuleType {
-	private final static EnumSet<RuleTypes> facadeExceptionRules = EnumSet.noneOf(RuleTypes.class);
 
-	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationtypes, Severity severity) {
-		super(key, categoryKey, violationtypes, facadeExceptionRules, severity);
+	public FacadeConventionRule(String key, String categoryKey, List<ViolationType> violationTypes, Severity severity) {
+		super(key, categoryKey, violationTypes, EnumSet.noneOf(RuleTypes.class), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		List<Mapping> mappingsFrom = mappings.getMappingFrom();
 		List<Violation> allViolations = new ArrayList<>();

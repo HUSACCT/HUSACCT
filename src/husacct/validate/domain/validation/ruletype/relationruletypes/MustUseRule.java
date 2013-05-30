@@ -28,8 +28,6 @@ public class MustUseRule extends RuleType {
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<Mapping> physicalClasspathsTo = mappings.getMappingTo();
@@ -40,12 +38,10 @@ public class MustUseRule extends RuleType {
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (Mapping classPathTo : physicalClasspathsTo) {
 				for (DependencyDTO dependency : dependencies) {
-					if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-						if (dependency.to.equals(classPathTo.getPhysicalPath())) {
-							if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-								dependencyCounter++;
-							}
-						}
+					if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
+                            dependency.to.equals(classPathTo.getPhysicalPath()) &&
+                            Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                        dependencyCounter++;
 					}
 				}
 			}

@@ -19,16 +19,12 @@ import java.util.List;
 
 public class IsOnlyAllowedToUseRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionrules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
-
-	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionrules, severity);
+	public IsOnlyAllowedToUseRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 
@@ -36,15 +32,13 @@ public class IsOnlyAllowedToUseRule extends RuleType {
 
 		for (Mapping classPathFrom : physicalClasspathsFrom) {
 			for (DependencyDTO dependency : dependencies) {
-				if (classPathFrom.getPhysicalPath().equals(dependency.from)) {
-					if (!containsMapping(mappings, dependency.to)) {
-						if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-							Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
-							Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
-							violations.add(violation);
-						}
-					}
-				}
+				if (classPathFrom.getPhysicalPath().equals(dependency.from) &&
+                        !containsMapping(mappings, dependency.to) &&
+                        Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                    Mapping classPathTo = new Mapping(dependency.to, classPathFrom.getViolationTypes());
+                    Violation violation = createViolation(rootRule, classPathFrom, classPathTo, dependency, configuration);
+                    violations.add(violation);
+                }
 			}
 		}
 		return violations;

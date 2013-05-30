@@ -19,16 +19,12 @@ import java.util.List;
 
 public class IsNotAllowedToMakeBackCallRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> exceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
-
-	public IsNotAllowedToMakeBackCallRule(String key, String category, List<ViolationType> violationtypes, Severity severity) {
-		super(key, category, violationtypes, exceptionRules, severity);
+	public IsNotAllowedToMakeBackCallRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE), severity);
 	}
 
 	@Override
 	public List<Violation> check(ConfigurationServiceImpl configuration, RuleDTO rootRule, RuleDTO currentRule) {
-		violations = new ArrayList<>();
-
 		mappings = CheckConformanceUtilClass.filterClassesFrom(currentRule);
 		physicalClasspathsFrom = mappings.getMappingFrom();
 		List<List<Mapping>> modulesTo = filterLayers(Arrays.asList(defineService.getChildrenFromModule(defineService.getParentFromModule(currentRule.moduleFrom.logicalPath))), currentRule);
@@ -39,13 +35,11 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 			for (List<Mapping> moduleTo : modulesTo) {
 				for (Mapping classpathTo : moduleTo) {
 					for (DependencyDTO dependency : dependencies) {
-						if (dependency.from.equals(classPathFrom.getPhysicalPath())) {
-							if (dependency.to.equals(classpathTo.getPhysicalPath())) {
-								if (Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
-									Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
-									violations.add(violation);
-								}
-							}
+						if (dependency.from.equals(classPathFrom.getPhysicalPath()) &&
+                                dependency.to.equals(classpathTo.getPhysicalPath()) &&
+                                Arrays.binarySearch(classPathFrom.getViolationTypes(), dependency.type) >= 0) {
+                            Violation violation = createViolation(rootRule, classPathFrom, classpathTo, dependency, configuration);
+                            violations.add(violation);
 						}
 					}
 				}
@@ -59,10 +53,9 @@ public class IsNotAllowedToMakeBackCallRule extends RuleType {
 		int counter = -1;
 		for (ModuleDTO module : allModules) {
 			counter++;
-			if (module.type.toLowerCase().equals("layer")) {
-				if (module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
-					returnModules = getModulesTo(allModules, counter, currentRule.violationTypeKeys);
-				}
+			if (module.type.toLowerCase().equals("layer") &&
+                    module.logicalPath.toLowerCase().equals(currentRule.moduleFrom.logicalPath.toLowerCase())) {
+                returnModules = getModulesTo(allModules, counter, currentRule.violationTypeKeys);
 			}
 		}
 		return returnModules;
