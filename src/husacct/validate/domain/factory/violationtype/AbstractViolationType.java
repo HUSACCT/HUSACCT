@@ -11,6 +11,7 @@ import husacct.validate.domain.validation.internaltransferobjects.CategoryKeySev
 import husacct.validate.domain.validation.ruletype.RuleTypes;
 import husacct.validate.domain.validation.violationtype.IViolationType;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -102,8 +103,11 @@ public abstract class AbstractViolationType {
 		} else {
 			logger.warn(String.format("Warning specified %s not found in the system and or configuration", violationTypeKey));
 		}
-		throw new ViolationTypeNotFoundException();
-	}
+		
+		//Verbeteren
+		return new ViolationType("", false, new Severity("", Color.GREEN));
+		//throw new ViolationTypeNotFoundException(); TODO: Onaangekondige ViolationTypes ondersteunen (van team Define)
+		}
 
 	private ViolationType generateViolationType(String ruleTypeKey, Enum<?> enumValue) {
 		final Severity severity = createSeverity(languageName, enumValue.toString());
