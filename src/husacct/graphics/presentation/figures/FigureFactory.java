@@ -27,7 +27,6 @@ public final class FigureFactory {
 		Color highestColor = null;
 		if (violationDTOs.length <= 0) {
 			logger.warn("No violations received. Cannot create a violation figure.");
-			//throw new RuntimeException("No violations received. Cannot create a violation figure.");
 		} else{
 			highestColor = violationDTOs[0].severityColor;
 			if (highestColor == null) {
