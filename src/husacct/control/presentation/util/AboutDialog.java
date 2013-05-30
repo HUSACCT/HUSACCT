@@ -63,6 +63,7 @@ public class AboutDialog extends JDialog{
 		this.setSize(new Dimension(420, 380));
 		this.setLayout(new FlowLayout(0,0,0));
 		this.setResizable(false);
+		this.setUndecorated(true);
 		DialogUtils.alignCenter(this);
 	}
 

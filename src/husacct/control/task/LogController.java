@@ -2,10 +2,10 @@ package husacct.control.task;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
-import husacct.common.logging.MethodLogger;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
 import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.task.logging.MethodLogger;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 

@@ -208,6 +208,5 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void showHelpDialog(Component comp) {
 		mainController.getApplicationController().showHelpGUI(comp);
-		
 	}
 }

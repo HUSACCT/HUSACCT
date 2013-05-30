@@ -1,4 +1,4 @@
-package husacct.common.logging;
+package husacct.control.task.logging;
 
 import husacct.control.task.LogController;
 
@@ -16,16 +16,12 @@ public abstract class MethodLogger {
 		Throwable t = new Throwable(); 
 		StackTraceElement[] elements = t.getStackTrace(); 
 
-		System.out.println();
-		
 		String classPath = elements[1].getClassName();
-		String callerMethodName = elements[1].getMethodName();
-		String calleeMethodName = elements[0].getMethodName(); 
+		String calledMethodName = elements[0].getMethodName(); 
 
 		HashMap<String, String> loggedMethodInfo = new HashMap<String, String>();
 		loggedMethodInfo.put("classPath", classPath);
-		loggedMethodInfo.put("callerMethodName", callerMethodName);
-		loggedMethodInfo.put("calleeMethodName", calleeMethodName);
+		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);
 		loggedMethodCalls.add(loggedMethodInfo);
 	}
@@ -34,8 +30,7 @@ public abstract class MethodLogger {
 		String output = "Logged Method Calls: \n";
 		for(HashMap<String, String> loggedMethod : loggedMethodCalls){
 			output += "classPath: " + loggedMethod.get("classPath") + ", \n";
-			output += "callerMethodName: " + loggedMethod.get("callerMethodName") + ", \n";
-			output += "calleeMethodName: " + loggedMethod.get("calleeMethodName") + ", \n";
+			output += "calledMethodName: " + loggedMethod.get("calledMethodName") + ", \n";
 			output += "message: " + loggedMethod.get("message") + "\n";
 			output += "========================================\n";
 		}
