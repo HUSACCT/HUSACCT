@@ -65,10 +65,10 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		if(!appDataFolderObject.exists()){
 			appDataFolderObject.mkdir();
 		}
-		ConfigurationManager.setPropertieIfEmpty("PlatformIndependentAppDataFolder", appDataFolderString);
-		ConfigurationManager.setPropertieIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
-		ConfigurationManager.setPropertieIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
-		ConfigurationManager.setPropertieIfEmpty("LastUsedAddProjectPath", appDataFolderString);	
+		ConfigurationManager.setPropertyIfEmpty("PlatformIndependentAppDataFolder", appDataFolderString);
+		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
+		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderString);	
 	}
 
 	@Override

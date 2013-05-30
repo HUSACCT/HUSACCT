@@ -165,7 +165,7 @@ public class AddProjectDialog extends JDialog{
 		int returnVal = fileChooser.showDialog(panel);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			String addedProjectPath = fileChooser.getSelectedFile().getAbsolutePath();
-			ConfigurationManager.setPropertie("LastUsedAddProjectPath", addedProjectPath);
+			ConfigurationManager.setProperty("LastUsedAddProjectPath", addedProjectPath);
 			pathListModel.add(pathListModel.size(), addedProjectPath);
 		}
 	}
