@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-public abstract class MethodLogger {
+public abstract class MethodLogController {
 	
 	private Logger logger = Logger.getLogger(LogController.class);
 	private static ArrayList<HashMap<String, String>> loggedMethodCalls = new ArrayList<HashMap<String, String>>();

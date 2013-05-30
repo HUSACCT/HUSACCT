@@ -5,7 +5,7 @@ import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
 import husacct.control.task.configuration.ConfigurationManager;
-import husacct.control.task.logging.MethodLogger;
+import husacct.control.task.logging.MethodLogController;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public class LogController extends MethodLogger{
+public class LogController extends MethodLogController{
 
 	private Logger logger = Logger.getLogger(LogController.class);
 	private Workspace currentWorkspace;
