@@ -1,6 +1,5 @@
-package husacct.control.task.logging;
+package husacct.control.task;
 
-import husacct.control.task.LogController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +8,11 @@ import org.apache.log4j.Logger;
 
 public abstract class MethodLogController {
 	
-	private Logger logger = Logger.getLogger(LogController.class);
+	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
 	private static ArrayList<HashMap<String, String>> loggedMethodCalls = new ArrayList<HashMap<String, String>>();
+	
+	public MethodLogController(){
+	}
 	
 	public void logMethod(String message){
 		Throwable t = new Throwable(); 

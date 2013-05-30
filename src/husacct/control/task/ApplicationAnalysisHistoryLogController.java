@@ -5,7 +5,6 @@ import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
 import husacct.control.task.configuration.ConfigurationManager;
-import husacct.control.task.logging.MethodLogController;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -19,16 +18,16 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public class LogController extends MethodLogController{
+public class ApplicationAnalysisHistoryLogController extends MethodLogController{
 
-	private Logger logger = Logger.getLogger(LogController.class);
+	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
 	private Workspace currentWorkspace;
 
 	private MainController mainController;
 	
 	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename"));
 	
-	public LogController(MainController mainController){
+	public ApplicationAnalysisHistoryLogController(MainController mainController){
 		this.mainController = mainController;
 		currentWorkspace = null;
 		//logMethod("Instantiate logcontroller");

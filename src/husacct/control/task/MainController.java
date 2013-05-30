@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
 import husacct.control.task.configuration.ConfigurationManager;
-import husacct.control.task.logging.MethodLogController;
 
 import javax.swing.JOptionPane;
 
@@ -19,7 +18,7 @@ public class MainController {
 	private ApplicationController applicationController;
 	private ImportController importController;
 	private ExportController exportController;
-	private LogController logController;
+	private ApplicationAnalysisHistoryLogController logController;
 	private MethodLogController methodLogController;
 	private CodeViewController codeViewController;
 	
@@ -48,7 +47,7 @@ public class MainController {
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
-		this.logController = new LogController(this);
+		this.logController = new ApplicationAnalysisHistoryLogController(this);
 		
 	}
 	
@@ -95,7 +94,7 @@ public class MainController {
 		return this.exportController;
 	}
 	
-	public LogController getLogController(){
+	public ApplicationAnalysisHistoryLogController getLogController(){
 		return this.logController;
 	}
 	
