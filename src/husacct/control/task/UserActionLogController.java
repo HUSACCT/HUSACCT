@@ -6,15 +6,24 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-public abstract class MethodLogController {
+public abstract class UserActionLogController {
 	
 	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
-	private static ArrayList<HashMap<String, String>> loggedMethodCalls = new ArrayList<HashMap<String, String>>();
+	private static ArrayList<HashMap<String, String>> loggedUserActions = new ArrayList<HashMap<String, String>>();
 	
-	public MethodLogController(){
+	public UserActionLogController(){
+		addDummyUserActions();
 	}
 	
-	public void logMethod(String message){
+	public void addDummyUserActions(){
+		HashMap<String, String> loggedMethodInfo = new HashMap<String, String>();
+		loggedMethodInfo.put("classPath", "husacct.control.task.ApplicationAnalysisHistoryLogController");
+		loggedMethodInfo.put("calledMethodName", "logMethod");
+		loggedMethodInfo.put("message", "Example entry: Checked if log file FILENAME exists");
+		loggedUserActions.add(loggedMethodInfo);
+	}
+	
+	public void logUserAction(String message){
 		Throwable t = new Throwable(); 
 		StackTraceElement[] elements = t.getStackTrace(); 
 
@@ -25,12 +34,12 @@ public abstract class MethodLogController {
 		loggedMethodInfo.put("classPath", classPath);
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);
-		loggedMethodCalls.add(loggedMethodInfo);
+		loggedUserActions.add(loggedMethodInfo);
 	}
 	
 	public void printLoggedMethods(){
-		String output = "Logged Method Calls: \n";
-		for(HashMap<String, String> loggedMethod : loggedMethodCalls){
+		String output = "Logged User Actions: \n";
+		for(HashMap<String, String> loggedMethod : loggedUserActions){
 			output += "classPath: " + loggedMethod.get("classPath") + ", \n";
 			output += "calledMethodName: " + loggedMethod.get("calledMethodName") + ", \n";
 			output += "message: " + loggedMethod.get("message") + "\n";
@@ -40,8 +49,8 @@ public abstract class MethodLogController {
 		logger.info(output);
 	}
 	
-	public ArrayList<HashMap<String, String>> getLoggedMethodCallsArrayList(){
-		return loggedMethodCalls;
+	public ArrayList<HashMap<String, String>> getLoggedUserActionsArrayList(){
+		return loggedUserActions;
 	}
 
 }
