@@ -52,7 +52,7 @@ public class MainGui extends HelpableJFrame{
 	private TaskBar taskBar;
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
-	private JDialog actionLogDialog;
+	private JDialog userActionLogDialog;
 	private ToolBar toolBar;
 	
 	
@@ -106,7 +106,7 @@ public class MainGui extends HelpableJFrame{
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		
-		//createActionLogDialog();
+		//createUserActionsDialog();
 		
 		add(contentPane);
 		add(moonwalkPanel);
@@ -169,17 +169,17 @@ public class MainGui extends HelpableJFrame{
 		setTitle("");
 	}
 	
-	private void createActionLogDialog(){
-		actionLogDialog = new JDialog(this);
-		actionLogDialog.setAlwaysOnTop(true);
-		actionLogDialog.setFocusableWindowState(false);
-		actionLogDialog.setFocusable(false);
-		actionLogDialog.setTitle(localeService.getTranslatedString("ActionLog"));
-		actionLogDialog.setVisible(true);
+	private void createUserActionsDialog(){
+		userActionLogDialog = new JDialog(this);
+		userActionLogDialog.setAlwaysOnTop(true);
+		userActionLogDialog.setFocusableWindowState(false);
+		userActionLogDialog.setFocusable(false);
+		userActionLogDialog.setTitle(localeService.getTranslatedString("ActionLog"));
+		userActionLogDialog.setVisible(true);
 		
 		int dialogWidth = 250;
 		int dialogHeight = 250;
-		actionLogDialog.setSize(dialogWidth, dialogHeight);
+		userActionLogDialog.setSize(dialogWidth, dialogHeight);
 		
 		//Absolute positioning: Right bottom of screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -187,7 +187,7 @@ public class MainGui extends HelpableJFrame{
 		int offsetY = 40;
 		int dialogLocationX = (int)dim.getWidth()-dialogWidth-offsetX;
 		int dialogLocationY = (int)dim.getHeight()-dialogHeight-offsetY;
-		actionLogDialog.setLocation(dialogLocationX, dialogLocationY);
+		userActionLogDialog.setLocation(dialogLocationX, dialogLocationY);
 		
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
@@ -199,23 +199,14 @@ public class MainGui extends HelpableJFrame{
 		logTable.getTableHeader().setReorderingAllowed(false);
 		logTable.getTableHeader().setResizingAllowed(false);
 		logTable.setAutoCreateRowSorter(false);
-		
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
 		
-		//TODO: Fix this
-		//ArrayList<HashMap<String, String>> loggedMethods = mainController.getMethodLogController().getLoggedMethodCallsArrayList();
-		/*for(HashMap<String, String> loggedMethod : loggedMethods){
-			output += "classPath: " + loggedMethod.get("classPath") + ", \n";
-			output += "calledMethodName: " + loggedMethod.get("calledMethodName") + ", \n";
-			output += "message: " + loggedMethod.get("message") + "\n";
-		}*/
-		
-		for(int i=1;i<=5;i++){
-			String actionLogMessage = "Blaat " + i;
-			logTableModel.addRow(new Object[]{actionLogMessage});
+		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getLoggedUserActionsArrayList();
+		for(HashMap<String, String> loggedUserAction : loggedUserActions){
+			logTableModel.addRow(new Object[]{loggedUserAction.get("message")});
 		}
 		
-		actionLogDialog.add(new JScrollPane(logTable));
+		userActionLogDialog.add(new JScrollPane(logTable));
 	}
 	
 }

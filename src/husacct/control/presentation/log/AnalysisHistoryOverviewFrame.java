@@ -57,7 +57,7 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 		String workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 		String application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
 		ArrayList<ProjectDTO> projects = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects;
-		HashMap<String, HashMap<String, String>> tableData = mainController.getLogController().getApplicationHistoryFromFile(workspace, application, projects);
+		HashMap<String, HashMap<String, String>> tableData = mainController.getApplicationAnalysisHistoryLogController().getApplicationHistoryFromFile(workspace, application, projects);
 		
 		analysisTableModel = new DefaultTableModel();
 		analysisTable = new JTable(analysisTableModel){

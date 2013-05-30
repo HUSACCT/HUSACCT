@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public class ApplicationAnalysisHistoryLogController extends MethodLogController{
+public class ApplicationAnalysisHistoryLogController extends UserActionLogController{
 
 	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
 	private Workspace currentWorkspace;
@@ -30,12 +30,9 @@ public class ApplicationAnalysisHistoryLogController extends MethodLogController
 	public ApplicationAnalysisHistoryLogController(MainController mainController){
 		this.mainController = mainController;
 		currentWorkspace = null;
-		//logMethod("Instantiate logcontroller");
 	}
 	
 	public boolean logFileExists(){
-		//logMethod("Check if " + logFile.getAbsolutePath() + " exists.");
-		//printLoggedMethods();
 		return logFile.exists();
 	}
 	
