@@ -11,6 +11,7 @@ import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -21,6 +22,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
@@ -128,11 +131,11 @@ public class MainGui extends HelpableJFrame{
 		addWindowFocusListener(new WindowFocusListener() {  
 			@Override  
 			public void windowGainedFocus(WindowEvent e) {
-				actionLogDialog.setVisible(true);
+				//actionLogDialog.setVisible(true);
 			}  
 			@Override  
 			public void windowLostFocus(WindowEvent e) {
-				actionLogDialog.setVisible(false);
+				//actionLogDialog.setVisible(false);
 			}  
 		});  
 	}
@@ -173,8 +176,18 @@ public class MainGui extends HelpableJFrame{
 		actionLogDialog.setFocusable(false);
 		actionLogDialog.setTitle(localeService.getTranslatedString("ActionLog"));
 		actionLogDialog.setVisible(true);
-		actionLogDialog.setSize(250, 250);
-		actionLogDialog.setLocation(533, 285);
+		
+		int dialogWidth = 250;
+		int dialogHeight = 250;
+		actionLogDialog.setSize(dialogWidth, dialogHeight);
+		
+		//Absolute positioning: Right bottom of screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		int offsetX = 5;
+		int offsetY = 40;
+		int dialogLocationX = (int)dim.getWidth()-dialogWidth-offsetX;
+		int dialogLocationY = (int)dim.getHeight()-dialogHeight-offsetY;
+		actionLogDialog.setLocation(dialogLocationX, dialogLocationY);
 		
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
@@ -183,28 +196,24 @@ public class MainGui extends HelpableJFrame{
 			}
 		};
 
+		logTable.getTableHeader().setReorderingAllowed(false);
+		logTable.getTableHeader().setResizingAllowed(false);
+		logTable.setAutoCreateRowSorter(false);
+		
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
 		
-		
-		
-		/*for (Entry<String, HashMap<String, String>> entry : tableData.entrySet()) {
-		    Long analysisTimestampLong = Long.parseLong(entry.getKey());
-			Date analysisTimestampDate = new Date(analysisTimestampLong*1000);
-			DateFormat analysisTimestampFormat = new SimpleDateFormat("dd-MM-yyyy hh:MM:ss");
-			
-		    HashMap<String, String> analysisData = entry.getValue();
-		    logTableModel.addRow(new Object[]{
-		    		analysisData.get("application"), 
-		    		analysisData.get("project"), 
-		    		analysisData.get("path"), 
-		    		analysisTimestampFormat.format(analysisTimestampDate),
-		    		analysisData.get("packages"), 
-		    		analysisData.get("classes"), 
-		    		analysisData.get("interfaces"), 
-		    		analysisData.get("dependencies"), 
-		    		analysisData.get("violations")
-		    });
+		//TODO: Fix this
+		//ArrayList<HashMap<String, String>> loggedMethods = mainController.getMethodLogController().getLoggedMethodCallsArrayList();
+		/*for(HashMap<String, String> loggedMethod : loggedMethods){
+			output += "classPath: " + loggedMethod.get("classPath") + ", \n";
+			output += "calledMethodName: " + loggedMethod.get("calledMethodName") + ", \n";
+			output += "message: " + loggedMethod.get("message") + "\n";
 		}*/
+		
+		for(int i=1;i<=5;i++){
+			String actionLogMessage = "Blaat " + i;
+			logTableModel.addRow(new Object[]{actionLogMessage});
+		}
 		
 		actionLogDialog.add(new JScrollPane(logTable));
 	}

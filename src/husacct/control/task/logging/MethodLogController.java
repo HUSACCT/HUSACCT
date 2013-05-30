@@ -36,26 +36,10 @@ public abstract class MethodLogController {
 		}
 		
 		logger.info(output);
-		
-		//Sample output (will be deleted once this is done)
-		/*
-		 *  INFO [AWT-EventQueue-0] (MethodLogger.java:40) - Logged Method Calls: 
-			classPath: husacct.control.task.LogController, 
-			callerMethodName: <init>, 
-			calleeMethodName: logMethod, 
-			message: Instantiate logcontroller
-			========================================
-			classPath: husacct.control.task.LogController, 
-			callerMethodName: logFileExists, 
-			calleeMethodName: logMethod, 
-			message: Check if C:\Users\Thijs\HUSACCT\applicationanalysishistory.xml exists.
-			========================================
-			classPath: husacct.control.task.LogController, 
-			callerMethodName: logFileExists, 
-			calleeMethodName: logMethod, 
-			message: Check if C:\Users\Thijs\HUSACCT\applicationanalysishistory.xml exists.
-			========================================
-		 */
+	}
+	
+	public ArrayList<HashMap<String, String>> getLoggedMethodCallsArrayList(){
+		return loggedMethodCalls;
 	}
 
 }
