@@ -60,15 +60,13 @@ public class AnalysedController extends DrawingController {
 	public void drawArchitecture(DrawingDetail detail) {
 		super.drawArchitecture(this.getCurrentDrawingDetail());
 		super.notifyServiceListeners();
-
-		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
-
-		AbstractDTO[] modules = this.analyseService.getRootModules();
 		this.resetCurrentPaths();
+
 		if (DrawingDetail.WITH_VIOLATIONS == detail) {
 			this.showViolations();
 		}
 
+		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
 		AbstractDTO[] projectArray = projects.toArray(new AbstractDTO[projects.size()]);
 		this.drawModulesAndLines(projectArray);
 	}
@@ -81,12 +79,10 @@ public class AnalysedController extends DrawingController {
 			this.setCurrentPaths(new String[] { parentName });
 			this.drawModulesAndLines(children);
 		} else {
-			this.logger.warn("Tried to draw modules for \"" + parentName
-					+ "\", but it has no children.");
+			this.logger.warn("Tried to draw modules for \"" + parentName + "\", but it has no children.");
 		}
 	}
 
-	//TODO parentNames bevat nog geen projectnamen
 	private void getAndDrawModulesIn(String[] parentNames) {
 		if (parentNames.length == 0) {
 			this.drawArchitecture(this.getCurrentDrawingDetail());
@@ -128,10 +124,8 @@ public class AnalysedController extends DrawingController {
 			Set<String> parentNamesKeySet = allChildren.keySet();
 			if (parentNamesKeySet.size() == 1) {
 				String onlyParentModule = parentNamesKeySet.iterator().next();
-				ArrayList<AbstractDTO> onlyParentChildren = allChildren
-						.get(onlyParentModule);
-				this.drawModulesAndLines(onlyParentChildren
-						.toArray(new AbstractDTO[] {}));
+				ArrayList<AbstractDTO> onlyParentChildren = allChildren.get(onlyParentModule);
+				this.drawModulesAndLines(onlyParentChildren.toArray(new AbstractDTO[] {}));
 			} else {
 				this.drawModulesAndLines(allChildren);
 			}
@@ -154,7 +148,6 @@ public class AnalysedController extends DrawingController {
 			this.logger.warn("Tried to draw modules for \"" + parentName
 					+ "\", but it has no children.");
 		}
-
 		return knownChildren;
 	}
 
@@ -169,14 +162,10 @@ public class AnalysedController extends DrawingController {
 	}
 
 	@Override
-	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap()
-				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap()
-				.getModuleDTO(figureTo);
-		return this.validateService.getViolationsByPhysicalPath(
-				dtoFrom.uniqueName, dtoTo.uniqueName);
+	protected ViolationDTO[] getViolationsBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) this.getFigureMap().getModuleDTO(figureTo);
+		return this.validateService.getViolationsByPhysicalPath(dtoFrom.uniqueName, dtoTo.uniqueName);
 	}
 
 	@Override
@@ -196,11 +185,17 @@ public class AnalysedController extends DrawingController {
 		super.notifyServiceListeners();
 		this.resetContextFigures();
 
-		//TODO optimize for selecting multiple projects
-		if(figures[0] instanceof ProjectFigure){
-			String[] paths = new String[1];
-			paths[0] = figures[0].getName();
-			super.setCurrentPaths(paths);
+		boolean allProjects = false;
+		for(BaseFigure fig : figures){
+			if(!(fig instanceof ProjectFigure)){
+				allProjects = false;
+			} else{
+				allProjects = true;
+			}
+		}
+
+		if(allProjects){
+			setCurrentPathsForProjects(figures);
 			ProjectDTO project = (ProjectDTO) this.getFigureMap().getModuleDTO(figures[0]);
 			AbstractDTO[] abstractDTOs = project.analysedModules.toArray(new AbstractDTO[project.analysedModules.size()] );
 			if(abstractDTOs.length != 0){
@@ -209,11 +204,17 @@ public class AnalysedController extends DrawingController {
 		}
 
 		ArrayList<String> parentNames = this.sortFiguresBasedOnZoomability(figures);
-
 		if (parentNames.size() > 0) {
 			this.saveSingleLevelFigurePositions();
 			this.getAndDrawModulesIn(parentNames.toArray(new String[] {}));
 		}
+	}
+
+	//TODO Needs to be removed as soon as uniqueName of a AnalysedDTO contains a project
+	private void setCurrentPathsForProjects(BaseFigure[] figures){
+		String[] paths = new String[1];
+		paths[0] = figures[0].getName();
+		super.setCurrentPaths(paths);
 	}
 
 	@Override
