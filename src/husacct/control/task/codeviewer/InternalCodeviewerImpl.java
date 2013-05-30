@@ -2,21 +2,21 @@ package husacct.control.task.codeviewer;
 
 import java.util.ArrayList;
 
-import nl.kuiperd.jcodeviewer.API;
+import eu.codeviewer.API;
 
 public class InternalCodeviewerImpl implements CodeviewerService {
 
 	API codeviewerAPI;
 	
 	public InternalCodeviewerImpl () {
-		
+		codeviewerAPI = new API();
 	}
 	
 	@Override
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errorLines) {
-		codeviewerAPI = new API();
 		codeviewerAPI.setErrors(errorLines);
-		codeviewerAPI.openFile(fileName);
+		codeviewerAPI.parseFile(fileName);
+		codeviewerAPI.show();
 	}
 
 }
