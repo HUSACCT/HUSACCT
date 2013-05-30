@@ -1,4 +1,4 @@
-package husacct.graphics.task.layout;
+package husacct.graphics.task.layout.state;
 
 import java.awt.geom.Rectangle2D;
 
