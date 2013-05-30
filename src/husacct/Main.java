@@ -18,7 +18,7 @@ public class Main {
 	}
 	
 	private void setLog4jConfiguration(){
-		URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
+		URL propertiesFile = getClass().getResource("/husacct/common/resources/log4j.properties");
 		PropertyConfigurator.configure(propertiesFile);
 	}
 	
