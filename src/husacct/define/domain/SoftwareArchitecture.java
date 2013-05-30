@@ -14,6 +14,7 @@ import java.util.Collections;
 
 public class SoftwareArchitecture {
 
+    private static int counter = 0;
     private static SoftwareArchitecture instance = null;
 
     public static SoftwareArchitecture getInstance() {
@@ -64,20 +65,10 @@ public class SoftwareArchitecture {
 	} else {
 	    throw new RuntimeException(ServiceProvider.getInstance()
 		    .getLocaleService().getTranslatedString("SameNameModule"));
-	    // TODO! Foutmelding ffs!
 	}
 	return moduleId;
     }
 
-    public String addNewModule(Module module) {
-	if (hasModule(module.getName())) {
-	    return ServiceProvider.getInstance().getLocaleService()
-		    .getTranslatedString("SameNameModule");
-	} else {
-	    rootModule.addSubModule(module);
-	}
-	return "";
-    }
 
     // TODO: Holy sh...
     private Module generateNewType(Module oldModule, String newType) {

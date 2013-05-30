@@ -156,4 +156,9 @@ public class AppliedRuleDomainService {
     public String[][] getCategories() {
 	return ruleFactory.getCategories();
     }
+
+    public boolean isMandatory(String ruleTypeKey, Module moduleFrom) {
+	DefaultRuleDomainService defaultRuleService = new DefaultRuleDomainService();
+	return defaultRuleService.isMandatoryRule(ruleTypeKey, moduleFrom);
+    }
 }
