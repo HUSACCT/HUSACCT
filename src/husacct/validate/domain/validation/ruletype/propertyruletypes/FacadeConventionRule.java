@@ -49,15 +49,9 @@ public class FacadeConventionRule extends RuleType {
 
 		if(facadeMapping != null) {
 			//TIJDELIJK
-			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
-					+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
-					+ facadeMapping.getLogicalPathType());
-			System.out.println(">> VIOLATION TYPE KEYS (SIZE: " + rootRule.violationTypeKeys.length + "): ");
-			for(String test: rootRule.violationTypeKeys) {
-				System.out.println("- " + test);
-			}
-			System.out.println("================");
-			
+//			System.out.println("================\n-> COMPONENT: " + componentMapping.getPhysicalPath() + " - " + componentMapping.getLogicalPath() + " - "
+//					+ componentMapping.getLogicalPathType() + "\n-> FACADE: " + facadeMapping.getPhysicalPath() + " - " + facadeMapping.getLogicalPath() + " - "
+//					+ facadeMapping.getLogicalPathType() + "\n================");
 			//EINDE
 
 			for (DependencyDTO dependency : dependencies) {
@@ -85,16 +79,6 @@ public class FacadeConventionRule extends RuleType {
 				}
 			}
 		}
-
-//		mappingsFrom = CheckConformanceUtilClass.filterClassesFrom(rootRule).getMappingFrom();
-//		for(Mapping theMapping: mappingsFrom) {
-//			System.out.println("[TEST 1] " + theMapping.getLogicalPath() + " - " + theMapping.getLogicalPathType() + " - " + theMapping.getPhysicalPath());
-//		}
-//		System.out.println("=================");
-//		mappingsFrom = CheckConformanceUtilPackage.filterPackages(rootRule).getMappingFrom();
-//		for(Mapping theMapping: mappingsFrom) {
-//			System.out.println("[TEST 2] " + theMapping.getLogicalPath() + " - " + theMapping.getLogicalPathType() + " - " + theMapping.getPhysicalPath());
-//		}
 
 		return allViolations;
 	}
