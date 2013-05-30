@@ -21,11 +21,7 @@ public class ConfigurationManager {
 		properties.setProperty(key, value);
 	}
 	
-	public static void setPropertie(String key, String value) {
-		properties.setProperty(key, value);
-	}
-	
-	public static void setPropertieIfEmpty(String key, String value) {
+	public static void setPropertyIfEmpty(String key, String value) {
 		if(!properties.containsKey(key) || properties.getProperty(key).equals(""))
 			properties.setProperty(key, value);
 	}
