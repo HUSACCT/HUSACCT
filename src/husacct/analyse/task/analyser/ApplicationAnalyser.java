@@ -46,6 +46,7 @@ public class ApplicationAnalyser {
         ServiceProvider.getInstance().getControlService().finishPreAnalysing();
         //End added by Team 1
         analyser.connectDependencies();
+        analyser.clearLambdaBuffers(); //required for clearing the buffers after analisation is finished
     }
 
     public boolean isZip(String path) {

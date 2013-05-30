@@ -6,8 +6,14 @@ import husacct.common.dto.ProjectDTO;
 import java.io.File;
 import java.util.ArrayList;
 
+/***
+ * Use this file with the following run argument to automatically run HUSACCT with a CSharp project.
+ * you can add as many paths as necessary when no path is given it will load the benchmark.
+ * --bootstrap:CreateWorkspace,SetCSharpBenchmark?"path1"|"path2"|"path3",Analyse,DefineJavaBenchmark,MapJavaBenchmark?"SoftwareUnit">"PACKAGE",Validate
+ */
 public class SetCSharpBenchmark extends AbstractBootstrap{
 	private String[] pathsToCustomTestProject = {};
+	private static final String PATH = new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "benchmark";
 	
 	@Override
 	public void execute() {
@@ -21,15 +27,7 @@ public class SetCSharpBenchmark extends AbstractBootstrap{
 		}
 		
 		if(paths.size() <= 0){
-//			paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "java" + File.separator + "benchmark");
-//			/Users/GMBosma/Git/HUSACCT/testprojects/csharp/benchmark/domain/Direct/Alowed/AccessClassVariable.cs
-			
-//			paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "recognition");
-//			paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "recognition" + File.separator + "invocmethod");
-//			paths.add(new File("/Users/GMBosma/Dropbox/Advanced Software Engineering/TestCases/gerardtests/src/").getAbsolutePath());
-//			 paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "recognition" + File.separator +  "invocmethod"  + File.separator + "a"  + File.separator +  "TheType.cs");
-//		     paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "recognition" + File.separator +  "invocmethod"  + File.separator + "a"  + File.separator +  "Gui.cs");
-//		     paths.add(new File("").getAbsolutePath() + File.separator + "testprojects" + File.separator + "csharp" + File.separator + "recognition" + File.separator +  "invocmethod"  + File.separator + "a"  + File.separator +  "SamePackageG.cs");
+			paths.add(PATH);
 		}
 		
 		ArrayList<AnalysedModuleDTO> analysedModules = new ArrayList<AnalysedModuleDTO>();
