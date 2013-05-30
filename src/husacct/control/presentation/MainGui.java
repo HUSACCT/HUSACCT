@@ -42,8 +42,6 @@ public class MainGui extends HelpableJFrame{
 	private static final long serialVersionUID = 140205650372010347L;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private Logger logger = Logger.getLogger(MainGui.class);
-	private IControlService controlService = ServiceProvider.getInstance().getControlService();
-	
 	private MainController mainController;
 	private MenuBar menuBar;
 	private String titlePrefix = "HUSACCT";

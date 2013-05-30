@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.MainGui;
 import husacct.control.task.configuration.ConfigurationManager;
+import husacct.control.task.logging.MethodLogController;
 
 import javax.swing.JOptionPane;
 
@@ -19,6 +20,7 @@ public class MainController {
 	private ImportController importController;
 	private ExportController exportController;
 	private LogController logController;
+	private MethodLogController methodLogController;
 	private CodeViewController codeViewController;
 	
 	public MainGui mainGUI;
