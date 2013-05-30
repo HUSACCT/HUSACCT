@@ -17,7 +17,7 @@ class JavaAttributeAndLocalVariableGenerator {
     private String belongsToClass;
     private String declareType;  //int, string, CustomClass etc
     private int lineNumber;
-    private String belongsToMethod = ""; //alleen voor local variables
+    private String belongsToMethod = ""; //only for local variables
     private ArrayList<String> declareTypes = new ArrayList<String>();
     private IModelCreationService modelService = new FamixCreationServiceImpl();
 

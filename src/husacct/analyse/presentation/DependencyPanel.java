@@ -55,7 +55,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
 
         dependencyTable.setModel(tableModel);
         dependencyScrollPane.setViewportView(dependencyTable);
-        dependencyTable.setBackground(UIManager.getColor("Panel.background"));
+        dependencyTable.setBackground(PANELBACKGROUND);
         dependencyTable.setAutoCreateRowSorter(true);
         initialiseTrees();
 
@@ -87,18 +87,18 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         this.expandLeaf(toModuleTree, 1);
         this.expandLeaf(fromModuleTree, 1);
 
-        fromModuleScrollPane.setBackground(UIManager.getColor("Panel.background"));
+        fromModuleScrollPane.setBackground(PANELBACKGROUND);
         fromModuleScrollPane.setViewportView(fromModuleTree);
-        toModuleScrollPane.setBackground(UIManager.getColor("Panel.background"));
+        toModuleScrollPane.setBackground(PANELBACKGROUND);
         toModuleScrollPane.setViewportView(toModuleTree);
     }
 
     private void createTreeLayout(JTree theTree) {
         DefaultTreeCellRenderer moduleNodeRenderer = new SoftwareTreeCellRenderer(dataControl);
-        moduleNodeRenderer.setBackground(UIManager.getColor("Panel.background"));
-        moduleNodeRenderer.setBackgroundNonSelectionColor(UIManager.getColor("Panel.background"));
+        moduleNodeRenderer.setBackground(PANELBACKGROUND);
+        moduleNodeRenderer.setBackgroundNonSelectionColor(PANELBACKGROUND);
         moduleNodeRenderer.setBackgroundSelectionColor(UIManager.getColor("Table.sortIconColor"));
-        moduleNodeRenderer.setTextNonSelectionColor(UIManager.getColor("Panel.background"));
+        moduleNodeRenderer.setTextNonSelectionColor(PANELBACKGROUND);
         moduleNodeRenderer.setTextSelectionColor(UIManager.getColor("Table.sortIconColor"));
         theTree.setCellRenderer(moduleNodeRenderer);
         theTree.setBackground(PANELBACKGROUND);
@@ -172,7 +172,7 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
         filterPanel.add(indirectFilterBox);
         fromModuleScrollPane.setBackground(PANELBACKGROUND);
         toModuleScrollPane.setBackground(PANELBACKGROUND);
-        dependencyScrollPane.setBackground(UIManager.getColor("Panel.background"));
+        dependencyScrollPane.setBackground(PANELBACKGROUND);
     }
 
     @Override
