@@ -33,6 +33,8 @@ public class ApplicationAnalysisHistoryLogController extends UserActionLogContro
 	}
 	
 	public boolean logFileExists(){
+		logUserAction("Viewed Application Analysis History");
+		mainController.getMainGui().refreshUserActionsDialog();
 		return logFile.exists();
 	}
 	

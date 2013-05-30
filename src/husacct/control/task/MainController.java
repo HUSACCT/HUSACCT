@@ -38,7 +38,6 @@ public class MainController extends UserActionLogController {
 	}
 	
 	private void setControllers() {
-		
 		this.commandLineController = new CommandLineController();
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
@@ -47,7 +46,6 @@ public class MainController extends UserActionLogController {
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
 		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
-		
 	}
 	
 	private void setAppleProperties(){
