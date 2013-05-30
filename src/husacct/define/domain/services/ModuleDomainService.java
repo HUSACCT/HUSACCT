@@ -208,6 +208,7 @@ private DefaultRuleDomainService service = new DefaultRuleDomainService();
 		.updateModuleType(module, newType);
 	service.addDefaultRules(updatedModule);
 	service.updateModuleRules(updatedModule);
+	StateService.instance().addUpdateModule(module,updatedModule);
 	
 	
 	ServiceProvider.getInstance().getDefineService()

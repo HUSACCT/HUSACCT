@@ -10,6 +10,7 @@ import husacct.define.domain.services.stateservice.state.ModuleCommand;
 import husacct.define.domain.services.stateservice.state.SoftwareUnitCommand;
 import husacct.define.domain.services.stateservice.state.StateDefineController;
 import husacct.define.domain.services.stateservice.state.UpdateModuleCommand;
+import husacct.define.domain.services.stateservice.state.UpdateModuleTypeCommand;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
@@ -184,6 +185,12 @@ public abstract class JtreeStateEngine {
 	public void addUpdateModule(long moduleId, String[] moduleold,
 			String[] modulenew) {
 	stateController.insertCommand(new UpdateModuleCommand(moduleId, modulenew,moduleold ));
+		
+	}
+
+	public void addUpdateModule(ModuleStrategy module,
+			ModuleStrategy updatedModule) {
+		stateController.insertCommand(new UpdateModuleTypeCommand(module, updatedModule));
 		
 	}
 	

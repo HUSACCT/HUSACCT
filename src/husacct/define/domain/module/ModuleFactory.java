@@ -34,7 +34,7 @@ public class ModuleFactory {
 	
 	public ModuleStrategy createModule(String choice){
 		for(int i = 0; i < flavors.length; i++){
-			if(flavors[i].equals(choice)) try{
+			if(flavors[i].equalsIgnoreCase(choice)) try{
 				ModuleStrategy newModule = (ModuleStrategy)icecreams[i].newInstance();
 				newModule.setType(choice);
 				return newModule;

@@ -1,25 +1,25 @@
 package husacct.define.domain.services.stateservice.state;
 
-import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
+import husacct.define.task.DefinitionController;
 
 public class LayerDownCommand  implements Istate{
 
-	private ModuleStrategy ModuleStrategy;
+	private long moduleId;
 
-	public LayerDownCommand(ModuleStrategy ModuleStrategy) {
-		this.ModuleStrategy=ModuleStrategy;
+	public LayerDownCommand(long moduleId) {
+		this.moduleId=moduleId;
 	}
 	
 	@Override
 	public void undo() {
-		// TODO Auto-generated method stub
+		DefinitionController.getInstance().moveLayerUp(moduleId);
 		
 	}
 
 	@Override
 	public void redo() {
-		// TODO Auto-generated method stub
+		DefinitionController.getInstance().moveLayerDown(moduleId);
 		
 	}
 

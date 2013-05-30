@@ -20,7 +20,7 @@ public class Layer extends ModuleStrategy {
 		STATIC_LEVEL++;
 		this.name = name;
 		this.description = description;
-		this.type = "Module";
+		
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
 		this.subModules = new ArrayList<ModuleStrategy>();

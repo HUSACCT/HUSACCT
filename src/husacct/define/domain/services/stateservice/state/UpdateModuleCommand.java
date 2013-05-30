@@ -1,5 +1,6 @@
 package husacct.define.domain.services.stateservice.state;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.services.ModuleDomainService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 
@@ -17,6 +18,7 @@ public class UpdateModuleCommand implements Istate{
 	public void undo() {
 		ModuleDomainService service = new ModuleDomainService();
 		service.updateModule(moduleId, oldModuleValue[0], oldModuleValue[1]);
+		ServiceProvider.getInstance().getDefineService().getDefinedGUI().updateUI();
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class UpdateModuleCommand implements Istate{
 		
 		ModuleDomainService service = new ModuleDomainService();
 		service.updateModule(moduleId, newModuleValue[0], newModuleValue[1]);
-		
+		ServiceProvider.getInstance().getDefineService().getDefinedGUI().updateUI();
 	}
 
 }
