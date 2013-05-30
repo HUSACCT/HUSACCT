@@ -1,28 +1,30 @@
 package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
+import husacct.analyse.task.analyser.VisibilitySet;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import husacct.analyse.task.analyser.VisibilitySet;
 
 public class CSharpGeneratorToolkit {
+	private static final String EMPTYSTRING = "";
+	private static final String DOT = ".";
+	private static final String COMMA = ",";
 
     /**
      * Returns the parentname from the stack: IE stack is C.B.A -> "A.B.C"
      * @param parentStack
      */
     public static String getParentName(Stack<String> parentStack) {
-        String result = "";
+        String result = EMPTYSTRING;
         for (String parentNamePart : parentStack) {
-            result += parentNamePart + ".";
+            result += parentNamePart + DOT;
         }
-        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
+        return result.length() > 0 ? result.substring(0, result.length() - 1) : EMPTYSTRING;
     }
 
     /**
@@ -30,7 +32,7 @@ public class CSharpGeneratorToolkit {
      * @param parentName
      */
     public static String potentiallyInsertDot(String parentName) {
-        return parentName.length() > 0 ? "." : "";
+        return parentName.length() > 0 ? DOT : EMPTYSTRING;
     }
 
     /**
@@ -40,7 +42,7 @@ public class CSharpGeneratorToolkit {
      */
     public static String getUniqueName(String parentName, String name) {
 		String result = parentName + potentiallyInsertDot(parentName) + name;
-        return result.endsWith(".") ? result.substring(0, result.length() -1) : result;
+        return result.endsWith(DOT) ? result.substring(0, result.length() -1) : result;
     }
     
     /**
@@ -141,11 +143,11 @@ public class CSharpGeneratorToolkit {
      * (IE: ["A", "B", "C"] returns "A,B,C")
      */
     public static String createCommaSeperatedString(Stack<String> names) {
-        String result = "";
+        String result = EMPTYSTRING;
         for (String parentNamePart : names) {
-            result += parentNamePart + ",";
+            result += parentNamePart + COMMA;
         }
-        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
+        return result.length() > 0 ? result.substring(0, result.length() - 1) : EMPTYSTRING;
     }
 
     /**
@@ -154,14 +156,14 @@ public class CSharpGeneratorToolkit {
      * 'public A.B.MyClass mc = new A.B.MyClass();')
      */
     public static String getTypeNameAndParts(CommonTree tree) {
-		String s = "";
+		String s = EMPTYSTRING;
 		CommonTree typenameTree = (CommonTree) tree.getFirstChildWithType(CSharpParser.NAMESPACE_OR_TYPE_NAME);
 		if (typenameTree != null) {
 			s += typenameTree.getFirstChildWithType(CSharpParser.IDENTIFIER).getText();
 			for (int i = 0; i < typenameTree.getChildCount(); i++) {
 				Tree t = typenameTree.getChild(i);
 				if (t.getType() == CSharpParser.NAMESPACE_OR_TYPE_PART) {
-					s += "." + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
+					s += DOT + ((CommonTree) t).getFirstChildWithType(CSharpParser.IDENTIFIER);
 				}
 			}
 		}
