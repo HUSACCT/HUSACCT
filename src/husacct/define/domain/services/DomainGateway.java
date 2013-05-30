@@ -123,6 +123,25 @@ public class DomainGateway {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+
+
+	public long getSelectedModuleId() {
+		// TODO Auto-generated method stub
+		return DefinitionController.getInstance().getSelectedModuleId();
+	}
+
+
+
+
+
+	public void updateModule(String moduleName, String moduleDescription) {
+		
+		DefinitionController.getInstance().updateModule(moduleName, moduleDescription);
+		
+	}
 	
 	
 	

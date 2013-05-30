@@ -2,6 +2,7 @@ package husacct.define.domain.module.modules;
 
 import java.util.ArrayList;
 
+import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
 import husacct.define.domain.module.ModuleStrategy;

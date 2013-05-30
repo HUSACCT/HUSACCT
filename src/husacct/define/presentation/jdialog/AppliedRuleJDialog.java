@@ -329,6 +329,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 			ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
 
 			if(appliedRuleController.conformRuleConventions(ruleDetails)){
+				
 				if(this.appliedRuleController.save(ruleDetails)) {
 					this.dispose();
 				} else {

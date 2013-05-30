@@ -9,6 +9,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.services.stateservice.state.ModuleCommand;
 import husacct.define.domain.services.stateservice.state.SoftwareUnitCommand;
 import husacct.define.domain.services.stateservice.state.StateDefineController;
+import husacct.define.domain.services.stateservice.state.UpdateModuleCommand;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
@@ -177,6 +178,12 @@ public abstract class JtreeStateEngine {
 	public boolean[] getRedoAndUndoStates()
 	{
 		return stateController.getStatesStatus();
+		
+	}
+
+	public void addUpdateModule(long moduleId, String[] moduleold,
+			String[] modulenew) {
+	stateController.insertCommand(new UpdateModuleCommand(moduleId, modulenew,moduleold ));
 		
 	}
 	

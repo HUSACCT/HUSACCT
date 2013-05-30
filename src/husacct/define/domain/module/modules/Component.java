@@ -31,4 +31,19 @@ public class Component extends ModuleStrategy {
 	    this.subModules.add(facade);
 	}
 	
+	
+	public void copyValuestoNewCompont(ModuleStrategy newModule)
+	{
+		newModule.setId(this.getId());
+		newModule.setName(this.getName());
+		newModule.setDescription(this.getDescription());
+		newModule.setParent(this.getparent());
+		this.subModules.remove(0);
+		newModule.setSubModules(this.getSubModules());
+		newModule.setRegExUnits(this.getRegExUnits());
+		newModule.setUnits(this.getUnits());
+		
+		
+	}
+	
 }

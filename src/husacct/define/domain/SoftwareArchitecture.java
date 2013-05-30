@@ -82,68 +82,7 @@ private	ModuleFactory factory = new ModuleFactory();
 	return "";
     }
 
-    // TODO: Holy sh...
-    private ModuleStrategy generateNewType(ModuleStrategy oldModule, String newType) {
-	Long id = oldModule.getId();
-	String name = oldModule.getName();
-	String desc = oldModule.getDescription();
-	ArrayList<SoftwareUnitDefinition> softwareUnits = oldModule.getUnits();
-	ArrayList<ModuleStrategy> subModules = oldModule.getSubModules();
-	processDefaultComponents(oldModule);
 
-	if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("Layer").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    Layer layer = new Layer();
-	    layer.setDescription(desc);
-	    layer.setId(id);
-	    layer.setName(name);
-	    layer.setType(newType);
-	    layer.setSubModules(subModules);
-	    layer.setUnits(softwareUnits);
-	    return layer;
-	} else if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("Component").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    Component component = (Component) factory.createModule("Component");
-	    component.setDescription(desc);
-	    component.setId(id);
-	    component.setName(name);
-	    component.setType(newType);
-	    Facade f = (Facade) factory.createDummy("Facade");
-	    subModules.add(f);
-	    Collections.reverse(subModules);
-	    component.setSubModules(subModules);
-	    component.setUnits(softwareUnits);
-
-	    return component;
-	} else if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("SubSystem").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    SubSystem subSystem = new SubSystem();
-	    subSystem.setDescription(desc);
-	    subSystem.setId(id);
-	    subSystem.setName(name);
-	    subSystem.setType(newType);
-	    subSystem.setSubModules(subModules);
-	    subSystem.setUnits(softwareUnits);
-	    return subSystem;
-	} else if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("ExternalLibrary").toLowerCase()
-		.equals(newType.toLowerCase())) {
-		ExternalLibrary externalSystem = (ExternalLibrary) factory.createModule("ExternalLibrary");
-	    externalSystem.setDescription(desc);
-	    externalSystem.setId(id);
-	    externalSystem.setName(name);
-	    externalSystem.setType(newType);
-	    externalSystem.setSubModules(subModules);
-	    externalSystem.setUnits(softwareUnits);
-	    return externalSystem;
-	} else {
-	    return null;
-	}
-
-    }
 
     public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
 	if (hasAppliedRule(appliedRuleId)) {
@@ -620,14 +559,14 @@ private	ModuleFactory factory = new ModuleFactory();
 
     public ModuleStrategy updateModuleType(ModuleStrategy oldModule, String newType) {
 
-	System.out.println(oldModule.getClass().getName()); // TODO: Print line?
+	
 	ModuleStrategy parent = oldModule.getparent();
 
 	int index = oldModule.getparent().getSubModules().indexOf(oldModule);
 	parent.getSubModules().remove(index);
-	ModuleStrategy updatedModule = generateNewType(oldModule, newType);
+	ModuleStrategy updatedModule = new ModuleFactory().updateModuleType(oldModule, newType);
 	parent.addSubModule(index, updatedModule);
-
-	return updatedModule;
+ 
+	return oldModule;
     }
 }

@@ -2,6 +2,7 @@ package husacct.define.presentation.jpanel;
 
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
+import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.utils.DefaultMessages;
 import husacct.define.task.DefinitionController;
 
@@ -128,7 +129,9 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 	return descriptionTextArea;
     }
 
-    private int getModuleType(String type) {
+   
+    /*this can be fixed by fixing types in module factory will discuise with Rob
+     *     private int getModuleType(String type) {
 	DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
 		moduleTypes);
 	moduleTypeComboBox.setModel(defaultModel);
@@ -160,6 +163,40 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
 	return result;
 
     }
+     */
+    
+    private int getModuleType(String type) {
+	DefaultComboBoxModel defaultModel = new DefaultComboBoxModel(
+		moduleTypes);
+	moduleTypeComboBox.setModel(defaultModel);
+	int result = 0;
+	
+	if (type.toLowerCase().equals("module")) {
+
+	    result = 1;
+	} else if ("component"
+		.equals(type.toLowerCase())) {
+	    result = 2;
+	} else if (ServiceProvider.getInstance().getLocaleService()
+		.getTranslatedString("subsystem").toLowerCase()
+		.equals(type.toLowerCase())) {
+	    result = 0;
+	} else if ("externallibrary".toLowerCase()
+		.equals(type.toLowerCase())) {
+	    result = 3;
+	} else {
+	    moduleTypeComboBox.setEnabled(false);
+	    DefaultComboBoxModel facadeModel = new DefaultComboBoxModel(
+		    facadeType);
+	    moduleTypeComboBox.setModel(facadeModel);
+	}
+	currentSelection = result;
+	return result;
+
+    }
+    
+    
+
 
     public void initGui() {
 	DefinitionController.getInstance().addObserver(this);
@@ -238,7 +275,7 @@ public class EditModuleJPanel extends JPanel implements KeyListener, Observer,
     private void updateModule() {
 	String moduleName = nameTextfield.getText();
 	String moduleDescription = descriptionTextArea.getText();
-	DefinitionController.getInstance().updateModule(moduleName,
+	DomainGateway.getInstance().updateModule(moduleName,
 		moduleDescription);
     }
 

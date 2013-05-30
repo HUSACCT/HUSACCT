@@ -64,4 +64,33 @@ public class ModuleFactory {
 		logger.error("Error in ModuleFactory: Illegal choice: ");
 		throw new IllegalArgumentException("Illegal choice");
 	}
+	
+	
+	public ModuleStrategy updateModuleType(ModuleStrategy oldModule,String choice)
+	{
+		
+		ModuleStrategy newModule = createModule(choice);
+		oldModule.copyValuestoNewCompont(newModule);
+		if (choice.toLowerCase().equals("component")) {
+		 ModuleStrategy facade=	this.createModule("Facade");
+		 facade.set(newModule.getName()+"Facade", "This the Facade of "+newModule.getName());
+		 newModule.addSubModule(0, facade);
+		}
+		
+		
+		
+		return newModule;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 }

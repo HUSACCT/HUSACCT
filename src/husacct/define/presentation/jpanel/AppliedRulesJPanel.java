@@ -3,6 +3,7 @@ package husacct.define.presentation.jpanel;
 import husacct.ServiceProvider;
 import husacct.common.services.IServiceListener;
 import husacct.control.presentation.util.DialogUtils;
+import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.tables.JTableAppliedRule;
 import husacct.define.presentation.tables.JTableTableModel;
@@ -130,8 +131,7 @@ public class AppliedRulesJPanel extends JPanel implements ActionListener,
     }
 
     private void addRule() {
-	long moduleId = DefinitionController.getInstance()
-		.getSelectedModuleId();
+	long moduleId = DomainGateway.getInstance().getSelectedModuleId();
 		if (moduleId != -1) {
 		    AppliedRuleJDialog appliedRuleFrame = new AppliedRuleJDialog(
 			    moduleId, -1L);

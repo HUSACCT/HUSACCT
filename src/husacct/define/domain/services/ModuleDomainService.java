@@ -5,18 +5,19 @@ import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.module.ModuleComparator;
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.task.JtreeController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ModuleDomainService {
-
+private DefaultRuleDomainService service = new DefaultRuleDomainService();
     public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
 	ModuleStrategy parentModule = SoftwareArchitecture.getInstance().getModuleById(
 		parentModuleId);
 	parentModule.addSubModule(module);
-	DefaultRuleDomainService service = new DefaultRuleDomainService();
+	
 
 	long moduleId = module.getId();
 	service.addDefaultRules(module);
@@ -28,7 +29,7 @@ public class ModuleDomainService {
 
     public long addModuleToRoot(ModuleStrategy module) {
 	long moduleId = SoftwareArchitecture.getInstance().addModule(module);
-
+	service.addDefaultRules(module);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();
 	return moduleId;
@@ -189,6 +190,7 @@ public class ModuleDomainService {
 	    String moduleDescription) {
 	ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(
 		moduleId);
+	StateService.instance().addUpdateModule(moduleId,new String[]{module.getName(),moduleDescription},new String[]{moduleName,moduleDescription});
 	module.setName(moduleName);
 	module.setDescription(moduleDescription);
 	ServiceProvider.getInstance().getDefineService()
@@ -206,6 +208,8 @@ public class ModuleDomainService {
 		.updateModuleType(module, newType);
 	service.addDefaultRules(updatedModule);
 	service.updateModuleRules(updatedModule);
+	
+	
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();
 
