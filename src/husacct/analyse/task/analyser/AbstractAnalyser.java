@@ -30,7 +30,7 @@ public abstract class AbstractAnalyser {
     public abstract String getFileExtension();
 
 	/**
-	 * Required to clear the LambdaBuffers after analisation is completed
+	 * Required to clear the LambdaBuffers after analisation is completed.
 	 */
 	public void clearLambdaBuffers() {
 		
