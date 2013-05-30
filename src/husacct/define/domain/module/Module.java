@@ -307,6 +307,9 @@ public class Module implements Comparable<Module> {
 
     public void setId(long id) {
 	this.id = id;
+	if(STATIC_ID <= id){
+	    STATIC_ID = id+1;
+	}
     }
 
     public void setName(String name) {
