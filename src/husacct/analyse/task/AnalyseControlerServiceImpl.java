@@ -1,13 +1,13 @@
 package husacct.analyse.task;
 
-import org.jdom2.Element;
-
-import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.domain.AnalyseDomainServiceImpl;
+import husacct.analyse.domain.IAnalyseDomainService;
 import husacct.analyse.task.analyser.ApplicationAnalyser;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
+
+import org.jdom2.Element;
 
 public class AnalyseControlerServiceImpl implements IAnalyseControlService {
 
@@ -18,7 +18,7 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     public AnalyseControlerServiceImpl() {
         this.domainService = new AnalyseDomainServiceImpl();
         this.analyserService = new ApplicationAnalyser();
-        this.exportController = new DependencyExportController();
+        this.exportController = new DependencyExportController(domainService);
     }
 
     public void reset() {

@@ -9,7 +9,7 @@ class DependencyTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
     private String[] fields;
-    private String titleFrom, titleTo, titleLine, titleType, titleIndirect;
+    private String titleFrom, titleVia, titleTo, titleLine, titleType, titleIndirect;
     private boolean showIndirect;
     private List<DependencyDTO> data = new ArrayList<DependencyDTO>();
     private AnalyseUIController uiController;
@@ -27,11 +27,12 @@ class DependencyTableModel extends AbstractTableModel {
         this.data = data;
         this.uiController = uiController;
         titleFrom = uiController.translate("From");
+        titleVia = "Via";
         titleTo = uiController.translate("To");
         titleLine = uiController.translate("Linenumber");
         titleType = uiController.translate("Type");
         titleIndirect = uiController.translate("Direct") + "/" + uiController.translate("Indirect");
-        fields = new String[]{titleFrom, titleTo, titleType, titleLine, titleIndirect};
+        fields = new String[]{titleFrom, titleVia, titleTo, titleType, titleLine, titleIndirect};
     }
 
     public void setModel(List<DependencyDTO> newData) {
@@ -53,6 +54,8 @@ class DependencyTableModel extends AbstractTableModel {
         String column = getColumnName(field);
         if (column.equals(titleFrom)) {
             return data.get(row).from;
+        } else if (column.equals(titleVia)) {
+        	return data.get(row).via;
         } else if (column.equals(titleTo)) {
             return data.get(row).to;
         } else if (column.equals(titleLine)) {

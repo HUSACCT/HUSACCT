@@ -114,7 +114,8 @@ class FamixDependencyFinder extends FamixFinder {
 							extendingDirectDependency.type = association.type + extendingDirectDependency.type;
 							extendingDirectDependency.isIndirect = typeOfDependency(extendingDirectDependency) == DependencyType.INDIRECT;
 							extendingDirectDependency.from = association.from;
-							extendingDirectDependency.to = association.to+ " -> " + extendingDirectDependency.to;
+							extendingDirectDependency.via = association.to;
+							extendingDirectDependency.to = extendingDirectDependency.to;
 							if(!containsDependency(extendingDirectDependency, result) && !extendingDirectDependency.isIndirect)
 								result.add(extendingDirectDependency);
 						}
@@ -131,17 +132,21 @@ class FamixDependencyFinder extends FamixFinder {
 		for(DependencyDTO dependency : dependencyCache){
 			switch(findFunction){
 			case FROM:
-				if(dependency.from.equals(from)){
+				if(isFrom(dependency, from)){
 					foundDependencies.add(dependency);
 				}
 			case TO:
-				if(dependency.to.equals(to)){
+				if(isTo(dependency, to)){
 					foundDependencies.add(dependency);
 				}
 			case BOTH:
-				if(dependency.from.equals(from) && dependency.to.equals(to)){
+				if(isFrom(dependency, from) && isTo(dependency, to)){
 					foundDependencies.add(dependency);
 				}
+			case ALL:
+				return dependencyCache;
+			default:
+				break;
 			}
 		}
 		return foundDependencies;
@@ -172,6 +177,7 @@ class FamixDependencyFinder extends FamixFinder {
 			for(DependencyDTO dependencyFrom : dependenciesFrom){
 				if(dependencyTo.from.equals(dependencyFrom.to)){
 					DependencyDTO indirectDependency = new DependencyDTO(dependencyFrom.from, dependencyTo.to, dependencyFrom.type + dependencyTo.type, true, dependencyFrom.lineNumber);
+					indirectDependency.via = dependencyFrom.to;
 					if(isValidIndirectDependency(indirectDependency) && !containsDependency(indirectDependency, result))
 						result.add(indirectDependency);
 				}
