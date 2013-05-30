@@ -61,7 +61,7 @@ public class DependencyDataModel extends AbstractTableModel {
 		else if (columnKey.equals(columnKeys[1]))
 			value = row.to;
 		else if (columnKey.equals(columnKeys[2]))
-			value = row.type;
+			value = localeService.getTranslatedString(row.type);
 		else if (columnKey.equals(columnKeys[3]))
 			value = "" + row.lineNumber;
 		else if (columnKey.equals(columnKeys[4]))

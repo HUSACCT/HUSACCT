@@ -5,6 +5,7 @@ import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.services.IServiceListener;
 import husacct.graphics.presentation.figures.BaseFigure;
@@ -126,10 +127,8 @@ public class AnalysedController extends DrawingController {
 	@Override
 	protected DependencyDTO[] getDependenciesBetween(BaseFigure figureFrom,
 			BaseFigure figureTo) {
-		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap()
-				.getModuleDTO(figureFrom);
-		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap()
-				.getModuleDTO(figureTo);
+		AnalysedModuleDTO dtoFrom = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureFrom);
+		AnalysedModuleDTO dtoTo = (AnalysedModuleDTO) getFigureMap().getModuleDTO(figureTo);
 		if (!figureFrom.equals(figureTo) && null != dtoFrom && null != dtoTo)
 			return analyseService.getDependencies(dtoFrom.uniqueName,
 					dtoTo.uniqueName);

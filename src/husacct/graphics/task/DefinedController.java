@@ -215,4 +215,10 @@ public class DefinedController extends DrawingController {
 		if (validateService.isValidated())
 			super.showViolations();
 	}
+
+	@Override
+	public void moduleZoom(String zoomType) {
+		// TODO Auto-generated method stub
+		
+	}
 }
