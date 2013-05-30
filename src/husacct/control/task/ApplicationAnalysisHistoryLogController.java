@@ -3,7 +3,7 @@ package husacct.control.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
-import husacct.control.presentation.log.AnalysisHistoryOverviewFrame;
+import husacct.control.presentation.log.ApplicationAnalysisHistoryOverviewFrame;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
@@ -152,7 +152,7 @@ public class ApplicationAnalysisHistoryLogController extends UserActionLogContro
 			if(getNumberOfAnalyses(workspace, application, projects)<1){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);
 			}else{
-				new AnalysisHistoryOverviewFrame(mainController);
+				new ApplicationAnalysisHistoryOverviewFrame(mainController);
 			}
 		}else{
 			JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("ApplicationAnalysisHistoryFileDoesntExist"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("ApplicationAnalysisHistoryFileDoesntExistTitle"), JOptionPane.ERROR_MESSAGE);

@@ -20,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
-public class AnalysisHistoryOverviewFrame extends JFrame{
+public class ApplicationAnalysisHistoryOverviewFrame extends JFrame{
 
 	private MainController mainController;
 	private JTable analysisTable;
@@ -28,7 +28,7 @@ public class AnalysisHistoryOverviewFrame extends JFrame{
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
-	public AnalysisHistoryOverviewFrame(MainController mainController){
+	public ApplicationAnalysisHistoryOverviewFrame(MainController mainController){
 		this.setTitle(localeService.getTranslatedString("ApplicationAnalysisHistory"));
 		this.mainController = mainController;
 		this.setup();
