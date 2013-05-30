@@ -61,18 +61,16 @@ public class HistoryLogger {
 			rootElement.setAttribute("version", adto.version);
 
 			//Workspace
-			Element workspace = doc.createElement("workspace");
+			Element workspace = getWorkspace(workspaceName);
 			rootElement.appendChild(workspace);
 
-			workspace.setAttribute("name", workspaceName);
-
 			//Application
-			Element application = doc.createElement("application");
+			Element application = getApplicationElement(adto);
 			workspace.appendChild(application);
-
-			application.setAttribute("name", adto.name);
-
-			getProjectElement(application, adto);
+			
+			application.appendChild(getProjectElement(adto));
+			
+			
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}	
@@ -88,42 +86,36 @@ public class HistoryLogger {
 			doc = docBuilder.parse(xmlFile);
 
 			Node root = doc.getFirstChild();
-			Node workspace = root.getFirstChild();
-			Node application = workspace.getFirstChild();
+			NodeList workspaces = root.getChildNodes();
+			
+			
+			ArrayList<String> workspaceList = new ArrayList<String>();
+			for(int i = 0; i < workspaces.getLength(); i++) {
+				workspaceList.add(workspaces.item(i).getAttributes().getNamedItem("name").getNodeValue());
+			}
+			
+			if(workspaceList.contains(workspaceName)) {
+				if(workspaces.item(workspaceList.indexOf(workspaceName)).getAttributes().getNamedItem("name").getNodeValue().equals(workspaceName)) {
+					Node application = workspaces.item(workspaceList.indexOf(workspaceName)).getFirstChild();
+					if(application.getAttributes().getNamedItem("name").getNodeValue().equals(adto.name)) {
+						NodeList projects = application.getChildNodes();
 
+						for(int i = 0; i < projects.getLength(); i++) {
+							Node p = projects.item(i);
 
-			if(workspace.getAttributes().getNamedItem("name").getNodeValue().equals(workspaceName)) {
-				if(application.getAttributes().getNamedItem("name").getNodeValue().equals(adto.name)) {
-					NodeList projects = application.getChildNodes();
-					
-					System.out.println("nodelist: " + projects.getLength());
-					System.out.println("adto.projects: " + adto.projects.size());
-					
-					int count = 0;
-					
-					if(projects.getLength() > adto.projects.size()) {
-						count = projects.getLength();
-					} else {
-						count = adto.projects.size();
-					}
-					
-					for(int i = 0; i < count; i++) {
-						Node p = projects.item(i);
-						
-						if(p != null && adto.projects.get(i).name != null) {
 							if(p.getAttributes().getNamedItem("name").getNodeValue().equals(adto.projects.get(i).name)) {
-								getAnalyseElement((Element) p, adto.projects.get(i));
+								p.appendChild(getAnalyseElement((Element) p, adto.projects.get(i)));
 							} else {
-								System.out.println("ohai thar");
-								getProjectElement((Element) application, adto);
+								p.appendChild(getProjectElement(adto));
 							}
 						}
+					} else {
+						Node workspace = workspaces.item(workspaceList.indexOf(workspaceName)).getFirstChild();
+						workspace.appendChild(getApplicationElement(adto)).appendChild(getProjectElement(adto));
 					}
-				} else {
-					//else for different application
 				}
 			} else {
-				//else for different workspace
+				root.appendChild(getWorkspace(workspaceName)).appendChild(getApplicationElement(adto)).appendChild(getProjectElement(adto));
 			}
 
 			createXML(doc, (Element)root);
@@ -155,25 +147,39 @@ public class HistoryLogger {
 			tfe.printStackTrace();
 		}
 	}
-
-	public void getProjectElement(Element application, ApplicationDTO adto) {
-		projects = adto.projects;
-
-		for(ProjectDTO pdto : projects) {
-			//Project
-			Element project = doc.createElement("project");
-			application.appendChild(project);
-
-			project.setAttribute("name", pdto.name);
-
-			getAnalyseElement(project, pdto);
-		}
+	
+	private Element getWorkspace(String workspaceName) {
+		Element workspace = doc.createElement("workspace");
+		
+		workspace.setAttribute("name", workspaceName);
+		
+		return workspace;
+	}
+	
+	public Element getApplicationElement(ApplicationDTO adto) {
+		Element application = doc.createElement("application");
+		application.setAttribute("name", adto.name);
+		
+		return application;
 	}
 
-	public void getAnalyseElement(Element project, ProjectDTO pdto) {
+	public Element getProjectElement(ApplicationDTO adto) {
+		projects = adto.projects;
+		Element project = null;
+		
+		for(ProjectDTO pdto : projects) {
+			//Project
+			project = doc.createElement("project");
+			project.setAttribute("name", pdto.name);
+			project.appendChild(getAnalyseElement(project, pdto));
+			
+		}
+		return project;
+	}
+
+	public Element getAnalyseElement(Element project, ProjectDTO pdto) {
 		//Analyse
 		Element analyse = doc.createElement("analyse");
-		project.appendChild(analyse);
 
 		GregorianCalendar cal = new GregorianCalendar();
 		long millis = cal.getTimeInMillis();
@@ -217,5 +223,7 @@ public class HistoryLogger {
 		violations.appendChild(doc.createTextNode("0"));
 
 		analyse.appendChild(violations);
+		
+		return analyse;
 	}
 }
