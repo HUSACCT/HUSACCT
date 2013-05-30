@@ -114,7 +114,6 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     public ExternalSystemDTO[] getExternalSystems(){
     	return domainService.getExternalSystems();
     }
-    
     public int getAmountOfDependencies() {
     	return domainService.getAmountOfDependencies();
     }
@@ -130,7 +129,6 @@ public class AnalyseControlerServiceImpl implements IAnalyseControlService {
     public int getAmountOfClasses() {
     	return domainService.getAmountOfClasses();
     }
-    
     @Override
     public int buildCache(){
     	return domainService.buildCache();

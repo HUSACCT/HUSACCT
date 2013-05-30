@@ -67,6 +67,10 @@ public class AnalyseTask implements Runnable {
 			}
 			this.mainController.getStateController().setAnalysing(false);
 			
+			logger.debug("Building cache");
+			int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
+			logger.debug("Cache is ready and filled with " + cacheSize + " dependencies");
+			
 			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
 			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
 			
