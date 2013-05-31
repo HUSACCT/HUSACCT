@@ -11,6 +11,7 @@ class JavaInterfaceGenerator extends JavaGenerator {
     private String uniqueName;
     private String belongsToPackage;
     private String visibillity = VisibilitySet.DEFAULT.toString();
+    
 
     public JavaInterfaceGenerator(String uniquePackageName) {
         this.belongsToPackage = uniquePackageName;

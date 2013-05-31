@@ -15,7 +15,7 @@ public class JavaParameterGenerator extends JavaGenerator {
     private String declareType;
     private String declareName;
     private String uniqueName;
-    private String signature = "";
+    private String signature;
     private boolean nameFound = false;
     private boolean declareTypeFound = false;
     private ArrayList<String> currentTypes;

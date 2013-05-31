@@ -9,6 +9,7 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator {
     private String from;
     private String to;
     private int lineNumber;
+    
 
     public void generateToDomain(CommonTree tree, String belongsToClass) {
         from = belongsToClass;
