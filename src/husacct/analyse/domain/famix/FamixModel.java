@@ -154,17 +154,17 @@ class FamixModel extends FamixObject {
     }
 
     public FamixStructuralEntity getTypeForVariable(String uniqueVarName) throws Exception {
-        String temp = uniqueVarName;
-        String[] splitted = temp.split("\\.");
+        String typeVariable = uniqueVarName;
+        String[] splitted = typeVariable.split("\\.");
         for (int i = splitted.length; i > 1; i--) {
-            if (structuralEntities.containsKey(temp)) {
-                return structuralEntities.get(temp);
+            if (structuralEntities.containsKey(typeVariable)) {
+                return structuralEntities.get(typeVariable);
             }
             // Is it an instance variable?
-            temp = splitted[0] + "." + splitted[splitted.length - 1];
+            typeVariable = splitted[0] + "." + splitted[splitted.length - 1];
         }
         // If not, throw new exception
-        throw new Exception("The unit (or a part of it) '" + temp + " or " + uniqueVarName + "' is not found or defined.");
+        throw new Exception("The unit (or a part of it) '" + typeVariable + " or " + uniqueVarName + "' is not found or defined.");
     }
     
     @Deprecated

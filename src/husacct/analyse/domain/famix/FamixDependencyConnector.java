@@ -66,9 +66,6 @@ class FamixDependencyConnector {
     }
 
     void connectAssociationDependencies() {
-        int count = 0;
-		
-		String oldy;
 		String theClass;
 		String belongsToPackage;
 		String classFoundInImports;
@@ -84,8 +81,6 @@ class FamixDependencyConnector {
             }
             //end added by Team 1
 
-            oldy = association.to;
-            count += 1;
             try {
                 boolean connected = false;
                 theClass = association.from;
@@ -124,8 +119,6 @@ class FamixDependencyConnector {
                     }
                 }
                 if (association.to.equals("") || association.to == null) {
-//					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
-//					System.out.println(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from + " | " + oldy);
                 } else {
                     determineType(association);
                     addToModel(association);

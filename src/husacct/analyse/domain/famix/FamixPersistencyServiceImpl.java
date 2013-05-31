@@ -37,17 +37,11 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
     //copies, but the real reference to the data in the memory, thus the complete model will be cleared
     //when calling this function. Please fix this.
     private void reset() {
-        this.packagesList.clear();
         this.packagesList = null;
-        this.librarieList.clear();
         this.librarieList = null;
-        this.classList.clear();
         this.classList = null;
-        this.methodsList.clear();
         this.methodsList = null;
-        this.variablesList.clear();
         this.variablesList = null;
-        this.associationList.clear();
         this.associationList = null;
     }
 
