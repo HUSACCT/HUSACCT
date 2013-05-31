@@ -147,8 +147,8 @@ public abstract class AbstractViolationType {
 		}
 	}
 
-	protected boolean isSubClassConvention(String ruleTypeKey) {
-		if (ruleTypeKey.equals(RuleTypes.SUBCLASS_CONVENTION)) {
+	protected boolean isSuperClassInheritanceConvention(String ruleTypeKey) {
+		if (ruleTypeKey.equals(RuleTypes.SUPERCLASSINHERITANCE_CONVENTION)) {
 			return true;
 		} else {
 			return false;

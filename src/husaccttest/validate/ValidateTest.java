@@ -112,11 +112,11 @@ public class ValidateTest {
 	@Test
 	public void getRuleTypes() {
 		CategoryDTO[] dtos = validate.getCategories();
-		final String[] currentRuletypes = new String[]{ 
-				RuleTypes.INTERFACE_CONVENTION.toString(), 
+		final String[] currentRuletypes = new String[]{
+                RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString(),
+                RuleTypes.INTERFACE_CONVENTION.toString(),
 				RuleTypes.NAMING_CONVENTION.toString(), 
-				RuleTypes.FACADE_CONVENTION.toString(), 
-				RuleTypes.SUBCLASS_CONVENTION.toString(), 
+				RuleTypes.FACADE_CONVENTION.toString(),
 				RuleTypes.VISIBILITY_CONVENTION.toString(), 
 				RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), 
 				RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString(), 
@@ -125,7 +125,6 @@ public class ValidateTest {
 				RuleTypes.MUST_USE.toString(),
 				RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()
 		};
-		
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 

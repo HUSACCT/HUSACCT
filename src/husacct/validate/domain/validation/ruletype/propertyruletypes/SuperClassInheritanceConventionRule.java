@@ -16,12 +16,12 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-public class SubClassConventionRule extends RuleType {
+public class SuperClassInheritanceConventionRule extends RuleType {
 
-	private final static EnumSet<RuleTypes> subClassExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
+	private final static EnumSet<RuleTypes> superClassInheritanceExceptionRules = EnumSet.of(RuleTypes.IS_ALLOWED_TO_USE);
 
-	public SubClassConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
-		super(key, category, violationTypes, subClassExceptionRules, severity);
+	public SuperClassInheritanceConventionRule(String key, String category, List<ViolationType> violationTypes, Severity severity) {
+		super(key, category, violationTypes, superClassInheritanceExceptionRules, severity);
 	}
 
 	@Override
