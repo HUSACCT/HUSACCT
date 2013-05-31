@@ -8,10 +8,12 @@ import husacct.define.task.conventions_checker.LayerCheckerHelper;
 import husacct.define.task.conventions_checker.ModuleCheckerHelper;
 
 public class IsOnlyModuleAllowedToUseRule extends AppliedRuleStrategy{
-	private ModuleCheckerHelper moduleCheckerHelper = new ModuleCheckerHelper();
-	private LayerCheckerHelper layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+	private ModuleCheckerHelper moduleCheckerHelper;
+	private LayerCheckerHelper layerCheckerHelper;
 
 	public boolean checkConvention() {
+		moduleCheckerHelper = new ModuleCheckerHelper();
+		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
 		boolean conventionSuccess = moduleCheckerHelper
 				.checkRuleTypeAlreadyFromThisToSelected("IsNotAllowedToUse",
 						this.getModuleFrom(), this.getModuleTo());

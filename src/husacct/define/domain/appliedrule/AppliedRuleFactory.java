@@ -1,5 +1,7 @@
 package husacct.define.domain.appliedrule;
 
+import java.util.HashMap;
+
 import husacct.define.domain.appliedrule.propertyrules.FacadeConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.InterfaceConventionRule;
 import husacct.define.domain.appliedrule.propertyrules.NamingConventionExceptionRule;
@@ -14,6 +16,7 @@ import husacct.define.domain.appliedrule.relationrules.IsNotAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.IsOnlyAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.IsOnlyModuleAllowedToUseRule;
 import husacct.define.domain.appliedrule.relationrules.MustUseRule;
+import husacct.define.domain.services.ModuleDomainService;
 
 import org.apache.log4j.Logger;
 
@@ -104,6 +107,29 @@ public class AppliedRuleFactory {
 				AppliedRuleStrategy newRule = (AppliedRuleStrategy)ruleClasses[i].newInstance();
 				newRule.setRuleType(choice);
 				newRule.setId(-1);
+				return newRule;
+			}catch (InstantiationException ex) {
+				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
+			} catch (IllegalAccessException ex) {
+				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
+			}
+		}
+		logger.error("Error in AppliedRuleFactory: Illegal choice: ");
+		throw new IllegalArgumentException("Illegal choice");
+	}
+	
+	public AppliedRuleStrategy createRuleWithModules(HashMap<String, Object> ruleDetails){
+		ModuleDomainService mds = new ModuleDomainService();
+		for(int i = 0; i < ruleTypes.length; i++){
+			if(ruleTypes[i].equals(ruleDetails.get("ruleTypeKey"))) try{
+				AppliedRuleStrategy newRule = (AppliedRuleStrategy)ruleClasses[i].newInstance();
+				newRule.setRuleType(""+ruleDetails.get("ruleTypeKey"));
+				newRule.setId(-1);
+				newRule.setModuleFrom(mds.getModuleById((long) ruleDetails.get("moduleFromId")));
+				if(Integer.parseInt(""+ruleDetails.get("moduleToId")) != -1)
+					newRule.setModuleTo(mds.getModuleById((long) ruleDetails.get("moduleToId")));
+				else
+					newRule.setModuleTo(mds.getModuleById((long) ruleDetails.get("moduleFromId")));
 				return newRule;
 			}catch (InstantiationException ex) {
 				logger.error("Instantiation Error in RuleFactory: " + ex.toString());
