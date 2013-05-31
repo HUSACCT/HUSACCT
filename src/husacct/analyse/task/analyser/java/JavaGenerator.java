@@ -6,4 +6,6 @@ import husacct.analyse.domain.famix.FamixCreationServiceImpl;
 abstract class JavaGenerator {
 
     protected IModelCreationService modelService = new FamixCreationServiceImpl();
+	void createDomainObject() {
+    }
 }
