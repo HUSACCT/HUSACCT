@@ -10,6 +10,7 @@ import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.task.JtreeController;
 
 import husacct.define.presentation.utils.DefaultMessages;
+import husacct.define.presentation.utils.ExpressionEngine;
 
 import husacct.define.task.JtreeStateEngine;
 import husacct.define.task.PopUpController;
@@ -310,20 +311,22 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	}
 
 	private void save() {
+		
 		boolean canclose= false;
 		if(regExMappingPanel != null) {
+			ExpressionEngine expressionEngine = new ExpressionEngine();
 			if(!regExTextField.getText().equals("")) {
 				if(packageCheckBox.isSelected() || classCheckBox.isSelected()) {
 					//PC = Packages and classes, P = Packages only, C = Classes only (classes also include interfaces)
 					AnalyzedModuleTree resultTree = JtreeController.instance().getResultTree();
 					if(packageCheckBox.isSelected() && classCheckBox.isSelected()) {
-							this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "PC");
+							expressionEngine.saveRegExToResultTree(regExTextField.getText(), "PC");
 					}
 					else if(packageCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "P");
+						expressionEngine.saveRegExToResultTree(regExTextField.getText(), "P");
 					}
 					else if(classCheckBox.isSelected()) {
-						this.softwareUnitController.saveRegExToResultTree(regExTextField.getText(), "C");
+						expressionEngine.saveRegExToResultTree(regExTextField.getText(), "C");
 					}
 					this.dispose();
 					new SoftwareUnitResultJDialog(_moduleId, resultTree, regExTextField.getText(), this);

@@ -3,6 +3,7 @@ package husacct.define.task;
 import husacct.define.analyzer.AnalyzedUnitComparator;
 import husacct.define.analyzer.AnalyzedUnitRegistry;
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
@@ -16,6 +17,7 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -191,6 +193,11 @@ public abstract class JtreeStateEngine {
 	public void addUpdateModule(ModuleStrategy module,
 			ModuleStrategy updatedModule) {
 		stateController.insertCommand(new UpdateModuleTypeCommand(module, updatedModule));
+		
+	}
+
+	public void removeRules(ArrayList<AppliedRuleStrategy> selectedRules) {
+		stateController.insertCommand(new RemoveAppliedRuleCommand(selectedRules));
 		
 	}
 	

@@ -1,11 +1,13 @@
 package husacct.define.domain.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import husacct.define.domain.SoftwareArchitecture;
 
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.task.AppliedRuleController;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.JtreeController;
 import husacct.define.task.SoftwareUnitController;
@@ -14,7 +16,8 @@ import husacct.define.task.components.AnalyzedModuleComponent;
 public class DomainGateway {
 
 	private static DomainGateway instance=null;
-	
+	private SoftwareUnitController unitController;
+	private AppliedRuleController appliedRuleController;
 	
 	public static DomainGateway getInstance()
 	{
@@ -120,7 +123,9 @@ public class DomainGateway {
 
 	public void saveRegEx(ArrayList<AnalyzedModuleComponent> components,
 			String enteredRegEx) {
-		// TODO Auto-generated method stub
+		unitController = new SoftwareUnitController(getSelectedModuleId());
+		unitController.saveRegEx(components, enteredRegEx);
+		 
 		
 	}
 
@@ -140,6 +145,28 @@ public class DomainGateway {
 	public void updateModule(String moduleName, String moduleDescription) {
 		
 		DefinitionController.getInstance().updateModule(moduleName, moduleDescription);
+		
+	}
+
+
+
+
+
+	public void addException(HashMap<String, Object> ruleDetails) {
+     long moduleId =(long) ruleDetails.get("moduleFromId");
+		//appliedRuleController= new AppliedRuleController(, ruleDetails.get(""))
+		
+	}
+
+
+
+
+
+	public void removeRules(List<Long> selectedRules) {
+		
+			SoftwareArchitecture.getInstance().removeAppliedRule(selectedRules);
+		
+		
 		
 	}
 	

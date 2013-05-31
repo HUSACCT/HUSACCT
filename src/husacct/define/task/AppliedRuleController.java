@@ -114,8 +114,7 @@ public class AppliedRuleController extends PopUpController {
 		module = SoftwareArchitecture.getInstance().getModuleById(
 			moduleId);
 	    } else {
-		module = new ModuleStrategy() {
-		};
+		module = new ModuleFactory().createDummy("blank");
 		module.setId(-1);
 	    }
 	} else {

@@ -8,6 +8,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.moduletree.AnalyzedModuleTree;
 import husacct.define.presentation.moduletree.CombinedModuleTreeModel;
 import husacct.define.presentation.moduletree.ModuleTree;
+import husacct.define.presentation.moduletree.SearchModuleCellRenderer;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 import husacct.define.task.components.RegexComponent;
@@ -117,7 +118,7 @@ import javax.swing.tree.TreePath;
 		RegexComponent root = new RegexComponent("root","Regix results","SEARCH","public");
 
 		resultTree= new AnalyzedModuleTree(root);
-
+       
 		return resultTree;
 
 	}
@@ -125,11 +126,13 @@ import javax.swing.tree.TreePath;
 	public void additemgetResultTree(AnalyzedModuleComponent analyzedModule) 
 	{
 
+		
 		analyzedModule.detach();
 		AnalyzedModuleComponent rootOfResultTree = (AnalyzedModuleComponent)resultTree.getModel().getRoot();
 		rootOfResultTree.detach();
 		rootOfResultTree.addChild(analyzedModule);
 		resultTree.setModel(new CombinedModuleTreeModel(rootOfResultTree));
+		resultTree.setCellRenderer(new SearchModuleCellRenderer());
 
 
 

@@ -1,22 +1,24 @@
 package husacct.define.domain.services.stateservice.state;
 
+import husacct.define.domain.SoftwareArchitecture;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 
 public class AppliedRuleCommand  implements Istate{
-
-	public AppliedRuleCommand() {
-		// TODO Auto-generated constructor stub
+    private AppliedRuleStrategy data;
+	public AppliedRuleCommand(AppliedRuleStrategy rule) {
+	this.data=rule;
 	}
 	
 	@Override
 	public void undo() {
-		// TODO Auto-generated method stub
+		SoftwareArchitecture.getInstance().removeAppliedRule(data.getId());
 		
 	}
 
 	@Override
 	public void redo() {
-		// TODO Auto-generated method stub
+	 SoftwareArchitecture.getInstance().addAppliedRule(data);
 		
 	}
 }

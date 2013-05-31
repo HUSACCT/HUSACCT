@@ -12,6 +12,7 @@ import husacct.define.domain.module.modules.SubSystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class SoftwareArchitecture {
     
@@ -569,4 +570,24 @@ private	ModuleFactory factory = new ModuleFactory();
  
 	return oldModule;
     }
+
+	public void removeAppliedRule(List<Long> selectedRules) {
+	 ArrayList<AppliedRuleStrategy> appliedRules = getAppliedRuleByIds(selectedRules);
+		
+	}
+
+	private ArrayList<AppliedRuleStrategy> getAppliedRuleByIds(
+			List<Long> selectedRules) {
+		ArrayList<AppliedRuleStrategy> result = new  ArrayList<AppliedRuleStrategy>();
+		
+		for (Long appliedruleID : selectedRules) {
+			AppliedRuleStrategy appliedrule = getAppliedRuleById(appliedruleID);
+			result.add(appliedrule);
+		
+			
+		}
+		
+		
+		return  result;
+	}
 }

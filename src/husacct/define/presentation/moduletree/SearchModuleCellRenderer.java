@@ -17,9 +17,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
+public class SearchModuleCellRenderer extends DefaultTreeCellRenderer {
 
-    private static final long serialVersionUID = 6225304804416378425L;
+	
+	
+	private static final long serialVersionUID = 6225304804416378425L;
 
     protected void checkEnabled(AbstractCombinedComponent component, JTree tree) {
 	if (component instanceof AbstractDefineComponent
@@ -146,7 +148,7 @@ public class CombinedModuleCellRenderer extends DefaultTreeCellRenderer {
 	    boolean hasFocus) {
 	if (value instanceof AbstractCombinedComponent) {
 	    AbstractCombinedComponent component = (AbstractCombinedComponent) value;
-	    super.getTreeCellRendererComponent(tree, component.getName(),
+	    super.getTreeCellRendererComponent(tree, component.getUniqueName(),
 		    selected, expanded, leaf, row, hasFocus);
 	    determineIcon(component);
 	    checkEnabled(component, tree);

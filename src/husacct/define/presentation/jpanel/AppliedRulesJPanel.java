@@ -287,6 +287,7 @@ public class AppliedRulesJPanel extends JPanel implements ActionListener,
 		    selectedRules.add(datahelper.getId());
 		}
 	    }
+	    DomainGateway.getInstance().removeRules(selectedRules);
 	    DefinitionController.getInstance().removeRules(selectedRules);
 	}
     }
