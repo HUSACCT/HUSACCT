@@ -33,20 +33,26 @@ class JavaMethodGeneratorController extends JavaGenerator {
 
     private void checkMethodType(CommonTree methodTree) {
         declaredReturnType = new ArrayList<String>();
-        if (methodTree.getType() == JavaParser.CONSTRUCTOR_DECL) {
+        int methodTreeType = methodTree.getType();
+        switch(methodTreeType) {
+        case JavaParser.CONSTRUCTOR_DECL: 
             declaredReturnType.add("");
             isConstructor = true;
             name = getClassOfUniqueName(belongsToClass);
-        } else if (methodTree.getType() == JavaParser.VOID_METHOD_DECL) {
+            break;
+        case JavaParser.VOID_METHOD_DECL:
             declaredReturnType.add("");
             isConstructor = false;
-        } else if (methodTree.getType() == JavaParser.FUNCTION_METHOD_DECL) {
+        	break;
+        case JavaParser.FUNCTION_METHOD_DECL:
             isConstructor = false;
-        } else {
-            logger.warn("MethodGenerator couldn't find a valid function type");
+        	break;
+        default:
+        	logger.warn("MethodGenerator couldn't find a valid function type");
+        	break;
+        	}
         }
-    }
-
+        
     private String getClassOfUniqueName(String uniqueName) {
         String[] parts = uniqueName.split("\\.");
         return parts[parts.length - 1];
