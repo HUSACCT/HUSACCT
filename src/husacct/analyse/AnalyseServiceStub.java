@@ -45,10 +45,6 @@ public class AnalyseServiceStub implements IAnalyseService {
     }
 
     @Override
-    public void analyseApplication(String[] paths, String programmingLanguage) {
-    }
-
-    @Override
     public void analyseApplication(ProjectDTO project) {
     }
 

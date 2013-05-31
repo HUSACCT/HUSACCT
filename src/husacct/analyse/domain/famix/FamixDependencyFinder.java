@@ -135,14 +135,17 @@ class FamixDependencyFinder extends FamixFinder {
 				if(isFrom(dependency, from)){
 					foundDependencies.add(dependency);
 				}
+				break;
 			case TO:
 				if(isTo(dependency, to)){
 					foundDependencies.add(dependency);
 				}
+				break;
 			case BOTH:
 				if(isFrom(dependency, from) && isTo(dependency, to)){
 					foundDependencies.add(dependency);
 				}
+				break;
 			case ALL:
 				return dependencyCache;
 			default:

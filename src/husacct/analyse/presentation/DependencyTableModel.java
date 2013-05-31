@@ -10,20 +10,14 @@ class DependencyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private String[] fields;
     private String titleFrom, titleVia, titleTo, titleLine, titleType, titleIndirect;
-    private boolean showIndirect;
     private List<DependencyDTO> data = new ArrayList<DependencyDTO>();
     private AnalyseUIController uiController;
 
-    public DependencyTableModel(List<DependencyDTO> data, AnalyseUIController uiController, boolean showIndirect) {
-        this.initiateTableModel(data, uiController, showIndirect);
-    }
-
     public DependencyTableModel(List<DependencyDTO> data, AnalyseUIController uiController) {
-        this.initiateTableModel(data, uiController, true);
+        this.initiateTableModel(data, uiController);
     }
 
-    private void initiateTableModel(List<DependencyDTO> data, AnalyseUIController uiController, boolean showIndirect) {
-        this.showIndirect = showIndirect;
+    private void initiateTableModel(List<DependencyDTO> data, AnalyseUIController uiController){//, boolean showIndirect) {
         this.data = data;
         this.uiController = uiController;
         titleFrom = uiController.translate("From");

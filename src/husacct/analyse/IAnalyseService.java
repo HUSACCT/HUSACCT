@@ -13,9 +13,6 @@ public interface IAnalyseService extends IObservableService, ISaveable {
 
     public String[] getAvailableLanguages();
 
-    @Deprecated
-    public void analyseApplication(String[] paths, String programmingLanguage);
-
     public void analyseApplication(ProjectDTO project);
 
     public boolean isAnalysed();

@@ -3,10 +3,7 @@ package husacct.analyse.task.analyser;
 import husacct.ServiceProvider;
 import husacct.analyse.task.analyser.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyser.java.JavaAnalyser;
-import husacct.common.dto.ApplicationDTO;
 import husacct.control.task.States;
-import husacct.define.IDefineService;
-
 import java.util.List;
 
 public class ApplicationAnalyser {

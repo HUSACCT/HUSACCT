@@ -25,7 +25,6 @@ public class ExcelExporter extends AbstractFileExporter {
     private Logger husacctLogger = Logger.getLogger(ExcelExporter.class);
     private WritableCellFormat timesBold;
     private WritableCellFormat times;
-    private String outputFile;
 
     public ExcelExporter(HashMap<String, DependencyDTO> data) {
         super(data);
@@ -34,7 +33,6 @@ public class ExcelExporter extends AbstractFileExporter {
     @Override
     protected void write(String path) {
         File file = new File(path);
-        this.outputFile = path;
         WorkbookSettings documentSettings = new WorkbookSettings();
         documentSettings.setLocale(ServiceProvider.getInstance().getLocaleService().getLocale());
         try {
