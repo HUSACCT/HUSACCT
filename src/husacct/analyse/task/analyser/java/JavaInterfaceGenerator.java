@@ -7,9 +7,9 @@ import org.antlr.runtime.tree.CommonTree;
 
 class JavaInterfaceGenerator extends JavaGenerator {
 
-    private String name = "";
-    private String uniqueName = "";
-    private String belongsToPackage = "";
+    private String name;
+    private String uniqueName;
+    private String belongsToPackage;
     private String visibillity = VisibilitySet.DEFAULT.toString();
 
     public JavaInterfaceGenerator(String uniquePackageName) {

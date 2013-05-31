@@ -15,7 +15,7 @@ public class JavaParameterGenerator extends JavaGenerator {
     private String declareType;
     private String declareName;
     private String uniqueName;
-    private String signature = "";
+    private String signature;
     private boolean nameFound = false;
     private boolean declareTypeFound = false;
     private ArrayList<String> currentTypes;
@@ -24,13 +24,10 @@ public class JavaParameterGenerator extends JavaGenerator {
     public String generateParameterObjects(Tree allParametersTree, String belongsToMethod, String belongsToClass) {
         this.saveParameterQueue = new ArrayList<ArrayList<Object>>();
         this.currentTypes = new ArrayList<String>();
-
         this.belongsToMethod = belongsToMethod;
         this.belongsToClass = belongsToClass;
         setLineNumber(allParametersTree);
-
         DelegateParametersFromTree(allParametersTree);
-
         writeParameterToDomain();
         return signature;
     }
@@ -116,7 +113,6 @@ public class JavaParameterGenerator extends JavaGenerator {
                     break;
                 default:
                     attributeType += getAttributeRecursive(childTree);
-
             }
         }
         return attributeType;

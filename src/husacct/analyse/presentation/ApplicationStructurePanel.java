@@ -106,7 +106,6 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener 
         setLayout(groupLayout);
     }
 
-    @Override
     public void valueChanged(TreeSelectionEvent eventTree) {
         //Implement extra functionality here if needed in the future
     }
