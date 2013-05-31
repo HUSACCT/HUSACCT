@@ -193,8 +193,8 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 						.addGroup(
 							rightSideGroupLayout
 								.createParallelGroup(Alignment.LEADING)
-								.addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-								.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+								.addComponent(statisticsScrollPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+								.addComponent(filterPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
 						)
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(violationsTableScrollPane, GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
