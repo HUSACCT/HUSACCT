@@ -24,7 +24,7 @@ public class JavaLoopGenerator extends JavaGenerator {
         } else if (loopTree.getType() == JavaParser.FOR_EACH) {
             walkForEachAST(loopTree);
         } else {
-            logger.warn("Onbekend type loop gevonden tijdens analyseren");
+            logger.warn("Found unknown type looping during analysis");
         }
 
     }
@@ -84,7 +84,7 @@ public class JavaLoopGenerator extends JavaGenerator {
                         int lineNumber = tree.getChild(childCount + 1).getLine();
                         javaLocalVariableGenerator.generateLocalLoopVariable(belongsToClass, belongsToMethod, child.getChild(0).getText(), tree.getChild(childCount + 1).getText(), lineNumber);
                     } else {
-                        logger.warn("Problemen with finding type. Please notice analyse");
+                        logger.warn("Problems with finding type. Please notice analyse");
                     }
                 }
             	break;

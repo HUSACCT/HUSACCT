@@ -38,7 +38,7 @@ public class JavaImplementsDefinitionGenerator extends JavaGenerator {
     }
 
     void createDomainObject() {
-        to = to.substring(0, to.length() - 1); //delete last point
+        to = to.substring(0, to.length() - 1); 
         if (!SkippedTypes.isSkippable(to)) {
             modelService.createImplementsDefinition(from, to, lineNumber);
         }

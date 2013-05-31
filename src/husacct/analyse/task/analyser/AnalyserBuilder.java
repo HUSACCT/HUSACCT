@@ -1,11 +1,12 @@
 package husacct.analyse.task.analyser;
 
+import husacct.analyse.task.analyser.clojure.ClojureAnalyser;
 import husacct.analyse.task.analyser.csharp.CSharpAnalyser;
 import husacct.analyse.task.analyser.java.JavaAnalyser;
 
 class AnalyserBuilder {
 	enum language {
-		Java, CSharp
+		Java, CSharp, Clojure
 	}
 
     public AbstractAnalyser getAnalyser(String language) {
@@ -15,7 +16,9 @@ class AnalyserBuilder {
     	return new JavaAnalyser();
     case "CSharp":
     	return new CSharpAnalyser();
-}
-		return null;
-}
-}
+    case "Clojure":
+    	return new ClojureAnalyser();
+    	}
+    	return null;
+    	}
+    }

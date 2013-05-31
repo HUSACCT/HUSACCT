@@ -197,9 +197,6 @@ class DependencyPanel extends JPanel implements TreeSelectionListener, ActionLis
 
     private void updateTableModel() {
     	toggleDependencies(this.indirectFilterBox.isSelected(), this.directFilterBox.isSelected());
-//        List<DependencyDTO> allFoundDependencies = dataControl.listDependencies(fromSelected, toSelected);
-//        dependencyTable.setModel(new DependencyTableModel(allFoundDependencies, dataControl));
-//        dependencyTable.repaint();
     }
 
     @Override

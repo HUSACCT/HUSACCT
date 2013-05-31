@@ -63,16 +63,39 @@ class JavaMethodGeneratorController extends JavaGenerator {
             Tree child = tree.getChild(childCount);
             int treeType = child.getType();
             switch(treeType) {
-            case JavaParser.ABSTRACT: isAbstract = true; break;
-            case JavaParser.FINAL: hasClassScope = true; break;
-            case JavaParser.PUBLIC: accessControlQualifier = "public"; break;
-            case JavaParser.PRIVATE: accessControlQualifier = "private"; break;
-            case JavaParser.PROTECTED: accessControlQualifier = "protected"; break;
-            case JavaParser.TYPE: getReturnType(child); deleteTreeChild(child); break;
-            case JavaParser.IDENT: name = child.getText(); break;
-            case JavaParser.THROW: delegateException(child); deleteTreeChild(child); break;
-            case JavaParser.THROWS: delegateException(child); deleteTreeChild(child); break;
-            case JavaParser.THROWS_CLAUSE: delegateException(child); deleteTreeChild(child); break;
+            case JavaParser.ABSTRACT: 
+            	isAbstract = true;
+            	break;
+            case JavaParser.FINAL: 
+            	hasClassScope = true; 
+            	break;
+            case JavaParser.PUBLIC: 
+            	accessControlQualifier = "public"; 
+            	break;
+            case JavaParser.PRIVATE: 
+            	accessControlQualifier = "private"; 
+            	break;
+            case JavaParser.PROTECTED: 
+            	accessControlQualifier = "protected"; 
+            	break;
+            case JavaParser.TYPE: 
+            	getReturnType(child); deleteTreeChild(child); 
+            	break;
+            case JavaParser.IDENT: 
+            	name = child.getText(); 
+            	break;
+            case JavaParser.THROW: 
+            	delegateException(child); 
+            	deleteTreeChild(child); 
+            	break;
+            case JavaParser.THROWS: 
+            	delegateException(child); 
+            	deleteTreeChild(child); 
+            	break;
+            case JavaParser.THROWS_CLAUSE: 
+            	delegateException(child); 
+            	deleteTreeChild(child); 
+            	break;
             case JavaParser.FORMAL_PARAM_LIST: 
             	if (child.getChildCount() > 0) {
                     JavaParameterGenerator javaParameterGenerator = new JavaParameterGenerator();

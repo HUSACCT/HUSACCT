@@ -60,7 +60,6 @@ class JavaAttributeAndLocalVariableGenerator {
             case JavaParser.VAR_DECLARATOR_LIST:
                 setAttributeName(child);
             	break;
-            	
             case JavaParser.CLASS_CONSTRUCTOR_CALL:
                 javaInvocationGenerator = new JavaInvocationGenerator(this.belongsToClass);
                 javaInvocationGenerator.generateConstructorInvocToDomain((CommonTree) tree, belongsToMethod);
@@ -174,7 +173,7 @@ class JavaAttributeAndLocalVariableGenerator {
         }
 
         walkThroughAST(returnTypeTree);
-
+        
         ArrayList<String> returnDeclareTypes = new ArrayList<String>();
         returnDeclareTypes.add(this.declareType);
         for (String s : this.declareTypes) {

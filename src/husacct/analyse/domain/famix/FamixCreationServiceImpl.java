@@ -128,7 +128,6 @@ public class FamixCreationServiceImpl implements IModelCreationService {
         addToModel(famixMethod);
 
         for (String s : declaredReturnType) {
-            //if (declaredReturnType != "" && declaredReturnType != null){
             if (s != "" && s != null) {
                 FamixAssociation fAssocation = new FamixAssociation();
                 fAssocation.from = belongsToClass;

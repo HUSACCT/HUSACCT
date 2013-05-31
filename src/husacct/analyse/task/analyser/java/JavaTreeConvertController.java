@@ -100,7 +100,7 @@ class JavaTreeConvertController {
     }
     
     private void warnNotSupportedClassType(int typeId, CommonTree classTree){
-    	String warnMessage = "Detected a non-suported type";
+    	String warnMessage = "Detected a non-supported type";
     	if(typeId != 0)
     		warnMessage += " [Probably type id " + typeId + " ]";
     	if(classTree != null)
@@ -213,9 +213,6 @@ class JavaTreeConvertController {
     }
 
     private boolean isTreeAvailable(Tree tree) {
-        if (tree != null) {
-            return true;
-        }
-        return false;
+    	return tree != null;
     }
 }
