@@ -7,6 +7,7 @@ import husacct.define.domain.appliedrule.AppliedRuleFactory;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.Component;
 import husacct.define.domain.module.ExternalSystem;
+import husacct.define.domain.module.Facade;
 import husacct.define.domain.module.Layer;
 import husacct.define.domain.module.Module;
 import husacct.define.domain.module.SubSystem;
@@ -102,6 +103,7 @@ public class XMLDomain {
 	    case "ExternalSystem"	: newModule = new ExternalSystem(moduleName, moduleDescription); break;
 	    case "Component" 		: newModule = new Component(moduleName, moduleDescription); break;
 	    case "SubSystem"		: newModule = new SubSystem(moduleName, moduleDescription); break;
+	    case "Facade"		: newModule = new Facade(moduleName, moduleDescription); break;
 	    case "Layer"		: newModule = new Layer(moduleName, moduleDescription, Integer.parseInt(module.getChildText("HierarchicalLevel"))); break;
 	    default			: newModule = new Module(moduleName, moduleDescription); break;	    	
 	    }
