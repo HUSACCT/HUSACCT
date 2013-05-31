@@ -19,7 +19,6 @@ public class JavaBlockScopeGenerator extends JavaGenerator {
         walkThroughBlockScope(tree);
     }
     
-    
     private void walkThroughBlockScope(Tree tree) {
     for (int i = 0; i < tree.getChildCount(); i++) {
         Tree child = tree.getChild(i);

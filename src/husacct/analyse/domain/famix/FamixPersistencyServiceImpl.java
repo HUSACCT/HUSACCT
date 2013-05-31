@@ -26,8 +26,7 @@ public class FamixPersistencyServiceImpl implements IModelPersistencyService {
         theModel = FamixModel.getInstance();
         initiateNodes();
         loadObjects();
-        Element totalNode = createXml();
-        return totalNode;
+        return createXml();
     }
 
     //Note - Reset was called in saveModel. Change the reset before implementing it, because the

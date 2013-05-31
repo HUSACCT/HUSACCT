@@ -80,7 +80,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
         if ((treeNode.getChildCount() <= 0) || (treeNode.getChild(0).getChildCount() <= 0) || (treeNode.getChild(0).getChild(0).getType() == JavaParser.METHOD_CALL)) {
             return;
         }
-        
         if (TreeHasConstructorInvocation(treeNode)) {
             createMethodOrPropertyFieldInvocationDetailsWhenConstructorIsFound(treeNode);
         } else {

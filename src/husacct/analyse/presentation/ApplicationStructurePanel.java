@@ -107,7 +107,14 @@ class ApplicationStructurePanel extends JPanel implements TreeSelectionListener 
     }
 
     public void valueChanged(TreeSelectionEvent eventTree) {
-        //Implement extra functionality here if needed in the future
+    	//Returns the last path element of the selection.
+    	//This method is useful only when the selection model allows a single selection.
+    	    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+    	                      analysedCodeTree.getLastSelectedPathComponent();
+
+    	    if (node == null)
+    	    //Nothing is selected.     
+    	    return;
     }
 
     public void reload() {

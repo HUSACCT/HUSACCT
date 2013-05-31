@@ -145,8 +145,6 @@ class JavaMethodGeneratorController extends JavaGenerator {
                 returnTypes.add(s);
             }
         }
-
-
         modelService.createMethod(name, uniqueName, accessControlQualifier, signature, isPureAccessor, returnTypes, belongsToClass, isConstructor, isAbstract, hasClassScope, lineNumber);
     }
 }

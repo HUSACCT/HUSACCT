@@ -16,7 +16,7 @@ public class JavaInheritanceDefinitionGenerator extends JavaGenerator {
         createDomainObject();
     }
 
-    void createDomainObject() {
+    private void createDomainObject() {
         to = to.substring(0, to.length() - 1); 
         if (!SkippedTypes.isSkippable(to)) {
             modelService.createInheritanceDefinition(from, to, lineNumber);
