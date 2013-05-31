@@ -8,9 +8,9 @@ import org.antlr.runtime.tree.CommonTree;
 class JavaClassGenerator extends JavaGenerator {
 
     private static final int abstractNode = JavaParser.ABSTRACT;
-    private String name = "";
-    private String uniqueName = "";
-    private String belongsToPackage = "";
+    private String name;
+    private String uniqueName;
+    private String belongsToPackage;
     private String belongsToClass = null;
     private boolean isInnerClass = false;
     private boolean isAbstract = false;

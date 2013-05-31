@@ -78,9 +78,6 @@ class JavaAnnotationGenerator extends JavaGenerator {
     }
 
     private boolean isTreeAvailable(CommonTree tree) {
-        if (tree != null) {
-            return true;
-        }
-        return false;
+    	return tree != null; 
     }
 }
