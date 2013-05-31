@@ -35,7 +35,6 @@ class FamixModel extends FamixObject {
         this.exporterDate = new Date().toString();
         waitingAssociations = new ArrayList<FamixAssociation>();
         waitingStructuralEntitys = new ArrayList<FamixStructuralEntity>();
-
         associations = new ArrayList<FamixAssociation>();
         classes = new HashMap<String, FamixClass>();
         packages = new HashMap<String, FamixPackage>();

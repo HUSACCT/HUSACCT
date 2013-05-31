@@ -30,14 +30,12 @@ class JavaClassGenerator extends JavaGenerator {
         } else {
             this.uniqueName = belongsToPackage + "." + commonTree.getChild(1).toString();
         }
-
         CommonTree modifierListTree = (CommonTree) commonTree.getFirstChildWithType(JavaParser.MODIFIER_LIST);
 
         if (modifierListTree.getFirstChildWithType(JavaParser.AT) != null) {
             JavaAnnotationGenerator annotationGenerator = new JavaAnnotationGenerator(uniqueName);
             annotationGenerator.generateMethod((CommonTree) modifierListTree.getFirstChildWithType(JavaParser.AT));
         }
-
         this.isAbstract = isAbstract(modifierListTree);
         modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visibility);
         return uniqueName;

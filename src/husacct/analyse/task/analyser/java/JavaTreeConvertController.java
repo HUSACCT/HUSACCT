@@ -67,8 +67,6 @@ class JavaTreeConvertController {
         if (!isTreeAvailable(classTree)) {
             classTree = (CommonTree) completeTree.getFirstChildWithType(JavaParser.ENUM);
         }
-
-
         if (isTreeAvailable(classTree)) {
             int classType = classTree.getType();
             switch (classType) {
@@ -148,7 +146,6 @@ class JavaTreeConvertController {
                         delegateMethod(treeNode);
                         deleteTreeChild(treeNode);
                         break;
-
                 }
                 delegateASTToGenerators((CommonTree) tree.getChild(i));
             }

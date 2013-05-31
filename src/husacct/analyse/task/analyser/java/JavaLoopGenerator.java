@@ -66,7 +66,6 @@ public class JavaLoopGenerator extends JavaGenerator {
                     myLoopTree = (CommonTree) child;
                     typeIdentTree = (CommonTree) myLoopTree.getFirstChildWithType(JavaParser.QUALIFIED_TYPE_IDENT);
                     if (typeIdentTree != null) {
-
                         String type = "";
                         for (int count = 0; count < typeIdentTree.getChildCount(); count++) {
                             type += !type.equals("") ? "." : "";
@@ -98,7 +97,6 @@ public class JavaLoopGenerator extends JavaGenerator {
             } else if (treeType == JavaParser.BLOCK_SCOPE) {
                 delegateBlockScope(child);
             }
-
             walkForEachAST(child);
         }
 

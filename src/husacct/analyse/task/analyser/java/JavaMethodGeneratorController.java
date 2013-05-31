@@ -37,7 +37,6 @@ class JavaMethodGeneratorController extends JavaGenerator {
             declaredReturnType.add("");
             isConstructor = true;
             name = getClassOfUniqueName(belongsToClass);
-
         } else if (methodTree.getType() == JavaParser.VOID_METHOD_DECL) {
             declaredReturnType.add("");
             isConstructor = false;
@@ -84,8 +83,6 @@ class JavaMethodGeneratorController extends JavaGenerator {
             }
             default: break;
             }
-            
-
             WalkThroughMethod(child);
         }
     }

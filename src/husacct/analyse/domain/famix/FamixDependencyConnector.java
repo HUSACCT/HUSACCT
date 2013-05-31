@@ -66,6 +66,7 @@ class FamixDependencyConnector {
     }
 
     void connectAssociationDependencies() {
+
 		String theClass;
 		String belongsToPackage;
 		String classFoundInImports;
@@ -80,6 +81,7 @@ class FamixDependencyConnector {
                 break;
             }
             //end added by Team 1
+            
 
             try {
                 boolean connected = false;

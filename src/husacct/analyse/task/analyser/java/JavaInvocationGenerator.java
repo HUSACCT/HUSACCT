@@ -17,7 +17,6 @@ public class JavaInvocationGenerator extends JavaGenerator {
     private boolean constructorInMethodInvocationFound = false;
     private boolean foundAllMethodInvocInfo = false;
     private boolean allIdents = true;
-    
     private Logger logger = Logger.getLogger(JavaTreeConvertController.class);
 
     public JavaInvocationGenerator(String uniqueClassName) {
