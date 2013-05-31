@@ -130,9 +130,9 @@ public final class ConfigurationServiceImpl extends Observable {
 	}
 
 	public void createHistoryPoint(String description) {
-		final SimpleEntry<Calendar, List<Violation>> violationsResult = getAllViolations();
-		final Calendar date = violationsResult.getKey();
-		final List<Violation> violations = violationsResult.getValue();
+		SimpleEntry<Calendar, List<Violation>> violationsResult = getAllViolations();
+		Calendar date = violationsResult.getKey();
+		List<Violation> violations = violationsResult.getValue();
 
 		ViolationHistory violationHistory = new ViolationHistory(violations, getAllSeverities(), date, description);
 		violationHistoryRepository.addViolationHistory(violationHistory);

@@ -10,11 +10,11 @@ import java.util.List;
 class ViolationRepository {
 
 	private List<Violation> violations;
-	private Calendar date;
+	private Calendar repositoryCalendar;
 
 	public ViolationRepository() {
 		this.violations = new ArrayList<Violation>();
-		this.date = Calendar.getInstance();
+		this.repositoryCalendar = Calendar.getInstance();
 	}
 
 	void addViolation(List<Violation> newViolations) {
@@ -26,7 +26,11 @@ class ViolationRepository {
 	}
 
 	SimpleEntry<Calendar, List<Violation>> getAllViolations() {
-		return new SimpleEntry<Calendar, List<Violation>>(date, violations);
+		return new SimpleEntry<Calendar, List<Violation>>(getCurrentCalendar(), violations);
+	}
+	
+	Calendar getCurrentCalendar() {
+		return Calendar.getInstance();
 	}
 
 	void clear() {
