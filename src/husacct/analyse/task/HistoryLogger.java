@@ -48,7 +48,7 @@ public class HistoryLogger {
 		}
 	}
 
-	public boolean saveHistory(ApplicationDTO adto, String workspaceName) {
+	private boolean saveHistory(ApplicationDTO adto, String workspaceName) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -68,16 +68,16 @@ public class HistoryLogger {
 			Element application = getApplicationElement(adto);
 			workspace.appendChild(application);
 			
-			application.appendChild(getProjectElement(adto));
-			
-			
+			for(Element project : getProjectElement(adto)) {
+				application.appendChild(project);
+			}
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		}	
 		return true;
 	}
 
-	public boolean addToExistingXml(ApplicationDTO adto, String workspaceName) {
+	private boolean addToExistingXml(ApplicationDTO adto, String workspaceName) {
 
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -106,16 +106,28 @@ public class HistoryLogger {
 							if(p.getAttributes().getNamedItem("name").getNodeValue().equals(adto.projects.get(i).name)) {
 								p.appendChild(getAnalyseElement((Element) p, adto.projects.get(i)));
 							} else {
-								p.appendChild(getProjectElement(adto));
+								for(Element project : getProjectElement(adto)) {
+									p.appendChild(project);
+								}
 							}
 						}
 					} else {
 						Node workspace = workspaces.item(workspaceList.indexOf(workspaceName)).getFirstChild();
-						workspace.appendChild(getApplicationElement(adto)).appendChild(getProjectElement(adto));
+						Node tempApplication = getApplicationElement(adto);
+						for(Element project : getProjectElement(adto)) {
+							tempApplication.appendChild(project);
+						}
+						workspace.appendChild(tempApplication);
 					}
 				}
 			} else {
-				root.appendChild(getWorkspace(workspaceName)).appendChild(getApplicationElement(adto)).appendChild(getProjectElement(adto));
+				Node workspace = getWorkspace(workspaceName);
+				Node tempApplication = getApplicationElement(adto);
+				for(Element project : getProjectElement(adto)) {
+					tempApplication.appendChild(project);
+				}
+				workspace.appendChild(tempApplication);
+				root.appendChild(workspace);
 			}
 
 			createXML(doc, (Element)root);
@@ -130,8 +142,7 @@ public class HistoryLogger {
 		return true;
 	}
 
-	public void createXML(Document doc, Element rootElement) {
-
+	private void createXML(Document doc, Element rootElement) {
 		try {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -150,35 +161,33 @@ public class HistoryLogger {
 	
 	private Element getWorkspace(String workspaceName) {
 		Element workspace = doc.createElement("workspace");
-		
 		workspace.setAttribute("name", workspaceName);
-		
+
 		return workspace;
 	}
 	
-	public Element getApplicationElement(ApplicationDTO adto) {
+	private Element getApplicationElement(ApplicationDTO adto) {
 		Element application = doc.createElement("application");
 		application.setAttribute("name", adto.name);
 		
 		return application;
 	}
 
-	public Element getProjectElement(ApplicationDTO adto) {
+	private ArrayList<Element> getProjectElement(ApplicationDTO adto) {
 		projects = adto.projects;
-		Element project = null;
+		ArrayList <Element> projectList = new ArrayList<Element>();
 		
 		for(ProjectDTO pdto : projects) {
-			//Project
+			Element project = null;
 			project = doc.createElement("project");
 			project.setAttribute("name", pdto.name);
 			project.appendChild(getAnalyseElement(project, pdto));
-			
+			projectList.add(project);
 		}
-		return project;
+		return projectList;
 	}
 
-	public Element getAnalyseElement(Element project, ProjectDTO pdto) {
-		//Analyse
+	private Element getAnalyseElement(Element project, ProjectDTO pdto) {
 		Element analyse = doc.createElement("analyse");
 
 		GregorianCalendar cal = new GregorianCalendar();
