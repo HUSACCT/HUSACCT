@@ -189,10 +189,25 @@ public abstract class AppliedRuleStrategy {
 	 */
 	@Override
 	public boolean equals(Object obj){
+		boolean returnme=false;
 		AppliedRuleStrategy doppelganger = (AppliedRuleStrategy) obj;
-		if(this.type == doppelganger.type && this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom && this.sameExceptions(doppelganger))
-			return true;
-		return false;
+		boolean first =this.type==doppelganger.type ;
+		boolean second =this.moduleTo == doppelganger.moduleTo;
+		boolean third =this.moduleFrom == doppelganger.moduleFrom;
+		boolean fourth =this.sameExceptions(doppelganger);
+		boolean fifth=this.type==doppelganger.type && this.moduleTo == doppelganger.moduleTo && this.moduleFrom == doppelganger.moduleFrom && this.sameExceptions(doppelganger);
+		System.out.println("dobbel ganger :"+first+ " "+second+ " "+third+" ? "+fourth+ "( "+fifth+" types:"+this.type+" <><> "+doppelganger.type);
+		if(this.type==doppelganger.type 
+				&& 
+				this.moduleTo == doppelganger.moduleTo
+				&& 
+				this.moduleFrom == doppelganger.moduleFrom 
+				&& 
+				this.sameExceptions(doppelganger)){
+			System.out.println("akkiii bo mamaa");
+			returnme= true;
+		}
+			return returnme;
 	}
 	
 	/**

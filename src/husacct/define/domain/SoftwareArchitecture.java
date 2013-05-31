@@ -57,7 +57,9 @@ private	ModuleFactory factory = new ModuleFactory();
     }
 
     public void addAppliedRule(AppliedRuleStrategy rule) {
-	if (!appliedRules.contains(rule) && !hasAppliedRule(rule.getId())) {
+    
+
+    	if (!appliedRules.contains(rule) && !hasAppliedRule(rule.getId())) {
 	    appliedRules.add(rule);
 	} else {
 	    throw new RuntimeException(ServiceProvider.getInstance()
@@ -396,6 +398,7 @@ private	ModuleFactory factory = new ModuleFactory();
 		ruleFound = true;
 	    }
 	}
+	System.out.println(ruleFound);
 	return ruleFound;
     }
 

@@ -83,9 +83,10 @@ public class DefaultRuleDomainService {
 		defaultRules.add(newRule);
 	}
 
+	
 	private void saveDefaultRules() {
 		for (AppliedRuleStrategy defaultRule : defaultRules) {
-			SoftwareArchitecture.getInstance().addAppliedRule(defaultRule);
+		SoftwareArchitecture.getInstance().addAppliedRule(defaultRule);
 		}
 	}
 
