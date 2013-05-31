@@ -7,7 +7,7 @@ import org.antlr.runtime.tree.Tree;
 public class JavaInheritanceDefinitionGenerator extends JavaGenerator {
 
     private String from;
-    private String to;
+    private String to = "";
     private int lineNumber;
 
     public void generateToDomain(CommonTree tree, String belongsToClass) {

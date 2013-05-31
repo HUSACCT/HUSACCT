@@ -16,7 +16,7 @@ class JavaMethodGeneratorController extends JavaGenerator {
     private String accessControlQualifier = "package-private";
     private boolean isPureAccessor;
     private ArrayList<String> declaredReturnType;
-    private String signature;
+    private String signature = "";
     public String name;
     public String uniqueName;
     private int lineNumber;
