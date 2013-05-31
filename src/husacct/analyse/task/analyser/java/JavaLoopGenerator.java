@@ -28,27 +28,30 @@ public class JavaLoopGenerator extends JavaGenerator {
         }
 
     }
-
+    
     private void walkForAndWhileAST(Tree tree) {
 		int size = tree.getChildCount();
         for (int i = 0; i < size; i++) {
             Tree child = tree.getChild(i);
-            int treeType = child.getType();
-            if (treeType == JavaParser.VAR_DECLARATION) {
+            int treeType = child.getType();    
+            switch(treeType) {
+            case JavaParser.VAR_DECLARATION:
                 javaLocalVariableGenerator.generateLocalVariableToDomain(child, this.belongsToClass, this.belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.METHOD_CALL) {
+                break;
+            case JavaParser.METHOD_CALL:
                 javaInvocationGenerator.generateMethodInvocToDomain((CommonTree) child, belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.DOT) {
+                break;
+            case JavaParser.DOT:
                 CommonTree newTree = new CommonTree();
                 newTree.addChild(child);
                 javaInvocationGenerator.generatePropertyOrFieldInvocToDomain((CommonTree) newTree, this.belongsToMethod);
                 deleteTreeChild(child);
-            } else if (treeType == JavaParser.BLOCK_SCOPE) {
+                break;
+            case JavaParser.BLOCK_SCOPE:
                 delegateBlockScope(child);
             }
-
             walkForAndWhileAST(child);
         }
     }
