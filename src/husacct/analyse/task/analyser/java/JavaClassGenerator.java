@@ -14,7 +14,7 @@ class JavaClassGenerator extends JavaGenerator {
     private String belongsToClass = null;
     private boolean isInnerClass = false;
     private boolean isAbstract = false;
-    private String visbillity;
+    private String visibility;
 
     public JavaClassGenerator(String uniquePackageName) {
         this.belongsToPackage = uniquePackageName;
@@ -22,7 +22,7 @@ class JavaClassGenerator extends JavaGenerator {
 
     public String generateToDomain(CommonTree commonTree) {
 
-        this.visbillity = getVisibillityFromTree(commonTree);
+        this.visibility = getVisibillityFromTree(commonTree);
 
         this.name = commonTree.getChild(1).toString();
         if (belongsToPackage.equals("")) {
@@ -39,7 +39,7 @@ class JavaClassGenerator extends JavaGenerator {
         }
 
         this.isAbstract = isAbstract(modifierListTree);
-        modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visbillity);
+        modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, "", visibility);
         return uniqueName;
     }
 
@@ -65,8 +65,8 @@ class JavaClassGenerator extends JavaGenerator {
             this.isInnerClass = true;
             this.belongsToClass = parentClassName;
             this.uniqueName = belongsToClass + "." + commonTree.getChild(1).toString();
-            this.visbillity = getVisibillityFromTree(commonTree);
-            modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visbillity);
+            this.visibility = getVisibillityFromTree(commonTree);
+            modelService.createClass(uniqueName, name, belongsToPackage, isAbstract, isInnerClass, belongsToClass, visibility);
             return uniqueName;
         }
         return "";
