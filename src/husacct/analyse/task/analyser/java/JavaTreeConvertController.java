@@ -83,7 +83,7 @@ class JavaTreeConvertController {
                     this.theClass = this.currentClass = delegateClass(classTree, false);
                     break;
                 default:
-                    this.warnNotSupportedClassType(classType);
+                    this.warnNotSupportedClassType(classType, classTree);
             }
         } else {
             int typeid = 0;
@@ -91,16 +91,21 @@ class JavaTreeConvertController {
             if (isTreeAvailable(warnTree)) {
                 typeid = warnTree.getType();
             }
-            this.warnNotSupportedClassType(typeid);
+            this.warnNotSupportedClassType(typeid, classTree);
         }
     }
 
     private void warnNotSupportedClassType(int typeId) {
-        String warnMessage = "Detected a not supported type";
-        if (typeId != 0) {
-            warnMessage += " [Probably type id " + typeId + " ]";
-        }
-        logger.warn(warnMessage);
+        warnNotSupportedClassType(typeId, null);
+    }
+    
+    private void warnNotSupportedClassType(int typeId, CommonTree classTree){
+    	String warnMessage = "Detected a non-suported type";
+    	if(typeId != 0)
+    		warnMessage += " [Probably type id " + typeId + " ]";
+    	if(classTree != null)
+    		warnMessage += " Info: " + classTree.toString();
+    	logger.warn(warnMessage);
     }
 
     private void delegateASTToGenerators(CommonTree tree) {

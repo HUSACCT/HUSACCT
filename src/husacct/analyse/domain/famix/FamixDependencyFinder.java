@@ -123,7 +123,8 @@ class FamixDependencyFinder extends FamixFinder {
 				}
 			}
 		}
-		result.addAll(findIndirectDependencies(from, to, applyFilter));
+		if(!preventRecursion)
+			result.addAll(findIndirectDependencies(from, to, applyFilter));
 		return result;
 	}
 	
