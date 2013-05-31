@@ -15,8 +15,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class SoftwareArchitecture {
+
     
 private	ModuleFactory factory = new ModuleFactory();
+
+
+    private static int counter = 0;
+
     private static SoftwareArchitecture instance = null;
 
     public static SoftwareArchitecture getInstance() {
@@ -68,10 +73,10 @@ private	ModuleFactory factory = new ModuleFactory();
 	} else {
 	    throw new RuntimeException(ServiceProvider.getInstance()
 		    .getLocaleService().getTranslatedString("SameNameModule"));
-	    // TODO! Foutmelding ffs!
 	}
 	return moduleId;
     }
+
 
     public String addNewModule(ModuleStrategy module) {
 	if (hasModule(module.getName())) {
@@ -82,6 +87,7 @@ private	ModuleFactory factory = new ModuleFactory();
 	}
 	return "";
     }
+
 
 
 
