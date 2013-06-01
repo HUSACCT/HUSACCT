@@ -17,6 +17,7 @@ import husacct.define.domain.module.modules.SubSystem;
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.AppliedRuleExceptionDomainService;
 import husacct.define.domain.services.ModuleDomainService;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jdialog.AppliedRuleJDialog;
 import husacct.define.presentation.utils.DataHelper;
 import husacct.define.presentation.utils.KeyValueComboBox;
@@ -545,7 +546,8 @@ public class AppliedRuleController extends PopUpController {
     public void saveAllExceptionRules() {
 	appliedRuleExceptionService
 	.removeAllAppliedRuleExceptions(currentAppliedRuleId);
-
+ArrayList<AppliedRuleStrategy> rules = new ArrayList<AppliedRuleStrategy>();
+AppliedRuleFactory factory = new AppliedRuleFactory();
 	for (HashMap<String, Object> exceptionRule : exceptionRules) {
 	    long appliedRuleId = currentAppliedRuleId;
 	    String ruleTypeKey = (String) exceptionRule.get("ruleTypeKey");
@@ -557,11 +559,23 @@ public class AppliedRuleController extends PopUpController {
 	    Object to = exceptionRule.get("moduleToId");
 	    ModuleStrategy moduleFrom = assignToCorrectModule(from);
 	    ModuleStrategy moduleTo = assignToCorrectModule(to);
-
+        
 	    appliedRuleExceptionService.addExceptionToAppliedRule(
 		    appliedRuleId, ruleTypeKey, description, moduleFrom,
 		    moduleTo, dependencies);
+	    
+	    AppliedRuleFactory ruleFactory = new AppliedRuleFactory();
+		AppliedRuleStrategy exceptionRule2 = ruleFactory.createRule(ruleTypeKey);
+		exceptionRule2.setAppliedRule(description, moduleFrom, moduleTo);
+		exceptionRule2.setDependencies(dependencies);
+		rules.add(exceptionRule2);
+		
+		
+	
 	}
+	//hot hack {{
+		StateService.instance().addExceptionRule(SoftwareArchitecture.getInstance().getAppliedRuleById(currentAppliedRuleId), rules);
+    
     }
 
     public boolean saveDefaultRules(HashMap<String, Object> ruleDetails) {

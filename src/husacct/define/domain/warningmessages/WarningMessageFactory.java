@@ -25,7 +25,7 @@ public class WarningMessageFactory {
 		WarningMessageService.getInstance().updateWarnings();
 		WarningMessageContainer root = new WarningMessageContainer(new CustomWarningMessage("WARNINGS"));
 		WarningMessageContainer codelevelContainer = new WarningMessageContainer(new CustomWarningMessage("Code Level "));
-		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level"));
+		WarningMessageContainer implevelContainer = new WarningMessageContainer(new CustomWarningMessage("Implementation Level("+WarningMessageService.getInstance().warningsCount()+")"));
 		WarningMessageContainer notMapped = new WarningMessageContainer(new CustomWarningMessage("NotMapped("+StateService.instance().getAnalzedModuleRegistry().getUnitsCount()+")"));
 		WarningMessageContainer customContainer = new WarningMessageContainer(new CustomWarningMessage("Custom"));
 		addNotmapped(notMapped);

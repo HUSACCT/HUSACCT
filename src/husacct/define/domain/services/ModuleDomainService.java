@@ -163,14 +163,13 @@ public class ModuleDomainService {
 	public void removeModuleById(long moduleId) {
 		ModuleStrategy module = SoftwareArchitecture.getInstance()
 				.getModuleById(moduleId);
-
+      try{
 		SoftwareArchitecture.getInstance().removeModule(module);
-		// TODO: this is a quick fix
-		try {
-			JtreeController.instance().registerTreeRemoval(module);
-		} catch (Exception e) {
-			// TODO: Add an exception scenario
-		}
+	    JtreeController.instance().registerTreeRemoval(module);
+      }catch(Exception e)
+      {
+    	  e.printStackTrace();
+      }
 		ServiceProvider.getInstance().getDefineService()
 				.notifyServiceListeners();
 	}

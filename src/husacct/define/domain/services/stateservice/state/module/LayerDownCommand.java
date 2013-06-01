@@ -1,4 +1,4 @@
-package husacct.define.domain.services.stateservice.state;
+package husacct.define.domain.services.stateservice.state.module;
 
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.task.DefinitionController;

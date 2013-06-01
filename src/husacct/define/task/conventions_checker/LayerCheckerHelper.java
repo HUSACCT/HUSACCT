@@ -1,11 +1,13 @@
 package husacct.define.task.conventions_checker;
 
 import husacct.ServiceProvider;
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.ModuleDomainService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LayerCheckerHelper {
 
@@ -52,16 +54,29 @@ public class LayerCheckerHelper {
     }
 
     private ArrayList<ModuleStrategy> getCurrentModules(ModuleStrategy moduleFrom) {
-	ModuleDomainService moduleService = new ModuleDomainService();
-	Long parentId = moduleService.getParentModuleIdByChildId(moduleFrom
-		.getId());
+	
+    	ModuleDomainService moduleService =new  ModuleDomainService();
+	
+    	Long parentId = SoftwareArchitecture.getInstance().getParentModuleIdByChildId(1L);
+    	System.out.println("oppp "+parentId);
+    	parentId=-1L;
 	if (parentId != -1) {
-	    ModuleStrategy parentModule = moduleService.getModuleById(parentId);
+		try{
+		
+		}catch(Exception e)
+		{
+			System.out.println("<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>"+moduleFrom==null ?  "klop":moduleFrom.getName());e.getStackTrace();
+		}
+		ModuleStrategy parentModule = moduleService.getModuleById(parentId);
 	    moduleService.sortModuleChildren(parentModule);
 	    return parentModule.getSubModules();
 	} else {
-	    return moduleService.getSortedModules();
+	    
+		return moduleService.getSortedModules();
 	}
+    
+	
+	
     }
 
     public String getErrorMessage() {

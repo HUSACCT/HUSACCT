@@ -2,6 +2,8 @@ package husacct.define.presentation.jdialog;
 
 import husacct.ServiceProvider;
 import husacct.common.Resource;
+import husacct.common.locale.ILocaleService;
+import husacct.control.presentation.util.DialogUtils;
 import husacct.define.domain.warningmessages.WarningMessageFactory;
 import husacct.define.presentation.treetable.WarningTreeTableCellrenderer;
 import husacct.define.presentation.treetable.WarningTreeTableModel;
@@ -33,6 +35,8 @@ public class WarningTableJDialog extends JDialog implements ActionListener,
 	private static final long serialVersionUID = 1L;
 private	WarningMessageFactory factory = new WarningMessageFactory();
 private JXTreeTable treeTab = new JXTreeTable();
+private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+
 	public WarningTableJDialog() {
 		init();
 	}
@@ -43,10 +47,9 @@ private JXTreeTable treeTab = new JXTreeTable();
 		this.setSize(new Dimension(500, 380));
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(createTreeTable(), BorderLayout.CENTER);
-		setTitle(ServiceProvider.getInstance().getLocaleService()
-				.getTranslatedString("SoftwareUnitTitle"));
-		setIconImage(new ImageIcon(Resource.get(Resource.HUSACCT_LOGO))
-				.getImage());
+		this.setTitle(localeService.getTranslatedString("Warnings"));
+		DialogUtils.alignCenter(this);
+		setIconImage(new ImageIcon(Resource.get(Resource.ICON_VALIDATE)).getImage());
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation( d.width / 2 - 512, d.height/2 - 384 );
 		setSize( 600, 300 );

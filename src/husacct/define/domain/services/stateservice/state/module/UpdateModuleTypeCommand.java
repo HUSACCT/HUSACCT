@@ -1,4 +1,4 @@
-package husacct.define.domain.services.stateservice.state;
+package husacct.define.domain.services.stateservice.state.module;
 
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.ModuleDomainService;

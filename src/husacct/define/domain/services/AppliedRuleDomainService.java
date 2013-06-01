@@ -74,8 +74,7 @@ public class AppliedRuleDomainService {
     }
 
     public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long ModuleStrategyId) {
-	return SoftwareArchitecture.getInstance()
-		.getAppliedRulesIdsByModuleFromId(ModuleStrategyId);
+	return SoftwareArchitecture.getInstance().getAppliedRulesIdsByModuleFromId(ModuleStrategyId);
     }
 
     public ArrayList<Long> getAppliedRulesIdsByModuleToId(long ModuleStrategyId) {

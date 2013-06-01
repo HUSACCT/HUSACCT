@@ -47,12 +47,13 @@ public class DomainGateway {
 	public void moveLayerUp(long layerId)
 	{
 		DefinitionController.getInstance().moveLayerUp(layerId);
-		
+		StateService.instance().layerUp(layerId);
 	}
 	
 	public void moveLayerDown(long layerId)
 	{
 		DefinitionController.getInstance().moveLayerDown(layerId);
+		StateService.instance().layerDown(layerId);
 		
 	}
 
@@ -96,6 +97,7 @@ public class DomainGateway {
 	public void removeSoftwareUnits(List<String> selectedModules,
 			List<String> types) {
 		DefinitionController.getInstance().removeSoftwareUnits(selectedModules, types);
+		StateService.instance().removeSoftwareUnit(selectedModules);
 		
 	}
 
@@ -168,6 +170,15 @@ public class DomainGateway {
 		
 		
 		
+	}
+
+
+
+
+
+	public AnalyzedModuleComponent treeModel() {
+		
+		return JtreeController.instance().getRootOfModel();
 	}
 	
 	

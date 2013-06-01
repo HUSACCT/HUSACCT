@@ -222,7 +222,7 @@ public class SoftwareUnitJDialog extends JDialog implements ActionListener, KeyL
 	
 	
 	private void getSoftwareDefinationTree() {
-	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().getRootModel());
+	this.softwareDefinitionTree=new AnalyzedModuleTree(DomainGateway.getInstance().treeModel());
 	
 		
 	}

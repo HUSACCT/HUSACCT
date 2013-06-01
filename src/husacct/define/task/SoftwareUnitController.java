@@ -5,7 +5,9 @@ import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
+import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
+import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.presentation.jdialog.SoftwareUnitJDialog;
 import husacct.define.presentation.utils.UiDialogs;
 import husacct.define.task.components.AbstractCombinedComponent;
@@ -182,6 +184,7 @@ public class SoftwareUnitController extends PopUpController {
 				+ this.getModuleId());
 		try {
 
+			StateService.instance().addSoftwareUnit(SoftwareArchitecture.getInstance().getModuleById(this.getModuleId()), units);
 			this.softwareUnitDefinitionDomainService.addSoftwareUnit(
 					this.getModuleId(), units);
 

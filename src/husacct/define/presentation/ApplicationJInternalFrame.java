@@ -182,6 +182,7 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 	public void update() {
 
 setButtonsVisability(undoButton,redoButton);
-	}
 
+
+}
 }

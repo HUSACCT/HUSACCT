@@ -1,20 +1,22 @@
-package husacct.define.domain.services.stateservice.state;
+package husacct.define.domain.services.stateservice.state.module;
+
+import java.util.ArrayList;
 
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.task.DefinitionController;
 
 
-public class ModuleCommand implements Istate{
+public class ModuleAddCommand implements Istate{
 
 
 	private ModuleStrategy child;
 		
+	private ArrayList<Object[]> data= new ArrayList<Object[]>();
 	
 	
-	
-	public ModuleCommand(ModuleStrategy ModuleStrategy) {
-		this.child=ModuleStrategy;
+	public ModuleAddCommand(ArrayList<Object[]> commandData) {
+		this.data=commandData;
 	}
 
 	@Override

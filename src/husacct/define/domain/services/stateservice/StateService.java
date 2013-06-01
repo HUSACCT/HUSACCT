@@ -1,6 +1,6 @@
 package husacct.define.domain.services.stateservice;
 
-import husacct.define.domain.services.stateservice.state.StateEngineFactory;
+import husacct.define.domain.services.stateservice.state.factory.StateEngineFactory;
 import husacct.define.task.JtreeStateEngine;
 
 public class StateService {

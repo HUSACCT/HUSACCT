@@ -7,15 +7,21 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.domain.services.stateservice.state.ModuleCommand;
-import husacct.define.domain.services.stateservice.state.SoftwareUnitCommand;
 import husacct.define.domain.services.stateservice.state.StateDefineController;
-import husacct.define.domain.services.stateservice.state.UpdateModuleCommand;
-import husacct.define.domain.services.stateservice.state.UpdateModuleTypeCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.AppliedRuleAddCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.ExceptionAddRuleCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.RemoveAppliedRuleCommand;
+import husacct.define.domain.services.stateservice.state.module.LayerDownCommand;
+import husacct.define.domain.services.stateservice.state.module.LayerUpCommand;
+import husacct.define.domain.services.stateservice.state.module.ModuleAddCommand;
+import husacct.define.domain.services.stateservice.state.module.ModuleRemoveCommand;
+import husacct.define.domain.services.stateservice.state.module.UpdateModuleCommand;
+import husacct.define.domain.services.stateservice.state.module.UpdateModuleTypeCommand;
+import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
+import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,50 +39,46 @@ public abstract class JtreeStateEngine {
 		logger = Logger.getLogger(JtreeStateEngine.class);
 	}
 
-	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
-
-		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
-				.get(unit.getName().toLowerCase())[1];
-		mapRegistry.remove(unit.getName());
-		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
-		data.add(analyzeModuleTobeRestored);
-		StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
-		
-		
-		WarningMessageService.getInstance().updateWarnings();
-		JtreeController.instance().restoreTreeItem(analyzeModuleTobeRestored);
-		stateController.insertCommand(new SoftwareUnitCommand(module,data));
-		
-
-	}
-
-
-
-	public void addModule(ModuleStrategy module) {
-
-		stateController.insertCommand(new ModuleCommand(module));
-	}
-
-	public void removeModule(ModuleStrategy module) {
-		ArrayList<AnalyzedModuleComponent> unitTobeRemoved = new ArrayList<AnalyzedModuleComponent>();
-		stateController.insertCommand(new ModuleCommand(module));
-		
-		for (SoftwareUnitDefinition analyzedmodule : module.getUnits()) {
-			String key = analyzedmodule.getName().toLowerCase();
-			AnalyzedModuleComponent analyzedModule = (AnalyzedModuleComponent) mapRegistry
-					.get(key)[1];
-			
-			unitTobeRemoved.add(analyzedModule);
-			mapRegistry.remove(key);
-			StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzedModule);
-			
-			
-			WarningMessageService.getInstance().updateWarnings();
+	public boolean undo() {
+		return 	stateController.undo();
 
 		}
+
+		public boolean redo()  {
+		return	stateController.redo();
+		}
+	
+	
+	
+	public void addModule(ArrayList<Object[]> toBeSaved) {
+
+		stateController.insertCommand(new ModuleAddCommand(toBeSaved));
+	}
+
+	public void removeModule(ArrayList<Object[]> data) {
+		ArrayList<AnalyzedModuleComponent> unitTobeRemoved = new ArrayList<AnalyzedModuleComponent>();
+		stateController.insertCommand(new ModuleRemoveCommand(data));
+		}
+	public void addUpdateModule(long moduleId, String[] moduleold,
+			String[] modulenew) {
+	stateController.insertCommand(new UpdateModuleCommand(moduleId, modulenew,moduleold ));
 		
-		stateController.insertCommand(new SoftwareUnitCommand(module,unitTobeRemoved) );
+	}
+
+	public void addUpdateModule(ModuleStrategy module,
+			ModuleStrategy updatedModule) {
+		stateController.insertCommand(new UpdateModuleTypeCommand(module, updatedModule));
 		
+	}
+	
+	public void layerUp(long moduleId)
+	{
+		stateController.insertCommand(new LayerUpCommand(moduleId));
+	}
+	
+	public void layerDown(long moduleId)
+	{
+		stateController.insertCommand(new LayerDownCommand(moduleId));
 	}
 
 	public void addSoftwareUnit(ModuleStrategy module,
@@ -88,14 +90,26 @@ public abstract class JtreeStateEngine {
 	
 		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
 		data.add(unitToBeinserted);
-		stateController.insertCommand(new SoftwareUnitCommand(module,data));
+		stateController.insertCommand(new SoftwareUnitAddCommand(module,data));
 		JtreeController.instance().removeTreeItem(unitToBeinserted);
 	}
+	
+	
+	public void removeSoftwareUnit(ModuleStrategy module, SoftwareUnitDefinition unit) {
+
+		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
+				.get(unit.getName().toLowerCase())[1];
+		mapRegistry.remove(unit.getName());
+		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		data.add(analyzeModuleTobeRestored);
+		StateService.instance().allUnitsRegistry.registerAnalyzedUnit(analyzeModuleTobeRestored);
+		stateController.insertCommand(new SoftwareUnitRemoveCommand(module,data));
+		}
 
 	public void addSoftwareUnit(ModuleStrategy module,
 			ArrayList<AnalyzedModuleComponent> unitToBeinserted) {
 
-		stateController.insertCommand(new SoftwareUnitCommand(module,unitToBeinserted));
+		stateController.insertCommand(new SoftwareUnitAddCommand(module,unitToBeinserted));
 		for (AnalyzedModuleComponent analyzedModuleComponent : unitToBeinserted) {
 			JtreeController.instance().removeTreeItem(analyzedModuleComponent);
 			mapRegistry.put(analyzedModuleComponent.getUniqueName().toLowerCase(),
@@ -105,21 +119,9 @@ public abstract class JtreeStateEngine {
 		}
 	}
 
-	public boolean undo() {
-	return 	stateController.undo();
-
-	}
-
-	public boolean redo()  {
-	return	stateController.redo();
-	}
 	
-
 	
-
-
-
-	public ModuleStrategy getModulebySoftwareUnitUniqName(String Uniqname) {
+  public ModuleStrategy getModulebySoftwareUnitUniqName(String Uniqname) {
 
 		Object[] result = mapRegistry.get(Uniqname.toLowerCase());
 		ModuleStrategy resultModule = (ModuleStrategy) result[0];
@@ -134,8 +136,7 @@ public abstract class JtreeStateEngine {
 	}
 
 	public void analyze() {
-   getRootModel();
-	
+        getRootModel();
 	}
 
 
@@ -158,21 +159,12 @@ public abstract class JtreeStateEngine {
 		
 	}
 	
-	public ArrayList<AnalyzedModuleComponent> getMappedUnits()
-	{
-	ArrayList<AnalyzedModuleComponent> analyzedUnits = new ArrayList<AnalyzedModuleComponent>();	
-	Collection<Object[]> units=	mapRegistry.values();
-	for (Object[] unit : units) {
-		analyzedUnits.add( (AnalyzedModuleComponent)unit[1]);
-	}
-	
-	return analyzedUnits;
 	
 		
 		
 		
 		
-	}
+	
 
 	public void fromGui() {
 		stateController.unlock();
@@ -184,21 +176,35 @@ public abstract class JtreeStateEngine {
 		
 	}
 
-	public void addUpdateModule(long moduleId, String[] moduleold,
-			String[] modulenew) {
-	stateController.insertCommand(new UpdateModuleCommand(moduleId, modulenew,moduleold ));
-		
-	}
-
-	public void addUpdateModule(ModuleStrategy module,
-			ModuleStrategy updatedModule) {
-		stateController.insertCommand(new UpdateModuleTypeCommand(module, updatedModule));
-		
-	}
+	
 
 	public void removeRules(ArrayList<AppliedRuleStrategy> selectedRules) {
 		stateController.insertCommand(new RemoveAppliedRuleCommand(selectedRules));
 		
 	}
+	
+	public void addRules(ArrayList<AppliedRuleStrategy> rules)
+	{
+		stateController.insertCommand(new AppliedRuleAddCommand(rules));
+	}
+	public void addExceptionRule(AppliedRuleStrategy parent,ArrayList<AppliedRuleStrategy> rules)
+	{
+		stateController.insertCommand(new ExceptionAddRuleCommand(parent, rules));
+	}
+
+	public void removeSoftwareUnit(List<String> selectedModules) {
+		ArrayList<AnalyzedModuleComponent> units =new ArrayList<AnalyzedModuleComponent>();
+		ModuleStrategy m =(ModuleStrategy) mapRegistry.get(selectedModules.get(0))[0];
+		for (String uniqname : selectedModules) {
+			AnalyzedModuleComponent softwareUnit= (AnalyzedModuleComponent)mapRegistry.get(uniqname)[1];
+			units.add(softwareUnit);
+		}
+		
+		stateController.insertCommand(new SoftwareUnitRemoveCommand(m,units));
+		
+
+		
+	} 
+	
 	
 }

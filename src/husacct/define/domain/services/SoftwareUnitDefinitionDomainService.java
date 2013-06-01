@@ -228,4 +228,19 @@ public class SoftwareUnitDefinitionDomainService {
 		
 	
 }
+
+	public void removeSoftwareUnit(long moduleId,
+			ArrayList<AnalyzedModuleComponent> data) {
+		ModuleStrategy module = SoftwareArchitecture.getInstance().getModuleById(moduleId);
+		
+		for (AnalyzedModuleComponent units : data) {
+			
+			SoftwareUnitDefinition unit = getSoftwareUnitByName(units.getUniqueName());
+			module.removeSUDefintion(unit);
+			WarningMessageService.getInstance().processModule(module);
+			StateService.instance().removeSoftwareUnit(module, unit);
+			ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
+		}
+		
+	}
 }

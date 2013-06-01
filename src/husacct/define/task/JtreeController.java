@@ -58,6 +58,8 @@ import javax.swing.tree.TreePath;
 			{
 				registerTreeRemoval(module.getSubModules().get(i));
 				pass=false;
+				registerTreeRemoval(module.getSubModules().get(i));
+				
 			}
 
 		}

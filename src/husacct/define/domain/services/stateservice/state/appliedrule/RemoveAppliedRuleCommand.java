@@ -1,4 +1,4 @@
-package husacct.define.task;
+package husacct.define.domain.services.stateservice.state.appliedrule;
 
 import husacct.define.domain.SoftwareArchitecture;
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;

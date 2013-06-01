@@ -69,7 +69,7 @@ public class StateDefineController {
 	}
 
 	public void insertCommand(Istate sate) {
-	
+	System.out.println(sate.getClass().getName()+" >>>>>>>>>>>>???");
 		 if (!islocked&& currentIndex+1!=states.size()) {
 			removeStates();
 			currentIndex++; 

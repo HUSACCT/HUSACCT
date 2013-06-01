@@ -1,6 +1,7 @@
-package husacct.define.domain.services.stateservice.state;
+package husacct.define.domain.services.stateservice.state.softwareunit;
 
 import husacct.define.domain.module.ModuleStrategy;
+import husacct.define.domain.services.SoftwareUnitDefinitionDomainService;
 import husacct.define.domain.services.stateservice.interfaces.Istate;
 import husacct.define.task.DefinitionController;
 import husacct.define.task.SoftwareUnitController;
@@ -23,10 +24,9 @@ public class SoftwareUnitAddCommand implements Istate {
 
 	@Override
 	public void undo() {
-	ArrayList<String> names = new ArrayList<String>();
-	ArrayList<String> types = new ArrayList<String>();
+	SoftwareUnitDefinitionDomainService service = new SoftwareUnitDefinitionDomainService();
 	for (AnalyzedModuleComponent unit : units) {
-		
+		service.removeSoftwareUnit(module.getId(), units);
 	}
 	
 		
@@ -34,7 +34,9 @@ public class SoftwareUnitAddCommand implements Istate {
 
 	@Override
 	public void redo() {
-		// TODO Auto-generated method stub
+		DefinitionController.getInstance().setSelectedModuleId(module.getId());
+		SoftwareUnitController controller = new SoftwareUnitController(module.getId());
+		controller.save(units);
 		
 	}
 
