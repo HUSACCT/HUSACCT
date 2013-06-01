@@ -14,13 +14,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
-public class ApplicationAnalysisHistoryOverviewFrame extends JFrame{
+public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 
 	private MainController mainController;
 	private JTable analysisTable;
@@ -29,22 +29,22 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JFrame{
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public ApplicationAnalysisHistoryOverviewFrame(MainController mainController){
+		super(mainController.getMainGui(), true);
 		this.setTitle(localeService.getTranslatedString("ApplicationAnalysisHistory"));
 		this.mainController = mainController;
 		this.setup();
 		this.addComponents();
 		this.setResizable(true);
 		this.setVisible(true);
-		this.setSize(1000, 400);
 	}
 	
 	private void setup(){
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(500, 380));
+		this.setSize(new Dimension(1000, 400));
 		
 		//Center window
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (dim.width/2-this.getSize().width/2)-250;
+		int x = (dim.width/2-this.getSize().width/2);
 		int y = dim.height/2-this.getSize().height/2;
 		this.setLocation(x, y);
 	}
