@@ -229,16 +229,7 @@ public class SoftwareArchitecture {
 
 	public ModuleStrategy getModuleBySoftwareUnit(String softwareUnitName) {
 		ModuleStrategy currentModule = null;
-		if (rootModule.hasSoftwareUnit(softwareUnitName)) {
-			currentModule = rootModule;
-			while (!currentModule.hasSoftwareUnitDirectly(softwareUnitName)) {
-				for (ModuleStrategy subModule : currentModule.getSubModules()) {
-					if (subModule.hasSoftwareUnit(softwareUnitName)) {
-						currentModule = subModule;
-					}
-				}
-			}
-		}
+	currentModule= StateService.instance().getModulebySoftwareUnitUniqName(softwareUnitName);
 		if (currentModule == null) {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService()
@@ -494,7 +485,7 @@ public class SoftwareArchitecture {
 		}
 
 		boolean moduleFound = true;
-        StateService.instance().addModule(toBeSaved);
+        StateService.instance().removeModule(toBeSaved);
 		
 		if (!moduleFound) {
 			throw new RuntimeException(ServiceProvider.getInstance()

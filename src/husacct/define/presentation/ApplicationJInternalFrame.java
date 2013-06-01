@@ -11,6 +11,7 @@ import husacct.define.presentation.jdialog.HelpDialog;
 import husacct.define.presentation.jdialog.WarningTableJDialog;
 import husacct.define.presentation.jpanel.DefinitionJPanel;
 import husacct.define.presentation.utils.JPanelStatus;
+import husacct.define.task.DefinitionController;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -181,7 +182,8 @@ public class ApplicationJInternalFrame extends JInternalFrame implements
 	@Override
 	public void update() {
 
-setButtonsVisability(undoButton,redoButton);
+     setButtonsVisability(undoButton,redoButton);
+     DefinitionController.getInstance().notifyObservers();
 
 
 }
