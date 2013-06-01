@@ -7,6 +7,7 @@ import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
 import husacct.control.presentation.util.MoonWalkPanel;
+import husacct.control.presentation.util.UserActionLogDialog;
 import husacct.control.task.MainController;
 
 import java.awt.BorderLayout;
@@ -55,7 +56,7 @@ public class MainGui extends HelpableJFrame{
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
 	private ToolBar toolBar;
-	private JDialog userActionLogDialog;
+	private UserActionLogDialog userActionLogDialog;
 	
 	public MainGui(MainController mainController) {
 		this.mainController = mainController;
@@ -102,6 +103,8 @@ public class MainGui extends HelpableJFrame{
 		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
 		
+		//userActionLogDialog = new UserActionLogDialog(this, mainController);
+		
 		taskBarPane.add(taskBar);
 		
 		contentPane.add(toolBar, BorderLayout.NORTH);
@@ -110,8 +113,6 @@ public class MainGui extends HelpableJFrame{
 		add(contentPane);
 		add(moonwalkPanel);
 		add(taskBarPane);
-		
-		//createUserActionsDialog();
 	}
 	
 	private void addListeners(){
@@ -130,7 +131,7 @@ public class MainGui extends HelpableJFrame{
 		});
 		
 		/*
-		addWindowFocusListener(new WindowFocusListener() {  
+		addWindowFocusListener(new WindowFocusListener() {
 			@Override  
 			public void windowGainedFocus(WindowEvent e) {
 				userActionLogDialog.setVisible(true);
@@ -174,85 +175,4 @@ public class MainGui extends HelpableJFrame{
 	private void setTitle(){
 		setTitle("");
 	}
-	
-	private void createUserActionsDialog(){
-		userActionLogDialog = new JDialog(this);
-		userActionLogDialog.setUndecorated(true);
-		userActionLogDialog.setAlwaysOnTop(true);
-		userActionLogDialog.setFocusableWindowState(false);
-		userActionLogDialog.setFocusable(false);
-		userActionLogDialog.setTitle(localeService.getTranslatedString("ActionLog"));
-		userActionLogDialog.setVisible(true);
-		
-		int dialogWidth = 300;
-		int dialogHeight = 212;
-		userActionLogDialog.setSize(dialogWidth, dialogHeight);
-
-		//Absolute positioning: Right bottom of screen
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int marginRight = 5;
-		int marginBottom = 40;
-		int dialogLocationX = (int)dim.getWidth()-dialogWidth-marginRight;
-		int dialogLocationY = (int)dim.getHeight()-dialogHeight-marginBottom;
-		userActionLogDialog.setLocation(dialogLocationX, dialogLocationY);
-		
-		refreshUserActionsDialog();
-	}
-	
-	private JScrollPane getUserActionsDialogScrollPaneContents(){
-		DefaultTableModel logTableModel = new DefaultTableModel();
-		JTable logTable = new JTable(logTableModel){
-			public boolean isCellEditable(int rowIndex, int colIndex) {
-				return false;
-			}
-		};
-
-		logTable.getTableHeader().setReorderingAllowed(false);
-		logTable.getTableHeader().setResizingAllowed(false);
-		logTable.setAutoCreateRowSorter(false);
-
-		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
-
-		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getLoggedUserActionsArrayList();
-		int i = 1;
-		for(HashMap<String, String> loggedUserAction : loggedUserActions){
-			logTableModel.addRow(new Object[]{i + ": " + loggedUserAction.get("message")});
-			i++;
-		}
-		
-		return new JScrollPane(logTable);
-	}
-	
-	private JPanel getUserActionsDialogButtonsPanel(){
-		JPanel buttonsPanel = new JPanel();
-		
-		//TODO: Implement this feature
-		
-		JButton undoButton = new JButton(localeService.getTranslatedString("Undo"));
-		undoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainController.logUserAction("Demonstration: User clicked the undo button.");
-			}
-		});
-		buttonsPanel.add(undoButton);
-		
-		JButton redoButton = new JButton(localeService.getTranslatedString("Redo"));
-		redoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainController.logUserAction("Demonstration: User clicked the redo button.");
-			}
-		});
-		buttonsPanel.add(redoButton);
-		
-		return buttonsPanel;
-	}
-	
-	public void refreshUserActionsDialog(){
-		userActionLogDialog.getContentPane().removeAll();
-		userActionLogDialog.add(getUserActionsDialogScrollPaneContents());
-		userActionLogDialog.add(getUserActionsDialogButtonsPanel(), BorderLayout.SOUTH);
-		userActionLogDialog.validate();
-		userActionLogDialog.repaint();
-	}
-	
 }
