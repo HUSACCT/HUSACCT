@@ -331,7 +331,7 @@ public class SoftwareArchitecture {
 				}
 			}
 		}
-		System.out.println(" <><><> " + parentModuleId);
+	
 		return parentModuleId;
 	}
 
@@ -395,7 +395,7 @@ public class SoftwareArchitecture {
 				ruleFound = true;
 			}
 		}
-		System.out.println(ruleFound);
+		
 		return ruleFound;
 	}
 

@@ -198,7 +198,7 @@ public abstract class AppliedRuleStrategy {
 				this.moduleFrom == doppelganger.moduleFrom 
 				&& 
 				this.sameExceptions(doppelganger)){
-			System.out.println("akkiii bo mamaa");
+		
 			returnme= true;
 		}
 			return returnme;
