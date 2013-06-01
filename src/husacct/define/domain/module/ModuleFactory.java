@@ -4,6 +4,7 @@
 
 package husacct.define.domain.module;
 
+import husacct.define.domain.module.modules.Blank;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.ExternalLibrary;
 import husacct.define.domain.module.modules.Facade;
@@ -21,7 +22,7 @@ public class ModuleFactory {
 		"Component",
 		"Facade",
 		"SubSystem",
-		"ExternalLibrary","Root"
+		"ExternalLibrary","Root","Blank"
 	};
 	
 	public static Class<?>[] icecreams = new Class[]{
@@ -29,7 +30,7 @@ public class ModuleFactory {
 		Component.class,
 		Facade.class,
 		SubSystem.class,
-		ExternalLibrary.class,Root.class
+		ExternalLibrary.class,Root.class,Blank.class
 	};
 	
 	public ModuleStrategy createModule(String choice){
@@ -50,7 +51,7 @@ public class ModuleFactory {
 	
 	public ModuleStrategy createDummy(String choice){
 		for(int i = 0; i < flavors.length; i++){
-			if(flavors[i].equals(choice)) try{
+			if(flavors[i].equalsIgnoreCase(choice)) try{
 				ModuleStrategy dummyModule = (ModuleStrategy)icecreams[i].newInstance();
 				dummyModule.setType(choice);
 				dummyModule.setId(-1);
