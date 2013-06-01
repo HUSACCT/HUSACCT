@@ -2,14 +2,20 @@ package husacct.define.domain.appliedrule.relationrules;
 
 
 import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.module.modules.Layer;
+import husacct.define.task.conventions_checker.LayerCheckerHelper;
+import husacct.define.task.conventions_checker.ModuleCheckerHelper;
+
+import java.util.ArrayList;
 
 public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
-	//private ModuleCheckerHelper moduleCheckerHelper = new ModuleCheckerHelper();
-	//private LayerCheckerHelper layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+	private ModuleCheckerHelper moduleCheckerHelper;
+	private LayerCheckerHelper layerCheckerHelper;
 
 	public boolean checkConvention() {
-		return true;
-		/*boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
+		moduleCheckerHelper = new ModuleCheckerHelper();
+		layerCheckerHelper = new LayerCheckerHelper(this.getModuleTo());
+		boolean conventionSuccess = moduleCheckerHelper.checkRuleTypeAlreadySet(
 				this.getRuleType(), this.getModuleFrom());
 		if (conventionSuccess) {
 			conventionSuccess = layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom());
@@ -25,10 +31,10 @@ public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 				}
 			}
 		}
-		return conventionSuccess;*/
+		return conventionSuccess;
 	}
 
-	/*private boolean checkIsNotAllowedToUse() {
+	private boolean checkIsNotAllowedToUse() {
 		boolean isNotAllowedToUseSucces = moduleCheckerHelper
 				.checkRuleTypeAlreadyFromThisToSelected("IsOnlyAllowedToUse",
 						this.getModuleFrom(), this.getModuleTo());
@@ -70,6 +76,6 @@ public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 			}
 		}
 		return isNotAllowedToUseSucces;
-	}*/
+	}
 
 }

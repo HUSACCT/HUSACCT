@@ -133,7 +133,7 @@ public class AppliedRuleController extends PopUpController {
     }
 
     public boolean conformRuleConventions(HashMap<String, Object> ruleDetails){
-	AppliedRuleStrategy dummyRule = ruleFactory.createDummyRule(""+ruleDetails.get("ruleTypeKey"));
+	AppliedRuleStrategy dummyRule = ruleFactory.createRuleWithModules(ruleDetails);
 	return conformRuleConventions(dummyRule);
     }
 

@@ -8,6 +8,7 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Layer;
+
 import husacct.define.domain.services.AppliedRuleDomainService;
 import husacct.define.domain.services.ModuleDomainService;
 
@@ -105,6 +106,7 @@ public class XMLDomain {
 	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
 	    	                      ((Layer)newModule).setHierarchicalLevel(HierarchicalLevel); break;
 	    default			        : newModule = factory.createDummy("blank"); break;	    	
+
 	    }
 	    newModule.set(moduleName, moduleDescription);
 	    newModule.setId(moduleId);
