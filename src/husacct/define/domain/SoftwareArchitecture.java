@@ -5,16 +5,11 @@ import husacct.define.domain.appliedrule.AppliedRuleStrategy;
 import husacct.define.domain.module.ModuleFactory;
 import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
-import husacct.define.domain.module.modules.ExternalLibrary;
-import husacct.define.domain.module.modules.Facade;
 import husacct.define.domain.module.modules.Layer;
-import husacct.define.domain.module.modules.SubSystem;
 import husacct.define.domain.services.stateservice.StateService;
-import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class SoftwareArchitecture {
