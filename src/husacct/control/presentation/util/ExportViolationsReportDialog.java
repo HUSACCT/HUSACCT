@@ -85,8 +85,6 @@ public class ExportViolationsReportDialog extends JDialog{
 				}
 			}
 		});
-		
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private void showFileDialog() {

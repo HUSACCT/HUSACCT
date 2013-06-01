@@ -47,7 +47,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 		this.processInfoText = processInfoText;
 		setup();
 		addComponents();
-		setListeners();
 	}
 	
 	public LoadingDialog(String processInfoText){
@@ -153,10 +152,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 		add(buttonPanel);
 	}
 
-	private void setListeners(){
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
-	}
-	
 	@Override
 	public void run() {
 		this.setVisible(true);

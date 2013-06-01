@@ -33,7 +33,6 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		this.mainController = mainController;
 		this.setup();
 		this.addComponents();
-		this.addListeners();
 		this.setResizable(true);
 		this.setVisible(true);
 	}
@@ -101,9 +100,5 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		}
 		
 		this.add(new JScrollPane(analysisTable));
-	}
-	
-	private void addListeners() {
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 }

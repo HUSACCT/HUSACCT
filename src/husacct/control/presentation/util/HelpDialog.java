@@ -185,7 +185,5 @@ public class HelpDialog extends JDialog {
 
 
 		});
-		
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 }

@@ -10,6 +10,7 @@ import husacct.control.presentation.util.MoonWalkPanel;
 import husacct.control.presentation.util.UserActionLogDialog;
 import husacct.control.task.MainController;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -17,11 +18,11 @@ import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
@@ -37,6 +38,7 @@ import com.pagosoft.plaf.PgsLookAndFeel;
 public class MainGui extends HelpableJFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
+	private Toolkit tk = Toolkit.getDefaultToolkit();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private Logger logger = Logger.getLogger(MainGui.class);
 	private MainController mainController;
@@ -121,7 +123,7 @@ public class MainGui extends HelpableJFrame{
 			}
 		});
 		
-		addUserActionLogDialogWindowFocusListener(this);
+		addGlobalWindowFocusListeners();
 	}
 	
 	private void createMenuBar() {
@@ -157,19 +159,18 @@ public class MainGui extends HelpableJFrame{
 		return userActionLogDialog;
 	}
 	
-	public void addUserActionLogDialogWindowFocusListener(Window regardingWindow){
-		regardingWindow.addWindowFocusListener(new WindowFocusListener() {
-			@Override  
-			public void windowGainedFocus(WindowEvent e) {
-				userActionLogDialog.setVisible(true);
-			}  
-			@Override  
-			public void windowLostFocus(WindowEvent e) {
-				//TODO: Fix this nasty workaround
-				if(e.getOppositeWindow()==null){
-					userActionLogDialog.setVisible(false);
+	public void addGlobalWindowFocusListeners(){
+		long windowFocusEvent = AWTEvent.WINDOW_FOCUS_EVENT_MASK;
+	    tk.addAWTEventListener(new AWTEventListener() {
+            public void eventDispatched(AWTEvent e) {
+            	int eventId = e.getID();
+            	
+            	if(eventId==207){			//WINDOW_GAINED_FOCUS
+            		userActionLogDialog.setVisible(true);
+            	}else if (eventId==208) {	//WINDOW_LOST_FOCUS
+            		userActionLogDialog.setVisible(false);
 				}
-			}  
-		});
+            }
+        }, windowFocusEvent);
 	}
 }

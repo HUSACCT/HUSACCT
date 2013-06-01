@@ -168,8 +168,6 @@ public class AboutDialog extends JDialog{
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 		});		
-
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private GridBagConstraints getConstraint(int gridx, int gridy){

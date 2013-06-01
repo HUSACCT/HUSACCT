@@ -130,8 +130,6 @@ public class DocumentationDialog extends JDialog{
 			}
 			
 		});
-
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private GridBagConstraints getConstraint(int gridx, int gridy){

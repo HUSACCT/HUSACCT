@@ -79,8 +79,6 @@ public class SetApplicationDialog extends JDialog {
 				}
 			}
 		});
-		
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 }

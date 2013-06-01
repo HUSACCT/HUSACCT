@@ -118,8 +118,6 @@ public class SaveWorkspaceDialog extends JDialog{
 				}
 			}
 		});
-		
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 	
 	private boolean saveWorkspace(){

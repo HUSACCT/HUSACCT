@@ -82,8 +82,6 @@ public class ExportDependenciesDialog extends JDialog {
 				}
 			}
 		});
-		
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private void showFileDialog() {
