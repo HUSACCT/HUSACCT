@@ -1,41 +1,32 @@
 package husacct.control.task;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
-
 public abstract class UserActionLogController {
-	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
 	private static ArrayList<HashMap<String, String>> loggedUserActions;
 	private int maxUserActions = 10;
-	
 	
 	public UserActionLogController(){
 		//TODO: Fix this nasty workaround
 		if(loggedUserActions==null){
 			loggedUserActions = new ArrayList<HashMap<String, String>>();
 		}
-		addDummyUserActions();
+		addDummyUserActions(maxUserActions);
 	}
 	
-	private void addDummyUserActions(){
-		for(int i=0;i<5;i++){
-			HashMap<String, String> loggedMethodInfo = new HashMap<String, String>();
-			loggedMethodInfo.put("classPath", "husacct.control.task.ApplicationAnalysisHistoryLogController");
-			loggedMethodInfo.put("calledMethodName", "logMethod");
-			loggedMethodInfo.put("message", "Dummy action: User opened HUSACCT");
-			loggedUserActions.add(loggedMethodInfo);
+	private void addDummyUserActions(int numberOfUserActions){
+		for(int i=0;i<numberOfUserActions;i++){
+			addUserAction("Dummy action: User opened HUSACCT");
 		}
 	}
 	
-	public void logUserAction(String message){
+	public void addUserAction(String message){
 		if(message==""){
 			return;
 		}
 		
-		if(loggedMaxUserActions()){
+		if(maxUserActionsAreLogged()){
 			removeFirstLoggedUserAction();
 		}
 		
@@ -55,7 +46,7 @@ public abstract class UserActionLogController {
 		//mainController.getMainGui().refreshUserActionsDialog();
 	}
 	
-	private boolean loggedMaxUserActions(){
+	private boolean maxUserActionsAreLogged(){
 		return loggedUserActions.size()==maxUserActions;
 	}
 	
