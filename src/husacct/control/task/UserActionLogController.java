@@ -1,6 +1,8 @@
 package husacct.control.task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class UserActionLogController {
@@ -26,7 +28,8 @@ public class UserActionLogController {
 
 		String classPath = elements[1].getClassName();
 		String calledMethodName = elements[0].getMethodName(); 
-
+		message = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + message;
+		
 		HashMap<String, String> loggedMethodInfo = new HashMap<String, String>();
 		loggedMethodInfo.put("classPath", classPath);
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
