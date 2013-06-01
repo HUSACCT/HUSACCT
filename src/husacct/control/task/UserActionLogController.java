@@ -32,9 +32,8 @@ public class UserActionLogController {
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);
 		loggedUserActions.add(loggedMethodInfo);
-		System.out.println("Add!");
 		
-		mainController.getMainGui().getUserActionLogDialog().refreshUserActionsDialog();
+		//mainController.getMainGui().getUserActionLogDialog().refreshUserActionsDialog();
 	}
 	
 	private boolean maxUserActionsAreLogged(){
