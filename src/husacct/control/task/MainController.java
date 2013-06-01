@@ -98,7 +98,6 @@ public class MainController {
 	}
 	
 	public UserActionLogController getUserActionLogController(){
-		System.out.println("Get user action log controller");
 		return this.userActionLogController;
 	}
 	
