@@ -102,7 +102,6 @@ public class FilterPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				browseViolations.loadAfterChange();
-				;
 			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
@@ -185,7 +184,6 @@ public class FilterPanel extends JPanel {
 	}
 
 	public List<Violation> fillViolationsTable(List<Violation> violations) {
-
 		List<Violation> violationsIndirect = new ArrayList<Violation>();
 
 		if (radioButtonAll.isSelected()) {

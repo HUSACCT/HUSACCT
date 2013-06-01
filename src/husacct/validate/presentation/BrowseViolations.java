@@ -226,13 +226,13 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!ServiceProvider.getInstance().getControlService().getState().contains(States.ANALYSING) && !ServiceProvider.getInstance().getControlService().getState().contains(States.VALIDATING)){
+					selectedViolationHistory = null;
 					ThreadWithLoader validateThread = ServiceProvider.getInstance().getControlService().getThreadWithLoader(localeService.getTranslatedString("ValidatingLoading"), new CheckConformanceTask(filterPane, buttonSaveInHistory));
 					LoadingDialog currentLoader = validateThread.getLoader();
 					currentLoader.addWindowListener(new WindowAdapter() {
 						@Override
 						public void windowClosing(WindowEvent e) {
 							ServiceProvider.getInstance().getControlService().setValidate(false);
-
 							logger.debug("Stopping Thread");
 						}
 					});
@@ -403,7 +403,6 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 		} else {
 			violationsSize = selectedViolationHistory.getViolations().size();
 			severities = selectedViolationHistory.getSeverities();
-			shownViolations = selectedViolationHistory.getViolations();
 		}
 
 		statisticsPanel.loadStatistics(taskServiceImpl.getViolationsPerSeverity(shownViolations, severities), violationsSize, shownViolations.size());
@@ -456,7 +455,12 @@ public class BrowseViolations extends JInternalFrame implements ILocaleChangeLis
 	}
 
 	public void reloadViolations() {
-		shownViolations = taskServiceImpl.getAllViolations().getValue();
+		if (selectedViolationHistory != null) {
+			shownViolations = selectedViolationHistory.getViolations();
+		} else {
+			shownViolations = taskServiceImpl.getAllViolations().getValue();
+		}
+		
 		shownViolations = filterPane.fillViolationsTable(shownViolations);
 		if (filterPane.getApplyFilter().isSelected()) {
 			shownViolations = filterViolations(shownViolations);
