@@ -4,6 +4,7 @@ import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ExternalSystemDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 class FamixDependencyFinder extends FamixFinder {
@@ -125,6 +126,27 @@ class FamixDependencyFinder extends FamixFinder {
 		}
 		if(!preventRecursion)
 			result.addAll(findIndirectDependencies(from, to, applyFilter));
+		return result;
+	}
+
+	public List<DependencyDTO> getAccessClassVariableInterfaceDirectDependencies(){
+		List<DependencyDTO> result = new ArrayList<DependencyDTO>();
+		HashMap<String, FamixInterface> allInterfaces = theModel.interfaces;
+		ArrayList<FamixAssociation> allAssociations  = theModel.associations;
+	
+		for(String interfaceObject : allInterfaces.keySet()){
+			for(FamixAssociation association : allAssociations){
+				if(interfaceObject.equals(association.to) && association.type.equals("Import")){
+					/*System.out.println("\n InterfaceObject: " + interfaceObject);
+					System.out.println("\n AssociationTO: " + association.to);
+					System.out.println(	"\n From: " + association.from +
+										"\n To: " + association.to +
+										"\n Type: " + association.type +
+										"\n Line: " + association.lineNumber);*/
+					result.add(new DependencyDTO(association.from, association.to, "AccessClassVariableInterface", false, association.lineNumber));
+				}
+			}
+		}
 		return result;
 	}
 	
