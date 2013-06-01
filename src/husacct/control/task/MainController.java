@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
-public class MainController extends UserActionLogController {
+public class MainController {
 	
 	private CommandLineController commandLineController;
 	private ViewController viewController;
@@ -19,6 +19,7 @@ public class MainController extends UserActionLogController {
 	private ImportController importController;
 	private ExportController exportController;
 	private ApplicationAnalysisHistoryLogController applicationAnalysisHistoryLogController;
+	private UserActionLogController userActionLogController;
 	private CodeViewController codeViewController;
 	
 	public MainGui mainGUI;
@@ -46,6 +47,7 @@ public class MainController extends UserActionLogController {
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
 		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
+		this.userActionLogController = new UserActionLogController(this);
 	}
 	
 	private void setAppleProperties(){
@@ -93,6 +95,11 @@ public class MainController extends UserActionLogController {
 	
 	public ApplicationAnalysisHistoryLogController getApplicationAnalysisHistoryLogController(){
 		return this.applicationAnalysisHistoryLogController;
+	}
+	
+	public UserActionLogController getUserActionLogController(){
+		System.out.println("Get user action log controller");
+		return this.userActionLogController;
 	}
 	
 	public void exit(){

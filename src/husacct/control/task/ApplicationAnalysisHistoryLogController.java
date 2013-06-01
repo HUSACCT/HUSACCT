@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-public class ApplicationAnalysisHistoryLogController extends UserActionLogController{
+public class ApplicationAnalysisHistoryLogController{
 
 	private Logger logger = Logger.getLogger(ApplicationAnalysisHistoryLogController.class);
 	private Workspace currentWorkspace;
@@ -84,7 +84,6 @@ public class ApplicationAnalysisHistoryLogController extends UserActionLogContro
 					}
 				}
 			}
-			
 		} catch (Exception e) {
 			logger.debug("Unable load application analysis history file: " + e.getMessage());
 		}
@@ -152,6 +151,8 @@ public class ApplicationAnalysisHistoryLogController extends UserActionLogContro
 			if(getNumberOfAnalyses(workspace, application, projects)<1){
 				JOptionPane.showMessageDialog(null, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistory"), ServiceProvider.getInstance().getLocaleService().getTranslatedString("NoApplicationAnalysisHistoryTitle"), JOptionPane.ERROR_MESSAGE);
 			}else{
+				//TODO: Remove this demonstration code after 04-06-2013
+				mainController.getUserActionLogController().addUserAction("Viewed Analysis History File: " + logFile.getAbsolutePath());
 				new ApplicationAnalysisHistoryOverviewFrame(mainController);
 			}
 		}else{

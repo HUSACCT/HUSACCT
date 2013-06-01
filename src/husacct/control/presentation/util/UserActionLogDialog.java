@@ -67,7 +67,7 @@ public class UserActionLogDialog extends JDialog{
 
 		logTableModel.addColumn(localeService.getTranslatedString("ActionLog"));
 
-		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getLoggedUserActionsArrayList();
+		ArrayList<HashMap<String, String>> loggedUserActions = mainController.getUserActionLogController().getLoggedUserActionsArrayList();
 		int i = 1;
 		for(HashMap<String, String> loggedUserAction : loggedUserActions){
 			logTableModel.addRow(new Object[]{i + ": " + loggedUserAction.get("message")});
@@ -91,7 +91,7 @@ public class UserActionLogDialog extends JDialog{
 		return buttonsPanel;
 	}
 	
-	private void refreshUserActionsDialog(){
+	public void refreshUserActionsDialog(){
 		this.getContentPane().removeAll();
 		this.add(getUserActionsDialogScrollPaneContents());
 		this.add(getUserActionsDialogButtonsPanel(), BorderLayout.SOUTH);
