@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 public final class FilterViolations extends JDialog {
 
 	private static final long serialVersionUID = -6295611607558238501L;
+	private boolean selectedFilterValues = true;
 	private TaskServiceImpl taskServiceImpl;
 	private DefaultTableModel ruletypeModelFilter, violationtypeModelFilter, pathFilterModel;
 	private JTabbedPane tabbedPane;
@@ -53,7 +54,6 @@ public final class FilterViolations extends JDialog {
 	}
 
 	private void initComponents() {
-
 		filtergroup = new ButtonGroup();
 		tabbedPane = new JTabbedPane();
 		filterViolationPanel = new JPanel();
@@ -121,6 +121,20 @@ public final class FilterViolations extends JDialog {
 				cancelActionPerformed();
 			}
 		});
+		
+		hideFilteredValues.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				setSelectedFilterValues(false);
+			}
+		});
+		
+		showFilteredValues.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				setSelectedFilterValues(true);
+			}
+		});
 
 		filtergroup.add(showFilteredValues);
 
@@ -131,6 +145,10 @@ public final class FilterViolations extends JDialog {
 		createPathFilterPanelLayout();
 		createBaseLayout();
 		setSize(800, 600);
+	}
+	
+	private void setSelectedFilterValues(boolean value) {
+		this.selectedFilterValues = value;
 	}
 
 	private void createFilterViolationPanelLayout() {
@@ -363,23 +381,35 @@ public final class FilterViolations extends JDialog {
 	}
 
 	private void loadRuletypes() {
+		ArrayList<String> enabledRuleTypes = taskServiceImpl.getEnabledFilterRuleTypes();
 		while (ruletypeModelFilter.getRowCount() > 0) {
 			ruletypeModelFilter.removeRow(0);
 		}
 		ArrayList<String> ruletypes = taskServiceImpl.loadRuletypesForFilter(violationDate);
+		boolean isEnabled;
 		for (String ruletype : ruletypes) {
-			ruletypeModelFilter.addRow(new Object[] {false, ruletype});
+			isEnabled = false;
+			if (enabledRuleTypes.contains(ruletype)){
+				isEnabled = true;
+			}
+			ruletypeModelFilter.addRow(new Object[] {isEnabled, ruletype});
 		}
 	}
 
 	private void loadViolationtypes() {
+		ArrayList<String> enabledViolations = taskServiceImpl.getEnabledFilterViolations();
 		while (violationtypeModelFilter.getRowCount() > 0) {
 			violationtypeModelFilter.removeRow(0);
 		}
 		ArrayList<String> violationtypes = taskServiceImpl.loadViolationtypesForFilter(violationDate);
+		boolean isEnabled;
 		for (String violationtype : violationtypes) {
 			if (!violationtype.isEmpty()) {
-				violationtypeModelFilter.addRow(new Object[] {false, violationtype});
+				isEnabled = false;
+				if (enabledViolations.contains(violationtype)){
+					isEnabled = true;
+				}
+				violationtypeModelFilter.addRow(new Object[] {isEnabled, violationtype});
 			}
 		}
 	}
