@@ -121,6 +121,8 @@ public class CreateWorkspaceDialog extends JDialog{
 				dispose();
 			}
 		});
+		
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private void toggleSetApplicationPanel(boolean checked){

@@ -117,6 +117,8 @@ public class OpenWorkspaceDialog extends JDialog{
 				}
 			}
 		});
+		
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 	
 	private boolean loadWorkspace(){

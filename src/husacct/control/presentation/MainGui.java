@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -120,19 +121,7 @@ public class MainGui extends HelpableJFrame{
 			}
 		});
 		
-		addWindowFocusListener(new WindowFocusListener() {
-			@Override  
-			public void windowGainedFocus(WindowEvent e) {
-				userActionLogDialog.setVisible(true);
-			}  
-			@Override  
-			public void windowLostFocus(WindowEvent e) {
-				//TODO: Fix this nasty workaround
-				if(e.getOppositeWindow()==null){
-					userActionLogDialog.setVisible(false);
-				}
-			}  
-		});
+		addUserActionLogDialogWindowFocusListener(this);
 	}
 	
 	private void createMenuBar() {
@@ -166,5 +155,21 @@ public class MainGui extends HelpableJFrame{
 	
 	public UserActionLogDialog getUserActionLogDialog(){
 		return userActionLogDialog;
+	}
+	
+	public void addUserActionLogDialogWindowFocusListener(Window regardingWindow){
+		regardingWindow.addWindowFocusListener(new WindowFocusListener() {
+			@Override  
+			public void windowGainedFocus(WindowEvent e) {
+				userActionLogDialog.setVisible(true);
+			}  
+			@Override  
+			public void windowLostFocus(WindowEvent e) {
+				//TODO: Fix this nasty workaround
+				if(e.getOppositeWindow()==null){
+					userActionLogDialog.setVisible(false);
+				}
+			}  
+		});
 	}
 }

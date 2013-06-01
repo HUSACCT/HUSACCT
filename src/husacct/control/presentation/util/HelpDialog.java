@@ -65,8 +65,7 @@ public class HelpDialog extends JDialog {
 
 	private static final long serialVersionUID = 652971000948178977L;
 
-	private ILocaleService localeService = ServiceProvider.getInstance()
-			.getLocaleService();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private Logger logger = Logger.getLogger(HelpDialog.class);
 
 	private JTree tree;
@@ -79,8 +78,8 @@ public class HelpDialog extends JDialog {
 	private HelpTreeModelLoader hpl;
 
 	public HelpDialog(MainController mainController, Component component) {
-
 		super(mainController.mainGUI, true);
+		this.mainController = mainController;
 		this.component = component;
 		this.hpl = new HelpTreeModelLoader();
 		this.setTitle(localeService.getTranslatedString("Help"));
@@ -186,7 +185,7 @@ public class HelpDialog extends JDialog {
 
 
 		});
-
+		
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
-
 }
