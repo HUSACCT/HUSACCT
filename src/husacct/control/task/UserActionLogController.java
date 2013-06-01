@@ -3,22 +3,13 @@ package husacct.control.task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class UserActionLogController {
-	private static ArrayList<HashMap<String, String>> loggedUserActions;
+public class UserActionLogController {
+	private ArrayList<HashMap<String, String>> loggedUserActions = new ArrayList<HashMap<String, String>>();
 	private int maxUserActions = 10;
+	private MainController mainController;
 	
-	public UserActionLogController(){
-		//TODO: Fix this nasty workaround
-		if(loggedUserActions==null){
-			loggedUserActions = new ArrayList<HashMap<String, String>>();
-		}
-		addDummyUserActions(maxUserActions);
-	}
-	
-	private void addDummyUserActions(int numberOfUserActions){
-		for(int i=0;i<numberOfUserActions;i++){
-			addUserAction("Dummy action: User opened HUSACCT");
-		}
+	public UserActionLogController(MainController mainController){
+		this.mainController = mainController;
 	}
 	
 	public void addUserAction(String message){
@@ -41,9 +32,9 @@ public abstract class UserActionLogController {
 		loggedMethodInfo.put("calledMethodName", calledMethodName);
 		loggedMethodInfo.put("message", message);
 		loggedUserActions.add(loggedMethodInfo);
+		System.out.println("Add!");
 		
-		//TODO: Refresh user actions dialog
-		//mainController.getMainGui().refreshUserActionsDialog();
+		mainController.getMainGui().getUserActionLogDialog().refreshUserActionsDialog();
 	}
 	
 	private boolean maxUserActionsAreLogged(){
