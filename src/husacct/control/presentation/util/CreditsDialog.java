@@ -124,8 +124,6 @@ public class CreditsDialog extends JDialog {
 				dispose();
 			}
 		});
-
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight){

@@ -52,7 +52,6 @@ public class ConfigurationDialog extends JDialog {
 		this.setLayout(new BorderLayout());
 		initialise();
 		setComponentText();
-		setListeners();
 		this.setVisible(true);
 	}
 	
@@ -183,9 +182,5 @@ public class ConfigurationDialog extends JDialog {
 		save.setText(localeService.getTranslatedString("SaveAndCloseButton"));
 		reset.setText(localeService.getTranslatedString("ResetButton"));
 		cancel.setText(localeService.getTranslatedString("CancelButton"));
-	}
-	
-	private void setListeners(){
-		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 }
