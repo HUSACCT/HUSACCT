@@ -93,7 +93,7 @@ public class MainGui extends HelpableJFrame{
 		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
 		
-		//userActionLogDialog = new UserActionLogDialog(this, mainController);
+		userActionLogDialog = new UserActionLogDialog(this, mainController);
 		
 		taskBarPane.add(taskBar);
 		
@@ -120,7 +120,6 @@ public class MainGui extends HelpableJFrame{
 			}
 		});
 		
-		/*
 		addWindowFocusListener(new WindowFocusListener() {
 			@Override  
 			public void windowGainedFocus(WindowEvent e) {
@@ -134,7 +133,6 @@ public class MainGui extends HelpableJFrame{
 				}
 			}  
 		});
-		*/
 	}
 	
 	private void createMenuBar() {

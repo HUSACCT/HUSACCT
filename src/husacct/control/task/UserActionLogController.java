@@ -33,7 +33,7 @@ public class UserActionLogController {
 		loggedMethodInfo.put("message", message);
 		loggedUserActions.add(loggedMethodInfo);
 		
-		//mainController.getMainGui().getUserActionLogDialog().refreshUserActionsDialog();
+		mainController.getMainGui().getUserActionLogDialog().refreshUserActionsDialog();
 	}
 	
 	private boolean maxUserActionsAreLogged(){
