@@ -52,8 +52,8 @@ public class DocumentationDialog extends JDialog{
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private MainController mainController;
 	private DefaultMutableTreeNode selectedNode;
+	
 	public DocumentationDialog(MainController mainController) {
-
 		super(mainController.getMainGui(), true);
 		this.mainController = mainController;
 		setTitle(localeService.getTranslatedString("Documentation"));
@@ -64,8 +64,6 @@ public class DocumentationDialog extends JDialog{
 	}
 
 	private void setup(){
-
-
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(420, 350));
 		this.setLayout(new FlowLayout(0,0,0));
@@ -76,8 +74,6 @@ public class DocumentationDialog extends JDialog{
 			tree = new JTree(getTreeModel(root));
 			treeView = new JScrollPane(tree);
 			treeView.setPreferredSize(new Dimension(420,280));
-			
-			
 			add(treeView);
 		}
 		catch (Exception ex) {
@@ -87,8 +83,6 @@ public class DocumentationDialog extends JDialog{
 		openButton = new JButton("Open");
 		buttonPanel.add(openButton);
 		add(buttonPanel);
-		
-		
 	}
 
 	private MutableTreeNode getTreeModel(File root) {
@@ -137,16 +131,11 @@ public class DocumentationDialog extends JDialog{
 			
 		});
 
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
-
-
 	private GridBagConstraints getConstraint(int gridx, int gridy){
-
 		return null;
 	}
 
-
-
 }
-

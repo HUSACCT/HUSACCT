@@ -30,7 +30,8 @@ import javax.swing.JTextArea;
 public class CreditsDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-
+	private MainController mainController;
+	
 	private JPanel logoPanel, textPanel;
 	private JLabel teacherLabelDescription, studentLabelDescription;
 	private JTextArea teacherLabel;
@@ -44,6 +45,7 @@ public class CreditsDialog extends JDialog {
 
 	public CreditsDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
+		this.mainController = mainController;
 		setTitle(localeService.getTranslatedString("Credits"));
 		setup();
 		addComponents();
@@ -123,7 +125,7 @@ public class CreditsDialog extends JDialog {
 			}
 		});
 
-
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 
 	private GridBagConstraints getConstraint(int gridx, int gridy, int gridwidth, int gridheight){

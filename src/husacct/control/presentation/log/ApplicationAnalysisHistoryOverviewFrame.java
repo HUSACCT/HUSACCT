@@ -25,7 +25,6 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 	private MainController mainController;
 	private JTable analysisTable;
 	private DefaultTableModel analysisTableModel;
-	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	
 	public ApplicationAnalysisHistoryOverviewFrame(MainController mainController){
@@ -34,6 +33,7 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		this.mainController = mainController;
 		this.setup();
 		this.addComponents();
+		this.addListeners();
 		this.setResizable(true);
 		this.setVisible(true);
 	}
@@ -101,5 +101,9 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		}
 		
 		this.add(new JScrollPane(analysisTable));
+	}
+	
+	private void addListeners() {
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
 }

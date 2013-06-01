@@ -169,9 +169,8 @@ public class AboutDialog extends JDialog{
 			public void mouseReleased(MouseEvent e) {}
 		});		
 
+		mainController.getMainGui().addUserActionLogDialogWindowFocusListener(this);
 	}
-	
-	
 
 	private GridBagConstraints getConstraint(int gridx, int gridy){
 		constraint.fill = GridBagConstraints.BOTH;
@@ -181,7 +180,4 @@ public class AboutDialog extends JDialog{
 		return constraint;		
 	}
 
-
-
 }
-
