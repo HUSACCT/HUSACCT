@@ -34,6 +34,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 	private JLabel progressLabel;
 	private JLabel projectProgressLabel;
 	
+	private MainController mainController;
 	private JProgressBar progressBar;	
 	private JProgressBar projectProgressBar;
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
@@ -41,11 +42,11 @@ public class LoadingDialog extends JFrame implements Runnable {
 
 	public LoadingDialog(MainController mainController, String processInfoText) {
 		super();
+		this.mainController = mainController;
 		setTitle(localeService.getTranslatedString("Prepare"));
 		this.processInfoText = processInfoText;
 		setup();
 		addComponents();
-
 	}
 	
 	public LoadingDialog(String processInfoText){

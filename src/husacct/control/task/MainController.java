@@ -18,7 +18,8 @@ public class MainController {
 	private ApplicationController applicationController;
 	private ImportController importController;
 	private ExportController exportController;
-	private LogController logController;
+	private ApplicationAnalysisHistoryLogController applicationAnalysisHistoryLogController;
+	private UserActionLogController userActionLogController;
 	private CodeViewController codeViewController;
 	
 	public MainGui mainGUI;
@@ -38,7 +39,6 @@ public class MainController {
 	}
 	
 	private void setControllers() {
-		
 		this.commandLineController = new CommandLineController();
 		this.workspaceController = new WorkspaceController(this);
 		this.viewController = new ViewController(this);
@@ -46,8 +46,8 @@ public class MainController {
 		this.applicationController = new ApplicationController(this);
 		this.importController = new ImportController(this);
 		this.exportController = new ExportController(this);
-		this.logController = new LogController(this);
-		
+		this.applicationAnalysisHistoryLogController = new ApplicationAnalysisHistoryLogController(this);
+		this.userActionLogController = new UserActionLogController(this);
 	}
 	
 	private void setAppleProperties(){
@@ -93,8 +93,12 @@ public class MainController {
 		return this.exportController;
 	}
 	
-	public LogController getLogController(){
-		return this.logController;
+	public ApplicationAnalysisHistoryLogController getApplicationAnalysisHistoryLogController(){
+		return this.applicationAnalysisHistoryLogController;
+	}
+	
+	public UserActionLogController getUserActionLogController(){
+		return this.userActionLogController;
 	}
 	
 	public void exit(){

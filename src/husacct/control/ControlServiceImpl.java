@@ -1,6 +1,7 @@
 package husacct.control;
 
 import husacct.ServiceProvider;
+import husacct.common.OSDetector;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.savechain.ISaveable;
 import husacct.common.services.IConfigurable;
@@ -23,6 +24,7 @@ import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,16 +62,29 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	}
 	
 	private void setDefaultSettings() {
-		String appDataFolderString = System.getProperty("user.home") + File.separator + "HUSACCT" + File.separator;
-		System.out.println("App data folder: " + appDataFolderString);
-		File appDataFolderObject = new File(appDataFolderString);
+		String OSSpecificAppDataFolderName;
+		switch(OSDetector.getOS()) {
+			case LINUX:
+				OSSpecificAppDataFolderName = ".husacct";
+			break;
+			case MAC:
+				OSSpecificAppDataFolderName = ".husacct";
+			break;
+			default:
+				OSSpecificAppDataFolderName = "HUSACCT";
+			break;
+		}
+		
+		String appDataFolderPath = System.getProperty("user.home") + File.separator + OSSpecificAppDataFolderName + File.separator;
+		logger.info("App data folder (platform specific): " + appDataFolderPath);
+		File appDataFolderObject = new File(appDataFolderPath);
 		if(!appDataFolderObject.exists()){
 			appDataFolderObject.mkdir();
 		}
-		ConfigurationManager.setPropertyIfEmpty("PlatformIndependentAppDataFolder", appDataFolderString);
-		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
-		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderString + "husacct_workspace.xml");
-		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderString);	
+		ConfigurationManager.setPropertyIfEmpty("PlatformIndependentAppDataFolder", appDataFolderPath);
+		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
+		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
+		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);	
 	}
 
 	@Override
@@ -221,7 +236,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public void showHelpDialog(Component comp) {
 		mainController.getApplicationController().showHelpGUI(comp);
-		
 	}
 
 	

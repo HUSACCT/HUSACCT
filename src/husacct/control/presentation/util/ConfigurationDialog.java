@@ -10,9 +10,13 @@ import husacct.control.task.configuration.ConfigurationManager;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -34,6 +38,7 @@ public class ConfigurationDialog extends JDialog {
 	
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private ArrayList<IConfigurable> configurableServices = new ArrayList<IConfigurable>();
+	private MainController mainController;
 	
 	private JButton save = new JButton(), reset = new JButton(), cancel = new JButton();
 	private JPanel sidebarPanel = new JPanel(new BorderLayout()), mainPanel= new JPanel(), buttonPanel = new JPanel();
@@ -43,14 +48,14 @@ public class ConfigurationDialog extends JDialog {
 	
 	public ConfigurationDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
+		this.mainController = mainController;
 		this.setLayout(new BorderLayout());
-		initiliaze();
+		initialise();
 		setComponentText();
-		
 		this.setVisible(true);
 	}
 	
-	public void initiliaze() {
+	public void initialise() {
 		getConfigurableServices();
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(configurableServices.get(0).getConfigurationPanel(), BorderLayout.CENTER);
