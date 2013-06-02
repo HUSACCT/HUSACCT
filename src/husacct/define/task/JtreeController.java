@@ -50,19 +50,11 @@ import javax.swing.tree.TreePath;
 
 	public void registerTreeRemoval(ModuleStrategy module) 
 	{
-		boolean pass=module.getSubModules().size()>0 ?true:false;
-
-		while(pass)
-		{
-			for (int i =0; i <module.getSubModules().size(); i++)
-			{
-				registerTreeRemoval(module.getSubModules().get(i));
-				pass=false;
-				registerTreeRemoval(module.getSubModules().get(i));
-				
-			}
-
+		removeSoftWareUnits(module);
+		for (ModuleStrategy m : module.getSubModules()) {
+			registerTreeRemoval(m);
 		}
+	
 		
 	}
 
@@ -70,17 +62,19 @@ import javax.swing.tree.TreePath;
 
 
 
-	private  void registerTreeRestoreByModuleId(LinkedHashMap<String,AbstractCombinedComponent> content)
-	{
-		for(String key : content.keySet())
-		{
-			tree.restoreTreeItem((AnalyzedModuleComponent)content.get(key));
-		}
-	}
-
+	
 
 	
 
+
+	private void removeSoftWareUnits(ModuleStrategy module) {
+        for (SoftwareUnitDefinition unit : module.getUnits()) {
+		AnalyzedModuleComponent softwareUnit=	StateService.instance().getAnalyzedSoftWareUnit(unit);
+		removeTreeItem(softwareUnit);
+        
+        }
+		
+	}
 
 	public  void setCurrentTree(AnalyzedModuleTree instanceoftree)
 	{

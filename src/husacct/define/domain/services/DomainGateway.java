@@ -74,7 +74,7 @@ public class DomainGateway {
 		SoftwareUnitController softwareUnitController = new SoftwareUnitController(id);
 		softwareUnitController.save(units);
 		
-		StateService.instance().addSoftwareUnit(SoftwareArchitecture.getInstance().getModuleById(id), units);
+		
 		
 		
 		return true;

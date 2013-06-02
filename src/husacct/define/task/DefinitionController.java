@@ -263,13 +263,14 @@ public class DefinitionController extends Observable implements Observer {
 	try {
 	    JPanelStatus.getInstance("Removing ModuleStrategy").start();
 	    moduleService.removeModuleById(moduleId);
-	    setSelectedModuleId(-1);
+	    setSelectedModuleId(0);
 	    this.notifyObservers();
 	} catch (Exception e) {
 	    logger.error("removeModuleById(" + moduleId + ") - exception: "
 		    + e.getMessage());
 	    UiDialogs.errorDialog(definitionJPanel, e.getMessage());
-	    System.out.println(e.getStackTrace());
+	e.printStackTrace();
+	    
 	} finally {
 	    JPanelStatus.getInstance().stop();
 	}

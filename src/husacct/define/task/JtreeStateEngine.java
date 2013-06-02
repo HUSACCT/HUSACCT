@@ -78,19 +78,7 @@ public abstract class JtreeStateEngine {
 		DefinitionController.getInstance().notifyObservers();
 	}
 
-	public void addSoftwareUnit(ModuleStrategy module,
-			AnalyzedModuleComponent unitToBeinserted) {
-
-		mapRegistry.put(unitToBeinserted.getUniqueName().toLowerCase(),
-				new Object[] { module, unitToBeinserted });
-		StateService.instance().allUnitsRegistry
-				.removeAnalyzedUnit(unitToBeinserted);
-
-		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
-		data.add(unitToBeinserted);
-		stateController.insertCommand(new SoftwareUnitAddCommand(module, data));
-		JtreeController.instance().removeTreeItem(unitToBeinserted);
-	}
+	
 
 	public void removeSoftwareUnit(ModuleStrategy module,
 			SoftwareUnitDefinition unit) {
@@ -195,7 +183,12 @@ public abstract class JtreeStateEngine {
 
 	}
 
+public AnalyzedModuleComponent getAnalyzedSoftWareUnit(SoftwareUnitDefinition unit)
+{
 
+return allUnitsRegistry.getAnalyzedUnit(unit);
+
+}
 
 	public void addModule(ModuleStrategy subModule) {
 		stateController.insertCommand(new ModuleAddCommand(subModule));

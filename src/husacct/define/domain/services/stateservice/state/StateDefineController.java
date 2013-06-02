@@ -60,10 +60,13 @@ public class StateDefineController {
 	private void registerState(Istate sate) {
 		if (states.size() == 5) {
 			states.remove(0);
+			System.out.println(sate.getClass().getName()+ "  <<<<<<<<<<< exe");
 			states.add(sate);
 			} else {
-			currentIndex++;
-			states.add(sate);
+				System.out.println();
+				currentIndex++;
+				System.out.println(sate.getClass().getName()+ "  <<<<<<<<<<< normal");
+				states.add(sate);
 		}
 
 	}

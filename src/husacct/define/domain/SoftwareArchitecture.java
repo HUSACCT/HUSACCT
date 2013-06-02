@@ -7,6 +7,7 @@ import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.module.modules.Component;
 import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.task.DefinitionController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -480,6 +481,7 @@ public class SoftwareArchitecture {
 			ModuleStrategy parent = module.getparent();
 			ArrayList<AppliedRuleStrategy> moduleRules = removeRelatedRules(module);
 			int index = parent.getSubModules().indexOf(module);
+			DefinitionController.getInstance().setSelectedModuleId(0);
 			parent.getSubModules().remove(index);
 			toBeSaved.add(new Object[]{module,moduleRules});
 		}
