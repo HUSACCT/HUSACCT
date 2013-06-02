@@ -16,3 +16,5 @@ nbproject/
 .metadata
 /bin
 /config.properties
+/git
+src/husacct/bootstrap/SetCSharpBenchmark.java
