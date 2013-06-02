@@ -53,6 +53,7 @@ public class UserActionLogDialog extends JDialog{
 		refreshUserActionsDialog();
 	}
 	
+	@SuppressWarnings("serial")
 	private JScrollPane getUserActionsDialogScrollPaneContents(){
 		DefaultTableModel logTableModel = new DefaultTableModel();
 		JTable logTable = new JTable(logTableModel){
