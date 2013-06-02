@@ -3,6 +3,7 @@ package husacct.graphics.presentation.figures;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
@@ -15,6 +16,7 @@ import org.apache.log4j.Logger;
 public final class FigureFactory {
 	protected Logger logger = Logger.getLogger(FigureFactory.class);
 	private String PROJECT_TYPE = "Project";
+	private String EXTERNALSYSTEM_TYPE = "ExternalSystem";
 
 	public RelationFigure createFigure(DependencyDTO[] dependencyDTOs) {
 		if (dependencyDTOs.length <= 0) {
@@ -71,6 +73,9 @@ public final class FigureFactory {
 		} else if (dto instanceof AnalysedModuleDTO) {
 			type = ((AnalysedModuleDTO) dto).type;
 			name = ((AnalysedModuleDTO) dto).name;
+		} else if (dto instanceof ExternalSystemDTO) {
+			type = EXTERNALSYSTEM_TYPE;
+			name = ((ExternalSystemDTO) dto).systemPackage;
 		} else if (dto instanceof ProjectDTO){
 			type = PROJECT_TYPE;
 			name = ((ProjectDTO) dto).name;
@@ -95,7 +100,7 @@ public final class FigureFactory {
 			return new PackageFigure(name);
 		else if (type.toLowerCase().equals("subsystem"))
 			return new SubsystemFigure(name);
-		else if (type.toLowerCase().equals("externallibrary"))
+		else if (type.toLowerCase().equals("externalsystem"))
 			return new ExternalSystemFigure(name);
 		else {
 			logger.debug("Type " + type.toLowerCase()

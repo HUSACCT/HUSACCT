@@ -4,6 +4,7 @@ import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ModuleDTO;
 import husacct.common.dto.PhysicalPathDTO;
 import husacct.common.dto.ViolationDTO;
@@ -219,5 +220,11 @@ public class DefinedController extends DrawingController {
 	@Override
 	public void moduleZoom(String zoomType) {
 		// Unused, does not need implementation
+	}
+
+	@Override
+	protected ExternalSystemDTO[] getToShowExternalSystems(ExternalSystemDTO[] extSystems, BaseFigure[] shownFigures) {
+		// Unused, does not need implementation
+		return null;
 	}
 }

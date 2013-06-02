@@ -3,6 +3,7 @@ package husacct.graphics.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ExternalSystemDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
@@ -154,6 +155,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 	protected void drawModulesAndLines(AbstractDTO[] modules) {
 		runDrawSingleLevelTask(modules);
 	}
+	protected void drawModulesAndLines(AbstractDTO[] modules, ExternalSystemDTO[] extSystems) {
+		runDrawSingleLevelTask(modules, extSystems);
+	}
 
 	protected void drawModulesAndLines(
 			HashMap<String, ArrayList<AbstractDTO>> modules) {
@@ -164,6 +168,21 @@ public abstract class DrawingController extends DrawingSettingsController {
 		this.graphicsFrame.setUpToDate();
 		this.clearDrawing();
 		this.drawMultiLevelModules(modules);
+		this.updateLayout();
+		this.drawLinesBasedOnSetting();
+		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
+		this.graphicsFrame.updateGUI();
+	}
+	
+	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules, ExternalSystemDTO[] extSystems) {
+		this.graphicsFrame.setUpToDate();
+		this.clearDrawing();
+		this.drawMultiLevelModules(modules);
+		
+		ExternalSystemDTO[] toShowExternalSystems = this.getToShowExternalSystems(extSystems, this.drawing.getShownModules());
+		
+		this.drawSingleLevelModules(toShowExternalSystems);
+		
 		this.updateLayout();
 		this.drawLinesBasedOnSetting();
 		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
@@ -200,6 +219,22 @@ public abstract class DrawingController extends DrawingSettingsController {
 	public void drawSingleLevel(AbstractDTO[] modules) {
 		this.graphicsFrame.setUpToDate();
 		this.drawSingleLevelModules(modules);
+		this.updateLayout();
+		if(modules.length != 0 && !(modules[0] instanceof ProjectDTO)){
+			this.drawLinesBasedOnSetting();
+		}
+		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
+		this.graphicsFrame.updateGUI();
+	}
+	
+	public void drawSingleLevel(AbstractDTO[] modules, ExternalSystemDTO[] extSystems) {
+		this.graphicsFrame.setUpToDate();
+		this.drawSingleLevelModules(modules);
+		
+		ExternalSystemDTO[] toShowExternalSystems = this.getToShowExternalSystems(extSystems, this.drawing.getShownModules());
+		
+		this.drawSingleLevelModules(toShowExternalSystems);
+		
 		this.updateLayout();
 		if(modules.length != 0 && !(modules[0] instanceof ProjectDTO)){
 			this.drawLinesBasedOnSetting();
@@ -283,10 +318,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 			graphicsFrame.hideProperties();
 	}
 
-	private void getAndDrawDependenciesBetween(BaseFigure figureFrom,
-			BaseFigure figureTo) {
-		DependencyDTO[] dependencies = getDependenciesBetween(figureFrom,
-				figureTo);
+	private void getAndDrawDependenciesBetween(BaseFigure figureFrom, BaseFigure figureTo) {
+		DependencyDTO[] dependencies = getDependenciesBetween(figureFrom, figureTo);
 		if (dependencies.length > 0)
 			drawDependenciesBetween(dependencies, figureFrom, figureTo);
 	}
@@ -306,6 +339,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 	protected abstract DependencyDTO[] getDependenciesBetween(
 			BaseFigure figureFrom, BaseFigure figureTo);
+	
+	protected abstract ExternalSystemDTO[] getToShowExternalSystems(
+			ExternalSystemDTO[] extSystems, BaseFigure[] shownFigures);
 
 	public Drawing getDrawing() {
 		return drawing;
@@ -456,11 +492,19 @@ public abstract class DrawingController extends DrawingSettingsController {
 			HashMap<String, ArrayList<AbstractDTO>> modules) {
 		runThread(new DrawingMultiLevelThread(this, modules));
 	}
+	
+	private void runDrawMultiLevelTask(
+			HashMap<String, ArrayList<AbstractDTO>> modules, ExternalSystemDTO[] extSystems) {
+		runThread(new DrawingMultiLevelThread(this, modules, extSystems));
+	}
 
 	private void runDrawSingleLevelTask(AbstractDTO[] modules) {
 		runThread(new DrawingSingleLevelThread(this, modules));
 	}
 
+	private void runDrawSingleLevelTask(AbstractDTO[] modules, ExternalSystemDTO[] extSystems) {
+		runThread(new DrawingSingleLevelThread(this, modules, extSystems));
+	}
 	private void runThread(Runnable runnable) {
 		if (!threadMonitor.add(runnable)) {
 			logger.warn("A drawing thread is already running. Wait until it has finished before running another.");
