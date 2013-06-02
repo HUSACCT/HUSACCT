@@ -10,7 +10,8 @@ public class ObservableThread extends Thread {
 	public ObservableThread(Runnable target) {
 		super(target);
 
-		listeners = Collections.synchronizedList(new ArrayList<ThreadListener>());
+		listeners = Collections
+				.synchronizedList(new ArrayList<ThreadListener>());
 	}
 
 	public synchronized void addThreadListener(ThreadListener listener) {
@@ -20,24 +21,22 @@ public class ObservableThread extends Thread {
 		}
 	}
 
-	protected synchronized void update(int progress) {
-		List<ThreadListener> copy = Collections.unmodifiableList(listeners);
-		for (ThreadListener l : copy) {
-			l.update(this, progress);
-		}
-	}
-
-	protected synchronized void threadTerminated() {
-		List<ThreadListener> copy = Collections.unmodifiableList(listeners);
-		for (ThreadListener l : copy) {
-			l.threadTerminated(this);
-		}
-	}
-
 	@Override
 	public void run() {
 		super.run();
 		threadTerminated();
 		listeners.clear();
+	}
+
+	protected synchronized void threadTerminated() {
+		List<ThreadListener> copy = Collections.unmodifiableList(listeners);
+		for (ThreadListener l : copy)
+			l.threadTerminated(this);
+	}
+
+	protected synchronized void update(int progress) {
+		List<ThreadListener> copy = Collections.unmodifiableList(listeners);
+		for (ThreadListener l : copy)
+			l.update(this, progress);
 	}
 }

@@ -7,6 +7,12 @@ import org.jhotdraw.draw.Figure;
 
 public class AbsoluteLocator implements org.jhotdraw.draw.locator.Locator {
 
+	private Point2D.Double getFigureCenter(Figure figure) {
+		Rectangle2D.Double bounds = figure.getBounds();
+
+		return new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
+	}
+
 	@Override
 	public Point2D.Double locate(Figure owner) {
 
@@ -21,36 +27,27 @@ public class AbsoluteLocator implements org.jhotdraw.draw.locator.Locator {
 
 		double connectorX = 0.0, connectorY = 0.0;
 
-		if (ownerCenter.y < dependentCenter.y) {
+		if (ownerCenter.y < dependentCenter.y)
 			// We should connect to the NORTH side of owner
 			connectorY = ownerBounds.y;
-
-		} else if (ownerCenter.y > dependentCenter.y) {
+		else if (ownerCenter.y > dependentCenter.y)
 			// We should connect to the SOUTH side of owner
 			connectorY = ownerBounds.y + ownerBounds.height;
-		} else {
+		else
 			// Use ownerCenter.y as location for the connector
 			connectorY = ownerCenter.y;
-		}
 
-		if (ownerCenter.x < dependentCenter.x) {
+		if (ownerCenter.x < dependentCenter.x)
 			// We should connect to the WEST side of owner
 			connectorX = ownerBounds.x + ownerBounds.width;
-		} else if (ownerCenter.x > dependentCenter.x) {
+		else if (ownerCenter.x > dependentCenter.x)
 			// We should connect to the EAST side of owner
 			connectorX = ownerBounds.x;
-		} else {
+		else
 			// We should use ownerCenter.x as x.
 			connectorX = ownerCenter.x;
-		}
 
 		return new Point2D.Double(connectorX, connectorY);
-	}
-
-	private Point2D.Double getFigureCenter(Figure figure) {
-		Rectangle2D.Double bounds = figure.getBounds();
-
-		return new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 	}
 
 }
