@@ -18,6 +18,11 @@ public class FamixQueryServiceImpl implements IModelQueryService {
         this.moduleFinder = new FamixModuleFinder(theModel);
         this.dependencyFinder = new FamixDependencyFinder(this.theModel);
     }
+    
+    @Override
+    public int buildCache(){
+    	return dependencyFinder.buildCache();
+    }
 
     @Override
     public AnalysedModuleDTO getModuleForUniqueName(String uniquename) {

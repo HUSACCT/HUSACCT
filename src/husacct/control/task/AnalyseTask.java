@@ -6,6 +6,7 @@ import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -61,13 +62,19 @@ public class AnalyseTask implements Runnable {
 			
 			logger.debug("Analysing finished");
 			
-			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
-			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
 			
 			if (!mainController.getStateController().isAnalysing()) {
 				ServiceProvider.getInstance().resetAnalyseService();
 			}
 			this.mainController.getStateController().setAnalysing(false);
+			
+			logger.debug(new Date().toString() + ": Building cache");
+			int cacheSize = ServiceProvider.getInstance().getAnalyseService().buildCache();
+			logger.debug(new Date().toString() + ": Cache is ready and filled with " + cacheSize + " dependencies");
+			
+			String workspaceName = mainController.getWorkspaceController().getCurrentWorkspace().getName();
+			ServiceProvider.getInstance().getAnalyseService().logHistory(applicationDTO, workspaceName);
+			
 			// ServiceProvider.getInstance().getDefineService().isReAnalyzed();
 		} catch (InterruptedException exception) {
 			this.logger.debug("RESETTING ANALYSE SERVICE");

@@ -45,10 +45,6 @@ public class AnalyseServiceStub implements IAnalyseService {
     }
 
     @Override
-    public void analyseApplication(String[] paths, String programmingLanguage) {
-    }
-
-    @Override
     public void analyseApplication(ProjectDTO project) {
     }
 
@@ -518,5 +514,34 @@ public class AnalyseServiceStub implements IAnalyseService {
 	@Override
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public int buildCache(){
+		return -1;
+	}
+
+	@Override
+	public int getAmountOfDependencies() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getAmountOfInterfaces() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getAmountOfPackages() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getAmountOfClasses() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

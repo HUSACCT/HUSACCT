@@ -5,10 +5,7 @@ public class FamixInterface extends FamixEntity {
     public String belongsToPackage;
 
     public boolean equals(FamixInterface other) {
-        boolean result = true;
-        result = result && (other.belongsToPackage == this.belongsToPackage);
-        result = result && (other.uniqueName == this.uniqueName);
-        return result;
+        return ((other.belongsToPackage == this.belongsToPackage && other.uniqueName == this.uniqueName)); 
     }
 
     public String toString() {
