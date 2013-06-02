@@ -517,10 +517,6 @@ public class AppliedRuleController extends PopUpController {
 		currentAppliedRuleId = appliedRuleService.addAppliedRule(
 			ruleTypeKey, description, dependencies, regex,
 			moduleFrom, moduleTo, isEnabled);
-		if (currentAppliedRuleId == -1) {
-		    logger.info("An identical rule already exists");
-		    return false;
-		}
 	    } else if (getAction().equals(PopUpController.ACTION_EDIT)) {
 		appliedRuleService.updateAppliedRule(currentAppliedRuleId,
 			ruleTypeKey, description, dependencies, regex,

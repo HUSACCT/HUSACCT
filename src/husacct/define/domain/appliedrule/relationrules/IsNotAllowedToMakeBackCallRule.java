@@ -58,15 +58,6 @@ public class IsNotAllowedToMakeBackCallRule extends AppliedRuleStrategy{
 				&& layerCheckerHelper.checkTypeIsLayer(this.getModuleTo())) {
 			ArrayList<Layer> backCallLayers = layerCheckerHelper
 					.getBackCallLayers(this.getModuleFrom().getId());
-			ArrayList<Layer> skipCallLayers = layerCheckerHelper
-					.getSkipCallLayers(this.getModuleFrom().getId());
-			for (Layer skipCallLayer : skipCallLayers) {
-				if (skipCallLayer.equals(this.getModuleTo())) {
-					isNotAllowedToUseSucces = moduleCheckerHelper
-							.checkRuleTypeAlreadySet(
-									"IsNotAllowedToMakeSkipCall", this.getModuleFrom());
-				}
-			}
 			for (Layer backCallLayer : backCallLayers) {
 				if (backCallLayer.equals(this.getModuleTo())) {
 					isNotAllowedToUseSucces = moduleCheckerHelper

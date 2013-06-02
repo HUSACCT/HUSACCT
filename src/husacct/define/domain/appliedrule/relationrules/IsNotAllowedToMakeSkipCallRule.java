@@ -30,7 +30,7 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 				}
 			}
 		}
-		return true;
+		return conventionSuccess;
 	}
 
 	private boolean checkIsNotAllowedToUse() {
@@ -55,8 +55,6 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 		if (isNotAllowedToUseSucces
 				&& layerCheckerHelper.checkTypeIsLayer(this.getModuleFrom())
 				&& layerCheckerHelper.checkTypeIsLayer(this.getModuleTo())) {
-			ArrayList<Layer> backCallLayers = layerCheckerHelper
-					.getBackCallLayers(this.getModuleFrom().getId());
 			ArrayList<Layer> skipCallLayers = layerCheckerHelper
 					.getSkipCallLayers(this.getModuleFrom().getId());
 			for (Layer skipCallLayer : skipCallLayers) {
@@ -64,13 +62,6 @@ public class IsNotAllowedToMakeSkipCallRule extends AppliedRuleStrategy{
 					isNotAllowedToUseSucces = moduleCheckerHelper
 							.checkRuleTypeAlreadySet(
 									"IsNotAllowedToMakeSkipCall", this.getModuleFrom());
-				}
-			}
-			for (Layer backCallLayer : backCallLayers) {
-				if (backCallLayer.equals(this.getModuleTo())) {
-					isNotAllowedToUseSucces = moduleCheckerHelper
-							.checkRuleTypeAlreadySet(
-									"IsNotAllowedToMakeBackCall", this.getModuleFrom());
 				}
 			}
 		}

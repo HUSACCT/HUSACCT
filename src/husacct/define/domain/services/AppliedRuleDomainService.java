@@ -34,10 +34,10 @@ public class AppliedRuleDomainService {
 	    Module moduleTo, boolean enabled) {
 
 	AppliedRuleStrategy rule = ruleFactory.createDummyRule(ruleTypeKey);
-	rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleTo, enabled); 
-	if (isDuplicate(rule)) {
-	    return -1;
-	}
+	if(moduleTo.getId() != -1)
+		rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleTo, enabled); 
+	else
+		rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleFrom, enabled); 
 	SoftwareArchitecture.getInstance().addAppliedRule(rule);
 	ServiceProvider.getInstance().getDefineService()
 		.notifyServiceListeners();

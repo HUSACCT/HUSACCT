@@ -324,18 +324,40 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 	}
 
 	private void save() {	
-		if (ruleDetailsJPanel.hasValidData()) {
-			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
-			ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
+		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
+			if (ruleDetailsJPanel.hasValidData()) {
+				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
 
-			if(appliedRuleController.conformRuleConventions(ruleDetails)){
+				if((Boolean) ruleDetails.get("enabled"))
+					if(appliedRuleController.conformRuleConventions(ruleDetails)){
+						if(this.appliedRuleController.save(ruleDetails)) {
+							this.dispose();
+						} else {
+							UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined")+"\n"+ruleDetails.get("ruleTypeKey"));
+						}
+					}else{
+						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
+					}
+				else {
+					if(this.appliedRuleController.save(ruleDetails)) {
+						this.dispose();
+					}
+				}
+			} else {
+				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
+			}
+		}
+		else if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_EDIT)) {
+			if (ruleDetailsJPanel.hasValidData()) {
+				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
+				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
+
 				if(this.appliedRuleController.save(ruleDetails)) {
 					this.dispose();
 				} else {
 					UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("NotAllowedBecauseDefined")+"\n"+ruleDetails.get("ruleTypeKey"));
 				}
-			}else{
-				UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
 			}
 		} else {
 			UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("CorrectDataError"));
