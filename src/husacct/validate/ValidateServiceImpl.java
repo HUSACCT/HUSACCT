@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.log4j.Logger;

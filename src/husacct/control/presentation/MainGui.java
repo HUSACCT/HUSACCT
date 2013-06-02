@@ -1,8 +1,6 @@
 package husacct.control.presentation;
-import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.common.help.presentation.HelpableJFrame;
-import husacct.common.locale.ILocaleService;
 import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
@@ -22,7 +20,6 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDesktopPane;
@@ -39,7 +36,6 @@ public class MainGui extends HelpableJFrame{
 
 	private static final long serialVersionUID = 140205650372010347L;
 	private Toolkit tk = Toolkit.getDefaultToolkit();
-	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private Logger logger = Logger.getLogger(MainGui.class);
 	private MainController mainController;
 	private MenuBar menuBar;
