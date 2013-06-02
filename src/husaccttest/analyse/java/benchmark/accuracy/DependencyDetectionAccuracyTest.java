@@ -67,7 +67,7 @@ public class DependencyDetectionAccuracyTest {
 	
 	//Instance method
 	@Test
-	public void cSharpCallInstanceMethodTest(){
+	public void javaCallInstanceMethodTest(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -81,7 +81,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	instance method, inherited
 	@Test
-	public void cSharpCallInstanceMethodInheritedTest(){
+	public void javaCallInstanceMethodInheritedTest(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodInherited";
 		for(DependencyDTO dependency : allDependencies){
@@ -95,7 +95,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class method
 	@Test
-	public void cSharpCallClassMethodTest(){
+	public void javaCallClassMethodTest(){
 		boolean found = false;
 		String toTestFrom = "CallClassMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -109,7 +109,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Constructor
 	@Test
-	public void cSharpCallConstructorTest(){
+	public void javaCallConstructorTest(){
 		boolean found = false;
 		String toTestFrom = "CallConstructor";
 		for(DependencyDTO dependency : allDependencies){
@@ -123,7 +123,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Inner class method
 	@Test
-	public void cSharpCallInnerClassMethodTest(){
+	public void javaCallInnerClassMethodTest(){
 		boolean found = false;
 		String toTestFrom = "CallInnerClassMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -137,7 +137,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Interface method
 	@Test
-	public void cSharpCallInterfaceMethodTest(){
+	public void javaCallInterfaceMethodTest(){
 		boolean found = false;
 		String toTestFrom = "CallInterfaceMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -151,7 +151,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Library class method
 	@Test
-	public void cSharpCallLibraryClassTest(){
+	public void javaCallLibraryClassTest(){
 		boolean found = false;
 		String toTestFrom = "CallLibraryClass";
 		for(DependencyDTO dependency : allDependencies){
@@ -166,7 +166,7 @@ public class DependencyDetectionAccuracyTest {
 //
 //	Instance variable
 	@Test
-	public void cSharpAccessInstanceVariableTest(){
+	public void javaAccessInstanceVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariable";
 		for(DependencyDTO dependency : allDependencies){
@@ -180,7 +180,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Instance variable, constant
 	@Test
-	public void cSharpAccessInstanceVariableConstantTest(){
+	public void javaAccessInstanceVariableConstantTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableConstant";
 		for(DependencyDTO dependency : allDependencies){
@@ -194,7 +194,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Instance variable, inherited
 	@Test
-	public void cSharpAccessInstanceVariableInheritedTest(){
+	public void javaAccessInstanceVariableInheritedTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableInherited";
 		for(DependencyDTO dependency : allDependencies){
@@ -208,7 +208,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class variable
 	@Test
-	public void cSharpAccessClassVariableTest(){
+	public void javaAccessClassVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessClassVariable";
 		for(DependencyDTO dependency : allDependencies){
@@ -222,7 +222,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class variable, constant
 	@Test
-	public void cSharpAccessClassVariableConstantTest(){
+	public void javaAccessClassVariableConstantTest(){
 		boolean found = false;
 		String toTestFrom = "AccessClassVariableConstant";
 		for(DependencyDTO dependency : allDependencies){
@@ -236,7 +236,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class variable, interface
 	@Test
-	public void cSharpAccessClassVariableInterfaceTest(){
+	public void javaAccessClassVariableInterfaceTest(){
 		boolean found = false;
 		String toTestFrom = "AccessClassVariableInterface";
 		for(DependencyDTO dependency : allDependencies){
@@ -250,7 +250,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Enumeration
 	@Test
-	public void cSharpAccessEnumerationTest(){
+	public void javaAccessEnumerationTest(){
 		boolean found = false;
 		String toTestFrom = "AccessEnumeration";
 		for(DependencyDTO dependency : allDependencies){
@@ -280,7 +280,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Extends class
 	@Test
-	public void cSharpInheritanceExtendsClassTest(){
+	public void javaInheritanceExtendsClassTest(){
 		boolean found = false;
 		String toTestFrom = "InheritanceExtends";
 		for(DependencyDTO dependency : allDependencies){
@@ -294,7 +294,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Extends abstract class
 	@Test
-	public void cSharpInheritanceExtendsAbstractTest(){
+	public void javaInheritanceExtendsAbstractTest(){
 		boolean found = false;
 		String toTestFrom = "InheritanceExtendsAbstract";
 		for(DependencyDTO dependency : allDependencies){
@@ -308,7 +308,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Implements interface
 	@Test
-	public void cSharpInheritanceImplementsInterfaceTest(){
+	public void javaInheritanceImplementsInterfaceTest(){
 		boolean found = false;
 		String toTestFrom = "InheritanceImplementsInterface";
 		for(DependencyDTO dependency : allDependencies){
@@ -322,7 +322,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Instance variable
 	@Test
-	public void cSharpDeclarationInstanceVariableTest(){
+	public void javaDeclarationInstanceVariableTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationInstanceVariable";
 		for(DependencyDTO dependency : allDependencies){
@@ -336,7 +336,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class variable
 	@Test
-	public void cSharpDeclarationClassVariableTest(){
+	public void javaDeclarationClassVariableTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationClassVariable";
 		for(DependencyDTO dependency : allDependencies){
@@ -350,7 +350,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Local variable
 	@Test
-	public void cSharpDeclarationLocalVariableTest(){
+	public void javaDeclarationLocalVariableTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationLocalVariable";
 		for(DependencyDTO dependency : allDependencies){
@@ -364,7 +364,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Parameter
 	@Test
-	public void cSharpDeclarationParameterTest(){
+	public void javaDeclarationParameterTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationParameter";
 		for(DependencyDTO dependency : allDependencies){
@@ -378,7 +378,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Return type
 	@Test
-	public void cSharpDeclarationReturnTypeTest(){
+	public void javaDeclarationReturnTypeTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationReturnType";
 		for(DependencyDTO dependency : allDependencies){
@@ -392,7 +392,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Exception
 	@Test
-	public void cSharpDeclarationExceptionTest(){
+	public void javaDeclarationExceptionTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationExceptionThrows";
 		for(DependencyDTO dependency : allDependencies){
@@ -406,7 +406,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Type cast
 	@Test
-	public void cSharpDeclarationTypeCastTest(){
+	public void javaDeclarationTypeCastTest(){
 		boolean found = false;
 		String toTestFrom = "DeclarationTypeCast";
 		for(DependencyDTO dependency : allDependencies){
@@ -420,7 +420,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class annotation
 	@Test
-	public void cSharpAnnotationTest(){
+	public void javaAnnotationTest(){
 		boolean found = false;
 		String toTestFrom = "AnnotationDependency";
 		for(DependencyDTO dependency : allDependencies){
@@ -434,7 +434,7 @@ public class DependencyDetectionAccuracyTest {
 	}
 //	Class using
 	@Test
-	public void cSharpUsingTest(){
+	public void javaUsingTest(){
 		boolean found = false;
 		String toTestFrom = "ImportDependencyUnused";
 		for(DependencyDTO dependency : allDependencies){
@@ -455,7 +455,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable
 //	From: AccessInstanceVariableIndirect_MethodVar
 	@Test
-	public void cSharpIAccessInstanceVariableTest(){
+	public void javaIAccessInstanceVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirect_MethodVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -470,7 +470,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable
 //	From: AccessInstanceVariableIndirect_VarVar
 	@Test
-	public void cSharpIAccessInstanceVariableTest2(){
+	public void javaIAccessInstanceVariableTest2(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirect_VarVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -485,7 +485,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable
 //	From: AccessInstanceVariableIndirect_VarVarToString
 	@Test
-	public void cSharpIAccessInstanceVariableTest3(){
+	public void javaIAccessInstanceVariableTest3(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirect_VarVarToString";
 		for(DependencyDTO dependency : allDependencies){
@@ -500,7 +500,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable ?Double indirect
 //	From: AccessInstanceVariableIndirectIndirect_MethodVarVar
 	@Test
-	public void cSharpIAccessInstanceVariableDoubleIndirectTest(){
+	public void javaIAccessInstanceVariableDoubleIndirectTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirectIndirect_MethodVarVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -515,7 +515,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable ?Double indirect
 //	From: AccessInstanceVariableIndirectIndirect_VarVarVar
 	@Test
-	public void cSharpIAccessInstanceVariableDoubleIndirectTest2(){
+	public void javaIAccessInstanceVariableDoubleIndirectTest2(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirectIndirect_VarVarVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -530,7 +530,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable ?Inherited
 //	From: AccessInstanceVariableIndirect_SuperClass
 	@Test
-	public void cSharpIAccessInstanceVariableInheritedTest(){
+	public void javaIAccessInstanceVariableInheritedTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirect_SuperClass";
 		for(DependencyDTO dependency : allDependencies){
@@ -545,7 +545,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Instance variable ?Inherited of 2nd super class
 //	From: AccessInstanceVariableIndirect_SuperSuperClass
 	@Test
-	public void cSharpIAccessInstanceVariableInheritedFromSecondSuperClassTest(){
+	public void javaIAccessInstanceVariableInheritedFromSecondSuperClassTest(){
 		boolean found = false;
 		String toTestFrom = "AccessInstanceVariableIndirect_SuperSuperClass";
 		for(DependencyDTO dependency : allDependencies){
@@ -560,7 +560,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Object reference ?Reference Variable
 //	From: AccessObjectReferenceIndirect_AsParameter_POI
 	@Test
-	public void cSharpIAccessObjectReferenceReferenceVariableTest(){
+	public void javaIAccessObjectReferenceReferenceVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessObjectReferenceIndirect_AsParameter_POI";
 		for(DependencyDTO dependency : allDependencies){
@@ -575,7 +575,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Object reference ?As return value
 //	From: AccessObjectReferenceIndirect_AsParameter
 	@Test
-	public void cSharpIAccessObjectReferenceAsReturnValueTest(){
+	public void javaIAccessObjectReferenceAsReturnValueTest(){
 		boolean found = false;
 		String toTestFrom = "AccessObjectReferenceIndirect_AsParameter";
 		for(DependencyDTO dependency : allDependencies){
@@ -590,7 +590,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Object reference ?Reference Variable
 //	From: AccessObjectReferenceIndirect_WithinIfStament_POI
 	@Test
-	public void cSharpIAccessObjectReferenceReferenceVariableTest2(){
+	public void javaIAccessObjectReferenceReferenceVariableTest2(){
 		boolean found = false;
 		String toTestFrom = "AccessObjectReferenceIndirect_WithinIfStament_POI";
 		for(DependencyDTO dependency : allDependencies){
@@ -605,7 +605,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Object reference ?As return value
 //	From: AccessObjectReferenceIndirect_WithinIfStament
 	@Test
-	public void cSharpIAccessObjectReferenceAsReturnValueTest2(){
+	public void javaIAccessObjectReferenceAsReturnValueTest2(){
 		boolean found = false;
 		String toTestFrom = "AccessObjectReferenceIndirect_WithinIfStament";
 		for(DependencyDTO dependency : allDependencies){
@@ -620,7 +620,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Static variable
 //	From: AccessStaticVariableIndirect_MethodVar
 	@Test
-	public void cSharpIAccessStaticVariableTest(){
+	public void javaIAccessStaticVariableTest(){
 		boolean found = false;
 		String toTestFrom = "AccessStaticVariableIndirect_MethodVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -635,7 +635,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Static variable
 //	From: AccessStaticVariableIndirect_VarVar
 	@Test
-	public void cSharpIAccessStaticVariableTest2(){
+	public void javaIAccessStaticVariableTest2(){
 		boolean found = false;
 		String toTestFrom = "AccessStaticVariableIndirect_VarVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -650,7 +650,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Static variable
 //	From: AccessStaticVariableIndirect_VarVarToString
 	@Test
-	public void cSharpIAccessStaticVariableTest3(){
+	public void javaIAccessStaticVariableTest3(){
 		boolean found = false;
 		String toTestFrom = "AccessStaticVariableIndirect_VarVarToString";
 		for(DependencyDTO dependency : allDependencies){
@@ -665,7 +665,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Static variable ?Double indirect
 //	From: AccessStaticVariableIndirectIndirect_MethodVarVar
 	@Test
-	public void cSharpIAccessStaticVariableDoubleIndirectTest(){
+	public void javaIAccessStaticVariableDoubleIndirectTest(){
 		boolean found = false;
 		String toTestFrom = "AccessStaticVariableIndirectIndirect_MethodVarVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -680,7 +680,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Access ?Static variable ?Double indirect
 //	From: AccessStaticVariableIndirectIndirect_VarVarVar
 	@Test
-	public void cSharpIAccessStaticVariableDoubleIndirectTest2(){
+	public void javaIAccessStaticVariableDoubleIndirectTest2(){
 		boolean found = false;
 		String toTestFrom = "AccessStaticVariableIndirectIndirect_VarVarVar";
 		for(DependencyDTO dependency : allDependencies){
@@ -698,7 +698,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method
 //	From: CallInstanceMethodIndirect_MethodMethod
 	@Test
-	public void cSharpICallInstanceMethodTest(){
+	public void javaICallInstanceMethodTest(){
 		boolean found = false;
 		String toTestFrom = "ImportDependencyUnused";
 		for(DependencyDTO dependency : allDependencies){
@@ -713,7 +713,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method
 //	From: CallInstanceMethodIndirect_MethodMethodToString
 	@Test
-	public void cSharpICallInstanceMethodTest2(){
+	public void javaICallInstanceMethodTest2(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirect_MethodMethodToString";
 		for(DependencyDTO dependency : allDependencies){
@@ -728,7 +728,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method
 //	From: CallInstanceMethodIndirect_MethodMethod_ViaConstructor
 	@Test
-	public void cSharpICallInstanceMethodTest3(){
+	public void javaICallInstanceMethodTest3(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirect_MethodMethod_ViaConstructor";
 		for(DependencyDTO dependency : allDependencies){
@@ -743,7 +743,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Static method
 //	From: CallInstanceMethodIndirect_StaticMethodInstanceMethod
 	@Test
-	public void cSharpICallStaticMethodTest(){
+	public void javaICallStaticMethodTest(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirect_StaticMethodInstanceMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -758,7 +758,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method ?Inherited (Virtual call)
 //	From: CallInstanceMethodIndirect_SuperClass
 	@Test
-	public void cSharpICallInstanceMethodInheritedVirtualCallTest(){
+	public void javaICallInstanceMethodInheritedVirtualCallTest(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirect_SuperClass";
 		for(DependencyDTO dependency : allDependencies){
@@ -773,7 +773,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method ?Inherited of 2nd super class
 //	From: CallInstanceMethodIndirect_SuperSuperClass
 	@Test
-	public void cSharpICallInstanceMethodInheritedFromSecondSuperClassTest(){
+	public void javaICallInstanceMethodInheritedFromSecondSuperClassTest(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirect_SuperSuperClass";
 		for(DependencyDTO dependency : allDependencies){
@@ -788,7 +788,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method
 //	From: CallInstanceMethodIndirect_VarMethod
 	@Test
-	public void cSharpICallInstanceMethodTest4(){
+	public void javaICallInstanceMethodTest4(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirect_VarMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -803,7 +803,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method ?Double indirect
 //	From: CallInstanceMethodIndirectIndirect_MethodVarMethod
 	@Test
-	public void cSharpICallInstanceMethodDoubleIndirectTest(){
+	public void javaICallInstanceMethodDoubleIndirectTest(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirectIndirect_MethodVarMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -818,7 +818,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Instance method ?Double indirect
 //	From: CallInstanceMethodIndirectIndirect_VarVarMethod
 	@Test
-	public void cSharpICallInstanceMethodDoubleIndirectTest2(){
+	public void javaICallInstanceMethodDoubleIndirectTest2(){
 		boolean found = false;
 		String toTestFrom = "CallInstanceMethodIndirectIndirect_VarVarMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -833,7 +833,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Static method
 //	From: CallStaticMethodIndirect_MethodStaticMethod
 	@Test
-	public void cSharpICallStaticMethodTest2(){
+	public void javaICallStaticMethodTest2(){
 		boolean found = false;
 		String toTestFrom = "CallStaticMethodIndirect_MethodStaticMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -848,7 +848,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Call ?Static method
 //	From: CallStaticMethodIndirect_VarStaticMethod
 	@Test
-	public void cSharpICallStaticMethodTest3(){
+	public void javaICallStaticMethodTest3(){
 		boolean found = false;
 		String toTestFrom = "CallStaticMethodIndirect_VarStaticMethod";
 		for(DependencyDTO dependency : allDependencies){
@@ -866,7 +866,7 @@ public class DependencyDetectionAccuracyTest {
 //	Type: Inheritance ?Extends 
 //	From: InheritanceExtendsExtendsIndirect
 	@Test
-	public void cSharpIInheritenceExtendsTest(){
+	public void javaIInheritenceExtendsTest(){
 		boolean found = false;
 		String toTestFrom = "InheritanceExtendsExtendsIndirect";
 		for(DependencyDTO dependency : allDependencies){
