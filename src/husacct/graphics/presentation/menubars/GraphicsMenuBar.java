@@ -413,6 +413,13 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 				.setToolTipText(menuBarLocale.get("ShowViolations"));
 		graphicsOptionsDialog.setViolationsUIToInactive();
 	}
+	
+	public void setExternalSystemsUIToInactive() {
+		graphicsOptionsDialog.setExternalSystemsUIToInactive();
+	}
+	public void setExternalSystemsUIToActive() {
+		graphicsOptionsDialog.setExternalSystemsUIToActive();
+	}
 
 	@Override
 	public void setZoomSlider(double zoomFactor) {
@@ -437,6 +444,19 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		for (UserInputListener l : listeners)
 			l.showViolations();
 	}
+	
+
+	@Override
+	public void showExternalSystems() {
+		for (UserInputListener l : listeners)
+			l.showExternalSystems();
+	}
+
+	@Override
+	public void hideExternalSystems() {
+		for (UserInputListener l : listeners)
+			l.hideExternalSystems();
+	}
 
 	public void turnOffBar() {
 		for (JComponent comp : actions)
@@ -453,4 +473,5 @@ public class GraphicsMenuBar extends JPanel implements UserInputListener {
 		validate();
 		updateUI();
 	}
+
 }

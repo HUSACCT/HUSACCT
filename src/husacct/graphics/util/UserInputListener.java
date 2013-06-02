@@ -43,4 +43,8 @@ public interface UserInputListener {
 	public void showSmartLines();
 
 	public void showViolations();
+
+	public void showExternalSystems();
+
+	public void hideExternalSystems();
 }

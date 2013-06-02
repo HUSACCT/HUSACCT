@@ -47,7 +47,6 @@ public class ClassFigure extends BaseFigure {
 		compIconFig.set(AttributeKeys.FILL_COLOR, defaultBackgroundColor);
 
 		try {
-			//TODO There needs to be a icon for Projects
 			URL componentImageURL = Resource.get(Resource.ICON_CLASS_PUBLIC);
 			compIcon = ImageIO.read(componentImageURL);
 			compIconFig.setImage(null, compIcon);

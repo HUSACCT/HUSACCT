@@ -68,11 +68,14 @@ public class AnalysedController extends DrawingController {
 			this.showViolations();
 		}
 		
-		for(ExternalSystemDTO ex : this.analyseService.getExternalSystems()){
+		/*
+		 * Shows all the dependencies
+		 * 
+		 * for(ExternalSystemDTO ex : this.analyseService.getExternalSystems()){
 			for(DependencyDTO dto : ex.fromDependencies){
 				System.out.println(dto.toString());
 			}
-		}
+		}*/
 
 		ArrayList<ProjectDTO> projects = this.controlService.getApplicationDTO().projects;
 		AbstractDTO[] projectArray = projects.toArray(new AbstractDTO[projects.size()]);
@@ -326,6 +329,13 @@ public class AnalysedController extends DrawingController {
 		if (validateService.isValidated())
 			super.showViolations();
 	}
+	
+
+	@Override
+	public void showExternalSystems() {
+		if (analyseService.isAnalysed())
+			super.showExternalSystems();
+	}
 
 	protected ArrayList<String> sortFiguresBasedOnZoomability(BaseFigure[] figures) {
 		ArrayList<String> parentNames = new ArrayList<String>();
@@ -352,5 +362,4 @@ public class AnalysedController extends DrawingController {
 
 		return parentNames;
 	}
-
 }

@@ -261,6 +261,8 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBarLocale.put("ShowDependencies", localeService.getTranslatedString("ShowDependencies"));
 		menuBarLocale.put("HideViolations", localeService.getTranslatedString("HideViolations"));
 		menuBarLocale.put("ShowViolations", localeService.getTranslatedString("ShowViolations"));
+		menuBarLocale.put("HideExternalSystems", localeService.getTranslatedString("HideExternalSystems"));
+		menuBarLocale.put("ShowExternalSystems", localeService.getTranslatedString("ShowExternalSystems"));
 		menuBarLocale.put("LineContextUpdates", localeService.getTranslatedString("LineContextUpdates"));
 		menuBarLocale.put("ExportToImage", localeService.getTranslatedString("ExportToImage"));
 		menuBarLocale.put("LayoutStrategy", localeService.getTranslatedString("LayoutStrategy"));
@@ -430,6 +432,19 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		for (UserInputListener l : listeners)
 			l.showViolations();
 	}
+	
+	@Override
+	public void showExternalSystems() {
+		for (UserInputListener l : listeners)
+			l.showExternalSystems();
+		
+	}
+
+	@Override
+	public void hideExternalSystems() {
+		for (UserInputListener l : listeners)
+			l.hideExternalSystems();
+	}
 
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
 		showProperties();
@@ -448,6 +463,11 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	public void turnOffViolations() {
 		menuBar.setViolationsUIToInactive();
 	}
+	
+	
+	public void turnOffExternalSystems() {
+		menuBar.setExternalSystemsUIToInactive();
+	}
 
 	public void turnOnDependencies() {
 		menuBar.setDependeciesUIToActive();
@@ -459,6 +479,10 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 
 	public void turnOnViolations() {
 		menuBar.setViolationsUIToActive();
+	}
+	
+	public void turnOnExternalSystems() {
+		menuBar.setExternalSystemsUIToActive();
 	}
 
 	public void updateGUI() {

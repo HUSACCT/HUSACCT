@@ -389,6 +389,13 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.turnOffViolations();
 		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
 	}
+	
+	@Override
+	public void hideExternalSystems() {
+		super.hideExternalSystems();
+		graphicsFrame.turnOffExternalSystems();
+		drawing.setFiguresNotViolated(figureMap.getViolatedFigures());
+	}
 
 	private void initializeComponents() {
 		drawing = new Drawing();
@@ -565,6 +572,12 @@ public abstract class DrawingController extends DrawingSettingsController {
 		graphicsFrame.turnOnSmartLines();
 	}
 
+	@Override
+	public void showExternalSystems() {
+		super.showExternalSystems();
+		graphicsFrame.turnOnExternalSystems();
+	}
+	
 	@Override
 	public void showViolations() {
 		super.showViolations();
