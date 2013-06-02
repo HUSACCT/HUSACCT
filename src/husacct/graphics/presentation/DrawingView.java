@@ -16,11 +16,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JComponent;
+import javax.swing.JViewport;
+
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.draw.event.FigureSelectionListener;
+import org.jhotdraw.draw.tool.AbstractTool;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class DrawingView extends DefaultDrawingView {
@@ -34,7 +38,8 @@ public class DrawingView extends DefaultDrawingView {
 	private final Drawing drawing;
 	private final DefaultDrawingEditor editor;
 	private final ContextMenu contextMenu;
-	private SelectionTool selectionTool;
+	protected AbstractTool panTool;
+	protected AbstractTool selectTool;
 	private boolean isCtrlPressed = false;
 	
 	private final ArrayList<UserInputListener> listeners = new ArrayList<UserInputListener>();
@@ -50,6 +55,8 @@ public class DrawingView extends DefaultDrawingView {
 		contextMenu = new ContextMenu();
 		
 		initializeSelectionTool();
+		editor.setTool(selectTool);
+		
 		initializeKeyListener();
 		initializeMouseListener();
 		initializeSelectionListener();
@@ -150,6 +157,10 @@ public class DrawingView extends DefaultDrawingView {
 		});
 	}
 	
+	protected void initializePanTool(JViewport viewport, JComponent comp) {
+		panTool = new PanTool(viewport, comp);
+	}
+	
 	private void initializeSelectionListener() {
 		addFigureSelectionListener(new FigureSelectionListener() {
 			@Override
@@ -160,8 +171,7 @@ public class DrawingView extends DefaultDrawingView {
 	}
 	
 	private void initializeSelectionTool() {
-		selectionTool = new SelectionTool();
-		editor.setTool(selectionTool);
+		selectTool = new SelectionTool();
 	}
 	
 	private void moduleZoom(BaseFigure[] fig) {

@@ -66,8 +66,10 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		
 		initializeComponents();
 		
-		drawingView.addMouseMotionListener(new DragMoverListener(
-				drawingScrollPane.getViewport(), drawingScrollPane));
+		drawingView.initializePanTool(drawingScrollPane.getViewport(),
+				drawingScrollPane);
+		
+		logger.debug("listeners added");
 		
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override

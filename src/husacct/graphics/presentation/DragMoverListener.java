@@ -11,8 +11,12 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 
+import common.Logger;
+
 public class DragMoverListener extends MouseInputAdapter implements
 MouseMotionListener {
+	private Logger log = Logger.getLogger(DragMoverListener.class);
+	
 	private final Cursor dc;
 	private final Cursor hc = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 	private final Rectangle rect = new Rectangle();
@@ -31,6 +35,8 @@ MouseMotionListener {
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		log.debug("dragged");
+
 		if (e.getButton() == MouseEvent.BUTTON2) {
 			Point pt = e.getPoint();
 			move.setLocation(pt.x - startPt.x, pt.y - startPt.y);
@@ -46,6 +52,8 @@ MouseMotionListener {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
+		log.debug("mousePressed");
+		
 		if (e.getButton() == MouseEvent.BUTTON2) {
 			comp.setCursor(hc);
 			startPt.setLocation(e.getPoint());
