@@ -239,4 +239,12 @@ public class DrawingView extends DefaultDrawingView {
 	public BaseFigure[] toFigureArray(Collection<Figure> collection) {
 		return collection.toArray(new BaseFigure[collection.size()]);
 	}
+	
+	public void usePanTool() {
+		getEditor().setTool(panTool);
+	}
+	
+	public void useSelectTool() {
+		getEditor().setTool(selectTool);
+	}
 }

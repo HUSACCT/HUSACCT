@@ -66,9 +66,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		
 		initializeComponents();
 		
-		drawingView.initializePanTool(drawingScrollPane.getViewport(),
-				drawingScrollPane);
-		
 		logger.debug("listeners added");
 		
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
@@ -244,6 +241,9 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 				// Do nothing
 			}
 		});
+		
+		drawingView.initializePanTool(drawingScrollPane.getViewport(),
+				drawingScrollPane);
 	}
 	
 	private void layoutComponents() {
@@ -470,5 +470,17 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	public void updateGUI() {
 		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();
+	}
+	
+	@Override
+	public void usePanTool() {
+		for (UserInputListener l : listeners)
+			l.usePanTool();
+	}
+	
+	@Override
+	public void useSelectTool() {
+		for (UserInputListener l : listeners)
+			l.useSelectTool();
 	}
 }

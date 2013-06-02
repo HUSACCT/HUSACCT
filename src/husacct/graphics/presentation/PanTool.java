@@ -26,13 +26,10 @@ public class PanTool extends AbstractTool {
 		this.vport = vport;
 		this.comp = comp;
 		dc = comp.getCursor();
-		log.debug("created pan tool");
 	}
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		log.debug("mouse dragged");
-
 		Point move = new Point();
 		Rectangle rect = new Rectangle();
 		Point pt = e.getPoint();
