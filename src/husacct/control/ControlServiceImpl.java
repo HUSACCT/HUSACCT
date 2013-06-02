@@ -19,6 +19,7 @@ import husacct.control.task.WorkspaceController;
 import husacct.control.task.configuration.ConfigPanel;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.threading.ThreadWithLoader;
+import husacct.validate.domain.validation.Severity;
 
 import java.awt.Component;
 import java.io.File;
@@ -181,7 +182,19 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	public void displayErrorsInFile(String fileName, ArrayList<Integer> errors) {
 		codeViewController.displayErrorsInFile(fileName, errors);
 	}
+	
+	@Override
+	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
+		codeViewController.displayErrorsInFile(fileName, errors);
+	}
 
+	@Override
+	public void displayErrorInFile(String fileName, int lineNumber, Severity severity) {
+		HashMap<Integer, Severity> errors = new HashMap<Integer, Severity>();
+		errors.put(lineNumber, severity);
+		codeViewController.displayErrorsInFile(fileName, errors);
+	}
+	
 	@Override
 	public String getConfigurationName() {
 		return ServiceProvider.getInstance().getLocaleService().getTranslatedString("ConfigGeneral");
@@ -210,4 +223,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		mainController.getApplicationController().showHelpGUI(comp);
 		
 	}
+
+	
 }

@@ -8,8 +8,10 @@ import husacct.control.task.codeviewer.CodeviewerService;
 import husacct.control.task.codeviewer.EclipseCodeviewerImpl;
 import husacct.control.task.codeviewer.InternalCodeviewerImpl;
 import husacct.control.task.configuration.ConfigurationManager;
+import husacct.validate.domain.validation.Severity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CodeViewController {
 	
@@ -38,5 +40,16 @@ public class CodeViewController {
 		} else {
 			currentCodeviewer = new InternalCodeviewerImpl();
 		}
+	}
+
+	public void displayErrorsInFile(String fileName, HashMap<Integer, Severity> errors) {
+		if(controlService == null)
+			controlService = ServiceProvider.getInstance().getControlService();
+		ApplicationDTO application = controlService.getApplicationDTO();
+		ProjectDTO project = application.projects.get(0);
+		fileName = project.paths.get(0) + "\\" + fileName;
+		setCurrentCodeviewer();
+		currentCodeviewer.displayErrorsInFile(fileName, errors);
+		
 	}
 }
