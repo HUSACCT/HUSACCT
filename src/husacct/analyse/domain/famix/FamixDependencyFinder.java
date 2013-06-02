@@ -11,13 +11,16 @@ class FamixDependencyFinder extends FamixFinder {
 	private static enum FinderFunction { FROM, TO, BOTH, ALL };
 	private static enum DependencyType { DIRECT, INDIRECT, EXTERNAL };
     private List<DependencyDTO> dependencyCache;
+    private List<ExternalSystemDTO> externalSystemCache;
     
 	public FamixDependencyFinder(FamixModel model) {
 		super(model);
 		this.dependencyCache = null;
+		this.externalSystemCache = null;
 	}
 	
 	public int buildCache(){
+		getExternalSystems().size();
 		return getAllDependencies().size();
 	}
 	
@@ -56,6 +59,8 @@ class FamixDependencyFinder extends FamixFinder {
 	}
 	
 	public List<ExternalSystemDTO> getExternalSystems(){
+		if(externalSystemCache != null)
+			return externalSystemCache;
 		List<ExternalSystemDTO> externalSystems = new ArrayList<ExternalSystemDTO>();
 		List<String> pathsToImports = new ArrayList<String>();
 		List<String> pathsToPackages = new ArrayList<String>();
@@ -78,7 +83,8 @@ class FamixDependencyFinder extends FamixFinder {
 		for(ExternalSystemDTO dto : externalSystems){
 			dto.fromDependencies = (ArrayList<DependencyDTO>) getDependenciesTo(dto.systemPackage);
 		}
-		return externalSystems;
+		externalSystemCache = externalSystems;
+		return externalSystemCache;
 	}
 	
 	private List<DependencyDTO> findDependencies(FinderFunction findFunction, String from, String to){
