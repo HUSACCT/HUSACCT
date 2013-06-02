@@ -4,7 +4,6 @@ import husacct.ServiceProvider;
 import husacct.common.dto.DependencyDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
-import husacct.graphics.DragMoverListener;
 import husacct.graphics.presentation.figures.BaseFigure;
 import husacct.graphics.presentation.menubars.GraphicsMenuBar;
 import husacct.graphics.presentation.menubars.LocationButtonActionListener;
@@ -30,7 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JViewport;
 
 import org.apache.log4j.Logger;
 
@@ -65,7 +63,12 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		resetCurrentPaths();
 		
 		drawingView = givenDrawingView;
+		
 		initializeComponents();
+		
+		drawingView.addMouseMotionListener(new DragMoverListener(
+				drawingScrollPane.getViewport(), drawingScrollPane));
+		
 		addHierarchyBoundsListener(new HierarchyBoundsListener() {
 			@Override
 			public void ancestorMoved(HierarchyEvent arg0) {
@@ -239,11 +242,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 				// Do nothing
 			}
 		});
-		
-		JViewport drawingScrollPaneViewport = drawingScrollPane.getViewport();
-		drawingScrollPaneViewport
-.addMouseMotionListener(new DragMoverListener(
-				drawingScrollPaneViewport, drawingScrollPane));
 	}
 	
 	private void layoutComponents() {

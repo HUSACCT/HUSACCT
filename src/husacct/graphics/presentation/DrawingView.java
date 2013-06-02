@@ -140,6 +140,7 @@ public class DrawingView extends DefaultDrawingView {
 				DrawingView.this.onMouseClicked(e);
 			}
 		});
+		
 		addMouseWheelListener(new MouseWheelListener() {
 			
 			@Override
