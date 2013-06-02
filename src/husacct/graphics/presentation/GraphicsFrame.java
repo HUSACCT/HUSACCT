@@ -245,7 +245,44 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		drawingView.initializePanTool(drawingScrollPane.getViewport(),
 				drawingScrollPane);
 	}
-	
+
+	private void resizeLocationBar() {
+		if (locationScrollPane.getHorizontalScrollBar().isShowing()) {
+			locationScrollPane.setPreferredSize(new Dimension(900, 50));
+		} else {
+			locationScrollPane.setPreferredSize(new Dimension(900, 35));
+		}
+	}
+
+	private void updateComponentsLocaleStrings() {
+		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
+		menuBarLocale.put("DiagramOptions", localeService.getTranslatedString("DiagramOptions"));
+		menuBarLocale.put("Options", localeService.getTranslatedString("Options"));
+		menuBarLocale.put("Ok", localeService.getTranslatedString("OkButton"));
+		menuBarLocale.put("Apply", localeService.getTranslatedString("Apply"));
+		menuBarLocale.put("Cancel", localeService.getTranslatedString("CancelButton"));
+		menuBarLocale.put("Zoom", localeService.getTranslatedString("Zoom"));
+		menuBarLocale.put("ZoomIn", localeService.getTranslatedString("ZoomIn"));
+		menuBarLocale.put("ZoomOut", localeService.getTranslatedString("ZoomOut"));
+		menuBarLocale.put("Refresh", localeService.getTranslatedString("Refresh"));
+		menuBarLocale.put("HideDependencies", localeService.getTranslatedString("HideDependencies"));
+		menuBarLocale.put("ShowDependencies", localeService.getTranslatedString("ShowDependencies"));
+		menuBarLocale.put("HideViolations", localeService.getTranslatedString("HideViolations"));
+		menuBarLocale.put("ShowViolations", localeService.getTranslatedString("ShowViolations"));
+		menuBarLocale.put("HideExternalSystems", localeService.getTranslatedString("HideExternalSystems"));
+		menuBarLocale.put("ShowExternalSystems", localeService.getTranslatedString("ShowExternalSystems"));
+		menuBarLocale.put("LineContextUpdates", localeService.getTranslatedString("LineContextUpdates"));
+		menuBarLocale.put("ExportToImage", localeService.getTranslatedString("ExportToImage"));
+		menuBarLocale.put("LayoutStrategy", localeService.getTranslatedString("LayoutStrategy"));
+		menuBarLocale.put("DrawingOutOfDate", localeService.getTranslatedString("DrawingOutOfDate"));
+		menuBarLocale.put("HideModules", localeService.getTranslatedString("HideModules"));
+		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
+		menuBar.setLocale(menuBarLocale);
+
+		ROOT_LEVEL = localeService.getTranslatedString("ProjectsLabel");
+		locationBar.setLocale(ROOT_LEVEL);
+	}
+
 	private void layoutComponents() {
 		centerPane.removeAll();
 		if (!showingProperties) {
@@ -323,12 +360,6 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	
 	public void resetCurrentPaths() {
 		currentPaths = new String[] {};
-	}
-	
-	private void resizeLocationBar() {
-		if (locationScrollPane.getHorizontalScrollBar().isShowing()) locationScrollPane.setPreferredSize(new Dimension(900, 50));
-		else
-			locationScrollPane.setPreferredSize(new Dimension(900, 35));
 	}
 	
 	@Override
@@ -410,6 +441,19 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 			l.showViolations();
 	}
 	
+	@Override
+	public void showExternalSystems() {
+		for (UserInputListener l : listeners)
+			l.showExternalSystems();
+		
+	}
+
+	@Override
+	public void hideExternalSystems() {
+		for (UserInputListener l : listeners)
+			l.hideExternalSystems();
+	}
+
 	public void showViolationsProperties(ViolationDTO[] violationDTOs) {
 		showProperties();
 		ViolationTable propertiesTable = new ViolationTable(violationDTOs);
@@ -427,7 +471,11 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 	public void turnOffViolations() {
 		menuBar.setViolationsUIToInactive();
 	}
-	
+
+	public void turnOffExternalSystems() {
+		menuBar.setExternalSystemsUIToInactive();
+	}
+
 	public void turnOnDependencies() {
 		menuBar.setDependeciesUIToActive();
 	}
@@ -440,33 +488,10 @@ public class GraphicsFrame extends JInternalFrame implements UserInputListener {
 		menuBar.setViolationsUIToActive();
 	}
 	
-	private void updateComponentsLocaleStrings() {
-		HashMap<String, String> menuBarLocale = new HashMap<String, String>();
-		menuBarLocale.put("DiagramOptions", localeService.getTranslatedString("DiagramOptions"));
-		menuBarLocale.put("Options", localeService.getTranslatedString("Options"));
-		menuBarLocale.put("Ok", localeService.getTranslatedString("OkButton"));
-		menuBarLocale.put("Apply", localeService.getTranslatedString("Apply"));
-		menuBarLocale.put("Cancel", localeService.getTranslatedString("CancelButton"));
-		menuBarLocale.put("Zoom", localeService.getTranslatedString("Zoom"));
-		menuBarLocale.put("ZoomIn", localeService.getTranslatedString("ZoomIn"));
-		menuBarLocale.put("ZoomOut", localeService.getTranslatedString("ZoomOut"));
-		menuBarLocale.put("Refresh", localeService.getTranslatedString("Refresh"));
-		menuBarLocale.put("HideDependencies", localeService.getTranslatedString("HideDependencies"));
-		menuBarLocale.put("ShowDependencies", localeService.getTranslatedString("ShowDependencies"));
-		menuBarLocale.put("HideViolations", localeService.getTranslatedString("HideViolations"));
-		menuBarLocale.put("ShowViolations", localeService.getTranslatedString("ShowViolations"));
-		menuBarLocale.put("LineContextUpdates", localeService.getTranslatedString("LineContextUpdates"));
-		menuBarLocale.put("ExportToImage", localeService.getTranslatedString("ExportToImage"));
-		menuBarLocale.put("LayoutStrategy", localeService.getTranslatedString("LayoutStrategy"));
-		menuBarLocale.put("DrawingOutOfDate", localeService.getTranslatedString("DrawingOutOfDate"));
-		menuBarLocale.put("HideModules", localeService.getTranslatedString("HideModules"));
-		menuBarLocale.put("RestoreHiddenModules", localeService.getTranslatedString("RestoreHiddenModules"));
-		menuBar.setLocale(menuBarLocale);
-		
-		ROOT_LEVEL = localeService.getTranslatedString("ProjectsLabel");
-		locationBar.setLocale(ROOT_LEVEL);
+	public void turnOnExternalSystems() {
+		menuBar.setExternalSystemsUIToActive();
 	}
-	
+
 	public void updateGUI() {
 		locationBar.updateLocationBar(getCurrentPaths());
 		updateUI();

@@ -47,4 +47,8 @@ public interface UserInputListener {
 	public void usePanTool();
 	
 	public void useSelectTool();
+
+	public void showExternalSystems();
+
+	public void hideExternalSystems();
 }

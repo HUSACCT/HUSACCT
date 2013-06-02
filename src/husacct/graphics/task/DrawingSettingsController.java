@@ -6,9 +6,8 @@ import husacct.graphics.util.UserInputListener;
 
 public abstract class DrawingSettingsController implements UserInputListener {
 	protected boolean areSmartLinesOn = true;
-	protected boolean areDependenciesShown;
-	protected boolean areViolationsShown;
-	
+	protected boolean areDependenciesShown, areViolationsShown, areExternalSystemsShown;
+
 	protected String[] currentPaths = new String[] {};
 	
 	public DrawingSettingsController() {
@@ -26,6 +25,10 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		return areViolationsShown;
 	}
 	
+	public boolean areExternalSystemsShown() {
+		return areExternalSystemsShown;
+	}
+
 	protected DrawingDetail getCurrentDrawingDetail() {
 		DrawingDetail detail = DrawingDetail.WITHOUT_VIOLATIONS;
 		if (areViolationsShown())
@@ -59,6 +62,11 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		areViolationsShown = false;
 	}
 	
+	@Override
+	public void hideExternalSystems() {
+		areExternalSystemsShown = false;
+	}
+
 	public void loadDefaultSettings() {
 		showDependencies();
 		hideViolations();
@@ -93,5 +101,8 @@ public abstract class DrawingSettingsController implements UserInputListener {
 		areViolationsShown = true;
 	}
 	
-
+	@Override
+	public void showExternalSystems() {
+		areExternalSystemsShown = true;
+	}
 }
