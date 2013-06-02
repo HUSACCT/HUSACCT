@@ -1,4 +1,4 @@
-package husacct.graphics.task.layout;
+package husacct.graphics.task.layout.state;
 
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.AnalysedModuleDTO;

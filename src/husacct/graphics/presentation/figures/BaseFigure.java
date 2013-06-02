@@ -147,8 +147,8 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 		return isContext;
 	}
 
-	public void isContext(boolean b) {
-		isContext = b;
+	public void setContext(boolean b) {
+		this.isContext = b;
 	}
 
 	public boolean isEnabled() {

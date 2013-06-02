@@ -3,6 +3,7 @@ package husacct.graphics.task;
 import husacct.ServiceProvider;
 import husacct.common.dto.AbstractDTO;
 import husacct.common.dto.DependencyDTO;
+import husacct.common.dto.ProjectDTO;
 import husacct.common.dto.ViolationDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.common.services.IServiceListener;
@@ -14,11 +15,11 @@ import husacct.graphics.presentation.figures.FigureFactory;
 import husacct.graphics.presentation.figures.ParentFigure;
 import husacct.graphics.presentation.figures.RelationFigure;
 import husacct.graphics.task.layout.BasicLayoutStrategy;
-import husacct.graphics.task.layout.DrawingState;
 import husacct.graphics.task.layout.FigureConnectorStrategy;
 import husacct.graphics.task.layout.LayeredLayoutStrategy;
 import husacct.graphics.task.layout.LayoutStrategy;
 import husacct.graphics.task.layout.NoLayoutStrategy;
+import husacct.graphics.task.layout.state.DrawingState;
 import husacct.graphics.util.DrawingDetail;
 import husacct.graphics.util.DrawingLayoutStrategy;
 import husacct.graphics.util.FigureMap;
@@ -160,12 +161,13 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	public void drawMultiLevel(HashMap<String, ArrayList<AbstractDTO>> modules) {
-		clearDrawing();
-		drawMultiLevelModules(modules);
-		updateLayout();
-		drawLinesBasedOnSetting();
-		graphicsFrame.setCurrentPaths(getCurrentPaths());
-		graphicsFrame.updateGUI();
+		this.graphicsFrame.setUpToDate();
+		this.clearDrawing();
+		this.drawMultiLevelModules(modules);
+		this.updateLayout();
+		this.drawLinesBasedOnSetting();
+		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
+		this.graphicsFrame.updateGUI();
 	}
 
 	public void drawMultiLevelModules(
@@ -174,8 +176,8 @@ public abstract class DrawingController extends DrawingSettingsController {
 		for (String parentName : modules.keySet()) {
 			ParentFigure parentFigure = null;
 			if (!parentName.isEmpty()) {
-				parentFigure = figureFactory.createParentFigure(parentName);
-				drawing.add(parentFigure);
+				parentFigure = this.figureFactory.createParentFigure(parentName);
+				this.drawing.add(parentFigure);
 			}
 			for (AbstractDTO dto : modules.get(parentName))
 				try {
@@ -196,20 +198,22 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	public void drawSingleLevel(AbstractDTO[] modules) {
-		graphicsFrame.setUpToDate();
-		drawSingleLevelModules(modules);
-		updateLayout();
-		drawLinesBasedOnSetting();
-		graphicsFrame.setCurrentPaths(getCurrentPaths());
-		graphicsFrame.updateGUI();
+		this.graphicsFrame.setUpToDate();
+		this.drawSingleLevelModules(modules);
+		this.updateLayout();
+		if(modules.length != 0 && !(modules[0] instanceof ProjectDTO)){
+			this.drawLinesBasedOnSetting();
+		}
+		this.graphicsFrame.setCurrentPaths(this.getCurrentPaths());
+		this.graphicsFrame.updateGUI();
 	}
 
 	public void drawSingleLevelModules(AbstractDTO[] modules) {
 		for (AbstractDTO dto : modules)
 			try {
-				BaseFigure generatedFigure = figureFactory.createFigure(dto);
-				drawing.add(generatedFigure);
-				figureMap.linkModule(generatedFigure, dto);
+				BaseFigure generatedFigure = this.figureFactory.createFigure(dto);
+				this.drawing.add(generatedFigure);
+				this.figureMap.linkModule(generatedFigure, dto);
 			} catch (Exception e) {
 				logger.error("Could not generate and display figure.", e);
 			}
@@ -373,28 +377,26 @@ public abstract class DrawingController extends DrawingSettingsController {
 
 		if (selection.size() > 0) {
 			ArrayList<BaseFigure> figures = new ArrayList<BaseFigure>();
-			java.util.Collections.addAll(figures,
-					selection.toArray(new BaseFigure[selection.size()]));
+			java.util.Collections.addAll(figures, selection.toArray(new BaseFigure[selection.size()]));
 
-			for (BaseFigure f : figures)
-				f.isContext(false); // minimising potential side effects
+			for (BaseFigure f : figures) {
+				f.setContext(false); // minimising potential side effects
+			}
 
 			drawingView.selectAll();
-			List<BaseFigure> allFigures = Arrays.asList(drawingView
-					.getSelectedFigures().toArray(new BaseFigure[0]));
+			List<BaseFigure> allFigures = Arrays.asList(drawingView.getSelectedFigures().toArray(new BaseFigure[0]));
 			drawingView.clearSelection();
 			drawingView.addToSelection(selection);
 
-			for (BaseFigure f : allFigures)
+			for (BaseFigure f : allFigures){
 				if (!f.isContext() && f.isModule() && !figures.contains(f)) {
-					f.isContext(true);
+					f.setContext(true);
 					figures.add(f);
-				} else
-					f.isContext(false);
-
-			BaseFigure[] selectedFigures = figures
-					.toArray(new BaseFigure[figures.size()]);
-
+				} else {
+					f.setContext(false);
+				}
+			}
+			BaseFigure[] selectedFigures = figures.toArray(new BaseFigure[figures.size()]);
 			this.moduleZoom(selectedFigures);
 		}
 	}
@@ -404,8 +406,9 @@ public abstract class DrawingController extends DrawingSettingsController {
 	}
 
 	protected void printFigures(String msg) {
-		if (!debugPrint)
+		if (!debugPrint){
 			return;
+		}
 
 		System.out.println(msg);
 

@@ -218,7 +218,6 @@ public class DefinedController extends DrawingController {
 
 	@Override
 	public void moduleZoom(String zoomType) {
-		// TODO Auto-generated method stub
-		
+		// Unused, does not need implementation
 	}
 }

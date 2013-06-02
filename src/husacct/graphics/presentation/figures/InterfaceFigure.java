@@ -1,5 +1,6 @@
 package husacct.graphics.presentation.figures;
 
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
@@ -8,7 +9,10 @@ import org.jhotdraw.draw.TextFigure;
 public class InterfaceFigure extends ClassFigure {
 	private static final long serialVersionUID = 3150088710360391913L;
 	private TextFigure interfaceTextFigure;
-
+	
+	private int MIN_WIDTH = 100;
+	private int MIN_HEIGHT = 80;
+	
 	public InterfaceFigure(String figureName) {
 		super(figureName);
 
