@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
 
 import org.jhotdraw.draw.tool.AbstractTool;
 
@@ -21,8 +20,12 @@ public class PanTool extends AbstractTool {
 	private final JComponent comp;
 	private final JViewport vport;
 	private Point startPt = new Point();
+	private Point move = new Point();
+	private Rectangle rect = new Rectangle();
 	
 	public PanTool(JViewport vport, JComponent comp) {
+		log.debug("pantool: init");
+		
 		this.vport = vport;
 		this.comp = comp;
 		dc = comp.getCursor();
@@ -30,19 +33,15 @@ public class PanTool extends AbstractTool {
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		Point move = new Point();
-		Rectangle rect = new Rectangle();
 		Point pt = e.getPoint();
 		
-		move.setLocation(pt.x - startPt.x, pt.y - startPt.y);
-		startPt.setLocation(pt);
+		int dx = pt.x - startPt.x;
+		int dy = pt.y - startPt.y;
 		Rectangle vr = vport.getViewRect();
-		int w = vr.width;
-		int h = vr.height;
-		Point ptZero = SwingUtilities.convertPoint(vport, 0, 0, comp);
-		rect.setRect(ptZero.x - move.x, ptZero.y - move.y, w, h);
-		comp.scrollRectToVisible(rect);
+		vr.setRect(vr.x - dx, vr.y - dy, vr.width, vr.height);
+		vport.scrollRectToVisible(vr);
 		
+		log.debug("moved " + dx + ", " + dy + " coords, to " + vr.toString());
 	}
 	
 	@Override
