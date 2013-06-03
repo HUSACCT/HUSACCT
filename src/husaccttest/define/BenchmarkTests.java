@@ -1,4 +1,4 @@
-package husaccttest.define;
+/*package husaccttest.define;
 
 import husacct.ServiceProvider;
 import husacct.common.dto.CategoryDTO;
@@ -126,3 +126,4 @@ public class BenchmarkTests {
 	
 	
 
+*/

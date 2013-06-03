@@ -2,6 +2,7 @@ package husacct.analyse.task;
 
 import husacct.ServiceProvider;
 import husacct.analyse.IAnalyseService;
+import husacct.common.OSDetector;
 import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.task.configuration.ConfigurationManager;
@@ -33,7 +34,7 @@ public class HistoryLogger {
 
 	private Document doc;
 	private Element rootElement;
-	private String xmlFile = ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", "");
+	private String xmlFile = OSDetector.getAppFolder() + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename");
 
 
 	public void logHistory(ApplicationDTO applicationDTO, String workspaceName) {
@@ -147,7 +148,7 @@ public class HistoryLogger {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder", "") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename", "")));
+			StreamResult result = new StreamResult(new File(xmlFile));
 
 			// Output to console for testing
 			//StreamResult result = new StreamResult(System.out);

@@ -19,10 +19,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class AnalyzedUnitComparator {
- 
+
 	public AnalyzedModuleComponent calucalteChanges(
 			AbstractCombinedComponent left, AbstractCombinedComponent right) {
-		
+
 		ArrayList<AbstractCombinedComponent> toBeDeleted = new ArrayList<AbstractCombinedComponent>();
 		ArrayList<AbstractCombinedComponent> toBeAaded = new ArrayList<AbstractCombinedComponent>();
 		int leftsize = left.getChildren().size();
@@ -42,44 +42,37 @@ public class AnalyzedUnitComparator {
 		}
 
 		for (AbstractCombinedComponent remove : toBeDeleted) {
-            
+
 			AnalyzedModuleComponent unittoberemoved = ((AnalyzedModuleComponent) remove);
 			unittoberemoved.removeChildFromParent();
-			
+
 			if (unittoberemoved.isMapped()) {
-			
+
 				ModuleStrategy module = StateService.instance().getModulebySoftwareUnitUniqName(unittoberemoved.getUniqueName());
 				WarningMessageService.getInstance().addCodeLevelWarning(module.getId(), unittoberemoved);
 			}
-			
-			
+
+
 			AbstractCombinedComponent parent = remove.getParentofChild();
-			
+
 			int index = parent.getChildren().indexOf(remove);
 			parent.getChildren().remove(index);
 		}
 
 		for (AbstractCombinedComponent newAbstractCombinedComponent : toBeAaded) {
-			
+
 			if (WarningMessageService.getInstance().hasCodeLevelWarning((AnalyzedModuleComponent) newAbstractCombinedComponent)) {
 
 				((AnalyzedModuleComponent) newAbstractCombinedComponent).freeze();
 				left.addChild(newAbstractCombinedComponent);
 
 			} else {
-				
+
 				left.addChild(newAbstractCombinedComponent);
 			}
-
 		}
-
-		
 		return (AnalyzedModuleComponent) left;
 	}
-
-
-		
-	
 
 	private void isequal(AbstractCombinedComponent left,
 			AbstractCombinedComponent right,
@@ -182,7 +175,7 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getSoftwareUnitTreeComponents() {
-	StateService.instance().getAnalzedModuleRegistry().reset();
+		StateService.instance().getAnalzedModuleRegistry().reset();
 		JtreeController.instance().setLoadState(true);
 		AnalyzedModuleComponent rootComponent = new AnalyzedModuleComponent(
 				"root", "Application", "application", "public");
@@ -195,7 +188,7 @@ public class AnalyzedUnitComparator {
 			AnalyzedModuleComponent projectComponent = new AnalyzedModuleComponent(
 					project.name, project.name, "root", "public");
 			for (AnalysedModuleDTO module : project.analysedModules) {
-				 
+
 				this.addChildComponents(projectComponent, module);
 			}
 			rootComponent.addChild(projectComponent);
@@ -210,24 +203,17 @@ public class AnalyzedUnitComparator {
 			AnalysedModuleDTO module) {
 		AnalyzedModuleComponent childComponent = new AnalyzedModuleComponent(
 				module.uniqueName, module.name, module.type, module.visibility);
-		   
-		
-		
-			
-		
-		
-		
-		   
-		   AnalysedModuleDTO[] children = ServiceProvider.getInstance()
+
+		AnalysedModuleDTO[] children = ServiceProvider.getInstance()
 				.getAnalyseService().getChildModulesInModule(module.uniqueName);
 		AnalysedModuleComparator comparator = new AnalysedModuleComparator();
 		Arrays.sort(children, comparator);
 		for (AnalysedModuleDTO subModule : children) {
-			
+
 			this.addChildComponents(childComponent, subModule);
 		}
-		
-		
+
+
 		parentComponent.addChild(childComponent);
 		parentComponent.registerchildrenSize();
 	}
@@ -264,25 +250,21 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		System.out.println("call me maybe ??");
 		if (!JtreeController.instance().isLoaded()|| !ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
-			
+
 			if(!ServiceProvider.getInstance().getControlService().isPreAnalysed())
 			{
-				System.out.println("call me maybe ??1");
 				AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
 				WarningMessageService.getInstance().registerNotMappedUnits(root);
 				return root;
 			}
-			System.out.println("call me maybe ???");
 			JtreeController.instance().setLoadState(true);
-		   JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
-		   AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
-		   WarningMessageService.getInstance().registerNotMappedUnits(root);
-		   return root;
+			JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
+			AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
+			WarningMessageService.getInstance().registerNotMappedUnits(root);
+			return root;
 
 		} else {
-			System.out.println("call me maybe ??????????");
 			AnalyzedModuleComponent left = JtreeController.instance()
 					.getRootOfModel();
 			AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();
@@ -291,9 +273,5 @@ public class AnalyzedUnitComparator {
 			WarningMessageService.getInstance().updateWarnings();
 			return left;
 		}
-		
-	
-
 	}
-
 }
