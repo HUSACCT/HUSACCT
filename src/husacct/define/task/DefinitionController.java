@@ -338,7 +338,7 @@ public class DefinitionController extends Observable implements Observer {
 		    ServiceProvider.getInstance().getLocaleService()
 			    .getTranslatedString("ConfirmRemoveSoftwareUnit"),
 		    "Remove?");
-
+       JtreeController.instance().restoreTreeItem(softwareUnitNames,types);
 	    for (String softwareUnit : softwareUnitNames) {
 		String type = types.get(location);
 		logger.info("Removing software unit " + softwareUnit);

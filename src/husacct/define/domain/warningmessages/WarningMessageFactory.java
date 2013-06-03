@@ -55,10 +55,10 @@ public class WarningMessageFactory {
 	List<AnalyzedModuleComponent> packages = new ArrayList<AnalyzedModuleComponent>();
 	List<AnalyzedModuleComponent> enums = new ArrayList<AnalyzedModuleComponent>();
 	List<AnalyzedModuleComponent> interfaces = new ArrayList<AnalyzedModuleComponent>();
-	packages=	StateService.instance().getAnalzedModuleRegistry().getAnalyzedUnit("package");
-	classes=	StateService.instance().getAnalzedModuleRegistry().getAnalyzedUnit("class");
-	interfaces=	StateService.instance().getAnalzedModuleRegistry().getAnalyzedUnit("interface");
-	enums=	StateService.instance().getAnalzedModuleRegistry().getAnalyzedUnit("enum");
+	packages=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("package");
+	classes=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("class");
+	interfaces=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("interface");
+	enums=	StateService.instance().getAnalzedModuleRegistry().getNotAnalyzedUnit("enum");
 	WarningMessageContainer classesroot = new WarningMessageContainer(new CustomWarningMessage("Class("+classes.size()+")"));
 	WarningMessageContainer packagesroot = new WarningMessageContainer(new CustomWarningMessage("Package("+packages.size()+")"));
 	WarningMessageContainer interfaceroot = new WarningMessageContainer(new CustomWarningMessage("Interface("+interfaces.size()+")"));

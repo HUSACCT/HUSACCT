@@ -264,15 +264,17 @@ public class AnalyzedUnitComparator {
 	}
 
 	public AnalyzedModuleComponent getRootModel() {
-		
+		System.out.println("call me maybe ??");
 		if (!JtreeController.instance().isLoaded()|| !ServiceProvider.getInstance().getControlService().isPreAnalysed()) {
 			
 			if(!ServiceProvider.getInstance().getControlService().isPreAnalysed())
 			{
+				System.out.println("call me maybe ??1");
 				AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
 				WarningMessageService.getInstance().registerNotMappedUnits(root);
 				return root;
 			}
+			System.out.println("call me maybe ???");
 			JtreeController.instance().setLoadState(true);
 		   JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(getSoftwareUnitTreeComponents()));
 		   AnalyzedModuleComponent root= JtreeController.instance().getRootOfModel();
@@ -280,7 +282,7 @@ public class AnalyzedUnitComparator {
 		   return root;
 
 		} else {
-		
+			System.out.println("call me maybe ??????????");
 			AnalyzedModuleComponent left = JtreeController.instance()
 					.getRootOfModel();
 			AnalyzedModuleComponent right = getSoftwareUnitTreeComponents();

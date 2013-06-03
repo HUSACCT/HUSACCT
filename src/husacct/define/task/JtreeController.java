@@ -15,6 +15,7 @@ import husacct.define.task.components.RegexComponent;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.swing.tree.TreePath;
 
@@ -70,7 +71,7 @@ import javax.swing.tree.TreePath;
 	private void removeSoftWareUnits(ModuleStrategy module) {
         for (SoftwareUnitDefinition unit : module.getUnits()) {
 		AnalyzedModuleComponent softwareUnit=	StateService.instance().getAnalyzedSoftWareUnit(unit);
-		removeTreeItem(softwareUnit);
+		restoreTreeItem(softwareUnit);
         
         }
 		
@@ -224,6 +225,11 @@ public void restoreTreeItems(ModuleStrategy module) {
 	
 	
 	
+	
+}
+
+public void restoreTreeItem(List<String> softwareUnitNames, List<String> types) {
+	// TODO Auto-generated method stub
 	
 }
 

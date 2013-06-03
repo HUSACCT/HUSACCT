@@ -28,6 +28,7 @@ public class AnalyzedModuleTree extends JTree {
 
 	public void restoreTreeItem(
 			AnalyzedModuleComponent analyzedsoftwarecomponent) {
+
 		analyzedsoftwarecomponent.unfreeze();
 	}
 

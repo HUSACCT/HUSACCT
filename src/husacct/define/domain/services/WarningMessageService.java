@@ -5,6 +5,7 @@ import husacct.define.domain.services.stateservice.StateService;
 import husacct.define.domain.warningmessages.CodeLevelWarning;
 import husacct.define.domain.warningmessages.ImplementationLevelWarning;
 import husacct.define.domain.warningmessages.WarningMessage;
+import husacct.define.task.JtreeController;
 import husacct.define.task.components.AbstractCombinedComponent;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
@@ -86,7 +87,9 @@ public class WarningMessageService extends Observable implements Observer {
 				
 			}
 			for (WarningMessage warningMessage : messagesTobeRemoved) {
-				removeWarning(warningMessage);
+				//quikfix
+				int index = codelevelWarnings.indexOf(warningMessage);
+				codelevelWarnings.remove(index);
 			}
 		
 		
@@ -203,6 +206,7 @@ public class WarningMessageService extends Observable implements Observer {
 		} 
 	}
 
+	
 
 	public void notifyAllObservers() {
 		notifyAllObservers(this, new Object());
@@ -238,6 +242,15 @@ public class WarningMessageService extends Observable implements Observer {
 			
 			
 		}
+		
+		
+		for (AbstractCombinedComponent unit : StateService.instance().getmappedUnits()) {
+			
+			JtreeController.instance().removeTreeItem((AnalyzedModuleComponent)unit);
+			StateService.instance().getAnalzedModuleRegistry().removeAnalyzedUnit((AnalyzedModuleComponent)unit);
+		}
+		
+		
 		
 		
 	}

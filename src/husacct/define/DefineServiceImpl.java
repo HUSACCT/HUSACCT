@@ -44,6 +44,7 @@ public class DefineServiceImpl extends ObservableService implements
     @Override
     public void analyze() {
 	StateService.instance().analyze();
+	System.out.println("Define Service is now begining to call for units");
 
     }
 

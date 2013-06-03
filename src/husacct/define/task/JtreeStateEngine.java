@@ -22,11 +22,15 @@ import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUn
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 public abstract class JtreeStateEngine {
 	private Logger logger;
@@ -85,6 +89,7 @@ public abstract class JtreeStateEngine {
 
 		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
 				.get(unit.getName().toLowerCase())[1];
+		
 		mapRegistry.remove(unit.getName());
 		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
 		data.add(analyzeModuleTobeRestored);
@@ -171,15 +176,16 @@ public abstract class JtreeStateEngine {
 
 	public void removeSoftwareUnit(List<String> selectedModules) {
 		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
-		ModuleStrategy m = (ModuleStrategy) mapRegistry.get(selectedModules
-				.get(0))[0];
+	
+	Object[] m=	mapRegistry.get(selectedModules.get(0));
+
 		for (String uniqname : selectedModules) {
 			AnalyzedModuleComponent softwareUnit = (AnalyzedModuleComponent) mapRegistry
 					.get(uniqname)[1];
 			units.add(softwareUnit);
 		}
 
-		stateController.insertCommand(new SoftwareUnitRemoveCommand(m, units));
+	//	stateController.insertCommand(new SoftwareUnitRemoveCommand(m, units));
 
 	}
 
@@ -193,6 +199,17 @@ return allUnitsRegistry.getAnalyzedUnit(unit);
 	public void addModule(ModuleStrategy subModule) {
 		stateController.insertCommand(new ModuleAddCommand(subModule));
 		
+	}
+
+	public ArrayList<AnalyzedModuleComponent>  getmappedUnits() {
+    ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		for (Object[] obj : mapRegistry.values()) {
+			data.add((AnalyzedModuleComponent)obj[1]);
+		}
+    		
+		
+		
+		return data;
 	}
 
 }

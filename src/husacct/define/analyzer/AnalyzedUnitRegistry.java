@@ -1,6 +1,7 @@
 package husacct.define.analyzer;
 
 import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.task.JtreeController;
 import husacct.define.task.components.AnalyzedModuleComponent;
 
 import java.util.ArrayList;
@@ -11,23 +12,29 @@ public class AnalyzedUnitRegistry {
 	private ArrayList<AnalyzedModuleComponent> classes = new ArrayList<AnalyzedModuleComponent>();
 	private ArrayList<AnalyzedModuleComponent> interfaces = new ArrayList<AnalyzedModuleComponent>();
 	private ArrayList<AnalyzedModuleComponent> enums = new ArrayList<AnalyzedModuleComponent>();
+	private ArrayList<AnalyzedModuleComponent> regex = new ArrayList<AnalyzedModuleComponent>();
+
+	private ArrayList<AnalyzedModuleComponent> mappedPackeges = new ArrayList<AnalyzedModuleComponent>();
+	private ArrayList<AnalyzedModuleComponent> mappedclasses = new ArrayList<AnalyzedModuleComponent>();
+	private ArrayList<AnalyzedModuleComponent> mappedinterfaces = new ArrayList<AnalyzedModuleComponent>();
+	private ArrayList<AnalyzedModuleComponent> mappedEnum = new ArrayList<AnalyzedModuleComponent>();
 
 	public void registerAnalyzedUnit(AnalyzedModuleComponent unit) {
 		String type = unit.getType().toLowerCase();
 
 		switch (type) {
 		case "class":
-			registerClass(unit);
+			registerEntity(classes, unit);
 			break;
 
 		case "package":
-			registerPackage(unit);
+			registerEntity(packeges, unit);
 			break;
 		case "interface":
-			registerInterface(unit);
+			registerEntity(interfaces, unit);
 			break;
 		case "enum":
-			registerEnum(unit);
+			registerEntity(enums, unit);
 			break;
 
 		default:
@@ -41,17 +48,17 @@ public class AnalyzedUnitRegistry {
 
 		switch (type) {
 		case "class":
-			removeClass(unit);
+			removeEnity(classes, unit);
 			break;
 
 		case "package":
-			removePackage(unit);
+			removeEnity(packeges, unit);
 			break;
 		case "interface":
-			removeInterface(unit);
+			removeEnity(interfaces, unit);
 			break;
 		case "enum":
-			removeEnum(unit);
+			removeEnity(enums, unit);
 			break;
 
 		default:
@@ -60,7 +67,31 @@ public class AnalyzedUnitRegistry {
 
 	}
 
-	public ArrayList<AnalyzedModuleComponent> getAnalyzedUnit(String type) {
+	public void registerEntity(List<AnalyzedModuleComponent> list,
+			AnalyzedModuleComponent data) {
+		JtreeController.instance().restoreTreeItem(data);
+		    list.add(data);
+	}
+
+	public void removeEnity(List<AnalyzedModuleComponent> list,
+			AnalyzedModuleComponent analyzedClass) {
+		int index = 0;
+		String right = analyzedClass.getUniqueName().toLowerCase();
+		for (int i = 0; i < list.size(); i++) {
+			String left = list.get(i).getUniqueName().toLowerCase();
+			if (left.equals(right)) {
+				index = i;
+              JtreeController.instance().removeTreeItem(analyzedClass);
+				list.remove(index);
+				break;
+			}
+
+		}
+
+	}
+
+	// used by warnings
+	public ArrayList<AnalyzedModuleComponent> getNotAnalyzedUnit(String type) {
 
 		ArrayList<AnalyzedModuleComponent> result = new ArrayList<AnalyzedModuleComponent>();
 		switch (type) {
@@ -84,89 +115,6 @@ public class AnalyzedUnitRegistry {
 		return result;
 	}
 
-	public void registerClass(AnalyzedModuleComponent analyzedClass) {
-		classes.add(analyzedClass);
-
-	}
-
-	public void registerPackage(AnalyzedModuleComponent analyzedPackage) {
-
-		packeges.add(analyzedPackage);
-
-	}
-
-	public void registerInterface(AnalyzedModuleComponent analyzedInterfaces) {
-		interfaces.add(analyzedInterfaces);
-
-	}
-
-	public void registerEnum(AnalyzedModuleComponent analyzedenum) {
-		enums.add(analyzedenum);
-
-	}
-
-	public void removeClass(AnalyzedModuleComponent analyzedClass) {
-		int index = 0;
-		String right = analyzedClass.getUniqueName().toLowerCase();
-		for (int i = 0; i < classes.size(); i++) {
-			String left = classes.get(i).getUniqueName().toLowerCase();
-			if (left.equals(right)) {
-				index = i;
-				classes.remove(index);
-				break;
-			}
-
-		}
-
-	}
-
-	public void removePackage(AnalyzedModuleComponent analyzedPackage) {
-		int index = 0;
-		String right = analyzedPackage.getUniqueName().toLowerCase();
-		for (int i = 0; i < packeges.size(); i++) {
-			String left = packeges.get(i).getUniqueName().toLowerCase();
-			if (left.equals(right)) {
-				index = i;
-				packeges.remove(index);
-				break;
-			}
-
-		}
-
-	}
-
-	public void removeInterface(AnalyzedModuleComponent analyzedInterfaces) {
-
-		int index = -1;
-		String right = analyzedInterfaces.getUniqueName().toLowerCase();
-		for (int i = 0; i < interfaces.size(); i++) {
-			String left = interfaces.get(i).getUniqueName().toLowerCase();
-			if (left.equals(right)) {
-				index = i;
-				interfaces.remove(index);
-				break;
-			}
-
-		}
-
-	}
-
-	public void removeEnum(AnalyzedModuleComponent analyzedenum) {
-
-		int index = 0;
-		String right = analyzedenum.getUniqueName().toLowerCase();
-		for (int i = 0; i < enums.size(); i++) {
-			String left = enums.get(i).getUniqueName().toLowerCase();
-			if (left.equals(right)) {
-				index = i;
-				enums.remove(index);
-				break;
-			}
-
-		}
-
-	}
-
 	public int getUnitsCount() {
 
 		return classes.size() + packeges.size() + enums.size()
@@ -183,21 +131,21 @@ public class AnalyzedUnitRegistry {
 	}
 
 	public AnalyzedModuleComponent getAnalyzedUnit(SoftwareUnitDefinition unit) {
-   AnalyzedModuleComponent resultingSoftwareUnit=null;
+		AnalyzedModuleComponent resultingSoftwareUnit = null;
 		switch (unit.getType()) {
 		case CLASS:
-		resultingSoftwareUnit=	findSoftUnit(unit.getName(), classes);
+			resultingSoftwareUnit = findSoftUnit(unit.getName(), classes);
 			break;
 		case PACKAGE:
-			resultingSoftwareUnit=	findSoftUnit(unit.getName(), packeges);
+			resultingSoftwareUnit = findSoftUnit(unit.getName(), packeges);
 			break;
 
 		case EXTERNALLIBRARY:
-		
+
 			break;
 
 		case INTERFACE:
-			resultingSoftwareUnit=	findSoftUnit(unit.getName(), interfaces);
+			resultingSoftwareUnit = findSoftUnit(unit.getName(), interfaces);
 			break;
 
 		case REGEX:
@@ -207,23 +155,57 @@ public class AnalyzedUnitRegistry {
 		case SUBSYSTEM:
 
 			break;
-		
+
 		default:
 			break;
 		}
 
 		return resultingSoftwareUnit;
 	}
-	
-	
-public AnalyzedModuleComponent findSoftUnit(String uniqname,List<AnalyzedModuleComponent> list)
-{
-	for (AnalyzedModuleComponent unit : list) {
-		if (uniqname.toLowerCase().equals(unit.getUniqueName().toLowerCase())) {
-			return unit;
-		}
-	}
-return new AnalyzedModuleComponent();
 
-}
+	public AnalyzedModuleComponent getMappedUnit(SoftwareUnitDefinition unit) {
+		AnalyzedModuleComponent resultingSoftwareUnit = null;
+		switch (unit.getType()) {
+		case CLASS:
+			resultingSoftwareUnit = findSoftUnit(unit.getName(), mappedclasses);
+			break;
+		case PACKAGE:
+			resultingSoftwareUnit = findSoftUnit(unit.getName(), mappedPackeges);
+			break;
+
+		case EXTERNALLIBRARY:
+
+			break;
+
+		case INTERFACE:
+			resultingSoftwareUnit = findSoftUnit(unit.getName(),
+					mappedinterfaces);
+			break;
+
+		case REGEX:
+
+			break;
+
+		case SUBSYSTEM:
+
+			break;
+
+		default:
+			break;
+		}
+
+		return resultingSoftwareUnit;
+	}
+
+	public AnalyzedModuleComponent findSoftUnit(String uniqname,
+			List<AnalyzedModuleComponent> list) {
+		for (AnalyzedModuleComponent unit : list) {
+			if (uniqname.toLowerCase().equals(
+					unit.getUniqueName().toLowerCase())) {
+				return unit;
+			}
+		}
+		return new AnalyzedModuleComponent();
+
+	}
 }
