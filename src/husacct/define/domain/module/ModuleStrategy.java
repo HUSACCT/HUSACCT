@@ -3,12 +3,14 @@ package husacct.define.domain.module;
 import husacct.ServiceProvider;
 import husacct.define.domain.SoftwareUnitDefinition;
 import husacct.define.domain.SoftwareUnitRegExDefinition;
+import husacct.define.domain.module.modules.Layer;
 import husacct.define.domain.services.DefaultRuleDomainService;
 import husacct.define.domain.services.WarningMessageService;
+import husacct.define.domain.services.stateservice.StateService;
 
 import java.util.ArrayList;
 
-public class Module implements Comparable<Module> {
+public abstract class ModuleStrategy implements Comparable<ModuleStrategy> {
 
 	protected static long STATIC_ID = 1;
 	protected long id;
@@ -17,23 +19,19 @@ public class Module implements Comparable<Module> {
 	protected String type;
 	protected ArrayList<SoftwareUnitDefinition> mappedSUunits;
 	protected ArrayList<SoftwareUnitRegExDefinition> mappedRegExSUunits;
-	protected ArrayList<Module> subModules;
-	protected Module parent;
+	protected ArrayList<ModuleStrategy> subModules;
+	protected ModuleStrategy parent;
 
-	public Module(){
-		this("", "");
-	}
-
-	public Module(String name, String description){	
+	public void set(String name, String description){
 		this.id = STATIC_ID;
 		STATIC_ID++;
 		this.name = name;
 		this.description = description;
-		this.type = "Module";
 		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
 		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
-		this.subModules = new ArrayList<Module>();
+		this.subModules = new ArrayList<ModuleStrategy>();
 	}
+	
 
 	public String getName() {
 		return name;
@@ -60,7 +58,7 @@ public class Module implements Comparable<Module> {
 	}
 
 	public ArrayList<SoftwareUnitDefinition> getUnits() {
-		return mappedSUunits;
+	return mappedSUunits;
 	}
 
 	public void setUnits(ArrayList<SoftwareUnitDefinition> units) {
@@ -75,12 +73,12 @@ public class Module implements Comparable<Module> {
 		this.mappedRegExSUunits = units;
 	}
 
-	public ArrayList<Module> getSubModules() {
+	public ArrayList<ModuleStrategy> getSubModules() {
 		return subModules;
 	}
 
-	public void setSubModules(ArrayList<Module> subModules) {
-		for (Module module : subModules) {
+	public void setSubModules(ArrayList<ModuleStrategy> subModules) {
+		for (ModuleStrategy module : subModules) {
 			module.parent=this;
 		}
 		this.subModules = subModules;
@@ -119,12 +117,13 @@ public class Module implements Comparable<Module> {
 		}
 	}
 
-	public String addSubModule(Module subModule){
+	public String addSubModule(ModuleStrategy subModule){
 		if(!subModules.contains(subModule) && !moduleAlreadyExistentWithinSystem(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(subModule);
 			DefaultRuleDomainService service = new DefaultRuleDomainService();
 			service.addDefaultRules(subModule);
+			StateService.instance().addModule(subModule);
 			WarningMessageService.getInstance().processModule(subModule);
 			return "";
 		}else{
@@ -133,7 +132,7 @@ public class Module implements Comparable<Module> {
 
 	}
 
-	public void addSubModule(int index,Module subModule){
+	public void addSubModule(int index,ModuleStrategy subModule){
 		if(!subModules.contains(subModule) && !this.hasSubModule(subModule.getName())) {
 			subModule.parent=this;
 			subModules.add(index,subModule);		
@@ -142,7 +141,7 @@ public class Module implements Comparable<Module> {
 		}
 	}
 
-	public void removeSubModule(Module subModule){
+	public void removeSubModule(ModuleStrategy subModule){
 		if(subModules.contains(subModule) && this.hasSubModule(subModule.getName())) {
 			subModules.remove(subModule);
 		}else{
@@ -155,7 +154,7 @@ public class Module implements Comparable<Module> {
 	}
 
 	public boolean moduleAlreadyExistentWithinSystem(String name) {
-		Module parentWalker = this;
+		ModuleStrategy parentWalker = this;
 		while (parentWalker.parent != null && !(parentWalker instanceof Layer)) {
 			parentWalker = parentWalker.parent;
 		}
@@ -165,7 +164,7 @@ public class Module implements Comparable<Module> {
 	public boolean hasSubModule(String name){
 		boolean hasSubModule = false;
 
-		for(Module subModule : subModules){
+		for(ModuleStrategy subModule : subModules){
 			if(subModule.getName().equals(name)){
 				hasSubModule = true;
 			}else if(!(subModule instanceof Layer) && subModule.hasSubModule(name)){
@@ -177,7 +176,7 @@ public class Module implements Comparable<Module> {
 
 	public boolean hasSubModule(long id){
 		boolean hasSubModule = false;
-		for(Module subModule : subModules){
+		for(ModuleStrategy subModule : subModules){
 			if(subModule.getId() == id || subModule.hasSubModule(id)){
 				hasSubModule = true;
 			}
@@ -208,7 +207,7 @@ public class Module implements Comparable<Module> {
 				softwareUnit = unit;
 			}
 		}
-		for (Module mod : subModules){
+		for (ModuleStrategy mod : subModules){
 			if (mod.hasSoftwareUnit(softwareUnitName)){
 				softwareUnit = mod.getSoftwareUnitByName(softwareUnitName);
 			}
@@ -224,7 +223,7 @@ public class Module implements Comparable<Module> {
 				softwareUnit = unit;
 			}
 		}
-		for (Module mod : subModules){
+		for (ModuleStrategy mod : subModules){
 			if (mod.hasRegExSoftwareUnit(softwareUnitName)){
 				softwareUnit = mod.getRegExSoftwareUnitByName(softwareUnitName);
 			}
@@ -239,8 +238,8 @@ public class Module implements Comparable<Module> {
 			return true;
 		if (obj == null)
 			return false;
-		if (obj instanceof Module){
-			Module m = (Module)obj;
+		if (obj instanceof ModuleStrategy){
+			ModuleStrategy m = (ModuleStrategy)obj;
 			if (m.id != this.id){
 				return false;
 			}
@@ -265,8 +264,7 @@ public class Module implements Comparable<Module> {
 		return isMapped;
 	}
 
-	@Override
-	public int compareTo(Module compareObject) {
+	public int compareTo(ModuleStrategy compareObject) {
 		int compareResult = 0;
 		if(compareObject instanceof Layer || this.getId() < compareObject.getId()) {
 			compareResult = -1;
@@ -276,7 +274,7 @@ public class Module implements Comparable<Module> {
 		return compareResult;
 	}
 
-	public Module getparent() {
+	public ModuleStrategy getparent() {
 		return parent;
 	}
 
@@ -288,7 +286,7 @@ public class Module implements Comparable<Module> {
 			}
 		}
 		if (!directly){
-			for (Module mod : subModules){
+			for (ModuleStrategy mod : subModules){
 				if (mod.hasSoftwareUnit(softwareUnitName, directly)){
 					hasSoftwareUnit = true;
 				}
@@ -305,7 +303,7 @@ public class Module implements Comparable<Module> {
 			}
 		}
 		if (!directly) {
-			for (Module mod : subModules){
+			for (ModuleStrategy mod : subModules){
 				if (mod.hasRegExSoftwareUnit(softwareUnitName, directly)){
 					hasSoftwareUnit = true;
 				}
@@ -313,5 +311,24 @@ public class Module implements Comparable<Module> {
 		}
 		return hasSoftwareUnit;
 	}
+	
+	public void copyValuestoNewCompont(ModuleStrategy newModule)
+	{
+		newModule.setId(this.getId());
+		newModule.setName(this.getName());
+		newModule.setDescription(this.getDescription());
+		newModule.parent=this.getparent();
+		newModule.setSubModules(this.getSubModules());
+		newModule.setRegExUnits(this.getRegExUnits());
+		newModule.setUnits(this.getUnits());
+		
+		
+	}
+
+	public void setParent(ModuleStrategy moduleParent) {
+		this.parent=moduleParent;
+		
+	}
+	
 
 }

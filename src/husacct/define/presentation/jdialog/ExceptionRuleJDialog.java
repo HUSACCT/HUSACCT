@@ -3,6 +3,7 @@ package husacct.define.presentation.jdialog;
 import husacct.ServiceProvider;
 import husacct.common.Resource;
 import husacct.control.ControlServiceImpl;
+import husacct.define.domain.services.DomainGateway;
 import husacct.define.presentation.jpanel.ruledetails.AbstractDetailsJPanel;
 import husacct.define.presentation.jpanel.ruledetails.FactoryDetails;
 import husacct.define.presentation.utils.KeyValueComboBox;
@@ -182,7 +183,7 @@ public class ExceptionRuleJDialog  extends JDialog implements KeyListener, Actio
 			HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 			String ruleTypeKey = this.exceptionRuleKeyValueComboBox.getSelectedItemKey();
 			ruleDetails.put("ruleTypeKey", ruleTypeKey);	
-			this.appliedRuleController.addException(ruleDetails);
+			DomainGateway.getInstance().addException(ruleDetails);
 			this.appliedRuleFrame.updateExceptionTable();
 			this.dispose();
 		} else {
