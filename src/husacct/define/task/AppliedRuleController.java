@@ -499,82 +499,17 @@ public class AppliedRuleController extends PopUpController {
 			exceptionRule.put("regex", exception.getRegex());
 			addException(exceptionRule);
 		}
-	    }
-	}
-	return hasException;
-    }
-
-    public boolean isAnalysed() {
-	return ServiceProvider.getInstance().getAnalyseService().isAnalysed();
-    }
-
-    private void loadAllRuleExceptions() {
-	ArrayList<AppliedRuleStrategy> exceptions = appliedRuleExceptionService
-		.getExceptionsByAppliedRule(currentAppliedRuleId);
-	for (AppliedRuleStrategy exception : exceptions) {
-	    HashMap<String, Object> exceptionRule = new HashMap<String, Object>();
-	    exceptionRule.put("id", exception.getId());
-	    exceptionRule.put("ruleTypeKey", exception.getRuleType());
-	    exceptionRule
-	    .put("moduleFromId", exception.getModuleFrom().getId());
-	    exceptionRule.put("moduleToId", exception.getModuleTo().getId());
-	    exceptionRule.put("dependencies", exception.getDependencies());
-	    exceptionRule.put("enabled", exception.isEnabled());
-	    exceptionRule.put("description", exception.getDescription());
-	    exceptionRule.put("regex", exception.getRegex());
-	    addException(exceptionRule);
-	}
-	notifyObservers();
-    }
-
-    /*
-     * Oberver
-     */
-    public void notifyObservers(long currentAppliedRuleId) {
-	for (Observer o : observers) {
-	    o.update(this, currentAppliedRuleId);
-	}
-    }
-
-    public void removeException(int index) {
-	if (index != -1) {
-	    try {
-		exceptionRules.remove(index);
-	    } catch (Exception e) {
-	    }
-	}
-    }
-
-    public boolean save(HashMap<String, Object> ruleDetails) {
-
-	String ruleTypeKey = (String) ruleDetails.get("ruleTypeKey");
-	Object from = ruleDetails.get("moduleFromId");
-	Object to = ruleDetails.get("moduleToId");
-	boolean isEnabled = (Boolean) ruleDetails.get("enabled");
-	String description = (String) ruleDetails.get("description");
-	String regex = (String) ruleDetails.get("regex");
-	String[] dependencies = (String[]) ruleDetails.get("dependencies");
-
-	Module moduleFrom = assignToCorrectModule(from);
-	Module moduleTo;
-	if(to == null){
-	    moduleTo = assignToCorrectModule(from);   
-	}else{
-	    moduleTo = assignToCorrectModule(to);
+		notifyObservers();
 	}
 
-	try {
-	    if (getAction().equals(PopUpController.ACTION_NEW)) {
-		currentAppliedRuleId = appliedRuleService.addAppliedRule(
-			ruleTypeKey, description, dependencies, regex,
-			moduleFrom, moduleTo, isEnabled);
-	    } else if (getAction().equals(PopUpController.ACTION_EDIT)) {
-		appliedRuleService.updateAppliedRule(currentAppliedRuleId,
-			ruleTypeKey, description, dependencies, regex,
-			moduleFrom, moduleTo, isEnabled);
-		appliedRuleExceptionService
-		.removeAllAppliedRuleExceptions(currentAppliedRuleId);
-	    }
+	/*
+	 * Oberver
+	 */
+	public void notifyObservers(long currentAppliedRuleId) {
+		for (Observer o : observers) {
+			o.update(this, currentAppliedRuleId);
+		}
+	}
 
 	public void removeException(int index) {
 		if (index != -1) {

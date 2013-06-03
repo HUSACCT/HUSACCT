@@ -30,19 +30,19 @@ public class AppliedRuleDomainService {
     }
 
     public long addAppliedRule(String ruleTypeKey, String description,
-	    String[] dependencies, String regex, ModuleStrategy ModuleStrategyFrom,
-	    ModuleStrategy ModuleStrategyTo, boolean enabled) {
+    	    String[] dependencies, String regex, ModuleStrategy ModuleStrategyFrom,
+    	    ModuleStrategy ModuleStrategyTo, boolean enabled) {
 
-	AppliedRuleStrategy rule = ruleFactory.createDummyRule(ruleTypeKey);
-	if(moduleTo.getId() != -1)
-		rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleTo, enabled); 
-	else
-		rule.setAppliedRule(description, dependencies, regex, moduleFrom, moduleFrom, enabled); 
-	SoftwareArchitecture.getInstance().addAppliedRule(rule);
-	ServiceProvider.getInstance().getDefineService()
-		.notifyServiceListeners();
+    	AppliedRuleStrategy rule = ruleFactory.createDummyRule(ruleTypeKey);
+    	rule.setAppliedRule(description, dependencies, regex, ModuleStrategyFrom, ModuleStrategyTo, enabled); 
+    	if (isDuplicate(rule)) {
+    	    return -1;
+    	}
+    	SoftwareArchitecture.getInstance().addAppliedRule(rule);
+    	ServiceProvider.getInstance().getDefineService()
+    		.notifyServiceListeners();
 
-	return rule.getId();
+    	return rule.getId();
     }
 
     public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {

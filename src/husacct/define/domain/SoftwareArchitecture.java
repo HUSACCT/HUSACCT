@@ -16,224 +16,101 @@ import java.util.List;
 
 public class SoftwareArchitecture {
 
-    private static int counter = 0;
-    private static SoftwareArchitecture instance = null;
+	private ModuleFactory factory = new ModuleFactory();
 
-    public static SoftwareArchitecture getInstance() {
-	return instance == null ? (instance = new SoftwareArchitecture())
-		: instance;
-    }
+	private static int counter = 0;
 
-    public static void setInstance(SoftwareArchitecture sA) {
-	instance = sA;
-    }
+	private static SoftwareArchitecture instance = null;
 
-    private ArrayList<AppliedRuleStrategy> appliedRules;
-
-    private Module rootModule;
-
-    public SoftwareArchitecture() {
-	this("SoftwareArchitecture", "This is the root of the architecture",
-		new ArrayList<Module>(), new ArrayList<AppliedRuleStrategy>());
-    }
-
-    public SoftwareArchitecture(String name, String description) {
-	this(name, description, new ArrayList<Module>(),
-		new ArrayList<AppliedRuleStrategy>());
-    }
-
-    public SoftwareArchitecture(String name, String description,
-	    ArrayList<Module> modules, ArrayList<AppliedRuleStrategy> rules) {
-	rootModule = new Module(name, description);
-	rootModule.setId(0);
-	setModules(modules);
-	setAppliedRules(rules);
-    }
-
-    public void addAppliedRule(AppliedRuleStrategy rule) {
-	    appliedRules.add(rule);
-    }
-
-    public long addModule(Module module) {
-	long moduleId;
-	if (!hasModule(module.getName())) {
-	    rootModule.addSubModule(module);
-	    moduleId = module.getId();
-	} else {
-	    throw new RuntimeException(ServiceProvider.getInstance()
-		    .getLocaleService().getTranslatedString("SameNameModule"));
-	}
-	return moduleId;
-    }
-
-
-    // TODO: Holy sh...
-    private Module generateNewType(Module oldModule, String newType) {
-	Long id = oldModule.getId();
-	String name = oldModule.getName();
-	String desc = oldModule.getDescription();
-	ArrayList<SoftwareUnitDefinition> softwareUnits = oldModule.getUnits();
-	ArrayList<Module> subModules = oldModule.getSubModules();
-	processDefaultComponents(oldModule);
-
-	if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("Layer").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    Layer layer = new Layer();
-	    layer.setDescription(desc);
-	    layer.setId(id);
-	    layer.setName(name);
-	    layer.setType(newType);
-	    layer.setSubModules(subModules);
-	    layer.setUnits(softwareUnits);
-	    return layer;
-	} else if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("Component").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    Component component = new Component();
-	    component.setDescription(desc);
-	    component.setId(id);
-	    component.setName(name);
-	    component.setType(newType);
-	    Facade f = new Facade("Facade" + name, "is Facade of " + name);
-	    subModules.add(f);
-	    Collections.reverse(subModules);
-	    component.setSubModules(subModules);
-	    component.setUnits(softwareUnits);
-
-	    return component;
-	} else if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("SubSystem").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    SubSystem subSystem = new SubSystem();
-	    subSystem.setDescription(desc);
-	    subSystem.setId(id);
-	    subSystem.setName(name);
-	    subSystem.setType(newType);
-	    subSystem.setSubModules(subModules);
-	    subSystem.setUnits(softwareUnits);
-	    return subSystem;
-	} else if (ServiceProvider.getInstance().getLocaleService()
-		.getTranslatedString("ExternalLibrary").toLowerCase()
-		.equals(newType.toLowerCase())) {
-	    ExternalSystem externalSystem = new ExternalSystem();
-	    externalSystem.setDescription(desc);
-	    externalSystem.setId(id);
-	    externalSystem.setName(name);
-	    externalSystem.setType(newType);
-	    externalSystem.setSubModules(subModules);
-	    externalSystem.setUnits(softwareUnits);
-	    return externalSystem;
-	} else {
-	    return null;
+	public static SoftwareArchitecture getInstance() {
+		return instance == null ? (instance = new SoftwareArchitecture())
+				: instance;
 	}
 
-    }
+	public static void setInstance(SoftwareArchitecture sA) {
+		instance = sA;
+	}
 
-    public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
-	if (hasAppliedRule(appliedRuleId)) {
-	    for (AppliedRuleStrategy rule : appliedRules) {
-		if (rule.getId() == appliedRuleId) {
-		    return rule;
+	private ArrayList<AppliedRuleStrategy> appliedRules;
+
+	private ModuleStrategy rootModule;
+
+	public SoftwareArchitecture() {
+		this("SoftwareArchitecture", "This is the root of the architecture",
+				new ArrayList<ModuleStrategy>(),
+				new ArrayList<AppliedRuleStrategy>());
+	}
+
+	public SoftwareArchitecture(String name, String description) {
+		this(name, description, new ArrayList<ModuleStrategy>(),
+				new ArrayList<AppliedRuleStrategy>());
+	}
+
+	public SoftwareArchitecture(String name, String description,
+			ArrayList<ModuleStrategy> modules,
+			ArrayList<AppliedRuleStrategy> rules) {
+		rootModule = factory.createModule("Root");
+
+		rootModule.set(name, description);
+		setModules(modules);
+		setAppliedRules(rules);
+	}
+
+	public void addAppliedRule(AppliedRuleStrategy rule) {
+
+		if (!appliedRules.contains(rule) && !hasAppliedRule(rule.getId())) {
+			appliedRules.add(rule);
+		} else {
+			throw new RuntimeException(ServiceProvider.getInstance()
+					.getLocaleService().getTranslatedString("RuleAlreadyAdded"));
 		}
-	    }
-	} else {
-	    throw new RuntimeException(ServiceProvider.getInstance()
-		    .getLocaleService().getTranslatedString("NoRule"));
 	}
-	return null;
-    }
 
-    public ArrayList<AppliedRuleStrategy> getAppliedRules() {
-	return appliedRules;
-    }
-
-    public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
-	ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
-	for (AppliedRuleStrategy rule : appliedRules) {
-	    if (rule.getModuleFrom().getId() == moduleId) {
-		appliedRuleIds.add(rule.getId());
-	    }
-	}
-	return appliedRuleIds;
-    }
-
-    public ArrayList<Long> getAppliedRulesIdsByModuleToId(long moduleId) {
-	ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
-	for (AppliedRuleStrategy rule : appliedRules) {
-	    if (rule.getModuleTo().getId() == moduleId) {
-		appliedRuleIds.add(rule.getId());
-	    }
-	}
-	return appliedRuleIds;
-    }
-
-    public String getDescription() {
-	return rootModule.getDescription();
-    }
-
-    public ArrayList<AppliedRuleStrategy> getEnabledAppliedRules() {
-	ArrayList<AppliedRuleStrategy> enabledRuleList = new ArrayList<AppliedRuleStrategy>();
-	for (AppliedRuleStrategy ar : appliedRules) {
-	    if (ar.isEnabled()) {
-		enabledRuleList.add(ar);
-	    }
-	}
-	return enabledRuleList;
-    }
-
-    public ArrayList<AppliedRuleStrategy> getGeneratedRules() {
-	return null; // TODO: Has to get an implementation
-    }
-
-    public ArrayList<Layer> getLayersBelow(Layer layer) {
-	ArrayList<Layer> returnList = new ArrayList<Layer>();
-	Layer underlyingLayer = getTheFirstLayerBelow(layer);
-	Layer _temp = underlyingLayer;
-
-	while (getTheFirstLayerBelow(_temp).equals(null)) {
-	    returnList.add(_temp);
-	    _temp = getTheFirstLayerBelow(_temp);
-	}
-	return returnList; // TODO: ?
-    }
-
-    public Module getModuleById(long moduleId) {
-	Module currentModule = null;
-	if (rootModule.getId() == moduleId || rootModule.hasSubModule(moduleId)) {
-	    currentModule = rootModule;
-	    while (currentModule.getId() != moduleId) {
-		for (Module subModule : currentModule.getSubModules()) {
-		    if (subModule.getId() == moduleId
-			    || subModule.hasSubModule(moduleId)) {
-			currentModule = subModule;
-		    }
+	public long addModule(ModuleStrategy module) {
+		long moduleId;
+		if (!hasModule(module.getName())) {
+			rootModule.addSubModule(module);
+			moduleId = module.getId();
+		} else {
+			throw new RuntimeException(ServiceProvider.getInstance()
+					.getLocaleService().getTranslatedString("SameNameModule"));
 		}
-	    }
+		return moduleId;
 	}
-	if (currentModule == null) {
-	    throw new RuntimeException(ServiceProvider.getInstance()
-		    .getLocaleService().getTranslatedString("NoModule"));
+
+	public String addNewModule(ModuleStrategy module) {
+		if (hasModule(module.getName())) {
+			return ServiceProvider.getInstance().getLocaleService()
+					.getTranslatedString("SameNameModule");
+		} else {
+			rootModule.addSubModule(module);
+		}
+		return "";
 	}
-	return currentModule;
-    }
 
-    public Module getModuleByLogicalPath(String logicalPath) {
-	Module currentModule = null;
-	if (logicalPath.equals("**")) {
-	    currentModule = rootModule;
-	} else {
-	    String[] moduleNames = logicalPath.split("\\.");
-	    int i = 0;
-	    for (Module module : rootModule.getSubModules()) {
-		if (module.getName().equals(moduleNames[i])) {
-		    currentModule = module;
+	public AppliedRuleStrategy getAppliedRuleById(long appliedRuleId) {
+		if (hasAppliedRule(appliedRuleId)) {
+			for (AppliedRuleStrategy rule : appliedRules) {
+				if (rule.getId() == appliedRuleId) {
+					return rule;
+				}
+			}
+		} else {
+			throw new RuntimeException(ServiceProvider.getInstance()
+					.getLocaleService().getTranslatedString("NoRule"));
+		}
+		return null;
+	}
 
-		    for (int j = i; j < moduleNames.length; j++) {
-			for (Module subModule : currentModule.getSubModules()) {
-			    if (subModule.getName().equals(moduleNames[j])) {
-				currentModule = subModule;
-			    }
+	public ArrayList<AppliedRuleStrategy> getAppliedRules() {
+		return appliedRules;
+	}
+
+	public ArrayList<Long> getAppliedRulesIdsByModuleFromId(long moduleId) {
+		ArrayList<Long> appliedRuleIds = new ArrayList<Long>();
+		for (AppliedRuleStrategy rule : appliedRules) {
+			if (rule.getModuleFrom().getId() == moduleId) {
+				appliedRuleIds.add(rule.getId());
 			}
 		}
 		return appliedRuleIds;
