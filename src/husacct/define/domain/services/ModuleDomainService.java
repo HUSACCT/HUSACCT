@@ -17,6 +17,7 @@ public class ModuleDomainService {
 	public long addModuleToParent(long parentModuleId, ModuleStrategy module) {
 		ModuleStrategy parentModule = SoftwareArchitecture.getInstance()
 				.getModuleById(parentModuleId);
+		
 		parentModule.addSubModule(module);
 		long moduleId = module.getId();
 
@@ -26,10 +27,13 @@ public class ModuleDomainService {
 	}
 
 	public long addModuleToRoot(ModuleStrategy module) {
+	
 		long moduleId = SoftwareArchitecture.getInstance().addModule(module);
-		//service.addDefaultRules(module);
-		ServiceProvider.getInstance().getDefineService()
-				.notifyServiceListeners();
+	
+		
+	
+		
+		ServiceProvider.getInstance().getDefineService().notifyServiceListeners();
 		return moduleId;
 	}
 

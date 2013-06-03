@@ -33,7 +33,8 @@ public class XMLDomain {
     }
 
     public Application createApplication(){
-	List<Element> applicationProperties = workspace.getChildren();
+	try{
+    	List<Element> applicationProperties = workspace.getChildren();
 
 	Element name = applicationProperties.get(0);
 	Element version = applicationProperties.get(1);
@@ -43,6 +44,7 @@ public class XMLDomain {
 
 	application = new Application(name.getValue(), projectsList, version.getValue());
 	application.setArchitecture(createArchitectureFromElement(architecture));
+	}catch(Exception exe){exe.printStackTrace();}
 	return application;
     }
 
@@ -82,7 +84,7 @@ public class XMLDomain {
 
 	// Check if there are rules in the XML
 	if(XMLElement.getChild("rules").getChildren().size() > 0){
-	    createAppliedRulesFromXML(XMLElement.getChild("rules"));
+	   createAppliedRulesFromXML(XMLElement.getChild("rules"));
 	}
 
 	return softwareArchitecture;
@@ -105,17 +107,24 @@ public class XMLDomain {
 	    case "Layer"		    : newModule = factory.createModule("Layer");                   
 	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
 	    	                      ((Layer)newModule).setHierarchicalLevel(HierarchicalLevel); break;
-	    default			        : newModule = factory.createDummy("blank"); break;	    	
+	    default			        : newModule = factory.createDummy("Empty"); break;	    	
 
 	    }
 	    newModule.set(moduleName, moduleDescription);
 	    newModule.setId(moduleId);
+	    System.out.println(newModule.getName()+" >>>>>>  ");
 
 	    // Add to Software Unit
 	    if(parentId == 0){
-		moduleService.addModuleToRoot(newModule);
+	    	try{
+	    	System.out.println(newModule.getName()+" >>>>>><<<<  ");
+	    	moduleService.addModuleToRoot(newModule);
+	    	}catch(Exception e)
+	    	{e.printStackTrace();}
 	    }else{
-		moduleService.addModuleToParent(parentId, newModule);
+		
+	    	moduleService.addModuleToParent(parentId, newModule);
+	
 	    }
 
 	    // Add submodules

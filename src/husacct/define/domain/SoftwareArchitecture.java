@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jfree.data.time.MovingAverage;
+
 public class SoftwareArchitecture {
 
 	private ModuleFactory factory = new ModuleFactory();
@@ -67,7 +69,8 @@ public class SoftwareArchitecture {
 	}
 
 	public long addModule(ModuleStrategy module) {
-		long moduleId;
+		long moduleId= module.getId();
+		try{
 		if (!hasModule(module.getName())) {
 			rootModule.addSubModule(module);
 			moduleId = module.getId();
@@ -75,6 +78,7 @@ public class SoftwareArchitecture {
 			throw new RuntimeException(ServiceProvider.getInstance()
 					.getLocaleService().getTranslatedString("SameNameModule"));
 		}
+		}catch(Exception rt){rt.printStackTrace();}
 		return moduleId;
 	}
 
