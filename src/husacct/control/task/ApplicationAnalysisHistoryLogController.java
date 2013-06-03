@@ -1,10 +1,10 @@
 package husacct.control.task;
 
 import husacct.ServiceProvider;
+import husacct.common.OSDetector;
 import husacct.common.dto.ProjectDTO;
 import husacct.control.domain.Workspace;
 import husacct.control.presentation.log.ApplicationAnalysisHistoryOverviewFrame;
-import husacct.control.task.configuration.ConfigurationManager;
 import husacct.control.task.resources.IResource;
 import husacct.control.task.resources.ResourceFactory;
 
@@ -25,7 +25,7 @@ public class ApplicationAnalysisHistoryLogController{
 
 	private MainController mainController;
 	
-	private File logFile = new File(ConfigurationManager.getProperty("PlatformIndependentAppDataFolder") + ConfigurationManager.getProperty("ApplicationHistoryXMLFilename"));
+	private File logFile = new File(OSDetector.getAppFolder());
 	
 	public ApplicationAnalysisHistoryLogController(MainController mainController){
 		this.mainController = mainController;
