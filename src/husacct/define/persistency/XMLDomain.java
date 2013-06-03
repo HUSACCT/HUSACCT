@@ -99,8 +99,8 @@ public class XMLDomain {
 
 	    // TODO: When modules change to factory, this should be revised
 	    switch(moduleType){
-	    case "ExternalSystem"	: newModule = factory.createModule("ExternalSystem"); break;
-	    case "Component" 		: newModule = factory.createModule("Componen"); break;
+	    case "ExternalLibrary"	: newModule = factory.createModule("ExternalLibrary"); break;
+	    case "Component" 		: newModule = factory.createModule("Component"); break;
 	    case "SubSystem"		: newModule = factory.createModule("SubSystem"); break;
 	    case "Layer"		    : newModule = factory.createModule("Layer");                   
 	    	                      int HierarchicalLevel=Integer.parseInt(module.getChildText("HierarchicalLevel"));
@@ -178,8 +178,8 @@ public class XMLDomain {
 
 	    String[] dependencyList = getDependenciesFromXML(dependencies);
 
-	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("Module").getChildText("id"));
-	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("Module").getChildText("id"));
+	    int moduleFromId 	= Integer.parseInt(appliedRule.getChild("moduleFrom").getChild("ModuleStrategy").getChildText("id"));
+	    int moduleToId 	= Integer.parseInt(appliedRule.getChild("moduleTo").getChild("ModuleStrategy").getChildText("id"));
 
 	    AppliedRuleStrategy dummyRule 	= ruleFactory.createDummyRule(ruleTypeKey);
 	    ModuleStrategy moduleFrom 			= moduleService.getModuleById(moduleFromId);
