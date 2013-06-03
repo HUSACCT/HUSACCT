@@ -9,8 +9,12 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class creditsFetcher {
 
+	private Logger logger = Logger.getLogger(creditsFetcher.class);
+	
 	public List<String> fetchStudentNames() {
 		
 		List<String> students = new ArrayList<String>();
