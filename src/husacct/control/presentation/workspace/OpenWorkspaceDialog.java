@@ -29,7 +29,7 @@ import javax.swing.event.ListSelectionListener;
 public class OpenWorkspaceDialog extends JDialog{
 
 	private MainController mainController;
-	private JList loaderList;
+	private JList<Object> loaderList;
 	private List<String> loaderListData;
 	private JButton openButton, cancelButton;
 	
@@ -58,13 +58,12 @@ public class OpenWorkspaceDialog extends JDialog{
 	}
 	
 	private void setLoaders(){
-		List<String> loaders = ResourceFactory.getAvailableResources();
-		loaderListData = loaders;
+		loaderListData = ResourceFactory.getAvailableResources();
 	}
 	
 	private void addComponents(){
 		
-		loaderList = new JList(loaderListData.toArray());
+		loaderList = new JList<Object>(loaderListData.toArray());
 		loaderList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		loaderList.setLayoutOrientation(JList.VERTICAL);
 		loaderList.setVisibleRowCount(-1);
