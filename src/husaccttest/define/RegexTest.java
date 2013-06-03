@@ -1,4 +1,4 @@
-package husaccttest.define;
+/*package husaccttest.define;
 
 import static org.junit.Assert.*;
 
@@ -102,3 +102,4 @@ public class RegexTest {
 	}
 
 }
+*/

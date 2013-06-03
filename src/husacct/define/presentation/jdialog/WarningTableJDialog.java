@@ -26,16 +26,16 @@ import javax.swing.WindowConstants;
 import org.jdesktop.swingx.JXTreeTable;
 
 public class WarningTableJDialog extends JDialog implements ActionListener,
-		KeyListener {
-	
+KeyListener {
+
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-private	WarningMessageFactory factory = new WarningMessageFactory();
-private JXTreeTable treeTab = new JXTreeTable();
-private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
+	private	WarningMessageFactory factory = new WarningMessageFactory();
+	private JXTreeTable treeTab = new JXTreeTable();
+	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 
 	public WarningTableJDialog() {
 		init();
@@ -57,13 +57,13 @@ private ILocaleService localeService = ServiceProvider.getInstance().getLocaleSe
 
 	public JTabbedPane createTreeTable()
 	{
-		 JTabbedPane tabs = new JTabbedPane();
+		JTabbedPane tabs = new JTabbedPane();
 		JPanel treeTablePanel = new JPanel( new BorderLayout() );
 
-	
+
 		WarningTreeTableModel model = new WarningTreeTableModel(factory.getsortedMessages());
-	 
-	    treeTab = new JXTreeTable(model);
+
+		treeTab = new JXTreeTable(model);
 		treeTab.setTreeCellRenderer(new WarningTreeTableCellrenderer());
 		treeTablePanel.add( new JScrollPane( treeTab ) );
 		tabs.addTab( "Warnings", treeTablePanel );

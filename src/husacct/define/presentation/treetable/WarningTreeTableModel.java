@@ -1,23 +1,18 @@
 package husacct.define.presentation.treetable;
 import husacct.define.domain.warningmessages.WarningMessageContainer;
-import husacct.define.domain.warningmessages.WarningMessageFactory;
-
-
-
-
 
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 
 
 public class WarningTreeTableModel  extends AbstractTreeTableModel{
-private WarningMessageContainer myroot;
-	
+	private WarningMessageContainer myroot;
+
 	public WarningTreeTableModel(WarningMessageContainer root)
 	{
 		myroot=root;
-		
-		
-		
+
+
+
 	}
 
 	@Override
@@ -25,11 +20,11 @@ private WarningMessageContainer myroot;
 	{
 		return 3;
 	}
-	
+
 	@Override
 	public String getColumnName( int column )
 	{
-		
+
 		switch( column )
 		{
 		case 0: return "Description";
@@ -43,7 +38,7 @@ private WarningMessageContainer myroot;
 	@Override
 	public Object getValueAt( Object node, int column ) 
 	{
-		
+
 		WarningMessageContainer treenode = (WarningMessageContainer )node;
 		switch( column )
 		{
@@ -84,22 +79,22 @@ private WarningMessageContainer myroot;
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	 public boolean isLeaf( Object node )
-	 {
-		 WarningMessageContainer treenode = ( WarningMessageContainer )node;
-		 if( treenode.getchildren().size() > 0 )
-		 {
-			 return false;
-		 }
-		 return true;
-	 }
-	 
-	 @Override
-	 public Object getRoot()
-	 {
-		 return myroot;
-	 }
+
+	public boolean isLeaf( Object node )
+	{
+		WarningMessageContainer treenode = ( WarningMessageContainer )node;
+		if( treenode.getchildren().size() > 0 )
+		{
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Object getRoot()
+	{
+		return myroot;
+	}
 }
 
 
