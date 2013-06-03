@@ -51,8 +51,7 @@ public class LoadingDialog extends JFrame implements Runnable {
 		new LoadingDialog(controlService.getMainController(), processInfoText);
 	}
 	
-	public void setProgressText(int percentage) {
-		//percentage = (percentage/amountOfProcesses) + (currentProcessNumber*(100/amountOfProcesses));
+	public void setProgressText(int percentage) {	
 		progressBar.setIndeterminate(false);
 		this.progressLabel.setText(percentage + "%");
 		this.setTitle((percentage/amountOfProcesses) + (currentProcessNumber*(100/amountOfProcesses)) + "%");
@@ -80,7 +79,6 @@ public class LoadingDialog extends JFrame implements Runnable {
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setSize(new Dimension(400, 250));
 		this.setResizable(false);
-		//DialogUtils.alignCenter(this);
 	}
 
 	private void addComponents() {

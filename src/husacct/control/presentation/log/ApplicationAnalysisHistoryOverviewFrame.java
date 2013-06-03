@@ -1,6 +1,7 @@
 package husacct.control.presentation.log;
 
 import husacct.ServiceProvider;
+import husacct.common.dto.ApplicationDTO;
 import husacct.common.dto.ProjectDTO;
 import husacct.common.locale.ILocaleService;
 import husacct.control.task.MainController;
@@ -41,7 +42,6 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(new Dimension(1000, 400));
 		
-		//Center window
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (dim.width/2-this.getSize().width/2);
 		int y = dim.height/2-this.getSize().height/2;
@@ -54,8 +54,9 @@ public class ApplicationAnalysisHistoryOverviewFrame extends JDialog{
 	
 	private void addTable(){
 		String workspace = mainController.getWorkspaceController().getCurrentWorkspace().getName();
-		String application = ServiceProvider.getInstance().getDefineService().getApplicationDetails().name;
-		ArrayList<ProjectDTO> projects = ServiceProvider.getInstance().getDefineService().getApplicationDetails().projects;
+		ApplicationDTO applicationDTO = ServiceProvider.getInstance().getDefineService().getApplicationDetails();
+		String application = applicationDTO.name;
+		ArrayList<ProjectDTO> projects = applicationDTO.projects;
 		HashMap<String, HashMap<String, String>> tableData = mainController.getApplicationAnalysisHistoryLogController().getApplicationHistoryFromFile(workspace, application, projects);
 		
 		analysisTableModel = new DefaultTableModel();

@@ -16,17 +16,13 @@ public class AnalyseTask implements Runnable {
 	private final MainController mainController;
 	private final ApplicationDTO applicationDTO;
 
-	public AnalyseTask(MainController mainController,
-			ApplicationDTO applicationDTO) {
+	public AnalyseTask(MainController mainController, ApplicationDTO applicationDTO) {
 		this.applicationDTO = applicationDTO;
 		this.mainController = mainController;
 	}
 
 	@Override
 	public void run() {
-		// Thread.sleep added to support InterruptedException catch
-		// InterruptedException is not yet implemented by analyse
-		// Therefore this thread can never be interrupted.
 		try {
 			this.mainController.getStateController().setAnalysing(true);
 			this.mainController.getStateController().setPreAnalysed(false);
