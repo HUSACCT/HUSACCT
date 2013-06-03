@@ -33,14 +33,14 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	public BaseFigure(String theName) {
 		super();
-		this.name = theName;
-		this.baseZIndex = 0;
-		this.raiseZIndex = 5;
-		this.zIndex = this.baseZIndex;
+		name = theName;
+		baseZIndex = 0;
+		raiseZIndex = 5;
+		zIndex = baseZIndex;
 	}
 
 	public void addDecorator(Decorator decorator) {
-		this.decorators.add(decorator);
+		decorators.add(decorator);
 	}
 
 	@Override
@@ -52,11 +52,10 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	@Override
 	public Collection<Handle> createHandles(int detailLevel) {
 		LinkedList<Handle> handles = new LinkedList<Handle>();
-		if (this.isSizeable) {
-			handles.addAll(this.createSizeableHandles(detailLevel));
-		} else {
-			handles.addAll(this.createSelectionHandles(detailLevel));
-		}
+		if (isSizeable)
+			handles.addAll(createSizeableHandles(detailLevel));
+		else
+			handles.addAll(createSelectionHandles(detailLevel));
 		return handles;
 	}
 
@@ -75,9 +74,8 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	@Override
 	public void draw(Graphics2D g) {
-		for (Decorator decorator : this.decorators) {
+		for (Decorator decorator : decorators)
 			decorator.decorate(this);
-		}
 
 		this.set(AttributeKeys.CANVAS_FILL_COLOR, defaultBackgroundColor);
 
@@ -107,24 +105,19 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass())
 			return false;
-		}
 
 		BaseFigure other = (BaseFigure) obj;
-		if (this.name == null) {
-			if (other.name != null) {
+		if (name == null) {
+			if (other.name != null)
 				return false;
-			}
-		} else if (!this.name.equals(other.name)) {
+		} else if (!name.equals(other.name))
 			return false;
-		}
 		return true;
 	}
 
@@ -134,36 +127,36 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	}
 
 	public double getHeight() {
-		return this.getBounds().height;
+		return getBounds().height;
 	}
 
 	@Override
 	public int getLayer() {
-		return this.zIndex;
+		return zIndex;
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public double getWidth() {
-		return this.getBounds().width;
+		return getBounds().width;
 	}
 
 	public boolean isContext() {
-		return this.isContext;
+		return isContext;
 	}
 
-	public void isContext(boolean b) {
+	public void setContext(boolean b) {
 		this.isContext = b;
 	}
 
 	public boolean isEnabled() {
-		return this.isEnabled;
+		return isEnabled;
 	}
 
 	public boolean isInContainer() {
-		return this.isStoredInContainer;
+		return isStoredInContainer;
 	}
 
 	public boolean isLine() {
@@ -179,54 +172,51 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	}
 
 	public boolean isSizeable() {
-		return this.isSizeable;
+		return isSizeable;
 	}
 
 	public void raiseLayer() {
-		this.zIndex = this.raiseZIndex;
+		zIndex = raiseZIndex;
 	}
 
 	public void removeDecorator(Decorator decorator) {
-		this.willChange();
+		willChange();
 		decorator.deDecorate(this);
-		this.decorators.remove(decorator);
-		this.changed();
+		decorators.remove(decorator);
+		changed();
 	}
 
 	public void removeDecoratorByType(Class<?> searchClass) {
 		ArrayList<Decorator> removes = new ArrayList<Decorator>();
 
-		for (Decorator decorator : this.decorators) {
-			if (decorator.getClass().isAssignableFrom(searchClass)) {
+		for (Decorator decorator : decorators)
+			if (decorator.getClass().isAssignableFrom(searchClass))
 				removes.add(decorator);
-			}
-		}
 
-		this.removeDecorators(removes.toArray(new Decorator[] {}));
+		removeDecorators(removes.toArray(new Decorator[] {}));
 	}
 
 	public void removeDecorators(Decorator[] decorators) {
-		for (Decorator decorator : decorators) {
-			this.removeDecorator(decorator);
-		}
+		for (Decorator decorator : decorators)
+			removeDecorator(decorator);
 	}
 
 	public void resetLayer() {
-		this.zIndex = this.baseZIndex;
+		zIndex = baseZIndex;
 	}
 
 	public void setEnabled(boolean newValue) {
-		this.isEnabled = newValue;
-		this.setVisible(newValue);
-		this.setSelectable(newValue);
+		isEnabled = newValue;
+		setVisible(newValue);
+		setSelectable(newValue);
 	}
 
 	public void setInContainer(boolean value) {
-		this.isStoredInContainer = value;
+		isStoredInContainer = value;
 	}
 
 	public void setSizeable(boolean newValue) {
-		this.isSizeable = newValue;
+		isSizeable = newValue;
 	}
 
 	public void setStrokeColor(Color newColor) {
@@ -235,8 +225,8 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 
 	@Override
 	public void transform(AffineTransform at) {
-		Point2D.Double anchor = this.getStartPoint();
-		Point2D.Double lead = this.getEndPoint();
+		Point2D.Double anchor = getStartPoint();
+		Point2D.Double lead = getEndPoint();
 
 		Point2D.Double newAnchor = new Point2D.Double(0, 0), newLead = new Point2D.Double(
 				0, 0);
@@ -247,11 +237,11 @@ public abstract class BaseFigure extends AbstractAttributedCompositeFigure {
 	}
 
 	public void updateLocation(double x, double y) {
-		this.willChange();
-		double widthX = x + this.getBounds().getWidth();
-		double heightY = y + this.getBounds().getHeight();
+		willChange();
+		double widthX = x + getBounds().getWidth();
+		double heightY = y + getBounds().getHeight();
 		this.setBounds(new Point2D.Double(x, y), new Point2D.Double(widthX,
 				heightY));
-		this.changed();
+		changed();
 	}
 }

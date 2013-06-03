@@ -7,6 +7,26 @@ import java.util.List;
 
 public class SortedNodeList extends NodeList {
 
+	private boolean compareIfListsOverlap(List<Node> lhs, List<Node> rhs) {
+		for (Node n : lhs)
+			if (rhs.contains(n))
+				return true;
+
+		return false;
+	}
+
+	private void mergeLists(List<Node> dest, List<Node> src) {
+		if (dest == src)
+			return;
+
+		while (!src.isEmpty()) {
+			Node node = ListUtils.pop(src);
+
+			if (!dest.contains(node))
+				dest.add(node);
+		}
+	}
+
 	public void sort() {
 		ArrayList<ArrayList<Node>> trees = new ArrayList<ArrayList<Node>>();
 
@@ -17,12 +37,11 @@ public class SortedNodeList extends NodeList {
 			openNodes.add(nodes.get(0));
 			while (!openNodes.isEmpty()) {
 				Node node = ListUtils.pop(openNodes);
-				
+
 				nodes.remove(node);
-				for (Node n : node.getConnections()) {
+				for (Node n : node.getConnections())
 					if (nodes.contains(n))
 						openNodes.add(n);
-				}
 
 				tree.add(node);
 			}
@@ -39,7 +58,7 @@ public class SortedNodeList extends NodeList {
 
 				for (int i = 0; i < finalOrdering.size(); i++) {
 					ArrayList<Node> finalOrderedTree = finalOrdering.get(i);
-				
+
 					if (compareIfListsOverlap(tree, finalOrderedTree))
 						mergeLists(finalOrderedTree, tree);
 					else
@@ -52,27 +71,6 @@ public class SortedNodeList extends NodeList {
 				ArrayList<Node> tree = ListUtils.pop(finalOrdering);
 				nodes.addAll(tree);
 			}
-		}
-	}
-
-	private boolean compareIfListsOverlap(List<Node> lhs, List<Node> rhs) {
-		for (Node n : lhs) {
-			if (rhs.contains(n))
-				return true;
-		}
-
-		return false;
-	}
-	
-	private void mergeLists(List<Node> dest, List<Node> src) {
-		if (dest == src)
-			return;
-		
-		while (!src.isEmpty()) {
-			Node node = ListUtils.pop(src);
-			
-			if (!dest.contains(node))
-				dest.add(node);
 		}
 	}
 }
