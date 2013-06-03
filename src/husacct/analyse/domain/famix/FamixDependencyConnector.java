@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+
 import javax.naming.directory.InvalidAttributesException;
-import org.apache.log4j.Logger;
 
 class FamixDependencyConnector {
 
@@ -18,16 +18,13 @@ class FamixDependencyConnector {
     private static final String EXTENDS_CONCRETE = "ExtendsConcrete";
     private static final String EXTENDS_INTERFACE = "ExtendsInterface";
     private FamixModel theModel;
-    private Logger logger = Logger.getLogger(FamixDependencyConnector.class);
     //Added By Team 1 General GUI & Control
     //Is needed for the progressBar
     private int amountOfModulesConnected = 0;
     //End added by Team 1
-    private FamixModuleFinder moduleFinder;
 
     public FamixDependencyConnector() {
         theModel = FamixModel.getInstance();
-        this.moduleFinder = new FamixModuleFinder(theModel);
     }
 
     void connectStructuralDependecies() {
@@ -66,9 +63,6 @@ class FamixDependencyConnector {
     }
 
     void connectAssociationDependencies() {
-        int count = 0;
-		
-		String oldy;
 		String theClass;
 		String belongsToPackage;
 		String classFoundInImports;
@@ -83,9 +77,8 @@ class FamixDependencyConnector {
                 break;
             }
             //end added by Team 1
+            
 
-            oldy = association.to;
-            count += 1;
             try {
                 boolean connected = false;
                 theClass = association.from;
@@ -124,8 +117,6 @@ class FamixDependencyConnector {
                     }
                 }
                 if (association.to.equals("") || association.to == null) {
-//					logger.info(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from);
-//					System.out.println(count + "/" + theModel.waitingAssociations.size() + " Couldn't analyse dependency from " + association.from + " | " + oldy);
                 } else {
                     determineType(association);
                     addToModel(association);
