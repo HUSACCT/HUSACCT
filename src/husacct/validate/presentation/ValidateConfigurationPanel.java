@@ -68,6 +68,7 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 		severityNameScrollPane.setViewportView(severityNameTable);
 
 		tabPanel.addTab(localeService.getTranslatedString("SeverityConfiguration"), severityNamePanel);
+		tabPanel.addTab(localeService.getTranslatedString("DefaultRules"), new ManageDefaultRulesPanel());
 
 		applySeverity.addActionListener(new ActionListener() {
 			@Override
@@ -215,7 +216,7 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 	}
 
 	private void setLanguageTabsLanguage() {
-		if (tabPanel.getTabCount() == 1) {
+		if (tabPanel.getTabCount() == 2) {
 			loadLanguageTabs();
 			return;
 		}
@@ -233,7 +234,7 @@ public final class ValidateConfigurationPanel extends ConfigPanel {
 			tabPanel.addTab(language, lcp);
 			tabs.add(lcp);
 		}
-		if (tabPanel.getTabCount() == 1) {
+		if (tabPanel.getTabCount() == 2) {
 			logger.error("No programming language set");
 			tabPanel.addTab(localeService.getTranslatedString("NoProgrammingLanguageAvailable"), new JPanel());
 		}

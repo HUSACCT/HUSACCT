@@ -45,4 +45,14 @@ public interface IAnalyseControlService {
     public void exportDependencies(String path);
     
     public ExternalSystemDTO[] getExternalSystems();
+    
+    public int getAmountOfDependencies();
+    
+    public int getAmountOfInterfaces();
+    
+    public int getAmountOfPackages();
+    
+    public int getAmountOfClasses();
+    
+    public int buildCache();
 }

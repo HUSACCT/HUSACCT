@@ -52,7 +52,7 @@ public class SeverityPerTypeRepository {
 		for (RuleType ruleType : ruletypeFactory.getRuleTypes()) {
 			severityPerType.put(ruleType.getKey(), ruleType.getSeverity());
 
-			for (RuleType exceptionRuleType : ruleType.getExceptionrules()) {
+			for (RuleType exceptionRuleType : ruleType.getExceptionRules()) {
 				if (severityPerType.get(exceptionRuleType.getKey()) == null) {
 					severityPerType.put(exceptionRuleType.getKey(), exceptionRuleType.getSeverity());
 				}

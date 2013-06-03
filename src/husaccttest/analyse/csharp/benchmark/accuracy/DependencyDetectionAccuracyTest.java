@@ -450,7 +450,7 @@ public class DependencyDetectionAccuracyTest {
 	
 	//INDIRECT
 //	Access
-//	Type: Access – Instance variable
+//	Type: Access  Instance variable
 //	From: AccessInstanceVariableIndirect_MethodVar
 	@Test
 	public void cSharpIAccessInstanceVariableTest(){
@@ -465,7 +465,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Instance variable
+//	Type: Access  Instance variable
 //	From: AccessInstanceVariableIndirect_VarVar
 	@Test
 	public void cSharpIAccessInstanceVariableTest2(){
@@ -480,7 +480,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Instance variable
+//	Type: Access  Instance variable
 //	From: AccessInstanceVariableIndirect_VarVarToString
 	@Test
 	public void cSharpIAccessInstanceVariableTest3(){
@@ -495,7 +495,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Instance variable – Double indirect
+//	Type: Access  Instance variable  Double indirect
 //	From: AccessInstanceVariableIndirectIndirect_MethodVarVar
 	@Test
 	public void cSharpIAccessInstanceVariableDoubleIndirectTest(){
@@ -510,7 +510,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Instance variable – Double indirect
+//	Type: Access  Instance variable  Double indirect
 //	From: AccessInstanceVariableIndirectIndirect_VarVarVar
 	@Test
 	public void cSharpIAccessInstanceVariableDoubleIndirectTest2(){
@@ -525,7 +525,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Instance variable – Inherited
+//	Type: Access  Instance variable  Inherited
 //	From: AccessInstanceVariableIndirect_SuperClass
 	@Test
 	public void cSharpIAccessInstanceVariableInheritedTest(){
@@ -540,7 +540,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Instance variable – Inherited of 2nd super class
+//	Type: Access  Instance variable  Inherited of 2nd super class
 //	From: AccessInstanceVariableIndirect_SuperSuperClass
 	@Test
 	public void cSharpIAccessInstanceVariableInheritedFromSecondSuperClassTest(){
@@ -555,7 +555,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Object reference – Reference Variable
+//	Type: Access  Object reference  Reference Variable
 //	From: AccessObjectReferenceIndirect_AsParameter_POI
 	@Test
 	public void cSharpIAccessObjectReferenceReferenceVariableTest(){
@@ -570,7 +570,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Object reference – As return value
+//	Type: Access  Object reference  As return value
 //	From: AccessObjectReferenceIndirect_AsParameter
 	@Test
 	public void cSharpIAccessObjectReferenceAsReturnValueTest(){
@@ -585,7 +585,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Object reference – Reference Variable
+//	Type: Access  Object reference  Reference Variable
 //	From: AccessObjectReferenceIndirect_WithinIfStament_POI
 	@Test
 	public void cSharpIAccessObjectReferenceReferenceVariableTest2(){
@@ -600,7 +600,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Object reference – As return value
+//	Type: Access  Object reference  As return value
 //	From: AccessObjectReferenceIndirect_WithinIfStament
 	@Test
 	public void cSharpIAccessObjectReferenceAsReturnValueTest2(){
@@ -615,7 +615,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Static variable
+//	Type: Access  Static variable
 //	From: AccessStaticVariableIndirect_MethodVar
 	@Test
 	public void cSharpIAccessStaticVariableTest(){
@@ -630,7 +630,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Static variable
+//	Type: Access  Static variable
 //	From: AccessStaticVariableIndirect_VarVar
 	@Test
 	public void cSharpIAccessStaticVariableTest2(){
@@ -645,7 +645,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Static variable
+//	Type: Access  Static variable
 //	From: AccessStaticVariableIndirect_VarVarToString
 	@Test
 	public void cSharpIAccessStaticVariableTest3(){
@@ -660,7 +660,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Static variable – Double indirect
+//	Type: Access  Static variable  Double indirect
 //	From: AccessStaticVariableIndirectIndirect_MethodVarVar
 	@Test
 	public void cSharpIAccessStaticVariableDoubleIndirectTest(){
@@ -675,7 +675,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Access – Static variable – Double indirect
+//	Type: Access  Static variable  Double indirect
 //	From: AccessStaticVariableIndirectIndirect_VarVarVar
 	@Test
 	public void cSharpIAccessStaticVariableDoubleIndirectTest2(){
@@ -693,7 +693,7 @@ public class DependencyDetectionAccuracyTest {
 //
 //
 //	Call
-//	Type: Call – Instance method
+//	Type: Call  Instance method
 //	From: CallInstanceMethodIndirect_MethodMethod
 	@Test
 	public void cSharpICallInstanceMethodTest(){
@@ -708,7 +708,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method
+//	Type: Call  Instance method
 //	From: CallInstanceMethodIndirect_MethodMethodToString
 	@Test
 	public void cSharpICallInstanceMethodTest2(){
@@ -723,7 +723,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method
+//	Type: Call  Instance method
 //	From: CallInstanceMethodIndirect_MethodMethod_ViaConstructor
 	@Test
 	public void cSharpICallInstanceMethodTest3(){
@@ -738,7 +738,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Static method
+//	Type: Call  Static method
 //	From: CallInstanceMethodIndirect_StaticMethodInstanceMethod
 	@Test
 	public void cSharpICallStaticMethodTest(){
@@ -753,7 +753,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method – Inherited (Virtual call)
+//	Type: Call  Instance method  Inherited (Virtual call)
 //	From: CallInstanceMethodIndirect_SuperClass
 	@Test
 	public void cSharpICallInstanceMethodInheritedVirtualCallTest(){
@@ -768,7 +768,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method – Inherited of 2nd super class
+//	Type: Call  Instance method  Inherited of 2nd super class
 //	From: CallInstanceMethodIndirect_SuperSuperClass
 	@Test
 	public void cSharpICallInstanceMethodInheritedFromSecondSuperClassTest(){
@@ -783,7 +783,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method
+//	Type: Call  Instance method
 //	From: CallInstanceMethodIndirect_VarMethod
 	@Test
 	public void cSharpICallInstanceMethodTest4(){
@@ -798,7 +798,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method – Double indirect
+//	Type: Call  Instance method  Double indirect
 //	From: CallInstanceMethodIndirectIndirect_MethodVarMethod
 	@Test
 	public void cSharpICallInstanceMethodDoubleIndirectTest(){
@@ -813,7 +813,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Instance method – Double indirect
+//	Type: Call  Instance method  Double indirect
 //	From: CallInstanceMethodIndirectIndirect_VarVarMethod
 	@Test
 	public void cSharpICallInstanceMethodDoubleIndirectTest2(){
@@ -828,7 +828,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Static method
+//	Type: Call  Static method
 //	From: CallStaticMethodIndirect_MethodStaticMethod
 	@Test
 	public void cSharpICallStaticMethodTest2(){
@@ -843,7 +843,7 @@ public class DependencyDetectionAccuracyTest {
 		}
 		Assert.assertTrue(found);
 	}
-//	Type: Call – Static method
+//	Type: Call  Static method
 //	From: CallStaticMethodIndirect_VarStaticMethod
 	@Test
 	public void cSharpICallStaticMethodTest3(){
@@ -861,7 +861,7 @@ public class DependencyDetectionAccuracyTest {
 //
 //
 //	Inheritance
-//	Type: Inheritance – Extends 
+//	Type: Inheritance  Extends 
 //	From: InheritanceExtendsExtendsIndirect
 	@Test
 	public void cSharpIInheritenceExtendsTest(){
@@ -908,3 +908,4 @@ public class DependencyDetectionAccuracyTest {
 		return (String) fromPath.subSequence(fromPath.lastIndexOf('.')+1, fromPath.length());
 	}
 }
+>>>>>>> 4e65191ad88116080e8b23218d2832541ab44931
