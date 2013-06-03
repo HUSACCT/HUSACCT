@@ -19,6 +19,7 @@ import husacct.validate.domain.validation.internaltransferobjects.Mappings;
 import husacct.validate.domain.validation.logicalmodule.LogicalModule;
 import husacct.validate.domain.validation.logicalmodule.LogicalModules;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -32,17 +33,18 @@ public abstract class RuleType {
 	protected final Severity severity;
 	protected List<Violation> violations;
 	protected Mappings mappings;
-	protected List<Mapping> classpathsFrom;
+	protected List<Mapping> physicalClasspathsFrom;
 	protected final IAnalyseService analyseService = ServiceProvider.getInstance().getAnalyseService();
 	protected final IDefineService defineService = ServiceProvider.getInstance().getDefineService();
-	private AbstractViolationType violationtypefactory;
+	private AbstractViolationType violationTypeFactory;
 
-	public RuleType(String key, String categoryKey, List<ViolationType> violationtypes, EnumSet<RuleTypes> exceptionRuletypes, Severity severity) {
-		this.key = key;
+	public RuleType(String key, String categoryKey, List<ViolationType> violationTypes, EnumSet<RuleTypes> exceptionRuleTypes, Severity severity) {
+		this.violations = new ArrayList<>();
+        this.key = key;
 		this.descriptionKey = key + "Description";
 		this.categoryKey = categoryKey;
-		this.violationTypes = violationtypes;
-		this.exceptionRuleKeys = exceptionRuletypes;
+		this.violationTypes = violationTypes;
+		this.exceptionRuleKeys = exceptionRuleTypes;
 		this.severity = severity;
 	}
 
@@ -66,11 +68,11 @@ public abstract class RuleType {
 		return violationTypes;
 	}
 
-	public void setExceptionrules(List<RuleType> ruletypes) {
-		this.exceptionRules = ruletypes;
+	public void setExceptionRules(List<RuleType> ruleTypes) {
+		this.exceptionRules = ruleTypes;
 	}
 
-	public List<RuleType> getExceptionrules() {
+	public List<RuleType> getExceptionRules() {
 		return exceptionRules;
 	}
 
@@ -162,14 +164,14 @@ public abstract class RuleType {
 	}
 
 	private void initializeViolationTypeFactory(ConfigurationServiceImpl configuration) {
-		if (violationtypefactory == null) {
-			this.violationtypefactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
+		if (violationTypeFactory == null) {
+			this.violationTypeFactory = new ViolationTypeFactory().getViolationTypeFactory(configuration);
 		}
 	}
 
 	private Severity getViolationTypeSeverity(String violationTypeKey) {
 		try {
-			return violationtypefactory.createViolationType(this.key, violationTypeKey).getSeverity();
+			return violationTypeFactory.createViolationType(this.key, violationTypeKey).getSeverity();
 		} catch (ViolationTypeNotFoundException e) {
 			e.printStackTrace();
 		}

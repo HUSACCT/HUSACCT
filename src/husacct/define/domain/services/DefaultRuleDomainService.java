@@ -83,7 +83,7 @@ public class DefaultRuleDomainService {
 		break;
 		case "FacadeConvention": facadeRule(ruleType); ;
 		break;
-		case "SubClass":  ;
+		case "SuperClassInheritance":  ;
 		break;       
 		case "Visibility": visibilityRule(ruleType) ;
 		break;     

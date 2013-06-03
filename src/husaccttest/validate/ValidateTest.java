@@ -14,12 +14,18 @@ import husacct.common.dto.ViolationTypeDTO;
 import husacct.define.IDefineService;
 import husacct.validate.IValidateService;
 import husacct.validate.domain.exception.ProgrammingLanguageNotFoundException;
+import husacct.validate.domain.validation.module.ModuleTypes;
+import husacct.validate.domain.validation.ruletype.RuleTypeCategories;
+import husacct.validate.domain.validation.ruletype.RuleTypes;
+import husacct.validate.task.extensiontypes.ExtensionTypes.ExtensionType;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +35,8 @@ public class ValidateTest {
 
 	@Before
 	public void setup() {
+		setLog4jConfiguration();
+		
 		define = ServiceProvider.getInstance().getDefineService();
 		ArrayList<ProjectDTO> projects = new ArrayList<ProjectDTO>();
 		for(int counter = 0; counter < 3; counter ++) {
@@ -37,9 +45,14 @@ public class ValidateTest {
 		}
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 		validate = ServiceProvider.getInstance().getValidateService();
-
 	}
-
+	
+	private void setLog4jConfiguration(){
+		URL propertiesFile = getClass().getResource("/husacct/common/resources/husacct.properties");
+		PropertyConfigurator.configure(propertiesFile);
+	}
+	
+	
 	@Test
 	public void getBrowseViolationsGUI() {
 		Object screen = validate.getBrowseViolationsGUI();
@@ -58,7 +71,13 @@ public class ValidateTest {
 
 	@Test
 	public void getExportExtentions() {
-		assertArrayEquals(new String[]{ "pdf", "html", "xml" }, validate.getExportExtentions());
+		String[] exportExtensions = new String[] { 
+				ExtensionType.PDF.getExtension(), 
+				ExtensionType.HTML.getExtension(),
+				ExtensionType.XML.getExtension()				
+		};
+		
+		assertArrayEquals(exportExtensions, validate.getExportExtentions());
 	}
 
 	@Test
@@ -83,23 +102,46 @@ public class ValidateTest {
 	@Test
 	public void getCategories() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertArrayEquals(new String[]{ "propertyruletypes", "relationruletypes" }, getCategoryStringArray(dtos));
+		String[] ruleTypeCategories = new String[] { 
+				RuleTypeCategories.PROPERTY_RULE_TYPES.getCategoryName().toLowerCase().replace(" ", ""), 
+				RuleTypeCategories.RELATION_RULE_TYPES.getCategoryName().toLowerCase().replace(" ", "") };
+		
+		assertArrayEquals(ruleTypeCategories, getCategoryStringArray(dtos));
 	}
 
 	@Test
 	public void getRuleTypes() {
 		CategoryDTO[] dtos = validate.getCategories();
-		final String[] currentRuletypes = new String[]{ "InterfaceConvention", "NamingConvention", "FacadeConvention", "SubClassConvention", "VisibilityConvention", "IsNotAllowedToUse", "IsOnlyAllowedToUse", "IsNotAllowedToMakeSkipCall", "IsOnlyModuleAllowedToUse", "MustUse", "IsNotAllowedToMakeBackCall" };
+		final String[] currentRuletypes = new String[]{
+                RuleTypes.SUPERCLASSINHERITANCE_CONVENTION.toString(),
+                RuleTypes.INTERFACE_CONVENTION.toString(),
+				RuleTypes.NAMING_CONVENTION.toString(), 
+				RuleTypes.FACADE_CONVENTION.toString(),
+				RuleTypes.VISIBILITY_CONVENTION.toString(), 
+				RuleTypes.IS_NOT_ALLOWED_TO_USE.toString(), 
+				RuleTypes.IS_ONLY_ALLOWED_TO_USE.toString(), 
+				RuleTypes.IS_NOT_ALLOWED_SKIP_CALL.toString(), 
+				RuleTypes.IS_ONLY_MODULE_ALLOWED_TO_USE.toString(), 
+				RuleTypes.MUST_USE.toString(),
+				RuleTypes.IS_NOT_ALLOWED_BACK_CALL.toString()
+		};
 		assertArrayEquals(currentRuletypes, getRuleTypesStringArray(dtos));
 	}
 
 	@Test
 	public void getAndPrintAllowedRuleTypesOfModules() {
 		try {
-			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+			String[] modules = { 
+					ModuleTypes.COMPONENT.toString(),
+					ModuleTypes.LAYER.toString(),
+					ModuleTypes.SUBSYSTEM.toString(),
+					ModuleTypes.EXTERNAL_LIBRARY.toString(),
+					ModuleTypes.FACADE.toString()
+			};
+
 			for (String module : modules) {
 				RuleTypeDTO[] allowedRuleTypes = validate.getAllowedRuleTypesOfModule(module);
-				System.out.print("\nallowedRuleTypes for " + module + " : ");
+				System.out.print("\nAllowedRuleTypes for " + module + ": ");
 				for (RuleTypeDTO allowedRuleType : allowedRuleTypes) {
 					System.out.print(allowedRuleType.getKey() + ", ");
 				}
@@ -112,10 +154,17 @@ public class ValidateTest {
 	@Test
 	public void getAndPrintDefaultRuleTypesOfModules() {
 		try {
-			String[] modules = {"Component", "Layer", "SubSystem", "ExternalLibrary"};
+			String[] modules = { 
+					ModuleTypes.COMPONENT.toString(),
+					ModuleTypes.LAYER.toString(), 
+					ModuleTypes.SUBSYSTEM.toString(), 
+					ModuleTypes.EXTERNAL_LIBRARY.toString(), 
+					ModuleTypes.FACADE.toString() 
+			};
+			
 			for (String module : modules) {
 				RuleTypeDTO[] defaultRuleTypes = validate.getDefaultRuleTypesOfModule(module);
-				System.out.print("\ndefaultRuleTypes for " + module + " : ");
+				System.out.print("\nDefaultRuleTypes for " + module + ": ");
 				for (RuleTypeDTO defaultRuleType : defaultRuleTypes) {
 					System.out.print(defaultRuleType.getKey() + ", ");
 				}
@@ -128,17 +177,17 @@ public class ValidateTest {
 	@Test
 	public void getViolationTypesJavaLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
-		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
-		assertEquals(4, getViolationTypesStringArray(dtos, "VisibilityConvention").length);
+		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
+		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 
 	@Test
 	public void getViolationTypesCSharpLanguage() {
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(12, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
-		assertEquals(12, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
-		assertEquals(4, getViolationTypesStringArray(dtos, "VisibilityConvention").length);
+		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(12, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
+		assertEquals(4, getViolationTypesStringArray(dtos, RuleTypes.VISIBILITY_CONVENTION).length);
 	}
 
 	@Test
@@ -148,8 +197,8 @@ public class ValidateTest {
 		define.createApplication("TEST_APPLICATION", projects, "1.0");
 
 		CategoryDTO[] dtos = validate.getCategories();
-		assertEquals(0, getViolationTypesStringArray(dtos, "IsNotAllowedToUse").length);
-		assertEquals(0, getViolationTypesStringArray(dtos, "IsAllowedToUse").length);
+		assertEquals(0, getViolationTypesStringArray(dtos, RuleTypes.IS_NOT_ALLOWED_TO_USE).length);
+		assertEquals(0, getViolationTypesStringArray(dtos, RuleTypes.IS_ALLOWED_TO_USE).length);
 	}
 
 	private String[] getCategoryStringArray(CategoryDTO[] dtos) {
@@ -172,16 +221,16 @@ public class ValidateTest {
 		return ruletypeList.toArray(new String[]{});
 	}
 
-	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, String ruleTypeKey) {
+	private String[] getViolationTypesStringArray(CategoryDTO[] dtos, RuleTypes ruleTypeKey) {
 		ArrayList<String> violationtypeList = new ArrayList<String>();
 
 		for (CategoryDTO cDTO : dtos) {
-			for (RuleTypeDTO rDTO : cDTO.getRuleTypes()) {
-				if (rDTO.getKey().equals(ruleTypeKey)) {
-					return getViolationTypesStringArray(rDTO);
+			for (RuleTypeDTO ruleTypeDTO : cDTO.getRuleTypes()) {
+				if (ruleTypeDTO.getKey().equals(ruleTypeKey.toString())) {
+					return getViolationTypesStringArray(ruleTypeDTO);
 				} else {
-					for (RuleTypeDTO exceptionDTO : rDTO.getExceptionRuleTypes()) {
-						if (exceptionDTO.getKey().equals(ruleTypeKey)) {
+					for (RuleTypeDTO exceptionDTO : ruleTypeDTO.getExceptionRuleTypes()) {
+						if (exceptionDTO.getKey().equals(ruleTypeKey.toString())) {
 							return getViolationTypesStringArray(exceptionDTO);
 						}
 					}
