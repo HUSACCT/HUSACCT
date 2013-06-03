@@ -323,13 +323,13 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 		this.dispose();
 	}
 
-	private void save() {	
+	private void save() {
 		if (this.appliedRuleController.getAction().equals(PopUpController.ACTION_NEW)) {
 			if (ruleDetailsJPanel.hasValidData()) {
 				HashMap<String, Object> ruleDetails = this.ruleDetailsJPanel.saveToHashMap();
 				ruleDetails.put("ruleTypeKey", this.appliedRuleKeyValueComboBox.getSelectedItemKey());
 
-				if((Boolean) ruleDetails.get("enabled"))
+				if((Boolean) ruleDetails.get("enabled")) {
 					if(appliedRuleController.conformRuleConventions(ruleDetails)){
 						if(this.appliedRuleController.save(ruleDetails)) {
 							this.dispose();
@@ -339,6 +339,7 @@ public class AppliedRuleJDialog extends JDialog implements KeyListener, ActionLi
 					}else{
 						UiDialogs.errorDialog(this, ServiceProvider.getInstance().getLocaleService().getTranslatedString("RuleNotConformConvention")); // TODO: Add more descriptive errors to the AppliedRule and show them here (appliedRule.toString());
 					}
+				}
 				else {
 					if(this.appliedRuleController.save(ruleDetails)) {
 						this.dispose();
