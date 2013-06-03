@@ -10,6 +10,7 @@ import husacct.control.task.codeviewer.InternalCodeviewerImpl;
 import husacct.control.task.configuration.ConfigurationManager;
 import husacct.validate.domain.validation.Severity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,7 +48,7 @@ public class CodeViewController {
 			controlService = ServiceProvider.getInstance().getControlService();
 		ApplicationDTO application = controlService.getApplicationDTO();
 		ProjectDTO project = application.projects.get(0);
-		fileName = project.paths.get(0) + "\\" + fileName;
+		fileName = project.paths.get(0) + File.separator + fileName;
 		setCurrentCodeviewer();
 		currentCodeviewer.displayErrorsInFile(fileName, errors);
 		
