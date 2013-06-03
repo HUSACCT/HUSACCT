@@ -93,7 +93,7 @@ public class ConsistencyTest {
 			AnalyzedModuleComponent root = JtreeController.instance().getRootOfModel();
 			
 		AnalyzedModuleComponent unitTobeRemoved =(AnalyzedModuleComponent) root.getChildren().get(0); 
-		JtreeController.instance().getTree().removeTreeItem(0, unitTobeRemoved);
+		JtreeController.instance().getTree().removeTreeItem(unitTobeRemoved);
 		
 		root = JtreeController.instance().getRootOfModel();
 		

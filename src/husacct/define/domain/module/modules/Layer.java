@@ -1,37 +1,36 @@
-package husacct.define.domain.module;
+package husacct.define.domain.module.modules;
 
-public class Layer extends Module {
+import java.util.ArrayList;
+
+import husacct.ServiceProvider;
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.SoftwareUnitRegExDefinition;
+import husacct.define.domain.module.ModuleStrategy;
+
+
+public class Layer extends ModuleStrategy {
 	
 	private static int STATIC_LEVEL = 1;
 	private int hierarchicalLevel;
 	
-	public Layer(){
-		this("", "");	
-	}
-
-	public Layer(String name){
-		this(name, "");
-	}
-	
-	public Layer(String name, String description){
-		super(name, description);
-		super.type = "Layer";
+	public void set(String name, String description){
+		this.id = STATIC_ID;
+		STATIC_ID++;
 		this.hierarchicalLevel = STATIC_LEVEL;
 		STATIC_LEVEL++;
-	}
-	
-	//TODO Test this, this constructor is only for importing
-	public Layer(String name, String description, int hierarchicalLevel){
-		super(name, description);
-		super.type = "Layer";
-		this.hierarchicalLevel = hierarchicalLevel;
-		if (hierarchicalLevel >= STATIC_LEVEL){
-			STATIC_LEVEL = hierarchicalLevel + 1;
-		}
+		this.name = name;
+		this.description = description;
+		
+		this.mappedSUunits = new ArrayList<SoftwareUnitDefinition>();
+		this.mappedRegExSUunits = new ArrayList<SoftwareUnitRegExDefinition>();
+		this.subModules = new ArrayList<ModuleStrategy>();
 	}
 	
 	public void setHierarchicalLevel(int hierarchicalLevel) {
 		this.hierarchicalLevel = hierarchicalLevel;
+		if(hierarchicalLevel >= STATIC_LEVEL){
+			STATIC_LEVEL = hierarchicalLevel++;
+		}
 	}
 
 	public int getHierarchicalLevel() {
@@ -54,8 +53,9 @@ public class Layer extends Module {
 	    return false;
 	}
 	
+		
 	@Override
-	public int compareTo(Module compareModule) {
+	public int compareTo(ModuleStrategy compareModule) {
 		int compareResult = 0;
 		if(compareModule instanceof Layer || this.getId() < compareModule.getId()) {
 			Layer compareLayer = (Layer) compareModule;
