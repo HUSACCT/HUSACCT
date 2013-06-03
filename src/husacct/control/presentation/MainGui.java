@@ -5,11 +5,12 @@ import husacct.control.presentation.menubar.MenuBar;
 import husacct.control.presentation.taskbar.TaskBar;
 import husacct.control.presentation.toolbar.ToolBar;
 import husacct.control.presentation.util.MoonWalkPanel;
-import husacct.control.presentation.util.UserActionLogDialog;
+import husacct.control.presentation.util.UserActionLogPanel;
 import husacct.control.task.MainController;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -17,6 +18,8 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -45,7 +48,7 @@ public class MainGui extends HelpableJFrame{
 	private MoonWalkPanel moonwalkPanel;
 	private Thread moonwalkThread;
 	private ToolBar toolBar;
-	private UserActionLogDialog userActionLogDialog;
+	private UserActionLogPanel userActionLogPanel;
 	
 	public MainGui(MainController mainController) {
 		this.mainController = mainController;
@@ -91,14 +94,12 @@ public class MainGui extends HelpableJFrame{
 		moonwalkThread = new Thread(moonwalkPanel);
 		toolBar = new ToolBar(getMenu(), mainController.getStateController());
 		taskBar = new TaskBar();
-		
-		userActionLogDialog = new UserActionLogDialog(this, mainController);
+		userActionLogPanel = new UserActionLogPanel(mainController);
 		
 		taskBarPane.add(taskBar);
-		
+		contentPane.add(userActionLogPanel, BorderLayout.EAST);
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(desktopPane, BorderLayout.CENTER);
-		
 		add(contentPane);
 		add(moonwalkPanel);
 		add(taskBarPane);
@@ -151,8 +152,8 @@ public class MainGui extends HelpableJFrame{
 		setTitle("");
 	}
 	
-	public UserActionLogDialog getUserActionLogDialog(){
-		return userActionLogDialog;
+	public UserActionLogPanel getUserActionLogPanel(){
+		return userActionLogPanel;
 	}
 	
 	public void addGlobalWindowFocusListeners(){
@@ -162,9 +163,9 @@ public class MainGui extends HelpableJFrame{
             	int eventId = e.getID();
             	
             	if(eventId==207){			//WINDOW_GAINED_FOCUS
-            		userActionLogDialog.setVisible(true);
+            		userActionLogPanel.setVisible(true);
             	}else if (eventId==208) {	//WINDOW_LOST_FOCUS
-            		userActionLogDialog.setVisible(false);
+            		userActionLogPanel.setVisible(false);
 				}
             }
         }, windowFocusEvent);
