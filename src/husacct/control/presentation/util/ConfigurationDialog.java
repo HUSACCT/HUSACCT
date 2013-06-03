@@ -54,7 +54,7 @@ public class ConfigurationDialog extends JDialog {
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.add(configurableServices.get(0).getConfigurationPanel(), BorderLayout.CENTER);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(new Dimension(800, 700));
+		this.setSize(new Dimension(900, 600));
 		loadSidePanel();
 		loadButtons();
 		

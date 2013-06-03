@@ -80,7 +80,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 		if(!appDataFolderObject.exists()){
 			appDataFolderObject.mkdir();
 		}
-		ConfigurationManager.setPropertyIfEmpty("PlatformIndependentAppDataFolder", appDataFolderPath);
 		ConfigurationManager.setPropertyIfEmpty("LastUsedLoadXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
 		ConfigurationManager.setPropertyIfEmpty("LastUsedSaveXMLWorkspacePath", appDataFolderPath + "husacct_workspace.xml");
 		ConfigurationManager.setPropertyIfEmpty("LastUsedAddProjectPath", appDataFolderPath);	
@@ -224,11 +223,6 @@ public class ControlServiceImpl extends ObservableService implements IControlSer
 	@Override
 	public HashMap<String, ConfigPanel> getSubItems() {
 		HashMap<String, ConfigPanel> subitems = new HashMap<String, ConfigPanel>();
-		//Test Code
-		subitems.put("extra", new GeneralConfigurationPanel());
-		subitems.put("options", new GeneralConfigurationPanel());
-		subitems.put("test", new GeneralConfigurationPanel());
-		//End
 		return subitems;
 	}
 	
