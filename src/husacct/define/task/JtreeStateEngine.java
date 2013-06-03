@@ -1,289 +1,215 @@
 package husacct.define.task;
 
-
-import husacct.ServiceProvider;
 import husacct.define.analyzer.AnalyzedUnitComparator;
+import husacct.define.analyzer.AnalyzedUnitRegistry;
+import husacct.define.domain.SoftwareUnitDefinition;
+import husacct.define.domain.appliedrule.AppliedRuleStrategy;
+import husacct.define.domain.module.ModuleStrategy;
 import husacct.define.domain.services.WarningMessageService;
-import husacct.define.domain.warningmessages.WarningMessage;
-import husacct.define.presentation.moduletree.AnalyzedModuleTree;
-import husacct.define.task.components.AbstractCombinedComponent;
+import husacct.define.domain.services.stateservice.StateService;
+import husacct.define.domain.services.stateservice.state.StateDefineController;
+import husacct.define.domain.services.stateservice.state.appliedrule.AppliedRuleAddCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.ExceptionAddRuleCommand;
+import husacct.define.domain.services.stateservice.state.appliedrule.RemoveAppliedRuleCommand;
+import husacct.define.domain.services.stateservice.state.module.LayerDownCommand;
+import husacct.define.domain.services.stateservice.state.module.LayerUpCommand;
+import husacct.define.domain.services.stateservice.state.module.ModuleAddCommand;
+import husacct.define.domain.services.stateservice.state.module.ModuleRemoveCommand;
+import husacct.define.domain.services.stateservice.state.module.UpdateModuleCommand;
+import husacct.define.domain.services.stateservice.state.module.UpdateModuleTypeCommand;
+import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitAddCommand;
+import husacct.define.domain.services.stateservice.state.softwareunit.SoftwareUnitRemoveCommand;
 import husacct.define.task.components.AnalyzedModuleComponent;
+
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
+public abstract class JtreeStateEngine {
+	private Logger logger;
+	private Map<String, Object[]> mapRegistry = new LinkedHashMap<String, Object[]>();
+	private StateDefineController stateController = new StateDefineController();
+	private AnalyzedUnitComparator analyzerComparator = new AnalyzedUnitComparator();
+	private AnalyzedUnitRegistry allUnitsRegistry = new AnalyzedUnitRegistry();
 
-public class JtreeStateEngine {
-private static JtreeStateEngine instance =null;
-private ArrayList<Map<Long,AbstractCombinedComponent>> orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
-private Logger logger;
-private AnalyzedModuleComponent currentRoot;
-private ArrayList<AnalyzedModuleComponent> reNewedCodes = new ArrayList<AnalyzedModuleComponent>(); 
+	public JtreeStateEngine() {
+		logger = Logger.getLogger(JtreeStateEngine.class);
+	}
+
+	public boolean undo() {
+		return stateController.undo();
+
+	}
+
+	public boolean redo() {
+		return stateController.redo();
+	}
+
 	
 
+	public void removeModule(ArrayList<Object[]> data) {
+		stateController.insertCommand(new ModuleRemoveCommand(data));
+	}
+
+	public void addUpdateModule(long moduleId, String[] moduleold,
+			String[] modulenew) {
+		stateController.insertCommand(new UpdateModuleCommand(moduleId,
+				modulenew, moduleold));
+
+	}
+
+	public void addUpdateModule(ModuleStrategy module,
+			ModuleStrategy updatedModule) {
+		stateController.insertCommand(new UpdateModuleTypeCommand(module,
+				updatedModule));
+
+	}
+
+	public void layerUp(long moduleId) {
+		stateController.insertCommand(new LayerUpCommand(moduleId));
+		DefinitionController.getInstance().notifyObservers();
+	}
+
+	public void layerDown(long moduleId) {
+		stateController.insertCommand(new LayerDownCommand(moduleId));
+		DefinitionController.getInstance().notifyObservers();
+	}
+
 	
 
+	public void removeSoftwareUnit(ModuleStrategy module,
+			SoftwareUnitDefinition unit) {
 
-public JtreeStateEngine()
+		AnalyzedModuleComponent analyzeModuleTobeRestored = (AnalyzedModuleComponent) mapRegistry
+				.get(unit.getName().toLowerCase())[1];
+		
+		mapRegistry.remove(unit.getName());
+		ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		data.add(analyzeModuleTobeRestored);
+		StateService.instance().allUnitsRegistry
+				.registerAnalyzedUnit(analyzeModuleTobeRestored);
+		stateController.insertCommand(new SoftwareUnitRemoveCommand(module,
+				data));
+	}
+
+	public void addSoftwareUnit(ModuleStrategy module,
+			ArrayList<AnalyzedModuleComponent> unitToBeinserted) {
+
+		stateController.insertCommand(new SoftwareUnitAddCommand(module,
+				unitToBeinserted));
+		for (AnalyzedModuleComponent analyzedModuleComponent : unitToBeinserted) {
+			JtreeController.instance().removeTreeItem(analyzedModuleComponent);
+			mapRegistry.put(analyzedModuleComponent.getUniqueName()
+					.toLowerCase(), new Object[] { module,
+					analyzedModuleComponent });
+			StateService.instance().allUnitsRegistry
+					.removeAnalyzedUnit(analyzedModuleComponent);
+			WarningMessageService.getInstance().updateWarnings();
+		}
+	}
+
+	public ModuleStrategy getModulebySoftwareUnitUniqName(String Uniqname) {
+
+		Object[] result = mapRegistry.get(Uniqname.toLowerCase());
+		ModuleStrategy resultModule = (ModuleStrategy) result[0];
+
+		return resultModule;
+
+	}
+
+	public AnalyzedModuleComponent getRootModel() {
+
+		return analyzerComparator.getRootModel();
+	}
+
+	public void analyze() {
+		getRootModel();
+	}
+
+	public void registerAnalyzedUnit(AnalyzedModuleComponent unit) {
+		allUnitsRegistry.registerAnalyzedUnit(unit);
+	}
+
+	public AnalyzedUnitRegistry getAnalzedModuleRegistry() {
+
+		return allUnitsRegistry;
+
+	}
+
+	public void reset() {
+		allUnitsRegistry.reset();
+
+	}
+
+	public void fromGui() {
+		stateController.unlock();
+
+	}
+
+	public boolean[] getRedoAndUndoStates() {
+		return stateController.getStatesStatus();
+
+	}
+
+	public void removeRules(ArrayList<AppliedRuleStrategy> selectedRules) {
+		stateController.insertCommand(new RemoveAppliedRuleCommand(
+				selectedRules));
+
+	}
+
+	public void addRules(ArrayList<AppliedRuleStrategy> rules) {
+		stateController.insertCommand(new AppliedRuleAddCommand(rules));
+	}
+
+	public void addExceptionRule(AppliedRuleStrategy parent,
+			ArrayList<AppliedRuleStrategy> rules) {
+		stateController
+				.insertCommand(new ExceptionAddRuleCommand(parent, rules));
+	}
+
+	public void removeSoftwareUnit(List<String> selectedModules) {
+		ArrayList<AnalyzedModuleComponent> units = new ArrayList<AnalyzedModuleComponent>();
+	
+	Object[] m=	mapRegistry.get(selectedModules.get(0));
+
+		for (String uniqname : selectedModules) {
+			AnalyzedModuleComponent softwareUnit = (AnalyzedModuleComponent) mapRegistry
+					.get(uniqname)[1];
+			units.add(softwareUnit);
+		}
+
+	//	stateController.insertCommand(new SoftwareUnitRemoveCommand(m, units));
+
+	}
+
+public AnalyzedModuleComponent getAnalyzedSoftWareUnit(SoftwareUnitDefinition unit)
 {
-	logger=Logger.getLogger(JtreeStateEngine.class);
+
+return allUnitsRegistry.getAnalyzedUnit(unit);
+
 }
-	
- public static JtreeStateEngine instance()
-{
-	 
-	 if (instance==null) {
-	return	instance= new JtreeStateEngine();
-	}else{
+
+	public void addModule(ModuleStrategy subModule) {
+		stateController.insertCommand(new ModuleAddCommand(subModule));
 		
-		return instance;
-    }
-}
- 
- public void compareNewData(AnalyzedModuleComponent newdata)
- {
-	
-	importNewData(newdata);
-	
- }
+	}
 
-
-private void flush() 
-{
-   AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
-   for (Map<Long,AbstractCombinedComponent> usersequenceinput: orderofinsertions) 
-   {
-	for(Long key: usersequenceinput.keySet())
-	  {
-		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) usersequenceinput.get(key);
-		unitTobeRestored.unfreeze();
-		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
-			flushRegix(unitTobeRestored,mainTree);
-			
-		}else{
-			mainTree.restoreTreeItem(unitTobeRestored);
+	public ArrayList<AnalyzedModuleComponent>  getmappedUnits() {
+    ArrayList<AnalyzedModuleComponent> data = new ArrayList<AnalyzedModuleComponent>();
+		for (Object[] obj : mapRegistry.values()) {
+			data.add((AnalyzedModuleComponent)obj[1]);
 		}
+    		
 		
-	  }
-   
-    }
-	 
-}
-private void flushRegix(AnalyzedModuleComponent unitTobeRestored,AnalyzedModuleTree mainTree) {
-	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
-	{
-		AnalyzedModuleComponent restoreUnit =(AnalyzedModuleComponent)result;
-		restoreUnit.unfreeze();
-		mainTree.restoreTreeItem(restoreUnit);
+		
+		return data;
 	}
-	
-	
-}
 
-private void compare(AnalyzedModuleComponent newdata) {
-	currentRoot = JtreeController.instance().getRootOfModel();
-	
-	AnalyzedUnitComparator c = new AnalyzedUnitComparator();
-	c.calucalteChanges(currentRoot, newdata);
-	
-	
-}
-
-
-
-private void restoreFlush() {
-	 AnalyzedModuleTree mainTree = JtreeController.instance().getTree();
-	 Collections.reverse(orderofinsertions);
-	 ArrayList<Map<Long,AbstractCombinedComponent>> temp =orderofinsertions;
-	 
-	 orderofinsertions = new ArrayList<Map<Long,AbstractCombinedComponent>>();
-	 try{ 
-	 for (Map<Long,AbstractCombinedComponent> result1 : temp) 
-	   {
-		for(Long key :result1.keySet()){
-		AnalyzedModuleComponent unitTobeRestored= (AnalyzedModuleComponent) result1.get(key);
-		if (unitTobeRestored.getType().toUpperCase().equals("REGEX".toUpperCase())) {
-			restoreflushRegix(key,unitTobeRestored,mainTree);
-			
-		}else{
-			if (unitTobeRestored.isRemoved()) {
-				WarningMessageService.getInstance().addCodeLevelWarning(key,unitTobeRestored);
-			}
-		}	
-		
-		
-		
-		}
-			
-		}
-	 }
-	 catch(Exception o)
-	 {
-		 System.out.println(o.getMessage());
-		 o.printStackTrace();
-	 }
-	   }
-
-private void restoreflushRegix(long id,AnalyzedModuleComponent unitTobeRestored,
-		AnalyzedModuleTree mainTree) {
-	
-	for(AbstractCombinedComponent result : unitTobeRestored.getChildren())
-	{
-		AnalyzedModuleComponent child= (AnalyzedModuleComponent)result;
-		if (unitTobeRestored.isRemoved()) {
-			WarningMessageService.getInstance().addCodeLevelWarning(id,child);
-		}
-	}
-}
-
-
-	
-
-public void registerSate(Long id,AbstractCombinedComponent inpute)
- {
-	LinkedHashMap<Long, AbstractCombinedComponent> input = new LinkedHashMap<Long,AbstractCombinedComponent>(); 
-	 input.put(id, inpute);
-	 
-	orderofinsertions.add(0,input);
-	 
- }
-
-
-
-public void importNewData(final AnalyzedModuleComponent newdata) {
-	
-		Thread first = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				logger.debug("Starting to reanalyze");
-				flush();
-				
-			
-				
-			}
-		});
-		
-		
-		Thread second = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				compare(newdata);
-					
-			}
-		});
-		
-		Thread third = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				restoreFlush();
-				
-				System.out.println("Finished Reanalyzing");
-			}
-		});
-			
-		
-		try {
-		first.start();
-		first.join();
-		second.start();
-		second.join();
-		third.start();
-		
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
-		
-}
-
-public void removeSoftwareUnit(long moduleId,
-	AnalyzedModuleComponent unitTobeRemoved) {
-	
-	int index=-1;
-	for (int i=0;i< orderofinsertions.size();i++)
-	{
-		
-		for(long key : orderofinsertions.get(i).keySet())
-		{
-			AnalyzedModuleComponent unitTochek =(AnalyzedModuleComponent) orderofinsertions.get(i).get(key);
-		
-		if(unitTochek.getUniqueName().toUpperCase().equals(unitTobeRemoved.getUniqueName().toUpperCase()))
-				{
-					index=i;
-				}
-		
-		}	
-	}
-	
-	if(index!=-1){
-	orderofinsertions.remove(index);
-	}else{
-	restoreCodeRenewal(unitTobeRemoved);
-	}
-}
-
-private void restoreCodeRenewal(AnalyzedModuleComponent unitTobeRemoved) {
-	AnalyzedModuleComponent result=null;
-	for (AnalyzedModuleComponent softwareUnit : reNewedCodes) {
-		if(unitTobeRemoved.getUniqueName().toLowerCase().equals(softwareUnit.getUniqueName().toLowerCase()))
-		{
-			result=softwareUnit;
-			
-			break;
-			
-		}
-		
-		
-	}
-	if(result!=null)
-	{
-		result.unfreeze();
-		int index = reNewedCodes.indexOf(result);
-		reNewedCodes.remove(index);
-	}else{
-		WarningMessageService.getInstance().hasCodeLevelWarning(unitTobeRemoved,WarningMessageService.removalType.fullRemoval);
-	}
-	
-}
-
-
-
-public void analyze() {
-	SoftwareUnitController controller = new SoftwareUnitController(-1);
-	if (JtreeController.instance().isLoaded()) {
-		AnalyzedModuleComponent rootComponent = controller.getSoftwareUnitTreeComponents();
-		JtreeStateEngine.instance().compareNewData(rootComponent); 
-		
-		
-	}else {
-		
-	AnalyzedModuleComponent rootComponent = controller.getSoftwareUnitTreeComponents();
-	
-	 
-	JtreeController.instance().setCurrentTree(new AnalyzedModuleTree(rootComponent));
-	
-	JtreeController.instance().setLoadState(true);
-
-	}
-	
-}
-
-public void registerCodeRenewal(AnalyzedModuleComponent analyzedModuleToChek) {
-	reNewedCodes.add(analyzedModuleToChek);
-	
-}
-	
-	
-	
-	
-	
-	
 }

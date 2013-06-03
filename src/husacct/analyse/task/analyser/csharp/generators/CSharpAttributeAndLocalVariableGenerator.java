@@ -2,10 +2,7 @@ package husacct.analyse.task.analyser.csharp.generators;
 
 import husacct.analyse.infrastructure.antlr.csharp.CSharpParser;
 import static husacct.analyse.task.analyser.csharp.generators.CSharpGeneratorToolkit.*;
-
-
 import java.util.ArrayList;
-
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
@@ -45,7 +42,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 
 
 	private void createAttributeObject() {
-		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1);
+		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
 		if(!SkippableTypes.isSkippable(declareType)){
 			modelService.createAttribute(hasClassScope, accessControlQualifier, packageAndClassName, declareType, name, packageAndClassName + "." + name, lineNumber, this.declareTypes);
 		}
@@ -54,7 +51,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 	}
 
 	private void createLocalVariableObject() {
-		if(declareType.contains("."))declareType = declareType.substring(0, declareType.length()-1);
+		if(declareType.endsWith("."))declareType = declareType.substring(0, declareType.length()-1);
 		if(!SkippableTypes.isSkippable(declareType)){
 			modelService.createLocalVariable(packageAndClassName, declareType, name, this.belongsToMethod + "." + this.name, lineNumber, this.belongsToMethod, this.declareTypes);
 		}
@@ -96,6 +93,7 @@ public class CSharpAttributeAndLocalVariableGenerator extends CSharpGenerator{
 				break;
 			case CSharpParser.MEMBER_ACCESS:
 				delegateInvocationPropertyOrField(child);
+				deleteTreeChild(child);
 				break;
 			}
 			treeNodeTypeFilter(child);

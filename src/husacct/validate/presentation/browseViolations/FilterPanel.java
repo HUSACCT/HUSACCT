@@ -102,7 +102,6 @@ public class FilterPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				browseViolations.loadAfterChange();
-				;
 			}
 		});
 		buttonEditFilter.addActionListener(new ActionListener() {
@@ -185,20 +184,24 @@ public class FilterPanel extends JPanel {
 	}
 
 	public List<Violation> fillViolationsTable(List<Violation> violations) {
-
-		List<Violation> violationsIndirect = new ArrayList<Violation>();
+		List<Violation> selectedViolations = new ArrayList<Violation>();
 
 		if (radioButtonAll.isSelected()) {
 			return violations;
-		}
-		boolean isIndirect = radioButtonIndirect.isSelected();
-		for (Violation violation : violations) {
-			if (violation.isIndirect() == isIndirect) {
-				violationsIndirect.add(violation);
+		} else if (radioButtonIndirect.isSelected()) {
+			for (Violation violation : violations) {
+				if (violation.isIndirect()) {
+					selectedViolations.add(violation);
+				}
 			}
+		} else if (radioButtonDirect.isSelected()) {
+			for (Violation violation : violations) {
+				if (!violation.isIndirect()) {
+					selectedViolations.add(violation);
+				}
+			} 
 		}
-
-		return violationsIndirect;
+		return selectedViolations;
 	}
 
 	public void loadAfterChange() {

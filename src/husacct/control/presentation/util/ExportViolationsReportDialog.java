@@ -34,9 +34,11 @@ public class ExportViolationsReportDialog extends JDialog{
 	private IControlService controlService = ServiceProvider.getInstance().getControlService();
 	private ILocaleService localeService = ServiceProvider.getInstance().getLocaleService();
 	private ExportController exportController;
+	private MainController mainController;
 	
 	public ExportViolationsReportDialog(MainController mainController) {
 		super(mainController.getMainGui(), true);
+		this.mainController = mainController;
 		this.exportController = mainController.getExportController();
 		setTitle(localeService.getTranslatedString("ExportReport"));
 		setup();

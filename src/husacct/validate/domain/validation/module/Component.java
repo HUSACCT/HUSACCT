@@ -29,7 +29,8 @@ public class Component extends AbstractModule {
 
 		for (RuleType ruleType : ruleTypes) {
 			if (!ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)
-					&& !ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
+					&& !ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)
+					&& !ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
 				allowedRuleTypes.add(ruleType);
 			}
 		}

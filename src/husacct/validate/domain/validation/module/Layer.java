@@ -28,7 +28,9 @@ public class Layer extends AbstractModule {
 		List<RuleType> allowedRuleTypes = new ArrayList<RuleType>();
 
 		for (RuleType ruleType : ruleTypes) {
-			if (!ruleType.equals(RuleTypes.FACADE_CONVENTION)) {
+			if (!ruleType.equals(RuleTypes.FACADE_CONVENTION)
+					&& !ruleType.equals(RuleTypes.IS_NOT_ALLOWED_BACK_CALL)
+					&& !ruleType.equals(RuleTypes.IS_NOT_ALLOWED_SKIP_CALL)) {
 				allowedRuleTypes.add(ruleType);
 			}
 		}

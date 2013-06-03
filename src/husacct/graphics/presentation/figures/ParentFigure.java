@@ -56,7 +56,7 @@ public class ParentFigure extends BaseFigure {
 			}
 
 			@Override
-			public void figureHandlesChanged(FigureEvent e) {
+			public void figureAdded(FigureEvent e) {
 			}
 
 			@Override
@@ -67,15 +67,15 @@ public class ParentFigure extends BaseFigure {
 				double newY = ((BaseFigure) e.getFigure()).getBounds().getY();
 				double difX = newX - oldX;
 				double difY = newY - oldY;
-				for (Figure fig : childrenOwnImpl) {
-					((BaseFigure) fig).updateLocation(fig.getBounds().getX() + difX, fig.getBounds().getY() + difY);
-				}
+				for (Figure fig : childrenOwnImpl)
+					((BaseFigure) fig).updateLocation(fig.getBounds().getX()
+							+ difX, fig.getBounds().getY() + difY);
 				currentPositionX = newX;
 				currentPositionY = newY;
 			}
 
 			@Override
-			public void figureAdded(FigureEvent e) {
+			public void figureHandlesChanged(FigureEvent e) {
 			}
 
 			@Override
@@ -89,24 +89,83 @@ public class ParentFigure extends BaseFigure {
 	}
 
 	@Override
-	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
-		if ((lead.x - anchor.x) < minWidth) {
-			lead.x = anchor.x + minWidth;
-		}
-		if ((lead.y - anchor.y) < minHeight) {
-			lead.y = anchor.y + minHeight;
-		}
+	public boolean add(Figure figure) {
+		BaseFigure bf = (BaseFigure) figure;
+		bf.setInContainer(true);
 
-		body.setBounds(anchor, lead);
+		childrenOwnImpl.add(figure);
+		figure.addFigureListener(new FigureListener() {
+			@Override
+			public void areaInvalidated(FigureEvent e) {
+			}
 
-		// textbox centralising
-		double plusX = (((lead.x - anchor.x) - text.getBounds().width) / 2);
+			@Override
+			public void attributeChanged(FigureEvent e) {
+			}
 
-		Point2D.Double textAnchor = (Double) anchor.clone();
-		textAnchor.x += plusX;
-		text.setBounds(textAnchor, null);
+			@Override
+			public void figureAdded(FigureEvent e) {
+			}
 
-		invalidate();
+			@Override
+			public void figureChanged(FigureEvent e) {
+				double parentFigureStartX = getBounds().getX();
+				double parentFigureWidth = getBounds().getWidth();
+				double parentFigureEndX = parentFigureStartX
+						+ parentFigureWidth;
+				double parentFigureStartY = getBounds().getY();
+				double parentFigureHeight = getBounds().getHeight();
+				double parentFigureEndY = parentFigureStartY
+						+ parentFigureHeight;
+
+				BaseFigure childFigure = (BaseFigure) e.getFigure();
+				java.awt.geom.Rectangle2D.Double figureBounds = childFigure
+						.getBounds();
+				double childFigureX = figureBounds.getX();
+				double childFigureWidth = figureBounds.getWidth();
+				double childFigureY = figureBounds.getY();
+				double childFigureHeight = figureBounds.getHeight();
+
+				boolean outsideLeft = childFigureX < parentFigureStartX;
+				boolean outsideRight = childFigureX + childFigureWidth > parentFigureEndX;
+				if (outsideLeft || outsideRight) {
+					childFigure.willChange();
+					if (outsideLeft)
+						childFigure.updateLocation(parentFigureStartX,
+								childFigureY);
+					else
+						childFigure.updateLocation(parentFigureEndX
+								- childFigureWidth, childFigureY);
+					childFigure.changed();
+				}
+
+				boolean outsideTop = childFigureY < parentFigureStartY;
+				boolean outsideBottom = childFigureY + childFigureHeight > parentFigureEndY;
+				if (outsideTop || outsideBottom) {
+					childFigure.willChange();
+					if (outsideTop)
+						childFigure.updateLocation(childFigureX,
+								parentFigureStartY);
+					else
+						childFigure.updateLocation(childFigureX,
+								parentFigureEndY - childFigureHeight);
+					childFigure.changed();
+				}
+			}
+
+			@Override
+			public void figureHandlesChanged(FigureEvent e) {
+			}
+
+			@Override
+			public void figureRemoved(FigureEvent e) {
+			}
+
+			@Override
+			public void figureRequestRemove(FigureEvent e) {
+			}
+		});
+		return true;
 	}
 
 	@Override
@@ -126,102 +185,6 @@ public class ParentFigure extends BaseFigure {
 		return childrenOwnImpl.toArray(new BaseFigure[] {});
 	}
 
-	public void updateLayout() {
-		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this, minChildPadding, minChildPadding);
-		cls.doLayout();
-
-		Rectangle newSize = new Rectangle();
-		for (Figure f : childrenOwnImpl) {
-			Rectangle2D.Double bounds = f.getBounds();
-
-			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y + bounds.height));
-		}
-		minWidth = newSize.width + minChildPadding;
-		minHeight = newSize.height + minChildPadding;
-
-		Rectangle2D.Double bounds = getBounds();
-		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
-		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10, anchor.y + minHeight + 10);
-
-		willChange();
-		setBounds(anchor, lead);
-		changed();
-	}
-
-	public boolean add(Figure figure) {
-		BaseFigure bf = (BaseFigure) figure;
-		bf.setInContainer(true);
-
-		childrenOwnImpl.add(figure);
-		figure.addFigureListener(new FigureListener() {
-			@Override
-			public void areaInvalidated(FigureEvent e) {
-			}
-
-			@Override
-			public void attributeChanged(FigureEvent e) {
-			}
-
-			@Override
-			public void figureHandlesChanged(FigureEvent e) {
-			}
-
-			@Override
-			public void figureChanged(FigureEvent e) {
-				double parentFigureStartX = getBounds().getX();
-				double parentFigureWidth = getBounds().getWidth();
-				double parentFigureEndX = parentFigureStartX + parentFigureWidth;
-				double parentFigureStartY = getBounds().getY();
-				double parentFigureHeight = getBounds().getHeight();
-				double parentFigureEndY = parentFigureStartY + parentFigureHeight;
-
-				BaseFigure childFigure = ((BaseFigure) e.getFigure());
-				java.awt.geom.Rectangle2D.Double figureBounds = childFigure.getBounds();
-				double childFigureX = figureBounds.getX();
-				double childFigureWidth = figureBounds.getWidth();
-				double childFigureY = figureBounds.getY();
-				double childFigureHeight = figureBounds.getHeight();
-
-				boolean outsideLeft = childFigureX < parentFigureStartX;
-				boolean outsideRight = (childFigureX + childFigureWidth) > parentFigureEndX;
-				if (outsideLeft || outsideRight) {
-					childFigure.willChange();
-					if (outsideLeft) {
-						childFigure.updateLocation(parentFigureStartX, childFigureY);
-					} else {
-						childFigure.updateLocation(parentFigureEndX - childFigureWidth, childFigureY);
-					}
-					childFigure.changed();
-				}
-
-				boolean outsideTop = childFigureY < parentFigureStartY;
-				boolean outsideBottom = (childFigureY + childFigureHeight) > parentFigureEndY;
-				if (outsideTop || outsideBottom) {
-					childFigure.willChange();
-					if (outsideTop) {
-						childFigure.updateLocation(childFigureX, parentFigureStartY);
-					} else {
-						childFigure.updateLocation(childFigureX, parentFigureEndY - childFigureHeight);
-					}
-					childFigure.changed();
-				}
-			}
-
-			@Override
-			public void figureAdded(FigureEvent e) {
-			}
-
-			@Override
-			public void figureRemoved(FigureEvent e) {
-			}
-
-			@Override
-			public void figureRequestRemove(FigureEvent e) {
-			}
-		});
-		return true;
-	}
-
 	@Override
 	public boolean isParent() {
 		return true;
@@ -230,16 +193,58 @@ public class ParentFigure extends BaseFigure {
 	@Override
 	public void raiseLayer() {
 		// zIndex = raiseZIndex-1;
-		for (BaseFigure childFigure : getChildFigures()) {
+		for (BaseFigure childFigure : getChildFigures())
 			childFigure.raiseLayer();
-		}
 	}
 
 	@Override
 	public void resetLayer() {
 		super.resetLayer();
-		for (BaseFigure childFigure : getChildFigures()) {
+		for (BaseFigure childFigure : getChildFigures())
 			childFigure.resetLayer();
+	}
+
+	@Override
+	public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
+		if (lead.x - anchor.x < minWidth)
+			lead.x = anchor.x + minWidth;
+		if (lead.y - anchor.y < minHeight)
+			lead.y = anchor.y + minHeight;
+
+		body.setBounds(anchor, lead);
+
+		// textbox centralising
+		double plusX = (lead.x - anchor.x - text.getBounds().width) / 2;
+
+		Point2D.Double textAnchor = (Double) anchor.clone();
+		textAnchor.x += plusX;
+		text.setBounds(textAnchor, null);
+
+		invalidate();
+	}
+
+	public void updateLayout() {
+		ContainerLayoutStrategy cls = new ContainerLayoutStrategy(this,
+				minChildPadding, minChildPadding);
+		cls.doLayout();
+
+		Rectangle newSize = new Rectangle();
+		for (Figure f : childrenOwnImpl) {
+			Rectangle2D.Double bounds = f.getBounds();
+
+			newSize.add(new Point2D.Double(bounds.x + bounds.width, bounds.y
+					+ bounds.height));
 		}
+		minWidth = newSize.width + minChildPadding;
+		minHeight = newSize.height + minChildPadding;
+
+		Rectangle2D.Double bounds = getBounds();
+		Point2D.Double anchor = new Point2D.Double(bounds.x, bounds.y);
+		Point2D.Double lead = new Point2D.Double(anchor.x + minWidth + 10,
+				anchor.y + minHeight + 10);
+
+		willChange();
+		setBounds(anchor, lead);
+		changed();
 	}
 }

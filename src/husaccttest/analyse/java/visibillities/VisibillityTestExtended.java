@@ -1,7 +1,10 @@
 package husaccttest.analyse.java.visibillities;
 
+import java.util.ArrayList;
+
 import husacct.analyse.AnalyseServiceImpl;
 import husacct.analyse.IAnalyseService;
+import husacct.common.dto.ProjectDTO;
 import husaccttest.analyse.TestCaseExtended;
 import husaccttest.analyse.TestProjectFinder;
 
@@ -19,12 +22,13 @@ public class VisibillityTestExtended extends TestCaseExtended{
 		
 		service = new AnalyseServiceImpl();
 		String path = TestProjectFinder.lookupProject("java", "visibillity");
-		String[] paths = new String[]{path};
+		ArrayList<String> paths = new ArrayList<String>();
+		paths.add(path);
 		String language = "Java";
 		
 		try {
 			if(!isAnalysed){
-				service.analyseApplication(paths, language);
+				service.analyseApplication(new ProjectDTO("TestCase", paths, language, "1", "visibility", null));
 				isAnalysed = true;
 			}
 		} catch (Exception e){

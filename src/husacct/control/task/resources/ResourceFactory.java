@@ -1,7 +1,5 @@
 package husacct.control.task.resources;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +19,7 @@ public class ResourceFactory {
 	            Class<?> myClass = myClassLoader.loadClass(classNameToBeLoaded);
 	            Object instance = myClass.newInstance();
 	            return (IResource) instance;
-	        } catch (SecurityException e) {
-	            e.printStackTrace();
-	        } catch (IllegalArgumentException e) {
-	            e.printStackTrace();
-	        } catch (ClassNotFoundException e) {
-	            e.printStackTrace();
-	        } catch (InstantiationException e) {
-	            e.printStackTrace();
-	        } catch (IllegalAccessException e) {
+	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
 		}
@@ -38,7 +28,6 @@ public class ResourceFactory {
 	
 	public static List<String> getAvailableResources(){
 		List<String> list = new ArrayList<String>();
-		//list.add("Husacct");
 		list.add("Xml");
 		return list;
 	}
